@@ -90,6 +90,91 @@
 <a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/performance"</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"performance"</span>)</a></code></pre></div>
 </div>
+<div id="examples" class="section level2">
+<h2 class="hasAnchor">
+<a href="#examples" class="anchor"></a>Examples</h2>
+<div id="lm" class="section level3">
+<h3 class="hasAnchor">
+<a href="#lm" class="anchor"></a>LM</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(model)</a></code></pre></div>
+<table class="table table">
+<thead><tr class="header">
+<th align="right">AIC</th>
+<th align="right">BIC</th>
+<th align="right">R2</th>
+<th align="right">f</th>
+<th align="right">DoF</th>
+<th align="right">DoF_residual</th>
+<th align="right">p</th>
+<th align="right">R2_adj</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">156</td>
+<td align="right">161.9</td>
+<td align="right">0.83</td>
+<td align="right">70.91</td>
+<td align="right">2</td>
+<td align="right">29</td>
+<td align="right">0</td>
+<td align="right">0.82</td>
+</tr></tbody>
+</table>
+</div>
+<div id="glm" class="section level3">
+<h3 class="hasAnchor">
+<a href="#glm" class="anchor"></a>GLM</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(vs <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>mpg, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> <span class="st">"binomial"</span>)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(model)</a></code></pre></div>
+<table class="table table">
+<thead><tr class="header">
+<th align="right">AIC</th>
+<th align="right">BIC</th>
+<th align="right">R2_Tjur</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">31.3</td>
+<td align="right">35.7</td>
+<td align="right">0.48</td>
+</tr></tbody>
+</table>
+</div>
+<div id="bayesian-lm-rstanarm" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bayesian-lm-rstanarm" class="anchor"></a>Bayesian LM (rstanarm)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rstanarm)</a>
+<a class="sourceLine" id="cb5-2" title="2">model &lt;-<span class="st"> </span>rstanarm<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">stan_glm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(model)</a></code></pre></div>
+<table class="table table">
+<thead><tr class="header">
+<th align="right">ELPD</th>
+<th align="right">ELPD_SE</th>
+<th align="right">LOOIC</th>
+<th align="right">LOOIC_SE</th>
+<th align="right">R2_Median</th>
+<th align="right">R2_MAD</th>
+<th align="right">R2_Mean</th>
+<th align="right">R2_SD</th>
+<th align="right">R2_CI_low</th>
+<th align="right">R2_CI_high</th>
+<th align="right">R2_LOO_adj</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td align="right">-78.58</td>
+<td align="right">4.57</td>
+<td align="right">157.2</td>
+<td align="right">9.14</td>
+<td align="right">0.83</td>
+<td align="right">0.02</td>
+<td align="right">0.82</td>
+<td align="right">0.03</td>
+<td align="right">0.78</td>
+<td align="right">0.85</td>
+<td align="right">0.79</td>
+</tr></tbody>
+</table>
+</div>
+</div>
 </div>
   </div>
 
@@ -104,9 +189,9 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
-<li>
 <a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>
+<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 </ul>
 </div>
 
@@ -125,7 +210,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>, <a href="https://github.com/strengejacke">Daniel Lüdecke</a>.</p>
+  <p>Developed by <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>.</p>
 </div>
 
 <div class="pkgdown">

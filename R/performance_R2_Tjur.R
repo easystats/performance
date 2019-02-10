@@ -7,7 +7,6 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_R2_tjur(model)
-#' @author \href{https://github.com/strengejacke}{Daniel Lüdecke}
 #'
 #' @importFrom stats predict residuals
 #' @importFrom insight get_response model_info

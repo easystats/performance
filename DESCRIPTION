@@ -3,32 +3,35 @@ Type: Package
 Title: Assessment of Model's Performance
 Version: 0.1.0
 Authors@R: c(
-	person("Dominique", 
-		"Makowski", 
-		email = "dom.makowski@gmail.com",
-		role = c("aut", "cre"), 
-		comment = c(ORCID = "0000-0001-5375-9967")),
 	person("Daniel", 
 		"Lüdecke", 
 		role = c("aut"), 
 		email = "d.luedecke@uke.de", 
-		comment = c(ORCID = "0000-0002-8895-3206"))
+		comment = c(ORCID = "0000-0002-8895-3206")),
+	person("Dominique", 
+		"Makowski", 
+		email = "dom.makowski@gmail.com",
+		role = c("aut", "cre"), 
+		comment = c(ORCID = "0000-0001-5375-9967"))
 	)
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 Imports:
-	insight
+	insight,
+	bayestestR
 Suggests:
 	knitr,
 	rmarkdown,
 	testthat,
 	covr,
 	rstanarm,
-	brms,
-	lme4
+	rstantools,
+	loo,
+	brms
 Remotes: 
 	easystats/insight
+	easystats/bayestestR
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

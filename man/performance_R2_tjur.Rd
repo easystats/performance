@@ -15,10 +15,8 @@ Computes Tjur's (2009) coefficient of determination.
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 performance_R2_tjur(model)
+
 }
 \references{
 Tjur, T. (2009). Coefficients of determination in logistic regression models—A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
-}
-\author{
-\href{https://github.com/strengejacke}{Daniel Lüdecke}
 }

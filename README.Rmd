@@ -54,3 +54,40 @@ devtools::install_github("easystats/performance")
 ```{r message=FALSE, warning=FALSE}
 library("performance")
 ```
+
+
+## Examples
+
+### LM
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+model_performance(model)
+```
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+knitr::kable(model_performance(model), digits=2)
+```
+
+### GLM
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+model_performance(model)
+```
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+knitr::kable(model_performance(model), digits=2)
+```
+
+### Bayesian LM (rstanarm)
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+library(rstanarm)
+model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+model_performance(model)
+```
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(rstanarm)
+text <- capture.output(model <- stan_glm(mpg ~ wt + cyl, data = mtcars))
+knitr::kable(model_performance(model), digits=2)
+```

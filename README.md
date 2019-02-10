@@ -24,3 +24,39 @@ devtools::install_github("easystats/performance")
 ``` r
 library("performance")
 ```
+
+## Examples
+
+### LM
+
+``` r
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+model_performance(model)
+```
+
+| AIC |   BIC |   R2 |     f | DoF | DoF\_residual | p | R2\_adj |
+| --: | ----: | ---: | ----: | --: | ------------: | -: | ------: |
+| 156 | 161.9 | 0.83 | 70.91 |   2 |            29 | 0 |    0.82 |
+
+### GLM
+
+``` r
+model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+model_performance(model)
+```
+
+|  AIC |  BIC | R2\_Tjur |
+| ---: | ---: | -------: |
+| 31.3 | 35.7 |     0.48 |
+
+### Bayesian LM (rstanarm)
+
+``` r
+library(rstanarm)
+model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+model_performance(model)
+```
+
+|    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adj |
+| ------: | -------: | ----: | --------: | ---------: | ------: | -------: | -----: | ----------: | -----------: | -----------: |
+| \-78.62 |     4.61 | 157.2 |      9.23 |       0.83 |    0.02 |     0.82 |   0.03 |        0.78 |         0.85 |         0.79 |
