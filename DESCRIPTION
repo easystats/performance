@@ -30,7 +30,7 @@ Suggests:
 	loo,
 	brms
 Remotes: 
-	easystats/insight
+	easystats/insight,
 	easystats/bayestestR
 License: GPL-3
 Encoding: UTF-8
