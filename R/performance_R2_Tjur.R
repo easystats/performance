@@ -8,6 +8,12 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_R2_tjur(model)
 #'
+#' \dontrun{
+#' library(rstanarm)
+#' model <- rstanarm::stan_glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' }
+#'
+#'
 #' @importFrom stats predict residuals
 #' @importFrom insight get_response model_info
 #'
