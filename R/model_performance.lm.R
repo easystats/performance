@@ -29,11 +29,11 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     model_summary <- summary(model)
     out$R2 <- model_summary$r.squared
 
-    out$f <- model_summary$fstatistic[1]
+    out$`F` <- model_summary$fstatistic[1]
     out$DoF <- model_summary$fstatistic[2]
     out$DoF_residual <- model_summary$fstatistic[3]
     out$p <- stats::pf(
-      out$f,
+      out$`F`,
       out$DoF,
       out$DoF_residual,
       lower.tail = FALSE)
