@@ -39,8 +39,5 @@ performance_R2_tjur <- function(model) {
   m1 <- mean(pred[which(y == categories[1])], na.rm = TRUE)
   m2 <- mean(pred[which(y == categories[2])], na.rm = TRUE)
 
-  D <- abs(m2 - m1)
-  # names(D) <- "Tjur's R2"
-
-  return(D)
+  abs(m2 - m1)
 }
