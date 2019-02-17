@@ -82,7 +82,6 @@ r2.lm <- function(x, type = c("adjusted", "unadjusted"), ...) {
 }
 
 
-#' @importFrom stats logLik update
 #' @export
 r2.polr <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
   type <- match.arg(type)
@@ -91,7 +90,7 @@ r2.polr <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 }
 
 
-#' @importFrom stats logLik update
+#' @rdname r2
 #' @export
 r2.clm2 <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
   type <- match.arg(type)
@@ -100,7 +99,6 @@ r2.clm2 <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 }
 
 
-#' @importFrom stats logLik update
 #' @export
 r2.clm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
   type <- match.arg(type)
@@ -109,7 +107,6 @@ r2.clm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 }
 
 
-#' @importFrom stats logLik update
 #' @export
 r2.vglm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
   if (!(is.null(x@call$summ) && !identical(x@call$summ, 0)))
@@ -121,7 +118,6 @@ r2.vglm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 }
 
 
-#' @importFrom stats logLik update
 #' @export
 r2.multinom <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
   type <- match.arg(type)
@@ -144,7 +140,6 @@ r2.plm <- function(x, type = c("adjusted", "unadjusted"), ...) {
 }
 
 
-#' @importFrom stats nobs logLik
 r2glm <- function(x, L.base, type) {
   L.full <- stats::logLik(x)
   D.full <- -2 * L.full
