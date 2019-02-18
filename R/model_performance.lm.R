@@ -19,13 +19,13 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   }
 
   out <- list()
-  if("AIC" %in% c(metrics)){
+  if ("AIC" %in% c(metrics)) {
     out$AIC <- AIC(model)
   }
-  if("BIC" %in% c(metrics)){
+  if ("BIC" %in% c(metrics)) {
     out$BIC <- BIC(model)
   }
-  if("R2" %in% c(metrics)){
+  if ("R2" %in% c(metrics)) {
     model_summary <- summary(model)
     out$R2 <- model_summary$r.squared
 
@@ -45,5 +45,5 @@ model_performance.lm <- function(model, metrics = "all", ...) {
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
-  return(out)
+  out
 }

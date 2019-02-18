@@ -14,18 +14,18 @@
 model_performance.glm <- function(model, metrics = "all", ...) {
 
 
-  if (metrics == "all"){
+  if (metrics == "all") {
     metrics <- c("AIC", "BIC", "R2")
   }
 
   out <- list()
-  if("AIC" %in% c(metrics)){
+  if("AIC" %in% c(metrics)) {
     out$AIC <- AIC(model)
   }
-  if("BIC" %in% c(metrics)){
+  if("BIC" %in% c(metrics)) {
     out$BIC <- BIC(model)
   }
-  if("R2" %in% c(metrics)){
+  if("R2" %in% c(metrics)) {
     out$R2_Tjur <- performance_R2_tjur(model)
   }
 
@@ -33,5 +33,5 @@ model_performance.glm <- function(model, metrics = "all", ...) {
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
-  return(out)
+  out
 }
