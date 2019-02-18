@@ -30,7 +30,7 @@ performance_r2_bayesian <- function(model) {
 
   if(insight::model_info(model)$is_mixed){
     r2_bayesian <- data.frame("R2_Bayes" = rstanarm::bayes_R2(model, re.form = NULL),
-                              "R2_Bayes_fixed" = rstanarm::bayes_R2(model, re.form = NULL))
+                              "R2_Bayes_fixed" = rstanarm::bayes_R2(model, re.form = NA))
   } else{
     r2_bayesian <- data.frame("R2_Bayes" = rstanarm::bayes_R2(model))
   }
