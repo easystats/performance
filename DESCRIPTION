@@ -28,10 +28,12 @@ Suggests:
 	rstanarm,
 	rstantools,
 	loo,
-	brms
+	brms,
+	circus
 Remotes: 
 	easystats/insight,
-	easystats/bayestestR
+	easystats/bayestestR,
+	easystats/circus
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

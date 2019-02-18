@@ -2,6 +2,7 @@
 
 S3method(model_performance,glm)
 S3method(model_performance,lm)
+S3method(model_performance,merMod)
 S3method(model_performance,stanreg)
 export(model_performance)
 export(performance_LOO)
