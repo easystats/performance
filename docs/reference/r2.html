@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Performance of Bayesian Models — model_performance.stanreg • performance</title>
+<title>Compute r-squared — r2 • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Performance of Bayesian Models — model_performance.stanreg" />
+<meta property="og:title" content="Compute r-squared — r2" />
 
-<meta property="og:description" content="Compute indices of model performance for (general) linear models." />
+<meta property="og:description" content="to do." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -113,56 +113,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Performance of Bayesian Models</h1>
+    <h1>Compute r-squared</h1>
     
-    <div class="hidden name"><code>model_performance.stanreg.Rd</code></div>
+    <div class="hidden name"><code>r2.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute indices of model performance for (general) linear models.</p>
+    <p>to do.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>,
-  <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>r2</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for glm</span>
+<span class='fu'>r2</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Nagelkerke"</span>, <span class='st'>"CoxSnell"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for lm</span>
+<span class='fu'>r2</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"adjusted"</span>, <span class='st'>"unadjusted"</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for clm2</span>
+<span class='fu'>r2</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Nagelkerke"</span>, <span class='st'>"CoxSnell"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>Object of class <a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a> or <a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a>.</p></td>
-    </tr>
-    <tr>
-      <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a list of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("LOO", "R2", "R2_adj")</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>ci</th>
-      <td><p>The Credible Interval level for R2.</p></td>
+      <th>x</th>
+      <td><p>A fitted model.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>Character vector, indicating the type of r-squared that is
+requested (like <code>"CoxSnell"</code> or <code>"adjusted"</code>).</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Gelman, A., Goodrich, B., Gabry, J., &amp; Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.</p>
+    <p>The requested r-squared value.</p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <div class='dont-index'><p><a href='performance_r2_bayesian.html'>performance_r2_bayesian</a></p></div>
+    <p>For linear models, the r-squared and adjusted r-squared value is returned,
+         as provided by the <code>summary</code>-function.
+         <br /> <br />
+         For generalized linear models, Cox &amp; Snell's and Nagelkerke's
+         pseudo r-squared values are returned.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstanarm</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)
-<span class='co'># }</span><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>iris</span>)
+
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'>r2</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt;  adjusted 
+#&gt; 0.3926302 </div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -170,9 +179,9 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#references">References</a></li>
+      <li><a href="#value">Value</a></li>
 
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

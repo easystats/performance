@@ -26,7 +26,7 @@ model_performance.glm <- function(model, metrics = "all", ...) {
     out$BIC <- BIC(model)
   }
   if("R2" %in% c(metrics)) {
-    out$R2_Tjur <- performance_R2_tjur(model)
+    out$R2_Tjur <- performance_r2_tjur(model)
   }
 
   #TODO: What with sigma and deviance?

@@ -24,4 +24,11 @@ Compute indices of model performance for (general) linear models.
 model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 model_performance(model)
 }
+
+}
+\references{
+Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
+}
+\seealso{
+\link{performance_r2_bayesian}
 }

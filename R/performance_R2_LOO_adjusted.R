@@ -9,14 +9,14 @@
 #' library(rstanarm)
 #'
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
-#' performance_R2_LOO_adjusted(model)
+#' performance_r2_LOO_adjusted(model)
 #' }
 #'
 #'
 #' @importFrom stats var
 #' @importFrom utils install.packages
 #' @export
-performance_R2_LOO_adjusted <- function(model) {
+performance_r2_LOO_adjusted <- function(model) {
 
   if(!requireNamespace("rstantools")){
     warning("This function needs `rstantools` to be installed... installing now.")
