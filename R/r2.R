@@ -5,7 +5,10 @@
 #'
 #' @param x A fitted model.
 #' @param type Character vector, indicating the type of r-squared that is
-#'    requested (like \code{"CoxSnell"} or \code{"adjusted"}).
+#'    requested (like \code{"coxsnell"} or \code{"adjusted"}). If \code{x}
+#'    is a \code{stanreg} or \code{brmsfit} object, \code{type = "loo"} will
+#'    calculate a LOO-adjusted r-squared is calculated; else, an "unadjusted"
+#'    r-squared will be returned by calling \code{rstantools::bayes_R2()}.
 #' @param n Optional, an \code{lme} object, representing the fitted null-model
 #'    (unconditional model) to \code{x}. If \code{n} is given, the pseudo-r-squared
 #'    for random intercept and random slope variances are computed
@@ -30,17 +33,30 @@
 #'               \item Raudenbush SW, Bryk AS. 2002. Hierarchical linear models: applications and data analysis methods. 2nd ed. Thousand Oaks: Sage Publications
 #'               \item Snijders TAB, Bosker RJ. 2012. Multilevel analysis: an introduction to basic and advanced multilevel modeling. 2nd ed. Los Angeles: Sage
 #'               \item Xu, R. 2003. Measuring explained variation in linear mixed effects models. Statist. Med. 22:3527-3541. \doi{10.1002/sim.1572}
-#'               \item Tjur T. 2009. Coefficients of determination in logistic regression models - a new proposal: The coefficient of discrimination. The American Statistician, 63(4): 366-372
 #'             }
 #'
-#' @details For linear models, the r-squared and adjusted r-squared value is returned,
-#'          as provided by the \code{summary}-function.
+#' @details \strong{Linear Models}
+#'          \cr \cr
+#'          For linear models, the r-squared and adjusted r-squared value is returned,
+#'          as provided by the \code{summary}-function. Typically, \code{r2()} for
+#'          linear models accepts \code{type = "adjusted"} or \code{type = "unadjusted"}.
+#'          \cr \cr
+#'          \strong{Generalized Linear Models}
+#'          \cr \cr
+#'          For generalized linear models, Cox & Snell's and Nagelkerke's
+#'          pseudo r-squared values are returned. Typically, \code{r2()} for
+#'          generalized linear models accepts \code{type = "nagelkerke"}
+#'          or \code{type = "coxsnell"}.
+#'          \cr \cr
+#'          \strong{Mixed Models}
 #'          \cr \cr
 #'          For mixed models (from \pkg{lme4} or \pkg{glmmTMB}) marginal and
 #'          conditional r-squared values are calculated, based on
 #'          \cite{Nakagawa et al. 2017}. The distributional variance
 #'          (or observation-level variance) is based on lognormal approximation,
-#'          \code{log(1+var(x)/mu^2)}.
+#'          \code{log(1+var(x)/mu^2)}. The marginal r-squared considers only
+#'          the variance of the fixed effects, while the conditional r-squared
+#'          takes both the fixed and random effects into account.
 #'          \cr \cr
 #'          For \code{lme}-models, an r-squared approximation by computing the
 #'          correlation between the fitted and observed values, as suggested by
@@ -56,45 +72,28 @@
 #'          the Omega-squared value (1 - (residual variance full model / residual
 #'          variance null model)) as suggested by \cite{Xu (2003)} are returned.
 #'          \cr \cr
-#'          For generalized linear models, Cox & Snell's and Nagelkerke's
-#'          pseudo r-squared values are returned.
-#'          \cr \cr
-#'          The ("unadjusted") r-squared value and its standard error for
-#'          \code{brmsfit} or \code{stanreg} objects are robust measures, i.e.
-#'          the median is used to compute r-squared, and the median absolute
-#'          deviation as the measure of variability. If \code{loo = TRUE},
-#'          a LOO-adjusted r-squared is calculated, which comes conceptionally
-#'          closer to an adjusted r-squared measure.
-#'
-#' @note \describe{
-#'         \item{\strong{cod()}}{
-#'          This method calculates the Coefficient of Discrimination \code{D}
-#'          for generalized linear (mixed) models for binary data. It is
-#'          an alternative to other Pseudo-R-squared values like Nakelkerke's
-#'          R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D}
-#'          can be read like any other (Pseudo-)R-squared value.
-#'         }
-#'         \item{\strong{r2()}}{
-#'          For mixed models, the marginal r-squared considers only the variance
-#'          of the fixed effects, while the conditional r-squared takes both
-#'          the fixed and random effects into account.
-#'          \cr \cr
-#'          For \code{lme}-objects, if \code{n} is given, the Pseudo-R2 statistic
-#'          is the proportion of explained variance in the random effect after
-#'          adding co-variates or predictors to the model, or in short: the
-#'          proportion of the explained variance in the random effect of the
-#'          full (conditional) model \code{x} compared to the null (unconditional)
-#'          model \code{n}.
-#'          \cr \cr
+#'          The Pseudo-R2 statistic is the proportion of explained variance in
+#'          the random effect after adding co-variates or predictors to the
+#'          model, or in short: the proportion of the explained variance in
+#'          the random effect of the full (conditional) model \code{x}
+#'          compared to the null (unconditional) model \code{n}.
 #'          The Omega-squared statistics, if \code{n} is given, is 1 - the proportion
 #'          of the residual variance of the full model compared to the null model's
 #'          residual variance, or in short: the the proportion of the residual
 #'          variation explained by the covariates.
 #'          \cr \cr
-#'          Alternative ways to assess the "goodness-of-fit" is to compare the ICC
-#'          of the null model with the ICC of the full model (see \code{\link{icc}}).
-#'         }
-#'       }
+#'          \strong{Bayesian Models}
+#'          \cr \cr
+#'          The Bayes r-squared value and its standard error for
+#'          \code{brmsfit} or \code{stanreg} objects are robust measures, i.e.
+#'          the median is used to compute r-squared, and the median absolute
+#'          deviation as the measure of variability. If \code{type = "loo"},
+#'          a LOO-adjusted r-squared is calculated, which comes conceptionally
+#'          closer to an adjusted r-squared measure. Typically, \code{r2()} for
+#'          Bayesian models accepts \code{type = "bayes"} or \code{type = "loo"}.
+#'
+#' @note  Alternative ways to assess the "goodness-of-fit" is to compare the ICC
+#'        of the null model with the ICC of the full model (see \code{\link{icc}}).
 #'
 #' @examples
 #' data(iris)
@@ -118,7 +117,7 @@ r2.default <- function(x, ...) {
 
 #' @rdname r2
 #' @export
-r2.glm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
+r2.glm <- function(x, type = c("nagelkerke", "coxsnell"), ...) {
   type <- match.arg(type)
 
   ## TODO how to handle poisson?
@@ -128,8 +127,8 @@ r2.glm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 
   R2 <- switch(
     type,
-    CoxSnell = CoxSnell,
-    Nakelkerke = CoxSnell / (1 - exp(-x$null / n))
+    coxsnell = CoxSnell,
+    nagelkerke = CoxSnell / (1 - exp(-x$null / n))
   )
 
   ## TODO should we return a named vector?
@@ -163,16 +162,15 @@ r2.lm <- function(x, type = c("adjusted", "unadjusted"), ...) {
 
 
 #' @export
-r2.polr <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
+r2.polr <- function(x, type = c("nagelkerke", "coxsnell"), ...) {
   type <- match.arg(type)
   L.base <- stats::logLik(stats::update(x, ~ 1))
   r2glm(x, L.base, type)
 }
 
 
-#' @rdname r2
 #' @export
-r2.clm2 <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
+r2.clm2 <- function(x, type = c("nagelkerke", "coxsnell"), ...) {
   type <- match.arg(type)
   L.base <- stats::logLik(stats::update(x, location = ~ 1, scale = ~ 1))
   r2glm(x, L.base, type)
@@ -180,7 +178,7 @@ r2.clm2 <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 
 
 #' @export
-r2.clm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
+r2.clm <- function(x, type = c("nagelkerke", "coxsnell"), ...) {
   type <- match.arg(type)
   L.base <- stats::logLik(stats::update(x, ~ 1))
   r2glm(x, L.base, type)
@@ -188,7 +186,7 @@ r2.clm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 
 
 #' @export
-r2.vglm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
+r2.vglm <- function(x, type = c("nagelkerke", "coxsnell"), ...) {
   if (!(is.null(x@call$summ) && !identical(x@call$summ, 0)))
     stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
 
@@ -199,7 +197,7 @@ r2.vglm <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
 
 
 #' @export
-r2.multinom <- function(x, type = c("Nagelkerke", "CoxSnell"), ...) {
+r2.multinom <- function(x, type = c("nagelkerke", "coxsnell"), ...) {
   type <- match.arg(type)
   L.base <- stats::logLik(stats::update(x, ~ 1, trace = FALSE))
   r2glm(x, L.base, type)
@@ -234,8 +232,8 @@ r2glm <- function(x, L.base, type) {
 
   R2 <- switch(
     type,
-    CoxSnell = 1 - exp(-G2 / n),
-    Nakelkerke = (1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n))
+    coxsnell = 1 - exp(-G2 / n),
+    nagelkerke = (1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n))
   )
 
   ## TODO should we return a named vector?
@@ -245,24 +243,30 @@ r2glm <- function(x, L.base, type) {
 }
 
 
+#' @rdname r2
 #' @export
-r2.merMod <- function(x, ...) {
-  r2_mixedmodel(x, type = "r2", obj.name = deparse(substitute(x)))
+r2.merMod <- function(x, type = c("marginal", "conditional"), ...) {
+  type <- match.arg(type)
+  r2_mixedmodel(x, type = type, obj.name = deparse(substitute(x)), fun.type = "r2")
 }
 
 
 #' @export
-r2.glmmTMB <- function(x, ...) {
-  r2_mixedmodel(x, type = "r2", obj.name = deparse(substitute(x)))
+r2.glmmTMB <- function(x, type = c("marginal", "conditional"), ...) {
+  type <- match.arg(type)
+  r2_mixedmodel(x, type = type, obj.name = deparse(substitute(x)), fun.type = "r2")
 }
 
 
+#' @rdname r2
 #' @export
-r2.brmsfit <- function(x, loo = FALSE, ...) {
+r2.brmsfit <- function(x, type = c("bayes", "loo"), ...) {
+  type <- match.arg(type)
+
   if (!requireNamespace("brms", quietly = TRUE))
     stop("Package `brms` needed for this function to work. Please install it.", call. = FALSE)
 
-  if (isTRUE(loo)) {
+  if (type == "loo") {
     rsq <- looR2(x)
     names(rsq) <- "LOO-adjusted R2"
     rsq
@@ -282,14 +286,16 @@ r2.brmsfit <- function(x, loo = FALSE, ...) {
 
 
 #' @export
-r2.stanreg <- function(x, loo = FALSE, ...) {
+r2.stanreg <- function(x, type = c("bayes", "loo"), ...) {
+  type <- match.arg(type)
+
   if (!requireNamespace("rstanarm", quietly = TRUE))
     stop("Package `rstanarm` needed for this function to work. Please install it.", call. = FALSE)
 
   if (inherits(x, "stanmvreg"))
     return(NULL)
 
-  if (isTRUE(loo)) {
+  if (type == "loo") {
     rsq <- looR2(x)
     names(rsq) <- "LOO-adjusted R2"
     rsq

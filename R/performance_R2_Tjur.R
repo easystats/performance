@@ -4,9 +4,20 @@
 #'
 #' @param model Binomial Model.
 #'
+#' @note This method calculates the Coefficient of Discrimination \code{D}
+#'    for generalized linear (mixed) models for binary outcomes. It is an
+#'    alternative to other Pseudo-R-squared values like Nagelkerke's
+#'    R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D}
+#'    can be read like any other (Pseudo-)R-squared value.
+#'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' performance_r2_tjur(model)
+#' performance_R2_tjur(model)
+#'
+#' \dontrun{
+#' library(rstanarm)
+#' model <- rstanarm::stan_glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' }
 #'
 #'
 #' @importFrom stats predict residuals
@@ -15,7 +26,7 @@
 #' @references Tjur, T. (2009). Coefficients of determination in logistic regression models—A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
 #'
 #' @export
-performance_r2_tjur <- function(model) {
+performance_R2_tjur <- function(model) {
   # check for valid object class
   if (!insight::model_info(model)$is_binomial) {
     stop("`model` must be binomial.")
@@ -35,4 +46,9 @@ performance_r2_tjur <- function(model) {
   m2 <- mean(pred[which(y == categories[2])], na.rm = TRUE)
 
   abs(m2 - m1)
+}
+
+#' @rdname performance_R2_tjur
+cod <- function(model) {
+  performance_R2_tjur(model)
 }

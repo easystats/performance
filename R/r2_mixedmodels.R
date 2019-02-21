@@ -1,17 +1,19 @@
 #' @importFrom stats nobs
 #' @importFrom insight find_formula
-r2_mixedmodel <- function(x, type = NULL, obj.name = NULL) {
+r2_mixedmodel <- function(x, type = NULL, obj.name = NULL, fun.type = NULL) {
 
   if (!requireNamespace("lme", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute r-squared for mixed models.", call. = FALSE)
   }
 
-  if (is.null(type) || type == "r2") {
+  if (is.null(fun.type) || fun.type == "r2") {
     ws <- "r2()"
     ws2 <- "R2"
+    fun.type <- "r2"
   } else {
     ws <- "icc()"
     ws2 <- "ICC"
+    fun.type <- "icc"
   }
 
 
@@ -62,7 +64,7 @@ r2_mixedmodel <- function(x, type = NULL, obj.name = NULL) {
 
   # Test for non-zero random effects ((near) singularity)
 
-  if (is_singular(x)) {
+  if (lme4::isSingular(x)) {
     warning(sprintf("Can't compute %s. Some variance components equal zero.\n  Solution: Respecify random structure!", ws2), call. = F)
     return(NULL)
   }
@@ -124,27 +126,21 @@ r2_mixedmodel <- function(x, type = NULL, obj.name = NULL) {
   names(icc.adjusted) <-    "Adjusted ICC"
   names(icc.conditional) <- "Conditional ICC"
 
-
-  if (is.null(type) || type == "r2") {
-    var.measure <- structure(
-      class = "sj_r2",
-      list(rsq.marginal = rsq.marginal, rsq.conditional = rsq.conditional)
-    )
-  } else if (type == "all") {
-    var.measure <- structure(
-      class = "sj_iccr2",
-      list(
-        list(rsq.marginal = rsq.marginal, rsq.conditional = rsq.conditional),
-        list(icc.adjusted = icc.adjusted, icc.conditional = icc.conditional)
-      )
-    )
-  } else {
-    var.measure <- structure(
-      class = "sj_icc",
-      list(icc.adjusted = icc.adjusted, icc.conditional = icc.conditional)
-    )
-  }
-
+  var.measure <- switch(
+    fun.type,
+    r2 = {
+      if (type == "marginal")
+        rsq.marginal
+      else
+        rsq.conditional
+    },
+    icc = {
+      if (type == "adjusted")
+        icc.adjusted
+      else
+        icc.conditional
+    }
+  )
 
   # save variance information
 
@@ -282,8 +278,6 @@ null_model <- function(x) {
 
   # yet another brms fix
   f <- stats::formula(x)
-
-  ## TODO add helper Method!!!
 
   if (is.list(f) && obj_has_name(f, "formula")) f <- f$formula
 

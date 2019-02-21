@@ -1,3 +1,4 @@
+#' @importFrom insight get_response
 #' @importFrom stats var
 looR2 <- function(fit) {
 
@@ -7,7 +8,7 @@ looR2 <- function(fit) {
   if (!requireNamespace("loo", quietly = TRUE))
     stop("Package `loo` required. Please install.", call. = FALSE)
 
-  y <- resp_val(fit)
+  y <- insight::get_response(fit)
   ypred <- rstantools::posterior_linpred(fit)
 
 
@@ -35,4 +36,21 @@ looR2 <- function(fit) {
   eloo <- ypredloo - y
 
   1 - stats::var(eloo) / stats::var(y)
+}
+
+
+n_of_chains <- function(x) {
+  if (inherits(x, "brmsfit"))
+    length(x$fit@stan_args)
+  else
+    length(x$stanfit@stan_args)
+}
+
+
+n_of_samples <- function(x) {
+  if (inherits(x, "brmsfit") && requireNamespace("brms", quietly = TRUE)) {
+    brms::nsamples(x, incl_warmup = FALSE)
+  } else {
+    sum(sapply(x$stanfit@stan_args, function(.x) .x$iter - .x$warmup))
+  }
 }

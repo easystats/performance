@@ -27,10 +27,7 @@ r2linmix <- function(x, n) {
     osq <- 1 - ((attr(tau_full, "sigma_2") / attr(tau_null, "sigma_2")))
 
     # if model has no random slope, we need to set this value to NA
-
-    ## TODO replace is_empty with helper function!
-
-    if (is.null(rsq1) || sjmisc::is_empty(rsq1)) rsq1 <- NA
+    if (is.null(rsq1) || is_empty_object(rsq1)) rsq1 <- NA
 
     # name vectors
     names(rsq0) <- "R-squared (tau-00)"

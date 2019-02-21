@@ -18,12 +18,8 @@
 #' @export
 performance_LOO <- function(model) {
 
-  # if model
-
-  if(!requireNamespace("loo")){
-    warning("This function needs `loo` to be installed... installing now.")
-    install.packages("loo")
-    requireNamespace("loo")
+  if (!requireNamespace("loo", quietly = TRUE)) {
+    stop("This function needs package `loo` to be installed.")
   }
 
   out <- list()
