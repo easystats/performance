@@ -21,7 +21,10 @@ Imports:
 	insight,
 	bayestestR
 Suggests:
+  brms,
 	knitr,
+	lme4,
+	loo,
 	rmarkdown,
 	testthat,
 	covr,
