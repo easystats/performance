@@ -7,14 +7,13 @@
 #' @examples
 #' \dontrun{
 #' library(lme4)
-#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1|Species), data=iris)
+#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' icc(model)
 #' }
-#'
+#' 
 #' @export
 icc <- function(model) {
-
-  vars <- .compute_variances(model, name="icc")
+  vars <- .compute_variances(model, name = "icc")
 
 
   # Calculate ICC values
@@ -23,10 +22,11 @@ icc <- function(model) {
   icc_conditional <- vars$var.ranef / (vars$var.fixef + vars$var.ranef + vars$var.resid)
 
 
-  out <- data.frame("ICC_adjusted" = icc_adjusted,
-                    "ICC_conditional" = icc_conditional)
+  out <- data.frame(
+    "ICC_adjusted" = icc_adjusted,
+    "ICC_conditional" = icc_conditional
+  )
 
 
   out
-
 }

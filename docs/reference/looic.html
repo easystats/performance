@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Model Performance — model_performance • performance</title>
+<title>LOO-related Indices for Bayesian regressions. — looic • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,13 +37,9 @@
 
 
 
-<meta property="og:title" content="Model Performance — model_performance" />
+<meta property="og:title" content="LOO-related Indices for Bayesian regressions. — looic" />
 
-<meta property="og:description" content="See the documentation for your object's class:
-lm
-glm
-Bayesian lm
-" />
+<meta property="og:description" content="Compute LOOIC and ELPD for Bayesian regressions." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -117,43 +113,45 @@ Bayesian lm
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Model Performance</h1>
+    <h1>LOO-related Indices for Bayesian regressions.</h1>
     
-    <div class="hidden name"><code>model_performance.Rd</code></div>
+    <div class="hidden name"><code>looic.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>See the documentation for your object's class:</p><ul>
-<li><p><a href='model_performance.lm.html'>lm</a></p></li>
-<li><p><a href='model_performance.lm.html'>glm</a></p></li>
-<li><p><a href='model_performance.stanreg.html'>Bayesian lm</a></p></li>
-</ul>
+    <p>Compute LOOIC and ELPD for Bayesian regressions.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_performance</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>looic</span>(<span class='no'>model</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Statistical model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
+      <td><p>A Bayesian regression model.</p></td>
     </tr>
     </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstanarm</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>looic</span>(<span class='no'>model</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

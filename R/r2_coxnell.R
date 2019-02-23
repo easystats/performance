@@ -7,7 +7,6 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_coxnell(model)
-#'
 #' @references
 #' \itemize{
 #'   \item Cox, D. R., & Snell, E. J. (1989). Analysis of binary data (Vol. 32). Monographs on Statistics and Applied Probability.
@@ -28,10 +27,11 @@ r2_coxnell <- function(model) {
   G2 <- -2 * (l_base - l_full)
 
   # Is it still necessary?
-  if (inherits(model, c("vglm", "clm2")))
+  if (inherits(model, c("vglm", "clm2"))) {
     n <- insight::n_obs(model)
-  else
+  } else {
     n <- attr(l_full, "nobs")
+  }
 
   r2_coxnell <- 1 - exp(-G2 / n)
 
@@ -44,7 +44,7 @@ r2_coxnell <- function(model) {
 
 
 #' @export
-r2_coxnell.glm <- function(model){
+r2_coxnell.glm <- function(model) {
   r2_coxnell <- (1 - exp((model$dev - model$null) / insight::n_obs(model)))
   names(r2_coxnell) <- "Coxnell's R2"
   return(r2_coxnell)
@@ -52,34 +52,35 @@ r2_coxnell.glm <- function(model){
 
 
 #' @export
-r2_coxnell.multinom <- function(model){
-  l_base <- stats::logLik(stats::update(model, ~ 1, trace = FALSE))
+r2_coxnell.multinom <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
   return(.r2_coxnell(model, l_base))
 }
 
 #' @export
-r2_coxnell.vglm <- function(model){
-  if (!(is.null(model@call$summ) && !identical(model@call$summ, 0)))
+r2_coxnell.vglm <- function(model) {
+  if (!(is.null(model@call$summ) && !identical(model@call$summ, 0))) {
     stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
+  }
 
-  l_base <- stats::logLik(stats::update(model, ~ 1))
+  l_base <- stats::logLik(stats::update(model, ~1))
   return(.r2_coxnell(model, l_base))
 }
 
 #' @export
-r2_coxnell.clm <- function(model){
-  l_base <- stats::logLik(stats::update(model, ~ 1))
+r2_coxnell.clm <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
   return(.r2_coxnell(model, l_base))
 }
 
 #' @export
-r2_coxnell.clm2 <- function(model){
-  l_base <- stats::logLik(stats::update(model, location = ~ 1, scale = ~ 1))
+r2_coxnell.clm2 <- function(model) {
+  l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
   return(.r2_coxnell(model, l_base))
 }
 
 #' @export
-r2_coxnell.polr <- function(model){
-  l_base <- stats::logLik(stats::update(model, ~ 1))
+r2_coxnell.polr <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
   return(.r2_coxnell(model, l_base))
 }

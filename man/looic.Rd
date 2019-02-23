@@ -20,5 +20,4 @@ model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 looic(model)
 }
 
-
 }

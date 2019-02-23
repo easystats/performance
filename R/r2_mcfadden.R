@@ -19,7 +19,7 @@ r2_mcfadden <- function(model) {
 
 
 #' @export
-r2_mcfadden.mlogit <- function(model){
+r2_mcfadden.mlogit <- function(model) {
   R2 <- as.vector(summary(model)$mfR2)
   names(R2) <- "McFadden's R2"
   R2

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Performance of Linear Models — model_performance.merMod • performance</title>
+<title>Performance of Mixed Models — model_performance.merMod • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Performance of Linear Models — model_performance.merMod" />
+<meta property="og:title" content="Performance of Mixed Models — model_performance.merMod" />
 
-<meta property="og:description" content="Compute indices of model performance for linear models." />
+<meta property="og:description" content="Compute indices of model performance for mixed models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -113,14 +113,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Performance of Linear Models</h1>
+    <h1>Performance of Mixed Models</h1>
     
     <div class="hidden name"><code>model_performance.merMod.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute indices of model performance for linear models.</p>
+    <p>Compute indices of model performance for mixed models.</p>
     
     </div>
 
@@ -132,11 +132,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Object of class <a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a>.</p></td>
+      <td><p>Object of class <code>merMod</code>.</p></td>
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a list of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "R2_adj")</a></code>).</p></td>
+      <td><p>Can be <code>"all"</code> or a list of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "ICC")</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -146,9 +146,12 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC     BIC        R2        F DoF DoF_residual            p    R2_adj
-#&gt; 1 156.0101 161.873 0.8302274 70.90836   2           29 6.808955e-12 0.8185189</div></pre>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute r-squared — r2 • performance</title>
+<title>Compute the model's R2 — r2 • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,15 @@
 
 
 
-<meta property="og:title" content="Compute r-squared — r2" />
+<meta property="og:title" content="Compute the model's R2 — r2" />
 
-<meta property="og:description" content="to do." />
+<meta property="og:description" content="Returns a list containing values related to the most appropriate R2 for the given model. See the list below:
+logistic models (glm): Tjur's R2
+General linear models (glm): Nagelkerke's R2
+Multinomial Logit (mlogit): McFadden's R2
+Mixed models (merMod, glmmTMB): Nakagawa's R2
+Bayesian models (brmsfit, stanreg): R2 bayes
+" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -113,76 +119,56 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute r-squared</h1>
+    <h1>Compute the model's R2</h1>
     
     <div class="hidden name"><code>r2.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>to do.</p>
+    <p>Returns a list containing values related to the most appropriate R2 for the given model. See the list below:</p><ul>
+<li><p>logistic models (glm): <a href='r2_tjur.html'>Tjur's R2</a></p></li>
+<li><p>General linear models (glm): <a href='r2_nagelkerke.html'>Nagelkerke's R2</a></p></li>
+<li><p>Multinomial Logit (mlogit): <a href='r2_mcfadden.html'>McFadden's R2</a></p></li>
+<li><p>Mixed models (merMod, glmmTMB): <a href='r2_nakagawa.html'>Nakagawa's R2</a></p></li>
+<li><p>Bayesian models (brmsfit, stanreg): <a href='r2_bayes.html'>R2 bayes</a></p></li>
+</ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for glm</span>
-<span class='fu'>r2</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Nagelkerke"</span>, <span class='st'>"CoxSnell"</span>), <span class='no'>...</span>)
-
-<span class='co'># S3 method for lm</span>
-<span class='fu'>r2</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"adjusted"</span>, <span class='st'>"unadjusted"</span>), <span class='no'>...</span>)
-
-<span class='co'># S3 method for clm2</span>
-<span class='fu'>r2</span>(<span class='no'>x</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Nagelkerke"</span>, <span class='st'>"CoxSnell"</span>), <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>r2</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A fitted model.</p></td>
+      <th>model</th>
+      <td><p>A statistical model.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>Character vector, indicating the type of r-squared that is
-requested (like <code>"CoxSnell"</code> or <code>"adjusted"</code>).</p></td>
+      <td><p>Arguments passed to or from other methods.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>The requested r-squared value.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>For linear models, the r-squared and adjusted r-squared value is returned,
-         as provided by the <code>summary</code>-function.
-         <br /> <br />
-         For generalized linear models, Cox &amp; Snell's and Nagelkerke's
-         pseudo r-squared values are returned.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>iris</span>)
-
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>r2</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt;  adjusted 
-#&gt; 0.3926302 </div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='fu'>r2</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; $R2_Tjur
+#&gt; [1] 0.4776926
+#&gt; </div><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lme4</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>Species</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='no'>iris</span>)
+<span class='fu'>r2</span>(<span class='no'>model</span>)
+<span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 

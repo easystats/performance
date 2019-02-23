@@ -7,23 +7,23 @@
 #' @examples
 #' \dontrun{
 #' library(rstanarm)
-#'
+#' 
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 #' r2_loo(model)
 #' }
-#'
-#'
+#' 
 #' @importFrom utils install.packages
 #' @importFrom insight get_response
 #' @importFrom stats var
 #' @export
 r2_loo <- function(model) {
-
-  if (!requireNamespace("rstantools", quietly = TRUE))
+  if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` required. Please install.", call. = FALSE)
+  }
 
-  if (!requireNamespace("loo", quietly = TRUE))
+  if (!requireNamespace("loo", quietly = TRUE)) {
     stop("Package `loo` required. Please install.", call. = FALSE)
+  }
 
   y <- insight::get_response(model)
   ypred <- rstantools::posterior_linpred(model)
@@ -33,11 +33,12 @@ r2_loo <- function(model) {
   # predicted, resulting in different lengths between y and ypred
 
   if (length(y) > ncol(ypred)) {
-    tryCatch(
-      {
-        y <- y[as.numeric(attr(ypred, "dimnames")[[2]])]
-      },
-      error = function(x) { NULL }
+    tryCatch({
+      y <- y[as.numeric(attr(ypred, "dimnames")[[2]])]
+    },
+    error = function(x) {
+      NULL
+    }
     )
   }
 
@@ -59,10 +60,11 @@ r2_loo <- function(model) {
 #' @keywords internal
 .n_chains <- function(x) {
   # This could be useful in insight :)
-  if (inherits(x, "brmsfit"))
+  if (inherits(x, "brmsfit")) {
     length(x$fit@stan_args)
-  else
+  } else {
     length(x$stanfit@stan_args)
+  }
 }
 
 #' @keywords internal

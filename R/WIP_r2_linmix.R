@@ -23,7 +23,7 @@ r2_linmix <- function(x, n) {
 
     # get r2
     rsq <- ((attr(tau_null, "tau.00") + attr(tau_null, "sigma_2")) -
-              (attr(tau_full, "tau.00") + attr(tau_full, "sigma_2"))) /
+      (attr(tau_full, "tau.00") + attr(tau_full, "sigma_2"))) /
       (attr(tau_null, "tau.00") + attr(tau_null, "sigma_2"))
 
     # get omega-squared
@@ -47,7 +47,7 @@ r2_linmix <- function(x, n) {
     ))
   } else {
     # compute "correlation"
-    lmfit <-  lm(resp_val(x) ~ stats::fitted(x))
+    lmfit <- lm(resp_val(x) ~ stats::fitted(x))
     # get r-squared
     rsq <- summary(lmfit)$r.squared
     # get omega squared

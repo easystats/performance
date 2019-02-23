@@ -15,7 +15,7 @@ DESCRIPTION TO BE IMPROVED.
 \examples{
 \dontrun{
 library(lme4)
-model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1|Species), data=iris)
+model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2_nakagawa(model)
 }
 

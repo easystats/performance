@@ -9,15 +9,13 @@
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
 #' model_performance(model)
-#'
+#' 
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
 #' @importFrom stats AIC BIC
 #' @export
 model_performance.lm <- function(model, metrics = "all", ...) {
-
-
-  if (metrics == "all"){
+  if (metrics == "all") {
     metrics <- c("AIC", "BIC", "R2", "R2_adj")
   }
 
@@ -32,7 +30,7 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     out <- c(out, r2(model))
   }
 
-  #TODO: What with sigma and deviance?
+  # TODO: What with sigma and deviance?
 
   out <- as.data.frame(out)
   row.names(out) <- NULL

@@ -15,17 +15,15 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2(model)
-#'
 #' \dontrun{
 #' library(lme4)
-#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1|Species), data=iris)
+#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' r2(model)
 #' }
-
-#'
+#' 
 #' @export
 r2 <- function(model, ...) {
- UseMethod("r2")
+  UseMethod("r2")
 }
 
 
@@ -44,7 +42,8 @@ r2.lm <- function(model, ...) {
     out$`F`,
     out$DoF,
     out$DoF_residual,
-    lower.tail = FALSE)
+    lower.tail = FALSE
+  )
 
   out$R2_adjusted <- model_summary$adj.r.squared
   return(out)
@@ -55,9 +54,9 @@ r2.lm <- function(model, ...) {
 
 #' @export
 r2.glm <- function(model, ...) {
-  if(insight::model_info(model)$is_logit){
+  if (insight::model_info(model)$is_logit) {
     out <- list("R2_Tjur" = r2_tjur(model))
-  } else{
+  } else {
     out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
   }
   return(out)
@@ -111,8 +110,10 @@ r2.multinom <- function(model, ...) {
 #' @export
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
-  out <- list("R2" = model_summary$r.squared[1],
-              "R2_adjusted" = model_summary$r.squared[2])
+  out <- list(
+    "R2" = model_summary$r.squared[1],
+    "R2_adjusted" = model_summary$r.squared[2]
+  )
   return(out)
 }
 

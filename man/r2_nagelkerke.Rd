@@ -15,7 +15,6 @@ DESCRIPTION TO BE IMPROVED.
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_nagelkerke(model)
-
 }
 \references{
 \itemize{

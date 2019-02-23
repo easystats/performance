@@ -7,14 +7,13 @@
 #' @examples
 #' \dontrun{
 #' library(lme4)
-#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1|Species), data=iris)
+#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' r2_nakagawa(model)
 #' }
-#'
+#' 
 #' @export
 r2_nakagawa <- function(model) {
-
-  vars <- .compute_variances(model, name="r2")
+  vars <- .compute_variances(model, name = "r2")
 
   # Calculate R2 values
 
@@ -22,8 +21,10 @@ r2_nakagawa <- function(model) {
   r2_conditional <- (vars$var.fixef + vars$var.ranef) / (vars$var.fixef + vars$var.ranef + vars$var.resid)
 
 
-  out <- list("R2_marginal" = r2_marginal,
-              "R2_conditional" = r2_conditional)
+  out <- list(
+    "R2_marginal" = r2_marginal,
+    "R2_conditional" = r2_conditional
+  )
 
 
   out
@@ -35,7 +36,6 @@ r2_nakagawa <- function(model) {
 
 #' @keywords internal
 .compute_variances <- function(model, name = "r2") {
-
   x <- model
 
   if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -78,7 +78,7 @@ r2_nakagawa <- function(model) {
   # for glmmTMB, use conditional component of model only,
   # and tell user that zero-inflation is ignored
 
-  if (inherits(x,"glmmTMB")) {
+  if (inherits(x, "glmmTMB")) {
     vals <- lapply(vals, .collapse_cond)
 
     nullEnv <- function(x) {
@@ -86,13 +86,15 @@ r2_nakagawa <- function(model) {
       return(x)
     }
 
-    if (!identical(nullEnv(x$modelInfo$allForm$ziformula), nullEnv(~0)))
+    if (!identical(nullEnv(x$modelInfo$allForm$ziformula), nullEnv(~0))) {
       warning(sprintf("%s ignores effects of zero-inflation.", name_fun), call. = FALSE)
+    }
 
     dform <- nullEnv(x$modelInfo$allForm$dispformula)
 
-    if (!identical(dform,nullEnv(~1)) && (!identical(dform, nullEnv(~0))))
+    if (!identical(dform, nullEnv(~1)) && (!identical(dform, nullEnv(~0)))) {
       warning(sprintf("%s ignores effects of dispersion model.", name_fun), call. = FALSE)
+    }
   }
 
 
@@ -120,8 +122,9 @@ r2_nakagawa <- function(model) {
     colnames(vals$re)
   }
 
-  if (!all(random.slopes %in% names(vals$beta)))
+  if (!all(random.slopes %in% names(vals$beta))) {
     warning(sprintf("Random slopes not present as fixed effects. This artificially inflates the conditional %s.\n  Solution: Respecify fixed structure!", name_full), call. = FALSE)
+  }
 
 
   # Separate observation variance from variance of random effects
@@ -159,9 +162,11 @@ r2_nakagawa <- function(model) {
 
   # attr(var.measure, ".obj.name") <- obj.name
 
-  return(list("var.fixef" = var.fixef,
-              "var.ranef" = var.ranef,
-              "var.resid" = var.resid))
+  return(list(
+    "var.fixef" = var.fixef,
+    "var.ranef" = var.ranef,
+    "var.resid" = var.resid
+  ))
 }
 
 
@@ -179,10 +184,11 @@ r2_nakagawa <- function(model) {
 #' glmmTMB returns a list of model information, one for conditional and one for zero-inflated part, so here we "unlist" it
 #' @keywords internal
 .collapse_cond <- function(fit) {
-  if (is.list(fit) && "cond" %in% names(fit))
+  if (is.list(fit) && "cond" %in% names(fit)) {
     fit[["cond"]]
-  else
+  } else {
     fit
+  }
 }
 
 
@@ -209,8 +215,9 @@ r2_nakagawa <- function(model) {
 
   sc <- vals$vc$residual__$sd[1]
 
-  if (.obj_has_name(vals$vc, "residual__"))
+  if (.obj_has_name(vals$vc, "residual__")) {
     vals$vc <- vals$vc[-which(names(vals$vc) == "residual__")]
+  }
 
   vals$vc <- lapply(vals$vc, function(.x) {
     if (.obj_has_name(.x, "cov")) {

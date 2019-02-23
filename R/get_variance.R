@@ -31,7 +31,8 @@
       # Z <- vals$X[, rownames(Sigma), drop = FALSE]
       Z.m <- Z %*% Sigma
       sum(diag(crossprod(Z.m, Z))) / stats::nobs(x)
-    }))
+    }
+  ))
 }
 
 
@@ -40,14 +41,12 @@
 #' Get residual (distribution specific) variance from random effects
 #' @keywords internal
 .get_variance_residual <- function(x, var.cor, faminfo, name) {
-
   sig <- attr(var.cor, "sc")
   if (is.null(sig)) sig <- 1
 
   if (faminfo$is_linear) {
     residual.variance <- sig^2
   } else {
-
     if (faminfo$is_bin) {
       residual.variance <- switch(
         faminfo$link.fun,
@@ -81,10 +80,11 @@
   if (faminfo$is_linear) {
     0
   } else {
-    if (length(obs.terms) == 0 )
+    if (length(obs.terms) == 0) {
       0
-    else
+    } else {
       .get_variance_random(obs.terms, x = x, vals = vals)
+    }
   }
 }
 
@@ -105,33 +105,34 @@
 
   ## in general want log(1+var(x)/mu^2)
   mu <- exp(null.fixef)
-  if (mu < 6)
+  if (mu < 6) {
     warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, name), call. = FALSE)
+  }
 
   ## TODO how to get theta or variance from brms-objects?
-  cvsquared <- tryCatch(
-    {
-      vv <- switch(
-        faminfo$family,
-        poisson = stats::family(x)$variance(mu),
-        truncated_poisson = stats::family(x)$variance(sig),
-        beta = .get_variance_beta(mu, sig),
-        genpois = ,
-        nbinom1 = ,
-        nbinom2 = stats::family(x)$variance(mu, sig),
+  cvsquared <- tryCatch({
+    vv <- switch(
+      faminfo$family,
+      poisson = stats::family(x)$variance(mu),
+      truncated_poisson = stats::family(x)$variance(sig),
+      beta = .get_variance_beta(mu, sig),
+      genpois = ,
+      nbinom1 = ,
+      nbinom2 = stats::family(x)$variance(mu, sig),
 
-        if (inherits(x,"merMod"))
-          mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
-        else
-          mu * (1 + mu / x$theta)
-      )
+      if (inherits(x, "merMod")) {
+        mu * (1 + mu / lme4::getME(x, "glmer.nb.theta"))
+      } else {
+        mu * (1 + mu / x$theta)
+      }
+    )
 
-      vv / mu^2
-    },
-    error = function(x) {
-      warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
-      0
-    }
+    vv / mu^2
+  },
+  error = function(x) {
+    warning("Can't calculate model's distributional variance. Results are not reliable.", call. = F)
+    0
+  }
   )
 
   log1p(cvsquared)

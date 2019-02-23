@@ -9,34 +9,32 @@
 #' @examples
 #' \dontrun{
 #' library(lme4)
-#' model <- lmer(Petal.Length ~ Sepal.Length + (1|Species), data = iris)
+#' model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #' model_performance(model)
 #' }
-
+#' 
 #' @importFrom stats AIC BIC
 #' @export
 model_performance.merMod <- function(model, metrics = "all", ...) {
-
-
-  if (metrics == "all"){
+  if (metrics == "all") {
     metrics <- c("AIC", "BIC", "R2", "ICC")
   }
 
   out <- list()
-  if("AIC" %in% c(metrics)){
+  if ("AIC" %in% c(metrics)) {
     out$AIC <- AIC(model)
   }
-  if("BIC" %in% c(metrics)){
+  if ("BIC" %in% c(metrics)) {
     out$BIC <- BIC(model)
   }
-  if("R2" %in% c(metrics)){
+  if ("R2" %in% c(metrics)) {
     out <- c(out, r2(model))
   }
-  if("ICC" %in% c(metrics)){
+  if ("ICC" %in% c(metrics)) {
     out <- c(out, icc(model))
   }
 
-  #TODO: What with sigma and deviance?
+  # TODO: What with sigma and deviance?
 
   out <- as.data.frame(out)
   row.names(out) <- NULL

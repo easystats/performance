@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Model Performance — model_performance • performance</title>
+<title>Tjur's (2009) R2 - coefficient of determination (D) — r2_tjur • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,13 +37,9 @@
 
 
 
-<meta property="og:title" content="Model Performance — model_performance" />
+<meta property="og:title" content="Tjur's (2009) R2 - coefficient of determination (D) — r2_tjur" />
 
-<meta property="og:description" content="See the documentation for your object's class:
-lm
-glm
-Bayesian lm
-" />
+<meta property="og:description" content="This method calculates the Coefficient of Discrimination D (also known as Tjur's R2; Tjur, 2009) for generalized linear (mixed) models for binary outcomes. It is an alternative to other Pseudo-R-squared values like Nagelkerke's R2 or Cox-Snell R2. The Coefficient of Discrimination D can be read like any other (Pseudo-)R-squared value." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -117,43 +113,54 @@ Bayesian lm
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Model Performance</h1>
+    <h1>Tjur's (2009) R2 - coefficient of determination (D)</h1>
     
-    <div class="hidden name"><code>model_performance.Rd</code></div>
+    <div class="hidden name"><code>r2_tjur.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>See the documentation for your object's class:</p><ul>
-<li><p><a href='model_performance.lm.html'>lm</a></p></li>
-<li><p><a href='model_performance.lm.html'>glm</a></p></li>
-<li><p><a href='model_performance.stanreg.html'>Bayesian lm</a></p></li>
-</ul>
+    <p>This method calculates the Coefficient of Discrimination <code>D</code> (also known as Tjur's R2; Tjur, 2009) for generalized linear (mixed) models for binary outcomes. It is an alternative to other Pseudo-R-squared values like Nagelkerke's R2 or Cox-Snell R2. The Coefficient of Discrimination <code>D</code> can be read like any other (Pseudo-)R-squared value.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_performance</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_tjur</span>(<span class='no'>model</span>)
+
+<span class='fu'>cod</span>(<span class='no'>model</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Statistical model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
+      <td><p>Binomial Model.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
+    <p>Tjur, T. (2009). Coefficients of determination in logistic regression models—A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='fu'>r2_tjur</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; [1] 0.4776926</div><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstanarm</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='co'># }</span><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#references">References</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

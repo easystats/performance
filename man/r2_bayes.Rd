@@ -19,7 +19,7 @@ library(rstanarm)
 model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 r2_bayes(model)
 
-model <- rstanarm::stan_lmer(Petal.Length ~ Petal.Width + (1|Species), data = iris)
+model <- rstanarm::stan_lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
 r2_bayes(model)
 
 library(brms)
@@ -27,7 +27,7 @@ library(brms)
 model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
 r2_bayes(model)
 
-model <- brms::brm(Petal.Length ~ Petal.Width + (1|Species), data = iris)
+model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
 r2_bayes(model)
 }
 

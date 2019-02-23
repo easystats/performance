@@ -15,7 +15,6 @@ DESCRIPTION TO BE IMPROVED. This index was proposed by Cox & Snell (1989, pp. 20
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_coxnell(model)
-
 }
 \references{
 \itemize{

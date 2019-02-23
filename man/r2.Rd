@@ -24,10 +24,9 @@ Returns a list containing values related to the most appropriate R2 for the give
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)
-
 \dontrun{
 library(lme4)
-model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1|Species), data=iris)
+model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2(model)
 }
 

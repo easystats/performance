@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Model Performance — model_performance • performance</title>
+<title>Nagelkerke's (1991) R2 — r2_nagelkerke • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,13 +37,9 @@
 
 
 
-<meta property="og:title" content="Model Performance — model_performance" />
+<meta property="og:title" content="Nagelkerke's (1991) R2 — r2_nagelkerke" />
 
-<meta property="og:description" content="See the documentation for your object's class:
-lm
-glm
-Bayesian lm
-" />
+<meta property="og:description" content="DESCRIPTION TO BE IMPROVED." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -117,43 +113,50 @@ Bayesian lm
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Model Performance</h1>
+    <h1>Nagelkerke's (1991) R2</h1>
     
-    <div class="hidden name"><code>model_performance.Rd</code></div>
+    <div class="hidden name"><code>r2_nagelkerke.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>See the documentation for your object's class:</p><ul>
-<li><p><a href='model_performance.lm.html'>lm</a></p></li>
-<li><p><a href='model_performance.lm.html'>glm</a></p></li>
-<li><p><a href='model_performance.stanreg.html'>Bayesian lm</a></p></li>
-</ul>
+    <p>DESCRIPTION TO BE IMPROVED.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>model_performance</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_nagelkerke</span>(<span class='no'>model</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Statistical model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
+      <td><p>Binomial Model.</p></td>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
+    <ul>
+<li><p>Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.</p></li>
+</ul>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='fu'>r2_nagelkerke</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Nagelkerke's R2 
+#&gt;       0.5899593 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#references">References</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
