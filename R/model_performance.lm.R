@@ -1,6 +1,6 @@
-#' Performance of Linear Models
+#' Performance of (General) Linear Models
 #'
-#' Compute indices of model performance for linear models.
+#' Compute indices of model performance for (general) linear models.
 #'
 #' @param model Object of class \link{lm}.
 #' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "R2_adj")}).
@@ -8,6 +8,9 @@
 #'
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
+#' model_performance(model)
+#'
+#' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
 #' @importFrom stats AIC BIC
 #' @export
@@ -35,3 +38,7 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   row.names(out) <- NULL
   out
 }
+
+#' @rdname model_performance.lm
+#' @export
+model_performance.glm <- model_performance.lm

@@ -2,9 +2,12 @@
 % Please edit documentation in R/model_performance.lm.R
 \name{model_performance.lm}
 \alias{model_performance.lm}
-\title{Performance of Linear Models}
+\alias{model_performance.glm}
+\title{Performance of (General) Linear Models}
 \usage{
 \method{model_performance}{lm}(model, metrics = "all", ...)
+
+\method{model_performance}{glm}(model, metrics = "all", ...)
 }
 \arguments{
 \item{model}{Object of class \link{lm}.}
@@ -14,9 +17,12 @@
 \item{...}{Arguments passed to or from other methods.}
 }
 \description{
-Compute indices of model performance for linear models.
+Compute indices of model performance for (general) linear models.
 }
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)
+model_performance(model)
+
+model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(model)
 }
