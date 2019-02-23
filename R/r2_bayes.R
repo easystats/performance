@@ -37,41 +37,10 @@ r2_bayes <- function(model) {
   }
 
   if(insight::model_info(model)$is_mixed){
-    r2_bayesian <- data.frame("R2_Bayes" = as.vector(rstanarm::bayes_R2(model, re.form = NULL, summary=FALSE)),
-                              "R2_Bayes_fixed" = as.vector(rstanarm::bayes_R2(model, re.form = NA, summary=FALSE)))
+    r2_bayesian <- list("R2_Bayes" = as.vector(rstanarm::bayes_R2(model, re.form = NULL, summary=FALSE)),
+                        "R2_Bayes_fixed" = as.vector(rstanarm::bayes_R2(model, re.form = NA, summary=FALSE)))
   } else{
-    r2_bayesian <- data.frame("R2_Bayes" = as.vector(rstanarm::bayes_R2(model, summary=FALSE)))
+    r2_bayesian <- list("R2_Bayes" = as.vector(rstanarm::bayes_R2(model, summary=FALSE)))
   }
   return(r2_bayesian)
-}
-
-
-
-
-
-#' @keywords internal
-.summarize_r2_bayes <- function(r2_posterior, ci=0.9, name="R2_"){
-  out <- list()
-  out$Median <- median(r2_posterior)
-  out$MAD <- mad(r2_posterior)
-  out$Mean <- mean(r2_posterior)
-  out$SD <- sd(r2_posterior)
-  out$MAP <- bayestestR::map_estimate(r2_posterior)
-
-  r2_ci <- bayestestR::hdi(r2_posterior, ci=ci)
-  if(nrow(r2_ci) > 1){
-    # TODO: as this transformation is also used in parameters, maybe it would be good to put a function in bayestestR
-    hdi_low <- as.data.frame(t(setNames(r2_ci$CI_low, as.numeric(r2_ci$CI))))
-    names(hdi_low) <- paste0("CI_", names(hdi_low), "_low")
-    hdi_high <- as.data.frame(t(setNames(r2_ci$CI_high, as.numeric(r2_ci$CI))))
-    names(hdi_high) <- paste0("CI_", names(hdi_high), "_high")
-    hdi <- sapply(cbind(hdi_low, hdi_high), as.numeric)
-    out <- append(out, as.list(hdi))
-  } else{
-    out$CI_low <- r2_ci$CI_low
-    out$CI_high <- r2_ci$CI_high
-  }
-
-  names(out) <- paste0(name, names(out))
-  return(out)
 }

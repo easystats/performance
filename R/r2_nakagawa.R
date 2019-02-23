@@ -22,8 +22,8 @@ r2_nakagawa <- function(model) {
   r2_conditional <- (vars$var.fixef + vars$var.ranef) / (vars$var.fixef + vars$var.ranef + vars$var.resid)
 
 
-  out <- data.frame("R2_marginal" = r2_marginal,
-                    "R2_conditional" = r2_conditional)
+  out <- list("R2_marginal" = r2_marginal,
+              "R2_conditional" = r2_conditional)
 
 
   out

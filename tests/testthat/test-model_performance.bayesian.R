@@ -19,7 +19,7 @@ test_that("model_performance.stanreg", {
   perf <- model_performance(model)
 
   testthat::expect_equal(perf$R2_Median, 0.64, tolerance = 0.01)
-  testthat::expect_equal(perf$R2_LOO_adj, 0.5885, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_LOO_adjusted, 0.5885, tolerance = 0.01)
   testthat::expect_equal(perf$ELPD, -31.590, tolerance = 0.01)
 
 })
@@ -34,12 +34,12 @@ test_that("model_performance.brmsfit", {
   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
   perf <- model_performance(model)
   testthat::expect_equal(perf$R2_Median, 0.826, tolerance = 0.01)
-  testthat::expect_equal(perf$R2_LOO_adj, 0.791, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_LOO_adjusted, 0.791, tolerance = 0.01)
   testthat::expect_equal(perf$ELPD, -78.407, tolerance = 0.01)
 
   model <- brms::brm(Petal.Length ~ Petal.Width + (1|Species), data = iris)
   perf <- model_performance(model)
   testthat::expect_equal(perf$R2_Median, 0.955, tolerance = 0.01)
-  testthat::expect_equal(perf$R2_LOO_adj, 0.952, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_LOO_adjusted, 0.952, tolerance = 0.01)
   testthat::expect_equal(perf$ELPD, -70.5, tolerance = 0.01)
 })

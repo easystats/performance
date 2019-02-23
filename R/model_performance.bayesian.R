@@ -22,12 +22,12 @@ model_performance.stanreg <- function(model, metrics = "all", ci=.90, ...) {
 
 
   if (metrics == "all"){
-    metrics <- c("LOOIC", "R2", "R2_adj")
+    metrics <- c("LOOIC", "R2", "R2_adjusted")
   }
 
   out <- list()
   if("LOOIC" %in% c(metrics)){
-    out <- append(out, as.list(looic(model)))
+    out <- append(out, looic(model))
   }
   if("R2" %in% c(metrics)){
     r2 <- r2_bayes(model)
@@ -37,8 +37,8 @@ model_performance.stanreg <- function(model, metrics = "all", ci=.90, ...) {
       out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_fixed, ci=ci, name="R2_Fixed_"))
     }
   }
-  if("R2_adj" %in% c(metrics)){
-    out$R2_LOO_adj <- r2_loo(model)
+  if("R2_adjusted" %in% c(metrics)){
+    out$R2_LOO_adjusted <- r2_loo(model)
   }
 
   #TODO: What with sigma and deviance?
@@ -51,3 +51,40 @@ model_performance.stanreg <- function(model, metrics = "all", ci=.90, ...) {
 
 #' @export
 model_performance.brmsfit <- model_performance.stanreg
+
+
+
+
+
+
+
+
+
+
+
+#' @keywords internal
+.summarize_r2_bayes <- function(r2_posterior, ci=0.9, name="R2_"){
+  out <- list()
+  out$Median <- median(r2_posterior)
+  out$MAD <- mad(r2_posterior)
+  out$Mean <- mean(r2_posterior)
+  out$SD <- sd(r2_posterior)
+  out$MAP <- bayestestR::map_estimate(r2_posterior)
+
+  r2_ci <- bayestestR::hdi(r2_posterior, ci=ci)
+  if(nrow(r2_ci) > 1){
+    # TODO: as this transformation is also used in parameters, maybe it would be good to put a function in bayestestR
+    hdi_low <- as.data.frame(t(setNames(r2_ci$CI_low, as.numeric(r2_ci$CI))))
+    names(hdi_low) <- paste0("CI_", names(hdi_low), "_low")
+    hdi_high <- as.data.frame(t(setNames(r2_ci$CI_high, as.numeric(r2_ci$CI))))
+    names(hdi_high) <- paste0("CI_", names(hdi_high), "_high")
+    hdi <- sapply(cbind(hdi_low, hdi_high), as.numeric)
+    out <- append(out, as.list(hdi))
+  } else{
+    out$CI_low <- r2_ci$CI_low
+    out$CI_high <- r2_ci$CI_high
+  }
+
+  names(out) <- paste0(name, names(out))
+  return(out)
+}

@@ -31,8 +31,6 @@ looic <- function(model) {
   out$LOOIC <- loo_df[rownames(loo_df) == "looic", ]$Estimate
   out$LOOIC_SE <- loo_df[rownames(loo_df) == "looic", ]$SE
 
-  out <- as.data.frame(out)
-
   # Leave p_loo as I am not sure it is an index of performance
 
   return(out)

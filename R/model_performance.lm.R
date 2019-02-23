@@ -26,19 +26,7 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     out$BIC <- BIC(model)
   }
   if ("R2" %in% c(metrics)) {
-    model_summary <- summary(model)
-    out$R2 <- model_summary$r.squared
-
-    out$`F` <- model_summary$fstatistic[1]
-    out$DoF <- model_summary$fstatistic[2]
-    out$DoF_residual <- model_summary$fstatistic[3]
-    out$p <- stats::pf(
-      out$`F`,
-      out$DoF,
-      out$DoF_residual,
-      lower.tail = FALSE)
-
-    out$R2_adj <- model_summary$adj.r.squared
+    out <- c(out, r2(model))
   }
 
   #TODO: What with sigma and deviance?
