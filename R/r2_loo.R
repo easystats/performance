@@ -1,6 +1,23 @@
+#' LOO-adjusted R2.
+#'
+#' Compute LOO-adjusted R2.
+#'
+#' @param model A Bayesian regression model.
+#'
+#' @examples
+#' \dontrun{
+#' library(rstanarm)
+#'
+#' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+#' r2_loo(model)
+#' }
+#'
+#'
+#' @importFrom utils install.packages
 #' @importFrom insight get_response
 #' @importFrom stats var
-looR2 <- function(fit) {
+#' @export
+r2_loo <- function(model) {
 
   if (!requireNamespace("rstantools", quietly = TRUE))
     stop("Package `rstantools` required. Please install.", call. = FALSE)
@@ -8,8 +25,8 @@ looR2 <- function(fit) {
   if (!requireNamespace("loo", quietly = TRUE))
     stop("Package `loo` required. Please install.", call. = FALSE)
 
-  y <- insight::get_response(fit)
-  ypred <- rstantools::posterior_linpred(fit)
+  y <- insight::get_response(model)
+  ypred <- rstantools::posterior_linpred(model)
 
 
   # for some weird models, not all response values can be
@@ -24,11 +41,11 @@ looR2 <- function(fit) {
     )
   }
 
-  ll <- rstantools::log_lik(fit)
+  ll <- rstantools::log_lik(model)
 
   r_eff <- loo::relative_eff(
     exp(ll),
-    chain_id = rep(1:n_of_chains(fit), each = n_of_samples(fit) / n_of_chains(fit))
+    chain_id = rep(1:.n_chains(model), each = .n_samples(model) / .n_chains(model))
   )
 
   psis_object <- loo::psis(log_ratios = -ll, r_eff = r_eff)
@@ -39,15 +56,18 @@ looR2 <- function(fit) {
 }
 
 
-n_of_chains <- function(x) {
+#' @keywords internal
+.n_chains <- function(x) {
+  # This could be useful in insight :)
   if (inherits(x, "brmsfit"))
     length(x$fit@stan_args)
   else
     length(x$stanfit@stan_args)
 }
 
-
-n_of_samples <- function(x) {
+#' @keywords internal
+.n_samples <- function(x) {
+  # This could be useful in insight :)
   if (inherits(x, "brmsfit") && requireNamespace("brms", quietly = TRUE)) {
     brms::nsamples(x, incl_warmup = FALSE)
   } else {

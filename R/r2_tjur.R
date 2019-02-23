@@ -1,18 +1,12 @@
-#' Tjur's (2009) coefficient of determination (D).
+#' Tjur's (2009) R2 - coefficient of determination (D)
 #'
-#' Computes Tjur's (2009) coefficient of determination.
+#' This method calculates the Coefficient of Discrimination \code{D} (also known as Tjur's R2; Tjur, 2009) for generalized linear (mixed) models for binary outcomes. It is an alternative to other Pseudo-R-squared values like Nagelkerke's R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D} can be read like any other (Pseudo-)R-squared value.
 #'
 #' @param model Binomial Model.
 #'
-#' @note This method calculates the Coefficient of Discrimination \code{D}
-#'    for generalized linear (mixed) models for binary outcomes. It is an
-#'    alternative to other Pseudo-R-squared values like Nagelkerke's
-#'    R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D}
-#'    can be read like any other (Pseudo-)R-squared value.
-#'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' performance_R2_tjur(model)
+#' r2_tjur(model)
 #'
 #' \dontrun{
 #' library(rstanarm)
@@ -26,7 +20,7 @@
 #' @references Tjur, T. (2009). Coefficients of determination in logistic regression models—A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
 #'
 #' @export
-performance_R2_tjur <- function(model) {
+r2_tjur <- function(model) {
   # check for valid object class
   if (!insight::model_info(model)$is_binomial) {
     stop("`model` must be binomial.")
@@ -48,7 +42,8 @@ performance_R2_tjur <- function(model) {
   abs(m2 - m1)
 }
 
-#' @rdname performance_R2_tjur
-cod <- function(model) {
-  performance_R2_tjur(model)
-}
+
+
+
+#' @rdname r2_tjur
+cod <- r2_tjur

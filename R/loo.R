@@ -9,14 +9,14 @@
 #' library(rstanarm)
 #'
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
-#' performance_LOO(model)
+#' looic(model)
 #' }
 #'
 #'
 #' @importFrom stats var
 #' @importFrom utils install.packages
 #' @export
-performance_LOO <- function(model) {
+looic <- function(model) {
 
   if (!requireNamespace("loo", quietly = TRUE)) {
     stop("This function needs package `loo` to be installed.")
