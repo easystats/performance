@@ -39,7 +39,7 @@
 
 #' Get residual (distribution specific) variance from random effects
 #' @keywords internal
-.get_variance_residual <- function(x, var.cor, faminfo, type) {
+.get_variance_residual <- function(x, var.cor, faminfo, name) {
 
   sig <- attr(var.cor, "sc")
   if (is.null(sig)) sig <- 1
@@ -58,14 +58,14 @@
     } else if (faminfo$is_pois) {
       residual.variance <- switch(
         faminfo$link.fun,
-        log = .get_variance_distributional(x, null_model(x), faminfo, sig, type = type),
+        log = .get_variance_distributional(x, null_model(x), faminfo, sig, name = name),
         sqrt = 0.25,
         .badlink(faminfo$link.fun, faminfo$family)
       )
     } else if (faminfo$family == "beta") {
       residual.variance <- switch(
         faminfo$link.fun,
-        logit = .get_variance_distributional(x, null_model(x), faminfo, sig, type = type),
+        logit = .get_variance_distributional(x, null_model(x), faminfo, sig, name = name),
         .badlink(faminfo$link.fun, faminfo$family)
       )
     }
@@ -98,7 +98,7 @@
 
 
 # distributional variance for different models
-.get_variance_distributional <- function(x, null.fixef, faminfo, sig, type) {
+.get_variance_distributional <- function(x, null.fixef, faminfo, sig, name) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needs to be installed to compute r-squared for mixed models.", call. = FALSE)
   }
@@ -106,7 +106,7 @@
   ## in general want log(1+var(x)/mu^2)
   mu <- exp(null.fixef)
   if (mu < 6)
-    warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, type), call. = FALSE)
+    warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, name), call. = FALSE)
 
   ## TODO how to get theta or variance from brms-objects?
   cvsquared <- tryCatch(

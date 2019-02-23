@@ -4,7 +4,7 @@
 \alias{.get_variance_residual}
 \title{Get residual (distribution specific) variance from random effects}
 \usage{
-.get_variance_residual(x, var.cor, faminfo, type)
+.get_variance_residual(x, var.cor, faminfo, name)
 }
 \description{
 Get residual (distribution specific) variance from random effects
