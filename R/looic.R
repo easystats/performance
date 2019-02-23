@@ -7,17 +7,15 @@
 #' @examples
 #' \dontrun{
 #' library(rstanarm)
-#'
+#' 
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
-#' performance_LOO(model)
+#' looic(model)
 #' }
-#'
-#'
+#' 
 #' @importFrom stats var
 #' @importFrom utils install.packages
 #' @export
-performance_LOO <- function(model) {
-
+looic <- function(model) {
   if (!requireNamespace("loo", quietly = TRUE)) {
     stop("This function needs package `loo` to be installed.")
   }
@@ -30,8 +28,6 @@ performance_LOO <- function(model) {
   out$ELPD_SE <- loo_df[rownames(loo_df) == "elpd_loo", ]$SE
   out$LOOIC <- loo_df[rownames(loo_df) == "looic", ]$Estimate
   out$LOOIC_SE <- loo_df[rownames(loo_df) == "looic", ]$SE
-
-  out <- as.data.frame(out)
 
   # Leave p_loo as I am not sure it is an index of performance
 

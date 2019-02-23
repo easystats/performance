@@ -1,6 +1,9 @@
+#' Internal for now (WIP)
+#'
 #' @importFrom insight get_response
-#' @importFrom stats var fitted residuals
-r2linmix <- function(x, n) {
+#' @importFrom stats var fitted residuals lm
+#' @keywords internal
+r2_linmix <- function(x, n) {
   # do we have null model?
   if (!is.null(n)) {
     # compute tau for both models
@@ -20,14 +23,14 @@ r2linmix <- function(x, n) {
 
     # get r2
     rsq <- ((attr(tau_null, "tau.00") + attr(tau_null, "sigma_2")) -
-              (attr(tau_full, "tau.00") + attr(tau_full, "sigma_2"))) /
+      (attr(tau_full, "tau.00") + attr(tau_full, "sigma_2"))) /
       (attr(tau_null, "tau.00") + attr(tau_null, "sigma_2"))
 
     # get omega-squared
     osq <- 1 - ((attr(tau_full, "sigma_2") / attr(tau_null, "sigma_2")))
 
     # if model has no random slope, we need to set this value to NA
-    if (is.null(rsq1) || is_empty_object(rsq1)) rsq1 <- NA
+    if (is.null(rsq1) || .is_empty_object(rsq1)) rsq1 <- NA
 
     # name vectors
     names(rsq0) <- "R-squared (tau-00)"
@@ -44,7 +47,7 @@ r2linmix <- function(x, n) {
     ))
   } else {
     # compute "correlation"
-    lmfit <-  lm(resp_val(x) ~ stats::fitted(x))
+    lmfit <- lm(resp_val(x) ~ stats::fitted(x))
     # get r-squared
     rsq <- summary(lmfit)$r.squared
     # get omega squared

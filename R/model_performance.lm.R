@@ -1,6 +1,6 @@
-#' Performance of Linear Models
+#' Performance of (General) Linear Models
 #'
-#' Compute indices of model performance for linear models.
+#' Compute indices of model performance for (general) linear models.
 #'
 #' @param model Object of class \link{lm}.
 #' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "R2_adj")}).
@@ -9,12 +9,13 @@
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
 #' model_performance(model)
+#' 
+#' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' model_performance(model)
 #' @importFrom stats AIC BIC
 #' @export
 model_performance.lm <- function(model, metrics = "all", ...) {
-
-
-  if (metrics == "all"){
+  if (metrics == "all") {
     metrics <- c("AIC", "BIC", "R2", "R2_adj")
   }
 
@@ -26,24 +27,16 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     out$BIC <- BIC(model)
   }
   if ("R2" %in% c(metrics)) {
-    model_summary <- summary(model)
-    out$R2 <- model_summary$r.squared
-
-    out$`F` <- model_summary$fstatistic[1]
-    out$DoF <- model_summary$fstatistic[2]
-    out$DoF_residual <- model_summary$fstatistic[3]
-    out$p <- stats::pf(
-      out$`F`,
-      out$DoF,
-      out$DoF_residual,
-      lower.tail = FALSE)
-
-    out$R2_adj <- model_summary$adj.r.squared
+    out <- c(out, r2(model))
   }
 
-  #TODO: What with sigma and deviance?
+  # TODO: What with sigma and deviance?
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
   out
 }
+
+#' @rdname model_performance.lm
+#' @export
+model_performance.glm <- model_performance.lm
