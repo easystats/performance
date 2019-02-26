@@ -12,7 +12,7 @@
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 #' model_performance(model)
 #' }
-#' 
+#'
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
 #' @importFrom bayestestR hdi
@@ -28,7 +28,7 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
     out <- append(out, looic(model))
   }
   if ("R2" %in% c(metrics)) {
-    r2 <- r2_bayes(model)
+    r2 <- .r2_posterior(model)
     out <- c(out, .summarize_r2_bayes(r2$R2_Bayes, ci = ci, name = "R2_"))
 
     if ("R2_Bayes_fixed" %in% names(r2)) {

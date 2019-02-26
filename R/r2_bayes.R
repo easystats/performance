@@ -29,47 +29,24 @@
 #' @importFrom stats var
 #' @importFrom utils install.packages
 #' @export
-r2_bayes <- function(model, robust) {
-  UseMethod("r2_bayes")
-}
-
-#' @export
-r2_bayes.rstanarm <- function(model, robust = FALSE) {
-  if (!requireNamespace("rstanarm", quietly = TRUE)) {
-
-    ## TODO should we better stop here than installing by default?
-    ## I find this a bit obstrusive...
-
-    warning("This function needs `rstanarm` to be installed... installing now.")
-    install.packages("rstanarm")
-    requireNamespace("rstanarm")
-  }
-
-  if (insight::model_info(model)$is_mixed) {
-    r2_bayesian <- list(
-      "R2_Bayes" = as.vector(rstanarm::bayes_R2(model, re.form = NULL, summary = FALSE)),
-      "R2_Bayes_fixed" = as.vector(rstanarm::bayes_R2(model, re.form = NA, summary = FALSE))
-    )
-  } else {
-    r2_bayesian <- list("R2_Bayes" = as.vector(rstanarm::bayes_R2(model, summary = FALSE)))
-  }
-
-  lapply(r2_bayesian, ifelse(robust, stats::median, mean))
-}
-
-#' @export
-r2_bayes.brmsfit <- function(model, robust = FALSE) {
+r2_bayes <- function(model, robust = FALSE) {
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
   }
 
+  r2_bayesian <- .r2_posterior(model)
+  lapply(r2_bayesian, ifelse(robust, stats::median, mean))
+}
+
+#' @keywords internal
+.r2_posterior <- function(model) {
   if (insight::model_info(model)$is_mixed) {
     r2_bayesian <- list(
-      "R2_Bayes" = rstanarm::bayes_R2(model, summary = TRUE, robust = robust, re_formula = NULL),
-      "R2_Bayes_fixed" = rstanarm::bayes_R2(model, summary = TRUE, robust = robust, re_formula = NA)
+      "R2_Bayes" = as.vector(rstanarm::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
+      "R2_Bayes_fixed" = as.vector(rstanarm::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
     )
   } else {
-    r2_bayesian <- list("R2_Bayes" = rstanarm::bayes_R2(model, summary = TRUE, robust = robust, re_formula = NA))
+    r2_bayesian <- list("R2_Bayes" = as.vector(rstanarm::bayes_R2(model, summary = FALSE)))
   }
 
   r2_bayesian
