@@ -28,9 +28,6 @@ r2_nakagawa <- function(model) {
 }
 
 
-
-
-
 #' @keywords internal
 .compute_variances <- function(model, name = "r2") {
   x <- model
@@ -66,11 +63,6 @@ r2_nakagawa <- function(model) {
     vc = lme4::VarCorr(x),
     re = lme4::ranef(x)
   )
-
-  # fix brms structure
-  if (inherits(x, "brmsfit")) {
-    vals <- .vals_brms(vals, faminfo)
-  }
 
   # for glmmTMB, use conditional component of model only,
   # and tell user that zero-inflation is ignored
@@ -167,9 +159,6 @@ r2_nakagawa <- function(model) {
 }
 
 
-
-
-
 #' helper-function, telling user if model is supported or not
 #' @keywords internal
 .badlink <- function(link, family) {
@@ -186,51 +175,4 @@ r2_nakagawa <- function(model) {
   } else {
     fit
   }
-}
-
-
-
-
-
-
-
-
-
-
-
-#' @keywords internal
-.vals_brms <- function(vals, faminfo) {
-  vals$beta <- vals$beta[, 1]
-
-  vals$re <- lapply(vals$re, function(r) {
-    dim.ranef <- dim(r)
-    dim.names <- dimnames(r)[[3]]
-    v.re <- lapply(1:dim.ranef[3], function(.x) r[1:dim.ranef[1], 1, .x])
-    names(v.re) <- dim.names
-    as.data.frame(v.re)
-  })
-
-  sc <- vals$vc$residual__$sd[1]
-
-  if (.obj_has_name(vals$vc, "residual__")) {
-    vals$vc <- vals$vc[-which(names(vals$vc) == "residual__")]
-  }
-
-  vals$vc <- lapply(vals$vc, function(.x) {
-    if (.obj_has_name(.x, "cov")) {
-      d <- dim(.x$cov)
-      .x <- .x$cov[1:d[1], 1, ]
-    } else if (.obj_has_name(.x, "sd")) {
-      .x <- .x$sd[1, 1, drop = FALSE]^2
-      attr(.x, "dimnames") <- list("Intercept", "Intercept")
-    }
-    .x
-  })
-  attr(vals$vc, "sc") <- sc
-
-  # warning: Where does ws come from?
-  # if (faminfo$is_zeroinf)
-  #   warning(sprintf("%s ignores effects of zero-inflation.", ws), call. = FALSE)
-
-  vals
 }
