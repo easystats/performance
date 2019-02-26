@@ -41,9 +41,12 @@ r2_bayes <- function(model, robust = FALSE) {
 #' @keywords internal
 .r2_posterior <- function(model) {
   if (insight::model_info(model)$is_mixed) {
+
+    ## TODO bug in brms, does not condition on random effects and `re_formula` does not work
+
     r2_bayesian <- list(
-      "R2_Bayes" = as.vector(rstanarm::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
-      "R2_Bayes_fixed" = as.vector(rstanarm::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
+      "R2_Bayes" = as.vector(rstanarm::bayes_R2(model, re.form = NULL, summary = FALSE)),
+      "R2_Bayes_fixed" = as.vector(rstanarm::bayes_R2(model, re.form = NA, summary = FALSE))
     )
   } else {
     r2_bayesian <- list("R2_Bayes" = as.vector(rstanarm::bayes_R2(model, summary = FALSE)))
