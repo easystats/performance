@@ -29,7 +29,12 @@
 #' @importFrom stats var
 #' @importFrom utils install.packages
 #' @export
-r2_bayes <- function(model, robust = FALSE) {
+r2_bayes <- function(model, robust) {
+  UseMethod("r2_bayes")
+}
+
+#' @export
+r2_bayes.rstanarm <- function(model, robust = FALSE) {
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
 
     ## TODO should we better stop here than installing by default?
@@ -50,4 +55,22 @@ r2_bayes <- function(model, robust = FALSE) {
   }
 
   lapply(r2_bayesian, ifelse(robust, stats::median, mean))
+}
+
+#' @export
+r2_bayes.brmsfit <- function(model, robust = FALSE) {
+  if (!requireNamespace("rstanarm", quietly = TRUE)) {
+    stop("This function needs `rstanarm` to be installed.")
+  }
+
+  if (insight::model_info(model)$is_mixed) {
+    r2_bayesian <- list(
+      "R2_Bayes" = rstanarm::bayes_R2(model, summary = TRUE, robust = robust, re_formula = NULL),
+      "R2_Bayes_fixed" = rstanarm::bayes_R2(model, summary = TRUE, robust = robust, re_formula = NA)
+    )
+  } else {
+    r2_bayesian <- list("R2_Bayes" = rstanarm::bayes_R2(model, summary = TRUE, robust = robust, re_formula = NA))
+  }
+
+  r2_bayesian
 }
