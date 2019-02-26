@@ -109,7 +109,6 @@
     warning(sprintf("mu of %0.1f is too close to zero, estimate of %s may be unreliable.\n", mu, name), call. = FALSE)
   }
 
-  ## TODO how to get theta or variance from brms-objects?
   cvsquared <- tryCatch({
     vv <- switch(
       faminfo$family,

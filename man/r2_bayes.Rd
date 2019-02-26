@@ -4,10 +4,12 @@
 \alias{r2_bayes}
 \title{R2 for Bayesian regressions.}
 \usage{
-r2_bayes(model)
+r2_bayes(model, robust = FALSE)
 }
 \arguments{
 \item{model}{A Bayesian regression model.}
+
+\item{robust}{Logical, if \code{TRUE},}
 }
 \description{
 Compute R2 for Bayesian models. For mixed models (including a random part), it additionally computes the R2 related to the fixed effects only.

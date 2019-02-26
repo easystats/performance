@@ -20,7 +20,7 @@
 #' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' r2(model)
 #' }
-#' 
+#'
 #' @export
 r2 <- function(model, ...) {
   UseMethod("r2")
@@ -135,15 +135,13 @@ r2.glmmTMB <- function(model, ...) {
 
 #' @export
 r2.brmsfit <- function(model, ...) {
-  out <- r2_bayes(model)
-  return(out)
+  r2_bayes(model)
 }
 
 
 #' @export
 r2.stanreg <- function(model, ...) {
-  out <- r2_bayes(model)
-  return(out)
+  r2_bayes(model)
 }
 
 #' #' @export
