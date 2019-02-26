@@ -10,7 +10,7 @@
 #' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' r2_nakagawa(model)
 #' }
-#' 
+#'
 #' @export
 r2_nakagawa <- function(model) {
   vars <- .compute_variances(model, name = "r2")
@@ -21,13 +21,10 @@ r2_nakagawa <- function(model) {
   r2_conditional <- (vars$var.fixef + vars$var.ranef) / (vars$var.fixef + vars$var.ranef + vars$var.resid)
 
 
-  out <- list(
+  list(
     "R2_marginal" = r2_marginal,
     "R2_conditional" = r2_conditional
   )
-
-
-  out
 }
 
 
