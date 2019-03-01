@@ -19,7 +19,7 @@
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
-  if (metrics == "all") {
+  if (all(metrics == "all")) {
     metrics <- c("LOOIC", "R2", "R2_adjusted")
   }
 
@@ -36,7 +36,9 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
     }
   }
   if ("R2_adjusted" %in% c(metrics)) {
-    out$R2_LOO_adjusted <- r2_loo(model)
+    if(model_info(model)$is_linear){
+      out$R2_LOO_adjusted <- r2_loo(model)
+    }
   }
 
   # TODO: What with sigma and deviance?
