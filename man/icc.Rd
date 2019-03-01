@@ -2,21 +2,36 @@
 % Please edit documentation in R/icc.R
 \name{icc}
 \alias{icc}
+\alias{icc.brmsfit}
 \title{The Intraclass Correlation Coefficient (ICC) for mixed models}
 \usage{
 icc(model)
+
+\method{icc}{brmsfit}(model, re.form = NULL, robust = FALSE,
+  ci.lvl = 0.95)
 }
 \arguments{
-\item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB} or
-\code{stanreg}.}
+\item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
+\code{stanreg} or \code{brmsfit}}
+
+\item{re.form}{Formula containing group-level effects to be considered in
+the prediction. If \code{NULL} (default), include all group-level effects.
+Else, for instance for nested models, name a specific group-level effect
+to calculate the ICC for this group-level. Only applies if \code{ppd = TRUE}.}
+
+\item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
+calculate the central tendency of the variances (only applies to models
+from \pkg{brms}).}
 }
 \description{
 This function calculates the intraclass-correlation
  (icc) - sometimes also called \emph{variance partition coefficient}
- (vpc) - for mixed effects models. Currently, \code{\link[lme4]{merMod}},
- \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects are supported.
- The ICC can be interpreted as \dQuote{the proportion of the variance
- explained by the grouping structure in the population} \cite{(Hox 2002: 15)}.
+ (vpc) - for mixed effects models. The ICC is calculated for \code{\link[lme4]{merMod}},
+ \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects and can be
+ interpreted as \dQuote{the proportion of the variance explained by the
+ grouping structure in the population} \cite{(Hox 2002: 15)}. For models
+ fitted with the \pkg{brms}-package, a variance decomposition based on the
+ posterior predictive distribution is calculated (see 'Details').
 }
 \details{
 \strong{Adjusted and conditional ICC}
@@ -34,8 +49,26 @@ This function calculates the intraclass-correlation
  However, according to \cite{Raudenbush and Bryk (2002)} or
  \cite{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the ICC
  for full models with covariates ("conditional models") and compare how
- much a level-2 variable explains the portion of variation in the grouping
+ much, e.g., a level-2 variable explains the portion of variation in the grouping
  structure (random intercept).
+ \cr \cr
+ \strong{ICC for brms-models}
+ \cr \cr
+ If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
+ variance decomposition based on the posterior predictive distribution. In
+ this case, first, the draws from the posterior predictive distribution
+ \emph{not conditioned} on group-level terms (\code{posterior_predict(..., re.form = NA)})
+ are calculated as well as draws from this distribution \emph{conditioned}
+ on \emph{all random effects} (by default, unless specified else in \code{re.form})
+ are taken. Then, second, the variances for each of these draws are calculated.
+ The "ICC" is then the ratio between these two variances. This is the recommended
+ way to analyse random-effect-variances for non-Gaussian models. It is then possible
+ to compare variances accross models, also by specifying different group-level
+ terms via the \code{re.form}-argument.
+ \cr \cr
+ Sometimes, when the variance of the posterior predictive distribution is
+ very large, the variance ratio in the output makes no sense, e.g. because
+ it is negative. In such cases, it might help to use \code{robust = TRUE}.
 }
 \examples{
 \dontrun{

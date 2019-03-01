@@ -7,7 +7,7 @@
 r2_nakagawa(model)
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A mixed effects model of class \code{merMod} or \code{glmmTMB}.}
 }
 \description{
 Compute the marginal and conditional r-squared value for

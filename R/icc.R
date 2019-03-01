@@ -2,13 +2,21 @@
 #'
 #' @description This function calculates the intraclass-correlation
 #'  (icc) - sometimes also called \emph{variance partition coefficient}
-#'  (vpc) - for mixed effects models. Currently, \code{\link[lme4]{merMod}},
-#'  \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects are supported.
-#'  The ICC can be interpreted as \dQuote{the proportion of the variance
-#'  explained by the grouping structure in the population} \cite{(Hox 2002: 15)}.
+#'  (vpc) - for mixed effects models. The ICC is calculated for \code{\link[lme4]{merMod}},
+#'  \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects and can be
+#'  interpreted as \dQuote{the proportion of the variance explained by the
+#'  grouping structure in the population} \cite{(Hox 2002: 15)}. For models
+#'  fitted with the \pkg{brms}-package, a variance decomposition based on the
+#'  posterior predictive distribution is calculated (see 'Details').
 #'
-#' @param model A mixed effects model of class \code{merMod}, \code{glmmTMB} or
-#'  \code{stanreg}.
+#' @param model A mixed effects model of class \code{merMod}, \code{glmmTMB},
+#'  \code{stanreg} or \code{brmsfit}
+#' @param re.form Formula containing group-level effects to be considered in
+#'   the prediction. If \code{NULL} (default), include all group-level effects.
+#'   Else, for instance for nested models, name a specific group-level effect
+#'   to calculate the ICC for this group-level. Only applies if \code{ppd = TRUE}.
+#'
+#' @inheritParams r2_bayes
 #'
 #' @references \itemize{
 #'  \item Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
@@ -34,8 +42,26 @@
 #'  However, according to \cite{Raudenbush and Bryk (2002)} or
 #'  \cite{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the ICC
 #'  for full models with covariates ("conditional models") and compare how
-#'  much a level-2 variable explains the portion of variation in the grouping
+#'  much, e.g., a level-2 variable explains the portion of variation in the grouping
 #'  structure (random intercept).
+#'  \cr \cr
+#'  \strong{ICC for brms-models}
+#'  \cr \cr
+#'  If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
+#'  variance decomposition based on the posterior predictive distribution. In
+#'  this case, first, the draws from the posterior predictive distribution
+#'  \emph{not conditioned} on group-level terms (\code{posterior_predict(..., re.form = NA)})
+#'  are calculated as well as draws from this distribution \emph{conditioned}
+#'  on \emph{all random effects} (by default, unless specified else in \code{re.form})
+#'  are taken. Then, second, the variances for each of these draws are calculated.
+#'  The "ICC" is then the ratio between these two variances. This is the recommended
+#'  way to analyse random-effect-variances for non-Gaussian models. It is then possible
+#'  to compare variances accross models, also by specifying different group-level
+#'  terms via the \code{re.form}-argument.
+#'  \cr \cr
+#'  Sometimes, when the variance of the posterior predictive distribution is
+#'  very large, the variance ratio in the output makes no sense, e.g. because
+#'  it is negative. In such cases, it might help to use \code{robust = TRUE}.
 #'
 #' @examples
 #' \dontrun{
@@ -46,17 +72,43 @@
 #'
 #' @export
 icc <- function(model) {
+  UseMethod("icc")
+}
+
+#' @export
+icc.default <- function(model) {
   vars <- .compute_variances(model, name = "icc")
 
-
   # Calculate ICC values
-
   icc_adjusted <- vars$var.ranef / (vars$var.ranef + vars$var.resid)
   icc_conditional <- vars$var.ranef / (vars$var.fixef + vars$var.ranef + vars$var.resid)
-
 
   list(
     "ICC_adjusted" = icc_adjusted,
     "ICC_conditional" = icc_conditional
+  )
+}
+
+#' @importFrom stats var
+#' @rdname icc
+#' @export
+icc.brmsfit <- function(model, re.form = NULL, robust = FALSE, ci.lvl = .95) {
+  if (!requireNamespace("brms", quietly = TRUE))
+    stop("Please install and load package `brms` first.", call. = F)
+
+  PPD <- brms::posterior_predict(model, re.form = re.form, summary = FALSE)
+  total_var <- apply(PPD, MARGIN = 1, FUN = stats::var)
+
+  PPD_0 <- brms::posterior_predict(model, re.form = NA, summary = FALSE)
+  tau.00 <- apply(PPD_0, MARGIN = 1, FUN = stats::var)
+
+  if (robust)
+    fun <- get("median", asNamespace("stats"))
+  else
+    fun <- get("mean", asNamespace("base"))
+
+  list(
+    "ICC_decomposed" = 1 - fun(tau.00 / total_var),
+    "CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci.lvl) / 2), (1 + ci.lvl) / 2)
   )
 }

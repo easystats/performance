@@ -3,7 +3,7 @@
 #' @description Compute the marginal and conditional r-squared value for
 #'  mixed effects models with complex random effects structures.
 #'
-#' @param model A statistical model.
+#' @param model A mixed effects model of class \code{merMod} or \code{glmmTMB}.
 #'
 #' @details For mixed models (from \pkg{lme4} or \pkg{glmmTMB}) marginal and
 #'  conditional r-squared values are calculated, based on
