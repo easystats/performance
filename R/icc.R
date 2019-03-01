@@ -10,7 +10,7 @@
 #' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' icc(model)
 #' }
-#' 
+#'
 #' @export
 icc <- function(model) {
   vars <- .compute_variances(model, name = "icc")
@@ -22,11 +22,8 @@ icc <- function(model) {
   icc_conditional <- vars$var.ranef / (vars$var.fixef + vars$var.ranef + vars$var.resid)
 
 
-  out <- data.frame(
+  list(
     "ICC_adjusted" = icc_adjusted,
     "ICC_conditional" = icc_conditional
   )
-
-
-  out
 }
