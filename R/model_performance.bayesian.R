@@ -12,7 +12,7 @@
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 #' model_performance(model)
 #' }
-#' 
+#'
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
 #' @importFrom bayestestR hdi
@@ -36,7 +36,9 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
     }
   }
   if ("R2_adjusted" %in% c(metrics)) {
-    out$R2_LOO_adjusted <- r2_loo(model)
+    if(model_info(model)$is_linear){
+      out$R2_LOO_adjusted <- r2_loo(model)
+    }
   }
 
   # TODO: What with sigma and deviance?
