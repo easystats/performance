@@ -19,7 +19,7 @@
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
-  if (metrics == "all") {
+  if (all(metrics == "all")) {
     metrics <- c("LOOIC", "R2", "R2_adjusted")
   }
 
