@@ -2,7 +2,7 @@
 % Please edit documentation in R/r2_nakagawa.R
 \name{r2_nakagawa}
 \alias{r2_nakagawa}
-\title{Nakagawa's (2013, 2018) R2 for mixed models}
+\title{Nakagawa's (2013, 2017) R2 for mixed models}
 \usage{
 r2_nakagawa(model)
 }
@@ -10,7 +10,20 @@ r2_nakagawa(model)
 \item{model}{A statistical model.}
 }
 \description{
-DESCRIPTION TO BE IMPROVED.
+Compute the marginal and conditional r-squared value for
+ mixed effects models with complex random effects structures.
+}
+\details{
+For mixed models (from \pkg{lme4} or \pkg{glmmTMB}) marginal and
+ conditional r-squared values are calculated, based on
+ \cite{Nakagawa et al. 2017}. The distributional variance (or observation-level
+ variance) that is used to calculate the r-squared is based on lognormal
+ approximation, \code{log(1+var(x)/mu^2)}. The marginal r-squared considers
+ only the variance of the fixed effects, while the conditional r-squared
+ takes both the fixed and random effects into account. The random effect
+ variances are actually the mean random effect variances, thus the
+ r-squared value is also appropriate for mixed models with random
+ slopes (see \cite{Johnson et al. 2014}).
 }
 \examples{
 \dontrun{
@@ -19,4 +32,11 @@ model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2_nakagawa(model)
 }
 
+}
+\references{
+\itemize{
+ \item Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (\doi{10.1111/2041-210X.12225})
+ \item Nakagawa S, Schielzeth H. 2013. A general and simple method for obtaining R2 from generalized linear mixed-effects models. Methods in Ecology and Evolution, 4(2):133–142. \doi{10.1111/j.2041-210x.2012.00261.x}
+ \item Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. \doi{10.1098/rsif.2017.0213}
+ }
 }
