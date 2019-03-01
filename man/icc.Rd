@@ -2,15 +2,73 @@
 % Please edit documentation in R/icc.R
 \name{icc}
 \alias{icc}
+\alias{icc.brmsfit}
 \title{The Intraclass Correlation Coefficient (ICC) for mixed models}
 \usage{
 icc(model)
+
+\method{icc}{brmsfit}(model, re.form = NULL, robust = FALSE,
+  ci.lvl = 0.95)
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
+\code{stanreg} or \code{brmsfit}}
+
+\item{re.form}{Formula containing group-level effects to be considered in
+the prediction. If \code{NULL} (default), include all group-level effects.
+Else, for instance for nested models, name a specific group-level effect
+to calculate the ICC for this group-level. Only applies if \code{ppd = TRUE}.}
+
+\item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
+calculate the central tendency of the variances (only applies to models
+from \pkg{brms}).}
 }
 \description{
-DESCRIPTION TO BE IMPROVED.
+This function calculates the intraclass-correlation
+ (icc) - sometimes also called \emph{variance partition coefficient}
+ (vpc) - for mixed effects models. The ICC is calculated for \code{\link[lme4]{merMod}},
+ \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects and can be
+ interpreted as \dQuote{the proportion of the variance explained by the
+ grouping structure in the population} \cite{(Hox 2002: 15)}. For models
+ fitted with the \pkg{brms}-package, a variance decomposition based on the
+ posterior predictive distribution is calculated (see 'Details').
+}
+\details{
+\strong{Adjusted and conditional ICC}
+ \cr \cr
+ \code{icc()} calculates an adjusted and conditional ICC are, which take
+ all sources of uncertainty (of \emph{all random effects}) into account. While
+ the adjusted ICC only relates to the random effects, the conditional ICC
+ also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
+ \code{icc()} return a meaningful ICC also for models with random slopes and
+ is applicable for models other distributions than Gaussian.
+ \cr \cr
+ \strong{ICC for unconditional and conditional models}
+ \cr \cr
+ Usually, the ICC is calculated for the null model ("unconditional model").
+ However, according to \cite{Raudenbush and Bryk (2002)} or
+ \cite{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the ICC
+ for full models with covariates ("conditional models") and compare how
+ much, e.g., a level-2 variable explains the portion of variation in the grouping
+ structure (random intercept).
+ \cr \cr
+ \strong{ICC for brms-models}
+ \cr \cr
+ If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
+ variance decomposition based on the posterior predictive distribution. In
+ this case, first, the draws from the posterior predictive distribution
+ \emph{not conditioned} on group-level terms (\code{posterior_predict(..., re.form = NA)})
+ are calculated as well as draws from this distribution \emph{conditioned}
+ on \emph{all random effects} (by default, unless specified else in \code{re.form})
+ are taken. Then, second, the variances for each of these draws are calculated.
+ The "ICC" is then the ratio between these two variances. This is the recommended
+ way to analyse random-effect-variances for non-Gaussian models. It is then possible
+ to compare variances accross models, also by specifying different group-level
+ terms via the \code{re.form}-argument.
+ \cr \cr
+ Sometimes, when the variance of the posterior predictive distribution is
+ very large, the variance ratio in the output makes no sense, e.g. because
+ it is negative. In such cases, it might help to use \code{robust = TRUE}.
 }
 \examples{
 \dontrun{
@@ -19,4 +77,13 @@ model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 icc(model)
 }
 
+}
+\references{
+\itemize{
+ \item Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
+ \item Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (\doi{10.1111/2041-210X.12225})
+ \item Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. \doi{10.1098/rsif.2017.0213}
+ \item Rabe-Hesketh S, Skrondal A. 2012. Multilevel and longitudinal modeling using Stata. 3rd ed. College Station, Tex: Stata Press Publication
+ \item Raudenbush SW, Bryk AS. 2002. Hierarchical linear models: applications and data analysis methods. 2nd ed. Thousand Oaks: Sage Publications
+ }
 }

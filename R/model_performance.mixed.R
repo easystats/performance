@@ -12,11 +12,11 @@
 #' model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #' model_performance(model)
 #' }
-#' 
+#'
 #' @importFrom stats AIC BIC
 #' @export
 model_performance.merMod <- function(model, metrics = "all", ...) {
-  if (metrics == "all") {
+  if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "ICC")
   }
 
