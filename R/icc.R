@@ -70,13 +70,20 @@
 #' icc(model)
 #' }
 #'
+#' @importFrom insight model_info
+#' @importFrom stats var
 #' @export
 icc <- function(model) {
   UseMethod("icc")
 }
 
+
 #' @export
 icc.default <- function(model) {
+  if (!insight::model_info(model)$is_mixed) {
+    stop("'model' has no random effects.", call. = FALSE)
+  }
+
   vars <- .compute_variances(model, name = "icc")
 
   # Calculate ICC values
@@ -89,12 +96,16 @@ icc.default <- function(model) {
   )
 }
 
-#' @importFrom stats var
 #' @rdname icc
 #' @export
 icc.brmsfit <- function(model, re.form = NULL, robust = FALSE, ci.lvl = .95) {
-  if (!requireNamespace("brms", quietly = TRUE))
+  if (!insight::model_info(model)$is_mixed) {
+    stop("'model' has no random effects.", call. = FALSE)
+  }
+
+  if (!requireNamespace("brms", quietly = TRUE)) {
     stop("Please install and load package `brms` first.", call. = F)
+  }
 
   PPD <- brms::posterior_predict(model, re.form = re.form, summary = FALSE)
   total_var <- apply(PPD, MARGIN = 1, FUN = stats::var)
@@ -109,6 +120,6 @@ icc.brmsfit <- function(model, re.form = NULL, robust = FALSE, ci.lvl = .95) {
 
   list(
     "ICC_decomposed" = 1 - fun(tau.00 / total_var),
-    "CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci.lvl) / 2), (1 + ci.lvl) / 2)
+    "CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci.lvl) / 2, (1 + ci.lvl) / 2))
   )
 }
