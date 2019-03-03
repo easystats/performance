@@ -31,8 +31,8 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
     r2 <- .r2_posterior(model)
     out <- c(out, .summarize_r2_bayes(r2$R2_Bayes, ci = ci, name = "R2_"))
 
-    if ("R2_Bayes_fixed" %in% names(r2)) {
-      out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_fixed, ci = ci, name = "R2_Fixed_"))
+    if ("R2_Bayes_marginal" %in% names(r2)) {
+      out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_fixed, ci = ci, name = "R2_marginal_"))
     }
   }
   if ("R2_adjusted" %in% c(metrics)) {

@@ -40,8 +40,8 @@ r2_nakagawa <- function(model) {
 
 
   list(
-    "R2_marginal" = r2_marginal,
-    "R2_conditional" = r2_conditional
+    "R2_conditional" = r2_conditional,
+    "R2_marginal" = r2_marginal
   )
 }
 

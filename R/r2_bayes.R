@@ -43,7 +43,7 @@ r2_bayes <- function(model, robust = FALSE) {
   if (insight::model_info(model)$is_mixed) {
     list(
       "R2_Bayes" = as.vector(rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
-      "R2_Bayes_fixed" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
+      "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
     )
   } else {
     list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
