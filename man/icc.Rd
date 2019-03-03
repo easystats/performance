@@ -20,8 +20,7 @@ Else, for instance for nested models, name a specific group-level effect
 to calculate the ICC for this group-level. Only applies if \code{ppd = TRUE}.}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
-calculate the central tendency of the variances (only applies to models
-from \pkg{brms}).}
+calculate the central tendency of the variances.}
 }
 \description{
 This function calculates the intraclass-correlation

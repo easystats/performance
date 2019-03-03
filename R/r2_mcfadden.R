@@ -16,6 +16,59 @@ r2_mcfadden <- function(model) {
 }
 
 
+.r2_mcfadden <- function(model, l_base) {
+  l_full <- stats::logLik(model)
+  mcfadden <- 1 - (l_full/l_base)
+
+  names(mcfadden) <- "McFadden's R2"
+  mcfadden
+}
+
+
+#' @export
+r2_mcfadden.glm <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
+  .r2_mcfadden(model, l_base)
+}
+
+
+#' @export
+r2_mcfadden.vglm <- function(model) {
+  if (!(is.null(model@call$summ) && !identical(model@call$summ, 0))) {
+    stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
+  }
+
+  l_base <- stats::logLik(stats::update(model, ~1))
+  .r2_mcfadden(model, l_base)
+}
+
+
+#' @export
+r2_mcfadden.clm <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
+  return(.r2_mcfadden(model, l_base))
+}
+
+
+#' @export
+r2_mcfadden.clm2 <- function(model) {
+  l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
+  return(.r2_mcfadden(model, l_base))
+}
+
+
+#' @export
+r2_mcfadden.polr <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
+  .r2_mcfadden(model, l_base)
+}
+
+
+#' @export
+r2_mcfadden.multinom <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
+  .r2_mcfadden(model, l_base)
+}
 
 
 #' @export

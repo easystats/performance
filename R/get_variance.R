@@ -47,25 +47,25 @@
   if (faminfo$is_linear) {
     residual.variance <- sig^2
   } else {
-    if (faminfo$is_bin) {
+    if (faminfo$is_binomial) {
       residual.variance <- switch(
-        faminfo$link.fun,
+        faminfo$link_function,
         logit = pi^2 / 3,
         probit = 1,
-        .badlink(faminfo$link.fun, faminfo$family)
+        .badlink(faminfo$link_function, faminfo$family)
       )
-    } else if (faminfo$is_pois) {
+    } else if (faminfo$is_count) {
       residual.variance <- switch(
-        faminfo$link.fun,
+        faminfo$link_function,
         log = .get_variance_distributional(x, null_model(x), faminfo, sig, name = name),
         sqrt = 0.25,
-        .badlink(faminfo$link.fun, faminfo$family)
+        .badlink(faminfo$link_function, faminfo$family)
       )
     } else if (faminfo$family == "beta") {
       residual.variance <- switch(
-        faminfo$link.fun,
+        faminfo$link_function,
         logit = .get_variance_distributional(x, null_model(x), faminfo, sig, name = name),
-        .badlink(faminfo$link.fun, faminfo$family)
+        .badlink(faminfo$link_function, faminfo$family)
       )
     }
   }

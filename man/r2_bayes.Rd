@@ -9,7 +9,8 @@ r2_bayes(model, robust = FALSE)
 \arguments{
 \item{model}{A Bayesian regression model.}
 
-\item{robust}{Logical, if \code{TRUE},}
+\item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
+calculate the central tendency of the variances.}
 }
 \description{
 Compute R2 for Bayesian models. For mixed models (including a random part), it additionally computes the R2 related to the fixed effects only.
