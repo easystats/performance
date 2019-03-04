@@ -5,23 +5,24 @@
 \alias{icc.brmsfit}
 \title{The Intraclass Correlation Coefficient (ICC) for mixed models}
 \usage{
-icc(model)
+icc(model, ...)
 
 \method{icc}{brmsfit}(model, re.form = NULL, robust = FALSE,
-  ci.lvl = 0.95)
+  ci.lvl = 0.95, ...)
 }
 \arguments{
 \item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
 \code{stanreg} or \code{brmsfit}}
 
+\item{...}{Currently not used.}
+
 \item{re.form}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
-to calculate the ICC for this group-level. Only applies if \code{ppd = TRUE}.}
+to calculate the variance decomposition for this group-level.}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
-calculate the central tendency of the variances (only applies to models
-from \pkg{brms}).}
+calculate the central tendency of the variances.}
 }
 \description{
 This function calculates the intraclass-correlation
@@ -36,12 +37,14 @@ This function calculates the intraclass-correlation
 \details{
 \strong{Adjusted and conditional ICC}
  \cr \cr
- \code{icc()} calculates an adjusted and conditional ICC are, which take
- all sources of uncertainty (of \emph{all random effects}) into account. While
+ \code{icc()} calculates an adjusted and conditional ICC, which take
+ all sources of uncertainty (i.e. of \emph{all random effects}) into account. While
  the adjusted ICC only relates to the random effects, the conditional ICC
  also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
+ Typically, the \emph{adjusted} ICC is of interest when the analysis of random
+ effects is of interest.
  \code{icc()} return a meaningful ICC also for models with random slopes and
- is applicable for models other distributions than Gaussian.
+ is applicable for models with other distributions than Gaussian.
  \cr \cr
  \strong{ICC for unconditional and conditional models}
  \cr \cr

@@ -21,16 +21,16 @@ model_performance.merMod <- function(model, metrics = "all", ...) {
   }
 
   out <- list()
-  if ("AIC" %in% c(metrics)) {
-    out$AIC <- AIC(model)
+  if ("AIC" %in% metrics) {
+    out$AIC <- stats::AIC(model)
   }
-  if ("BIC" %in% c(metrics)) {
-    out$BIC <- BIC(model)
+  if ("BIC" %in% metrics) {
+    out$BIC <- stats::BIC(model)
   }
-  if ("R2" %in% c(metrics)) {
+  if ("R2" %in% metrics) {
     out <- c(out, r2(model))
   }
-  if ("ICC" %in% c(metrics)) {
+  if ("ICC" %in% metrics) {
     out <- c(out, icc(model))
   }
 

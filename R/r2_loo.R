@@ -1,4 +1,4 @@
-#' LOO-adjusted R2.
+#' LOO-adjusted R2
 #'
 #' Compute LOO-adjusted R2.
 #'
@@ -7,11 +7,11 @@
 #' @examples
 #' \dontrun{
 #' library(rstanarm)
-#' 
+#'
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 #' r2_loo(model)
 #' }
-#' 
+#'
 #' @importFrom utils install.packages
 #' @importFrom insight get_response
 #' @importFrom stats var

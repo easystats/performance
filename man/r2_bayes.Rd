@@ -2,14 +2,15 @@
 % Please edit documentation in R/r2_bayes.R
 \name{r2_bayes}
 \alias{r2_bayes}
-\title{R2 for Bayesian regressions.}
+\title{Bayesian R2}
 \usage{
 r2_bayes(model, robust = FALSE)
 }
 \arguments{
 \item{model}{A Bayesian regression model.}
 
-\item{robust}{Logical, if \code{TRUE},}
+\item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
+calculate the central tendency of the variances.}
 }
 \description{
 Compute R2 for Bayesian models. For mixed models (including a random part), it additionally computes the R2 related to the fixed effects only.

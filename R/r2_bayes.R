@@ -1,6 +1,7 @@
-#' R2 for Bayesian regressions.
+#' Bayesian R2
 #'
-#' Compute R2 for Bayesian models. For mixed models (including a random part), it additionally computes the R2 related to the fixed effects only.
+#' Compute R2 for Bayesian models. For mixed models (including a random part),
+#' it additionally computes the R2 related to the fixed effects only (marginal R2).
 #'
 #' @param model A Bayesian regression model.
 #' @param robust Logical, if \code{TRUE}, the median instead of mean is used to
@@ -43,7 +44,7 @@ r2_bayes <- function(model, robust = FALSE) {
   if (insight::model_info(model)$is_mixed) {
     list(
       "R2_Bayes" = as.vector(rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
-      "R2_Bayes_fixed" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
+      "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
     )
   } else {
     list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))

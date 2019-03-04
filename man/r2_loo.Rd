@@ -2,7 +2,7 @@
 % Please edit documentation in R/r2_loo.R
 \name{r2_loo}
 \alias{r2_loo}
-\title{LOO-adjusted R2.}
+\title{LOO-adjusted R2}
 \usage{
 r2_loo(model)
 }

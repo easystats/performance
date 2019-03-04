@@ -1,6 +1,6 @@
-#' Performance of (General) Linear Models
+#' Performance of (Generalized) Linear Models
 #'
-#' Compute indices of model performance for (general) linear models.
+#' Compute indices of model performance for (generalized) linear models.
 #'
 #' @param model Object of class \link{lm}.
 #' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "R2_adj")}).
@@ -20,13 +20,13 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   }
 
   out <- list()
-  if ("AIC" %in% c(metrics)) {
-    out$AIC <- AIC(model)
+  if ("AIC" %in% metrics) {
+    out$AIC <- stats::AIC(model)
   }
-  if ("BIC" %in% c(metrics)) {
-    out$BIC <- BIC(model)
+  if ("BIC" %in% metrics) {
+    out$BIC <- stats::BIC(model)
   }
-  if ("R2" %in% c(metrics)) {
+  if ("R2" %in% metrics) {
     out <- c(out, r2(model))
   }
 

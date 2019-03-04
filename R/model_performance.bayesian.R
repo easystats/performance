@@ -31,12 +31,12 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
     r2 <- .r2_posterior(model)
     out <- c(out, .summarize_r2_bayes(r2$R2_Bayes, ci = ci, name = "R2_"))
 
-    if ("R2_Bayes_fixed" %in% names(r2)) {
-      out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_fixed, ci = ci, name = "R2_Fixed_"))
+    if ("R2_Bayes_marginal" %in% names(r2)) {
+      out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_marginal, ci = ci, name = "R2_marginal_"))
     }
   }
   if ("R2_adjusted" %in% c(metrics)) {
-    if(model_info(model)$is_linear){
+    if (model_info(model)$is_linear) {
       out$R2_LOO_adjusted <- r2_loo(model)
     }
   }
@@ -65,18 +65,18 @@ model_performance.brmsfit <- model_performance.stanreg
 #' @keywords internal
 .summarize_r2_bayes <- function(r2_posterior, ci = 0.9, name = "R2_") {
   out <- list()
-  out$Median <- median(r2_posterior)
-  out$MAD <- mad(r2_posterior)
+  out$Median <- stats::median(r2_posterior)
+  out$MAD <- stats::mad(r2_posterior)
   out$Mean <- mean(r2_posterior)
-  out$SD <- sd(r2_posterior)
+  out$SD <- stats::sd(r2_posterior)
   out$MAP <- bayestestR::map_estimate(r2_posterior)
 
   r2_ci <- bayestestR::hdi(r2_posterior, ci = ci)
   if (nrow(r2_ci) > 1) {
     # TODO: as this transformation is also used in parameters, maybe it would be good to put a function in bayestestR
-    hdi_low <- as.data.frame(t(setNames(r2_ci$CI_low, as.numeric(r2_ci$CI))))
+    hdi_low <- as.data.frame(t(stats::setNames(r2_ci$CI_low, as.numeric(r2_ci$CI))))
     names(hdi_low) <- paste0("CI_", names(hdi_low), "_low")
-    hdi_high <- as.data.frame(t(setNames(r2_ci$CI_high, as.numeric(r2_ci$CI))))
+    hdi_high <- as.data.frame(t(stats::setNames(r2_ci$CI_high, as.numeric(r2_ci$CI))))
     names(hdi_high) <- paste0("CI_", names(hdi_high), "_high")
     hdi <- sapply(cbind(hdi_low, hdi_high), as.numeric)
     out <- append(out, as.list(hdi))
