@@ -1,0 +1,23 @@
+#' @title Compute residual standard error
+#' @name rse
+#'
+#' @description Compute residual standard error of linear models.
+#'
+#' @inheritParams rmse
+#'
+#' @details The residual standard error is the square root of the residual
+#'   sum of squares divided by the residual degrees of freedom.
+#'
+#' @return The residual standard error of \code{model}.
+#'
+#' @examples
+#' data(mtcars)
+#' m <- lm(mpg ~ hp + gear, data = mtcars)
+#' rse(m)
+#'
+#' @importFrom stats residuals df.residual
+#' @export
+rse <- function(model) {
+  # Residual standard error
+  sqrt(sum(stats::residuals(model)^2, na.rm = T) / stats::df.residual(model))
+}
