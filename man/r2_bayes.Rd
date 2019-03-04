@@ -4,7 +4,7 @@
 \alias{r2_bayes}
 \title{Bayesian R2}
 \usage{
-r2_bayes(model, robust = FALSE)
+r2_bayes(model, robust = TRUE)
 }
 \arguments{
 \item{model}{A Bayesian regression model.}

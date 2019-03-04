@@ -101,7 +101,7 @@ icc.default <- function(model, ...) {
 
 #' @rdname icc
 #' @export
-icc.brmsfit <- function(model, re.form = NULL, robust = FALSE, ci.lvl = .95, ...) {
+icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci.lvl = .95, ...) {
   if (!insight::model_info(model)$is_mixed) {
     stop("'model' has no random effects.", call. = FALSE)
   }

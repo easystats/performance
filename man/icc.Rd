@@ -7,7 +7,7 @@
 \usage{
 icc(model, ...)
 
-\method{icc}{brmsfit}(model, re.form = NULL, robust = FALSE,
+\method{icc}{brmsfit}(model, re.form = NULL, robust = TRUE,
   ci.lvl = 0.95, ...)
 }
 \arguments{
