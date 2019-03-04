@@ -49,21 +49,5 @@ item_intercor <- function(x, method = c("pearson", "spearman", "kendall")) {
     corr <- stats::cor(x, method = method)
   }
 
-  # Sum up all correlation values
-  meanic <- c()
-
-  for (j in seq_len((ncol(corr) - 1))) {
-    # first correlation is always "1" (self-correlation)
-    for (i in (j + 1):nrow(corr)) {
-      # check for valid bound
-      if (i <= nrow(corr) && j <= ncol(corr)) {
-        # add up all subsequent values
-        meanic <- c(meanic, corr[i, j])
-      } else {
-        meanic <- c(meanic, "NA")
-      }
-    }
-  }
-
-  mean(meanic)
+  mean(corr[lower.tri(corr)])
 }
