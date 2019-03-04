@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nakagawa's (2013, 2018) R2 for mixed models — r2_nakagawa • performance</title>
+<title>Nakagawa's (2013, 2017) R2 for mixed models — r2_nakagawa • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,10 @@
 
 
 
-<meta property="og:title" content="Nakagawa's (2013, 2018) R2 for mixed models — r2_nakagawa" />
+<meta property="og:title" content="Nakagawa's (2013, 2017) R2 for mixed models — r2_nakagawa" />
 
-<meta property="og:description" content="DESCRIPTION TO BE IMPROVED." />
+<meta property="og:description" content="Compute the marginal and conditional r-squared value for
+ mixed effects models with complex random effects structures." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -55,16 +56,6 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-97457476-7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-97457476-7');
-</script>
 
   </head>
 
@@ -113,14 +104,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Nakagawa's (2013, 2018) R2 for mixed models</h1>
+    <h1>Nakagawa's (2013, 2017) R2 for mixed models</h1>
     
     <div class="hidden name"><code>r2_nakagawa.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>DESCRIPTION TO BE IMPROVED.</p>
+    <p>Compute the marginal and conditional r-squared value for
+ mixed effects models with complex random effects structures.</p>
     
     </div>
 
@@ -131,15 +123,37 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A statistical model.</p></td>
+      <td><p>A mixed effects model of class <code>merMod</code> or <code>glmmTMB</code>.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>For mixed models (from <span class="pkg">lme4</span> or <span class="pkg">glmmTMB</span>) marginal and
+ conditional r-squared values are calculated, based on
+ <cite>Nakagawa et al. 2017</cite>. The distributional variance (or observation-level
+ variance) that is used to calculate the r-squared is based on lognormal
+ approximation, <code><a href='https://www.rdocumentation.org/packages/base/topics/Log'>log(1+var(x)/mu^2)</a></code>. The marginal r-squared considers
+ only the variance of the fixed effects, while the conditional r-squared
+ takes both the fixed and random effects into account. The random effect
+ variances are actually the mean random effect variances, thus the
+ r-squared value is also appropriate for mixed models with random
+ slopes (see <cite>Johnson et al. 2014</cite>).</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <ul>
+<li><p>Johnson PC, O'Hara RB. 2014. Extension of Nakagawa &amp; Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (doi: <a href='http://doi.org/10.1111/2041-210X.12225'>10.1111/2041-210X.12225</a>
+)</p></li>
+<li><p>Nakagawa S, Schielzeth H. 2013. A general and simple method for obtaining R2 from generalized linear mixed-effects models. Methods in Ecology and Evolution, 4(2):133–142. doi: <a href='http://doi.org/10.1111/j.2041-210x.2012.00261.x'>10.1111/j.2041-210x.2012.00261.x</a></p></li>
+<li><p>Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. doi: <a href='http://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lme4</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>Species</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='no'>iris</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lme4</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 <span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
@@ -148,7 +162,11 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

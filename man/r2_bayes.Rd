@@ -13,7 +13,8 @@ r2_bayes(model, robust = FALSE)
 calculate the central tendency of the variances.}
 }
 \description{
-Compute R2 for Bayesian models. For mixed models (including a random part), it additionally computes the R2 related to the fixed effects only.
+Compute R2 for Bayesian models. For mixed models (including a random part),
+it additionally computes the R2 related to the fixed effects only (marginal R2).
 }
 \examples{
 \dontrun{

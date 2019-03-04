@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Internal for now (WIP) — r2_linmix • performance</title>
+<title>Root Mean Squared Error of Linear Models — rmse • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Internal for now (WIP) — r2_linmix" />
+<meta property="og:title" content="Root Mean Squared Error of Linear Models — rmse" />
 
-<meta property="og:description" content="Internal for now (WIP)" />
+<meta property="og:description" content="Compute root mean squared error for linear (mixed effects) models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -103,25 +103,73 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Internal for now (WIP)</h1>
+    <h1>Root Mean Squared Error of Linear Models</h1>
     
-    <div class="hidden name"><code>r2_linmix.Rd</code></div>
+    <div class="hidden name"><code>rmse.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Internal for now (WIP)</p>
+    <p>Compute root mean squared error for linear (mixed effects) models.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2_linmix</span>(<span class='no'>x</span>, <span class='no'>n</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>rmse</span>(<span class='no'>model</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>model</th>
+      <td><p>Linear model of class <code>lm</code>, <code>merMod</code> (<span class="pkg">lme4</span>)
+or <code>lme</code> (<span class="pkg">nlme</span>).</p></td>
+    </tr>
+    <tr>
+      <th>normalized</th>
+      <td><p>Logical, use <code>TRUE</code> if normalized rmse should be returned.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    
+
+
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The RMSE is the square root of the variance of the residuals and indicates
+  the absolute fit of the model to the data (difference between observed data
+  to model's predicted values). It can be interpreted as the standard
+  deviation of the unexplained variance, and is in the same units as the
+  response variable. Lower values indicate better model fit.
+  <br /> <br />
+  The normalized RMSE is the proportion of the RMSE related to the
+  range of the response variable. Hence, lower values indicate
+  less residual variance.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>nlme</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/nlme/topics/lme'>lme</a></span>(<span class='no'>distance</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Orthodont</span>)
+
+<span class='co'># RMSE</span>
+<span class='fu'>rmse</span>(<span class='no'>m</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 0.07242178</div><div class='input'>
+<span class='co'># normalized RMSE</span>
+<span class='fu'>rmse</span>(<span class='no'>m</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 0.07242178</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
