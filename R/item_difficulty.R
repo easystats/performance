@@ -27,7 +27,7 @@
 #' @importFrom stats na.omit
 #' @export
 item_difficulty <- function(x) {
-  d <- apply(x, 2, function(.x) {
+  d <- sapply(x, function(.x) {
     .x <- stats::na.omit(.x)
     round(sum(.x) / (max(.x) * length(.x)), 2)
   })
@@ -41,8 +41,8 @@ item_difficulty <- function(x) {
   di <- apply(x, 2, fun.diff.ideal)
 
   list(
-    items = colnames(x),
-    item_difficulty = d,
-    ideal.difficulty = di
+    item = colnames(x),
+    difficulty = d,
+    ideal = di
   )
 }
