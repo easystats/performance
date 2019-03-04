@@ -39,7 +39,14 @@
 
 <meta property="og:title" content="The Intraclass Correlation Coefficient (ICC) for mixed models — icc" />
 
-<meta property="og:description" content="DESCRIPTION TO BE IMPROVED." />
+<meta property="og:description" content="This function calculates the intraclass-correlation
+ (icc) - sometimes also called variance partition coefficient
+ (vpc) - for mixed effects models. The ICC is calculated for merMod,
+ glmmTMB and stanreg objects and can be
+ interpreted as &amp;#8220;the proportion of the variance explained by the
+ grouping structure in the population&amp;#8221; (Hox 2002: 15). For models
+ fitted with the brms-package, a variance decomposition based on the
+ posterior predictive distribution is calculated (see 'Details')." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -55,16 +62,6 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-97457476-7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-97457476-7');
-</script>
 
   </head>
 
@@ -120,20 +117,99 @@
 
     <div class="ref-description">
     
-    <p>DESCRIPTION TO BE IMPROVED.</p>
+    <p>This function calculates the intraclass-correlation
+ (icc) - sometimes also called <em>variance partition coefficient</em>
+ (vpc) - for mixed effects models. The ICC is calculated for <code><a href='https://www.rdocumentation.org/packages/lme4/topics/merMod-class'>merMod</a></code>,
+ <code><a href='https://www.rdocumentation.org/packages/glmmTMB/topics/glmmTMB'>glmmTMB</a></code> and <code>stanreg</code> objects and can be
+ interpreted as &#8220;the proportion of the variance explained by the
+ grouping structure in the population&#8221; <cite>(Hox 2002: 15)</cite>. For models
+ fitted with the <span class="pkg">brms</span>-package, a variance decomposition based on the
+ posterior predictive distribution is calculated (see 'Details').</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>icc</span>(<span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>icc</span>(<span class='no'>model</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for brmsfit</span>
+<span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>re.form</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ci.lvl</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A statistical model.</p></td>
+      <td><p>A mixed effects model of class <code>merMod</code>, <code>glmmTMB</code>,
+<code>stanreg</code> or <code>brmsfit</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>re.form</th>
+      <td><p>Formula containing group-level effects to be considered in
+the prediction. If <code>NULL</code> (default), include all group-level effects.
+Else, for instance for nested models, name a specific group-level effect
+to calculate the variance decomposition for this group-level.</p></td>
+    </tr>
+    <tr>
+      <th>robust</th>
+      <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
+calculate the central tendency of the variances.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><strong>Adjusted and conditional ICC</strong>
+ <br /> <br />
+ <code>icc()</code> calculates an adjusted and conditional ICC, which take
+ all sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
+ the adjusted ICC only relates to the random effects, the conditional ICC
+ also takes the fixed effects variances into account (see <cite>Nakagawa et al. 2017</cite>).
+ Typically, the <em>adjusted</em> ICC is of interest when the analysis of random
+ effects is of interest.
+ <code>icc()</code> return a meaningful ICC also for models with random slopes and
+ is applicable for models with other distributions than Gaussian.
+ <br /> <br />
+ <strong>ICC for unconditional and conditional models</strong>
+ <br /> <br />
+ Usually, the ICC is calculated for the null model ("unconditional model").
+ However, according to <cite>Raudenbush and Bryk (2002)</cite> or
+ <cite>Rabe-Hesketh and Skrondal (2012)</cite> it is also feasible to compute the ICC
+ for full models with covariates ("conditional models") and compare how
+ much, e.g., a level-2 variable explains the portion of variation in the grouping
+ structure (random intercept).
+ <br /> <br />
+ <strong>ICC for brms-models</strong>
+ <br /> <br />
+ If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> calculates a
+ variance decomposition based on the posterior predictive distribution. In
+ this case, first, the draws from the posterior predictive distribution
+ <em>not conditioned</em> on group-level terms (<code>posterior_predict(..., re.form = NA)</code>)
+ are calculated as well as draws from this distribution <em>conditioned</em>
+ on <em>all random effects</em> (by default, unless specified else in <code>re.form</code>)
+ are taken. Then, second, the variances for each of these draws are calculated.
+ The "ICC" is then the ratio between these two variances. This is the recommended
+ way to analyse random-effect-variances for non-Gaussian models. It is then possible
+ to compare variances accross models, also by specifying different group-level
+ terms via the <code>re.form</code>-argument.
+ <br /> <br />
+ Sometimes, when the variance of the posterior predictive distribution is
+ very large, the variance ratio in the output makes no sense, e.g. because
+ it is negative. In such cases, it might help to use <code>robust = TRUE</code>.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <ul>
+<li><p>Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum</p></li>
+<li><p>Johnson PC, O'Hara RB. 2014. Extension of Nakagawa &amp; Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (doi: <a href='http://doi.org/10.1111/2041-210X.12225'>10.1111/2041-210X.12225</a>
+)</p></li>
+<li><p>Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. doi: <a href='http://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
+<li><p>Rabe-Hesketh S, Skrondal A. 2012. Multilevel and longitudinal modeling using Stata. 3rd ed. College Station, Tex: Stata Press Publication</p></li>
+<li><p>Raudenbush SW, Bryk AS. 2002. Hierarchical linear models: applications and data analysis methods. 2nd ed. Thousand Oaks: Sage Publications</p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -148,7 +224,11 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

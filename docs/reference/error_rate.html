@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Internal for now (WIP) — r2_linmix • performance</title>
+<title>Error Rate for Logistic Regression Models — error_rate • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,10 @@
 
 
 
-<meta property="og:title" content="Internal for now (WIP) — r2_linmix" />
+<meta property="og:title" content="Error Rate for Logistic Regression Models — error_rate" />
 
-<meta property="og:description" content="Internal for now (WIP)" />
+<meta property="og:description" content="Compute the error rate for logistic regression models, which is
+   a crude measure for the model fit." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -103,25 +104,81 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Internal for now (WIP)</h1>
+    <h1>Error Rate for Logistic Regression Models</h1>
     
-    <div class="hidden name"><code>r2_linmix.Rd</code></div>
+    <div class="hidden name"><code>error_rate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Internal for now (WIP)</p>
+    <p>Compute the error rate for logistic regression models, which is
+   a crude measure for the model fit.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2_linmix</span>(<span class='no'>x</span>, <span class='no'>n</span>)</pre>
-        
+    <pre class="usage"><span class='fu'>error_rate</span>(<span class='no'>model</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>model</th>
+      <td><p>A <code>glm</code>-object with binomial-family.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A list with four values: the error rate of the full and the null model,
+    as well as the chi-squared and p-value from the Likelihood-Ratio-Test
+    between the full and null model.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The error rate is a crude measure for model fit for logistic regression
+   models. It is defined as the proportion of cases for which the
+   deterministic prediction is wrong, i.e. the proportion where the the
+   predicted probability is above 0.5, although y = 0 (and vice versa).
+   In general, the error rate should be below 0.5 (i.e. 50%), the
+   closer to zero, the better. Furthermore, the error rate of the full
+   model should be considerably below the null model's error rate
+   (cf. Gelman and Hill 2007, pp. 99).</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Gelman A, Hill J (2007) Data Analysis Using Regression and Multilevel/Hierarchical Models. Cambridge, New York: Cambridge University Press</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>am</span> ~ <span class='no'>mpg</span> + <span class='no'>hp</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span><span class='kw'>=</span> <span class='no'>binomial</span>)
+<span class='fu'>error_rate</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $error.model
+#&gt; [1] 0.125
+#&gt; 
+#&gt; $error.null
+#&gt; [1] 0.40625
+#&gt; 
+#&gt; $lrt.chisq
+#&gt; [1] 24.88287
+#&gt; 
+#&gt; $lrt.p
+#&gt; [1] 1.633612e-05
+#&gt; </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
