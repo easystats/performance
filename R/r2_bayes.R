@@ -30,7 +30,7 @@
 #'
 #' @importFrom stats median
 #' @export
-r2_bayes <- function(model, robust = FALSE) {
+r2_bayes <- function(model, robust = TRUE) {
   r2_bayesian <- .r2_posterior(model)
   lapply(r2_bayesian, ifelse(robust, stats::median, mean))
 }
