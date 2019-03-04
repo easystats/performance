@@ -1,4 +1,4 @@
-#' @title Compute residual standard error
+#' @title Residual Standard Error for Linear Models
 #' @name rse
 #'
 #' @description Compute residual standard error of linear models.

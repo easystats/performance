@@ -1,4 +1,4 @@
-#' @title Compute root mean squared error
+#' @title Root Mean Squared Error of Linear Models
 #' @name rmse
 #'
 #' @description Compute root mean squared error for linear (mixed effects) models.

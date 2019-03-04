@@ -2,7 +2,7 @@
 % Please edit documentation in R/mse.R
 \name{mse}
 \alias{mse}
-\title{Compute mean square error of linear models}
+\title{Mean Square Error of Linear Models}
 \usage{
 mse(model)
 }

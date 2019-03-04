@@ -1,6 +1,6 @@
-#' Performance of (General) Linear Models
+#' Performance of (Generalized) Linear Models
 #'
-#' Compute indices of model performance for (general) linear models.
+#' Compute indices of model performance for (generalized) linear models.
 #'
 #' @param model Object of class \link{lm}.
 #' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "R2_adj")}).

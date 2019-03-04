@@ -2,7 +2,7 @@
 % Please edit documentation in R/rmse.R
 \name{rmse}
 \alias{rmse}
-\title{Compute root mean squared error}
+\title{Root Mean Squared Error of Linear Models}
 \usage{
 rmse(model, normalized = FALSE)
 }

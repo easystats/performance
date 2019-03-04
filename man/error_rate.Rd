@@ -2,7 +2,7 @@
 % Please edit documentation in R/error_rate.R
 \name{error_rate}
 \alias{error_rate}
-\title{Error rate for logistic regression models.}
+\title{Error Rate for Logistic Regression Models}
 \usage{
 error_rate(model)
 }

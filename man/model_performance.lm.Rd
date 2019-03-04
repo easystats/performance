@@ -3,7 +3,7 @@
 \name{model_performance.lm}
 \alias{model_performance.lm}
 \alias{model_performance.glm}
-\title{Performance of (General) Linear Models}
+\title{Performance of (Generalized) Linear Models}
 \usage{
 \method{model_performance}{lm}(model, metrics = "all", ...)
 
@@ -17,7 +17,7 @@
 \item{...}{Arguments passed to or from other methods.}
 }
 \description{
-Compute indices of model performance for (general) linear models.
+Compute indices of model performance for (generalized) linear models.
 }
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)

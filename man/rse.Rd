@@ -2,7 +2,7 @@
 % Please edit documentation in R/rse.R
 \name{rse}
 \alias{rse}
-\title{Compute residual standard error}
+\title{Residual Standard Error for Linear Models}
 \usage{
 rse(model)
 }

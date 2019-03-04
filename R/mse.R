@@ -1,4 +1,4 @@
-#' @title Compute mean square error of linear models
+#' @title Mean Square Error of Linear Models
 #' @name mse
 #'
 #' @description Compute mean square error of linear models.

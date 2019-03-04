@@ -1,6 +1,7 @@
-#' R2 for Bayesian regressions.
+#' Bayesian R2
 #'
-#' Compute R2 for Bayesian models. For mixed models (including a random part), it additionally computes the R2 related to the fixed effects only.
+#' Compute R2 for Bayesian models. For mixed models (including a random part),
+#' it additionally computes the R2 related to the fixed effects only (marginal R2).
 #'
 #' @param model A Bayesian regression model.
 #' @param robust Logical, if \code{TRUE}, the median instead of mean is used to

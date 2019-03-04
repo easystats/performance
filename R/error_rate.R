@@ -1,4 +1,4 @@
-#' @title Error rate for logistic regression models.
+#' @title Error Rate for Logistic Regression Models
 #' @name error_rate
 #'
 #' @description Compute the error rate for logistic regression models, which is

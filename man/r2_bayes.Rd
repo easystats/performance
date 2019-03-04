@@ -2,7 +2,7 @@
 % Please edit documentation in R/r2_bayes.R
 \name{r2_bayes}
 \alias{r2_bayes}
-\title{R2 for Bayesian regressions.}
+\title{Bayesian R2}
 \usage{
 r2_bayes(model, robust = FALSE)
 }

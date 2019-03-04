@@ -11,7 +11,7 @@
 #' library(rstanarm)
 #' model <- rstanarm::stan_glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' }
-#' 
+#'
 #' @importFrom stats predict residuals
 #' @importFrom insight get_response model_info
 #'
@@ -39,9 +39,3 @@ r2_tjur <- function(model) {
 
   abs(m2 - m1)
 }
-
-
-
-
-#' @rdname r2_tjur
-cod <- r2_tjur

@@ -2,12 +2,9 @@
 % Please edit documentation in R/r2_tjur.R
 \name{r2_tjur}
 \alias{r2_tjur}
-\alias{cod}
 \title{Tjur's (2009) R2 - coefficient of determination (D)}
 \usage{
 r2_tjur(model)
-
-cod(model)
 }
 \arguments{
 \item{model}{Binomial Model.}
