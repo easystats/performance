@@ -15,6 +15,7 @@
 #'   the prediction. If \code{NULL} (default), include all group-level effects.
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the ICC for this group-level. Only applies if \code{ppd = TRUE}.
+#' @param ... Currently not used.
 #'
 #' @inheritParams r2_bayes
 #'
@@ -73,13 +74,13 @@
 #' @importFrom insight model_info
 #' @importFrom stats var
 #' @export
-icc <- function(model) {
+icc <- function(model, ...) {
   UseMethod("icc")
 }
 
 
 #' @export
-icc.default <- function(model) {
+icc.default <- function(model, ...) {
   if (!insight::model_info(model)$is_mixed) {
     stop("'model' has no random effects.", call. = FALSE)
   }
@@ -98,7 +99,7 @@ icc.default <- function(model) {
 
 #' @rdname icc
 #' @export
-icc.brmsfit <- function(model, re.form = NULL, robust = FALSE, ci.lvl = .95) {
+icc.brmsfit <- function(model, re.form = NULL, robust = FALSE, ci.lvl = .95, ...) {
   if (!insight::model_info(model)$is_mixed) {
     stop("'model' has no random effects.", call. = FALSE)
   }

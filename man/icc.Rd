@@ -5,14 +5,16 @@
 \alias{icc.brmsfit}
 \title{The Intraclass Correlation Coefficient (ICC) for mixed models}
 \usage{
-icc(model)
+icc(model, ...)
 
 \method{icc}{brmsfit}(model, re.form = NULL, robust = FALSE,
-  ci.lvl = 0.95)
+  ci.lvl = 0.95, ...)
 }
 \arguments{
 \item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
 \code{stanreg} or \code{brmsfit}}
+
+\item{...}{Currently not used.}
 
 \item{re.form}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
