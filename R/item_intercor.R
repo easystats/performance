@@ -1,5 +1,5 @@
 #' @title Mean Inter-Item-Correlation
-#' @name mean_iic
+#' @name item_intercor
 #'
 #' @description Compute various measures of internal consistencies
 #'    for tests or item-scales of questionnaires.
@@ -32,12 +32,12 @@
 #' @examples
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
-#' mean_iic(x)
+#' item_intercor(x)
 #'
 #'
 #' @importFrom stats cor na.omit
 #' @export
-mean_iic <- function(x, method = c("pearson", "spearman", "kendall")) {
+item_intercor <- function(x, method = c("pearson", "spearman", "kendall")) {
   # Check parameter
   method <- match.arg(method)
 

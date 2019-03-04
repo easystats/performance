@@ -1,5 +1,5 @@
 #' @title Reliability Test for Items or Scales
-#' @name reliability
+#' @name item_reliability
 #'
 #' @description Compute various measures of internal consistencies
 #'    for tests or item-scales of questionnaires.
@@ -28,11 +28,11 @@
 #' @examples
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
-#' reliability(x)
+#' item_reliability(x)
 #'
 #' @importFrom stats cor var na.omit
 #' @export
-reliability <- function(x, standardize = FALSE, digits = 3) {
+item_reliability <- function(x, standardize = FALSE, digits = 3) {
   # check param
   if (!is.matrix(x) && !is.data.frame(x)) {
     warning("`x` needs to be a data frame or matrix.", call. = F)
@@ -66,7 +66,7 @@ reliability <- function(x, standardize = FALSE, digits = 3) {
       sub.df <- subset(x, select = c(-i))
 
       # calculate cronbach-if-deleted
-      cronbachDeleted <- c(cronbachDeleted, cronbach(sub.df))
+      cronbachDeleted <- c(cronbachDeleted, cronbachs_alpha(sub.df))
 
       # calculate corrected total-item correlation
       totalCorr <- c(totalCorr, stats::cor(x[, i], apply(sub.df, 1, sum), use = "pairwise.complete.obs"))

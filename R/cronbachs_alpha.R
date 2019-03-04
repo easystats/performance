@@ -1,5 +1,5 @@
 #' @title Cronbach's Alpha for Items or Scales
-#' @name cronbach
+#' @name cronbachs_alpha
 #'
 #' @description Compute various measures of internal consistencies
 #'    for tests or item-scales of questionnaires.
@@ -20,11 +20,11 @@
 #' @examples
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
-#' cronbach(x)
+#' cronbachs_alpha(x)
 #'
 #' @importFrom stats var na.omit
 #' @export
-cronbach <- function(x) {
+cronbachs_alpha <- function(x) {
   # remove missings
   .data <- stats::na.omit(x)
 

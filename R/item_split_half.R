@@ -1,5 +1,5 @@
 #' @title Split-Half Reliability
-#' @name split_half
+#' @name item_split_half
 #'
 #' @description Compute various measures of internal consistencies
 #'    for tests or item-scales of questionnaires.
@@ -22,11 +22,11 @@
 #' @examples
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
-#' split_half(x)
+#' item_split_half(x)
 #'
 #' @importFrom stats cor
 #' @export
-split_half <- function(x, digits = 3) {
+item_split_half <- function(x, digits = 3) {
   # Calculating total score for even items
   score_e <- rowMeans(x[, c(TRUE, FALSE)], na.rm = TRUE)
   # Calculating total score for odd items
