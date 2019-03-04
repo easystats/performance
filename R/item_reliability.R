@@ -57,20 +57,11 @@ item_reliability <- function(x, standardize = FALSE, digits = 3) {
     # when items have different measures / scales
     if (standardize) x <- .std(x)
 
-    totalCorr <- c()
-    cronbachDeleted <- c()
+    # calculate cronbach-if-deleted
+    cronbachDeleted <- sapply(seq_len(ncol(x)), function(i) cronbachs_alpha(x[, -i]))
 
-    # iterate all items
-    for (i in seq_len(ncol(x))) {
-      # create subset with all items except current one (current item "deleted")
-      sub.df <- subset(x, select = c(-i))
-
-      # calculate cronbach-if-deleted
-      cronbachDeleted <- c(cronbachDeleted, cronbachs_alpha(sub.df))
-
-      # calculate corrected total-item correlation
-      totalCorr <- c(totalCorr, stats::cor(x[, i], apply(sub.df, 1, sum), use = "pairwise.complete.obs"))
-    }
+    # calculate corrected total-item correlation
+    totalCorr <- sapply(seq_len(ncol(x)), function(i) stats::cor(x[, i], apply(x[, -i], 1, sum), use = "pairwise.complete.obs"))
 
     ret.df <- data.frame(
       term = df.names,
