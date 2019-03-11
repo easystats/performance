@@ -15,9 +15,9 @@
 #'    selecting odd versus even columns in \code{x}. A value closer to 1
 #'    indicates greater internal consistency.
 #'
-#' @references Spearman C. 1910. Correlation calculated from faulty data. British Journal of Psychology (3): 271–295. \doi{10.1111/j.2044-8295.1910.tb00206.x}
+#' @references Spearman C. 1910. Correlation calculated from faulty data. British Journal of Psychology (3): 271-295. \doi{10.1111/j.2044-8295.1910.tb00206.x}
 #'             \cr \cr
-#'             Brown W. 1910. Some experimental results in the correlation of mental abilities. British Journal of Psychology (3): 296–322. \doi{10.1111/j.2044-8295.1910.tb00207.x}
+#'             Brown W. 1910. Some experimental results in the correlation of mental abilities. British Journal of Psychology (3): 296-322. \doi{10.1111/j.2044-8295.1910.tb00207.x}
 #'
 #' @examples
 #' data(mtcars)

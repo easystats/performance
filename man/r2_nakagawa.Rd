@@ -23,7 +23,7 @@ For mixed models (from \pkg{lme4} and \pkg{glmmTMB}) marginal and
  takes both the fixed and random effects into account. The random effect
  variances are actually the mean random effect variances, thus the
  r-squared value is also appropriate for mixed models with random
- slopes (see \cite{Johnson et al. 2014}).
+ slopes or nested random effects (see \cite{Johnson et al. 2014}).
 }
 \examples{
 \dontrun{
@@ -36,7 +36,7 @@ r2_nakagawa(model)
 \references{
 \itemize{
  \item Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (\doi{10.1111/2041-210X.12225})
- \item Nakagawa S, Schielzeth H. 2013. A general and simple method for obtaining R2 from generalized linear mixed-effects models. Methods in Ecology and Evolution, 4(2):133–142. \doi{10.1111/j.2041-210x.2012.00261.x}
+ \item Nakagawa S, Schielzeth H. 2013. A general and simple method for obtaining R2 from generalized linear mixed-effects models. Methods in Ecology and Evolution, 4(2):133-142. \doi{10.1111/j.2041-210x.2012.00261.x}
  \item Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. \doi{10.1098/rsif.2017.0213}
  }
 }
