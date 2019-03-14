@@ -2,7 +2,7 @@
 #'
 #' Returns a list containing values related to the most appropriate R2 for the given model. See the list below:
 #' \itemize{
-#'   \item logistic models (glm): \link[=r2_tjur]{Tjur's R2}
+#'   \item Logistic models (glm): \link[=r2_tjur]{Tjur's R2}
 #'   \item General linear models (glm): \link[=r2_nagelkerke]{Nagelkerke's R2}
 #'   \item Multinomial Logit (mlogit): \link[=r2_mcfadden]{McFadden's R2}
 #'   \item Mixed models (merMod, glmmTMB): \link[=r2_nakagawa]{Nakagawa's R2}
