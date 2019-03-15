@@ -73,7 +73,7 @@
 #' icc(model)
 #' }
 #'
-#' @importFrom insight model_info
+#' @importFrom insight model_info get_variances
 #' @importFrom stats var
 #' @export
 icc <- function(model, ...) {
@@ -87,7 +87,7 @@ icc.default <- function(model, ...) {
     stop("'model' has no random effects.", call. = FALSE)
   }
 
-  vars <- .compute_variances(model, name = "icc")
+  vars <- insight::get_variances(model)
 
   # Calculate ICC values
   icc_adjusted <- vars$var.ranef / (vars$var.ranef + vars$var.resid)
