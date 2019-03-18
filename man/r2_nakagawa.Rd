@@ -7,15 +7,16 @@
 r2_nakagawa(model)
 }
 \arguments{
-\item{model}{A mixed effects model of class \code{merMod} or \code{glmmTMB}.}
+\item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB}
+or \code{MixMod}.}
 }
 \description{
 Compute the marginal and conditional r-squared value for
  mixed effects models with complex random effects structures.
 }
 \details{
-For mixed models (from \pkg{lme4} and \pkg{glmmTMB}) marginal and
- conditional r-squared values are calculated, based on
+For mixed models (from \pkg{lme4}, \pkg{glmmTMB} and \code{GLMMadaptive})
+ marginal and conditional r-squared values are calculated, based on
  \cite{Nakagawa et al. 2017}. The distributional variance (or observation-level
  variance) that is used to calculate the r-squared is based on lognormal
  approximation, \code{log(1+var(x)/mu^2)}. The marginal r-squared considers

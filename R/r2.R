@@ -46,7 +46,7 @@ r2.lm <- function(model, ...) {
   )
 
   out$R2_adjusted <- model_summary$adj.r.squared
-  return(out)
+  out
 }
 
 
@@ -55,11 +55,10 @@ r2.lm <- function(model, ...) {
 #' @export
 r2.glm <- function(model, ...) {
   if (insight::model_info(model)$is_logit) {
-    out <- list("R2_Tjur" = r2_tjur(model))
+    list("R2_Tjur" = r2_tjur(model))
   } else {
-    out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+    list("R2_Nagelkerke" = r2_nagelkerke(model))
   }
-  return(out)
 }
 
 
@@ -67,70 +66,66 @@ r2.glm <- function(model, ...) {
 
 #' @export
 r2.mlogit <- function(model, ...) {
-  out <- list("R2_McFadden" = r2_mcfadden(model))
-  return(out)
+  list("R2_McFadden" = r2_mcfadden(model))
 }
 
 
 #' @export
 r2.polr <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
-  return(out)
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 
 
 #' @export
 r2.clm2 <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
-  return(out)
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 
 
 #' @export
 r2.clm <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
-  return(out)
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 
 
 #' @export
 r2.vglm <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
-  return(out)
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 
 
 #' @export
 r2.multinom <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
-  return(out)
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 
 
 #' @export
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
-  out <- list(
+  list(
     "R2" = model_summary$r.squared[1],
     "R2_adjusted" = model_summary$r.squared[2]
   )
-  return(out)
 }
 
 
 #' @export
 r2.merMod <- function(model, ...) {
-  out <- r2_nakagawa(model)
-  return(out)
+  r2_nakagawa(model)
 }
 
 
 #' @export
 r2.glmmTMB <- function(model, ...) {
-  out <- r2_nakagawa(model)
-  return(out)
+  r2_nakagawa(model)
 }
 
+
+#' @export
+r2.MixMod <- function(model, ...) {
+  r2_nakagawa(model)
+}
 
 
 #' @export

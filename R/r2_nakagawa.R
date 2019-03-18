@@ -3,10 +3,11 @@
 #' @description Compute the marginal and conditional r-squared value for
 #'  mixed effects models with complex random effects structures.
 #'
-#' @param model A mixed effects model of class \code{merMod} or \code{glmmTMB}.
+#' @param model A mixed effects model of class \code{merMod}, \code{glmmTMB}
+#'  or \code{MixMod}.
 #'
-#' @details For mixed models (from \pkg{lme4} and \pkg{glmmTMB}) marginal and
-#'  conditional r-squared values are calculated, based on
+#' @details For mixed models (from \pkg{lme4}, \pkg{glmmTMB} and \code{GLMMadaptive})
+#'  marginal and conditional r-squared values are calculated, based on
 #'  \cite{Nakagawa et al. 2017}. The distributional variance (or observation-level
 #'  variance) that is used to calculate the r-squared is based on lognormal
 #'  approximation, \code{log(1+var(x)/mu^2)}. The marginal r-squared considers
@@ -29,15 +30,15 @@
 #' r2_nakagawa(model)
 #' }
 #'
-#' @importFrom insight get_variances
+#' @importFrom insight get_variance
 #' @export
 r2_nakagawa <- function(model) {
-  vars <- insight::get_variances(model)
+  vars <- insight::get_variance(model)
 
   # Calculate R2 values
 
-  r2_marginal <- vars$var.fixef / (vars$var.fixef + vars$var.ranef + vars$var.resid)
-  r2_conditional <- (vars$var.fixef + vars$var.ranef) / (vars$var.fixef + vars$var.ranef + vars$var.resid)
+  r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual)
+  r2_conditional <- (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
 
 
   list(

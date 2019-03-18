@@ -3,14 +3,14 @@
 #' @description This function calculates the intraclass-correlation
 #'  (icc) - sometimes also called \emph{variance partition coefficient}
 #'  (vpc) - for mixed effects models. The ICC is calculated for \code{\link[lme4]{merMod}},
-#'  \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects and can be
+#'  \code{\link[glmmTMB]{glmmTMB}}, \code{MixMod} and \code{stanreg} objects and can be
 #'  interpreted as \dQuote{the proportion of the variance explained by the
 #'  grouping structure in the population} \cite{(Hox 2002: 15)}. For models
 #'  fitted with the \pkg{brms}-package, a variance decomposition based on the
 #'  posterior predictive distribution is calculated (see 'Details').
 #'
 #' @param model A mixed effects model of class \code{merMod}, \code{glmmTMB},
-#'  \code{stanreg} or \code{brmsfit}
+#'  \code{MixMod}, \code{stanreg} or \code{brmsfit}
 #' @param re.form Formula containing group-level effects to be considered in
 #'   the prediction. If \code{NULL} (default), include all group-level effects.
 #'   Else, for instance for nested models, name a specific group-level effect
@@ -74,7 +74,7 @@
 #' icc(model)
 #' }
 #'
-#' @importFrom insight model_info get_variances
+#' @importFrom insight model_info get_variance
 #' @export
 icc <- function(model, ...) {
   UseMethod("icc")
@@ -87,11 +87,11 @@ icc.default <- function(model, ...) {
     stop("'model' has no random effects.", call. = FALSE)
   }
 
-  vars <- insight::get_variances(model)
+  vars <- insight::get_variance(model)
 
   # Calculate ICC values
-  icc_adjusted <- vars$var.ranef / (vars$var.ranef + vars$var.resid)
-  icc_conditional <- vars$var.ranef / (vars$var.fixef + vars$var.ranef + vars$var.resid)
+  icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
+  icc_conditional <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
 
   list(
     "ICC_adjusted" = icc_adjusted,
