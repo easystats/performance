@@ -15,6 +15,7 @@
 #'   the prediction. If \code{NULL} (default), include all group-level effects.
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the variance decomposition for this group-level.
+#' @param ci The Credible Interval level.
 #' @param ... Currently not used.
 #'
 #' @inheritParams r2_bayes
@@ -74,7 +75,6 @@
 #' }
 #'
 #' @importFrom insight model_info get_variances
-#' @importFrom stats var
 #' @export
 icc <- function(model, ...) {
   UseMethod("icc")
@@ -99,15 +99,20 @@ icc.default <- function(model, ...) {
   )
 }
 
+
+
+
+
+#' @importFrom stats quantile
 #' @rdname icc
 #' @export
-icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci.lvl = .95, ...) {
+icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
   if (!insight::model_info(model)$is_mixed) {
     stop("'model' has no random effects.", call. = FALSE)
   }
 
   if (!requireNamespace("brms", quietly = TRUE)) {
-    stop("Please install and load package `brms` first.", call. = F)
+    stop("Please install and load package `brms` first.", call. = FALSE)
   }
 
   PPD <- brms::posterior_predict(model, re.form = re.form, summary = FALSE)
@@ -123,6 +128,6 @@ icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci.lvl = .95, ...)
 
   list(
     "ICC_decomposed" = 1 - fun(tau.00 / total_var),
-    "CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci.lvl) / 2, (1 + ci.lvl) / 2))
+    "ICC_CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci) / 2, (1 + ci) / 2))
   )
 }

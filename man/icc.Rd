@@ -8,7 +8,7 @@
 icc(model, ...)
 
 \method{icc}{brmsfit}(model, re.form = NULL, robust = TRUE,
-  ci.lvl = 0.95, ...)
+  ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
@@ -23,6 +23,8 @@ to calculate the variance decomposition for this group-level.}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
 calculate the central tendency of the variances.}
+
+\item{ci}{The Credible Interval level.}
 }
 \description{
 This function calculates the intraclass-correlation

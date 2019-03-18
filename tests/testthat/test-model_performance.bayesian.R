@@ -8,19 +8,23 @@ test_that("model_performance.stanreg", {
   model <- circus::download_model("stanreg_lm_1")
   perf <- model_performance(model)
 
-  testthat::expect_equal(perf$R2_Median, 0.826, tolerance = 0.01)
-  testthat::expect_equal(perf$R2_LOO_adjusted, 0.791, tolerance = 0.01)
-  testthat::expect_equal(perf$ELPD, -78.52894, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_Median, 0.751, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_LOO_adjusted, 0.7094, tolerance = 0.01)
+  testthat::expect_equal(perf$ELPD, -83.514, tolerance = 0.01)
 
   model <- circus::download_model("stanreg_lm_2")
-  testthat::expect_error(model_performance(model)) ## FIXME
+  perf <- model_performance(model)
+
+  testthat::expect_equal(perf$R2_Median, 0.6392, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_LOO_adjusted, 0.587247, tolerance = 0.01)
+  testthat::expect_equal(perf$ELPD, -31.622, tolerance = 0.01)
 
   model <- circus::download_model("stanreg_lmerMod_1")
   perf <- model_performance(model)
 
-  testthat::expect_equal(perf$R2_Median, 0.6384912, tolerance = 0.01)
-  testthat::expect_equal(perf$R2_LOO_adjusted, 0.5902234, tolerance = 0.01)
-  testthat::expect_equal(perf$ELPD, -31.61927, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_Median, 0.6392, tolerance = 0.01)
+  testthat::expect_equal(perf$R2_LOO_adjusted, 0.58724, tolerance = 0.01)
+  testthat::expect_equal(perf$ELPD, -31.622, tolerance = 0.01)
 })
 
 
