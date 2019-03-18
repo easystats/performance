@@ -129,6 +129,12 @@ r2.MixMod <- function(model, ...) {
 
 
 #' @export
+r2.lme <- function(x, ...) {
+  r2_nakagawa(x)
+}
+
+
+#' @export
 r2.brmsfit <- function(model, ...) {
   r2_bayes(model)
 }
@@ -144,8 +150,3 @@ r2.stanreg <- function(model, ...) {
 #'   NULL
 #' }
 #'
-#'
-#' #' @export
-#' r2.lme <- function(x, n = NULL, ...) {
-#'   r2linmix(x, n)
-#' }

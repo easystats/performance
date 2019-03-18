@@ -15,15 +15,15 @@ Compute the marginal and conditional r-squared value for
  mixed effects models with complex random effects structures.
 }
 \details{
-For mixed models (from \pkg{lme4}, \pkg{glmmTMB} and \code{GLMMadaptive})
- marginal and conditional r-squared values are calculated, based on
- \cite{Nakagawa et al. 2017}. The distributional variance (or observation-level
- variance) that is used to calculate the r-squared is based on lognormal
- approximation, \code{log(1+var(x)/mu^2)}. The marginal r-squared considers
- only the variance of the fixed effects, while the conditional r-squared
- takes both the fixed and random effects into account. The random effect
- variances are actually the mean random effect variances, thus the
- r-squared value is also appropriate for mixed models with random
+For mixed models (from \pkg{lme4}, \pkg{glmmTMB}, \pkg{nlme} or
+ \code{GLMMadaptive}) marginal and conditional r-squared values are calculated,
+ based on \cite{Nakagawa et al. 2017}. The distributional variance (or
+ observation-level variance) that is used to calculate the r-squared is
+ based on lognormal approximation, \code{log(1+var(x)/mu^2)}. The marginal
+ r-squared considers only the variance of the fixed effects, while the
+ conditional r-squared takes both the fixed and random effects into account.
+ The random effect variances are actually the mean random effect variances,
+ thus the r-squared value is also appropriate for mixed models with random
  slopes or nested random effects (see \cite{Johnson et al. 2014}).
 }
 \examples{

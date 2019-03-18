@@ -12,7 +12,7 @@ icc(model, ...)
 }
 \arguments{
 \item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
-\code{MixMod}, \code{stanreg} or \code{brmsfit}}
+\code{MixMod}, \code{lme}, \code{stanreg} or \code{brmsfit}.}
 
 \item{...}{Currently not used.}
 
@@ -30,11 +30,12 @@ calculate the central tendency of the variances.}
 This function calculates the intraclass-correlation
  (icc) - sometimes also called \emph{variance partition coefficient}
  (vpc) - for mixed effects models. The ICC is calculated for \code{\link[lme4]{merMod}},
- \code{\link[glmmTMB]{glmmTMB}}, \code{MixMod} and \code{stanreg} objects and can be
- interpreted as \dQuote{the proportion of the variance explained by the
- grouping structure in the population} \cite{(Hox 2002: 15)}. For models
- fitted with the \pkg{brms}-package, a variance decomposition based on the
- posterior predictive distribution is calculated (see 'Details').
+ \code{\link[glmmTMB]{glmmTMB}}, \code{MixMod}, \code{lme}, and
+ \code{stanreg} objects and can be interpreted as \dQuote{the proportion
+ of the variance explained by the grouping structure in the population}
+ \cite{(Hox 2002: 15)}. For models fitted with the \pkg{brms}-package,
+ a variance decomposition based on the posterior predictive distribution
+ is calculated (see 'Details').
 }
 \details{
 \strong{Adjusted and conditional ICC}
