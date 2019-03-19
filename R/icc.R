@@ -37,9 +37,10 @@
 #'  the adjusted ICC only relates to the random effects, the conditional ICC
 #'  also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
 #'  Typically, the \emph{adjusted} ICC is of interest when the analysis of random
-#'  effects is of interest.
-#'  \code{icc()} return a meaningful ICC also for models with random slopes and
-#'  is applicable for models with other distributions than Gaussian.
+#'  effects is of interest. \code{icc()} returns a meaningful ICC also for models
+#'  with random slopes and is applicable for models with other distributions
+#'  than Gaussian. For more details on the computation of the variances, see
+#'  \code{\link[insight]{get_variance}}.
 #'  \cr \cr
 #'  \strong{ICC for unconditional and conditional models}
 #'  \cr \cr
