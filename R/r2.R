@@ -129,6 +129,12 @@ r2.MixMod <- function(model, ...) {
 
 
 #' @export
+r2.mixed <- function(model, ...) {
+  r2_nakagawa(model)
+}
+
+
+#' @export
 r2.lme <- function(x, ...) {
   r2_nakagawa(x)
 }

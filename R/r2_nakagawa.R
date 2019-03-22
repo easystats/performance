@@ -5,20 +5,15 @@
 #'
 #' @param model A mixed effects model.
 #'
-#' @details For mixed models (from \pkg{lme4}, \pkg{glmmTMB}, \pkg{nlme} or
-#'  \code{GLMMadaptive}) marginal and conditional r-squared values are calculated,
-#'  based on \cite{Nakagawa et al. 2017}. The distributional variance that is
-#'  used to calculate the r-squared is based on lognormal approximation,
-#'  \code{log(1+var(x)/mu^2)}.
+#' @details Marginal and conditional r-squared values for mixed models are calculated
+#'  based on \cite{Nakagawa et al. 2017}. For more details on the computation
+#'  of the variances, see \code{\link[insight]{get_variance}}.
 #'  \cr \cr
 #'  The marginal r-squared considers only the variance of the fixed effects, while the
 #'  conditional r-squared takes both the fixed and random effects into account.
 #'  The random effect variances are actually the mean random effect variances,
 #'  thus the r-squared value is also appropriate for mixed models with random
 #'  slopes or nested random effects (see \cite{Johnson 2014}).
-#'  \cr \cr
-#'  For more details on the computation of the variances, see
-#'  \code{\link[insight]{get_variance}}.
 #'
 #' @references \itemize{
 #'  \item Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (\doi{10.1111/2041-210X.12225})
