@@ -14,7 +14,7 @@ Authors@R: c(
 		role = c("aut", "cre"), 
 		comment = c(ORCID = "0000-0001-5375-9967"))
 	)
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 Imports:
@@ -23,18 +23,15 @@ Imports:
 Suggests:
 	knitr,
 	lme4,
+	nlme,
+	Matrix,
 	rmarkdown,
 	testthat,
 	covr,
 	rstanarm,
 	rstantools,
 	loo,
-	brms,
-	circus
-Remotes: 
-	easystats/insight,
-	easystats/bayestestR,
-	easystats/circus
+	brms
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

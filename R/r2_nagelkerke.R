@@ -33,8 +33,6 @@ r2_nagelkerke <- function(model) {
 
   r2_nagelkerke <- (1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n))
 
-  ## TODO should we return a named vector?
-
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }

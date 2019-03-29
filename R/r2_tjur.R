@@ -12,11 +12,10 @@
 #' model <- rstanarm::stan_glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' }
 #'
+#' @references Tjur, T. (2009). Coefficients of determination in logistic regression models - A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
+#'
 #' @importFrom stats predict residuals
 #' @importFrom insight get_response model_info
-#'
-#' @references Tjur, T. (2009). Coefficients of determination in logistic regression models—A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
-#'
 #' @export
 r2_tjur <- function(model) {
   # check for valid object class
@@ -27,7 +26,6 @@ r2_tjur <- function(model) {
   y <- insight::get_response(model)
   pred <- stats::predict(model, type = "response", re.form = NULL)
 
-  # TODO: replace for get_residuals?
   # delete pred for cases with missing residuals
   if (anyNA(stats::residuals(model))) {
     pred <- pred[!is.na(stats::residuals(model))]

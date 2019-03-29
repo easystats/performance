@@ -15,7 +15,7 @@
 #'
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
-#' @importFrom bayestestR hdi
+#' @importFrom bayestestR map_estimate hdi
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
@@ -45,21 +45,12 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
-  return(out)
+  out
 }
 
 
 #' @export
 model_performance.brmsfit <- model_performance.stanreg
-
-
-
-
-
-
-
-
-
 
 
 #' @keywords internal
@@ -74,17 +65,15 @@ model_performance.brmsfit <- model_performance.stanreg
   r2_ci <- bayestestR::hdi(r2_posterior, ci = ci)
   if (nrow(r2_ci) > 1) {
     # TODO: as this transformation is also used in parameters, maybe it would be good to put a function in bayestestR
-    hdi_low <- as.data.frame(t(stats::setNames(r2_ci$CI_low, as.numeric(r2_ci$CI))))
-    names(hdi_low) <- paste0("CI_", names(hdi_low), "_low")
-    hdi_high <- as.data.frame(t(stats::setNames(r2_ci$CI_high, as.numeric(r2_ci$CI))))
+    hdi_low <- stats::setNames(r2_ci$CI_low, sprintf("CI_%i_low", r2_ci$CI))
+    hdi_high <- stats::setNames(r2_ci$CI_high, sprintf("CI_%i_high", r2_ci$CI))
     names(hdi_high) <- paste0("CI_", names(hdi_high), "_high")
-    hdi <- sapply(cbind(hdi_low, hdi_high), as.numeric)
-    out <- append(out, as.list(hdi))
+    out <- append(out, as.list(c(hdi_low, hdi_high)))
   } else {
     out$CI_low <- r2_ci$CI_low
     out$CI_high <- r2_ci$CI_high
   }
 
   names(out) <- paste0(name, names(out))
-  return(out)
+  out
 }

@@ -2,19 +2,22 @@
 #'
 #' @description This function calculates the intraclass-correlation
 #'  (icc) - sometimes also called \emph{variance partition coefficient}
-#'  (vpc) - for mixed effects models. The ICC is calculated for \code{\link[lme4]{merMod}},
-#'  \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects and can be
-#'  interpreted as \dQuote{the proportion of the variance explained by the
-#'  grouping structure in the population} \cite{(Hox 2002: 15)}. For models
-#'  fitted with the \pkg{brms}-package, a variance decomposition based on the
-#'  posterior predictive distribution is calculated (see 'Details').
+#'  (vpc) - for mixed effects models. The ICC is calculated for \code{merMod}
+#'  (\pkg{lme4}), \code{glmmTMB} (\pkg{glmmTMB}), \code{MixMod} (\pkg{GLMMadpative}),
+#'  \code{lme} (\pkg{nlme}), \code{mixed} (\pkg{afex}), and \code{stanreg}
+#'  (\pkg{rstanarm}) objects and can be interpreted as \dQuote{the proportion
+#'  of the variance explained by the grouping structure in the population}
+#'  \cite{(Hox 2002: 15)}. For models fitted with the \pkg{brms}-package,
+#'  a variance decomposition based on the posterior predictive distribution
+#'  is calculated (see 'Details').
 #'
 #' @param model A mixed effects model of class \code{merMod}, \code{glmmTMB},
-#'  \code{stanreg} or \code{brmsfit}
+#'  \code{MixMod}, \code{lme}, \code{mixed}, \code{stanreg} or \code{brmsfit}.
 #' @param re.form Formula containing group-level effects to be considered in
 #'   the prediction. If \code{NULL} (default), include all group-level effects.
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the variance decomposition for this group-level.
+#' @param ci The Credible Interval level.
 #' @param ... Currently not used.
 #'
 #' @inheritParams r2_bayes
@@ -35,9 +38,10 @@
 #'  the adjusted ICC only relates to the random effects, the conditional ICC
 #'  also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
 #'  Typically, the \emph{adjusted} ICC is of interest when the analysis of random
-#'  effects is of interest.
-#'  \code{icc()} return a meaningful ICC also for models with random slopes and
-#'  is applicable for models with other distributions than Gaussian.
+#'  effects is of interest. \code{icc()} returns a meaningful ICC also for models
+#'  with random slopes and is applicable for models with other distributions
+#'  than Gaussian. For more details on the computation of the variances, see
+#'  \code{\link[insight]{get_variance}}.
 #'  \cr \cr
 #'  \strong{ICC for unconditional and conditional models}
 #'  \cr \cr
@@ -73,8 +77,7 @@
 #' icc(model)
 #' }
 #'
-#' @importFrom insight model_info
-#' @importFrom stats var
+#' @importFrom insight model_info get_variance
 #' @export
 icc <- function(model, ...) {
   UseMethod("icc")
@@ -87,11 +90,11 @@ icc.default <- function(model, ...) {
     stop("'model' has no random effects.", call. = FALSE)
   }
 
-  vars <- .compute_variances(model, name = "icc")
+  vars <- insight::get_variance(model)
 
   # Calculate ICC values
-  icc_adjusted <- vars$var.ranef / (vars$var.ranef + vars$var.resid)
-  icc_conditional <- vars$var.ranef / (vars$var.fixef + vars$var.ranef + vars$var.resid)
+  icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
+  icc_conditional <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
 
   list(
     "ICC_adjusted" = icc_adjusted,
@@ -99,15 +102,20 @@ icc.default <- function(model, ...) {
   )
 }
 
+
+
+
+
+#' @importFrom stats quantile
 #' @rdname icc
 #' @export
-icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci.lvl = .95, ...) {
+icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
   if (!insight::model_info(model)$is_mixed) {
     stop("'model' has no random effects.", call. = FALSE)
   }
 
   if (!requireNamespace("brms", quietly = TRUE)) {
-    stop("Please install and load package `brms` first.", call. = F)
+    stop("Please install and load package `brms` first.", call. = FALSE)
   }
 
   PPD <- brms::posterior_predict(model, re.form = re.form, summary = FALSE)
@@ -123,6 +131,6 @@ icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci.lvl = .95, ...)
 
   list(
     "ICC_decomposed" = 1 - fun(tau.00 / total_var),
-    "CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci.lvl) / 2, (1 + ci.lvl) / 2))
+    "ICC_CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci) / 2, (1 + ci) / 2))
   )
 }

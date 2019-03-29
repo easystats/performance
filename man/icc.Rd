@@ -8,11 +8,11 @@
 icc(model, ...)
 
 \method{icc}{brmsfit}(model, re.form = NULL, robust = TRUE,
-  ci.lvl = 0.95, ...)
+  ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
-\code{stanreg} or \code{brmsfit}}
+\code{MixMod}, \code{lme}, \code{mixed}, \code{stanreg} or \code{brmsfit}.}
 
 \item{...}{Currently not used.}
 
@@ -23,16 +23,20 @@ to calculate the variance decomposition for this group-level.}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
 calculate the central tendency of the variances.}
+
+\item{ci}{The Credible Interval level.}
 }
 \description{
 This function calculates the intraclass-correlation
  (icc) - sometimes also called \emph{variance partition coefficient}
- (vpc) - for mixed effects models. The ICC is calculated for \code{\link[lme4]{merMod}},
- \code{\link[glmmTMB]{glmmTMB}} and \code{stanreg} objects and can be
- interpreted as \dQuote{the proportion of the variance explained by the
- grouping structure in the population} \cite{(Hox 2002: 15)}. For models
- fitted with the \pkg{brms}-package, a variance decomposition based on the
- posterior predictive distribution is calculated (see 'Details').
+ (vpc) - for mixed effects models. The ICC is calculated for \code{merMod}
+ (\pkg{lme4}), \code{glmmTMB} (\pkg{glmmTMB}), \code{MixMod} (\pkg{GLMMadpative}),
+ \code{lme} (\pkg{nlme}), \code{mixed} (\pkg{afex}), and \code{stanreg}
+ (\pkg{rstanarm}) objects and can be interpreted as \dQuote{the proportion
+ of the variance explained by the grouping structure in the population}
+ \cite{(Hox 2002: 15)}. For models fitted with the \pkg{brms}-package,
+ a variance decomposition based on the posterior predictive distribution
+ is calculated (see 'Details').
 }
 \details{
 \strong{Adjusted and conditional ICC}
@@ -42,9 +46,10 @@ This function calculates the intraclass-correlation
  the adjusted ICC only relates to the random effects, the conditional ICC
  also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
  Typically, the \emph{adjusted} ICC is of interest when the analysis of random
- effects is of interest.
- \code{icc()} return a meaningful ICC also for models with random slopes and
- is applicable for models with other distributions than Gaussian.
+ effects is of interest. \code{icc()} returns a meaningful ICC also for models
+ with random slopes and is applicable for models with other distributions
+ than Gaussian. For more details on the computation of the variances, see
+ \code{\link[insight]{get_variance}}.
  \cr \cr
  \strong{ICC for unconditional and conditional models}
  \cr \cr

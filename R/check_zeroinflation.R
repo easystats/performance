@@ -1,0 +1,48 @@
+#' @title Check for zero-inflation in count models
+#' @name check_zeroinflation
+#'
+#' @description \code{check_zeroinflation()} checks whether count models are over- or
+#'    underfitting zero-counts in the outcome.
+#'
+#' @param x Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
+#'    or \code{glm.nb} (package \pkg{MASS}).
+#' @param tolerance The tolerance for the ratio of observed and predicted
+#'    zeros to considered as over- or underfitting zero-counts. A ratio
+#'    between 1 +/- \code{tolerance} is considered as OK, while a ratio
+#'    beyond or below this treshold would indicate over- or underfitting.
+#'
+#' @return A list with information about the amount of predicted and observed
+#'    zeros in the outcome, as well as the ratio between these two values.
+#'
+#' @note
+#'
+#' @details A model that is underfitting zero-counts indicates a zero-inflation
+#'    in the data, i.e. it is recommended to use negative binomial or
+#'    zero-inflated models then.
+#'
+#' @examples
+#'
+#' @importFrom stats fitted dpois family
+#' @export
+check_zeroinflation <- function(x, tolerance = .05) {
+  # check if we have poisson
+  if (!stats::family(x)$family %in% c("poisson", "quasipoisson"))
+    stop("Model must be from Poisson-family.", call. = F)
+
+  # get predictions of outcome
+  mu <- stats::fitted(x)
+
+  # get predicted zero-counts
+  pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
+
+  # get actual zero of response
+  obs.zero <- sum(resp_val(x) == 0)
+
+  # proportion
+  list(
+    predicted.zeros = pred.zero,
+    observed.zeros = obs.zero,
+    ratio = pred.zero / obs.zero,
+    tolerance = tolerance
+  )
+}
