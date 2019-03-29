@@ -8,7 +8,6 @@
 #' @param tolerance Indicates up to which value the convergence result is
 #'          accepted. The smaller \code{tolerance} is, the stricter the test
 #'          will be.
-#' @param ... Currently not used.
 #'
 #' @return \code{TRUE} if convergence is fine and \code{FALSE} if convergence
 #'   is suspicious. Additionally, the convergence value is returned as return

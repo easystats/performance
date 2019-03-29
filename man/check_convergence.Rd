@@ -12,8 +12,6 @@ check_convergence(x, tolerance = 0.001)
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test
 will be.}
-
-\item{...}{Currently not used.}
 }
 \value{
 \code{TRUE} if convergence is fine and \code{FALSE} if convergence
