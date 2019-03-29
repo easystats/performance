@@ -38,12 +38,15 @@ r2.lm <- function(model, ...) {
   out$`F` <- model_summary$fstatistic[1]
   out$DoF <- model_summary$fstatistic[2]
   out$DoF_residual <- model_summary$fstatistic[3]
-  out$p <- stats::pf(
-    out$`F`,
-    out$DoF,
-    out$DoF_residual,
-    lower.tail = FALSE
-  )
+
+  if (length(out) > 1) {
+    out$p <- stats::pf(
+      out$`F`,
+      out$DoF,
+      out$DoF_residual,
+      lower.tail = FALSE
+    )
+  }
 
   out$R2_adjusted <- model_summary$adj.r.squared
   out
