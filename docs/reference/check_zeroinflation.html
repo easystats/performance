@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bayesian R2 — r2_bayes • performance</title>
+<title>Check for zero-inflation in count models — check_zeroinflation • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,10 @@
 
 
 
-<meta property="og:title" content="Bayesian R2 — r2_bayes" />
+<meta property="og:title" content="Check for zero-inflation in count models — check_zeroinflation" />
 
-<meta property="og:description" content="Compute R2 for Bayesian models. For mixed models (including a random part),
-it additionally computes the R2 related to the fixed effects only (marginal R2)." />
+<meta property="og:description" content="check_zeroinflation() checks whether count models are over- or
+   underfitting zero-counts in the outcome." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -104,57 +104,55 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bayesian R2</h1>
+    <h1>Check for zero-inflation in count models</h1>
     
-    <div class="hidden name"><code>r2_bayes.Rd</code></div>
+    <div class="hidden name"><code>check_zeroinflation.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute R2 for Bayesian models. For mixed models (including a random part),
-it additionally computes the R2 related to the fixed effects only (marginal R2).</p>
+    <p><code>check_zeroinflation()</code> checks whether count models are over- or
+   underfitting zero-counts in the outcome.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2_bayes</span>(<span class='no'>model</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>check_zeroinflation</span>(<span class='no'>x</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.05</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>A Bayesian regression model.</p></td>
+      <th>x</th>
+      <td><p>Fitted model of class <code>merMod</code>, <code>glmmTMB</code>, <code>glm</code>,
+or <code>glm.nb</code> (package <span class="pkg">MASS</span>).</p></td>
     </tr>
     <tr>
-      <th>robust</th>
-      <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
-calculate the central tendency of the variances.</p></td>
+      <th>tolerance</th>
+      <td><p>The tolerance for the ratio of observed and predicted
+zeros to considered as over- or underfitting zero-counts. A ratio
+between 1 +/- <code>tolerance</code> is considered as OK, while a ratio
+beyond or below this treshold would indicate over- or underfitting.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Gelman, A., Goodrich, B., Gabry, J., &amp; Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.</p>
+    <p>A list with information about the amount of predicted and observed
+   zeros in the outcome, as well as the ratio between these two values.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>A model that is underfitting zero-counts indicates a zero-inflation
+   in the data, i.e. it is recommended to use negative binomial or
+   zero-inflated models then.</p>
+    
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
-
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstanarm</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>r2_bayes</span>(<span class='no'>model</span>)
-
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>rstanarm</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>stan_lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Petal.Width</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>r2_bayes</span>(<span class='no'>model</span>)
-
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>brms</span>)
-
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>brms</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/brms/topics/brm'>brm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>r2_bayes</span>(<span class='no'>model</span>)
-
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>brms</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/brms/topics/brm'>brm</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Petal.Width</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>r2_bayes</span>(<span class='no'>model</span>)
-<span class='co'># }</span><div class='input'>
+    <pre class="examples"><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -162,7 +160,11 @@ calculate the central tendency of the variances.</p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#references">References</a></li>
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#note">Note</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

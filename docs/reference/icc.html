@@ -41,12 +41,14 @@
 
 <meta property="og:description" content="This function calculates the intraclass-correlation
  (icc) - sometimes also called variance partition coefficient
- (vpc) - for mixed effects models. The ICC is calculated for merMod,
- glmmTMB and stanreg objects and can be
- interpreted as &amp;#8220;the proportion of the variance explained by the
- grouping structure in the population&amp;#8221; (Hox 2002: 15). For models
- fitted with the brms-package, a variance decomposition based on the
- posterior predictive distribution is calculated (see 'Details')." />
+ (vpc) - for mixed effects models. The ICC is calculated for merMod
+ (lme4), glmmTMB (glmmTMB), MixMod (GLMMadpative),
+ lme (nlme), mixed (afex), and stanreg
+ (rstanarm) objects and can be interpreted as &amp;#8220;the proportion
+ of the variance explained by the grouping structure in the population&amp;#8221;
+ (Hox 2002: 15). For models fitted with the brms-package,
+ a variance decomposition based on the posterior predictive distribution
+ is calculated (see 'Details')." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,20 +121,22 @@
     
     <p>This function calculates the intraclass-correlation
  (icc) - sometimes also called <em>variance partition coefficient</em>
- (vpc) - for mixed effects models. The ICC is calculated for <code><a href='https://www.rdocumentation.org/packages/lme4/topics/merMod-class'>merMod</a></code>,
- <code><a href='https://www.rdocumentation.org/packages/glmmTMB/topics/glmmTMB'>glmmTMB</a></code> and <code>stanreg</code> objects and can be
- interpreted as &#8220;the proportion of the variance explained by the
- grouping structure in the population&#8221; <cite>(Hox 2002: 15)</cite>. For models
- fitted with the <span class="pkg">brms</span>-package, a variance decomposition based on the
- posterior predictive distribution is calculated (see 'Details').</p>
+ (vpc) - for mixed effects models. The ICC is calculated for <code>merMod</code>
+ (<span class="pkg">lme4</span>), <code>glmmTMB</code> (<span class="pkg">glmmTMB</span>), <code>MixMod</code> (<span class="pkg">GLMMadpative</span>),
+ <code>lme</code> (<span class="pkg">nlme</span>), <code>mixed</code> (<span class="pkg">afex</span>), and <code>stanreg</code>
+ (<span class="pkg">rstanarm</span>) objects and can be interpreted as &#8220;the proportion
+ of the variance explained by the grouping structure in the population&#8221;
+ <cite>(Hox 2002: 15)</cite>. For models fitted with the <span class="pkg">brms</span>-package,
+ a variance decomposition based on the posterior predictive distribution
+ is calculated (see 'Details').</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>icc</span>(<span class='no'>model</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for brmsfit</span>
-<span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>re.form</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ci.lvl</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>re.form</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,7 +144,7 @@
     <tr>
       <th>model</th>
       <td><p>A mixed effects model of class <code>merMod</code>, <code>glmmTMB</code>,
-<code>stanreg</code> or <code>brmsfit</code></p></td>
+<code>MixMod</code>, <code>lme</code>, <code>mixed</code>, <code>stanreg</code> or <code>brmsfit</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -158,6 +162,10 @@ to calculate the variance decomposition for this group-level.</p></td>
       <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
 calculate the central tendency of the variances.</p></td>
     </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>The Credible Interval level.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -169,9 +177,10 @@ calculate the central tendency of the variances.</p></td>
  the adjusted ICC only relates to the random effects, the conditional ICC
  also takes the fixed effects variances into account (see <cite>Nakagawa et al. 2017</cite>).
  Typically, the <em>adjusted</em> ICC is of interest when the analysis of random
- effects is of interest.
- <code>icc()</code> return a meaningful ICC also for models with random slopes and
- is applicable for models with other distributions than Gaussian.
+ effects is of interest. <code>icc()</code> returns a meaningful ICC also for models
+ with random slopes and is applicable for models with other distributions
+ than Gaussian. For more details on the computation of the variances, see
+ <code><a href='https://www.rdocumentation.org/packages/insight/topics/get_variance'>get_variance</a></code>.
  <br /> <br />
  <strong>ICC for unconditional and conditional models</strong>
  <br /> <br />
