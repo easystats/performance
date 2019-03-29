@@ -23,6 +23,7 @@ Imports:
 Suggests:
 	knitr,
 	lme4,
+	Matrix,
 	rmarkdown,
 	testthat,
 	covr,
