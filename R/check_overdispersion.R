@@ -1,7 +1,7 @@
 #' @title Check overdispersion of GL(M)M's
-#' @name overdispersion
+#' @name check_overdispersion
 #'
-#' @description \code{overdispersion()} checks generalized linear (mixed) models
+#' @description \code{check_overdispersion()} checks generalized linear (mixed) models
 #'    for overdispersion.
 #'
 #' @param x Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
@@ -12,7 +12,7 @@
 #'    p-value or dispersion ratio.
 #'
 #' @details A p-value < .05 indicates overdispersion. For \code{merMod}- and
-#'    \code{glmmTMB}-objects, \code{overdispersion()} is based on the code in
+#'    \code{glmmTMB}-objects, \code{check_overdispersion()} is based on the code in
 #'    the \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
 #'    section \emph{How can I deal with overdispersion in GLMMs?}. Note that
 #'    this function only returns an \emph{approximate} estimate of an
@@ -30,15 +30,15 @@
 #' @examples
 #'
 #' @export
-overdispersion <- function(x, ...) {
-  UseMethod("overdispersion")
+check_overdispersion <- function(x, ...) {
+  UseMethod("check_overdispersion")
 }
 
 
 #' @importFrom insight get_response
 #' @importFrom stats fitted nobs coef pchisq
 #' @export
-overdispersion.glm <- function(x, ...) {
+check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
   if (!stats::family(x)$family %in% c("poisson", "quasipoisson"))
     stop("Model must be from Poisson-family.", call. = F)
@@ -63,25 +63,25 @@ overdispersion.glm <- function(x, ...) {
 
 
 #' @export
-overdispersion.negbin <- function(x, ...) {
-  overdispersion.lme4(x)
+check_overdispersion.negbin <- function(x, ...) {
+  check_overdispersion.lme4(x)
 }
 
 
 #' @export
-overdispersion.merMod <- function(x, ...) {
-  overdispersion.lme4(x)
+check_overdispersion.merMod <- function(x, ...) {
+  check_overdispersion.lme4(x)
 }
 
 
 #' @export
-overdispersion.glmmTMB <- function(x, ...) {
-  overdispersion.lme4(x)
+check_overdispersion.glmmTMB <- function(x, ...) {
+  check_overdispersion.lme4(x)
 }
 
 
 #' @importFrom stats df.residual residuals pchisq
-overdispersion.lme4 <- function(x) {
+check_overdispersion.lme4 <- function(x) {
   rdf <- stats::df.residual(x)
   rp <- stats::residuals(x, type = "pearson")
   Pearson.chisq <- sum(rp^2)

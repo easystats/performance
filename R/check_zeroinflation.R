@@ -1,7 +1,7 @@
 #' @title Check for zero-inflation in count models
-#' @name zerocount
+#' @name check_zeroinflation
 #'
-#' @description \code{zerocount()} checks whether count models are over- or
+#' @description \code{check_zeroinflation()} checks whether count models are over- or
 #'    underfitting zero-counts in the outcome.
 #'
 #' @param x Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
@@ -24,7 +24,7 @@
 #'
 #' @importFrom stats fitted dpois family
 #' @export
-zerocount <- function(x, tolerance = .05) {
+check_zeroinflation <- function(x, tolerance = .05) {
   # check if we have poisson
   if (!stats::family(x)$family %in% c("poisson", "quasipoisson"))
     stop("Model must be from Poisson-family.", call. = F)
