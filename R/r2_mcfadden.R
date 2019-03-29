@@ -46,14 +46,14 @@ r2_mcfadden.vglm <- function(model) {
 #' @export
 r2_mcfadden.clm <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))
-  return(.r2_mcfadden(model, l_base))
+  .r2_mcfadden(model, l_base)
 }
 
 
 #' @export
 r2_mcfadden.clm2 <- function(model) {
   l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
-  return(.r2_mcfadden(model, l_base))
+  .r2_mcfadden(model, l_base)
 }
 
 

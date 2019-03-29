@@ -43,14 +43,14 @@ r2_nagelkerke <- function(model) {
 r2_nagelkerke.glm <- function(model) {
   r2_nagelkerke <- r2_coxnell(model) / (1 - exp(-model$null / insight::n_obs(model)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
-  return(r2_nagelkerke)
+  r2_nagelkerke
 }
 
 
 #' @export
 r2_nagelkerke.multinom <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
-  return(.r2_nagelkerke(model, l_base))
+  .r2_nagelkerke(model, l_base)
 }
 
 #' @export
@@ -60,23 +60,23 @@ r2_nagelkerke.vglm <- function(model) {
   }
 
   l_base <- stats::logLik(stats::update(model, ~1))
-  return(.r2_nagelkerke(model, l_base))
+  .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))
-  return(.r2_nagelkerke(model, l_base))
+  .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm2 <- function(model) {
   l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
-  return(.r2_nagelkerke(model, l_base))
+  .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.polr <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))
-  return(.r2_nagelkerke(model, l_base))
+  .r2_nagelkerke(model, l_base)
 }
