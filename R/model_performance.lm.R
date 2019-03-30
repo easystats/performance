@@ -2,7 +2,7 @@
 #'
 #' Compute indices of model performance for (generalized) linear models.
 #'
-#' @param model Object of class \link{lm}.
+#' @param model Object of class \code{lm} or \code{glm}.
 #' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "R2_adj")}).
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -14,7 +14,9 @@
 #' model_performance(model)
 #' @importFrom stats AIC BIC
 #' @export
-model_performance.lm <- function(model, metrics = "all", ...) {
+model_performance.lm <- function(model, metrics = c("all", "AIC", "BIC", "R2", "R2_adj"), ...) {
+  metrics <- match.arg(metrics)
+
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj")
   }
