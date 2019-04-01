@@ -39,8 +39,11 @@ r2_nakagawa <- function(model) {
   r2_conditional <- (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
 
 
-  list(
-    "R2_conditional" = r2_conditional,
-    "R2_marginal" = r2_marginal
+  structure(
+    class = "r2_nakagawa",
+    list(
+      "R2_conditional" = r2_conditional,
+      "R2_marginal" = r2_marginal
+    )
   )
 }
