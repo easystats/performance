@@ -104,13 +104,32 @@ icc.default <- function(model, ...) {
 
 
 
-
-
+#' @importFrom bayestestR ci
+#' @importFrom insight is_multivariate find_response model_info
 #' @importFrom stats quantile
 #' @rdname icc
 #' @export
 icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
-  if (!insight::model_info(model)$is_mixed) {
+
+  ## TODO enable this once it is fixed in insight
+
+  # for multivariate response models, we need a more complicated check...
+  # if (insight::is_multivariate(model)) {
+  #   resp <- insight::find_response(model)
+  #
+  #   is.mixed <- sapply(resp, function(i) {
+  #     insight::model_info(model)[[resp]]$is_mixed
+  #   }, simplify = TRUE)
+  #
+  #   if (!any(is.mixed)) {
+  #     stop("'model' has no random effects.", call. = FALSE)
+  #   }
+  # } else if (!insight::model_info(model)$is_mixed) {
+  #   stop("'model' has no random effects.", call. = FALSE)
+  # }
+
+
+  if (!insight::is_multivariate(model) && !insight::model_info(model)$is_mixed) {
     stop("'model' has no random effects.", call. = FALSE)
   }
 
@@ -119,18 +138,37 @@ icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
   }
 
   PPD <- brms::posterior_predict(model, re.form = re.form, summary = FALSE)
-  total_var <- apply(PPD, MARGIN = 1, FUN = stats::var)
+  var_total <- apply(PPD, MARGIN = 1, FUN = stats::var)
 
   PPD_0 <- brms::posterior_predict(model, re.form = NA, summary = FALSE)
-  tau.00 <- apply(PPD_0, MARGIN = 1, FUN = stats::var)
+  var_rand_intercept <- apply(PPD_0, MARGIN = 1, FUN = stats::var)
 
   if (robust)
     fun <- get("median", asNamespace("stats"))
   else
     fun <- get("mean", asNamespace("base"))
 
-  list(
-    "ICC_decomposed" = 1 - fun(tau.00 / total_var),
-    "ICC_CI" = 1 - quantile(tau.00 / total_var, probs = c((1 - ci) / 2, (1 + ci) / 2))
+  var_icc <- var_rand_intercept / var_total
+  var_residual <- var_total - var_rand_intercept
+  ci_icc <- rev(1 - stats::quantile(var_rand_intercept / var_total, probs = c((1 - ci) / 2, (1 + ci) / 2)))
+
+  result <- structure(
+    class = "icc_decomposed",
+    list(
+      "ICC_decomposed" = 1 - fun(var_icc),
+      "ICC_CI" = ci_icc
+    )
   )
+
+  attr(result, "var_rand_intercept") <- fun(var_rand_intercept)
+  attr(result, "var_residual") <- fun(var_residual)
+  attr(result, "var_total") <- fun(var_total)
+  attr(result, "ci.var_rand_intercept") <- bayestestR::ci(var_rand_intercept, ci = ci)
+  attr(result, "ci.var_residual") <- bayestestR::ci(var_residual, ci = ci)
+  attr(result, "ci.var_total") <- bayestestR::ci(var_total, ci = ci)
+  attr(result, "ci") <- ci
+  attr(result, "re.form") <- re.form
+  attr(result, "ranef") <- model$ranef$group[1]
+
+  result
 }
