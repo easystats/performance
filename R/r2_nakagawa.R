@@ -28,10 +28,32 @@
 #' r2_nakagawa(model)
 #' }
 #'
-#' @importFrom insight get_variance
+#' @importFrom insight get_variance print_color
 #' @export
 r2_nakagawa <- function(model) {
-  vars <- insight::get_variance(model)
+  vars <- tryCatch(
+    {
+      insight::get_variance(model, name_fun = "r2()", name_full = "r-squared")
+    },
+    warning = function(e) {
+      if (inherits(e, c("simpleWarning", "warning"))) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
+    },
+    error = function(e) {
+      if (inherits(e, c("simpleError", "error"))) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
+    }
+  )
+
+  if (is.null(vars) || is.na(vars)) {
+    return(NULL)
+  }
 
   # Calculate R2 values
 

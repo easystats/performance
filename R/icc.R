@@ -77,7 +77,7 @@
 #' icc(model)
 #' }
 #'
-#' @importFrom insight model_info get_variance
+#' @importFrom insight model_info get_variance print_color
 #' @export
 icc <- function(model, ...) {
   UseMethod("icc")
@@ -90,7 +90,25 @@ icc.default <- function(model, ...) {
     stop("'model' has no random effects.", call. = FALSE)
   }
 
-  vars <- insight::get_variance(model)
+  vars <- tryCatch(
+    {
+      insight::get_variance(model, name_fun = "icc()", name_full = "ICC")
+    },
+    warning = function(e) {
+      if (inherits(e, c("simpleWarning", "warning"))) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
+    },
+    error = function(e) {
+      if (inherits(e, c("simpleError", "error"))) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
+    }
+  )
 
   # Calculate ICC values
   icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
