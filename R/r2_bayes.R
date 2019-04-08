@@ -44,6 +44,8 @@ r2_bayes <- function(model, robust = TRUE) {
     stop("This function needs `rstantools` to be installed.")
   }
 
+  ## TODO check for multivariate response models
+
   if (insight::model_info(model)$is_mixed) {
     list(
       "R2_Bayes" = as.vector(rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
