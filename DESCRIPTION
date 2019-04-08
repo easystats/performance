@@ -1,6 +1,6 @@
 Package: performance
 Type: Package
-Title: Assessment of Model's Performance
+Title: Assessment of Regression Models Performance
 Version: 0.1.0
 Authors@R: c(
 	person("Daniel", 
@@ -15,23 +15,28 @@ Authors@R: c(
 		comment = c(ORCID = "0000-0001-5375-9967"))
 	)
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Utilities for computing indices to assess model quality,
+    which are not directly provided by R's base or stats packages. These 
+    include e.g. measures like r-squared values, intraclass correlation coefficient, 
+    root mean squared errors or function to check models for overdispersion, 
+    singularity or zeroinflation and more. Functions apply to a large variety of
+    models, including generalized linear models, mixed effects models and Bayesian 
+    models.
 Imports:
 	insight,
 	bayestestR
 Suggests:
+	brms,
+	covr,
 	knitr,
 	lme4,
-	nlme,
+	loo,
 	Matrix,
+	nlme,
 	rmarkdown,
-	testthat,
-	covr,
 	rstanarm,
 	rstantools,
-	loo,
-	brms
+	testthat
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
