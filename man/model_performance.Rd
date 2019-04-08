@@ -2,21 +2,21 @@
 % Please edit documentation in R/model_performance.R
 \name{model_performance}
 \alias{model_performance}
+\alias{compare_performance}
 \title{Model Performance}
 \usage{
 model_performance(model, ...)
+
+compare_performance(..., metrics = "all")
 }
 \arguments{
 \item{model}{Statistical model.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Arguments passed to or from other methods, resp. for \code{compare_performance()}, one or multiple model objects (also of different classes).}
 }
 \description{
-See the documentation for your object's class:
-\itemize{
- \item{\link[=model_performance.lm]{lm}}
- \item{\link[=model_performance.glm]{glm}}
- \item{\link[=model_performance.merMod]{mixed models}}
- \item{\link[=model_performance.stanreg]{Bayesian models}}
- }
+See the documentation for your object's class: \link[=model_performance.lm]{lm},
+\link[=model_performance.glm]{glm}, \link[=model_performance.merMod]{mixed models}
+and \link[=model_performance.stanreg]{Bayesian models}. \code{compare_performance()}
+computes indices of model performance for different models.
 }
