@@ -34,6 +34,18 @@ A p-value < .05 indicates overdispersion. For \code{merMod}- and
    from \cite{Gelman and Hill (2007), page 115}.
 }
 \examples{
+library(glmmTMB)
+data(Salamanders)
+
+m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_overdispersion(m)
+
+m <- glmmTMB(
+  count ~ mined + spp + (1 | site),
+  family = poisson,
+  data = Salamanders
+)
+check_overdispersion(m)
 
 }
 \references{

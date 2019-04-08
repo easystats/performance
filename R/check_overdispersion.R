@@ -28,6 +28,18 @@
 #'  Gelman A, Hill J (2007) Data Analysis Using Regression and Multilevel/Hierarchical Models. Cambridge, New York: Cambridge University Press
 #'
 #' @examples
+#' library(glmmTMB)
+#' data(Salamanders)
+#'
+#' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+#' check_overdispersion(m)
+#'
+#' m <- glmmTMB(
+#'   count ~ mined + spp + (1 | site),
+#'   family = poisson,
+#'   data = Salamanders
+#' )
+#' check_overdispersion(m)
 #'
 #' @export
 check_overdispersion <- function(x, ...) {
@@ -53,11 +65,14 @@ check_overdispersion.glm <- function(x, ...) {
   ratio <-  chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
 
-  list(
-    chisq_statistic = chisq,
-    dispersion_ratio = ratio,
-    residual_df = n - k,
-    p_value = p.value
+  structure(
+    class = "check_overdisp",
+    list(
+      chisq_statistic = chisq,
+      dispersion_ratio = ratio,
+      residual_df = n - k,
+      p_value = p.value
+    )
   )
 }
 
@@ -88,10 +103,13 @@ check_overdispersion.lme4 <- function(x) {
   prat <- Pearson.chisq / rdf
   pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
 
-  list(
-    chisq = Pearson.chisq,
-    ratio = prat,
-    rdf = rdf,
-    p = pval
+  structure(
+    class = "check_overdisp",
+    list(
+      chisq_statistic = Pearson.chisq,
+      dispersion_ratio = prat,
+      residual_df = rdf,
+      p_value = pval
+    )
   )
 }

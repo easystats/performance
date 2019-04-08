@@ -29,6 +29,7 @@ Suggests:
 	brms,
 	covr,
 	knitr,
+	glmmTMB,
 	lme4,
 	loo,
 	Matrix,
