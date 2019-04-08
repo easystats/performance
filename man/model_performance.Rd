@@ -16,6 +16,7 @@ See the documentation for your object's class:
 \itemize{
  \item{\link[=model_performance.lm]{lm}}
  \item{\link[=model_performance.glm]{glm}}
- \item{\link[=model_performance.stanreg]{Bayesian lm}}
+ \item{\link[=model_performance.merMod]{mixed models}}
+ \item{\link[=model_performance.stanreg]{Bayesian models}}
  }
 }
