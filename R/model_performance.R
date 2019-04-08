@@ -7,8 +7,9 @@
 #' computes indices of model performance for different models.
 #'
 #' @param model Statistical model.
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed.
+#'   See related documentation of object's class for details.
 #' @param ... Arguments passed to or from other methods, resp. for \code{compare_performance()}, one or multiple model objects (also of different classes).
-#'
 #'
 #' @export
 model_performance <- function(model, ...) {

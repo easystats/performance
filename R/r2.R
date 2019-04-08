@@ -136,8 +136,8 @@ r2.mixed <- function(model, ...) {
 
 
 #' @export
-r2.lme <- function(x, ...) {
-  r2_nakagawa(x)
+r2.lme <- function(model, ...) {
+  r2_nakagawa(model)
 }
 
 

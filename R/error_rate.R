@@ -27,11 +27,11 @@
 #' error_rate(m)
 #'
 #' @importFrom insight get_response find_response get_data
-#' @importFrom stats binomial predict.glm pchisq logLik weights
+#' @importFrom stats binomial predict.glm pchisq logLik weights as.formula glm
 #' @export
 error_rate <- function(model) {
-  m0 <- suppressWarnings(glm(
-    formula = as.formula(sprintf("%s ~ 1", insight::find_response(model))),
+  m0 <- suppressWarnings(stats::glm(
+    formula = stats::as.formula(sprintf("%s ~ 1", insight::find_response(model))),
     family = stats::binomial(link = "logit"),
     data = insight::get_data(model),
     weights = stats::weights(model)
