@@ -12,12 +12,16 @@
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
+#'
 #' @importFrom stats AIC BIC
+#' @importFrom insight model_info
 #' @export
 model_performance.lm <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
+
+  minfo <- insight::model_info(model)
 
   out <- list()
   if ("AIC" %in% metrics) {
@@ -29,7 +33,7 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   if ("R2" %in% metrics) {
     out <- c(out, r2(model))
   }
-  if ("RMSE" %in% metrics) {
+  if ("RMSE" %in% metrics && minfo$is_linear) {
     out <- c(out, rmse(model))
   }
 

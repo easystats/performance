@@ -25,4 +25,5 @@ model_performance(model)
 
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(model)
+
 }

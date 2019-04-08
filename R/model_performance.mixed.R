@@ -3,7 +3,7 @@
 #' Compute indices of model performance for mixed models.
 #'
 #' @param model Object of class \code{merMod}, \code{glmmTMB}, \code{lme} or \code{MixMod}.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
@@ -13,12 +13,15 @@
 #' model_performance(model)
 #' }
 #'
+#' @importFrom insight model_info
 #' @importFrom stats AIC BIC
 #' @export
 model_performance.merMod <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "ICC")
+    metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE")
   }
+
+  minfo <- insight::model_info(model)
 
   out <- list()
   if ("AIC" %in% metrics) {
@@ -32,6 +35,9 @@ model_performance.merMod <- function(model, metrics = "all", ...) {
   }
   if ("ICC" %in% metrics) {
     out <- c(out, icc(model))
+  }
+  if ("RMSE" %in% metrics && minfo$is_linear) {
+    out <- c(out, rmse(model))
   }
 
   # TODO: What with sigma and deviance?
