@@ -13,7 +13,7 @@ or \code{lme} (\pkg{nlme}).}
 \item{normalized}{Logical, use \code{TRUE} if normalized rmse should be returned.}
 }
 \value{
-
+Numeric, the root mean squared error.
 }
 \description{
 Compute root mean squared error for linear (mixed effects) models.

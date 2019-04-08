@@ -17,7 +17,7 @@
 #'   range of the response variable. Hence, lower values indicate
 #'   less residual variance.
 #'
-#' @return
+#' @return Numeric, the root mean squared error.
 #'
 #' @examples
 #' library(nlme)
