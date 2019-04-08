@@ -7,11 +7,12 @@
 #' @examples
 #' \dontrun{
 #' library(rstanarm)
-#' 
+#'
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
 #' looic(model)
 #' }
-#' 
+#'
+#' @importFrom insight find_algorithm
 #' @importFrom stats var
 #' @importFrom utils install.packages
 #' @export
@@ -20,9 +21,23 @@ looic <- function(model) {
     stop("This function needs package `loo` to be installed.")
   }
 
+
+  algorithm <- insight::find_algorithm(model)
+  if (algorithm$algorithm != "sampling") {
+    warning("`looic()` only available for models fit using the 'sampling' algorithm.", call. = FALSE)
+    return(NA)
+  }
+
   out <- list()
 
-  loo_df <- as.data.frame(loo::loo(model)$estimates)
+  loo_df <- tryCatch(
+    {
+      as.data.frame(loo::loo(model)$estimates)
+    },
+    error = function(e) { NULL }
+  )
+
+  if (is.null(loo_df)) return(NULL)
 
   out$ELPD <- loo_df[rownames(loo_df) == "elpd_loo", ]$Estimate
   out$ELPD_SE <- loo_df[rownames(loo_df) == "elpd_loo", ]$SE
@@ -31,5 +46,5 @@ looic <- function(model) {
 
   # Leave p_loo as I am not sure it is an index of performance
 
-  return(out)
+  out
 }

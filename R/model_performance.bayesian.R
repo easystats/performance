@@ -15,12 +15,20 @@
 #'
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
+#'
+#' @importFrom insight find_algorithm
 #' @importFrom bayestestR map_estimate hdi
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
   if (all(metrics == "all")) {
     metrics <- c("LOOIC", "R2", "R2_adjusted")
+  }
+
+  algorithm <- insight::find_algorithm(model)
+  if (algorithm$algorithm != "sampling") {
+    warning("`model_performance()` only possible for models fit using the 'sampling' algorithm.", call. = FALSE)
+    return(NULL)
   }
 
   out <- list()

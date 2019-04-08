@@ -28,9 +28,11 @@
 #'
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
 #'
+#' @importFrom insight find_algorithm
 #' @importFrom stats median
 #' @export
 r2_bayes <- function(model, robust = TRUE) {
+
   r2_bayesian <- .r2_posterior(model)
   structure(
     class = "r2_bayes",
@@ -42,6 +44,12 @@ r2_bayes <- function(model, robust = TRUE) {
 .r2_posterior <- function(model) {
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("This function needs `rstantools` to be installed.")
+  }
+
+  algorithm <- insight::find_algorithm(model)
+  if (algorithm$algorithm != "sampling") {
+    warning("`r2()` only available for models fit using the 'sampling' algorithm.", call. = FALSE)
+    return(NA)
   }
 
   ## TODO check for multivariate response models
