@@ -52,7 +52,7 @@ r2_nakagawa <- function(model) {
   )
 
   if (is.null(vars) || is.na(vars)) {
-    return(NULL)
+    return(NA)
   }
 
   # Calculate R2 values

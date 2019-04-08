@@ -110,6 +110,12 @@ icc.default <- function(model, ...) {
     }
   )
 
+
+  if (is.null(vars) || is.na(vars)) {
+    return(NA)
+  }
+
+
   # Calculate ICC values
   icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
   icc_conditional <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
@@ -124,7 +130,7 @@ icc.default <- function(model, ...) {
 
 #' @importFrom bayestestR ci
 #' @importFrom insight is_multivariate find_response model_info
-#' @importFrom stats quantile
+#' @importFrom stats quantile var
 #' @rdname icc
 #' @export
 icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {

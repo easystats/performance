@@ -22,6 +22,7 @@
 #'
 #' @examples
 #'
+#' @importFrom insight get_response
 #' @importFrom stats fitted dpois family
 #' @export
 check_zeroinflation <- function(x, tolerance = .05) {
@@ -36,7 +37,7 @@ check_zeroinflation <- function(x, tolerance = .05) {
   pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
 
   # get actual zero of response
-  obs.zero <- sum(resp_val(x) == 0)
+  obs.zero <- sum(insight::get_response(x) == 0)
 
   # proportion
   list(

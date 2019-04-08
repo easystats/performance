@@ -36,7 +36,7 @@ check_overdispersion <- function(x, ...) {
 
 
 #' @importFrom insight get_response
-#' @importFrom stats fitted nobs coef pchisq
+#' @importFrom stats fitted nobs coef pchisq family
 #' @export
 check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson

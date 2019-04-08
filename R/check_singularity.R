@@ -92,6 +92,7 @@ check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
   any(sapply(diag(x$D), function(.x) any(abs(.x) < tolerance)))
 }
 
+#' @importFrom stats na.omit
 #' @export
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
   if (!requireNamespace("nlme", quietly = TRUE))
