@@ -39,7 +39,7 @@
 
 <meta property="og:title" content="The Intraclass Correlation Coefficient (ICC) for mixed models — icc" />
 
-<meta property="og:description" content="This function calculates the intraclass-correlation
+<meta property="og:description" content="This function calculates the intraclass-correlation coefficient
  (icc) - sometimes also called variance partition coefficient
  (vpc) - for mixed effects models. The ICC is calculated for merMod
  (lme4), glmmTMB (glmmTMB), MixMod (GLMMadpative),
@@ -119,7 +119,7 @@
 
     <div class="ref-description">
     
-    <p>This function calculates the intraclass-correlation
+    <p>This function calculates the intraclass-correlation coefficient
  (icc) - sometimes also called <em>variance partition coefficient</em>
  (vpc) - for mixed effects models. The ICC is calculated for <code>merMod</code>
  (<span class="pkg">lme4</span>), <code>glmmTMB</code> (<span class="pkg">glmmTMB</span>), <code>MixMod</code> (<span class="pkg">GLMMadpative</span>),
@@ -170,15 +170,23 @@ calculate the central tendency of the variances.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><strong>Adjusted and conditional ICC</strong>
+    <p><strong>Calculation of the ICC</strong>
+ <br /> <br />
+ The ICC is calculated by dividing the random effect variance,
+ &sigma;<sup>2</sup><sub>i</sub>, by
+ the total variance, i.e. the sum of the random effect variance and the
+ residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>.
+ <br /> <br />
+ <strong>Adjusted and conditional ICC</strong>
  <br /> <br />
  <code>icc()</code> calculates an adjusted and conditional ICC, which take
  all sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
  the adjusted ICC only relates to the random effects, the conditional ICC
  also takes the fixed effects variances into account (see <cite>Nakagawa et al. 2017</cite>).
  Typically, the <em>adjusted</em> ICC is of interest when the analysis of random
- effects is of interest. <code>icc()</code> returns a meaningful ICC also for models
- with random slopes and is applicable for models with other distributions
+ effects is of interest. <code>icc()</code> returns a meaningful ICC also for more
+ complex random effects structures, like models with random slopes or nested
+ design (more than two levels) and is applicable for models with other distributions
  than Gaussian. For more details on the computation of the variances, see
  <code><a href='https://www.rdocumentation.org/packages/insight/topics/get_variance'>get_variance</a></code>.
  <br /> <br />
@@ -190,6 +198,22 @@ calculate the central tendency of the variances.</p></td>
  for full models with covariates ("conditional models") and compare how
  much, e.g., a level-2 variable explains the portion of variation in the grouping
  structure (random intercept).
+ <br /> <br />
+ <strong>ICC for specific group-levels </strong>
+ <br /> <br />
+ The proportion of variance for specific levels related to  each other
+ (e.g., similarity of level-1-units within level-2-units or level-2-units
+ within level-3-units) must be calculated manually. Use <code><a href='https://www.rdocumentation.org/packages/insight/topics/get_variance'>get_variance</a></code>
+ to get the random intercept variances (between-group-variances) and residual
+ variance of the model, and calculate the ICC for the various level correlations.
+ <br /> <br />
+ For example, for the ICC between level 1 and 2: <br />
+ <code>sum(insight::get_variance_intercept(model)) /</code> <br />
+ <code>  (sum(insight::get_variance_intercept(model)) + insight::get_variance_residual(model))</code>
+ <br /> <br />
+ For for the ICC between level 2 and 3: <br />
+ <code>insight::get_variance_intercept(model)[2] /</code> <br />
+ <code><a href='https://www.rdocumentation.org/packages/base/topics/sum'>  sum(insight::get_variance_intercept(model))</a></code>
  <br /> <br />
  <strong>ICC for brms-models</strong>
  <br /> <br />
@@ -213,8 +237,6 @@ calculate the central tendency of the variances.</p></td>
 
     <ul>
 <li><p>Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum</p></li>
-<li><p>Johnson PC, O'Hara RB. 2014. Extension of Nakagawa &amp; Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (doi: <a href='http://doi.org/10.1111/2041-210X.12225'>10.1111/2041-210X.12225</a>
-)</p></li>
 <li><p>Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. doi: <a href='http://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
 <li><p>Rabe-Hesketh S, Skrondal A. 2012. Multilevel and longitudinal modeling using Stata. 3rd ed. College Station, Tex: Stata Press Publication</p></li>
 <li><p>Raudenbush SW, Bryk AS. 2002. Hierarchical linear models: applications and data analysis methods. 2nd ed. Thousand Oaks: Sage Publications</p></li>
