@@ -13,7 +13,7 @@
 #' }
 #'
 #' @importFrom utils install.packages
-#' @importFrom insight get_response
+#' @importFrom insight get_response find_algorithm
 #' @importFrom stats var
 #' @export
 r2_loo <- function(model) {
@@ -44,9 +44,13 @@ r2_loo <- function(model) {
 
   ll <- rstantools::log_lik(model)
 
+  algorithm <- insight::find_algorithm(model)
+  .n_chains <- algorithm$chains
+  .n_samples <- (algorithm$iterations - algorithm$warmup) * algorithm$chains
+
   r_eff <- loo::relative_eff(
     exp(ll),
-    chain_id = rep(1:.n_chains(model), each = .n_samples(model) / .n_chains(model))
+    chain_id = rep(1:.n_chains, each = .n_samples / .n_chains)
   )
 
   psis_object <- loo::psis(log_ratios = -ll, r_eff = r_eff)
@@ -54,25 +58,4 @@ r2_loo <- function(model) {
   eloo <- ypredloo - y
 
   1 - stats::var(eloo) / stats::var(y)
-}
-
-
-#' @keywords internal
-.n_chains <- function(x) {
-  # This could be useful in insight :)
-  if (inherits(x, "brmsfit")) {
-    length(x$fit@stan_args)
-  } else {
-    length(x$stanfit@stan_args)
-  }
-}
-
-#' @keywords internal
-.n_samples <- function(x) {
-  # This could be useful in insight :)
-  if (inherits(x, "brmsfit") && requireNamespace("brms", quietly = TRUE)) {
-    brms::nsamples(x, incl_warmup = FALSE)
-  } else {
-    sum(sapply(x$stanfit@stan_args, function(.x) .x$iter - .x$warmup))
-  }
 }
