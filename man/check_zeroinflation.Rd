@@ -11,7 +11,7 @@ check_zeroinflation(x, tolerance = 0.05)
 or \code{glm.nb} (package \pkg{MASS}).}
 
 \item{tolerance}{The tolerance for the ratio of observed and predicted
-zeros to considered as over- or underfitting zero-counts. A ratio
+zeros to considered as over- or underfitting zeros. A ratio
 between 1 +/- \code{tolerance} is considered as OK, while a ratio
 beyond or below this treshold would indicate over- or underfitting.}
 }
@@ -21,16 +21,18 @@ A list with information about the amount of predicted and observed
 }
 \description{
 \code{check_zeroinflation()} checks whether count models are over- or
-   underfitting zero-counts in the outcome.
+   underfitting zeros in the outcome.
 }
 \details{
-A model that is underfitting zero-counts indicates a zero-inflation
-   in the data, i.e. it is recommended to use negative binomial or
-   zero-inflated models then.
-}
-\note{
-
+If the observed zeros are larger than the predicted zeros, the model
+   is underfitting zeros, which indicates a zero-inflation in the data. In
+   such cases, it is recommended to use negative binomial or zero-inflated
+   models.
 }
 \examples{
+library(glmmTMB)
+data(Salamanders)
+m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_zeroinflation(m)
 
 }
