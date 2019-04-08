@@ -10,7 +10,7 @@
 \arguments{
 \item{model}{Object of class \code{stanreg} or \code{brmsfit}.}
 
-\item{metrics}{Can be \code{"all"} or a list of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj")}).}
+\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj")}).}
 
 \item{ci}{The Credible Interval level for R2.}
 

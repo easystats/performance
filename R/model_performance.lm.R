@@ -3,7 +3,7 @@
 #' Compute indices of model performance for (generalized) linear models.
 #'
 #' @param model Object of class \code{lm} or \code{glm}.
-#' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "R2_adj")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
@@ -14,11 +14,9 @@
 #' model_performance(model)
 #' @importFrom stats AIC BIC
 #' @export
-model_performance.lm <- function(model, metrics = c("all", "AIC", "BIC", "R2", "R2_adj"), ...) {
-  metrics <- match.arg(metrics)
-
+model_performance.lm <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj")
+    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
 
   out <- list()
@@ -30,6 +28,9 @@ model_performance.lm <- function(model, metrics = c("all", "AIC", "BIC", "R2", "
   }
   if ("R2" %in% metrics) {
     out <- c(out, r2(model))
+  }
+  if ("RMSE" %in% metrics) {
+    out <- c(out, rmse(model))
   }
 
   # TODO: What with sigma and deviance?

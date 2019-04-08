@@ -3,7 +3,7 @@
 #' Compute indices of model performance for (general) linear models.
 #'
 #' @param model Object of class \code{stanreg} or \code{brmsfit}.
-#' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj")}).
 #' @param ci The Credible Interval level for R2.
 #' @param ... Arguments passed to or from other methods.
 #'

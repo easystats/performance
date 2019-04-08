@@ -18,12 +18,12 @@ model_performance <- function(model, ...) {
   UseMethod("model_performance")
 }
 
-temp_model_performance <- function(...) {
+temp_model_performance <- function(..., metrics = "all") {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
   m <- lapply(objects, function(.x) {
-    dat <- model_performance(.x)
+    dat <- model_performance(.x, metrics = metrics)
     cbind(data.frame(class = class(.x)[1], stringsAsFactors = FALSE), dat)
   })
 

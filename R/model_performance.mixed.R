@@ -3,7 +3,7 @@
 #' Compute indices of model performance for mixed models.
 #'
 #' @param model Object of class \code{merMod}, \code{glmmTMB}, \code{lme} or \code{MixMod}.
-#' @param metrics Can be \code{"all"} or a list of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
@@ -15,9 +15,7 @@
 #'
 #' @importFrom stats AIC BIC
 #' @export
-model_performance.merMod <- function(model, metrics = c("all", "AIC", "BIC", "R2", "ICC"), ...) {
-  metrics <- match.arg(metrics)
-
+model_performance.merMod <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "ICC")
   }
