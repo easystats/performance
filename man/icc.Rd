@@ -27,7 +27,7 @@ calculate the central tendency of the variances.}
 \item{ci}{The Credible Interval level.}
 }
 \description{
-This function calculates the intraclass-correlation
+This function calculates the intraclass-correlation coefficient
  (icc) - sometimes also called \emph{variance partition coefficient}
  (vpc) - for mixed effects models. The ICC is calculated for \code{merMod}
  (\pkg{lme4}), \code{glmmTMB} (\pkg{glmmTMB}), \code{MixMod} (\pkg{GLMMadpative}),
@@ -39,15 +39,23 @@ This function calculates the intraclass-correlation
  is calculated (see 'Details').
 }
 \details{
-\strong{Adjusted and conditional ICC}
+\strong{Calculation of the ICC}
+ \cr \cr
+ The ICC is calculated by dividing the random effect variance,
+ \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}}, by
+ the total variance, i.e. the sum of the random effect variance and the
+ residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
+ \cr \cr
+ \strong{Adjusted and conditional ICC}
  \cr \cr
  \code{icc()} calculates an adjusted and conditional ICC, which take
  all sources of uncertainty (i.e. of \emph{all random effects}) into account. While
  the adjusted ICC only relates to the random effects, the conditional ICC
  also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
  Typically, the \emph{adjusted} ICC is of interest when the analysis of random
- effects is of interest. \code{icc()} returns a meaningful ICC also for models
- with random slopes and is applicable for models with other distributions
+ effects is of interest. \code{icc()} returns a meaningful ICC also for more
+ complex random effects structures, like models with random slopes or nested
+ design (more than two levels) and is applicable for models with other distributions
  than Gaussian. For more details on the computation of the variances, see
  \code{\link[insight]{get_variance}}.
  \cr \cr
@@ -59,6 +67,22 @@ This function calculates the intraclass-correlation
  for full models with covariates ("conditional models") and compare how
  much, e.g., a level-2 variable explains the portion of variation in the grouping
  structure (random intercept).
+ \cr \cr
+ \strong{ICC for specific group-levels }
+ \cr \cr
+ The proportion of variance for specific levels related to  each other
+ (e.g., similarity of level-1-units within level-2-units or level-2-units
+ within level-3-units) must be calculated manually. Use \code{\link[insight]{get_variance}}
+ to get the random intercept variances (between-group-variances) and residual
+ variance of the model, and calculate the ICC for the various level correlations.
+ \cr \cr
+ For example, for the ICC between level 1 and 2: \cr
+ \code{sum(insight::get_variance_intercept(model)) /} \cr
+ \code{  (sum(insight::get_variance_intercept(model)) + insight::get_variance_residual(model))}
+ \cr \cr
+ For for the ICC between level 2 and 3: \cr
+ \code{insight::get_variance_intercept(model)[2] /} \cr
+ \code{  sum(insight::get_variance_intercept(model))}
  \cr \cr
  \strong{ICC for brms-models}
  \cr \cr
@@ -89,7 +113,6 @@ icc(model)
 \references{
 \itemize{
  \item Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
- \item Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (\doi{10.1111/2041-210X.12225})
  \item Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. \doi{10.1098/rsif.2017.0213}
  \item Rabe-Hesketh S, Skrondal A. 2012. Multilevel and longitudinal modeling using Stata. 3rd ed. College Station, Tex: Stata Press Publication
  \item Raudenbush SW, Bryk AS. 2002. Hierarchical linear models: applications and data analysis methods. 2nd ed. Thousand Oaks: Sage Publications
