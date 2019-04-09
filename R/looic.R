@@ -12,7 +12,7 @@
 #' looic(model)
 #' }
 #'
-#' @importFrom insight find_algorithm
+#' @importFrom insight find_algorithm print_color
 #' @importFrom stats var
 #' @importFrom utils install.packages
 #' @export
@@ -21,8 +21,8 @@ looic <- function(model) {
     stop("This function needs package `loo` to be installed.")
   }
 
-
   algorithm <- insight::find_algorithm(model)
+
   if (algorithm$algorithm != "sampling") {
     warning("`looic()` only available for models fit using the 'sampling' algorithm.", call. = FALSE)
     return(NA)
@@ -34,7 +34,13 @@ looic <- function(model) {
     {
       as.data.frame(loo::loo(model)$estimates)
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      if (inherits(e, c("simpleError", "error"))) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
+    }
   )
 
   if (is.null(loo_df)) return(NULL)
