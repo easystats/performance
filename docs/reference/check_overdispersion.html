@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
 
@@ -159,8 +159,28 @@ or <code>glm.nb</code> (package <span class="pkg">MASS</span>).</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>glmmTMB</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>Salamanders</span>)
+
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>poisson</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>)
+<span class='fu'>check_overdispersion</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Overdispersion test
+#&gt; 
+#&gt; </span><span>       dispersion ratio =    2.946
+#&gt;   Pearson's Chi-Squared = 1873.710
+#&gt;                 p-value =  &lt; 0.001
+#&gt; </div><div class='output co'>#&gt; <span class='message'>Overdispersion detected.</span></div><div class='input'>
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/glmmTMB/topics/glmmTMB'>glmmTMB</a></span>(
+  <span class='no'>count</span> ~ <span class='no'>mined</span> + <span class='no'>spp</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
+  <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>poisson</span>,
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>
+)
+<span class='fu'>check_overdispersion</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Overdispersion test
+#&gt; 
+#&gt; </span><span>       dispersion ratio =    2.324
+#&gt;   Pearson's Chi-Squared = 1475.875
+#&gt;                 p-value =  &lt; 0.001
+#&gt; </div><div class='output co'>#&gt; <span class='message'>Overdispersion detected.</span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
