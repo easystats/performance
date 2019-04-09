@@ -15,8 +15,7 @@ will be.}
 }
 \value{
 \code{TRUE} if convergence is fine and \code{FALSE} if convergence
-  is suspicious. Additionally, the convergence value is returned as return
-  value's name.
+  is suspicious. Additionally, the convergence value is returned as attribute.
 }
 \description{
 \code{check_convergence()} provides an alternative convergence
@@ -28,6 +27,7 @@ will be.}
   \href{https://github.com/lme4/lme4/issues/120}{here}
   and suggested by Ben Bolker in
   \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment}.
+  Further details can be found in \code{\link[lme4]{convergence}}.
 }
 \examples{
 library(lme4)

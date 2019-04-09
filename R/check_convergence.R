@@ -10,14 +10,14 @@
 #'          will be.
 #'
 #' @return \code{TRUE} if convergence is fine and \code{FALSE} if convergence
-#'   is suspicious. Additionally, the convergence value is returned as return
-#'   value's name.
+#'   is suspicious. Additionally, the convergence value is returned as attribute.
 #'
 #' @details \code{check_convergence()} provides an alternative convergence test for
 #'   \code{\link[lme4]{merMod}}-objects, as discussed
 #'   \href{https://github.com/lme4/lme4/issues/120}{here}
 #'   and suggested by Ben Bolker in
 #'   \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment}.
+#'   Further details can be found in \code{\link[lme4]{convergence}}.
 #'
 #' @examples
 #' library(lme4)
@@ -50,7 +50,7 @@ check_convergence <- function(x, tolerance = 0.001) {
   # copy logical value, TRUE if convergence is OK
   retval <- max(abs(relgrad)) < tolerance
   # copy convergence value
-  names(retval) <- max(abs(relgrad))
+  attr(retval, "gradient") <- max(abs(relgrad))
 
   # return result
   retval

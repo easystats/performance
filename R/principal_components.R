@@ -115,16 +115,21 @@ principal_components <- function(x, rotation = NULL, n_comp = NULL) {
   if (!inherits(x, "data.frame") && rotation != "varimax")
     stop(sprintf("`x` must be a data frame for `%s`-rotation.", rotation), call. = F)
 
-  if (rotation != "varimax" && !requireNamespace("psych", quietly = TRUE))
-    stop(sprintf("Package `psych` required for `%s`-rotation.", rotation), call. = F)
-
-
   # rotate loadings
 
-  if (rotation != "varimax")
+  if (rotation != "varimax") {
+
+    if (!requireNamespace("psych", quietly = TRUE)) {
+      stop(sprintf("Package `psych` required for `%s`-rotation.", rotation), call. = F)
+    }
+
     tmp <- psych::principal(r = x, n_compactors = n_comp, rotate = rotation)
-  else {
-    if (!inherits(x, "pca")) x <- .pca(x)
+
+  } else {
+
+    if (!inherits(x, "pca")) {
+      x <- .pca(x)
+    }
 
     loadings <- attr(x, "loadings", exact = TRUE)
     if (is.null(n_comp)) n_comp <- attr(x, "kaiser", exact = TRUE)
@@ -134,6 +139,7 @@ principal_components <- function(x, rotation = NULL, n_comp = NULL) {
     }
 
     tmp <- stats::varimax(loadings[, seq_len(n_comp)])
+
   }
 
 

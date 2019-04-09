@@ -51,7 +51,7 @@ r2_nakagawa <- function(model) {
     }
   )
 
-  if (is.null(vars) || is.na(vars)) {
+  if (is.null(vars) || all(is.na(vars))) {
     return(NA)
   }
 
