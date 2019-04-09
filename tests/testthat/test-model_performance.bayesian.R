@@ -10,42 +10,41 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     model <- insight::download_model("stanreg_lm_1")
     perf <- model_performance(model)
 
-    testthat::expect_equal(perf$R2_Median, 0.751, tolerance = 0.01)
-    testthat::expect_equal(perf$R2_LOO_adjusted, 0.7094, tolerance = 0.01)
-    testthat::expect_equal(perf$ELPD, -83.514, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_Median, 0.7522515, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_LOO_adjusted,  0.7110354, tolerance = 0.01)
+    testthat::expect_equal(perf$ELPD, -83.40375, tolerance = 0.01)
 
     model <- insight::download_model("stanreg_lm_2")
     perf <- model_performance(model)
 
-    testthat::expect_equal(perf$R2_Median, 0.6392, tolerance = 0.01)
-    testthat::expect_equal(perf$R2_LOO_adjusted, 0.587247, tolerance = 0.01)
-    testthat::expect_equal(perf$ELPD, -31.622, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_Median, 0.8258362, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_LOO_adjusted, 0.791236, tolerance = 0.01)
+    testthat::expect_equal(perf$ELPD, -78.38735, tolerance = 0.01)
 
-    model <- insightinsight::download_model("stanreg_lmerMod_1")
+    model <- insight::download_model("stanreg_lmerMod_1")
     perf <- model_performance(model)
 
-    testthat::expect_equal(perf$R2_Median, 0.6392, tolerance = 0.01)
-    testthat::expect_equal(perf$R2_LOO_adjusted, 0.58724, tolerance = 0.01)
-    testthat::expect_equal(perf$ELPD, -31.622, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_Median, 0.6420022, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_LOO_adjusted, 0.5896637, tolerance = 0.01)
+    testthat::expect_equal(perf$ELPD, -31.55849, tolerance = 0.01)
   })
 
 
   test_that("model_performance.brmsfit", {
     set.seed(333)
-
     library(brms)
 
-    model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+    model <- insight::download_model("brms_1")
     perf <- model_performance(model)
-    testthat::expect_equal(perf$R2_Median, 0.826, tolerance = 0.01)
-    testthat::expect_equal(perf$R2_LOO_adjusted, 0.791, tolerance = 0.01)
-    testthat::expect_equal(perf$ELPD, -78.407, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_Median, 0.8267671, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_LOO_adjusted, 0.7908548, tolerance = 0.01)
+    testthat::expect_equal(perf$ELPD, -78.43981, tolerance = 0.01)
 
-    model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+    model <- insight::download_model("brms_mixed_4")
     perf <- model_performance(model)
-    testthat::expect_equal(perf$R2_Median, 0.955, tolerance = 0.01)
-    testthat::expect_equal(perf$R2_LOO_adjusted, 0.952, tolerance = 0.01)
-    testthat::expect_equal(perf$ELPD, -70.5, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_Median, 0.9545026, tolerance = 0.01)
+    testthat::expect_equal(perf$R2_LOO_adjusted, 0.9524251, tolerance = 0.01)
+    testthat::expect_equal(perf$ELPD, -70.23604, tolerance = 0.01)
   })
 
 }
