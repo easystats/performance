@@ -1,5 +1,5 @@
 #' @export
-print.pca_rotate <- function(x, cutoff = 0.1, digits = 3, ...) {
+print.perf_pca_rotate <- function(x, cutoff = 0.1, digits = 3, ...) {
 
   insight::print_color(sprintf("# Rotated loadings from Principal Component Analysis (%s-rotation)\n\n", attr(x, "rotation", exact = TRUE)), "blue")
 
