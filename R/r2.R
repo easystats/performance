@@ -2,11 +2,11 @@
 #'
 #' Returns a list containing values related to the most appropriate R2 for the given model. See the list below:
 #' \itemize{
-#'   \item Logistic models (glm): \link[=r2_tjur]{Tjur's R2}
-#'   \item General linear models (glm): \link[=r2_nagelkerke]{Nagelkerke's R2}
-#'   \item Multinomial Logit (mlogit): \link[=r2_mcfadden]{McFadden's R2}
-#'   \item Mixed models (merMod, glmmTMB): \link[=r2_nakagawa]{Nakagawa's R2}
-#'   \item Bayesian models (brmsfit, stanreg): \link[=r2_bayes]{R2 bayes}
+#'   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
+#'   \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
+#'   \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
+#'   \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
+#'   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
 #' }
 #'
 #' @param model A statistical model.
@@ -26,6 +26,13 @@ r2 <- function(model, ...) {
   UseMethod("r2")
 }
 
+
+#' @importFrom insight print_color
+#' @export
+r2.default <- function(model, ...) {
+  insight::print_color(sprintf("Objects of class \"%s\" are not supported yet.", class(model)), "red")
+  return(NA)
+}
 
 
 #' @importFrom stats pf
@@ -151,9 +158,3 @@ r2.brmsfit <- function(model, ...) {
 r2.stanreg <- function(model, ...) {
   r2_bayes(model)
 }
-
-#' #' @export
-#' r2.stanmvreg <- function(x, ...) {
-#'   NULL
-#' }
-#'

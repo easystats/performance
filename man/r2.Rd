@@ -14,11 +14,11 @@ r2(model, ...)
 \description{
 Returns a list containing values related to the most appropriate R2 for the given model. See the list below:
 \itemize{
-  \item Logistic models (glm): \link[=r2_tjur]{Tjur's R2}
-  \item General linear models (glm): \link[=r2_nagelkerke]{Nagelkerke's R2}
-  \item Multinomial Logit (mlogit): \link[=r2_mcfadden]{McFadden's R2}
-  \item Mixed models (merMod, glmmTMB): \link[=r2_nakagawa]{Nakagawa's R2}
-  \item Bayesian models (brmsfit, stanreg): \link[=r2_bayes]{R2 bayes}
+  \item Logistic models: \link[=r2_tjur]{Tjur's R2}
+  \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
+  \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
+  \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
+  \item Bayesian models: \link[=r2_bayes]{R2 bayes}
 }
 }
 \examples{

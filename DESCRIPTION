@@ -17,11 +17,11 @@ Authors@R: c(
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's base or stats packages. These 
-    include e.g. measures like r-squared values, intra-class correlation coefficient, 
-    root mean squared errors or function to check models for overdispersion, 
+    include e.g. measures like r-squared, intra-class correlation coefficient, 
+    root mean squared error or functions to check models for overdispersion, 
     singularity or zero-inflation and more. Functions apply to a large variety of
-    models, including generalized linear models, mixed effects models and Bayesian 
-    models.
+    regression models, including generalized linear models, mixed effects models
+    and Bayesian models.
 Imports:
 	insight,
 	bayestestR
@@ -43,3 +43,4 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr
