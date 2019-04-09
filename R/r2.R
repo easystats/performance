@@ -28,7 +28,7 @@ r2 <- function(model, ...) {
 
 
 
-
+#' @importFrom stats pf
 #' @export
 r2.lm <- function(model, ...) {
   model_summary <- summary(model)
@@ -52,7 +52,7 @@ r2.lm <- function(model, ...) {
 
 
 
-
+#' @importFrom insight model_info
 #' @export
 r2.glm <- function(model, ...) {
   if (insight::model_info(model)$is_logit) {
