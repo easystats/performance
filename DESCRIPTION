@@ -5,13 +5,13 @@ Version: 0.0.0.9000
 Authors@R: c(
 	person("Daniel", 
 		"Lüdecke", 
-		role = c("aut"), 
+		role = c("aut", "cre"), 
 		email = "d.luedecke@uke.de", 
 		comment = c(ORCID = "0000-0002-8895-3206")),
 	person("Dominique", 
 		"Makowski", 
 		email = "dom.makowski@gmail.com",
-		role = c("aut", "cre"), 
+		role = c("aut", "ctb"), 
 		comment = c(ORCID = "0000-0001-5375-9967"))
 	)
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
