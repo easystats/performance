@@ -15,11 +15,11 @@ Authors@R: c(
 		comment = c(ORCID = "0000-0001-5375-9967"))
 	)
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
-Description: Utilities for computing indices to assess model quality,
+Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's base or stats packages. These 
-    include e.g. measures like r-squared values, intraclass correlation coefficient, 
+    include e.g. measures like r-squared values, intra-class correlation coefficient, 
     root mean squared errors or function to check models for overdispersion, 
-    singularity or zeroinflation and more. Functions apply to a large variety of
+    singularity or zero-inflation and more. Functions apply to a large variety of
     models, including generalized linear models, mixed effects models and Bayesian 
     models.
 Imports:
