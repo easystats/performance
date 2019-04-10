@@ -9,7 +9,7 @@ r2(model, ...)
 \arguments{
 \item{model}{A statistical model.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Currently not used.}
 }
 \value{
 Returns a list containing values related to the most appropriate R2

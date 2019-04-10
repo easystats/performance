@@ -5,7 +5,7 @@
 #'   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param ... Arguments passed to or from other methods.
+#' @param ... Currently not used.
 #'
 #' @return Returns a list containing values related to the most appropriate R2
 #'   for the given model. See the list below:
@@ -62,6 +62,15 @@ r2.lm <- function(model, ...) {
   }
 
   out
+}
+
+
+#' @export
+r2.feis <- function(model, ...) {
+  list(
+    R2 = model$r2,
+    R2_adjusted = model$adj.r2
+  )
 }
 
 
