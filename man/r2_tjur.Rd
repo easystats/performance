@@ -2,7 +2,7 @@
 % Please edit documentation in R/r2_tjur.R
 \name{r2_tjur}
 \alias{r2_tjur}
-\title{Tjur's (2009) R2 - coefficient of determination (D)}
+\title{Tjur's R2 - coefficient of determination (D)}
 \usage{
 r2_tjur(model)
 }
@@ -10,7 +10,11 @@ r2_tjur(model)
 \item{model}{Binomial Model.}
 }
 \description{
-This method calculates the Coefficient of Discrimination \code{D} (also known as Tjur's R2; Tjur, 2009) for generalized linear (mixed) models for binary outcomes. It is an alternative to other Pseudo-R-squared values like Nagelkerke's R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D} can be read like any other (Pseudo-)R-squared value.
+This method calculates the Coefficient of Discrimination \code{D}
+  (also known as Tjur's R2; \cite{Tjur, 2009}) for generalized linear (mixed) models
+  for binary outcomes. It is an alternative to other pseudo-R2 values like
+  Nagelkerke's R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D}
+  can be read like any other (pseudo-)R2 value.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

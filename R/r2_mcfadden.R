@@ -1,9 +1,9 @@
-#' McFadden's (1973) R2
+#' @title McFadden's (1973) R2
+#' @name r2_mcfadden
 #'
-#' DESCRIPTION TO BE IMPROVED.
+#' @description DESCRIPTION TO BE IMPROVED.
 #'
 #' @param model Multinomial Logit (\code{mlogit}) Model.
-#'
 #'
 #' @references
 #' \itemize{

@@ -17,11 +17,20 @@ model_performance <- function(model, ...) {
 }
 
 
+#' @importFrom insight is_model
 #' @rdname model_performance
 #' @export
 compare_performance <- function(..., metrics = "all") {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
+
+  supported_models <- sapply(objects, insight::is_model)
+
+  if (!all(supported_models)) {
+    warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
+    objects <- objects[supported_models]
+    object_names <- object_names[supported_models]
+  }
 
   m <- lapply(objects, function(.x) {
     dat <- model_performance(.x, metrics = metrics)

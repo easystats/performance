@@ -1,22 +1,20 @@
-#' Nagelkerke's (1991) R2
+#' @title Nagelkerke's R2
+#' @name r2_nagelkerke
 #'
-#' DESCRIPTION TO BE IMPROVED.
+#' @description DESCRIPTION TO BE IMPROVED.
 #'
 #' @param model Binomial Model.
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_nagelkerke(model)
-#' @references
-#' \itemize{
-#'   \item Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
-#' }
+#'
+#' @references Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
+#'
 #' @export
 r2_nagelkerke <- function(model) {
   UseMethod("r2_nagelkerke")
 }
-
-
 
 
 .r2_nagelkerke <- function(model, l_base) {

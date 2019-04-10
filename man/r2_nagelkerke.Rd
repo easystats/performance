@@ -2,7 +2,7 @@
 % Please edit documentation in R/r2_nagelkerke.R
 \name{r2_nagelkerke}
 \alias{r2_nagelkerke}
-\title{Nagelkerke's (1991) R2}
+\title{Nagelkerke's R2}
 \usage{
 r2_nagelkerke(model)
 }
@@ -15,9 +15,8 @@ DESCRIPTION TO BE IMPROVED.
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_nagelkerke(model)
+
 }
 \references{
-\itemize{
-  \item Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
-}
+Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
 }

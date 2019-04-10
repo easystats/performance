@@ -2,7 +2,7 @@
 % Please edit documentation in R/r2_coxnell.R
 \name{r2_coxnell}
 \alias{r2_coxnell}
-\title{Cox & Snell's (1989) R2}
+\title{Cox & Snell's R2}
 \usage{
 r2_coxnell(model)
 }
@@ -10,11 +10,20 @@ r2_coxnell(model)
 \item{model}{Binomial Model.}
 }
 \description{
-DESCRIPTION TO BE IMPROVED. This index was proposed by Cox & Snell (1989, pp. 208-9) and, apparently independently, by Magee (1990); but had been suggested earlier for binary response models by Maddala (1983). However, this index achieves a maximum of less than 1 for discrete models (i.e. models whose likelihood is a product of probabilities) which have a maximum of 1, instead of densities, which can become infinite (Nagelkerke, 1991).
+Calculates the pseudo-R2 value based on the proposal from \cite{Cox & Snell (1989)}.
+}
+\details{
+This index was proposed by \cite{Cox & Snell (1989, pp. 208-9)} and,
+  apparently independently, by \cite{Magee (1990)}; but had been suggested earlier
+  for binary response models by \cite{Maddala (1983)}. However, this index achieves
+  a maximum of less than 1 for discrete models (i.e. models whose likelihood
+  is a product of probabilities) which have a maximum of 1, instead of
+  densities, which can become infinite \cite{(Nagelkerke, 1991)}.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_coxnell(model)
+
 }
 \references{
 \itemize{
