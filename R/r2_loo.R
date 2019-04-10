@@ -1,8 +1,15 @@
-#' LOO-adjusted R2
+#' @title LOO-adjusted R2
+#' @name r2_loo
 #'
-#' Compute LOO-adjusted R2.
+#' @description Compute LOO-adjusted R2.
 #'
 #' @param model A Bayesian regression model.
+#'
+#' @return The LOO-adjusted R2 for \code{model}, as numeric value.
+#'
+#' @details Unlike \code{\link{r2_bayes}}, which returns an "unadjusted" R2 value,
+#'   \code{r2_loo()} calculates a LOO-adjusted R2, which comes conceptionally
+#'   closer to an "adjusted" R2 measure.
 #'
 #' @examples
 #' \dontrun{
@@ -57,5 +64,8 @@ r2_loo <- function(model) {
   ypredloo <- loo::E_loo(ypred, psis_object, log_ratios = -ll)$value
   eloo <- ypredloo - y
 
-  1 - stats::var(eloo) / stats::var(y)
+  loor2 <- 1 - stats::var(eloo) / stats::var(y)
+
+  names(loor2) <- "LOO-adjusted R2"
+  loor2
 }

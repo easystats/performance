@@ -9,8 +9,16 @@ r2_loo(model)
 \arguments{
 \item{model}{A Bayesian regression model.}
 }
+\value{
+The LOO-adjusted R2 for \code{model}, as numeric value.
+}
 \description{
 Compute LOO-adjusted R2.
+}
+\details{
+Unlike \code{\link{r2_bayes}}, which returns an "unadjusted" R2 value,
+  \code{r2_loo()} calculates a LOO-adjusted R2, which comes conceptionally
+  closer to an "adjusted" R2 measure.
 }
 \examples{
 \dontrun{

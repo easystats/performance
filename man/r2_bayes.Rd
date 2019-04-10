@@ -12,9 +12,19 @@ r2_bayes(model, robust = TRUE)
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
 calculate the central tendency of the variances.}
 }
+\value{
+A list with the Bayesian R2 value. For mixed models, a list with the
+  Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
+  for the R2 values are saved as attributes.
+}
 \description{
 Compute R2 for Bayesian models. For mixed models (including a random part),
 it additionally computes the R2 related to the fixed effects only (marginal R2).
+}
+\details{
+\code{r2_bayes()} returns an "unadjusted" R2 value. See \code{\link{r2_loo}}
+  to calculate a LOO-adjusted R2, which comes conceptionally closer to an
+  adjusted R2 measure.
 }
 \examples{
 \dontrun{
