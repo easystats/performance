@@ -3,7 +3,7 @@
 #'
 #' @description Calculates the pseudo-R2 value based on the proposal from \cite{Cox & Snell (1989)}.
 #'
-#' @param model Binomial Model.
+#' @param model Model with binary outcome.
 #'
 #' @details This index was proposed by \cite{Cox & Snell (1989, pp. 208-9)} and,
 #'   apparently independently, by \cite{Magee (1990)}; but had been suggested earlier
@@ -23,6 +23,7 @@
 #'   \item Maddala, G. S. (1986). Limited-dependent and qualitative variables in econometrics (No. 3). Cambridge university press.
 #'   \item Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
 #' }
+#'
 #' @export
 r2_coxnell <- function(model) {
   UseMethod("r2_coxnell")

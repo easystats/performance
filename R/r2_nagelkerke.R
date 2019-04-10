@@ -1,9 +1,10 @@
 #' @title Nagelkerke's R2
 #' @name r2_nagelkerke
 #'
-#' @description DESCRIPTION TO BE IMPROVED.
+#' @description Calculate Nagelkerke's pseudo-R2.
 #'
-#' @param model Binomial Model.
+#' @param model A generalized linear model, including cumulative links resp.
+#'   multinomial models.
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

@@ -7,7 +7,7 @@
 r2_coxnell(model)
 }
 \arguments{
-\item{model}{Binomial Model.}
+\item{model}{Model with binary outcome.}
 }
 \description{
 Calculates the pseudo-R2 value based on the proposal from \cite{Cox & Snell (1989)}.

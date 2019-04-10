@@ -2,7 +2,7 @@
 % Please edit documentation in R/r2_mcfadden.R
 \name{r2_mcfadden}
 \alias{r2_mcfadden}
-\title{McFadden's (1973) R2}
+\title{McFadden's R2}
 \usage{
 r2_mcfadden(model)
 }
@@ -10,7 +10,7 @@ r2_mcfadden(model)
 \item{model}{Multinomial Logit (\code{mlogit}) Model.}
 }
 \description{
-DESCRIPTION TO BE IMPROVED.
+Calculates McFadden's pseudo R2.
 }
 \references{
 \itemize{

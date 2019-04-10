@@ -1,7 +1,7 @@
-#' @title McFadden's (1973) R2
+#' @title McFadden's R2
 #' @name r2_mcfadden
 #'
-#' @description DESCRIPTION TO BE IMPROVED.
+#' @description Calculates McFadden's pseudo R2.
 #'
 #' @param model Multinomial Logit (\code{mlogit}) Model.
 #'
@@ -10,6 +10,8 @@
 #'   \item McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
 #'   \item McFadden, D. (1973). Conditional logit analysis of qualitative choice behavior.
 #' }
+#'
+#' @importFrom stats logLik update
 #' @export
 r2_mcfadden <- function(model) {
   UseMethod("r2_mcfadden")
@@ -18,7 +20,7 @@ r2_mcfadden <- function(model) {
 
 .r2_mcfadden <- function(model, l_base) {
   l_full <- stats::logLik(model)
-  mcfadden <- 1 - (l_full/l_base)
+  mcfadden <- 1 - (l_full / l_base)
 
   names(mcfadden) <- "McFadden's R2"
   mcfadden

@@ -7,10 +7,11 @@
 r2_nagelkerke(model)
 }
 \arguments{
-\item{model}{Binomial Model.}
+\item{model}{A generalized linear model, including cumulative links resp.
+multinomial models.}
 }
 \description{
-DESCRIPTION TO BE IMPROVED.
+Calculate Nagelkerke's pseudo-R2.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
