@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Cox &amp; Snell's (1989) R2 — r2_coxnell • performance</title>
+<title>Cox &amp; Snell's R2 — r2_coxnell • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Cox &amp; Snell's (1989) R2 — r2_coxnell" />
+<meta property="og:title" content="Cox &amp; Snell's R2 — r2_coxnell" />
 
-<meta property="og:description" content="DESCRIPTION TO BE IMPROVED. This index was proposed by Cox &amp;amp; Snell (1989, pp. 208-9) and, apparently independently, by Magee (1990); but had been suggested earlier for binary response models by Maddala (1983). However, this index achieves a maximum of less than 1 for discrete models (i.e. models whose likelihood is a product of probabilities) which have a maximum of 1, instead of densities, which can become infinite (Nagelkerke, 1991)." />
+<meta property="og:description" content="Calculates the pseudo-R2 value based on the proposal from Cox &amp;amp; Snell (1989)." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -103,14 +103,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Cox &amp; Snell's (1989) R2</h1>
+    <h1>Cox &amp; Snell's R2</h1>
     
     <div class="hidden name"><code>r2_coxnell.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>DESCRIPTION TO BE IMPROVED. This index was proposed by Cox &amp; Snell (1989, pp. 208-9) and, apparently independently, by Magee (1990); but had been suggested earlier for binary response models by Maddala (1983). However, this index achieves a maximum of less than 1 for discrete models (i.e. models whose likelihood is a product of probabilities) which have a maximum of 1, instead of densities, which can become infinite (Nagelkerke, 1991).</p>
+    <p>Calculates the pseudo-R2 value based on the proposal from <cite>Cox &amp; Snell (1989)</cite>.</p>
     
     </div>
 
@@ -125,6 +125,15 @@
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This index was proposed by <cite>Cox &amp; Snell (1989, pp. 208-9)</cite> and,
+  apparently independently, by <cite>Magee (1990)</cite>; but had been suggested earlier
+  for binary response models by <cite>Maddala (1983)</cite>. However, this index achieves
+  a maximum of less than 1 for discrete models (i.e. models whose likelihood
+  is a product of probabilities) which have a maximum of 1, instead of
+  densities, which can become infinite <cite>(Nagelkerke, 1991)</cite>.</p>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <ul>
@@ -138,13 +147,16 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='fu'>r2_coxnell</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Coxnell's R2 
-#&gt;    0.4401407 </div></pre>
+#&gt;    0.4401407 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>

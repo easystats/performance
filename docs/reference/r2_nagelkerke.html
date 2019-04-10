@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nagelkerke's (1991) R2 — r2_nagelkerke • performance</title>
+<title>Nagelkerke's R2 — r2_nagelkerke • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,7 @@
 
 
 
-<meta property="og:title" content="Nagelkerke's (1991) R2 — r2_nagelkerke" />
+<meta property="og:title" content="Nagelkerke's R2 — r2_nagelkerke" />
 
 <meta property="og:description" content="DESCRIPTION TO BE IMPROVED." />
 
@@ -103,7 +103,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Nagelkerke's (1991) R2</h1>
+    <h1>Nagelkerke's R2</h1>
     
     <div class="hidden name"><code>r2_nagelkerke.Rd</code></div>
     </div>
@@ -127,15 +127,14 @@
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <ul>
-<li><p>Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.</p></li>
-</ul>
+    <p>Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='fu'>r2_nagelkerke</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Nagelkerke's R2 
-#&gt;       0.5899593 </div></pre>
+#&gt;       0.5899593 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convergence test for mixed effects models — check_convergence • performance</title>
+<title>Kullback-Leibler R2 — r2_kl • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,10 @@
 
 
 
-<meta property="og:title" content="Convergence test for mixed effects models — check_convergence" />
+<meta property="og:title" content="Kullback-Leibler R2 — r2_kl" />
 
-<meta property="og:description" content="check_convergence() provides an alternative convergence
-  test for merMod-objects." />
+<meta property="og:description" content="Calculates the Kullback-Leibler-divergence-based
+  R2 for generalized linear models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -104,64 +104,45 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convergence test for mixed effects models</h1>
+    <h1>Kullback-Leibler R2</h1>
     
-    <div class="hidden name"><code>check_convergence.Rd</code></div>
+    <div class="hidden name"><code>r2_kl.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>check_convergence()</code> provides an alternative convergence
-  test for <code><a href='https://www.rdocumentation.org/packages/lme4/topics/merMod-class'>merMod</a></code>-objects.</p>
+    <p>Calculates the Kullback-Leibler-divergence-based
+  R2 for generalized linear models.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>check_convergence</span>(<span class='no'>x</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.001</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_kl</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>A <code>merMod</code>-object.</p></td>
+      <th>model</th>
+      <td><p>A generalized linear model.</p></td>
     </tr>
     <tr>
-      <th>tolerance</th>
-      <td><p>Indicates up to which value the convergence result is
-accepted. The smaller <code>tolerance</code> is, the stricter the test
-will be.</p></td>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>adjust</th>
+      <td><p>Logical, if <code>TRUE</code> (the default), the adjusted R2 value is returned.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p><code>TRUE</code> if convergence is fine and <code>FALSE</code> if convergence
-  is suspicious. Additionally, the convergence value is returned as attribute.</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>check_convergence()</code> provides an alternative convergence test for
-  <code><a href='https://www.rdocumentation.org/packages/lme4/topics/merMod-class'>merMod</a></code>-objects, as discussed
-  <a href='https://github.com/lme4/lme4/issues/120'>here</a>
-  and suggested by Ben Bolker in
-  <a href='https://github.com/lme4/lme4/issues/120#issuecomment-39920269'>this comment</a>.
-  Further details can be found in <code><a href='https://www.rdocumentation.org/packages/lme4/topics/convergence'>convergence</a></code>.</p>
+    <p>Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness of fit for some common nonlinear regression models. Journal of Econometrics, 77: 329-342.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>cbpp</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Random'>set.seed</a></span>(<span class='fl'>1</span>)
-<span class='no'>cbpp</span>$<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Normal'>rnorm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>cbpp</span>))
-<span class='no'>cbpp</span>$<span class='no'>x2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/Uniform'>runif</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/nrow'>nrow</a></span>(<span class='no'>cbpp</span>))
-
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/glmer'>glmer</a></span>(
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>cbind</a></span>(<span class='no'>incidence</span>, <span class='no'>size</span> - <span class='no'>incidence</span>) ~ <span class='no'>period</span> + <span class='no'>x</span> + <span class='no'>x2</span> + (<span class='fl'>1</span> + <span class='no'>x</span> <span class='kw'>|</span> <span class='no'>herd</span>),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>cbpp</span>,
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>binomial</a></span>()
-)</div><div class='output co'>#&gt; <span class='warning'>Warning: Model failed to converge with max|grad| = 0.00114582 (tol = 0.001, component 1)</span></div><div class='input'>
-<span class='fu'>check_convergence</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; [1] TRUE
-#&gt; attr(,"gradient")
-#&gt; [1] 0.0002803075</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='fu'>r2_kl</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; [1] 0.3834362</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -169,9 +150,7 @@ will be.</p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
+      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
