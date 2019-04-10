@@ -54,7 +54,7 @@ r2_coxnell <- function(model) {
 #' @export
 r2_coxnell.glm <- function(model) {
   r2_coxnell <- (1 - exp((model$dev - model$null) / insight::n_obs(model)))
-  names(r2_coxnell) <- "Coxnell's R2"
+  names(r2_coxnell) <- "Cox & Snell's R2"
   r2_coxnell
 }
 

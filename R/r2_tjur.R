@@ -40,5 +40,8 @@ r2_tjur <- function(model) {
   m1 <- mean(pred[which(y == categories[1])], na.rm = TRUE)
   m2 <- mean(pred[which(y == categories[2])], na.rm = TRUE)
 
-  abs(m2 - m1)
+  tjur_d <- abs(m2 - m1)
+
+  names(tjur_d) <- "Tjur's R2"
+  tjur_d
 }

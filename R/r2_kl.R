@@ -25,5 +25,9 @@ r2_kl.glm <- function(model, adjust = TRUE, ...) {
     adj <- model$df.null/model$df.residual
   else
     adj <- 1
-  1 - (model$deviance / model$null.deviance) * adj
+
+  klr2 <- 1 - (model$deviance / model$null.deviance) * adj
+
+  names(klr2) <- "Kullback-Leibler R2"
+  klr2
 }

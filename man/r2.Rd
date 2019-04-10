@@ -11,8 +11,9 @@ r2(model, ...)
 
 \item{...}{Arguments passed to or from other methods.}
 }
-\description{
-Returns a list containing values related to the most appropriate R2 for the given model. See the list below:
+\value{
+Returns a list containing values related to the most appropriate R2
+  for the given model. See the list below:
 \itemize{
   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
   \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
@@ -20,6 +21,10 @@ Returns a list containing values related to the most appropriate R2 for the give
   \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
 }
+}
+\description{
+Calculate the R2 value for different model objects. Depending
+  on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

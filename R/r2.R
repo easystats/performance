@@ -1,6 +1,14 @@
-#' Compute the model's R2
+#' @title Compute the model's R2
+#' @name r2
 #'
-#' Returns a list containing values related to the most appropriate R2 for the given model. See the list below:
+#' @description Calculate the R2 value for different model objects. Depending
+#'   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
+#'
+#' @param model A statistical model.
+#' @param ... Arguments passed to or from other methods.
+#'
+#' @return Returns a list containing values related to the most appropriate R2
+#'   for the given model. See the list below:
 #' \itemize{
 #'   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
 #'   \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
@@ -8,9 +16,6 @@
 #'   \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
 #'   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
 #' }
-#'
-#' @param model A statistical model.
-#' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
@@ -39,8 +44,11 @@ r2.default <- function(model, ...) {
 #' @export
 r2.lm <- function(model, ...) {
   model_summary <- summary(model)
-  out <- list()
-  out$R2 <- model_summary$r.squared
+
+  out <- list(
+    R2 = model_summary$r.squared,
+    R2_adjusted = model_summary$adj.r.squared
+  )
 
   f.stat <- model_summary$fstatistic[1]
   DoF <- model_summary$fstatistic[2]
@@ -53,10 +61,8 @@ r2.lm <- function(model, ...) {
     attr(out, "DoF_residual") <- DoF_residual
   }
 
-  out$R2_adjusted <- model_summary$adj.r.squared
   out
 }
-
 
 
 #' @importFrom insight model_info
@@ -68,8 +74,6 @@ r2.glm <- function(model, ...) {
     list("R2_Nagelkerke" = r2_nagelkerke(model))
   }
 }
-
-
 
 
 #' @export
