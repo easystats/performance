@@ -28,7 +28,6 @@ Imports:
 Suggests:
 	brms,
 	covr,
-	knitr,
 	glmmTMB,
 	lme4,
 	loo,
@@ -43,4 +42,3 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-VignetteBuilder: knitr
