@@ -1,9 +1,12 @@
-#' Nakagawa's (2013, 2017) R2 for mixed models
+#' @title Nakagawa's R2 for mixed models
+#' @name r2_nakagawa
 #'
 #' @description Compute the marginal and conditional r-squared value for
 #'  mixed effects models with complex random effects structures.
 #'
 #' @param model A mixed effects model.
+#'
+#' @return A list with the conditional and marginal R2 values.
 #'
 #' @details Marginal and conditional r-squared values for mixed models are calculated
 #'  based on \cite{Nakagawa et al. 2017}. For more details on the computation

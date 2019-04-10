@@ -2,12 +2,15 @@
 % Please edit documentation in R/r2_nakagawa.R
 \name{r2_nakagawa}
 \alias{r2_nakagawa}
-\title{Nakagawa's (2013, 2017) R2 for mixed models}
+\title{Nakagawa's R2 for mixed models}
 \usage{
 r2_nakagawa(model)
 }
 \arguments{
 \item{model}{A mixed effects model.}
+}
+\value{
+A list with the conditional and marginal R2 values.
 }
 \description{
 Compute the marginal and conditional r-squared value for

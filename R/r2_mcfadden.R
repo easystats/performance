@@ -20,7 +20,7 @@ r2_mcfadden <- function(model) {
 
 .r2_mcfadden <- function(model, l_base) {
   l_full <- stats::logLik(model)
-  mcfadden <- 1 - (l_full / l_base)
+  mcfadden <- 1 - (as.vector(l_full) / as.vector(l_base))
 
   names(mcfadden) <- "McFadden's R2"
   mcfadden

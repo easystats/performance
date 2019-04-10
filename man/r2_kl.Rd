@@ -4,12 +4,10 @@
 \alias{r2_kl}
 \title{Kullback-Leibler R2}
 \usage{
-r2_kl(model, ...)
+r2_kl(model, adjust = TRUE)
 }
 \arguments{
 \item{model}{A generalized linear model.}
-
-\item{...}{Currently not used.}
 
 \item{adjust}{Logical, if \code{TRUE} (the default), the adjusted R2 value is returned.}
 }
