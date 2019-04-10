@@ -25,6 +25,10 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
 \code{r2_bayes()} returns an "unadjusted" R2 value. See \code{\link{r2_loo}}
   to calculate a LOO-adjusted R2, which comes conceptionally closer to an
   adjusted R2 measure.
+  \cr \cr
+  For mixed models, the conditional and marginal R2 are returned. The marginal
+  R2 considers only the variance of the fixed effects, while the conditional
+  R2 takes both the fixed and random effects into account.
 }
 \examples{
 \dontrun{
