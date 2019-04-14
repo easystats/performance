@@ -65,7 +65,7 @@ r2.lm <- function(model, ...) {
     attr(out, "DoF_residual") <- DoF_residual
   }
 
-  out
+  structure(class = "r2_lm", out)
 }
 
 

@@ -1,5 +1,22 @@
 #' @importFrom insight print_color
 #' @export
+print.r2_lm <- function(x, digits = 3, ...) {
+  insight::print_color("# R2 for linear models\n\n", "blue")
+
+  out <- paste0(c(
+    sprintf("       R2: %.*f", digits, x$R2),
+    sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)),
+    collapse = "\n"
+  )
+
+  cat(out)
+  cat("\n")
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
 print.r2_nakagawa <- function(x, digits = 3, ...) {
   insight::print_color("# R2 for mixed models\n\n", "blue")
 

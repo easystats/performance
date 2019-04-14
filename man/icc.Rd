@@ -26,6 +26,11 @@ calculate the central tendency of the variances.}
 
 \item{ci}{The Credible Interval level.}
 }
+\value{
+A list with two values, the adjusted and conditional ICC. For models
+  of class \code{brmsfit}, a list with two values, the decomposed ICC as well
+  as the credible intervals for this ICC.
+}
 \description{
 This function calculates the intraclass-correlation coefficient
  (icc) - sometimes also called \emph{variance partition coefficient}

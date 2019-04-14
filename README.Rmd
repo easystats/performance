@@ -52,9 +52,11 @@ library("performance")
 
 ## Examples
 
-### R-squared and ICC
+### R-squared
 
 **performance** has a generic `r2()` function, which computes the r-squared for many differnt models, including mixed effects and Bayesian regression models.
+
+`r2()` returns a list containing values related to the "most appropriate" r-squared for the given model.
 
 ```{r, warning=FALSE, message=FALSE}
 model <- lm(mpg ~ wt + cyl, data = mtcars)
@@ -69,6 +71,50 @@ model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 r2(model)
 ```
 
+The different r-squared measures can also be accessed directly via functions like `r2_bayes()`, `r2_coxsnell()` or `r2_nagelkerke()` (see a full list of functions [here](https://easystats.github.io/performance/reference/index.html)).
+
+For mixed models, the _conditional_ and _marginal_ r-squared are returned. The _marginal r-squared_ considers only the variance of the fixed effects and indicates how much of the model's variance is explained by the fixed effects part only. The _conditional r-squared_ takes both the fixed and random effects into account and indicates how much of the model's variance is explained by the "complete" model.
+
+For frequentist mixed models, the random effect variances are the mean random effect variances, thus the r-squared value is also appropriate for mixed models with random slopes or nested random effects (see _Johnson 2014_ and _Nakagawa et al. 2017_).
+
+```{r, warning=FALSE, message=FALSE}
+library(rstanarm)
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species), 
+  data = iris, 
+  cores = 4
+)
+r2(model)
+
+library(lme4)
+model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+r2(model)
+```
+
+### Intraclass Correlation Coefficient (ICC)
+
+Similar to r-squared, the ICC also provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" (_Hox 2002: 15_).
+
+`icc()` calculates the ICC for various mixed model objects, including `stanreg` models.
+
+```{r, warning=FALSE, message=FALSE}
+library(lme4)
+model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+icc(model)
+```
+
+For models of class `brmsfit`, an ICC based on variance decomposition is returned (for details, see the [documentation](https://easystats.github.io/performance/reference/icc.html)).
+ 
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+library(brms)
+set.seed(123)
+model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
+icc(model)
+```
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+m <- insight::download_model("brms_mixed_1")
+icc(m)
+```
 
 ### LM
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
@@ -103,3 +149,13 @@ library(rstanarm)
 text <- capture.output(model = stan_glm(mpg ~ wt + cyl, data = mtcars))
 knitr::kable(model_performance(model), digits = 2)
 ```
+
+# References
+
+Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. doi: 10.1080/00031305.2018.1549100
+
+Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
+
+Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (doi: 10.1111/2041-210X.12225)
+
+Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. doi: 10.1098/rsif.2017.0213

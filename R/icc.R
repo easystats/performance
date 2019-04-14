@@ -22,6 +22,10 @@
 #'
 #' @inheritParams r2_bayes
 #'
+#' @return A list with two values, the adjusted and conditional ICC. For models
+#'   of class \code{brmsfit}, a list with two values, the decomposed ICC as well
+#'   as the credible intervals for this ICC.
+#'
 #' @references \itemize{
 #'  \item Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
 #'  \item Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. \doi{10.1098/rsif.2017.0213}
