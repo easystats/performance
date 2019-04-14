@@ -95,7 +95,7 @@ r2(model)
 
 ### Intraclass Correlation Coefficient (ICC)
 
-Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" (_Hox 2002: 15_).
+Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" (_Hox 2010: 15_).
 
 `icc()` calculates the ICC for various mixed model objects, including `stanreg` models.
 
@@ -132,7 +132,7 @@ model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_overdispersion(model)
 ```
 
-Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family (like Quasi-Poisson, or negative binomial...).
+Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family (like Quasi-Poisson, or negative binomial, see _Gelman and Hill 2007_).
 
 ### Check for zero-inflation
 
@@ -226,10 +226,10 @@ knitr::kable(compare_performance(m1, m2, m3), digits = 2)
 
 # References
 
-Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. doi: 10.1080/00031305.2018.1549100
+Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
 
-Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
+Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.
 
-Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. (doi: 10.1111/2041-210X.12225)
+Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. https://doi.org/10.1111/2041-210X.12225
 
-Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. doi: 10.1098/rsif.2017.0213
+Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. https://doi.org/10.1098/rsif.2017.0213

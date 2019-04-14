@@ -90,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.411 [0.120]
+#>      Marginal R2: 0.409 [0.123]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -105,7 +105,7 @@ r2(model)
 
 Similar to r-squared, the ICC provides information on the explained
 variance and can be interpreted as “the proportion of the variance
-explained by the grouping structure in the population” (*Hox 2002: 15*).
+explained by the grouping structure in the population” (*Hox 2010: 15*).
 
 `icc()` calculates the ICC for various mixed model objects, including
 `stanreg` models.
@@ -137,14 +137,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.52 0.78]
+#> Ratio: 0.39  CI 95%: [-0.55 0.77]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.78  CI 95%: [ 8.45 56.98]
-#> Conditioned on rand. effects: 37.73  CI 95%: [25.12 56.28]
+#> Conditioned on fixed effects: 22.88  CI 95%: [ 8.35 58.32]
+#> Conditioned on rand. effects: 37.67  CI 95%: [24.96 56.59]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.46  CI 95%: [-17.80 35.09]
+#> Difference: 14.50  CI 95%: [-19.42 35.91]
 ```
 
 ## Model diagnostics
@@ -172,7 +172,8 @@ check_overdispersion(model)
 
 Overdispersion can be fixed by either modelling the dispersion parameter
 (not possible with all packages), or by choosing a different
-distributional family (like Quasi-Poisson, or negative binomial…).
+distributional family (like Quasi-Poisson, or negative binomial, see
+*Gelman and Hill 2007*).
 
 ### Check for zero-inflation
 
@@ -285,18 +286,19 @@ compare_performance(m1, m2, m3)
 
 # References
 
-Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for
-Bayesian regression models. The American Statistician, 1–6. doi:
-10.1080/00031305.2018.1549100
+Gelman, A., & Hill, J. (2007). Data analysis using regression and
+multilevel/hierarchical models. Cambridge; New York: Cambridge
+University Press.
 
-Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah,
-NJ: Erlbaum
+Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd
+ed). New York: Routledge.
 
-Johnson PC, O’Hara RB. 2014. Extension of Nakagawa & Schielzeth’s R2GLMM
-to random slopes models. Methods Ecol Evol, 5: 944-946. (doi:
-10.1111/2041-210X.12225)
+Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM
+to random slopes models. Methods in Ecology and Evolution, 5(9),
+944–946. <https://doi.org/10.1111/2041-210X.12225>
 
-Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of
-determination R2 and intra-class correlation coefficient from
-generalized linear mixed-effects models revisted and expanded. J. R.
-Soc. Interface 14. doi: 10.1098/rsif.2017.0213
+Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The
+coefficient of determination R2 and intra-class correlation coefficient
+from generalized linear mixed-effects models revisited and expanded.
+Journal of The Royal Society Interface, 14(134), 20170213.
+<https://doi.org/10.1098/rsif.2017.0213>

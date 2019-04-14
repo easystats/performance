@@ -39,7 +39,7 @@ This function calculates the intraclass-correlation coefficient
  \code{lme} (\pkg{nlme}), \code{mixed} (\pkg{afex}), and \code{stanreg}
  (\pkg{rstanarm}) objects and can be interpreted as \dQuote{the proportion
  of the variance explained by the grouping structure in the population}
- \cite{(Hox 2002: 15)}. For models fitted with the \pkg{brms}-package,
+ \cite{(Hox 2010: 15)}. For models fitted with the \pkg{brms}-package,
  a variance decomposition based on the posterior predictive distribution
  is calculated (see 'Details').
 }
@@ -117,9 +117,9 @@ icc(model)
 }
 \references{
 \itemize{
- \item Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum
- \item Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. \doi{10.1098/rsif.2017.0213}
- \item Rabe-Hesketh S, Skrondal A. 2012. Multilevel and longitudinal modeling using Stata. 3rd ed. College Station, Tex: Stata Press Publication
- \item Raudenbush SW, Bryk AS. 2002. Hierarchical linear models: applications and data analysis methods. 2nd ed. Thousand Oaks: Sage Publications
+ \item Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.
+ \item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+ \item Rabe-Hesketh, S., & Skrondal, A. (2012). Multilevel and longitudinal modeling using Stata (3rd ed). College Station, Tex: Stata Press Publication.
+ \item Raudenbush, S. W., & Bryk, A. S. (2002). Hierarchical linear models: applications and data analysis methods (2nd ed). Thousand Oaks: Sage Publications.
  }
 }
