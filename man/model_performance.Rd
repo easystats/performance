@@ -12,10 +12,17 @@ compare_performance(..., metrics = "all")
 \arguments{
 \item{model}{Statistical model.}
 
-\item{...}{Arguments passed to or from other methods, resp. for \code{compare_performance()}, one or multiple model objects (also of different classes).}
+\item{...}{Arguments passed to or from other methods, resp. for
+\code{compare_performance()}, one or multiple model objects (also of
+different classes).}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed.
 See related documentation of object's class for details.}
+}
+\value{
+For \code{model_performance()}, a data frame (with one row) and one
+  column per "index" (see \code{metrics}). For \code{compare_performance()},
+  the same data frame with one row per model.
 }
 \description{
 See the documentation for your object's class: \link[=model_performance.lm]{lm},

@@ -15,7 +15,7 @@ measures like r-squared, root mean squared error or intraclass
 correlation coefficient (ICC) , but also functions to check (mixed)
 models for overdispersion, zero-inflation, convergence or singularity.
 
-## Installation
+# Installation
 
 Run the following:
 
@@ -28,13 +28,15 @@ devtools::install_github("easystats/performance")
 library("performance")
 ```
 
-## Examples
+# Examples
+
+## Assessing model quality
 
 ### R-squared
 
 **performance** has a generic `r2()` function, which computes the
-r-squared for many differnt models, including mixed effects and Bayesian
-regression models.
+r-squared for many different models, including mixed effects and
+Bayesian regression models.
 
 `r2()` returns a list containing values related to the “most
 appropriate” r-squared for the given model.
@@ -74,10 +76,11 @@ explained by the fixed effects part only. The *conditional r-squared*
 takes both the fixed and random effects into account and indicates how
 much of the model’s variance is explained by the “complete” model.
 
-For frequentist mixed models, the random effect variances are the mean
-random effect variances, thus the r-squared value is also appropriate
-for mixed models with random slopes or nested random effects (see
-*Johnson 2014* and *Nakagawa et al. 2017*).
+For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes
+the *mean* random effect variances, thus the r-squared value is also
+appropriate for mixed models with more complex random effects
+structures, like random slopes or nested random effects (see *Johnson
+2014* and *Nakagawa et al. 2017*).
 
 ``` r
 library(rstanarm)
@@ -87,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.408 [0.120]
+#>      Marginal R2: 0.409 [0.119]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -100,7 +103,7 @@ r2(model)
 
 ### Intraclass Correlation Coefficient (ICC)
 
-Similar to r-squared, the ICC also provides information on the explained
+Similar to r-squared, the ICC provides information on the explained
 variance and can be interpreted as “the proportion of the variance
 explained by the grouping structure in the population” (*Hox 2002: 15*).
 
@@ -135,49 +138,250 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.58 0.78]
+#> Ratio: 0.38  CI 95%: [-0.54 0.78]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.82  CI 95%: [ 8.29 58.51]
-#> Conditioned on rand. effects: 37.72  CI 95%: [25.39 56.79]
+#> Conditioned on fixed effects: 22.68  CI 95%: [ 8.66 58.26]
+#> Conditioned on rand. effects: 37.70  CI 95%: [24.62 56.03]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.39  CI 95%: [-20.39 35.76]
+#> Difference: 14.15  CI 95%: [-19.15 36.59]
 ```
 
-### LM
+## Model diagnostics
+
+### Check for overdispersion
+
+Overdispersion occurs when the observed variance in the data is higher
+than the expected variance from the model assumption (for Poisson,
+variance roughly equals the mean of an outcome).
+`check_overdispersion()` checks if a count model (including mixed
+models) is overdispersed or not.
 
 ``` r
-model <- lm(mpg ~ wt + cyl, data = mtcars)
-model_performance(model)
+library(glmmTMB)
+data(Salamanders)
+model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_overdispersion(model)
+#> # Overdispersion test
+#> 
+#>        dispersion ratio =    2.946
+#>   Pearson's Chi-Squared = 1873.710
+#>                 p-value =  < 0.001
+```
+
+Overdispersion can be fixed by either modelling the dispersion parameter
+(not possible with all packages), or by choosing a different
+distributional family (like Quasi-Poisson, or negative binomial…).
+
+### Check for zero-inflation
+
+Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount
+of observed zeros is larger than the amount of predicted zeros, so the
+model is *underfitting* zeros. In such cases, it is recommended to use
+negative binomial or zero-inflated models.
+
+Use `check_zeroinflation()` to check if zero-inflation is present in the
+fitted model.
+
+``` r
+model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_zeroinflation(model)
+#> 
+#> # Check for zero-inflation
+#> 
+#>    Observed zeros: 387
+#>   Predicted zeros: 298
+#>             Ratio: 0.77
+```
+
+### Check for singular model fits
+
+A “singular” model fit means that some dimensions of the
+variance-covariance matrix have been estimated as exactly zero. This
+often occurs for mixed models with overly complex random effects
+structures.
+
+`check_singularity()` checks mixed models (of class `lme`, `merMod`,
+`glmmTMB` or `MixMod`) for singularity.
+
+``` r
+library(lme4)
+data(sleepstudy)
+
+# prepare data
+set.seed(1)
+sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mysubgrp <- NA
+for (i in 1:5) {
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), 
+        replace = TRUE)
+}
+
+# fit strange model
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), 
+    data = sleepstudy)
+
+check_singularity(model)
+#> [1] TRUE
+```
+
+Remedies to cure issues with singular fits can be found
+[here](https://easystats.github.io/performance/reference/check_singularity.html).
+
+## Model performance summaries
+
+`model_performance()` computes indices of model performance for
+regression models. Depending on the model object, typical indices might
+be r-squared, AIC, BIC, RMSE, ICC or LOOIC.
+
+### Linear model
+
+``` r
+m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+model_performance(m1)
 ```
 
 | AIC |   BIC |   R2 | R2\_adjusted | X2.44420210815285 |
 | --: | ----: | ---: | -----------: | ----------------: |
 | 156 | 161.9 | 0.83 |         0.82 |              2.44 |
 
-### GLM
+### Logistic regression
 
 ``` r
-model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-model_performance(model)
+m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+model_performance(m2)
 ```
 
 |  AIC |  BIC | R2\_Tjur |
 | ---: | ---: | -------: |
 | 31.3 | 35.7 |     0.48 |
 
-### Bayesian LM (rstanarm)
+### Bayesian linear model (rstanarm)
 
 ``` r
 library(rstanarm)
-model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
-model_performance(model)
+m3 <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+model_performance(m3)
 ```
 
-|  AIC |  BIC | R2\_Tjur |
-| ---: | ---: | -------: |
-| 31.3 | 35.7 |     0.48 |
+    #> 
+    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
+    #> Chain 1: 
+    #> Chain 1: Gradient evaluation took 0.001 seconds
+    #> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+    #> Chain 1: Adjust your expectations accordingly!
+    #> Chain 1: 
+    #> Chain 1: 
+    #> Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+    #> Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+    #> Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+    #> Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+    #> Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+    #> Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+    #> Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+    #> Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+    #> Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+    #> Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+    #> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+    #> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+    #> Chain 1: 
+    #> Chain 1:  Elapsed Time: 0.077 seconds (Warm-up)
+    #> Chain 1:                0.077 seconds (Sampling)
+    #> Chain 1:                0.154 seconds (Total)
+    #> Chain 1: 
+    #> 
+    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
+    #> Chain 2: 
+    #> Chain 2: Gradient evaluation took 0 seconds
+    #> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+    #> Chain 2: Adjust your expectations accordingly!
+    #> Chain 2: 
+    #> Chain 2: 
+    #> Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+    #> Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+    #> Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+    #> Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+    #> Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+    #> Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+    #> Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+    #> Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+    #> Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+    #> Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+    #> Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+    #> Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+    #> Chain 2: 
+    #> Chain 2:  Elapsed Time: 0.093 seconds (Warm-up)
+    #> Chain 2:                0.076 seconds (Sampling)
+    #> Chain 2:                0.169 seconds (Total)
+    #> Chain 2: 
+    #> 
+    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
+    #> Chain 3: 
+    #> Chain 3: Gradient evaluation took 0 seconds
+    #> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+    #> Chain 3: Adjust your expectations accordingly!
+    #> Chain 3: 
+    #> Chain 3: 
+    #> Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+    #> Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+    #> Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+    #> Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+    #> Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+    #> Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+    #> Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+    #> Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+    #> Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+    #> Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+    #> Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+    #> Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+    #> Chain 3: 
+    #> Chain 3:  Elapsed Time: 0.077 seconds (Warm-up)
+    #> Chain 3:                0.074 seconds (Sampling)
+    #> Chain 3:                0.151 seconds (Total)
+    #> Chain 3: 
+    #> 
+    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
+    #> Chain 4: 
+    #> Chain 4: Gradient evaluation took 0 seconds
+    #> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+    #> Chain 4: Adjust your expectations accordingly!
+    #> Chain 4: 
+    #> Chain 4: 
+    #> Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+    #> Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+    #> Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+    #> Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+    #> Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+    #> Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+    #> Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+    #> Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+    #> Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+    #> Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+    #> Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+    #> Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+    #> Chain 4: 
+    #> Chain 4:  Elapsed Time: 0.075 seconds (Warm-up)
+    #> Chain 4:                0.065 seconds (Sampling)
+    #> Chain 4:                0.14 seconds (Total)
+    #> Chain 4:
+
+|    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_MAP | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adjusted |
+| ------: | -------: | ----: | --------: | ---------: | ------: | -------: | -----: | ------: | ----------: | -----------: | ----------------: |
+| \-78.68 |     4.68 | 157.3 |      9.37 |       0.83 |    0.02 |     0.82 |   0.03 |    0.84 |        0.78 |         0.85 |              0.79 |
+
+### Comparing different models
+
+``` r
+compare_performance(m1, m2, m3)
+```
+
+| name | class   |   AIC |   BIC |   R2 | R2\_adjusted | X2.44420210815285 | R2\_Tjur |    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_MAP | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adjusted |
+| :--- | :------ | ----: | ----: | ---: | -----------: | ----------------: | -------: | ------: | -------: | ----: | --------: | ---------: | ------: | -------: | -----: | ------: | ----------: | -----------: | ----------------: |
+| m1   | glm     |  31.3 |  35.7 |      |              |                   |     0.48 |         |          |       |           |            |         |          |        |         |             |              |                   |
+| m2   | lm      | 156.0 | 161.9 | 0.83 |         0.82 |              2.44 |          |         |          |       |           |            |         |          |        |         |             |              |                   |
+| m3   | stanreg |       |       |      |              |                   |          | \-78.68 |     4.68 | 157.3 |      9.37 |       0.83 |    0.02 |     0.82 |   0.03 |    0.84 |        0.78 |         0.85 |              0.79 |
 
 # References
 

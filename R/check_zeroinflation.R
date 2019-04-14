@@ -14,10 +14,10 @@
 #' @return A list with information about the amount of predicted and observed
 #'    zeros in the outcome, as well as the ratio between these two values.
 #'
-#' @details If the observed zeros are larger than the predicted zeros, the model
-#'    is underfitting zeros, which indicates a zero-inflation in the data. In
-#'    such cases, it is recommended to use negative binomial or zero-inflated
-#'    models.
+#' @details If the amount of observed zeros is larger than the amount of
+#'   predicted zeros, the model is underfitting zeros, which indicates a
+#'   zero-inflation in the data. In such cases, it is recommended to use
+#'   negative binomial or zero-inflated models.
 #'
 #' @examples
 #' library(glmmTMB)

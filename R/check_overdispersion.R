@@ -22,6 +22,10 @@
 #'    \cr \cr
 #'    For Poisson-models, the overdispersion test is based on the code
 #'    from \cite{Gelman and Hill (2007), page 115}.
+#'    \cr \cr
+#'    Overdispersion can be fixed by either modelling the dispersion parameter,
+#'    or by choosing a different distributional family (like Quasi-Poisson,
+#'    or negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
 #'
 #' @references Bolker B et al. (2017): \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ.}
 #'  \cr \cr

@@ -24,10 +24,10 @@ A list with information about the amount of predicted and observed
    underfitting zeros in the outcome.
 }
 \details{
-If the observed zeros are larger than the predicted zeros, the model
-   is underfitting zeros, which indicates a zero-inflation in the data. In
-   such cases, it is recommended to use negative binomial or zero-inflated
-   models.
+If the amount of observed zeros is larger than the amount of
+  predicted zeros, the model is underfitting zeros, which indicates a
+  zero-inflation in the data. In such cases, it is recommended to use
+  negative binomial or zero-inflated models.
 }
 \examples{
 library(glmmTMB)
