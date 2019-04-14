@@ -90,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.409 [0.119]
+#>      Marginal R2: 0.410 [0.116]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -132,20 +132,19 @@ model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
 
 ``` r
 icc(model)
-#> 
 #> # Random Effect Variances and ICC
 #> 
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.38  CI 95%: [-0.54 0.78]
+#> Ratio: 0.39  CI 95%: [-0.53 0.78]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.68  CI 95%: [ 8.66 58.26]
-#> Conditioned on rand. effects: 37.70  CI 95%: [24.62 56.03]
+#> Conditioned on fixed effects: 22.56  CI 95%: [ 8.53 57.83]
+#> Conditioned on rand. effects: 37.83  CI 95%: [24.80 56.60]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.15  CI 95%: [-19.15 36.59]
+#> Difference: 14.47  CI 95%: [-17.76 36.55]
 ```
 
 ## Model diagnostics
@@ -187,7 +186,6 @@ fitted model.
 ``` r
 model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(model)
-#> 
 #> # Check for zero-inflation
 #> 
 #>    Observed zeros: 387
@@ -243,9 +241,9 @@ m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
 ```
 
-| AIC |   BIC |   R2 | R2\_adjusted | X2.44420210815285 |
-| --: | ----: | ---: | -----------: | ----------------: |
-| 156 | 161.9 | 0.83 |         0.82 |              2.44 |
+| AIC |   BIC |   R2 | R2\_adjusted | RMSE |
+| --: | ----: | ---: | -----------: | ---: |
+| 156 | 161.9 | 0.83 |         0.82 | 2.44 |
 
 ### Logistic regression
 
@@ -269,8 +267,8 @@ model_performance(m3)
     #> 
     #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
     #> Chain 1: 
-    #> Chain 1: Gradient evaluation took 0.001 seconds
-    #> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+    #> Chain 1: Gradient evaluation took 0 seconds
+    #> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
     #> Chain 1: Adjust your expectations accordingly!
     #> Chain 1: 
     #> Chain 1: 
@@ -313,8 +311,8 @@ model_performance(m3)
     #> Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
     #> Chain 2: 
     #> Chain 2:  Elapsed Time: 0.093 seconds (Warm-up)
-    #> Chain 2:                0.076 seconds (Sampling)
-    #> Chain 2:                0.169 seconds (Total)
+    #> Chain 2:                0.075 seconds (Sampling)
+    #> Chain 2:                0.168 seconds (Total)
     #> Chain 2: 
     #> 
     #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -337,8 +335,8 @@ model_performance(m3)
     #> Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     #> Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
     #> Chain 3: 
-    #> Chain 3:  Elapsed Time: 0.077 seconds (Warm-up)
-    #> Chain 3:                0.074 seconds (Sampling)
+    #> Chain 3:  Elapsed Time: 0.078 seconds (Warm-up)
+    #> Chain 3:                0.073 seconds (Sampling)
     #> Chain 3:                0.151 seconds (Total)
     #> Chain 3: 
     #> 
@@ -362,9 +360,9 @@ model_performance(m3)
     #> Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
     #> Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
     #> Chain 4: 
-    #> Chain 4:  Elapsed Time: 0.075 seconds (Warm-up)
+    #> Chain 4:  Elapsed Time: 0.074 seconds (Warm-up)
     #> Chain 4:                0.065 seconds (Sampling)
-    #> Chain 4:                0.14 seconds (Total)
+    #> Chain 4:                0.139 seconds (Total)
     #> Chain 4:
 
 |    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_MAP | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adjusted |
@@ -377,11 +375,11 @@ model_performance(m3)
 compare_performance(m1, m2, m3)
 ```
 
-| name | class   |   AIC |   BIC |   R2 | R2\_adjusted | X2.44420210815285 | R2\_Tjur |    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_MAP | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adjusted |
-| :--- | :------ | ----: | ----: | ---: | -----------: | ----------------: | -------: | ------: | -------: | ----: | --------: | ---------: | ------: | -------: | -----: | ------: | ----------: | -----------: | ----------------: |
-| m1   | glm     |  31.3 |  35.7 |      |              |                   |     0.48 |         |          |       |           |            |         |          |        |         |             |              |                   |
-| m2   | lm      | 156.0 | 161.9 | 0.83 |         0.82 |              2.44 |          |         |          |       |           |            |         |          |        |         |             |              |                   |
-| m3   | stanreg |       |       |      |              |                   |          | \-78.68 |     4.68 | 157.3 |      9.37 |       0.83 |    0.02 |     0.82 |   0.03 |    0.84 |        0.78 |         0.85 |              0.79 |
+| name | class   |   AIC |   BIC |   R2 | R2\_adjusted | RMSE | R2\_Tjur |    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_MAP | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adjusted |
+| :--- | :------ | ----: | ----: | ---: | -----------: | ---: | -------: | ------: | -------: | ----: | --------: | ---------: | ------: | -------: | -----: | ------: | ----------: | -----------: | ----------------: |
+| m1   | glm     |  31.3 |  35.7 |      |              |      |     0.48 |         |          |       |           |            |         |          |        |         |             |              |                   |
+| m2   | lm      | 156.0 | 161.9 | 0.83 |         0.82 | 2.44 |          |         |          |       |           |            |         |          |        |         |             |              |                   |
+| m3   | stanreg |       |       |      |              |      |          | \-78.68 |     4.68 | 157.3 |      9.37 |       0.83 |    0.02 |     0.82 |   0.03 |    0.84 |        0.78 |         0.85 |              0.79 |
 
 # References
 

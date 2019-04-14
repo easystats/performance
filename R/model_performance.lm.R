@@ -34,7 +34,7 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     out <- c(out, r2(model))
   }
   if ("RMSE" %in% metrics && minfo$is_linear) {
-    out <- c(out, rmse(model))
+    out$RMSE <- rmse(model)
   }
 
   # TODO: What with sigma and deviance?

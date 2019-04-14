@@ -105,7 +105,7 @@ print.icc <- function(x, digits = 3, ...) {
 #' @importFrom insight print_color
 #' @export
 print.check_zi <- function(x, ...) {
-  insight::print_color("\n# Check for zero-inflation\n\n", "blue")
+  insight::print_color("# Check for zero-inflation\n\n", "blue")
   cat(sprintf("   Observed zeros: %i\n", x$observed.zeros))
   cat(sprintf("  Predicted zeros: %i\n", x$predicted.zeros))
   cat(sprintf("            Ratio: %.2f\n\n", x$ratio))
@@ -154,7 +154,7 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 #' @export
 print.icc_decomposed <- function(x, digits = 2, ...) {
   # print model information
-  cat("\n# Random Effect Variances and ICC\n\n")
+  cat("# Random Effect Variances and ICC\n\n")
 
   reform <- attr(x, "re.form", exact = TRUE)
   if (is.null(reform))
