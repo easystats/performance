@@ -30,7 +30,7 @@ r2_nagelkerke <- function(model) {
     n <- attr(L.full, "nobs")
   }
 
-  r2_nagelkerke <- (1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n))
+  r2_nagelkerke <- as.vector((1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n)))
 
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke

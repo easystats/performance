@@ -9,8 +9,11 @@ Status](https://travis-ci.org/easystats/performance.svg?branch=master)](https://
 
 ***Test if your model is a good model\!***
 
-`performance`’s primary goal is to provide utilities for computing
-indices of models fit performance.
+The primary goal of the **performance** package is to provide utilities
+for computing indices to assess the model quality. This includes
+measures like r-squared, root mean squared error or intraclass
+correlation coefficient (ICC) , but also functions to check (mixed)
+models for overdispersion, zero-inflation, convergence or singularity.
 
 ## Installation
 
@@ -26,6 +29,48 @@ library("performance")
 ```
 
 ## Examples
+
+### R-squared and ICC
+
+**performance** has a generic `r2()` function, which computes the
+r-squared for many differnt models, including mixed effects and Bayesian
+regression models.
+
+``` r
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+r2(model)
+#> $R2
+#> [1] 0.8302
+#> 
+#> $R2_adjusted
+#> [1] 0.8185
+#> 
+#> attr(,"p_value")
+#>     value 
+#> 6.809e-12 
+#> attr(,"F_statistic")
+#> value 
+#> 70.91 
+#> attr(,"DoF")
+#> numdf 
+#>     2 
+#> attr(,"DoF_residual")
+#> dendf 
+#>    29
+
+model <- glm(am ~ wt + cyl, data = mtcars, family = binomial)
+r2(model)
+#> $R2_Tjur
+#> Tjur's R2 
+#>    0.7051
+
+library(MASS)
+data(housing)
+model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+r2(model)
+#> $R2_Nagelkerke
+#> 'log Lik.' 0.1084 (df=8)
+```
 
 ### LM
 

@@ -19,7 +19,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   tidy.opts = list(width.cutoff = 60),
   tidy = TRUE,
-  fig.path = "README-"
+  fig.path = "README-",
+  comment = "#>"
 )
 options(knitr.kable.NA = '',
         digits = 4,
@@ -34,7 +35,7 @@ options(knitr.kable.NA = '',
 
 ***Test if your model is a good model!***
 
-The primary goal of the **performance** package is to provide utilities for computing indices of models fit performance. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.
+The primary goal of the **performance** package is to provide utilities for computing indices to assess the model quality. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.
 
 ## Installation
 
@@ -51,8 +52,22 @@ library("performance")
 
 ## Examples
 
-## R-squared and ICC
+### R-squared and ICC
 
+**performance** has a generic `r2()` function, which computes the r-squared for many differnt models, including mixed effects and Bayesian regression models.
+
+```{r, warning=FALSE, message=FALSE}
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+r2(model)
+
+model <- glm(am ~ wt + cyl, data = mtcars, family = binomial)
+r2(model)
+
+library(MASS)
+data(housing)
+model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+r2(model)
+```
 
 
 ### LM
