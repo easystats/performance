@@ -8,8 +8,8 @@
 #'    or \code{glm.nb} (package \pkg{MASS}).
 #' @param ... Currently not used.
 #'
-#' @return Results from the on the overdispersion test, like chi-squared statistics,
-#'    p-value or dispersion ratio.
+#' @return A list with results from the overdispersion test, like chi-squared
+#'  statistics, p-value or dispersion ratio.
 #'
 #' @details A p-value < .05 indicates overdispersion. For \code{merMod}- and
 #'    \code{glmmTMB}-objects, \code{check_overdispersion()} is based on the code in

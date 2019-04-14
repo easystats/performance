@@ -1,5 +1,22 @@
 #' @importFrom insight print_color
 #' @export
+print.looic <- function(x, digits = 2, ...) {
+  insight::print_color("# LOOIC and ELPD with Standard Error\n\n", "blue")
+
+  out <- paste0(c(
+    sprintf("  LOOIC: %.*f [%.*f]", digits, x$LOOIC, digits, x$LOOIC_SE),
+    sprintf("   ELPD: %.*f [%.*f]", digits, x$ELPD, digits, x$ELPD_SE)),
+    collapse = "\n"
+  )
+
+  cat(out)
+  cat("\n")
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
 print.r2_lm <- function(x, digits = 3, ...) {
   insight::print_color("# R2 for linear models\n\n", "blue")
 

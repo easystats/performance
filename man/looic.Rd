@@ -9,8 +9,12 @@ looic(model)
 \arguments{
 \item{model}{A Bayesian regression model.}
 }
+\value{
+A list with four elements, the ELPD, LOOIC and their standard errors.
+}
 \description{
-Compute LOOIC and ELPD for Bayesian regressions.
+Compute LOOIC (leave-one-out cross-validation (LOO) information
+  criterion) and ELPD (expected log predictive density) for Bayesian regressions.
 }
 \examples{
 \dontrun{

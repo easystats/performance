@@ -1,8 +1,12 @@
-#' LOO-related Indices for Bayesian regressions.
+#' @title LOO-related Indices for Bayesian regressions.
+#' @name looic
 #'
-#' Compute LOOIC and ELPD for Bayesian regressions.
+#' @description Compute LOOIC (leave-one-out cross-validation (LOO) information
+#'   criterion) and ELPD (expected log predictive density) for Bayesian regressions.
 #'
 #' @param model A Bayesian regression model.
+#'
+#' @return A list with four elements, the ELPD, LOOIC and their standard errors.
 #'
 #' @examples
 #' \dontrun{
@@ -52,5 +56,8 @@ looic <- function(model) {
 
   # Leave p_loo as I am not sure it is an index of performance
 
-  out
+  structure(
+    class = "looic",
+    out
+  )
 }

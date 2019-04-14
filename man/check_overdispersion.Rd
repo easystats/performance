@@ -13,8 +13,8 @@ or \code{glm.nb} (package \pkg{MASS}).}
 \item{...}{Currently not used.}
 }
 \value{
-Results from the on the overdispersion test, like chi-squared statistics,
-   p-value or dispersion ratio.
+A list with results from the overdispersion test, like chi-squared
+ statistics, p-value or dispersion ratio.
 }
 \description{
 \code{check_overdispersion()} checks generalized linear (mixed) models
