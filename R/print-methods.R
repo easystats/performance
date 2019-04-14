@@ -1,5 +1,25 @@
 #' @importFrom insight print_color
 #' @export
+print.error_rate <- function(x, digits = 2, ...) {
+  insight::print_color("# Error Rate of Logistic Regression Model\n\n", "blue")
+  cat(sprintf("  Full model: %.2f%%\n", 100 * x$error.model))
+  cat(sprintf("  Null model: %.2f%%\n", 100 * x$error.null))
+
+  insight::print_color("\n# Likelihood-Ratio-Test\n\n", "blue")
+
+  v1 <- sprintf("%.3f", x$lrt.chisq)
+  v2 <- sprintf("%.3f", x$lrt.p)
+
+  space <- max(nchar(c(v1, v2)))
+
+  cat(sprintf("  Chi-squared: %*s\n", space, v1))
+  cat(sprintf("      p-value: %*s\n\n", space, v2))
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
 print.looic <- function(x, digits = 2, ...) {
   insight::print_color("# LOOIC and ELPD with Standard Error\n\n", "blue")
 

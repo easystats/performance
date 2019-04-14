@@ -6,7 +6,7 @@
 #'
 #' @param model A \code{glm}-object with binomial-family.
 #'
-#' @references Gelman A, Hill J (2007) Data Analysis Using Regression and Multilevel/Hierarchical Models. Cambridge, New York: Cambridge University Press
+#' @references Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
 #'
 #' @details The error rate is a crude measure for model fit for logistic regression
 #'    models. It is defined as the proportion of cases for which the
@@ -54,10 +54,13 @@ error_rate <- function(model) {
 
   lrt.chisq <- 2 * abs(stats::logLik(model) - stats::logLik(m0))
 
-  list(
-    error.model = error1,
-    error.null = error0,
-    lrt.chisq = as.vector(lrt.chisq),
-    lrt.p = lrt.p
+  structure(
+    class = "error_rate",
+    list(
+      error.model = error1,
+      error.null = error0,
+      lrt.chisq = as.vector(lrt.chisq),
+      lrt.p = lrt.p
+    )
   )
 }
