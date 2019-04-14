@@ -90,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.410 [0.116]
+#>      Marginal R2: 0.410 [0.118]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -137,14 +137,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.53 0.78]
+#> Ratio: 0.38  CI 95%: [-0.51 0.79]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.56  CI 95%: [ 8.53 57.83]
-#> Conditioned on rand. effects: 37.83  CI 95%: [24.80 56.60]
+#> Conditioned on fixed effects: 22.91  CI 95%: [ 8.41 58.00]
+#> Conditioned on rand. effects: 37.80  CI 95%: [24.84 55.68]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.47  CI 95%: [-17.76 36.55]
+#> Difference: 14.20  CI 95%: [-17.60 36.03]
 ```
 
 ## Model diagnostics
@@ -167,6 +167,7 @@ check_overdispersion(model)
 #>        dispersion ratio =    2.946
 #>   Pearson's Chi-Squared = 1873.710
 #>                 p-value =  < 0.001
+#> Overdispersion detected.
 ```
 
 Overdispersion can be fixed by either modelling the dispersion parameter
@@ -191,6 +192,7 @@ check_zeroinflation(model)
 #>    Observed zeros: 387
 #>   Predicted zeros: 298
 #>             Ratio: 0.77
+#> Model is underfitting zeros (probable zero-inflation).
 ```
 
 ### Check for singular model fits
@@ -201,7 +203,8 @@ often occurs for mixed models with overly complex random effects
 structures.
 
 `check_singularity()` checks mixed models (of class `lme`, `merMod`,
-`glmmTMB` or `MixMod`) for singularity.
+`glmmTMB` or `MixMod`) for singularity, and returns `TRUE` if the model
+fit is singular.
 
 ``` r
 library(lme4)
@@ -256,118 +259,17 @@ model_performance(m2)
 | ---: | ---: | -------: |
 | 31.3 | 35.7 |     0.48 |
 
-### Bayesian linear model (rstanarm)
+### Linear mixed model
 
 ``` r
-library(rstanarm)
-m3 <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+library(lme4)
+m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 ```
 
-    #> 
-    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-    #> Chain 1: 
-    #> Chain 1: Gradient evaluation took 0 seconds
-    #> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-    #> Chain 1: Adjust your expectations accordingly!
-    #> Chain 1: 
-    #> Chain 1: 
-    #> Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-    #> Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-    #> Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-    #> Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-    #> Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-    #> Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    #> Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    #> Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    #> Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    #> Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    #> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    #> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-    #> Chain 1: 
-    #> Chain 1:  Elapsed Time: 0.077 seconds (Warm-up)
-    #> Chain 1:                0.077 seconds (Sampling)
-    #> Chain 1:                0.154 seconds (Total)
-    #> Chain 1: 
-    #> 
-    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
-    #> Chain 2: 
-    #> Chain 2: Gradient evaluation took 0 seconds
-    #> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-    #> Chain 2: Adjust your expectations accordingly!
-    #> Chain 2: 
-    #> Chain 2: 
-    #> Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-    #> Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-    #> Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-    #> Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-    #> Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-    #> Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    #> Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    #> Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    #> Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    #> Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    #> Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    #> Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-    #> Chain 2: 
-    #> Chain 2:  Elapsed Time: 0.093 seconds (Warm-up)
-    #> Chain 2:                0.075 seconds (Sampling)
-    #> Chain 2:                0.168 seconds (Total)
-    #> Chain 2: 
-    #> 
-    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
-    #> Chain 3: 
-    #> Chain 3: Gradient evaluation took 0 seconds
-    #> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-    #> Chain 3: Adjust your expectations accordingly!
-    #> Chain 3: 
-    #> Chain 3: 
-    #> Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-    #> Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-    #> Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-    #> Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-    #> Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-    #> Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    #> Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    #> Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    #> Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    #> Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    #> Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    #> Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-    #> Chain 3: 
-    #> Chain 3:  Elapsed Time: 0.078 seconds (Warm-up)
-    #> Chain 3:                0.073 seconds (Sampling)
-    #> Chain 3:                0.151 seconds (Total)
-    #> Chain 3: 
-    #> 
-    #> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
-    #> Chain 4: 
-    #> Chain 4: Gradient evaluation took 0 seconds
-    #> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-    #> Chain 4: Adjust your expectations accordingly!
-    #> Chain 4: 
-    #> Chain 4: 
-    #> Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-    #> Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-    #> Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-    #> Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-    #> Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-    #> Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-    #> Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-    #> Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-    #> Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-    #> Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-    #> Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-    #> Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-    #> Chain 4: 
-    #> Chain 4:  Elapsed Time: 0.074 seconds (Warm-up)
-    #> Chain 4:                0.065 seconds (Sampling)
-    #> Chain 4:                0.139 seconds (Total)
-    #> Chain 4:
-
-|    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_MAP | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adjusted |
-| ------: | -------: | ----: | --------: | ---------: | ------: | -------: | -----: | ------: | ----------: | -----------: | ----------------: |
-| \-78.68 |     4.68 | 157.3 |      9.37 |       0.83 |    0.02 |     0.82 |   0.03 |    0.84 |        0.78 |         0.85 |              0.79 |
+|  AIC |  BIC | R2\_conditional | R2\_marginal | ICC\_adjusted | ICC\_conditional |  RMSE |
+| ---: | ---: | --------------: | -----------: | ------------: | ---------------: | ----: |
+| 1756 | 1775 |             0.8 |         0.28 |          0.72 |             0.52 | 23.44 |
 
 ### Comparing different models
 
@@ -375,11 +277,11 @@ model_performance(m3)
 compare_performance(m1, m2, m3)
 ```
 
-| name | class   |   AIC |   BIC |   R2 | R2\_adjusted | RMSE | R2\_Tjur |    ELPD | ELPD\_SE | LOOIC | LOOIC\_SE | R2\_Median | R2\_MAD | R2\_Mean | R2\_SD | R2\_MAP | R2\_CI\_low | R2\_CI\_high | R2\_LOO\_adjusted |
-| :--- | :------ | ----: | ----: | ---: | -----------: | ---: | -------: | ------: | -------: | ----: | --------: | ---------: | ------: | -------: | -----: | ------: | ----------: | -----------: | ----------------: |
-| m1   | glm     |  31.3 |  35.7 |      |              |      |     0.48 |         |          |       |           |            |         |          |        |         |             |              |                   |
-| m2   | lm      | 156.0 | 161.9 | 0.83 |         0.82 | 2.44 |          |         |          |       |           |            |         |          |        |         |             |              |                   |
-| m3   | stanreg |       |       |      |              |      |          | \-78.68 |     4.68 | 157.3 |      9.37 |       0.83 |    0.02 |     0.82 |   0.03 |    0.84 |        0.78 |         0.85 |              0.79 |
+| name | class   |    AIC |    BIC |  RMSE |   R2 | R2\_adjusted | R2\_Tjur | R2\_conditional | R2\_marginal | ICC\_adjusted | ICC\_conditional |
+| :--- | :------ | -----: | -----: | ----: | ---: | -----------: | -------: | --------------: | -----------: | ------------: | ---------------: |
+| m1   | glm     |   31.3 |   35.7 |       |      |              |     0.48 |                 |              |               |                  |
+| m2   | lm      |  156.0 |  161.9 |  2.44 | 0.83 |         0.82 |          |                 |              |               |                  |
+| m3   | lmerMod | 1755.6 | 1774.8 | 23.44 |      |              |          |             0.8 |         0.28 |          0.72 |             0.52 |
 
 # References
 

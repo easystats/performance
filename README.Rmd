@@ -125,7 +125,7 @@ icc(model)
 
 Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). `check_overdispersion()` checks if a count model (including mixed models) is overdispersed or not.
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=TRUE}
 library(glmmTMB)
 data(Salamanders)
 model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
@@ -140,7 +140,7 @@ Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of obser
 
 Use `check_zeroinflation()` to check if zero-inflation is present in the fitted model.
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=TRUE}
 model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(model)
 ```
@@ -149,7 +149,7 @@ check_zeroinflation(model)
 
 A "singular" model fit means that some dimensions of the variance-covariance matrix have been estimated as exactly zero. This often occurs for mixed models with overly complex random effects structures.
 
-`check_singularity()` checks mixed models (of class `lme`, `merMod`, `glmmTMB` or `MixMod`) for singularity.
+`check_singularity()` checks mixed models (of class `lme`, `merMod`, `glmmTMB` or `MixMod`) for singularity, and returns `TRUE` if the model fit is singular.
 
 ```{r, warning=FALSE, message=FALSE}
 library(lme4)
@@ -202,16 +202,16 @@ m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 knitr::kable(model_performance(m2), digits = 2)
 ```
 
-### Bayesian linear model (rstanarm)
+### Linear mixed model
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
-library(rstanarm)
-m3 <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+library(lme4)
+m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 ```
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
-library(rstanarm)
-m3 <- stan_glm(mpg ~ wt + cyl, data = mtcars)
+library(lme4)
+m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 knitr::kable(model_performance(m3), digits = 2)
 ```
 
