@@ -37,7 +37,7 @@ model_performance.merMod <- function(model, metrics = "all", ...) {
     out <- c(out, icc(model))
   }
   if ("RMSE" %in% metrics && minfo$is_linear) {
-    out <- c(out, rmse(model))
+    out$RMSE <- rmse(model)
   }
 
   # TODO: What with sigma and deviance?
