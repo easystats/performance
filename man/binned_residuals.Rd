@@ -44,7 +44,7 @@ Binned residual plots are achieved by \dQuote{dividing the data into
   predictor (cf. Gelman and Hill 2007, pp. 97ff).
 }
 \examples{
-model <- glm(vs ~ wt + mpg + cyl + gear, data = mtcars, family = "binomial")
+model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 binned_residuals(model)
 
 }
