@@ -146,25 +146,23 @@
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Gelman A, Hill J (2007) Data Analysis Using Regression and Multilevel/Hierarchical Models. Cambridge, New York: Cambridge University Press</p>
+    <p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>am</span> ~ <span class='no'>mpg</span> + <span class='no'>hp</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span><span class='kw'>=</span> <span class='no'>binomial</span>)
-<span class='fu'>error_rate</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; $error.model
-#&gt; [1] 0.125
+<span class='fu'>error_rate</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Error Rate of Logistic Regression Model
 #&gt; 
-#&gt; $error.null
-#&gt; [1] 0.40625
+#&gt; </span><span>  Full model: 12.50%
+#&gt;   Null model: 40.62%
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; # Likelihood-Ratio-Test
 #&gt; 
-#&gt; $lrt.chisq
-#&gt; [1] 24.88287
-#&gt; 
-#&gt; $lrt.p
-#&gt; [1] 1.633612e-05
+#&gt; </span><span>  Chi-squared: 24.883
+#&gt;       p-value:  0.000
 #&gt; </div><div class='input'>
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
