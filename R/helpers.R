@@ -28,3 +28,17 @@
 
   x
 }
+
+
+#' @keywords internal
+recode_to_zero <- function(x) {
+  # check if factor
+  if (is.factor(x)) {
+    # try to convert to numeric
+    x <- as.numeric(as.character(x))
+  }
+
+  # retrieve lowest category
+  minval <- min(x, na.rm = TRUE)
+  sapply(x, function(y) y - minval)
+}

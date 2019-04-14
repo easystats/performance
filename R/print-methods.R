@@ -278,3 +278,72 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
     ci.res.hi
   ))
 }
+
+
+
+#' @export
+print.binned_residuals <- function(x, ...) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package `ggplot2` required.", call. = F)
+  }
+
+  if (!requireNamespace("graphics", quietly = TRUE)) {
+    stop("Package `graphics` required.", call. = F)
+  }
+
+  if (!requireNamespace("scales", quietly = TRUE)) {
+    stop("Package `scales` required.", call. = F)
+  }
+
+  x$se.lo <- -x$se
+  if (length(unique(x$group)) > 1)
+    ltitle <- "Within error bounds"
+  else
+    ltitle <- NULL
+
+  term <- attr(x, "term", exact = TRUE)
+
+  if (is.null(term))
+    xtitle <- sprintf("Estimated Probability of %s", attr(x, "resp_var", exact = TRUE))
+  else
+    xtitle = term
+
+  p <- ggplot2::ggplot(data = x, ggplot2::aes_string(x = "xbar")) +
+    ggplot2::geom_abline(slope = 0, intercept = 0, colour = "grey80")
+
+  if (!is.null(term)) {
+    p <- p +
+      ggplot2::stat_smooth(
+        ggplot2::aes_string(y = "ybar"),
+        method = "loess",
+        se = FALSE,
+        colour = "#00b159",
+        size = .5
+      )
+  }
+
+  p <- p +
+    ggplot2::geom_ribbon(ggplot2::aes_string(ymin = -Inf, ymax = "se.lo"), alpha = .1 , fill = "grey70") +
+    ggplot2::geom_ribbon(ggplot2::aes_string(ymin = "se", ymax = Inf), alpha = .1 , fill = "grey70") +
+    ggplot2::geom_line(ggplot2::aes_string(y = "se"), colour = "grey70") +
+    ggplot2::geom_line(ggplot2::aes_string(y = "se.lo"), colour = "grey70") +
+    ggplot2::theme_bw() +
+    ggplot2::scale_color_manual(values = c("#d11141", "#00aedb")) +
+    ggplot2::labs(
+      y = "Average residual",
+      x = xtitle,
+      colour = ltitle
+    )
+
+  if (is.null(term)) {
+    p <- p + ggplot2::scale_x_continuous(labels = scales::percent)
+  }
+
+  if (is.null(ltitle)) {
+    p <- p + ggplot2::geom_point(ggplot2::aes_string(y = "ybar"))
+  } else {
+    p <- p + ggplot2::geom_point(ggplot2::aes_string(y = "ybar", colour = "group"))
+  }
+
+  suppressWarnings(graphics::plot(p))
+}
