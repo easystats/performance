@@ -77,10 +77,10 @@ takes both the fixed and random effects into account and indicates how
 much of the model’s variance is explained by the “complete” model.
 
 For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes
-the *mean* random effect variances, thus the r-squared value is also
-appropriate for mixed models with more complex random effects
-structures, like random slopes or nested random effects (see *Johnson
-2014* and *Nakagawa et al. 2017*).
+the *mean* random effect variances, thus `r2()` is also appropriate for
+mixed models with more complex random effects structures, like random
+slopes or nested random effects (see *Johnson 2014* and *Nakagawa et
+al. 2017*).
 
 ``` r
 library(rstanarm)
@@ -90,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.410 [0.118]
+#>      Marginal R2: 0.411 [0.120]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -137,14 +137,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.38  CI 95%: [-0.51 0.79]
+#> Ratio: 0.39  CI 95%: [-0.52 0.78]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.91  CI 95%: [ 8.41 58.00]
-#> Conditioned on rand. effects: 37.80  CI 95%: [24.84 55.68]
+#> Conditioned on fixed effects: 22.78  CI 95%: [ 8.45 56.98]
+#> Conditioned on rand. effects: 37.73  CI 95%: [25.12 56.28]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.20  CI 95%: [-17.60 36.03]
+#> Difference: 14.46  CI 95%: [-17.80 35.09]
 ```
 
 ## Model diagnostics

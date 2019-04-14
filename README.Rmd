@@ -77,7 +77,7 @@ The different r-squared measures can also be accessed directly via functions lik
 
 For mixed models, the _conditional_ and _marginal_ r-squared are returned. The _marginal r-squared_ considers only the variance of the fixed effects and indicates how much of the model's variance is explained by the fixed effects part only. The _conditional r-squared_ takes both the fixed and random effects into account and indicates how much of the model's variance is explained by the "complete" model.
 
-For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_ random effect variances, thus the r-squared value is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (see _Johnson 2014_ and _Nakagawa et al. 2017_).
+For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_ random effect variances, thus `r2()` is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (see _Johnson 2014_ and _Nakagawa et al. 2017_).
 
 ```{r, warning=FALSE, message=FALSE}
 library(rstanarm)
