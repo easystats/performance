@@ -80,30 +80,175 @@
 </h1></div>
 
 <p><strong><em>Test if your model is a good model!</em></strong></p>
-<p><code>performance</code>’s primary goal is to provide utilities for computing indices of models fit performance.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<p>The primary goal of the <strong>performance</strong> package is to provide utilities for computing indices to assess the model quality. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
+</div>
+<div id="installation" class="section level1">
+<h1 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h1>
 <p>Run the following:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"easystats/performance"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"easystats/performance"</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"performance"</span>)</a></code></pre></div>
 </div>
-<div id="examples" class="section level2">
+<div id="examples" class="section level1">
+<h1 class="hasAnchor">
+<a href="#examples" class="anchor"></a>Examples</h1>
+<div id="assessing-model-quality" class="section level2">
 <h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<div id="lm" class="section level3">
+<a href="#assessing-model-quality" class="anchor"></a>Assessing model quality</h2>
+<div id="r-squared" class="section level3">
 <h3 class="hasAnchor">
-<a href="#lm" class="anchor"></a>LM</h3>
+<a href="#r-squared" class="anchor"></a>R-squared</h3>
+<p><strong>performance</strong> has a generic <code><a href="reference/r2.html">r2()</a></code> function, which computes the r-squared for many different models, including mixed effects and Bayesian regression models.</p>
+<p><code><a href="reference/r2.html">r2()</a></code> returns a list containing values related to the “most appropriate” r-squared for the given model.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(model)</a></code></pre></div>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; # R2 for linear models</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;        R2: 0.830</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;   adj. R2: 0.819</span></a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(am <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> binomial)</a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; $R2_Tjur</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; Tjur's R2 </span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;    0.7051</span></a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(MASS)</a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(housing)</a>
+<a class="sourceLine" id="cb3-16" title="16">model &lt;-<span class="st"> </span><span class="kw">polr</span>(Sat <span class="op">~</span><span class="st"> </span>Infl <span class="op">+</span><span class="st"> </span>Type <span class="op">+</span><span class="st"> </span>Cont, <span class="dt">weights =</span> Freq, <span class="dt">data =</span> housing)</a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; $R2_Nagelkerke</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt; Nagelkerke's R2 </span></a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt;          0.1084</span></a></code></pre></div>
+<p>The different r-squared measures can also be accessed directly via functions like <code><a href="reference/r2_bayes.html">r2_bayes()</a></code>, <code>r2_coxsnell()</code> or <code><a href="reference/r2_nagelkerke.html">r2_nagelkerke()</a></code> (see a full list of functions <a href="https://easystats.github.io/performance/reference/index.html">here</a>).</p>
+<p>For mixed models, the <em>conditional</em> and <em>marginal</em> r-squared are returned. The <em>marginal r-squared</em> considers only the variance of the fixed effects and indicates how much of the model’s variance is explained by the fixed effects part only. The <em>conditional r-squared</em> takes both the fixed and random effects into account and indicates how much of the model’s variance is explained by the “complete” model.</p>
+<p>For frequentist mixed models, <code><a href="reference/r2.html">r2()</a></code> (resp. <code><a href="reference/r2_nakagawa.html">r2_nakagawa()</a></code>) computes the <em>mean</em> random effect variances, thus <code><a href="reference/r2.html">r2()</a></code> is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (see <em>Johnson 2014</em> and <em>Nakagawa et al. 2017</em>).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rstanarm)</a>
+<a class="sourceLine" id="cb4-2" title="2">model &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Species), </a>
+<a class="sourceLine" id="cb4-3" title="3">    <span class="dt">data =</span> iris, <span class="dt">cores =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; # Bayesian R2 with Standard Error</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;   Conditional R2: 0.954 [0.002]</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.410 [0.118]</span></a>
+<a class="sourceLine" id="cb4-9" title="9"></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
+<a class="sourceLine" id="cb4-11" title="11">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt; # R2 for mixed models</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="co">#&gt;   Conditional R2: 0.799</span></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="co">#&gt;      Marginal R2: 0.279</span></a></code></pre></div>
+</div>
+<div id="intraclass-correlation-coefficient-icc" class="section level3">
+<h3 class="hasAnchor">
+<a href="#intraclass-correlation-coefficient-icc" class="anchor"></a>Intraclass Correlation Coefficient (ICC)</h3>
+<p>Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as “the proportion of the variance explained by the grouping structure in the population” (<em>Hox 2010: 15</em>).</p>
+<p><code><a href="reference/icc.html">icc()</a></code> calculates the ICC for various mixed model objects, including <code>stanreg</code> models.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
+<a class="sourceLine" id="cb5-2" title="2">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="reference/icc.html">icc</a></span>(model)</a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt; # Intraclass Correlation Coefficient</span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt;      Adjusted ICC: 0.722</span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt;   Conditional ICC: 0.521</span></a></code></pre></div>
+<p>For models of class <code>brmsfit</code>, an ICC based on variance decomposition is returned (for details, see the <a href="https://easystats.github.io/performance/reference/icc.html">documentation</a>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(brms)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb6-3" title="3">model &lt;-<span class="st"> </span><span class="kw">brm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>cyl) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>wt <span class="op">|</span><span class="st"> </span>gear), <span class="dt">data =</span> mtcars)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="reference/icc.html">icc</a></span>(model)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; # Random Effect Variances and ICC</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; Conditioned on: all random effects</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; ## Variance Ratio (comparable to ICC)</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.55 0.78]</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; ## Variances of Posterior Predicted Distribution</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.68  CI 95%: [ 8.57 57.86]</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.58  CI 95%: [25.30 56.57]</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; ## Difference in Variances</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.21  CI 95%: [-18.84 35.97]</span></a></code></pre></div>
+</div>
+</div>
+<div id="model-diagnostics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#model-diagnostics" class="anchor"></a>Model diagnostics</h2>
+<div id="check-for-overdispersion" class="section level3">
+<h3 class="hasAnchor">
+<a href="#check-for-overdispersion" class="anchor"></a>Check for overdispersion</h3>
+<p>Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). <code><a href="reference/check_overdispersion.html">check_overdispersion()</a></code> checks if a count model (including mixed models) is overdispersed or not.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(glmmTMB)</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(Salamanders)</a>
+<a class="sourceLine" id="cb8-3" title="3">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(count <span class="op">~</span><span class="st"> </span>spp <span class="op">+</span><span class="st"> </span>mined, <span class="dt">family =</span> poisson, <span class="dt">data =</span> Salamanders)</a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="kw"><a href="reference/check_overdispersion.html">check_overdispersion</a></span>(model)</a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; # Overdispersion test</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt;        dispersion ratio =    2.946</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt;   Pearson's Chi-Squared = 1873.710</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt;                 p-value =  &lt; 0.001</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; Overdispersion detected.</span></a></code></pre></div>
+<p>Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family (like Quasi-Poisson, or negative binomial, see <em>Gelman and Hill 2007</em>).</p>
+</div>
+<div id="check-for-zero-inflation" class="section level3">
+<h3 class="hasAnchor">
+<a href="#check-for-zero-inflation" class="anchor"></a>Check for zero-inflation</h3>
+<p>Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of observed zeros is larger than the amount of predicted zeros, so the model is <em>underfitting</em> zeros. In such cases, it is recommended to use negative binomial or zero-inflated models.</p>
+<p>Use <code><a href="reference/check_zeroinflation.html">check_zeroinflation()</a></code> to check if zero-inflation is present in the fitted model.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(count <span class="op">~</span><span class="st"> </span>spp <span class="op">+</span><span class="st"> </span>mined, <span class="dt">family =</span> poisson, <span class="dt">data =</span> Salamanders)</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="kw"><a href="reference/check_zeroinflation.html">check_zeroinflation</a></span>(model)</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; # Check for zero-inflation</span></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt;    Observed zeros: 387</span></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt;   Predicted zeros: 298</span></a>
+<a class="sourceLine" id="cb9-7" title="7"><span class="co">#&gt;             Ratio: 0.77</span></a>
+<a class="sourceLine" id="cb9-8" title="8"><span class="co">#&gt; Model is underfitting zeros (probable zero-inflation).</span></a></code></pre></div>
+</div>
+<div id="check-for-singular-model-fits" class="section level3">
+<h3 class="hasAnchor">
+<a href="#check-for-singular-model-fits" class="anchor"></a>Check for singular model fits</h3>
+<p>A “singular” model fit means that some dimensions of the variance-covariance matrix have been estimated as exactly zero. This often occurs for mixed models with overly complex random effects structures.</p>
+<p><code><a href="reference/check_singularity.html">check_singularity()</a></code> checks mixed models (of class <code>lme</code>, <code>merMod</code>, <code>glmmTMB</code> or <code>MixMod</code>) for singularity, and returns <code>TRUE</code> if the model fit is singular.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/data">data</a></span>(sleepstudy)</a>
+<a class="sourceLine" id="cb10-3" title="3"></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co"># prepare data</span></a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb10-6" title="6">sleepstudy<span class="op">$</span>mygrp &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">size =</span> <span class="dv">180</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-7" title="7">sleepstudy<span class="op">$</span>mysubgrp &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</a>
+<a class="sourceLine" id="cb10-9" title="9">    filter_group &lt;-<span class="st"> </span>sleepstudy<span class="op">$</span>mygrp <span class="op">==</span><span class="st"> </span>i</a>
+<a class="sourceLine" id="cb10-10" title="10">    sleepstudy<span class="op">$</span>mysubgrp[filter_group] &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">size =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sum">sum</a></span>(filter_group), </a>
+<a class="sourceLine" id="cb10-11" title="11">        <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-12" title="12">}</a>
+<a class="sourceLine" id="cb10-13" title="13"></a>
+<a class="sourceLine" id="cb10-14" title="14"><span class="co"># fit strange model</span></a>
+<a class="sourceLine" id="cb10-15" title="15">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>mygrp<span class="op">/</span>mysubgrp) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Subject), </a>
+<a class="sourceLine" id="cb10-16" title="16">    <span class="dt">data =</span> sleepstudy)</a>
+<a class="sourceLine" id="cb10-17" title="17"></a>
+<a class="sourceLine" id="cb10-18" title="18"><span class="kw"><a href="reference/check_singularity.html">check_singularity</a></span>(model)</a>
+<a class="sourceLine" id="cb10-19" title="19"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<p>Remedies to cure issues with singular fits can be found <a href="https://easystats.github.io/performance/reference/check_singularity.html">here</a>.</p>
+</div>
+</div>
+<div id="model-performance-summaries" class="section level2">
+<h2 class="hasAnchor">
+<a href="#model-performance-summaries" class="anchor"></a>Model performance summaries</h2>
+<p><code><a href="reference/model_performance.html">model_performance()</a></code> computes indices of model performance for regression models. Depending on the model object, typical indices might be r-squared, AIC, BIC, RMSE, ICC or LOOIC.</p>
+<div id="linear-model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#linear-model" class="anchor"></a>Linear model</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m1)</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
 <th align="right">AIC</th>
 <th align="right">BIC</th>
 <th align="right">R2</th>
 <th align="right">R2_adjusted</th>
-<th align="right">X2.44420210815285</th>
+<th align="right">RMSE</th>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">156</td>
@@ -114,11 +259,11 @@
 </tr></tbody>
 </table>
 </div>
-<div id="glm" class="section level3">
+<div id="logistic-regression" class="section level3">
 <h3 class="hasAnchor">
-<a href="#glm" class="anchor"></a>GLM</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(vs <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>mpg, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> <span class="st">"binomial"</span>)</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(model)</a></code></pre></div>
+<a href="#logistic-regression" class="anchor"></a>Logistic regression</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">m2 &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/glm">glm</a></span>(vs <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>mpg, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> <span class="st">"binomial"</span>)</a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m2)</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
 <th align="right">AIC</th>
@@ -132,44 +277,107 @@
 </tr></tbody>
 </table>
 </div>
-<div id="bayesian-lm-rstanarm" class="section level3">
+<div id="linear-mixed-model" class="section level3">
 <h3 class="hasAnchor">
-<a href="#bayesian-lm-rstanarm" class="anchor"></a>Bayesian LM (rstanarm)</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rstanarm)</a>
-<a class="sourceLine" id="cb5-2" title="2">model &lt;-<span class="st"> </span>rstanarm<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm">stan_glm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(model)</a></code></pre></div>
+<a href="#linear-mixed-model" class="anchor"></a>Linear mixed model</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
+<a class="sourceLine" id="cb13-2" title="2">m3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m3)</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
-<th align="right">ELPD</th>
-<th align="right">ELPD_SE</th>
-<th align="right">LOOIC</th>
-<th align="right">LOOIC_SE</th>
-<th align="right">R2_Median</th>
-<th align="right">R2_MAD</th>
-<th align="right">R2_Mean</th>
-<th align="right">R2_SD</th>
-<th align="right">R2_MAP</th>
-<th align="right">R2_CI_low</th>
-<th align="right">R2_CI_high</th>
-<th align="right">R2_LOO_adjusted</th>
+<th align="right">AIC</th>
+<th align="right">BIC</th>
+<th align="right">R2_conditional</th>
+<th align="right">R2_marginal</th>
+<th align="right">ICC_adjusted</th>
+<th align="right">ICC_conditional</th>
+<th align="right">RMSE</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-78.37</td>
-<td align="right">4.6</td>
-<td align="right">156.7</td>
-<td align="right">9.21</td>
-<td align="right">0.83</td>
-<td align="right">0.02</td>
-<td align="right">0.82</td>
-<td align="right">0.03</td>
-<td align="right">0.84</td>
-<td align="right">0.78</td>
-<td align="right">0.85</td>
-<td align="right">0.79</td>
+<td align="right">1756</td>
+<td align="right">1775</td>
+<td align="right">0.8</td>
+<td align="right">0.28</td>
+<td align="right">0.72</td>
+<td align="right">0.52</td>
+<td align="right">23.44</td>
 </tr></tbody>
 </table>
 </div>
+<div id="comparing-different-models" class="section level3">
+<h3 class="hasAnchor">
+<a href="#comparing-different-models" class="anchor"></a>Comparing different models</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="reference/model_performance.html">compare_performance</a></span>(m1, m2, m3)</a></code></pre></div>
+<table class="table table">
+<thead><tr class="header">
+<th align="left">name</th>
+<th align="left">class</th>
+<th align="right">AIC</th>
+<th align="right">BIC</th>
+<th align="right">RMSE</th>
+<th align="right">R2</th>
+<th align="right">R2_adjusted</th>
+<th align="right">R2_Tjur</th>
+<th align="right">R2_conditional</th>
+<th align="right">R2_marginal</th>
+<th align="right">ICC_adjusted</th>
+<th align="right">ICC_conditional</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">m1</td>
+<td align="left">glm</td>
+<td align="right">31.3</td>
+<td align="right">35.7</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">0.48</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">m2</td>
+<td align="left">lm</td>
+<td align="right">156.0</td>
+<td align="right">161.9</td>
+<td align="right">2.44</td>
+<td align="right">0.83</td>
+<td align="right">0.82</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">m3</td>
+<td align="left">lmerMod</td>
+<td align="right">1755.6</td>
+<td align="right">1774.8</td>
+<td align="right">23.44</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right">0.8</td>
+<td align="right">0.28</td>
+<td align="right">0.72</td>
+<td align="right">0.52</td>
+</tr>
+</tbody>
+</table>
 </div>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1 class="hasAnchor">
+<a href="#references" class="anchor"></a>References</h1>
+<p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.</p>
+<p>Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.</p>
+<p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. <a href="https://doi.org/10.1111/2041-210X.12225" class="uri">https://doi.org/10.1111/2041-210X.12225</a></p>
+<p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. <a href="https://doi.org/10.1098/rsif.2017.0213" class="uri">https://doi.org/10.1098/rsif.2017.0213</a></p>
 </div>
   </div>
 
@@ -194,7 +402,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/easystats/performance"><img src="https://travis-ci.org/easystats/performance.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/gh/easystats/parameters"><img src="https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://codecov.io/gh/easystats/performance"><img src="https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg" alt="codecov"></a></li>
 <li><a href="http://hits.dwyl.io/easystats/performance"><img src="http://hits.dwyl.io/easystats/performance.svg" alt="HitCount"></a></li>
 <li><a href="https://easystats.github.io/performance/"><img src="https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63" alt="Documentation"></a></li>
 </ul>

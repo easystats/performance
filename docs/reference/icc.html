@@ -46,7 +46,7 @@
  lme (nlme), mixed (afex), and stanreg
  (rstanarm) objects and can be interpreted as &amp;#8220;the proportion
  of the variance explained by the grouping structure in the population&amp;#8221;
- (Hox 2002: 15). For models fitted with the brms-package,
+ (Hox 2010: 15). For models fitted with the brms-package,
  a variance decomposition based on the posterior predictive distribution
  is calculated (see 'Details')." />
 
@@ -126,7 +126,7 @@
  <code>lme</code> (<span class="pkg">nlme</span>), <code>mixed</code> (<span class="pkg">afex</span>), and <code>stanreg</code>
  (<span class="pkg">rstanarm</span>) objects and can be interpreted as &#8220;the proportion
  of the variance explained by the grouping structure in the population&#8221;
- <cite>(Hox 2002: 15)</cite>. For models fitted with the <span class="pkg">brms</span>-package,
+ <cite>(Hox 2010: 15)</cite>. For models fitted with the <span class="pkg">brms</span>-package,
  a variance decomposition based on the posterior predictive distribution
  is calculated (see 'Details').</p>
     
@@ -167,6 +167,12 @@ calculate the central tendency of the variances.</p></td>
       <td><p>The Credible Interval level.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list with two values, the adjusted and conditional ICC. For models
+  of class <code>brmsfit</code>, a list with two values, the decomposed ICC as well
+  as the credible intervals for this ICC.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -236,10 +242,10 @@ calculate the central tendency of the variances.</p></td>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <ul>
-<li><p>Hox J. 2002. Multilevel analysis: techniques and applications. Mahwah, NJ: Erlbaum</p></li>
-<li><p>Nakagawa S, Johnson P, Schielzeth H (2017) The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. doi: <a href='http://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
-<li><p>Rabe-Hesketh S, Skrondal A. 2012. Multilevel and longitudinal modeling using Stata. 3rd ed. College Station, Tex: Stata Press Publication</p></li>
-<li><p>Raudenbush SW, Bryk AS. 2002. Hierarchical linear models: applications and data analysis methods. 2nd ed. Thousand Oaks: Sage Publications</p></li>
+<li><p>Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.</p></li>
+<li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. doi: <a href='http://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
+<li><p>Rabe-Hesketh, S., &amp; Skrondal, A. (2012). Multilevel and longitudinal modeling using Stata (3rd ed). College Station, Tex: Stata Press Publication.</p></li>
+<li><p>Raudenbush, S. W., &amp; Bryk, A. S. (2002). Hierarchical linear models: applications and data analysis methods (2nd ed). Thousand Oaks: Sage Publications.</p></li>
 </ul>
     
 
@@ -256,6 +262,8 @@ calculate the central tendency of the variances.</p></td>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
