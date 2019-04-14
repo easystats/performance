@@ -347,3 +347,25 @@ print.binned_residuals <- function(x, ...) {
 
   suppressWarnings(graphics::plot(p))
 }
+
+
+
+#' @export
+print.hoslem_test <- function(x, ...) {
+  insight::print_color("# Hosmer-Lemeshow Goodness-of-Fit Test\n\n", "blue")
+
+  v1 <- sprintf("%.3f", x$chisq)
+  v2 <- sprintf("%i    ", x$df)
+  v3 <- sprintf("%.3f", x$p.value)
+
+  space <- max(nchar(c(v1, v2, v3)))
+
+  cat(sprintf("  Chi-squared: %*s\n", space, v1))
+  cat(sprintf("           df: %*s\n", space, v2))
+  cat(sprintf("      p-value: %*s\n\n", space, v3))
+
+  if (x$p.value >= 0.05)
+    message("Summary: model seems to fit well.")
+  else
+    message("Summary: model does not fit well.")
+}
