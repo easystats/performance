@@ -87,7 +87,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.411 [0.119]
+#>      Marginal R2: 0.408 [0.120]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -125,23 +125,25 @@ returned (for details, see the
 library(brms)
 set.seed(123)
 model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
-icc(model)
 ```
 
-    #> 
-    #> # Random Effect Variances and ICC
-    #> 
-    #> Conditioned on: all random effects
-    #> 
-    #> ## Variance Ratio (comparable to ICC)
-    #> Ratio: 0.38  CI 95%: [-0.54 0.77]
-    #> 
-    #> ## Variances of Posterior Predicted Distribution
-    #> Conditioned on fixed effects: 22.86  CI 95%: [ 8.40 58.10]
-    #> Conditioned on rand. effects: 37.46  CI 95%: [24.84 55.65]
-    #> 
-    #> ## Difference in Variances
-    #> Difference: 14.15  CI 95%: [-18.51 35.49]
+``` r
+icc(model)
+#> 
+#> # Random Effect Variances and ICC
+#> 
+#> Conditioned on: all random effects
+#> 
+#> ## Variance Ratio (comparable to ICC)
+#> Ratio: 0.39  CI 95%: [-0.58 0.78]
+#> 
+#> ## Variances of Posterior Predicted Distribution
+#> Conditioned on fixed effects: 22.82  CI 95%: [ 8.29 58.51]
+#> Conditioned on rand. effects: 37.72  CI 95%: [25.39 56.79]
+#> 
+#> ## Difference in Variances
+#> Difference: 14.39  CI 95%: [-20.39 35.76]
+```
 
 ### LM
 

@@ -105,15 +105,16 @@ icc(model)
 
 For models of class `brmsfit`, an ICC based on variance decomposition is returned (for details, see the [documentation](https://easystats.github.io/performance/reference/icc.html)).
  
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+model <- insight::download_model("brms_mixed_1")
+```
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
 library(brms)
 set.seed(123)
 model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
-icc(model)
 ```
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-m <- insight::download_model("brms_mixed_1")
-icc(m)
+```{r, warning=FALSE, message=FALSE}
+icc(model)
 ```
 
 ### LM
