@@ -4,7 +4,7 @@
 #' @description Check model quality of logistic regression models.
 #'
 #' @param model A \code{glm}-object with binomial-family.
-#' @param n.bins Numeric, the number of bins to divide the data.
+#' @param n_bins Numeric, the number of bins to divide the data.
 #'
 #' @return An object of class \code{hoslem_test} with following values: \code{chisq},
 #'   the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees of freedom
@@ -22,7 +22,7 @@
 #'
 #' @importFrom stats fitted quantile xtabs pchisq
 #' @export
-hosmer_lemeshow <- function(model, n.bins = 10) {
+hosmer_lemeshow <- function(model, n_bins = 10) {
   if (inherits(model, "merMod") && !requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needed for this function to work. Please install it.", call. = FALSE)
   }
@@ -43,18 +43,18 @@ hosmer_lemeshow <- function(model, n.bins = 10) {
 
   cutyhat <- cut(
     yhat,
-    breaks = stats::quantile(yhat, probs = seq(0, 1, 1 / n.bins)),
+    breaks = stats::quantile(yhat, probs = seq(0, 1, 1 / n_bins)),
     include.lowest = TRUE
   )
 
   obs <- stats::xtabs(cbind(1 - y, y) ~ cutyhat)
   expect <- stats::xtabs(cbind(1 - yhat, yhat) ~ cutyhat)
   chisq <- sum((obs - expect)^2 / expect)
-  p.value <- 1 - stats::pchisq(chisq, n.bins - 2)
+  p.value <- 1 - stats::pchisq(chisq, n_bins - 2)
 
   hoslem <- list(
     chisq = chisq,
-    df = n.bins - 2,
+    df = n_bins - 2,
     p.value = p.value
   )
 

@@ -4,7 +4,7 @@
 \alias{binned_residuals}
 \title{Binned residuals for logistic regression}
 \usage{
-binned_residuals(model, term = NULL, n.bins = NULL)
+binned_residuals(model, term = NULL, n_nins = NULL)
 }
 \arguments{
 \item{term}{Name of independent variable from \code{x}. If not \code{NULL},
@@ -12,8 +12,8 @@ average residuals for the categories of \code{term} are plotted; else,
 average residuals for the estimated probabilities of the response are
 plotted.}
 
-\item{n.bins}{Numeric, the number of bins to divide the data. If
-\code{n.bins = NULL}, the square root of the number of observations is
+\item{n_nins}{Numeric, the number of bins to divide the data. If
+\code{n_nins = NULL}, the square root of the number of observations is
 taken.}
 
 \item{x}{A \code{glm}-object with binomial-family.}

@@ -4,12 +4,12 @@
 \alias{hosmer_lemeshow}
 \title{Hosmer-Lemeshow goodness-of-fit test}
 \usage{
-hosmer_lemeshow(model, n.bins = 10)
+hosmer_lemeshow(model, n_bins = 10)
 }
 \arguments{
 \item{model}{A \code{glm}-object with binomial-family.}
 
-\item{n.bins}{Numeric, the number of bins to divide the data.}
+\item{n_bins}{Numeric, the number of bins to divide the data.}
 }
 \value{
 An object of class \code{hoslem_test} with following values: \code{chisq},

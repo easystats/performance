@@ -8,8 +8,8 @@
 #'   average residuals for the categories of \code{term} are plotted; else,
 #'   average residuals for the estimated probabilities of the response are
 #'   plotted.
-#' @param n.bins Numeric, the number of bins to divide the data. If
-#'   \code{n.bins = NULL}, the square root of the number of observations is
+#' @param n_nins Numeric, the number of bins to divide the data. If
+#'   \code{n_nins = NULL}, the square root of the number of observations is
 #'   taken.
 #'
 #' @return A data frame representing the data that is mapped to the plot, which is
@@ -41,7 +41,7 @@
 #' @importFrom stats fitted sd
 #' @importFrom insight get_data get_response find_response
 #' @export
-binned_residuals <- function(model, term = NULL, n.bins = NULL) {
+binned_residuals <- function(model, term = NULL, n_nins = NULL) {
   fv <- stats::fitted(model)
   mf <- insight::get_data(model)
 
@@ -52,14 +52,14 @@ binned_residuals <- function(model, term = NULL, n.bins = NULL) {
 
   y <- recode_to_zero(as.numeric(as.character(insight::get_response(model)))) - fv
 
-  if (is.null(n.bins)) n.bins <- round(sqrt(length(pred)))
+  if (is.null(n_nins)) n_nins <- round(sqrt(length(pred)))
 
-  breaks.index <- floor(length(pred) * (1:(n.bins - 1)) / n.bins)
+  breaks.index <- floor(length(pred) * (1:(n_nins - 1)) / n_nins)
   breaks <- unique(c(-Inf, sort(pred)[breaks.index], Inf))
 
   model.binned <- as.numeric(cut(pred, breaks))
 
-  d <- suppressWarnings(lapply(1:n.bins, function(.x) {
+  d <- suppressWarnings(lapply(1:n_nins, function(.x) {
       items <- (1:length(pred))[model.binned == .x]
       model.range <- range(pred[items], na.rm = TRUE)
       xbar <- mean(pred[items], na.rm = TRUE)
