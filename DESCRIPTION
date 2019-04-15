@@ -28,7 +28,9 @@ Imports:
 Suggests:
 	brms,
 	covr,
+	graphics,
 	glmmTMB,
+	ggplot2,
 	lme4,
 	loo,
 	Matrix,
@@ -38,6 +40,7 @@ Suggests:
 	rmarkdown,
 	rstanarm,
 	rstantools,
+	scales,
 	testthat
 License: GPL-3
 Encoding: UTF-8

@@ -3,7 +3,7 @@
 #'
 #' @description Check model quality of logistic regression models.
 #'
-#' @param x A \code{glm}-object with binomial-family.
+#' @param model A \code{glm}-object with binomial-family.
 #' @param term Name of independent variable from \code{x}. If not \code{NULL},
 #'   average residuals for the categories of \code{term} are plotted; else,
 #'   average residuals for the estimated probabilities of the response are
@@ -38,7 +38,7 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' binned_residuals(model)
 #'
-#' @importFrom stats fitted sd
+#' @importFrom stats fitted sd complete.cases
 #' @importFrom insight get_data get_response find_response
 #' @export
 binned_residuals <- function(model, term = NULL, n_nins = NULL) {
@@ -78,7 +78,7 @@ binned_residuals <- function(model, term = NULL, n_nins = NULL) {
   }))
 
   d <- do.call(rbind, d)
-  d <- d[complete.cases(d), ]
+  d <- d[stats::complete.cases(d), ]
 
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"
