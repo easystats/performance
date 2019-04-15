@@ -5,6 +5,8 @@
 #'
 #' @param model Multinomial Logit (\code{mlogit}) Model.
 #'
+#' @return A named vector with the R2 value.
+#'
 #' @references
 #' \itemize{
 #'   \item McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. Journal of econometrics, 34(1-2), 63-82.

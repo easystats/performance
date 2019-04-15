@@ -12,6 +12,8 @@
 #'   is a product of probabilities) which have a maximum of 1, instead of
 #'   densities, which can become infinite \cite{(Nagelkerke, 1991)}.
 #'
+#' @return A named vector with the R2 value.
+#'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_coxnell(model)

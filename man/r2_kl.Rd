@@ -11,6 +11,9 @@ r2_kl(model, adjust = TRUE)
 
 \item{adjust}{Logical, if \code{TRUE} (the default), the adjusted R2 value is returned.}
 }
+\value{
+A named vector with the R2 value.
+}
 \description{
 Calculates the Kullback-Leibler-divergence-based
   R2 for generalized linear models.

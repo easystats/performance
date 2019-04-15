@@ -9,6 +9,9 @@ r2_coxnell(model)
 \arguments{
 \item{model}{Model with binary outcome.}
 }
+\value{
+A named vector with the R2 value.
+}
 \description{
 Calculates the pseudo-R2 value based on the proposal from \cite{Cox & Snell (1989)}.
 }

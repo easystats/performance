@@ -1,5 +1,20 @@
 #' @importFrom insight print_color
 #' @export
+print.item_difficulty <- function(x, ...) {
+  spaces <- max(nchar(x$item))
+
+  insight::print_color("# Item Difficulty\n\n", "blue")
+  insight::print_color(sprintf("  %*s  ideal\n", spaces + 10, "difficulty"), "red")
+
+  for (i in 1:length(x$item)) {
+    cat(sprintf("  %*s      %.2f   %.2f\n",  spaces, x$item[i], x$difficulty[i], x$ideal[i]))
+  }
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
 print.error_rate <- function(x, digits = 2, ...) {
   insight::print_color("# Error Rate of Logistic Regression Model\n\n", "blue")
   cat(sprintf("  Full model: %.2f%%\n", 100 * x$error.model))

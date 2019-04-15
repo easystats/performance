@@ -8,7 +8,7 @@
 #'    returned by the \code{\link{cor}}-function, or a data frame
 #'    with items (e.g. from a test or questionnaire).
 #'
-#' @return A list with three elements: The name(s) of the item(s), the item
+#' @return A data frame with three columns: The name(s) of the item(s), the item
 #'      difficulties for each item, and the ideal item difficulty.
 #'
 #' @details This function calculates the item difficutly, which should
@@ -40,9 +40,13 @@ item_difficulty <- function(x) {
 
   di <- apply(x, 2, fun.diff.ideal)
 
-  list(
-    item = colnames(x),
-    difficulty = d,
-    ideal = di
+  structure(
+    class = c("item_difficulty", "data.frame"),
+    data.frame(
+      item = colnames(x),
+      difficulty = d,
+      ideal = di,
+      stringsAsFactors = FALSE
+    )
   )
 }

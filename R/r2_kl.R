@@ -7,6 +7,8 @@
 #' @param model A generalized linear model.
 #' @param adjust Logical, if \code{TRUE} (the default), the adjusted R2 value is returned.
 #'
+#' @return A named vector with the R2 value.
+#'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_kl(model)

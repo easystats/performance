@@ -13,6 +13,9 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A data frame (with one row) and one column per "index" (see \code{metrics}).
+}
 \description{
 Compute indices of model performance for mixed models.
 }

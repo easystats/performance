@@ -9,6 +9,9 @@ r2_mcfadden(model)
 \arguments{
 \item{model}{Multinomial Logit (\code{mlogit}) Model.}
 }
+\value{
+A named vector with the R2 value.
+}
 \description{
 Calculates McFadden's pseudo R2.
 }

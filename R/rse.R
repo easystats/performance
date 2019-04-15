@@ -8,7 +8,7 @@
 #' @details The residual standard error is the square root of the residual
 #'   sum of squares divided by the residual degrees of freedom.
 #'
-#' @return The residual standard error of \code{model}.
+#' @return Numeric, the residual standard error of \code{model}.
 #'
 #' @examples
 #' data(mtcars)

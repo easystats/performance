@@ -12,7 +12,7 @@ returned by the \code{\link{cor}}-function, or a data frame
 with items (e.g. from a test or questionnaire).}
 }
 \value{
-A list with three elements: The name(s) of the item(s), the item
+A data frame with three columns: The name(s) of the item(s), the item
      difficulties for each item, and the ideal item difficulty.
 }
 \description{

@@ -11,7 +11,7 @@ rse(model)
 or \code{lme} (\pkg{nlme}).}
 }
 \value{
-The residual standard error of \code{model}.
+Numeric, the residual standard error of \code{model}.
 }
 \description{
 Compute residual standard error of linear models.

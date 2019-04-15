@@ -11,7 +11,7 @@ mse(model)
 or \code{lme} (\pkg{nlme}).}
 }
 \value{
-The mean square error of \code{model}.
+Numeric, the mean square error of \code{model}.
 }
 \description{
 Compute mean square error of linear models.

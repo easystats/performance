@@ -7,6 +7,8 @@
 #' @param ci The Credible Interval level for R2.
 #' @param ... Arguments passed to or from other methods.
 #'
+#' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
+#'
 #' @examples
 #' \dontrun{
 #' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)

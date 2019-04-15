@@ -9,6 +9,8 @@
 #'
 #' @param model Binomial Model.
 #'
+#' @return A named vector with the R2 value.
+#'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_tjur(model)

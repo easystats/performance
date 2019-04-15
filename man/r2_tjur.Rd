@@ -9,6 +9,9 @@ r2_tjur(model)
 \arguments{
 \item{model}{Binomial Model.}
 }
+\value{
+A named vector with the R2 value.
+}
 \description{
 This method calculates the Coefficient of Discrimination \code{D}
   (also known as Tjur's R2; \cite{Tjur, 2009}) for generalized linear (mixed) models

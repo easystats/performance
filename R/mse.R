@@ -9,7 +9,7 @@
 #'    i.e. it measures the average of the squares of the errors. Lower
 #'    values (closer to zero) indicate better fit.
 #'
-#' @return The mean square error of \code{model}.
+#' @return Numeric, the mean square error of \code{model}.
 #'
 #' @examples
 #' data(mtcars)

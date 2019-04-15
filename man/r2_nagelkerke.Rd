@@ -10,6 +10,9 @@ r2_nagelkerke(model)
 \item{model}{A generalized linear model, including cumulative links resp.
 multinomial models.}
 }
+\value{
+A named vector with the R2 value.
+}
 \description{
 Calculate Nagelkerke's pseudo-R2.
 }
