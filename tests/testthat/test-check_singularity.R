@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (.runThisTest && Sys.getenv("USER") != "travis") {
+if (.runThisTest) {
   if (require("testthat") && require("performance") && require("lme4")) {
     context("check_singularity")
 
