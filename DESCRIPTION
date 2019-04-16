@@ -2,6 +2,7 @@ Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
 Version: 0.0.0.9000
+Date: 2019-03-29
 Authors@R: c(
 	person("Daniel", 
 		"Lüdecke", 
@@ -22,6 +23,8 @@ Description: Utilities for computing measures to assess model quality,
     singularity or zero-inflation and more. Functions apply to a large variety of
     regression models, including generalized linear models, mixed effects models
     and Bayesian models.
+URL: https://easystats.github.io/performance/
+BugReports: https://github.com/easystats/performance/issues
 Imports:
 	insight,
 	bayestestR
