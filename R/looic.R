@@ -18,7 +18,6 @@
 #'
 #' @importFrom insight find_algorithm print_color
 #' @importFrom stats var
-#' @importFrom utils install.packages
 #' @export
 looic <- function(model) {
   if (!requireNamespace("loo", quietly = TRUE)) {

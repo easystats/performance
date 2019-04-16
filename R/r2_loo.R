@@ -19,7 +19,6 @@
 #' r2_loo(model)
 #' }
 #'
-#' @importFrom utils install.packages
 #' @importFrom insight get_response find_algorithm
 #' @importFrom stats var
 #' @export
