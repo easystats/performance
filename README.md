@@ -1,21 +1,21 @@
 
 # performance <img src='man/figures/logo.png' align="right" height="139" />
 
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
+[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![Build
 Status](https://travis-ci.org/easystats/performance.svg?branch=master)](https://travis-ci.org/easystats/performance)
 [![codecov](https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/performance)
-[![HitCount](http://hits.dwyl.io/easystats/performance.svg)](http://hits.dwyl.io/easystats/performance)
-[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
 
 ***Test if your model is a good model\!***
 
 The primary goal of the **performance** package is to provide utilities
-for computing indices to assess the model quality. This includes
-measures like r-squared, root mean squared error or intraclass
+for computing **indices of model quality** and **goodness of fit**. This
+includes measures like r-squared, root mean squared error or intraclass
 correlation coefficient (ICC) , but also functions to check (mixed)
 models for overdispersion, zero-inflation, convergence or singularity.
 
-# Installation
+## Installation
 
 Run the following:
 
@@ -29,6 +29,10 @@ library("performance")
 ```
 
 # Examples
+
+[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html)
 
 ## Assessing model quality
 
@@ -90,7 +94,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.409 [0.123]
+#>      Marginal R2: 0.412 [0.119]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -137,14 +141,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.55 0.77]
+#> Ratio: 0.39  CI 95%: [-0.57 0.78]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.88  CI 95%: [ 8.35 58.32]
-#> Conditioned on rand. effects: 37.67  CI 95%: [24.96 56.59]
+#> Conditioned on fixed effects: 22.79  CI 95%: [ 8.48 57.73]
+#> Conditioned on rand. effects: 37.70  CI 95%: [25.08 55.43]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.50  CI 95%: [-19.42 35.91]
+#> Difference: 14.42  CI 95%: [-18.82 36.07]
 ```
 
 ## Model diagnostics

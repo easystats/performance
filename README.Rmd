@@ -28,16 +28,17 @@ options(knitr.kable.NA = '',
 ```
 
 
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
+[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![Build Status](https://travis-ci.org/easystats/performance.svg?branch=master)](https://travis-ci.org/easystats/performance)
 [![codecov](https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/performance)
-[![HitCount](http://hits.dwyl.io/easystats/performance.svg)](http://hits.dwyl.io/easystats/performance) [![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
 
 
 ***Test if your model is a good model!***
 
-The primary goal of the **performance** package is to provide utilities for computing indices to assess the model quality. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.
+The primary goal of the **performance** package is to provide utilities for computing **indices of model quality** and **goodness of fit**. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.
 
-# Installation
+## Installation
 
 Run the following:
 
@@ -51,6 +52,10 @@ library("performance")
 
 
 # Examples
+
+[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html)
 
 ## Assessing model quality
 
