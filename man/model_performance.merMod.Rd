@@ -20,10 +20,8 @@ A data frame (with one row) and one column per "index" (see \code{metrics}).
 Compute indices of model performance for mixed models.
 }
 \examples{
-\dontrun{
 library(lme4)
 model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 model_performance(model)
-}
 
 }

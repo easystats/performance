@@ -17,6 +17,16 @@
 #'   column per "index" (see \code{metrics}). For \code{compare_performance()},
 #'   the same data frame with one row per model.
 #'
+#' @examples
+#' library(lme4)
+#'
+#' m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+#' model_performance(m1)
+#'
+#' m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+#' compare_performance(m1, m2, m3)
+#'
 #' @export
 model_performance <- function(model, ...) {
   UseMethod("model_performance")

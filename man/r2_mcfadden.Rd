@@ -15,6 +15,15 @@ A named vector with the R2 value.
 \description{
 Calculates McFadden's pseudo R2.
 }
+\examples{
+library(mlogit)
+data("Fishing", package = "mlogit")
+Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
+
+model <- mlogit(mode ~ price + catch, data = Fish)
+r2_mcfadden(model)
+
+}
 \references{
 \itemize{
   \item McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. Journal of econometrics, 34(1-2), 63-82.

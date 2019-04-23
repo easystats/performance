@@ -25,11 +25,9 @@
 #'  }
 #'
 #' @examples
-#' \dontrun{
 #' library(lme4)
-#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#' model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' r2_nakagawa(model)
-#' }
 #'
 #' @importFrom insight get_variance print_color
 #' @export

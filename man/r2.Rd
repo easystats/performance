@@ -29,11 +29,10 @@ Calculate the R2 value for different model objects. Depending
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)
-\dontrun{
+
 library(lme4)
-model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2(model)
-}
 
 }
 \seealso{

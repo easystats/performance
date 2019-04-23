@@ -1,8 +1,8 @@
 Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
-Version: 0.0.0.9000
-Date: 2019-03-29
+Version: 0.1.0
+Date: 2019-04-16
 Authors@R: c(
 	person("Daniel", 
 		"Lüdecke", 
@@ -17,8 +17,9 @@ Authors@R: c(
 	)
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
-    which are not directly provided by R's base or stats packages. These 
-    include e.g. measures like r-squared, intraclass correlation coefficient, 
+    which are not directly provided by R's 'base' or 'stats' packages. These 
+    include e.g. measures like r-squared, intraclass correlation coefficient
+    (Nakagawa, Johnson & Schielzeth (2017) <doi:10.1098/rsif.2017.0213>), 
     root mean squared error or functions to check models for overdispersion, 
     singularity or zero-inflation and more. Functions apply to a large variety of
     regression models, including generalized linear models, mixed effects models
@@ -38,6 +39,7 @@ Suggests:
 	loo,
 	Matrix,
 	MASS,
+	mlogit,
 	nlme,
 	psych,
 	rmarkdown,

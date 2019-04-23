@@ -21,17 +21,21 @@
 #'   R2 takes both the fixed and random effects into account.
 #'
 #' @examples
-#' \dontrun{
 #' library(rstanarm)
 #'
-#' model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+#' model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
 #' r2_bayes(model)
 #'
-#' model <- rstanarm::stan_lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+#' model <- stan_lmer(
+#'   Petal.Length ~ Petal.Width + (1 | Species),
+#'   data = iris,
+#'   chains = 1,
+#'   iter = 500
+#' )
 #' r2_bayes(model)
 #'
+#' \dontrun{
 #' library(brms)
-#'
 #' model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
 #' r2_bayes(model)
 #'

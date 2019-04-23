@@ -24,11 +24,10 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2(model)
-#' \dontrun{
+#'
 #' library(lme4)
-#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#' model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' r2(model)
-#' }
 #'
 #' @export
 r2 <- function(model, ...) {

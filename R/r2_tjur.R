@@ -14,10 +14,6 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_tjur(model)
-#' \dontrun{
-#' library(rstanarm)
-#' model <- rstanarm::stan_glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' }
 #'
 #' @references Tjur, T. (2009). Coefficients of determination in logistic regression models - A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
 #'

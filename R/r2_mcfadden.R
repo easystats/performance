@@ -13,6 +13,14 @@
 #'   \item McFadden, D. (1973). Conditional logit analysis of qualitative choice behavior.
 #' }
 #'
+#' @examples
+#' library(mlogit)
+#' data("Fishing", package = "mlogit")
+#' Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
+#'
+#' model <- mlogit(mode ~ price + catch, data = Fish)
+#' r2_mcfadden(model)
+#'
 #' @importFrom stats logLik update
 #' @export
 r2_mcfadden <- function(model) {

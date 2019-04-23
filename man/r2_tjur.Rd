@@ -22,10 +22,6 @@ This method calculates the Coefficient of Discrimination \code{D}
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_tjur(model)
-\dontrun{
-library(rstanarm)
-model <- rstanarm::stan_glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-}
 
 }
 \references{

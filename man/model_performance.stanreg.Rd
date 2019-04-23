@@ -23,10 +23,9 @@ A data frame (with one row) and one column per "index" (see \code{metrics}).
 Compute indices of model performance for (general) linear models.
 }
 \examples{
-\dontrun{
-model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+library(rstanarm)
+model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
 model_performance(model)
-}
 
 }
 \references{

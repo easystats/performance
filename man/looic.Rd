@@ -17,11 +17,9 @@ Compute LOOIC (leave-one-out cross-validation (LOO) information
   criterion) and ELPD (expected log predictive density) for Bayesian regressions.
 }
 \examples{
-\dontrun{
 library(rstanarm)
 
-model <- rstanarm::stan_glm(mpg ~ wt + cyl, data = mtcars)
+model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
 looic(model)
-}
 
 }

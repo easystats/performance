@@ -28,11 +28,9 @@ Marginal and conditional r-squared values for mixed models are calculated
  slopes or nested random effects (see \cite{Johnson 2014}).
 }
 \examples{
-\dontrun{
 library(lme4)
-model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2_nakagawa(model)
-}
 
 }
 \references{

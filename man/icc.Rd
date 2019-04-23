@@ -108,11 +108,9 @@ This function calculates the intraclass-correlation coefficient
  it is negative. In such cases, it might help to use \code{robust = TRUE}.
 }
 \examples{
-\dontrun{
 library(lme4)
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 icc(model)
-}
 
 }
 \references{

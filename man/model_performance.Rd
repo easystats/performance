@@ -30,3 +30,14 @@ See the documentation for your object's class: \link[=model_performance.lm]{lm},
 and \link[=model_performance.stanreg]{Bayesian models}. \code{compare_performance()}
 computes indices of model performance for different models.
 }
+\examples{
+library(lme4)
+
+m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+model_performance(m1)
+
+m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+compare_performance(m1, m2, m3)
+
+}
