@@ -2,7 +2,7 @@ Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
 Version: 0.1.0
-Date: 2019-04-16
+Date: 2019-04-23
 Authors@R: c(
 	person("Daniel", 
 		"Lüdecke", 
