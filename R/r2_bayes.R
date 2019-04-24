@@ -73,11 +73,16 @@ r2_bayes <- function(model, robust = TRUE) {
   ## TODO check for multivariate response models
 
   if (insight::model_info(model)$is_mixed) {
-    list(
+    br2 <- list(
       "R2_Bayes" = as.vector(rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
       "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
     )
+    names(br2$R2_Bayes) <- "Conditional R2"
+    names(br2$R2_Bayes_marginal) <- "Marginal R2"
   } else {
-    list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
+    br2 <- list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
+    names(br2$R2_Bayes) <- "R2"
   }
+
+  br2
 }

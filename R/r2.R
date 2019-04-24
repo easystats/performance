@@ -53,6 +53,9 @@ r2.lm <- function(model, ...) {
     R2_adjusted = model_summary$adj.r.squared
   )
 
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+
   f.stat <- model_summary$fstatistic[1]
   DoF <- model_summary$fstatistic[2]
   DoF_residual <- model_summary$fstatistic[3]
