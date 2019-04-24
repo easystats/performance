@@ -42,7 +42,7 @@ r2_nagelkerke <- function(model) {
 
 #' @export
 r2_nagelkerke.glm <- function(model) {
-  r2_nagelkerke <- r2_coxnell(model) / (1 - exp(-model$null / insight::n_obs(model)))
+  r2_nagelkerke <- r2_coxsnell(model) / (1 - exp(-model$null / insight::n_obs(model)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
