@@ -7,7 +7,12 @@ if (require("testthat") && require("performance") && require("lme4")) {
   test_that("r2_nakagawa", {
     expect_equal(
       r2_nakagawa(model),
-      structure(list(R2_conditional = 0.969409477972726, R2_marginal = 0.65846169440315), class = "r2_nakagawa"),
+      structure(
+        list(
+          R2_conditional = c(`Conditional R2` = 0.969409477972726),
+          R2_marginal = c(`Marginal R2` = 0.65846169440315)
+        ),
+        class = "r2_nakagawa"),
       tolerance = 1e-3
     )
   })
