@@ -118,6 +118,21 @@ r2.survreg <- function(model, ...) {
 
 
 #' @export
+r2.svyglm <- function(model, ...) {
+  rsq <- (model$null.deviance - model$deviance) / model$null.deviance
+  rsq.adjust = 1 - ((1 - rsq) * (model$df.null / model$df.residual))
+
+  structure(
+    class = "r2_svyglm",
+    list(
+      R2 = c(`R2` = rsq),
+      R2_adjusted = c(`adjusted R2` = rsq.adjust)
+    )
+  )
+}
+
+
+#' @export
 r2.polr <- function(model, ...) {
   list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
