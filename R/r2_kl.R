@@ -18,7 +18,7 @@
 #' @export
 r2_kl <- function(model, adjust = TRUE) {
   if (adjust)
-    adj <- model$df.null/model$df.residual
+    adj <- model$df.null / model$df.residual
   else
     adj <- 1
 

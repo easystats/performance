@@ -30,6 +30,7 @@ r2_nagelkerke <- function(model) {
     n <- insight::n_obs(model)
   } else {
     n <- attr(L.full, "nobs")
+    if (is.null(n)) n <- insight::n_obs(model)
   }
 
   r2_nagelkerke <- as.vector((1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n)))
@@ -66,6 +67,18 @@ r2_nagelkerke.vglm <- function(model) {
 
 #' @export
 r2_nagelkerke.clm <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
+  .r2_nagelkerke(model, l_base)
+}
+
+#' @export
+r2_nagelkerke.censReg <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
+  .r2_nagelkerke(model, l_base)
+}
+
+#' @export
+r2_nagelkerke.truncreg <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))
   .r2_nagelkerke(model, l_base)
 }

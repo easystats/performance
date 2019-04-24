@@ -81,6 +81,19 @@ r2.feis <- function(model, ...) {
 
 
 #' @export
+r2.plm <- function(model, ...) {
+  if (!requireNamespace("plm", quietly = TRUE)) {
+    stop("Package `plm` needed to calculate R2.", call. = FALSE)
+  }
+
+  list(
+    R2 = c(`R2` = plm::r.squared(model)),
+    R2_adjusted = c(`adjusted R2` = plm::r.squared(model, dfcor = TRUE))
+  )
+}
+
+
+#' @export
 r2.betareg <- function(model, ...) {
   list(
     R2 = c(`Pseudo R2` = model$pseudo.r.squared)
@@ -107,13 +120,13 @@ r2.mlogit <- function(model, ...) {
 
 #' @export
 r2.coxph <- function(model, ...) {
-  list("R2_CoxSnell" = r2_coxsnell(model))
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 
 
 #' @export
 r2.survreg <- function(model, ...) {
-  list("R2_CoxSnell" = r2_coxsnell(model))
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 
 
@@ -134,6 +147,18 @@ r2.svyglm <- function(model, ...) {
 
 #' @export
 r2.polr <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+#' @export
+r2.censReg <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+#' @export
+r2.truncreg <- function(model, ...) {
   list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
 

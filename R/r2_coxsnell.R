@@ -106,6 +106,22 @@ r2_coxsnell.clm <- function(model) {
 
 #' @importFrom stats logLik update
 #' @export
+r2_coxsnell.censReg <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
+  .r2_coxsnell(model, l_base)
+}
+
+
+#' @importFrom stats logLik update
+#' @export
+r2_coxsnell.truncreg <- function(model) {
+  l_base <- stats::logLik(stats::update(model, ~1))
+  .r2_coxsnell(model, l_base)
+}
+
+
+#' @importFrom stats logLik update
+#' @export
 r2_coxsnell.clm2 <- function(model) {
   l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
   .r2_coxsnell(model, l_base)
