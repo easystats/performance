@@ -43,6 +43,7 @@ r2_coxsnell <- function(model) {
     n <- insight::n_obs(model)
   } else {
     n <- attr(l_full, "nobs")
+    if (is.null(n)) n <- insight::n_obs(model)
   }
 
   r2_coxsnell <- as.vector(1 - exp(-G2 / n))
@@ -83,6 +84,13 @@ r2_coxsnell.vglm <- function(model) {
 
 #' @export
 r2_coxsnell.coxph <- function(model) {
+  l_base <- model$loglik[1]
+  .r2_coxsnell(model, l_base)
+}
+
+
+#' @export
+r2_coxsnell.survreg <- function(model) {
   l_base <- model$loglik[1]
   .r2_coxsnell(model, l_base)
 }

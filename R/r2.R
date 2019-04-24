@@ -112,6 +112,12 @@ r2.coxph <- function(model, ...) {
 
 
 #' @export
+r2.survreg <- function(model, ...) {
+  list("R2_CoxSnell" = r2_coxsnell(model))
+}
+
+
+#' @export
 r2.polr <- function(model, ...) {
   list("R2_Nagelkerke" = r2_nagelkerke(model))
 }

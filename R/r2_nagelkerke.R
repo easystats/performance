@@ -71,6 +71,18 @@ r2_nagelkerke.clm <- function(model) {
 }
 
 #' @export
+r2_nagelkerke.coxph <- function(model) {
+  l_base <- model$loglik[1]
+  .r2_nagelkerke(model, l_base)
+}
+
+#' @export
+r2_nagelkerke.survreg <- function(model) {
+  l_base <- model$loglik[1]
+  .r2_nagelkerke(model, l_base)
+}
+
+#' @export
 r2_nagelkerke.clm2 <- function(model) {
   l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
   .r2_nagelkerke(model, l_base)
