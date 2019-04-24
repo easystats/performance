@@ -49,3 +49,45 @@ model_performance.lm <- function(model, metrics = "all", ...) {
 #' @rdname model_performance.lm
 #' @export
 model_performance.glm <- model_performance.lm
+
+#' @export
+model_performance.betareg <- model_performance.lm
+
+#' @export
+model_performance.censReg <- model_performance.lm
+
+#' @export
+model_performance.clm <- model_performance.lm
+
+#' @export
+model_performance.clm2 <- model_performance.lm
+
+#' @export
+model_performance.coxph <- model_performance.lm
+
+#' @export
+model_performance.feis <- model_performance.lm
+
+#' @export
+model_performance.mlogit <- model_performance.lm
+
+#' @export
+model_performance.multinom <- model_performance.lm
+
+#' @export
+model_performance.plm <- model_performance.lm
+
+#' @export
+model_performance.polr <- model_performance.lm
+
+#' @export
+model_performance.survreg <- model_performance.lm
+
+#' @export
+model_performance.svyglm <- model_performance.lm
+
+#' @export
+model_performance.truncreg <- model_performance.lm
+
+#' @export
+model_performance.vglm <- model_performance.lm
