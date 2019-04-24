@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
       </span>
     </div>
 
@@ -86,6 +86,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -137,6 +140,17 @@
 </ul>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>mlogit</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Formula</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: zoo</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: 'zoo'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:base':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    as.Date, as.Date.numeric</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: lmtest</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='st'>"Fishing"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"mlogit"</span>)
+<span class='no'>Fish</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/mlogit/topics/mlogit.data'>mlogit.data</a></span>(<span class='no'>Fishing</span>, <span class='kw'>varying</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>:<span class='fl'>9</span>), <span class='kw'>shape</span> <span class='kw'>=</span> <span class='st'>"wide"</span>, <span class='kw'>choice</span> <span class='kw'>=</span> <span class='st'>"mode"</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/mlogit/topics/mlogit'>mlogit</a></span>(<span class='no'>mode</span> ~ <span class='no'>price</span> + <span class='no'>catch</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Fish</span>)
+<span class='fu'>r2_mcfadden</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; McFadden's R2 
+#&gt;       0.17823 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -146,7 +160,9 @@
       <li><a href="#value">Value</a></li>
 
       <li><a href="#references">References</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

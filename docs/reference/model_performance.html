@@ -75,7 +75,7 @@ computes indices of model performance for different models." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
       </span>
     </div>
 
@@ -89,6 +89,9 @@ computes indices of model performance for different models." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
@@ -151,6 +154,23 @@ See related documentation of object's class for details.</p></td>
   the same data frame with one row per model.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+
+<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>model_performance</span>(<span class='no'>m1</span>)</div><div class='output co'>#&gt;        AIC     BIC        R2 R2_adjusted     RMSE
+#&gt; 1 156.0101 161.873 0.8302274   0.8185189 2.444202</div><div class='input'>
+<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'>compare_performance</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt;   name   class       AIC       BIC     RMSE        R2 R2_adjusted   R2_Tjur
+#&gt; 1   m1     glm  31.29788  35.69508       NA        NA          NA 0.4776926
+#&gt; 2   m2      lm 156.01007 161.87301 2.444202 0.8302274   0.8185189        NA
+#&gt; 3   m3 lmerMod  77.31960  89.36214 0.278776        NA          NA        NA
+#&gt;   R2_conditional R2_marginal ICC_adjusted ICC_conditional
+#&gt; 1             NA          NA           NA              NA
+#&gt; 2             NA          NA           NA              NA
+#&gt; 3      0.9723224   0.0955834    0.9693973        0.876739</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -158,7 +178,9 @@ See related documentation of object's class for details.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

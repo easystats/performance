@@ -17,8 +17,9 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Assessment of Regression Models Performance">
 <meta property="og:description" content="Utilities for computing measures to assess model quality,
-    which are not directly provided by R's base or stats packages. These 
-    include e.g. measures like r-squared, intra-class correlation coefficient, 
+    which are not directly provided by R's 'base' or 'stats' packages. These 
+    include e.g. measures like r-squared, intraclass correlation coefficient
+    (Nakagawa, Johnson &amp; Schielzeth (2017) &lt;doi:10.1098/rsif.2017.0213&gt;), 
     root mean squared error or functions to check models for overdispersion, 
     singularity or zero-inflation and more. Functions apply to a large variety of
     regression models, including generalized linear models, mixed effects models
@@ -43,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
       </span>
     </div>
 
@@ -57,6 +58,9 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -80,19 +84,20 @@
 </h1></div>
 
 <p><strong><em>Test if your model is a good model!</em></strong></p>
-<p>The primary goal of the <strong>performance</strong> package is to provide utilities for computing indices to assess the model quality. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
-</div>
-<div id="installation" class="section level1">
-<h1 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h1>
+<p>The primary goal of the <strong>performance</strong> package is to provide utilities for computing <strong>indices of model quality</strong> and <strong>goodness of fit</strong>. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
 <a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"easystats/performance"</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"performance"</span>)</a></code></pre></div>
 </div>
+</div>
 <div id="examples" class="section level1">
 <h1 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h1>
+<p><a href="https://easystats.github.io/performance/"><img src="https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/performance/reference/index.html"><img src="https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3" alt="Features"></a></p>
 <div id="assessing-model-quality" class="section level2">
 <h2 class="hasAnchor">
 <a href="#assessing-model-quality" class="anchor"></a>Assessing model quality</h2>
@@ -121,7 +126,7 @@
 <a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; $R2_Nagelkerke</span></a>
 <a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt; Nagelkerke's R2 </span></a>
 <a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt;          0.1084</span></a></code></pre></div>
-<p>The different r-squared measures can also be accessed directly via functions like <code><a href="reference/r2_bayes.html">r2_bayes()</a></code>, <code>r2_coxsnell()</code> or <code><a href="reference/r2_nagelkerke.html">r2_nagelkerke()</a></code> (see a full list of functions <a href="https://easystats.github.io/performance/reference/index.html">here</a>).</p>
+<p>The different r-squared measures can also be accessed directly via functions like <code><a href="reference/r2_bayes.html">r2_bayes()</a></code>, <code><a href="reference/r2_coxsnell.html">r2_coxsnell()</a></code> or <code><a href="reference/r2_nagelkerke.html">r2_nagelkerke()</a></code> (see a full list of functions <a href="https://easystats.github.io/performance/reference/index.html">here</a>).</p>
 <p>For mixed models, the <em>conditional</em> and <em>marginal</em> r-squared are returned. The <em>marginal r-squared</em> considers only the variance of the fixed effects and indicates how much of the model’s variance is explained by the fixed effects part only. The <em>conditional r-squared</em> takes both the fixed and random effects into account and indicates how much of the model’s variance is explained by the “complete” model.</p>
 <p>For frequentist mixed models, <code><a href="reference/r2.html">r2()</a></code> (resp. <code><a href="reference/r2_nakagawa.html">r2_nakagawa()</a></code>) computes the <em>mean</em> random effect variances, thus <code><a href="reference/r2.html">r2()</a></code> is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (see <em>Johnson 2014</em> and <em>Nakagawa et al. 2017</em>).</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rstanarm)</a>
@@ -131,7 +136,7 @@
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; # Bayesian R2 with Standard Error</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;   Conditional R2: 0.954 [0.002]</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.410 [0.118]</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.408 [0.117]</span></a>
 <a class="sourceLine" id="cb4-9" title="9"></a>
 <a class="sourceLine" id="cb4-10" title="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
 <a class="sourceLine" id="cb4-11" title="11">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
@@ -166,11 +171,11 @@
 <a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.55 0.78]</span></a>
 <a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; ## Variances of Posterior Predicted Distribution</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.68  CI 95%: [ 8.57 57.86]</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.58  CI 95%: [25.30 56.57]</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.86  CI 95%: [ 8.56 58.36]</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.61  CI 95%: [24.63 56.42]</span></a>
 <a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; ## Difference in Variances</span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.21  CI 95%: [-18.84 35.97]</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.16  CI 95%: [-19.35 35.36]</span></a></code></pre></div>
 </div>
 </div>
 <div id="model-diagnostics" class="section level2">
@@ -382,7 +387,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=performance">https://​cloud.r-project.org/​package=performance</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/easystats/performance/issues">https://​github.com/​easystats/​performance/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
@@ -401,10 +415,10 @@
       <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=performance"><img src="http://www.r-pkg.org/badges/version/performance" alt="CRAN"></a></li>
+<li><a href="https://cran.r-project.org/package=performance"><img src="http://cranlogs.r-pkg.org/badges/performance" alt="downloads"></a></li>
 <li><a href="https://travis-ci.org/easystats/performance"><img src="https://travis-ci.org/easystats/performance.svg?branch=master" alt="Build Status"></a></li>
 <li><a href="https://codecov.io/gh/easystats/performance"><img src="https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="http://hits.dwyl.io/easystats/performance"><img src="http://hits.dwyl.io/easystats/performance.svg" alt="HitCount"></a></li>
-<li><a href="https://easystats.github.io/performance/"><img src="https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63" alt="Documentation"></a></li>
 </ul>
 </div>
 </div>
