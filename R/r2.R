@@ -38,7 +38,7 @@ r2 <- function(model, ...) {
 #' @importFrom insight print_color
 #' @export
 r2.default <- function(model, ...) {
-  insight::print_color(sprintf("Objects of class \"%s\" are not supported yet.", class(model)), "red")
+  insight::print_color(sprintf("Objects of class \"%s\" are not supported yet.\n", class(model)[1]), "red")
   return(NA)
 }
 
@@ -74,8 +74,16 @@ r2.lm <- function(model, ...) {
 #' @export
 r2.feis <- function(model, ...) {
   list(
-    R2 = model$r2,
-    R2_adjusted = model$adj.r2
+    R2 = c(`R2` = model$r2),
+    R2_adjusted = c(`adjusted R2` = model$adj.r2)
+  )
+}
+
+
+#' @export
+r2.betareg <- function(model, ...) {
+  list(
+    R2 = c(`Pseudo R2` = model$pseudo.r.squared)
   )
 }
 
@@ -94,6 +102,12 @@ r2.glm <- function(model, ...) {
 #' @export
 r2.mlogit <- function(model, ...) {
   list("R2_McFadden" = r2_mcfadden(model))
+}
+
+
+#' @export
+r2.coxph <- function(model, ...) {
+  list("R2_CoxSnell" = r2_coxsnell(model))
 }
 
 
@@ -131,8 +145,8 @@ r2.multinom <- function(model, ...) {
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
   list(
-    "R2" = model_summary$r.squared[1],
-    "R2_adjusted" = model_summary$r.squared[2]
+    "R2" = c(`R2` = model_summary$r.squared[1]),
+    "R2_adjusted" = c(`adjusted R2` = model_summary$r.squared[2])
   )
 }
 

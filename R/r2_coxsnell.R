@@ -1,5 +1,5 @@
 #' @title Cox & Snell's R2
-#' @name r2_coxnell
+#' @name r2_coxsnell
 #'
 #' @description Calculates the pseudo-R2 value based on the proposal from \cite{Cox & Snell (1989)}.
 #'
@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' r2_coxnell(model)
+#' r2_coxsnell(model)
 #'
 #' @references
 #' \itemize{
@@ -27,14 +27,14 @@
 #' }
 #'
 #' @export
-r2_coxnell <- function(model) {
-  UseMethod("r2_coxnell")
+r2_coxsnell <- function(model) {
+  UseMethod("r2_coxsnell")
 }
 
 
 #' @importFrom insight n_obs
 #' @importFrom stats logLik
-.r2_coxnell <- function(model, l_base) {
+.r2_coxsnell <- function(model, l_base) {
   l_full <- stats::logLik(model)
   G2 <- -2 * (l_base - l_full)
 
@@ -45,61 +45,68 @@ r2_coxnell <- function(model) {
     n <- attr(l_full, "nobs")
   }
 
-  r2_coxnell <- 1 - exp(-G2 / n)
+  r2_coxsnell <- as.vector(1 - exp(-G2 / n))
 
-  names(r2_coxnell) <- "Cox & Snell's R2"
-  r2_coxnell
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
 }
 
 
 #' @importFrom insight n_obs
 #' @export
-r2_coxnell.glm <- function(model) {
-  r2_coxnell <- (1 - exp((model$dev - model$null) / insight::n_obs(model)))
-  names(r2_coxnell) <- "Cox & Snell's R2"
-  r2_coxnell
+r2_coxsnell.glm <- function(model) {
+  r2_coxsnell <- (1 - exp((model$dev - model$null) / insight::n_obs(model)))
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
 }
 
 
 #' @importFrom stats logLik update
 #' @export
-r2_coxnell.multinom <- function(model) {
+r2_coxsnell.multinom <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
-  .r2_coxnell(model, l_base)
+  .r2_coxsnell(model, l_base)
 }
 
 
 #' @importFrom stats logLik update
 #' @export
-r2_coxnell.vglm <- function(model) {
+r2_coxsnell.vglm <- function(model) {
   if (!(is.null(model@call$summ) && !identical(model@call$summ, 0))) {
     stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
   }
 
   l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_coxnell(model, l_base)
+  .r2_coxsnell(model, l_base)
+}
+
+
+#' @export
+r2_coxsnell.coxph <- function(model) {
+  l_base <- model$loglik[1]
+  .r2_coxsnell(model, l_base)
 }
 
 
 #' @importFrom stats logLik update
 #' @export
-r2_coxnell.clm <- function(model) {
+r2_coxsnell.clm <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_coxnell(model, l_base)
+  .r2_coxsnell(model, l_base)
 }
 
 
 #' @importFrom stats logLik update
 #' @export
-r2_coxnell.clm2 <- function(model) {
+r2_coxsnell.clm2 <- function(model) {
   l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
-  .r2_coxnell(model, l_base)
+  .r2_coxsnell(model, l_base)
 }
 
 
 #' @importFrom stats logLik update
 #' @export
-r2_coxnell.polr <- function(model) {
+r2_coxsnell.polr <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_coxnell(model, l_base)
+  .r2_coxsnell(model, l_base)
 }
