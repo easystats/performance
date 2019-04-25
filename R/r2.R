@@ -107,6 +107,20 @@ r2.feis <- function(model, ...) {
 
 
 
+#' @export
+r2.felm <- function(model, ...) {
+  model_summary <- summary(model)
+  out <- list(
+    R2 = c(`R2` = model_summary$r2),
+    R2_adjusted = c(`adjusted R2` = model_summary$r2adj)
+  )
+
+  attr(out, "model_type") <- "Fixed Effects"
+  structure(class = "r2_generic", out)
+}
+
+
+
 #' @importFrom insight model_info
 #' @export
 r2.glm <- function(model, ...) {
@@ -122,6 +136,33 @@ r2.glm <- function(model, ...) {
 #' @export
 r2.glmmTMB <- function(model, ...) {
   r2_nakagawa(model)
+}
+
+
+
+#' @export
+r2.iv_robust <- function(model, ...) {
+  out <- list(
+    R2 = c(`R2` = model$r.squared),
+    R2_adjusted = c(`adjusted R2` = model$adj.r.squared)
+  )
+
+  attr(out, "model_type") <- "Two-Stage Least Squares Instrumental-Variable"
+  structure(class = "r2_generic", out)
+}
+
+
+
+#' @export
+r2.ivreg <- function(model, ...) {
+  model_summary <- summary(model)
+  out <- list(
+    R2 = c(`R2` = model_summary$r.squared),
+    R2_adjusted = c(`adjusted R2` = model_summary$adj.r.squared)
+  )
+
+  attr(out, "model_type") <- "Instrumental-Variable"
+  structure(class = "r2_generic", out)
 }
 
 

@@ -55,7 +55,7 @@ print.looic <- function(x, digits = 2, ...) {
 print.r2_generic <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
   if (!is.null(model_type)) {
-    insight::print_color(sprintf("# R2 for %s Regression Model\n\n", model_type), "blue")
+    insight::print_color(sprintf("# R2 for %s Regression\n\n", model_type), "blue")
   } else {
     insight::print_color("# R2\n\n", "blue")
   }
