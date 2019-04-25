@@ -66,7 +66,10 @@ model_performance.clm2 <- model_performance.lm
 model_performance.coxph <- model_performance.lm
 
 #' @export
-model_performance.feis <- model_performance.lm
+model_performance.felm <- model_performance.lm
+
+#' @export
+model_performance.iv_robust <- model_performance.lm
 
 #' @export
 model_performance.mlogit <- model_performance.lm
