@@ -43,6 +43,89 @@ r2.default <- function(model, ...) {
 }
 
 
+
+#' @export
+r2.betareg <- function(model, ...) {
+  list(
+    R2 = c(`Pseudo R2` = model$pseudo.r.squared)
+  )
+}
+
+
+
+#' @export
+r2.brmsfit <- function(model, ...) {
+  r2_bayes(model)
+}
+
+
+
+#' @export
+r2.censReg <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+
+#' @export
+r2.clm <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+
+#' @export
+r2.clm2 <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+#' @export
+r2.coxph <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+
+#' @export
+r2.crch <- function(model, ...) {
+  list("R2_CoxSnell" = r2_coxsnell(model))
+}
+
+
+
+#' @export
+r2.feis <- function(model, ...) {
+  out <- list(
+    R2 = c(`R2` = model$r2),
+    R2_adjusted = c(`adjusted R2` = model$adj.r2)
+  )
+
+  attr(out, "model_type") <- "Fixed Effects Individual Slope"
+  structure(class = "r2_generic", out)
+}
+
+
+
+#' @importFrom insight model_info
+#' @export
+r2.glm <- function(model, ...) {
+  if (insight::model_info(model)$is_logit) {
+    list("R2_Tjur" = r2_tjur(model))
+  } else {
+    list("R2_Nagelkerke" = r2_nagelkerke(model))
+  }
+}
+
+
+
+#' @export
+r2.glmmTMB <- function(model, ...) {
+  r2_nakagawa(model)
+}
+
+
+
 #' @importFrom stats pf
 #' @export
 r2.lm <- function(model, ...) {
@@ -72,35 +155,47 @@ r2.lm <- function(model, ...) {
 }
 
 
+
 #' @export
-r2.feis <- function(model, ...) {
+r2.lme <- function(model, ...) {
+  r2_nakagawa(model)
+}
+
+
+
+#' @export
+r2.lmrob <- function(model, ...) {
+  model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model$r2),
-    R2_adjusted = c(`adjusted R2` = model$adj.r2)
+    R2 = c(`R2` = model_summary$r.squared),
+    R2_adjusted = c(`adjusted R2` = model_summary$adj.r.squared)
   )
 
-  attr(out, "model_type") <- "Fixed Effects Individual Slope"
+  attr(out, "model_type") <- "Robust Linear"
   structure(class = "r2_generic", out)
 }
 
 
+
 #' @export
-r2.betareg <- function(model, ...) {
-  list(
-    R2 = c(`Pseudo R2` = model$pseudo.r.squared)
-  )
+r2.merMod <- function(model, ...) {
+  r2_nakagawa(model)
 }
 
 
-#' @importFrom insight model_info
+
 #' @export
-r2.glm <- function(model, ...) {
-  if (insight::model_info(model)$is_logit) {
-    list("R2_Tjur" = r2_tjur(model))
-  } else {
-    list("R2_Nagelkerke" = r2_nagelkerke(model))
-  }
+r2.mixed <- function(model, ...) {
+  r2_nakagawa(model)
 }
+
+
+
+#' @export
+r2.MixMod <- function(model, ...) {
+  r2_nakagawa(model)
+}
+
 
 
 #' @export
@@ -109,16 +204,47 @@ r2.mlogit <- function(model, ...) {
 }
 
 
+
 #' @export
-r2.coxph <- function(model, ...) {
+r2.multinom <- function(model, ...) {
   list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
+
+
+
+#' @export
+r2.plm <- function(model, ...) {
+  model_summary <- summary(model)
+  out <- list(
+    "R2" = c(`R2` = model_summary$r.squared[1]),
+    "R2_adjusted" = c(`adjusted R2` = model_summary$r.squared[2])
+  )
+
+  attr(out, "model_type") <- "Panel Data"
+  structure(class = "r2_generic", out)
+}
+
+
+
+#' @export
+r2.polr <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+
+#' @export
+r2.stanreg <- function(model, ...) {
+  r2_bayes(model)
+}
+
 
 
 #' @export
 r2.survreg <- function(model, ...) {
   list("R2_Nagelkerke" = r2_nagelkerke(model))
 }
+
 
 
 #' @export
@@ -136,17 +262,6 @@ r2.svyglm <- function(model, ...) {
 }
 
 
-#' @export
-r2.polr <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
-}
-
-
-#' @export
-r2.censReg <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
-}
-
 
 #' @export
 r2.truncreg <- function(model, ...) {
@@ -154,80 +269,8 @@ r2.truncreg <- function(model, ...) {
 }
 
 
-#' @export
-r2.clm2 <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
-}
-
-
-#' @export
-r2.clm <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
-}
-
 
 #' @export
 r2.vglm <- function(model, ...) {
   list("R2_Nagelkerke" = r2_nagelkerke(model))
-}
-
-
-#' @export
-r2.multinom <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
-}
-
-
-#' @export
-r2.plm <- function(model, ...) {
-  model_summary <- summary(model)
-  out <- list(
-    "R2" = c(`R2` = model_summary$r.squared[1]),
-    "R2_adjusted" = c(`adjusted R2` = model_summary$r.squared[2])
-  )
-
-  attr(out, "model_type") <- "Panel Data"
-  structure(class = "r2_generic", out)
-}
-
-
-#' @export
-r2.merMod <- function(model, ...) {
-  r2_nakagawa(model)
-}
-
-
-#' @export
-r2.glmmTMB <- function(model, ...) {
-  r2_nakagawa(model)
-}
-
-
-#' @export
-r2.MixMod <- function(model, ...) {
-  r2_nakagawa(model)
-}
-
-
-#' @export
-r2.mixed <- function(model, ...) {
-  r2_nakagawa(model)
-}
-
-
-#' @export
-r2.lme <- function(model, ...) {
-  r2_nakagawa(model)
-}
-
-
-#' @export
-r2.brmsfit <- function(model, ...) {
-  r2_bayes(model)
-}
-
-
-#' @export
-r2.stanreg <- function(model, ...) {
-  r2_bayes(model)
 }
