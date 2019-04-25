@@ -52,25 +52,13 @@ print.looic <- function(x, digits = 2, ...) {
 
 #' @importFrom insight print_color
 #' @export
-print.r2_lm <- function(x, digits = 3, ...) {
-  insight::print_color("# R2 for linear models\n\n", "blue")
-
-  out <- paste0(c(
-    sprintf("       R2: %.*f", digits, x$R2),
-    sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)),
-    collapse = "\n"
-  )
-
-  cat(out)
-  cat("\n")
-}
-
-
-
-#' @importFrom insight print_color
-#' @export
-print.r2_svyglm <- function(x, digits = 3, ...) {
-  insight::print_color("# R2 for survey models\n\n", "blue")
+print.r2_generic <- function(x, digits = 3, ...) {
+  model_type <- attr(x, "model_type")
+  if (!is.null(model_type)) {
+    insight::print_color(sprintf("# R2 for %s Regression Model\n\n", model_type), "blue")
+  } else {
+    insight::print_color("# R2\n\n", "blue")
+  }
 
   out <- paste0(c(
     sprintf("       R2: %.*f", digits, x$R2),

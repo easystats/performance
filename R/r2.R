@@ -67,29 +67,20 @@ r2.lm <- function(model, ...) {
     attr(out, "DoF_residual") <- DoF_residual
   }
 
-  structure(class = "r2_lm", out)
+  attr(out, "model_type") <- "Linear"
+  structure(class = "r2_generic", out)
 }
 
 
 #' @export
 r2.feis <- function(model, ...) {
-  list(
+  out <- list(
     R2 = c(`R2` = model$r2),
     R2_adjusted = c(`adjusted R2` = model$adj.r2)
   )
-}
 
-
-#' @export
-r2.plm <- function(model, ...) {
-  if (!requireNamespace("plm", quietly = TRUE)) {
-    stop("Package `plm` needed to calculate R2.", call. = FALSE)
-  }
-
-  list(
-    R2 = c(`R2` = plm::r.squared(model)),
-    R2_adjusted = c(`adjusted R2` = plm::r.squared(model, dfcor = TRUE))
-  )
+  attr(out, "model_type") <- "Fixed Effects Individual Slope"
+  structure(class = "r2_generic", out)
 }
 
 
@@ -135,13 +126,13 @@ r2.svyglm <- function(model, ...) {
   rsq <- (model$null.deviance - model$deviance) / model$null.deviance
   rsq.adjust = 1 - ((1 - rsq) * (model$df.null / model$df.residual))
 
-  structure(
-    class = "r2_svyglm",
-    list(
-      R2 = c(`R2` = rsq),
-      R2_adjusted = c(`adjusted R2` = rsq.adjust)
-    )
+  out <- list(
+    R2 = c(`R2` = rsq),
+    R2_adjusted = c(`adjusted R2` = rsq.adjust)
   )
+
+  attr(out, "model_type") <- "Survey"
+  structure(class = "r2_generic", out)
 }
 
 
@@ -190,10 +181,13 @@ r2.multinom <- function(model, ...) {
 #' @export
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
-  list(
+  out <- list(
     "R2" = c(`R2` = model_summary$r.squared[1]),
     "R2_adjusted" = c(`adjusted R2` = model_summary$r.squared[2])
   )
+
+  attr(out, "model_type") <- "Panel Data"
+  structure(class = "r2_generic", out)
 }
 
 

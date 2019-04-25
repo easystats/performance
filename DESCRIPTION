@@ -41,7 +41,6 @@ Suggests:
 	MASS,
 	mlogit,
 	nlme,
-	plm,
 	psych,
 	rmarkdown,
 	rstanarm,
