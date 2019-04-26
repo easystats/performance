@@ -62,10 +62,31 @@ predictive_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000
 
     # check if bootstrapping or cross validation is requested
     if (method == "boot") {
-      stop("Method `boot` not implemented yet.")
+
+      # accuracy linear models with bootstrapping
+
+      bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
+
+      models <- lapply(bootstr, function(.x) {
+        stats::lm(formula, data = model_data[.x, ])
+      })
+
+      predictions <- mapply(function(.x, .y) {
+        stats::predict(.y, newdata = model_data[.x, ])
+      }, bootstr, models, SIMPLIFY = FALSE)
+
+      response <- lapply(bootstr, function(.x) {
+        as.data.frame(model_data[.x, ])[[resp.name]]
+      })
+
+      accuracy <- mapply(function(.x, .y) {
+        stats::cor(.x, .y, use = "pairwise.complete.obs")
+      }, predictions, response)
+
     } else {
 
       # accuracy linear models with cross validation
+
       cv <- .crossv_kfold(model_data, k = k)
 
       models <- lapply(cv, function(.x) {
@@ -74,7 +95,7 @@ predictive_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000
 
       predictions <- mapply(function(.x, .y) {
         stats::predict(.y, newdata = model_data[.x$test, ])
-      }, cv, models)
+      }, cv, models, SIMPLIFY = FALSE)
 
       response <- lapply(cv, function(.x) {
         as.data.frame(model_data[.x$test, ])[[resp.name]]
@@ -91,7 +112,27 @@ predictive_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000
 
     # check if bootstrapping or cross validation is requested
     if (method == "boot") {
-      stop("Method `boot` not implemented yet.")
+
+      # accuracy linear models with bootstrapping
+
+      bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
+
+      models <- lapply(bootstr, function(.x) {
+        stats::glm(formula, data = model_data[.x, ], family = stats::binomial(link = "logit"))
+      })
+
+      predictions <- mapply(function(.x, .y) {
+        stats::predict.glm(.y, newdata = model_data[.x, ])
+      }, bootstr, models, SIMPLIFY = FALSE)
+
+      response <- lapply(bootstr, function(.x) {
+        as.data.frame(model_data[.x, ])[[resp.name]]
+      })
+
+      accuracy <- mapply(function(.x, .y) {
+        pROC::auc(pROC::roc(response = .x, predictor = .y))
+      }, response, predictions)
+
     } else {
 
       # accuracy linear models with cross validation
@@ -103,7 +144,7 @@ predictive_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000
 
       predictions <- mapply(function(.x, .y) {
         stats::predict.glm(.y, newdata = model_data[.x$test, ])
-      }, cv, models)
+      }, cv, models, SIMPLIFY = FALSE)
 
       response <- lapply(cv, function(.x) {
         as.data.frame(model_data[.x$test, ])[[resp.name]]
