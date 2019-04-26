@@ -48,7 +48,7 @@ appropriate” r-squared for the given model.
 ``` r
 model <- lm(mpg ~ wt + cyl, data = mtcars)
 r2(model)
-#> # R2 for linear models
+#> # R2 for Linear Regression
 #> 
 #>        R2: 0.830
 #>   adj. R2: 0.819
@@ -94,7 +94,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.412 [0.119]
+#>      Marginal R2: 0.406 [0.122]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -141,14 +141,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.57 0.78]
+#> Ratio: 0.38  CI 95%: [-0.52 0.77]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.79  CI 95%: [ 8.48 57.73]
-#> Conditioned on rand. effects: 37.70  CI 95%: [25.08 55.43]
+#> Conditioned on fixed effects: 22.84  CI 95%: [ 8.66 57.03]
+#> Conditioned on rand. effects: 37.60  CI 95%: [24.81 56.09]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.42  CI 95%: [-18.82 36.07]
+#> Difference: 14.02  CI 95%: [-17.41 36.29]
 ```
 
 ## Model diagnostics
@@ -260,9 +260,9 @@ m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
 ```
 
-|  AIC |  BIC | R2\_Tjur |
-| ---: | ---: | -------: |
-| 31.3 | 35.7 |     0.48 |
+|  AIC |  BIC | R2\_Tjur | RMSE | LOGLOSS |
+| ---: | ---: | -------: | ---: | ------: |
+| 31.3 | 35.7 |     0.48 | 0.89 |     0.4 |
 
 ### Linear mixed model
 
@@ -272,9 +272,9 @@ m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 ```
 
-|  AIC |  BIC | R2\_conditional | R2\_marginal | ICC\_adjusted | ICC\_conditional |  RMSE |
-| ---: | ---: | --------------: | -----------: | ------------: | ---------------: | ----: |
-| 1756 | 1775 |             0.8 |         0.28 |          0.72 |             0.52 | 23.44 |
+|  AIC |  BIC | R2\_conditional | R2\_marginal |  ICC |  RMSE |
+| ---: | ---: | --------------: | -----------: | ---: | ----: |
+| 1756 | 1775 |             0.8 |         0.28 | 0.72 | 23.44 |
 
 ### Comparing different models
 
@@ -282,11 +282,11 @@ model_performance(m3)
 compare_performance(m1, m2, m3)
 ```
 
-| name | class   |    AIC |    BIC |  RMSE |   R2 | R2\_adjusted | R2\_Tjur | R2\_conditional | R2\_marginal | ICC\_adjusted | ICC\_conditional |
-| :--- | :------ | -----: | -----: | ----: | ---: | -----------: | -------: | --------------: | -----------: | ------------: | ---------------: |
-| m1   | glm     |   31.3 |   35.7 |       |      |              |     0.48 |                 |              |               |                  |
-| m2   | lm      |  156.0 |  161.9 |  2.44 | 0.83 |         0.82 |          |                 |              |               |                  |
-| m3   | lmerMod | 1755.6 | 1774.8 | 23.44 |      |              |          |             0.8 |         0.28 |          0.72 |             0.52 |
+| name | class   |    AIC |    BIC |  RMSE |   R2 | R2\_adjusted | R2\_Tjur | LOGLOSS | R2\_conditional | R2\_marginal |  ICC |
+| :--- | :------ | -----: | -----: | ----: | ---: | -----------: | -------: | ------: | --------------: | -----------: | ---: |
+| m1   | glm     |   31.3 |   35.7 |  0.89 |      |              |     0.48 |     0.4 |                 |              |      |
+| m2   | lm      |  156.0 |  161.9 |  2.44 | 0.83 |         0.82 |          |         |                 |              |      |
+| m3   | lmerMod | 1755.6 | 1774.8 | 23.44 |      |              |          |         |             0.8 |         0.28 | 0.72 |
 
 # References
 

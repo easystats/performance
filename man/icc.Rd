@@ -53,9 +53,9 @@ This function calculates the intraclass-correlation coefficient
  \cr \cr
  \strong{Adjusted and conditional ICC}
  \cr \cr
- \code{icc()} calculates an adjusted and conditional ICC, which take
+ \code{icc()} calculates an adjusted and conditional ICC, which both take
  all sources of uncertainty (i.e. of \emph{all random effects}) into account. While
- the adjusted ICC only relates to the random effects, the conditional ICC
+ the \emph{adjusted ICC} only relates to the random effects, the \emph{conditional ICC}
  also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
  Typically, the \emph{adjusted} ICC is of interest when the analysis of random
  effects is of interest. \code{icc()} returns a meaningful ICC also for more

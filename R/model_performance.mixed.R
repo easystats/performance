@@ -8,6 +8,10 @@
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
+#' @details This method returns the \emph{adjusted ICC} only, as this is typically
+#'   of interest when judging the variance attributed to the random effects part
+#'   of the model (see also \code{\link{icc}}).
+#'
 #' @examples
 #' library(lme4)
 #' model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
@@ -34,7 +38,7 @@ model_performance.merMod <- function(model, metrics = "all", ...) {
     out <- c(out, r2(model))
   }
   if ("ICC" %in% metrics) {
-    out <- c(out, icc(model))
+    out$ICC <- icc(model)$ICC_adjusted
   }
   if ("RMSE" %in% metrics) {
     out$RMSE <- rmse(model)
