@@ -1,10 +1,10 @@
-#' @title Root Mean Squared Error of Linear Models
+#' @title Root Mean Squared Error
 #' @name rmse
 #'
-#' @description Compute root mean squared error for linear (mixed effects) models.
+#' @description Compute root mean squared error for (mixed effects) models,
+#'   including Bayesian regression models.
 #'
-#' @param model Linear model of class \code{lm}, \code{merMod} (\pkg{lme4})
-#'   or \code{lme} (\pkg{nlme}).
+#' @param model A model.
 #' @param normalized Logical, use \code{TRUE} if normalized rmse should be returned.
 #'
 #' @details The RMSE is the square root of the variance of the residuals and indicates

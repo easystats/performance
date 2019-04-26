@@ -2,13 +2,12 @@
 % Please edit documentation in R/rmse.R
 \name{rmse}
 \alias{rmse}
-\title{Root Mean Squared Error of Linear Models}
+\title{Root Mean Squared Error}
 \usage{
 rmse(model, normalized = FALSE)
 }
 \arguments{
-\item{model}{Linear model of class \code{lm}, \code{merMod} (\pkg{lme4})
-or \code{lme} (\pkg{nlme}).}
+\item{model}{A model.}
 
 \item{normalized}{Logical, use \code{TRUE} if normalized rmse should be returned.}
 }
@@ -16,7 +15,8 @@ or \code{lme} (\pkg{nlme}).}
 Numeric, the root mean squared error.
 }
 \description{
-Compute root mean squared error for linear (mixed effects) models.
+Compute root mean squared error for (mixed effects) models,
+  including Bayesian regression models.
 }
 \details{
 The RMSE is the square root of the variance of the residuals and indicates

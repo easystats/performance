@@ -3,16 +3,16 @@
 \name{model_performance.lm}
 \alias{model_performance.lm}
 \alias{model_performance.glm}
-\title{Performance of (Generalized) Linear Models}
+\title{Performance of Regression Models}
 \usage{
 \method{model_performance}{lm}(model, metrics = "all", ...)
 
 \method{model_performance}{glm}(model, metrics = "all", ...)
 }
 \arguments{
-\item{model}{Object of class \code{lm} or \code{glm}.}
+\item{model}{A model.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE")}).}
+\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS")}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -20,7 +20,7 @@
 A data frame (with one row) and one column per "index" (see \code{metrics}).
 }
 \description{
-Compute indices of model performance for (generalized) linear models.
+Compute indices of model performance for regression models.
 }
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)

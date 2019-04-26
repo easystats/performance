@@ -3,7 +3,7 @@
 #' Compute indices of model performance for mixed models.
 #'
 #' @param model Object of class \code{merMod}, \code{glmmTMB}, \code{lme} or \code{MixMod}.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
@@ -18,10 +18,10 @@
 #' @export
 model_performance.merMod <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE")
+    metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS")
   }
 
-  minfo <- insight::model_info(model)
+  mi <- insight::model_info(model)
 
   out <- list()
   if ("AIC" %in% metrics) {
@@ -36,8 +36,11 @@ model_performance.merMod <- function(model, metrics = "all", ...) {
   if ("ICC" %in% metrics) {
     out <- c(out, icc(model))
   }
-  if ("RMSE" %in% metrics && minfo$is_linear) {
+  if ("RMSE" %in% metrics) {
     out$RMSE <- rmse(model)
+  }
+  if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
+    out$LOGLOSS <- log_loss(model)
   }
 
   # TODO: What with sigma and deviance?

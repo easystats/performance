@@ -9,7 +9,7 @@
 \arguments{
 \item{model}{Object of class \code{merMod}, \code{glmmTMB}, \code{lme} or \code{MixMod}.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE")}).}
+\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS")}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }

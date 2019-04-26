@@ -3,7 +3,7 @@
 #' Compute indices of model performance for (general) linear models.
 #'
 #' @param model Object of class \code{stanreg} or \code{brmsfit}.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj", "RMSE", "LOGLOSS")}).
 #' @param ci The Credible Interval level for R2.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -23,7 +23,7 @@
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
   if (all(metrics == "all")) {
-    metrics <- c("LOOIC", "R2", "R2_adjusted")
+    metrics <- c("LOOIC", "R2", "R2_adjusted", "RMSE", "LOGLOSS")
   }
 
   algorithm <- insight::find_algorithm(model)
@@ -31,6 +31,7 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
     warning("`model_performance()` only possible for models fit using the 'sampling' algorithm.", call. = FALSE)
     return(NULL)
   }
+  mi <- insight::model_info(model)
 
   out <- list()
   if ("LOOIC" %in% c(metrics)) {
@@ -44,10 +45,14 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
       out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_marginal, ci = ci, name = "R2_marginal_"))
     }
   }
-  if ("R2_adjusted" %in% c(metrics)) {
-    if (model_info(model)$is_linear) {
-      out$R2_LOO_adjusted <- r2_loo(model)
-    }
+  if ("R2_adjusted" %in% c(metrics) && mi$is_linear) {
+    out$R2_LOO_adjusted <- r2_loo(model)
+  }
+  if ("RMSE" %in% c(metrics)) {
+    out$RMSE <- rmse(model)
+  }
+  if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
+    out$LOGLOSS <- log_loss(model)
   }
 
   # TODO: What with sigma and deviance?

@@ -7,8 +7,7 @@
 rse(model)
 }
 \arguments{
-\item{model}{Linear model of class \code{lm}, \code{merMod} (\pkg{lme4})
-or \code{lme} (\pkg{nlme}).}
+\item{model}{A model.}
 }
 \value{
 Numeric, the residual standard error of \code{model}.

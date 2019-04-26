@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Performance of (Generalized) Linear Models — model_performance.lm • performance</title>
+<title>Performance of Regression Models — model_performance.lm • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Performance of (Generalized) Linear Models — model_performance.lm" />
+<meta property="og:title" content="Performance of Regression Models — model_performance.lm" />
 
-<meta property="og:description" content="Compute indices of model performance for (generalized) linear models." />
+<meta property="og:description" content="Compute indices of model performance for regression models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -106,14 +106,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Performance of (Generalized) Linear Models</h1>
+    <h1>Performance of Regression Models</h1>
     
     <div class="hidden name"><code>model_performance.lm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute indices of model performance for (generalized) linear models.</p>
+    <p>Compute indices of model performance for regression models.</p>
     
     </div>
 
@@ -128,11 +128,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Object of class <code>lm</code> or <code>glm</code>.</p></td>
+      <td><p>A model.</p></td>
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "RMSE")</a></code>).</p></td>
+      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "RMSE", "LOGLOSS")</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -150,8 +150,8 @@
 <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC     BIC        R2 R2_adjusted     RMSE
 #&gt; 1 156.0101 161.873 0.8302274   0.8185189 2.444202</div><div class='input'>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC      BIC   R2_Tjur
-#&gt; 1 31.29788 35.69508 0.4776926</div><div class='input'>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC      BIC   R2_Tjur      RMSE   LOGLOSS
+#&gt; 1 31.29788 35.69508 0.4776926 0.8891336 0.3952793</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -1,9 +1,9 @@
-#' Performance of (Generalized) Linear Models
+#' Performance of Regression Models
 #'
-#' Compute indices of model performance for (generalized) linear models.
+#' Compute indices of model performance for regression models.
 #'
-#' @param model Object of class \code{lm} or \code{glm}.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE")}).
+#' @param model A model.
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
@@ -15,15 +15,15 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
 #'
-#' @importFrom stats AIC BIC
 #' @importFrom insight model_info
+#' @importFrom stats AIC BIC
 #' @export
 model_performance.lm <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
+    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS")
   }
 
-  minfo <- insight::model_info(model)
+  mi <- insight::model_info(model)
 
   out <- list()
   if ("AIC" %in% metrics) {
@@ -35,8 +35,11 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   if ("R2" %in% metrics) {
     out <- c(out, r2(model))
   }
-  if ("RMSE" %in% metrics && minfo$is_linear) {
+  if ("RMSE" %in% metrics) {
     out$RMSE <- rmse(model)
+  }
+  if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
+    out$LOGLOSS <- log_loss(model)
   }
 
   # TODO: What with sigma and deviance?
