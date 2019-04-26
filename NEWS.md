@@ -8,6 +8,7 @@
 
 ## New functions
 
+* `predictive_accuracy()`, which calculates the predictive accuracy of linear or logistic regression models.
 * `log_loss()` to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the `rmse()`.
 
 ## Bug fixes

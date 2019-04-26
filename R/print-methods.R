@@ -389,3 +389,15 @@ print.hoslem_test <- function(x, ...) {
   else
     message("Summary: model does not fit well.")
 }
+
+
+#' @export
+print.predictive_accuracy <- function(x, ...) {
+  # headline
+  insight::print_color("# Accuracy of Model Predictions\n\n", "blue")
+
+  # statistics
+  cat(sprintf("Accuracy: %.2f%%\n", 100 * x$accuracy))
+  cat(sprintf("      SE: %.2f%%-points\n", 100 * x$std.error))
+  cat(sprintf("  Method: %s\n", x$stat))
+}
