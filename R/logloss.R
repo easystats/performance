@@ -9,7 +9,7 @@
 #' @return Numeric, the log loss of \code{model}.
 #'
 #' @details Logistic regression models predict the probability of an outcome of
-#'   being a "success" or "failure" (or 1 and 0 etc.). `log_loss()` evaluates
+#'   being a "success" or "failure" (or 1 and 0 etc.). \code{log_loss()} evaluates
 #'   how good or bad the predicted probabilities are. High values indicate
 #'   bad predictions, while low values indicate good predictions. The lower
 #'   the log-loss, the better the model predicts the outcome.
