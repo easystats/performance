@@ -20,7 +20,7 @@
 #' @export
 model_performance.lm <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS")
+    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "EPCP")
   }
 
   mi <- insight::model_info(model)
@@ -40,6 +40,10 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
     out$LOGLOSS <- log_loss(model)
+  }
+
+  if (("EPCP" %in% metrics) && mi$is_binomial) {
+    out$EPCP <- correct_predictions(model)$epcp
   }
 
   # TODO: What with sigma and deviance?
