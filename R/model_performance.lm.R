@@ -3,10 +3,21 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "EPCP")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
+#'
+#' @details Depending on \code{model}, following indices are computed:
+#' \decribe{
+#'   \item{\strong{AIC}}{Akaike's Information Criterion, see \code{\link[stats]{AIC}}}
+#'   \item{\strong{BIC}}{Bayesian Information Criterion, see \code{\link[stats]{BIC}}}
+#'   \item{\strong{R2}}{r-squared value, see \code{\link{r2}}}
+#'   \item{\strong{R2_adj}}{adjusted r-squared, see \code{\link{r2}}}
+#'   \item{\strong{RMSE}}{root mean squared error, see \code{\link{rmse}}}
+#'   \item{\strong{LOGLOSS}}{Log-loss, see \code{\link{log_loss}}}
+#'   \item{\strong{EPCP}}{expected percentage of correct predictions, see \code{\link{correct_predictions}}}
+#' }
 #'
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)

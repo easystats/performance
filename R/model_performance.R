@@ -1,10 +1,10 @@
 #' @title Model Performance
 #' @name model_performance
 #'
-#' @description See the documentation for your object's class: \link[=model_performance.lm]{lm},
-#' \link[=model_performance.glm]{glm}, \link[=model_performance.merMod]{mixed models}
-#' and \link[=model_performance.stanreg]{Bayesian models}. \code{compare_performance()}
-#' computes indices of model performance for different models.
+#' @description See the documentation for your object's class: \link[=model_performance.lm]{(generalized) linear models},
+#' \link[=model_performance.merMod]{mixed models} and \link[=model_performance.stanreg]{Bayesian models}.
+#' \code{compare_performance()} computes indices of model performance for
+#' different models at once and hence allows comparison of indices accros models.
 #'
 #' @param model Statistical model.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed.

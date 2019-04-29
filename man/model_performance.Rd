@@ -25,10 +25,10 @@ For \code{model_performance()}, a data frame (with one row) and one
   the same data frame with one row per model.
 }
 \description{
-See the documentation for your object's class: \link[=model_performance.lm]{lm},
-\link[=model_performance.glm]{glm}, \link[=model_performance.merMod]{mixed models}
-and \link[=model_performance.stanreg]{Bayesian models}. \code{compare_performance()}
-computes indices of model performance for different models.
+See the documentation for your object's class: \link[=model_performance.lm]{(generalized) linear models},
+\link[=model_performance.merMod]{mixed models} and \link[=model_performance.stanreg]{Bayesian models}.
+\code{compare_performance()} computes indices of model performance for
+different models at once and hence allows comparison of indices accros models.
 }
 \examples{
 library(lme4)
