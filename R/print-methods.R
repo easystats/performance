@@ -371,7 +371,7 @@ print.binned_residuals <- function(x, ...) {
 
 
 #' @export
-print.hoslem_test <- function(x, ...) {
+print.performance_hosmer <- function(x, ...) {
   insight::print_color("# Hosmer-Lemeshow Goodness-of-Fit Test\n\n", "blue")
 
   v1 <- sprintf("%.3f", x$chisq)
@@ -392,7 +392,7 @@ print.hoslem_test <- function(x, ...) {
 
 
 #' @export
-print.predictive_accuracy <- function(x, ...) {
+print.performance_accuracy  <- function(x, ...) {
   # headline
   insight::print_color("# Accuracy of Model Predictions\n\n", "blue")
 

@@ -21,3 +21,8 @@
 performance_mse <- function(model) {
   mean(stats::residuals(model)^2, na.rm = T)
 }
+
+
+#' @rdname performance_mse
+#' @export
+mse <- performance_mse

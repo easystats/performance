@@ -1,5 +1,5 @@
 #' @title Hosmer-Lemeshow goodness-of-fit test
-#' @name hosmer_lemeshow
+#' @name performance_hosmer
 #'
 #' @description Check model quality of logistic regression models.
 #'
@@ -18,11 +18,11 @@
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' hosmer_lemeshow(model)
+#' performance_hosmer(model)
 #'
 #' @importFrom stats fitted quantile xtabs pchisq
 #' @export
-hosmer_lemeshow <- function(model, n_bins = 10) {
+performance_hosmer <- function(model, n_bins = 10) {
   if (inherits(model, "merMod") && !requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needed for this function to work. Please install it.", call. = FALSE)
   }
@@ -58,6 +58,6 @@ hosmer_lemeshow <- function(model, n_bins = 10) {
     p.value = p.value
   )
 
-  class(hoslem) <- c("hoslem_test", "list")
+  class(hoslem) <- c("performance_hosmer", "list")
   hoslem
 }

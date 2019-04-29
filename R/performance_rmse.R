@@ -45,3 +45,8 @@ performance_rmse <- function(model, normalized = FALSE) {
 
   rmse_val
 }
+
+
+#' @rdname performance_rmse
+#' @export
+rmse <- performance_rmse

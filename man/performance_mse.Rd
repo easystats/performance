@@ -2,9 +2,12 @@
 % Please edit documentation in R/performance_mse.R
 \name{performance_mse}
 \alias{performance_mse}
+\alias{mse}
 \title{Mean Square Error of Linear Models}
 \usage{
 performance_mse(model)
+
+mse(model)
 }
 \arguments{
 \item{model}{A model.}

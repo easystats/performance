@@ -1,5 +1,5 @@
 #' @title Accuracy of predictions from model fit
-#' @name predictive_accuracy
+#' @name performance_accuracy
 #'
 #' @description This function calculates the predictive accuracy of linear
 #'    or logistic regression models.
@@ -29,15 +29,15 @@
 #'
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
-#' predictive_accuracy(model)
+#' performance_accuracy(model)
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' predictive_accuracy(model)
+#' performance_accuracy(model)
 #'
 #' @importFrom insight find_response get_data
 #' @importFrom stats lm cor glm predict predict.glm model.frame formula binomial sd
 #' @export
-predictive_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000) {
+performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000) {
 
   method <- match.arg(method)
 
@@ -158,7 +158,7 @@ predictive_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000
 
   # return mean value of accuracy
   structure(
-    class = c("predictive_accuracy"),
+    class = c("performance_accuracy"),
     list(
       accuracy = mean(accuracy),
       std.error = stats::sd(accuracy),

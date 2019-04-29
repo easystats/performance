@@ -2,9 +2,12 @@
 % Please edit documentation in R/performance_rmse.R
 \name{performance_rmse}
 \alias{performance_rmse}
+\alias{rmse}
 \title{Root Mean Squared Error}
 \usage{
 performance_rmse(model, normalized = FALSE)
+
+rmse(model, normalized = FALSE)
 }
 \arguments{
 \item{model}{A model.}
