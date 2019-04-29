@@ -49,10 +49,10 @@ model_performance.stanreg <- function(model, metrics = "all", ci = .90, ...) {
     out$R2_LOO_adjusted <- r2_loo(model)
   }
   if ("RMSE" %in% c(metrics)) {
-    out$RMSE <- rmse(model)
+    out$RMSE <- performance_rmse(model)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$LOGLOSS <- log_loss(model)
+    out$LOGLOSS <- performance_logloss(model)
   }
 
   # TODO: What with sigma and deviance?

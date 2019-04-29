@@ -1,9 +1,9 @@
 #' @title Mean Square Error of Linear Models
-#' @name mse
+#' @name performance_mse
 #'
 #' @description Compute mean square error of linear models.
 #'
-#' @inheritParams rmse
+#' @inheritParams performance_rmse
 #'
 #' @details The mean square error is the mean of the sum of squared residuals,
 #'    i.e. it measures the average of the squares of the errors. Lower
@@ -14,10 +14,10 @@
 #' @examples
 #' data(mtcars)
 #' m <- lm(mpg ~ hp + gear, data = mtcars)
-#' mse(m)
+#' performance_mse(m)
 #'
 #' @importFrom stats residuals
 #' @export
-mse <- function(model) {
+performance_mse <- function(model) {
   mean(stats::residuals(model)^2, na.rm = T)
 }

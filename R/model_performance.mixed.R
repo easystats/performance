@@ -41,10 +41,10 @@ model_performance.merMod <- function(model, metrics = "all", ...) {
     out$ICC <- icc(model)$ICC_adjusted
   }
   if ("RMSE" %in% metrics) {
-    out$RMSE <- rmse(model)
+    out$RMSE <- performance_rmse(model)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$LOGLOSS <- log_loss(model)
+    out$LOGLOSS <- performance_logloss(model)
   }
 
   # TODO: What with sigma and deviance?

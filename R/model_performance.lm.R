@@ -3,20 +3,20 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "EPCP")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
 #' @details Depending on \code{model}, following indices are computed:
-#' \decribe{
+#' \describe{
 #'   \item{\strong{AIC}}{Akaike's Information Criterion, see \code{\link[stats]{AIC}}}
 #'   \item{\strong{BIC}}{Bayesian Information Criterion, see \code{\link[stats]{BIC}}}
 #'   \item{\strong{R2}}{r-squared value, see \code{\link{r2}}}
 #'   \item{\strong{R2_adj}}{adjusted r-squared, see \code{\link{r2}}}
-#'   \item{\strong{RMSE}}{root mean squared error, see \code{\link{rmse}}}
-#'   \item{\strong{LOGLOSS}}{Log-loss, see \code{\link{log_loss}}}
-#'   \item{\strong{EPCP}}{expected percentage of correct predictions, see \code{\link{correct_predictions}}}
+#'   \item{\strong{RMSE}}{root mean squared error, see \code{\link{performance_rmse}}}
+#'   \item{\strong{LOGLOSS}}{Log-loss, see \code{\link{performance_logloss}}}
+#'   \item{\strong{PCP}}{percentage of correct predictions, see \code{\link{performance_pcp}}}
 #' }
 #'
 #' @examples
@@ -31,7 +31,7 @@
 #' @export
 model_performance.lm <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "EPCP")
+    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "PCP")
   }
 
   mi <- insight::model_info(model)
@@ -47,14 +47,14 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     out <- c(out, r2(model))
   }
   if ("RMSE" %in% metrics) {
-    out$RMSE <- rmse(model)
+    out$RMSE <- performance_rmse(model)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$LOGLOSS <- log_loss(model)
+    out$LOGLOSS <- performance_logloss(model)
   }
 
-  if (("EPCP" %in% metrics) && mi$is_binomial) {
-    out$EPCP <- correct_predictions(model)$epcp
+  if (("PCP" %in% metrics) && mi$is_binomial) {
+    out$PCP <- performance_pcp(model)$pcp
   }
 
   # TODO: What with sigma and deviance?

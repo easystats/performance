@@ -1,5 +1,5 @@
 #' @title Root Mean Squared Error
-#' @name rmse
+#' @name performance_rmse
 #'
 #' @description Compute root mean squared error for (mixed effects) models,
 #'   including Bayesian regression models.
@@ -24,16 +24,16 @@
 #' m <- lme(distance ~ age, data = Orthodont)
 #'
 #' # RMSE
-#' rmse(m, normalized = TRUE)
+#' performance_rmse(m, normalized = TRUE)
 #'
 #' # normalized RMSE
-#' rmse(m, normalized = TRUE)
+#' performance_rmse(m, normalized = TRUE)
 #'
 #' @importFrom insight get_response
 #' @export
-rmse <- function(model, normalized = FALSE) {
+performance_rmse <- function(model, normalized = FALSE) {
   # compute rmse
-  rmse_val <- sqrt(mse(model))
+  rmse_val <- sqrt(performance_mse(model))
 
   # if normalized, divide by range of response
   if (normalized) {
