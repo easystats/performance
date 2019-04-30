@@ -33,7 +33,7 @@ Percentage of correct predictions (PCP) for models
   \code{method = "Herron"} computes a modified version of the PCP
   (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
   where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
-  by the number of observations.
+  by the number of observations. This approach is said to be more accurate.
   \cr \cr
   The PCP ranges from 0 to 1, where values closer to 1 mean that the model
   predicts the outcome better than models with an PCP closer to 0. In general,
@@ -52,6 +52,8 @@ performance_pcp(m, method = "Gelman-Hill")
 
 }
 \references{
-Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
-Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
+\itemize {
+\item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
+\item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
+}
 }
