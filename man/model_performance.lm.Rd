@@ -24,14 +24,14 @@ Compute indices of model performance for regression models.
 }
 \details{
 Depending on \code{model}, following indices are computed:
-\describe{
-  \item{\strong{AIC}}{Akaike's Information Criterion, see \code{\link[stats]{AIC}}}
-  \item{\strong{BIC}}{Bayesian Information Criterion, see \code{\link[stats]{BIC}}}
-  \item{\strong{R2}}{r-squared value, see \code{\link{r2}}}
-  \item{\strong{R2_adj}}{adjusted r-squared, see \code{\link{r2}}}
-  \item{\strong{RMSE}}{root mean squared error, see \code{\link{performance_rmse}}}
-  \item{\strong{LOGLOSS}}{Log-loss, see \code{\link{performance_logloss}}}
-  \item{\strong{PCP}}{percentage of correct predictions, see \code{\link{performance_pcp}}}
+\itemize{
+  \item{\strong{AIC}} {Akaike's Information Criterion, see \code{\link[stats]{AIC}}}
+  \item{\strong{BIC}} {Bayesian Information Criterion, see \code{\link[stats]{BIC}}}
+  \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
+  \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
+  \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
+  \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
+  \item{\strong{PCP}} {percentage of correct predictions, see \code{\link{performance_pcp}}}
 }
 }
 \examples{

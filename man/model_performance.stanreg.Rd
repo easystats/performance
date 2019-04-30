@@ -4,15 +4,12 @@
 \alias{model_performance.stanreg}
 \title{Performance of Bayesian Models}
 \usage{
-\method{model_performance}{stanreg}(model, metrics = "all", ci = 0.9,
-  ...)
+\method{model_performance}{stanreg}(model, metrics = "all", ...)
 }
 \arguments{
 \item{model}{Object of class \code{stanreg} or \code{brmsfit}.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj", "RMSE", "LOGLOSS")}).}
-
-\item{ci}{The Credible Interval level for R2.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -24,7 +21,16 @@ Compute indices of model performance for (general) linear models.
 }
 \examples{
 library(rstanarm)
+
 model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
+model_performance(model)
+
+model <- stan_glmer(
+  mpg ~ wt + cyl + (1 | gear),
+  data = mtcars,
+  chains = 1,
+  iter = 500
+)
 model_performance(model)
 
 }
