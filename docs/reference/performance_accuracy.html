@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nakagawa's R2 for mixed models — r2_nakagawa • performance</title>
+<title>Accuracy of predictions from model fit — performance_accuracy • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,10 @@
 
 
 
-<meta property="og:title" content="Nakagawa's R2 for mixed models — r2_nakagawa" />
+<meta property="og:title" content="Accuracy of predictions from model fit — performance_accuracy" />
 
-<meta property="og:description" content="Compute the marginal and conditional r-squared value for
- mixed effects models with complex random effects structures." />
+<meta property="og:description" content="This function calculates the predictive accuracy of linear
+   or logistic regression models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -107,61 +107,78 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Nakagawa's R2 for mixed models</h1>
+    <h1>Accuracy of predictions from model fit</h1>
     
-    <div class="hidden name"><code>r2_nakagawa.Rd</code></div>
+    <div class="hidden name"><code>performance_accuracy.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute the marginal and conditional r-squared value for
- mixed effects models with complex random effects structures.</p>
+    <p>This function calculates the predictive accuracy of linear
+   or logistic regression models.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>performance_accuracy</span>(<span class='no'>model</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"cv"</span>, <span class='st'>"boot"</span>), <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+  <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>1000</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A mixed effects model.</p></td>
+      <td><p>Fitted model object of class <code>lm</code> or <code>glm</code>, the latter
+being a logistic regression model (binary response).</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>Character string, indicating whether crossvalidation
+(<code>method = "cv"</code>) or bootstrapping (<code>method = "boot"</code>)
+is used to compute the accuracy values.</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>The number of folds for the kfold-crossvalidation.</p></td>
+    </tr>
+    <tr>
+      <th>n</th>
+      <td><p>Number of bootstrap-samples.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with the conditional and marginal R2 values.</p>
+    <p>A list with two values: The <code>accuracy</code> of the model predictions, i.e.
+   the proportion of accurately predicted values from the model and
+   its standard error, <code>std.error</code>.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Marginal and conditional r-squared values for mixed models are calculated
- based on <cite>Nakagawa et al. 2017</cite>. For more details on the computation
- of the variances, see <code><a href='https://www.rdocumentation.org/packages/insight/topics/get_variance'>get_variance</a></code>.
- <br /> <br />
- The marginal r-squared considers only the variance of the fixed effects, while the
- conditional r-squared takes both the fixed and random effects into account.
- The random effect variances are actually the mean random effect variances,
- thus the r-squared value is also appropriate for mixed models with random
- slopes or nested random effects (see <cite>Johnson 2014</cite>).</p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <ul>
-<li><p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. doi: <a href='https://doi.org/10.1111/2041-210X.12225'>10.1111/2041-210X.12225</a></p></li>
-<li><p>Nakagawa, S., &amp; Schielzeth, H. (2013). A general and simple method for obtaining R2 from generalized linear mixed-effects models. Methods in Ecology and Evolution, 4(2), 133–142. doi: <a href='https://doi.org/10.1111/j.2041-210x.2012.00261.x'>10.1111/j.2041-210x.2012.00261.x</a></p></li>
-<li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. doi: <a href='https://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
-</ul>
+    <p>For linar models, the accuracy is the correlation coefficient
+   between the actual and the predicted value of the outcome. For
+   logistic regression models, the accuracy corresponds to the
+   AUC-value, calculated with the <code><a href='https://www.rdocumentation.org/packages/pROC/topics/auc'>auc</a></code>-function.
+   <br /> <br />
+   The accuracy is the mean value of multiple correlation resp.
+   AUC-values, which are either computed with crossvalidation
+   or nonparametric bootstrapping (see argument <code>method</code>).
+   The standard error is the standard deviation of the computed
+   correlation resp. AUC-values.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># R2 for mixed models
+    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>performance_accuracy</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Accuracy of Model Predictions
 #&gt; 
-#&gt; </span><span>  Conditional R2: 0.969
-#&gt;      Marginal R2: 0.658</div><div class='input'>
+#&gt; </span><span>Accuracy: 93.73%
+#&gt;       SE: 4.91%-points
+#&gt;   Method: Correlation between observed and predicted</div><div class='input'>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='fu'>performance_accuracy</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Accuracy of Model Predictions
+#&gt; 
+#&gt; </span><span>Accuracy: 88.00%
+#&gt;       SE: 15.35%-points
+#&gt;   Method: Area under Curve</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -172,8 +189,6 @@
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

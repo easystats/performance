@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nakagawa's R2 for mixed models — r2_nakagawa • performance</title>
+<title>Percentage of Correct Predictions — performance_pcp • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,10 @@
 
 
 
-<meta property="og:title" content="Nakagawa's R2 for mixed models — r2_nakagawa" />
+<meta property="og:title" content="Percentage of Correct Predictions — performance_pcp" />
 
-<meta property="og:description" content="Compute the marginal and conditional r-squared value for
- mixed effects models with complex random effects structures." />
+<meta property="og:description" content="Percentage of correct predictions (PCP) for models
+  with binary outcome." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -107,61 +107,94 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Nakagawa's R2 for mixed models</h1>
+    <h1>Percentage of Correct Predictions</h1>
     
-    <div class="hidden name"><code>r2_nakagawa.Rd</code></div>
+    <div class="hidden name"><code>performance_pcp.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute the marginal and conditional r-squared value for
- mixed effects models with complex random effects structures.</p>
+    <p>Percentage of correct predictions (PCP) for models
+  with binary outcome.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>performance_pcp</span>(<span class='no'>model</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Herron"</span>, <span class='st'>"Gelman-Hill"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A mixed effects model.</p></td>
+      <td><p>Model with binary outcome.</p></td>
+    </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>The level of the confidence interval.</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>Name of the method to calculate the PCP (see 'Details'). May be abbreviated.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with the conditional and marginal R2 values.</p>
+    <p>A list with several elements: the percentage of correct predictions
+  of the full and the null model, their confidence intervals, as well as the
+  chi-squared and p-value from the Likelihood-Ratio-Test between the full and
+  null model.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Marginal and conditional r-squared values for mixed models are calculated
- based on <cite>Nakagawa et al. 2017</cite>. For more details on the computation
- of the variances, see <code><a href='https://www.rdocumentation.org/packages/insight/topics/get_variance'>get_variance</a></code>.
- <br /> <br />
- The marginal r-squared considers only the variance of the fixed effects, while the
- conditional r-squared takes both the fixed and random effects into account.
- The random effect variances are actually the mean random effect variances,
- thus the r-squared value is also appropriate for mixed models with random
- slopes or nested random effects (see <cite>Johnson 2014</cite>).</p>
+    <p><code>method = "Gelman-Hill"</code> computes the PCP based on the
+  proposal from <cite>Gelman &amp; Hill 2017, 99</cite>, which is defined as the
+  proportion of cases for which the deterministic prediction is wrong,
+  i.e. the proportion where the predicted probability is above 0.5,
+  although y=0 (and vice versa) (see also <cite>Herron 1999, 90</cite>).
+  <br /> <br />
+  <code>method = "Herron"</code> computes a modified version of the PCP
+  (<cite>Herron 1999, 90-92</cite>), which is the sum of predicted probabilities,
+  where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
+  by the number of observations. This approach is said to be more accurate.
+  <br /> <br />
+  The PCP ranges from 0 to 1, where values closer to 1 mean that the model
+  predicts the outcome better than models with an PCP closer to 0. In general,
+  the PCP should be above 0.5 (i.e. 50%), the closer to one, the better.
+  Furthermore, the PCP of the full model should be considerably above
+  the null model's PCP.
+  <br /> <br />
+  The likelihood-ratio test indicates whether the model has a significantly
+  better fit than the null-model (in such cases, p &lt; 0.05).</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <ul>
-<li><p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. doi: <a href='https://doi.org/10.1111/2041-210X.12225'>10.1111/2041-210X.12225</a></p></li>
-<li><p>Nakagawa, S., &amp; Schielzeth, H. (2013). A general and simple method for obtaining R2 from generalized linear mixed-effects models. Methods in Ecology and Evolution, 4(2), 133–142. doi: <a href='https://doi.org/10.1111/j.2041-210x.2012.00261.x'>10.1111/j.2041-210x.2012.00261.x</a></p></li>
-<li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. doi: <a href='https://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
-</ul>
+    <p>Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
+ Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># R2 for mixed models
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='no'>vs</span> ~ <span class='no'>hp</span> + <span class='no'>wt</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>performance_pcp</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Percentage of Correct Predictions from Logistic Regression Model
 #&gt; 
-#&gt; </span><span>  Conditional R2: 0.969
-#&gt;      Marginal R2: 0.658</div><div class='input'>
+#&gt; </span><span>  Full model: 83.75% [70.96% - 96.53%]
+#&gt;   Null model: 50.78% [33.46% - 68.10%]
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; # Likelihood-Ratio-Test
+#&gt; 
+#&gt; </span><span>  Chi-squared: 27.751
+#&gt;       p-value:  0.000
+#&gt; </div><div class='input'><span class='fu'>performance_pcp</span>(<span class='no'>m</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"Gelman-Hill"</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Percentage of Correct Predictions from Logistic Regression Model
+#&gt; 
+#&gt; </span><span>  Full model: 87.50% [76.04% - 98.96%]
+#&gt;   Null model: 56.25% [39.06% - 73.44%]
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; # Likelihood-Ratio-Test
+#&gt; 
+#&gt; </span><span>  Chi-squared: 27.751
+#&gt;       p-value:  0.000
+#&gt; </div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

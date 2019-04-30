@@ -39,10 +39,10 @@
 
 <meta property="og:title" content="Model Performance — model_performance" />
 
-<meta property="og:description" content="See the documentation for your object's class: lm,
-glm, mixed models
-and Bayesian models. compare_performance()
-computes indices of model performance for different models." />
+<meta property="og:description" content="See the documentation for your object's class: (generalized) linear models,
+mixed models and Bayesian models.
+compare_performance() computes indices of model performance for
+different models at once and hence allows comparison of indices accros models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -116,10 +116,10 @@ computes indices of model performance for different models." />
 
     <div class="ref-description">
     
-    <p>See the documentation for your object's class: <a href='model_performance.lm.html'>lm</a>,
-<a href='model_performance.lm.html'>glm</a>, <a href='model_performance.merMod.html'>mixed models</a>
-and <a href='model_performance.stanreg.html'>Bayesian models</a>. <code>compare_performance()</code>
-computes indices of model performance for different models.</p>
+    <p>See the documentation for your object's class: <a href='model_performance.lm.html'>(generalized) linear models</a>,
+<a href='model_performance.merMod.html'>mixed models</a> and <a href='model_performance.stanreg.html'>Bayesian models</a>.
+<code>compare_performance()</code> computes indices of model performance for
+different models at once and hence allows comparison of indices accros models.</p>
     
     </div>
 
@@ -166,10 +166,10 @@ See related documentation of object's class for details.</p></td>
 #&gt; 1   m1     glm  31.29788  35.69508 0.8891336        NA          NA 0.4776926
 #&gt; 2   m2      lm 156.01007 161.87301 2.4442021 0.8302274   0.8185189        NA
 #&gt; 3   m3 lmerMod  77.31960  89.36214 0.2787760        NA          NA        NA
-#&gt;     LOGLOSS R2_conditional R2_marginal       ICC
-#&gt; 1 0.3952793             NA          NA        NA
-#&gt; 2        NA             NA          NA        NA
-#&gt; 3        NA      0.9723224   0.0955834 0.9693973</div><div class='input'>
+#&gt;     LOGLOSS       PCP R2_conditional R2_marginal       ICC
+#&gt; 1 0.3952793 0.7429268             NA          NA        NA
+#&gt; 2        NA        NA             NA          NA        NA
+#&gt; 3        NA        NA      0.9723224   0.0955834 0.9693973</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

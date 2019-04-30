@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • performance</title>
+<title>Residual Standard Error for Linear Models — performance_rse • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,9 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Residual Standard Error for Linear Models — performance_rse" />
+
+<meta property="og:description" content="Compute residual standard error of linear models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -104,67 +106,57 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+    <h1>Residual Standard Error for Linear Models</h1>
+    
+    <div class="hidden name"><code>performance_rse.Rd</code></div>
     </div>
 
-    <div id="performance-011" class="section level1">
-<h1 class="page-header">
-<a href="#performance-011" class="anchor"></a>performance 0.1.1<small> Unreleased </small>
-</h1>
-<div id="general" class="section level2">
-<h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
-<ul>
-<li>
-<code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</li>
-<li>
-<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> now works for multivariate response models.</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> now works for more regression models, and also includes the log-loss and percentage of correct predictions as new metric for models with binary outcome.</li>
-</ul>
-</div>
-<div id="new-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
-<ul>
-<li>
-<code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code>, which calculates the predictive accuracy of linear or logistic regression models.</li>
-<li>
-<code><a href="../reference/performance_logloss.html">performance_logloss()</a></code> to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the <code><a href="../reference/performance_rmse.html">rmse()</a></code>.</li>
-<li>
-<code><a href="../reference/performance_pcp.html">performance_pcp()</a></code> to calculate the percentage of correct predictions for models with binary outcome.</li>
-</ul>
-</div>
-<div id="breaking-changes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
-<ul>
-<li>
-<code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.</li>
-<li>
-<code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
-</ul>
-</div>
-<div id="bug-fixes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
-<ul>
-<li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
-</ul>
-</div>
-</div>
-  </div>
+    <div class="ref-description">
+    
+    <p>Compute residual standard error of linear models.</p>
+    
+    </div>
 
+    <pre class="usage"><span class='fu'>performance_rse</span>(<span class='no'>model</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>model</th>
+      <td><p>A model.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Numeric, the residual standard error of <code>model</code>.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The residual standard error is the square root of the residual
+  sum of squares divided by the residual degrees of freedom.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>mtcars</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>hp</span> + <span class='no'>gear</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>performance_rse</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; [1] 3.107785</div><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#performance-011">0.1.1</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
 
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+  </div>
 </div>
 
       <footer>
