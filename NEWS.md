@@ -15,6 +15,7 @@
 ## Breaking changes
 
 * `model_performance.stanreg()` and `model_performance.brmsfit()` now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.
+* `error_rate()` is now integrated in the `performance_pcp()`-function.
 
 ## Bug fixes
 

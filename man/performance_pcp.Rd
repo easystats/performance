@@ -4,31 +4,54 @@
 \alias{performance_pcp}
 \title{Percentage of Correct Predictions}
 \usage{
-performance_pcp(model, ci = 0.95)
+performance_pcp(model, ci = 0.95, method = c("Herron", "Gelman-Hill"))
 }
 \arguments{
 \item{model}{Model with binary outcome.}
 
 \item{ci}{The level of the confidence interval.}
+
+\item{method}{Name of the method to calculate the PCP (see 'Details'). May be abbreviated.}
 }
 \value{
-A data frame with three columns: the percentage of
-  correct predictions and the related lower and upper confidence interval.
+A list with several elements: the percentage of correct predictions
+  of the full and the null model, their confidence intervals, as well as the
+  chi-squared and p-value from the Likelihood-Ratio-Test between the full and
+  null model.
 }
 \description{
 Percentage of correct predictions (PCP) for models
   with binary outcome.
 }
 \details{
-The PCP ranges from 0 to 1, where values closer to 1 mean that
-  the model predicts the outcome better than models with an CPC closer to 0.
+\code{method = "Gelman-Hill"} computes the PCP based on the
+  proposal from \cite{Gelman & Hill 2017, 99}, which is defined as the
+  proportion of cases for which the deterministic prediction is wrong,
+  i.e. the proportion where the predicted probability is above 0.5,
+  although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
+  \cr \cr
+  \code{method = "Herron"} computes a modified version of the PCP
+  (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
+  where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
+  by the number of observations.
+  \cr \cr
+  The PCP ranges from 0 to 1, where values closer to 1 mean that the model
+  predicts the outcome better than models with an PCP closer to 0. In general,
+  the PCP should be above 0.5 (i.e. 50\%), the closer to one, the better.
+  Furthermore, the PCP of the full model should be considerably above
+  the null model's PCP.
+  \cr \cr
+  The likelihood-ratio test indicates whether the model has a significantly
+  better fit than the null-model (in such cases, p < 0.05).
 }
 \examples{
 data(mtcars)
 m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 performance_pcp(m)
+performance_pcp(m, method = "Gelman-Hill")
 
 }
 \references{
 Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
+Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
 }

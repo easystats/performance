@@ -12,18 +12,17 @@ print.item_difficulty <- function(x, ...) {
 }
 
 
-
 #' @importFrom insight print_color
 #' @export
-print.error_rate <- function(x, digits = 2, ...) {
-  insight::print_color("# Error Rate of Logistic Regression Model\n\n", "blue")
-  cat(sprintf("  Full model: %.2f%%\n", 100 * x$error.model))
-  cat(sprintf("  Null model: %.2f%%\n", 100 * x$error.null))
+print.performance_pcp <- function(x, digits = 2, ...) {
+  insight::print_color("# Percentage of Correct Predictions from Logistic Regression Model\n\n", "blue")
+  cat(sprintf("  Full model: %.2f%% [%.2f%% - %.2f%%]\n", 100 * x$pcp_model, 100 * x$model_ci_low, 100 * x$model_ci_high))
+  cat(sprintf("  Null model: %.2f%% [%.2f%% - %.2f%%]\n", 100 * x$pcp_m0, 100 * x$null_ci_low, 100 * x$null_ci_high))
 
   insight::print_color("\n# Likelihood-Ratio-Test\n\n", "blue")
 
-  v1 <- sprintf("%.3f", x$lrt.chisq)
-  v2 <- sprintf("%.3f", x$lrt.p)
+  v1 <- sprintf("%.3f", x$lrt_chisq)
+  v2 <- sprintf("%.3f", x$lrt_p)
 
   space <- max(nchar(c(v1, v2)))
 
