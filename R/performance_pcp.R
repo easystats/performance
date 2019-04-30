@@ -14,7 +14,7 @@
 #'   null model.
 #'
 #' @details \code{method = "Gelman-Hill"} computes the PCP based on the
-#'   proposal from \cite{Gelman & Hill 2017, 99}, which is defined as the
+#'   proposal from \cite{Gelman and Hill 2017, 99}, which is defined as the
 #'   proportion of cases for which the deterministic prediction is wrong,
 #'   i.e. the proportion where the predicted probability is above 0.5,
 #'   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
@@ -34,17 +34,16 @@
 #'   better fit than the null-model (in such cases, p < 0.05).
 #'
 #'
+#' @references \itemize {
+#'   \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
+#'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
+#' }
+#'
 #' @examples
 #' data(mtcars)
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 #' performance_pcp(m)
 #' performance_pcp(m, method = "Gelman-Hill")
-#'
-#' @references
-#' \itemize {
-#' \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
-#' \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
-#' }
 #'
 #' @importFrom stats predict qnorm binomial predict.glm pchisq logLik weights as.formula glm
 #' @importFrom insight get_response n_obs model_info find_response get_data

@@ -25,7 +25,7 @@ Percentage of correct predictions (PCP) for models
 }
 \details{
 \code{method = "Gelman-Hill"} computes the PCP based on the
-  proposal from \cite{Gelman & Hill 2017, 99}, which is defined as the
+  proposal from \cite{Gelman and Hill 2017, 99}, which is defined as the
   proportion of cases for which the deterministic prediction is wrong,
   i.e. the proportion where the predicted probability is above 0.5,
   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
@@ -53,7 +53,7 @@ performance_pcp(m, method = "Gelman-Hill")
 }
 \references{
 \itemize {
-\item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
-\item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
+  \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
+  \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
 }
 }
