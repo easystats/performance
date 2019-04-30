@@ -54,7 +54,7 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   }
 
   if (("PCP" %in% metrics) && mi$is_binomial) {
-    out$PCP <- performance_pcp(model)$pcp
+    out$PCP <- performance_pcp(model)$pcp_model
   }
 
   # TODO: What with sigma and deviance?
