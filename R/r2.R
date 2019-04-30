@@ -55,7 +55,7 @@ r2.betareg <- function(model, ...) {
 
 #' @export
 r2.brmsfit <- function(model, ...) {
-  r2_bayes(model)
+  r2_bayes(model, ...)
 }
 
 
@@ -276,7 +276,7 @@ r2.polr <- function(model, ...) {
 
 #' @export
 r2.stanreg <- function(model, ...) {
-  r2_bayes(model)
+  r2_bayes(model, ...)
 }
 
 

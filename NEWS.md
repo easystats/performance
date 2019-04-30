@@ -12,6 +12,10 @@
 * `performance_logloss()` to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the `rmse()`.
 * `performance_pcp()` to calculate the percentage of correct predictions for models with binary outcome.
 
+## Breaking changes
+
+* `model_performance.stanreg()` and `model_performance.brmsfit()` now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.
+
 ## Bug fixes
 
 * Renamed `r2_coxnell()` to `r2_coxsnell()`.
