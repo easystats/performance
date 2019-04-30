@@ -4,7 +4,7 @@
 \alias{performance_pcp}
 \title{Percentage of Correct Predictions}
 \usage{
-performance_pcp(model, ci = 0.95, method = c("Herron", "Gelman-Hill"))
+performance_pcp(model, ci = 0.95, method = c("herron", "gelman_hill"))
 }
 \arguments{
 \item{model}{Model with binary outcome.}
@@ -24,13 +24,13 @@ Percentage of correct predictions (PCP) for models
   with binary outcome.
 }
 \details{
-\code{method = "Gelman-Hill"} computes the PCP based on the
+\code{method = "gelman_hill"} computes the PCP based on the
   proposal from \cite{Gelman and Hill 2017, 99}, which is defined as the
   proportion of cases for which the deterministic prediction is wrong,
   i.e. the proportion where the predicted probability is above 0.5,
   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
   \cr \cr
-  \code{method = "Herron"} computes a modified version of the PCP
+  \code{method = "herron"} computes a modified version of the PCP
   (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
   where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
   by the number of observations. This approach is said to be more accurate.
@@ -48,7 +48,7 @@ Percentage of correct predictions (PCP) for models
 data(mtcars)
 m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 performance_pcp(m)
-performance_pcp(m, method = "Gelman-Hill")
+performance_pcp(m, method = "gelman_hill")
 
 }
 \references{

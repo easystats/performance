@@ -13,13 +13,13 @@
 #'   chi-squared and p-value from the Likelihood-Ratio-Test between the full and
 #'   null model.
 #'
-#' @details \code{method = "Gelman-Hill"} computes the PCP based on the
+#' @details \code{method = "gelman_hill"} computes the PCP based on the
 #'   proposal from \cite{Gelman and Hill 2017, 99}, which is defined as the
 #'   proportion of cases for which the deterministic prediction is wrong,
 #'   i.e. the proportion where the predicted probability is above 0.5,
 #'   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
 #'   \cr \cr
-#'   \code{method = "Herron"} computes a modified version of the PCP
+#'   \code{method = "herron"} computes a modified version of the PCP
 #'   (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
 #'   where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
 #'   by the number of observations. This approach is said to be more accurate.
@@ -43,12 +43,12 @@
 #' data(mtcars)
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 #' performance_pcp(m)
-#' performance_pcp(m, method = "Gelman-Hill")
+#' performance_pcp(m, method = "gelman_hill")
 #'
 #' @importFrom stats predict qnorm binomial predict.glm pchisq logLik weights as.formula glm
 #' @importFrom insight get_response n_obs model_info find_response get_data
 #' @export
-performance_pcp <- function(model, ci = 0.95, method = c("Herron", "Gelman-Hill")) {
+performance_pcp <- function(model, ci = 0.95, method = c("herron", "gelman_hill")) {
   method <- match.arg(method)
   mi <- insight::model_info(model)
 
@@ -63,7 +63,7 @@ performance_pcp <- function(model, ci = 0.95, method = c("Herron", "Gelman-Hill"
     weights = stats::weights(model)
   ))
 
-  if (method == "Herron")
+  if (method == "herron")
     .pcp_herron(model, m0, ci)
   else
     .pcp_gelman_hill(model, m0, ci)
