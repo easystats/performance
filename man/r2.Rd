@@ -36,7 +36,7 @@ r2(model)
 
 }
 \seealso{
-\code{link{r2_bayes}}, \code{link{r2_coxsnell}}, \code{link{r2_kl}},
-  \code{link{r2_loo}}, \code{link{r2_mcfadden}}, \code{link{r2_nagelkerke}},
-  \code{link{r2_nakagawa}} and \code{link{r2_tjur}}.
+\code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kl}},
+  \code{\link{r2_loo}}, \code{\link{r2_mcfadden}}, \code{\link{r2_nagelkerke}},
+  \code{\link{r2_nakagawa}} and \code{\link{r2_tjur}}.
 }

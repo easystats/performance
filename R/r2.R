@@ -17,9 +17,9 @@
 #'   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
 #' }
 #'
-#' @seealso \code{link{r2_bayes}}, \code{link{r2_coxsnell}}, \code{link{r2_kl}},
-#'   \code{link{r2_loo}}, \code{link{r2_mcfadden}}, \code{link{r2_nagelkerke}},
-#'   \code{link{r2_nakagawa}} and \code{link{r2_tjur}}.
+#' @seealso \code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kl}},
+#'   \code{\link{r2_loo}}, \code{\link{r2_mcfadden}}, \code{\link{r2_nagelkerke}},
+#'   \code{\link{r2_nakagawa}} and \code{\link{r2_tjur}}.
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
