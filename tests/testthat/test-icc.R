@@ -33,47 +33,43 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     m3 <- insight::download_model("brms_mixed_1")
 
     test_that("icc", {
+      set.seed(123)
       expect_equal(
         icc(m3),
         structure(
           list(
-            ICC_decomposed = 0.388408542148012,
-            ICC_CI = c(`97.5%` = -0.544516876682987,
-                       `2.5%` = 0.775857482706126)
+            ICC_decomposed = 0.390068271523025,
+            ICC_CI = c(`97.5%` = -0.5338626026371, `2.5%` = 0.783366175564956)
           ),
           class = "icc_decomposed",
-          var_rand_intercept = 22.8685704053387,
-          var_residual = 14.25791154994,
-          var_total = 37.5757907428253,
+          var_rand_intercept = 22.7916688806349,
+          var_residual = 14.4878967615321,
+          var_total = 37.662418617231,
           ci.var_rand_intercept = structure(
             list(
               CI = 95,
-              CI_low = 8.57462826731456,
-              CI_high = 57.4620121695706
+              CI_low = 8.44552116382023,
+              CI_high = 58.0512742208554
             ),
-            row.names = c(NA,
-                          -1L),
-            class = "data.frame"
+            row.names = c(NA, -1L),
+            class = c("ci", "data.frame")
           ),
           ci.var_residual = structure(
             list(
-              CI = 95,
-              CI_low = -18.4313656698792,
-              CI_high = 35.850113863994
+              CI = 95, CI_low = -18.1777017649845,
+              CI_high = 35.5471388201185
             ),
-            row.names = c(NA,
-                          -1L),
-            class = "data.frame"
+            row.names = c(NA, -1L),
+            class = c("ci", "data.frame")
           ),
           ci.var_total = structure(
             list(
               CI = 95,
-              CI_low = 25.1969325228524,
-              CI_high = 57.5279317022377
+              CI_low = 25.1996582781989,
+              CI_high = 56.4463902022863
             ),
-            row.names = c(NA,
-                          -1L),
-            class = "data.frame"
+            row.names = c(NA, -1L),
+            class = c("ci", "data.frame")
           ),
           ci = 0.95,
           ranef = "cyl"
