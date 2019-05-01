@@ -22,11 +22,11 @@
 #' @export
 r2_loo <- function(model) {
   if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("Package `rstantools` required. Please install.", call. = FALSE)
+    stop("Package `rstantools` needed for this function to work. Please install it.", call. = FALSE)
   }
 
   if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` required. Please install.", call. = FALSE)
+    stop("Package `loo` needed for this function to work. Please install it.", call. = FALSE)
   }
 
   y <- insight::get_response(model)

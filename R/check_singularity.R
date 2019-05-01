@@ -69,7 +69,7 @@ check_singularity <- function(x, tolerance = 1e-5, ...) {
 #' @export
 check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
   if (!requireNamespace("lme4", quietly = TRUE))
-    stop("Please install and load package `lme4` first.")
+    stop("Package `lme4` needed for this function to work. Please install it.")
 
   theta <- lme4::getME(x, "theta")
   # diagonal elements are identifiable because they are fitted
@@ -81,7 +81,7 @@ check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
 #' @export
 check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
   if (!requireNamespace("lme4", quietly = TRUE))
-    stop("Please install and load package `lme4` first.")
+    stop("Package `lme4` needed for this function to work. Please install it.")
 
   vc <- .collapse_cond(lme4::VarCorr(x))
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
@@ -96,7 +96,7 @@ check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
 #' @export
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
   if (!requireNamespace("nlme", quietly = TRUE))
-    stop("Please install and load package `nlme` first.")
+    stop("Package `nlme` needed for this function to work. Please install it.")
 
   any(abs(stats::na.omit(as.numeric(diag(nlme::getVarCov(x)))) < tolerance))
 }

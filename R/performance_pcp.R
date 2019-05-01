@@ -6,21 +6,22 @@
 #'
 #' @param model Model with binary outcome.
 #' @param ci The level of the confidence interval.
-#' @param method Name of the method to calculate the PCP (see 'Details'). May be abbreviated.
+#' @param method Name of the method to calculate the PCP (see 'Details').
+#'   Default is \code{"Herron"}. May be abbreviated.
 #'
 #' @return A list with several elements: the percentage of correct predictions
 #'   of the full and the null model, their confidence intervals, as well as the
 #'   chi-squared and p-value from the Likelihood-Ratio-Test between the full and
 #'   null model.
 #'
-#' @details \code{method = "gelman_hill"} computes the PCP based on the
-#'   proposal from \cite{Gelman and Hill 2017, 99}, which is defined as the
-#'   proportion of cases for which the deterministic prediction is wrong,
-#'   i.e. the proportion where the predicted probability is above 0.5,
+#' @details \code{method = "Gelman-Hill"} (or \code{"gelman_hill"}) computes the
+#'   PCP based on the proposal from \cite{Gelman and Hill 2017, 99}, which is
+#'   defined as the proportion of cases for which the deterministic prediction
+#'   is wrong, i.e. the proportion where the predicted probability is above 0.5,
 #'   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
 #'   \cr \cr
-#'   \code{method = "herron"} computes a modified version of the PCP
-#'   (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
+#'   \code{method = "Herron"} (or \code{"herron"}) computes a modified version
+#'   of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
 #'   where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
 #'   by the number of observations. This approach is said to be more accurate.
 #'   \cr \cr
@@ -43,13 +44,13 @@
 #' data(mtcars)
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 #' performance_pcp(m)
-#' performance_pcp(m, method = "gelman_hill")
+#' performance_pcp(m, method = "Gelman-Hill")
 #'
 #' @importFrom stats predict qnorm binomial predict.glm pchisq logLik weights as.formula glm
 #' @importFrom insight get_response n_obs model_info find_response get_data
 #' @export
-performance_pcp <- function(model, ci = 0.95, method = c("herron", "gelman_hill")) {
-  method <- match.arg(method)
+performance_pcp <- function(model, ci = 0.95, method = "Herron") {
+  method <- match.arg(method, choices = c("Herron", "Gelman-Hill", "herron", "gelman_hill"))
   mi <- insight::model_info(model)
 
   if (!mi$is_binomial) {
@@ -63,7 +64,7 @@ performance_pcp <- function(model, ci = 0.95, method = c("herron", "gelman_hill"
     weights = stats::weights(model)
   ))
 
-  if (method == "herron")
+  if (method %in% c("Herron", "herron"))
     .pcp_herron(model, m0, ci)
   else
     .pcp_gelman_hill(model, m0, ci)

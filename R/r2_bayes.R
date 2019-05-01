@@ -71,7 +71,7 @@ r2_bayes <- function(model, robust = TRUE) {
 #' @keywords internal
 .r2_posterior <- function(model) {
   if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("This function needs `rstantools` to be installed.")
+    stop("Package `rstantools` needed for this function to work. Please install it.")
   }
 
   algorithm <- insight::find_algorithm(model)

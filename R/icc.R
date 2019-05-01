@@ -186,7 +186,7 @@ icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
   }
 
   if (!requireNamespace("brms", quietly = TRUE)) {
-    stop("Please install and load package `brms` first.", call. = FALSE)
+    stop("Package `brms` needed for this function to work. Please install it.", call. = FALSE)
   }
 
   PPD <- brms::posterior_predict(model, re.form = re.form, summary = FALSE)

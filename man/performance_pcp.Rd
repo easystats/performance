@@ -4,14 +4,15 @@
 \alias{performance_pcp}
 \title{Percentage of Correct Predictions}
 \usage{
-performance_pcp(model, ci = 0.95, method = c("herron", "gelman_hill"))
+performance_pcp(model, ci = 0.95, method = "Herron")
 }
 \arguments{
 \item{model}{Model with binary outcome.}
 
 \item{ci}{The level of the confidence interval.}
 
-\item{method}{Name of the method to calculate the PCP (see 'Details'). May be abbreviated.}
+\item{method}{Name of the method to calculate the PCP (see 'Details').
+Default is \code{"Herron"}. May be abbreviated.}
 }
 \value{
 A list with several elements: the percentage of correct predictions
@@ -24,14 +25,14 @@ Percentage of correct predictions (PCP) for models
   with binary outcome.
 }
 \details{
-\code{method = "gelman_hill"} computes the PCP based on the
-  proposal from \cite{Gelman and Hill 2017, 99}, which is defined as the
-  proportion of cases for which the deterministic prediction is wrong,
-  i.e. the proportion where the predicted probability is above 0.5,
+\code{method = "Gelman-Hill"} (or \code{"gelman_hill"}) computes the
+  PCP based on the proposal from \cite{Gelman and Hill 2017, 99}, which is
+  defined as the proportion of cases for which the deterministic prediction
+  is wrong, i.e. the proportion where the predicted probability is above 0.5,
   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
   \cr \cr
-  \code{method = "herron"} computes a modified version of the PCP
-  (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
+  \code{method = "Herron"} (or \code{"herron"}) computes a modified version
+  of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
   where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
   by the number of observations. This approach is said to be more accurate.
   \cr \cr
@@ -48,7 +49,7 @@ Percentage of correct predictions (PCP) for models
 data(mtcars)
 m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 performance_pcp(m)
-performance_pcp(m, method = "gelman_hill")
+performance_pcp(m, method = "Gelman-Hill")
 
 }
 \references{

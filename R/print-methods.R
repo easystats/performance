@@ -303,15 +303,15 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 #' @export
 print.binned_residuals <- function(x, ...) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("Package `ggplot2` required.", call. = F)
+    stop("Package `ggplot2` needed for this function to work. Please install it.", call. = F)
   }
 
   if (!requireNamespace("graphics", quietly = TRUE)) {
-    stop("Package `graphics` required.", call. = F)
+    stop("Package `graphics` needed for this function to work. Please install it.", call. = F)
   }
 
   if (!requireNamespace("scales", quietly = TRUE)) {
-    stop("Package `scales` required.", call. = F)
+    stop("Package `scales` needed for this function to work. Please install it.", call. = F)
   }
 
   x$se.lo <- -x$se
