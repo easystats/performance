@@ -7,10 +7,11 @@
 r2_mcfadden(model)
 }
 \arguments{
-\item{model}{Multinomial Logit (\code{mlogit}) Model.}
+\item{model}{Generalized linear or multinomial logit (\code{mlogit}) model.}
 }
 \value{
-A named vector with the R2 value.
+For most models, a list with McFadden's R2 and adjusted McFadden's
+  R2 value. For some models, only McFadden's R2 is available.
 }
 \description{
 Calculates McFadden's pseudo R2.

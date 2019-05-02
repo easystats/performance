@@ -3,9 +3,10 @@
 #'
 #' @description Calculates McFadden's pseudo R2.
 #'
-#' @param model Multinomial Logit (\code{mlogit}) Model.
+#' @param model Generalized linear or multinomial logit (\code{mlogit}) model.
 #'
-#' @return A named vector with the R2 value.
+#' @return For most models, a list with McFadden's R2 and adjusted McFadden's
+#'   R2 value. For some models, only McFadden's R2 is available.
 #'
 #' @references
 #' \itemize{
@@ -21,6 +22,7 @@
 #' model <- mlogit(mode ~ price + catch, data = Fish)
 #' r2_mcfadden(model)
 #'
+#' @importFrom insight find_parameters
 #' @importFrom stats logLik update
 #' @export
 r2_mcfadden <- function(model) {
@@ -28,19 +30,26 @@ r2_mcfadden <- function(model) {
 }
 
 
-.r2_mcfadden <- function(model, l_base) {
+.r2_mcfadden <- function(model, l_null) {
   l_full <- stats::logLik(model)
-  mcfadden <- 1 - (as.vector(l_full) / as.vector(l_base))
+  k <- length(insight::find_parameters(model))
+  mcfadden <- 1 - (as.vector(l_full) / as.vector(l_null))
+  mcfadden_adjusted <- 1 - ((as.vector(l_full) - k) / as.vector(l_null))
 
-  names(mcfadden) <- "McFadden's R2"
-  mcfadden
+  out <- list(
+    R2 = c(`McFadden's R2` = mcfadden),
+    R2_adjusted = c(`adjusted McFadden's R2` = mcfadden_adjusted)
+  )
+
+  attr(out, "model_type") <- "Generalized Linear"
+  structure(class = "r2_generic", out)
 }
 
 
 #' @export
 r2_mcfadden.glm <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_mcfadden(model, l_base)
+  l_null <- stats::logLik(stats::update(model, ~1))
+  .r2_mcfadden(model, l_null)
 }
 
 
@@ -50,36 +59,36 @@ r2_mcfadden.vglm <- function(model) {
     stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
   }
 
-  l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_mcfadden(model, l_base)
+  l_null <- stats::logLik(stats::update(model, ~1))
+  .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
 r2_mcfadden.clm <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_mcfadden(model, l_base)
+  l_null <- stats::logLik(stats::update(model, ~1))
+  .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
 r2_mcfadden.clm2 <- function(model) {
-  l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
-  .r2_mcfadden(model, l_base)
+  l_null <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
+  .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
 r2_mcfadden.polr <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_mcfadden(model, l_base)
+  l_null <- stats::logLik(stats::update(model, ~1))
+  .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
 r2_mcfadden.multinom <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
-  .r2_mcfadden(model, l_base)
+  l_null <- stats::logLik(stats::update(model, ~1, trace = FALSE))
+  .r2_mcfadden(model, l_null)
 }
 
 

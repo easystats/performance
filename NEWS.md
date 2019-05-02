@@ -11,6 +11,7 @@
 * `performance_accuracy()`, which calculates the predictive accuracy of linear or logistic regression models.
 * `performance_logloss()` to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the `rmse()`.
 * `performance_pcp()` to calculate the percentage of correct predictions for models with binary outcome.
+* `r2_mckelvey()` to compute McKelvey and Zavoinas R2 value.
 
 ## Breaking changes
 
