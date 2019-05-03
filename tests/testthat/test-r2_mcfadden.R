@@ -2,10 +2,19 @@ if (require("testthat") && require("performance") && require("MASS")) {
   context("r2_mcfadden")
 
   options(contrasts = c("contr.treatment", "contr.poly"))
-  data(housing)
+  data(housing, package = "MASS")
   model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 
   test_that("r2_mcfadden", {
-    expect_equal(r2_mcfadden(model), c(`McFadden's R2` = 0.0465152150591893), tolerance = 1e-3)
+    expect_equal(
+      r2_mcfadden(model),
+      structure(
+        list(
+          R2 = c(`McFadden's R2` = 0.0465152150591893),
+          R2_adjusted = c(`adjusted McFadden's R2` = 0.0459671013089695)
+        ),
+        model_type = "Generalized Linear", class = "r2_generic"
+      ),
+      tolerance = 1e-3)
   })
 }
