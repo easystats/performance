@@ -47,7 +47,7 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
   }
   if ("R2" %in% c(metrics)) {
     r2 <- .r2_posterior(model)
-    if (!is.null(r2) && !is.na(r2)) {
+    if (!is.null(r2) && !all(is.na(r2))) {
       out <- c(out, .summarize_r2_bayes(r2$R2_Bayes, name = "R2"))
       if ("R2_Bayes_marginal" %in% names(r2)) {
         out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_marginal, name = "R2_marginal"))
