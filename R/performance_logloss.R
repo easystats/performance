@@ -20,7 +20,7 @@
 #' performance_logloss(m)
 #'
 #' @importFrom stats fitted
-#' @importFrom insight get_response
+#' @importFrom insight get_response print_color
 #' @export
 performance_logloss <- function(model, ...) {
   UseMethod("performance_logloss")
@@ -30,7 +30,14 @@ performance_logloss <- function(model, ...) {
 #' @export
 performance_logloss.default <- function(model, ...) {
   resp <- .factor_to_numeric(insight::get_response(model))
-  mean(log(1 - abs(resp - stats::fitted(model))) * -1)
+  ll <- suppressWarnings(mean(log(1 - abs(resp - stats::fitted(model))) * -1))
+
+  if (is.na(ll)) {
+    insight::print_color("Can't calculate log-loss.\n", "red")
+    return(NA)
+  }
+
+  ll
 }
 
 

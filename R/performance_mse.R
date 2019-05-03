@@ -16,10 +16,24 @@
 #' m <- lm(mpg ~ hp + gear, data = mtcars)
 #' performance_mse(m)
 #'
+#' @importFrom insight print_color
 #' @importFrom stats residuals
 #' @export
 performance_mse <- function(model) {
-  mean(stats::residuals(model)^2, na.rm = T)
+  res <- tryCatch({
+    stats::residuals(model)
+  },
+  error = function(e) {
+    NULL
+  }
+  )
+
+  if (is.null(res) || is.na(res)) {
+    insight::print_color("Can't extract residuals from model.\n", "red")
+    return(NA)
+  }
+
+  mean(res^2, na.rm = T)
 }
 
 

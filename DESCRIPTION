@@ -30,7 +30,9 @@ Imports:
 	insight,
 	bayestestR
 Suggests:
+	AER,
 	brms,
+	censReg,
 	covr,
 	graphics,
 	glmmTMB,
@@ -41,6 +43,7 @@ Suggests:
 	MASS,
 	mlogit,
 	nlme,
+	ordinal,
 	pROC,
 	psych,
 	rmarkdown,

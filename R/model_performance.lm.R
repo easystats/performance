@@ -50,10 +50,11 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     out$RMSE <- performance_rmse(model)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$LOGLOSS <- performance_logloss(model)
+    .logloss <- performance_logloss(model)
+    if (!is.na(.logloss)) out$LOGLOSS <- .logloss
   }
 
-  if (("PCP" %in% metrics) && mi$is_binomial) {
+  if (("PCP" %in% metrics) && mi$is_binomial && !mi$is_ordinal) {
     out$PCP <- performance_pcp(model)$pcp_model
   }
 
@@ -88,6 +89,9 @@ model_performance.felm <- model_performance.lm
 
 #' @export
 model_performance.iv_robust <- model_performance.lm
+
+#' @export
+model_performance.ivreg <- model_performance.lm
 
 #' @export
 model_performance.mlogit <- model_performance.lm
