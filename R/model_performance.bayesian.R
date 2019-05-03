@@ -47,16 +47,17 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
   }
   if ("R2" %in% c(metrics)) {
     r2 <- .r2_posterior(model)
-    out <- c(out, .summarize_r2_bayes(r2$R2_Bayes, name = "R2"))
-
-    if ("R2_Bayes_marginal" %in% names(r2)) {
-      out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_marginal, name = "R2_marginal"))
+    if (!is.null(r2) && !is.na(r2)) {
+      out <- c(out, .summarize_r2_bayes(r2$R2_Bayes, name = "R2"))
+      if ("R2_Bayes_marginal" %in% names(r2)) {
+        out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_marginal, name = "R2_marginal"))
+      }
     }
   }
   if ("R2_adjusted" %in% c(metrics) && mi$is_linear) {
     out$R2_LOO_adjusted <- r2_loo(model)
   }
-  if ("RMSE" %in% c(metrics)) {
+  if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_categorical) {
     out$RMSE <- performance_rmse(model)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {

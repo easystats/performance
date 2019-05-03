@@ -50,7 +50,7 @@ binned_residuals <- function(model, term = NULL, n_nins = NULL) {
   else
     pred <- mf[[term]]
 
-  y <- recode_to_zero(as.numeric(as.character(insight::get_response(model)))) - fv
+  y <- .recode_to_zero(insight::get_response(model)) - fv
 
   if (is.null(n_nins)) n_nins <- round(sqrt(length(pred)))
 

@@ -31,14 +31,31 @@
 
 
 #' @keywords internal
-recode_to_zero <- function(x) {
+.recode_to_zero <- function(x) {
   # check if factor
-  if (is.factor(x)) {
+  if (is.factor(x) || is.character(x)) {
     # try to convert to numeric
-    x <- as.numeric(as.character(x))
+    x <- .factor_to_numeric(x)
   }
 
   # retrieve lowest category
   minval <- min(x, na.rm = TRUE)
   sapply(x, function(y) y - minval)
+}
+
+
+#' @importFrom stats na.omit
+#' @keywords internal
+.factor_to_numeric <- function(x) {
+  if (is.numeric(x))
+    return(x)
+
+  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+    if (is.character(x)) {
+      x <- as.factor(x)
+    }
+    levels(x) <- 1:nlevels(x)
+  }
+
+  as.numeric(as.character(x))
 }

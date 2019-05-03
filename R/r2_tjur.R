@@ -26,7 +26,7 @@ r2_tjur <- function(model) {
     stop("`model` must be binomial.")
   }
 
-  y <- insight::get_response(model)
+  y <- .recode_to_zero(insight::get_response(model))
   pred <- stats::predict(model, type = "response", re.form = NULL)
 
   # delete pred for cases with missing residuals

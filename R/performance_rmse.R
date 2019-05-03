@@ -38,7 +38,7 @@ performance_rmse <- function(model, normalized = FALSE) {
   # if normalized, divide by range of response
   if (normalized) {
     # get response
-    resp <- insight::get_response(model)
+    resp <- .factor_to_numeric(insight::get_response(model))
     # cpmpute rmse, normalized
     rmse_val <- rmse_val / (max(resp, na.rm = T) - min(resp, na.rm = T))
   }

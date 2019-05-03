@@ -72,8 +72,8 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron") {
 
 
 .pcp_herron <- function(model, m0, ci) {
-  y_full <- insight::get_response(model)
-  y_null <- insight::get_response(m0)
+  y_full <- .recode_to_zero(insight::get_response(model))
+  y_null <- .recode_to_zero(insight::get_response(m0))
 
   n_full <- insight::n_obs(model)
   n_null <- insight::n_obs(m0)
@@ -109,8 +109,8 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron") {
 
 
 .pcp_gelman_hill <- function(model, m0, ci) {
-  y_full <- insight::get_response(model)
-  y_null <- insight::get_response(m0)
+  y_full <- .recode_to_zero(insight::get_response(model))
+  y_null <- .recode_to_zero(insight::get_response(m0))
 
   n_full <- insight::n_obs(model)
   n_null <- insight::n_obs(m0)

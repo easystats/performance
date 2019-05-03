@@ -29,12 +29,14 @@ performance_logloss <- function(model, ...) {
 
 #' @export
 performance_logloss.default <- function(model, ...) {
-  mean(log(1 - abs(insight::get_response(model) - stats::fitted(model))) * -1)
+  resp <- .factor_to_numeric(insight::get_response(model))
+  mean(log(1 - abs(resp - stats::fitted(model))) * -1)
 }
 
 
 #' @export
 performance_logloss.brmsfit <- function(model, ...) {
   yhat <- stats::fitted(object = model, summary = TRUE, ...)[, "Estimate"]
-  mean(log(1 - abs(insight::get_response(model) - yhat)) * -1)
+  resp <- .factor_to_numeric(insight::get_response(model))
+  mean(log(1 - abs(resp - yhat)) * -1)
 }

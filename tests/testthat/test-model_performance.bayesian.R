@@ -46,6 +46,11 @@ if (require("testthat") && require("performance")) {
       expect_equal(perf$R2, 0.9541836, tolerance = 0.01)
       expect_equal(perf$R2_LOO_adjusted, 0.9524251, tolerance = 0.01)
       expect_equal(perf$ELPD, -70.23604, tolerance = 0.01)
+
+      model <- insight::download_model("brms_ordinal_1")
+      perf <- model_performance(model)
+      expect_null(perf$R2)
+      expect_equal(perf$ELPD, -12.77548, tolerance = 0.01)
     })
 
   }
