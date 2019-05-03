@@ -1,8 +1,10 @@
 #' @title Model Performance
 #' @name model_performance
 #'
-#' @description See the documentation for your object's class: \link[=model_performance.lm]{(generalized) linear models},
-#' \link[=model_performance.merMod]{mixed models} and \link[=model_performance.stanreg]{Bayesian models}.
+#' @description See the documentation for your object's class:
+#' \link[=model_performance.merMod]{mixed models},
+#' \link[=model_performance.stanreg]{Bayesian models} and
+#' \link[=model_performance.lm]{all other models}.
 #' \code{compare_performance()} computes indices of model performance for
 #' different models at once and hence allows comparison of indices accros models.
 #'
