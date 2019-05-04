@@ -9,7 +9,7 @@
 \arguments{
 \item{model}{Object of class \code{stanreg} or \code{brmsfit}.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "R2", "R2_adj", "RMSE", "LOGLOSS")}).}
+\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS")}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }
