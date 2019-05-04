@@ -5,9 +5,7 @@
 #'  (vpc) - for mixed effects models. The ICC is calculated for \code{merMod}
 #'  (\pkg{lme4}), \code{glmmTMB} (\pkg{glmmTMB}), \code{MixMod} (\pkg{GLMMadpative}),
 #'  \code{lme} (\pkg{nlme}), \code{mixed} (\pkg{afex}), and \code{stanreg}
-#'  (\pkg{rstanarm}) objects and can be interpreted as \dQuote{the proportion
-#'  of the variance explained by the grouping structure in the population}
-#'  \cite{(Hox 2010: 15)}. For models fitted with the \pkg{brms}-package,
+#'  (\pkg{rstanarm}) objects. For models fitted with the \pkg{brms}-package,
 #'  a variance decomposition based on the posterior predictive distribution
 #'  is calculated (see 'Details').
 #'
@@ -40,6 +38,12 @@
 #'  \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}}, by
 #'  the total variance, i.e. the sum of the random effect variance and the
 #'  residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
+#'  The ICC can be interpreted as \dQuote{the proportion of the variance explained
+#'  by the grouping structure in the population}, or in other word, the ICC
+#'  \dQuote{can also be interpreted as the expected correlation between two
+#'  randomly drawn units that are in the same group} \cite{(Hox 2010: 15)}.
+#'  Note that the second part of the definition might not apply to mixed models
+#'  with more complex random effects strucures.
 #'  \cr \cr
 #'  \strong{Adjusted and conditional ICC}
 #'  \cr \cr
