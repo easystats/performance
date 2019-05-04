@@ -28,7 +28,7 @@ performance_mse <- function(model) {
   }
   )
 
-  if (is.null(res) || is.na(res)) {
+  if (is.null(res) || all(is.na(res))) {
     insight::print_color("Can't extract residuals from model.\n", "red")
     return(NA)
   }
