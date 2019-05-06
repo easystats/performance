@@ -1,9 +1,7 @@
-if (require("testthat") && require("performance") && require("insight")) {
+if (require("testthat") && require("performance") && require("insight")
+    && require("censReg") && require("AER") && require("ordinal")) {
   context("model_performance different models")
 
-  library(censReg)
-  library(AER)
-  library(ordinal)
   data("Affairs", package = "AER")
 
   m1 <- insight::download_model("betareg_1")
