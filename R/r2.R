@@ -13,13 +13,15 @@
 #'   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
 #'   \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
 #'   \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
+#'   \item Models with zero-inflation: \link[=r2_zeroinflated]{R2 for zero-inflated models}
 #'   \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
 #'   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
 #' }
 #'
 #' @seealso \code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kl}},
 #'   \code{\link{r2_loo}}, \code{\link{r2_mcfadden}}, \code{\link{r2_nagelkerke}},
-#'   \code{\link{r2_nakagawa}} and \code{\link{r2_tjur}}.
+#'   \code{\link{r2_nakagawa}}, \code{\link{r2_tjur}}, \code{\link{r2_xu}} and
+#'   \code{\link{r2_zeroinflated}}.
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
@@ -136,6 +138,13 @@ r2.glm <- function(model, ...) {
 #' @export
 r2.glmmTMB <- function(model, ...) {
   r2_nakagawa(model)
+}
+
+
+
+#' @export
+r2.hurdle <- function(model, ...) {
+  list("R2" = r2_zeroinflated(model))
 }
 
 
@@ -314,4 +323,18 @@ r2.truncreg <- function(model, ...) {
 #' @export
 r2.vglm <- function(model, ...) {
   list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+
+#' @export
+r2.zerotrunc <- function(model, ...) {
+  list("R2" = r2_zeroinflated(model))
+}
+
+
+
+#' @export
+r2.zeroinfl <- function(model, ...) {
+  list("R2" = r2_zeroinflated(model))
 }

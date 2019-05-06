@@ -45,6 +45,7 @@ Suggests:
 	nlme,
 	ordinal,
 	pROC,
+	pscl,
 	psych,
 	rmarkdown,
 	rstanarm,
