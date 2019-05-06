@@ -10,7 +10,7 @@ if (require("testthat") && require("performance") && require("survival")) {
 
   test_that("r2", {
     expect_equal(r2_nagelkerke(m1), c(`Nagelkerke's R2` = 0.1626795), tolerance = 1e-3)
-    expect_equal(r2(m1), list(Nagelkerke = c(`Nagelkerke's R2` = 0.1626795 )), tolerance = 1e-3)
+    expect_equal(r2(m1), list(R2_Nagelkerke = c(`Nagelkerke's R2` = 0.1626795 )), tolerance = 1e-3)
   })
 
   test_that("model_performance", {

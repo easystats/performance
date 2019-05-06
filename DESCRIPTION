@@ -51,6 +51,7 @@ Suggests:
 	rstanarm,
 	rstantools,
 	scales,
+	survival,
 	testthat
 License: GPL-3
 Encoding: UTF-8
