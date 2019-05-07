@@ -12,7 +12,7 @@
 * `performance_logloss()` to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the `rmse()`.
 * `performance_pcp()` to calculate the percentage of correct predictions for models with binary outcome.
 * `r2_mckelvey()` to compute McKelvey and Zavoinas R2 value.
-* `r2_zeroinflated()` as a crude R2 measure for zero-inflated models.
+* `r2_zeroinflated()` to compute R2 for zero-inflated (non-mixed) models.
 * `r2_xu()` as a crude R2 measure for linear (mixed) models.
 
 ## Breaking changes
@@ -23,6 +23,7 @@
 ## Changes to functions
 
 * `model_performance.stanreg()` and `model_performance.brmsfit()` now also return the _WAIC_ (widely applicable information criterion).
+* `r2_nakagawa()` now calculates the full R2 for mixed models with zero-inflation.
 
 ## Bug fixes
 

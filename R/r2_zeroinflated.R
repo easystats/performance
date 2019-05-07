@@ -8,7 +8,7 @@
 #'
 #' @return The R2 value.
 #'
-#' @details The default-method calculates an R2 values based on the residual
+#' @details The default-method calculates an R2 value based on the residual
 #'   sums of squares (using Pearson residuals), divided by the total sum of
 #'   squares. For \code{method = "correlation"}, R2 is a correlation-based measure,
 #'   which is rather crude. It simply computes the squared correlation between the
