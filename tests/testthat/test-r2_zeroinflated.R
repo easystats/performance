@@ -13,8 +13,8 @@ if (require("testthat") && require("performance") && require("pscl")) {
       r2_zeroinflated(model),
       structure(
         list(
-          R2 = c(R2 = 0.30718048189065),
-          R2_adjusted = c(`adjusted R2` = 0.303369593452205)
+          R2 = c(R2 = 0.179754784762554),
+          R2_adjusted = c(`adjusted R2` = 0.175242984898761)
         ),
         model_type = "Zero-Inflated and Hurdle",
         class = "r2_generic"
@@ -25,8 +25,8 @@ if (require("testthat") && require("performance") && require("pscl")) {
       r2(model),
       structure(
         list(
-          R2 = c(R2 = 0.30718048189065),
-          R2_adjusted = c(`adjusted R2` = 0.303369593452205)
+          R2 = c(R2 = 0.179754784762554),
+          R2_adjusted = c(`adjusted R2` = 0.175242984898761)
         ),
         model_type = "Zero-Inflated and Hurdle",
         class = "r2_generic"
@@ -50,8 +50,8 @@ if (require("testthat") && require("performance") && require("pscl")) {
       r2_zeroinflated(model),
       structure(
         list(
-          R2 = c(R2 = 0.317868232740263),
-          R2_adjusted = c(`adjusted R2` = 0.314116132810341)
+          R2 = c(R2 = 0.0920246818082126),
+          R2_adjusted = c(`adjusted R2` = 0.087030318121789)
         ),
         model_type = "Zero-Inflated and Hurdle",
         class = "r2_generic"
@@ -62,8 +62,8 @@ if (require("testthat") && require("performance") && require("pscl")) {
       r2(model),
       structure(
         list(
-          R2 = c(R2 = 0.317868232740263),
-          R2_adjusted = c(`adjusted R2` = 0.314116132810341)
+          R2 = c(R2 = 0.0920246818082126),
+          R2_adjusted = c(`adjusted R2` = 0.087030318121789)
         ),
         model_type = "Zero-Inflated and Hurdle",
         class = "r2_generic"
