@@ -60,7 +60,7 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   var_fixed <- sum((stats::fitted(model) - mean(y))^2)
   var_resid <- sum(stats::residuals(model, type = "pearson")^2)
 
-  r2_zi <- 1 - (var_fixed / (var_resid + var_fixed))
+  r2_zi <- var_fixed / (var_resid + var_fixed)
   r2_zi_adj <- 1 - (1 - r2_zi) * (n - 1) / (n - k - 1)
 
   out <- list(R2 = r2_zi, R2_adjusted = r2_zi_adj)
