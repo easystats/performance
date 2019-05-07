@@ -36,13 +36,6 @@ r2_nakagawa <- function(model) {
     {
       insight::get_variance(model, name_fun = "r2()", name_full = "r-squared")
     },
-    warning = function(e) {
-      if (inherits(e, c("simpleWarning", "warning"))) {
-        insight::print_color(e$message, "red")
-        cat("\n")
-      }
-      NULL
-    },
     error = function(e) {
       if (inherits(e, c("simpleError", "error"))) {
         insight::print_color(e$message, "red")
