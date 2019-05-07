@@ -32,18 +32,28 @@
 #' @importFrom insight get_response
 #' @export
 performance_rmse <- function(model, normalized = FALSE) {
-  # compute rmse
-  rmse_val <- sqrt(performance_mse(model))
+  tryCatch({
+    # compute rmse
+    rmse_val <- sqrt(performance_mse(model))
 
-  # if normalized, divide by range of response
-  if (normalized) {
-    # get response
-    resp <- .factor_to_numeric(insight::get_response(model))
-    # cpmpute rmse, normalized
-    rmse_val <- rmse_val / (max(resp, na.rm = T) - min(resp, na.rm = T))
+    # if normalized, divide by range of response
+    if (normalized) {
+      # get response
+      resp <- .factor_to_numeric(insight::get_response(model))
+      # cpmpute rmse, normalized
+      rmse_val <- rmse_val / (max(resp, na.rm = T) - min(resp, na.rm = T))
+    }
+
+    rmse_val
+  },
+  error = function(e) {
+    if (inherits(e, c("simpleError", "error"))) {
+      insight::print_color(e$message, "red")
+      cat("\n")
+    }
+    NA
   }
-
-  rmse_val
+  )
 }
 
 
