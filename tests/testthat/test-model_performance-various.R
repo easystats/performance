@@ -1,5 +1,4 @@
-if (require("testthat") && require("performance") && require("insight")
-    && require("censReg") && require("AER") && require("ordinal") && require("betareg")) {
+if (require("testthat") && require("performance") && require("insight") && require("censReg") && require("AER") && require("ordinal") && require("betareg")) {
   context("model_performance different models")
 
   data("Affairs", package = "AER")

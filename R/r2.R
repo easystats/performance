@@ -144,7 +144,7 @@ r2.glmmTMB <- function(model, ...) {
 
 #' @export
 r2.hurdle <- function(model, ...) {
-  list("R2" = r2_zeroinflated(model))
+  r2_zeroinflated(model)
 }
 
 
@@ -329,12 +329,12 @@ r2.vglm <- function(model, ...) {
 
 #' @export
 r2.zerotrunc <- function(model, ...) {
-  list("R2" = r2_zeroinflated(model))
+  r2_zeroinflated(model)
 }
 
 
 
 #' @export
 r2.zeroinfl <- function(model, ...) {
-  list("R2" = r2_zeroinflated(model))
+  r2_zeroinflated(model)
 }
