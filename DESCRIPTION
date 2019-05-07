@@ -31,6 +31,7 @@ Imports:
 	bayestestR
 Suggests:
 	AER,
+	betareg,
 	brms,
 	censReg,
 	covr,
