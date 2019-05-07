@@ -12,7 +12,9 @@ r2_zeroinflated(model, method = c("default", "correlation"))
 \item{method}{Indicates the method to calculate R2. See 'Details'. May be abbreviated.}
 }
 \value{
-The R2 value.
+For the default-method, a list with the R2 and adjusted R2 values.
+  For \code{method = "correlation"}, a named numeric vector with the
+  correlation-based R2 value.
 }
 \description{
 Calculates R2 for models with zero-inflation component, including mixed effects models.

@@ -6,7 +6,9 @@
 #' @param model A model.
 #' @param method Indicates the method to calculate R2. See 'Details'. May be abbreviated.
 #'
-#' @return The R2 value.
+#' @return For the default-method, a list with the R2 and adjusted R2 values.
+#'   For \code{method = "correlation"}, a named numeric vector with the
+#'   correlation-based R2 value.
 #'
 #' @details The default-method calculates an R2 value based on the residual
 #'   sums of squares (using Pearson residuals), divided by the total sum of
@@ -25,7 +27,7 @@
 #' r2_zeroinflated(model)
 #'
 #' @importFrom stats cor predict residuals fitted
-#' @importFrom insight model_info get_response
+#' @importFrom insight model_info get_response find_parameters n_obs
 #' @export
 r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   method <- match.arg(method)
@@ -50,8 +52,18 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
 
 
 .r2_zi_default <- function(model) {
+  n <- insight::n_obs(model)
+  p <- length(insight::find_parameters(model)[["conditional"]])
+
   r2_zi <- 1 - (sum(stats::fitted(model)^2) /
                   (sum(stats::fitted(model)^2) + sum(stats::residuals(model, type = "pearson")^2)))
-  names(r2_zi) <- "R2 for ZI-models"
-  r2_zi
+  r2_zi_adj <- 1 - (1 - r2_zi) * (n - 1) / (n - p - 1)
+
+  out <- list(R2 = r2_zi, R2_adjusted = r2_zi_adj)
+
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+
+  attr(out, "model_type") <- "Zero-Inflated and Hurdle"
+  structure(class = "r2_generic", out)
 }
