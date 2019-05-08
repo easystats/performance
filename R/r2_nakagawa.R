@@ -45,7 +45,17 @@ r2_nakagawa <- function(model) {
     }
   )
 
+
   if (is.null(vars) || all(is.na(vars))) {
+    return(NA)
+  }
+
+  # check if we have successfully computed all variance components...
+
+  components <- c("var.fixed", "var.random", "var.residual")
+  check_elements <- sapply(components, function(.i) !is.null(vars[[.i]]))
+
+  if (!all(check_elements)) {
     return(NA)
   }
 

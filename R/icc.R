@@ -138,6 +138,16 @@ icc.default <- function(model, ...) {
   }
 
 
+  # check if we have successfully computed all variance components...
+
+  components <- c("var.fixed", "var.random", "var.residual")
+  check_elements <- sapply(components, function(.i) !is.null(vars[[.i]]))
+
+  if (!all(check_elements)) {
+    return(NA)
+  }
+
+
   # Calculate ICC values
   icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
   icc_conditional <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
