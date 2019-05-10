@@ -400,3 +400,37 @@ print.performance_accuracy  <- function(x, ...) {
   cat(sprintf("      SE: %.2f%%-points\n", 100 * x$std.error))
   cat(sprintf("  Method: %s\n", x$stat))
 }
+
+
+#' @export
+print.check_collinearity <- function(x, ...) {
+  insight::print_color("# Check for Multicollinearity\n", "blue")
+
+  vifs <- x$VIF
+
+  x$VIF <- sprintf("%.2f", x$VIF)
+  x$SE_factor <- sprintf("%.2f", x$SE_factor)
+
+  colnames(x)[3] <- "Increased SE"
+
+  low_corr <- which(vifs < 5)
+  if (length(low_corr)) {
+    cat("\n")
+    insight::print_color("Low Correlation\n\n", "green")
+    print.data.frame(x[low_corr, ], row.names = FALSE)
+  }
+
+  mid_corr <- which(vifs >= 5 & vifs < 10)
+  if (length(mid_corr)) {
+    cat("\n")
+    insight::print_color("Moderate Correlation\n\n", "yellow")
+    print.data.frame(x[mid_corr, ], row.names = FALSE)
+  }
+
+  high_corr <- which(vifs >= 10)
+  if (length(high_corr)) {
+    cat("\n")
+    insight::print_color("High Correlation\n\n", "red")
+    print.data.frame(x[high_corr, ], row.names = FALSE)
+  }
+}

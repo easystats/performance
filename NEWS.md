@@ -14,6 +14,7 @@
 * `r2_mckelvey()` to compute McKelvey and Zavoinas R2 value.
 * `r2_zeroinflated()` to compute R2 for zero-inflated (non-mixed) models.
 * `r2_xu()` as a crude R2 measure for linear (mixed) models.
+* `check_collinearity()` to calculate the variance inflation factor and check model predictors for multicollinearity.
 
 ## Breaking changes
 
