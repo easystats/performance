@@ -35,8 +35,8 @@ check_collinearity <- function(x, ...) {
 #' @importFrom insight has_intercept find_predictors
 #' @export
 check_collinearity.default <- function(x, ...) {
-  v <- as.matrix(stats::vcov(x))
-  assign <- attr(stats::model.matrix(x), "assign")
+  v <- .vcov_as_matrix(x)
+  assign <- .term_assignments(x)
 
   if (insight::has_intercept(x)) {
     v <- v[-1, -1]
@@ -76,49 +76,25 @@ check_collinearity.default <- function(x, ...) {
 }
 
 
-#' @importFrom stats vcov cov2cor
-#' @importFrom insight has_intercept find_predictors
-#' @export
-check_collinearity.glmmTMB <- function(x, ...) {
-  v <- as.matrix(.collapse_cond(stats::vcov(x)))
-  assign <- attr(stats::model.matrix(x), "assign")
 
-  if (insight::has_intercept(x)) {
-    v <- v[-1, -1]
-    assign <- assign[-1]
-  }
-
-  terms <- insight::find_predictors(x)[["conditional"]]
-  n.terms <- length(terms)
-
-  if (n.terms < 2) {
-    warning("Not enought model terms to check for multicollinearity.")
-    return(NA)
-  }
-
-  R <- stats::cov2cor(v)
-  detR <- det(R)
-
-  result <- vector("numeric")
-
-  for (term in 1:n.terms) {
-    subs <- which(assign == term)
-    result <- c(
-      result,
-      det(as.matrix(R[subs, subs])) * det(as.matrix(R[-subs, -subs])) / detR
-    )
-  }
-
-  structure(
-    class = c("check_collinearity", "data.frame"),
-    data.frame(
-      Predictor = terms,
-      VIF = result,
-      SE_factor = sqrt(result),
-      stringsAsFactors = FALSE
-    )
-  )
+#' @importFrom stats vcov
+#' @keywords internal
+.vcov_as_matrix <- function(x) {
+  as.matrix(.collapse_cond(stats::vcov(x)))
 }
 
 
-## assign <- match(insight::clean_names(insight::find_parameters(m)[["conditional"]]), insight::find_predictors(m)[["conditional"]])
+#' @importFrom stats model.matrix
+#' @importFrom insight find_parameters find_predictors
+#' @keywords internal
+.term_assignments <- function(x) {
+  tryCatch({
+    attr(stats::model.matrix(x), "assign")
+  },
+  error = function(e) {
+    match(
+      insight::clean_names(insight::find_parameters(x)[["conditional"]]),
+      insight::find_predictors(x)[["conditional"]]
+    )
+  })
+}
