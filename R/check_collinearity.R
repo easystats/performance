@@ -50,7 +50,7 @@ check_collinearity.default <- function(x, ...) {
 
   if (n.terms < 2) {
     warning("Not enought model terms to check for multicollinearity.")
-    return(NA)
+    return(NULL)
   }
 
   R <- stats::cov2cor(v)
