@@ -4,7 +4,9 @@
 #' @description \code{check_collinearity()} checks regression models for
 #'   multicollinearity by calculating the variance inflation factor (VIF).
 #'
-#' @param x A model object (that should respond to \code{vcov()} and \code{model.matrix()}.
+#' @param x A model object (that should at least respond to \code{vcov()},
+#'  and if possible, also to \code{model.matrix()} - however, it also should
+#'  work without \code{model.matrix()}).
 #' @param ... Currently not used.
 #'
 #' @return A data frame with three columns: The name of the model term, the
@@ -80,21 +82,45 @@ check_collinearity.default <- function(x, ...) {
 #' @importFrom stats vcov
 #' @keywords internal
 .vcov_as_matrix <- function(x) {
-  as.matrix(.collapse_cond(stats::vcov(x)))
+  if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
+    as.matrix(stats::vcov(x, model = "count"))
+  } else {
+    as.matrix(.collapse_cond(stats::vcov(x)))
+  }
 }
 
 
 #' @importFrom stats model.matrix
-#' @importFrom insight find_parameters find_predictors
 #' @keywords internal
 .term_assignments <- function(x) {
   tryCatch({
-    attr(stats::model.matrix(x), "assign")
+    assign <- attr(stats::model.matrix(x), "assign")
+    if (is.null(assign)) {
+      assign <- .find_term_assignment(x)
+    }
+
+    assign
   },
   error = function(e) {
-    match(
-      insight::clean_names(insight::find_parameters(x)[["conditional"]]),
-      insight::find_predictors(x)[["conditional"]]
-    )
+    .find_term_assignment(x)
   })
+}
+
+
+#' @importFrom insight find_parameters find_predictors
+#' @keywords internal
+.find_term_assignment <- function(x) {
+  match(
+    insight::clean_names(insight::find_parameters(x)[["conditional"]]),
+    insight::find_predictors(x)[["conditional"]]
+  )
+}
+
+
+.collapse_zi <- function(x) {
+  if (is.list(x) && "zi" %in% names(x)) {
+    x[["zi"]]
+  } else {
+    x
+  }
 }

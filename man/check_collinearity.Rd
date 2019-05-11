@@ -7,7 +7,9 @@
 check_collinearity(x, ...)
 }
 \arguments{
-\item{x}{A model object (that should respond to \code{vcov()} and \code{model.matrix()}.}
+\item{x}{A model object (that should at least respond to \code{vcov()},
+and if possible, also to \code{model.matrix()} - however, it also should
+work without \code{model.matrix()}).}
 
 \item{...}{Currently not used.}
 }
