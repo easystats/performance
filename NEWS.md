@@ -6,15 +6,21 @@
 * `r2_bayes()` now works for multivariate response models.
 * `model_performance()` now works for more regression models, and also includes the log-loss and percentage of correct predictions as new metric for models with binary outcome.
 
-## New functions
+## New performance-functions
 
 * `performance_accuracy()`, which calculates the predictive accuracy of linear or logistic regression models.
 * `performance_logloss()` to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the `rmse()`.
 * `performance_pcp()` to calculate the percentage of correct predictions for models with binary outcome.
+
+## New check-functions
+
+* `check_collinearity()` to calculate the variance inflation factor and check model predictors for multicollinearity.
+
+## New indices-functions
+
 * `r2_mckelvey()` to compute McKelvey and Zavoinas R2 value.
 * `r2_zeroinflated()` to compute R2 for zero-inflated (non-mixed) models.
 * `r2_xu()` as a crude R2 measure for linear (mixed) models.
-* `check_collinearity()` to calculate the variance inflation factor and check model predictors for multicollinearity.
 
 ## Breaking changes
 
