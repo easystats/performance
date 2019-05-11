@@ -44,9 +44,7 @@
  (vpc) - for mixed effects models. The ICC is calculated for merMod
  (lme4), glmmTMB (glmmTMB), MixMod (GLMMadpative),
  lme (nlme), mixed (afex), and stanreg
- (rstanarm) objects and can be interpreted as &amp;#8220;the proportion
- of the variance explained by the grouping structure in the population&amp;#8221;
- (Hox 2010: 15). For models fitted with the brms-package,
+ (rstanarm) objects. For models fitted with the brms-package,
  a variance decomposition based on the posterior predictive distribution
  is calculated (see 'Details')." />
 
@@ -127,9 +125,7 @@
  (vpc) - for mixed effects models. The ICC is calculated for <code>merMod</code>
  (<span class="pkg">lme4</span>), <code>glmmTMB</code> (<span class="pkg">glmmTMB</span>), <code>MixMod</code> (<span class="pkg">GLMMadpative</span>),
  <code>lme</code> (<span class="pkg">nlme</span>), <code>mixed</code> (<span class="pkg">afex</span>), and <code>stanreg</code>
- (<span class="pkg">rstanarm</span>) objects and can be interpreted as &#8220;the proportion
- of the variance explained by the grouping structure in the population&#8221;
- <cite>(Hox 2010: 15)</cite>. For models fitted with the <span class="pkg">brms</span>-package,
+ (<span class="pkg">rstanarm</span>) objects. For models fitted with the <span class="pkg">brms</span>-package,
  a variance decomposition based on the posterior predictive distribution
  is calculated (see 'Details').</p>
     
@@ -185,6 +181,12 @@ calculate the central tendency of the variances.</p></td>
  &sigma;<sup>2</sup><sub>i</sub>, by
  the total variance, i.e. the sum of the random effect variance and the
  residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>.
+ The ICC can be interpreted as &#8220;the proportion of the variance explained
+ by the grouping structure in the population&#8221;, or in other word, the ICC
+ &#8220;can also be interpreted as the expected correlation between two
+ randomly drawn units that are in the same group&#8221; <cite>(Hox 2010: 15)</cite>.
+ Note that the second part of the definition might not apply to mixed models
+ with more complex random effects strucures.
  <br /> <br />
  <strong>Adjusted and conditional ICC</strong>
  <br /> <br />
