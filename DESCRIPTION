@@ -35,9 +35,7 @@ Suggests:
 	brms,
 	censReg,
 	covr,
-	graphics,
 	glmmTMB,
-	ggplot2,
 	lme4,
 	loo,
 	Matrix,
@@ -51,7 +49,7 @@ Suggests:
 	rmarkdown,
 	rstanarm,
 	rstantools,
-	scales,
+	see,
 	survival,
 	testthat
 License: GPL-3
