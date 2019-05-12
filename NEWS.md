@@ -31,6 +31,7 @@
 
 * `model_performance.stanreg()` and `model_performance.brmsfit()` now also return the _WAIC_ (widely applicable information criterion).
 * `r2_nakagawa()` now calculates the full R2 for mixed models with zero-inflation.
+* `icc()` now returns `NULL` and no longer stops when no mixed model is provided.
 
 ## Bug fixes
 

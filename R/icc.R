@@ -116,7 +116,8 @@ icc <- function(model, ...) {
 #' @export
 icc.default <- function(model, ...) {
   if (!insight::model_info(model)$is_mixed) {
-    stop("'model' has no random effects.", call. = FALSE)
+    warning("'model' has no random effects.", call. = FALSE)
+    return(NULL)
   }
 
   vars <- tryCatch(
@@ -169,28 +170,21 @@ icc.default <- function(model, ...) {
 #' @rdname icc
 #' @export
 icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
-
-  ## TODO enable this once it is fixed in insight
+  mi <- insight::model_info(model)
 
   # for multivariate response models, we need a more complicated check...
-  # if (insight::is_multivariate(model)) {
-  #   resp <- insight::find_response(model)
-  #
-  #   is.mixed <- sapply(resp, function(i) {
-  #     insight::model_info(model)[[resp]]$is_mixed
-  #   }, simplify = TRUE)
-  #
-  #   if (!any(is.mixed)) {
-  #     stop("'model' has no random effects.", call. = FALSE)
-  #   }
-  # } else if (!insight::model_info(model)$is_mixed) {
-  #   stop("'model' has no random effects.", call. = FALSE)
-  # }
-
-
-  if (!insight::is_multivariate(model) && !insight::model_info(model)$is_mixed) {
-    stop("'model' has no random effects.", call. = FALSE)
+  if (insight::is_multivariate(model)) {
+    resp <- insight::find_response(model)
+    is.mixed <- sapply(resp, function(i) mi[[i]]$is_mixed, simplify = TRUE)
+    if (!any(is.mixed)) {
+      warning("'model' has no random effects.", call. = FALSE)
+      return(NULL)
+    }
+  } else if (!mi$is_mixed) {
+    warning("'model' has no random effects.", call. = FALSE)
+    return(NULL)
   }
+
 
   if (!requireNamespace("brms", quietly = TRUE)) {
     stop("Package `brms` needed for this function to work. Please install it.", call. = FALSE)
