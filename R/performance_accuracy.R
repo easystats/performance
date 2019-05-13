@@ -34,17 +34,13 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_accuracy(model)
 #'
+#' @importFrom bayestestR area_under_curve
 #' @importFrom insight find_response get_data
 #' @importFrom stats lm cor glm predict predict.glm model.frame formula binomial sd
 #' @export
 performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000) {
 
   method <- match.arg(method)
-
-  # check package availability
-  if (!requireNamespace("pROC", quietly = TRUE) && inherits(model, "glm")) {
-    stop("Package `pROC` needed for this function to work. Please install it.", call. = F)
-  }
 
   # get formula from model fit
   formula <- stats::formula(model)
@@ -130,7 +126,8 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       })
 
       accuracy <- mapply(function(.x, .y) {
-        pROC::auc(pROC::roc(response = .x, predictor = .y))
+        roc <- .simple_roc(response = .x, predictions = .y)
+        bayestestR::area_under_curve(roc$x, roc$y)
       }, response, predictions)
 
     } else {
@@ -151,7 +148,8 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       })
 
       accuracy <- mapply(function(.x, .y) {
-        pROC::auc(pROC::roc(response = .x, predictor = .y))
+        roc <- .simple_roc(response = .x, predictions = .y)
+        bayestestR::area_under_curve(roc$x, roc$y)
       }, response, predictions)
     }
   }
@@ -177,4 +175,14 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
     list(train = setdiff(idx, test), test = test)
   }
   lapply(fold_idx, fold)
+}
+
+
+
+.simple_roc <- function(response, predictions){
+  response <- response[order(predictions, decreasing = TRUE)]
+  list(
+    x = cumsum(!response) / sum(!response),
+    y = cumsum(response) / sum(response)
+  )
 }

@@ -43,7 +43,6 @@ Suggests:
 	mlogit,
 	nlme,
 	ordinal,
-	pROC,
 	pscl,
 	psych,
 	rmarkdown,
