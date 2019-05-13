@@ -37,3 +37,4 @@
 
 * Renamed `r2_coxnell()` to `r2_coxsnell()`.
 * Fix issues in `r2_bayes()` and `model_performance()` for ordinal models resp. models with cumulative link (#48).
+* `compare_performance()` did not sort the `name`-column properly, if the columns `class` and `name` were not in the same alphabetical order (#51).

@@ -50,18 +50,11 @@ compare_performance <- function(..., metrics = "all") {
     object_names <- object_names[supported_models]
   }
 
-  m <- lapply(objects, function(.x) {
+  m <- mapply(function(.x, .y) {
     dat <- model_performance(.x, metrics = metrics)
-    cbind(data.frame(class = class(.x)[1], stringsAsFactors = FALSE), dat)
-  })
+    cbind(data.frame(name = as.character(.y), class = class(.x)[1], stringsAsFactors = FALSE), dat)
+  }, objects, object_names)
 
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE), m)
-
-  cbind(
-    data.frame(
-      name = unlist(lapply(object_names, as.character)),
-      stringsAsFactors = FALSE
-    ),
-    dfs
-  )
+  dfs[order(sapply(object_names, as.character), dfs$name), ]
 }
