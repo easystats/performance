@@ -2,30 +2,28 @@
 % Please edit documentation in R/performance_roc.R
 \name{performance_roc}
 \alias{performance_roc}
-\alias{performance_roc.numeric}
-\alias{performance_roc.glm}
 \title{Simple ROC curve}
 \usage{
-performance_roc(x, ...)
-
-\method{performance_roc}{numeric}(x, predictions, ...)
-
-\method{performance_roc}{glm}(x, new_data = NULL, ...)
+performance_roc(x, ..., predictions, new_data)
 }
 \arguments{
 \item{x}{A numeric vector, representing the outcome (0/1), or a model with
 binomial outcome.}
 
+\item{...}{One or more models with binomial outcome. In this case,
+\code{new_data} is ignored.}
+
 \item{predictions}{If \code{x} is numeric, a numeric vector of same length
 as \code{x}, representing the actual predicted values.}
 
 \item{new_data}{If \code{x} is a model, a data frame that is passed to
-\code{predict()} as \code{newdata}-argument.}
+\code{predict()} as \code{newdata}-argument. If \code{NULL}, the ROC for
+the full model is calculated.}
 }
 \value{
-A data frame with two columns, the x/y-coordinate pairs for the ROC
-curve (\code{Sensivity} and \code{Specifity}), which, for instance, can be
-used to further compute the AUC.
+A data frame with three columns, the x/y-coordinate pairs for the ROC
+curve (\code{Sensivity} and \code{Specifity}), and a column with the model
+name.
 }
 \description{
 This function calculates a simple ROC curves of x/y coordinates
@@ -34,6 +32,7 @@ based on response and predictions of a binomial model.
 \examples{
 library(bayestestR)
 data(iris)
+
 set.seed(123)
 iris$y <- rbinom(nrow(iris), size = 1, .3)
 folds <- sample(nrow(iris), size = nrow(iris) / 8, replace = FALSE)
@@ -41,9 +40,14 @@ test_data <- iris[folds, ]
 train_data <- iris[-folds, ]
 
 model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
-performance_roc(model, test_data)
+performance_roc(model, new_data = test_data)
 
-roc <- performance_roc(model, test_data)
+roc <- performance_roc(model, new_data = test_data)
 area_under_curve(roc$Sensivity, roc$Specifity)
+
+m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
+m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
+m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
+performance_roc(m1, m2, m3)
 
 }

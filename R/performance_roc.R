@@ -9,15 +9,19 @@
 #' @param predictions If \code{x} is numeric, a numeric vector of same length
 #' as \code{x}, representing the actual predicted values.
 #' @param new_data If \code{x} is a model, a data frame that is passed to
-#' \code{predict()} as \code{newdata}-argument.
+#' \code{predict()} as \code{newdata}-argument. If \code{NULL}, the ROC for
+#' the full model is calculated.
+#' @param ... One or more models with binomial outcome. In this case,
+#' \code{new_data} is ignored.
 #'
-#' @return A data frame with two columns, the x/y-coordinate pairs for the ROC
-#' curve (\code{Sensivity} and \code{Specifity}), which, for instance, can be
-#' used to further compute the AUC.
+#' @return A data frame with three columns, the x/y-coordinate pairs for the ROC
+#' curve (\code{Sensivity} and \code{Specifity}), and a column with the model
+#' name.
 #'
 #' @examples
 #' library(bayestestR)
 #' data(iris)
+#'
 #' set.seed(123)
 #' iris$y <- rbinom(nrow(iris), size = 1, .3)
 #' folds <- sample(nrow(iris), size = nrow(iris) / 8, replace = FALSE)
@@ -25,25 +29,48 @@
 #' train_data <- iris[-folds, ]
 #'
 #' model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
-#' performance_roc(model, test_data)
+#' performance_roc(model, new_data = test_data)
 #'
-#' roc <- performance_roc(model, test_data)
+#' roc <- performance_roc(model, new_data = test_data)
 #' area_under_curve(roc$Sensivity, roc$Specifity)
 #'
+#' m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
+#' m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
+#' m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
+#' performance_roc(m1, m2, m3)
+#'
+#' @importFrom stats predict
+#' @importFrom insight find_response get_data
 #' @export
-performance_roc <- function(x, ...) {
-  UseMethod("performance_roc")
+performance_roc <- function(x, ..., predictions, new_data) {
+  dots <- list(...)
+
+  object_names <- c(
+    deparse(substitute(x), width.cutoff = 500),
+    sapply(match.call(expand.dots = FALSE)$`...`, deparse, width.cutoff = 500)
+  )
+
+  if (is.numeric(x) && !missing(predictions) && !is.null(predictions)) {
+    .performance_roc_numeric(x, predictions)
+  } else if (inherits(x, "glm") && length(dots) == 0) {
+    if (missing(new_data)) new_data <- NULL
+    .performance_roc_model(x, new_data)
+  } else if (length(dots) > 0) {
+    .performance_roc_models(list(x, ...), names = object_names)
+  }
 }
 
 
-#' @rdname performance_roc
-#' @export
-performance_roc.numeric <- function(x, predictions, ...){
+
+.performance_roc_numeric <- function(x, predictions) {
+  if (length(x) != length(predictions))
+    stop("'x' and ' predictions' must be of same length.", call. = FALSE)
+
   x <- x[order(predictions, decreasing = TRUE)]
 
   res <- data.frame(
-    Sensivity = cumsum(x) / sum(x),
-    Specifity = cumsum(!x) / sum(!x)
+    Sensivity = c(0, cumsum(x) / sum(x), 1),
+    Specifity = c(0, cumsum(!x) / sum(!x), 1)
   )
 
   class(res) <- c("performance_roc", "see_performance_roc", "data.frame")
@@ -51,13 +78,26 @@ performance_roc.numeric <- function(x, predictions, ...){
 }
 
 
-#' @importFrom stats predict
-#' @importFrom insight find_response get_data
-#' @rdname performance_roc
-#' @export
-performance_roc.glm <- function(x, new_data = NULL, ...){
+
+.performance_roc_model <- function(x, new_data, model_name = "Model 1") {
   predictions <- stats::predict(x, newdata = new_data, type = "response")
   if (is.null(new_data)) new_data <- insight::get_data(x)
   response <- new_data[[insight::find_response(x)]]
-  performance_roc(response, predictions)
+
+  dat <- .performance_roc_numeric(response, predictions)
+  dat$Model <- model_name
+  dat
+}
+
+
+
+.performance_roc_models <- function(x, names) {
+  l <- lapply(1:length(x), function(i) {
+    if (inherits(x[[i]], "glm")) {
+      .performance_roc_model(x = x[[i]], new_data = NULL, model_name = names[i])
+    } else {
+      warning("Object '", names[i], "' is not valid.", call. = FALSE)
+    }
+  })
+  do.call(rbind, l)
 }

@@ -1,8 +1,24 @@
+#' @importFrom bayestestR area_under_curve
 #' @importFrom insight print_color
 #' @export
 print.performance_roc <- function(x, ...) {
-  insight::print_color("# ROC curve\n\n", "blue")
-  print.data.frame(x, row.names = FALSE)
+  if (length(unique(x$Model)) == 1) {
+    cat(sprintf("AUC: %.2f%%\n", 100 * bayestestR::area_under_curve(x$Sensivity, x$Specifity)))
+  } else {
+    insight::print_color("# Area under Curve\n\n", "blue")
+
+    dat <- split(x, f = x$Model)
+    max_space <- max(nchar(x$Model))
+
+    for (i in 1:length(dat)) {
+      cat(sprintf(
+        "  %*s: %.2f%%\n",
+        max_space,
+        names(dat)[i],
+        100 * bayestestR::area_under_curve(dat[[i]]$Sensivity, dat[[i]]$Specifity)
+      ))
+    }
+  }
 }
 
 
