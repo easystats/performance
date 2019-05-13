@@ -1,5 +1,13 @@
 #' @importFrom insight print_color
 #' @export
+print.performance_roc <- function(x, ...) {
+  insight::print_color("# ROC curve\n\n", "blue")
+  print.data.frame(x, row.names = FALSE)
+}
+
+
+#' @importFrom insight print_color
+#' @export
 print.item_difficulty <- function(x, ...) {
   spaces <- max(nchar(x$item))
 

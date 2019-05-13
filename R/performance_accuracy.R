@@ -126,8 +126,8 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       })
 
       accuracy <- mapply(function(.x, .y) {
-        roc <- .simple_roc(response = .x, predictions = .y)
-        bayestestR::area_under_curve(roc$x, roc$y)
+        roc <- performance_roc(x = .x, predictions = .y)
+        bayestestR::area_under_curve(roc$Sensivity, roc$Specifity)
       }, response, predictions)
 
     } else {
@@ -148,8 +148,8 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       })
 
       accuracy <- mapply(function(.x, .y) {
-        roc <- .simple_roc(response = .x, predictions = .y)
-        bayestestR::area_under_curve(roc$x, roc$y)
+        roc <- performance_roc(x = .x, predictions = .y)
+        bayestestR::area_under_curve(roc$Sensivity, roc$Specifity)
       }, response, predictions)
     }
   }
@@ -177,12 +177,3 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
   lapply(fold_idx, fold)
 }
 
-
-
-.simple_roc <- function(response, predictions){
-  response <- response[order(predictions, decreasing = TRUE)]
-  list(
-    x = cumsum(!response) / sum(!response),
-    y = cumsum(response) / sum(response)
-  )
-}
