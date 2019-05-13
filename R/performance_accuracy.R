@@ -19,7 +19,7 @@
 #' @details For linar models, the accuracy is the correlation coefficient
 #'    between the actual and the predicted value of the outcome. For
 #'    logistic regression models, the accuracy corresponds to the
-#'    AUC-value, calculated with the \code{\link[pROC]{auc}}-function.
+#'    AUC-value, calculated with the \code{\link[bayestestR]{auc}}-function.
 #'    \cr \cr
 #'    The accuracy is the mean value of multiple correlation resp.
 #'    AUC-values, which are either computed with crossvalidation
