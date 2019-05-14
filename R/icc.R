@@ -32,18 +32,22 @@
 #'  }
 #'
 #' @details
-#' \strong{Calculation of the ICC}
+#' \strong{Interpretation}
+#'  \cr \cr
+#'  The ICC can be interpreted as \dQuote{the proportion of the variance explained
+#'  by the grouping structure in the population}. This index goes from 0, if the
+#'  grouping conveys no information, to 1, if all observations in a group are
+#'  identical (Gelman \& Hill, 2007, p. 258). In other word, the ICC
+#'  \dQuote{can also be interpreted as the expected correlation between two
+#'  randomly drawn units that are in the same group} \cite{(Hox 2010: 15)},
+#'  altough this definition might not apply to mixed models with more complex
+#'  random effects strucures.
+#' \strong{Calculation}
 #'  \cr \cr
 #'  The ICC is calculated by dividing the random effect variance,
 #'  \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}}, by
 #'  the total variance, i.e. the sum of the random effect variance and the
 #'  residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
-#'  The ICC can be interpreted as \dQuote{the proportion of the variance explained
-#'  by the grouping structure in the population}, or in other word, the ICC
-#'  \dQuote{can also be interpreted as the expected correlation between two
-#'  randomly drawn units that are in the same group} \cite{(Hox 2010: 15)}.
-#'  Note that the second part of the definition might not apply to mixed models
-#'  with more complex random effects strucures.
 #'  \cr \cr
 #'  \strong{Adjusted and conditional ICC}
 #'  \cr \cr
@@ -67,7 +71,7 @@
 #'  much, e.g., a level-2 variable explains the portion of variation in the grouping
 #'  structure (random intercept).
 #'  \cr \cr
-#'  \strong{ICC for specific group-levels }
+#'  \strong{ICC for specific group-levels}
 #'  \cr \cr
 #'  The proportion of variance for specific levels related to  each other
 #'  (e.g., similarity of level-1-units within level-2-units or level-2-units
