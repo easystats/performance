@@ -7,8 +7,8 @@
 \usage{
 check_collinearity(x, ...)
 
-\method{check_collinearity}{glmmTMB}(x, component = c("conditional",
-  "count", "zi", "zero_inflated"), ...)
+\method{check_collinearity}{glmmTMB}(x, component = c("all",
+  "conditional", "count", "zi", "zero_inflated"), ...)
 }
 \arguments{
 \item{x}{A model object (that should at least respond to \code{vcov()},
@@ -19,11 +19,11 @@ work without \code{model.matrix()}).}
 
 \item{component}{For models with zero-inflation component, multicollinearity
 can be checked for the conditional model (count component,
-\code{component = "conditional"} or \code{component = "count"}) or
+\code{component = "conditional"} or \code{component = "count"}),
 zero-inflation component (\code{component = "zero_inflated"} or
-\code{component = "zi"}). Following model-classes are currently supported:
-\code{hurdle}, \code{zeroinfl}, \code{zerocount}, \code{MixMod} and
-\code{glmmTMB}.}
+\code{component = "zi"}) or both components (\code{component = "all"}).
+Following model-classes are currently supported: \code{hurdle},
+\code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.}
 }
 \value{
 A data frame with three columns: The name of the model term, the

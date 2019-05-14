@@ -371,6 +371,19 @@ print.performance_accuracy  <- function(x, ...) {
 print.check_collinearity <- function(x, ...) {
   insight::print_color("# Check for Multicollinearity\n", "blue")
 
+  if ("Component" %in% colnames(x)) {
+    comp <- split(x, x$Component)
+    for (i in 1:length(comp)) {
+      cat(paste0("\n* ", comp[[i]]$Component[1], " component:\n"))
+      .print_collinearity(comp[[i]][, 1:3])
+    }
+  } else {
+    .print_collinearity(x)
+  }
+}
+
+
+.print_collinearity <- function(x) {
   vifs <- x$VIF
 
   x$VIF <- sprintf("%.2f", x$VIF)

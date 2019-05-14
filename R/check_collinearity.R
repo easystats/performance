@@ -9,11 +9,11 @@
 #'  work without \code{model.matrix()}).
 #' @param component For models with zero-inflation component, multicollinearity
 #'  can be checked for the conditional model (count component,
-#'  \code{component = "conditional"} or \code{component = "count"}) or
+#'  \code{component = "conditional"} or \code{component = "count"}),
 #'  zero-inflation component (\code{component = "zero_inflated"} or
-#'  \code{component = "zi"}). Following model-classes are currently supported:
-#'  \code{hurdle}, \code{zeroinfl}, \code{zerocount}, \code{MixMod} and
-#'  \code{glmmTMB}.
+#'  \code{component = "zi"}) or both components (\code{component = "all"}).
+#'  Following model-classes are currently supported: \code{hurdle},
+#'  \code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with three columns: The name of the model term, the
@@ -51,68 +51,60 @@ check_collinearity.default <- function(x, ...) {
 
 #' @rdname check_collinearity
 #' @export
-check_collinearity.glmmTMB <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
+check_collinearity.glmmTMB <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
+  .check_collinearity_zi_model(x, component)
+}
 
+
+
+#' @export
+check_collinearity.MixMod <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  .check_collinearity_zi_model(x, component)
+}
+
+
+
+#' @export
+check_collinearity.hurdle <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  .check_collinearity_zi_model(x, component)
+}
+
+
+
+#' @export
+check_collinearity.zeroinfl <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  .check_collinearity_zi_model(x, component)
+}
+
+
+
+#' @export
+check_collinearity.zerocount <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+  .check_collinearity_zi_model(x, component)
+}
+
+
+
+#' @keywords internal
+.check_collinearity_zi_model <- function(x, component) {
   if (component == "count") component <- "conditional"
   if (component == "zi") component <- "zero_inflated"
 
-  if (component != "count") {
-    warning("Can't check collinearity for zero-inflation component from glmmTMB-models.", call. = FALSE)
-    return(NULL)
+  if (component == "all") {
+    cond <- .check_collinearity(x, "conditional")
+    cond$Component = "conditional"
+    zi <- .check_collinearity(x, "zero_inflated")
+    zi$Component = "zero inflated"
+    rbind(cond, zi)
+  } else {
+    .check_collinearity(x, component)
   }
-
-  .check_collinearity(x, component)
 }
-
-
-
-#' @export
-check_collinearity.MixMod <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
-  component <- match.arg(component)
-
-  if (component == "count") component <- "conditional"
-  if (component == "zi") component <- "zero_inflated"
-
-  .check_collinearity(x, component)
-}
-
-
-
-#' @export
-check_collinearity.hurdle <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
-  component <- match.arg(component)
-
-  if (component == "count") component <- "conditional"
-  if (component == "zi") component <- "zero_inflated"
-
-  .check_collinearity(x, component)
-}
-
-
-
-#' @export
-check_collinearity.zeroinfl <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
-  component <- match.arg(component)
-
-  if (component == "count") component <- "conditional"
-  if (component == "zi") component <- "zero_inflated"
-
-  .check_collinearity(x, component)
-}
-
-
-
-#' @export
-check_collinearity.zerocount <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
-  component <- match.arg(component)
-
-  if (component == "count") component <- "conditional"
-  if (component == "zi") component <- "zero_inflated"
-
-  .check_collinearity(x, component)
-}
-
 
 
 
@@ -205,8 +197,7 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
       assign <- switch(
         component,
         conditional = attr(stats::model.matrix(x), "assign"),
-        ## TODO model.matrix() needs to be fixed in glmmTMB
-        zero_inflated = NULL
+        zero_inflated = .find_term_assignment(x, component)
       )
     } else if (inherits(x, "MixMod")) {
       assign <- switch(
@@ -232,13 +223,28 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
 
 
 
-#' @importFrom insight find_parameters find_predictors
+#' @importFrom insight get_data find_predictors find_parameters clean_names
 #' @keywords internal
 .find_term_assignment <- function(x, component) {
-  match(
-    insight::clean_names(insight::find_parameters(x)[[component]]),
-    insight::find_predictors(x)[[component]]
-  )
+  pred <- insight::find_predictors(x)[[component]]
+  dat <- insight::get_data(x)[, pred]
+
+  parms <- unlist(lapply(1:length(pred), function(i) {
+    p <- pred[i]
+    if (is.factor(dat[[p]])) {
+      ps <- paste0(p, levels(dat[[p]]))
+      names(ps)[1:length(ps)] <- i
+      ps
+    } else {
+      names(p) <- i
+      p
+    }
+  }))
+
+  as.numeric(names(parms)[match(
+    insight::clean_names(insight::find_parameters(x)[["zero_inflated"]]),
+    parms
+  )])
 }
 
 
