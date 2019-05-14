@@ -7,6 +7,11 @@
 #' @param x A model object (that should at least respond to \code{vcov()},
 #'  and if possible, also to \code{model.matrix()} - however, it also should
 #'  work without \code{model.matrix()}).
+#' @param component For models with zero-inflation component, multicollinearity
+#'  can be checked for the conditional model (count component,
+#'  \code{component = "conditional"} or \code{component = "count"}) or
+#'  zero-inflation component (\code{component = "zero_inflated"} or
+#'  \code{component = "zi"}).
 #' @param ... Currently not used.
 #'
 #' @return A data frame with three columns: The name of the model term, the
@@ -27,25 +32,80 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
+#' @importFrom stats vcov cov2cor
+#' @importFrom insight has_intercept find_predictors
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
 }
 
 
-#' @importFrom stats vcov cov2cor
-#' @importFrom insight has_intercept find_predictors
 #' @export
 check_collinearity.default <- function(x, ...) {
-  v <- .vcov_as_matrix(x)
-  assign <- .term_assignments(x)
+  .check_collinearity(x, component = "conditional")
+}
+
+
+
+#' @export
+check_collinearity.glmmTMB <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+
+  if (component == "count") component <- "conditional"
+  if (component == "zi") component <- "zero_inflated"
+
+  .check_collinearity(x, component)
+}
+
+
+
+#' @export
+check_collinearity.hurdle <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+
+  if (component == "count") component <- "conditional"
+  if (component == "zi") component <- "zero_inflated"
+
+  .check_collinearity(x, component)
+}
+
+
+
+#' @export
+check_collinearity.zeroinfl <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+
+  if (component == "count") component <- "conditional"
+  if (component == "zi") component <- "zero_inflated"
+
+  .check_collinearity(x, component)
+}
+
+
+
+#' @export
+check_collinearity.zerocount <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+
+  if (component == "count") component <- "conditional"
+  if (component == "zi") component <- "zero_inflated"
+
+  .check_collinearity(x, component)
+}
+
+
+
+#' @keywords internal
+.check_collinearity <- function(x, component) {
+  v <- .vcov_as_matrix(x, component)
+  assign <- .term_assignments(x, component)
 
   if (insight::has_intercept(x)) {
     v <- v[-1, -1]
     assign <- assign[-1]
   }
 
-  terms <- insight::find_predictors(x)[["conditional"]]
+  terms <- insight::find_predictors(x)[[component]]
   n.terms <- length(terms)
 
   if (n.terms < 2) {
@@ -81,38 +141,57 @@ check_collinearity.default <- function(x, ...) {
 
 #' @importFrom stats vcov
 #' @keywords internal
-.vcov_as_matrix <- function(x) {
+.vcov_as_matrix <- function(x, component) {
   if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
-    as.matrix(stats::vcov(x, model = "count"))
+    switch(
+      component,
+      conditional = as.matrix(stats::vcov(x, model = "count")),
+      zero_inflated = as.matrix(stats::vcov(x, model = "zero"))
+    )
   } else {
-    as.matrix(.collapse_cond(stats::vcov(x)))
+    switch(
+      component,
+      conditional = as.matrix(.collapse_cond(stats::vcov(x))),
+      zero_inflated = as.matrix(.collapse_zi(stats::vcov(x)))
+    )
   }
 }
 
 
+
 #' @importFrom stats model.matrix
 #' @keywords internal
-.term_assignments <- function(x) {
+.term_assignments <- function(x, component) {
   tryCatch({
-    assign <- attr(stats::model.matrix(x), "assign")
+    if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
+      assign <- switch(
+        component,
+        conditional = attr(stats::model.matrix(x, model = "count"), "assign"),
+        zero_inflated = attr(stats::model.matrix(x, model = "zero"), "assign")
+      )
+    } else {
+      assign <- attr(stats::model.matrix(x), "assign")
+    }
+
     if (is.null(assign)) {
-      assign <- .find_term_assignment(x)
+      assign <- .find_term_assignment(x, component)
     }
 
     assign
   },
   error = function(e) {
-    .find_term_assignment(x)
+    .find_term_assignment(x, component)
   })
 }
 
 
+
 #' @importFrom insight find_parameters find_predictors
 #' @keywords internal
-.find_term_assignment <- function(x) {
+.find_term_assignment <- function(x, component) {
   match(
-    insight::clean_names(insight::find_parameters(x)[["conditional"]]),
-    insight::find_predictors(x)[["conditional"]]
+    insight::clean_names(insight::find_parameters(x)[[component]]),
+    insight::find_predictors(x)[[component]]
   )
 }
 

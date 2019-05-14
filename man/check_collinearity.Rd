@@ -12,6 +12,12 @@ and if possible, also to \code{model.matrix()} - however, it also should
 work without \code{model.matrix()}).}
 
 \item{...}{Currently not used.}
+
+\item{component}{For models with zero-inflation component, multicollinearity
+can be checked for the conditional model (count component,
+\code{component = "conditional"} or \code{component = "count"}) or
+zero-inflation component (\code{component = "zero_inflated"} or
+\code{component = "zi"}).}
 }
 \value{
 A data frame with three columns: The name of the model term, the
