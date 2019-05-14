@@ -41,7 +41,8 @@
 #'  \dQuote{can also be interpreted as the expected correlation between two
 #'  randomly drawn units that are in the same group} \cite{(Hox 2010: 15)},
 #'  altough this definition might not apply to mixed models with more complex
-#'  random effects strucures.
+#'  random effects structures.
+#'  \cr \cr
 #' \strong{Calculation}
 #'  \cr \cr
 #'  The ICC is calculated by dividing the random effect variance,
