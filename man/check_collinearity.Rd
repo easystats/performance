@@ -2,9 +2,13 @@
 % Please edit documentation in R/check_collinearity.R
 \name{check_collinearity}
 \alias{check_collinearity}
+\alias{check_collinearity.glmmTMB}
 \title{Check for multicollinearity of model predictors}
 \usage{
 check_collinearity(x, ...)
+
+\method{check_collinearity}{glmmTMB}(x, component = c("conditional",
+  "count", "zi", "zero_inflated"), ...)
 }
 \arguments{
 \item{x}{A model object (that should at least respond to \code{vcov()},
@@ -17,7 +21,9 @@ work without \code{model.matrix()}).}
 can be checked for the conditional model (count component,
 \code{component = "conditional"} or \code{component = "count"}) or
 zero-inflation component (\code{component = "zero_inflated"} or
-\code{component = "zi"}).}
+\code{component = "zi"}). Following model-classes are currently supported:
+\code{hurdle}, \code{zeroinfl}, \code{zerocount}, \code{MixMod} and
+\code{glmmTMB}.}
 }
 \value{
 A data frame with three columns: The name of the model term, the

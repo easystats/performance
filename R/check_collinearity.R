@@ -11,7 +11,9 @@
 #'  can be checked for the conditional model (count component,
 #'  \code{component = "conditional"} or \code{component = "count"}) or
 #'  zero-inflation component (\code{component = "zero_inflated"} or
-#'  \code{component = "zi"}).
+#'  \code{component = "zi"}). Following model-classes are currently supported:
+#'  \code{hurdle}, \code{zeroinfl}, \code{zerocount}, \code{MixMod} and
+#'  \code{glmmTMB}.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with three columns: The name of the model term, the
@@ -47,8 +49,26 @@ check_collinearity.default <- function(x, ...) {
 
 
 
+#' @rdname check_collinearity
 #' @export
 check_collinearity.glmmTMB <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
+  component <- match.arg(component)
+
+  if (component == "count") component <- "conditional"
+  if (component == "zi") component <- "zero_inflated"
+
+  if (component != "count") {
+    warning("Can't check collinearity for zero-inflation component from glmmTMB-models.", call. = FALSE)
+    return(NULL)
+  }
+
+  .check_collinearity(x, component)
+}
+
+
+
+#' @export
+check_collinearity.MixMod <- function(x, component = c("conditional", "count", "zi", "zero_inflated"), ...) {
   component <- match.arg(component)
 
   if (component == "count") component <- "conditional"
@@ -95,6 +115,7 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
 
 
 
+
 #' @keywords internal
 .check_collinearity <- function(x, component) {
   v <- .vcov_as_matrix(x, component)
@@ -103,6 +124,8 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
   if (insight::has_intercept(x)) {
     v <- v[-1, -1]
     assign <- assign[-1]
+  } else {
+    warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
   }
 
   terms <- insight::find_predictors(x)[[component]]
@@ -139,6 +162,8 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
 
 
 
+
+
 #' @importFrom stats vcov
 #' @keywords internal
 .vcov_as_matrix <- function(x, component) {
@@ -147,6 +172,12 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
       component,
       conditional = as.matrix(stats::vcov(x, model = "count")),
       zero_inflated = as.matrix(stats::vcov(x, model = "zero"))
+    )
+  } else if (inherits(x, "MixMod")) {
+    switch(
+      component,
+      conditional = as.matrix(stats::vcov(x, parm = "fixed-effects")),
+      zero_inflated = as.matrix(stats::vcov(x, parm = "zero_part"))
     )
   } else {
     switch(
@@ -159,6 +190,7 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
 
 
 
+
 #' @importFrom stats model.matrix
 #' @keywords internal
 .term_assignments <- function(x, component) {
@@ -168,6 +200,19 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
         component,
         conditional = attr(stats::model.matrix(x, model = "count"), "assign"),
         zero_inflated = attr(stats::model.matrix(x, model = "zero"), "assign")
+      )
+    } else if (inherits(x, "glmmTMB")) {
+      assign <- switch(
+        component,
+        conditional = attr(stats::model.matrix(x), "assign"),
+        ## TODO model.matrix() needs to be fixed in glmmTMB
+        zero_inflated = NULL
+      )
+    } else if (inherits(x, "MixMod")) {
+      assign <- switch(
+        component,
+        conditional = attr(stats::model.matrix(x, type = "fixed"), "assign"),
+        zero_inflated = attr(stats::model.matrix(x, type = "zi_fixed"), "assign")
       )
     } else {
       assign <- attr(stats::model.matrix(x), "assign")
@@ -186,6 +231,7 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
 
 
 
+
 #' @importFrom insight find_parameters find_predictors
 #' @keywords internal
 .find_term_assignment <- function(x, component) {
@@ -194,6 +240,7 @@ check_collinearity.zerocount <- function(x, component = c("conditional", "count"
     insight::find_predictors(x)[[component]]
   )
 }
+
 
 
 .collapse_zi <- function(x) {
