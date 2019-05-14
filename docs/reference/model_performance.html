@@ -167,12 +167,12 @@ See related documentation of object's class for details.</p></td>
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 <span class='fu'>compare_performance</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt;   name   class       AIC       BIC      RMSE        R2 R2_adjusted   R2_Tjur
-#&gt; 1   m1     glm  31.29788  35.69508 0.8891336        NA          NA 0.4776926
-#&gt; 2   m2      lm 156.01007 161.87301 2.4442021 0.8302274   0.8185189        NA
+#&gt; 1   m1      lm 156.01007 161.87301 2.4442021 0.8302274   0.8185189        NA
+#&gt; 2   m2     glm  31.29788  35.69508 0.8891336        NA          NA 0.4776926
 #&gt; 3   m3 lmerMod  77.31960  89.36214 0.2787760        NA          NA        NA
 #&gt;     LOGLOSS       PCP R2_conditional R2_marginal       ICC
-#&gt; 1 0.3952793 0.7429268             NA          NA        NA
-#&gt; 2        NA        NA             NA          NA        NA
+#&gt; 1        NA        NA             NA          NA        NA
+#&gt; 2 0.3952793 0.7429268             NA          NA        NA
 #&gt; 3        NA        NA      0.9723224   0.0955834 0.9693973</div><div class='input'>
 </div></pre>
   </div>

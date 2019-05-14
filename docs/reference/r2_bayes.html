@@ -180,12 +180,12 @@ calculate the central tendency of the variances.</p></td>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.023 seconds (Warm-up)
+#&gt; Chain 1:  Elapsed Time: 0.03 seconds (Warm-up)
 #&gt; Chain 1:                0.016 seconds (Sampling)
-#&gt; Chain 1:                0.039 seconds (Total)
+#&gt; Chain 1:                0.046 seconds (Total)
 #&gt; Chain 1: </div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
-#&gt; </span><span>  Conditional R2: 0.825 [0.020]</div><div class='input'>
+#&gt; </span><span>  Conditional R2: 0.825 [0.026]</div><div class='input'>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>stan_lmer</a></span>(
   <span class='no'>Petal.Length</span> ~ <span class='no'>Petal.Width</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>),
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>,
@@ -212,13 +212,13 @@ calculate the central tendency of the variances.</p></td>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.526 seconds (Warm-up)
-#&gt; Chain 1:                0.401 seconds (Sampling)
-#&gt; Chain 1:                0.927 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.652 seconds (Warm-up)
+#&gt; Chain 1:                0.408 seconds (Sampling)
+#&gt; Chain 1:                1.06 seconds (Total)
 #&gt; Chain 1: </div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
 #&gt; </span><span>  Conditional R2: 0.954 [0.002]
-#&gt;      Marginal R2: 0.429 [0.139]</div><div class='input'>
+#&gt;      Marginal R2: 0.412 [0.112]</div><div class='input'>
 </div></span><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>brms</span>)
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>brms</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/brms/topics/brm'>brm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)

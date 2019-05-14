@@ -175,18 +175,23 @@ calculate the central tendency of the variances.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><strong>Calculation of the ICC</strong>
+    <p><strong>Interpretation</strong>
+ <br /> <br />
+ The ICC can be interpreted as &#8220;the proportion of the variance explained
+ by the grouping structure in the population&#8221;. This index goes from 0, if the
+ grouping conveys no information, to 1, if all observations in a group are
+ identical (Gelman \&amp; Hill, 2007, p. 258). In other word, the ICC
+ &#8220;can also be interpreted as the expected correlation between two
+ randomly drawn units that are in the same group&#8221; <cite>(Hox 2010: 15)</cite>,
+ altough this definition might not apply to mixed models with more complex
+ random effects structures.
+ <br /> <br />
+<strong>Calculation</strong>
  <br /> <br />
  The ICC is calculated by dividing the random effect variance,
  &sigma;<sup>2</sup><sub>i</sub>, by
  the total variance, i.e. the sum of the random effect variance and the
  residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>.
- The ICC can be interpreted as &#8220;the proportion of the variance explained
- by the grouping structure in the population&#8221;, or in other word, the ICC
- &#8220;can also be interpreted as the expected correlation between two
- randomly drawn units that are in the same group&#8221; <cite>(Hox 2010: 15)</cite>.
- Note that the second part of the definition might not apply to mixed models
- with more complex random effects strucures.
  <br /> <br />
  <strong>Adjusted and conditional ICC</strong>
  <br /> <br />
@@ -210,7 +215,7 @@ calculate the central tendency of the variances.</p></td>
  much, e.g., a level-2 variable explains the portion of variation in the grouping
  structure (random intercept).
  <br /> <br />
- <strong>ICC for specific group-levels </strong>
+ <strong>ICC for specific group-levels</strong>
  <br /> <br />
  The proportion of variance for specific levels related to  each other
  (e.g., similarity of level-1-units within level-2-units or level-2-units

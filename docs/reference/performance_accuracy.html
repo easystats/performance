@@ -157,7 +157,7 @@ is used to compute the accuracy values.</p></td>
     <p>For linar models, the accuracy is the correlation coefficient
    between the actual and the predicted value of the outcome. For
    logistic regression models, the accuracy corresponds to the
-   AUC-value, calculated with the <code><a href='https://www.rdocumentation.org/packages/pROC/topics/auc'>auc</a></code>-function.
+   AUC-value, calculated with the <code><a href='https://www.rdocumentation.org/packages/bayestestR/topics/area_under_curve'>auc</a></code>-function.
    <br /> <br />
    The accuracy is the mean value of multiple correlation resp.
    AUC-values, which are either computed with crossvalidation
@@ -176,7 +176,7 @@ is used to compute the accuracy values.</p></td>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='fu'>performance_accuracy</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Accuracy of Model Predictions
 #&gt; 
-#&gt; </span><span>Accuracy: 88.00%
+#&gt; </span><span>Accuracy: 12.00%
 #&gt;       SE: 15.35%-points
 #&gt;   Method: Area under Curve</div><div class='input'>
 </div></span></pre>

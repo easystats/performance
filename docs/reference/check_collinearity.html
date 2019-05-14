@@ -119,7 +119,11 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>check_collinearity</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>check_collinearity</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for glmmTMB</span>
+<span class='fu'>check_collinearity</span>(<span class='no'>x</span>, <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"all"</span>,
+  <span class='st'>"conditional"</span>, <span class='st'>"count"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,6 +137,16 @@ work without <code><a href='https://www.rdocumentation.org/packages/stats/topics
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>component</th>
+      <td><p>For models with zero-inflation component, multicollinearity
+can be checked for the conditional model (count component,
+<code>component = "conditional"</code> or <code>component = "count"</code>),
+zero-inflation component (<code>component = "zero_inflated"</code> or
+<code>component = "zi"</code>) or both components (<code>component = "all"</code>).
+Following model-classes are currently supported: <code>hurdle</code>,
+<code>zeroinfl</code>, <code>zerocount</code>, <code>MixMod</code> and <code>glmmTMB</code>.</p></td>
     </tr>
     </table>
     

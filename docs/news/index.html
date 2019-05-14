@@ -134,6 +134,8 @@
 <code><a href="../reference/performance_logloss.html">performance_logloss()</a></code> to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the <code><a href="../reference/performance_rmse.html">rmse()</a></code>.</li>
 <li>
 <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code> to calculate the percentage of correct predictions for models with binary outcome.</li>
+<li>
+<code><a href="../reference/performance_roc.html">performance_roc()</a></code>, to calculate ROC-curves.</li>
 </ul>
 </div>
 <div id="new-check-functions" class="section level2">
@@ -174,6 +176,8 @@
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>
 <li>
 <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now calculates the full R2 for mixed models with zero-inflation.</li>
+<li>
+<code><a href="../reference/icc.html">icc()</a></code> now returns <code>NULL</code> and no longer stops when no mixed model is provided.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -182,6 +186,8 @@
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
 <li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (#48).</li>
+<li>
+<code><a href="../reference/model_performance.html">compare_performance()</a></code> did not sort the <code>name</code>-column properly, if the columns <code>class</code> and <code>name</code> were not in the same alphabetical order (#51).</li>
 </ul>
 </div>
 </div>
