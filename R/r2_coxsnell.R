@@ -55,7 +55,15 @@ r2_coxsnell <- function(model) {
 
 #' @export
 r2_coxsnell.glm <- function(model) {
-  r2_coxsnell <- (1 - exp((model$dev - model$null) / insight::n_obs(model)))
+  r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model)))
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
+}
+
+
+#' @export
+r2_coxsnell.BBreg <- function(model) {
+  r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model)))
   names(r2_coxsnell) <- "Cox & Snell's R2"
   r2_coxsnell
 }

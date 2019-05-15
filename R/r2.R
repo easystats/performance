@@ -47,6 +47,13 @@ r2.default <- function(model, ...) {
 
 
 #' @export
+r2.BBreg <- function(model, ...) {
+  list("R2_CoxSnell" = r2_coxsnell(model))
+}
+
+
+
+#' @export
 r2.betareg <- function(model, ...) {
   list(
     R2 = c(`Pseudo R2` = model$pseudo.r.squared)
