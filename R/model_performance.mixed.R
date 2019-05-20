@@ -35,10 +35,12 @@ model_performance.merMod <- function(model, metrics = "all", ...) {
     out$BIC <- stats::BIC(model)
   }
   if ("R2" %in% metrics) {
-    out <- c(out, r2(model))
+    rsq <- suppressWarnings(r2(model))
+    if (!all(is.na(rsq))) out <- c(out, rsq)
   }
   if ("ICC" %in% metrics) {
-    out$ICC <- icc(model)$ICC_adjusted
+    icc_mm <- suppressWarnings(icc(model))
+    if (!all(is.na(icc_mm))) out$ICC <- icc_mm$ICC_adjusted
   }
   if ("RMSE" %in% metrics) {
     out$RMSE <- performance_rmse(model)
@@ -61,6 +63,9 @@ model_performance.lme <- model_performance.merMod
 
 #' @export
 model_performance.MixMod <- model_performance.merMod
+
+#' @export
+model_performance.mixed <- model_performance.merMod
 
 #' @export
 model_performance.glmmTMB <- model_performance.merMod
