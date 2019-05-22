@@ -356,7 +356,7 @@ print.performance_hosmer <- function(x, ...) {
 
 
 #' @export
-print.performance_accuracy  <- function(x, ...) {
+print.performance_accuracy <- function(x, ...) {
   # headline
   insight::print_color("# Accuracy of Model Predictions\n\n", "blue")
 
@@ -364,6 +364,25 @@ print.performance_accuracy  <- function(x, ...) {
   cat(sprintf("Accuracy: %.2f%%\n", 100 * x$accuracy))
   cat(sprintf("      SE: %.2f%%-points\n", 100 * x$std.error))
   cat(sprintf("  Method: %s\n", x$stat))
+}
+
+
+#' @export
+print.performance_score <- function(x, ...) {
+  # headline
+  insight::print_color("# Proper Scoring Rules\n\n", "blue")
+
+  results <- format(
+    c(
+      sprintf("%.4f", x$logarithmic),
+      sprintf("%.4f", x$quadratic),
+      sprintf("%.4f", x$spherical)
+    ),
+    justify = "right")
+
+  cat(sprintf("logarithmic: %s\n", results[1]))
+  cat(sprintf("  quadratic: %s\n", results[2]))
+  cat(sprintf("  spherical: %s\n", results[3]))
 }
 
 

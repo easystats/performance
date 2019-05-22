@@ -4,12 +4,13 @@
 
 * `r2()` now works for more regression models.
 * `r2_bayes()` now works for multivariate response models.
-* `model_performance()` now works for more regression models, and also includes the log-loss and percentage of correct predictions as new metric for models with binary outcome.
+* `model_performance()` now works for more regression models, and also includes the log-loss, proper scoring rules and percentage of correct predictions as new metric for models with binary outcome.
 
 ## New performance-functions
 
 * `performance_accuracy()`, which calculates the predictive accuracy of linear or logistic regression models.
 * `performance_logloss()` to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the `rmse()`.
+* `performance_score()` to compute the logarithmic, quadratic and spherical proper scoring rules.
 * `performance_pcp()` to calculate the percentage of correct predictions for models with binary outcome.
 * `performance_roc()`, to calculate ROC-curves.
 

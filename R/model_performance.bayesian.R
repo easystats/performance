@@ -3,10 +3,13 @@
 #' Compute indices of model performance for (general) linear models.
 #'
 #' @param model Object of class \code{stanreg} or \code{brmsfit}.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
+#'
+#' @details See 'Details' in \code{\link{model_performance.lm}} for more
+#' details on returned indices.
 #'
 #' @examples
 #' library(rstanarm)
@@ -31,7 +34,7 @@
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "LOGLOSS")
+    metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "LOGLOSS", "SCORE")
   }
 
   algorithm <- insight::find_algorithm(model)
@@ -70,6 +73,11 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
     out$LOGLOSS <- performance_logloss(model)
+  }
+  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
+    .scoring_rules <- performance_score(model)
+    if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
   }
 
   # TODO: What with sigma and deviance?

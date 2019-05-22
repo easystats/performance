@@ -9,7 +9,7 @@
 \arguments{
 \item{model}{Object of class \code{stanreg} or \code{brmsfit}.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS")}).}
+\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -18,6 +18,10 @@ A data frame (with one row) and one column per "index" (see \code{metrics}).
 }
 \description{
 Compute indices of model performance for (general) linear models.
+}
+\details{
+See 'Details' in \code{\link{model_performance.lm}} for more
+details on returned indices.
 }
 \examples{
 library(rstanarm)

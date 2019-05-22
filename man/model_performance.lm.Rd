@@ -12,7 +12,7 @@
 \arguments{
 \item{model}{A model.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP")}).}
+\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -31,6 +31,8 @@ Depending on \code{model}, following indices are computed:
   \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
+  \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
+  \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
   \item{\strong{PCP}} {percentage of correct predictions, see \code{\link{performance_pcp}}}
 }
 }

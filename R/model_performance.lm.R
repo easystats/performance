@@ -3,7 +3,7 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
@@ -16,6 +16,8 @@
 #'   \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
 #'   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
 #'   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
+#'   \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
+#'   \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
 #'   \item{\strong{PCP}} {percentage of correct predictions, see \code{\link{performance_pcp}}}
 #' }
 #'
@@ -31,7 +33,7 @@
 #' @export
 model_performance.lm <- function(model, metrics = "all", ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "PCP")
+    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "PCP", "SCORE")
   }
 
   mi <- insight::model_info(model)
@@ -52,6 +54,11 @@ model_performance.lm <- function(model, metrics = "all", ...) {
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
     .logloss <- performance_logloss(model)
     if (!is.na(.logloss)) out$LOGLOSS <- .logloss
+  }
+  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
+    .scoring_rules <- performance_score(model)
+    if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
   }
 
   if (("PCP" %in% metrics) && mi$is_binomial && !mi$is_ordinal) {

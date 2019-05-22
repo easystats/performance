@@ -14,6 +14,8 @@
 #'   bad predictions, while low values indicate good predictions. The lower
 #'   the log-loss, the better the model predicts the outcome.
 #'
+#' @seealso \code{\link[=performance_score]{performance_score()}}
+#'
 #' @examples
 #' data(mtcars)
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)

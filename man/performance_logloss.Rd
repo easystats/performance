@@ -30,3 +30,6 @@ m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 performance_logloss(m)
 
 }
+\seealso{
+\code{\link[=performance_score]{performance_score()}}
+}
