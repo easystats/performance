@@ -223,10 +223,20 @@ knitr::kable(model_performance(m3), digits = 2)
 ### Comparing different models
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
-compare_performance(m1, m2, m3)
+counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+outcome <- gl(3, 1, 9)
+treatment <- gl(3, 3)
+m4 <- glm(counts ~ outcome + treatment, family = poisson())
+
+compare_performance(m1, m2, m3, m4)
 ```
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
-knitr::kable(compare_performance(m1, m2, m3), digits = 2)
+counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+outcome <- gl(3, 1, 9)
+treatment <- gl(3, 3)
+m4 <- glm(counts ~ outcome + treatment, family = poisson())
+
+knitr::kable(compare_performance(m1, m2, m3, m4), digits = 2)
 ```
 
 # References

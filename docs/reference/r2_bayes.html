@@ -162,8 +162,8 @@ calculate the central tendency of the variances.</p></td>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 0 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 1: Gradient evaluation took 0.001 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -180,9 +180,9 @@ calculate the central tendency of the variances.</p></td>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.03 seconds (Warm-up)
-#&gt; Chain 1:                0.016 seconds (Sampling)
-#&gt; Chain 1:                0.046 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.024 seconds (Warm-up)
+#&gt; Chain 1:                0.011 seconds (Sampling)
+#&gt; Chain 1:                0.035 seconds (Total)
 #&gt; Chain 1: </div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
 #&gt; </span><span>  Conditional R2: 0.825 [0.026]</div><div class='input'>
@@ -212,9 +212,9 @@ calculate the central tendency of the variances.</p></td>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.652 seconds (Warm-up)
-#&gt; Chain 1:                0.408 seconds (Sampling)
-#&gt; Chain 1:                1.06 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.485 seconds (Warm-up)
+#&gt; Chain 1:                0.307 seconds (Sampling)
+#&gt; Chain 1:                0.792 seconds (Total)
 #&gt; Chain 1: </div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
 #&gt; </span><span>  Conditional R2: 0.954 [0.002]

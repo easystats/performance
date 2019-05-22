@@ -132,7 +132,7 @@
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP")</a></code>).</p></td>
+      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -153,6 +153,8 @@
 <li><p><strong>R2_adj</strong> adjusted r-squared, see <code><a href='r2.html'>r2</a></code></p></li>
 <li><p><strong>RMSE</strong> root mean squared error, see <code><a href='performance_rmse.html'>performance_rmse</a></code></p></li>
 <li><p><strong>LOGLOSS</strong> Log-loss, see <code><a href='performance_logloss.html'>performance_logloss</a></code></p></li>
+<li><p><strong>SCORE_LOG</strong> score of logarithmic proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
+<li><p><strong>SCORE_SPHERICAL</strong> score of spherical proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
 <li><p><strong>PCP</strong> percentage of correct predictions, see <code><a href='performance_pcp.html'>performance_pcp</a></code></p></li>
 </ul>
     
@@ -162,8 +164,10 @@
 <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC     BIC        R2 R2_adjusted     RMSE
 #&gt; 1 156.0101 161.873 0.8302274   0.8185189 2.444202</div><div class='input'>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC      BIC   R2_Tjur      RMSE   LOGLOSS       PCP
-#&gt; 1 31.29788 35.69508 0.4776926 0.8891336 0.3952793 0.7429268</div><div class='input'>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC      BIC   R2_Tjur      RMSE   LOGLOSS SCORE_LOG SCORE_SPHERICAL
+#&gt; 1 31.29788 35.69508 0.4776926 0.8891336 0.3952793 -14.90294       0.0945795
+#&gt;         PCP
+#&gt; 1 0.7429268</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

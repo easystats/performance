@@ -129,7 +129,7 @@
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS")</a></code>).</p></td>
+      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -140,6 +140,11 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>See 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for more
+details on returned indices.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -174,9 +179,9 @@
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.032 seconds (Warm-up)
-#&gt; Chain 1:                0.021 seconds (Sampling)
-#&gt; Chain 1:                0.053 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.023 seconds (Warm-up)
+#&gt; Chain 1:                0.014 seconds (Sampling)
+#&gt; Chain 1:                0.037 seconds (Total)
 #&gt; Chain 1: </div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        ELPD  ELPD_SE    LOOIC LOOIC_SE     WAIC        R2      R2_SE
 #&gt; 1 -78.02776 4.428559 156.0555 8.857117 156.0104 0.8183015 0.02785584
 #&gt;   R2_LOO_adjusted     RMSE
@@ -207,9 +212,9 @@
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.159 seconds (Warm-up)
-#&gt; Chain 1:                0.05 seconds (Sampling)
-#&gt; Chain 1:                0.209 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.122 seconds (Warm-up)
+#&gt; Chain 1:                0.036 seconds (Sampling)
+#&gt; Chain 1:                0.158 seconds (Total)
 #&gt; Chain 1: </div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.</span></div><div class='output co'>#&gt;        ELPD  ELPD_SE    LOOIC LOOIC_SE     WAIC        R2      R2_SE
 #&gt; 1 -79.02096 4.418515 158.0419  8.83703 157.8849 0.8169693 0.03009043
 #&gt;   R2_marginal R2_marginal_SE R2_LOO_adjusted     RMSE
@@ -222,6 +227,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
 

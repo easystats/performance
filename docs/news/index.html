@@ -121,7 +121,7 @@
 <li>
 <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> now works for multivariate response models.</li>
 <li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> now works for more regression models, and also includes the log-loss and percentage of correct predictions as new metric for models with binary outcome.</li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> now works for more regression models, and also includes the log-loss, proper scoring rules and percentage of correct predictions as new metric for models with binary outcome.</li>
 </ul>
 </div>
 <div id="new-performance-functions" class="section level2">
@@ -132,6 +132,8 @@
 <code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code>, which calculates the predictive accuracy of linear or logistic regression models.</li>
 <li>
 <code><a href="../reference/performance_logloss.html">performance_logloss()</a></code> to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the <code><a href="../reference/performance_rmse.html">rmse()</a></code>.</li>
+<li>
+<code><a href="../reference/performance_score.html">performance_score()</a></code> to compute the logarithmic, quadratic and spherical proper scoring rules.</li>
 <li>
 <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code> to calculate the percentage of correct predictions for models with binary outcome.</li>
 <li>

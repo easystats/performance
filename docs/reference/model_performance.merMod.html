@@ -129,7 +129,7 @@
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS")</a></code>).</p></td>
+      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -145,7 +145,10 @@
 
     <p>This method returns the <em>adjusted ICC</em> only, as this is typically
   of interest when judging the variance attributed to the random effects part
-  of the model (see also <code><a href='icc.html'>icc</a></code>).</p>
+  of the model (see also <code><a href='icc.html'>icc</a></code>).
+  <br /> <br />
+  Furthermore, see 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for
+  more details on returned indices.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
