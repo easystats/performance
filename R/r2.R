@@ -336,14 +336,7 @@ r2.vglm <- function(model, ...) {
 
 #' @export
 r2.wbm <- function(model, ...) {
-  s <- summary(model)
-  structure(
-    class = "r2_nakagawa",
-    list(
-      "R2_conditional" = s$mod_info_list$pR2_total,
-      "R2_marginal" = s$mod_info_list$pR2_fe
-    )
-  )
+  r2_nakagawa(model)
 }
 
 
