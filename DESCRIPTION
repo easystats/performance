@@ -1,7 +1,7 @@
 Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
-Version: 0.1.0.9000
+Version: 0.2.0
 Date: 2019-04-23
 Authors@R: c(
 	person("Daniel", 
@@ -13,7 +13,12 @@ Authors@R: c(
 		"Makowski", 
 		email = "dom.makowski@gmail.com",
 		role = c("aut", "ctb"), 
-		comment = c(ORCID = "0000-0001-5375-9967"))
+		comment = c(ORCID = "0000-0001-5375-9967")),
+	person("Philip", 
+		"Waggoner", 
+		email = "philip.waggoner@gmail.com",
+		role = c("aut", "ctb"), 
+		comment = c(ORCID = "0000-0002-7825-7573"))
 	)
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
