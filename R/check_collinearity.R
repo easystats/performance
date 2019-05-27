@@ -35,7 +35,7 @@
 #' check_collinearity(m)
 #'
 #' @importFrom stats vcov cov2cor
-#' @importFrom insight has_intercept find_predictors
+#' @importFrom insight has_intercept find_predictors model_info
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
