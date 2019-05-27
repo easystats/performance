@@ -34,8 +34,8 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
-#' @importFrom stats vcov cov2cor
-#' @importFrom insight has_intercept find_predictors model_info
+#' @importFrom stats vcov cov2cor terms
+#' @importFrom insight has_intercept find_formula model_info
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
@@ -123,7 +123,13 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
   }
 
-  terms <- insight::find_predictors(x)[[component]]
+  f <- insight::find_formula(x)
+  terms <- labels(stats::terms(f[[component]]))
+
+  if ("instruments" %in% names(f)) {
+    terms <- unique(c(terms, labels(stats::terms(f[["instruments"]]))))
+  }
+
   n.terms <- length(terms)
 
   if (n.terms < 2) {
