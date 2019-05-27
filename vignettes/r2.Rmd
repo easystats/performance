@@ -1,0 +1,54 @@
+---
+title: "R-squared (R2)"
+output: 
+  github_document:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, performance, r2]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{R-squared (R2)}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = '')
+knitr::opts_chunk$set(comment=">")
+options(digits=2)
+
+set.seed(333)
+
+library(dplyr)
+```
+
+
+# What is the R2?
+
+The **coefficient of determination**, denoted **R2** and pronounced "R squared", is the proportion of the variance in the dependent variable (the response) that is *explained* (*i.e.*, predictable) from the independent variables (the predictors).
+
+It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1, and can be used for model performance assessment or models comparison.
+
+# Different types of R2
+
+As models become more complex, the computation of an R2 becomes less straightforward.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+data.frame("Model_class" = c("lm", "glm"),
+           "r2_simple" = c("X", NA),
+           "r2_Tjur" = c(NA, "X")) %>% 
+  knitr::kable()
+```
+
+
+
+
