@@ -95,6 +95,9 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   if (component == "count") component <- "conditional"
   if (component == "zi") component <- "zero_inflated"
 
+  mi <- insight::model_info(x)
+  if (!mi$is_zero_inflated) component <- "conditional"
+
   if (component == "all") {
     cond <- .check_collinearity(x, "conditional")
     cond$Component = "conditional"
