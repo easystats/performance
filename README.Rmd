@@ -36,7 +36,7 @@ options(knitr.kable.NA = '',
 
 ***Test if your model is a good model!***
 
-The primary goal of the **performance** package is to provide utilities for computing **indices of model quality** and **goodness of fit**. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.
+The primary goal of the **performance** package is to provide utilities for computing **indices of model quality** and **goodness of fit**. This includes measures like r-squared (R2), root mean squared error (RMSE) or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.
 
 ## Installation
 
