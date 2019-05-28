@@ -13,6 +13,7 @@
 * `performance_score()` to compute the logarithmic, quadratic and spherical proper scoring rules.
 * `performance_pcp()` to calculate the percentage of correct predictions for models with binary outcome.
 * `performance_roc()`, to calculate ROC-curves.
+* `performance_aicc()`, to calculate the second-order AIC (AICc).
 
 ## New check-functions
 

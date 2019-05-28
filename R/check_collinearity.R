@@ -124,6 +124,10 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   }
 
   terms <- insight::find_predictors(x)[[component]]
+
+  ## TODO add interaction terms
+  # strsplit(deparse(insight::find_formula(glm1)[component], width.cutoff = 500), split = "(\\+|-|~)")
+
   n.terms <- length(terms)
 
   if (n.terms < 2) {
