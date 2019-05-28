@@ -123,10 +123,12 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
   }
 
-  terms <- insight::find_predictors(x)[[component]]
+  f <- insight::find_formula(x)
+  terms <- labels(stats::terms(f[[component]]))
 
-  ## TODO add interaction terms
-  # strsplit(deparse(insight::find_formula(glm1)[component], width.cutoff = 500), split = "(\\+|-|~)")
+  if ("instruments" %in% names(f)) {
+    terms <- unique(c(terms, labels(stats::terms(f[["instruments"]]))))
+  }
 
   n.terms <- length(terms)
 
