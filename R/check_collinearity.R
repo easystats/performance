@@ -34,8 +34,8 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
-#' @importFrom stats vcov cov2cor
-#' @importFrom insight has_intercept find_predictors model_info
+#' @importFrom stats vcov cov2cor terms
+#' @importFrom insight has_intercept find_formula model_info
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
