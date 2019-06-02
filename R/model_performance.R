@@ -35,7 +35,8 @@ model_performance <- function(model, ...) {
 }
 
 
-#' @importFrom insight is_model
+#' @importFrom insight is_model all_models_equal
+#' @importFrom bayestestR bayesfactor_models
 #' @rdname model_performance
 #' @export
 compare_performance <- function(..., metrics = "all") {
@@ -55,6 +56,21 @@ compare_performance <- function(..., metrics = "all") {
     cbind(data.frame(name = as.character(.y), class = class(.x)[1], stringsAsFactors = FALSE), dat)
   }, objects, object_names, SIMPLIFY = FALSE)
 
+
+  # check for identical model class, for bayesfactor
+  BFs <- NULL
+  if (insight::all_models_equal(...)) {
+    BFs <- tryCatch({
+      bayestestR::bayesfactor_models(..., verbose = FALSE)
+    },
+    error = function(e) { NULL })
+  }
+
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE), m)
+
+  if (!is.null(BFs)) {
+    dfs$Bayesfactor <- BFs$BF
+  }
+
   dfs[order(sapply(object_names, as.character), dfs$name), ]
 }

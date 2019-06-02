@@ -3,7 +3,7 @@
 \name{icc}
 \alias{icc}
 \alias{icc.brmsfit}
-\title{The Intraclass Correlation Coefficient (ICC) for mixed models}
+\title{Intraclass Correlation Coefficient (ICC)}
 \usage{
 icc(model, ...)
 
@@ -33,8 +33,8 @@ A list with two values, the adjusted and conditional ICC. For models
 }
 \description{
 This function calculates the intraclass-correlation coefficient
- (icc) - sometimes also called \emph{variance partition coefficient}
- (vpc) - for mixed effects models. The ICC is calculated for \code{merMod}
+ (ICC) - sometimes also called \emph{variance partition coefficient}
+ (VPC) - for mixed effects models. The ICC is calculated for \code{merMod}
  (\pkg{lme4}), \code{glmmTMB} (\pkg{glmmTMB}), \code{MixMod} (\pkg{GLMMadpative}),
  \code{lme} (\pkg{nlme}), \code{mixed} (\pkg{afex}), and \code{stanreg}
  (\pkg{rstanarm}) objects. For models fitted with the \pkg{brms}-package,
