@@ -19,6 +19,12 @@
 #'   column per "index" (see \code{metrics}). For \code{compare_performance()},
 #'   the same data frame with one row per model.
 #'
+#' @details If all models are of the same class, \code{compare_performance()}
+#'   returns an additional column named \code{BF}, which shows the Bayes factor
+#'   (see \code{\link[bayestestR]{bayesfactor_models}}) for each model against
+#'   the denominator model. The \emph{first} model is used as denominator model,
+#'   and its Bayes factor is set to \code{NA} to indicate the reference model.
+#'
 #' @examples
 #' library(lme4)
 #'
@@ -28,6 +34,12 @@
 #' m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #' compare_performance(m1, m2, m3)
+#'
+#' data(iris)
+#' lm1 <- lm(Sepal.Length ~ Species, data = iris)
+#' lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+#' lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+#' compare_performance(lm1, lm2, lm3)
 #'
 #' @export
 model_performance <- function(model, ...) {
@@ -61,7 +73,7 @@ compare_performance <- function(..., metrics = "all") {
   BFs <- NULL
   if (insight::all_models_equal(...)) {
     BFs <- tryCatch({
-      bayestestR::bayesfactor_models(..., verbose = FALSE)
+      bayestestR::bayesfactor_models(..., denominator = 1, verbose = FALSE)
     },
     error = function(e) { NULL })
   }
@@ -69,7 +81,8 @@ compare_performance <- function(..., metrics = "all") {
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE), m)
 
   if (!is.null(BFs)) {
-    dfs$Bayesfactor <- BFs$BF
+    dfs$BF <- BFs$BF
+    dfs$BF[dfs$name == object_names[1]] <- NA
   }
 
   dfs[order(sapply(object_names, as.character), dfs$name), ]
