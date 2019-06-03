@@ -6,6 +6,7 @@
 #'
 #' @param model A model.
 #' @param normalized Logical, use \code{TRUE} if normalized rmse should be returned.
+#' @inheritParams model_performance
 #'
 #' @details The RMSE is the square root of the variance of the residuals and indicates
 #'   the absolute fit of the model to the data (difference between observed data
@@ -31,7 +32,7 @@
 #'
 #' @importFrom insight get_response
 #' @export
-performance_rmse <- function(model, normalized = FALSE) {
+performance_rmse <- function(model, normalized = FALSE, verbose = TRUE) {
   tryCatch({
     # compute rmse
     rmse_val <- sqrt(performance_mse(model))
@@ -47,7 +48,7 @@ performance_rmse <- function(model, normalized = FALSE) {
     rmse_val
   },
   error = function(e) {
-    if (inherits(e, c("simpleError", "error"))) {
+    if (inherits(e, c("simpleError", "error")) && verbose) {
       insight::print_color(e$message, "red")
       cat("\n")
     }

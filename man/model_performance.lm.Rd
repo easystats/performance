@@ -5,14 +5,18 @@
 \alias{model_performance.glm}
 \title{Performance of Regression Models}
 \usage{
-\method{model_performance}{lm}(model, metrics = "all", ...)
+\method{model_performance}{lm}(model, metrics = "all", verbose = TRUE,
+  ...)
 
-\method{model_performance}{glm}(model, metrics = "all", ...)
+\method{model_performance}{glm}(model, metrics = "all", verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{model}{A model.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}).}
+
+\item{verbose}{Toggle off warnings.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

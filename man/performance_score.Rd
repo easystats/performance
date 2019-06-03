@@ -4,7 +4,7 @@
 \alias{performance_score}
 \title{Proper Scoring Rules}
 \usage{
-performance_score(model)
+performance_score(model, verbose = TRUE)
 }
 \arguments{
 \item{model}{Model with binary or count outcome.}

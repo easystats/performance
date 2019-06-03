@@ -5,9 +5,9 @@
 \alias{rmse}
 \title{Root Mean Squared Error}
 \usage{
-performance_rmse(model, normalized = FALSE)
+performance_rmse(model, normalized = FALSE, verbose = TRUE)
 
-rmse(model, normalized = FALSE)
+rmse(model, normalized = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{model}{A model.}

@@ -4,6 +4,7 @@
 #' @description Compute mean square error of linear models.
 #'
 #' @inheritParams performance_rmse
+#' @inheritParams model_performance
 #'
 #' @details The mean square error is the mean of the sum of squared residuals,
 #'    i.e. it measures the average of the squares of the errors. Lower
@@ -19,7 +20,7 @@
 #' @importFrom insight print_color
 #' @importFrom stats residuals
 #' @export
-performance_mse <- function(model) {
+performance_mse <- function(model, verbose = TRUE) {
   res <- tryCatch({
     stats::residuals(model)
   },
@@ -29,7 +30,7 @@ performance_mse <- function(model) {
   )
 
   if (is.null(res) || all(is.na(res))) {
-    insight::print_color("Can't extract residuals from model.\n", "red")
+    if (verbose) insight::print_color("Can't extract residuals from model.\n", "red")
     return(NA)
   }
 

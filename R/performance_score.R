@@ -6,6 +6,7 @@
 #'
 #' @param model Model with binary or count outcome.
 #' @param ... Currently not used.
+#' @inheritParams model_performance
 #'
 #' @return A list with three elements, the logarithmic, quadratic/Brier and spherical score.
 #'
@@ -47,9 +48,13 @@
 #' @importFrom insight get_response model_info
 #' @importFrom stats dbinom dpois dnbinom ppois pnbinom
 #' @export
-performance_score <- function(model) {
+performance_score <- function(model, verbose = TRUE) {
   minfo <- insight::model_info(model)
 
+  if (minfo$is_ordinal) {
+    if (verbose) insight::print_color("Can't calculate proper scoring rules for ordinal or cumulative link models.\n", "red")
+    return(list(logarithmic = NA, quadratic = NA, spherical = NA))
+  }
 
   ## TODO remove once insight 0.4.0 is on CRAN
 
@@ -101,7 +106,7 @@ performance_score <- function(model) {
   }
 
   pr <- .predict_score_y(model)
-  resp <- insight::get_response(model)
+  resp <- .factor_to_numeric(insight::get_response(model))
   p_y <- prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))
 
   quadrat_p <- sum(p_y^2)
@@ -157,6 +162,8 @@ performance_score <- function(model) {
   } else if (inherits(model, c("hurdle", "zeroinfl"))) {
     pred <- stats::predict(model, type = "response")
     pred_zi <- stats::predict(model, type = "zero")
+  } else if (inherits(model, c("clm", "clm2", "clmm"))) {
+    pred <- stats::predict(model)
   } else {
     pred <- stats::predict(model, type = "response")
   }

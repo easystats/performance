@@ -5,9 +5,9 @@
 \alias{mse}
 \title{Mean Square Error of Linear Models}
 \usage{
-performance_mse(model)
+performance_mse(model, verbose = TRUE)
 
-mse(model)
+mse(model, verbose = TRUE)
 }
 \arguments{
 \item{model}{A model.}

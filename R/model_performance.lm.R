@@ -4,6 +4,7 @@
 #'
 #' @param model A model.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}).
+#' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
@@ -31,7 +32,7 @@
 #' @importFrom insight model_info
 #' @importFrom stats AIC BIC
 #' @export
-model_performance.lm <- function(model, metrics = "all", ...) {
+model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "PCP", "SCORE")
   }
@@ -49,14 +50,14 @@ model_performance.lm <- function(model, metrics = "all", ...) {
     out <- c(out, r2(model))
   }
   if ("RMSE" %in% metrics) {
-    out$RMSE <- performance_rmse(model)
+    out$RMSE <- performance_rmse(model, verbose = verbose)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    .logloss <- performance_logloss(model)
+    .logloss <- performance_logloss(model, verbose = verbose)
     if (!is.na(.logloss)) out$LOGLOSS <- .logloss
   }
   if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
-    .scoring_rules <- performance_score(model)
+    .scoring_rules <- performance_score(model, verbose = verbose)
     if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
     if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
   }

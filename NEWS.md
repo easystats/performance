@@ -36,6 +36,7 @@
 * `r2_nakagawa()` now calculates the full R2 for mixed models with zero-inflation.
 * `icc()` now returns `NULL` and no longer stops when no mixed model is provided.
 * `compare_performance()` now shows the Bayes factor when all compared models are of same class.
+* Some functions get a `verbose`-argument to sow or suppress warnings.
 
 ## Bug fixes
 
