@@ -81,7 +81,7 @@ performance_score <- function(model) {
       out[ind0] <- pis[ind0] + out[ind0]
       out
     }
-  } else if (minfo$hurdle && minfo$is_poisson) {
+  } else if (minfo$is_hurdle && minfo$is_poisson) {
     function(x, mean, pis, n) {
       ind0 <- x == 0
       trunc_zero <- stats::dpois(x, lambda = mean) / stats::ppois(0, lambda = mean, lower.tail = FALSE)
@@ -89,7 +89,7 @@ performance_score <- function(model) {
       out[ind0] <- pis[ind0]
       out
     }
-  } else if (minfo$hurdle && minfo$is_negbin) {
+  } else if (minfo$is_hurdle && minfo$is_negbin) {
     function(x, mean, pis, n) {
       ind0 <- x == 0
       trunc_zero <- stats::dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo))) /
