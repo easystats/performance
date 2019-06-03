@@ -1,7 +1,7 @@
 #' @title Check model for independence of residuals.
 #' @name check_autocorrelation
 #'
-#' @description Check model for independence of residuals, i.e. for auto-correlation
+#' @description Check model for independence of residuals, i.e. for autocorrelation
 #' of error terms.
 #'
 #' @param x A model object.
@@ -11,8 +11,8 @@
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates autocorrelated residuals.
 #'
-#' @details Performs a Durbin-Watson-Test to check for auto-correlated residuals.
-#' In case of auto-correlation, robust standard errors return more accurate
+#' @details Performs a Durbin-Watson-Test to check for autocorrelated residuals.
+#' In case of autocorrelation, robust standard errors return more accurate
 #' results for the estimates, or maybe a mixed model with error term for the
 #' cluster groups should be used.
 #'
@@ -43,9 +43,9 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   p.val <- 2 * (min(p, 1 - p))
 
   if (p.val < 0.05) {
-    message(sprintf("Autocorrelated residuals detected (p=%.3f).", p.val))
+    insight::print_color(sprintf("Warning: Autocorrelated residuals detected (p=%.3f).", p.val), "red")
   } else {
-    message(sprintf("No autocorrelated residuals detected (p=%.3f).", p.val))
+    insight::print_color(sprintf("OK: Residuals appear to be independent and not autocorrelated (p=%.3f).", p.val), "green")
   }
 
   invisible(p.val)

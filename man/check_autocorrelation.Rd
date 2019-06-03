@@ -21,12 +21,12 @@ Invisibly returns the p-value of the test statistics. A p-value < 0.05
 indicates autocorrelated residuals.
 }
 \description{
-Check model for independence of residuals, i.e. for auto-correlation
+Check model for independence of residuals, i.e. for autocorrelation
 of error terms.
 }
 \details{
-Performs a Durbin-Watson-Test to check for auto-correlated residuals.
-In case of auto-correlation, robust standard errors return more accurate
+Performs a Durbin-Watson-Test to check for autocorrelated residuals.
+In case of autocorrelation, robust standard errors return more accurate
 results for the estimates, or maybe a mixed model with error term for the
 cluster groups should be used.
 }
