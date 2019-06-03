@@ -9,7 +9,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     m1 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 
     test_that("icc", {
-      expect_error(icc(m0))
+      expect_warning(expect_null(icc(m0)))
     })
 
     test_that("icc", {
@@ -52,7 +52,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
               CI_high = 58.0512742208554
             ),
             row.names = c(NA, -1L),
-            class = c("ci", "data.frame")
+            class = c("ci", "see_ci", "data.frame")
           ),
           ci.var_residual = structure(
             list(
@@ -60,7 +60,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
               CI_high = 35.5471388201185
             ),
             row.names = c(NA, -1L),
-            class = c("ci", "data.frame")
+            class = c("ci", "see_ci", "data.frame")
           ),
           ci.var_total = structure(
             list(
@@ -69,7 +69,7 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
               CI_high = 56.4463902022863
             ),
             row.names = c(NA, -1L),
-            class = c("ci", "data.frame")
+            class = c("ci", "see_ci", "data.frame")
           ),
           ci = 0.95,
           ranef = "cyl"

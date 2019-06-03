@@ -228,5 +228,10 @@ icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
   attr(result, "re.form") <- re.form
   attr(result, "ranef") <- model$ranef$group[1]
 
+  # remove data
+  attr(attr(result, "ci.var_rand_intercept"), "data") <- NULL
+  attr(attr(result, "ci.var_residual"), "data") <- NULL
+  attr(attr(result, "ci.var_total"), "data") <- NULL
+
   result
 }

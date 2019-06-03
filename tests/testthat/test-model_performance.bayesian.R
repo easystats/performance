@@ -49,7 +49,7 @@ if (require("testthat") && require("performance")) {
 
       model <- insight::download_model("brms_ordinal_1")
       perf <- model_performance(model)
-      expect_null(perf$R2)
+      expect_equal(perf$R2, 0.8702333, tolerance = 0.01)
       expect_equal(perf$ELPD, -12.77548, tolerance = 0.01)
     })
 
