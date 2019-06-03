@@ -7,12 +7,17 @@
 \usage{
 check_model(x, ...)
 
-\method{check_model}{default}(x, panels = TRUE, ...)
+\method{check_model}{default}(x, dot_size = 2, line_size = 0.8,
+  panels = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object.}
 
 \item{...}{Currently not used.}
+
+\item{dot_size}{Size of dot-geoms.}
+
+\item{line_size}{Size of line-geoms.}
 
 \item{panel}{Logical, if \code{TRUE}, plots are arranged as panels; else,
 single plots for each diagnostic are returned.}
