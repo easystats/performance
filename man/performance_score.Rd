@@ -9,6 +9,8 @@ performance_score(model, verbose = TRUE)
 \arguments{
 \item{model}{Model with binary or count outcome.}
 
+\item{verbose}{Toggle off warnings.}
+
 \item{...}{Currently not used.}
 }
 \value{
