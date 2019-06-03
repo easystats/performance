@@ -8,7 +8,7 @@
 check_model(x, ...)
 
 \method{check_model}{default}(x, dot_size = 2, line_size = 0.8,
-  panels = TRUE, ...)
+  panel = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object.}
@@ -41,7 +41,7 @@ check_model(m)
 
 library(lme4)
 m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-check_model(m, panels = FALSE)
+check_model(m, panel = FALSE)
 
 library(rstanarm)
 m <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200)

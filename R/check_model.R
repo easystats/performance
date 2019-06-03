@@ -24,7 +24,7 @@
 #'
 #' library(lme4)
 #' m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' check_model(m, panels = FALSE)
+#' check_model(m, panel = FALSE)
 #'
 #' library(rstanarm)
 #' m <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200)
@@ -39,7 +39,7 @@ check_model <- function(x, ...) {
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x, dot_size = 2, line_size = .8, panels = TRUE, ...) {
+check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, ...) {
   minfo <- insight::model_info(x)
 
   if (minfo$is_bayesian) {
@@ -52,7 +52,7 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panels = TRUE, 
     stop(paste0("`check_assumptions()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
   }
 
-  attr(ca, "panels") <- panels
+  attr(ca, "panel") <- panel
   attr(ca, "dot_size") <- dot_size
   attr(ca, "line_size") <- line_size
 
