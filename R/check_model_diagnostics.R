@@ -1,9 +1,9 @@
 .diag_vif <- function(model) {
   dat <- .compact_list(check_collinearity(model))
   if (is.null(dat)) return(NULL)
-  dat$group <- "low correlation"
-  dat$group[dat$VIF >= 5 & dat$VIF < 10] <- "moderate correlation"
-  dat$group[dat$VIF >= 10] <- "high correlation"
+  dat$group <- "low"
+  dat$group[dat$VIF >= 5 & dat$VIF < 10] <- "moderate"
+  dat$group[dat$VIF >= 10] <- "high"
 
   if (ncol(dat) == 5) {
     colnames(dat) <- c("x", "y", "se", "facet", "group")
