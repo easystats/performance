@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
       </span>
     </div>
 
@@ -58,6 +58,18 @@
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/r2.html">R-squared (R2)</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -84,7 +96,7 @@
 </h1></div>
 
 <p><strong><em>Test if your model is a good model!</em></strong></p>
-<p>The primary goal of the <strong>performance</strong> package is to provide utilities for computing <strong>indices of model quality</strong> and <strong>goodness of fit</strong>. This includes measures like r-squared, root mean squared error or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
+<p>The primary goal of the <strong>performance</strong> package is to provide utilities for computing <strong>indices of model quality</strong> and <strong>goodness of fit</strong>. This includes measures like r-squared (R2), root mean squared error (RMSE) or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -136,7 +148,7 @@
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; # Bayesian R2 with Standard Error</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;   Conditional R2: 0.954 [0.002]</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.415 [0.118]</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.406 [0.118]</span></a>
 <a class="sourceLine" id="cb4-9" title="9"></a>
 <a class="sourceLine" id="cb4-10" title="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
 <a class="sourceLine" id="cb4-11" title="11">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
@@ -168,14 +180,14 @@
 <a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; Conditioned on: all random effects</span></a>
 <a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; ## Variance Ratio (comparable to ICC)</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.54 0.78]</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.54 0.77]</span></a>
 <a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; ## Variances of Posterior Predicted Distribution</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.66  CI 95%: [ 8.30 57.44]</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.54  CI 95%: [25.45 56.39]</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.96  CI 95%: [ 8.44 57.29]</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.72  CI 95%: [24.90 56.57]</span></a>
 <a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; ## Difference in Variances</span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.21  CI 95%: [-18.91 35.76]</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.38  CI 95%: [-19.43 35.39]</span></a></code></pre></div>
 </div>
 </div>
 <div id="model-diagnostics" class="section level2">
@@ -328,8 +340,8 @@
 <a class="sourceLine" id="cb14-6" title="6"><span class="kw"><a href="reference/model_performance.html">compare_performance</a></span>(m1, m2, m3, m4)</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
-<th align="left">name</th>
-<th align="left">class</th>
+<th align="left">Model</th>
+<th align="left">Type</th>
 <th align="right">AIC</th>
 <th align="right">BIC</th>
 <th align="right">RMSE</th>
@@ -456,6 +468,7 @@
 <a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 <li>
 <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
+<li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID" height="16"></a> </li>
 </ul>
 </div>
 
@@ -474,7 +487,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>.</p>
+  <p>Developed by <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>, Philip Waggoner.</p>
 </div>
 
 <div class="pkgdown">

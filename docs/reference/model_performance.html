@@ -77,7 +77,7 @@ different models at once and hence allows comparison of indices accros models." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
       </span>
     </div>
 
@@ -91,6 +91,18 @@ different models at once and hence allows comparison of indices accros models." 
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/r2.html">R-squared (R2)</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -157,6 +169,14 @@ See related documentation of object's class for details.</p></td>
   column per "index" (see <code>metrics</code>). For <code>compare_performance()</code>,
   the same data frame with one row per model.</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If all models are of the same class, <code>compare_performance()</code>
+  returns an additional column named <code>BF</code>, which shows the Bayes factor
+  (see <code><a href='https://www.rdocumentation.org/packages/bayestestR/topics/bayesfactor_models'>bayesfactor_models</a></code>) for each model against
+  the denominator model. The <em>first</em> model is used as denominator model,
+  and its Bayes factor is set to <code>NA</code> to indicate the reference model.</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
@@ -166,10 +186,10 @@ See related documentation of object's class for details.</p></td>
 #&gt; 1 156.0101 161.873 0.8302274   0.8185189 2.444202</div><div class='input'>
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>compare_performance</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt;   name   class       AIC       BIC      RMSE        R2 R2_adjusted   R2_Tjur
-#&gt; 1   m1      lm 156.01007 161.87301 2.4442021 0.8302274   0.8185189        NA
-#&gt; 2   m2     glm  31.29788  35.69508 0.8891336        NA          NA 0.4776926
-#&gt; 3   m3 lmerMod  77.31960  89.36214 0.2787760        NA          NA        NA
+<span class='fu'>compare_performance</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt;   Model    Type       AIC       BIC      RMSE        R2 R2_adjusted   R2_Tjur
+#&gt; 1    m1      lm 156.01007 161.87301 2.4442021 0.8302274   0.8185189        NA
+#&gt; 2    m2     glm  31.29788  35.69508 0.8891336        NA          NA 0.4776926
+#&gt; 3    m3 lmerMod  77.31960  89.36214 0.2787760        NA          NA        NA
 #&gt;     LOGLOSS SCORE_LOG SCORE_SPHERICAL       PCP R2_conditional R2_marginal
 #&gt; 1        NA        NA              NA        NA             NA          NA
 #&gt; 2 0.3952793 -14.90294       0.0945795 0.7429268             NA          NA
@@ -178,6 +198,14 @@ See related documentation of object's class for details.</p></td>
 #&gt; 1        NA
 #&gt; 2        NA
 #&gt; 3 0.9693973</div><div class='input'>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>iris</span>)
+<span class='no'>lm1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='no'>lm2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Species</span> + <span class='no'>Petal.Length</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='no'>lm3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Length</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'>compare_performance</span>(<span class='no'>lm1</span>, <span class='no'>lm2</span>, <span class='no'>lm3</span>)</div><div class='output co'>#&gt;   Model Type      AIC      BIC        R2 R2_adjusted      RMSE           BF
+#&gt; 1   lm1   lm 231.4520 243.4945 0.6187057   0.6135181 0.5096155           NA
+#&gt; 2   lm2   lm 106.2327 121.2859 0.8367238   0.8333688 0.3334832 3.445528e+26
+#&gt; 3   lm3   lm 106.7673 127.8418 0.8404527   0.8349129 0.3296532 1.299196e+25</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -186,6 +214,8 @@ See related documentation of object's class for details.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
@@ -195,7 +225,7 @@ See related documentation of object's class for details.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner.</p>
 </div>
 
 <div class="pkgdown">

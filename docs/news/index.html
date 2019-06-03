@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9001</span>
       </span>
     </div>
 
@@ -84,6 +84,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/r2.html">R-squared (R2)</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -138,6 +150,8 @@
 <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code> to calculate the percentage of correct predictions for models with binary outcome.</li>
 <li>
 <code><a href="../reference/performance_roc.html">performance_roc()</a></code>, to calculate ROC-curves.</li>
+<li>
+<code><a href="../reference/performance_aicc.html">performance_aicc()</a></code>, to calculate the second-order AIC (AICc).</li>
 </ul>
 </div>
 <div id="new-check-functions" class="section level2">
@@ -146,6 +160,8 @@
 <ul>
 <li>
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> to calculate the variance inflation factor and check model predictors for multicollinearity.</li>
+<li>
+<code><a href="../reference/check_distribution.html">check_distribution()</a></code> to classify the distribution of a model-family using machine learning.</li>
 </ul>
 </div>
 <div id="new-indices-functions" class="section level2">
@@ -180,6 +196,9 @@
 <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now calculates the full R2 for mixed models with zero-inflation.</li>
 <li>
 <code><a href="../reference/icc.html">icc()</a></code> now returns <code>NULL</code> and no longer stops when no mixed model is provided.</li>
+<li>
+<code><a href="../reference/model_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are of same class.</li>
+<li>Some functions get a <code>verbose</code>-argument to sow or suppress warnings.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
@@ -208,7 +227,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner.</p>
 </div>
 
 <div class="pkgdown">

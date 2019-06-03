@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Kullback-Leibler R2 — r2_kl • performance</title>
+<title>Classify the distribution of a model-family using machine learning — check_distribution • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,9 @@
 
 
 
-<meta property="og:title" content="Kullback-Leibler R2 — r2_kl" />
+<meta property="og:title" content="Classify the distribution of a model-family using machine learning — check_distribution" />
 
-<meta property="og:description" content="Calculates the Kullback-Leibler-divergence-based
-  R2 for generalized linear models." />
+<meta property="og:description" content="Choosing the right distributional family for regression models is essential to get more accurate estimates and standard errors. This function may help to check a models' distributional family and see if the model-family probably should be reconsidered. Since it is difficult to exactly predict the correct model family, consider this function as somewhat experimental." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,56 +118,66 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Kullback-Leibler R2</h1>
+    <h1>Classify the distribution of a model-family using machine learning</h1>
     
-    <div class="hidden name"><code>r2_kl.Rd</code></div>
+    <div class="hidden name"><code>check_distribution.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculates the Kullback-Leibler-divergence-based
-  R2 for generalized linear models.</p>
+    <p>Choosing the right distributional family for regression models is essential to get more accurate estimates and standard errors. This function may help to check a models' distributional family and see if the model-family probably should be reconsidered. Since it is difficult to exactly predict the correct model family, consider this function as somewhat experimental.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2_kl</span>(<span class='no'>model</span>, <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>check_distribution</span>(<span class='no'>model</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A generalized linear model.</p></td>
-    </tr>
-    <tr>
-      <th>adjust</th>
-      <td><p>Logical, if <code>TRUE</code> (the default), the adjusted R2 value is returned.</p></td>
+      <td><p>A model (that should response to <code><a href='https://www.rdocumentation.org/packages/stats/topics/residuals'>residuals()</a></code>).</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A named vector with the R2 value.</p>
+    <p>This function uses an internal random forest model to classify the distribution from a model-family.</p>
     
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness of fit for some common nonlinear regression models. Journal of Econometrics, 77: 329-342.</p>
+    <p>This function is somewhat experimental and might be improved in future releases.
+  The final decision on the model-family should also be based on theoretical
+  aspects and other information about the data and the model.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'>r2_kl</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Kullback-Leibler R2 
-#&gt;           0.3834362 </div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='no'>Days</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
+<span class='fu'>check_distribution</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Distribution of Model Family
+#&gt; 
+#&gt; </span><span style='color: #BB0000;'>Predicted Distribution of Residuals
+#&gt; 
+#&gt; </span><span> Distribution Probability
+#&gt;        normal         50%
+#&gt;         gamma         40%
+#&gt;     lognormal         10%
+#&gt; </span><span style='color: #BB0000;'>
+#&gt; Predicted Distribution of Response
+#&gt; 
+#&gt; </span><span> Distribution Probability
+#&gt;         gamma         50%
+#&gt;     lognormal         50%</div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
 
-      <li><a href="#references">References</a></li>
+      <li><a href="#note">Note</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
