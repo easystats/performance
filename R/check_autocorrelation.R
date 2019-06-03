@@ -5,6 +5,7 @@
 #' of error terms.
 #'
 #' @param x A model object.
+#' @param nsim Number of simulations for the Durbin-Watson-Test.
 #' @param ... Currently not used.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
@@ -25,7 +26,7 @@ check_autocorrelation <- function(x, ...) {
   UseMethod("check_autocorrelation")
 }
 
-
+#' @rdname check_autocorrelation
 #' @export
 check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   .residuals <- stats::residuals(x)

@@ -2,14 +2,19 @@
 % Please edit documentation in R/check_autocorrelation.R
 \name{check_autocorrelation}
 \alias{check_autocorrelation}
+\alias{check_autocorrelation.default}
 \title{Check model for independence of residuals.}
 \usage{
 check_autocorrelation(x, ...)
+
+\method{check_autocorrelation}{default}(x, nsim = 1000, ...)
 }
 \arguments{
 \item{x}{A model object.}
 
 \item{...}{Currently not used.}
+
+\item{nsim}{Number of simulations for the Durbin-Watson-Test.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value < 0.05
