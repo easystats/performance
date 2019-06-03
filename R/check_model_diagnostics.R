@@ -4,8 +4,14 @@
   dat$group <- "low correlation"
   dat$group[dat$VIF >= 5 & dat$VIF < 10] <- "moderate correlation"
   dat$group[dat$VIF >= 10] <- "high correlation"
-  colnames(dat) <- c("x", "y", "se", "facet", "group")
-  dat[, c("x", "y", "facet", "group")]
+
+  if (ncol(dat) == 5) {
+    colnames(dat) <- c("x", "y", "se", "facet", "group")
+    dat[, c("x", "y", "facet", "group")]
+  } else {
+    colnames(dat) <- c("x", "y", "se", "group")
+    dat[, c("x", "y", "group")]
+  }
 }
 
 
