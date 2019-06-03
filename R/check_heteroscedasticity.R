@@ -6,8 +6,8 @@
 #' @param x A model object.
 #' @param ... Currently not used.
 #'
-#' @return The p-value of the test statistics. A p-value < 0.05 indicates
-#' a non-constant variance (heteroskedasticity).
+#' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
+#' indicates a non-constant variance (heteroskedasticity).
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -37,8 +37,10 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   # print message, but not for nested models. only if 'x' is a single model
   if (p.val < 0.05) {
-    message(sprintf("Heteroscedasticity (non-constant error variance) detected: p = %.3f", p.val))
+    message(sprintf("Heteroscedasticity (non-constant error variance) detected (p=%.3f).", p.val))
   } else {
-    message("Homoscedasticity (constant error variance) detected.")
+    message(sprintf("Homoscedasticity (constant error variance) detected (p=%.3f).", p.val))
   }
+
+  invisible(p.val)
 }

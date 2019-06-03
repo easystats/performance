@@ -12,8 +12,8 @@ check_heteroscedasticity(x, ...)
 \item{...}{Currently not used.}
 }
 \value{
-The p-value of the test statistics. A p-value < 0.05 indicates
-a non-constant variance (heteroskedasticity).
+Invisibly returns the p-value of the test statistics. A p-value < 0.05
+indicates a non-constant variance (heteroskedasticity).
 }
 \description{
 Check model for (non-)constant error variance.

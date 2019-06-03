@@ -12,8 +12,8 @@ check_normality(x, ...)
 \item{...}{Currently not used.}
 }
 \value{
-The p-value of the test statistics. A p-value < 0.05 indicates a
-significant deviation from normal distribution
+Invisibly returns the p-value of the test statistics. A p-value
+< 0.05 indicates a significant deviation from normal distribution
 }
 \description{
 Check model for (non-)normality of residuals.

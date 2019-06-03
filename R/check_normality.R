@@ -6,8 +6,8 @@
 #' @param x A model object.
 #' @param ... Currently not used.
 #'
-#' @return The p-value of the test statistics. A p-value < 0.05 indicates a
-#' significant deviation from normal distribution
+#' @return Invisibly returns the p-value of the test statistics. A p-value
+#' < 0.05 indicates a significant deviation from normal distribution
 #'
 #' @details \code{check_normality()} calls \code{\link[stats]{shapiro.test}}
 #' and checks the standardized residuals for normal distribution. Note that
@@ -32,8 +32,10 @@ check_normality.default <- function(x, ...) {
   p.val <- ts$p.value
 
   if (p.val < 0.05) {
-    message(sprintf("Non-normality of residuals detected: p = %.3f", p.val))
+    message(sprintf("Non-normality of residuals detected (p=%.3f).", p.val))
   } else {
-    message("Residuals are normally distributed.")
+    message(sprintf("Residuals are normally distributed (p=%.3f).", p.val))
   }
+
+  invisible(p.val)
 }
