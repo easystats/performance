@@ -37,9 +37,9 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   # print message, but not for nested models. only if 'x' is a single model
   if (p.val < 0.05) {
-    message(sprintf("Heteroscedasticity (non-constant error variance) detected (p=%.3f).", p.val))
+    message(sprintf("Heteroscedasticity (non-constant error variance) detected (p = %.3f).", p.val))
   } else {
-    message(sprintf("Homoscedasticity (constant error variance) detected (p=%.3f).", p.val))
+    message(sprintf("Homoscedasticity (constant error variance) detected (p = %.3f).", p.val))
   }
 
   invisible(p.val)

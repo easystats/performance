@@ -43,9 +43,9 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   p.val <- 2 * (min(p, 1 - p))
 
   if (p.val < 0.05) {
-    message(sprintf("Autocorrelated residuals detected (p=%.3f).", p.val))
+    message(sprintf("Autocorrelated residuals detected (p = %.3f).", p.val))
   } else {
-    message(sprintf("No autocorrelated residuals detected (p=%.3f).", p.val))
+    message(sprintf("No autocorrelated residuals detected (p = %.3f).", p.val))
   }
 
   invisible(p.val)
