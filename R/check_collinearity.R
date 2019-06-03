@@ -133,7 +133,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   n.terms <- length(terms)
 
   if (n.terms < 2) {
-    warning("Not enought model terms to check for multicollinearity.")
+    warning("Not enough model terms to check for multicollinearity.")
     return(NULL)
   }
 

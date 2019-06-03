@@ -1,3 +1,13 @@
+#' @export
+print.check_model <- function(x, ...) {
+  if (!requireNamespace("see", quietly = TRUE)) {
+    stop("Package 'see' required to plot model assumptions. Please install it.")
+  }
+  NextMethod()
+}
+
+
+
 #' @importFrom insight print_color
 #' @export
 print.check_distribution <- function(x, ...) {
