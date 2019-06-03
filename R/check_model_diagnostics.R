@@ -94,12 +94,27 @@
 }
 
 
-
+#' @importFrom insight get_variance_residual
 #' @importFrom stats rstandard fitted
 .diag_homogeneity <- function(model) {
+  r <- tryCatch(
+    {
+      if (inherits(model, "merMod")) {
+        stats::residuals(model, scaled = TRUE)
+      } else if (inherits(model, "glmmTMB")) {
+        sigma <- sqrt(insight::get_variance_residual(model))
+        stats::residuals(model) / sigma
+      } else {
+        stats::rstandard(model)
+      }
+    },
+    error = function(e) { NULL }
+  )
+
+  if (is.null(r)) return(NULL)
+
   data.frame(
     x = stats::fitted(model),
-    y = sqrt(abs(stats::rstandard(model)))
+    y = sqrt(abs(r))
   )
 }
-
