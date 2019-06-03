@@ -19,6 +19,7 @@
 
 * `check_collinearity()` to calculate the variance inflation factor and check model predictors for multicollinearity.
 * `check_heteroscedasticity()` to check models for (non-)constant error variance.
+* `check_normality()` to check models for (non-)normality of residuals.
 * `check_distribution()` to classify the distribution of a model-family using machine learning.
 
 ## New indices-functions
