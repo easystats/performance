@@ -10,10 +10,15 @@ check_distribution(model)
 \item{model}{A model (that should response to \code{residuals()}).}
 }
 \description{
+Choosing the right distributional family for regression models is essential to get more accurate estimates and standard errors. This function may help to check a models' distributional family and see if the model-family probably should be reconsidered. Since it is difficult to exactly predict the correct model family, consider this function as somewhat experimental.
+}
+\details{
 This function uses an internal random forest model to classify the distribution from a model-family.
 }
 \note{
 This function is somewhat experimental and might be improved in future releases.
+  The final decision on the model-family should also be based on theoretical
+  aspects and other information about the data and the model.
 }
 \examples{
 library(lme4)

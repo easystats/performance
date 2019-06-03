@@ -18,6 +18,7 @@
 ## New check-functions
 
 * `check_collinearity()` to calculate the variance inflation factor and check model predictors for multicollinearity.
+* `check_distribution()` to classify the distribution of a model-family using machine learning.
 
 ## New indices-functions
 
