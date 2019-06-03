@@ -49,6 +49,7 @@ Suggests:
 	ordinal,
 	pscl,
 	psych,
+	randomForest,
 	rmarkdown,
 	rstanarm,
 	rstantools,

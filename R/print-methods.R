@@ -1,3 +1,27 @@
+#' @importFrom insight print_color
+#' @export
+print.check_distribution <- function(x, ...) {
+  insight::print_color("# Distribution of Model Family\n\n", "blue")
+
+  x1 <- x[order(x$p_Residuals, decreasing = TRUE)[1:3], c(1, 2)]
+  x1 <- x1[x1$p_Residuals > 0, ]
+  x1$p_Residuals <- sprintf("%g%%", 100 * x1$p_Residuals)
+  colnames(x1) <- c("Distribution", "Probability")
+
+  insight::print_color("Predicted Distribution of Residuals\n\n", "red")
+  print.data.frame(x1, row.names = FALSE, ...)
+
+  x2 <- x[order(x$p_Response, decreasing = TRUE)[1:3], c(1, 3)]
+  x2 <- x2[x2$p_Response > 0, ]
+  x2$p_Response <- sprintf("%g%%", 100 * x2$p_Response)
+  colnames(x2) <- c("Distribution", "Probability")
+
+  insight::print_color("\nPredicted Distribution of Response\n\n", "red")
+  print.data.frame(x2, row.names = FALSE, ...)
+}
+
+
+
 #' @importFrom bayestestR area_under_curve
 #' @importFrom insight print_color
 #' @export
