@@ -82,8 +82,8 @@ compare_performance <- function(..., metrics = "all") {
 
   if (!is.null(BFs)) {
     dfs$BF <- BFs$BF
-    dfs$BF[dfs$name == object_names[1]] <- NA
+    dfs$BF[dfs$Model == object_names[1]] <- NA
   }
 
-  dfs[order(sapply(object_names, as.character), dfs$name), ]
+  dfs[order(sapply(object_names, as.character), dfs$Model), ]
 }
