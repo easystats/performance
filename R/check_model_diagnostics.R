@@ -99,7 +99,7 @@
 .diag_homogeneity <- function(model) {
   data.frame(
     x = stats::fitted(model),
-    y = sqrt(stats::rstandard(model))
+    y = sqrt(abs(stats::rstandard(model)))
   )
 }
 
