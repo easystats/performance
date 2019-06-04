@@ -41,10 +41,10 @@ It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1, and can be 
 As models become more complex, the computation of an R2 becomes less straightforward.
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-data.frame("Model_class" = c("lm", "glm"),
+d <- data.frame("Model_class" = c("lm", "glm"),
            "r2_simple" = c("X", NA),
-           "r2_Tjur" = c(NA, "X")) %>% 
-  knitr::kable()
+           "r2_Tjur" = c(NA, "X"))
+knitr::kable(d)
 ```
 
 

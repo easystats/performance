@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute the model's R2 — r2 • performance</title>
+<title>Visual check of model assumptions — check_model • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,11 @@
 
 
 
-<meta property="og:title" content="Compute the model's R2 — r2" />
+<meta property="og:title" content="Visual check of model assumptions — check_model" />
 
-<meta property="og:description" content="Calculate the R2 value for different model objects. Depending
-  on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned." />
+<meta property="og:description" content="Visual check of model various assumptions (normality of residuals,
+normality of random effects, heteroscedasticity, homogeneity of variance,
+multicollinearity)." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,67 +120,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute the model's R2</h1>
+    <h1>Visual check of model assumptions</h1>
     
-    <div class="hidden name"><code>r2.Rd</code></div>
+    <div class="hidden name"><code>check_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculate the R2 value for different model objects. Depending
-  on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.</p>
+    <p>Visual check of model various assumptions (normality of residuals,
+normality of random effects, heteroscedasticity, homogeneity of variance,
+multicollinearity).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>check_model</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>check_model</span>(<span class='no'>x</span>, <span class='kw'>dot_size</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>line_size</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
+  <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>A statistical model.</p></td>
+      <th>x</th>
+      <td><p>A model object.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
     </tr>
+    <tr>
+      <th>dot_size</th>
+      <td><p>Size of dot-geoms.</p></td>
+    </tr>
+    <tr>
+      <th>line_size</th>
+      <td><p>Size of line-geoms.</p></td>
+    </tr>
+    <tr>
+      <th>panel</th>
+      <td><p>Logical, if <code>TRUE</code>, plots are arranged as panels; else,
+single plots for each diagnostic are returned.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a list containing values related to the most appropriate R2
-  for the given model. See the list below:</p><ul>
-<li><p>Logistic models: <a href='r2_tjur.html'>Tjur's R2</a></p></li>
-<li><p>General linear models: <a href='r2_nagelkerke.html'>Nagelkerke's R2</a></p></li>
-<li><p>Multinomial Logit: <a href='r2_mcfadden.html'>McFadden's R2</a></p></li>
-<li><p>Models with zero-inflation: <a href='r2_zeroinflated.html'>R2 for zero-inflated models</a></p></li>
-<li><p>Mixed models: <a href='r2_nakagawa.html'>Nakagawa's R2</a></p></li>
-<li><p>Bayesian models: <a href='r2_bayes.html'>R2 bayes</a></p></li>
-</ul>
-
+    <p>The data frame that is used for plotting.</p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <div class='dont-index'><p><code><a href='r2_bayes.html'>r2_bayes</a></code>, <code><a href='r2_coxsnell.html'>r2_coxsnell</a></code>, <code><a href='r2_kl.html'>r2_kl</a></code>,
-  <code><a href='r2_loo.html'>r2_loo</a></code>, <code><a href='r2_mcfadden.html'>r2_mcfadden</a></code>, <code><a href='r2_nagelkerke.html'>r2_nagelkerke</a></code>,
-  <code><a href='r2_nakagawa.html'>r2_nakagawa</a></code>, <code><a href='r2_tjur.html'>r2_tjur</a></code>, <code><a href='r2_xu.html'>r2_xu</a></code> and
-  <code><a href='r2_zeroinflated.html'>r2_zeroinflated</a></code>.</p></div>
+    <p>This function just prepares the data for plotting. To create the plots,
+<a href='https://CRAN.R-project.org/package=see'><span class="pkg">see</span></a> needs to be installed.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'>r2</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; $R2_Tjur
-#&gt; Tjur's R2 
-#&gt; 0.4776926 
-#&gt; </div><div class='input'>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>gear</span> + <span class='no'>disp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>check_model</span>(<span class='no'>m</span>)
+
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>r2</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># R2 for mixed models
-#&gt; 
-#&gt; </span><span>  Conditional R2: 0.969
-#&gt;      Marginal R2: 0.658</div><div class='input'>
-</div></span></pre>
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='no'>Days</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
+<span class='fu'>check_model</span>(<span class='no'>m</span>, <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>gear</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>200</span>)
+<span class='fu'>check_model</span>(<span class='no'>m</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -188,7 +197,7 @@
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#note">Note</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
