@@ -22,7 +22,7 @@ Check model for (non-)normality of residuals.
 \code{check_normality()} calls \code{\link[stats]{shapiro.test}}
 and checks the standardized residuals for normal distribution. Note that
 this formal test almost always yields significant results for the distribution
-of residuals and visual inspection (e.g. qqplots) are preferable.
+of residuals and visual inspection (e.g. Q-Q plots) are preferable.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
