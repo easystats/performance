@@ -41,7 +41,18 @@ check_outliers <- function(x, ...) {
 #' @export
 check_outliers.default <- function(x, threshold = 4 / insight::n_obs(x), ...) {
   dat <- insight::get_data(x)
-  cook <- unname(stats::cooks.distance(x))
+
+  cook <- tryCatch(
+    {
+      unname(stats::cooks.distance(x))
+    },
+    error = function(e) { NULL }
+  )
+
+  if (is.null(cook)) {
+    insight::print_color(sprintf("Objects of class \"%s\" are not supported yet.\n", class(x)[1]), "red")
+    return(NULL)
+  }
 
   dat[[".id"]] <- 1:nrow(dat)
   dat[[".outliers"]] <- cook > threshold

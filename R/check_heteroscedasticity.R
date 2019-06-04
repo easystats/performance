@@ -36,7 +36,6 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   p.val <- stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
 
-  # print message, but not for nested models. only if 'x' is a single model
   if (p.val < 0.05) {
     insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (p = %.3f).", p.val), "red")
   } else {

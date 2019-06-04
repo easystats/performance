@@ -71,6 +71,8 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, .
   dat$NORM <- .diag_norm(model)
   dat$NCV <- .diag_ncv(model)
   dat$HOMOGENEITY <- .diag_homogeneity(model)
+  dat$OUTLIERS <- check_outliers(model)
+  class(dat$OUTLIERS) <- "data.frame"
 
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -82,7 +84,11 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, .
 
 .check_assumptions_glm <- function(model) {
   dat <- list()
+
   dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
+  dat$OUTLIERS <- check_outliers(model)
+  class(dat$OUTLIERS) <- "data.frame"
+
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
