@@ -1,4 +1,4 @@
-# performance 0.1.1
+# performance 0.2.0
 
 ## General
 
@@ -18,6 +18,7 @@
 ## New check-functions
 
 * `check_collinearity()` to calculate the variance inflation factor and check model predictors for multicollinearity.
+* `check_outlier()` to check models for influential observations.
 * `check_heteroscedasticity()` to check models for (non-)constant error variance.
 * `check_normality()` to check models for (non-)normality of residuals.
 * `check_autocorrelation()` to check models for auto-correlated residuals.

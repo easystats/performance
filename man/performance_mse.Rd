@@ -11,6 +11,8 @@ mse(model, verbose = TRUE)
 }
 \arguments{
 \item{model}{A model.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 Numeric, the mean square error of \code{model}.

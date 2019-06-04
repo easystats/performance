@@ -1,19 +1,21 @@
-#' is string empty?
-#' @keywords internal
+# is string empty?
 .is_empty_object <- function(x) {
   x <- suppressWarnings(x[!is.na(x)])
   length(x) == 0 || is.null(x)
 }
 
-#' has object an element with given name?
-#' @keywords internal
+
+
+
+# has object an element with given name?
 .obj_has_name <- function(x, name) {
   name %in% names(x)
 }
 
 
+
+
 #' @importFrom stats na.omit sd
-#' @keywords internal
 .std <- function(x) {
   if (!is.numeric(x)) return(x)
 
@@ -30,7 +32,10 @@
 }
 
 
-#' @keywords internal
+
+
+# recode numeric vector, so lowest value stats with 0
+# factors are coerced to numeric
 .recode_to_zero <- function(x) {
   # check if factor
   if (is.factor(x) || is.character(x)) {
@@ -44,8 +49,10 @@
 }
 
 
+
+
+# safe conversion from factor to numeric
 #' @importFrom stats na.omit
-#' @keywords internal
 .factor_to_numeric <- function(x) {
   if (is.numeric(x))
     return(x)
@@ -58,4 +65,18 @@
   }
 
   as.numeric(as.character(x))
+}
+
+
+
+
+# remove NULL elements from lists
+.compact_list <- function(x) x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL"))]
+
+
+
+
+# remove column
+.remove_column <- function(data, variables) {
+  data[, -which(colnames(data) %in% variables), drop = FALSE]
 }

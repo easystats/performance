@@ -6,7 +6,7 @@
 #'
 #' @param model A model.
 #' @param normalized Logical, use \code{TRUE} if normalized rmse should be returned.
-#' @inheritParams model_performance
+#' @inheritParams model_performance.lm
 #'
 #' @details The RMSE is the square root of the variance of the residuals and indicates
 #'   the absolute fit of the model to the data (difference between observed data

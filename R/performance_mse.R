@@ -4,7 +4,7 @@
 #' @description Compute mean square error of linear models.
 #'
 #' @inheritParams performance_rmse
-#' @inheritParams model_performance
+#' @inheritParams model_performance.lm
 #'
 #' @details The mean square error is the mean of the sum of squared residuals,
 #'    i.e. it measures the average of the squares of the errors. Lower

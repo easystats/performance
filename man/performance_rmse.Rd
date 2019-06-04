@@ -13,6 +13,8 @@ rmse(model, normalized = FALSE, verbose = TRUE)
 \item{model}{A model.}
 
 \item{normalized}{Logical, use \code{TRUE} if normalized rmse should be returned.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 Numeric, the root mean squared error.

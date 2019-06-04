@@ -14,6 +14,7 @@
 #' check_heteroscedasticity(m)
 #'
 #' @importFrom stats residuals df.residual fitted anova pchisq
+#' @importFrom insight print_color
 #' @export
 check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")
@@ -37,9 +38,9 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   # print message, but not for nested models. only if 'x' is a single model
   if (p.val < 0.05) {
-    message(sprintf("Heteroscedasticity (non-constant error variance) detected (p = %.3f).", p.val))
+    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (p = %.3f).", p.val), "red")
   } else {
-    message(sprintf("Homoscedasticity (constant error variance) detected (p = %.3f).", p.val))
+    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (p = %.3f).", p.val), "green")
   }
 
   invisible(p.val)
