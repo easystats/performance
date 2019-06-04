@@ -60,5 +60,6 @@ check_outliers.default <- function(x, threshold = 4 / insight::n_obs(x), ...) {
 
   class(dat) <- c("check_outliers", "see_check_outliers", "data.frame")
   attr(dat, "threshold") <- threshold
+  attr(dat, "text_size") <- 3
   dat
 }
