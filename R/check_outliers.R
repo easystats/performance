@@ -41,20 +41,13 @@ check_outliers <- function(x, ...) {
 #' @export
 check_outliers.default <- function(x, threshold = 4 / insight::n_obs(x), ...) {
   dat <- insight::get_data(x)
+  cook <- unname(stats::cooks.distance(x))
 
-  cook <- stats::cooks.distance(x)
-  outliers <- length(as.numeric(names(cook)[(cook > threshold)]))
-
-  if (outliers >= 1) {
-    o <- paste0(" (cases ", paste0(names(cook)[(cook > threshold)], collapse = ", "), ")")
-    insight::print_color(sprintf("Warning: Outliers detected%s.\n", o), 'red')
-  } else {
-    insight::print_color("OK: No outliers detected.\n", 'green')
-  }
-
-  dat[[".outlier"]] <- cook > threshold
+  dat[[".id"]] <- 1:nrow(dat)
+  dat[[".outliers"]] <- cook > threshold
   dat[[".distance"]] <- cook
 
   class(dat) <- c("check_outliers", "see_check_outliers", "data.frame")
-  invisible(dat)
+  attr(dat, "threshold") <- threshold
+  dat
 }

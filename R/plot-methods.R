@@ -5,3 +5,13 @@ plot.performance_roc <- function(x, ...) {
   }
   NextMethod()
 }
+
+
+
+#' @export
+plot.check_outliers <- function(x, ...) {
+  if (!requireNamespace("see", quietly = TRUE)) {
+    stop("Package 'see' needed to plot outliers. Please install it.")
+  }
+  NextMethod()
+}

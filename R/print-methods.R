@@ -1,4 +1,17 @@
 #' @export
+print.check_outliers <- function(x, ...) {
+  outliers <- which(x[[".outliers"]])
+  if (length(outliers) >= 1) {
+    o <- paste0(" (cases ", paste0(outliers, collapse = ", "), ")")
+    insight::print_color(sprintf("Warning: Outliers detected%s.\n", o), 'red')
+  } else {
+    insight::print_color("OK: No outliers detected.\n", 'green')
+  }
+}
+
+
+
+#' @export
 print.check_model <- function(x, ...) {
   if (!requireNamespace("see", quietly = TRUE)) {
     stop("Package 'see' required to plot model assumptions. Please install it.")
