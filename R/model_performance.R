@@ -6,7 +6,7 @@
 #' \link[=model_performance.stanreg]{Bayesian models} and
 #' \link[=model_performance.lm]{all other models}.
 #' \code{compare_performance()} computes indices of model performance for
-#' different models at once and hence allows comparison of indices accros models.
+#' different models at once and hence allows comparison of indices across models.
 #'
 #' @param model Statistical model.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed.

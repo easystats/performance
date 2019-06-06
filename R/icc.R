@@ -99,7 +99,7 @@
 #'  are taken. Then, second, the variances for each of these draws are calculated.
 #'  The "ICC" is then the ratio between these two variances. This is the recommended
 #'  way to analyse random-effect-variances for non-Gaussian models. It is then possible
-#'  to compare variances accross models, also by specifying different group-level
+#'  to compare variances across models, also by specifying different group-level
 #'  terms via the \code{re.form}-argument.
 #'  \cr \cr
 #'  Sometimes, when the variance of the posterior predictive distribution is
