@@ -32,8 +32,7 @@
 #'  }
 #'
 #' @details
-#' \strong{Interpretation}
-#'  \cr \cr
+#'  \subsection{Interpretation}{
 #'  The ICC can be interpreted as \dQuote{the proportion of the variance explained
 #'  by the grouping structure in the population}. This index goes from 0, if the
 #'  grouping conveys no information, to 1, if all observations in a group are
@@ -42,16 +41,14 @@
 #'  randomly drawn units that are in the same group} \cite{(Hox 2010: 15)},
 #'  altough this definition might not apply to mixed models with more complex
 #'  random effects structures.
-#'  \cr \cr
-#' \strong{Calculation}
-#'  \cr \cr
+#'  }
+#'  \subsection{Calculation}{
 #'  The ICC is calculated by dividing the random effect variance,
 #'  \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}}, by
 #'  the total variance, i.e. the sum of the random effect variance and the
 #'  residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
-#'  \cr \cr
-#'  \strong{Adjusted and conditional ICC}
-#'  \cr \cr
+#'  }
+#'  \subsection{Adjusted and conditional ICC}{
 #'  \code{icc()} calculates an adjusted and conditional ICC, which both take
 #'  all sources of uncertainty (i.e. of \emph{all random effects}) into account. While
 #'  the \emph{adjusted ICC} only relates to the random effects, the \emph{conditional ICC}
@@ -62,18 +59,16 @@
 #'  design (more than two levels) and is applicable for models with other distributions
 #'  than Gaussian. For more details on the computation of the variances, see
 #'  \code{\link[insight]{get_variance}}.
-#'  \cr \cr
-#'  \strong{ICC for unconditional and conditional models}
-#'  \cr \cr
+#'  }
+#'  \subsection{ICC for unconditional and conditional models}{
 #'  Usually, the ICC is calculated for the null model ("unconditional model").
 #'  However, according to \cite{Raudenbush and Bryk (2002)} or
 #'  \cite{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the ICC
 #'  for full models with covariates ("conditional models") and compare how
 #'  much, e.g., a level-2 variable explains the portion of variation in the grouping
 #'  structure (random intercept).
-#'  \cr \cr
-#'  \strong{ICC for specific group-levels}
-#'  \cr \cr
+#'  }
+#'  \subsection{ICC for specific group-levels}{
 #'  The proportion of variance for specific levels related to  each other
 #'  (e.g., similarity of level-1-units within level-2-units or level-2-units
 #'  within level-3-units) must be calculated manually. Use \code{\link[insight]{get_variance}}
@@ -87,9 +82,8 @@
 #'  For for the ICC between level 2 and 3: \cr
 #'  \code{insight::get_variance_intercept(model)[2] /} \cr
 #'  \code{  sum(insight::get_variance_intercept(model))}
-#'  \cr \cr
-#'  \strong{ICC for brms-models}
-#'  \cr \cr
+#'  }
+#'  \subsection{ICC for brms-models}{
 #'  If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
 #'  variance decomposition based on the posterior predictive distribution. In
 #'  this case, first, the draws from the posterior predictive distribution
@@ -105,6 +99,7 @@
 #'  Sometimes, when the variance of the posterior predictive distribution is
 #'  very large, the variance ratio in the output makes no sense, e.g. because
 #'  it is negative. In such cases, it might help to use \code{robust = TRUE}.
+#'  }
 #'
 #' @examples
 #' library(lme4)
