@@ -97,12 +97,16 @@
 #' @importFrom insight get_variance_residual
 #' @importFrom stats rstandard fitted
 .diag_homogeneity <- function(model) {
+  faminfo <- insight::model_info(model)
   r <- tryCatch(
     {
       if (inherits(model, "merMod")) {
         stats::residuals(model, scaled = TRUE)
       } else if (inherits(model, c("glmmTMB", "MixMod"))) {
-        sigma <- sqrt(insight::get_variance_residual(model))
+        sigma <- if (faminfo$is_mixed)
+          sqrt(insight::get_variance_residual(model))
+        else
+          .sigma_glmmTMB_nonmixed(model, faminfo)
         stats::residuals(model) / sigma
       } else {
         stats::rstandard(model)
@@ -116,5 +120,21 @@
   data.frame(
     x = stats::fitted(model),
     y = sqrt(abs(r))
+  )
+}
+
+
+
+#' @importFrom insight model_info
+.sigma_glmmTMB_nonmixed <- function(model, faminfo) {
+  if (!is.na(match(faminfo$family, c("binomial", "poisson", "truncated_poisson")))) {
+    return(1)
+  }
+  betad <- model$fit$par["betad"]
+  switch(
+    faminfo$family,
+    gaussian = exp(0.5 * betad),
+    Gamma = exp(-0.5 * betad),
+    exp(betad)
   )
 }
