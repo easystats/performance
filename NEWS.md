@@ -1,3 +1,9 @@
+# performance 0.2.1
+
+## Changes to functions
+
+* `check_model()` now performs more checks for GLM(M)s and other model objects.
+
 # performance 0.2.0
 
 ## General

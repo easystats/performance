@@ -56,16 +56,6 @@ performance_score <- function(model, verbose = TRUE) {
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
 
-  ## TODO remove once insight 0.4.0 is on CRAN
-
-  if (is.null(minfo$is_hurdle)) {
-    minfo$is_hurdle <- inherits(model, "hurdle") |
-      grepl("\\Qhurdle\\E", minfo$family, ignore.case = TRUE) |
-      grepl("^hu", minfo$family, perl = TRUE) |
-      grepl("^truncated", minfo$family, perl = TRUE)
-  }
-
-
   prob_fun <- if (minfo$is_binomial) {
     function(x, mean, pis, n) stats::dbinom(x, size = n, prob = mean)
   } else if (minfo$is_poisson && !minfo$is_zero_inflated) {

@@ -101,7 +101,7 @@
     {
       if (inherits(model, "merMod")) {
         stats::residuals(model, scaled = TRUE)
-      } else if (inherits(model, "glmmTMB")) {
+      } else if (inherits(model, c("glmmTMB", "MixMod"))) {
         sigma <- sqrt(insight::get_variance_residual(model))
         stats::residuals(model) / sigma
       } else {
