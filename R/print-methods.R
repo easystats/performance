@@ -130,11 +130,16 @@ print.r2_generic <- function(x, digits = 3, ...) {
     insight::print_color("# R2\n\n", "blue")
   }
 
-  out <- paste0(c(
-    sprintf("       R2: %.*f", digits, x$R2),
-    sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)),
-    collapse = "\n"
-  )
+  if ("R2_adjusted" %in% names(x)) {
+    out <- paste0(c(
+      sprintf("       R2: %.*f", digits, x$R2),
+      sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)),
+      collapse = "\n"
+    )
+  } else {
+    out <- sprintf("  R2: %.*f", digits, x$R2)
+  }
+
 
   cat(out)
   cat("\n")

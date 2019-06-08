@@ -52,12 +52,24 @@ r2_nakagawa <- function(model) {
 
   # check if we have successfully computed all variance components...
 
-  components <- c("var.fixed", "var.random", "var.residual")
+  components <- c("var.fixed", "var.residual")
   check_elements <- sapply(components, function(.i) !is.null(vars[[.i]]))
 
   if (!all(check_elements)) {
     return(NA)
   }
+
+
+  # if no random effect variance, return simple R2
+
+  if (.is_empty_object(vars$var.random) || is.na(vars$var.random)) {
+    print_color("Random effects variances not available. Returned R2 does not account for random effects.\n", "red")
+    vars$var.random <- 0
+    out <- list("R2" = vars$var.fixed / (vars$var.fixed + vars$var.residual))
+    attr(out, "model_type") <- "Mixed Model"
+    return(structure(class = "r2_generic", out))
+  }
+
 
   # Calculate R2 values
 
