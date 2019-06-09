@@ -3,6 +3,7 @@
 ## Changes to functions
 
 * `check_model()` now performs more checks for GLM(M)s and other model objects.
+* `r2_nakagawa()` now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with `MuMIn::r.squaredGLMM()`, which returned a value for models with singular fit.
 
 # performance 0.2.0
 
