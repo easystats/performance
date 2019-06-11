@@ -46,8 +46,8 @@ performance_roc <- function(x, ..., predictions, new_data) {
   dots <- list(...)
 
   object_names <- c(
-    deparse(substitute(x), width.cutoff = 500),
-    sapply(match.call(expand.dots = FALSE)$`...`, deparse, width.cutoff = 500)
+    .safe_deparse(substitute(x)),
+    sapply(match.call(expand.dots = FALSE)$`...`, .safe_deparse)
   )
 
   if (is.numeric(x) && !missing(predictions) && !is.null(predictions)) {
