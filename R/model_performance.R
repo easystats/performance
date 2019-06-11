@@ -78,12 +78,13 @@ compare_performance <- function(..., metrics = "all") {
     error = function(e) { NULL })
   }
 
-  dfs <- Reduce(function(x, y) merge(x, y, all = TRUE), m)
+  dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 
   if (!is.null(BFs)) {
     dfs$BF <- BFs$BF
     dfs$BF[dfs$Model == object_names[1]] <- NA
   }
 
-  dfs[order(sapply(object_names, as.character), dfs$Model), ]
+  # dfs[order(sapply(object_names, as.character), dfs$Model), ]
+  dfs
 }
