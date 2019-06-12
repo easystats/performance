@@ -47,7 +47,7 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, .
   } else if (minfo$is_linear) {
     ca <- .check_assumptions_linear(x, minfo)
   } else {
-    ca <- .check_assumptions_glm(x)
+    ca <- .check_assumptions_glm(x, minfo)
   }
   # else {
   #   stop(paste0("`check_assumptions()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
@@ -83,13 +83,13 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, .
 
 
 
-.check_assumptions_glm <- function(model) {
+.check_assumptions_glm <- function(model, model_info) {
   dat <- list()
 
   dat$VIF <- .diag_vif(model)
   dat$QQ <- .diag_qq(model)
   dat$HOMOGENEITY <- .diag_homogeneity(model)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
+  if (model_info$is_mixed) dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
   dat$OUTLIERS <- check_outliers(model)
   if (!is.null(dat$OUTLIERS)) class(dat$OUTLIERS) <- "data.frame"
 
