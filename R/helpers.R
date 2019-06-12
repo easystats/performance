@@ -5,7 +5,7 @@
 
 # safe deparse, works for very long strings
 .safe_deparse <- function(string) {
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = " ")
+  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = "")
 }
 
 
