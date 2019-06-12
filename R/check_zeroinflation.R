@@ -33,14 +33,19 @@ check_zeroinflation <- function(x, tolerance = .05) {
   if (!stats::family(x)$family %in% c("poisson", "quasipoisson"))
     stop("Model must be from Poisson-family.", call. = F)
 
+  # get actual zero of response
+  obs.zero <- sum(insight::get_response(x) == 0)
+
+  if (obs.zero == 0) {
+    insight::print_color("Model has no observed zeros in the response variable.\n", "red")
+    return(NULL)
+  }
+
   # get predictions of outcome
   mu <- stats::fitted(x)
 
   # get predicted zero-counts
   pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
-
-  # get actual zero of response
-  obs.zero <- sum(insight::get_response(x) == 0)
 
   # proportion
   structure(
