@@ -3,7 +3,7 @@ print.check_outliers <- function(x, ...) {
   outliers <- which(x[[".outliers"]])
   if (length(outliers) >= 1) {
     o <- paste0(" (cases ", paste0(outliers, collapse = ", "), ")")
-    insight::print_color(sprintf("Warning: Outliers detected%s.\n", o), 'red')
+    insight::print_color(sprintf("Warning: %i outliers detected%s.\n", length(outliers), o), 'red')
   } else {
     insight::print_color("OK: No outliers detected.\n", 'green')
   }

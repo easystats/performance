@@ -1,7 +1,7 @@
 Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
-Version: 0.2.0
+Version: 0.2.0.9000
 Date: 2019-06-04
 Authors@R: c(
 	person("Daniel", 
@@ -42,6 +42,8 @@ Suggests:
 	brms,
 	covr,
 	glmmTMB,
+	ICS,
+	ICSOutlier,
 	lme4,
 	loo,
 	Matrix,
@@ -49,6 +51,7 @@ Suggests:
 	mlogit,
 	nlme,
 	ordinal,
+	parallel,
 	pscl,
 	psych,
 	randomForest,
