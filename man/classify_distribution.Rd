@@ -4,7 +4,7 @@
 \name{classify_distribution}
 \alias{classify_distribution}
 \title{Machine learning model trained to classify distributions}
-\format{An object of class \code{randomForest.formula} (inherits from \code{randomForest}) of length 8.}
+\format{An object of class \code{randomForest.formula} (inherits from \code{randomForest}) of length 19.}
 \usage{
 classify_distribution
 }
