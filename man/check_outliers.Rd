@@ -7,8 +7,8 @@
 \usage{
 check_outliers(x, ...)
 
-\method{check_outliers}{default}(x, threshold = NULL,
-  method = c("cook", "mahalanobis", "ics"), ...)
+\method{check_outliers}{default}(x, method = c("cook", "mahalanobis",
+  "ics"), threshold = NULL, ...)
 }
 \arguments{
 \item{x}{A model object.}
@@ -16,14 +16,14 @@ check_outliers(x, ...)
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are
 passed down to \code{ICSOutlier::ics.outlier()}.}
 
+\item{method}{The method to calculate the distance, at which value a point is
+considered as "outlier".}
+
 \item{threshold}{The threshold indicating at which distance an observation is
 considered as outlier. Possible values are \code{"cook"} (Cook's Distance),
 \code{"mahalanobis"} (Mahalanobis Distance) or \code{"ics"} (Invariant
 Coordinate Selection, \cite{Archimbaud et al. 2018}). May be abbreviated.
 See 'Details'.}
-
-\item{method}{The method to calculate the distance, at which value a point is
-considered as "outlier".}
 }
 \value{
 Check (message) on whether outliers were detected or not, as well as a

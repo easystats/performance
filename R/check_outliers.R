@@ -75,7 +75,7 @@ check_outliers <- function(x, ...) {
 
 #' @rdname check_outliers
 #' @export
-check_outliers.default <- function(x, threshold = NULL, method = c("cook", "mahalanobis", "ics"), ...) {
+check_outliers.default <- function(x, method = c("cook", "mahalanobis", "ics"), threshold = NULL, ...) {
   method <- match.arg(method)
   dat <- insight::get_data(x)
   preds <- insight::get_predictors(x)
