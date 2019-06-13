@@ -6,8 +6,9 @@
 #' @param x A model object.
 #' @param threshold The threshold indicating at which distance an observation is
 #'   considered as outlier. Possible values are \code{"cook"} (Cook's Distance),
-#'   \code{"mahalanobis"} (Mahalanobis Distance) or \code{"ics"} (Invariant Coordinate
-#'   System, \cite{Archimbaud et al. 2018}). May be abbreviated. See 'Details'.
+#'   \code{"mahalanobis"} (Mahalanobis Distance) or \code{"ics"} (Invariant
+#'   Coordinate Selection, \cite{Archimbaud et al. 2018}). May be abbreviated.
+#'   See 'Details'.
 #' @param method The method to calculate the distance, at which value a point is
 #'   considered as "outlier".
 #' @param ... When \code{method = "ics"}, further arguments in \code{...} are
@@ -35,7 +36,7 @@
 #' for the threshold regarding the Mahalanobis Distance, most studies use a value
 #' between 3 and 10. It is most likely better to define own, sensible thresholds.
 #' }
-#' \item{\strong{Invariant Coordinate System}}{
+#' \item{\strong{Invariant Coordinate Selection}}{
 #' If \code{method = "ics"}, the threshold is determined by \code{ICSOutlier::ics.outlier()}.
 #' Refer to the help-file of that function to get more details about this procedure.
 #' Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
