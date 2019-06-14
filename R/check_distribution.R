@@ -58,7 +58,7 @@ check_distribution <- function(model) {
   dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
 
 
-  x <- insight::get_response(model)
+  x <- .factor_to_numeric(insight::get_response(model))
 
   # Extract features
   dat <- data.frame(
