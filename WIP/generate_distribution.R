@@ -16,7 +16,7 @@ generate_distribution <- function(
     rbinom(size, size = trials, prob = prob)
   } else if (family == "bernoulli") {
     extraDistr::rbern(size, prob = prob)
-  } else if (family == "binomial (zero-inflated)") {
+  } else if (family == "binomial (zero-infl.)") {
     extraDistr::rzib(size, size = trials, prob = prob, pi = zi)
   } else if (family == "chi") {
     rchisq(size, location, scale)
@@ -38,11 +38,11 @@ generate_distribution <- function(
     runif(size, location, location * 2)
   } else if (family == "negative binomial") {
     rnbinom(n = size, size = trials, mu = mu)
-  } else if (family == "negative binomial (zero-inflated)") {
+  } else if (family == "neg. binomial (zero-infl.)") {
     extraDistr::rzinb(n = size, size = trials, prob = prob, pi = zi)
   } else if (family == "beta-binomial") {
     extraDistr::rbbinom(n = size, size = trials, alpha = scale, beta = location)
-  } else if (family == "poisson (zero-inflated)") {
+  } else if (family == "poisson (zero-infl.)") {
     extraDistr::rzip(size, location, pi = zi)
   } else if (family == "pareto") {
     VGAM::rpareto(n = size, scale = scale + 1, shape = location + 1)
@@ -54,7 +54,7 @@ df <- data.frame()
 distrs <- c(
   "normal", "beta", "chi", "F", "exponential", "gamma", "lognormal",
   "poisson", "uniform", "negative binomial", "bernoulli",
-  "poisson (zero-inflated)", "negative binomial (zero-inflated)",
+  "poisson (zero-infl.)", "neg. binomial (zero-infl.)",
   "weibull", "beta-binomial", "binomial", "pareto"
 )
 
@@ -62,13 +62,15 @@ pb <- txtProgressBar(min = 0, max = length(distrs), style = 3)
 
 for (di in 1:length(distrs)) {
 
-  setTxtProgressBar(pb, di)
+  setTxtProgressBar(pb, di - 1)
   distribution <- distrs[di]
-  cat("\n\n", distribution, "\n")
+  cat("\n\n", sprintf("Distribution %i of %i:", di, length(distrs)), distribution, "\n")
 
-  pb2 <- txtProgressBar(min = 1, max = 2500, style = 3)
+  n_samples <- 1250
 
-  for (i in 1:3000) {
+  pb2 <- txtProgressBar(min = 1, max = n_samples, style = 3)
+
+  for (i in 1:n_samples) {
 
     setTxtProgressBar(pb2, i)
 
@@ -149,8 +151,8 @@ model2 <- model <-
     maxBins = 32,
     minInstancesPerNode = 1,
     minInfoGain = 0.0,
-    maxMemoryInMB = 512,
-    ntree = 48
+    maxMemoryInMB = 128,
+    ntree = 32
   )
 
 

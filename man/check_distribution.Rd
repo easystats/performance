@@ -21,6 +21,11 @@ trained (i.e. results of \code{check_distribution()} may be one of the following
 \code{"normal"}, \code{"negative binomial"}, \code{"negative binomial (zero-inflated)"},
 \code{"pareto"}, \code{"poisson"}, \code{"poisson (zero-inflated)"},
 \code{"uniform"} and \code{"weibull"}.
+\cr \cr
+Note the similarity between certain distributions according to shape, skewness,
+etc., for instance \code{plot(dnorm(1:100, 30, 3))} and \code{plot(dnorm(1:100, 30, 3))}.
+Thus, the predicted distribution may not be perfectly matching to the underlying
+fitted model.
 }
 \note{
 This function is somewhat experimental and might be improved in future releases.
