@@ -24,8 +24,11 @@ trained (i.e. results of \code{check_distribution()} may be one of the following
 \cr \cr
 Note the similarity between certain distributions according to shape, skewness,
 etc., for instance \code{plot(dnorm(1:100, 30, 3))} and \code{plot(dnorm(1:100, 30, 3))}.
-Thus, the predicted distribution may not be perfectly matching to the underlying
-fitted model.
+Thus, the predicted distribution may not be perfectly representing the distributional
+family of the underlying fitted model, or the response value.
+\cr \cr
+There is a \code{plot()}, which shows the probabilities of all predicted
+distributions, however, only if the probability is greater than zero.
 }
 \note{
 This function is somewhat experimental and might be improved in future releases.
@@ -36,5 +39,6 @@ This function is somewhat experimental and might be improved in future releases.
 library(lme4)
 model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 check_distribution(model)
+plot(check_distribution(model))
 
 }
