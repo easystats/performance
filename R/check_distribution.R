@@ -103,6 +103,6 @@ check_distribution <- function(model) {
     row.names = NULL
   )
 
-  class(out) <- c("check_distribution", class(out))
+  class(out) <- unique(c("check_distribution", "see_check_distribution", class(out)))
   out
 }

@@ -15,3 +15,13 @@ plot.check_outliers <- function(x, ...) {
   }
   NextMethod()
 }
+
+
+
+#' @export
+plot.check_distribution <- function(x, ...) {
+  if (!requireNamespace("see", quietly = TRUE)) {
+    stop("Package 'see' needed to plot predicted distributions. Please install it.")
+  }
+  NextMethod()
+}
