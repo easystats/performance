@@ -18,7 +18,14 @@
 #'   The final decision on the model-family should also be based on theoretical
 #'   aspects and other information about the data and the model.
 #'
-#' @details This function uses an internal random forest model to classify the distribution from a model-family.
+#' @details This function uses an internal random forest model to classify the
+#' distribution from a model-family. Currently, following distributions are
+#' trained (i.e. results of \code{check_distribution()} may be one of the following):
+#' \code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"}, \code{"binomial"},
+#' \code{"chi"}, \code{"exponential"}, \code{"F"}, \code{"gamma"}, \code{"lognormal"},
+#' \code{"normal"}, \code{"negative binomial"}, \code{"negative binomial (zero-inflated)"},
+#' \code{"pareto"}, \code{"poisson"}, \code{"poisson (zero-inflated)"},
+#' \code{"uniform"} and \code{"weibull"}.
 #'
 #' @examples
 #' library(lme4)
@@ -36,6 +43,7 @@ check_distribution <- function(model) {
   }
 
   x <- stats::residuals(model)
+  # x_scaled <- .normalize(x)
 
   # Extract features
   dat <- data.frame(
@@ -46,13 +54,14 @@ check_distribution <- function(model) {
     "SD_MAD_Distance" = stats::sd(x) - stats::mad(x, constant = 1),
     "Var_Mean_Distance" = stats::var(x) - mean(x),
     "Range_SD" = diff(range(x)) / stats::sd(x),
+    "Range" = diff(range(x)),
     "IQR" = stats::IQR(x),
     "Skewness" = .skewness(x),
     "Kurtosis" = .kurtosis(x),
     "Uniques" = length(unique(x)) / length(x),
+    "N_Uniques" = length(unique(x)),
     "Min" = min(x),
-    "Max" = max(x),
-    "Proportion_Zero" = sum(x == 0) / length(x)
+    "Max" = max(x)
   )
 
   dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
@@ -69,13 +78,14 @@ check_distribution <- function(model) {
     "SD_MAD_Distance" = stats::sd(x) - stats::mad(x, constant = 1),
     "Var_Mean_Distance" = stats::var(x) - mean(x),
     "Range_SD" = diff(range(x)) / stats::sd(x),
+    "Range" = diff(range(x)),
     "IQR" = stats::IQR(x),
     "Skewness" = .skewness(x),
     "Kurtosis" = .kurtosis(x),
     "Uniques" = length(unique(x)) / length(x),
+    "N_Uniques" = length(unique(x)),
     "Min" = min(x),
-    "Max" = max(x),
-    "Proportion_Zero" = sum(x == 0) / length(x)
+    "Max" = max(x)
   )
 
   dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))

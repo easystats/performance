@@ -37,3 +37,8 @@
   n <- length(x)
   n * sum((x - mean(x))^4) / (sum((x - mean(x))^2)^2)
 }
+
+
+.normalize <- function(x) {
+  as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
+}

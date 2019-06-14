@@ -13,7 +13,14 @@ check_distribution(model)
 Choosing the right distributional family for regression models is essential to get more accurate estimates and standard errors. This function may help to check a models' distributional family and see if the model-family probably should be reconsidered. Since it is difficult to exactly predict the correct model family, consider this function as somewhat experimental.
 }
 \details{
-This function uses an internal random forest model to classify the distribution from a model-family.
+This function uses an internal random forest model to classify the
+distribution from a model-family. Currently, following distributions are
+trained (i.e. results of \code{check_distribution()} may be one of the following):
+\code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"}, \code{"binomial"},
+\code{"chi"}, \code{"exponential"}, \code{"F"}, \code{"gamma"}, \code{"lognormal"},
+\code{"normal"}, \code{"negative binomial"}, \code{"negative binomial (zero-inflated)"},
+\code{"pareto"}, \code{"poisson"}, \code{"poisson (zero-inflated)"},
+\code{"uniform"} and \code{"weibull"}.
 }
 \note{
 This function is somewhat experimental and might be improved in future releases.

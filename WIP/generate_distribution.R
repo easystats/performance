@@ -1,47 +1,52 @@
-generate_distribution <- function(family = "normal", size = 1000, location = 0, scale = 1, zi = .2) {
+generate_distribution <- function(
+  family = "normal",
+  size = 1000,
+  location = 0,
+  scale = 1,
+  trials = 1,
+  prob = .5,
+  mu = 3,
+  zi = .2
+) {
   if (family == "normal") {
-    x <- rnorm(size, location, scale)
+    rnorm(size, location, scale)
   } else if (family == "beta") {
-    x <- rbeta(size, location, scale)
+    rbeta(size, location, scale)
   } else if (family == "binomial") {
-    x <- rbinom(size, round(location) + 1, scale / 10 ^ (nchar(round(scale))))
+    rbinom(size, size = trials, prob = prob)
   } else if (family == "bernoulli") {
-    x <- extraDistr::rbern(size, scale / 10 ^ (nchar(round(scale))))
+    extraDistr::rbern(size, prob = prob)
   } else if (family == "binomial (zero-inflated)") {
-    x <-
-      extraDistr::rzib(size, round(location) + 1, scale / 10 ^ (nchar(round(scale))), pi = zi)
+    extraDistr::rzib(size, size = trials, prob = prob, pi = zi)
   } else if (family == "chi") {
-    x <- rchisq(size, location, scale)
+    rchisq(size, location, scale)
   } else if (family == "exponential") {
-    x <- rexp(size, scale)
+    rexp(size, scale)
   } else if (family == "F") {
-    x <- rf(size, location, scale + 0.1)
+    rf(size, location, scale + 0.1)
   } else if (family == "gamma") {
-    x <- rgamma(size, location, scale)
+    rgamma(size, location, scale)
   } else if (family == "lognormal") {
-    x <- rlnorm(size, location, scale)
+    rlnorm(size, location, scale)
   } else if (family == "poisson") {
-    x <- rpois(size, location)
+    rpois(size, lambda = mu)
   } else if (family == "t") {
-    x <- rt(size, location, scale)
+    rt(size, location, scale)
   } else if (family == "weibull") {
-    x <- rweibull(size, location, scale)
+    rweibull(size, location, scale)
   } else if (family == "uniform") {
-    x <- runif(size, location, location * 2)
+    runif(size, location, location * 2)
   } else if (family == "negative binomial") {
-    x <- rnbinom(n = size, size = scale, mu = location)
+    rnbinom(n = size, size = trials, mu = mu)
   } else if (family == "negative binomial (zero-inflated)") {
-    x <-
-      extraDistr::rzinb(
-        n = size,
-        size = scale,
-        prob = scale / 10 ^ (nchar(round(scale))),
-        pi = zi
-      )
+    extraDistr::rzinb(n = size, size = trials, prob = prob, pi = zi)
+  } else if (family == "beta-binomial") {
+    extraDistr::rbbinom(n = size, size = trials, alpha = scale, beta = location)
   } else if (family == "poisson (zero-inflated)") {
-    x <- extraDistr::rzip(size, location, pi = zi)
+    extraDistr::rzip(size, location, pi = zi)
+  } else if (family == "pareto") {
+    VGAM::rpareto(n = size, scale = scale + 1, shape = location + 1)
   }
-  return(x)
 }
 
 
@@ -49,7 +54,8 @@ df <- data.frame()
 distrs <- c(
   "normal", "beta", "chi", "F", "exponential", "gamma", "lognormal",
   "poisson", "uniform", "negative binomial", "bernoulli",
-  "poisson (zero-inflated)", "negative binomial (zero-inflated)"
+  "poisson (zero-inflated)", "negative binomial (zero-inflated)",
+  "weibull", "beta-binomial", "binomial", "pareto"
 )
 
 pb <- txtProgressBar(min = 0, max = length(distrs), style = 3)
@@ -58,12 +64,20 @@ for (di in 1:length(distrs)) {
 
   setTxtProgressBar(pb, di)
   distribution <- distrs[di]
+  cat("\n\n", distribution, "\n")
 
-  for (i in 1:2000) {
+  pb2 <- txtProgressBar(min = 1, max = 2500, style = 3)
+
+  for (i in 1:3000) {
+
+    setTxtProgressBar(pb2, i)
 
     size <- round(runif(1, 30, 2000))
+    trials <- round(runif(1, 0, ifelse(size / 5 > 100, 100, size / 5)))
     location <- runif(1, 0.01, 10)
     scale <- runif(1, 0.02, 10)
+    prob <- runif(1, .05, .9)
+    mu <- runif(1, 1, ifelse(round(sqrt(trials)) < 2, 2, round(sqrt(trials))))
     zi <- runif(1, 0, .7)
 
     x <-
@@ -72,50 +86,57 @@ for (di in 1:length(distrs)) {
         size = size,
         location = location,
         scale = scale,
+        trials = trials,
+        prob = prob,
+        mu = mu,
         zi = zi
       )
 
-    x[is.infinite(x)] <- 5.565423e+156
-    x_scaled <- parameters::normalize(x, verbose = FALSE)
+    x <- as.vector(na.omit(sjmisc::zap_inf(x)))
+    # x_scaled <- parameters::normalize(x, verbose = FALSE)
 
-    # Extract features
-    data <- data.frame(
-      "SD" = sd(x_scaled),
-      "MAD" = mad(x_scaled, constant = 1),
-      "Mean_Median_Distance" = mean(x_scaled) - median(x_scaled),
-      "Mean_Mode_Distance" = mean(x_scaled) - as.numeric(bayestestR::map_estimate(x_scaled, bw = "nrd0")),
-      "SD_MAD_Distance" = sd(x_scaled) - mad(x_scaled, constant = 1),
-      "Var_Mean_Distance" = var(x) - mean(x),
-      "Range_SD" = diff(range(x)) / sd(x),
-      "IQR" = stats::IQR(x_scaled),
-      "Skewness" = parameters::skewness(x_scaled),
-      "Kurtosis" = parameters::kurtosis(x_scaled),
-      "Uniques" = length(unique(x)) / length(x),
-      "Min" = min(x),
-      "Max" = max(x),
-      "Proportion_Zero" = sum(x == 0) / length(x)
-    )
+    if (length(x >= 10)) {
+      # Extract features
+      data <- data.frame(
+        "SD" = sd(x),
+        "MAD" = mad(x, constant = 1),
+        "Mean_Median_Distance" = mean(x) - median(x),
+        "Mean_Mode_Distance" = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+        "SD_MAD_Distance" = sd(x) - mad(x, constant = 1),
+        "Var_Mean_Distance" = var(x) - mean(x),
+        "Range_SD" = diff(range(x)) / sd(x),
+        "Range" = diff(range(x)),
+        "IQR" = stats::IQR(x),
+        "Skewness" = parameters::skewness(x),
+        "Kurtosis" = parameters::kurtosis(x),
+        "Uniques" = length(unique(x)) / length(x),
+        "N_Uniques" = length(unique(x)),
+        "Min" = min(x),
+        "Max" = max(x)
+        # "Proportion_Zero" = sum(x == 0) / length(x)
+        # "Proportion_Minimum" = sum(x == min(x)) / length(x),
+        # "Proportion_Maximum" = sum(x == max(x)) / length(x)
+      )
 
-    if (length(unique(x)) == 1) {
-      data$Distribution <- "uniform"
-    } else{
-      data$Distribution <- distribution
+      if (length(unique(x)) == 1) {
+        data$Distribution <- "uniform"
+      } else {
+        data$Distribution <- distribution
+      }
+
+      df <- rbind(df, data)
     }
-
-    df <- rbind(df, data)
   }
+  close(pb2)
 }
 
 close(pb)
-
-df
-
 
 df2 <- na.omit(df)
 infinite <- is.infinite(rowSums(df2[sapply(df2, is.numeric)]))
 df2 <- df2[!infinite, ]
 
-model <-
+model2 <- model <-
   randomForest::randomForest(
     as.factor(Distribution) ~ .,
     data = df2,
@@ -124,14 +145,33 @@ model <-
     keep.forest = TRUE,
     keep.inbag = FALSE,
     proximity = FALSE,
-    maxDepth = 16,
+    maxDepth = 20,
     maxBins = 32,
     minInstancesPerNode = 1,
     minInfoGain = 0.0,
     maxMemoryInMB = 512,
-    ntree = 32
+    ntree = 48
   )
+
+
+model <- strip::strip(model, keep = "predict", use_trim = TRUE)
+
+model$predicted <- NULL
+model$y <- NULL
+model$err.rate <- NULL
+model$test <- NULL
+model$proximity <- NULL
+model$confusion <- NULL
+model$localImportance <- NULL
+model$importanceSD <- NULL
+model$inbag <- NULL
+model$votes <- NULL
+model$oob.times <- NULL
 
 
 classify_distribution <- model
 usethis::use_data(classify_distribution, overwrite = TRUE, internal = TRUE)
+
+sjmisc::frq(df2$Distribution)
+
+randomForest::varImpPlot(model2)
