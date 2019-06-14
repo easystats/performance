@@ -44,11 +44,15 @@ check_distribution <- function(model) {
     "Mean_Median_Distance" = mean(x) - median(x),
     "Mean_Mode_Distance" = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
     "SD_MAD_Distance" = stats::sd(x) - stats::mad(x, constant = 1),
+    "Var_Mean_Distance" = stats::var(x) - mean(x),
     "Range_SD" = diff(range(x)) / stats::sd(x),
     "IQR" = stats::IQR(x),
     "Skewness" = .skewness(x),
     "Kurtosis" = .kurtosis(x),
-    "Uniques" = length(unique(x)) / length(x)
+    "Uniques" = length(unique(x)) / length(x),
+    "Min" = min(x),
+    "Max" = max(x),
+    "Proportion_Zero" = sum(x == 0) / length(x)
   )
 
   dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
@@ -63,11 +67,15 @@ check_distribution <- function(model) {
     "Mean_Median_Distance" = mean(x) - median(x),
     "Mean_Mode_Distance" = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
     "SD_MAD_Distance" = stats::sd(x) - stats::mad(x, constant = 1),
+    "Var_Mean_Distance" = stats::var(x) - mean(x),
     "Range_SD" = diff(range(x)) / stats::sd(x),
     "IQR" = stats::IQR(x),
     "Skewness" = .skewness(x),
     "Kurtosis" = .kurtosis(x),
-    "Uniques" = length(unique(x)) / length(x)
+    "Uniques" = length(unique(x)) / length(x),
+    "Min" = min(x),
+    "Max" = max(x),
+    "Proportion_Zero" = sum(x == 0) / length(x)
   )
 
   dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
