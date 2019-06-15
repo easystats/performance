@@ -152,7 +152,11 @@ indicates a non-constant variance (heteroskedasticity).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>gear</span> + <span class='no'>disp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>check_heteroscedasticity</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).</span><span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='fu'>check_heteroscedasticity</span>(<span class='no'>m</span>))</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).</span><span></div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div><div class='input'>
+<span class='fu'>check_heteroscedasticity</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).
+#&gt; </span><span></div><div class='input'>
+<span class='co'># plot results</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>check_heteroscedasticity</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).
+#&gt; </span><span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

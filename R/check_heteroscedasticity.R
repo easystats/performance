@@ -12,7 +12,10 @@
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_heteroscedasticity(m)
-#' plot(check_heteroscedasticity(m))
+#'
+#' # plot results
+#' x <- check_heteroscedasticity(m)
+#' plot(x)
 #'
 #' @importFrom stats residuals df.residual fitted anova pchisq
 #' @importFrom insight print_color

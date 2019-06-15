@@ -34,6 +34,10 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
+#' # plot results
+#' x <- check_collinearity(m)
+#' plot(x)
+#'
 #' @importFrom stats vcov cov2cor terms
 #' @importFrom insight has_intercept find_formula model_info
 #' @export
@@ -151,8 +155,14 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   }
 
   structure(
-    class = c("check_collinearity", "data.frame"),
+    class = c("check_collinearity", "see_check_collinearity", "data.frame"),
     data.frame(
+      Predictor = terms,
+      VIF = result,
+      SE_factor = sqrt(result),
+      stringsAsFactors = FALSE
+    ),
+    data = data.frame(
       Predictor = terms,
       VIF = result,
       SE_factor = sqrt(result),

@@ -17,7 +17,10 @@
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_normality(m)
-#' plot(check_normality(m))
+#'
+#' # plot results
+#' x <- check_normality(m)
+#' plot(x)
 #'
 #' \dontrun{
 #' # QQ-plot
