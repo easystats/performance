@@ -25,3 +25,13 @@ plot.check_distribution <- function(x, ...) {
   }
   NextMethod()
 }
+
+
+
+#' @export
+plot.check_normality <- function(x, ...) {
+  if (!requireNamespace("see", quietly = TRUE)) {
+    stop("Package 'see' needed for residual plots. Please install it.")
+  }
+  NextMethod()
+}

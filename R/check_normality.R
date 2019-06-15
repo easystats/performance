@@ -37,5 +37,8 @@ check_normality.default <- function(x, ...) {
     insight::print_color(sprintf("OK: Residuals appear as normally distributed (p = %.3f).", p.val), "green")
   }
 
+  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+
   invisible(p.val)
 }
