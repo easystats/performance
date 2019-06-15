@@ -39,7 +39,7 @@
 
 <meta property="og:title" content="Check for influential observations — check_outliers" />
 
-<meta property="og:description" content="Checks for and locates influential observations (i.e., &quot;outliers&quot;) via Cook's Distance." />
+<meta property="og:description" content="Checks for and locates influential observations (i.e., &quot;outliers&quot;) via several distance methods." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -125,14 +125,15 @@
 
     <div class="ref-description">
     
-    <p>Checks for and locates influential observations (i.e., "outliers") via Cook's Distance.</p>
+    <p>Checks for and locates influential observations (i.e., "outliers") via several distance methods.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>check_outliers</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>check_outliers</span>(<span class='no'>x</span>, <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='fl'>4</span>/<span class='kw pkg'>insight</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/insight/topics/n_obs'>n_obs</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)</pre>
+<span class='fu'>check_outliers</span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"cook"</span>, <span class='st'>"mahalanobis"</span>,
+  <span class='st'>"ics"</span>), <span class='kw'>threshold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,13 +144,21 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <td><p>When <code>method = "ics"</code>, further arguments in <code>...</code> are
+passed down to <code><a href='https://www.rdocumentation.org/packages/ICSOutlier/topics/ics.outlier'>ICSOutlier::ics.outlier()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>The method to calculate the distance, at which value a point is
+considered as "outlier".</p></td>
     </tr>
     <tr>
       <th>threshold</th>
       <td><p>The threshold indicating at which distance an observation is
-considered as outlier. For the Cook's Distance method, <code>threshold</code> defaults
-to 4 divided by numbers of observations.</p></td>
+considered as outlier. Possible values are <code>"cook"</code> (Cook's Distance),
+<code>"mahalanobis"</code> (Mahalanobis Distance) or <code>"ics"</code> (Invariant
+Coordinate Selection, <cite>Archimbaud et al. 2018</cite>). May be abbreviated.
+See 'Details'.</p></td>
     </tr>
     </table>
     
@@ -162,26 +171,49 @@ as outlier.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Performs a Cook's distance test to check for influential observations. Those greater than 4/n, are considered
-outliers. This relatively conservative threshold is useful only for detection, rather than justificaiton for automatic observation
-deletion. If users opt to drop observations that may be problematic, they may do so by specifying <code>drop_outliers = TRUE</code>.</p>
+    <p>Performs a distance test to check for influential observations. Those
+greater as a certain threshold, are considered outliers. This relatively conservative
+threshold is useful only for detection, rather than justificaiton for automatic
+observation deletion.</p><h3>Choosing Default Thresholds</h3>
+    <dl class='dl-horizontal'>
+<dt><strong>Cook's Distance</strong></dt><dd><p>When <code>method = "cook"</code>, <code>threshold</code> defaults to 4 divided by numbers of observations.</p></dd>
+<dt><strong>Mahalanobis Distance</strong></dt><dd><p>When <code>method = "mahalanobis"</code>, the default for <code>threshold</code> is based on
+a weird formula (<code><a href='https://www.rdocumentation.org/packages/base/topics/Round'>floor(3 * sqrt(sum(cov(predictors)^2)) / nobs(x))</a></code>),
+which is limted to values between 3 and 10, to account for different variation
+in the data depending on the number of observations. There is no "rule of thumb"
+for the threshold regarding the Mahalanobis Distance, most studies use a value
+between 3 and 10. It is most likely better to define own, sensible thresholds.</p></dd>
+<dt><strong>Invariant Coordinate Selection</strong></dt><dd><p>If <code>method = "ics"</code>, the threshold is determined by <code><a href='https://www.rdocumentation.org/packages/ICSOutlier/topics/ics.outlier'>ICSOutlier::ics.outlier()</a></code>.
+Refer to the help-file of that function to get more details about this procedure.
+Note that <code>method = "ics"</code> requires both <span class="pkg">ICS</span> and <span class="pkg">ICSOutlier</span>
+to be installed, and that it takes a bit longer to compute the results.</p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.</p>
+    <ul>
+<li><p>Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.</p></li>
+<li><p>Archimbaud, A., Nordhausen, K., &amp; Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics &amp; Data Analysis, 128, 184–199. doi: <a href='https://doi.org/10.1016/j.csda.2018.06.011'>10.1016/j.csda.2018.06.011</a></p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># select only mpg and disp (continuous)</span>
-<span class='no'>mt1</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span>[, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>3</span>)]
+<span class='no'>mt1</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span>[, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>4</span>)]
 <span class='co'># create some fake outliers and attach outliers to main df</span>
-<span class='no'>mt2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>mt1</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>mpg</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>37</span>, <span class='fl'>40</span>), <span class='kw'>disp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>300</span>, <span class='fl'>400</span>)))
+<span class='no'>mt2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/cbind'>rbind</a></span>(<span class='no'>mt1</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>mpg</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>37</span>, <span class='fl'>40</span>), <span class='kw'>disp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>300</span>, <span class='fl'>400</span>), <span class='kw'>hp</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>110</span>, <span class='fl'>120</span>)))
 <span class='co'># fit model with outliers</span>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>disp</span> ~ <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mt2</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>disp</span> ~ <span class='no'>mpg</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mt2</span>)
 
-<span class='fu'>check_outliers</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Outliers detected (cases 33, 34).
+<span class='fu'>check_outliers</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: 3 outliers detected (cases 31, 33, 34).
+#&gt; </span><span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='fu'>check_outliers</span>(<span class='no'>model</span>))</div><div class='output co'>#&gt; <span class='message'>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 31 rows containing missing values (geom_text_repel).</span></div><div class='img'><img src='check_outliers-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'>check_outliers</span>(<span class='no'>model</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"m"</span>)</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 2 outliers detected (cases 31, 34).
 #&gt; </span><span></div><div class='input'>
-</div></span></pre>
+</div></span><span class='co'># NOT RUN {</span>
+<span class='co'># This one takes some seconds to finish...</span>
+<span class='fu'>check_outliers</span>(<span class='no'>model</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"ics"</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

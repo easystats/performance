@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -182,7 +182,7 @@
 <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC     BIC        R2 R2_adjusted     RMSE
 #&gt; 1 156.0101 161.873 0.8302274   0.8185189 2.444202</div><div class='input'>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        AIC      BIC   R2_Tjur      RMSE   LOGLOSS SCORE_LOG SCORE_SPHERICAL
+<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: number of items to replace is not a multiple of replacement length</span></div><div class='output co'>#&gt;        AIC      BIC   R2_Tjur      RMSE   LOGLOSS SCORE_LOG SCORE_SPHERICAL
 #&gt; 1 31.29788 35.69508 0.4776926 0.8891336 0.3952793 -14.90294       0.0945795
 #&gt;         PCP
 #&gt; 1 0.7429268</div><div class='input'>

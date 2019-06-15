@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -120,13 +120,46 @@
       
     </div>
 
-    <div id="performance-020" class="section level1">
+    <div id="performance-021" class="section level1">
 <h1 class="page-header">
-<a href="#performance-020" class="anchor"></a>performance 0.2.0<small> Unreleased </small>
+<a href="#performance-021" class="anchor"></a>performance 0.2.1<small> Unreleased </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>Many <code>check_*()</code> methods now get a <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code> method.</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/check_outliers.html">check_outliers()</a></code> gets a <code>method</code>-argument to choose the method for detecting outliers. Furthermore, two new methods (Mahalanobis Distance and Invariant Coordinate Selection) were implemented.</li>
+<li>
+<code><a href="../reference/check_model.html">check_model()</a></code> now performs more checks for GLM(M)s and other model objects.</li>
+<li>
+<code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with <code><a href="https://www.rdocumentation.org/packages/MuMIn/topics/r.squaredGLMM">MuMIn::r.squaredGLMM()</a></code>, which returned a value for models with singular fit.</li>
+<li>
+<code><a href="../reference/check_distribution.html">check_distribution()</a></code> now detects negative binomial and zero-inflated distributions. Furthermore, attempt to improve accuracy.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fix issues with <code><a href="../reference/model_performance.html">compare_performance()</a></code> and row-ordering.</li>
+</ul>
+</div>
+</div>
+    <div id="performance-020" class="section level1">
+<h1 class="page-header">
+<a href="#performance-020" class="anchor"></a>performance 0.2.0<small> 2019-06-04 </small>
+</h1>
+<div id="general-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</li>
@@ -194,9 +227,9 @@
 <code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>
@@ -209,9 +242,9 @@
 <li>Some functions get a <code>verbose</code>-argument to sow or suppress warnings.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
 <li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (#48).</li>
@@ -226,6 +259,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#performance-021">0.2.1</a></li>
         <li><a href="#performance-020">0.2.0</a></li>
       </ul>
     </div>

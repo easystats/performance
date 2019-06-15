@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -142,7 +142,22 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function uses an internal random forest model to classify the distribution from a model-family.</p>
+    <p>This function uses an internal random forest model to classify the
+distribution from a model-family. Currently, following distributions are
+trained (i.e. results of <code>check_distribution()</code> may be one of the following):
+<code>"bernoulli"</code>, <code>"beta"</code>, <code>"beta-binomial"</code>, <code>"binomial"</code>,
+<code>"chi"</code>, <code>"exponential"</code>, <code>"F"</code>, <code>"gamma"</code>, <code>"lognormal"</code>,
+<code>"normal"</code>, <code>"negative binomial"</code>, <code>"negative binomial (zero-inflated)"</code>,
+<code>"pareto"</code>, <code>"poisson"</code>, <code>"poisson (zero-inflated)"</code>,
+<code>"uniform"</code> and <code>"weibull"</code>.
+<br /> <br />
+Note the similarity between certain distributions according to shape, skewness,
+etc., for instance <code><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot(dnorm(1:100, 30, 3))</a></code> and <code><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot(dnorm(1:100, 30, 3))</a></code>.
+Thus, the predicted distribution may not be perfectly representing the distributional
+family of the underlying fitted model, or the response value.
+<br /> <br />
+There is a <code><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot()</a></code>, which shows the probabilities of all predicted
+distributions, however, only if the probability is greater than zero.</p>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -158,16 +173,17 @@
 #&gt; 
 #&gt; </span><span style='color: #BB0000;'>Predicted Distribution of Residuals
 #&gt; 
-#&gt; </span><span> Distribution Probability
-#&gt;        normal         50%
-#&gt;         gamma         40%
-#&gt;     lognormal         10%
+#&gt; </span><span>               Distribution Probability
+#&gt;                      normal         50%
+#&gt;  neg. binomial (zero-infl.)     15.625%
+#&gt;                       gamma       12.5%
 #&gt; </span><span style='color: #BB0000;'>
 #&gt; Predicted Distribution of Response
 #&gt; 
 #&gt; </span><span> Distribution Probability
-#&gt;         gamma         50%
-#&gt;     lognormal         50%</div><div class='input'>
+#&gt;     lognormal         75%
+#&gt;         gamma       12.5%
+#&gt;   exponential      9.375%</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='fu'>check_distribution</span>(<span class='no'>model</span>))</div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
