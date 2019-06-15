@@ -40,9 +40,9 @@ check_normality.default <- function(x, ...) {
   p.val <- ts$p.value
 
   if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Non-normality of residuals detected (p = %.3f).", p.val), "red")
+    insight::print_color(sprintf("Warning: Non-normality of residuals detected (p = %.3f).\n", p.val), "red")
   } else {
-    insight::print_color(sprintf("OK: Residuals appear as normally distributed (p = %.3f).", p.val), "green")
+    insight::print_color(sprintf("OK: Residuals appear as normally distributed (p = %.3f).\n", p.val), "green")
   }
 
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
