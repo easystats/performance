@@ -29,4 +29,11 @@ m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
 plot(check_normality(m))
 
+\dontrun{
+# QQ-plot
+plot(check_normality(m), type = "qq")
+
+# PP-plot
+plot(check_normality(m), type = "pp")}
+
 }
