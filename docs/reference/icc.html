@@ -263,10 +263,7 @@ calculate the central tendency of the variances.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lme4</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>icc</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Intraclass Correlation Coefficient
-#&gt; 
-#&gt; </span><span>     Adjusted ICC: 0.910
-#&gt;   Conditional ICC: 0.311</div><div class='input'>
+<span class='fu'>icc</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>zero-length inputs cannot be mixed with those of non-zero length</span><span></div><div class='output co'>#&gt; [1] NA</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

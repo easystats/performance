@@ -2,7 +2,7 @@
 
 ## General
 
-* Many `check_*()` methods now get a `plot()` method.
+* Many `check_*()`-methods now get a `plot()`-method. Package **see** is required for plotting.
 
 ## Changes to functions
 

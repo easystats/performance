@@ -186,18 +186,15 @@ See related documentation of object's class for details.</p></td>
 #&gt; 1 156.0101 161.873 0.8302274   0.8185189 2.444202</div><div class='input'>
 <span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>compare_performance</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: number of items to replace is not a multiple of replacement length</span></div><div class='output co'>#&gt;   Model    Type       AIC       BIC      RMSE        R2 R2_adjusted   R2_Tjur
+<span class='fu'>compare_performance</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: number of items to replace is not a multiple of replacement length</span></div><div class='output co'>#&gt; <span style='color: #BB0000;'>zero-length inputs cannot be mixed with those of non-zero length</span><span>
+#&gt; </span><span style='color: #BB0000;'>zero-length inputs cannot be mixed with those of non-zero length</span><span></div><div class='output co'>#&gt;   Model    Type       AIC       BIC      RMSE        R2 R2_adjusted   R2_Tjur
 #&gt; 1    m1      lm 156.01007 161.87301 2.4442021 0.8302274   0.8185189        NA
 #&gt; 2    m2     glm  31.29788  35.69508 0.8891336        NA          NA 0.4776926
 #&gt; 3    m3 lmerMod  77.31960  89.36214 0.2787760        NA          NA        NA
-#&gt;     LOGLOSS SCORE_LOG SCORE_SPHERICAL       PCP R2_conditional R2_marginal
-#&gt; 1        NA        NA              NA        NA             NA          NA
-#&gt; 2 0.3952793 -14.90294       0.0945795 0.7429268             NA          NA
-#&gt; 3        NA        NA              NA        NA      0.9723224   0.0955834
-#&gt;         ICC
-#&gt; 1        NA
-#&gt; 2        NA
-#&gt; 3 0.9693973</div><div class='input'>
+#&gt;     LOGLOSS SCORE_LOG SCORE_SPHERICAL       PCP
+#&gt; 1        NA        NA              NA        NA
+#&gt; 2 0.3952793 -14.90294       0.0945795 0.7429268
+#&gt; 3        NA        NA              NA        NA</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>iris</span>)
 <span class='no'>lm1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 <span class='no'>lm2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Species</span> + <span class='no'>Petal.Length</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
@@ -206,7 +203,7 @@ See related documentation of object's class for details.</p></td>
 #&gt; 1   lm1   lm 231.4520 243.4945 0.6187057   0.6135181 0.5096155           NA
 #&gt; 2   lm2   lm 106.2327 121.2859 0.8367238   0.8333688 0.3334832 3.445528e+26
 #&gt; 3   lm3   lm 106.7673 127.8418 0.8404527   0.8349129 0.3296532 1.299196e+25</div><div class='input'>
-</div></pre>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
