@@ -27,5 +27,6 @@ of residuals and visual inspection (e.g. Q-Q plots) are preferable.
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
+plot(check_normality(m))
 
 }

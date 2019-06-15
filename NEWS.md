@@ -1,5 +1,9 @@
 # performance 0.2.1
 
+## General
+
+* Many `check_*()` methods now get a `plot()` method.
+
 ## Changes to functions
 
 * `check_outliers()` gets a `method`-argument to choose the method for detecting outliers. Furthermore, two new methods (Mahalanobis Distance and Invariant Coordinate Selection) were implemented.

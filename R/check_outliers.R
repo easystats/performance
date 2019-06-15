@@ -59,6 +59,7 @@
 #' model <- lm(disp ~ mpg + hp, data = mt2)
 #'
 #' check_outliers(model)
+#' plot(check_outliers(model))
 #'
 #' check_outliers(model, method = "m")
 #'

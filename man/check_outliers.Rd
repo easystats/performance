@@ -70,6 +70,7 @@ mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 12
 model <- lm(disp ~ mpg + hp, data = mt2)
 
 check_outliers(model)
+plot(check_outliers(model))
 
 check_outliers(model, method = "m")
 
