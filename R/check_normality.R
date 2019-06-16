@@ -39,7 +39,18 @@ check_normality <- function(x, ...) {
 #' @export
 check_normality.default <- function(x, ...) {
   # check for normality of residuals
-  ts <- stats::shapiro.test(stats::rstandard(x))
+  ts <- tryCatch(
+    {
+      stats::shapiro.test(stats::rstandard(x))
+    },
+    error = function(e) { NULL }
+  )
+
+  if (is.null(ts)) {
+    insight::print_color(sprintf("'check_normality()' does not support models of class '%s'.\n", class(x)[1]), "red")
+    return(NULL)
+  }
+
   p.val <- ts$p.value
 
   if (p.val < 0.05) {

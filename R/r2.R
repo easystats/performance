@@ -40,7 +40,7 @@ r2 <- function(model, ...) {
 #' @importFrom insight print_color
 #' @export
 r2.default <- function(model, ...) {
-  insight::print_color(sprintf("Objects of class \"%s\" are not supported yet.\n", class(model)[1]), "red")
+  insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
   return(NA)
 }
 

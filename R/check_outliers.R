@@ -127,9 +127,9 @@ check_outliers.default <- function(x, method = c("cook", "mahalanobis", "ics"), 
       if (ncol(preds) == 1)
         insight::print_color("At least two numeric predictors are required to detect outliers.\n", "red")
       else
-        insight::print_color(sprintf("Objects of class \"%s\" are not supported yet.\n", class(x)[1]), "red")
+        insight::print_color(sprintf("'check_outliers()' does not support models of class '%s'.\n", class(x)[1]), "red")
     } else {
-      insight::print_color(sprintf("Objects of class \"%s\" are not supported yet.\n", class(x)[1]), "red")
+      insight::print_color(sprintf("'check_outliers()' does not support models of class '%s'.\n", class(x)[1]), "red")
     }
     return(NULL)
   }
