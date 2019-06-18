@@ -8,6 +8,7 @@
 #' @param tolerance Indicates up to which value the convergence result is
 #'          accepted. The smaller \code{tolerance} is, the stricter the test
 #'          will be.
+#' @param ... Currently not used.
 #'
 #' @return \code{TRUE} if convergence is fine and \code{FALSE} if convergence
 #'   is suspicious. Additionally, the convergence value is returned as attribute.
@@ -35,15 +36,22 @@
 #' check_convergence(model)
 #'
 #' @export
-check_convergence <- function(x, tolerance = 0.001) {
+check_convergence <- function(x, tolerance = 0.001, ...) {
+  UseMethod("check_convergence")
+}
+
+
+#' @export
+check_convergence.default <- function(x, tolerance = 0.001, ...) {
+  insight::print_color(sprintf("check_convergence() does not work for models of class '%s'.\n", class(x)[1]), "red")
+}
+
+
+#' @export
+check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
   # check for package availability
   if (!requireNamespace("Matrix", quietly = TRUE))
     stop("Package `Matrix` needed for this function to work. Please install it.", call. = FALSE)
-
-  # is 'x' an lmer object?
-  if (!inherits(x, "merMod"))
-    warning("`x` must be a `merMod` object.", call. = F)
-
 
   relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
 
