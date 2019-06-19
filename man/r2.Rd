@@ -37,7 +37,7 @@ r2(model)
 
 }
 \seealso{
-\code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kl}},
+\code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kullback}},
   \code{\link{r2_loo}}, \code{\link{r2_mcfadden}}, \code{\link{r2_nagelkerke}},
   \code{\link{r2_nakagawa}}, \code{\link{r2_tjur}}, \code{\link{r2_xu}} and
   \code{\link{r2_zeroinflated}}.

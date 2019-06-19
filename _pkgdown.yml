@@ -7,3 +7,62 @@ authors:
 template:
   params:
     bootswatch: cosmo
+
+reference:
+- title: "Common Indices of Model Quality"
+  contents:
+  - icc
+  - looic
+  - r2
+
+- title: "Check Model Assumptions or Properties"
+  contents:
+  - binned_residuals
+  - check_autocorrelation
+  - check_collinearity
+  - check_convergence
+  - check_distribution
+  - check_heteroscedasticity
+  - check_model
+  - check_normality
+  - check_outliers
+  - check_overdispersion
+  - check_singularity
+  - check_zeroinflation
+
+- title: "Check Model Performance or Quality"
+  contents:
+  - model_performance
+  - performance_accuracy
+  - performance_aicc
+  - performance_hosmer
+  - performance_logloss
+  - performance_mse
+  - performance_pcp
+  - performance_rmse
+  - performance_roc
+  - performance_rse
+  - performance_score
+
+- title: "Check Items and Scales"
+  contents:
+  - cronbachs_alpha
+  - item_difficulty
+  - item_intercor
+  - item_reliability
+  - item_split_half
+
+- title: "Further R2 Functions"
+  contents:
+  - r2_bayes
+  - r2_coxsnell
+  - r2_kullback
+  - r2_loo
+  - r2_mcfadden
+  - r2_mckelvey
+  - r2_nagelkerke
+  - r2_nakagawa
+  - r2_tjur
+  - r2_xu
+  - r2_zeroinflated
+
