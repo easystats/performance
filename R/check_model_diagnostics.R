@@ -20,7 +20,21 @@
   if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB"))) {
     res_ <- sort(stats::residuals(model), na.last = NA)
   } else {
-    res_ <- sort(stats::rstudent(model), na.last = NA)
+    res_ <- tryCatch(
+      {sort(stats::rstudent(model), na.last = NA)},
+      error = function(e) { NULL }
+    )
+    if (is.null(res_)) {
+      res_ <- tryCatch(
+        {sort(stats::residuals(model), na.last = NA)},
+        error = function(e) { NULL }
+      )
+    }
+  }
+
+  if (is.null(res_)) {
+    insight::print_color(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class '%s'.\n", class(model)[1]), "red")
+    return(NULL)
   }
 
   fitted_ <- sort(stats::fitted(model), na.last = NA)
@@ -76,7 +90,13 @@
 #' @importFrom bayestestR estimate_density
 #' @importFrom stats residuals sd
 .diag_norm <- function(model) {
-  r <- stats::residuals(model)
+  r <- try(stats::residuals(model), silent = TRUE)
+
+  if (inherits(r, "try-error")) {
+    insight::print_color(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.\n", class(model)[1]), "red")
+    return(NULL)
+  }
+
   dat <- as.data.frame(bayestestR::estimate_density(r))
   dat$curve <- stats::dnorm(seq(min(dat$x), max(dat$x), length.out = nrow(dat)),  mean(r),  stats::sd(r))
   dat
@@ -87,10 +107,21 @@
 
 #' @importFrom stats residuals fitted
 .diag_ncv <- function(model) {
-  data.frame(
-    x = stats::fitted(model),
-    y = stats::residuals(model)
+  ncv <- tryCatch({
+    data.frame(
+      x = stats::fitted(model),
+      y = stats::residuals(model)
+    )
+  },
+  error = function(e) { NULL }
   )
+
+  if (is.null(ncv)) {
+    insight::print_color(sprintf("Non-constant error variance could not be computed. Cannot extract residuals from objects of class '%s'.\n", class(model)[1]), "red")
+    return(NULL)
+  }
+
+  ncv
 }
 
 
@@ -115,7 +146,10 @@
     error = function(e) { NULL }
   )
 
-  if (is.null(r)) return(NULL)
+  if (is.null(r)) {
+    insight::print_color(sprintf("Homogeneity of variance could not be computed. Cannot extract residual variance from objects of class '%s'.\n", class(model)[1]), "red")
+    return(NULL)
+  }
 
   data.frame(
     x = stats::fitted(model),
