@@ -1,10 +1,9 @@
-#' @title Check model for homogeneity of variances
-#' @name check_homogeneity
+#' Check model for homogeneity of variances
 #'
-#' @description Check model for homogeneity of variances between groups described
+#' Check model for homogeneity of variances between groups described
 #' by independent variables in a model.
 #'
-#' @param x A linear model or an Anova object.
+#' @param x A linear model or an ANOVA object.
 #' @param method Name of the method (underlying test) that should be performend
 #' to check the homogeneity of variances. May either be \code{"bartlett"} for
 #' the Bartlett test (assuming normal distributed samples or groups),
@@ -17,17 +16,17 @@
 #' < 0.05 indicates a significant difference in the variance between the groups.
 #'
 #' @examples
-#' m <- lm(len ~ supp + dose, data = ToothGrowth)
-#' check_homogeneity(m)
+#' model <- lm(len ~ supp + dose, data = ToothGrowth)
+#' check_homogeneity(model)
 #'
 #' # plot results
-#' x <- check_homogeneity(m)
-#' plot(x)
+#' result <- check_homogeneity(model)
+#' plot(result)
 #'
 #' @importFrom stats fligner.test bartlett.test shapiro.test
 #' @importFrom insight find_response find_predictors get_data get_response
 #' @export
-check_homogeneity <- function(x, ...) {
+check_homogeneity <- function(x, method = c("bartlett", "fligner", "auto"), ...) {
   UseMethod("check_homogeneity")
 }
 
