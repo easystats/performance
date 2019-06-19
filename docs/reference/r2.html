@@ -161,7 +161,7 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='r2_bayes.html'>r2_bayes</a></code>, <code><a href='r2_coxsnell.html'>r2_coxsnell</a></code>, <code><a href='r2_kl.html'>r2_kl</a></code>,
+    <div class='dont-index'><p><code><a href='r2_bayes.html'>r2_bayes</a></code>, <code><a href='r2_coxsnell.html'>r2_coxsnell</a></code>, <code><a href='r2_kullback.html'>r2_kullback</a></code>,
   <code><a href='r2_loo.html'>r2_loo</a></code>, <code><a href='r2_mcfadden.html'>r2_mcfadden</a></code>, <code><a href='r2_nagelkerke.html'>r2_nagelkerke</a></code>,
   <code><a href='r2_nakagawa.html'>r2_nakagawa</a></code>, <code><a href='r2_tjur.html'>r2_tjur</a></code>, <code><a href='r2_xu.html'>r2_xu</a></code> and
   <code><a href='r2_zeroinflated.html'>r2_zeroinflated</a></code>.</p></div>
@@ -175,7 +175,10 @@
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'>r2</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>zero-length inputs cannot be mixed with those of non-zero length</span><span></div><div class='output co'>#&gt; [1] NA</div><div class='input'>
+<span class='fu'>r2</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># R2 for mixed models
+#&gt; 
+#&gt; </span><span>  Conditional R2: 0.969
+#&gt;      Marginal R2: 0.658</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -23,6 +23,7 @@ reference:
   - check_convergence
   - check_distribution
   - check_heteroscedasticity
+  - check_homogeneity
   - check_model
   - check_normality
   - check_outliers
@@ -51,6 +52,7 @@ reference:
   - item_intercor
   - item_reliability
   - item_split_half
+  - principal_components
 
 - title: "Further R2 Functions"
   contents:

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>LOO-related Indices for Bayesian regressions. — looic • performance</title>
+<title>Kullback-Leibler R2 — r2_kullback • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,10 +37,10 @@
 
 
 
-<meta property="og:title" content="LOO-related Indices for Bayesian regressions. — looic" />
+<meta property="og:title" content="Kullback-Leibler R2 — r2_kullback" />
 
-<meta property="og:description" content="Compute LOOIC (leave-one-out cross-validation (LOO) information
-  criterion) and ELPD (expected log predictive density) for Bayesian regressions." />
+<meta property="og:description" content="Calculates the Kullback-Leibler-divergence-based
+  R2 for generalized linear models." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -119,67 +119,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>LOO-related Indices for Bayesian regressions.</h1>
+    <h1>Kullback-Leibler R2</h1>
     
-    <div class="hidden name"><code>looic.Rd</code></div>
+    <div class="hidden name"><code>r2_kullback.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute LOOIC (leave-one-out cross-validation (LOO) information
-  criterion) and ELPD (expected log predictive density) for Bayesian regressions.</p>
+    <p>Calculates the Kullback-Leibler-divergence-based
+  R2 for generalized linear models.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>looic</span>(<span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_kullback</span>(<span class='no'>model</span>, <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A Bayesian regression model.</p></td>
+      <td><p>A generalized linear model.</p></td>
+    </tr>
+    <tr>
+      <th>adjust</th>
+      <td><p>Logical, if <code>TRUE</code> (the default), the adjusted R2 value is returned.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with four elements, the ELPD, LOOIC and their standard errors.</p>
+    <p>A named vector with the R2 value.</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness of fit for some common nonlinear regression models. Journal of Econometrics, 77: 329-342.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'xts':</span>
-#&gt; <span class='message'>  method     from</span>
-#&gt; <span class='message'>  as.zoo.xts zoo </span></div><div class='output co'>#&gt; <span class='message'>rstanarm (Version 2.18.2, packaged: 2018-11-08 22:19:38 UTC)</span></div><div class='output co'>#&gt; <span class='message'>- Do not expect the default priors to remain the same in future rstanarm versions.</span></div><div class='output co'>#&gt; <span class='message'>Thus, R scripts should specify priors explicitly, even if they are just the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'>- Plotting theme set to bayesplot::theme_default().</span></div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>)</div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-#&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 0 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 1: Adjust your expectations accordingly!
-#&gt; Chain 1: 
-#&gt; Chain 1: 
-#&gt; Chain 1: Iteration:   1 / 500 [  0%]  (Warmup)
-#&gt; Chain 1: Iteration:  50 / 500 [ 10%]  (Warmup)
-#&gt; Chain 1: Iteration: 100 / 500 [ 20%]  (Warmup)
-#&gt; Chain 1: Iteration: 150 / 500 [ 30%]  (Warmup)
-#&gt; Chain 1: Iteration: 200 / 500 [ 40%]  (Warmup)
-#&gt; Chain 1: Iteration: 250 / 500 [ 50%]  (Warmup)
-#&gt; Chain 1: Iteration: 251 / 500 [ 50%]  (Sampling)
-#&gt; Chain 1: Iteration: 300 / 500 [ 60%]  (Sampling)
-#&gt; Chain 1: Iteration: 350 / 500 [ 70%]  (Sampling)
-#&gt; Chain 1: Iteration: 400 / 500 [ 80%]  (Sampling)
-#&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
-#&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
-#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.033 seconds (Warm-up)
-#&gt; Chain 1:                0.021 seconds (Sampling)
-#&gt; Chain 1:                0.054 seconds (Total)
-#&gt; Chain 1: </div><div class='input'><span class='fu'>looic</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># LOOIC and ELPD with Standard Error
-#&gt; 
-#&gt; </span><span>  LOOIC: 156.71 [8.85]
-#&gt;    ELPD: -78.36 [4.43]</div><div class='input'>
-</div></span></pre>
+    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
+<span class='fu'>r2_kullback</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Kullback-Leibler R2 
+#&gt;           0.3834362 </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -187,6 +167,8 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
