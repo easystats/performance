@@ -4,12 +4,10 @@
 \alias{check_homogeneity}
 \title{Check model for homogeneity of variances}
 \usage{
-check_homogeneity(x, ...)
+check_homogeneity(x, method = c("bartlett", "fligner", "auto"), ...)
 }
 \arguments{
-\item{x}{A linear model or an Anova object.}
-
-\item{...}{Currently not used.}
+\item{x}{A linear model or an ANOVA object.}
 
 \item{method}{Name of the method (underlying test) that should be performend
 to check the homogeneity of variances. May either be \code{"bartlett"} for
@@ -17,6 +15,8 @@ the Bartlett test (assuming normal distributed samples or groups),
 \code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric test),
 or \code{"auto"}. In the latter case, Bartlett test is used if the model response
 is normal distributed, else Fligner-Killeen test is used.}
+
+\item{...}{Currently not used.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value
@@ -27,11 +27,11 @@ Check model for homogeneity of variances between groups described
 by independent variables in a model.
 }
 \examples{
-m <- lm(len ~ supp + dose, data = ToothGrowth)
-check_homogeneity(m)
+model <- lm(len ~ supp + dose, data = ToothGrowth)
+check_homogeneity(model)
 
 # plot results
-x <- check_homogeneity(m)
-plot(x)
+result <- check_homogeneity(model)
+plot(result)
 
 }
