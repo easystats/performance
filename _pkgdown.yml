@@ -9,7 +9,12 @@ template:
     bootswatch: cosmo
 
 reference:
-- title: "Common Indices of Model Quality"
+- title: "Comprehensive Summaries"
+  contents:
+  - check_model
+  - model_performance
+
+- title: "Common Indices"
   contents:
   - icc
   - looic
@@ -24,7 +29,6 @@ reference:
   - check_distribution
   - check_heteroscedasticity
   - check_homogeneity
-  - check_model
   - check_normality
   - check_outliers
   - check_overdispersion
@@ -33,7 +37,6 @@ reference:
 
 - title: "Check Model Performance or Quality"
   contents:
-  - model_performance
   - performance_accuracy
   - performance_aicc
   - performance_hosmer
