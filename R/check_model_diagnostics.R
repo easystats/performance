@@ -44,6 +44,7 @@
 
 
 #' @importFrom stats qnorm ppoints
+#' @importFrom insight print_color
 .diag_reqq <- function(model, level = .95, model_info) {
   # check if we have mixed model
   if (!model_info$is_mixed) return(NULL)
@@ -60,11 +61,24 @@
     re   <- lme4::ranef(model, condVar = TRUE)
   }
 
-  se <- lapply(re, function(.x) {
-    pv   <- attr(.x, var_attr, exact = TRUE)
-    cols <- seq_len(dim(pv)[1])
-    unlist(lapply(cols, function(.y) sqrt(pv[.y, .y, ])))
-  })
+
+  se <- tryCatch(
+    {
+      lapply(re, function(.x) {
+        pv   <- attr(.x, var_attr, exact = TRUE)
+        cols <- seq_len(dim(pv)[1])
+        unlist(lapply(cols, function(.y) sqrt(pv[.y, .y, ])))
+      })
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(se)) {
+    insight::print_color("Could not compute standard errors from random effects for diagnostic plot.\n", "red")
+    return(NULL)
+  }
 
 
   mapply(function(.re, .se) {
