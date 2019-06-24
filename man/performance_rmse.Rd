@@ -39,7 +39,7 @@ library(nlme)
 m <- lme(distance ~ age, data = Orthodont)
 
 # RMSE
-performance_rmse(m, normalized = TRUE)
+performance_rmse(m, normalized = FALSE)
 
 # normalized RMSE
 performance_rmse(m, normalized = TRUE)
