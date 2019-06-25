@@ -10,7 +10,7 @@
 #'
 #' @details See the documentation for \code{\link[lavaan]{fitmeasures}}. There are absolute and relative indices of fit.
 #' \cr\cr
-#' \strong{Absolute indices of fit}
+#' \strong{Indices of fit}
 #' \cr
 #' \itemize{
 #'    \item \strong{Chisq}: The model Chi-squared assesses overall fit and the discrepancy between the sample and fitted covariance matrices. Its p-value should be > .05 (i.e., the hypothesis of a perfect cannot be rejected). However, it is quite sensitive to sample size.
