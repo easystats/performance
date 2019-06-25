@@ -8,7 +8,7 @@
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
-#' @details See the documentation for \code{\link[lavaan]{fitmeasures}}. There are absolute and relative indices of fit.
+#' @details See the documentation for \code{\link[lavaan]{fitmeasures}}.
 #' \cr\cr
 #' \strong{Indices of fit}
 #' \cr
