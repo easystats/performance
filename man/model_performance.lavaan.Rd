@@ -20,7 +20,7 @@ A data frame (with one row) and one column per "index" (see \code{metrics}).
 Compute indices of model performance for SEM or CFA models from the \code{lavaan} package.
 }
 \details{
-See the documentation for \code{lavaan::fitmeasures}.
+See the documentation for \code{\link[lavaan]{fitmeasures}}.
 }
 \examples{
 \dontrun{

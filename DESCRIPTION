@@ -44,6 +44,7 @@ Suggests:
 	glmmTMB,
 	ICS,
 	ICSOutlier,
+	lavaan,
 	lme4,
 	loo,
 	Matrix,

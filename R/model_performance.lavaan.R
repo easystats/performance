@@ -8,7 +8,7 @@
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
-#' @details See the documentation for \code{lavaan::fitmeasures}.
+#' @details See the documentation for \code{\link[lavaan]{fitmeasures}}.
 #'
 #' @examples
 #' \dontrun{
@@ -27,7 +27,7 @@
 model_performance.lavaan <- function(model, metrics = "all", ...) {
 
   if (!requireNamespace("lavaan", quietly = TRUE)) {
-    stop("Package `lavaan` required. Please install it by running `install.packages(lavaan)`.", call. = FALSE)
+    stop("Package `lavaan` needed for this function to work. Please install it.", call. = FALSE)
   }
 
   measures <-  as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
