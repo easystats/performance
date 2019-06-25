@@ -8,7 +8,22 @@
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
-#' @details See the documentation for \code{\link[lavaan]{fitmeasures}}.
+#' @details See the documentation for \code{\link[lavaan]{fitmeasures}}. There are absolute and relative indices of fit.
+#' \cr\cr
+#' \strong{Absolute indices of fit}
+#' \cr
+#' \itemize{
+#'    \item \strong{Chisq}: The model Chi-squared assesses overall fit and the discrepancy between the sample and fitted covariance matrices. Its p-value should be > .05 (i.e., the hypothesis of a perfect cannot be rejected). However, it is quite sensitive to sample size.
+#'    \item \strong{GFI/AGFI}: The (Adjusted) Goodness of Fit is the proportion of variance accounted for by the estimated population covariance. Analogous to R2. The GFI and the AGFI should be > .95 and > .90, respectively.
+#'    \item \strong{NFI/NNFI/TLI}: The (Non) Normed Fit Index. An NFI of 0.95, indicates the model of interest improves the fit by 95\% relative to the null model. The NNFI (also called the Tucker Lewis index; TLI) is preferable for smaller samples. They should be > .90 (Byrne, 1994) or > .95 (Schumacker \& Lomax, 2004).
+#'    \item \strong{CFI}: The Comparative Fit Index is a revised form of NFI. Not very sensitive to sample size (Fan, Thompson, \& Wang, 1999). Compares the fit of a target model to the fit of an independent, or null, model. It should be > .90.
+#'    \item \strong{RMSEA}: The Root Mean Square Error of Approximation is a parsimony-adjusted index. Values closer to 0 represent a good fit. It should be < .08 or < .05. The p value printed with it tests the hypothesis that RMSEA is less than or equal to .05 (a cutoff sometimes used for good fit), and thus should be not significant.
+#'    \item \strong{RMR/SRMR}: the (Standardized) Root Mean Square Residual represents the square-root of the difference between the residuals of the sample covariance matrix and the hypothesized model. As the RMR can be sometimes hard to interpret, better to use SRMR. Should be < .08.
+#' }
+#'
+#' \cr\cr
+#' \strong{What to report}: Kline (2015) suggests that at a minimum the following indices should be reported: The model \strong{chi-square}, the \strong{RMSEA}, the \strong{CFI} and the \strong{SRMR}.
+#'
 #'
 #' @examples
 #' \dontrun{
@@ -21,6 +36,14 @@
 #'                speed   =~ x7 + x8 + x9 '
 #' model <- lavaan::cfa(structure, data=HolzingerSwineford1939)
 #' model_performance(model)
+#' }
+#'
+#' @references \itemize{
+#'   \item Byrne, B. M. (1994). Structural equation modeling with EQS and EQS/Windows. Thousand Oaks, CA: Sage Publications.
+#'   \item Tucker, L. R., \& Lewis, C. (1973). The reliability coefficient for maximum likelihood factor analysis. Psychometrika, 38, 1-10.
+#'   \item Schumacker, R. E., \& Lomax, R. G. (2004). A beginner's guide to structural equation modeling, Second edition. Mahwah, NJ: Lawrence Erlbaum Associates.
+#'   \item Fan, X., B. Thompson, \& L. Wang (1999). Effects of sample size, estimation method, and model specification on structural equation modeling fit indexes. Structural Equation Modeling, 6, 56-83.
+#'   \item Kline, R. B. (2015). Principles and practice of structural equation modeling. Guilford publications.
 #' }
 #'
 #' @export
@@ -37,14 +60,28 @@ model_performance.lavaan <- function(model, metrics = "all", ...) {
     "Chisq" = measures$chisq,
     "Chisq_DoF" = measures$df,
     "Chisq_p" = measures$pvalue,
+
     "Baseline" = measures$baseline.chisq,
     "Baseline_DoF" = measures$baseline.df,
     "Baseline_p" = measures$baseline.pvalue,
-    "CFI" = measures$cfi,
-    "TLI" = measures$tli,
-    "NNFI" = measures$nnfi,
-    "RFI" = measures$rfi,
+
+    "GFI" = measures$gfi,
+    "AGFI" = measures$agfi,
+
     "NFI" = measures$nfi,
+    "NNFI" = measures$tli,
+
+    "CFI" = measures$cfi,
+
+    "RMSEA" = measures$rmsea,
+    "RMSEA_CI_low" = measures$rmsea.ci.lower,
+    "RMSEA_CI_high" = measures$rmsea.ci.upper,
+    "RMSEA_p" = measures$rmsea.pvalue,
+
+    "RMR" = measures$rmr,
+    "SRMR" = measures$srmr
+
+    "RFI" = measures$rfi,
     "PNFI" = measures$pnfi,
     "IFI" = measures$ifi,
     "RNI" = measures$rni,
@@ -52,8 +89,8 @@ model_performance.lavaan <- function(model, metrics = "all", ...) {
     "AIC" = measures$aic,
     "BIC" = measures$bic,
     "BIC_adjusted" = measures$bic2,
-    "RMSEA" = measures$rmsea,
-    "SMRM" = measures$srmr
+
+
   )
 
   if (all(metrics == "all")) {
