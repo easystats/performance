@@ -39,7 +39,7 @@
 #' plot(x)
 #'
 #' @importFrom stats vcov cov2cor terms
-#' @importFrom insight has_intercept find_formula model_info
+#' @importFrom insight has_intercept find_formula model_info print_color
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
@@ -104,8 +104,19 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
   if (component == "all") {
     cond <- .check_collinearity(x, "conditional")
-    cond$Component = "conditional"
     zi <- .check_collinearity(x, "zero_inflated")
+    if (is.null(cond) && is.null(zi)) {
+      return(NULL)
+    }
+    if (is.null(cond)) {
+      zi$Component = "zero inflated"
+      return(zi)
+    }
+    if (is.null(zi)) {
+      cond$Component = "conditional"
+      return(cond)
+    }
+    cond$Component = "conditional"
     zi$Component = "zero inflated"
     rbind(cond, zi)
   } else {
@@ -137,7 +148,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   n.terms <- length(terms)
 
   if (n.terms < 2) {
-    warning("Not enough model terms to check for multicollinearity.")
+    insight::print_color(sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.\n", component), "red")
     return(NULL)
   }
 
