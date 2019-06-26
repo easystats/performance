@@ -122,7 +122,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       }, bootstr, models, SIMPLIFY = FALSE)
 
       response <- lapply(bootstr, function(.x) {
-        as.data.frame(model_data[.x, ])[[resp.name]]
+        .factor_to_numeric(as.data.frame(model_data[.x, ])[[resp.name]])
       })
 
       accuracy <- mapply(function(.x, .y) {
@@ -144,7 +144,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       }, cv, models, SIMPLIFY = FALSE)
 
       response <- lapply(cv, function(.x) {
-        as.data.frame(model_data[.x$test, ])[[resp.name]]
+        .factor_to_numeric(as.data.frame(model_data[.x$test, ])[[resp.name]])
       })
 
       accuracy <- mapply(function(.x, .y) {
