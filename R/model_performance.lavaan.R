@@ -86,9 +86,7 @@ model_performance.lavaan <- function(model, metrics = "all", ...) {
     "Loglikelihood" = measures$logl,
     "AIC" = measures$aic,
     "BIC" = measures$bic,
-    "BIC_adjusted" = measures$bic2,
-
-
+    "BIC_adjusted" = measures$bic2
   )
 
   if (all(metrics == "all")) {
