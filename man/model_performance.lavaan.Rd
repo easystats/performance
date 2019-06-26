@@ -20,10 +20,7 @@ A data frame (with one row) and one column per "index" (see \code{metrics}).
 Compute indices of model performance for SEM or CFA models from the \code{lavaan} package.
 }
 \details{
-See the documentation for \code{\link[lavaan]{fitmeasures}}.
-\cr\cr
-\strong{Indices of fit}
-\cr
+\subsection{Indices of fit}{
 \itemize{
    \item \strong{Chisq}: The model Chi-squared assesses overall fit and the discrepancy between the sample and fitted covariance matrices. Its p-value should be > .05 (i.e., the hypothesis of a perfect cannot be rejected). However, it is quite sensitive to sample size.
    \item \strong{GFI/AGFI}: The (Adjusted) Goodness of Fit is the proportion of variance accounted for by the estimated population covariance. Analogous to R2. The GFI and the AGFI should be > .95 and > .90, respectively.
@@ -32,9 +29,11 @@ See the documentation for \code{\link[lavaan]{fitmeasures}}.
    \item \strong{RMSEA}: The Root Mean Square Error of Approximation is a parsimony-adjusted index. Values closer to 0 represent a good fit. It should be < .08 or < .05. The p value printed with it tests the hypothesis that RMSEA is less than or equal to .05 (a cutoff sometimes used for good fit), and thus should be not significant.
    \item \strong{RMR/SRMR}: the (Standardized) Root Mean Square Residual represents the square-root of the difference between the residuals of the sample covariance matrix and the hypothesized model. As the RMR can be sometimes hard to interpret, better to use SRMR. Should be < .08.
 }
-
-\cr\cr
-\strong{What to report}: Kline (2015) suggests that at a minimum the following indices should be reported: The model \strong{chi-square}, the \strong{RMSEA}, the \strong{CFI} and the \strong{SRMR}.
+See the documentation for \code{\link[lavaan]{fitmeasures}}.
+}
+\subsection{What to report}{
+Kline (2015) suggests that at a minimum the following indices should be reported: The model \strong{chi-square}, the \strong{RMSEA}, the \strong{CFI} and the \strong{SRMR}.
+}
 }
 \examples{
 \dontrun{
