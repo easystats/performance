@@ -84,6 +84,17 @@ binned_residuals <- function(model, term = NULL, n_nins = NULL) {
   d$group <- "yes"
   d$group[gr] <- "no"
 
+  resid_ok <- sum(d$group == "yes") / length(d$group)
+
+  if (resid_ok < .8) {
+    insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
+  } else if (resid_ok < .95) {
+    insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "yellow")
+  } else {
+    insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
+  }
+
+
   class(d) <- c("binned_residuals", "see_binned_residuals", class(d))
   attr(d, "resp_var") <- insight::find_response(model)
   attr(d, "term") <- term
