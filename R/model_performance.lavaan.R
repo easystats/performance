@@ -79,7 +79,7 @@ model_performance.lavaan <- function(model, metrics = "all", ...) {
     "RMSEA_p" = measures$rmsea.pvalue,
 
     "RMR" = measures$rmr,
-    "SRMR" = measures$srmr
+    "SRMR" = measures$srmr,
 
     "RFI" = measures$rfi,
     "PNFI" = measures$pnfi,
