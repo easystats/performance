@@ -3,7 +3,7 @@
 \name{check_collinearity}
 \alias{check_collinearity}
 \alias{check_collinearity.glmmTMB}
-\title{Check for multicollinearity of model predictors}
+\title{Check for multicollinearity of model terms}
 \usage{
 check_collinearity(x, ...)
 
@@ -28,7 +28,7 @@ Following model-classes are currently supported: \code{hurdle},
 \value{
 A data frame with three columns: The name of the model term, the
   variance inflation factor and the factor by which the standard error
-  is increased due to possible correlation with other predictors.
+  is increased due to possible correlation with other terms.
 }
 \description{
 \code{check_collinearity()} checks regression models for
@@ -36,7 +36,7 @@ A data frame with three columns: The name of the model term, the
 }
 \details{
 The variance inflation factor is a measure to analyze the magnitude
-  of multicollinearity of model predictors. A VIF less than 5 indicates
+  of multicollinearity of model terms. A VIF less than 5 indicates
   a low correlation of that predictor with other predictors. A value between
   5 and 10 indicates a moderate correlation, while VIF values larger than 10
   are a sign for high, not tolerable correlation of model predictors. The

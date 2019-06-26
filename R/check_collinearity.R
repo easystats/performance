@@ -1,4 +1,4 @@
-#' @title Check for multicollinearity of model predictors
+#' @title Check for multicollinearity of model terms
 #' @name check_collinearity
 #'
 #' @description \code{check_collinearity()} checks regression models for
@@ -18,10 +18,10 @@
 #'
 #' @return A data frame with three columns: The name of the model term, the
 #'   variance inflation factor and the factor by which the standard error
-#'   is increased due to possible correlation with other predictors.
+#'   is increased due to possible correlation with other terms.
 #'
 #' @details The variance inflation factor is a measure to analyze the magnitude
-#'   of multicollinearity of model predictors. A VIF less than 5 indicates
+#'   of multicollinearity of model terms. A VIF less than 5 indicates
 #'   a low correlation of that predictor with other predictors. A value between
 #'   5 and 10 indicates a moderate correlation, while VIF values larger than 10
 #'   are a sign for high, not tolerable correlation of model predictors. The
@@ -168,13 +168,13 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   structure(
     class = c("check_collinearity", "see_check_collinearity", "data.frame"),
     data.frame(
-      Predictor = terms,
+      Parameter = terms,
       VIF = result,
       SE_factor = sqrt(result),
       stringsAsFactors = FALSE
     ),
     data = data.frame(
-      Predictor = terms,
+      Parameter = terms,
       VIF = result,
       SE_factor = sqrt(result),
       stringsAsFactors = FALSE

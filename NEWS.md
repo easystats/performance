@@ -17,7 +17,8 @@
 
 ## Bug fixes
 
-* Fix issues with `compare_performance()` and row-ordering.
+* Fixed issues with `compare_performance()` and row-ordering.
+* Fixed issue in `check_collinearity()` for zero-inlfated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.
 
 # performance 0.2.0
 
