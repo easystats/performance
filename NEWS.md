@@ -19,6 +19,7 @@
 
 * Fixed issues with `compare_performance()` and row-ordering.
 * Fixed issue in `check_collinearity()` for zero-inlfated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.
+* Fixed issue in some `check_*()` and `performance_*()` functions for models with binary outcome, when outcome variable was a factor.
 
 # performance 0.2.0
 
