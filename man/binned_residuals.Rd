@@ -4,7 +4,7 @@
 \alias{binned_residuals}
 \title{Binned residuals for logistic regression}
 \usage{
-binned_residuals(model, term = NULL, n_nins = NULL)
+binned_residuals(model, term = NULL, n_bins = NULL, ...)
 }
 \arguments{
 \item{model}{A \code{glm}-object with binomial-family.}
@@ -14,9 +14,12 @@ average residuals for the categories of \code{term} are plotted; else,
 average residuals for the estimated probabilities of the response are
 plotted.}
 
-\item{n_nins}{Numeric, the number of bins to divide the data. If
-\code{n_nins = NULL}, the square root of the number of observations is
+\item{n_bins}{Numeric, the number of bins to divide the data. If
+\code{n_bins = NULL}, the square root of the number of observations is
 taken.}
+
+\item{...}{Further argument like \code{size} (for point-size) or
+\code{color} (for point-colors).}
 }
 \value{
 A data frame representing the data that is mapped to the plot, which is
@@ -42,6 +45,13 @@ Binned residual plots are achieved by \dQuote{dividing the data into
   pattern of residuals along the x-axis (the pattern is indicated by
   a green line) is a signal to consider taking the logarithm of the
   predictor (cf. Gelman and Hill 2007, pp. 97ff).
+}
+\note{
+Since \code{binned_residuals()} returns a data frame, the default
+  action for the result is \emph{printing}. However, the `print()`-method for
+  \code{binned_residuals()} actually creates a plot. For further modifications
+  of the plot, use `print()` and add ggplot-layers to the return values,
+  e.g \code{plot(binned_residuals(model)) + see::scale_color_pizza()}.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
