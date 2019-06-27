@@ -28,7 +28,7 @@ print.check_distribution <- function(x, ...) {
 
   x1 <- x[order(x$p_Residuals, decreasing = TRUE)[1:3], c(1, 2)]
   x1 <- x1[x1$p_Residuals > 0, ]
-  x1$p_Residuals <- sprintf("%g%%", 100 * x1$p_Residuals)
+  x1$p_Residuals <- sprintf("%g%%", round(100 * x1$p_Residuals))
   colnames(x1) <- c("Distribution", "Probability")
 
   insight::print_color("Predicted Distribution of Residuals\n\n", "red")
@@ -36,11 +36,26 @@ print.check_distribution <- function(x, ...) {
 
   x2 <- x[order(x$p_Response, decreasing = TRUE)[1:3], c(1, 3)]
   x2 <- x2[x2$p_Response > 0, ]
-  x2$p_Response <- sprintf("%g%%", 100 * x2$p_Response)
+  x2$p_Response <- sprintf("%g%%", round(100 * x2$p_Response))
   colnames(x2) <- c("Distribution", "Probability")
 
   insight::print_color("\nPredicted Distribution of Response\n\n", "red")
   print.data.frame(x2, row.names = FALSE, ...)
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
+print.check_distribution_numeric <- function(x, ...) {
+  insight::print_color("# Predicted Distribution of Vector\n\n", "blue")
+
+  x1 <- x[order(x$p_Vector, decreasing = TRUE)[1:3], c(1, 2)]
+  x1 <- x1[x1$p_Vector > 0, ]
+  x1$p_Vector <- sprintf("%g%%", round(100 * x1$p_Vector))
+  colnames(x1) <- c("Distribution", "Probability")
+
+  print.data.frame(x1, row.names = FALSE, ...)
 }
 
 
