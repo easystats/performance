@@ -36,7 +36,6 @@ Kline (2015) suggests that at a minimum the following indices should be reported
 }
 }
 \examples{
-\dontrun{
 library(lavaan)
 
 # Confirmatory Factor Analysis (CFA) ---------
@@ -46,7 +45,6 @@ structure <- ' visual  =~ x1 + x2 + x3
                speed   =~ x7 + x8 + x9 '
 model <- lavaan::cfa(structure, data=HolzingerSwineford1939)
 model_performance(model)
-}
 
 }
 \references{

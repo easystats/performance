@@ -24,7 +24,6 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' library(lavaan)
 #'
 #' # Confirmatory Factor Analysis (CFA) ---------
@@ -34,7 +33,6 @@
 #'                speed   =~ x7 + x8 + x9 '
 #' model <- lavaan::cfa(structure, data=HolzingerSwineford1939)
 #' model_performance(model)
-#' }
 #'
 #' @references \itemize{
 #'   \item Byrne, B. M. (1994). Structural equation modeling with EQS and EQS/Windows. Thousand Oaks, CA: Sage Publications.

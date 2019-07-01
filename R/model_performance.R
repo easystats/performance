@@ -55,7 +55,7 @@ compare_performance <- function(..., metrics = "all") {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
-  supported_models <- sapply(objects, insight::is_model)
+  supported_models <- sapply(objects, function(i) insight::is_model(i) | inherits(i, "lavaan"))
 
   if (!all(supported_models)) {
     warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
