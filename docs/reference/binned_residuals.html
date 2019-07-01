@@ -129,7 +129,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>binned_residuals</span>(<span class='no'>model</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_nins</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>binned_residuals</span>(<span class='no'>model</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_bins</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,10 +146,15 @@ average residuals for the estimated probabilities of the response are
 plotted.</p></td>
     </tr>
     <tr>
-      <th>n_nins</th>
+      <th>n_bins</th>
       <td><p>Numeric, the number of bins to divide the data. If
-<code>n_nins = NULL</code>, the square root of the number of observations is
+<code>n_bins = NULL</code>, the square root of the number of observations is
 taken.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further argument like <code>size</code> (for point-size) or
+<code>color</code> (for point-colors).</p></td>
     </tr>
     </table>
     
@@ -177,6 +182,14 @@ taken.</p></td>
   a green line) is a signal to consider taking the logarithm of the
   predictor (cf. Gelman and Hill 2007, pp. 97ff).</p>
     
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>Since <code>binned_residuals()</code> returns a data frame, the default
+  action for the result is <em>printing</em>. However, the `print()`-method for
+  <code>binned_residuals()</code> actually creates a plot. For further modifications
+  of the plot, use `print()` and add ggplot-layers to the return values,
+  e.g <code>plot(binned_residuals(model)) + see::scale_color_pizza()</code>.</p>
+    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.</p>
@@ -184,8 +197,9 @@ taken.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'>binned_residuals</span>(<span class='no'>model</span>)</div><div class='img'><img src='binned_residuals-1.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+<span class='fu'>binned_residuals</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Probably bad model fit. Only about 50% of the residuals are inside the error bounds.
+#&gt; </span><span></div><div class='img'><img src='binned_residuals-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -195,6 +209,8 @@ taken.</p></td>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#note">Note</a></li>
 
       <li><a href="#references">References</a></li>
       

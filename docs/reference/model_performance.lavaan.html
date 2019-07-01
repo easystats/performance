@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Performance of Bayesian Models — model_performance.stanreg • performance</title>
+<title>Performance of lavaan SEM / CFA Models — model_performance.lavaan • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Performance of Bayesian Models — model_performance.stanreg" />
+<meta property="og:title" content="Performance of lavaan SEM / CFA Models — model_performance.lavaan" />
 
-<meta property="og:description" content="Compute indices of model performance for (general) linear models." />
+<meta property="og:description" content="Compute indices of model performance for SEM or CFA models from the lavaan package." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -118,18 +118,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Performance of Bayesian Models</h1>
+    <h1>Performance of lavaan SEM / CFA Models</h1>
     
-    <div class="hidden name"><code>model_performance.stanreg.Rd</code></div>
+    <div class="hidden name"><code>model_performance.lavaan.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Compute indices of model performance for (general) linear models.</p>
+    <p>Compute indices of model performance for SEM or CFA models from the <code>lavaan</code> package.</p>
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for stanreg</span>
+    <pre class="usage"><span class='co'># S3 method for lavaan</span>
 <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -137,11 +137,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Object of class <code>stanreg</code> or <code>brmsfit</code>.</p></td>
+      <td><p>A <code>lavaan</code> model.</p></td>
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")</a></code>).</p></td>
+      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline", "Baseline_DoF", "Baseline_p", "CFI", "TLI", "NNFI", "RFI", "NFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted", "RMSEA", "SMRM")</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -155,82 +155,46 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for more
-details on returned indices.</p>
+    <h3>Indices of fit</h3>
+    <ul>
+<li><p><strong>Chisq</strong>: The model Chi-squared assesses overall fit and the discrepancy between the sample and fitted covariance matrices. Its p-value should be &gt; .05 (i.e., the hypothesis of a perfect cannot be rejected). However, it is quite sensitive to sample size.</p></li>
+<li><p><strong>GFI/AGFI</strong>: The (Adjusted) Goodness of Fit is the proportion of variance accounted for by the estimated population covariance. Analogous to R2. The GFI and the AGFI should be &gt; .95 and &gt; .90, respectively.</p></li>
+<li><p><strong>NFI/NNFI/TLI</strong>: The (Non) Normed Fit Index. An NFI of 0.95, indicates the model of interest improves the fit by 95% relative to the null model. The NNFI (also called the Tucker Lewis index; TLI) is preferable for smaller samples. They should be &gt; .90 (Byrne, 1994) or &gt; .95 (Schumacker \&amp; Lomax, 2004).</p></li>
+<li><p><strong>CFI</strong>: The Comparative Fit Index is a revised form of NFI. Not very sensitive to sample size (Fan, Thompson, \&amp; Wang, 1999). Compares the fit of a target model to the fit of an independent, or null, model. It should be &gt; .90.</p></li>
+<li><p><strong>RMSEA</strong>: The Root Mean Square Error of Approximation is a parsimony-adjusted index. Values closer to 0 represent a good fit. It should be &lt; .08 or &lt; .05. The p value printed with it tests the hypothesis that RMSEA is less than or equal to .05 (a cutoff sometimes used for good fit), and thus should be not significant.</p></li>
+<li><p><strong>RMR/SRMR</strong>: the (Standardized) Root Mean Square Residual represents the square-root of the difference between the residuals of the sample covariance matrix and the hypothesized model. As the RMR can be sometimes hard to interpret, better to use SRMR. Should be &lt; .08.</p></li>
+</ul>
+See the documentation for <code><a href='https://www.rdocumentation.org/packages/lavaan/topics/fitMeasures'>fitmeasures</a></code>.
+    <h3>What to report</h3>
+    Kline (2015) suggests that at a minimum the following indices should be reported: The model <strong>chi-square</strong>, the <strong>RMSEA</strong>, the <strong>CFI</strong> and the <strong>SRMR</strong>.
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Gelman, A., Goodrich, B., Gabry, J., &amp; Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='r2_bayes.html'>r2_bayes</a></p></div>
+    <ul>
+<li><p>Byrne, B. M. (1994). Structural equation modeling with EQS and EQS/Windows. Thousand Oaks, CA: Sage Publications.</p></li>
+<li><p>Tucker, L. R., \&amp; Lewis, C. (1973). The reliability coefficient for maximum likelihood factor analysis. Psychometrika, 38, 1-10.</p></li>
+<li><p>Schumacker, R. E., \&amp; Lomax, R. G. (2004). A beginner's guide to structural equation modeling, Second edition. Mahwah, NJ: Lawrence Erlbaum Associates.</p></li>
+<li><p>Fan, X., B. Thompson, \&amp; L. Wang (1999). Effects of sample size, estimation method, and model specification on structural equation modeling fit indexes. Structural Equation Modeling, 6, 56-83.</p></li>
+<li><p>Kline, R. B. (2015). Principles and practice of structural equation modeling. Guilford publications.</p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lavaan</span>)</div><div class='output co'>#&gt; <span class='message'>This is lavaan 0.6-3</span></div><div class='output co'>#&gt; <span class='message'>lavaan is BETA software! Please report any bugs.</span></div><div class='input'>
+<span class='co'># Confirmatory Factor Analysis (CFA) ---------</span>
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>)</div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-#&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 0 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 1: Adjust your expectations accordingly!
-#&gt; Chain 1: 
-#&gt; Chain 1: 
-#&gt; Chain 1: Iteration:   1 / 500 [  0%]  (Warmup)
-#&gt; Chain 1: Iteration:  50 / 500 [ 10%]  (Warmup)
-#&gt; Chain 1: Iteration: 100 / 500 [ 20%]  (Warmup)
-#&gt; Chain 1: Iteration: 150 / 500 [ 30%]  (Warmup)
-#&gt; Chain 1: Iteration: 200 / 500 [ 40%]  (Warmup)
-#&gt; Chain 1: Iteration: 250 / 500 [ 50%]  (Warmup)
-#&gt; Chain 1: Iteration: 251 / 500 [ 50%]  (Sampling)
-#&gt; Chain 1: Iteration: 300 / 500 [ 60%]  (Sampling)
-#&gt; Chain 1: Iteration: 350 / 500 [ 70%]  (Sampling)
-#&gt; Chain 1: Iteration: 400 / 500 [ 80%]  (Sampling)
-#&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
-#&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
-#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.032 seconds (Warm-up)
-#&gt; Chain 1:                0.02 seconds (Sampling)
-#&gt; Chain 1:                0.052 seconds (Total)
-#&gt; Chain 1: </div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        ELPD  ELPD_SE    LOOIC LOOIC_SE     WAIC        R2      R2_SE
-#&gt; 1 -78.02776 4.428559 156.0555 8.857117 156.0104 0.8183015 0.02785584
-#&gt;   R2_LOO_adjusted     RMSE
-#&gt; 1       0.7955352 2.445441</div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>stan_glmer</a></span>(
-  <span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>gear</span>),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
-  <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>
-)</div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-#&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 0 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 1: Adjust your expectations accordingly!
-#&gt; Chain 1: 
-#&gt; Chain 1: 
-#&gt; Chain 1: Iteration:   1 / 500 [  0%]  (Warmup)
-#&gt; Chain 1: Iteration:  50 / 500 [ 10%]  (Warmup)
-#&gt; Chain 1: Iteration: 100 / 500 [ 20%]  (Warmup)
-#&gt; Chain 1: Iteration: 150 / 500 [ 30%]  (Warmup)
-#&gt; Chain 1: Iteration: 200 / 500 [ 40%]  (Warmup)
-#&gt; Chain 1: Iteration: 250 / 500 [ 50%]  (Warmup)
-#&gt; Chain 1: Iteration: 251 / 500 [ 50%]  (Sampling)
-#&gt; Chain 1: Iteration: 300 / 500 [ 60%]  (Sampling)
-#&gt; Chain 1: Iteration: 350 / 500 [ 70%]  (Sampling)
-#&gt; Chain 1: Iteration: 400 / 500 [ 80%]  (Sampling)
-#&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
-#&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
-#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.171 seconds (Warm-up)
-#&gt; Chain 1:                0.052 seconds (Sampling)
-#&gt; Chain 1:                0.223 seconds (Total)
-#&gt; Chain 1: </div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.</span></div><div class='output co'>#&gt;        ELPD  ELPD_SE    LOOIC LOOIC_SE     WAIC        R2      R2_SE
-#&gt; 1 -79.02096 4.418515 158.0419  8.83703 157.8849 0.8169693 0.03009043
-#&gt;   R2_marginal R2_marginal_SE R2_LOO_adjusted     RMSE
-#&gt; 1   0.8150884     0.03487563       0.7864806 2.455553</div><div class='input'>
+<span class='no'>structure</span> <span class='kw'>&lt;-</span> <span class='st'>' visual  =~ x1 + x2 + x3
+               textual =~ x4 + x5 + x6
+               speed   =~ x7 + x8 + x9 '</span>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/lavaan/topics/cfa'>cfa</a></span>(<span class='no'>structure</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>HolzingerSwineford1939</span>)
+<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;      Chisq Chisq_DoF      Chisq_p Baseline Baseline_DoF Baseline_p       GFI
+#&gt; 1 85.30552        24 8.502553e-09 918.8516           36          0 0.9433321
+#&gt;        AGFI       NFI      NNFI       CFI      RMSEA RMSEA_CI_low RMSEA_CI_high
+#&gt; 1 0.8937476 0.9071607 0.8958395 0.9305597 0.09212148   0.07141849      0.113678
+#&gt;        RMSEA_p        RMR       SRMR       RFI      PNFI       IFI       RNI
+#&gt; 1 0.0006612368 0.08218433 0.06520506 0.8607411 0.6047738 0.9314908 0.9305597
+#&gt;   Loglikelihood     AIC      BIC BIC_adjusted
+#&gt; 1     -3737.745 7517.49 7595.339     7528.739</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -243,8 +207,6 @@ details on returned indices.</p>
       <li><a href="#details">Details</a></li>
 
       <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

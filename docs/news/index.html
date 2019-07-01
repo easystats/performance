@@ -136,6 +136,8 @@
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</li>
+<li>
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> gets a <code>method</code>-argument to choose the method for detecting outliers. Furthermore, two new methods (Mahalanobis Distance and Invariant Coordinate Selection) were implemented.</li>
 <li>
 <code><a href="../reference/check_model.html">check_model()</a></code> now performs more checks for GLM(M)s and other model objects.</li>
@@ -143,6 +145,8 @@
 <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with <code><a href="https://www.rdocumentation.org/packages/MuMIn/topics/r.squaredGLMM">MuMIn::r.squaredGLMM()</a></code>, which returned a value for models with singular fit.</li>
 <li>
 <code><a href="../reference/check_distribution.html">check_distribution()</a></code> now detects negative binomial and zero-inflated distributions. Furthermore, attempt to improve accuracy.</li>
+<li>
+<code><a href="../reference/check_distribution.html">check_distribution()</a></code> now also accepts a numeric vector as input.</li>
 </ul>
 </div>
 <div id="new-check-functions" class="section level2">
@@ -157,7 +161,9 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fix issues with <code><a href="../reference/model_performance.html">compare_performance()</a></code> and row-ordering.</li>
+<li>Fixed issues with <code><a href="../reference/model_performance.html">compare_performance()</a></code> and row-ordering.</li>
+<li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inlfated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
+<li>Fixed issue in some <code>check_*()</code> and <code>performance_*()</code> functions for models with binary outcome, when outcome variable was a factor.</li>
 </ul>
 </div>
 </div>

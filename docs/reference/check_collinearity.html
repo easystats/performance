@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check for multicollinearity of model predictors — check_collinearity • performance</title>
+<title>Check for multicollinearity of model terms — check_collinearity • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,7 @@
 
 
 
-<meta property="og:title" content="Check for multicollinearity of model predictors — check_collinearity" />
+<meta property="og:title" content="Check for multicollinearity of model terms — check_collinearity" />
 
 <meta property="og:description" content="check_collinearity() checks regression models for
   multicollinearity by calculating the variance inflation factor (VIF)." />
@@ -119,7 +119,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check for multicollinearity of model predictors</h1>
+    <h1>Check for multicollinearity of model terms</h1>
     
     <div class="hidden name"><code>check_collinearity.Rd</code></div>
     </div>
@@ -166,12 +166,12 @@ Following model-classes are currently supported: <code>hurdle</code>,
 
     <p>A data frame with three columns: The name of the model term, the
   variance inflation factor and the factor by which the standard error
-  is increased due to possible correlation with other predictors.</p>
+  is increased due to possible correlation with other terms.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The variance inflation factor is a measure to analyze the magnitude
-  of multicollinearity of model predictors. A VIF less than 5 indicates
+  of multicollinearity of model terms. A VIF less than 5 indicates
   a low correlation of that predictor with other predictors. A value between
   5 and 10 indicates a moderate correlation, while VIF values larger than 10
   are a sign for high, not tolerable correlation of model predictors. The
@@ -189,12 +189,12 @@ Following model-classes are currently supported: <code>hurdle</code>,
 #&gt; </span><span>
 #&gt; </span><span style='color: #00BB00;'>Low Correlation
 #&gt; 
-#&gt; </span><span> Predictor  VIF Increased SE
+#&gt; </span><span> Parameter  VIF Increased SE
 #&gt;       gear 1.53         1.24
 #&gt; 
 #&gt; </span><span style='color: #BBBB00;'>Moderate Correlation
 #&gt; 
-#&gt; </span><span> Predictor  VIF Increased SE
+#&gt; </span><span> Parameter  VIF Increased SE
 #&gt;         wt 5.05         2.25
 #&gt;        cyl 5.41         2.33
 #&gt;       disp 9.97         3.16</div><div class='input'>
