@@ -118,7 +118,11 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     }
     cond$Component = "conditional"
     zi$Component = "zero inflated"
-    rbind(cond, zi)
+    dat_cond <- attr(cond, "data")
+    dat_zi <- attr(zi, "data")
+    dat <- rbind(cond, zi)
+    attr(dat, "data") <- rbind(dat_cond, dat_zi)
+    dat
   } else {
     .check_collinearity(x, component)
   }
@@ -177,6 +181,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
       Parameter = terms,
       VIF = result,
       SE_factor = sqrt(result),
+      Component = component,
       stringsAsFactors = FALSE
     )
   )
