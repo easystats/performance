@@ -34,8 +34,8 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
   R (>= 3.0)
 Imports:
-	insight,
-	bayestestR
+	insight (>= 0.4.0),
+	bayestestR (>= 0.2.2)
 Suggests:
 	AER,
 	betareg,
