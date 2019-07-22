@@ -2,9 +2,12 @@
 #' @name model_performance
 #'
 #' @description See the documentation for your object's class:
-#' \link[=model_performance.merMod]{mixed models},
-#' \link[=model_performance.stanreg]{Bayesian models} and
-#' \link[=model_performance.lm]{all other models}.
+#' \itemize{
+#'   \item \link[=model_performance.lm]{Frequentist Regressions}
+#'   \item \link[=model_performance.merMod]{Mixed models}
+#'   \item \link[=model_performance.stanreg]{Bayesian models}
+#'   \item \link[=model_performance.lavaan]{CFA/SEM lavaan models}
+#' }
 #' \code{compare_performance()} computes indices of model performance for
 #' different models at once and hence allows comparison of indices across models.
 #'

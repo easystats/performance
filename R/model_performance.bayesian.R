@@ -8,8 +8,7 @@
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
-#' @details See 'Details' in \code{\link{model_performance.lm}} for more
-#' details on returned indices.
+#' @inherit model_performance.lm details
 #'
 #' @examples
 #' library(rstanarm)
