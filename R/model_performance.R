@@ -6,7 +6,7 @@
 #'   \item \link[=model_performance.lm]{Frequentist Regressions}
 #'   \item \link[=model_performance.merMod]{Mixed models}
 #'   \item \link[=model_performance.stanreg]{Bayesian models}
-#'   \item \link[=model_performance.lavaan]{CFA/SEM lavaan models}
+#'   \item \link[=model_performance.lavaan]{CFA / SEM lavaan models}
 #' }
 #' \code{compare_performance()} computes indices of model performance for
 #' different models at once and hence allows comparison of indices across models.
