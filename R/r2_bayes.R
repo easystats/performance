@@ -58,13 +58,13 @@ r2_bayes <- function(model, robust = TRUE) {
     structure(
       class = "r2_bayes_mv",
       rapply(r2_bayesian, ifelse(robust, stats::median, mean)),
-      "std.error" = rapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd))
+      "SE" = rapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd))
     )
   } else {
     structure(
       class = "r2_bayes",
       lapply(r2_bayesian, ifelse(robust, stats::median, mean)),
-      "std.error" = lapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd))
+      "SE" = lapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd))
     )
   }
 }

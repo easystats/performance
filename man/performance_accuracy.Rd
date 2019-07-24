@@ -20,9 +20,9 @@ is used to compute the accuracy values.}
 \item{n}{Number of bootstrap-samples.}
 }
 \value{
-A list with two values: The \code{accuracy} of the model predictions, i.e.
-   the proportion of accurately predicted values from the model and
-   its standard error, \code{std.error}.
+A list with three values: The \code{Accuracy} of the model predictions, i.e.
+   the proportion of accurately predicted values from the model, its standard
+   error, \code{SE}, and the \code{Method} used to compute the accuracy.
 }
 \description{
 This function calculates the predictive accuracy of linear
