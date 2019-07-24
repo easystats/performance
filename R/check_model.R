@@ -89,7 +89,7 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, .
   dat$VIF <- .diag_vif(model)
   dat$QQ <- .diag_qq(model)
   dat$HOMOGENEITY <- .diag_homogeneity(model)
-  if (model_info$is_mixed) dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
+  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
   dat$OUTLIERS <- check_outliers(model)
   if (!is.null(dat$OUTLIERS)) class(dat$OUTLIERS) <- "data.frame"
 
