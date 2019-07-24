@@ -4,6 +4,10 @@
 
 * Many `check_*()`-methods now get a `plot()`-method. Package **see** is required for plotting.
 
+## Breaking changes
+
+* The attribute for the standard error of the Bayesian R2 (`r2_bayes()`) was renamed from `std.error` to `SE` to be in line with the naming convention of other easystats-packages.
+
 ## Changes to functions
 
 * `model_performance()` now also works for *lavaan*-objects.
