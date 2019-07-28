@@ -3,6 +3,7 @@
 ## General
 
 * Many `check_*()`-methods now get a `plot()`-method. Package **see** is required for plotting.
+* `model_performance()` gets a preliminary `print()`-method.
 
 ## Breaking changes
 
