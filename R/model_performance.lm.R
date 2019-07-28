@@ -37,32 +37,32 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "PCP", "SCORE")
   }
 
-  mi <- insight::model_info(model)
+  info <- insight::model_info(model)
 
   out <- list()
-  if ("AIC" %in% metrics) {
+  if ("AIC" %in% toupper(metrics)) {
     out$AIC <- stats::AIC(model)
   }
-  if ("BIC" %in% metrics) {
+  if ("BIC" %in% toupper(metrics)) {
     out$BIC <- stats::BIC(model)
   }
-  if ("R2" %in% metrics) {
+  if ("R2" %in% toupper(metrics)) {
     out <- c(out, r2(model))
   }
-  if ("RMSE" %in% metrics) {
+  if ("RMSE" %in% toupper(metrics)) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
-  if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
+  if (("LOGLOSS" %in% toupper(metrics)) && info$is_binomial) {
     .logloss <- performance_logloss(model, verbose = verbose)
     if (!is.na(.logloss)) out$LOGLOSS <- .logloss
   }
-  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
+  if (("SCORE" %in% toupper(metrics)) && (info$is_binomial || info$is_count)) {
     .scoring_rules <- performance_score(model, verbose = verbose)
     if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
     if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
   }
 
-  if (("PCP" %in% metrics) && mi$is_binomial && !mi$is_ordinal) {
+  if (("PCP" %in% toupper(metrics)) && info$is_binomial && !info$is_ordinal) {
     out$PCP <- performance_pcp(model)$pcp_model
   }
 
@@ -70,6 +70,8 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
+  class(out) <- c("performance_model", class(out))
+
   out
 }
 
