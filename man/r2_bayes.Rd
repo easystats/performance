@@ -31,6 +31,7 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
   R2 takes both the fixed and random effects into account.
 }
 \examples{
+library(performance)
 library(rstanarm)
 
 model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)

@@ -8,8 +8,19 @@
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
-#' @details See 'Details' in \code{\link{model_performance.lm}} for more
-#' details on returned indices.
+#' @details Depending on \code{model}, following indices are computed:
+#' \itemize{
+#'   \item{\strong{ELPD}} {expected log predictive density, see \code{\link{looic}}}
+#'   \item{\strong{LOOIC}} {leave-one-out cross-validation (LOO) information criterion, see \code{\link{looic}}}
+#'   \item{\strong{WAIC}} {widely applicable information criterion, see \code{loo::waic}}
+#'   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
+#'   \item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see \code{\link{r2}}}
+#'   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
+#'   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
+#'   \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
+#'   \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
+#'   \item{\strong{PCP}} {percentage of correct predictions, see \code{\link{performance_pcp}}}
+#' }
 #'
 #' @examples
 #' library(rstanarm)

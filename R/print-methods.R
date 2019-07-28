@@ -1,4 +1,12 @@
 #' @export
+print.performance_model <- function(x, ...) {
+  insight::print_color("# Indices of model performance\n\n", "blue")
+
+  print.data.frame(x, row.names = FALSE, ...)
+}
+
+
+#' @export
 print.check_outliers <- function(x, ...) {
   outliers <- which(x[[".outliers"]])
   if (length(outliers) >= 1) {

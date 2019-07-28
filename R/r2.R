@@ -201,10 +201,10 @@ r2.lm <- function(model, ...) {
   DoF_residual <- model_summary$fstatistic[3]
 
   if (!is.null(f.stat)) {
-    attr(out, "p_value") <- stats::pf(f.stat, DoF, DoF_residual, lower.tail = FALSE)
-    attr(out, "F_statistic") <- f.stat
-    attr(out, "DoF") <- DoF
-    attr(out, "DoF_residual") <- DoF_residual
+    attr(out, "p") <- stats::pf(f.stat, DoF, DoF_residual, lower.tail = FALSE)
+    attr(out, "F") <- f.stat
+    attr(out, "df") <- DoF
+    attr(out, "df_residual") <- DoF_residual
   }
 
   attr(out, "model_type") <- "Linear"
