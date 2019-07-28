@@ -20,7 +20,9 @@ if (.runThisTest) {
     )
 
     test_that("check_singularity", {
-      expect_true(check_singularity(model))
+      if (paste0(R.Version()[c("major", "minor")], collapse = ".") > "3.5.3") {
+        expect_true(check_singularity(model))
+      }
     })
   }
 }
