@@ -62,7 +62,7 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
 
   out <- list()
   if ("LOOIC" %in% c(metrics)) {
-    out <- append(out, looic(model))
+    out <- append(out, suppressWarnings(looic(model)))
   }
   if ("WAIC" %in% c(metrics)) {
     out$WAIC <- suppressWarnings(loo::waic(model)$estimates["waic", "Estimate"])
@@ -77,7 +77,7 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
     }
   }
   if ("R2_adjusted" %in% c(metrics) && mi$is_linear) {
-    out$R2_LOO_adjusted <- r2_loo(model)
+    out$R2_LOO_adjusted <- suppressWarnings(r2_loo(model))
   }
   if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_categorical) {
     out$RMSE <- performance_rmse(model)
@@ -95,6 +95,8 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
+  class(out) <- c("performance_model", class(out))
+
   out
 }
 

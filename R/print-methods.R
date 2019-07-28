@@ -1,6 +1,11 @@
 #' @export
-print.performance_model <- function(x, ...) {
+print.performance_model <- function(x, digits = 3, ...) {
   insight::print_color("# Indices of model performance\n\n", "blue")
+
+  x[] <- lapply(x, function(i) {
+    if (is.numeric(i)) i <- round(i, digits)
+    i
+  })
 
   print.data.frame(x, row.names = FALSE, ...)
 }
