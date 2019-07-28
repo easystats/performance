@@ -40,6 +40,8 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   info <- insight::model_info(model)
 
   out <- list()
+  attrib <- list()
+
   if ("AIC" %in% toupper(metrics)) {
     out$AIC <- stats::AIC(model)
   }
@@ -47,7 +49,9 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     out$BIC <- stats::BIC(model)
   }
   if ("R2" %in% toupper(metrics)) {
-    out <- c(out, r2(model))
+    R2 <- r2(model)
+    attrib$r2 <- attributes(R2)
+    out <- c(out, R2)
   }
   if ("RMSE" %in% toupper(metrics)) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
@@ -71,6 +75,9 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   out <- as.data.frame(out)
   row.names(out) <- NULL
   class(out) <- c("performance_model", class(out))
+
+  # Add attributes
+  attributes(out) <- c(attributes(out), attrib)
 
   out
 }
