@@ -49,6 +49,7 @@
 #'
 #' @importFrom insight find_algorithm is_multivariate find_response
 #' @importFrom stats median mad sd
+#' @importFrom bayestestR ci
 #' @export
 r2_bayes <- function(model, robust = TRUE, ci = .89) {
   r2_bayesian <- .r2_posterior(model)
