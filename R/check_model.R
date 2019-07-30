@@ -10,6 +10,12 @@
 #' @param line_size Size of line-geoms.
 #' @param panel Logical, if \code{TRUE}, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
+#' @param check Character vector, indicating which checks for should be performed
+#'   and plotted. May be one or more of
+#'   \code{"all", "vif", "qq", "normality", "ncv", "homogeneity", "outliers", "reqq"}.
+#'   \code{"reqq"} is a QQ-plot for random effects and only available for mixed models.
+#'   \code{"ncv"} checks for non-constant variance, i.e. for heteroscedasticity.
+#'   By default, all possible checks are performed and plotted.
 #' @param ... Currently not used.
 #'
 #' @return The data frame that is used for plotting.
@@ -39,7 +45,7 @@ check_model <- function(x, ...) {
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, ...) {
+check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", ...) {
   minfo <- insight::model_info(x)
 
   if (minfo$is_bayesian) {
@@ -56,6 +62,7 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, .
   attr(ca, "panel") <- panel
   attr(ca, "dot_size") <- dot_size
   attr(ca, "line_size") <- line_size
+  attr(ca, "check") <- check
 
   ca
 }

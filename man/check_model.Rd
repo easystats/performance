@@ -8,7 +8,7 @@
 check_model(x, ...)
 
 \method{check_model}{default}(x, dot_size = 2, line_size = 0.8,
-  panel = TRUE, ...)
+  panel = TRUE, check = "all", ...)
 }
 \arguments{
 \item{x}{A model object.}
@@ -21,6 +21,13 @@ check_model(x, ...)
 
 \item{panel}{Logical, if \code{TRUE}, plots are arranged as panels; else,
 single plots for each diagnostic are returned.}
+
+\item{check}{Character vector, indicating which checks for should be performed
+and plotted. May be one or more of
+\code{"all", "vif", "qq", "normality", "ncv", "homogeneity", "outliers", "reqq"}.
+\code{"reqq"} is a QQ-plot for random effects and only available for mixed models.
+\code{"ncv"} checks for non-constant variance, i.e. for heteroscedasticity.
+By default, all possible checks are performed and plotted.}
 }
 \value{
 The data frame that is used for plotting.
