@@ -12,3 +12,4 @@
 ^logo.png
 ^pkgdown/.
 ^WIP/.
+^.github$
