@@ -82,8 +82,8 @@ much of the model’s variance is explained by the “complete” model.
 For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes
 the *mean* random effect variances, thus `r2()` is also appropriate for
 mixed models with more complex random effects structures, like random
-slopes or nested random effects (see *Johnson 2014* and *Nakagawa et
-al. 2017*).
+slopes or nested random effects (Johnson 2014; Nakagawa, Johnson, and
+Schielzeth 2017).
 
 ``` r
 library(rstanarm)
@@ -93,7 +93,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.408 [0.122]
+#>      Marginal R2: 0.409 [0.120]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -108,7 +108,7 @@ r2(model)
 
 Similar to r-squared, the ICC provides information on the explained
 variance and can be interpreted as “the proportion of the variance
-explained by the grouping structure in the population” (*Hox 2010: 15*).
+explained by the grouping structure in the population” (Hox 2010).
 
 `icc()` calculates the ICC for various mixed model objects, including
 `stanreg` models.
@@ -140,14 +140,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.53 0.78]
+#> Ratio: 0.39  CI 95%: [-0.54 0.77]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.75  CI 95%: [ 8.32 57.47]
-#> Conditioned on rand. effects: 37.47  CI 95%: [25.44 56.38]
+#> Conditioned on fixed effects: 22.75  CI 95%: [ 8.55 56.61]
+#> Conditioned on rand. effects: 37.74  CI 95%: [24.77 55.78]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.12  CI 95%: [-19.36 35.87]
+#> Difference: 14.40  CI 95%: [-18.81 35.55]
 ```
 
 ## Model diagnostics
@@ -175,8 +175,8 @@ check_overdispersion(model)
 
 Overdispersion can be fixed by either modelling the dispersion parameter
 (not possible with all packages), or by choosing a different
-distributional family (like Quasi-Poisson, or negative binomial, see
-*Gelman and Hill 2007*).
+distributional family \[like Quasi-Poisson, or negative binomial, see
+(Gelman and Hill 2007).
 
 ### Check for zero-inflation
 
@@ -295,19 +295,40 @@ compare_performance(m1, m2, m3, m4)
 
 # References
 
-Gelman, A., & Hill, J. (2007). Data analysis using regression and
-multilevel/hierarchical models. Cambridge; New York: Cambridge
-University Press.
+<div id="refs" class="references">
 
-Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd
-ed). New York: Routledge.
+<div id="ref-gelman_data_2007">
 
-Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM
-to random slopes models. Methods in Ecology and Evolution, 5(9),
-944–946. <https://doi.org/10.1111/2041-210X.12225>
+Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
+and Multilevel/Hierarchical Models*. Analytical Methods for Social
+Research. Cambridge ; New York: Cambridge University Press.
 
-Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The
-coefficient of determination R2 and intra-class correlation coefficient
-from generalized linear mixed-effects models revisited and expanded.
-Journal of The Royal Society Interface, 14(134), 20170213.
-<https://doi.org/10.1098/rsif.2017.0213>
+</div>
+
+<div id="ref-hox_multilevel_2010">
+
+Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
+ed. Quantitative Methodology Series. New York: Routledge.
+
+</div>
+
+<div id="ref-johnson_extension_2014">
+
+Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
+to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
+Ecology and Evolution* 5 (9): 944–46.
+<https://doi.org/10.1111/2041-210X.12225>.
+
+</div>
+
+<div id="ref-nakagawa_coefficient_2017">
+
+Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
+“The Coefficient of Determination R2 and Intra-Class Correlation
+Coefficient from Generalized Linear Mixed-Effects Models Revisited and
+Expanded.” *Journal of the Royal Society Interface* 14 (134): 20170213.
+<https://doi.org/10.1098/rsif.2017.0213>.
+
+</div>
+
+</div>

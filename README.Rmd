@@ -10,6 +10,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
+bibliography: paper/paper.bib
 ---
 
 # performance <img src='man/figures/logo.png' align="right" height="139" />
@@ -76,7 +77,7 @@ The different r-squared measures can also be accessed directly via functions lik
 
 For mixed models, the _conditional_ and _marginal_ r-squared are returned. The _marginal r-squared_ considers only the variance of the fixed effects and indicates how much of the model's variance is explained by the fixed effects part only. The _conditional r-squared_ takes both the fixed and random effects into account and indicates how much of the model's variance is explained by the "complete" model.
 
-For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_ random effect variances, thus `r2()` is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (see _Johnson 2014_ and _Nakagawa et al. 2017_).
+For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_ random effect variances, thus `r2()` is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects [@johnson_extension_2014; @nakagawa_coefficient_2017].
 
 ```{r, warning=FALSE, message=FALSE}
 library(rstanarm)
@@ -94,7 +95,7 @@ r2(model)
 
 ### Intraclass Correlation Coefficient (ICC)
 
-Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" (_Hox 2010: 15_).
+Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" [@hox_multilevel_2010].
 
 `icc()` calculates the ICC for various mixed model objects, including `stanreg` models.
 
@@ -131,7 +132,7 @@ model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_overdispersion(model)
 ```
 
-Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family (like Quasi-Poisson, or negative binomial, see _Gelman and Hill 2007_).
+Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family [like Quasi-Poisson, or negative binomial, see [@gelman_data_2007].
 
 ### Check for zero-inflation
 
@@ -234,11 +235,3 @@ knitr::kable(compare_performance(m1, m2, m3, m4), digits = 2)
 ```
 
 # References
-
-Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
-
-Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.
-
-Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. https://doi.org/10.1111/2041-210X.12225
-
-Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. https://doi.org/10.1098/rsif.2017.0213
