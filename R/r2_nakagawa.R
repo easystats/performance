@@ -60,21 +60,18 @@ r2_nakagawa <- function(model) {
   }
 
 
-  # if no random effect variance, return simple R2
-
-  if (.is_empty_object(vars$var.random) || is.na(vars$var.random)) {
-    print_color("Random effects variances not available. Returned R2 does not account for random effects.\n", "red")
-    vars$var.random <- 0
-    out <- list("R2" = vars$var.fixed / (vars$var.fixed + vars$var.residual))
-    attr(out, "model_type") <- "Mixed Model"
-    return(structure(class = "r2_generic", out))
-  }
-
-
   # Calculate R2 values
 
-  r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual)
-  r2_conditional <- (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+  if (.is_empty_object(vars$var.random) || is.na(vars$var.random)) {
+    # if no random effect variance, return simple R2
+    print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red")
+    r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.residual)
+    r2_conditional <- NA
+  } else {
+    r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual)
+    r2_conditional <- (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+  }
+
 
   names(r2_conditional) <- "Conditional R2"
   names(r2_marginal) <- "Marginal R2"

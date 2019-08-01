@@ -44,7 +44,7 @@
 #' @examples
 #' library(lme4)
 #' data(sleepstudy)
-#' set.seed(1)
+#' set.seed(123)
 #' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 #' sleepstudy$mysubgrp <- NA
 #' for (i in 1:5) {
