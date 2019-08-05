@@ -29,11 +29,10 @@
 #' \code{"uniform"} and \code{"weibull"}.
 #' \cr \cr
 #' Note the similarity between certain distributions according to shape, skewness,
-#' etc., for instance \code{plot(dnorm(1:100, 30, 3))} and \code{plot(dnorm(1:100, 30, 3))}.
-#' Thus, the predicted distribution may not be perfectly representing the distributional
-#' family of the underlying fitted model, or the response value.
+#' etc. Thus, the predicted distribution may not be perfectly representing the
+#' distributional family of the underlying fitted model, or the response value.
 #' \cr \cr
-#' There is a \code{plot()}, which shows the probabilities of all predicted
+#' There is a \code{plot()} method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
 #' @examples
