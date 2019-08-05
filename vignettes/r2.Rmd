@@ -23,8 +23,8 @@ editor_options:
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = '')
-knitr::opts_chunk$set(comment=">")
-options(digits=2)
+knitr::opts_chunk$set(comment = "#>")
+options(digits = 2)
 
 set.seed(333)
 ```
@@ -32,7 +32,7 @@ set.seed(333)
 
 # What is the R2?
 
-The **coefficient of determination**, denoted **R2** and pronounced "R squared", is the proportion of the variance in the dependent variable (the response) that is *explained* (*i.e.*, predictable) from the independent variables (the predictors).
+The **coefficient of determination**, denoted **R2** and pronounced "R squared", is the proportion of the variance in the dependent variable (the response) that is explained (i.e., predictable) from the independent variables (the predictors).
 
 It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1, and can be used for model performance assessment or models comparison.
 
@@ -46,7 +46,5 @@ d <- data.frame("Model_class" = c("lm", "glm"),
            "r2_Tjur" = c(NA, "X"))
 knitr::kable(d)
 ```
-
-
 
 

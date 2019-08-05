@@ -22,7 +22,7 @@
 #'   column per "index" (see \code{metrics}). For \code{compare_performance()},
 #'   the same data frame with one row per model.
 #'
-#' @details If all models are of the same class, \code{compare_performance()}
+#' @details If all models were fit from the same data, \code{compare_performance()}
 #'   returns an additional column named \code{BF}, which shows the Bayes factor
 #'   (see \code{\link[bayestestR]{bayesfactor_models}}) for each model against
 #'   the denominator model. The \emph{first} model is used as denominator model,
@@ -47,47 +47,4 @@
 #' @export
 model_performance <- function(model, ...) {
   UseMethod("model_performance")
-}
-
-
-#' @importFrom insight is_model all_models_equal
-#' @importFrom bayestestR bayesfactor_models
-#' @rdname model_performance
-#' @export
-compare_performance <- function(..., metrics = "all") {
-  objects <- list(...)
-  object_names <- match.call(expand.dots = FALSE)$`...`
-
-  supported_models <- sapply(objects, function(i) insight::is_model(i) | inherits(i, "lavaan"))
-
-  if (!all(supported_models)) {
-    warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
-    objects <- objects[supported_models]
-    object_names <- object_names[supported_models]
-  }
-
-  m <- mapply(function(.x, .y) {
-    dat <- model_performance(.x, metrics = metrics)
-    cbind(data.frame(Model = as.character(.y), Type = class(.x)[1], stringsAsFactors = FALSE), dat)
-  }, objects, object_names, SIMPLIFY = FALSE)
-
-
-  # check for identical model class, for bayesfactor
-  BFs <- NULL
-  if (insight::all_models_equal(...)) {
-    BFs <- tryCatch({
-      bayestestR::bayesfactor_models(..., denominator = 1, verbose = FALSE)
-    },
-    error = function(e) { NULL })
-  }
-
-  dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
-
-  if (!is.null(BFs)) {
-    dfs$BF <- BFs$BF
-    dfs$BF[dfs$Model == object_names[1]] <- NA
-  }
-
-  # dfs[order(sapply(object_names, as.character), dfs$Model), ]
-  dfs
 }

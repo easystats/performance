@@ -8,6 +8,7 @@
 ## Breaking changes
 
 * The attribute for the standard error of the Bayesian R2 (`r2_bayes()`) was renamed from `std.error` to `SE` to be in line with the naming convention of other easystats-packages.
+* `compare_performance()` now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.
 
 ## Changes to functions
 
@@ -18,6 +19,7 @@
 * `r2_nakagawa()` now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with `MuMIn::r.squaredGLMM()`, which returned a value for models with singular fit.
 * `check_distribution()` now detects negative binomial and zero-inflated distributions. Furthermore, attempt to improve accuracy.
 * `check_distribution()` now also accepts a numeric vector as input.
+* `compare_performance()` warns if models were not fit from same data.
 
 ## New check-functions
 
@@ -72,7 +74,7 @@
 * `r2_nakagawa()` now calculates the full R2 for mixed models with zero-inflation.
 * `icc()` now returns `NULL` and no longer stops when no mixed model is provided.
 * `compare_performance()` now shows the Bayes factor when all compared models are of same class.
-* Some functions get a `verbose`-argument to sow or suppress warnings.
+* Some functions get a `verbose`-argument to show or suppress warnings.
 
 ## Bug fixes
 
