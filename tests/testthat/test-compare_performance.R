@@ -17,5 +17,9 @@ if (require("testthat") && require("performance")) {
         c("Model", "Type", "AIC", "BIC", "R2", "R2_adjusted", "RMSE")
       )
     )
+    expect_equal(
+      colnames(compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)),
+      c("Model", "Type", "AIC", "BIC", "R2", "R2_adjusted", "RMSE")
+    )
   })
 }

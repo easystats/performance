@@ -2,7 +2,7 @@
 
 ## Bug fixes
 
-* Fixed bug in `compare_performance()` that did not properly check if models were fit from same data.
+* Fixed bug in `compare_performance()` that toggled a warning although models were fit from same data.
 
 # performance 0.3.0
 
