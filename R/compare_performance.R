@@ -38,7 +38,7 @@ compare_performance <- function(..., metrics = "all", verbose = TRUE) {
 
   # check if all models were fit from same data
   resps <- lapply(objects, insight::get_response)
-  if (!Reduce(identical, resps) && verbose) {
+  if (!all(sapply(resps[-1], function(x) identical(x, resps[[1]]))) && verbose) {
     warning("When comparing models, please note that probably not all models were fit from same data.", call. = FALSE)
   }
 

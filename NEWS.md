@@ -1,3 +1,9 @@
+# performance 0.3.1
+
+## Bug fixes
+
+* Fixed bug in `compare_performance()` that did not properly check if models were fit from same data.
+
 # performance 0.3.0
 
 ## General
