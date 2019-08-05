@@ -1,8 +1,8 @@
 Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
-Version: 0.2.0.9000
-Date: 2019-06-04
+Version: 0.3.0
+Date: 2019-08-05
 Authors@R: c(
 	person("Daniel", 
 		"Lüdecke", 
@@ -34,7 +34,7 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
   R (>= 3.0)
 Imports:
-	insight (>= 0.4.0),
+	insight (>= 0.4.1),
 	bayestestR (>= 0.2.2)
 Suggests:
 	AER,
@@ -59,7 +59,7 @@ Suggests:
 	rmarkdown,
 	rstanarm,
 	rstantools,
-	see,
+	see (>= 0.2.1),
 	survival,
 	testthat
 License: GPL-3
