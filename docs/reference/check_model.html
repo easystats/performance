@@ -74,7 +74,7 @@ multicollinearity)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@ multicollinearity).</p>
 
 <span class='co'># S3 method for default</span>
 <span class='fu'>check_model</span>(<span class='no'>x</span>, <span class='kw'>dot_size</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>line_size</span> <span class='kw'>=</span> <span class='fl'>0.8</span>,
-  <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>check</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -162,6 +162,15 @@ multicollinearity).</p>
       <th>panel</th>
       <td><p>Logical, if <code>TRUE</code>, plots are arranged as panels; else,
 single plots for each diagnostic are returned.</p></td>
+    </tr>
+    <tr>
+      <th>check</th>
+      <td><p>Character vector, indicating which checks for should be performed
+and plotted. May be one or more of
+<code>"all", "vif", "qq", "normality", "ncv", "homogeneity", "outliers", "reqq"</code>.
+<code>"reqq"</code> is a QQ-plot for random effects and only available for mixed models.
+<code>"ncv"</code> checks for non-constant variance, i.e. for heteroscedasticity.
+By default, all possible checks are performed and plotted.</p></td>
     </tr>
     </table>
     

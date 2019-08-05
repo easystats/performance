@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -160,9 +160,9 @@ is used to compute the accuracy values.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with two values: The <code>accuracy</code> of the model predictions, i.e.
-   the proportion of accurately predicted values from the model and
-   its standard error, <code>std.error</code>.</p>
+    <p>A list with three values: The <code>Accuracy</code> of the model predictions, i.e.
+   the proportion of accurately predicted values from the model, its standard
+   error, <code>SE</code>, and the <code>Method</code> used to compute the accuracy.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -182,14 +182,14 @@ is used to compute the accuracy values.</p></td>
     <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'>performance_accuracy</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Accuracy of Model Predictions
 #&gt; 
-#&gt; </span><span>Accuracy: 93.73%
-#&gt;       SE: 4.91%-points
+#&gt; </span><span>Accuracy: 91.85%
+#&gt;       SE: 6.55%-points
 #&gt;   Method: Correlation between observed and predicted</div><div class='input'>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='fu'>performance_accuracy</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Accuracy of Model Predictions
 #&gt; 
-#&gt; </span><span>Accuracy: 12.00%
-#&gt;       SE: 15.35%-points
+#&gt; </span><span>Accuracy: NaN%
+#&gt;       SE: NA%-points
 #&gt;   Method: Area under Curve</div><div class='input'>
 </div></span></pre>
   </div>

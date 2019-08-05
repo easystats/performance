@@ -44,7 +44,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@
 <div id="examples" class="section level1">
 <h1 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h1>
-<p><a href="https://easystats.github.io/performance/"><img src="https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/performance/reference/index.html"><img src="https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3" alt="Features"></a></p>
+<p><a href="https://easystats.github.io/performance/reference/index.html"><img src="https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3" alt="Features"></a> <a href="https://easystats.github.io/blog/posts/"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a></p>
 <div id="assessing-model-quality" class="section level2">
 <h2 class="hasAnchor">
 <a href="#assessing-model-quality" class="anchor"></a>Assessing model quality</h2>
@@ -140,7 +140,7 @@
 <a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt;          0.1084</span></a></code></pre></div>
 <p>The different r-squared measures can also be accessed directly via functions like <code><a href="reference/r2_bayes.html">r2_bayes()</a></code>, <code><a href="reference/r2_coxsnell.html">r2_coxsnell()</a></code> or <code><a href="reference/r2_nagelkerke.html">r2_nagelkerke()</a></code> (see a full list of functions <a href="https://easystats.github.io/performance/reference/index.html">here</a>).</p>
 <p>For mixed models, the <em>conditional</em> and <em>marginal</em> r-squared are returned. The <em>marginal r-squared</em> considers only the variance of the fixed effects and indicates how much of the model’s variance is explained by the fixed effects part only. The <em>conditional r-squared</em> takes both the fixed and random effects into account and indicates how much of the model’s variance is explained by the “complete” model.</p>
-<p>For frequentist mixed models, <code><a href="reference/r2.html">r2()</a></code> (resp. <code><a href="reference/r2_nakagawa.html">r2_nakagawa()</a></code>) computes the <em>mean</em> random effect variances, thus <code><a href="reference/r2.html">r2()</a></code> is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (see <em>Johnson 2014</em> and <em>Nakagawa et al. 2017</em>).</p>
+<p>For frequentist mixed models, <code><a href="reference/r2.html">r2()</a></code> (resp. <code><a href="reference/r2_nakagawa.html">r2_nakagawa()</a></code>) computes the <em>mean</em> random effect variances, thus <code><a href="reference/r2.html">r2()</a></code> is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects <span class="citation">(Johnson 2014; Nakagawa, Johnson, and Schielzeth 2017)</span>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rstanarm)</a>
 <a class="sourceLine" id="cb4-2" title="2">model &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Species), </a>
 <a class="sourceLine" id="cb4-3" title="3">    <span class="dt">data =</span> iris, <span class="dt">cores =</span> <span class="dv">4</span>)</a>
@@ -148,7 +148,7 @@
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; # Bayesian R2 with Standard Error</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;   Conditional R2: 0.954 [0.002]</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.411 [0.127]</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.406 [0.117]</span></a>
 <a class="sourceLine" id="cb4-9" title="9"></a>
 <a class="sourceLine" id="cb4-10" title="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
 <a class="sourceLine" id="cb4-11" title="11">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
@@ -161,7 +161,7 @@
 <div id="intraclass-correlation-coefficient-icc" class="section level3">
 <h3 class="hasAnchor">
 <a href="#intraclass-correlation-coefficient-icc" class="anchor"></a>Intraclass Correlation Coefficient (ICC)</h3>
-<p>Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as “the proportion of the variance explained by the grouping structure in the population” (<em>Hox 2010: 15</em>).</p>
+<p>Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as “the proportion of the variance explained by the grouping structure in the population” <span class="citation">(Hox 2010)</span>.</p>
 <p><code><a href="reference/icc.html">icc()</a></code> calculates the ICC for various mixed model objects, including <code>stanreg</code> models.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
 <a class="sourceLine" id="cb5-2" title="2">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
@@ -180,14 +180,14 @@
 <a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; Conditioned on: all random effects</span></a>
 <a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; ## Variance Ratio (comparable to ICC)</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.55 0.78]</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.56 0.77]</span></a>
 <a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; ## Variances of Posterior Predicted Distribution</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.93  CI 95%: [ 8.36 58.43]</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.58  CI 95%: [25.33 56.31]</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.73  CI 95%: [ 8.63 56.94]</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.56  CI 95%: [25.19 57.15]</span></a>
 <a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; ## Difference in Variances</span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.31  CI 95%: [-19.10 35.43]</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.30  CI 95%: [-18.69 35.99]</span></a></code></pre></div>
 </div>
 </div>
 <div id="model-diagnostics" class="section level2">
@@ -207,7 +207,7 @@
 <a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt;   Pearson's Chi-Squared = 1873.710</span></a>
 <a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt;                 p-value =  &lt; 0.001</span></a>
 <a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; Overdispersion detected.</span></a></code></pre></div>
-<p>Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family (like Quasi-Poisson, or negative binomial, see <em>Gelman and Hill 2007</em>).</p>
+<p>Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family [like Quasi-Poisson, or negative binomial, see <span class="citation">(Gelman and Hill 2007)</span>.</p>
 </div>
 <div id="check-for-zero-inflation" class="section level3">
 <h3 class="hasAnchor">
@@ -435,13 +435,23 @@
 </div>
 </div>
 </div>
-<div id="references" class="section level1">
+<div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.</p>
-<p>Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.</p>
-<p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. <a href="https://doi.org/10.1111/2041-210X.12225" class="uri">https://doi.org/10.1111/2041-210X.12225</a></p>
-<p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. <a href="https://doi.org/10.1098/rsif.2017.0213" class="uri">https://doi.org/10.1098/rsif.2017.0213</a></p>
+<div id="refs" class="references">
+<div id="ref-gelman_data_2007">
+<p>Gelman, Andrew, and Jennifer Hill. 2007. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Analytical Methods for Social Research. Cambridge ; New York: Cambridge University Press.</p>
+</div>
+<div id="ref-hox_multilevel_2010">
+<p>Hox, J. J. 2010. <em>Multilevel Analysis: Techniques and Applications</em>. 2nd ed. Quantitative Methodology Series. New York: Routledge.</p>
+</div>
+<div id="ref-johnson_extension_2014">
+<p>Johnson, Paul C. D. 2014. “Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to Random Slopes Models.” Edited by Robert B. O’Hara. <em>Methods in Ecology and Evolution</em> 5 (9): 944–46. <a href="https://doi.org/10.1111/2041-210X.12225">https://doi.org/10.1111/2041-210X.12225</a>.</p>
+</div>
+<div id="ref-nakagawa_coefficient_2017">
+<p>Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017. “The Coefficient of Determination R2 and Intra-Class Correlation Coefficient from Generalized Linear Mixed-Effects Models Revisited and Expanded.” <em>Journal of the Royal Society Interface</em> 14 (134): 20170213. <a href="https://doi.org/10.1098/rsif.2017.0213">https://doi.org/10.1098/rsif.2017.0213</a>.</p>
+</div>
+</div>
 </div>
   </div>
 
@@ -476,9 +486,9 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://cran.r-project.org/package=performance"><img src="http://www.r-pkg.org/badges/version/performance" alt="CRAN"></a></li>
+<li><a href="https://easystats.github.io/performance/"><img src="https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63" alt="Documentation"></a></li>
 <li><a href="https://cran.r-project.org/package=performance"><img src="http://cranlogs.r-pkg.org/badges/performance" alt="downloads"></a></li>
-<li><a href="https://travis-ci.org/easystats/performance"><img src="https://travis-ci.org/easystats/performance.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/gh/easystats/performance"><img src="https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="http://cranlogs.r-pkg.org/"><img src="http://cranlogs.r-pkg.org/badges/grand-total/performance" alt="total"></a></li>
 </ul>
 </div>
 </div>

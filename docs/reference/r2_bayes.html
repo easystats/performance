@@ -73,7 +73,7 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -131,7 +131,7 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
     
     </div>
 
-    <pre class="usage"><span class='fu'>r2_bayes</span>(<span class='no'>model</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_bayes</span>(<span class='no'>model</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,13 +145,17 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
       <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
 calculate the central tendency of the variances.</p></td>
     </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>Value or vector of probability of the CI (between 0 and 1) to be estimated.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with the Bayesian R2 value. For mixed models, a list with the
   Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
-  for the R2 values are saved as attributes.</p>
+  and credible intervals for the R2 values are saved as attributes.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -169,7 +173,8 @@ calculate the central tendency of the variances.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>performance</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
 
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>)</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
@@ -192,9 +197,9 @@ calculate the central tendency of the variances.</p></td>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.032 seconds (Warm-up)
-#&gt; Chain 1:                0.019 seconds (Sampling)
-#&gt; Chain 1:                0.051 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.026 seconds (Warm-up)
+#&gt; Chain 1:                0.014 seconds (Sampling)
+#&gt; Chain 1:                0.04 seconds (Total)
 #&gt; Chain 1: </div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
 #&gt; </span><span>  Conditional R2: 0.825 [0.026]</div><div class='input'>
@@ -224,10 +229,14 @@ calculate the central tendency of the variances.</p></td>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.659 seconds (Warm-up)
-#&gt; Chain 1:                0.424 seconds (Sampling)
-#&gt; Chain 1:                1.083 seconds (Total)
-#&gt; Chain 1: </div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Bayesian R2 with Standard Error
+#&gt; Chain 1:  Elapsed Time: 0.515 seconds (Warm-up)
+#&gt; Chain 1:                0.314 seconds (Sampling)
+#&gt; Chain 1:                0.829 seconds (Total)
+#&gt; Chain 1: </div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
+#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
 #&gt; </span><span>  Conditional R2: 0.954 [0.002]
 #&gt;      Marginal R2: 0.412 [0.112]</div><div class='input'>

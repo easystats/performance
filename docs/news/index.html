@@ -70,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -120,15 +120,38 @@
       
     </div>
 
-    <div id="performance-021" class="section level1">
+    <div id="performance-031" class="section level1">
 <h1 class="page-header">
-<a href="#performance-021" class="anchor"></a>performance 0.2.1<small> Unreleased </small>
+<a href="#performance-031" class="anchor"></a>performance 0.3.1<small> Unreleased </small>
+</h1>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fixed bug in <code><a href="../reference/model_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
+</ul>
+</div>
+</div>
+    <div id="performance-030" class="section level1">
+<h1 class="page-header">
+<a href="#performance-030" class="anchor"></a>performance 0.3.0<small> Unreleased </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
 <ul>
 <li>Many <code>check_*()</code>-methods now get a <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code>-method.</li>
+</ul>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>The attribute for the standard error of the Bayesian R2 (<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code>) was renamed from <code>std.error</code> to <code>SE</code> to be in line with the naming convention of other easystats-packages.</li>
+<li>
+<code><a href="../reference/model_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -142,11 +165,15 @@
 <li>
 <code><a href="../reference/check_model.html">check_model()</a></code> now performs more checks for GLM(M)s and other model objects.</li>
 <li>
+<code><a href="../reference/check_model.html">check_model()</a></code> gets a <code>check</code>-argument to plot selected checks only.</li>
+<li>
 <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with <code><a href="https://www.rdocumentation.org/packages/MuMIn/topics/r.squaredGLMM">MuMIn::r.squaredGLMM()</a></code>, which returned a value for models with singular fit.</li>
 <li>
 <code><a href="../reference/check_distribution.html">check_distribution()</a></code> now detects negative binomial and zero-inflated distributions. Furthermore, attempt to improve accuracy.</li>
 <li>
 <code><a href="../reference/check_distribution.html">check_distribution()</a></code> now also accepts a numeric vector as input.</li>
+<li>
+<code><a href="../reference/model_performance.html">compare_performance()</a></code> warns if models were not fit from same data.</li>
 </ul>
 </div>
 <div id="new-check-functions" class="section level2">
@@ -157,9 +184,9 @@
 <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> to check models for homogeneity of variances.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues with <code><a href="../reference/model_performance.html">compare_performance()</a></code> and row-ordering.</li>
 <li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inlfated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
@@ -231,9 +258,9 @@
 <code><a href="../reference/r2_xu.html">r2_xu()</a></code> as a crude R2 measure for linear (mixed) models.</li>
 </ul>
 </div>
-<div id="breaking-changes" class="section level2">
+<div id="breaking-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.</li>
@@ -253,12 +280,12 @@
 <code><a href="../reference/icc.html">icc()</a></code> now returns <code>NULL</code> and no longer stops when no mixed model is provided.</li>
 <li>
 <code><a href="../reference/model_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are of same class.</li>
-<li>Some functions get a <code>verbose</code>-argument to sow or suppress warnings.</li>
+<li>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
 <li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (#48).</li>
@@ -273,7 +300,8 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#performance-021">0.2.1</a></li>
+        <li><a href="#performance-031">0.3.1</a></li>
+        <li><a href="#performance-030">0.3.0</a></li>
         <li><a href="#performance-020">0.2.0</a></li>
       </ul>
     </div>

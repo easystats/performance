@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -155,8 +155,18 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>See 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for more
-details on returned indices.</p>
+    <p>Depending on <code>model</code>, following indices are computed:</p><ul>
+<li><p><strong>ELPD</strong> expected log predictive density, see <code><a href='looic.html'>looic</a></code></p></li>
+<li><p><strong>LOOIC</strong> leave-one-out cross-validation (LOO) information criterion, see <code><a href='looic.html'>looic</a></code></p></li>
+<li><p><strong>WAIC</strong> widely applicable information criterion, see <code><a href='https://www.rdocumentation.org/packages/loo/topics/waic'>loo::waic</a></code></p></li>
+<li><p><strong>R2</strong> r-squared value, see <code><a href='r2.html'>r2</a></code></p></li>
+<li><p><strong>R2_LOO_adjusted</strong> adjusted r-squared, see <code><a href='r2.html'>r2</a></code></p></li>
+<li><p><strong>RMSE</strong> root mean squared error, see <code><a href='performance_rmse.html'>performance_rmse</a></code></p></li>
+<li><p><strong>LOGLOSS</strong> Log-loss, see <code><a href='performance_logloss.html'>performance_logloss</a></code></p></li>
+<li><p><strong>SCORE_LOG</strong> score of logarithmic proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
+<li><p><strong>SCORE_SPHERICAL</strong> score of spherical proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
+<li><p><strong>PCP</strong> percentage of correct predictions, see <code><a href='performance_pcp.html'>performance_pcp</a></code></p></li>
+</ul>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -191,13 +201,13 @@ details on returned indices.</p>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.032 seconds (Warm-up)
-#&gt; Chain 1:                0.02 seconds (Sampling)
-#&gt; Chain 1:                0.052 seconds (Total)
-#&gt; Chain 1: </div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt;        ELPD  ELPD_SE    LOOIC LOOIC_SE     WAIC        R2      R2_SE
-#&gt; 1 -78.02776 4.428559 156.0555 8.857117 156.0104 0.8183015 0.02785584
-#&gt;   R2_LOO_adjusted     RMSE
-#&gt; 1       0.7955352 2.445441</div><div class='input'>
+#&gt; Chain 1:  Elapsed Time: 0.025 seconds (Warm-up)
+#&gt; Chain 1:                0.015 seconds (Sampling)
+#&gt; Chain 1:                0.04 seconds (Total)
+#&gt; Chain 1: </div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
+#&gt; 
+#&gt; </span><span>    ELPD ELPD_SE   LOOIC LOOIC_SE    WAIC   R2 R2_SE R2_LOO_adjusted  RMSE
+#&gt;  -78.253   4.465 156.507     8.93 156.419 0.82 0.029           0.794 2.445</div><div class='input'>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>stan_glmer</a></span>(
   <span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>gear</span>),
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
@@ -224,14 +234,23 @@ details on returned indices.</p>
 #&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.171 seconds (Warm-up)
-#&gt; Chain 1:                0.052 seconds (Sampling)
-#&gt; Chain 1:                0.223 seconds (Total)
-#&gt; Chain 1: </div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.</span></div><div class='output co'>#&gt;        ELPD  ELPD_SE    LOOIC LOOIC_SE     WAIC        R2      R2_SE
-#&gt; 1 -79.02096 4.418515 158.0419  8.83703 157.8849 0.8169693 0.03009043
-#&gt;   R2_marginal R2_marginal_SE R2_LOO_adjusted     RMSE
-#&gt; 1   0.8150884     0.03487563       0.7864806 2.455553</div><div class='input'>
-</div></pre>
+#&gt; Chain 1:  Elapsed Time: 0.134 seconds (Warm-up)
+#&gt; Chain 1:                0.03 seconds (Sampling)
+#&gt; Chain 1:                0.164 seconds (Total)
+#&gt; Chain 1: </div><div class='output co'>#&gt; <span class='warning'>Warning: There were 1 divergent transitions after warmup. Increasing adapt_delta above 0.95 may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Examine the pairs() plot to diagnose sampling problems</span></div><div class='output co'>#&gt; <span class='warning'>Warning: The largest R-hat is 1.05, indicating chains have not mixed.</span>
+#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#r-hat</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
+#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='input'><span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Indices of model performance
+#&gt; 
+#&gt; </span><span>    ELPD ELPD_SE   LOOIC LOOIC_SE   WAIC    R2 R2_SE R2_marginal R2_marginal_SE
+#&gt;  -79.247   4.537 158.494    9.073 158.35 0.818 0.029       0.814          0.036
+#&gt;  R2_LOO_adjusted  RMSE
+#&gt;            0.784 2.449</div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
