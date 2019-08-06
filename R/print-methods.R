@@ -211,8 +211,13 @@ print.r2_bayes <- function(x, digits = 3, ...) {
 
 #' @export
 print.perf_pca_rotate <- function(x, cutoff = 0.1, digits = 3, ...) {
+  .rotation <- attr(x, "rotation", exact = TRUE)
 
-  insight::print_color(sprintf("# Rotated loadings from Principal Component Analysis (%s-rotation)\n\n", attr(x, "rotation", exact = TRUE)), "blue")
+  if (.rotation == "none")
+    insight::print_color("# Loadings from Principal Component Analysis (no rotation)\n\n", "blue")
+  else
+    insight::print_color(sprintf("# Rotated loadings from Principal Component Analysis (%s-rotation)\n\n", .rotation), "blue")
+
 
   xs <- attr(x, "variance", exact = TRUE)
   x <- round(x, digits = digits)
