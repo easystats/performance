@@ -3,6 +3,7 @@
 ## Bug fixes
 
 * Fixed bug in `compare_performance()` that toggled a warning although models were fit from same data.
+* Fixed bug in `principal_components()` that did not return more components when rotation was not Varimax.
 
 # performance 0.3.0
 
