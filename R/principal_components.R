@@ -123,7 +123,7 @@ principal_components <- function(x, rotation = NULL, n_comp = NULL) {
       stop(sprintf("Package `psych` required for `%s`-rotation.", rotation), call. = F)
     }
 
-    tmp <- psych::principal(r = x, n_compactors = n_comp, rotate = rotation)
+    tmp <- psych::principal(r = x, nfactors = n_comp, rotate = rotation)
 
   } else {
 
