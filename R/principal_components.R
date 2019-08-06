@@ -115,31 +115,29 @@ principal_components <- function(x, rotation = NULL, n_comp = NULL) {
   if (!inherits(x, "data.frame") && rotation != "varimax")
     stop(sprintf("`x` must be a data frame for `%s`-rotation.", rotation), call. = F)
 
+
+  if (!inherits(x, "pca")) {
+    pca_data <- .pca(x)
+  } else {
+    pca_data <- x
+  }
+
+  if (is.null(n_comp)) n_comp <- attr(pca_data, "kaiser", exact = TRUE)
+
+
   # rotate loadings
 
   if (rotation != "varimax") {
-
     if (!requireNamespace("psych", quietly = TRUE)) {
       stop(sprintf("Package `psych` required for `%s`-rotation.", rotation), call. = F)
     }
-
     tmp <- psych::principal(r = x, nfactors = n_comp, rotate = rotation)
-
   } else {
-
-    if (!inherits(x, "pca")) {
-      x <- .pca(x)
-    }
-
-    loadings <- attr(x, "loadings", exact = TRUE)
-    if (is.null(n_comp)) n_comp <- attr(x, "kaiser", exact = TRUE)
-
+    loadings <- attr(pca_data, "loadings", exact = TRUE)
     if (n_comp < 2) {
       stop("Can't rotate loadings, too few components extracted.", call. = F)
     }
-
     tmp <- stats::varimax(loadings[, seq_len(n_comp)])
-
   }
 
 
