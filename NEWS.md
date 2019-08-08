@@ -1,5 +1,9 @@
 # performance 0.3.1
 
+## Deprecated and Defunct
+
+* `principal_components()` is now deprecated and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now.
+
 ## Bug fixes
 
 * Fixed bug in `compare_performance()` that toggled a warning although models were fit from same data.

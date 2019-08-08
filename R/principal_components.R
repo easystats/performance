@@ -43,6 +43,9 @@
 #' @importFrom stats prcomp na.omit varimax
 #' @export
 principal_components <- function(x, rotation = NULL, n_comp = NULL) {
+
+  warning("'performance::principal_components() is deprecated. Please install the 'parameters'-package and use 'parameters::principal_components()' instead.")
+
   if (is.null(rotation))
     .pca(x)
   else
