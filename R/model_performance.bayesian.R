@@ -108,9 +108,3 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
 model_performance.brmsfit <- model_performance.stanreg
 
 
-#' @keywords internal
-.summarize_r2_bayes <- function(r2_posterior, name = "R2_") {
-  out <- list(mean(r2_posterior), stats::sd(r2_posterior))
-  names(out) <- paste0(name, c("", "_SE"))
-  out
-}
