@@ -16,6 +16,11 @@
 #' in the interval \code{[0, 1]}, with values closer to 1 indicating a more
 #' accurate model, and the logarithmic rule in the interval \code{[-Inf, 0]},
 #' with values closer to 0 indicating a more accurate model.
+#' \cr \cr
+#' For \code{stan_lmer()} and \code{stan_glmer()} models, the predicted values
+#' are based on \code{posterior_predict()}, instead of \code{predict()}. Thus,
+#' results may differ more than expected from their non-Bayesian counterparts
+#' in \pkg{lme4}.
 #'
 #' @references Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 #'
@@ -154,6 +159,8 @@ performance_score <- function(model, verbose = TRUE) {
     pred_zi <- stats::predict(model, type = "zero")
   } else if (inherits(model, c("clm", "clm2", "clmm"))) {
     pred <- stats::predict(model)
+  } else if (all(inherits(model, c("stanreg", "lmerMod"), which = TRUE)) > 0) {
+    pred <- colMeans(rstanarm::posterior_predict(model))
   } else {
     pred <- stats::predict(model, type = "response")
   }

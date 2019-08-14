@@ -4,6 +4,10 @@
 
 * `principal_components()` is now deprecated and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now.
 
+## Changes to functions
+
+* `performance_score()` now also works `stan_lmer()` and `stan_glmer()` objects.
+
 ## Bug fixes
 
 * Fixed bug in `compare_performance()` that toggled a warning although models were fit from same data.

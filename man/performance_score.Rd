@@ -27,6 +27,11 @@ quadratic/Brier and spherical scoring rules. The spherical rule takes values
 in the interval \code{[0, 1]}, with values closer to 1 indicating a more
 accurate model, and the logarithmic rule in the interval \code{[-Inf, 0]},
 with values closer to 0 indicating a more accurate model.
+\cr \cr
+For \code{stan_lmer()} and \code{stan_glmer()} models, the predicted values
+are based on \code{posterior_predict()}, instead of \code{predict()}. Thus,
+results may differ more than expected from their non-Bayesian counterparts
+in \pkg{lme4}.
 }
 \note{
 Code is partially based on \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
