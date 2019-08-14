@@ -6,7 +6,7 @@
 
 ## Changes to functions
 
-* `performance_score()` now also works `stan_lmer()` and `stan_glmer()` objects.
+* `performance_score()` now also works on `stan_lmer()` and `stan_glmer()` objects.
 
 ## Bug fixes
 
