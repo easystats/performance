@@ -62,14 +62,18 @@ r2_bayes <- function(model, robust = TRUE, ci = .89) {
       class = "r2_bayes_mv",
       rapply(r2_bayesian, ifelse(robust, stats::median, mean)),
       "SE" = rapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd)),
-      "CI" = rapply(r2_bayesian, bayestestR::ci, ci = ci)
+      "Estimates" = rapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
+      "CI" = rapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      "robust" = robust
     )
   } else {
     structure(
       class = "r2_bayes",
       lapply(r2_bayesian, ifelse(robust, stats::median, mean)),
       "SE" = lapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd)),
-      "CI" = lapply(r2_bayesian, bayestestR::ci, ci = ci)
+      "Estimates" = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
+      "CI" = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      "robust" = robust
     )
   }
 }

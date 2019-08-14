@@ -61,6 +61,7 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
   mi <- insight::model_info(model)
 
   out <- list()
+  attri <- list()
   if ("LOOIC" %in% c(metrics)) {
     out <- append(out, suppressWarnings(looic(model)))
   }
@@ -68,16 +69,16 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
     out$WAIC <- suppressWarnings(loo::waic(model)$estimates["waic", "Estimate"])
   }
   if ("R2" %in% c(metrics)) {
-    r2 <- .r2_posterior(model)
-    if (!is.null(r2) && !all(is.na(r2))) {
-      out <- c(out, .summarize_r2_bayes(r2$R2_Bayes, name = "R2"))
-      if ("R2_Bayes_marginal" %in% names(r2)) {
-        out <- c(out, .summarize_r2_bayes(r2$R2_Bayes_marginal, name = "R2_marginal"))
-      }
-    }
+    r2 <- r2_bayes(model, ...)
+    attri$r2_bayes <- attributes(r2) # save attributes
+
+    # Format to df then to list
+    r2_df <- as.data.frame(t(as.numeric(r2)))
+    names(r2_df) <- gsub("_Bayes", "", names(r2), fixed = TRUE)
+    out <- append(out, as.list(r2_df))
   }
   if ("R2_adjusted" %in% c(metrics) && mi$is_linear) {
-    out$R2_LOO_adjusted <- suppressWarnings(r2_loo(model))
+    out$R2_adjusted <- suppressWarnings(r2_loo(model))
   }
   if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_categorical) {
     out$RMSE <- performance_rmse(model)
@@ -95,6 +96,8 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
+
+  attributes(out) <- c(attributes(out), attri)
   class(out) <- c("performance_model", class(out))
 
   out
@@ -105,9 +108,3 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
 model_performance.brmsfit <- model_performance.stanreg
 
 
-#' @keywords internal
-.summarize_r2_bayes <- function(r2_posterior, name = "R2_") {
-  out <- list(mean(r2_posterior), stats::sd(r2_posterior))
-  names(out) <- paste0(name, c("", "_SE"))
-  out
-}
