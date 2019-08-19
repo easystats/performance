@@ -23,31 +23,51 @@
 #' greater as a certain threshold, are considered outliers. This relatively conservative
 #' threshold is useful only for detection, rather than justificaiton for automatic
 #' observation deletion.
-#' \subsection{Choosing Default Thresholds}{
+#' \subsection{Methods}{
 #' \describe{
 #' \item{\strong{Cook's Distance}}{
-#' When \code{method = "cook"}, \code{threshold} defaults to 4 divided by numbers of observations.
+#'  Among outlier detection methods, Cook's distance and leverage are less common
+#'  than the basic Mahalanobis distance, but still used. Cook's distance estimates
+#'  the variations in regression coefficients after removing each observation,
+#'  one by one (Cook, 1977). Since Cook's distance is in the metric of an F distribution with p and n-p degrees of freedom, the median point of the quantile distribution can be used as a cut-off (Bollen, 1985). A common approximation or heuristic is to use 4 divided by the numbers of observations, which usually correponds to a lower threshold (i.e., more outliers are detected).
 #' }
 #' \item{\strong{Mahalanobis Distance}}{
-#' When \code{method = "mahalanobis"}, the default for \code{threshold} is based on
-#' a weird formula (\code{floor(3 * sqrt(sum(cov(predictors)^2)) / nobs(x))}),
-#' which is limted to values between 3 and 10, to account for different variation
-#' in the data depending on the number of observations. There is no "rule of thumb"
-#' for the threshold regarding the Mahalanobis Distance, most studies use a value
-#' between 3 and 10. It is most likely better to define own, sensible thresholds.
+#' Mahalanobis distance (Mahalanobis, 1930) is often used for multivariate outliers
+#' detection as this distance takes into account the shape of the observations.
+#' The default \code{threshold} is often arbitrarily set to some deviation (in
+#' terms of SD or MAD) from the mean (or median) of the Mahalanobis distance.
+#' However, as the Mahalanobis distance can be approximated by a Chi squared
+#' distribution (Rousseeuw & Van Zomeren, 1990), we can use the the alpha quantile
+#' of the chi-square distribution with k degrees of freedom (k being the number of
+#' columns). By default, the alpha threshold is set to 0.05 (corresponding to the
+#' 5\% most extreme observations). This criterion is a natural extension of the
+#' median plus or minus a coefficient times the MAD method (Leys et al., 2013).
+#' }
+#' \item{\strong{Minimum Covariance Determinant}}{
+#' Leys et al. (2018) argue that Mahalanobis Distance s not a robust way to
+#' determine outliers, as it uses the means and covariances of all the data
+#' – including the outliers – to determine individual difference scores. Minimum
+#' Covariance Determinant calculates the mean and covariance matrix based on the
+#' most central subset of the data (for instance, 50\%), before computing the
+#' Mahalanobis Distance. This is deemed to be a more robust method of identifying
+#' and removing outliers than regular Mahalanobis distance.
 #' }
 #' \item{\strong{Invariant Coordinate Selection}}{
-#' If \code{method = "ics"}, the threshold is determined by \code{ICSOutlier::ics.outlier()}.
-#' Refer to the help-file of that function to get more details about this procedure.
-#' Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
-#' to be installed, and that it takes a bit longer to compute the results.
+#'  The outlier are detected using ICS, which by default uses an alpha threshold
+#'  of 0.05 (corresponding to the 5\% most extreme observations) as a cut-off value for outliers classification. Refer to the help-file
+#'  of \code{ICSOutlier::ics.outlier()} to get more details about this procedure.
+#'  Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
+#'  to be installed, and that it takes some time to compute the results.
 #' }
 #' }
 #' }
 #'
 #' @references \itemize{
 #' \item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
-#' \item Archimbaud, A., Nordhausen, K., & Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
+#' \item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
+#' \item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
+#' \item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
+#' \item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
 #' }
 #'
 #' @examples
@@ -66,6 +86,8 @@
 #' \dontrun{
 #' # This one takes some seconds to finish...
 #' check_outliers(model, method = "ics")}
+#'
+#' check_outliers.data.frame(mtcars)
 #'
 #' @importFrom insight n_obs get_predictors get_data
 #' @importFrom stats cooks.distance mahalanobis cov
@@ -143,4 +165,218 @@ check_outliers.default <- function(x, method = c("cook", "mahalanobis", "ics"), 
   attr(dat, "method") <- method
   attr(dat, "text_size") <- 3
   dat
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# "cook" = stats::qf(0.5, ncol(x), nrow(x) -  ncol(x)),
+#' @rdname check_outliers
+#' @export
+check_outliers.data.frame <- function(x, method = c("mahalanobis", "mcd", "ics"), threshold = NULL, ...) {
+
+  # Remove non-numerics
+  x <- x[, sapply(x, is.numeric), drop = FALSE]
+
+  # Check args
+  method <- match.arg(method, several.ok = TRUE)
+
+
+  # Default thresholds
+  if (is.null(threshold)) {
+    thresholds <- list(
+      "mahalanobis" = stats::qchisq(p = 1 - 0.05, df = ncol(x)),
+      "mcd" = stats::qchisq(p = 1 - 0.05, df = ncol(x)),
+      "ics" = 0.05)
+  } else if(is.list(threshold)){
+    thresholds <- threshold
+    for(i in c(method)){
+      if(is.null(thresholds[[i]])){
+        thresholds[[i]] <- threshold
+      }
+    }
+  } else{
+    thresholds <- list()
+    for(i in c(method)){
+      thresholds[[i]] <- threshold
+    }
+  }
+
+
+
+  out <- list()
+  # Mahalanobis
+  if("mahalanobis" %in% c(method)){
+    out <- c(out, .check_outliers_mahalanobis(x, threshold = thresholds$mahalanobis))
+  }
+
+  # MCD
+  if("mcd" %in% c(method)){
+    out <- c(out, .check_outliers_mcd(x, threshold = thresholds$mcd, percentage_central = .50))
+  }
+
+  # ICS
+  if ("ics" %in% c(method)) {
+    out <- c(out, .check_outliers_ics(x, threshold = thresholds$ics))
+  }
+
+  # Combine outlier data
+  df <- data.frame(Obs = 1:nrow(x))
+  for(i in names(out[sapply(out, is.data.frame)])){
+    df <- cbind(df, out[[i]])
+  }
+  df$Obs <- NULL
+
+
+  # Composite outlier score
+  df$Outlier <- rowMeans(df[grepl("Outlier_", names(df))])
+
+  # Out
+  outlier <- df$Outlier
+
+  # Attributes
+  # class(df) <- c("check_outliers", "see_check_outliers", class(df))
+  attr(outlier, "data") <- df
+  attr(outlier, "threshold") <- thresholds
+  attr(outlier, "method") <- method
+  attr(outlier, "text_size") <- 3
+  outlier
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' @keywords internal
+.check_outliers_ics <- function(x, threshold = 0.05, ...){
+  out <- data.frame(Obs = 1:nrow(x))
+
+  # Install packages
+  if (!requireNamespace("ICS", quietly = TRUE)) {
+    stop("Package `ICS` needed for this function to work. Please install it.", call. = FALSE)
+  }
+  if (!requireNamespace("ICSOutlier", quietly = TRUE)) {
+    stop("Package `ICSOutlier` needed for this function to work. Please install it.", call. = FALSE)
+  }
+
+  # Get n cores
+  n_cores <- if (!requireNamespace("parallel", quietly = TRUE)){
+    NULL
+  } else{
+    parallel::detectCores() - 1
+  }
+
+  # Run algorithm
+  # Try
+  outliers <- tryCatch({
+    ics <- ICS::ics2(x)
+    ICSOutlier::ics.outlier(object = ics, ncores = n_cores, level.dist = threshold, ...)
+  },
+  error = function(e) {
+    NULL
+  })
+
+  if(is.null(outliers)){
+    if (ncol(x) == 1){
+      insight::print_color("At least two numeric predictors are required to detect outliers.\n", "red")
+    }
+    else{
+      insight::print_color(sprintf("'check_outliers()' does not support models of class '%s'.\n", class(x)[1]), "red")
+    }
+  }
+
+  # Get results
+  cutoff <- outliers@ics.dist.cutoff
+  out$Distance_ICS <- outliers@ics.distances
+  out$Outlier_ICS <- as.numeric(out$Distance_ICS > cutoff)
+  out$Obs <- NULL
+
+  # Out
+  list("data_ICS" = out,
+       "threshold_ICS" = threshold)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' @keywords internal
+.check_outliers_mahalanobis <- function(x, threshold = NULL){
+  out <- data.frame(Obs = 1:nrow(x))
+
+  # Compute
+  out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), cov = stats::cov(x))
+
+  # Filter
+  out$Outlier_Mahalanobis <- as.numeric(out$Distance_Mahalanobis > threshold)
+
+  out$Obs <- NULL
+  list("data_mahalanobis" = out,
+       "threshold_mahalanobis" = threshold)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+#' @keywords internal
+.check_outliers_mcd <- function(x, threshold = NULL, percentage_central = .50){
+  out <- data.frame(Obs = 1:nrow(x))
+
+
+
+  # Install packages
+  if (!requireNamespace("MASS", quietly = TRUE)) {
+    stop("Package `MASS` needed for this function to work. Please install it.", call. = FALSE)
+  }
+
+  # Compute
+  mcd <- MASS::cov.mcd(x, quantile.used = percentage_central * nrow(x))
+  out$Distance_MCD <- stats::mahalanobis(x, center = mcd$center, cov = mcd$cov)
+
+  # Filter
+  out$Outlier_MCD <- as.numeric(out$Distance_MCD > threshold)
+
+  out$Obs <- NULL
+  list("data_mcd" = out,
+       "threshold_mcd" = threshold)
 }
