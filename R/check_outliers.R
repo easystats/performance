@@ -39,11 +39,11 @@
 #' However, as the Mahalanobis distance can be approximated by a Chi squared
 #' distribution (Rousseeuw & Van Zomeren, 1990), we can use the the alpha quantile
 #' of the chi-square distribution with k degrees of freedom (k being the number of
-#' columns). By default, the alpha threshold is set to 0.05 (corresponding to the
-#' 5\% most extreme observations). This criterion is a natural extension of the
+#' columns). By default, the alpha threshold is set to 0.025 (corresponding to the
+#' 2.5\% most extreme observations; Cabana, 2019). This criterion is a natural extension of the
 #' median plus or minus a coefficient times the MAD method (Leys et al., 2013).
 #' }
-#' \item{\strong{Minimum Covariance Determinant}}{
+#' \item{\strong{Minimum Covariance Determinant (MCD)}}{
 #' Leys et al. (2018) argue that Mahalanobis Distance s not a robust way to
 #' determine outliers, as it uses the means and covariances of all the data
 #' – including the outliers – to determine individual difference scores. Minimum
@@ -52,12 +52,19 @@
 #' Mahalanobis Distance. This is deemed to be a more robust method of identifying
 #' and removing outliers than regular Mahalanobis distance.
 #' }
-#' \item{\strong{Invariant Coordinate Selection}}{
+#' \item{\strong{Invariant Coordinate Selection (ICS)}}{
 #'  The outlier are detected using ICS, which by default uses an alpha threshold
-#'  of 0.05 (corresponding to the 5\% most extreme observations) as a cut-off value for outliers classification. Refer to the help-file
+#'  of 0.025 (corresponding to the 2.5\% most extreme observations) as a cut-off value for outliers classification. Refer to the help-file
 #'  of \code{ICSOutlier::ics.outlier()} to get more details about this procedure.
 #'  Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
 #'  to be installed, and that it takes some time to compute the results.
+#' }
+#' \item{\strong{OPTICS}}{
+#'  The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised clustering technique that can be used for outliers detection). The threshold argument is passsed as \code{minPts}, which corresponds to the minimum size of a cluster. By default, this size is set at 2 times the number of columns (Sander et al., 1998). Compared to the others techniques, that will always detect several outliers (as these are usually defined as a percentage of extreme values), this algorithm functions in a different manner and won't always detect outliers. Note that \code{method = "optics"} requires the \pkg{dbscan} package to be installed, and that it takes some time to compute the results.
+#' }
+#' \item{\strong{Isolation Forest}}{
+#'  The outliers are detected using the anomaly score of an isolation forest (a class of random forest). The default threshold
+#'  of 0.025 will classify as outliers the observations located at \code{qnorm(1-0.025) * MAD) (a robust equivalent of SD) of the median (roughly corresponding to the 2.5\% most extreme observations).
 #' }
 #' }
 #' }
@@ -68,6 +75,7 @@
 #' \item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
 #' \item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
 #' \item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
+#' \item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
 #' }
 #'
 #' @examples
@@ -87,7 +95,8 @@
 #' # This one takes some seconds to finish...
 #' check_outliers(model, method = "ics")}
 #'
-#' check_outliers.data.frame(mtcars)
+#' # For dataframes
+#' check_outliers(mtcars)
 #'
 #' @importFrom insight n_obs get_predictors get_data
 #' @importFrom stats cooks.distance mahalanobis cov
@@ -180,10 +189,10 @@ check_outliers.default <- function(x, method = c("cook", "mahalanobis", "ics"), 
 
 
 
-# "cook" = stats::qf(0.5, ncol(x), nrow(x) -  ncol(x)),
+# "cook" threshold = stats::qf(0.5, ncol(x), nrow(x) -  ncol(x)),
 #' @rdname check_outliers
 #' @export
-check_outliers.data.frame <- function(x, method = c("mahalanobis", "mcd", "ics"), threshold = NULL, ...) {
+check_outliers.data.frame <- function(x, method = c("mahalanobis", "mcd", "ics", "optics", "iforest"), threshold = NULL, ...) {
 
   # Remove non-numerics
   x <- x[, sapply(x, is.numeric), drop = FALSE]
@@ -195,9 +204,11 @@ check_outliers.data.frame <- function(x, method = c("mahalanobis", "mcd", "ics")
   # Default thresholds
   if (is.null(threshold)) {
     thresholds <- list(
-      "mahalanobis" = stats::qchisq(p = 1 - 0.05, df = ncol(x)),
-      "mcd" = stats::qchisq(p = 1 - 0.05, df = ncol(x)),
-      "ics" = 0.05)
+      "mahalanobis" = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+      "mcd" = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+      "ics" = 0.025,
+      "optics" = 2 * ncol(x),
+      "iforest" = 0.025)
   } else if(is.list(threshold)){
     thresholds <- threshold
     for(i in c(method)){
@@ -228,6 +239,14 @@ check_outliers.data.frame <- function(x, method = c("mahalanobis", "mcd", "ics")
   # ICS
   if ("ics" %in% c(method)) {
     out <- c(out, .check_outliers_ics(x, threshold = thresholds$ics))
+  }
+  # OPTICS
+  if ("optics" %in% c(method)) {
+    out <- c(out, .check_outliers_optics(x, threshold = thresholds$optics))
+  }
+  # Isolation Forest
+  if ("iforest" %in% c(method)) {
+    out <- c(out, .check_outliers_iforest(x, threshold = thresholds$iforest))
   }
 
   # Combine outlier data
@@ -270,7 +289,7 @@ check_outliers.data.frame <- function(x, method = c("mahalanobis", "mcd", "ics")
 
 
 #' @keywords internal
-.check_outliers_ics <- function(x, threshold = 0.05, ...){
+.check_outliers_ics <- function(x, threshold = 0.025, ...){
   out <- data.frame(Obs = 1:nrow(x))
 
   # Install packages
@@ -379,4 +398,54 @@ check_outliers.data.frame <- function(x, method = c("mahalanobis", "mcd", "ics")
   out$Obs <- NULL
   list("data_mcd" = out,
        "threshold_mcd" = threshold)
+}
+
+
+
+
+
+#' @keywords internal
+.check_outliers_optics <- function(x, threshold = NULL){
+  out <- data.frame(Obs = 1:nrow(x))
+
+  # Install packages
+  if (!requireNamespace("dbscan", quietly = TRUE)) {
+    stop("Package `dbscan` needed for this function to work. Please install it.", call. = FALSE)
+  }
+
+  # Compute
+  rez <- dbscan::optics(x, minPts = threshold)
+  rez <- dbscan::extractXi(rez, xi = 0.05)
+
+  out$Distance_OPTICS <- rez$coredist
+  # Filter
+  out$Outlier_OPTICS <- as.numeric(rez$cluster == 0)
+
+  out$Obs <- NULL
+  list("data_optics" = out,
+       "threshold_optics" = threshold)
+}
+
+
+#' @keywords internal
+.check_outliers_iforest <- function(x, threshold = 0.025){
+  out <- data.frame(Obs = 1:nrow(x))
+
+  # Install packages
+  if (!requireNamespace("solitude", quietly = TRUE)) {
+    stop("Package `solitude` needed for this function to work. Please install it.", call. = FALSE)
+  }
+
+  # Compute
+  iforest <- solitude::isolationForest(x)
+  out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
+
+  # Threshold
+  cutoff <- median(out$Distance_iforest) + qnorm(1 - threshold) * mad(out$Distance_iforest)
+  # Filter
+  out$Outlier_iforest <- as.numeric(out$Distance_iforest >= cutoff)
+
+  out$Obs <- NULL
+  list("data_iforest" = out,
+       "threshold_iforest" = threshold)
 }
