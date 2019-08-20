@@ -40,6 +40,7 @@ Suggests:
 	AER,
 	betareg,
 	brms,
+	dbscan,
 	covr,
 	glmmTMB,
 	ICS,
@@ -61,6 +62,7 @@ Suggests:
 	rstantools,
 	see (>= 0.2.1),
 	survival,
+	solitude,
 	testthat
 License: GPL-3
 Encoding: UTF-8

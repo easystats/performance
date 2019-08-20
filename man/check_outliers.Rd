@@ -3,27 +3,27 @@
 \name{check_outliers}
 \alias{check_outliers}
 \alias{check_outliers.default}
-\title{Check for influential observations}
+\alias{check_outliers.data.frame}
+\title{Outliers detection (check for influential observations)}
 \usage{
 check_outliers(x, ...)
 
-\method{check_outliers}{default}(x, method = c("cook", "mahalanobis",
-  "ics"), threshold = NULL, ...)
+\method{check_outliers}{default}(x, method = c("cook", "pareto"),
+  threshold = NULL, ...)
+
+\method{check_outliers}{data.frame}(x, method = "mahalanobis",
+  threshold = NULL, ...)
 }
 \arguments{
-\item{x}{A model object.}
+\item{x}{A model or a data.frame object.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are
 passed down to \code{ICSOutlier::ics.outlier()}.}
 
-\item{method}{The method to calculate the distance, at which value a point is
-considered as "outlier".}
+\item{method}{The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").}
 
-\item{threshold}{The threshold indicating at which distance an observation is
-considered as outlier. Possible values are \code{"cook"} (Cook's Distance),
-\code{"mahalanobis"} (Mahalanobis Distance) or \code{"ics"} (Invariant
-Coordinate Selection, \cite{Archimbaud et al. 2018}). May be abbreviated.
-See 'Details'.}
+\item{threshold}{A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
+considered as outlier. If \code{NULL}, default values will be used (see 'Details').}
 }
 \value{
 Check (message) on whether outliers were detected or not, as well as a
@@ -32,33 +32,59 @@ information on the distance measure and whether or not an observation is conside
 as outlier.
 }
 \description{
-Checks for and locates influential observations (i.e., "outliers") via several distance methods.
+Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary results of each method. It represents the probability of each observation of being classified as an outlier by a method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5.
 }
 \details{
-Performs a distance test to check for influential observations. Those
-greater as a certain threshold, are considered outliers. This relatively conservative
-threshold is useful only for detection, rather than justificaiton for automatic
-observation deletion.
-\subsection{Choosing Default Thresholds}{
-\describe{
-\item{\strong{Cook's Distance}}{
-When \code{method = "cook"}, \code{threshold} defaults to 4 divided by numbers of observations.
-}
-\item{\strong{Mahalanobis Distance}}{
-When \code{method = "mahalanobis"}, the default for \code{threshold} is based on
-a weird formula (\code{floor(3 * sqrt(sum(cov(predictors)^2)) / nobs(x))}),
-which is limted to values between 3 and 10, to account for different variation
-in the data depending on the number of observations. There is no "rule of thumb"
-for the threshold regarding the Mahalanobis Distance, most studies use a value
-between 3 and 10. It is most likely better to define own, sensible thresholds.
-}
-\item{\strong{Invariant Coordinate Selection}}{
-If \code{method = "ics"}, the threshold is determined by \code{ICSOutlier::ics.outlier()}.
-Refer to the help-file of that function to get more details about this procedure.
-Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
-to be installed, and that it takes a bit longer to compute the results.
-}
-}
+Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.
+
+\itemize{
+\item \strong{Cook's Distance}:
+ Among outlier detection methods, Cook's distance and leverage are less common
+ than the basic Mahalanobis distance, but still used. Cook's distance estimates
+ the variations in regression coefficients after removing each observation,
+ one by one (Cook, 1977). Since Cook's distance is in the metric of an F
+ distribution with p and n-p degrees of freedom, the median point of the quantile
+ distribution can be used as a cut-off (Bollen, 1985). A common approximation
+ or heuristic is to use 4 divided by the numbers of observations, which usually
+ correponds to a lower threshold (i.e., more outliers are detected). This only works for Frequentist models. For Bayesian models, see \code{pareto}.
+
+\item \strong{Pareto}:
+The reliability and approximate convergence of Bayesian models can be assessed using the estimates for the shape parameter k of the generalized Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the user should be warned, although in practice the authors of the \code{loo} package observed good performance for values of k up to 0.7 (the default threshold used by \code{performance}).
+
+\item \strong{Mahalanobis Distance}:
+Mahalanobis distance (Mahalanobis, 1930) is often used for multivariate outliers
+detection as this distance takes into account the shape of the observations.
+The default \code{threshold} is often arbitrarily set to some deviation (in
+terms of SD or MAD) from the mean (or median) of the Mahalanobis distance.
+However, as the Mahalanobis distance can be approximated by a Chi squared
+distribution (Rousseeuw & Van Zomeren, 1990), we can use the the alpha quantile
+of the chi-square distribution with k degrees of freedom (k being the number of
+columns). By default, the alpha threshold is set to 0.025 (corresponding to the
+2.5\% most extreme observations; Cabana, 2019). This criterion is a natural extension of the
+median plus or minus a coefficient times the MAD method (Leys et al., 2013).
+
+\item \strong{Minimum Covariance Determinant (MCD)}:
+Leys et al. (2018) argue that Mahalanobis Distance s not a robust way to
+determine outliers, as it uses the means and covariances of all the data
+– including the outliers – to determine individual difference scores. Minimum
+Covariance Determinant calculates the mean and covariance matrix based on the
+most central subset of the data (for instance, 50\%), before computing the
+Mahalanobis Distance. This is deemed to be a more robust method of identifying
+and removing outliers than regular Mahalanobis distance.
+
+\item \strong{Invariant Coordinate Selection (ICS)}:
+ The outlier are detected using ICS, which by default uses an alpha threshold
+ of 0.025 (corresponding to the 2.5\% most extreme observations) as a cut-off value for outliers classification. Refer to the help-file
+ of \code{ICSOutlier::ics.outlier()} to get more details about this procedure.
+ Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
+ to be installed, and that it takes some time to compute the results.
+
+\item \strong{OPTICS}:
+ The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised clustering technique that can be used for outliers detection). The threshold argument is passsed as \code{minPts}, which corresponds to the minimum size of a cluster. By default, this size is set at 2 times the number of columns (Sander et al., 1998). Compared to the others techniques, that will always detect several outliers (as these are usually defined as a percentage of extreme values), this algorithm functions in a different manner and won't always detect outliers. Note that \code{method = "optics"} requires the \pkg{dbscan} package to be installed, and that it takes some time to compute the results.
+
+\item \strong{Isolation Forest}:
+ The outliers are detected using the anomaly score of an isolation forest (a class of random forest). The default threshold
+ of 0.025 will classify as outliers the observations located at \code{qnorm(1-0.025) * MAD)} (a robust equivalent of SD) of the median (roughly corresponding to the 2.5\% most extreme observations).
 }
 }
 \examples{
@@ -70,18 +96,28 @@ mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 12
 model <- lm(disp ~ mpg + hp, data = mt2)
 
 check_outliers(model)
-plot(check_outliers(model))
+# plot(check_outliers(model))
 
-check_outliers(model, method = "m")
-
+check_outliers(model, method = c("mahalabonis", "mcd"))
 \dontrun{
 # This one takes some seconds to finish...
-check_outliers(model, method = "ics")}
+check_outliers(model, method = "ics")
 
+# For Bayesian models
+library(rstanarm)
+model <- stan_glm(disp ~ mpg + hp, data = mt2, refresh = 0)
+
+# For dataframes
+check_outliers(mtcars)
+}
 }
 \references{
 \itemize{
 \item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
-\item Archimbaud, A., Nordhausen, K., & Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
+\item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
+\item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
+\item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
+\item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
+\item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
 }
 }

@@ -13,7 +13,7 @@ print.performance_model <- function(x, digits = 3, ...) {
 
 #' @export
 print.check_outliers <- function(x, ...) {
-  outliers <- which(x[[".outliers"]])
+  outliers <- which(as.numeric(x) >= 0.5)
   if (length(outliers) >= 1) {
     o <- paste0(" (cases ", paste0(outliers, collapse = ", "), ")")
     insight::print_color(sprintf("Warning: %i outliers detected%s.\n", length(outliers), o), 'red')
