@@ -89,7 +89,6 @@
 #' # plot(check_outliers(model))
 #'
 #' check_outliers(model, method = c("mahalabonis", "mcd"))
-#'
 #' \dontrun{
 #' # This one takes some seconds to finish...
 #' check_outliers(model, method = "ics")
@@ -122,7 +121,7 @@ check_outliers <- function(x, ...) {
 check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = NULL, ...) {
 
   # Check args
-  if(all(method == "all")){
+  if (all(method == "all")) {
     method <- c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest")
   }
   method <- match.arg(method, c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
@@ -134,31 +133,31 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 
   # Thresholds
-  if(is.null(threshold)){
+  if (is.null(threshold)) {
     thresholds <- .check_outliers_thresholds(data)
-  } else if(is.list(threshold)){
+  } else if (is.list(threshold)) {
     thresholds <- .check_outliers_thresholds(data)
     thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
-  } else{
+  } else {
     stop("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).")
   }
 
 
 
   # Others
-  if(!all(method %in% c("cook", "pareto"))){
+  if (!all(method %in% c("cook", "pareto"))) {
     df <- check_outliers(data, method, threshold, ...)
     df <- attributes(df)$data
-  } else{
+  } else {
     df <- data.frame(Obs = row.names(data))
   }
 
   # Cook
-  if("cook" %in% c(method) & insight::model_info(x)$is_bayesian == FALSE){
+  if ("cook" %in% c(method) & insight::model_info(x)$is_bayesian == FALSE) {
     df <- cbind(df, .check_outliers_cook(x, threshold = thresholds$cook)$data_cook)
   }
   # Pareto
-  if("pareto" %in% c(method) & insight::model_info(x)$is_bayesian){
+  if ("pareto" %in% c(method) & insight::model_info(x)$is_bayesian) {
     df <- cbind(df, .check_outliers_pareto(x, threshold = thresholds$pareto)$data_pareto)
   }
 
@@ -202,29 +201,29 @@ check_outliers.data.frame <- function(x,
   x <- x[, sapply(x, is.numeric), drop = FALSE]
 
   # Check args
-  if(all(method == "all")){
+  if (all(method == "all")) {
     method <- c("mahalanobis", "mcd", "ics", "optics", "iforest")
   }
   method <- match.arg(method, c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
 
   # Thresholds
-  if(is.null(threshold)){
+  if (is.null(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
-  } else if(is.list(threshold)){
+  } else if (is.list(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
     thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
-  } else{
+  } else {
     stop("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).")
   }
 
   out <- list()
   # Mahalanobis
-  if("mahalanobis" %in% c(method)){
+  if ("mahalanobis" %in% c(method)) {
     out <- c(out, .check_outliers_mahalanobis(x, threshold = thresholds$mahalanobis))
   }
 
   # MCD
-  if("mcd" %in% c(method)){
+  if ("mcd" %in% c(method)) {
     out <- c(out, .check_outliers_mcd(x, threshold = thresholds$mcd, percentage_central = .50))
   }
 
@@ -243,7 +242,7 @@ check_outliers.data.frame <- function(x,
 
   # Combine outlier data
   df <- data.frame(Obs = row.names(x))
-  for(i in names(out[sapply(out, is.data.frame)])){
+  for (i in names(out[sapply(out, is.data.frame)])) {
     df <- cbind(df, out[[i]])
   }
   # df$Obs <- NULL
@@ -274,14 +273,14 @@ check_outliers.data.frame <- function(x,
 
 #' @keywords internal
 .check_outliers_thresholds <- function(x,
-                                      cook = stats::qf(0.5, ncol(x), nrow(x) -  ncol(x)),
-                                      pareto = 0.7,
-                                      mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-                                      mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-                                      ics = 0.025,
-                                      optics = 2 * ncol(x),
-                                      iforest = 0.025,
-                                      ...){
+                                       cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+                                       pareto = 0.7,
+                                       mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+                                       mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+                                       ics = 0.025,
+                                       optics = 2 * ncol(x),
+                                       iforest = 0.025,
+                                       ...) {
   list(
     "cook" = cook,
     "pareto" = pareto,
@@ -289,7 +288,8 @@ check_outliers.data.frame <- function(x,
     "mcd" = mcd,
     "ics" = ics,
     "optics" = optics,
-    "iforest" = iforest)
+    "iforest" = iforest
+  )
 }
 
 
@@ -312,7 +312,7 @@ check_outliers.data.frame <- function(x,
 
 
 #' @keywords internal
-.check_outliers_cook <- function(x, threshold = NULL){
+.check_outliers_cook <- function(x, threshold = NULL) {
   # Compute
   d <- unname(stats::cooks.distance(x))
   out <- data.frame(Obs = 1:length(d))
@@ -322,15 +322,17 @@ check_outliers.data.frame <- function(x,
   out$Outlier_Cook <- as.numeric(out$Distance_Cook > threshold)
 
   out$Obs <- NULL
-  list("data_cook" = out,
-       "threshold_cook" = threshold)
+  list(
+    "data_cook" = out,
+    "threshold_cook" = threshold
+  )
 }
 
 
 
 
 #' @keywords internal
-.check_outliers_pareto <- function(x, threshold = 0.7){
+.check_outliers_pareto <- function(x, threshold = 0.7) {
 
   # Install packages
   if (!requireNamespace("loo", quietly = TRUE)) {
@@ -347,8 +349,10 @@ check_outliers.data.frame <- function(x,
   out$Outlier_Pareto <- as.numeric(out$Distance_Pareto > threshold)
 
   out$Obs <- NULL
-  list("data_pareto" = out,
-       "threshold_pareto" = threshold)
+  list(
+    "data_pareto" = out,
+    "threshold_pareto" = threshold
+  )
 }
 
 
@@ -357,7 +361,7 @@ check_outliers.data.frame <- function(x,
 
 
 #' @keywords internal
-.check_outliers_mahalanobis <- function(x, threshold = NULL){
+.check_outliers_mahalanobis <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
 
   # Compute
@@ -367,8 +371,10 @@ check_outliers.data.frame <- function(x,
   out$Outlier_Mahalanobis <- as.numeric(out$Distance_Mahalanobis > threshold)
 
   out$Obs <- NULL
-  list("data_mahalanobis" = out,
-       "threshold_mahalanobis" = threshold)
+  list(
+    "data_mahalanobis" = out,
+    "threshold_mahalanobis" = threshold
+  )
 }
 
 
@@ -384,7 +390,7 @@ check_outliers.data.frame <- function(x,
 
 
 #' @keywords internal
-.check_outliers_mcd <- function(x, threshold = NULL, percentage_central = .50){
+.check_outliers_mcd <- function(x, threshold = NULL, percentage_central = .50) {
   out <- data.frame(Obs = 1:nrow(x))
 
 
@@ -402,8 +408,10 @@ check_outliers.data.frame <- function(x,
   out$Outlier_MCD <- as.numeric(out$Distance_MCD > threshold)
 
   out$Obs <- NULL
-  list("data_mcd" = out,
-       "threshold_mcd" = threshold)
+  list(
+    "data_mcd" = out,
+    "threshold_mcd" = threshold
+  )
 }
 
 
@@ -413,7 +421,7 @@ check_outliers.data.frame <- function(x,
 
 
 #' @keywords internal
-.check_outliers_ics <- function(x, threshold = 0.025, ...){
+.check_outliers_ics <- function(x, threshold = 0.025, ...) {
   out <- data.frame(Obs = 1:nrow(x))
 
   # Install packages
@@ -425,9 +433,9 @@ check_outliers.data.frame <- function(x,
   }
 
   # Get n cores
-  n_cores <- if (!requireNamespace("parallel", quietly = TRUE)){
+  n_cores <- if (!requireNamespace("parallel", quietly = TRUE)) {
     NULL
-  } else{
+  } else {
     parallel::detectCores() - 1
   }
 
@@ -439,13 +447,14 @@ check_outliers.data.frame <- function(x,
   },
   error = function(e) {
     NULL
-  })
+  }
+  )
 
-  if(is.null(outliers)){
-    if (ncol(x) == 1){
+  if (is.null(outliers)) {
+    if (ncol(x) == 1) {
       insight::print_color("At least two numeric predictors are required to detect outliers.\n", "red")
     }
-    else{
+    else {
       insight::print_color(sprintf("'check_outliers()' does not support models of class '%s'.\n", class(x)[1]), "red")
     }
   }
@@ -457,8 +466,10 @@ check_outliers.data.frame <- function(x,
   out$Obs <- NULL
 
   # Out
-  list("data_ICS" = out,
-       "threshold_ICS" = threshold)
+  list(
+    "data_ICS" = out,
+    "threshold_ICS" = threshold
+  )
 }
 
 
@@ -472,7 +483,7 @@ check_outliers.data.frame <- function(x,
 
 
 #' @keywords internal
-.check_outliers_optics <- function(x, threshold = NULL){
+.check_outliers_optics <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
 
   # Install packages
@@ -489,13 +500,15 @@ check_outliers.data.frame <- function(x,
   out$Outlier_OPTICS <- as.numeric(rez$cluster == 0)
 
   out$Obs <- NULL
-  list("data_optics" = out,
-       "threshold_optics" = threshold)
+  list(
+    "data_optics" = out,
+    "threshold_optics" = threshold
+  )
 }
 
 
 #' @keywords internal
-.check_outliers_iforest <- function(x, threshold = 0.025){
+.check_outliers_iforest <- function(x, threshold = 0.025) {
   out <- data.frame(Obs = 1:nrow(x))
 
   # Install packages
@@ -513,59 +526,8 @@ check_outliers.data.frame <- function(x,
   out$Outlier_iforest <- as.numeric(out$Distance_iforest >= cutoff)
 
   out$Obs <- NULL
-  list("data_iforest" = out,
-       "threshold_iforest" = threshold)
+  list(
+    "data_iforest" = out,
+    "threshold_iforest" = threshold
+  )
 }
-
-
-# # Plot test
-# library(performance)
-# mt1 <- mtcars[, c(1, 3, 4)]
-# mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 120)))
-# model <- lm(disp ~ mpg + hp, data = mt2)
-#
-# x <- check_outliers(model, method = "all")
-#
-# # Data plot ---------------
-# library(parameters)
-#
-# data_plot_outliers <- function(x){
-#   data <- attributes(x)$data
-#   row.names(data) <- data$Obs
-#
-#   # Extract distances
-#   d <- data[grepl("Distance_", names(data))]
-#   d <- parameters::normalize(d)
-#
-#   d_long <- stats::reshape(
-#     d,
-#     direction = "long",
-#     varying = list(names(d)),
-#     sep = "_",
-#     v.names = "Distance",
-#     timevar = "Method",
-#     times = names(d)
-#   )
-#   d_long$Obs <- as.factor(d_long$id)
-#   row.names(d_long) <- d_long$id <- NULL
-#   d_long$Method <- gsub("Distance_", "", d_long$Method)
-#   d_long
-# }
-#
-#
-# # Plot ---------------
-# library(tidyverse)
-# library(see)
-#
-# x <- check_outliers(model, method = "all")
-#
-#
-# x %>%
-#   data_plot_outliers() %>%
-#   ggplot(aes(x = Obs, y = Distance, fill = Method, group = Method)) +
-#   # geom_vline(xintercept = as.character(c(1, 2))) +
-#   geom_bar(position = "dodge", stat = "identity") +
-#   scale_fill_viridis_d() +
-#   theme_modern()  +
-#   theme(axis.text.x = element_text(colour = ifelse(as.numeric(x) >= 0.5, "red", "darkgrey")),
-#         panel.grid.major.x = element_line(linetype = "dashed", colour = ifelse(as.numeric(x) >= 0.5, "red", "lightgrey")))
