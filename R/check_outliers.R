@@ -193,9 +193,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 #' @rdname check_outliers
 #' @export
-check_outliers.data.frame <- function(x,
-                                      method = "mahalanobis",
-                                      threshold = NULL, ...) {
+check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NULL, ...) {
 
   # Remove non-numerics
   x <- x[, sapply(x, is.numeric), drop = FALSE]
@@ -231,10 +229,12 @@ check_outliers.data.frame <- function(x,
   if ("ics" %in% c(method)) {
     out <- c(out, .check_outliers_ics(x, threshold = thresholds$ics))
   }
+
   # OPTICS
   if ("optics" %in% c(method)) {
     out <- c(out, .check_outliers_optics(x, threshold = thresholds$optics))
   }
+
   # Isolation Forest
   if ("iforest" %in% c(method)) {
     out <- c(out, .check_outliers_iforest(x, threshold = thresholds$iforest))
@@ -266,12 +266,7 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
-#' @keywords internal
+#' @importFrom stats qf qchisq
 .check_outliers_thresholds <- function(x,
                                        cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
                                        pareto = 0.7,
@@ -294,24 +289,7 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' @keywords internal
+#' @importFrom stats cooks.distance
 .check_outliers_cook <- function(x, threshold = NULL) {
   # Compute
   d <- unname(stats::cooks.distance(x))
@@ -360,7 +338,7 @@ check_outliers.data.frame <- function(x,
 
 
 
-#' @keywords internal
+#' @importFrom stats mahalanobis cov
 .check_outliers_mahalanobis <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -380,20 +358,8 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
-
-
-
-
-#' @keywords internal
 .check_outliers_mcd <- function(x, threshold = NULL, percentage_central = .50) {
   out <- data.frame(Obs = 1:nrow(x))
-
-
 
   # Install packages
   if (!requireNamespace("MASS", quietly = TRUE)) {
@@ -416,11 +382,6 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-#' @keywords internal
 .check_outliers_ics <- function(x, threshold = 0.025, ...) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -477,11 +438,6 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
 #' @keywords internal
 .check_outliers_optics <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
@@ -507,7 +463,7 @@ check_outliers.data.frame <- function(x,
 }
 
 
-#' @keywords internal
+#' @importFrom stats median qnorm mad
 .check_outliers_iforest <- function(x, threshold = 0.025) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -521,7 +477,7 @@ check_outliers.data.frame <- function(x,
   out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
 
   # Threshold
-  cutoff <- median(out$Distance_iforest) + qnorm(1 - threshold) * mad(out$Distance_iforest)
+  cutoff <- stats::median(out$Distance_iforest) + stats::qnorm(1 - threshold) * stats::mad(out$Distance_iforest)
   # Filter
   out$Outlier_iforest <- as.numeric(out$Distance_iforest >= cutoff)
 
