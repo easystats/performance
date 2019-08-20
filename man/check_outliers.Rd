@@ -4,30 +4,26 @@
 \alias{check_outliers}
 \alias{check_outliers.default}
 \alias{check_outliers.data.frame}
-\title{Check for influential observations}
+\title{Outliers detection (check for influential observations)}
 \usage{
 check_outliers(x, ...)
 
 \method{check_outliers}{default}(x, method = c("cook", "pareto"),
   threshold = NULL, ...)
 
-\method{check_outliers}{data.frame}(x, method = c("mahalanobis", "mcd",
-  "ics", "optics", "iforest"), threshold = NULL, ...)
+\method{check_outliers}{data.frame}(x, method = "mahalanobis",
+  threshold = NULL, ...)
 }
 \arguments{
-\item{x}{A model object.}
+\item{x}{A model or a data.frame object.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are
 passed down to \code{ICSOutlier::ics.outlier()}.}
 
-\item{method}{The method to calculate the distance, at which value a point is
-considered as "outlier".}
+\item{method}{The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").}
 
-\item{threshold}{The threshold indicating at which distance an observation is
-considered as outlier. Possible values are \code{"cook"} (Cook's Distance),
-\code{"mahalanobis"} (Mahalanobis Distance) or \code{"ics"} (Invariant
-Coordinate Selection, \cite{Archimbaud et al. 2018}). May be abbreviated.
-See 'Details'.}
+\item{threshold}{A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
+considered as outlier. If \code{NULL}, default values will be used (see 'Details').}
 }
 \value{
 Check (message) on whether outliers were detected or not, as well as a
@@ -36,7 +32,7 @@ information on the distance measure and whether or not an observation is conside
 as outlier.
 }
 \description{
-Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods.
+Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary results of each method. It represents the probability of each observation of being classified as an outlier by a method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5.
 }
 \details{
 Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.
@@ -100,9 +96,9 @@ mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 12
 model <- lm(disp ~ mpg + hp, data = mt2)
 
 check_outliers(model)
-plot(check_outliers(model))
+# plot(check_outliers(model))
 
-check_outliers(model, method = "m")
+check_outliers(model, method = c("mahalabonis", "mcd"))
 
 \dontrun{
 # This one takes some seconds to finish...

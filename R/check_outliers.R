@@ -1,16 +1,13 @@
-#' @title Check for influential observations
+#' @title Outliers detection (check for influential observations)
 #' @name check_outliers
 #'
-#' @description Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods.
+#' @description Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary results of each method. It represents the probability of each observation of being classified as an outlier by a method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5.
 #'
-#' @param x A model object.
-#' @param threshold The threshold indicating at which distance an observation is
-#'   considered as outlier. Possible values are \code{"cook"} (Cook's Distance),
-#'   \code{"mahalanobis"} (Mahalanobis Distance) or \code{"ics"} (Invariant
-#'   Coordinate Selection, \cite{Archimbaud et al. 2018}). May be abbreviated.
-#'   See 'Details'.
-#' @param method The method to calculate the distance, at which value a point is
-#'   considered as "outlier".
+#' @param x A model or a data.frame object.
+#' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").
+#' @param threshold A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
+#'   considered as outlier. If \code{NULL}, default values will be used (see 'Details').
+#'
 #' @param ... When \code{method = "ics"}, further arguments in \code{...} are
 #'   passed down to \code{ICSOutlier::ics.outlier()}.
 #'
@@ -126,9 +123,9 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
   # Check args
   if(all(method == "all")){
-    method <- c("cook", "mahalanobis", "mcd", "ics", "optics", "iforest")
+    method <- c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest")
   }
-  method <- match.arg(method, c("cook", "mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
+  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
 
   # Remove non-numerics
   data <- insight::get_predictors(x)
@@ -149,7 +146,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 
   # Others
-  if(method != "cook"){
+  if(!all(method %in% c("cook", "pareto"))){
     df <- check_outliers(data, method, threshold, ...)
     df <- attributes(df)$data
   } else{
@@ -167,21 +164,6 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 
 
-
-
-
-  # dat[[".id"]] <- 1:nrow(dat)
-  # dat[[".outliers"]] <- dist > threshold
-  # dat[[".distance"]] <- dist
-  #
-  # class(dat) <- c("check_outliers", "see_check_outliers", "data.frame")
-  # attr(dat, "threshold") <- threshold
-  # attr(dat, "method") <- method
-  # attr(dat, "text_size") <- 3
-  # Attributes
-  # class(df) <- c("check_outliers", "see_check_outliers", class(df))
-
-
   # Composite outlier score
   df$Outlier <- rowMeans(df[grepl("Outlier_", names(df))])
   df <- df[c(names(df)[names(df) != "Outlier"], "Outlier")]
@@ -189,6 +171,8 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   # Out
   outlier <- df$Outlier
 
+  # Attributes
+  class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
   attr(outlier, "data") <- df
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
@@ -211,7 +195,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 #' @rdname check_outliers
 #' @export
 check_outliers.data.frame <- function(x,
-                                      method = c("mahalanobis", "mcd", "ics", "optics", "iforest"),
+                                      method = "mahalanobis",
                                       threshold = NULL, ...) {
 
   # Remove non-numerics
@@ -221,7 +205,7 @@ check_outliers.data.frame <- function(x,
   if(all(method == "all")){
     method <- c("mahalanobis", "mcd", "ics", "optics", "iforest")
   }
-  method <- match.arg(method, c("mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
+  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
 
   # Thresholds
   if(is.null(threshold)){
@@ -272,7 +256,7 @@ check_outliers.data.frame <- function(x,
   outlier <- df$Outlier
 
   # Attributes
-  # class(df) <- c("check_outliers", "see_check_outliers", class(df))
+  class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
   attr(outlier, "data") <- df
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
@@ -532,3 +516,56 @@ check_outliers.data.frame <- function(x,
   list("data_iforest" = out,
        "threshold_iforest" = threshold)
 }
+
+
+# # Plot test
+# library(performance)
+# mt1 <- mtcars[, c(1, 3, 4)]
+# mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 120)))
+# model <- lm(disp ~ mpg + hp, data = mt2)
+#
+# x <- check_outliers(model, method = "all")
+#
+# # Data plot ---------------
+# library(parameters)
+#
+# data_plot_outliers <- function(x){
+#   data <- attributes(x)$data
+#   row.names(data) <- data$Obs
+#
+#   # Extract distances
+#   d <- data[grepl("Distance_", names(data))]
+#   d <- parameters::normalize(d)
+#
+#   d_long <- stats::reshape(
+#     d,
+#     direction = "long",
+#     varying = list(names(d)),
+#     sep = "_",
+#     v.names = "Distance",
+#     timevar = "Method",
+#     times = names(d)
+#   )
+#   d_long$Obs <- as.factor(d_long$id)
+#   row.names(d_long) <- d_long$id <- NULL
+#   d_long$Method <- gsub("Distance_", "", d_long$Method)
+#   d_long
+# }
+#
+#
+# # Plot ---------------
+# library(tidyverse)
+# library(see)
+#
+# x <- check_outliers(model, method = "all")
+#
+#
+# x %>%
+#   data_plot_outliers() %>%
+#   ggplot(aes(x = Obs, y = Distance, fill = Method, group = Method)) +
+#   # geom_vline(xintercept = as.character(c(1, 2))) +
+#   geom_bar(position = "dodge", stat = "identity") +
+#   scale_fill_viridis_d() +
+#   theme_modern()  +
+#   theme(axis.text.x = element_text(colour = ifelse(as.numeric(x) >= 0.5, "red", "darkgrey")),
+#         panel.grid.major.x = element_line(linetype = "dashed", colour = ifelse(as.numeric(x) >= 0.5, "red", "lightgrey")))
