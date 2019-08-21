@@ -94,7 +94,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @keywords internal
 .check_collinearity_zi_model <- function(x, component) {
   if (component == "count") component <- "conditional"
   if (component == "zi") component <- "zero_inflated"
@@ -130,7 +129,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @keywords internal
 .check_collinearity <- function(x, component) {
   v <- .vcov_as_matrix(x, component)
   assign <- .term_assignments(x, component)
@@ -192,7 +190,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 #' @importFrom stats vcov
-#' @keywords internal
 .vcov_as_matrix <- function(x, component) {
   if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
     switch(
@@ -219,7 +216,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 #' @importFrom stats model.matrix
-#' @keywords internal
 .term_assignments <- function(x, component) {
   tryCatch({
     if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
@@ -259,7 +255,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 #' @importFrom insight get_data find_predictors find_parameters clean_names
-#' @keywords internal
 .find_term_assignment <- function(x, component) {
   pred <- insight::find_predictors(x)[[component]]
   dat <- insight::get_data(x)[, pred]

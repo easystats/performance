@@ -69,12 +69,12 @@
 #' }
 #'
 #' @references \itemize{
-#' \item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
-#' \item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
 #' \item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
+#' \item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
+#' \item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
+#' \item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
 #' \item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
 #' \item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
-#' \item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
 #' }
 #'
 #' @examples
@@ -106,12 +106,6 @@
 check_outliers <- function(x, ...) {
   UseMethod("check_outliers")
 }
-
-
-
-
-
-
 
 
 
@@ -178,14 +172,6 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   attr(outlier, "text_size") <- 3
   outlier
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -309,7 +295,6 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 
 
-#' @keywords internal
 .check_outliers_pareto <- function(x, threshold = 0.7) {
 
   # Install packages
@@ -332,8 +317,6 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     "threshold_pareto" = threshold
   )
 }
-
-
 
 
 
@@ -436,9 +419,6 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 
 
-
-
-#' @keywords internal
 .check_outliers_optics <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -461,6 +441,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     "threshold_optics" = threshold
   )
 }
+
 
 
 #' @importFrom stats median qnorm mad
