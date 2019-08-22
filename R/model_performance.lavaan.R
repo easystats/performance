@@ -12,10 +12,13 @@
 #' \itemize{
 #'    \item \strong{Chisq}: The model Chi-squared assesses overall fit and the discrepancy between the sample and fitted covariance matrices. Its p-value should be > .05 (i.e., the hypothesis of a perfect cannot be rejected). However, it is quite sensitive to sample size.
 #'    \item \strong{GFI/AGFI}: The (Adjusted) Goodness of Fit is the proportion of variance accounted for by the estimated population covariance. Analogous to R2. The GFI and the AGFI should be > .95 and > .90, respectively.
-#'    \item \strong{NFI/NNFI/TLI}: The (Non) Normed Fit Index. An NFI of 0.95, indicates the model of interest improves the fit by 95\% relative to the null model. The NNFI (also called the Tucker Lewis index; TLI) is preferable for smaller samples. They should be > .90 (Byrne, 1994) or > .95 (Schumacker \& Lomax, 2004).
-#'    \item \strong{CFI}: The Comparative Fit Index is a revised form of NFI. Not very sensitive to sample size (Fan, Thompson, \& Wang, 1999). Compares the fit of a target model to the fit of an independent, or null, model. It should be > .90.
-#'    \item \strong{RMSEA}: The Root Mean Square Error of Approximation is a parsimony-adjusted index. Values closer to 0 represent a good fit. It should be < .08 or < .05. The p value printed with it tests the hypothesis that RMSEA is less than or equal to .05 (a cutoff sometimes used for good fit), and thus should be not significant.
+#'    \item \strong{NFI/NNFI/TLI}: The (Non) Normed Fit Index. An NFI of 0.95, indicates the model of interest improves the fit by 95\% relative to the null model. The NNFI (also called the Tucker Lewis index; TLI) is preferable for smaller samples. They should be > .90 (Byrne, 1994) or > .95 (Schumacker & Lomax, 2004).
+#'    \item \strong{CFI}: The Comparative Fit Index is a revised form of NFI. Not very sensitive to sample size (Fan, Thompson, & Wang, 1999). Compares the fit of a target model to the fit of an independent, or null, model. It should be > .90.
+#'    \item \strong{RMSEA}: The Root Mean Square Error of Approximation is a parsimony-adjusted index. Values closer to 0 represent a good fit. It should be < .08 or < .05. The p-value printed with it tests the hypothesis that RMSEA is less than or equal to .05 (a cutoff sometimes used for good fit), and thus should be not significant.
 #'    \item \strong{RMR/SRMR}: the (Standardized) Root Mean Square Residual represents the square-root of the difference between the residuals of the sample covariance matrix and the hypothesized model. As the RMR can be sometimes hard to interpret, better to use SRMR. Should be < .08.
+#'    \item \strong{RFI}: the Relative Fit Index, also known as RHO1, is not guaranteed to vary from 0 to 1. However, RFI close to 1 indicates a good fit.
+#'    \item \strong{IFI}: the Incremental Fit Index (IFI) adjusts the Normed Fit Index (NFI) for sample size and degrees of freedom (Bollen's, 1989). Over 0.90 is a good fit, but the index can exceed 1.
+#'    \item \strong{PNFI}: the Parsimony-Adjusted Measures Index. There is no commonly agreed-upon cutoff value for an acceptable model for this index. Should be > 0.50.
 #' }
 #' See the documentation for \code{\link[lavaan]{fitmeasures}}.
 #' }
