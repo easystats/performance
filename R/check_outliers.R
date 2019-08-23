@@ -539,6 +539,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   out$Distance_LOF <- log(dbscan::lof(x, k = ncol(x)-1))
 
   # Threshold
+  # TODO: use tukey_mc from bigutilsr package
   cutoff <- stats::qnorm(1 - threshold) * stats::sd(out$Distance_LOF)
 
   # Filter
