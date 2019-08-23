@@ -63,12 +63,17 @@ columns). By default, the alpha threshold is set to 0.025 (corresponding to the
 2.5\% most extreme observations; Cabana, 2019). This criterion is a natural extension of the
 median plus or minus a coefficient times the MAD method (Leys et al., 2013).
 
+\item \strong{Robust Mahalanobis Distance}:
+A robust version of Mahalanobis distance using an Orthogonalized
+Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring, 1972).
+Requires the \pkg{bigutilsr} package.
+
 \item \strong{Minimum Covariance Determinant (MCD)}:
-Leys et al. (2018) argue that Mahalanobis Distance s not a robust way to
+Another robust version of Mahalanobis. Leys et al. (2018) argue that Mahalanobis Distance is not a robust way to
 determine outliers, as it uses the means and covariances of all the data
 – including the outliers – to determine individual difference scores. Minimum
 Covariance Determinant calculates the mean and covariance matrix based on the
-most central subset of the data (for instance, 50\%), before computing the
+most central subset of the data (by default, 66\%), before computing the
 Mahalanobis Distance. This is deemed to be a more robust method of identifying
 and removing outliers than regular Mahalanobis distance.
 
@@ -84,7 +89,18 @@ and removing outliers than regular Mahalanobis distance.
 
 \item \strong{Isolation Forest}:
  The outliers are detected using the anomaly score of an isolation forest (a class of random forest). The default threshold
- of 0.025 will classify as outliers the observations located at \code{qnorm(1-0.025) * MAD)} (a robust equivalent of SD) of the median (roughly corresponding to the 2.5\% most extreme observations).
+ of 0.025 will classify as outliers the observations located at \code{qnorm(1-0.025) * MAD)} (a robust equivalent of SD) of the median (roughly corresponding to the 2.5\% most extreme observations). Requires the \pkg{solitude} package.
+
+ \item \strong{Local Outlier Factor}:
+ Based on a K nearest neighbours algorithm, LOF compares the local density
+ of an point to the local densities of its neighbors instead of computing a
+ distance from the center (Breunig et al., 2000). Points that have a
+ substantially lower density than their neighbors are considered outliers.
+ A LOF score of approximately 1 indicates that density around the point is
+ comparable to its neighbors. Scores significantly larger than 1 indicate outliers.
+ The default threshold of 0.025 will classify as outliers the observations
+ located at \code{qnorm(1-0.025) * SD)} of the log-transformed LOF distance.
+ Requires the \pkg{dbscan} package.
 }
 }
 \examples{
@@ -109,6 +125,7 @@ model <- stan_glm(disp ~ mpg + hp, data = mt2, refresh = 0)
 
 # For dataframes
 check_outliers(mtcars)
+check_outliers(mtcars, method = "all")
 }
 }
 \references{

@@ -40,6 +40,7 @@ Suggests:
 	AER,
 	betareg,
 	brms,
+	bigutilsr,
 	dbscan,
 	covr,
 	glmmTMB,
