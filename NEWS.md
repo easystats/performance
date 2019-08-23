@@ -6,6 +6,7 @@
 
 ## Changes to functions
 
+* `check_outliers()` now also works on data frames.
 * `performance_score()` now also works on `stan_lmer()` and `stan_glmer()` objects.
 
 ## Bug fixes

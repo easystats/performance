@@ -85,12 +85,12 @@
 #' }
 #'
 #' @references \itemize{
-#' \item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
-#' \item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
 #' \item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
+#' \item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
+#' \item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
+#' \item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
 #' \item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
 #' \item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
-#' \item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
 #' }
 #'
 #' @examples
@@ -123,12 +123,6 @@
 check_outliers <- function(x, ...) {
   UseMethod("check_outliers")
 }
-
-
-
-
-
-
 
 
 
@@ -200,19 +194,9 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 
 
-
-
-
-
-
-
-
-
 #' @rdname check_outliers
 #' @export
-check_outliers.data.frame <- function(x,
-                                      method = "mahalanobis",
-                                      threshold = NULL, ...) {
+check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NULL, ...) {
 
   # Remove non-numerics
   x <- x[, sapply(x, is.numeric), drop = FALSE]
@@ -253,10 +237,12 @@ check_outliers.data.frame <- function(x,
   if ("ics" %in% c(method)) {
     out <- c(out, .check_outliers_ics(x, threshold = thresholds$ics))
   }
+
   # OPTICS
   if ("optics" %in% c(method)) {
     out <- c(out, .check_outliers_optics(x, threshold = thresholds$optics))
   }
+
   # Isolation Forest
   if ("iforest" %in% c(method)) {
     out <- c(out, .check_outliers_iforest(x, threshold = thresholds$iforest))
@@ -293,12 +279,7 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
-#' @keywords internal
+#' @importFrom stats qf qchisq
 .check_outliers_thresholds <- function(x,
                                        cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
                                        pareto = 0.7,
@@ -325,24 +306,7 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' @keywords internal
+#' @importFrom stats cooks.distance
 .check_outliers_cook <- function(x, threshold = NULL) {
   # Compute
   d <- unname(stats::cooks.distance(x))
@@ -362,7 +326,6 @@ check_outliers.data.frame <- function(x,
 
 
 
-#' @keywords internal
 .check_outliers_pareto <- function(x, threshold = 0.7) {
 
   # Install packages
@@ -389,9 +352,7 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-#' @keywords internal
+#' @importFrom stats mahalanobis cov
 .check_outliers_mahalanobis <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -434,20 +395,8 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
-
-
-
-
-#' @keywords internal
 .check_outliers_mcd <- function(x, threshold = NULL, percentage_central = .50) {
   out <- data.frame(Obs = 1:nrow(x))
-
-
 
   # Install packages
   if (!requireNamespace("MASS", quietly = TRUE)) {
@@ -467,10 +416,6 @@ check_outliers.data.frame <- function(x,
     "threshold_mcd" = threshold
   )
 }
-
-
-
-
 
 
 
@@ -529,14 +474,6 @@ check_outliers.data.frame <- function(x,
 
 
 
-
-
-
-
-
-
-
-#' @keywords internal
 .check_outliers_optics <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -561,7 +498,8 @@ check_outliers.data.frame <- function(x,
 }
 
 
-#' @keywords internal
+
+#' @importFrom stats median qnorm mad
 .check_outliers_iforest <- function(x, threshold = 0.025) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -575,7 +513,7 @@ check_outliers.data.frame <- function(x,
   out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
 
   # Threshold
-  cutoff <- median(out$Distance_iforest) + qnorm(1 - threshold) * mad(out$Distance_iforest)
+  cutoff <- stats::median(out$Distance_iforest) + stats::qnorm(1 - threshold) * stats::mad(out$Distance_iforest)
   # Filter
   out$Outlier_iforest <- as.numeric(out$Distance_iforest >= cutoff)
 
