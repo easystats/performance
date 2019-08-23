@@ -57,11 +57,11 @@ model_performance.lavaan <- function(model, metrics = "all", ...) {
 
   out <- data.frame(
     "Chisq" = measures$chisq,
-    "Chisq_DoF" = measures$df,
+    "Chisq_df" = measures$df,
     "Chisq_p" = measures$pvalue,
 
     "Baseline" = measures$baseline.chisq,
-    "Baseline_DoF" = measures$baseline.df,
+    "Baseline_df" = measures$baseline.df,
     "Baseline_p" = measures$baseline.pvalue,
 
     "GFI" = measures$gfi,
