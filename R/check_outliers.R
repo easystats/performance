@@ -44,12 +44,17 @@
 #' 2.5\% most extreme observations; Cabana, 2019). This criterion is a natural extension of the
 #' median plus or minus a coefficient times the MAD method (Leys et al., 2013).
 #'
+#' \item \strong{Robust Mahalanobis Distance}:
+#' A robust version of Mahalanobis distance using an Orthogonalized
+#' Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring, 1972).
+#' Requires the \pkg{bigutilsr} package.
+#'
 #' \item \strong{Minimum Covariance Determinant (MCD)}:
-#' Leys et al. (2018) argue that Mahalanobis Distance s not a robust way to
+#' Another robust version of Mahalanobis. Leys et al. (2018) argue that Mahalanobis Distance is not a robust way to
 #' determine outliers, as it uses the means and covariances of all the data
 #' – including the outliers – to determine individual difference scores. Minimum
 #' Covariance Determinant calculates the mean and covariance matrix based on the
-#' most central subset of the data (for instance, 50\%), before computing the
+#' most central subset of the data (by default, 66\%), before computing the
 #' Mahalanobis Distance. This is deemed to be a more robust method of identifying
 #' and removing outliers than regular Mahalanobis distance.
 #'
@@ -65,7 +70,18 @@
 #'
 #' \item \strong{Isolation Forest}:
 #'  The outliers are detected using the anomaly score of an isolation forest (a class of random forest). The default threshold
-#'  of 0.025 will classify as outliers the observations located at \code{qnorm(1-0.025) * MAD)} (a robust equivalent of SD) of the median (roughly corresponding to the 2.5\% most extreme observations).
+#'  of 0.025 will classify as outliers the observations located at \code{qnorm(1-0.025) * MAD)} (a robust equivalent of SD) of the median (roughly corresponding to the 2.5\% most extreme observations). Requires the \pkg{solitude} package.
+#'
+#'  \item \strong{Local Outlier Factor}:
+#'  Based on a K nearest neighbours algorithm, LOF compares the local density
+#'  of an point to the local densities of its neighbors instead of computing a
+#'  distance from the center (Breunig et al., 2000). Points that have a
+#'  substantially lower density than their neighbors are considered outliers.
+#'  A LOF score of approximately 1 indicates that density around the point is
+#'  comparable to its neighbors. Scores significantly larger than 1 indicate outliers.
+#'  The default threshold of 0.025 will classify as outliers the observations
+#'  located at \code{qnorm(1-0.025) * SD)} of the log-transformed LOF distance.
+#'  Requires the \pkg{dbscan} package.
 #' }
 #'
 #' @references \itemize{
@@ -99,6 +115,7 @@
 #'
 #' # For dataframes
 #' check_outliers(mtcars)
+#' check_outliers(mtcars, method = "all")
 #' }
 #' @importFrom insight n_obs get_predictors get_data
 #' @importFrom stats cooks.distance mahalanobis cov
@@ -116,9 +133,9 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
   # Check args
   if (all(method == "all")) {
-    method <- c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest")
+    method <- c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
   }
-  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
+  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
   # Remove non-numerics
   data <- insight::get_predictors(x)
@@ -186,9 +203,9 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   # Check args
   if (all(method == "all")) {
-    method <- c("mahalanobis", "mcd", "ics", "optics", "iforest")
+    method <- c("mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
   }
-  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest"), several.ok = TRUE)
+  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
   # Thresholds
   if (is.null(threshold)) {
@@ -206,9 +223,14 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     out <- c(out, .check_outliers_mahalanobis(x, threshold = thresholds$mahalanobis))
   }
 
+  # Robust Mahalanobis
+  if ("robust" %in% c(method)) {
+    out <- c(out, .check_outliers_robust(x, threshold = thresholds$robust))
+  }
+
   # MCD
   if ("mcd" %in% c(method)) {
-    out <- c(out, .check_outliers_mcd(x, threshold = thresholds$mcd, percentage_central = .50))
+    out <- c(out, .check_outliers_mcd(x, threshold = thresholds$mcd, percentage_central = .66))
   }
 
   # ICS
@@ -224,6 +246,11 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   # Isolation Forest
   if ("iforest" %in% c(method)) {
     out <- c(out, .check_outliers_iforest(x, threshold = thresholds$iforest))
+  }
+
+  # Local Outlier Factor
+  if ("lof" %in% c(method)) {
+    out <- c(out, .check_outliers_lof(x, threshold = thresholds$lof))
   }
 
   # Combine outlier data
@@ -257,19 +284,23 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
                                        cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
                                        pareto = 0.7,
                                        mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+                                       robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
                                        mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
                                        ics = 0.025,
                                        optics = 2 * ncol(x),
                                        iforest = 0.025,
+                                       lof = 0.025,
                                        ...) {
   list(
     "cook" = cook,
     "pareto" = pareto,
     "mahalanobis" = mahalanobis,
+    "robust" = robust,
     "mcd" = mcd,
     "ics" = ics,
     "optics" = optics,
-    "iforest" = iforest
+    "iforest" = iforest,
+    "lof" = lof
   )
 }
 
@@ -339,6 +370,29 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 }
 
 
+# Bigutils not yet fully available on CRAN
+.check_outliers_robust <- function(x, threshold = NULL) {
+  out <- data.frame(Obs = 1:nrow(x))
+
+  # Install packages
+  if (!requireNamespace("bigutilsr", quietly = TRUE)) {
+    stop("Package `bigutilsr` needed for this function to work. Please install it.", call. = FALSE)
+  }
+
+
+  # Compute
+  out$Distance_Robust <- bigutilsr::covRob(x, estim = "pairwiseGK")$dist
+
+  # Filter
+  out$Outlier_Robust <- as.numeric(out$Distance_Robust > threshold)
+
+  out$Obs <- NULL
+  list(
+    "data_robust" = out,
+    "threshold_robust" = threshold
+  )
+}
+
 
 
 .check_outliers_mcd <- function(x, threshold = NULL, percentage_central = .50) {
@@ -362,6 +416,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     "threshold_mcd" = threshold
   )
 }
+
 
 
 
@@ -466,5 +521,33 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   list(
     "data_iforest" = out,
     "threshold_iforest" = threshold
+  )
+}
+
+
+
+.check_outliers_lof <- function(x, threshold = NULL) {
+  out <- data.frame(Obs = 1:nrow(x))
+
+  # Install packages
+  if (!requireNamespace("dbscan", quietly = TRUE)) {
+    stop("Package `dbscan` needed for this function to work. Please install it.", call. = FALSE)
+  }
+
+
+  # Compute
+  out$Distance_LOF <- log(dbscan::lof(x, k = ncol(x)-1))
+
+  # Threshold
+  # TODO: use tukey_mc from bigutilsr package
+  cutoff <- stats::qnorm(1 - threshold) * stats::sd(out$Distance_LOF)
+
+  # Filter
+  out$Outlier_LOF <- as.numeric(out$Distance_LOF > cutoff)
+
+  out$Obs <- NULL
+  list(
+    "data_lof" = out,
+    "threshold_lof" = threshold
   )
 }
