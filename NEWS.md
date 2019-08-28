@@ -1,5 +1,9 @@
 # performance 0.3.1
 
+## General
+
+* `performance()` is an alias for `model_performance()`.
+
 ## Deprecated and Defunct
 
 * `principal_components()` is now deprecated and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now.

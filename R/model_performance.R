@@ -48,3 +48,7 @@
 model_performance <- function(model, ...) {
   UseMethod("model_performance")
 }
+
+
+#' @export
+performance <- model_performance
