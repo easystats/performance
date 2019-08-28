@@ -13,7 +13,7 @@ r:
 # Copied from broom
 sudo: required
 cache: packages
-bioc_required: true
+bioc_required: false
 warnings_are_errors: false
 
 env:
@@ -28,11 +28,3 @@ r_check_args: "--no-build-vignettes --as-cran"
 r_binary_packages:
   - rstanarm
   - rstan
-
-r_packages:
-  - rlang
-  - bindrcpp
-
-
-after_success:
-  - Rscript -e 'covr::codecov()'
