@@ -88,6 +88,15 @@ check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
 }
 
 #' @export
+check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
+  if (!requireNamespace("ordinal", quietly = TRUE))
+    stop("Package `ordinal` needed for this function to work. Please install it.")
+
+  vc <- ordinal::VarCorr(x)
+  any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
+}
+
+#' @export
 check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
   any(sapply(diag(x$D), function(.x) any(abs(.x) < tolerance)))
 }

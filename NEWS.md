@@ -13,6 +13,8 @@
 * `check_outliers()` now also works on data frames.
 * Added more methods to `check_outliers()`.
 * `performance_score()` now also works on `stan_lmer()` and `stan_glmer()` objects.
+* `check_singularity()` now works with models of class *clmm*.
+* `r2()` now works with models of class *clmm*.
 
 ## Bug fixes
 

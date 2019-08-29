@@ -242,6 +242,13 @@ r2.merMod <- function(model, ...) {
 
 
 #' @export
+r2.clmm <- function(model, ...) {
+  r2_nakagawa(model)
+}
+
+
+
+#' @export
 r2.mixed <- function(model, ...) {
   r2_nakagawa(model)
 }
