@@ -1,4 +1,4 @@
-#' @importFrom insight is_model all_models_equal get_response
+#' @importFrom insight is_model_supported all_models_equal get_response
 #' @importFrom bayestestR bayesfactor_models
 #' @inheritParams model_performance.lm
 #' @rdname model_performance
@@ -7,7 +7,7 @@ compare_performance <- function(..., metrics = "all", verbose = TRUE) {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
-  supported_models <- sapply(objects, function(i) insight::is_model(i) | inherits(i, "lavaan"))
+  supported_models <- sapply(objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
 
   if (!all(supported_models)) {
     warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
