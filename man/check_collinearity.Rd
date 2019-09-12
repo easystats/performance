@@ -42,6 +42,9 @@ The variance inflation factor is a measure to analyze the magnitude
   are a sign for high, not tolerable correlation of model predictors. The
   \emph{Increased SE} column in the output indicates how much larger
   the standard error is due to the correlation with other predictors.
+  \cr \cr
+  An informative blog post about collinearity can be found
+  \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{here}.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
