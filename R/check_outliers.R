@@ -1,7 +1,7 @@
 #' @title Outliers detection (check for influential observations)
 #' @name check_outliers
 #'
-#' @description Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary results of each method. It represents the probability of each observation of being classified as an outlier by a method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5.
+#' @description Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation of being classified as an outlier by at least one method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5 (i.e., that were classified as outliers by at least half of the methods).
 #'
 #' @param x A model or a data.frame object.
 #' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").
@@ -18,6 +18,7 @@
 #'
 #' @details Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.
 #'
+#' \subsection{Model-specific methods}{
 #' \itemize{
 #' \item \strong{Cook's Distance}:
 #'  Among outlier detection methods, Cook's distance and leverage are less common
@@ -31,7 +32,20 @@
 #'
 #' \item \strong{Pareto}:
 #' The reliability and approximate convergence of Bayesian models can be assessed using the estimates for the shape parameter k of the generalized Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the user should be warned, although in practice the authors of the \code{loo} package observed good performance for values of k up to 0.7 (the default threshold used by \code{performance}).
+#' }}
 #'
+#'
+#' \subsection{Univariate methods}{
+#' \itemize{
+#' \item \strong{Z-scores}:
+#'  The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean or, as it is here the case by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959, corresponding to the 2.5\% most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a data.frame is passed, then the maximum distance is kept for each observations. Thus, all observations that are extreme for at least one variable will be detected. However, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).
+#'
+#' \item \strong{IQR}:
+#'  Using the IQR (interquartile range) is a robust method developed by John Tukey, which often appears in box-and-whisker plots (e.g., in \code{geom_boxplot}). The interquartile range is the range between the first and the third quartiles. Tukey considered as outliers any data point that fell outside of either 1.5 times (the default threshold) the IQR below the first or above the third quartile. Similar to the Z-score method, this is a univariate method for outliers detection, returning outliers detected for at least one column, and might thus not be suited to high dimensional data.
+#' }}
+#'
+#' \subsection{Multivariate methods}{
+#' \itemize{
 #' \item \strong{Mahalanobis Distance}:
 #' Mahalanobis distance (Mahalanobis, 1930) is often used for multivariate outliers
 #' detection as this distance takes into account the shape of the observations.
@@ -82,11 +96,12 @@
 #'  The default threshold of 0.025 will classify as outliers the observations
 #'  located at \code{qnorm(1-0.025) * SD)} of the log-transformed LOF distance.
 #'  Requires the \pkg{dbscan} package.
-#' }
+#' }}
 #'
 #' @references \itemize{
 #' \item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
 #' \item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
+#' \item Iglewicz, B., & Hoaglin, D. C. (1993). How to detect and handle outliers (Vol. 16). Asq Press.
 #' \item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
 #' \item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
 #' \item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
@@ -94,6 +109,10 @@
 #' }
 #'
 #' @examples
+#' # Univariate
+#' check_outliers(mtcars$mpg)
+#'
+#' # Multivariate
 #' # select only mpg and disp (continuous)
 #' mt1 <- mtcars[, c(1, 3, 4)]
 #' # create some fake outliers and attach outliers to main df
@@ -133,9 +152,9 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
   # Check args
   if (all(method == "all")) {
-    method <- c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
+    method <- c("zscore", "iqr", "cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
   }
-  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
+  method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
   # Remove non-numerics
   data <- insight::get_predictors(x)
@@ -194,6 +213,19 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 
 
+
+#' @rdname check_outliers
+#' @export
+check_outliers.numeric <- function(x, method = "zscore", threshold = NULL, ...){
+  check_outliers(as.data.frame(x), method = method, threshold = threshold, ...)
+}
+
+
+
+
+
+
+
 #' @rdname check_outliers
 #' @export
 check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NULL, ...) {
@@ -203,9 +235,9 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   # Check args
   if (all(method == "all")) {
-    method <- c("mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
+    method <- c("zscore", "iqr", "mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
   }
-  method <- match.arg(method, c("cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
+  method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
   # Thresholds
   if (is.null(threshold)) {
@@ -218,6 +250,16 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   }
 
   out <- list()
+  # Z-score
+  if ("zscore" %in% c(method)) {
+    out <- c(out, .check_outliers_zscore(x, threshold = thresholds$zscore, robust = TRUE, method = "max"))
+  }
+
+  # IQR
+  if ("iqr" %in% c(method)) {
+    out <- c(out, .check_outliers_iqr(x, threshold = thresholds$iqr, method = "tukey"))
+  }
+
   # Mahalanobis
   if ("mahalanobis" %in% c(method)) {
     out <- c(out, .check_outliers_mahalanobis(x, threshold = thresholds$mahalanobis))
@@ -281,6 +323,8 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 #' @importFrom stats qf qchisq
 .check_outliers_thresholds <- function(x,
+                                       zscore = stats::qnorm(p = 1 - 0.025),
+                                       iqr = 1.5,
                                        cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
                                        pareto = 0.7,
                                        mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
@@ -292,6 +336,8 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
                                        lof = 0.025,
                                        ...) {
   list(
+    "zscore" = zscore,
+    "iqr" = iqr,
     "cook" = cook,
     "pareto" = pareto,
     "mahalanobis" = mahalanobis,
@@ -303,6 +349,67 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     "lof" = lof
   )
 }
+
+
+
+
+.check_outliers_zscore <- function(x, threshold = stats::qnorm(p = 1 - 0.025), robust = TRUE, method = "max") {
+  # Standardize
+  if(robust == FALSE){
+    d <- abs(as.data.frame(sapply(x, function(x) (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE))))
+  } else{
+    d <- abs(as.data.frame(sapply(x, function(x) (x - median(x, na.rm = TRUE)) / mad(x, na.rm = TRUE))))
+  }
+
+  out <- data.frame(Obs = 1:nrow(as.data.frame(d)))
+
+  out$Distance_Zscore <- sapply(as.data.frame(t(d)), method, na.rm = TRUE)
+
+  # Filter
+  out$Outlier_Zscore <- as.numeric(out$Distance_Zscore > threshold)
+
+  out$Obs <- NULL
+  list(
+    "data_zscore" = out,
+    "threshold_zscore" = threshold
+  )
+}
+
+
+
+#' @importFrom stats IQR
+.check_outliers_iqr <- function(x, threshold = 1.5, method = "tukey") {
+
+  d <- data.frame(Obs = 1:nrow(as.data.frame(x)))
+  for(col in 1:ncol(as.data.frame(x))){
+
+    v <- x[, col]
+
+    if(method == "tukey"){
+      iqr <- quantile(v, 0.75) - quantile(v, 0.25)
+    } else{
+      iqr <- IQR(v, na.rm = TRUE)
+    }
+
+    lower <- quantile(v, 0.25) - (iqr * threshold)
+    upper <- quantile(v, 0.75) + (iqr * threshold)
+
+    d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1,
+                                                ifelse(v < lower, 1, 0))
+  }
+  d$Obs <- NULL
+
+  out <- data.frame(Obs = 1:nrow(as.data.frame(d)))
+  out$Distance_IQR <- sapply(as.data.frame(t(d)), "mean", na.rm = TRUE)
+  out$Outlier_IQR <- sapply(as.data.frame(t(d)), "max", na.rm = TRUE)
+
+  out$Obs <- NULL
+  list(
+    "data_iqr" = out,
+    "threshold_iqr" = threshold
+  )
+}
+
 
 
 
