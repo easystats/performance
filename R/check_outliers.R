@@ -377,7 +377,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 
 
-#' @importFrom stats IQR
+#' @importFrom stats IQR quantile
 .check_outliers_iqr <- function(x, threshold = 1.5, method = "tukey") {
 
   d <- data.frame(Obs = 1:nrow(as.data.frame(x)))
@@ -386,9 +386,9 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     v <- x[, col]
 
     if(method == "tukey"){
-      iqr <- quantile(v, 0.75) - quantile(v, 0.25)
+      iqr <- stats::quantile(v, 0.75) - quantile(v, 0.25)
     } else{
-      iqr <- IQR(v, na.rm = TRUE)
+      iqr <- stats::IQR(v, na.rm = TRUE)
     }
 
     lower <- quantile(v, 0.25) - (iqr * threshold)
