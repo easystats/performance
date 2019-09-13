@@ -24,7 +24,7 @@ check_outliers(x, ...)
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are
 passed down to \code{ICSOutlier::ics.outlier()}.}
 
-\item{method}{The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").}
+\item{method}{The outlier detection method(s). Can be "all" or some of c("zscore", "iqr", "cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").}
 
 \item{threshold}{A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 considered as outlier. If \code{NULL}, default values will be used (see 'Details').}

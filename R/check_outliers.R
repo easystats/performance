@@ -4,7 +4,7 @@
 #' @description Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation of being classified as an outlier by at least one method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5 (i.e., that were classified as outliers by at least half of the methods).
 #'
 #' @param x A model or a data.frame object.
-#' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").
+#' @param method The outlier detection method(s). Can be "all" or some of c("zscore", "iqr", "cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest").
 #' @param threshold A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 #'   considered as outlier. If \code{NULL}, default values will be used (see 'Details').
 #'
@@ -300,7 +300,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   for (i in names(out[sapply(out, is.data.frame)])) {
     df <- cbind(df, out[[i]])
   }
-  # df$Obs <- NULL
+  df$Obs <- NULL  # Remove temp column
 
 
   # Composite outlier score
@@ -316,6 +316,18 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
   outlier
+}
+
+
+
+#' @export
+as.data.frame.check_outliers <- function(x, ...){
+  attributes(x)$data
+}
+
+#' @export
+as.numeric.check_outliers <- function(x, ...){
+  attributes(x)$data$Outlier
 }
 
 
@@ -349,7 +361,6 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     "lof" = lof
   )
 }
-
 
 
 
