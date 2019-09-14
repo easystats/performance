@@ -221,6 +221,35 @@ r2.lme <- function(model, ...) {
 
 
 #' @export
+r2.bigglm <- function(model, ...) {
+  list("R2_CoxSnell" = summary(model)$rsq)
+}
+
+
+
+#' @export
+r2.biglm <- function(model, ...) {
+  df.int <- ifelse(insight::has_intercept(model), 1, 0)
+  n <- insight::n_obs(model)
+
+  rsq <- summary(model)$rsq
+  adj.rsq <- 1 - (1 - rsq) * ((n - df.int) / model$df.resid)
+
+  out <- list(
+    R2 = rsq,
+    R2_adjusted = adj.rsq
+  )
+
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+
+  attr(out, "model_type") <- "Linear"
+  structure(class = "r2_generic", out)
+}
+
+
+
+#' @export
 r2.lmrob <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
