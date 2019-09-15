@@ -6,7 +6,7 @@
 
 ## Deprecated and Defunct
 
-* `principal_components()` is now deprecated and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now.
+* `principal_components()` was removed and re-implemented in the **parameters**-package. Please use `parameters::principal_components()` now.
 
 ## Changes to functions
 
@@ -19,7 +19,6 @@
 ## Bug fixes
 
 * Fixed bug in `compare_performance()` that toggled a warning although models were fit from same data.
-* Fixed bug in `principal_components()` that did not return more components when rotation was not Varimax.
 
 # performance 0.3.0
 
