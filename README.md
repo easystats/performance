@@ -3,6 +3,8 @@
 
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
 [![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
+[![Build
+Status](https://travis-ci.org/easystats/performance.svg?branch=master)](https://travis-ci.org/easystats/performance)
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![total](http://cranlogs.r-pkg.org/badges/grand-total/performance)](http://cranlogs.r-pkg.org/)
 
@@ -93,7 +95,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.409 [0.120]
+#>      Marginal R2: 0.410 [0.123]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -140,14 +142,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.54 0.77]
+#> Ratio: 0.39  CI 95%: [-0.51 0.78]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.75  CI 95%: [ 8.55 56.61]
-#> Conditioned on rand. effects: 37.74  CI 95%: [24.77 55.78]
+#> Conditioned on fixed effects: 22.81  CI 95%: [ 8.50 58.48]
+#> Conditioned on rand. effects: 37.66  CI 95%: [24.65 56.23]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.40  CI 95%: [-18.81 35.55]
+#> Difference: 14.08  CI 95%: [-18.80 35.95]
 ```
 
 ## Model diagnostics

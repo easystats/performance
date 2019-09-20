@@ -19,6 +19,7 @@
 ## Bug fixes
 
 * Fixed bug in `compare_performance()` that toggled a warning although models were fit from same data.
+* Fixed bug in `check_model()` for *glmmTMB* models that occured when checking for outliers.
 
 # performance 0.3.0
 

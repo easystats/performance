@@ -623,7 +623,7 @@ as.numeric.check_outliers <- function(x, ...){
 
 
 
-#' @importFrom stats median qnorm mad
+#' @importFrom stats median qnorm mad sd
 .check_outliers_iforest <- function(x, threshold = 0.025) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -660,7 +660,7 @@ as.numeric.check_outliers <- function(x, ...){
 
 
   # Compute
-  out$Distance_LOF <- log(dbscan::lof(x, k = ncol(x)-1))
+  out$Distance_LOF <- log(dbscan::lof(x, k = ncol(x) - 1))
 
   # Threshold
   # TODO: use tukey_mc from bigutilsr package
@@ -674,4 +674,11 @@ as.numeric.check_outliers <- function(x, ...){
     "data_lof" = out,
     "threshold_lof" = threshold
   )
+}
+
+
+
+#' @export
+check_outliers.glmmTMB <- function(x, ...) {
+  NULL
 }
