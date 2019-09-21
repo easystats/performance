@@ -110,8 +110,14 @@ check_overdispersion.glmmTMB <- function(x, ...) {
 }
 
 
+#' @importFrom insight model_info
 #' @importFrom stats df.residual residuals pchisq
 check_overdispersion.lme4 <- function(x) {
+  # check if we have poisson
+  if (!insight::model_info(x)$is_poisson) {
+    stop("Model must be from Poisson-family.", call. = F)
+  }
+
   rdf <- stats::df.residual(x)
   rp <- stats::residuals(x, type = "pearson")
   Pearson.chisq <- sum(rp^2)

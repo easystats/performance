@@ -15,6 +15,7 @@
 * `performance_score()` now also works on `stan_lmer()` and `stan_glmer()` objects.
 * `check_singularity()` now works with models of class *clmm*.
 * `r2()` now works with models of class *clmm*, *bigglm* and *biglm*.
+* `check_overdispersion()` for mixed models now checks that model family is Poisson.
 
 ## Bug fixes
 
