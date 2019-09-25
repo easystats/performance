@@ -15,21 +15,25 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,10 +41,11 @@
 
 
 
-<meta property="og:title" content="Changelog" />
 
+<meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -52,6 +57,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -78,7 +84,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -101,7 +107,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -111,6 +116,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -124,25 +130,59 @@
 <h1 class="page-header">
 <a href="#performance-031" class="anchor"></a>performance 0.3.1<small> Unreleased </small>
 </h1>
+<div id="general" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>
+<code>performance()</code> is an alias for <code><a href="../reference/model_performance.html">model_performance()</a></code>.</li>
+</ul>
+</div>
+<div id="deprecated-and-defunct" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecated-and-defunct" class="anchor"></a>Deprecated and Defunct</h2>
+<ul>
+<li>
+<code>principal_components()</code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://rdrr.io/pkg/parameters/man/principal_components.html">parameters::principal_components()</a></code> now.</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</li>
+<li>Added more methods to <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</li>
+<li>
+<code><a href="../reference/performance_score.html">performance_score()</a></code> now also works on <code>stan_lmer()</code> and <code>stan_glmer()</code> objects.</li>
+<li>
+<code><a href="../reference/check_singularity.html">check_singularity()</a></code> now works with models of class <em>clmm</em>.</li>
+<li>
+<code><a href="../reference/r2.html">r2()</a></code> now works with models of class <em>clmm</em>, <em>bigglm</em> and <em>biglm</em>.</li>
+<li>
+<code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</li>
+</ul>
+</div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/model_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
+<li>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occured when checking for outliers.</li>
 </ul>
 </div>
 </div>
     <div id="performance-030" class="section level1">
 <h1 class="page-header">
-<a href="#performance-030" class="anchor"></a>performance 0.3.0<small> Unreleased </small>
+<a href="#performance-030" class="anchor"></a>performance 0.3.0<small> 2019-08-05 </small>
 </h1>
-<div id="general" class="section level2">
+<div id="general-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
-<li>Many <code>check_*()</code>-methods now get a <code><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
+<li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
 <li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code>-method.</li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>-method.</li>
 </ul>
 </div>
 <div id="breaking-changes" class="section level2">
@@ -154,9 +194,9 @@
 <code><a href="../reference/model_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</li>
@@ -167,7 +207,7 @@
 <li>
 <code><a href="../reference/check_model.html">check_model()</a></code> gets a <code>check</code>-argument to plot selected checks only.</li>
 <li>
-<code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with <code><a href="https://www.rdocumentation.org/packages/MuMIn/topics/r.squaredGLMM">MuMIn::r.squaredGLMM()</a></code>, which returned a value for models with singular fit.</li>
+<code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with <code><a href="https://rdrr.io/pkg/MuMIn/man/r.squaredGLMM.html">MuMIn::r.squaredGLMM()</a></code>, which returned a value for models with singular fit.</li>
 <li>
 <code><a href="../reference/check_distribution.html">check_distribution()</a></code> now detects negative binomial and zero-inflated distributions. Furthermore, attempt to improve accuracy.</li>
 <li>
@@ -198,9 +238,9 @@
 <h1 class="page-header">
 <a href="#performance-020" class="anchor"></a>performance 0.2.0<small> 2019-06-04 </small>
 </h1>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h2>
+<a href="#general-2" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</li>
@@ -268,9 +308,9 @@
 <code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>
@@ -309,19 +349,23 @@
 
 </div>
 
+
       <footer>
       <div class="copyright">
   <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

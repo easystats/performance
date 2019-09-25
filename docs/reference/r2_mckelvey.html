@@ -15,21 +15,25 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -37,12 +41,12 @@
 
 
 
+
 <meta property="og:title" content="McKelvey &amp; Zavoinas R2 — r2_mckelvey" />
-
 <meta property="og:description" content="Calculates McKelvey &amp;amp; Zavoinas pseudo R2." />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -54,6 +58,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -80,7 +85,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +108,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
@@ -113,6 +117,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -124,13 +129,11 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Calculates McKelvey &amp; Zavoinas pseudo R2.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>r2_mckelvey</span>(<span class='no'>model</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -139,11 +142,10 @@
       <td><p>Generalized linear model.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The R2 value.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>McKelvey &amp; Zavoinas R2 is based on the explained variance,
@@ -153,21 +155,21 @@
   for logit-link and 1 for probit-link. For poisson-models, the
   residual variance is based on log-normal approximation, similar to
   the <em>distribution-specific variance</em> as described in
-  <code><a href='https://www.rdocumentation.org/packages/insight/topics/get_variance'>get_variance</a></code>.</p>
-    
+  <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance</a></code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <ul>
+    
+<ul>
 <li><p>McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.</p></li>
 </ul>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Dobson (1990) Page 93: Randomized Controlled Trial:</span>
-<span class='no'>counts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>17</span>,<span class='fl'>15</span>,<span class='fl'>20</span>,<span class='fl'>10</span>,<span class='fl'>20</span>,<span class='fl'>25</span>,<span class='fl'>13</span>,<span class='fl'>12</span>)<span class='co'>#</span>
-<span class='no'>outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/gl'>gl</a></span>(<span class='fl'>3</span>,<span class='fl'>1</span>,<span class='fl'>9</span>)
-<span class='no'>treatment</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/gl'>gl</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/glm'>glm</a></span>(<span class='no'>counts</span> ~ <span class='no'>outcome</span> + <span class='no'>treatment</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/family'>poisson</a></span>())
+<span class='no'>counts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>,<span class='fl'>17</span>,<span class='fl'>15</span>,<span class='fl'>20</span>,<span class='fl'>10</span>,<span class='fl'>20</span>,<span class='fl'>25</span>,<span class='fl'>13</span>,<span class='fl'>12</span>)<span class='co'>#</span>
+<span class='no'>outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>,<span class='fl'>1</span>,<span class='fl'>9</span>)
+<span class='no'>treatment</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>,<span class='fl'>3</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>counts</span> ~ <span class='no'>outcome</span> + <span class='no'>treatment</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>poisson</a></span>())
 
 <span class='fu'>r2_mckelvey</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; McKelvey's R2 
 #&gt;     0.3776292 </div><div class='input'>
@@ -177,18 +179,15 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#references">References</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -196,13 +195,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
