@@ -608,11 +608,16 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Compute
   rez <- dbscan::optics(x, minPts = threshold)
-  rez <- dbscan::extractXi(rez, xi = 0.05)
+  rez <- dbscan::extractXi(rez, xi = 0.05)  # TODO: find automatic way of setting xi
 
   out$Distance_OPTICS <- rez$coredist
   # Filter
-  out$Outlier_OPTICS <- as.numeric(rez$cluster == 0)
+  if(is.null(rez$cluster)){
+    out$Outlier_OPTICS <- 0
+  } else{
+    out$Outlier_OPTICS <- as.numeric(rez$cluster == 0)
+  }
+
 
   out$Obs <- NULL
   list(
