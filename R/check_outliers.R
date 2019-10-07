@@ -102,6 +102,25 @@
 #'  Requires the \pkg{dbscan} package.
 #' }}
 #'
+#' \subsection{Threshold specification}{
+#' Default thresholds are currently specified as follows:
+#'
+#' \code{
+#' list(
+#'   zscore = stats::qnorm(p = 1 - 0.025),
+#'   iqr = 1.5,
+#'   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+#'   pareto = 0.7,
+#'   mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+#'   robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+#'   mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+#'   ics = 0.025,
+#'   optics = 2 * ncol(x),
+#'   iforest = 0.025,
+#'   lof = 0.025
+#' )
+#' }}
+#'
 #' @references \itemize{
 #' \item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
 #' \item Gnanadesikan, R., \& Kettenring, J. R. (1972). Robust estimates, residuals, and outlier detection with multiresponse data. Biometrics, 81-124.
@@ -403,13 +422,13 @@ as.numeric.check_outliers <- function(x, ...){
     v <- x[, col]
 
     if(method == "tukey"){
-      iqr <- stats::quantile(v, 0.75) - quantile(v, 0.25)
+      iqr <- stats::quantile(v, 0.75, na.rm = TRUE) - stats::quantile(v, 0.25, na.rm = TRUE)
     } else{
       iqr <- stats::IQR(v, na.rm = TRUE)
     }
 
-    lower <- quantile(v, 0.25) - (iqr * threshold)
-    upper <- quantile(v, 0.75) + (iqr * threshold)
+    lower <- stats::quantile(v, 0.25, na.rm = TRUE) - (iqr * threshold)
+    upper <- stats::quantile(v, 0.75, na.rm = TRUE) + (iqr * threshold)
 
     d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1,
                                                 ifelse(v < lower, 1, 0))
@@ -417,8 +436,8 @@ as.numeric.check_outliers <- function(x, ...){
   d$Obs <- NULL
 
   out <- data.frame(Obs = 1:nrow(as.data.frame(d)))
-  out$Distance_IQR <- sapply(as.data.frame(t(d)), "mean", na.rm = TRUE)
-  out$Outlier_IQR <- sapply(as.data.frame(t(d)), "max", na.rm = TRUE)
+  out$Distance_IQR <- sapply(as.data.frame(t(d)), function(x) {ifelse(all(is.na(x)), NA, mean(x))})
+  out$Outlier_IQR <- sapply(as.data.frame(t(d)), function(x) {ifelse(all(is.na(x)), NA, max(x))})
 
   out$Obs <- NULL
   list(
