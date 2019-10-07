@@ -380,7 +380,7 @@ as.numeric.check_outliers <- function(x, ...){
 
   out <- data.frame(Obs = 1:nrow(as.data.frame(d)))
 
-  out$Distance_Zscore <- sapply(as.data.frame(t(d)), method, na.rm = TRUE)
+  out$Distance_Zscore <- sapply(as.data.frame(t(d)), method, na.omit = TRUE, na.rm = TRUE)
 
   # Filter
   out$Outlier_Zscore <- as.numeric(out$Distance_Zscore > threshold)
