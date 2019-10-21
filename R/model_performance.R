@@ -50,5 +50,6 @@ model_performance <- function(model, ...) {
 }
 
 
+#' @rdname model_performance
 #' @export
 performance <- model_performance

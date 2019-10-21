@@ -3,11 +3,14 @@
 \name{compare_performance}
 \alias{compare_performance}
 \alias{model_performance}
+\alias{performance}
 \title{Model Performance}
 \usage{
 compare_performance(..., metrics = "all", verbose = TRUE)
 
 model_performance(model, ...)
+
+performance(model, ...)
 }
 \arguments{
 \item{...}{Arguments passed to or from other methods, resp. for
