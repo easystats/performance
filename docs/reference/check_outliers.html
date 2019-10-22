@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -255,6 +255,24 @@ and removing outliers than regular Mahalanobis distance.</p></li>
  Requires the <span class="pkg">dbscan</span> package.</p></li>
 </ul>
 
+<h3>Threshold specification</h3>
+<p>Default thresholds are currently specified as follows:</p>
+<p><code><a href='https://rdrr.io/r/base/list.html'>
+list(
+  zscore = stats::qnorm(p = 1 - 0.025),
+  iqr = 1.5,
+  cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+  pareto = 0.7,
+  mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+  robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+  mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+  ics = 0.025,
+  optics = 2 * ncol(x),
+  iforest = 0.025,
+  lof = 0.025
+)
+</a></code></p>
+
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -293,7 +311,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 
 <span class='co'># For Bayesian models</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rstanarm</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/rstanarm/man/stan_glm.html'>stan_glm</a></span>(<span class='no'>disp</span> ~ <span class='no'>mpg</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mt2</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>disp</span> ~ <span class='no'>mpg</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mt2</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
 
 <span class='co'># For dataframes</span>
 <span class='fu'>check_outliers</span>(<span class='no'>mtcars</span>)
