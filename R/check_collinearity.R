@@ -132,8 +132,10 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
+
+#' @importFrom insight get_varcov
 .check_collinearity <- function(x, component) {
-  v <- .vcov_as_matrix(x, component)
+  v <- insight::get_varcov(x, component = component)
   assign <- .term_assignments(x, component)
 
   if (insight::has_intercept(x)) {
@@ -186,34 +188,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
       stringsAsFactors = FALSE
     )
   )
-}
-
-
-
-
-## TODO replace with insight's get_varcov()?
-
-#' @importFrom stats vcov
-.vcov_as_matrix <- function(x, component) {
-  if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
-    switch(
-      component,
-      conditional = as.matrix(stats::vcov(x, model = "count")),
-      zero_inflated = as.matrix(stats::vcov(x, model = "zero"))
-    )
-  } else if (inherits(x, "MixMod")) {
-    switch(
-      component,
-      conditional = as.matrix(stats::vcov(x, parm = "fixed-effects")),
-      zero_inflated = as.matrix(stats::vcov(x, parm = "zero_part"))
-    )
-  } else {
-    switch(
-      component,
-      conditional = as.matrix(.collapse_cond(stats::vcov(x))),
-      zero_inflated = as.matrix(.collapse_zi(stats::vcov(x)))
-    )
-  }
 }
 
 
