@@ -1,3 +1,9 @@
+# performance 0.4.1
+
+## Minor changes
+
+* `check_collinearity()` now no longer returns backticks in row- and column names.
+
 # performance 0.4.0
 
 ## General
