@@ -174,18 +174,22 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
   structure(
     class = c("check_collinearity", "see_check_collinearity", "data.frame"),
-    data.frame(
-      Parameter = terms,
-      VIF = result,
-      SE_factor = sqrt(result),
-      stringsAsFactors = FALSE
+    .remove_backticks_from_parameter_names(
+      data.frame(
+        Parameter = terms,
+        VIF = result,
+        SE_factor = sqrt(result),
+        stringsAsFactors = FALSE
+      )
     ),
-    data = data.frame(
-      Parameter = terms,
-      VIF = result,
-      SE_factor = sqrt(result),
-      Component = component,
-      stringsAsFactors = FALSE
+    data = .remove_backticks_from_parameter_names(
+      data.frame(
+        Parameter = terms,
+        VIF = result,
+        SE_factor = sqrt(result),
+        Component = component,
+        stringsAsFactors = FALSE
+      )
     )
   )
 }
@@ -253,14 +257,4 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     insight::clean_names(insight::find_parameters(x)[["zero_inflated"]]),
     parms
   )])
-}
-
-
-
-.collapse_zi <- function(x) {
-  if (is.list(x) && "zi" %in% names(x)) {
-    x[["zi"]]
-  } else {
-    x
-  }
 }
