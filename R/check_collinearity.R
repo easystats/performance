@@ -191,6 +191,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
+## TODO replace with insight's get_varcov()?
 
 #' @importFrom stats vcov
 .vcov_as_matrix <- function(x, component) {
