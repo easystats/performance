@@ -4,6 +4,10 @@
 
 * `check_collinearity()` now no longer returns backticks in row- and column names.
 
+## Bug fixes
+
+* Fixed issue in `r2()` for `wbm`-models with cross-level interactions.
+
 # performance 0.4.0
 
 ## General
