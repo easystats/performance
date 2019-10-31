@@ -178,7 +178,12 @@ print.r2_generic <- function(x, digits = 3, ...) {
 #' @importFrom insight print_color
 #' @export
 print.r2_nakagawa <- function(x, digits = 3, ...) {
-  insight::print_color("# R2 for mixed models\n\n", "blue")
+  model_type <- attr(x, "model_type")
+  if (is.null(model_type)) {
+    insight::print_color("# R2 for Mixed Models\n\n", "blue")
+  } else {
+    insight::print_color("# R2 for %s Regression\n\n", "blue")
+  }
 
   out <- paste0(c(
     sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),

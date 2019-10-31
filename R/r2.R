@@ -372,7 +372,27 @@ r2.vglm <- function(model, ...) {
 
 #' @export
 r2.wbm <- function(model, ...) {
-  r2_nakagawa(model)
+  out <- r2_nakagawa(model)
+
+  if (is.null(out) || is.na(out)) {
+    s <- summary(model)
+
+    r2_marginal <- s$mod_info_list$pR2_fe
+    r2_conditional <- s$mod_info_list$pR2_total
+
+    names(r2_conditional) <- "Conditional R2"
+    names(r2_marginal) <- "Marginal R2"
+
+    out <- list(
+      "R2_conditional" = r2_conditional,
+      "R2_marginal" = r2_marginal
+    )
+
+    attr(out, "model_type") <- "Fixed Effects"
+    class(out) <- "r2_nakagawa"
+  }
+
+  out
 }
 
 
