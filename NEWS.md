@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * Fixed issue in `r2()` for `wbm`-models with cross-level interactions.
+* `plot()`-methods for `check_heteroscedasticity()` and `check_homogeneity()` now work without requiring to load package *see* before.
 
 # performance 0.4.0
 

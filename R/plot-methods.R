@@ -55,3 +55,21 @@ plot.check_normality <- function(x, ...) {
   }
   NextMethod()
 }
+
+
+#' @export
+plot.check_heteroscedasticity <- function(x, ...) {
+  if (!requireNamespace("see", quietly = TRUE)) {
+    stop("Package 'see' needed for residual plots. Please install it.")
+  }
+  NextMethod()
+}
+
+
+#' @export
+plot.check_homogeneity <- function(x, ...) {
+  if (!requireNamespace("see", quietly = TRUE)) {
+    stop("Package 'see' needed for homogeneity plots. Please install it.")
+  }
+  NextMethod()
+}
