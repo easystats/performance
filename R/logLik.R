@@ -29,11 +29,14 @@ logLik.felm <- function(object, ...) {
 }
 
 
-#' @importFrom stats residuals
 #' @export
-logLik.iv_robust <- function(object, ...) {
-  res <- stats::residuals(object)
-  p <- object$rank
+logLik.ivreg <- logLik.felm
+
+
+#' @importFrom insight find_parameters
+#' @export
+logLik.plm <- function(object, ...) {
+  res <- object$residuals
   w <- object$weights
 
   N <- length(res)
@@ -54,16 +57,17 @@ logLik.iv_robust <- function(object, ...) {
 
   attr(val, "nall") <- N0
   attr(val, "nobs") <- N
-  attr(val, "df") <- p + 1
+  attr(val, "df") <- length(insight::find_parameters(object, effects = "fixed", flatten = TRUE))
   class(val) <- "logLik"
 
   val
 }
 
 
+#' @importFrom stats residuals
 #' @export
-logLik.ivreg <- function(object, ...) {
-  res <- object$residuals
+logLik.iv_robust <- function(object, ...) {
+  res <- stats::residuals(object)
   p <- object$rank
   w <- object$weights
 

@@ -1,5 +1,9 @@
 # performance 0.4.1
 
+## General
+
+* `model_performance()` now supports *plm* models.
+
 ## Minor changes
 
 * `check_collinearity()` now no longer returns backticks in row- and column names.
