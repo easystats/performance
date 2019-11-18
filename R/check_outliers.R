@@ -473,7 +473,7 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Install packages
   if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `loo` required for this function to work. Please install it by running `install.packages('loo')`.", call. = FALSE)
   }
 
   # Compute
@@ -519,7 +519,7 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Install packages
   if (!requireNamespace("bigutilsr", quietly = TRUE)) {
-    stop("Package `bigutilsr` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `bigutilsr` required for this function to work. Please install it by running `install.packages('bigutilsr')`.", call. = FALSE)
   }
 
 
@@ -543,7 +543,7 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Install packages
   if (!requireNamespace("MASS", quietly = TRUE)) {
-    stop("Package `MASS` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `MASS` required for this function to work. Please install it by running `install.packages('MASS')`.", call. = FALSE)
   }
 
   # Compute
@@ -568,10 +568,10 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Install packages
   if (!requireNamespace("ICS", quietly = TRUE)) {
-    stop("Package `ICS` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `ICS` required for this function to work. Please install it by running `install.packages('ICS')`.", call. = FALSE)
   }
   if (!requireNamespace("ICSOutlier", quietly = TRUE)) {
-    stop("Package `ICSOutlier` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `ICSOutlier` required for this function to work. Please install it by running `install.packages('ICSOutlier')`.", call. = FALSE)
   }
 
   # Get n cores
@@ -622,7 +622,7 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Install packages
   if (!requireNamespace("dbscan", quietly = TRUE)) {
-    stop("Package `dbscan` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `dbscan` required for this function to work. Please install it by running `install.packages('dbscan')`.", call. = FALSE)
   }
 
   # Compute
@@ -646,19 +646,26 @@ as.numeric.check_outliers <- function(x, ...){
 }
 
 
-
+#' @importFrom utils packageVersion
 #' @importFrom stats median qnorm mad sd
 .check_outliers_iforest <- function(x, threshold = 0.025) {
   out <- data.frame(Obs = 1:nrow(x))
 
   # Install packages
   if (!requireNamespace("solitude", quietly = TRUE)) {
-    stop("Package `solitude` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `solitude` required for this function to work. Please install it by running `install.packages('solitude')`.", call. = FALSE)
   }
 
   # Compute
-  iforest <- solitude::isolationForest(x)
-  out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
+  if(packageVersion("solitude") < '0.2.1'){
+    iforest <- solitude::isolationForest(x)
+    out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
+  } else{
+    iforest <- solitude::isolationForest$new(sample_size = nrow(x))
+    suppressMessages(iforest$fit(x))
+    out$Distance_iforest <- iforest$scores$anomaly_score
+  }
+
 
   # Threshold
   cutoff <- stats::median(out$Distance_iforest) + stats::qnorm(1 - threshold) * stats::mad(out$Distance_iforest)
@@ -679,7 +686,7 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Install packages
   if (!requireNamespace("dbscan", quietly = TRUE)) {
-    stop("Package `dbscan` needed for this function to work. Please install it.", call. = FALSE)
+    stop("Package `dbscan` required for this function to work. Please install it by running `install.packages('dbscan')`.", call. = FALSE)
   }
 
 
