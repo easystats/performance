@@ -49,5 +49,4 @@ m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
 m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
 m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
 performance_roc(m1, m2, m3)
-
 }

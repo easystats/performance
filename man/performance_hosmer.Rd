@@ -27,7 +27,6 @@ A well-fitting model shows \emph{no} significant difference between
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 performance_hosmer(model)
-
 }
 \references{
 Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken, NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}

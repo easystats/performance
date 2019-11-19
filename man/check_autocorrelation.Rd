@@ -33,5 +33,4 @@ cluster groups should be used.
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_autocorrelation(m)
-
 }

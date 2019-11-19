@@ -31,12 +31,12 @@ check_normality(m)
 # plot results
 x <- check_normality(m)
 plot(x)
-
 \dontrun{
 # QQ-plot
 plot(check_normality(m), type = "qq")
 
 # PP-plot
-plot(check_normality(m), type = "pp")}
+plot(check_normality(m), type = "pp")
+}
 
 }

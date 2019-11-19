@@ -46,5 +46,4 @@ performance_accuracy(model)
 
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 performance_accuracy(model)
-
 }

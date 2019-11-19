@@ -31,5 +31,4 @@ This method returns the \emph{adjusted ICC} only, as this is typically
 library(lme4)
 model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 model_performance(model)
-
 }

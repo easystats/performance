@@ -50,7 +50,6 @@ data(mtcars)
 m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 performance_pcp(m)
 performance_pcp(m, method = "Gelman-Hill")
-
 }
 \references{
 \itemize{

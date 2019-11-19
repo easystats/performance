@@ -23,5 +23,4 @@ The residual standard error is the square root of the residual
 data(mtcars)
 m <- lm(mpg ~ hp + gear, data = mtcars)
 performance_rse(m)
-
 }

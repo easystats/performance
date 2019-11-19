@@ -23,7 +23,6 @@ Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
 
 model <- mlogit(mode ~ price + catch, data = Fish)
 r2_mcfadden(model)
-
 }
 \references{
 \itemize{

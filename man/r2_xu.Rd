@@ -23,7 +23,6 @@ Calculates Xu' Omega-squared value, a simple R2 equivalent for linear mixed mode
 \examples{
 model <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
 r2_xu(model)
-
 }
 \references{
 Xu, R. (2003). Measuring explained variation in linear mixed effects models. Statistics in Medicine, 22(22), 3527–3541. \doi{10.1002/sim.1572}

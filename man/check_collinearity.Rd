@@ -53,7 +53,6 @@ check_collinearity(m)
 # plot results
 x <- check_collinearity(m)
 plot(x)
-
 }
 \references{
 James, G., Witten, D., Hastie, T., & Tibshirani, R. (Hrsg.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.

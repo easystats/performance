@@ -25,5 +25,4 @@ library(rstanarm)
 
 model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
 r2_loo(model)
-
 }

@@ -31,7 +31,6 @@ Marginal and conditional r-squared values for mixed models are calculated
 library(lme4)
 model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2_nakagawa(model)
-
 }
 \references{
 \itemize{

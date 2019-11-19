@@ -40,5 +40,4 @@ This function calculates the item discriminations (corrected item-total
 data(mtcars)
 x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 item_reliability(x)
-
 }

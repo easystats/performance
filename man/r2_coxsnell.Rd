@@ -26,7 +26,6 @@ This index was proposed by \cite{Cox & Snell (1989, pp. 208-9)} and,
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_coxsnell(model)
-
 }
 \references{
 \itemize{

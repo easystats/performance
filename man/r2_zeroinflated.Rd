@@ -34,5 +34,4 @@ model <- zeroinfl(
 )
 
 r2_zeroinflated(model)
-
 }

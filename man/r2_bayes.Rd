@@ -46,7 +46,6 @@ model <- stan_lmer(
   iter = 500
 )
 r2_bayes(model)
-
 \dontrun{
 library(brms)
 model <- brms::brm(mpg ~ wt + cyl, data = mtcars)

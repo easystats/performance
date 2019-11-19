@@ -34,5 +34,4 @@ library(glmmTMB)
 data(Salamanders)
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(m)
-
 }

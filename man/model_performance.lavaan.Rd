@@ -43,12 +43,11 @@ library(lavaan)
 
 # Confirmatory Factor Analysis (CFA) ---------
 
-structure <- ' visual  =~ x1 + x2 + x3
+structure <- " visual  =~ x1 + x2 + x3
                textual =~ x4 + x5 + x6
-               speed   =~ x7 + x8 + x9 '
-model <- lavaan::cfa(structure, data=HolzingerSwineford1939)
+               speed   =~ x7 + x8 + x9 "
+model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 model_performance(model)
-
 }
 \references{
 \itemize{

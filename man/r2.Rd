@@ -34,7 +34,6 @@ r2(model)
 library(lme4)
 model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 r2(model)
-
 }
 \seealso{
 \code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kullback}},

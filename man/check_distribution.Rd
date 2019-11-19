@@ -40,5 +40,4 @@ library(lme4)
 model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 check_distribution(model)
 plot(check_distribution(model))
-
 }

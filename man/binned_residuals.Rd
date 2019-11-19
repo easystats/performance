@@ -56,7 +56,6 @@ Since \code{binned_residuals()} returns a data frame, the default
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 binned_residuals(model)
-
 }
 \references{
 Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.

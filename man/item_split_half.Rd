@@ -29,7 +29,6 @@ This function calculates the split-half reliability for items in
 data(mtcars)
 x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 item_split_half(x)
-
 }
 \references{
 Spearman C. 1910. Correlation calculated from faulty data. British Journal of Psychology (3): 271-295. \doi{10.1111/j.2044-8295.1910.tb00206.x}

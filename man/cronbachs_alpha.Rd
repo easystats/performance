@@ -30,5 +30,4 @@ The Cronbach's Alpha value for \code{x}. A value closer to 1
 data(mtcars)
 x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 cronbachs_alpha(x)
-
 }

@@ -33,5 +33,4 @@ check_homogeneity(model)
 # plot results
 result <- check_homogeneity(model)
 plot(result)
-
 }

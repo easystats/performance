@@ -25,5 +25,4 @@ check_heteroscedasticity(m)
 # plot results
 x <- check_heteroscedasticity(m)
 plot(x)
-
 }

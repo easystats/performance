@@ -63,7 +63,6 @@ model <- lmer(
 )
 
 check_singularity(model)
-
 }
 \references{
 \itemize{

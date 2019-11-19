@@ -58,7 +58,6 @@ m <- glmmTMB(
   data = Salamanders
 )
 check_overdispersion(m)
-
 }
 \references{
 \itemize{

@@ -43,5 +43,4 @@ performance_rmse(m, normalized = FALSE)
 
 # normalized RMSE
 performance_rmse(m, normalized = TRUE)
-
 }

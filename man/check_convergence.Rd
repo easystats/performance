@@ -45,5 +45,4 @@ model <- glmer(
 )
 
 check_convergence(model)
-
 }

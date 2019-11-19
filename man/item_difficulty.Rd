@@ -31,6 +31,4 @@ This function calculates the item difficutly, which should
 data(mtcars)
 x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 item_difficulty(x)
-
-
 }

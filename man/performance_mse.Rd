@@ -31,5 +31,4 @@ The mean square error is the mean of the sum of squared residuals,
 data(mtcars)
 m <- lm(mpg ~ hp + gear, data = mtcars)
 performance_mse(m)
-
 }

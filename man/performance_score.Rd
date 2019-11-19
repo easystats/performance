@@ -44,7 +44,6 @@ treatment <- gl(3, 3)
 model <- glm(counts ~ outcome + treatment, family = poisson())
 
 performance_score(model)
-
 \dontrun{
 library(glmmTMB)
 data(Salamanders)
