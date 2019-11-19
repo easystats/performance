@@ -40,7 +40,6 @@
 #' model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 #' check_distribution(model)
 #' plot(check_distribution(model))
-#'
 #' @importFrom bayestestR map_estimate
 #' @importFrom stats IQR density predict sd mad residuals
 #' @importFrom insight get_response

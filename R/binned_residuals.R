@@ -45,7 +45,6 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' binned_residuals(model)
-#'
 #' @importFrom stats fitted sd complete.cases
 #' @importFrom insight get_data get_response find_response
 #' @export
@@ -53,10 +52,11 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)
   mf <- insight::get_data(model)
 
-  if (is.null(term))
+  if (is.null(term)) {
     pred <- fv
-  else
+  } else {
     pred <- mf[[term]]
+  }
 
   y <- .recode_to_zero(insight::get_response(model)) - fv
 
@@ -68,21 +68,21 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   model.binned <- as.numeric(cut(pred, breaks))
 
   d <- suppressWarnings(lapply(1:n_bins, function(.x) {
-      items <- (1:length(pred))[model.binned == .x]
-      model.range <- range(pred[items], na.rm = TRUE)
-      xbar <- mean(pred[items], na.rm = TRUE)
-      ybar <- mean(y[items], na.rm = TRUE)
-      n <- length(items)
-      sdev <- stats::sd(y[items], na.rm = TRUE)
+    items <- (1:length(pred))[model.binned == .x]
+    model.range <- range(pred[items], na.rm = TRUE)
+    xbar <- mean(pred[items], na.rm = TRUE)
+    ybar <- mean(y[items], na.rm = TRUE)
+    n <- length(items)
+    sdev <- stats::sd(y[items], na.rm = TRUE)
 
-      data.frame(
-        xbar = xbar,
-        ybar = ybar,
-        n = n,
-        x.lo = model.range[1],
-        x.hi = model.range[2],
-        se = 2 * sdev / sqrt(n)
-      )
+    data.frame(
+      xbar = xbar,
+      ybar = ybar,
+      n = n,
+      x.lo = model.range[1],
+      x.hi = model.range[2],
+      se = 2 * sdev / sqrt(n)
+    )
   }))
 
   d <- do.call(rbind, d)

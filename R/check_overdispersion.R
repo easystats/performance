@@ -54,7 +54,6 @@
 #'   data = Salamanders
 #' )
 #' check_overdispersion(m)
-#'
 #' @export
 check_overdispersion <- function(x, ...) {
   UseMethod("check_overdispersion")
@@ -66,8 +65,9 @@ check_overdispersion <- function(x, ...) {
 #' @export
 check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
-  if (!stats::family(x)$family %in% c("poisson", "quasipoisson"))
+  if (!stats::family(x)$family %in% c("poisson", "quasipoisson")) {
     stop("Model must be from Poisson-family.", call. = F)
+  }
 
   yhat <- stats::fitted(x)
 
@@ -76,7 +76,7 @@ check_overdispersion.glm <- function(x, ...) {
 
   zi <- (insight::get_response(x) - yhat) / sqrt(yhat)
   chisq <- sum(zi^2)
-  ratio <-  chisq / (n - k)
+  ratio <- chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
 
   structure(

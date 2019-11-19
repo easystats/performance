@@ -21,13 +21,13 @@
 #' # plot results
 #' x <- check_normality(m)
 #' plot(x)
-#'
 #' \dontrun{
 #' # QQ-plot
 #' plot(check_normality(m), type = "qq")
 #'
 #' # PP-plot
-#' plot(check_normality(m), type = "pp")}
+#' plot(check_normality(m), type = "pp")
+#' }
 #'
 #' @importFrom stats shapiro.test rstandard
 #' @export
@@ -43,7 +43,9 @@ check_normality.default <- function(x, ...) {
     {
       stats::shapiro.test(stats::rstandard(x))
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   if (is.null(ts)) {

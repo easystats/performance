@@ -105,7 +105,6 @@
 #' library(lme4)
 #' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' icc(model)
-#'
 #' @importFrom insight model_info get_variance print_color
 #' @export
 icc <- function(model, ...) {
@@ -196,10 +195,11 @@ icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
   PPD_0 <- brms::posterior_predict(model, re.form = NA, summary = FALSE)
   var_rand_intercept <- apply(PPD_0, MARGIN = 1, FUN = stats::var)
 
-  if (robust)
+  if (robust) {
     fun <- get("median", asNamespace("stats"))
-  else
+  } else {
     fun <- get("mean", asNamespace("base"))
+  }
 
   var_icc <- var_rand_intercept / var_total
   var_residual <- var_total - var_rand_intercept

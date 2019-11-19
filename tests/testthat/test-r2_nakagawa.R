@@ -12,10 +12,9 @@ if (require("testthat") && require("performance") && require("lme4")) {
           R2_conditional = c(`Conditional R2` = 0.969409477972726),
           R2_marginal = c(`Marginal R2` = 0.65846169440315)
         ),
-        class = "r2_nakagawa"),
+        class = "r2_nakagawa"
+      ),
       tolerance = 1e-3
     )
   })
-
 }
-

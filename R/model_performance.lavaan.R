@@ -31,12 +31,11 @@
 #'
 #' # Confirmatory Factor Analysis (CFA) ---------
 #'
-#' structure <- ' visual  =~ x1 + x2 + x3
+#' structure <- " visual  =~ x1 + x2 + x3
 #'                textual =~ x4 + x5 + x6
-#'                speed   =~ x7 + x8 + x9 '
-#' model <- lavaan::cfa(structure, data=HolzingerSwineford1939)
+#'                speed   =~ x7 + x8 + x9 "
+#' model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 #' model_performance(model)
-#'
 #' @references \itemize{
 #'   \item Byrne, B. M. (1994). Structural equation modeling with EQS and EQS/Windows. Thousand Oaks, CA: Sage Publications.
 #'   \item Tucker, L. R., \& Lewis, C. (1973). The reliability coefficient for maximum likelihood factor analysis. Psychometrika, 38, 1-10.
@@ -47,12 +46,11 @@
 #'
 #' @export
 model_performance.lavaan <- function(model, metrics = "all", ...) {
-
   if (!requireNamespace("lavaan", quietly = TRUE)) {
     stop("Package `lavaan` needed for this function to work. Please install it.", call. = FALSE)
   }
 
-  measures <-  as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
+  measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
   row.names(measures) <- NULL
 
   out <- data.frame(

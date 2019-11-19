@@ -22,7 +22,6 @@
 #' # plot results
 #' result <- check_homogeneity(model)
 #' plot(result)
-#'
 #' @importFrom stats fligner.test bartlett.test shapiro.test
 #' @importFrom insight find_response find_predictors get_data get_response
 #' @export
@@ -46,8 +45,12 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "auto
 
   if (method == "auto") {
     check <- tryCatch(
-      {stats::shapiro.test(insight::get_response(x))$p.value},
-      error = function(e) { NULL }
+      {
+        stats::shapiro.test(insight::get_response(x))$p.value
+      },
+      error = function(e) {
+        NULL
+      }
     )
 
     if (is.null(check)) {

@@ -23,7 +23,6 @@
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_split_half(x)
-#'
 #' @importFrom stats cor
 #' @export
 item_split_half <- function(x, digits = 3) {

@@ -12,7 +12,7 @@ if (require("testthat") && require("performance")) {
       perf <- model_performance(model)
 
       expect_equal(perf$R2, 0.7381938, tolerance = 1e-3)
-      expect_equal(perf$R2_adjusted,  0.7110354, tolerance = 1e-3)
+      expect_equal(perf$R2_adjusted, 0.7110354, tolerance = 1e-3)
       expect_equal(perf$ELPD, -83.40375, tolerance = 1e-3)
 
       model <- insight::download_model("stanreg_lm_2")
@@ -52,6 +52,5 @@ if (require("testthat") && require("performance")) {
       expect_equal(perf$R2, 0.873797, tolerance = 1e-3)
       expect_equal(perf$ELPD, -12.78422, tolerance = 1e-3)
     })
-
   }
 }

@@ -28,7 +28,6 @@
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
-#'
 #' @importFrom insight model_info
 #' @importFrom stats AIC BIC
 #' @export

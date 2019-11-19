@@ -43,7 +43,6 @@
 #' lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 #' lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
 #' compare_performance(lm1, lm2, lm3)
-#'
 #' @export
 model_performance <- function(model, ...) {
   UseMethod("model_performance")

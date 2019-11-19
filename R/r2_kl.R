@@ -12,15 +12,15 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_kullback(model)
-#'
 #' @references Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness of fit for some common nonlinear regression models. Journal of Econometrics, 77: 329-342.
 #'
 #' @export
 r2_kullback <- function(model, adjust = TRUE) {
-  if (adjust)
+  if (adjust) {
     adj <- model$df.null / model$df.residual
-  else
+  } else {
     adj <- 1
+  }
 
   klr2 <- 1 - (model$deviance / model$null.deviance) * adj
 

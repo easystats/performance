@@ -14,8 +14,12 @@
 .is_empty_object <- function(x) {
   if (is.list(x)) {
     x <- tryCatch(
-      {.compact_list(x)},
-      error = function(x) { x }
+      {
+        .compact_list(x)
+      },
+      error = function(x) {
+        x
+      }
     )
   }
   # this is an ugly fix because of ugly tibbles
@@ -37,7 +41,9 @@
 
 #' @importFrom stats na.omit sd
 .std <- function(x) {
-  if (!is.numeric(x)) return(x)
+  if (!is.numeric(x)) {
+    return(x)
+  }
 
   # remove missings
   tmp <- stats::na.omit(x)
@@ -74,8 +80,9 @@
 # safe conversion from factor to numeric
 #' @importFrom stats na.omit
 .factor_to_numeric <- function(x) {
-  if (is.numeric(x))
+  if (is.numeric(x)) {
     return(x)
+  }
 
   if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
     if (is.character(x)) {

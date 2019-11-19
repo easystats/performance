@@ -16,7 +16,6 @@
 #' # plot results
 #' x <- check_heteroscedasticity(m)
 #' plot(x)
-#'
 #' @importFrom stats residuals df.residual fitted anova pchisq
 #' @importFrom insight print_color
 #' @export

@@ -24,7 +24,6 @@
 #' )
 #'
 #' r2_zeroinflated(model)
-#'
 #' @importFrom stats cor predict coef model.matrix
 #' @importFrom insight model_info get_response find_parameters n_obs
 #' @export
@@ -36,10 +35,11 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
     warning("Model has no zero-inflation component.")
   }
 
-  if (method == "default")
+  if (method == "default") {
     .r2_zi_default(model)
-  else
+  } else {
     .r2_zi_correlation(model)
+  }
 }
 
 

@@ -33,13 +33,11 @@
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_accuracy(model)
-#'
 #' @importFrom bayestestR area_under_curve
 #' @importFrom insight find_response get_data
 #' @importFrom stats lm cor glm predict predict.glm model.frame formula binomial sd
 #' @export
 performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000) {
-
   method <- match.arg(method)
 
   # get formula from model fit
@@ -53,7 +51,6 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
 
   # accuracy for linear models
   if (inherits(model, "lm") && !inherits(model, "glm")) {
-
     measure <- "Correlation between observed and predicted"
 
     # check if bootstrapping or cross validation is requested
@@ -78,7 +75,6 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       accuracy <- mapply(function(.x, .y) {
         stats::cor(.x, .y, use = "pairwise.complete.obs")
       }, predictions, response)
-
     } else {
 
       # accuracy linear models with cross validation
@@ -101,9 +97,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
         stats::cor(.x, .y, use = "pairwise.complete.obs")
       }, predictions, response)
     }
-
   } else if (inherits(model, "glm") && stats::family(model)$family == "binomial") {
-
     measure <- "Area under Curve"
 
     # check if bootstrapping or cross validation is requested
@@ -129,7 +123,6 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
         roc <- performance_roc(x = .x, predictions = .y)
         bayestestR::area_under_curve(roc$Sensivity, roc$Specifity)
       }, response, predictions)
-
     } else {
 
       # accuracy linear models with cross validation
@@ -176,4 +169,3 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
   }
   lapply(fold_idx, fold)
 }
-

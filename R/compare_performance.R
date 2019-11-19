@@ -26,7 +26,9 @@ compare_performance <- function(..., metrics = "all", verbose = TRUE) {
     {
       bayestestR::bayesfactor_models(..., denominator = 1, verbose = FALSE)
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)

@@ -10,6 +10,7 @@ if (require("testthat") && require("performance")) {
         splithalf = 0.7864936,
         spearmanbrown = 0.8804886
       ),
-      tolerance = 1e-3)
+      tolerance = 1e-3
+    )
   })
 }

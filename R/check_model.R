@@ -112,15 +112,17 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
 
     # check if brms can be loaded
 
-    if (!requireNamespace("brms", quietly = TRUE))
+    if (!requireNamespace("brms", quietly = TRUE)) {
       stop("Package `brms` needs to be loaded first!", call. = F)
+    }
 
     # check if prior sample are available
 
     d2 <- brms::prior_samples(model)
 
-    if (is.null(d2))
+    if (is.null(d2)) {
       stop("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model.", call. = FALSE)
+    }
 
     d1 <- brms::posterior_samples(model)
 
@@ -128,12 +130,12 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
 
     d1 <- d1[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d1), perl = TRUE)]
     d2 <- d2[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d2), perl = TRUE)]
-
   } else if (inherits(model, c("stanreg", "stanfit"))) {
 
     # check if rstanarm can be loaded
-    if (!requireNamespace("rstanarm", quietly = TRUE))
+    if (!requireNamespace("rstanarm", quietly = TRUE)) {
       stop("Package `rstanarm` needs to be loaded first!", call. = F)
+    }
 
 
     # get samples from posterior and prior
@@ -149,17 +151,21 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
     # remove intercept from output for ridgeline plot.
     # this would increase the range of the scale too much
 
-    if (.obj_has_name(d1, "(Intercept)"))
+    if (.obj_has_name(d1, "(Intercept)")) {
       d1 <- .remove_column(d1, "(Intercept)")
+    }
 
-    if (.obj_has_name(d2, "(Intercept)"))
+    if (.obj_has_name(d2, "(Intercept)")) {
       d2 <- .remove_column(d2, "(Intercept)")
+    }
 
-    if (.obj_has_name(d1, "sigma"))
+    if (.obj_has_name(d1, "sigma")) {
       d1 <- .remove_column(d1, "sigma")
+    }
 
-    if (.obj_has_name(d2, "sigma"))
+    if (.obj_has_name(d2, "sigma")) {
       d2 <- .remove_column(d2, "sigma")
+    }
 
     d1 <- d1[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d1), perl = TRUE)]
     d2 <- d2[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d2), perl = TRUE)]

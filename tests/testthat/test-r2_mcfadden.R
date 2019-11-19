@@ -15,7 +15,8 @@ if (require("testthat") && require("performance") && require("MASS")) {
         ),
         model_type = "Generalized Linear", class = "r2_generic"
       ),
-      tolerance = 1e-3)
+      tolerance = 1e-3
+    )
 
     expect_equal(
       r2(model),

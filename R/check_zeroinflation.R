@@ -24,14 +24,14 @@
 #' data(Salamanders)
 #' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 #' check_zeroinflation(m)
-#'
 #' @importFrom insight get_response
 #' @importFrom stats fitted dpois family
 #' @export
 check_zeroinflation <- function(x, tolerance = .05) {
   # check if we have poisson
-  if (!stats::family(x)$family %in% c("poisson", "quasipoisson"))
+  if (!stats::family(x)$family %in% c("poisson", "quasipoisson")) {
     stop("Model must be from Poisson-family.", call. = F)
+  }
 
   # get actual zero of response
   obs.zero <- sum(insight::get_response(x) == 0)

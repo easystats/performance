@@ -241,7 +241,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 #' @rdname check_outliers
 #' @export
-check_outliers.numeric <- function(x, method = "zscore", threshold = NULL, ...){
+check_outliers.numeric <- function(x, method = "zscore", threshold = NULL, ...) {
   check_outliers(as.data.frame(x), method = method, threshold = threshold, ...)
 }
 
@@ -325,7 +325,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   for (i in names(out[sapply(out, is.data.frame)])) {
     df <- cbind(df, out[[i]])
   }
-  df$Obs <- NULL  # Remove temp column
+  df$Obs <- NULL # Remove temp column
 
 
   # Composite outlier score
@@ -346,12 +346,12 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 
 #' @export
-as.data.frame.check_outliers <- function(x, ...){
+as.data.frame.check_outliers <- function(x, ...) {
   attributes(x)$data
 }
 
 #' @export
-as.numeric.check_outliers <- function(x, ...){
+as.numeric.check_outliers <- function(x, ...) {
   attributes(x)$data$Outlier
 }
 
@@ -391,9 +391,9 @@ as.numeric.check_outliers <- function(x, ...){
 
 .check_outliers_zscore <- function(x, threshold = stats::qnorm(p = 1 - 0.025), robust = TRUE, method = "max") {
   # Standardize
-  if(robust == FALSE){
+  if (robust == FALSE) {
     d <- abs(as.data.frame(sapply(x, function(x) (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE))))
-  } else{
+  } else {
     d <- abs(as.data.frame(sapply(x, function(x) (x - median(x, na.rm = TRUE)) / mad(x, na.rm = TRUE))))
   }
 
@@ -415,15 +415,13 @@ as.numeric.check_outliers <- function(x, ...){
 
 #' @importFrom stats IQR quantile
 .check_outliers_iqr <- function(x, threshold = 1.5, method = "tukey") {
-
   d <- data.frame(Obs = 1:nrow(as.data.frame(x)))
-  for(col in 1:ncol(as.data.frame(x))){
-
+  for (col in 1:ncol(as.data.frame(x))) {
     v <- x[, col]
 
-    if(method == "tukey"){
+    if (method == "tukey") {
       iqr <- stats::quantile(v, 0.75, na.rm = TRUE) - stats::quantile(v, 0.25, na.rm = TRUE)
-    } else{
+    } else {
       iqr <- stats::IQR(v, na.rm = TRUE)
     }
 
@@ -431,13 +429,18 @@ as.numeric.check_outliers <- function(x, ...){
     upper <- stats::quantile(v, 0.75, na.rm = TRUE) + (iqr * threshold)
 
     d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1,
-                                                ifelse(v < lower, 1, 0))
+      ifelse(v < lower, 1, 0)
+    )
   }
   d$Obs <- NULL
 
   out <- data.frame(Obs = 1:nrow(as.data.frame(d)))
-  out$Distance_IQR <- sapply(as.data.frame(t(d)), function(x) {ifelse(all(is.na(x)), NA, mean(x))})
-  out$Outlier_IQR <- sapply(as.data.frame(t(d)), function(x) {ifelse(all(is.na(x)), NA, max(x))})
+  out$Distance_IQR <- sapply(as.data.frame(t(d)), function(x) {
+    ifelse(all(is.na(x)), NA, mean(x))
+  })
+  out$Outlier_IQR <- sapply(as.data.frame(t(d)), function(x) {
+    ifelse(all(is.na(x)), NA, max(x))
+  })
 
   out$Obs <- NULL
   list(
@@ -583,13 +586,14 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Run algorithm
   # Try
-  outliers <- tryCatch({
-    ics <- ICS::ics2(x)
-    ICSOutlier::ics.outlier(object = ics, ncores = n_cores, level.dist = threshold, ...)
-  },
-  error = function(e) {
-    NULL
-  }
+  outliers <- tryCatch(
+    {
+      ics <- ICS::ics2(x)
+      ICSOutlier::ics.outlier(object = ics, ncores = n_cores, level.dist = threshold, ...)
+    },
+    error = function(e) {
+      NULL
+    }
   )
 
   if (is.null(outliers)) {
@@ -627,13 +631,13 @@ as.numeric.check_outliers <- function(x, ...){
 
   # Compute
   rez <- dbscan::optics(x, minPts = threshold)
-  rez <- dbscan::extractXi(rez, xi = 0.05)  # TODO: find automatic way of setting xi
+  rez <- dbscan::extractXi(rez, xi = 0.05) # TODO: find automatic way of setting xi
 
   out$Distance_OPTICS <- rez$coredist
   # Filter
-  if(is.null(rez$cluster)){
+  if (is.null(rez$cluster)) {
     out$Outlier_OPTICS <- 0
-  } else{
+  } else {
     out$Outlier_OPTICS <- as.numeric(rez$cluster == 0)
   }
 
@@ -657,10 +661,10 @@ as.numeric.check_outliers <- function(x, ...){
   }
 
   # Compute
-  if (utils::packageVersion("solitude") < '0.2.0') {
+  if (utils::packageVersion("solitude") < "0.2.0") {
     iforest <- solitude::isolationForest(x)
     out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
-  } else{
+  } else {
     iforest <- solitude::isolationForest$new(sample_size = nrow(x))
     suppressMessages(iforest$fit(x))
     out$Distance_iforest <- iforest$scores$anomaly_score

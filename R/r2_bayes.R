@@ -35,7 +35,6 @@
 #'   iter = 500
 #' )
 #' r2_bayes(model)
-#'
 #' \dontrun{
 #' library(brms)
 #' model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
@@ -54,8 +53,9 @@
 r2_bayes <- function(model, robust = TRUE, ci = .89) {
   r2_bayesian <- .r2_posterior(model)
 
-  if (is.null(r2_bayesian))
+  if (is.null(r2_bayesian)) {
     return(NULL)
+  }
 
   if (insight::is_multivariate(model)) {
     structure(
@@ -91,51 +91,53 @@ r2_bayes <- function(model, robust = TRUE, ci = .89) {
     return(NA)
   }
 
-  tryCatch({
-    mi <- insight::model_info(model)
+  tryCatch(
+    {
+      mi <- insight::model_info(model)
 
-    if (insight::is_multivariate(model)) {
-      res <- insight::find_response(model)
-      if (mi[[1]]$is_mixed) {
-        br2_mv <- list(
-          "R2_Bayes" = rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE),
-          "R2_Bayes_marginal" = rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE)
-        )
-        br2 <- lapply(1:length(res), function(x) {
-          list(
-            "R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])),
-            "R2_Bayes_marginal" = unname(as.vector(br2_mv$R2_Bayes_marginal[, x]))
+      if (insight::is_multivariate(model)) {
+        res <- insight::find_response(model)
+        if (mi[[1]]$is_mixed) {
+          br2_mv <- list(
+            "R2_Bayes" = rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE),
+            "R2_Bayes_marginal" = rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE)
           )
-        })
-        names(br2) <- res
+          br2 <- lapply(1:length(res), function(x) {
+            list(
+              "R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])),
+              "R2_Bayes_marginal" = unname(as.vector(br2_mv$R2_Bayes_marginal[, x]))
+            )
+          })
+          names(br2) <- res
+        } else {
+          br2_mv <- list("R2_Bayes" = rstantools::bayes_R2(model, summary = FALSE))
+          br2 <- lapply(1:length(res), function(x) {
+            list("R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])))
+          })
+          names(br2) <- res
+        }
       } else {
-        br2_mv <- list("R2_Bayes" = rstantools::bayes_R2(model, summary = FALSE))
-        br2 <- lapply(1:length(res), function(x) {
-          list("R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])))
-        })
-        names(br2) <- res
+        if (mi$is_mixed) {
+          br2 <- list(
+            "R2_Bayes" = as.vector(rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
+            "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
+          )
+          names(br2$R2_Bayes) <- "Conditional R2"
+          names(br2$R2_Bayes_marginal) <- "Marginal R2"
+        } else {
+          br2 <- list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
+          names(br2$R2_Bayes) <- "R2"
+        }
       }
-    } else {
-      if (mi$is_mixed) {
-        br2 <- list(
-          "R2_Bayes" = as.vector(rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
-          "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
-        )
-        names(br2$R2_Bayes) <- "Conditional R2"
-        names(br2$R2_Bayes_marginal) <- "Marginal R2"
-      } else {
-        br2 <- list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
-        names(br2$R2_Bayes) <- "R2"
-      }
-    }
 
-    br2
-  },
-  error = function(e) {
-    if (inherits(e, c("simpleError", "error"))) {
-      insight::print_color(e$message, "red")
-      cat("\n")
+      br2
+    },
+    error = function(e) {
+      if (inherits(e, c("simpleError", "error"))) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
     }
-    NULL
-  })
+  )
 }
