@@ -10,6 +10,4 @@ if (require("testthat") && require("performance")) {
     model <- lm(mpg ~ wt + cyl, data = mtcars)
     expect_error(r2_tjur(model))
   })
-
-
 }

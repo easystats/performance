@@ -16,7 +16,6 @@
 #' @examples
 #' model <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
 #' r2_xu(model)
-#'
 #' @importFrom stats residuals var
 #' @importFrom insight get_response model_info
 #' @export

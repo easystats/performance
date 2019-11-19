@@ -38,7 +38,6 @@
 #' m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
 #' m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
 #' performance_roc(m1, m2, m3)
-#'
 #' @importFrom stats predict
 #' @importFrom insight find_response get_data
 #' @export
@@ -63,8 +62,9 @@ performance_roc <- function(x, ..., predictions, new_data) {
 
 
 .performance_roc_numeric <- function(x, predictions) {
-  if (length(x) != length(predictions))
+  if (length(x) != length(predictions)) {
     stop("'x' and ' predictions' must be of same length.", call. = FALSE)
+  }
 
   x <- x[order(predictions, decreasing = TRUE)]
 

@@ -21,7 +21,6 @@
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' cronbachs_alpha(x)
-#'
 #' @importFrom stats var na.omit
 #' @export
 cronbachs_alpha <- function(x) {

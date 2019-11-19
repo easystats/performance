@@ -19,7 +19,6 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' AIC(m)
 #' performance_aicc(m)
-#'
 #' @export
 performance_aicc <- function(x, ...) {
   UseMethod("performance_aicc")

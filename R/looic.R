@@ -13,7 +13,6 @@
 #'
 #' model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
 #' looic(model)
-#'
 #' @importFrom insight find_algorithm print_color
 #' @importFrom stats var
 #' @export
@@ -44,7 +43,9 @@ looic <- function(model) {
     }
   )
 
-  if (is.null(loo_df)) return(NULL)
+  if (is.null(loo_df)) {
+    return(NULL)
+  }
 
   out$ELPD <- loo_df[rownames(loo_df) == "elpd_loo", ]$Estimate
   out$ELPD_SE <- loo_df[rownames(loo_df) == "elpd_loo", ]$SE

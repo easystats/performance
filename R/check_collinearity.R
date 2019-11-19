@@ -40,7 +40,6 @@
 #' # plot results
 #' x <- check_collinearity(m)
 #' plot(x)
-#'
 #' @importFrom stats vcov cov2cor terms
 #' @importFrom insight has_intercept find_formula model_info print_color
 #' @export
@@ -111,15 +110,15 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
       return(NULL)
     }
     if (is.null(cond)) {
-      zi$Component = "zero inflated"
+      zi$Component <- "zero inflated"
       return(zi)
     }
     if (is.null(zi)) {
-      cond$Component = "conditional"
+      cond$Component <- "conditional"
       return(cond)
     }
-    cond$Component = "conditional"
-    zi$Component = "zero inflated"
+    cond$Component <- "conditional"
+    zi$Component <- "zero inflated"
     dat_cond <- attr(cond, "data")
     dat_zi <- attr(zi, "data")
     dat <- rbind(cond, zi)
@@ -199,38 +198,40 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 #' @importFrom stats model.matrix
 .term_assignments <- function(x, component) {
-  tryCatch({
-    if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
-      assign <- switch(
-        component,
-        conditional = attr(stats::model.matrix(x, model = "count"), "assign"),
-        zero_inflated = attr(stats::model.matrix(x, model = "zero"), "assign")
-      )
-    } else if (inherits(x, "glmmTMB")) {
-      assign <- switch(
-        component,
-        conditional = attr(stats::model.matrix(x), "assign"),
-        zero_inflated = .find_term_assignment(x, component)
-      )
-    } else if (inherits(x, "MixMod")) {
-      assign <- switch(
-        component,
-        conditional = attr(stats::model.matrix(x, type = "fixed"), "assign"),
-        zero_inflated = attr(stats::model.matrix(x, type = "zi_fixed"), "assign")
-      )
-    } else {
-      assign <- attr(stats::model.matrix(x), "assign")
-    }
+  tryCatch(
+    {
+      if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
+        assign <- switch(
+          component,
+          conditional = attr(stats::model.matrix(x, model = "count"), "assign"),
+          zero_inflated = attr(stats::model.matrix(x, model = "zero"), "assign")
+        )
+      } else if (inherits(x, "glmmTMB")) {
+        assign <- switch(
+          component,
+          conditional = attr(stats::model.matrix(x), "assign"),
+          zero_inflated = .find_term_assignment(x, component)
+        )
+      } else if (inherits(x, "MixMod")) {
+        assign <- switch(
+          component,
+          conditional = attr(stats::model.matrix(x, type = "fixed"), "assign"),
+          zero_inflated = attr(stats::model.matrix(x, type = "zi_fixed"), "assign")
+        )
+      } else {
+        assign <- attr(stats::model.matrix(x), "assign")
+      }
 
-    if (is.null(assign)) {
-      assign <- .find_term_assignment(x, component)
-    }
+      if (is.null(assign)) {
+        assign <- .find_term_assignment(x, component)
+      }
 
-    assign
-  },
-  error = function(e) {
-    .find_term_assignment(x, component)
-  })
+      assign
+    },
+    error = function(e) {
+      .find_term_assignment(x, component)
+    }
+  )
 }
 
 

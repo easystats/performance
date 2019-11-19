@@ -1,6 +1,8 @@
 .diag_vif <- function(model) {
   dat <- .compact_list(check_collinearity(model))
-  if (is.null(dat)) return(NULL)
+  if (is.null(dat)) {
+    return(NULL)
+  }
   dat$group <- "low"
   dat$group[dat$VIF >= 5 & dat$VIF < 10] <- "moderate"
   dat$group[dat$VIF >= 10] <- "high"
@@ -21,13 +23,21 @@
     res_ <- sort(stats::residuals(model), na.last = NA)
   } else {
     res_ <- tryCatch(
-      {sort(stats::rstudent(model), na.last = NA)},
-      error = function(e) { NULL }
+      {
+        sort(stats::rstudent(model), na.last = NA)
+      },
+      error = function(e) {
+        NULL
+      }
     )
     if (is.null(res_)) {
       res_ <- tryCatch(
-        {sort(stats::residuals(model), na.last = NA)},
-        error = function(e) { NULL }
+        {
+          sort(stats::residuals(model), na.last = NA)
+        },
+        error = function(e) {
+          NULL
+        }
       )
     }
   }
@@ -47,7 +57,9 @@
 #' @importFrom insight print_color
 .diag_reqq <- function(model, level = .95, model_info) {
   # check if we have mixed model
-  if (!model_info$is_mixed) return(NULL)
+  if (!model_info$is_mixed) {
+    return(NULL)
+  }
 
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package 'lme4' required for this function to work. Please install it.", call. = FALSE)
@@ -55,17 +67,17 @@
 
   if (inherits(model, "glmmTMB")) {
     var_attr <- "condVar"
-    re   <- .collapse_cond(lme4::ranef(model, condVar = TRUE))
+    re <- .collapse_cond(lme4::ranef(model, condVar = TRUE))
   } else {
     var_attr <- "postVar"
-    re   <- lme4::ranef(model, condVar = TRUE)
+    re <- lme4::ranef(model, condVar = TRUE)
   }
 
 
   se <- tryCatch(
     {
       lapply(re, function(.x) {
-        pv   <- attr(.x, var_attr, exact = TRUE)
+        pv <- attr(.x, var_attr, exact = TRUE)
         cols <- seq_len(dim(pv)[1])
         unlist(lapply(cols, function(.y) sqrt(pv[.y, .y, ])))
       })
@@ -82,7 +94,7 @@
 
 
   mapply(function(.re, .se) {
-    ord  <- unlist(lapply(.re, order)) + rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
+    ord <- unlist(lapply(.re, order)) + rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
 
     df.y <- unlist(.re)[ord]
     df.ci <- stats::qnorm((1 + level) / 2) * .se[ord]
@@ -95,7 +107,8 @@
       facet = gl(ncol(.re), nrow(.re), labels = names(.re)),
       stringsAsFactors = FALSE,
       row.names = NULL
-    )}, re, se, SIMPLIFY = FALSE)
+    )
+  }, re, se, SIMPLIFY = FALSE)
 }
 
 
@@ -112,7 +125,7 @@
   }
 
   dat <- as.data.frame(bayestestR::estimate_density(r))
-  dat$curve <- stats::dnorm(seq(min(dat$x), max(dat$x), length.out = nrow(dat)),  mean(r),  stats::sd(r))
+  dat$curve <- stats::dnorm(seq(min(dat$x), max(dat$x), length.out = nrow(dat)), mean(r), stats::sd(r))
   dat
 }
 
@@ -121,13 +134,16 @@
 
 #' @importFrom stats residuals fitted
 .diag_ncv <- function(model) {
-  ncv <- tryCatch({
-    data.frame(
-      x = stats::fitted(model),
-      y = stats::residuals(model)
-    )
-  },
-  error = function(e) { NULL }
+  ncv <- tryCatch(
+    {
+      data.frame(
+        x = stats::fitted(model),
+        y = stats::residuals(model)
+      )
+    },
+    error = function(e) {
+      NULL
+    }
   )
 
   if (is.null(ncv)) {
@@ -148,16 +164,19 @@
       if (inherits(model, "merMod")) {
         stats::residuals(model, scaled = TRUE)
       } else if (inherits(model, c("glmmTMB", "MixMod"))) {
-        sigma <- if (faminfo$is_mixed)
+        sigma <- if (faminfo$is_mixed) {
           sqrt(insight::get_variance_residual(model))
-        else
+        } else {
           .sigma_glmmTMB_nonmixed(model, faminfo)
+        }
         stats::residuals(model) / sigma
       } else {
         stats::rstandard(model)
       }
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   if (is.null(r)) {

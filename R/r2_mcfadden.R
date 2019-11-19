@@ -21,7 +21,6 @@
 #'
 #' model <- mlogit(mode ~ price + catch, data = Fish)
 #' r2_mcfadden(model)
-#'
 #' @importFrom insight find_parameters
 #' @importFrom stats logLik update
 #' @export

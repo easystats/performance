@@ -59,7 +59,6 @@
 #' )
 #'
 #' check_singularity(model)
-#'
 #' @export
 check_singularity <- function(x, tolerance = 1e-5, ...) {
   UseMethod("check_singularity")
@@ -68,8 +67,9 @@ check_singularity <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE))
+  if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needed for this function to work. Please install it.")
+  }
 
   theta <- lme4::getME(x, "theta")
   # diagonal elements are identifiable because they are fitted
@@ -80,8 +80,9 @@ check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE))
+  if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needed for this function to work. Please install it.")
+  }
 
   vc <- .collapse_cond(lme4::VarCorr(x))
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
@@ -89,8 +90,9 @@ check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("ordinal", quietly = TRUE))
+  if (!requireNamespace("ordinal", quietly = TRUE)) {
     stop("Package `ordinal` needed for this function to work. Please install it.")
+  }
 
   vc <- ordinal::VarCorr(x)
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
@@ -104,8 +106,9 @@ check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
 #' @importFrom stats na.omit
 #' @export
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("nlme", quietly = TRUE))
+  if (!requireNamespace("nlme", quietly = TRUE)) {
     stop("Package `nlme` needed for this function to work. Please install it.")
+  }
 
   any(abs(stats::na.omit(as.numeric(diag(nlme::getVarCov(x)))) < tolerance))
 }

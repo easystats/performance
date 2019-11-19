@@ -45,7 +45,6 @@
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 #' performance_pcp(m)
 #' performance_pcp(m, method = "Gelman-Hill")
-#'
 #' @importFrom stats predict qnorm binomial predict.glm pchisq logLik weights as.formula glm
 #' @importFrom insight get_response n_obs model_info find_response get_data
 #' @export
@@ -64,10 +63,11 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron") {
     weights = stats::weights(model)
   ))
 
-  if (method %in% c("Herron", "herron"))
+  if (method %in% c("Herron", "herron")) {
     .pcp_herron(model, m0, ci)
-  else
+  } else {
     .pcp_gelman_hill(model, m0, ci)
+  }
 }
 
 

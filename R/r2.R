@@ -30,7 +30,6 @@
 #' library(lme4)
 #' model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #' r2(model)
-#'
 #' @export
 r2 <- function(model, ...) {
   UseMethod("r2")
@@ -343,7 +342,7 @@ r2.survreg <- function(model, ...) {
 #' @export
 r2.svyglm <- function(model, ...) {
   rsq <- (model$null.deviance - model$deviance) / model$null.deviance
-  rsq.adjust = 1 - ((1 - rsq) * (model$df.null / model$df.residual))
+  rsq.adjust <- 1 - ((1 - rsq) * (model$df.null / model$df.residual))
 
   out <- list(
     R2 = c(`R2` = rsq),

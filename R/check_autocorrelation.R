@@ -19,7 +19,6 @@
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_autocorrelation(m)
-#'
 #' @importFrom stats residuals model.matrix fitted
 #' @export
 check_autocorrelation <- function(x, ...) {
@@ -53,6 +52,6 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
 
 .durbWats <- function(.residuals) {
   n <- length(.residuals)
-  den <- sum(.residuals ^ 2)
-  (sum((.residuals[2:n] - .residuals[1:(n - 1)]) ^ 2)) / den
+  den <- sum(.residuals^2)
+  (sum((.residuals[2:n] - .residuals[1:(n - 1)])^2)) / den
 }

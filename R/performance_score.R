@@ -36,7 +36,6 @@
 #' model <- glm(counts ~ outcome + treatment, family = poisson())
 #'
 #' performance_score(model)
-#'
 #' \dontrun{
 #' library(glmmTMB)
 #' data(Salamanders)
@@ -129,15 +128,17 @@ performance_score <- function(model, verbose = TRUE) {
       }
       glmmTMB::getME(model, "theta")
     } else {
-      sum(stats::residuals(model , type = "pearson")^2) / stats::df.residual(model)
+      sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
     }
   } else {
-    tryCatch({
-      sum(stats::residuals(model , type = "pearson")^2) / stats::df.residual(model)
-    },
-    error = function(e) {
-      0
-    })
+    tryCatch(
+      {
+        sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
+      },
+      error = function(e) {
+        0
+      }
+    )
   }
 }
 

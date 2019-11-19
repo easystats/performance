@@ -22,8 +22,6 @@
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_difficulty(x)
-#'
-#'
 #' @importFrom stats na.omit
 #' @export
 item_difficulty <- function(x) {

@@ -17,7 +17,6 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_coxsnell(model)
-#'
 #' @references
 #' \itemize{
 #'   \item Cox, D. R., Snell, E. J. (1989). Analysis of binary data (Vol. 32). Monographs on Statistics and Applied Probability.

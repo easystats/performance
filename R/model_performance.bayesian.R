@@ -35,7 +35,6 @@
 #'   iter = 500
 #' )
 #' model_performance(model)
-#'
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
 #'
@@ -106,5 +105,3 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
 
 #' @export
 model_performance.brmsfit <- model_performance.stanreg
-
-

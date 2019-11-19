@@ -16,7 +16,6 @@
 #'
 #' model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
 #' r2_loo(model)
-#'
 #' @importFrom insight get_response find_algorithm
 #' @importFrom stats var
 #' @export
@@ -37,12 +36,13 @@ r2_loo <- function(model) {
   # predicted, resulting in different lengths between y and ypred
 
   if (length(y) > ncol(ypred)) {
-    tryCatch({
-      y <- y[as.numeric(attr(ypred, "dimnames")[[2]])]
-    },
-    error = function(x) {
-      NULL
-    }
+    tryCatch(
+      {
+        y <- y[as.numeric(attr(ypred, "dimnames")[[2]])]
+      },
+      error = function(x) {
+        NULL
+      }
     )
   }
 

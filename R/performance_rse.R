@@ -14,7 +14,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ hp + gear, data = mtcars)
 #' performance_rse(m)
-#'
 #' @importFrom stats residuals df.residual
 #' @export
 performance_rse <- function(model) {
