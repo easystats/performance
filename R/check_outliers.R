@@ -657,7 +657,7 @@ as.numeric.check_outliers <- function(x, ...){
   }
 
   # Compute
-  if (utils::packageVersion("solitude") < '0.2.1') {
+  if (utils::packageVersion("solitude") < '0.2.0') {
     iforest <- solitude::isolationForest(x)
     out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
   } else{
