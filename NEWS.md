@@ -2,6 +2,7 @@
 
 ## General
 
+* Support for `mclogit` and `mmclogit` models.
 * `model_performance()` now supports *plm* models.
 
 ## Minor changes
