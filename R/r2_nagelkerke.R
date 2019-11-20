@@ -92,6 +92,9 @@ r2_nagelkerke.clm <- function(model) {
 r2_nagelkerke.polr <- r2_nagelkerke.clm
 
 #' @export
+r2_nagelkerke.mclogit <- r2_nagelkerke.clm
+
+#' @export
 r2_nagelkerke.censReg <- r2_nagelkerke.clm
 
 #' @export

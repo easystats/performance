@@ -61,11 +61,11 @@ r2_coxsnell.glm <- function(model) {
 
 
 #' @export
-r2_coxsnell.BBreg <- function(model) {
-  r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model)))
-  names(r2_coxsnell) <- "Cox & Snell's R2"
-  r2_coxsnell
-}
+r2_coxsnell.BBreg <- r2_coxsnell.glm
+
+
+#' @export
+r2_coxsnell.mclogit <- r2_coxsnell.glm
 
 
 #' @export

@@ -305,6 +305,20 @@ r2.multinom <- function(model, ...) {
 
 
 #' @export
+r2.mclogit <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}
+
+
+
+#' @export
+r2.mmclogit <- function(model, ...) {
+  list(R2 = NA)
+}
+
+
+
+#' @export
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
