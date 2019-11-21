@@ -6,7 +6,7 @@
 \alias{performance}
 \title{Model Performance}
 \usage{
-compare_performance(..., metrics = "all", verbose = TRUE)
+compare_performance(..., metrics = "all", rank = FALSE, verbose = TRUE)
 
 model_performance(model, ...)
 

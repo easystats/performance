@@ -3,7 +3,7 @@
 #' @inheritParams model_performance.lm
 #' @rdname model_performance
 #' @export
-compare_performance <- function(..., metrics = "all", verbose = TRUE) {
+compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
@@ -44,7 +44,50 @@ compare_performance <- function(..., metrics = "all", verbose = TRUE) {
     warning("When comparing models, please note that probably not all models were fit from same data.", call. = FALSE)
   }
 
+  # create "ranking" of models
+  if (isTRUE(rank)) {
+    dfs <- .rank_performance_indices(dfs)
+  }
+
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
   class(dfs) <- c("compare_performance", "see_compare_performance", class(dfs))
   dfs
+}
+
+
+
+
+.rank_performance_indices <- function(x) {
+  out <- x
+
+  # set reference for Bayes factors to 1
+  if ("BF" %in% colnames(out)) out$BF[is.na(out$BF)] <- 1
+
+  # normalize indices, for comparison
+  out[] <- lapply(out, function(i) {
+    if (is.numeric(i)) i <- .normalize_vector(i)
+    i
+  })
+
+  # recode some indices, so higher values = better fit
+  for (i in c("AIC", "BIC", "RMSE")) {
+    if (i %in% colnames(out)) {
+      out[[i]] <- 1 - out[[i]]
+    }
+  }
+
+  # create rank-index
+  numeric_columns <- sapply(out, is.numeric)
+  rank_index <- rowMeans(out[numeric_columns], na.rm = TRUE)
+
+  x <- x[order(rank_index), ]
+
+  rownames(x) <- NULL
+  attr(x, "rank_index") <- rank_index
+
+  x
+}
+
+.normalize_vector <- function(x) {
+  as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 }
