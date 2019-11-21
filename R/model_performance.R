@@ -14,6 +14,12 @@
 #' @param model Statistical model.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed.
 #'   See related documentation of object's class for details.
+#' @param rank Logical, if \code{TRUE}, models are ranked according to "best overall
+#'   model performance". A new column \code{Performance_Score} is returned. This
+#'   score ranges from 0\% to 100\%, higher values indicating better model performance.
+#'   Calculation is based on normalizing all indices (i.e. rescaling them to a
+#'   range from 0 to 1), and taking the mean value of all indices for each model.
+#'   This is a rather quick heuristic, but might be helpful as exploratory index.
 #' @param ... Arguments passed to or from other methods, resp. for
 #'   \code{compare_performance()}, one or multiple model objects (also of
 #'   different classes).
@@ -27,6 +33,13 @@
 #'   (see \code{\link[bayestestR]{bayesfactor_models}}) for each model against
 #'   the denominator model. The \emph{first} model is used as denominator model,
 #'   and its Bayes factor is set to \code{NA} to indicate the reference model.
+#'   \cr \cr
+#'   There is a \code{plot()}-method for \code{compare_performance()},
+#'   which creates a "spiderweb" plot, where the different indices are
+#'   normalized and larger values indicate better model performance.
+#'   Hence, points closer to the center indicate worse fit indices
+#'   (see \href{https://easystats.github.io/see/articles/performance.html}{online-documentation}
+#'   for more details).
 #'
 #' @examples
 #' library(lme4)
@@ -43,6 +56,7 @@
 #' lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 #' lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
 #' compare_performance(lm1, lm2, lm3)
+#' compare_performance(lm1, lm2, lm3, rank = TRUE)
 #' @export
 model_performance <- function(model, ...) {
   UseMethod("model_performance")

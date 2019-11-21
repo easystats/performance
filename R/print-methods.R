@@ -1,9 +1,9 @@
 #' @export
 print.compare_performance <- function(x, digits = 3, ...) {
-  insight::print_color("# Comparison of Model Performance Indices\n", "blue")
+  insight::print_color("# Comparison of Model Performance Indices\n\n", "blue")
 
   if ("Performance_Score" %in% colnames(x)) {
-    x$Performance_Score <- sprintf("%.2f", 100 * x$Performance_Score)
+    x$Performance_Score <- sprintf("%.2f%%", 100 * x$Performance_Score)
   }
 
   x[] <- lapply(x, function(i) {
@@ -14,6 +14,10 @@ print.compare_performance <- function(x, digits = 3, ...) {
   })
 
   print.data.frame(x, row.names = FALSE)
+
+  if ("Performance_Score" %in% colnames(x)) {
+    insight::print_color(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.\n", x$Model[1], x$Type[1], x$Performance_Score[1]), "yellow")
+  }
 }
 
 

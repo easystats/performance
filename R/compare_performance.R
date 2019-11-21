@@ -81,7 +81,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   rank_index <- rowMeans(out[numeric_columns], na.rm = TRUE)
 
   x$Performance_Score <- rank_index
-  x <- x[order(rank_index), ]
+  x <- x[order(rank_index, decreasing = TRUE), ]
 
   rownames(x) <- NULL
   x
