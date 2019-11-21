@@ -13,6 +13,10 @@ reference:
   contents:
   - check_model
   - model_performance
+  - model_performance.lm
+  - model_performance.merMod
+  - model_performance.stanreg
+  - model_performance.lavaan
 
 - title: "Common Indices"
   contents:
@@ -55,7 +59,6 @@ reference:
   - item_intercor
   - item_reliability
   - item_split_half
-  - principal_components
 
 - title: "Further R2 Functions"
   contents:

@@ -76,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.1</span>
       </span>
     </div>
 
@@ -126,13 +126,54 @@
       
     </div>
 
-    <div id="performance-040" class="section level1">
+    <div id="performance-041" class="section level1">
 <h1 class="page-header">
-<a href="#performance-040" class="anchor"></a>performance 0.4.0<small> 2019-10-21 </small>
+<a href="#performance-041" class="anchor"></a>performance 0.4.1<small> Unreleased </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>Support for <code>mclogit</code> and <code>mmclogit</code> models.</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> now supports <em>plm</em> models.</li>
+<li>
+<code><a href="../reference/model_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/model_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
+</ul>
+</div>
+<div id="minor-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-changes" class="anchor"></a>Minor changes</h2>
+<ul>
+<li>
+<code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now no longer returns backticks in row- and column names.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
+<li>
+<code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</li>
+</ul>
+</div>
+</div>
+    <div id="performance-040" class="section level1">
+<h1 class="page-header">
+<a href="#performance-040" class="anchor"></a>performance 0.4.0<small> 2019-10-21 </small>
+</h1>
+<div id="general-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">performance()</a></code> is an alias for <code><a href="../reference/model_performance.html">model_performance()</a></code>.</li>
@@ -146,9 +187,9 @@
 <code>principal_components()</code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://rdrr.io/pkg/parameters/man/principal_components.html">parameters::principal_components()</a></code> now.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</li>
@@ -163,9 +204,9 @@
 <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/model_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
 <li>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occured when checking for outliers.</li>
@@ -176,9 +217,9 @@
 <h1 class="page-header">
 <a href="#performance-030" class="anchor"></a>performance 0.3.0<small> 2019-08-05 </small>
 </h1>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h2>
+<a href="#general-2" class="anchor"></a>General</h2>
 <ul>
 <li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
 <li>
@@ -194,9 +235,9 @@
 <code><a href="../reference/model_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</li>
@@ -224,9 +265,9 @@
 <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> to check models for homogeneity of variances.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues with <code><a href="../reference/model_performance.html">compare_performance()</a></code> and row-ordering.</li>
 <li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inlfated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
@@ -238,9 +279,9 @@
 <h1 class="page-header">
 <a href="#performance-020" class="anchor"></a>performance 0.2.0<small> 2019-06-04 </small>
 </h1>
-<div id="general-2" class="section level2">
+<div id="general-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-2" class="anchor"></a>General</h2>
+<a href="#general-3" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</li>
@@ -308,9 +349,9 @@
 <code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>
@@ -323,9 +364,9 @@
 <li>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
 <li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (#48).</li>
@@ -340,6 +381,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#performance-041">0.4.1</a></li>
         <li><a href="#performance-040">0.4.0</a></li>
         <li><a href="#performance-030">0.3.0</a></li>
         <li><a href="#performance-020">0.2.0</a></li>
