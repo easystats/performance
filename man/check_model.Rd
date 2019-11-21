@@ -7,8 +7,7 @@
 \usage{
 check_model(x, ...)
 
-\method{check_model}{default}(x, dot_size = 2, line_size = 0.8,
-  panel = TRUE, check = "all", ...)
+\method{check_model}{default}(x, dot_size = 2, line_size = 0.8, panel = TRUE, check = "all", ...)
 }
 \arguments{
 \item{x}{A model object.}

@@ -7,8 +7,7 @@
 \usage{
 icc(model, ...)
 
-\method{icc}{brmsfit}(model, re.form = NULL, robust = TRUE,
-  ci = 0.95, ...)
+\method{icc}{brmsfit}(model, re.form = NULL, robust = TRUE, ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},

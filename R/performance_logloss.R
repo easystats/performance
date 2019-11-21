@@ -5,7 +5,6 @@
 #'
 #' @param model Model with binary outcome.
 #' @param ... Currently not used.
-#' @inheritParams model_performance.lm
 #'
 #' @return Numeric, the log loss of \code{model}.
 #'

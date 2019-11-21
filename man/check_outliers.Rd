@@ -9,14 +9,11 @@
 \usage{
 check_outliers(x, ...)
 
-\method{check_outliers}{default}(x, method = c("cook", "pareto"),
-  threshold = NULL, ...)
+\method{check_outliers}{default}(x, method = c("cook", "pareto"), threshold = NULL, ...)
 
-\method{check_outliers}{numeric}(x, method = "zscore",
-  threshold = NULL, ...)
+\method{check_outliers}{numeric}(x, method = "zscore", threshold = NULL, ...)
 
-\method{check_outliers}{data.frame}(x, method = "mahalanobis",
-  threshold = NULL, ...)
+\method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ...)
 }
 \arguments{
 \item{x}{A model or a data.frame object.}

@@ -4,8 +4,7 @@
 \alias{performance_accuracy}
 \title{Accuracy of predictions from model fit}
 \usage{
-performance_accuracy(model, method = c("cv", "boot"), k = 5,
-  n = 1000)
+performance_accuracy(model, method = c("cv", "boot"), k = 5, n = 1000)
 }
 \arguments{
 \item{model}{Fitted model object of class \code{lm} or \code{glm}, the latter

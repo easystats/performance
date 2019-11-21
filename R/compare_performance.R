@@ -45,5 +45,6 @@ compare_performance <- function(..., metrics = "all", verbose = TRUE) {
   }
 
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
+  class(dfs) <- c("compare_performance", "see_compare_performance", class(dfs))
   dfs
 }

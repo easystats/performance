@@ -73,3 +73,12 @@ plot.check_homogeneity <- function(x, ...) {
   }
   NextMethod()
 }
+
+
+#' @export
+plot.compare_performance <- function(x, ...) {
+  if (!requireNamespace("see", quietly = TRUE)) {
+    stop("Package 'see' needed for model comparison plots. Please install it.")
+  }
+  NextMethod()
+}

@@ -4,6 +4,7 @@
 
 * Support for `mclogit` and `mmclogit` models.
 * `model_performance()` now supports *plm* models.
+* `compare_models()` now gets a `plot()`-method (requires package **see**).
 
 ## Minor changes
 

@@ -7,8 +7,11 @@
 \usage{
 check_collinearity(x, ...)
 
-\method{check_collinearity}{glmmTMB}(x, component = c("all",
-  "conditional", "count", "zi", "zero_inflated"), ...)
+\method{check_collinearity}{glmmTMB}(
+  x,
+  component = c("all", "conditional", "count", "zi", "zero_inflated"),
+  ...
+)
 }
 \arguments{
 \item{x}{A model object (that should at least respond to \code{vcov()},
