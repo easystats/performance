@@ -1,4 +1,24 @@
 #' @export
+print.compare_performance <- function(x, digits = 3, ...) {
+  insight::print_color("# Comparison of Model Performance Indices\n", "blue")
+
+  if ("Performance_Score" %in% colnames(x)) {
+    x$Performance_Score <- sprintf("%.2f", 100 * x$Performance_Score)
+  }
+
+  x[] <- lapply(x, function(i) {
+    if (is.numeric(i))
+      round(i, digits = digits)
+    else
+      i
+  })
+
+  print.data.frame(x, row.names = FALSE)
+}
+
+
+
+#' @export
 print.performance_model <- function(x, digits = 3, ...) {
   insight::print_color("# Indices of model performance\n\n", "blue")
 
