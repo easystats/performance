@@ -46,7 +46,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
   # create "ranking" of models
   if (isTRUE(rank)) {
-    dfs <- .rank_performance_indices(dfs)
+    dfs <- .rank_performance_indices(dfs, verbose)
   }
 
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
@@ -57,8 +57,13 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
 
 
-.rank_performance_indices <- function(x) {
+.rank_performance_indices <- function(x, verbose) {
   out <- x
+
+  # all models comparable?
+  if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
+    warning("Models are not of same type. Comparison of indices might be not meaningful.", call. = FALSE)
+  }
 
   # set reference for Bayes factors to 1
   if ("BF" %in% colnames(out)) out$BF[is.na(out$BF)] <- 1
@@ -76,8 +81,17 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
     }
   }
 
-  # create rank-index
-  numeric_columns <- sapply(out, is.numeric)
+  # any indices with NA?
+  missing_indices <- sapply(out, anyNA)
+  if (any(missing_indices) && isTRUE(verbose)) {
+    warning(sprintf(
+      "Following indices with missing values are not used for ranking: %s",
+      paste0(colnames(out)[missing_indices], collapse = ", ")
+    ), call. = FALSE)
+  }
+
+  # create rank-index, only for complete indices
+  numeric_columns <- sapply(out, function(i) is.numeric(i) & !anyNA(i))
   rank_index <- rowMeans(out[numeric_columns], na.rm = TRUE)
 
   x$Performance_Score <- rank_index
