@@ -26,7 +26,7 @@ r2_nagelkerke <- function(model) {
 
   D.base <- -2 * l_base
   # Is it still necessary?
-  if (inherits(model, c("vglm", "clm2"))) {
+  if (inherits(model, c("vglm", "vgam", "clm2"))) {
     n <- insight::n_obs(model)
   } else {
     n <- attr(L.full, "nobs")
@@ -69,6 +69,9 @@ r2_nagelkerke.vglm <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))
   .r2_nagelkerke(model, l_base)
 }
+
+#' @export
+r2_nagelkerke.vgam <- r2_nagelkerke.vglm
 
 #' @export
 r2_nagelkerke.multinom <- function(model) {

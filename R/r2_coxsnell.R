@@ -38,7 +38,7 @@ r2_coxsnell <- function(model) {
   G2 <- -2 * (l_base - l_full)
 
   # Is it still necessary?
-  if (inherits(model, c("vglm", "clm2"))) {
+  if (inherits(model, c("vglm", "vgam", "clm2"))) {
     n <- insight::n_obs(model)
   } else {
     n <- attr(l_full, "nobs")

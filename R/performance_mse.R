@@ -24,7 +24,11 @@
 performance_mse <- function(model, verbose = TRUE) {
   res <- tryCatch(
     {
-      stats::residuals(model)
+      if (inherits(model, c("vgam", "vglm"))) {
+        model@residuals
+      } else {
+        stats::residuals(model)
+      }
     },
     error = function(e) {
       NULL
