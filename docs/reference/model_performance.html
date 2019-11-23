@@ -167,11 +167,7 @@ See related documentation of object's class for details.</p></td>
     <tr>
       <th>rank</th>
       <td><p>Logical, if <code>TRUE</code>, models are ranked according to "best overall
-model performance". A new column <code>Performance_Score</code> is returned. This
-score ranges from 0% to 100%, higher values indicating better model performance.
-Calculation is based on normalizing all indices (i.e. rescaling them to a
-range from 0 to 1), and taking the mean value of all indices for each model.
-This is a rather quick heuristic, but might be helpful as exploratory index.</p></td>
+model performance". See 'Details'.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -190,11 +186,24 @@ This is a rather quick heuristic, but might be helpful as exploratory index.</p>
   the same data frame with one row per model.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If all models were fit from the same data, <code>compare_performance()</code>
+    
+<h3>Bayes factor for Model Comparison</h3>
+<p>If all models were fit from the same data, <code>compare_performance()</code>
   returns an additional column named <code>BF</code>, which shows the Bayes factor
   (see <code><a href='https://rdrr.io/pkg/bayestestR/man/bayesfactor_models.html'>bayesfactor_models</a></code>) for each model against
   the denominator model. The <em>first</em> model is used as denominator model,
-  and its Bayes factor is set to <code>NA</code> to indicate the reference model.
+  and its Bayes factor is set to <code>NA</code> to indicate the reference model.</p><p></p><h3>Ranking Models</h3>
+<p>When <code>rank = TRUE</code>, a new column <code>Performance_Score</code> is returned. This
+  score ranges from 0% to 100%, higher values indicating better model performance.
+  Calculation is based on normalizing all indices (i.e. rescaling them to a
+  range from 0 to 1), and taking the mean value of all indices for each model.
+  This is a rather quick heuristic, but might be helpful as exploratory index.
+  <br /> <br />
+  In particular when models are of different types (e.g. mixed models, classical
+  linear models, logistic regression, ...), not all indices will be computed
+  for each model. In case where an index can't be calculated for a specific
+  model type, this model gets an <code>NA</code> value. All indices that have any
+  <code>NA</code>s are excluded from calculating the performance score.
   <br /> <br />
   There is a <code><a href='https://rdrr.io/r/graphics/plot.html'>plot()</a></code>-method for <code>compare_performance()</code>,
   which creates a "spiderweb" plot, where the different indices are
@@ -202,6 +211,7 @@ This is a rather quick heuristic, but might be helpful as exploratory index.</p>
   Hence, points closer to the center indicate worse fit indices
   (see <a href='https://easystats.github.io/see/articles/performance.html'>online-documentation</a>
   for more details).</p>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)
