@@ -29,7 +29,6 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
 #' @importFrom insight model_info
-#' @importFrom stats AIC BIC
 #' @export
 model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
@@ -42,10 +41,10 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   attrib <- list()
 
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- stats::AIC(model)
+    out$AIC <- .get_AIC(model)
   }
   if ("BIC" %in% toupper(metrics)) {
-    out$BIC <- stats::BIC(model)
+    out$BIC <- .get_BIC(model)
   }
   if ("R2" %in% toupper(metrics)) {
     R2 <- r2(model)

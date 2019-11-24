@@ -3,6 +3,40 @@
 
 
 
+
+
+#' @importFrom stats AIC
+.get_AIC <- function(x) {
+  if (inherits(x, c("vgam", "vglm"))) {
+    if (!requireNamespace("VGAM", quietly = TRUE)) {
+      warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
+      return(NULL)
+    }
+    VGAM::AIC(x)
+  } else {
+    stats::AIC(x)
+  }
+}
+
+
+
+
+#' @importFrom stats BIC
+.get_BIC <- function(x) {
+  if (inherits(x, c("vgam", "vglm"))) {
+    if (!requireNamespace("VGAM", quietly = TRUE)) {
+      warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
+      return(NULL)
+    }
+    VGAM::BIC(x)
+  } else {
+    stats::BIC(x)
+  }
+}
+
+
+
+
 # safe deparse, works for very long strings
 .safe_deparse <- function(string) {
   paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = "")

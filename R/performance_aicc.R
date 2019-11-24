@@ -35,3 +35,13 @@ performance_aicc.default <- function(x, ...) {
 
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
 }
+
+
+#' @export
+performance_aicc.vglm <- function(x, ...) {
+  if (!requireNamespace("VGAM", quietly = TRUE)) {
+    warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
+    return(NULL)
+  }
+  VGAM::AICc(x)
+}

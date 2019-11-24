@@ -63,7 +63,8 @@ Suggests:
 	see (>= 0.2.1),
 	survival,
 	solitude,
-	testthat
+	testthat,
+	VGAM
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
