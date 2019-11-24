@@ -76,17 +76,6 @@ r2_coxsnell.multinom <- function(model) {
 
 
 #' @export
-r2_coxsnell.vglm <- function(model) {
-  if (!(is.null(model@call$summ) && !identical(model@call$summ, 0))) {
-    stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
-  }
-
-  l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_coxsnell(model, l_base)
-}
-
-
-#' @export
 r2_coxsnell.coxph <- function(model) {
   l_base <- model$loglik[1]
   .r2_coxsnell(model, l_base)

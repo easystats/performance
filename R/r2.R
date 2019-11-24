@@ -378,9 +378,11 @@ r2.truncreg <- function(model, ...) {
 
 #' @export
 r2.vglm <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
+  list("R2_McKelvey" = r2_mckelvey(model))
 }
 
+#' @export
+r2.vgam <- r2.vglm
 
 
 #' @export

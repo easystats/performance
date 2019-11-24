@@ -61,19 +61,6 @@ r2_nagelkerke.BBreg <- r2_nagelkerke.glm
 # Nagelkerke's R2 based on LogLik ----------------
 
 #' @export
-r2_nagelkerke.vglm <- function(model) {
-  if (!(is.null(model@call$summ) && !identical(model@call$summ, 0))) {
-    stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
-  }
-
-  l_base <- stats::logLik(stats::update(model, ~1))
-  .r2_nagelkerke(model, l_base)
-}
-
-#' @export
-r2_nagelkerke.vgam <- r2_nagelkerke.vglm
-
-#' @export
 r2_nagelkerke.multinom <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
   .r2_nagelkerke(model, l_base)

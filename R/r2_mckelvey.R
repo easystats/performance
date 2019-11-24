@@ -48,11 +48,12 @@ r2_mckelvey.default <- function(model) {
   faminfo <- insight::model_info(model)
   n <- insight::n_obs(model)
 
-  if (faminfo$is_binomial) {
+  if (faminfo$is_binomial | faminfo$is_ordinal) {
     dist.variance <- switch(
       faminfo$link_function,
       probit = 1,
       logit = pi^2 / 3,
+      clogloglink = pi^2 / 6,
       NA
     )
   } else if (faminfo$is_count) {
@@ -65,6 +66,11 @@ r2_mckelvey.default <- function(model) {
   }
 
   y.hat <- stats::predict(model, type = "link")
+
+  # fix for VGAM
+  yhat_columns <- ncol(y.hat)
+  if (!is.null(yhat_columns) && yhat_columns > 1) y.hat <- as.vector(y.hat[, 1])
+
   dist.residual <- sum((y.hat - mean(y.hat))^2)
 
   mckelvey <- dist.residual / (n * dist.variance + dist.residual)
