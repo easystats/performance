@@ -131,3 +131,6 @@ model_performance.truncreg <- model_performance.lm
 
 #' @export
 model_performance.vglm <- model_performance.lm
+
+#' @export
+model_performance.fixest <- model_performance.lm

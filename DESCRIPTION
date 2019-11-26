@@ -42,6 +42,7 @@ Suggests:
 	bigutilsr,
 	dbscan,
 	covr,
+	fixest,
 	glmmTMB,
 	ICS,
 	ICSOutlier,

@@ -60,12 +60,18 @@ check_overdispersion <- function(x, ...) {
 }
 
 
-#' @importFrom insight get_response
-#' @importFrom stats fitted nobs coef pchisq family
+
+
+# Overdispersion for classical models -----------------------------
+
+
+#' @importFrom insight get_response model_info
+#' @importFrom stats fitted nobs coef pchisq
 #' @export
 check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
-  if (!stats::family(x)$family %in% c("poisson", "quasipoisson")) {
+  model_info <- insight::model_info(x)
+  if (!model_info$is_poisson) {
     stop("Model must be from Poisson-family.", call. = F)
   }
 
@@ -90,28 +96,21 @@ check_overdispersion.glm <- function(x, ...) {
   )
 }
 
-
 #' @export
-check_overdispersion.negbin <- function(x, ...) {
-  check_overdispersion.lme4(x)
-}
+check_overdispersion.fixest <- check_overdispersion.glm
 
 
-#' @export
-check_overdispersion.merMod <- function(x, ...) {
-  check_overdispersion.lme4(x)
-}
 
 
-#' @export
-check_overdispersion.glmmTMB <- function(x, ...) {
-  check_overdispersion.lme4(x)
-}
+
+
+# Overdispersion for mixed models ---------------------------
 
 
 #' @importFrom insight model_info
 #' @importFrom stats df.residual residuals pchisq
-check_overdispersion.lme4 <- function(x) {
+#' @export
+check_overdispersion.merMod <- function(x, ...) {
   # check if we have poisson
   if (!insight::model_info(x)$is_poisson) {
     stop("Model must be from Poisson-family.", call. = F)
@@ -133,3 +132,9 @@ check_overdispersion.lme4 <- function(x) {
     )
   )
 }
+
+#' @export
+check_overdispersion.negbin <- check_overdispersion.merMod
+
+#' @export
+check_overdispersion.glmmTMB <- check_overdispersion.merMod

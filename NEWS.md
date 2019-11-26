@@ -2,7 +2,7 @@
 
 ## General
 
-* Support for `mclogit`, `mmclogit`, `vgam` and `vglm` models.
+* Support for `fixest`, `mclogit`, `mmclogit`, `vgam` and `vglm` models.
 * `model_performance()` now supports *plm* models.
 * `r2()` now supports *complmrob* models.
 * `compare_performance()` now gets a `plot()`-method (requires package **see**).

@@ -265,6 +265,40 @@ r2.feis <- function(model, ...) {
 
 
 #' @export
+r2.fixest <- function(model, ...) {
+  if (!requireNamespace("fixest", quietly = TRUE)) {
+    stop("Package 'fixest' needed to calculate R2. Please install it.")
+  }
+
+  r2 <- fixest::r2(model)
+
+  out_normal <- .compact_list(list(
+    R2 = r2["r2"],
+    R2_adjusted = r2["ar2"],
+    R2_within = r2["wr2"],
+    R2_within_adjusted = r2["war2"]
+  ), remove_na = TRUE)
+
+  out_pseudo <- .compact_list(list(
+    R2 = r2["pr2"],
+    R2_adjusted = r2["apr2"],
+    R2_within = r2["wpr2"],
+    R2_within_adjusted = r2["wapr2"]
+  ), remove_na = TRUE)
+
+  if (length(out_normal)) {
+    out <- out_normal
+  } else {
+    out <- out_pseudo
+  }
+
+  attr(out, "model_type") <- "Fixed Effects"
+  structure(class = "r2_generic", out)
+}
+
+
+
+#' @export
 r2.felm <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(

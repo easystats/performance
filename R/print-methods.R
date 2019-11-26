@@ -183,7 +183,16 @@ print.r2_generic <- function(x, digits = 3, ...) {
     insight::print_color("# R2\n\n", "blue")
   }
 
-  if ("R2_adjusted" %in% names(x)) {
+  if (all(c("R2_adjusted", "R2_within_adjusted") %in% names(x))) {
+    out <- paste0(c(
+      sprintf("              R2: %.*f", digits, x$R2),
+      sprintf("         adj. R2: %.*f", digits, x$R2_adjusted),
+      sprintf("       within R2: %.*f", digits, x$R2_within),
+      sprintf("  adj. within R2: %.*f", digits, x$R2_within_adjusted)
+    ),
+    collapse = "\n"
+    )
+  } else if ("R2_adjusted" %in% names(x)) {
     out <- paste0(c(
       sprintf("       R2: %.*f", digits, x$R2),
       sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)
