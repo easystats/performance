@@ -5,6 +5,7 @@
 #'
 #' @param model Model with binary outcome.
 #' @param ... Currently not used.
+#' @inheritParams model_performance.lm
 #'
 #' @return Numeric, the log loss of \code{model}.
 #'
@@ -23,7 +24,7 @@
 #' @importFrom stats fitted
 #' @importFrom insight get_response print_color
 #' @export
-performance_logloss <- function(model, ...) {
+performance_logloss <- function(model, verbose = TRUE, ...) {
   UseMethod("performance_logloss")
 }
 
@@ -43,8 +44,15 @@ performance_logloss.default <- function(model, verbose = TRUE, ...) {
 
 
 #' @export
-performance_logloss.brmsfit <- function(model, ...) {
+performance_logloss.brmsfit <- function(model, verbose = TRUE, ...) {
   yhat <- stats::fitted(object = model, summary = TRUE, ...)[, "Estimate"]
   resp <- .factor_to_numeric(insight::get_response(model))
-  mean(log(1 - abs(resp - yhat)) * -1)
+  ll <- suppressWarnings(mean(log(1 - abs(resp - yhat)) * -1))
+
+  if (is.na(ll)) {
+    if (verbose) insight::print_color("Can't calculate log-loss.\n", "red")
+    return(NA)
+  }
+
+  ll
 }

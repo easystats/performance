@@ -5,6 +5,7 @@
 #' @param model Object of class \code{stanreg} or \code{brmsfit}.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}).
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams model_performance.lm
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
@@ -42,14 +43,14 @@
 #' @importFrom bayestestR map_estimate hdi
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
-model_performance.stanreg <- function(model, metrics = "all", ...) {
+model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
     metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "LOGLOSS", "SCORE")
   }
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
-    warning("`model_performance()` only possible for models fit using the 'sampling' algorithm.", call. = FALSE)
+    if (verbose) warning("`model_performance()` only possible for models fit using the 'sampling' algorithm.", call. = FALSE)
     return(NULL)
   }
 
@@ -80,13 +81,13 @@ model_performance.stanreg <- function(model, metrics = "all", ...) {
     out$R2_adjusted <- suppressWarnings(r2_loo(model))
   }
   if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_categorical) {
-    out$RMSE <- performance_rmse(model)
+    out$RMSE <- performance_rmse(model, verbose = verbose)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$LOGLOSS <- performance_logloss(model)
+    out$LOGLOSS <- performance_logloss(model, verbose = verbose)
   }
   if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
-    .scoring_rules <- performance_score(model)
+    .scoring_rules <- performance_score(model, verbose = verbose)
     if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
     if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
   }

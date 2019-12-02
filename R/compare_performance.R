@@ -16,7 +16,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   }
 
   m <- mapply(function(.x, .y) {
-    dat <- model_performance(.x, metrics = metrics)
+    dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
     cbind(data.frame(Model = as.character(.y), Type = class(.x)[1], stringsAsFactors = FALSE), dat)
   }, objects, object_names, SIMPLIFY = FALSE)
 

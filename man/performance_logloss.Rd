@@ -4,10 +4,12 @@
 \alias{performance_logloss}
 \title{Log Loss}
 \usage{
-performance_logloss(model, ...)
+performance_logloss(model, verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{Model with binary outcome.}
+
+\item{verbose}{Toggle off warnings.}
 
 \item{...}{Currently not used.}
 }

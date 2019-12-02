@@ -65,7 +65,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
   if (("PCP" %in% toupper(metrics)) && info$is_binomial && !info$is_ordinal) {
-    out$PCP <- performance_pcp(model)$pcp_model
+    out$PCP <- performance_pcp(model, verbose = verbose)$pcp_model
   }
 
   # TODO: What with sigma and deviance?

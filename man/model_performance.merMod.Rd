@@ -4,12 +4,14 @@
 \alias{model_performance.merMod}
 \title{Performance of Mixed Models}
 \usage{
-\method{model_performance}{merMod}(model, metrics = "all", ...)
+\method{model_performance}{merMod}(model, metrics = "all", verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{Object of class \code{merMod}, \code{glmmTMB}, \code{lme} or \code{MixMod}.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")}).}
+
+\item{verbose}{Toggle off warnings.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

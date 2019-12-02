@@ -10,6 +10,9 @@
 ## Changes to functions
 
 * `compare_performance()` gets a `rank`-argument, to rank models according to their overall model performance.
+* `compare_performance()` has a nicer `print()`-method now.
+* Verbosity for `compare_performance()` was slightly adjusted.
+* `model_performance()`-methods for different objects now also have a `verbose`-argument.
 
 ## Minor changes
 
