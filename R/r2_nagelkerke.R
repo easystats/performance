@@ -82,6 +82,12 @@ r2_nagelkerke.clm <- function(model) {
 r2_nagelkerke.polr <- r2_nagelkerke.clm
 
 #' @export
+r2_nagelkerke.bracl <- r2_nagelkerke.clm
+
+#' @export
+r2_nagelkerke.brmultinom <- r2_nagelkerke.clm
+
+#' @export
 r2_nagelkerke.mclogit <- r2_nagelkerke.clm
 
 #' @export

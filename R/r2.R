@@ -143,6 +143,14 @@ r2.survreg <- r2.censReg
 #' @export
 r2.truncreg <- r2.censReg
 
+#' @export
+r2.bracl <- r2.censReg
+
+#' @export
+r2.brmultinom <- r2.censReg
+
+
+
 
 
 
