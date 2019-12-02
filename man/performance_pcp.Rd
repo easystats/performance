@@ -4,7 +4,7 @@
 \alias{performance_pcp}
 \title{Percentage of Correct Predictions}
 \usage{
-performance_pcp(model, ci = 0.95, method = "Herron")
+performance_pcp(model, ci = 0.95, method = "Herron", verbose = TRUE)
 }
 \arguments{
 \item{model}{Model with binary outcome.}
@@ -13,6 +13,8 @@ performance_pcp(model, ci = 0.95, method = "Herron")
 
 \item{method}{Name of the method to calculate the PCP (see 'Details').
 Default is \code{"Herron"}. May be abbreviated.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 A list with several elements: the percentage of correct predictions

@@ -60,6 +60,13 @@ performance_score <- function(model, verbose = TRUE) {
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
 
+  resp <- insight::get_response(model)
+
+  if (!is.null(ncol(resp)) && ncol(resp) > 1) {
+    if (verbose) insight::print_color("Can't calculate proper scoring rules for models without integer response values.\n", "red")
+    return(list(logarithmic = NA, quadratic = NA, spherical = NA))
+  }
+
   prob_fun <- if (minfo$is_binomial) {
     function(x, mean, pis, n) stats::dbinom(x, size = n, prob = mean)
   } else if (minfo$is_poisson && !minfo$is_zero_inflated) {
@@ -100,7 +107,7 @@ performance_score <- function(model, verbose = TRUE) {
   }
 
   pr <- .predict_score_y(model)
-  resp <- .factor_to_numeric(insight::get_response(model))
+  resp <- .factor_to_numeric(resp)
   p_y <- prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))
 
   quadrat_p <- sum(p_y^2)

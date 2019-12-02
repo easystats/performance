@@ -8,6 +8,7 @@
 #' @param ci The level of the confidence interval.
 #' @param method Name of the method to calculate the PCP (see 'Details').
 #'   Default is \code{"Herron"}. May be abbreviated.
+#' @inheritParams model_performance.lm
 #'
 #' @return A list with several elements: the percentage of correct predictions
 #'   of the full and the null model, their confidence intervals, as well as the
@@ -48,12 +49,18 @@
 #' @importFrom stats predict qnorm binomial predict.glm pchisq logLik weights as.formula glm
 #' @importFrom insight get_response n_obs model_info find_response get_data
 #' @export
-performance_pcp <- function(model, ci = 0.95, method = "Herron") {
+performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
   method <- match.arg(method, choices = c("Herron", "Gelman-Hill", "herron", "gelman_hill"))
   mi <- insight::model_info(model)
 
   if (!mi$is_binomial) {
     stop("`performance_pcp()` only works for models with binary outcome.")
+  }
+
+  resp <- insight::get_response(model)
+  if (!is.null(ncol(resp)) && ncol(resp) > 1) {
+    if (verbose) insight::print_color("`performance_pcp()` only works for models with binary response values.\n", "red")
+    return(NULL)
   }
 
   m0 <- suppressWarnings(stats::glm(

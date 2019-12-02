@@ -111,9 +111,18 @@
 
 
 
+
 # safe conversion from factor to numeric
 #' @importFrom stats na.omit
 .factor_to_numeric <- function(x) {
+  if (is.data.frame(x)) {
+    as.data.frame(lapply(x, .factor_to_numeric_helper))
+  } else {
+    .factor_to_numeric_helper(x)
+  }
+}
+
+.factor_to_numeric_helper <- function(x) {
   if (is.numeric(x)) {
     return(x)
   }
