@@ -21,7 +21,6 @@
 #' model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #' model_performance(model)
 #' @importFrom insight model_info
-#' @importFrom stats AIC BIC
 #' @export
 model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
@@ -32,10 +31,10 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
 
   out <- list()
   if ("AIC" %in% metrics) {
-    out$AIC <- stats::AIC(model)
+    out$AIC <- .get_AIC(model)
   }
   if ("BIC" %in% metrics) {
-    out$BIC <- stats::BIC(model)
+    out$BIC <- .get_BIC(model)
   }
   if ("R2" %in% metrics) {
     rsq <- suppressWarnings(r2(model))
@@ -68,6 +67,9 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
 
 #' @export
 model_performance.lme <- model_performance.merMod
+
+#' @export
+model_performance.rlmerMod <- model_performance.merMod
 
 #' @export
 model_performance.MixMod <- model_performance.merMod

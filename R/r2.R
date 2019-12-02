@@ -199,6 +199,9 @@ r2.mixed <- r2.merMod
 #' @export
 r2.MixMod <- r2.merMod
 
+#' @export
+r2.rlmerMod <- r2.merMod
+
 
 #' @export
 r2.wbm <- function(model, ...) {

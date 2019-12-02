@@ -14,7 +14,12 @@
     }
     VGAM::AIC(x)
   } else {
-    stats::AIC(x)
+    tryCatch({
+      stats::AIC(x)
+    },
+    error = function(e) {
+      NULL
+    })
   }
 }
 
@@ -30,7 +35,12 @@
     }
     VGAM::BIC(x)
   } else {
-    stats::BIC(x)
+    tryCatch({
+      stats::BIC(x)
+    },
+    error = function(e) {
+      NULL
+    })
   }
 }
 

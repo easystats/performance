@@ -79,6 +79,9 @@ check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
 }
 
 #' @export
+check_singularity.rlmerMod <- check_singularity.merMod
+
+#' @export
 check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
   if (!requireNamespace("lme4", quietly = TRUE)) {
     stop("Package `lme4` needed for this function to work. Please install it.")
