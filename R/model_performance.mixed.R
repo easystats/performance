@@ -2,9 +2,9 @@
 #'
 #' Compute indices of model performance for mixed models.
 #'
-#' @param model Object of class \code{merMod}, \code{glmmTMB}, \code{lme} or \code{MixMod}.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")}).
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams r2_nakagawa
 #' @inheritParams model_performance.lm
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
@@ -67,6 +67,9 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
 
 #' @export
 model_performance.lme <- model_performance.merMod
+
+#' @export
+model_performance.glmmadmb <- model_performance.merMod
 
 #' @export
 model_performance.rlmerMod <- model_performance.merMod

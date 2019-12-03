@@ -10,8 +10,7 @@ icc(model, ...)
 \method{icc}{brmsfit}(model, re.form = NULL, robust = TRUE, ci = 0.95, ...)
 }
 \arguments{
-\item{model}{A mixed effects model of class \code{merMod}, \code{glmmTMB},
-\code{MixMod}, \code{lme}, \code{mixed}, \code{stanreg} or \code{brmsfit}.}
+\item{model}{A (Bayesian) mixed effects model.}
 
 \item{...}{Currently not used.}
 
@@ -33,12 +32,10 @@ A list with two values, the adjusted and conditional ICC. For models
 \description{
 This function calculates the intraclass-correlation coefficient
  (ICC) - sometimes also called \emph{variance partition coefficient}
- (VPC) - for mixed effects models. The ICC is calculated for \code{merMod}
- (\pkg{lme4}), \code{glmmTMB} (\pkg{glmmTMB}), \code{MixMod} (\pkg{GLMMadpative}),
- \code{lme} (\pkg{nlme}), \code{mixed} (\pkg{afex}), and \code{stanreg}
- (\pkg{rstanarm}) objects. For models fitted with the \pkg{brms}-package,
- a variance decomposition based on the posterior predictive distribution
- is calculated (see 'Details').
+ (VPC) - for mixed effects models. The ICC can be calculated for all models
+ supported by \code{\link[insight]{get_variance}}. For models fitted with
+ the \pkg{brms}-package, a variance decomposition based on the posterior
+ predictive distribution is calculated (see 'Details').
 }
 \details{
 \subsection{Interpretation}{

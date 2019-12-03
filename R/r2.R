@@ -188,6 +188,9 @@ r2.merMod <- function(model, ...) {
 r2.glmmTMB <- r2.merMod
 
 #' @export
+r2.glmmadmb <- r2.merMod
+
+#' @export
 r2.lme <- r2.merMod
 
 #' @export
