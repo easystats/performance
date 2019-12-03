@@ -58,15 +58,15 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
 
 .rank_performance_indices <- function(x, verbose) {
-  out <- x
-
   # all models comparable?
   if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
     warning("Models are not of same type. Comparison of indices might be not meaningful.", call. = FALSE)
   }
 
   # set reference for Bayes factors to 1
-  if ("BF" %in% colnames(out)) out$BF[is.na(out$BF)] <- 1
+  if ("BF" %in% colnames(x)) x$BF[is.na(x$BF)] <- 1
+
+  out <- x
 
   # normalize indices, for comparison
   out[] <- lapply(out, function(i) {

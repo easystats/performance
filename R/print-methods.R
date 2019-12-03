@@ -3,8 +3,10 @@
 print.compare_performance <- function(x, digits = 3, ...) {
   insight::print_color("# Comparison of Model Performance Indices\n\n", "blue")
 
+  # if we have ranking, add score and remove incomplete indices in print
   if ("Performance_Score" %in% colnames(x)) {
     x$Performance_Score <- sprintf("%.2f%%", 100 * x$Performance_Score)
+    x <- x[!sapply(x, anyNA)]
   }
 
   x[] <- lapply(x, function(i) {

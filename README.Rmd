@@ -20,7 +20,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   tidy.opts = list(width.cutoff = 60),
   tidy = TRUE,
-  fig.path = "README-",
+  dpi=450,
+  fig.path = "man/figures/",
   comment = "#>"
 )
 options(knitr.kable.NA = '',
@@ -40,8 +41,7 @@ The primary goal of the **performance** package is to provide utilities for comp
 Run the following:
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE}
-install.packages("devtools")
-devtools::install_github("easystats/performance")
+install.packages("performance")
 ```
 ```{r message=FALSE, warning=FALSE}
 library("performance")
@@ -176,6 +176,15 @@ check_singularity(model)
 
 Remedies to cure issues with singular fits can be found [here](https://easystats.github.io/performance/reference/check_singularity.html). 
 
+## Comprehensive model check
+
+**performance** provides many functions to check model assumptions, like `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To get a comprehensive check, use `check_model()`.
+
+```{r, warning=FALSE, message=FALSE, eval=TRUE}
+model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
+check_model(model)
+```
+
 ## Model performance summaries
 
 `model_performance()` computes indices of model performance for regression models. Depending on the model object, typical indices might be r-squared, AIC, BIC, RMSE, ICC or LOOIC.
@@ -217,7 +226,7 @@ knitr::kable(model_performance(m3), digits = 2)
 
 ### Comparing different models
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, warning=FALSE, message=FALSE, eval=TRUE}
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 outcome <- gl(3, 1, 9)
 treatment <- gl(3, 3)
@@ -225,13 +234,15 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 
 compare_performance(m1, m2, m3, m4)
 ```
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
-outcome <- gl(3, 1, 9)
-treatment <- gl(3, 3)
-m4 <- glm(counts ~ outcome + treatment, family = poisson())
 
-knitr::kable(compare_performance(m1, m2, m3, m4), digits = 2)
+### Comparing different models, ordered by model performance
+
+```{r, warning=FALSE, message=FALSE}
+compare_performance(m1, m2, m3, m4, rank = TRUE)
+```
+
+```{r, warning=FALSE, message=FALSE}
+plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
 ```
 
 # References

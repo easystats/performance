@@ -22,8 +22,7 @@ singularity.
 Run the following:
 
 ``` r
-install.packages("devtools")
-devtools::install_github("easystats/performance")
+install.packages("performance")
 ```
 
 ``` r
@@ -94,13 +93,13 @@ model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species),
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.954 [0.002]
-#>      Marginal R2: 0.410 [0.123]
+#>   Conditional R2: 0.953 [0.006]
+#>      Marginal R2: 0.825 [0.043]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 r2(model)
-#> # R2 for mixed models
+#> # R2 for Mixed Models
 #> 
 #>   Conditional R2: 0.799
 #>      Marginal R2: 0.279
@@ -142,14 +141,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.51 0.78]
+#> Ratio: 0.39  CI 95%: [-0.53 0.77]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.81  CI 95%: [ 8.50 58.48]
-#> Conditioned on rand. effects: 37.66  CI 95%: [24.65 56.23]
+#> Conditioned on fixed effects: 22.87  CI 95%: [ 8.63 57.48]
+#> Conditioned on rand. effects: 37.67  CI 95%: [25.00 56.22]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.08  CI 95%: [-18.80 35.95]
+#> Difference: 14.48  CI 95%: [-18.34 35.14]
 ```
 
 ## Model diagnostics
@@ -237,6 +236,20 @@ check_singularity(model)
 Remedies to cure issues with singular fits can be found
 [here](https://easystats.github.io/performance/reference/check_singularity.html).
 
+## Comprehensive model check
+
+**performance** provides many functions to check model assumptions, like
+`check_collinearity()`, `check_normality()` or
+`check_heteroscedasticity()`. To get a comprehensive check, use
+`check_model()`.
+
+``` r
+model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
+check_model(model)
+```
+
+![](man/figures/unnamed-chunk-13-1.png)<!-- -->
+
 ## Model performance summaries
 
 `model_performance()` computes indices of model performance for
@@ -286,14 +299,37 @@ treatment <- gl(3, 3)
 m4 <- glm(counts ~ outcome + treatment, family = poisson())
 
 compare_performance(m1, m2, m3, m4)
+#> # Comparison of Model Performance Indices
+#> 
+#> Model |    Type |     AIC |     BIC |  RMSE | SCORE_LOG | SCORE_SPHERICAL |   R2 | R2_adjusted | R2_Tjur | LOGLOSS |  PCP | R2_conditional | R2_marginal |  ICC | R2_Nagelkerke
+#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> m1    |      lm |  156.01 |  161.87 |  2.44 |           |                 | 0.83 |        0.82 |         |         |      |                |             |      |              
+#> m2    |     glm |   31.30 |   35.70 |  0.89 |    -14.90 |            0.10 |      |             |    0.48 |    0.40 | 0.74 |                |             |      |              
+#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |           |                 |      |             |         |         |      |           0.80 |        0.28 | 0.72 |              
+#> m4    |     glm |   56.76 |   57.75 |  0.76 |     -2.60 |            0.32 |      |             |         |         |      |                |             |      |          0.66
 ```
 
-| Model | Type    |     AIC |     BIC |  RMSE | SCORE\_LOG | SCORE\_SPHERICAL |   R2 | R2\_adjusted | R2\_Tjur | LOGLOSS |  PCP | R2\_conditional | R2\_marginal |  ICC | R2\_Nagelkerke |
-| :---- | :------ | ------: | ------: | ----: | ---------: | ---------------: | ---: | -----------: | -------: | ------: | ---: | --------------: | -----------: | ---: | -------------: |
-| m1    | lm      |  156.01 |  161.87 |  2.44 |            |                  | 0.83 |         0.82 |          |         |      |                 |              |      |                |
-| m2    | glm     |   31.30 |   35.70 |  0.89 |     \-14.9 |             0.09 |      |              |     0.48 |     0.4 | 0.74 |                 |              |      |                |
-| m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |            |                  |      |              |          |         |      |             0.8 |         0.28 | 0.72 |                |
-| m4    | glm     |   56.76 |   57.75 |  0.75 |      \-2.6 |             0.32 |      |              |          |         |      |                 |              |      |           0.66 |
+### Comparing different models, ordered by model performance
+
+``` r
+compare_performance(m1, m2, m3, m4, rank = TRUE)
+#> # Comparison of Model Performance Indices
+#> 
+#> Model |    Type |     AIC |     BIC |  RMSE | Performance_Score
+#> ---------------------------------------------------------------
+#> m2    |     glm |   31.30 |   35.70 |  0.89 |            99.80%
+#> m4    |     glm |   56.76 |   57.75 |  0.76 |            99.09%
+#> m1    |      lm |  156.01 |  161.87 |  2.44 |            92.69%
+#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |             0.00%
+#> 
+#> Model m2 (of class glm) performed best with an overall performance score of 99.80%.
+```
+
+``` r
+plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
+```
+
+![](man/figures/unnamed-chunk-22-1.png)<!-- -->
 
 # References
 
