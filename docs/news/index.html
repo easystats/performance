@@ -134,9 +134,11 @@
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
 <ul>
-<li>Support for <code>mclogit</code> and <code>mmclogit</code> models.</li>
+<li>Support for <code>bracl</code>, <code>brmultinom</code>, <code>fixest</code>, <code>mclogit</code>, <code>mmclogit</code>, <code>vgam</code> and <code>vglm</code> models.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now supports <em>plm</em> models.</li>
+<li>
+<code><a href="../reference/r2.html">r2()</a></code> now supports <em>complmrob</em> models.</li>
 <li>
 <code><a href="../reference/model_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
 </ul>
@@ -147,6 +149,11 @@
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
+<li>
+<code><a href="../reference/model_performance.html">compare_performance()</a></code> has a nicer <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>-method now.</li>
+<li>Verbosity for <code><a href="../reference/model_performance.html">compare_performance()</a></code> was slightly adjusted.</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code>-methods for different objects now also have a <code>verbose</code>-argument.</li>
 </ul>
 </div>
 <div id="minor-changes" class="section level2">
@@ -164,6 +171,7 @@
 <li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
 <li>
 <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</li>
+<li>Fixed issues with models of class <code>rlmerMod</code>.</li>
 </ul>
 </div>
 </div>

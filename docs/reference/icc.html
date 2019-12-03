@@ -45,12 +45,10 @@
 <meta property="og:title" content="Intraclass Correlation Coefficient (ICC) — icc" />
 <meta property="og:description" content="This function calculates the intraclass-correlation coefficient
  (ICC) - sometimes also called variance partition coefficient
- (VPC) - for mixed effects models. The ICC is calculated for merMod
- (lme4), glmmTMB (glmmTMB), MixMod (GLMMadpative),
- lme (nlme), mixed (afex), and stanreg
- (rstanarm) objects. For models fitted with the brms-package,
- a variance decomposition based on the posterior predictive distribution
- is calculated (see 'Details')." />
+ (VPC) - for mixed effects models. The ICC can be calculated for all models
+ supported by get_variance. For models fitted with
+ the brms-package, a variance decomposition based on the posterior
+ predictive distribution is calculated (see 'Details')." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -138,12 +136,10 @@
     <div class="ref-description">
     <p>This function calculates the intraclass-correlation coefficient
  (ICC) - sometimes also called <em>variance partition coefficient</em>
- (VPC) - for mixed effects models. The ICC is calculated for <code>merMod</code>
- (<span class="pkg">lme4</span>), <code>glmmTMB</code> (<span class="pkg">glmmTMB</span>), <code>MixMod</code> (<span class="pkg">GLMMadpative</span>),
- <code>lme</code> (<span class="pkg">nlme</span>), <code>mixed</code> (<span class="pkg">afex</span>), and <code>stanreg</code>
- (<span class="pkg">rstanarm</span>) objects. For models fitted with the <span class="pkg">brms</span>-package,
- a variance decomposition based on the posterior predictive distribution
- is calculated (see 'Details').</p>
+ (VPC) - for mixed effects models. The ICC can be calculated for all models
+ supported by <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance</a></code>. For models fitted with
+ the <span class="pkg">brms</span>-package, a variance decomposition based on the posterior
+ predictive distribution is calculated (see 'Details').</p>
     </div>
 
     <pre class="usage"><span class='fu'>icc</span>(<span class='no'>model</span>, <span class='no'>...</span>)
@@ -156,8 +152,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A mixed effects model of class <code>merMod</code>, <code>glmmTMB</code>,
-<code>MixMod</code>, <code>lme</code>, <code>mixed</code>, <code>stanreg</code> or <code>brmsfit</code>.</p></td>
+      <td><p>A (Bayesian) mixed effects model.</p></td>
     </tr>
     <tr>
       <th>...</th>

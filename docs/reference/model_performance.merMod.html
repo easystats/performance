@@ -133,18 +133,22 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for merMod</span>
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Object of class <code>merMod</code>, <code>glmmTMB</code>, <code>lme</code> or <code>MixMod</code>.</p></td>
+      <td><p>A mixed effects model.</p></td>
     </tr>
     <tr>
       <th>metrics</th>
       <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle off warnings.</p></td>
     </tr>
     <tr>
       <th>...</th>
