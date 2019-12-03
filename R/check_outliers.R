@@ -664,7 +664,9 @@ as.numeric.check_outliers <- function(x, ...) {
   if (utils::packageVersion("solitude") < "0.2.0") {
     iforest <- solitude::isolationForest(x)
     out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
-  } else {
+  } else if (utils::packageVersion("solitude") == "0.2.0"){
+    stop("Must update package `solitude` (above version 0.2.0). Please run `devtools::install_github('talegari/solitude')`.", call. = FALSE)
+  } else{
     iforest <- solitude::isolationForest$new(sample_size = nrow(x))
     suppressMessages(iforest$fit(x))
     out$Distance_iforest <- iforest$scores$anomaly_score
