@@ -56,7 +56,7 @@
 #' The default \code{threshold} is often arbitrarily set to some deviation (in
 #' terms of SD or MAD) from the mean (or median) of the Mahalanobis distance.
 #' However, as the Mahalanobis distance can be approximated by a Chi squared
-#' distribution (Rousseeuw & Van Zomeren, 1990), we can use the the alpha quantile
+#' distribution (Rousseeuw & Van Zomeren, 1990), we can use the alpha quantile
 #' of the chi-square distribution with k degrees of freedom (k being the number of
 #' columns). By default, the alpha threshold is set to 0.025 (corresponding to the
 #' 2.5\% most extreme observations; Cabana, 2019). This criterion is a natural extension of the
@@ -665,7 +665,7 @@ as.numeric.check_outliers <- function(x, ...) {
     iforest <- solitude::isolationForest(x)
     out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
   } else if (utils::packageVersion("solitude") == "0.2.0"){
-    stop("Must update package `solitude` (above version 0.2.0). Please run `devtools::install_github('talegari/solitude')`.", call. = FALSE)
+    stop("Must update package `solitude` (above version 0.2.0). Please run `install.packages('solitude')`.", call. = FALSE)
   } else{
     iforest <- solitude::isolationForest$new(sample_size = nrow(x))
     suppressMessages(iforest$fit(x))
