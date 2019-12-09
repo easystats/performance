@@ -55,14 +55,24 @@ cronbachs_alpha.parameters_pca <- function(x) {
     return(NULL)
   }
 
+  # fetch data used for the PCA
   pca_data <- get(pca_data, envir = parent.frame())
+
+  # get columns from parameters_pca-object where loadings are saved
   loadings_columns <- attributes(x)$loadings_columns
+
+  # find component with max loading for each variable
   factor_assignment <- apply(x[, loadings_columns], 1, function(i) which.max(abs(i)))
 
-  cronb <- sapply(unique(factor_assignment), function(i) {
+  # sort and get unique IDs so we only get data from relevant columns
+  unique_factors <- sort(unique(factor_assignment))
+
+  # apply cronbach's alpha for each component,
+  # only for variables with max loading
+  cronb <- sapply(unique_factors, function(i) {
     cronbachs_alpha(pca_data[, as.vector(x$Variable[factor_assignment == i]), drop = FALSE])
   })
 
-  names(cronb) <- colnames(x)[loadings_columns[unique(factor_assignment)]]
+  names(cronb) <- colnames(x)[loadings_columns[unique_factors]]
   unlist(cronb)
 }
