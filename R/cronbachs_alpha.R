@@ -24,6 +24,13 @@
 #' @importFrom stats var na.omit
 #' @export
 cronbachs_alpha <- function(x) {
+  UseMethod("cronbachs_alpha")
+}
+
+
+
+#' @export
+cronbachs_alpha.data.frame <- function(x) {
   # remove missings
   .data <- stats::na.omit(x)
 
@@ -35,4 +42,27 @@ cronbachs_alpha <- function(x) {
 
   # Compute Cronbach's Alpha
   dim(.data)[2] / (dim(.data)[2] - 1) * (1 - sum(apply(.data, 2, stats::var)) / stats::var(rowSums(.data)))
+}
+
+
+
+#' @export
+cronbachs_alpha.parameters_pca <- function(x) {
+  pca_data <- attr(x, "data")
+
+  if (is.null(pca_data)) {
+    warning("Could not find data frame that was used for the PCA.", call. = FALSE)
+    return(NULL)
+  }
+
+  pca_data <- get(pca_data, envir = parent.frame())
+  loadings_columns <- attributes(x)$loadings_columns
+  factor_assignment <- apply(x[, loadings_columns], 1, function(i) which.max(abs(i)))
+
+  cronb <- sapply(unique(factor_assignment), function(i) {
+    cronbachs_alpha(pca_data[, as.vector(x$Variable[factor_assignment == i]), drop = FALSE])
+  })
+
+  names(cronb) <- colnames(x)[loadings_columns[unique(factor_assignment)]]
+  unlist(cronb)
 }
