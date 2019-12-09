@@ -20,6 +20,10 @@ r2_nagelkerke <- function(model) {
 
 
 
+
+# helper ---------------------------
+
+
 .r2_nagelkerke <- function(model, l_base) {
   L.full <- stats::logLik(model)
   D.full <- -2 * L.full
@@ -42,6 +46,7 @@ r2_nagelkerke <- function(model) {
 
 
 
+
 # Nagelkerke's R2 based on Cox&Snell's R2 ----------------
 
 #' @export
@@ -58,7 +63,10 @@ r2_nagelkerke.BBreg <- r2_nagelkerke.glm
 
 
 
+
+
 # Nagelkerke's R2 based on LogLik ----------------
+
 
 #' @export
 r2_nagelkerke.multinom <- function(model) {
@@ -85,6 +93,9 @@ r2_nagelkerke.polr <- r2_nagelkerke.clm
 r2_nagelkerke.bracl <- r2_nagelkerke.clm
 
 #' @export
+r2_nagelkerke.glmx <- r2_nagelkerke.clm
+
+#' @export
 r2_nagelkerke.brmultinom <- r2_nagelkerke.clm
 
 #' @export
@@ -95,6 +106,14 @@ r2_nagelkerke.censReg <- r2_nagelkerke.clm
 
 #' @export
 r2_nagelkerke.truncreg <- r2_nagelkerke.clm
+
+
+
+
+
+
+# Nagelkerke's R2 based on LogLik stored in model object ----------------
+
 
 #' @export
 r2_nagelkerke.coxph <- function(model) {

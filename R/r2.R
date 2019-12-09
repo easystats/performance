@@ -89,7 +89,8 @@ r2.glm <- function(model, ...) {
   }
 }
 
-
+#' @export
+r2.glmx <- r2.glm
 
 
 

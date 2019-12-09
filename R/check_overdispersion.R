@@ -65,7 +65,7 @@ check_overdispersion <- function(x, ...) {
 # Overdispersion for classical models -----------------------------
 
 
-#' @importFrom insight get_response model_info
+#' @importFrom insight get_response model_info find_parameters
 #' @importFrom stats fitted nobs coef pchisq
 #' @export
 check_overdispersion.glm <- function(x, ...) {
@@ -78,7 +78,7 @@ check_overdispersion.glm <- function(x, ...) {
   yhat <- stats::fitted(x)
 
   n <- stats::nobs(x)
-  k <- length(stats::coef(x))
+  k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
 
   zi <- (insight::get_response(x) - yhat) / sqrt(yhat)
   chisq <- sum(zi^2)
@@ -98,6 +98,9 @@ check_overdispersion.glm <- function(x, ...) {
 
 #' @export
 check_overdispersion.fixest <- check_overdispersion.glm
+
+#' @export
+check_overdispersion.glmx <- check_overdispersion.glm
 
 
 

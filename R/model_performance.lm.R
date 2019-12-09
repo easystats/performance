@@ -85,6 +85,9 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 model_performance.glm <- model_performance.lm
 
 #' @export
+model_performance.glmx <- model_performance.lm
+
+#' @export
 model_performance.betareg <- model_performance.lm
 
 #' @export

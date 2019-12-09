@@ -76,7 +76,7 @@ detection as this distance takes into account the shape of the observations.
 The default \code{threshold} is often arbitrarily set to some deviation (in
 terms of SD or MAD) from the mean (or median) of the Mahalanobis distance.
 However, as the Mahalanobis distance can be approximated by a Chi squared
-distribution (Rousseeuw & Van Zomeren, 1990), we can use the the alpha quantile
+distribution (Rousseeuw & Van Zomeren, 1990), we can use the alpha quantile
 of the chi-square distribution with k degrees of freedom (k being the number of
 columns). By default, the alpha threshold is set to 0.025 (corresponding to the
 2.5\% most extreme observations; Cabana, 2019). This criterion is a natural extension of the
