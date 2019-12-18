@@ -145,7 +145,12 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   }
 
   f <- insight::find_formula(x)
-  terms <- labels(stats::terms(f[[component]]))
+
+  if (inherits(x, "mixor")) {
+    terms <- labels(x$terms)
+  } else {
+    terms <- labels(stats::terms(f[[component]]))
+  }
 
   if ("instruments" %in% names(f)) {
     terms <- unique(c(terms, labels(stats::terms(f[["instruments"]]))))
@@ -255,7 +260,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   }))
 
   as.numeric(names(parms)[match(
-    insight::clean_names(insight::find_parameters(x)[["zero_inflated"]]),
+    insight::clean_names(insight::find_parameters(x)[[component]]),
     parms
   )])
 }

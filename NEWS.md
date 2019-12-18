@@ -1,3 +1,9 @@
+# performance 0.4.3
+
+## General
+
+* Support for `mixor` models.
+
 # performance 0.4.2
 
 ## General

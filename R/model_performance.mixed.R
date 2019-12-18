@@ -82,3 +82,37 @@ model_performance.mixed <- model_performance.merMod
 
 #' @export
 model_performance.glmmTMB <- model_performance.merMod
+
+
+
+#' @export
+model_performance.mixor <- function(model, metrics = "all", verbose = TRUE, ...) {
+  if (all(metrics == "all")) {
+    metrics <- c("AIC", "BIC", "LOGLOSS", "SCORE")
+  }
+
+  mi <- insight::model_info(model)
+
+  out <- list()
+  if ("AIC" %in% metrics) {
+    out$AIC <- .get_AIC(model)
+  }
+  if ("BIC" %in% metrics) {
+    out$BIC <- .get_BIC(model)
+  }
+  if (("LOGLOSS" %in% metrics) && mi$is_binomial && !mi$is_ordinal) {
+    out$LOGLOSS <- performance_logloss(model, verbose = verbose)
+  }
+  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count) && !mi$is_ordinal) {
+    .scoring_rules <- performance_score(model, verbose = verbose)
+    if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
+  }
+
+  out <- as.data.frame(out)
+  row.names(out) <- NULL
+
+  out
+}
+
+
