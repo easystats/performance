@@ -83,7 +83,7 @@ different models at once and hence allows comparison of indices across models." 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.1</span>
       </span>
     </div>
 
@@ -236,17 +236,17 @@ model performance". See 'Details'.</p></td>
 <span class='no'>lm3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Length</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 <span class='fu'>compare_performance</span>(<span class='no'>lm1</span>, <span class='no'>lm2</span>, <span class='no'>lm3</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
 #&gt; 
-#&gt; </span><span></div><div class='output co'>#&gt; <span class='warning'>Warning: probable complete loss of accuracy in modulus</span></div><div class='output co'>#&gt; <span class='warning'>Warning: probable complete loss of accuracy in modulus</span></div><div class='output co'>#&gt; Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |                   BF
-#&gt; ---------------------------------------------------------------------------------
-#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |        0.61 | 0.51 |                     
-#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |        0.83 | 0.33 | 3.44552828468688e+26
-#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 | 1.29919564789917e+25</div><div class='input'><span class='fu'>compare_performance</span>(<span class='no'>lm1</span>, <span class='no'>lm2</span>, <span class='no'>lm3</span>, <span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
+#&gt; </span><span>Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |          BF
+#&gt; ------------------------------------------------------------------------
+#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |        0.61 | 0.51 |            
+#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |        0.83 | 0.33 | 3.44553e+26
+#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 | 1.29920e+25</div><div class='input'><span class='fu'>compare_performance</span>(<span class='no'>lm1</span>, <span class='no'>lm2</span>, <span class='no'>lm3</span>, <span class='kw'>rank</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
 #&gt; 
-#&gt; </span><span></div><div class='output co'>#&gt; <span class='warning'>Warning: probable complete loss of accuracy in modulus</span></div><div class='output co'>#&gt; <span class='warning'>Warning: probable complete loss of accuracy in modulus</span></div><div class='output co'>#&gt; Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |                   BF | Performance_Score
-#&gt; -----------------------------------------------------------------------------------------------------
-#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |        0.83 | 0.33 | 3.44552828468688e+26 |            99.25%
-#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 | 1.29919564789917e+25 |            83.00%
-#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |        0.61 | 0.51 |                    1 |             0.00%
+#&gt; </span><span>Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |          BF | Performance_Score
+#&gt; --------------------------------------------------------------------------------------------
+#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |        0.83 | 0.33 | 3.44553e+26 |            99.25%
+#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 | 1.29920e+25 |            83.00%
+#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |        0.61 | 0.51 |        1.00 |             0.00%
 #&gt; </span><span style='color: #BBBB00;'>
 #&gt; Model lm2 (of class lm) performed best with an overall performance score of 99.25%.
 #&gt; </span><span></div></span></pre>
