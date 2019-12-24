@@ -34,6 +34,8 @@ generate_distribution <- function(
     rt(size, location, scale)
   } else if (family == "weibull") {
     rweibull(size, location, scale)
+  } else if (family == "tweedie") {
+    tweedie::rtweedie(size, mu = mu, phi = scale, power = location)
   } else if (family == "uniform") {
     runif(size, location, location * 2)
   } else if (family == "negative binomial") {
@@ -55,7 +57,7 @@ distrs <- c(
   "normal", "beta", "chi", "F", "exponential", "gamma", "lognormal",
   "poisson", "uniform", "negative binomial", "bernoulli",
   "poisson (zero-infl.)", "neg. binomial (zero-infl.)",
-  "weibull", "beta-binomial", "binomial", "pareto"
+  "weibull", "beta-binomial", "binomial", "pareto", "tweedie"
 )
 
 pb <- txtProgressBar(min = 0, max = length(distrs), style = 3)
