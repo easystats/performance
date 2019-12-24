@@ -121,6 +121,9 @@ r2.censReg <- function(model, ...) {
 }
 
 #' @export
+r2.cpglm <- r2.censReg
+
+#' @export
 r2.clm <- r2.censReg
 
 #' @export
@@ -187,6 +190,9 @@ r2.merMod <- function(model, ...) {
 
 #' @export
 r2.glmmTMB <- r2.merMod
+
+#' @export
+r2.cpglmm <- r2.merMod
 
 #' @export
 r2.glmmadmb <- r2.merMod

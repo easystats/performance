@@ -63,6 +63,10 @@ logLik.plm <- function(object, ...) {
   val
 }
 
+#' @export
+logLik.cpglm <- logLik.plm
+
+
 
 #' @importFrom stats residuals
 #' @export

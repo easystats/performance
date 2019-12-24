@@ -67,6 +67,9 @@ r2_mcfadden.glm <- function(model) {
 r2_mcfadden.clm <- r2_mcfadden.glm
 
 #' @export
+r2_mcfadden.cpglm <- r2_mcfadden.glm
+
+#' @export
 r2_mcfadden.glmx <- r2_mcfadden.glm
 
 #' @export

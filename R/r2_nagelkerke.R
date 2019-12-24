@@ -90,6 +90,9 @@ r2_nagelkerke.clm <- function(model) {
 r2_nagelkerke.polr <- r2_nagelkerke.clm
 
 #' @export
+r2_nagelkerke.cpglm <- r2_nagelkerke.clm
+
+#' @export
 r2_nagelkerke.bracl <- r2_nagelkerke.clm
 
 #' @export
