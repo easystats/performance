@@ -41,7 +41,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   attrib <- list()
 
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- .get_AIC(model)
+    out$AIC <- performance_aic(model)
   }
   if ("BIC" %in% toupper(metrics)) {
     out$BIC <- .get_BIC(model)

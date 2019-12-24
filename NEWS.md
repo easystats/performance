@@ -4,6 +4,10 @@
 
 * Support for `mixor`, `cpglm` and `cpglmm` models.
 
+## New functions
+
+* `performance_aic()` as a small wrapper that returns the AIC. It is a generic function that also works for some models that don't have a AIC method (like Tweedie models).
+
 ## Changes to functions
 
 * `model_performance()` now calculates AIC for Tweedie models.

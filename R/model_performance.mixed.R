@@ -31,7 +31,7 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
 
   out <- list()
   if ("AIC" %in% metrics) {
-    out$AIC <- .get_AIC(model)
+    out$AIC <- performance_aic(model)
   }
   if ("BIC" %in% metrics) {
     out$BIC <- .get_BIC(model)
@@ -95,7 +95,7 @@ model_performance.mixor <- function(model, metrics = "all", verbose = TRUE, ...)
 
   out <- list()
   if ("AIC" %in% metrics) {
-    out$AIC <- .get_AIC(model)
+    out$AIC <- performance_aic(model)
   }
   if ("BIC" %in% metrics) {
     out$BIC <- .get_BIC(model)

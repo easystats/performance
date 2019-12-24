@@ -2,9 +2,12 @@
 % Please edit documentation in R/performance_aicc.R
 \name{performance_aicc}
 \alias{performance_aicc}
-\title{Compute second order AIC}
+\alias{performance_aic}
+\title{Compute AIC and second order AIC}
 \usage{
 performance_aicc(x, ...)
+
+performance_aic(x, ...)
 }
 \arguments{
 \item{x}{A model object.}
@@ -12,12 +15,14 @@ performance_aicc(x, ...)
 \item{...}{Currently not used.}
 }
 \value{
-Numeric, the AICc value.
+Numeric, the AIC or AICc value.
 }
 \description{
 Compute the second-order Akaike's information criterion (AICc).
 The second-order (or small sample) is a AIC with a correction for small sample
-sizes.
+sizes. \code{performance_aic()} is a small wrapper that returns the AIC. It is
+a generic function that also works for some models that don't have a AIC method
+(like Tweedie models).
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
