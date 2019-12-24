@@ -65,6 +65,7 @@ Suggests:
 	survival,
 	solitude,
 	testthat,
+	tweedie,
 	VGAM
 License: GPL-3
 Encoding: UTF-8

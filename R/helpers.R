@@ -13,6 +13,12 @@
       return(NULL)
     }
     VGAM::AIC(x)
+  } else if (insight::model_info(x)$family == "Tweedie") {
+    if (!requireNamespace("tweedie", quietly = TRUE)) {
+      warning("Package 'tweedie' required for this function work. Please install it.", call. = FALSE)
+      return(NULL)
+    }
+    suppressMessages(tweedie::AICtweedie(x))
   } else {
     tryCatch({
       stats::AIC(x)

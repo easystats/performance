@@ -2,7 +2,11 @@
 
 ## General
 
-* Support for `mixor` models.
+* Support for `mixor`, `cpglm` and `cpglmm` models.
+
+## Changes to functions
+
+* `model_performance()` now calculates AIC for Tweedie models.
 
 # performance 0.4.2
 
