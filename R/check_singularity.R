@@ -112,6 +112,18 @@ check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
 
 
 #' @export
+check_singularity.cpglmm <- function(x, tolerance = 1e-5, ...) {
+  if (!requireNamespace("cplm", quietly = TRUE)) {
+    stop("Package `cplm` needed for this function to work. Please install it.")
+  }
+
+  vc <- cplm::VarCorr(x)
+  any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
+}
+
+
+
+#' @export
 check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
   any(sapply(diag(x$D), function(.x) any(abs(.x) < tolerance)))
 }

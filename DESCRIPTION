@@ -38,10 +38,11 @@ Imports:
 Suggests:
 	AER,
 	betareg,
-	brms,
 	bigutilsr,
-	dbscan,
+	brms,
 	covr,
+	cplm,
+	dbscan,
 	fixest,
 	glmmTMB,
 	ICS,
