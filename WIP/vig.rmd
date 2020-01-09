@@ -1,0 +1,194 @@
+---
+  title: "Statistics for Bayesian Models"
+author: "Daniel Lüdecke"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+---
+
+  <!--
+  vignette: >
+  %\VignetteIndexEntry{Statistics for Bayesian Models}
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
+-->
+
+  ```{r, SETTINGS-knitr, echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  fig.width = 7,
+  fig.height = 5,
+  message = FALSE,
+  warning = FALSE
+)
+
+options(width = 800)
+
+if (!requireNamespace("mediation", quietly = TRUE)) {
+  warning("Package 'mediation' required for this vignette.", call. = FALSE)
+}
+```
+
+
+## ICC for multilevel models
+
+Similar to [frequentist multilevel models](mixedmodels-statistics.html), `icc()` computes the intraclass correlation coefficient for Bayesian multilevel models. One advantage of Bayesian regression models is that you can compute the ICC for each sample of the posterior distribution, which allows you to easily calculate uncertainty intervals.
+
+```{r}
+icc(m4)
+
+icc(m5)
+```
+
+For non-Gaussian models, there is no clean variance decomposition and hence the ICC can't be calculated exactly. The general Bayesian way to analyse the random-effect variances is then to draw samples from the posterior predictive distribution, calculate the variances and compare how the variance across models changes when group-specific term are included or dropped.
+
+You can achieve this with the `ppd`-argument. In this case, draws from the posterior predictive distribution _not conditioned_ on group-level terms (using `posterior_predict(..., re.form = NA)`) as well as draws from this distribution _conditioned_ on _all random effects_ (by default, unless specified else in the `re.form`-argument) are taken. Then, the variances for each of these draws are calculated. The "ICC" is then the ratio between these two variances.
+
+```{r, message=TRUE}
+icc(m4, ppd = TRUE, re.form = ~(1 | cyl), prob = .5)
+```
+
+Sometimes, when the variance of the posterior predictive distribution is very large, the variance ratio in the output makes no sense, e.g. because it is negative. In such cases, it might help to use a more robust measure to calculate the central tendency of the variances. This can be done with the `typical`-argument.
+
+```{r}
+# the "classical" ICC, not recommended for non-Gaussian
+icc(m3)
+
+# variance ratio based on posterior predictive distributions,
+# which is negative and hence obviously nonsense
+icc(m3, ppd = TRUE)
+
+# use median instead of mean
+icc(m3, ppd = TRUE, typical = "median")
+```
+
+## Bayes r-squared and LOO-adjusted r-squared
+
+`r2()` computes either the Bayes r-squared value, or - if `loo = TRUE` - a LOO-adjusted r-squared value (which comes conceptionally closer to an adjusted r-squared measure).
+
+For the Bayes r-squared, the standard error is also reported. Note that `r2()` uses the median as measure of central tendency and the median absolute deviation as measure for variability.
+
+```{r}
+r2(m5)
+
+r2(m5, loo = TRUE)
+```
+
+
+Kruschke JK. Doing Bayesian Data Analysis: A Tutorial with R, JAGS, and Stan. 2nd edition. Academic Press, 2015 
+
+Kruschke JK. Rejecting or Accepting Parameter Values in Bayesian Estimation. Advances in Methods and Practices in Psychological Science. 2018; doi: [10.1177/2515245918771304 ](https://doi.org/10.1177/2515245918771304)
+
+McElreath R. Statistical Rethinking. A Bayesian Course with Examples in R and Stan. Chapman and Hall, 2015
+
+Norman GR, Sloan JA, Wyrwich KW. Interpretation of Changes in Health-related Quality of Life: The Remarkable Universality of Half a Standard Deviation. Medical Care. 2003;41: 582–592. doi: [10.1097/01.MLR.0000062554.74615.4C](https://doi.org/10.1097/01.MLR.0000062554.74615.4C)
+
+
+
+
+
+
+## Trouble Shooting
+
+Sometimes, when fitting mixed models, covergence warnings or warnings about singularity may come up (see details on these issues [in this FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html#troubleshooting)). These warnings sometimes arise due to the strict tresholds and / or may be safely ignored, but sometimes indicate overly complex models or models with poorly defined random structure. `converge_ok()` and `is_singular()` may help to check whether such a warning is problematic or not.
+
+`converge_ok()` provides an alternative convergence test for merMod-objects (with a less strict treshold, as suggested by one of the _lme4_-package authors), while `is_singular()` can be used in case of post-fitting convergence warnings, such as warnings about negative eigenvalues of the Hessian. Typically, you want `TRUE` for `converge_ok()` and non-singular models (i.e. `FALSE` for `is_singular()`).
+
+```{r}
+converge_ok(m)
+
+is_singular(m)
+```
+
+Regarding singular models, there may be some concerns that should be checked:
+
+  * singular fits correspond to overfitted models that may have poor power;
+  * chances of numerical problems and mis-convergence are higher for singular models (e.g. it may be computationally difficult to compute profile confidence intervals for such models);
+  * standard inferential procedures such as Wald statistics and likelihood ratio tests may be inappropriate.
+
+Singular fits are likely to occur when the numbers of random-effect levels is small or for complex random-effects models, e.g. models with several different random-slopes terms. There are several (contradicting) proposals how to deal with singularity, although there is no consensus about the best approach:
+
+  * Start with the most complex model, then dropping terms until model fit is non-singular and convergence is ok (see _Barr et al. 2013_).
+  * Define a parsimonious, simplified model _a priori_ (see _Bates et al. 2015_, _Matuschek et al. 2017_).
+
+See `?is_singular` and `?lme4::isSingular` for further details.
+
+
+## P-Values
+
+For linear mixed models, the `summary()` in **lme4** does not report p-values. Other objects from regression functions are not consistent in their output structure when reporting p-values. `p_value()` aims at returning a standardized ("tidy") output for any regression model. The return value is always a data frame with three columns: _term_, _p.value_ and _std.error_, which represent the name, p-value and standard error for each term.
+
+For linear mixed models, the approximation of p-values are more precise when `p.kr = TRUE`, based on conditional F-tests with Kenward-Roger approximation for the degrees of freedom (calling `pbkrtest::get_Lb_ddf()`).
+
+```{r}
+# Using the t-statistics for calculating the p-value
+p_value(m2)
+
+# p-values based on conditional F-tests with 
+# Kenward-Roger approximation for the degrees of freedom
+p_value(m2, p.kr = TRUE)
+```
+
+To see more details on the degrees of freedom when using Kenward-Roger approximation, use the `summary()`-method:
+
+```{r}
+pv <- p_value(m2, p.kr = TRUE)
+summary(pv)
+```
+
+## R-squared
+
+_Nakagawa et al. (2017)_ proposed a method to compute marginal and conditional r-squared values, which is implemented in the `r2()`-function. For mixed models, the marginal r-squared considers only the variance of the fixed effects, while the conditional r-squared takes both the fixed and random effects into account. `r2()` can be used with models fitted with the functions of the **lme4** and **glmmTMB** packages. 
+
+```{r}
+r2(m)
+```
+
+## Intraclass-Correlation Coefficient
+
+The components of the random effect variances are of interest when calculating the intraclass-correlation coefficient, ICC. The ICC is calculated by dividing the between-group-variance (random intercept variance) by the total variance (i.e. sum of between-group-variance and within-group (residual) variance). The ICC can be interpreted as "the proportion of the variance explained by the grouping structure in the population" (Hox 2002: 15). 
+
+Usually, the ICC is calculated for the null model ("unconditional model"). However, according to _Raudenbush and Bryk (2002)_ or _Rabe-Hesketh and Skrondal (2012)_ it is also feasible to compute the ICC for full models with covariates ("conditional models") and compare how much a level-2 variable explains the portion of variation in the grouping structure (random intercept). 
+
+The ICC for mixed models can be computed with `icc()`. *Caution:* For random-slope-intercept models, the ICC would differ at each unit of the predictors. Hence, the ICC for these kind of models cannot be understood simply as proportion of variance (see _Goldstein et al. 2010_). For convenience reasons, as the `icc()` function is also used to extract the different random effects variances (see `re_var()` above), the ICC for random-slope-intercept-models is reported nonetheless, but it is usually no meaningful summary of the proportion of variances. To get a meaningful ICC also for models with random slopes, use `adjusted = TRUE`. The adjusted ICC uses the mean random effect variance, which is based on the random effect variances for each value of the random slope (see _Johnson 2014_).
+
+By default, for three-level-models, depending on the nested structure of the model, or for cross-classified models, `icc()` only reports the proportion of variance explained for each grouping level. Use `adjusted = TRUE` to calculate the adjusted and conditional ICC that take all random effect variances into account.
+
+```{r message = TRUE}
+icc(m)
+
+icc(m2)
+```
+
+If `adjusted = TRUE`, an adjusted and a conditional ICC are calculated, which take all sources of uncertainty (of all random effects) into account to report an "adjusted" ICC, as well as the conditional ICC. The latter also takes the fixed effects variances into account (see _Nakagawa et al. 2017_). If random effects are not nested and not cross-classified, the adjusted (`adjusted = TRUE`) and unadjusted (`adjusted = FALSE`) ICC are identical. 
+
+```{r message = TRUE}
+icc(m, adjusted = TRUE)
+
+icc(m2, adjusted = TRUE)
+```
+
+# References
+
+
+
+Barr DJ, Levy R, Scheepers C, Tily HJ. 2013. Random effects structure for confirmatory hypothesis testing: Keep it maximal. Journal of Memory and Language, 68(3):255–278
+
+Bates D, Kliegl R, Vasishth S, Baayen H. 2015. Parsimonious Mixed Models. arXiv:1506.04967
+
+
+Goldstein H, Browne W, Rasbash J. 2010. Partitioning Variation in Multilevel Models. Understanding Statistics, 1:4, 223-231, doi: [10.1207/S15328031US0104_02](http://doi.org/10.1207/S15328031US0104_02)
+
+Hox J. 2002. _Multilevel analysis: techniques and applications._ Mahwah, NJ: Erlbaum
+
+
+Johnson PC, O'Hara RB. 2014. Extension of Nakagawa & Schielzeth's R2GLMM to random slopes models. Methods Ecol Evol, 5: 944-946. doi: [10.1111/2041-210X.12225](http://doi.org/10.1111/2041-210X.12225)
+
+Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. 2017.Balancing type I error and power in linear mixed models. Journal of Memory and Language, 94:305–315
+
+Nakagawa S, Johnson P, Schielzeth H. 2017. The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisted and expanded. J. R. Soc. Interface 14. doi: [10.1098/rsif.2017.0213](http://doi.org/10.1098/rsif.2017.0213)
+
+Rabe-Hesketh S, Skrondal A. 2012. _Multilevel and longitudinal modeling using Stata._ 3rd ed. College Station, Tex: Stata Press Publication
+
+Raudenbush SW, Bryk AS. 2002. _Hierarchical linear models: applications and data analysis methods._ 2nd ed. Thousand Oaks: Sage Publications
