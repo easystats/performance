@@ -33,7 +33,7 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
   R (>= 3.2)
 Imports:
-	insight (>= 0.7.0),
+	insight (>= 0.8.0),
 	bayestestR (>= 0.4.0)
 Suggests:
 	AER,
@@ -62,7 +62,7 @@ Suggests:
 	rmarkdown,
 	rstanarm,
 	rstantools,
-	see (>= 0.2.1),
+	see (>= 0.4.0),
 	survival,
 	solitude,
 	testthat,
