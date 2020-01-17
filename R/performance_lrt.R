@@ -23,6 +23,7 @@ performance_lrt <- function(...) {
 }
 
 
+#' @importFrom stats anova
 #' @importFrom insight is_model
 #' @export
 performance_lrt.default <- function(...) {
