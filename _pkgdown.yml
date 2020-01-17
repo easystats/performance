@@ -12,6 +12,7 @@ reference:
 - title: "Comprehensive Summaries"
   contents:
   - check_model
+  - compare_performance
   - model_performance
   - model_performance.lm
   - model_performance.merMod
@@ -45,6 +46,7 @@ reference:
   - performance_aicc
   - performance_hosmer
   - performance_logloss
+  - performance_lrt
   - performance_mse
   - performance_pcp
   - performance_rmse
