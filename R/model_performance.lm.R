@@ -3,7 +3,7 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}).
+#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -33,6 +33,8 @@
 model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "PCP", "SCORE")
+  } else if (all(metrics == "common")) {
+    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
 
   info <- insight::model_info(model)

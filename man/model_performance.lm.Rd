@@ -12,7 +12,7 @@
 \arguments{
 \item{model}{A model.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}).}
+\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
 

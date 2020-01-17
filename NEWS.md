@@ -7,6 +7,7 @@
 ## New functions
 
 * `performance_aic()` as a small wrapper that returns the AIC. It is a generic function that also works for some models that don't have a AIC method (like Tweedie models).
+* `performance_lrt()` as a small wrapper around `anova()` to perform a Likelihood-Ratio-Test for model comparison.
 
 ## Changes to functions
 

@@ -3,7 +3,7 @@
 #' Compute indices of model performance for (general) linear models.
 #'
 #' @param model Object of class \code{stanreg} or \code{brmsfit}.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}).
+#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}). \code{"common"} will compute LOOIC, WAIC, R2 and RMSE.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams model_performance.lm
 #'
@@ -46,6 +46,8 @@
 model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
     metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "LOGLOSS", "SCORE")
+  } else if (all(metrics == "common")) {
+    metrics <- c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE")
   }
 
   algorithm <- insight::find_algorithm(model)

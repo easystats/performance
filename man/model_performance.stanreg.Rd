@@ -9,7 +9,7 @@
 \arguments{
 \item{model}{Object of class \code{stanreg} or \code{brmsfit}.}
 
-\item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}).}
+\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}). \code{"common"} will compute LOOIC, WAIC, R2 and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
 
