@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute second order AIC — performance_aicc • performance</title>
+<title>Compute AIC and second order AIC — performance_aicc • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,10 +42,12 @@
 
 
 
-<meta property="og:title" content="Compute second order AIC — performance_aicc" />
+<meta property="og:title" content="Compute AIC and second order AIC — performance_aicc" />
 <meta property="og:description" content="Compute the second-order Akaike's information criterion (AICc).
 The second-order (or small sample) is a AIC with a correction for small sample
-sizes." />
+sizes. performance_aic() is a small wrapper that returns the AIC. It is
+a generic function that also works for some models that don't have a AIC method
+(like Tweedie models)." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -125,7 +127,7 @@ sizes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute second order AIC</h1>
+    <h1>Compute AIC and second order AIC</h1>
     
     <div class="hidden name"><code>performance_aicc.Rd</code></div>
     </div>
@@ -133,10 +135,14 @@ sizes." />
     <div class="ref-description">
     <p>Compute the second-order Akaike's information criterion (AICc).
 The second-order (or small sample) is a AIC with a correction for small sample
-sizes.</p>
+sizes. <code>performance_aic()</code> is a small wrapper that returns the AIC. It is
+a generic function that also works for some models that don't have a AIC method
+(like Tweedie models).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>performance_aicc</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>performance_aicc</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='fu'>performance_aic</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,7 +159,7 @@ sizes.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Numeric, the AICc value.</p>
+    <p>Numeric, the AIC or AICc value.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     

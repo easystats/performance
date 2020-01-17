@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Model Performance — model_performance • performance</title>
+<title>Likelihood-Ratio-Test for Model Comparison — performance_lrt • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,14 +42,8 @@
 
 
 
-<meta property="og:title" content="Model Performance — model_performance" />
-<meta property="og:description" content="See the documentation for your object's class:
-Frequentist Regressions
-Mixed models
-Bayesian models
-CFA / SEM lavaan models
-
-" />
+<meta property="og:title" content="Likelihood-Ratio-Test for Model Comparison — performance_lrt" />
+<meta property="og:description" content="Compute Likelihood-Ratio-Test for model comparison." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -129,74 +123,58 @@ CFA / SEM lavaan models
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Model Performance</h1>
+    <h1>Likelihood-Ratio-Test for Model Comparison</h1>
     
-    <div class="hidden name"><code>model_performance.Rd</code></div>
+    <div class="hidden name"><code>performance_lrt.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>See the documentation for your object's class:</p><ul>
-<li><p><a href='model_performance.lm.html'>Frequentist Regressions</a></p></li>
-<li><p><a href='model_performance.merMod.html'>Mixed models</a></p></li>
-<li><p><a href='model_performance.stanreg.html'>Bayesian models</a></p></li>
-<li><p><a href='model_performance.lavaan.html'>CFA / SEM lavaan models</a></p></li>
-</ul>
-
+    <p>Compute Likelihood-Ratio-Test for model comparison.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>model_performance</span>(<span class='no'>model</span>, <span class='no'>...</span>)
-
-<span class='fu'>performance</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>performance_lrt</span>(<span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>Statistical model.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
-      <td><p>Arguments passed to or from other methods, resp. for
-<code><a href='compare_performance.html'>compare_performance()</a></code>, one or multiple model objects (also of
-different classes).</p></td>
-    </tr>
-    <tr>
-      <th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed.
-See related documentation of object's class for details.</p></td>
-    </tr>
-    <tr>
-      <th>rank</th>
-      <td><p>Logical, if <code>TRUE</code>, models are ranked according to "best overall
-model performance". See 'Details'.</p></td>
+      <td><p>Multiple model objects, which should respond to <code><a href='https://rdrr.io/r/stats/anova.html'>anova()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
+    <p>A data frame, based on the results from <code><a href='https://rdrr.io/r/stats/anova.html'>anova()</a></code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This only makes statistical sense if the models are nested. It is conventional to list the models from smallest to largest, but this is up to the user. The ouput shows the tests of the models against one another in the order specified.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>model_performance</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
+    <pre class="examples"><div class='input'><span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>gear</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>gear</span> + <span class='no'>disp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
+<span class='fu'>performance_lrt</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test for Model Comparison
 #&gt; 
-#&gt; </span><span>    AIC     BIC   R2 R2_adjusted  RMSE
-#&gt;  156.01 161.873 0.83       0.819 2.444</div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'>model_performance</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Indices of model performance
-#&gt; 
-#&gt; </span><span>    AIC    BIC R2_Tjur  RMSE LOGLOSS SCORE_LOG SCORE_SPHERICAL   PCP
-#&gt;  31.298 35.695   0.478 0.889   0.395   -14.903           0.095 0.743</div></span></pre>
+#&gt; </span><span>Model | Type | Df |     AIC |     p
+#&gt; -----------------------------------
+#&gt; m1    |   lm |  3 | 156.010 |      
+#&gt; m2    |   lm |  4 | 157.499 | 0.507
+#&gt; m3    |   lm |  5 | 159.105 | 0.563
+#&gt; </span><span style='color: #BBBB00;'>
+#&gt; Model 'm1' seems to have the best model fit.
+#&gt; </span><span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
+      <li><a href="#details">Details</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
