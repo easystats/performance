@@ -51,10 +51,16 @@ performance_lrt.default <- function(...) {
     # bind all data
     out <- cbind(do.call(rbind, m), lrt)
 
+    # add AIC, if necessary
+    if (!"AIC" %in% names(out)) {
+      out$Df <- sapply(objects, function(i) length(insight::find_parameters(i, flatten = TRUE)))
+      out$AIC <- sapply(objects, performance_aic)
+    }
+
     # preserve only some columns
-    out <- out[, intersect(colnames(out), c("Model", "Type", "Df", "AIC", "BIC", "Chisq", "Pr(>Chisq)"))]
-    colnames(out)[names(out) == "Chisq"] <- "Statistic"
-    colnames(out)[names(out) == "Pr(>Chisq)"] <- "p"
+    out <- out[, intersect(c("Model", "Type", "Df", "AIC", "BIC", "F", "Chisq", "Pr(>Chisq)", "Pr(>Chi)", "Pr(>F)"), colnames(out))]
+    colnames(out)[names(out) %in% c("Chisq", "F")] <- "Statistic"
+    colnames(out)[grepl("^Pr\\(>", names(out))] <- "p"
     rownames(out) <- NULL
 
     class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")

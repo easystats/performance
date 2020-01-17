@@ -578,7 +578,7 @@ print.performance_lrt <- function(x, digits = 3, ...) {
   insight::print_color("# Likelihood-Ratio-Test for Model Comparison\n\n", "blue")
   cat(insight::format_table(x, digits = digits))
 
-  if (any(x$p < .05) && sum(x$p < .05, na.rm = TRUE) <= 1) {
+  if (sum(x$p < .05, na.rm = TRUE) <= 1) {
     best <- which(x$p < .05)
     if (length(best) == 0) best <- 1
     insight::print_color(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
