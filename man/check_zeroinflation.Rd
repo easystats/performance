@@ -30,8 +30,9 @@ If the amount of observed zeros is larger than the amount of
   negative binomial or zero-inflated models.
 }
 \examples{
-library(glmmTMB)
-data(Salamanders)
-m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-check_zeroinflation(m)
+if (require("glmmTMB")) {
+  data(Salamanders)
+  m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+  check_zeroinflation(m)
+}
 }

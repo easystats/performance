@@ -56,7 +56,6 @@ reference:
 
 - title: "Check Items and Scales"
   contents:
-  - check_itemscale
   - cronbachs_alpha
   - item_difficulty
   - item_intercor

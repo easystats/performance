@@ -36,8 +36,9 @@ This function is somewhat experimental and might be improved in future releases.
   aspects and other information about the data and the model.
 }
 \examples{
-library(lme4)
-model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-check_distribution(model)
-plot(check_distribution(model))
+if (require("lme4")) {
+  model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+  check_distribution(model)
+  plot(check_distribution(model))
+}
 }

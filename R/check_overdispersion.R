@@ -42,18 +42,18 @@
 #'
 #'
 #' @examples
-#' library(glmmTMB)
-#' data(Salamanders)
+#' if (require("glmmTMB")) {
+#'   data(Salamanders)
+#'   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+#'   check_overdispersion(m)
 #'
-#' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#' check_overdispersion(m)
-#'
-#' m <- glmmTMB(
-#'   count ~ mined + spp + (1 | site),
-#'   family = poisson,
-#'   data = Salamanders
-#' )
-#' check_overdispersion(m)
+#'   m <- glmmTMB(
+#'     count ~ mined + spp + (1 | site),
+#'     family = poisson,
+#'     data = Salamanders
+#'   )
+#'   check_overdispersion(m)
+#' }
 #' @export
 check_overdispersion <- function(x, ...) {
   UseMethod("check_overdispersion")

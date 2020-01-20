@@ -142,11 +142,16 @@
 <a href="#new-functions" class="anchor"></a>New functions</h2>
 <ul>
 <li>
-<code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe properties of (sub)scales, based on results from principal component analyses.</li>
-<li>
 <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</li>
 <li>
 <code><a href="../reference/performance_lrt.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fix issues with CRAN checks.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -196,9 +201,9 @@
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now no longer returns backticks in row- and column names.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
 <li>
@@ -244,9 +249,9 @@
 <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
 <li>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occured when checking for outliers.</li>
@@ -305,9 +310,9 @@
 <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> to check models for homogeneity of variances.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues with <code><a href="../reference/compare_performance.html">compare_performance()</a></code> and row-ordering.</li>
 <li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inlfated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
@@ -404,9 +409,9 @@
 <li>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
 <li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (#48).</li>

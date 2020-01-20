@@ -45,16 +45,17 @@ model <- glm(counts ~ outcome + treatment, family = poisson())
 
 performance_score(model)
 \dontrun{
-library(glmmTMB)
-data(Salamanders)
-model <- glmmTMB(
-  count ~ spp + mined + (1 | site),
-  zi =  ~ spp + mined,
-  family = nbinom2(),
-  data = Salamanders
-)
+if (require("glmmTMB")) {
+  data(Salamanders)
+  model <- glmmTMB(
+    count ~ spp + mined + (1 | site),
+    zi =  ~ spp + mined,
+    family = nbinom2(),
+    data = Salamanders
+  )
 
 performance_score(model)
+}
 }
 
 }

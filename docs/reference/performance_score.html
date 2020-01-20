@@ -191,16 +191,17 @@ in <span class="pkg">lme4</span>.</p>
 #&gt; </span><span>logarithmic: -2.5979
 #&gt;   quadratic:  0.2095
 #&gt;   spherical:  0.3238</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>glmmTMB</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Salamanders</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html'>glmmTMB</a></span>(
-  <span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
-  <span class='kw'>zi</span> <span class='kw'>=</span>  ~ <span class='no'>spp</span> + <span class='no'>mined</span>,
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/nbinom2.html'>nbinom2</a></span>(),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>
-)
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"glmmTMB"</span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Salamanders</span>)
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html'>glmmTMB</a></span>(
+    <span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
+    <span class='kw'>zi</span> <span class='kw'>=</span>  ~ <span class='no'>spp</span> + <span class='no'>mined</span>,
+    <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/nbinom2.html'>nbinom2</a></span>(),
+    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>
+  )
 
 <span class='fu'>performance_score</span>(<span class='no'>model</span>)
+}
 }</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

@@ -46,23 +46,24 @@ If a model is "singular", this means that some dimensions of the
   }
 }
 \examples{
-library(lme4)
-data(sleepstudy)
-set.seed(123)
-sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-sleepstudy$mysubgrp <- NA
-for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+if (require("lme4")) {
+  data(sleepstudy)
+  set.seed(123)
+  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$mysubgrp <- NA
+  for (i in 1:5) {
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <-
+      sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+
+  model <- lmer(
+    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+
+  check_singularity(model)
 }
-
-model <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
-
-check_singularity(model)
 }
 \references{
 \itemize{

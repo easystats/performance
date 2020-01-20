@@ -48,12 +48,13 @@ if (require("rstanarm")) {
   r2_bayes(model)
 }
 \dontrun{
-library(brms)
-model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
-r2_bayes(model)
+if (require("brms")) {
+  model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+  r2_bayes(model)
 
-model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
-r2_bayes(model)
+  model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+  r2_bayes(model)
+}
 }
 }
 \references{

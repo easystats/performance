@@ -187,22 +187,18 @@ or negative binomial, see <cite>Gelman and Hill (2007), pages 115-116</cite>).</
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>glmmTMB</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Salamanders</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"glmmTMB"</span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Salamanders</span>)
+  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>poisson</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>)
+  <span class='fu'>check_overdispersion</span>(<span class='no'>m</span>)
 
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>poisson</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>)
-<span class='fu'>check_overdispersion</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Overdispersion test
-#&gt; 
-#&gt; </span><span>       dispersion ratio =    2.946
-#&gt;   Pearson's Chi-Squared = 1873.710
-#&gt;                 p-value =  &lt; 0.001
-#&gt; </div><div class='output co'>#&gt; <span class='message'>Overdispersion detected.</span></div><div class='input'>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html'>glmmTMB</a></span>(
-  <span class='no'>count</span> ~ <span class='no'>mined</span> + <span class='no'>spp</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
-  <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>poisson</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>
-)
-<span class='fu'>check_overdispersion</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Overdispersion test
+  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html'>glmmTMB</a></span>(
+    <span class='no'>count</span> ~ <span class='no'>mined</span> + <span class='no'>spp</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>site</span>),
+    <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>poisson</span>,
+    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>
+  )
+  <span class='fu'>check_overdispersion</span>(<span class='no'>m</span>)
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: glmmTMB</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Overdispersion test
 #&gt; 
 #&gt; </span><span>       dispersion ratio =    2.324
 #&gt;   Pearson's Chi-Squared = 1475.875

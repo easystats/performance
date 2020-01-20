@@ -20,10 +20,11 @@
 #'   negative binomial or zero-inflated models.
 #'
 #' @examples
-#' library(glmmTMB)
-#' data(Salamanders)
-#' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#' check_zeroinflation(m)
+#' if (require("glmmTMB")) {
+#'   data(Salamanders)
+#'   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+#'   check_zeroinflation(m)
+#' }
 #' @importFrom insight get_response model_info
 #' @importFrom stats fitted dpois
 #' @export

@@ -57,11 +57,12 @@ different models at once and hence allows comparison of indices across models.
   }
 }
 \examples{
-library(lme4)
-m1 <- lm(mpg ~ wt + cyl, data = mtcars)
-m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-compare_performance(m1, m2, m3)
+if (require("lme4")) {
+  m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+  m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+  m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+  compare_performance(m1, m2, m3)
+}
 
 data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)

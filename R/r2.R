@@ -27,9 +27,10 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2(model)
 #'
-#' library(lme4)
-#' model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-#' r2(model)
+#' if (require("lme4")) {
+#'   model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#'   r2(model)
+#' }
 #' @export
 r2 <- function(model, ...) {
   UseMethod("r2")

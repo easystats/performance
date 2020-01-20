@@ -36,10 +36,11 @@
 #' distributions, however, only if the probability is greater than zero.
 #'
 #' @examples
-#' library(lme4)
-#' model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#' check_distribution(model)
-#' plot(check_distribution(model))
+#' if (require("lme4")) {
+#'   model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#'   check_distribution(model)
+#'   plot(check_distribution(model))
+#' }
 #' @importFrom bayestestR map_estimate
 #' @importFrom stats IQR density predict sd mad residuals
 #' @importFrom insight get_response

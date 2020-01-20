@@ -37,16 +37,17 @@
 #'
 #' performance_score(model)
 #' \dontrun{
-#' library(glmmTMB)
-#' data(Salamanders)
-#' model <- glmmTMB(
-#'   count ~ spp + mined + (1 | site),
-#'   zi =  ~ spp + mined,
-#'   family = nbinom2(),
-#'   data = Salamanders
-#' )
+#' if (require("glmmTMB")) {
+#'   data(Salamanders)
+#'   model <- glmmTMB(
+#'     count ~ spp + mined + (1 | site),
+#'     zi =  ~ spp + mined,
+#'     family = nbinom2(),
+#'     data = Salamanders
+#'   )
 #'
 #' performance_score(model)
+#' }
 #' }
 #'
 #' @importFrom insight get_response model_info
@@ -168,6 +169,9 @@ performance_score <- function(model, verbose = TRUE) {
   } else if (inherits(model, c("clm", "clm2", "clmm"))) {
     pred <- stats::predict(model)
   } else if (all(inherits(model, c("stanreg", "lmerMod"), which = TRUE)) > 0) {
+    if (!requireNamespace("rstanarm", quietly = TRUE)) {
+      stop("Package `rstanarm` required for this function to work. Please install it.")
+    }
     pred <- colMeans(rstanarm::posterior_predict(model))
   } else {
     pred <- stats::predict(model, type = "response")

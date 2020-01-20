@@ -37,12 +37,13 @@
 #'   r2_bayes(model)
 #' }
 #' \dontrun{
-#' library(brms)
-#' model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
-#' r2_bayes(model)
+#' if (require("brms")) {
+#'   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+#'   r2_bayes(model)
 #'
-#' model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
-#' r2_bayes(model)
+#'   model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+#'   r2_bayes(model)
+#' }
 #' }
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
 #'

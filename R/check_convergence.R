@@ -21,19 +21,20 @@
 #'   Further details can be found in \code{\link[lme4]{convergence}}.
 #'
 #' @examples
-#' library(lme4)
-#' data(cbpp)
-#' set.seed(1)
-#' cbpp$x <- rnorm(nrow(cbpp))
-#' cbpp$x2 <- runif(nrow(cbpp))
+#' if (require("lme4")) {
+#'   data(cbpp)
+#'   set.seed(1)
+#'   cbpp$x <- rnorm(nrow(cbpp))
+#'   cbpp$x2 <- runif(nrow(cbpp))
 #'
-#' model <- glmer(
-#'   cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
-#'   data = cbpp,
-#'   family = binomial()
-#' )
+#'   model <- glmer(
+#'     cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
+#'     data = cbpp,
+#'     family = binomial()
+#'   )
 #'
-#' check_convergence(model)
+#'   check_convergence(model)
+#' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
   UseMethod("check_convergence")
