@@ -16,14 +16,15 @@
 #'   the squared correlation between the model's actual and predicted reponse.
 #'
 #' @examples
-#' library(pscl)
-#' data(bioChemists)
-#' model <- zeroinfl(
-#'   art ~ fem + mar + kid5 + ment | kid5 + phd,
-#'   data = bioChemists
-#' )
+#' if (require("pscl")) {
+#'   data(bioChemists)
+#'   model <- zeroinfl(
+#'     art ~ fem + mar + kid5 + ment | kid5 + phd,
+#'     data = bioChemists
+#'   )
 #'
-#' r2_zeroinflated(model)
+#'   r2_zeroinflated(model)
+#' }
 #' @importFrom stats cor predict coef model.matrix
 #' @importFrom insight model_info get_response find_parameters n_obs
 #' @export

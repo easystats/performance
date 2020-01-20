@@ -26,12 +26,13 @@ The default-method calculates an R2 value based on the residual
   the squared correlation between the model's actual and predicted reponse.
 }
 \examples{
-library(pscl)
-data(bioChemists)
-model <- zeroinfl(
-  art ~ fem + mar + kid5 + ment | kid5 + phd,
-  data = bioChemists
-)
+if (require("pscl")) {
+  data(bioChemists)
+  model <- zeroinfl(
+    art ~ fem + mar + kid5 + ment | kid5 + phd,
+    data = bioChemists
+  )
 
-r2_zeroinflated(model)
+  r2_zeroinflated(model)
+}
 }

@@ -99,9 +99,10 @@
 #'  }
 #'
 #' @examples
-#' library(lme4)
-#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-#' icc(model)
+#' if (require("lme4")) {
+#'   model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#'   icc(model)
+#' }
 #' @importFrom insight model_info get_variance print_color
 #' @export
 icc <- function(model, ...) {

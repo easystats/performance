@@ -35,12 +35,13 @@ The RMSE is the square root of the variance of the residuals and indicates
   less residual variance.
 }
 \examples{
-library(nlme)
-m <- lme(distance ~ age, data = Orthodont)
+if (require("nlme")) {
+  m <- lme(distance ~ age, data = Orthodont)
 
-# RMSE
-performance_rmse(m, normalized = FALSE)
+  # RMSE
+  performance_rmse(m, normalized = FALSE)
 
-# normalized RMSE
-performance_rmse(m, normalized = TRUE)
+  # normalized RMSE
+  performance_rmse(m, normalized = TRUE)
+}
 }

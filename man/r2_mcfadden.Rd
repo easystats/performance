@@ -17,12 +17,13 @@ For most models, a list with McFadden's R2 and adjusted McFadden's
 Calculates McFadden's pseudo R2.
 }
 \examples{
-library(mlogit)
-data("Fishing", package = "mlogit")
-Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
+if (require("mlogit")) {
+  data("Fishing", package = "mlogit")
+  Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
 
-model <- mlogit(mode ~ price + catch, data = Fish)
-r2_mcfadden(model)
+  model <- mlogit(mode ~ price + catch, data = Fish)
+  r2_mcfadden(model)
+}
 }
 \references{
 \itemize{

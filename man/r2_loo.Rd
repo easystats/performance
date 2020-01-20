@@ -22,7 +22,7 @@ Unlike \code{\link{r2_bayes}}, which returns an "unadjusted" R2 value,
 }
 \examples{
 if (require("rstanarm")) {
-  model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
+  model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
   r2_loo(model)
 }
 }

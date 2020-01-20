@@ -15,12 +15,13 @@
 #' }
 #'
 #' @examples
-#' library(mlogit)
-#' data("Fishing", package = "mlogit")
-#' Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
+#' if (require("mlogit")) {
+#'   data("Fishing", package = "mlogit")
+#'   Fish <- mlogit.data(Fishing, varying = c(2:9), shape = "wide", choice = "mode")
 #'
-#' model <- mlogit(mode ~ price + catch, data = Fish)
-#' r2_mcfadden(model)
+#'   model <- mlogit(mode ~ price + catch, data = Fish)
+#'   r2_mcfadden(model)
+#' }
 #' @importFrom insight find_parameters
 #' @importFrom stats logLik update
 #' @export
