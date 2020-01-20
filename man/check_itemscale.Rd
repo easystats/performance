@@ -34,6 +34,7 @@ set.seed(17)
 X <- matrix(rnorm(16000), 100, 16)
 Z <- X \%*\% C
 
+library(parameters)
 pca <- principal_components(as.data.frame(Z), rotation = "varimax")
 pca
 check_itemscale(pca)

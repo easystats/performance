@@ -146,7 +146,7 @@
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; # Bayesian R2 with Standard Error</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;   Conditional R2: 0.953 [0.006]</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.825 [0.045]</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.823 [0.044]</span></a>
 <a class="sourceLine" id="cb4-9" title="9"></a>
 <a class="sourceLine" id="cb4-10" title="10"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</a>
 <a class="sourceLine" id="cb4-11" title="11">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
@@ -178,14 +178,14 @@
 <a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; Conditioned on: all random effects</span></a>
 <a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; ## Variance Ratio (comparable to ICC)</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.57 0.77]</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.54 0.77]</span></a>
 <a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; ## Variances of Posterior Predicted Distribution</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.79  CI 95%: [ 8.54 58.47]</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.49  CI 95%: [24.73 55.90]</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.78  CI 95%: [ 8.81 57.96]</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.63  CI 95%: [25.22 55.66]</span></a>
 <a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; ## Difference in Variances</span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.16  CI 95%: [-19.01 35.51]</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.42  CI 95%: [-18.75 35.31]</span></a></code></pre></div>
 </div>
 </div>
 <div id="model-diagnostics" class="section level2">
