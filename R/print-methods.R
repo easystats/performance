@@ -584,3 +584,26 @@ print.performance_lrt <- function(x, digits = 3, ...) {
     insight::print_color(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
   }
 }
+
+
+
+#' @importFrom insight print_color format_table
+#' @export
+print.check_itemscale <- function(x, digits = 2, ...) {
+  insight::print_color("# Description of (Sub-)Scales\n", "blue")
+
+  for (i in 1:length(x)) {
+    insight::print_color(sprintf("\nComponent %i\n\n", i), "red")
+    out <- x[[i]]
+    out[["Missings"]] <- sprintf("%.*f%%", digits, 100 * out[["Missings"]])
+    out[["Mean"]] <- sprintf("%.*f", digits, out[["Mean"]])
+    out[["SD"]] <- sprintf("%.*f", digits, out[["SD"]])
+
+    cat(insight::format_table(out, missing = "<NA>"))
+
+    insight::print_color(sprintf(
+      "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f\n\n",
+      attributes(out)$item_intercorrelation, attributes(out)$cronbachs_alpha
+    ), "yellow")
+  }
+}
