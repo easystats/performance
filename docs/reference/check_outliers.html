@@ -306,10 +306,6 @@ list(
 <span class='co'># This one takes some seconds to finish...</span>
 <span class='fu'>check_outliers</span>(<span class='no'>model</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"ics"</span>)
 
-<span class='co'># For Bayesian models</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rstanarm</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>disp</span> ~ <span class='no'>mpg</span> + <span class='no'>hp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mt2</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
-
 <span class='co'># For dataframes</span>
 <span class='fu'>check_outliers</span>(<span class='no'>mtcars</span>)
 <span class='fu'>check_outliers</span>(<span class='no'>mtcars</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"all"</span>)

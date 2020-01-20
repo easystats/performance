@@ -174,69 +174,23 @@ calculate the central tendency of the variances.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>performance</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rstanarm</span>)
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"rstanarm"</span>)) {
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+  <span class='fu'>r2_bayes</span>(<span class='no'>model</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>)</div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-#&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 0 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 1: Adjust your expectations accordingly!
-#&gt; Chain 1: 
-#&gt; Chain 1: 
-#&gt; Chain 1: Iteration:   1 / 500 [  0%]  (Warmup)
-#&gt; Chain 1: Iteration:  50 / 500 [ 10%]  (Warmup)
-#&gt; Chain 1: Iteration: 100 / 500 [ 20%]  (Warmup)
-#&gt; Chain 1: Iteration: 150 / 500 [ 30%]  (Warmup)
-#&gt; Chain 1: Iteration: 200 / 500 [ 40%]  (Warmup)
-#&gt; Chain 1: Iteration: 250 / 500 [ 50%]  (Warmup)
-#&gt; Chain 1: Iteration: 251 / 500 [ 50%]  (Sampling)
-#&gt; Chain 1: Iteration: 300 / 500 [ 60%]  (Sampling)
-#&gt; Chain 1: Iteration: 350 / 500 [ 70%]  (Sampling)
-#&gt; Chain 1: Iteration: 400 / 500 [ 80%]  (Sampling)
-#&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
-#&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
-#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.02 seconds (Warm-up)
-#&gt; Chain 1:                0.011 seconds (Sampling)
-#&gt; Chain 1:                0.031 seconds (Total)
-#&gt; Chain 1: </div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
-#&gt; 
-#&gt; </span><span>  Conditional R2: 0.815 [0.047]</div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_lmer</a></span>(
-  <span class='no'>Petal.Length</span> ~ <span class='no'>Petal.Width</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>),
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>,
-  <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>
-)</div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-#&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 0 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 1: Adjust your expectations accordingly!
-#&gt; Chain 1: 
-#&gt; Chain 1: 
-#&gt; Chain 1: Iteration:   1 / 500 [  0%]  (Warmup)
-#&gt; Chain 1: Iteration:  50 / 500 [ 10%]  (Warmup)
-#&gt; Chain 1: Iteration: 100 / 500 [ 20%]  (Warmup)
-#&gt; Chain 1: Iteration: 150 / 500 [ 30%]  (Warmup)
-#&gt; Chain 1: Iteration: 200 / 500 [ 40%]  (Warmup)
-#&gt; Chain 1: Iteration: 250 / 500 [ 50%]  (Warmup)
-#&gt; Chain 1: Iteration: 251 / 500 [ 50%]  (Sampling)
-#&gt; Chain 1: Iteration: 300 / 500 [ 60%]  (Sampling)
-#&gt; Chain 1: Iteration: 350 / 500 [ 70%]  (Sampling)
-#&gt; Chain 1: Iteration: 400 / 500 [ 80%]  (Sampling)
-#&gt; Chain 1: Iteration: 450 / 500 [ 90%]  (Sampling)
-#&gt; Chain 1: Iteration: 500 / 500 [100%]  (Sampling)
-#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.455 seconds (Warm-up)
-#&gt; Chain 1:                0.282 seconds (Sampling)
-#&gt; Chain 1:                0.737 seconds (Total)
-#&gt; Chain 1: </div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_lmer</a></span>(
+    <span class='no'>Petal.Length</span> ~ <span class='no'>Petal.Width</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>),
+    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>,
+    <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+    <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>,
+    <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>
+  )
+  <span class='fu'>r2_bayes</span>(<span class='no'>model</span>)
+}</div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='input'><span class='fu'>r2_bayes</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Bayesian R2 with Standard Error
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
 #&gt; </span><span>  Conditional R2: 0.953 [0.005]
 #&gt;      Marginal R2: 0.825 [0.040]</div><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
