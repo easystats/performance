@@ -9,7 +9,13 @@
 #'
 #' @return A list of data frames, with relatest measures of internal consistencies of each subscale.
 #'
-#' @details
+#' @details \code{check_itemscale()} calculates various measures of internal
+#'   consistencies, such as Cronbach's alpha, item difficulty or discrimination etc.
+#'   on subscales which were built from several items. Subscales are retrieved from
+#'   the results of \code{\link[parameters]{principal_components}}, i.e. based on
+#'   how many components were extracted from the PCA, \code{check_itemscale()}
+#'   retrieves those variables that belong to a component and calculates the above
+#'   mentioned measures.
 #'
 #' @note \itemize{
 #'   \item \emph{Item difficulty} should range between 0.2 and 0.8. Ideal value is \code{p+(1-p)/2} (which mostly is between 0.5 and 0.8). See \code{\link{item_difficulty}} for details.
