@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance")) {
-  context("backticks")
-
   data(iris)
   iris$`a m` <- iris$Species
   iris$`Sepal Width` <- iris$Sepal.Width

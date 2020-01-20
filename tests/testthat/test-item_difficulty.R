@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance")) {
-  context("item_difficulty")
-
   test_that("item_difficulty", {
     data(iris)
     x <- iris[, 1:4]

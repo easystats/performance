@@ -2,8 +2,6 @@
 
 if (.runThisTest) {
   if (require("testthat") && require("performance") && require("lme4")) {
-    context("check_singularity")
-
     data(sleepstudy)
     set.seed(123)
     sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

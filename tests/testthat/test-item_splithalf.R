@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance")) {
-  context("item_split_half")
-
   test_that("item_split_half", {
     data(iris)
     x <- iris[, 1:4]

@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance") && require("insight") && require("AER") && require("ordinal") && require("betareg")) {
-  context("model_performance different models")
-
   data("Affairs", package = "AER")
 
   m1 <- insight::download_model("betareg_1")

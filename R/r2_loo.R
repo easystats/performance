@@ -12,10 +12,10 @@
 #'   closer to an "adjusted" R2 measure.
 #'
 #' @examples
-#' library(rstanarm)
-#'
-#' model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
-#' r2_loo(model)
+#' if (require("rstanarm")) {
+#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
+#'   r2_loo(model)
+#' }
 #' @importFrom insight get_response find_algorithm
 #' @importFrom stats var
 #' @export

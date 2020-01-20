@@ -161,10 +161,6 @@ check_outliers(model, method = c("mahalabonis", "mcd"))
 # This one takes some seconds to finish...
 check_outliers(model, method = "ics")
 
-# For Bayesian models
-library(rstanarm)
-model <- stan_glm(disp ~ mpg + hp, data = mt2, refresh = 0)
-
 # For dataframes
 check_outliers(mtcars)
 check_outliers(mtcars, method = "all")

@@ -1,13 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
 
-if (require("testthat") && require("performance")) {
+if (require("testthat") && require("performance") && require("rstanarm")) {
   if (.runThisTest && Sys.getenv("USER") != "travis") {
-    context("model_performance.bayesian")
-
     test_that("model_performance.stanreg", {
       set.seed(333)
-      library(rstanarm)
-
       model <- insight::download_model("stanreg_lm_1")
       perf <- model_performance(model)
 

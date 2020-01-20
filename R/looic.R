@@ -9,10 +9,10 @@
 #' @return A list with four elements, the ELPD, LOOIC and their standard errors.
 #'
 #' @examples
-#' library(rstanarm)
-#'
-#' model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
-#' looic(model)
+#' if (require("rstanarm")) {
+#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
+#'   looic(model)
+#' }
 #' @importFrom insight find_algorithm print_color
 #' @importFrom stats var
 #' @export

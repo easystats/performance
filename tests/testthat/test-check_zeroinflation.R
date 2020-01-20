@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance") && require("glmmTMB")) {
-  context("check_zeroinflation")
-
   data(Salamanders)
   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 

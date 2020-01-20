@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance") && require("lme4")) {
-  context("r2_nakagawa")
-
   data(iris)
   model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 

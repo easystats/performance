@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance") && require("lme4")) {
-  context("check_convergence")
-
   data(cbpp)
   data(sleepstudy)
   set.seed(1)

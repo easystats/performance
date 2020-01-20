@@ -34,18 +34,19 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
 }
 \examples{
 library(performance)
-library(rstanarm)
+if (require("rstanarm")) {
+  model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
+  r2_bayes(model)
 
-model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500)
-r2_bayes(model)
-
-model <- stan_lmer(
-  Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  chains = 1,
-  iter = 500
-)
-r2_bayes(model)
+  model <- stan_lmer(
+    Petal.Length ~ Petal.Width + (1 | Species),
+    data = iris,
+    chains = 1,
+    iter = 500,
+    refresh = 0
+  )
+  r2_bayes(model)
+}
 \dontrun{
 library(brms)
 model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
@@ -54,7 +55,6 @@ r2_bayes(model)
 model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
 r2_bayes(model)
 }
-
 }
 \references{
 Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}

@@ -2,8 +2,6 @@
 
 if (.runThisTest && Sys.getenv("USER") != "travis") {
   if (require("testthat") && require("performance") && require("lme4") && require("insight")) {
-    context("icc")
-
     data(iris)
     m0 <- lm(Sepal.Length ~ Petal.Length, data = iris)
     m1 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
