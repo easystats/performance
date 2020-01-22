@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -160,21 +160,25 @@
   the squared correlation between the model's actual and predicted reponse.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>pscl</span>)</div><div class='output co'>#&gt; <span class='message'>Classes and Methods for R developed in the</span>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"pscl"</span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>bioChemists</span>)
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pscl/man/zeroinfl.html'>zeroinfl</a></span>(
+    <span class='no'>art</span> ~ <span class='no'>fem</span> + <span class='no'>mar</span> + <span class='no'>kid5</span> + <span class='no'>ment</span> <span class='kw'>|</span> <span class='no'>kid5</span> + <span class='no'>phd</span>,
+    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bioChemists</span>
+  )
+
+  <span class='fu'>r2_zeroinflated</span>(<span class='no'>model</span>)
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: pscl</span></div><div class='output co'>#&gt; <span class='message'>Classes and Methods for R developed in the</span>
 #&gt; <span class='message'>Political Science Computational Laboratory</span>
 #&gt; <span class='message'>Department of Political Science</span>
 #&gt; <span class='message'>Stanford University</span>
 #&gt; <span class='message'>Simon Jackman</span>
-#&gt; <span class='message'>hurdle and zeroinfl functions by Achim Zeileis</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>bioChemists</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pscl/man/zeroinfl.html'>zeroinfl</a></span>(
-  <span class='no'>art</span> ~ <span class='no'>fem</span> + <span class='no'>mar</span> + <span class='no'>kid5</span> + <span class='no'>ment</span> <span class='kw'>|</span> <span class='no'>kid5</span> + <span class='no'>phd</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bioChemists</span>
-)
-
-<span class='fu'>r2_zeroinflated</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># R2 for Zero-Inflated and Hurdle Regression
+#&gt; <span class='message'>hurdle and zeroinfl functions by Achim Zeileis</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># R2 for Zero-Inflated and Hurdle Regression
 #&gt; 
 #&gt; </span><span>       R2: 0.180
-#&gt;   adj. R2: 0.175</div></span></pre>
+#&gt;   adj. R2: 0.175</div><div class='input'># }
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

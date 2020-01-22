@@ -2,7 +2,7 @@
 #' @name check_itemscale
 #'
 #' @description Compute various measures of internal consistencies
-#'   applied to (sub)scales, wich items were extracted using
+#'   applied to (sub)scales, which items were extracted using
 #'   \code{\link[parameters]{principal_components}}.
 #'
 #' @param x An object of class \code{parameters_pca}, as returned by \code{\link[parameters]{principal_components}}.

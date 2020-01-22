@@ -78,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
       </span>
     </div>
 
@@ -171,15 +171,18 @@
   less residual variance.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>nlme</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"nlme"</span>)) {
+  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(<span class='no'>distance</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Orthodont</span>)
+
+  <span class='co'># RMSE</span>
+  <span class='fu'>performance_rmse</span>(<span class='no'>m</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+  <span class='co'># normalized RMSE</span>
+  <span class='fu'>performance_rmse</span>(<span class='no'>m</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: 'nlme'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:lme4':</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    lmList</span></div><div class='input'><span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/nlme/man/lme.html'>lme</a></span>(<span class='no'>distance</span> ~ <span class='no'>age</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Orthodont</span>)
-
-<span class='co'># RMSE</span>
-<span class='fu'>performance_rmse</span>(<span class='no'>m</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] 1.086327</div><div class='input'>
-<span class='co'># normalized RMSE</span>
-<span class='fu'>performance_rmse</span>(<span class='no'>m</span>, <span class='kw'>normalized</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] 0.07242178</div></pre>
+#&gt; <span class='message'>    lmList</span></div><div class='output co'>#&gt; [1] 0.07242178</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
