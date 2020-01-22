@@ -12,10 +12,6 @@
 #' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.
 #'
 #' @param model Statistical model.
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed.
-#'   See related documentation of object's class for details.
-#' @param rank Logical, if \code{TRUE}, models are ranked according to "best overall
-#'   model performance". See 'Details'.
 #' @param ... Arguments passed to or from other methods, resp. for
 #'   \code{compare_performance()}, one or multiple model objects (also of
 #'   different classes).

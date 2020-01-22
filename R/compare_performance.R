@@ -4,13 +4,10 @@
 #' @description \code{compare_performance()} computes indices of model performance for
 #' different models at once and hence allows comparison of indices across models.
 #'
-#' @param model Statistical model.
+#' @param ... Multiple model objects (also of different classes).
 #' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \link[=model_performance]{documentation} of object's class for details.
 #' @param rank Logical, if \code{TRUE}, models are ranked according to "best overall
 #'   model performance". See 'Details'.
-#' @param ... Arguments passed to or from other methods, resp. for
-#'   \code{compare_performance()}, one or multiple model objects (also of
-#'   different classes).
 #'
 #' @return A data frame (with one row per model) and one column per "index" (see \code{metrics}).
 #'

@@ -7,9 +7,7 @@
 compare_performance(..., metrics = "all", rank = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{...}{Arguments passed to or from other methods, resp. for
-\code{compare_performance()}, one or multiple model objects (also of
-different classes).}
+\item{...}{Multiple model objects (also of different classes).}
 
 \item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \link[=model_performance]{documentation} of object's class for details.}
 
@@ -17,8 +15,6 @@ different classes).}
 model performance". See 'Details'.}
 
 \item{verbose}{Toggle off warnings.}
-
-\item{model}{Statistical model.}
 }
 \value{
 A data frame (with one row per model) and one column per "index" (see \code{metrics}).
