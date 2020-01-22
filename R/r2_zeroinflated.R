@@ -16,6 +16,7 @@
 #'   the squared correlation between the model's actual and predicted reponse.
 #'
 #' @examples
+#' \donttest{
 #' if (require("pscl")) {
 #'   data(bioChemists)
 #'   model <- zeroinfl(
@@ -24,6 +25,7 @@
 #'   )
 #'
 #'   r2_zeroinflated(model)
+#' }
 #' }
 #' @importFrom stats cor predict coef model.matrix
 #' @importFrom insight model_info get_response find_parameters n_obs

@@ -26,6 +26,7 @@ The default-method calculates an R2 value based on the residual
   the squared correlation between the model's actual and predicted reponse.
 }
 \examples{
+\donttest{
 if (require("pscl")) {
   data(bioChemists)
   model <- zeroinfl(
@@ -34,5 +35,6 @@ if (require("pscl")) {
   )
 
   r2_zeroinflated(model)
+}
 }
 }
