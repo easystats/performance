@@ -40,6 +40,7 @@
 #' pca
 #' check_itemscale(pca)
 #' @importFrom stats sd
+#' @importFrom parameters closest_component
 #' @export
 check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {
@@ -50,7 +51,7 @@ check_itemscale <- function(x) {
   }
 
   data_set <- attributes(x)$data_set
-  subscales <- parameters::component_columns(x)
+  subscales <- parameters::closest_component(x)
 
   out <- lapply(sort(unique(subscales)), function(.subscale) {
     columns <- names(subscales)[subscales == .subscale]
