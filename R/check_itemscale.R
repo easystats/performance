@@ -40,7 +40,6 @@
 #' pca
 #' check_itemscale(pca)
 #' @importFrom stats sd
-#' @importFrom parameters closest_component
 #' @export
 check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {

@@ -34,7 +34,9 @@ Depends:
   R (>= 3.2)
 Imports:
 	insight (>= 0.8.0),
-	bayestestR (>= 0.4.0)
+	bayestestR (>= 0.4.0),
+	stats,
+	utils
 Suggests:
 	AER,
 	betareg,
