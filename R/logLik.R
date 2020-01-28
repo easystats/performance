@@ -1,5 +1,5 @@
 #' @export
-logLik.felm <- function(object, ...) {
+logLik.ivreg <- function(object, ...) {
   res <- object$residuals
   p <- object$rank
   w <- object$weights
@@ -27,10 +27,6 @@ logLik.felm <- function(object, ...) {
 
   val
 }
-
-
-#' @export
-logLik.ivreg <- logLik.felm
 
 
 #' @importFrom insight find_parameters
