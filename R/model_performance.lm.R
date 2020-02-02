@@ -66,7 +66,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
   }
 
-  if (("PCP" %in% toupper(metrics)) && info$is_binomial && !info$is_ordinal) {
+  if (("PCP" %in% toupper(metrics)) && info$is_binomial && !info$is_multinomial && !info$is_ordinal) {
     out$PCP <- performance_pcp(model, verbose = verbose)$pcp_model
   }
 

@@ -103,10 +103,10 @@ model_performance.mixor <- function(model, metrics = "all", verbose = TRUE, ...)
   if ("BIC" %in% metrics) {
     out$BIC <- .get_BIC(model)
   }
-  if (("LOGLOSS" %in% metrics) && mi$is_binomial && !mi$is_ordinal) {
+  if (("LOGLOSS" %in% metrics) && mi$is_binomial && !mi$is_ordinal && !mi$is_multinomial) {
     out$LOGLOSS <- performance_logloss(model, verbose = verbose)
   }
-  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count) && !mi$is_ordinal) {
+  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count) && !mi$is_ordinal && !mi$is_multinomial) {
     .scoring_rules <- performance_score(model, verbose = verbose)
     if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
     if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical

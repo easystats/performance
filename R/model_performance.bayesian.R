@@ -83,7 +83,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   if ("R2_adjusted" %in% c(metrics) && mi$is_linear) {
     out$R2_adjusted <- suppressWarnings(r2_loo(model))
   }
-  if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_categorical) {
+  if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_multinomial && !mi$is_categorical) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {

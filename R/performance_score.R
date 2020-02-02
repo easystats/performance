@@ -56,8 +56,8 @@
 performance_score <- function(model, verbose = TRUE) {
   minfo <- insight::model_info(model)
 
-  if (minfo$is_ordinal) {
-    if (verbose) insight::print_color("Can't calculate proper scoring rules for ordinal or cumulative link models.\n", "red")
+  if (minfo$is_ordinal || minfo$is_multinomial) {
+    if (verbose) insight::print_color("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.\n", "red")
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
 
