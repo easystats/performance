@@ -21,8 +21,12 @@ A list with results from the overdispersion test, like chi-squared
    for overdispersion.
 }
 \details{
+Overdispersion occurs when the observed variance is higher than
+the variance of a theoretical model. For Poisson models, variance increases
+with the mean, thus, variance usually (roughly) equals the mean value. If
+the variance is much higher, the data are "ovderdispersed".
 \subsection{Interpretation of the Dispersion Ratio}{
-If the dispersion ratio is close to one, a poisson model fits well
+If the dispersion ratio is close to one, a Poisson model fits well
 to the data. Dispersion ratios larger than one indicate overdispersion,
 thus a negative binomial model or similar might fit better to the data.
 A p-value < .05 indicates overdispersion.
@@ -40,7 +44,7 @@ overdispersion parameter, and is probably inaccurate for zero-inflated
 mixed models (fitted with \code{glmmTMB}).
 }
 \subsection{How to fix Overdispersion}{
-Overdispersion can be fixed by either modelling the dispersion parameter,
+Overdispersion can be fixed by either modeling the dispersion parameter,
 or by choosing a different distributional family (like Quasi-Poisson,
 or negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
 }
