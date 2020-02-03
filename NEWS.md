@@ -8,6 +8,10 @@
 
 * `check_itemscale()` to describe various measures of internal consistencies for scales which were built from several items from a PCA, using `parameters::principal_components()`.
 
+## Bug fixes
+
+* Fixed issue in documentation of `performance_score()`.
+
 # performance 0.4.3
 
 ## General

@@ -5,7 +5,6 @@
 #'   from a model with binary or count outcome.
 #'
 #' @param model Model with binary or count outcome.
-#' @param ... Currently not used.
 #' @inheritParams model_performance.lm
 #'
 #' @return A list with three elements, the logarithmic, quadratic/Brier and spherical score.
