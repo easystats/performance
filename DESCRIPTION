@@ -45,6 +45,7 @@ Suggests:
     covr,
     cplm,
     dbscan,
+    DirichletReg,
     fixest,
     glmmTMB,
     ICS,

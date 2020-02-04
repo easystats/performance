@@ -11,7 +11,11 @@ check_distribution(model)
 May also be a numeric vector.}
 }
 \description{
-Choosing the right distributional family for regression models is essential to get more accurate estimates and standard errors. This function may help to check a models' distributional family and see if the model-family probably should be reconsidered. Since it is difficult to exactly predict the correct model family, consider this function as somewhat experimental.
+Choosing the right distributional family for regression models is essential
+to get more accurate estimates and standard errors. This function may help to
+check a models' distributional family and see if the model-family probably
+should be reconsidered. Since it is difficult to exactly predict the correct
+model family, consider this function as somewhat experimental.
 }
 \details{
 This function uses an internal random forest model to classify the
@@ -37,6 +41,10 @@ This function is somewhat experimental and might be improved in future releases.
 }
 \examples{
 if (require("lme4")) {
+  library(lme4)
+  library(parameters)
+  data(sleepstudy)
+
   model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
   check_distribution(model)
   plot(check_distribution(model))

@@ -139,3 +139,12 @@ model_performance.vglm <- model_performance.lm
 
 #' @export
 model_performance.fixest <- model_performance.lm
+
+#' @export
+model_performance.DirichletRegModel <- model_performance.lm
+
+#' @export
+model_performance.flexsurvreg <- model_performance.lm
+
+#' @export
+model_performance.hurdle <- model_performance.lm
