@@ -22,7 +22,7 @@ Compute mean square error of linear models.
 }
 \details{
 The mean square error is the mean of the sum of squared residuals,
-  i.e. it measures the average of the squares of the errors. Less technicaly
+  i.e. it measures the average of the squares of the errors. Less technically
   speaking, the mean square error can be considered as the variance of the
   residuals, i.e. the variation in the outcome the model doesn't explain.
   Lower values (closer to zero) indicate better fit.

@@ -10,10 +10,11 @@ print.compare_performance <- function(x, digits = 3, ...) {
   }
 
   x[] <- lapply(x, function(i) {
-    if (is.numeric(i))
+    if (is.numeric(i)) {
       round(i, digits = digits)
-    else
+    } else {
       i
+    }
   })
 
   ## TODO remove suppressWarnings() once insight is updated on CRAN (> 0.7.1)

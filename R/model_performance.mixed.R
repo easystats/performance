@@ -117,5 +117,3 @@ model_performance.mixor <- function(model, metrics = "all", verbose = TRUE, ...)
 
   out
 }
-
-

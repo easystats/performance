@@ -11,7 +11,7 @@
 #' @return A data frame with three columns: The name(s) of the item(s), the item
 #'      difficulties for each item, and the ideal item difficulty.
 #'
-#' @details This function calculates the item difficutly, which should
+#' @details This function calculates the item difficulty, which should
 #'    range between 0.2 and 0.8. Lower values are a signal for
 #'    more difficult items, while higher values close to one
 #'    are a sign for easier items. The ideal value for item difficulty

@@ -43,12 +43,14 @@ performance_aic <- function(x, ...) {
     }
     suppressMessages(tweedie::AICtweedie(x))
   } else {
-    tryCatch({
-      stats::AIC(x)
-    },
-    error = function(e) {
-      NULL
-    })
+    tryCatch(
+      {
+        stats::AIC(x)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 }
 

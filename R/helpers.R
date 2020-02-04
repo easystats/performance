@@ -13,12 +13,14 @@
     }
     VGAM::BIC(x)
   } else {
-    tryCatch({
-      stats::BIC(x)
-    },
-    error = function(e) {
-      NULL
-    })
+    tryCatch(
+      {
+        stats::BIC(x)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 }
 
