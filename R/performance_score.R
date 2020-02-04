@@ -45,7 +45,7 @@
 #'     data = Salamanders
 #'   )
 #'
-#' performance_score(model)
+#'   performance_score(model)
 #' }
 #' }
 #'

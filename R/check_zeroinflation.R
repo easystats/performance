@@ -9,7 +9,7 @@
 #' @param tolerance The tolerance for the ratio of observed and predicted
 #'    zeros to considered as over- or underfitting zeros. A ratio
 #'    between 1 +/- \code{tolerance} is considered as OK, while a ratio
-#'    beyond or below this treshold would indicate over- or underfitting.
+#'    beyond or below this threshold would indicate over- or underfitting.
 #'
 #' @return A list with information about the amount of predicted and observed
 #'    zeros in the outcome, as well as the ratio between these two values.

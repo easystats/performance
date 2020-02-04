@@ -20,7 +20,7 @@ Compute various measures of internal consistencies
    for tests or item-scales of questionnaires.
 }
 \details{
-This function calculates the item difficutly, which should
+This function calculates the item difficulty, which should
    range between 0.2 and 0.8. Lower values are a signal for
    more difficult items, while higher values close to one
    are a sign for easier items. The ideal value for item difficulty

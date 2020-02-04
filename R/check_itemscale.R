@@ -7,7 +7,7 @@
 #'
 #' @param x An object of class \code{parameters_pca}, as returned by \code{\link[parameters]{principal_components}}.
 #'
-#' @return A list of data frames, with relatest measures of internal consistencies of each subscale.
+#' @return A list of data frames, with related measures of internal consistencies of each subscale.
 #'
 #' @details \code{check_itemscale()} calculates various measures of internal
 #'   consistencies, such as Cronbach's alpha, item difficulty or discrimination etc.
@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' # data generation from '?prcomp', slightly modified
-#' C <- chol(S <- toeplitz(.9 ^ (0:15)))
+#' C <- chol(S <- toeplitz(.9^(0:15)))
 #' set.seed(17)
 #' X <- matrix(rnorm(16000), 100, 16)
 #' Z <- X %*% C

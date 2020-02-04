@@ -52,7 +52,7 @@ An \strong{example sentence} for reporting the usage of the composite method cou
  distribution with p and n-p degrees of freedom, the median point of the quantile
  distribution can be used as a cut-off (Bollen, 1985). A common approximation
  or heuristic is to use 4 divided by the numbers of observations, which usually
- correponds to a lower threshold (i.e., more outliers are detected). This only works for Frequentist models. For Bayesian models, see \code{pareto}.
+ corresponds to a lower threshold (i.e., more outliers are detected). This only works for Frequentist models. For Bayesian models, see \code{pareto}.
 
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be assessed using the estimates for the shape parameter k of the generalized Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the user should be warned, although in practice the authors of the \code{loo} package observed good performance for values of k up to 0.7 (the default threshold used by \code{performance}).
@@ -104,7 +104,7 @@ and removing outliers than regular Mahalanobis distance.
  to be installed, and that it takes some time to compute the results.
 
 \item \strong{OPTICS}:
- The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised clustering technique that can be used for outliers detection). The threshold argument is passsed as \code{minPts}, which corresponds to the minimum size of a cluster. By default, this size is set at 2 times the number of columns (Sander et al., 1998). Compared to the others techniques, that will always detect several outliers (as these are usually defined as a percentage of extreme values), this algorithm functions in a different manner and won't always detect outliers. Note that \code{method = "optics"} requires the \pkg{dbscan} package to be installed, and that it takes some time to compute the results.
+ The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised clustering technique that can be used for outliers detection). The threshold argument is passed as \code{minPts}, which corresponds to the minimum size of a cluster. By default, this size is set at 2 times the number of columns (Sander et al., 1998). Compared to the others techniques, that will always detect several outliers (as these are usually defined as a percentage of extreme values), this algorithm functions in a different manner and won't always detect outliers. Note that \code{method = "optics"} requires the \pkg{dbscan} package to be installed, and that it takes some time to compute the results.
 
 \item \strong{Isolation Forest}:
  The outliers are detected using the anomaly score of an isolation forest (a class of random forest). The default threshold

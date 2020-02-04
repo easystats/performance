@@ -4,7 +4,7 @@
 #' by independent variables in a model.
 #'
 #' @param x A linear model or an ANOVA object.
-#' @param method Name of the method (underlying test) that should be performend
+#' @param method Name of the method (underlying test) that should be performed
 #' to check the homogeneity of variances. May either be \code{"bartlett"} for
 #' the Bartlett test (assuming normal distributed samples or groups),
 #' \code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric test),

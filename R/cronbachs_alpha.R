@@ -10,7 +10,7 @@
 #'
 #' @details The Cronbach's Alpha value for \code{x}. A value closer to 1
 #'    indicates greater internal consistency, where usually following
-#'    rule of thumb is applied to interprete the results:
+#'    rule of thumb is applied to interpret the results:
 #'    \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
 #'    0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
 #'    0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
