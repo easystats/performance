@@ -135,3 +135,6 @@ r2_coxsnell.polr <- r2_coxsnell.clm
 
 #' @export
 r2_coxsnell.glmx <- r2_coxsnell.clm
+
+#' @export
+r2_coxsnell.DirichletRegModel <- r2_coxsnell.clm

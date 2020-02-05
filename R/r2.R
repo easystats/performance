@@ -459,3 +459,10 @@ r2.vglm <- function(model, ...) {
 
 #' @export
 r2.vgam <- r2.vglm
+
+
+
+#' @export
+r2.DirichletRegModel <- function(model, ...) {
+  list("R2_Nagelkerke" = r2_nagelkerke(model))
+}

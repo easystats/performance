@@ -104,15 +104,15 @@
 
 # safe conversion from factor to numeric
 #' @importFrom stats na.omit
-.factor_to_numeric <- function(x) {
+.factor_to_numeric <- function(x, lowest = NULL) {
   if (is.data.frame(x)) {
-    as.data.frame(lapply(x, .factor_to_numeric_helper))
+    as.data.frame(lapply(x, .factor_to_numeric_helper, lowest = lowest))
   } else {
-    .factor_to_numeric_helper(x)
+    .factor_to_numeric_helper(x, lowest = lowest)
   }
 }
 
-.factor_to_numeric_helper <- function(x) {
+.factor_to_numeric_helper <- function(x, lowest = NULL) {
   if (is.numeric(x)) {
     return(x)
   }
@@ -124,7 +124,14 @@
     levels(x) <- 1:nlevels(x)
   }
 
-  as.numeric(as.character(x))
+  out <- as.numeric(as.character(x))
+
+  if (!is.null(lowest)) {
+    difference <- min(out) - lowest
+    out <- out - difference
+  }
+
+  out
 }
 
 
