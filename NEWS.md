@@ -3,10 +3,12 @@
 ## General
 
 * Removed `logLik.felm()`, because this method is now implemented in the *lfe* package.
+* Support for `DirichletRegModel` models.
 
 ## New functions
 
 * `check_itemscale()` to describe various measures of internal consistencies for scales which were built from several items from a PCA, using `parameters::principal_components()`.
+* `r2_efron()` to compute Efron's pseudo R2.
 
 ## Bug fixes
 
