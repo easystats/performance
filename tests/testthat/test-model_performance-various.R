@@ -37,14 +37,15 @@ if (require("testthat") && require("performance") && require("DirichletReg")) {
         list(
           AIC = -199.993722776335,
           BIC = -185.021667961168,
-          NA. = NA,
+          R2_Nagelkerke = 0.0405982703444639,
           RMSE = 0.922951614921502
         ),
         class = c(
           "performance_model",
           "data.frame"
         ),
-        row.names = 1L
+        row.names = 1L,
+        r2 = list(names = "R2_Nagelkerke")
       ),
       tolerance = 1e-3
     )
