@@ -3,6 +3,7 @@
 ## General
 
 * Removed `logLik.felm()`, because this method is now implemented in the *lfe* package.
+* Support for `DirichletRegModel` models.
 
 ## New functions
 
