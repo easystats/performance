@@ -10,7 +10,11 @@
 
 #' Classify the distribution of a model-family using machine learning
 #'
-#' Choosing the right distributional family for regression models is essential to get more accurate estimates and standard errors. This function may help to check a models' distributional family and see if the model-family probably should be reconsidered. Since it is difficult to exactly predict the correct model family, consider this function as somewhat experimental.
+#' Choosing the right distributional family for regression models is essential
+#' to get more accurate estimates and standard errors. This function may help to
+#' check a models' distributional family and see if the model-family probably
+#' should be reconsidered. Since it is difficult to exactly predict the correct
+#' model family, consider this function as somewhat experimental.
 #'
 #' @param model Typically, a model (that should response to \code{residuals()}).
 #'   May also be a numeric vector.
@@ -37,6 +41,10 @@
 #'
 #' @examples
 #' if (require("lme4")) {
+#'   library(lme4)
+#'   library(parameters)
+#'   data(sleepstudy)
+#'
 #'   model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 #'   check_distribution(model)
 #'   plot(check_distribution(model))

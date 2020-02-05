@@ -29,16 +29,20 @@
 #' }
 #'
 #' @examples
-#' # data generation from '?prcomp', slightly modified
-#' C <- chol(S <- toeplitz(.9^(0:15)))
-#' set.seed(17)
-#' X <- matrix(rnorm(16000), 100, 16)
-#' Z <- X %*% C
+#' \donttest{
+#' if (require("nFactors")) {
+#'   # data generation from '?prcomp', slightly modified
+#'   C <- chol(S <- toeplitz(.9^(0:15)))
+#'   set.seed(17)
+#'   X <- matrix(rnorm(16000), 100, 16)
+#'   Z <- X %*% C
 #'
-#' library(parameters)
-#' pca <- principal_components(as.data.frame(Z), rotation = "varimax")
-#' pca
-#' check_itemscale(pca)
+#'   library(parameters)
+#'   pca <- principal_components(as.data.frame(Z), rotation = "varimax")
+#'   pca
+#'   check_itemscale(pca)
+#' }
+#' }
 #' @importFrom stats sd
 #' @export
 check_itemscale <- function(x) {
