@@ -67,6 +67,7 @@ reference:
   contents:
   - r2_bayes
   - r2_coxsnell
+  - r2_efron
   - r2_kullback
   - r2_loo
   - r2_mcfadden

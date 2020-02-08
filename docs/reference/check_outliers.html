@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3.1</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ as outlier.</p>
  distribution with p and n-p degrees of freedom, the median point of the quantile
  distribution can be used as a cut-off (Bollen, 1985). A common approximation
  or heuristic is to use 4 divided by the numbers of observations, which usually
- correponds to a lower threshold (i.e., more outliers are detected). This only works for Frequentist models. For Bayesian models, see <code>pareto</code>.</p></li>
+ corresponds to a lower threshold (i.e., more outliers are detected). This only works for Frequentist models. For Bayesian models, see <code>pareto</code>.</p></li>
 <li><p><strong>Pareto</strong>:
 The reliability and approximate convergence of Bayesian models can be assessed using the estimates for the shape parameter k of the generalized Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the user should be warned, although in practice the authors of the <code>loo</code> package observed good performance for values of k up to 0.7 (the default threshold used by <code>performance</code>).</p></li>
 </ul>
@@ -236,7 +236,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
  Note that <code>method = "ics"</code> requires both <span class="pkg">ICS</span> and <span class="pkg">ICSOutlier</span>
  to be installed, and that it takes some time to compute the results.</p></li>
 <li><p><strong>OPTICS</strong>:
- The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised clustering technique that can be used for outliers detection). The threshold argument is passsed as <code>minPts</code>, which corresponds to the minimum size of a cluster. By default, this size is set at 2 times the number of columns (Sander et al., 1998). Compared to the others techniques, that will always detect several outliers (as these are usually defined as a percentage of extreme values), this algorithm functions in a different manner and won't always detect outliers. Note that <code>method = "optics"</code> requires the <span class="pkg">dbscan</span> package to be installed, and that it takes some time to compute the results.</p></li>
+ The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised clustering technique that can be used for outliers detection). The threshold argument is passed as <code>minPts</code>, which corresponds to the minimum size of a cluster. By default, this size is set at 2 times the number of columns (Sander et al., 1998). Compared to the others techniques, that will always detect several outliers (as these are usually defined as a percentage of extreme values), this algorithm functions in a different manner and won't always detect outliers. Note that <code>method = "optics"</code> requires the <span class="pkg">dbscan</span> package to be installed, and that it takes some time to compute the results.</p></li>
 <li><p><strong>Isolation Forest</strong>:
  The outliers are detected using the anomaly score of an isolation forest (a class of random forest). The default threshold
  of 0.025 will classify as outliers the observations located at <code>qnorm(1-0.025) * MAD)</code> (a robust equivalent of SD) of the median (roughly corresponding to the 2.5% most extreme observations). Requires the <span class="pkg">solitude</span> package.</p></li>
@@ -270,6 +270,9 @@ list(
 )
 </a></code></p>
 
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -317,6 +320,7 @@ list(
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
+      <li><a href="#note">Note</a></li>
       <li><a href="#references">References</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
