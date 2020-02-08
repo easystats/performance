@@ -141,6 +141,9 @@ list(
 )
 }}
 }
+\note{
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+}
 \examples{
 # Univariate
 check_outliers(mtcars$mpg)

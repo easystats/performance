@@ -52,6 +52,9 @@ different models at once and hence allows comparison of indices across models.
   for more details).
   }
 }
+\note{
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+}
 \examples{
 if (require("lme4")) {
   m1 <- lm(mpg ~ wt + cyl, data = mtcars)

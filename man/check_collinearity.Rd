@@ -49,6 +49,9 @@ The variance inflation factor is a measure to analyze the magnitude
   An informative blog post about collinearity can be found
   \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{here}.
 }
+\note{
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+}
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)

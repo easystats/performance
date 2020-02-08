@@ -24,6 +24,9 @@ and checks the standardized residuals for normal distribution. Note that
 this formal test almost always yields significant results for the distribution
 of residuals and visual inspection (e.g. Q-Q plots) are preferable.
 }
+\note{
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+}
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
@@ -38,5 +41,4 @@ plot(check_normality(m), type = "qq")
 # PP-plot
 plot(check_normality(m), type = "pp")
 }
-
 }

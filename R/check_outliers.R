@@ -16,6 +16,8 @@
 #' information on the distance measure and whether or not an observation is considered
 #' as outlier.
 #'
+#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'
 #' @details Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.
 #'
 #' An \strong{example sentence} for reporting the usage of the composite method could be:

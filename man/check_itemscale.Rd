@@ -33,6 +33,22 @@ Compute various measures of internal consistencies
   \item In case the total \emph{Cronbach's alpha} value is below the acceptable cut-off of 0.7 (mostly if an index has few items), the \emph{mean inter-item-correlation} is an alternative measure to indicate acceptability. Satisfactory range lies between 0.2 and 0.4. See also \code{\link{item_intercor}}.
 }
 }
+\examples{
+\donttest{
+if (require("nFactors")) {
+  # data generation from '?prcomp', slightly modified
+  C <- chol(S <- toeplitz(.9^(0:15)))
+  set.seed(17)
+  X <- matrix(rnorm(16000), 100, 16)
+  Z <- X \%*\% C
+
+  library(parameters)
+  pca <- principal_components(as.data.frame(Z), rotation = "varimax")
+  pca
+  check_itemscale(pca)
+}
+}
+}
 \references{
 \itemize{
   \item Briggs SR, Cheek JM (1986) The role of factor analysis in the development and evaluation of personality scales. Journal of Personality, 54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x

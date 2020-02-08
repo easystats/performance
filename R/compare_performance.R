@@ -11,6 +11,8 @@
 #'
 #' @return A data frame (with one row per model) and one column per "index" (see \code{metrics}).
 #'
+#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'
 #' @details \subsection{Bayes factor for Model Comparison}{
 #'   If all models were fit from the same data, \code{compare_performance()}
 #'   returns an additional column named \code{BF}, which shows the Bayes factor

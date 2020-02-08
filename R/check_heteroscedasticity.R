@@ -9,6 +9,8 @@
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates a non-constant variance (heteroskedasticity).
 #'
+#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_heteroscedasticity(m)

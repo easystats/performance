@@ -18,6 +18,9 @@ indicates a non-constant variance (heteroskedasticity).
 \description{
 Check model for (non-)constant error variance.
 }
+\note{
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+}
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_heteroscedasticity(m)

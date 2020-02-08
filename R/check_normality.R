@@ -9,6 +9,8 @@
 #' @return Invisibly returns the p-value of the test statistics. A p-value
 #' < 0.05 indicates a significant deviation from normal distribution
 #'
+#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'
 #' @details \code{check_normality()} calls \code{\link[stats]{shapiro.test}}
 #' and checks the standardized residuals for normal distribution. Note that
 #' this formal test almost always yields significant results for the distribution
@@ -28,7 +30,6 @@
 #' # PP-plot
 #' plot(check_normality(m), type = "pp")
 #' }
-#'
 #' @importFrom stats shapiro.test rstandard
 #' @export
 check_normality <- function(x, ...) {
