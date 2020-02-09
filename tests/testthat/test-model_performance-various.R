@@ -34,7 +34,7 @@ if (require("testthat") &&
 
 if (require("testthat") && require("performance") && require("DirichletReg")) {
   set.seed(123)
-  library(DirichletReg)
+  data("ArcticLake")
 
   ALake <- ArcticLake
   ALake$Y <- suppressWarnings(DR_data(ALake[, 1:3]))
