@@ -31,35 +31,36 @@ if (require("testthat") &&
   })
 }
 
+## DirichletReg is currently orphaned
 
-if (require("testthat") && require("performance") && require("DirichletReg")) {
-  set.seed(123)
-  data("ArcticLake")
-
-  ALake <- ArcticLake
-  ALake$Y <- suppressWarnings(DR_data(ALake[, 1:3]))
-
-  # fit a quadratic Dirichlet regression models ("common")
-  res1 <- DirichReg(Y ~ depth + I(depth^2), ALake)
-
-  test_that("model_performance (Dirichlet regression)", {
-    expect_equal(
-      performance::model_performance(res1),
-      structure(
-        list(
-          AIC = -199.993722776335,
-          BIC = -185.021667961168,
-          R2_Nagelkerke = 0.0405982703444639,
-          RMSE = 0.922951614921502
-        ),
-        class = c(
-          "performance_model",
-          "data.frame"
-        ),
-        row.names = 1L,
-        r2 = list(names = "R2_Nagelkerke")
-      ),
-      tolerance = 1e-3
-    )
-  })
-}
+# if (require("testthat") && require("performance") && require("DirichletReg")) {
+#   set.seed(123)
+#   data("ArcticLake")
+#
+#   ALake <- ArcticLake
+#   ALake$Y <- suppressWarnings(DR_data(ALake[, 1:3]))
+#
+#   # fit a quadratic Dirichlet regression models ("common")
+#   res1 <- DirichReg(Y ~ depth + I(depth^2), ALake)
+#
+#   test_that("model_performance (Dirichlet regression)", {
+#     expect_equal(
+#       performance::model_performance(res1),
+#       structure(
+#         list(
+#           AIC = -199.993722776335,
+#           BIC = -185.021667961168,
+#           R2_Nagelkerke = 0.0405982703444639,
+#           RMSE = 0.922951614921502
+#         ),
+#         class = c(
+#           "performance_model",
+#           "data.frame"
+#         ),
+#         row.names = 1L,
+#         r2 = list(names = "R2_Nagelkerke")
+#       ),
+#       tolerance = 1e-3
+#     )
+#   })
+# }
