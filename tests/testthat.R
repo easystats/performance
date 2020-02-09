@@ -2,9 +2,9 @@ library(testthat)
 library(performance)
 
 if (length(strsplit(packageDescription("performance")$Version, "\\.")[[1]]) > 3) {
-  Sys.setenv("RunAllinsightTests" = "yes")
+  Sys.setenv("RunAllperformanceTests" = "yes")
 } else {
-  Sys.setenv("RunAllinsightTests" = "no")
+  Sys.setenv("RunAllperformanceTests" = "no")
 }
 
 

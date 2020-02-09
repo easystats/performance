@@ -1,4 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+.runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest) {
   if (require("testthat") && require("performance") && require("lme4")) {

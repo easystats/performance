@@ -4,12 +4,24 @@ if (require("testthat") &&
   require("AER") &&
   require("ordinal") &&
   require("betareg")) {
-  data("Affairs", package = "AER")
 
-  m1 <- insight::download_model("betareg_1")
-  m3 <- insight::download_model("clm_1")
-  m4 <- insight::download_model("clm2_1")
-  m5 <- insight::download_model("ivreg_1")
+  data("Affairs", package = "AER")
+  data("GasolineYield")
+  data("wine")
+  data("CigarettesSW")
+
+  CigarettesSW$rprice <- with(CigarettesSW, price / cpi)
+  CigarettesSW$rincome <- with(CigarettesSW, income / population / cpi)
+  CigarettesSW$tdiff <- with(CigarettesSW, (taxs - tax) / cpi)
+
+  m1 <- betareg(yield ~ batch + temp, data = GasolineYield)
+  m3 <- clm(rating ~ temp * contact, data = wine)
+  m4 <- clm2(rating ~ temp * contact, data = wine)
+  m5 <- ivreg(
+    log(packs) ~ log(rprice) + log(rincome) | log(rincome) + tdiff + I(tax / cpi),
+    data = CigarettesSW,
+    subset = year == "1995"
+  )
 
   test_that("model_performance various", {
     expect_equal(model_performance(m1)$R2, 0.9617312, tolerance = 1e-4)

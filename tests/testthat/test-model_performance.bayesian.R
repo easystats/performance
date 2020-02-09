@@ -1,4 +1,4 @@
-.runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+.runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (require("testthat") && require("performance") && require("rstanarm")) {
   if (.runThisTest && Sys.getenv("USER") != "travis") {

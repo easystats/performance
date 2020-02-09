@@ -1,5 +1,5 @@
 if (require("testthat") && require("performance")) {
-  .runThisTest <- Sys.getenv("RunAllinsightTests") == "yes"
+  .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
   if (.runThisTest) {
     context("model_performance.merMod")
