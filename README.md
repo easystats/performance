@@ -92,8 +92,8 @@ model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species),
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 [0.005]
-#>      Marginal R2: 0.824 [0.043]
+#>   Conditional R2: 0.953 [0.006]
+#>      Marginal R2: 0.825 [0.042]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -140,14 +140,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.53 0.78]
+#> Ratio: 0.39  CI 95%: [-0.55 0.78]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.80  CI 95%: [ 8.35 58.74]
-#> Conditioned on rand. effects: 37.89  CI 95%: [25.42 55.41]
+#> Conditioned on fixed effects: 22.69  CI 95%: [ 8.42 58.44]
+#> Conditioned on rand. effects: 37.71  CI 95%: [25.06 55.58]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.34  CI 95%: [-18.97 35.94]
+#> Difference: 14.29  CI 95%: [-19.67 35.40]
 ```
 
 ## Model diagnostics
