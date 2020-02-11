@@ -1,3 +1,9 @@
+# performance 0.4.5
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` for *glmmTMB* models when zero-inflated formula only had one predictor.
+
 # performance 0.4.4
 
 ## General

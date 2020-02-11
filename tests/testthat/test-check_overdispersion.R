@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance") && require("glmmTMB")) {
-  context("check_overdispersion")
-
   data(Salamanders)
 
   m1 <- glm(count ~ spp + mined, family = poisson, data = Salamanders)

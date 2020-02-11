@@ -247,7 +247,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 #' @importFrom insight get_data find_predictors find_parameters clean_names
 .find_term_assignment <- function(x, component) {
   pred <- insight::find_predictors(x)[[component]]
-  dat <- insight::get_data(x)[, pred]
+  dat <- insight::get_data(x)[, pred, drop = FALSE]
 
   parms <- unlist(lapply(1:length(pred), function(i) {
     p <- pred[i]
