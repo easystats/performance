@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4.1</span>
       </span>
     </div>
 
@@ -170,35 +170,24 @@
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p></p><ul>
+    
+<ul>
 <li><p>Briggs SR, Cheek JM (1986) The role of factor analysis in the development and evaluation of personality scales. Journal of Personality, 54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x</p></li>
 <li><p>Trochim WMK (2008) Types of Reliability. (<a href='http://www.socialresearchmethods.net/kb/reltypes.php'>web</a>)</p></li>
 </ul>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"nFactors"</span>)) {
-  <span class='co'># data generation from '?prcomp', slightly modified</span>
-  <span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chol.html'>chol</a></span>(<span class='no'>S</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/toeplitz.html'>toeplitz</a></span>(<span class='fl'>.9</span>^(<span class='fl'>0</span>:<span class='fl'>15</span>)))
-  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>17</span>)
-  <span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>16000</span>), <span class='fl'>100</span>, <span class='fl'>16</span>)
-  <span class='no'>Z</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='no'>C</span>
-
-  <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>parameters</span>)
-  <span class='no'>pca</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Z</span>), <span class='kw'>rotation</span> <span class='kw'>=</span> <span class='st'>"varimax"</span>)
+    <pre class="examples"><div class='input'><span class='co'># data generation from '?prcomp', slightly modified</span>
+<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chol.html'>chol</a></span>(<span class='no'>S</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/toeplitz.html'>toeplitz</a></span>(<span class='fl'>.9</span>^(<span class='fl'>0</span>:<span class='fl'>15</span>)))
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>17</span>)
+<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>16000</span>), <span class='fl'>100</span>, <span class='fl'>16</span>)
+<span class='no'>Z</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='no'>C</span>
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"parameters"</span>)) {
+  <span class='no'>pca</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Z</span>), <span class='kw'>rotation</span> <span class='kw'>=</span> <span class='st'>"varimax"</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>)
   <span class='no'>pca</span>
   <span class='fu'>check_itemscale</span>(<span class='no'>pca</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: nFactors</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: MASS</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: psych</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: boot</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'boot'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:psych':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    logit</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: lattice</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'lattice'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:boot':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    melanoma</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'nFactors'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:lattice':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    parallel</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Description of (Sub-)Scales
+}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Description of (Sub-)Scales
 #&gt; </span><span style='color: #BB0000;'>
 #&gt; Component 1
 #&gt; 
@@ -239,8 +228,7 @@
 #&gt; </span><span style='color: #BBBB00;'>
 #&gt; Mean inter-item-correlation = 0.811  Cronbach's alpha = 0.945
 #&gt; 
-#&gt; </span><span></div><div class='input'># }
-</div></span></pre>
+#&gt; </span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

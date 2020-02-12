@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4.1</span>
       </span>
     </div>
 
@@ -100,8 +100,8 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"performance"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"performance"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"performance"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"performance"</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="examples" class="section level1">
@@ -116,76 +116,76 @@
 <a href="#r-squared" class="anchor"></a>R-squared</h3>
 <p><strong>performance</strong> has a generic <code><a href="reference/r2.html">r2()</a></code> function, which computes the r-squared for many different models, including mixed effects and Bayesian regression models.</p>
 <p><code><a href="reference/r2.html">r2()</a></code> returns a list containing values related to the “most appropriate” r-squared for the given model.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; # R2 for Linear Regression</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="co">#&gt;        R2: 0.830</span></a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="co">#&gt;   adj. R2: 0.819</span></a>
-<a class="sourceLine" id="cb3-7" title="7"></a>
-<a class="sourceLine" id="cb3-8" title="8">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(am <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> binomial)</a>
-<a class="sourceLine" id="cb3-9" title="9"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; $R2_Tjur</span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; Tjur's R2 </span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt;    0.7051</span></a>
-<a class="sourceLine" id="cb3-13" title="13"></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MASS)</a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(housing)</a>
-<a class="sourceLine" id="cb3-16" title="16">model &lt;-<span class="st"> </span><span class="kw">polr</span>(Sat <span class="op">~</span><span class="st"> </span>Infl <span class="op">+</span><span class="st"> </span>Type <span class="op">+</span><span class="st"> </span>Cont, <span class="dt">weights =</span> Freq, <span class="dt">data =</span> housing)</a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; $R2_Nagelkerke</span></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt; Nagelkerke's R2 </span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt;          0.1084</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; # R2 for Linear Regression</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; </span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt;        R2: 0.830</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt;   adj. R2: 0.819</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(am <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> binomial)</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; $R2_Tjur</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; Tjur's R2 </span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt;    0.7051</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MASS)</span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(housing)</span>
+<span id="cb3-16"><a href="#cb3-16"></a>model &lt;-<span class="st"> </span><span class="kw">polr</span>(Sat <span class="op">~</span><span class="st"> </span>Infl <span class="op">+</span><span class="st"> </span>Type <span class="op">+</span><span class="st"> </span>Cont, <span class="dt">weights =</span> Freq, <span class="dt">data =</span> housing)</span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt; $R2_Nagelkerke</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt; Nagelkerke's R2 </span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt;          0.1084</span></span></code></pre></div>
 <p>The different r-squared measures can also be accessed directly via functions like <code><a href="reference/r2_bayes.html">r2_bayes()</a></code>, <code><a href="reference/r2_coxsnell.html">r2_coxsnell()</a></code> or <code><a href="reference/r2_nagelkerke.html">r2_nagelkerke()</a></code> (see a full list of functions <a href="https://easystats.github.io/performance/reference/index.html">here</a>).</p>
 <p>For mixed models, the <em>conditional</em> and <em>marginal</em> r-squared are returned. The <em>marginal r-squared</em> considers only the variance of the fixed effects and indicates how much of the model’s variance is explained by the fixed effects part only. The <em>conditional r-squared</em> takes both the fixed and random effects into account and indicates how much of the model’s variance is explained by the “complete” model.</p>
 <p>For frequentist mixed models, <code><a href="reference/r2.html">r2()</a></code> (resp. <code><a href="reference/r2_nakagawa.html">r2_nakagawa()</a></code>) computes the <em>mean</em> random effect variances, thus <code><a href="reference/r2.html">r2()</a></code> is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (Johnson 2014; Nakagawa, Johnson, and Schielzeth 2017).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</a>
-<a class="sourceLine" id="cb4-2" title="2">model &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Species), </a>
-<a class="sourceLine" id="cb4-3" title="3">    <span class="dt">data =</span> iris, <span class="dt">cores =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; # Bayesian R2 with Standard Error</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;   Conditional R2: 0.953 [0.005]</span></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt;      Marginal R2: 0.824 [0.043]</span></a>
-<a class="sourceLine" id="cb4-9" title="9"></a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</a>
-<a class="sourceLine" id="cb4-11" title="11">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
-<a class="sourceLine" id="cb4-12" title="12"><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</a>
-<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt; # R2 for Mixed Models</span></a>
-<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-15" title="15"><span class="co">#&gt;   Conditional R2: 0.799</span></a>
-<a class="sourceLine" id="cb4-16" title="16"><span class="co">#&gt;      Marginal R2: 0.279</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>model &lt;-<span class="st"> </span><span class="kw">stan_glmer</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Species), </span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="dt">data =</span> iris, <span class="dt">cores =</span> <span class="dv">4</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; # Bayesian R2 with Standard Error</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; </span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt;   Conditional R2: 0.953 [0.006]</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt;      Marginal R2: 0.825 [0.042]</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</span>
+<span id="cb4-11"><a href="#cb4-11"></a>model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="kw"><a href="reference/r2.html">r2</a></span>(model)</span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt; # R2 for Mixed Models</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; </span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt;   Conditional R2: 0.799</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">#&gt;      Marginal R2: 0.279</span></span></code></pre></div>
 </div>
 <div id="intraclass-correlation-coefficient-icc" class="section level3">
 <h3 class="hasAnchor">
 <a href="#intraclass-correlation-coefficient-icc" class="anchor"></a>Intraclass Correlation Coefficient (ICC)</h3>
 <p>Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as “the proportion of the variance explained by the grouping structure in the population” (Hox 2010).</p>
 <p><code><a href="reference/icc.html">icc()</a></code> calculates the ICC for various mixed model objects, including <code>stanreg</code> models.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</a>
-<a class="sourceLine" id="cb5-2" title="2">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="reference/icc.html">icc</a></span>(model)</a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">#&gt; # Intraclass Correlation Coefficient</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">#&gt;      Adjusted ICC: 0.722</span></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt;   Conditional ICC: 0.521</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw"><a href="reference/icc.html">icc</a></span>(model)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; # Intraclass Correlation Coefficient</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; </span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt;      Adjusted ICC: 0.722</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt;   Conditional ICC: 0.521</span></span></code></pre></div>
 <p>For models of class <code>brmsfit</code>, an ICC based on variance decomposition is returned (for details, see the <a href="https://easystats.github.io/performance/reference/icc.html">documentation</a>).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(brms)</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb6-3" title="3">model &lt;-<span class="st"> </span><span class="kw">brm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>cyl) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>wt <span class="op">|</span><span class="st"> </span>gear), <span class="dt">data =</span> mtcars)</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="reference/icc.html">icc</a></span>(model)</a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; # Random Effect Variances and ICC</span></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; Conditioned on: all random effects</span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; ## Variance Ratio (comparable to ICC)</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.53 0.78]</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; ## Variances of Posterior Predicted Distribution</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; Conditioned on fixed effects: 22.80  CI 95%: [ 8.35 58.74]</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Conditioned on rand. effects: 37.89  CI 95%: [25.42 55.41]</span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; ## Difference in Variances</span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; Difference: 14.34  CI 95%: [-18.97 35.94]</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(brms)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>model &lt;-<span class="st"> </span><span class="kw">brm</span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>cyl) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>wt <span class="op">|</span><span class="st"> </span>gear), <span class="dt">data =</span> mtcars)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="reference/icc.html">icc</a></span>(model)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; # Random Effect Variances and ICC</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; </span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; Conditioned on: all random effects</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; </span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; ## Variance Ratio (comparable to ICC)</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt; Ratio: 0.39  CI 95%: [-0.55 0.78]</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt; </span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; ## Variances of Posterior Predicted Distribution</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; Conditioned on fixed effects: 22.69  CI 95%: [ 8.42 58.44]</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; Conditioned on rand. effects: 37.71  CI 95%: [25.06 55.58]</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt; </span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; ## Difference in Variances</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; Difference: 14.29  CI 95%: [-19.67 35.40]</span></span></code></pre></div>
 </div>
 </div>
 <div id="model-diagnostics" class="section level2">
@@ -195,16 +195,16 @@
 <h3 class="hasAnchor">
 <a href="#check-for-overdispersion" class="anchor"></a>Check for overdispersion</h3>
 <p>Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). <code><a href="reference/check_overdispersion.html">check_overdispersion()</a></code> checks if a count model (including mixed models) is overdispersed or not.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(glmmTMB)</a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(Salamanders)</a>
-<a class="sourceLine" id="cb8-3" title="3">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(count <span class="op">~</span><span class="st"> </span>spp <span class="op">+</span><span class="st"> </span>mined, <span class="dt">family =</span> poisson, <span class="dt">data =</span> Salamanders)</a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="kw"><a href="reference/check_overdispersion.html">check_overdispersion</a></span>(model)</a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; # Overdispersion test</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt;        dispersion ratio =    2.946</span></a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt;   Pearson's Chi-Squared = 1873.710</span></a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt;                 p-value =  &lt; 0.001</span></a>
-<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; Overdispersion detected.</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(glmmTMB)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(Salamanders)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(count <span class="op">~</span><span class="st"> </span>spp <span class="op">+</span><span class="st"> </span>mined, <span class="dt">family =</span> poisson, <span class="dt">data =</span> Salamanders)</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="kw"><a href="reference/check_overdispersion.html">check_overdispersion</a></span>(model)</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; # Overdispersion test</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; </span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt;        dispersion ratio =    2.946</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt;   Pearson's Chi-Squared = 1873.710</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt;                 p-value =  &lt; 0.001</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; Overdispersion detected.</span></span></code></pre></div>
 <p>Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family [like Quasi-Poisson, or negative binomial, see (Gelman and Hill 2007).</p>
 </div>
 <div id="check-for-zero-inflation" class="section level3">
@@ -212,39 +212,39 @@
 <a href="#check-for-zero-inflation" class="anchor"></a>Check for zero-inflation</h3>
 <p>Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of observed zeros is larger than the amount of predicted zeros, so the model is <em>underfitting</em> zeros. In such cases, it is recommended to use negative binomial or zero-inflated models.</p>
 <p>Use <code><a href="reference/check_zeroinflation.html">check_zeroinflation()</a></code> to check if zero-inflation is present in the fitted model.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(count <span class="op">~</span><span class="st"> </span>spp <span class="op">+</span><span class="st"> </span>mined, <span class="dt">family =</span> poisson, <span class="dt">data =</span> Salamanders)</a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="kw"><a href="reference/check_zeroinflation.html">check_zeroinflation</a></span>(model)</a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; # Check for zero-inflation</span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt;    Observed zeros: 387</span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt;   Predicted zeros: 298</span></a>
-<a class="sourceLine" id="cb9-7" title="7"><span class="co">#&gt;             Ratio: 0.77</span></a>
-<a class="sourceLine" id="cb9-8" title="8"><span class="co">#&gt; Model is underfitting zeros (probable zero-inflation).</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(count <span class="op">~</span><span class="st"> </span>spp <span class="op">+</span><span class="st"> </span>mined, <span class="dt">family =</span> poisson, <span class="dt">data =</span> Salamanders)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw"><a href="reference/check_zeroinflation.html">check_zeroinflation</a></span>(model)</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt; # Check for zero-inflation</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; </span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;    Observed zeros: 387</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;   Predicted zeros: 298</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;             Ratio: 0.77</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; Model is underfitting zeros (probable zero-inflation).</span></span></code></pre></div>
 </div>
 <div id="check-for-singular-model-fits" class="section level3">
 <h3 class="hasAnchor">
 <a href="#check-for-singular-model-fits" class="anchor"></a>Check for singular model fits</h3>
 <p>A “singular” model fit means that some dimensions of the variance-covariance matrix have been estimated as exactly zero. This often occurs for mixed models with overly complex random effects structures.</p>
 <p><code><a href="reference/check_singularity.html">check_singularity()</a></code> checks mixed models (of class <code>lme</code>, <code>merMod</code>, <code>glmmTMB</code> or <code>MixMod</code>) for singularity, and returns <code>TRUE</code> if the model fit is singular.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(sleepstudy)</a>
-<a class="sourceLine" id="cb10-3" title="3"></a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="co"># prepare data</span></a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb10-6" title="6">sleepstudy<span class="op">$</span>mygrp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">size =</span> <span class="dv">180</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-7" title="7">sleepstudy<span class="op">$</span>mysubgrp &lt;-<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</a>
-<a class="sourceLine" id="cb10-9" title="9">    filter_group &lt;-<span class="st"> </span>sleepstudy<span class="op">$</span>mygrp <span class="op">==</span><span class="st"> </span>i</a>
-<a class="sourceLine" id="cb10-10" title="10">    sleepstudy<span class="op">$</span>mysubgrp[filter_group] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">size =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(filter_group), </a>
-<a class="sourceLine" id="cb10-11" title="11">        <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-12" title="12">}</a>
-<a class="sourceLine" id="cb10-13" title="13"></a>
-<a class="sourceLine" id="cb10-14" title="14"><span class="co"># fit strange model</span></a>
-<a class="sourceLine" id="cb10-15" title="15">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>mygrp<span class="op">/</span>mysubgrp) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Subject), </a>
-<a class="sourceLine" id="cb10-16" title="16">    <span class="dt">data =</span> sleepstudy)</a>
-<a class="sourceLine" id="cb10-17" title="17"></a>
-<a class="sourceLine" id="cb10-18" title="18"><span class="kw"><a href="reference/check_singularity.html">check_singularity</a></span>(model)</a>
-<a class="sourceLine" id="cb10-19" title="19"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(sleepstudy)</span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># prepare data</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">123</span>)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>sleepstudy<span class="op">$</span>mygrp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">size =</span> <span class="dv">180</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a>sleepstudy<span class="op">$</span>mysubgrp &lt;-<span class="st"> </span><span class="ot">NA</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
+<span id="cb10-9"><a href="#cb10-9"></a>    filter_group &lt;-<span class="st"> </span>sleepstudy<span class="op">$</span>mygrp <span class="op">==</span><span class="st"> </span>i</span>
+<span id="cb10-10"><a href="#cb10-10"></a>    sleepstudy<span class="op">$</span>mysubgrp[filter_group] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">size =</span> <span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(filter_group), </span>
+<span id="cb10-11"><a href="#cb10-11"></a>        <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb10-12"><a href="#cb10-12"></a>}</span>
+<span id="cb10-13"><a href="#cb10-13"></a></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co"># fit strange model</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a>model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>mygrp<span class="op">/</span>mysubgrp) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Subject), </span>
+<span id="cb10-16"><a href="#cb10-16"></a>    <span class="dt">data =</span> sleepstudy)</span>
+<span id="cb10-17"><a href="#cb10-17"></a></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="kw"><a href="reference/check_singularity.html">check_singularity</a></span>(model)</span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>Remedies to cure issues with singular fits can be found <a href="https://easystats.github.io/performance/reference/check_singularity.html">here</a>.</p>
 </div>
 </div>
@@ -252,8 +252,8 @@
 <h2 class="hasAnchor">
 <a href="#comprehensive-model-check" class="anchor"></a>Comprehensive model check</h2>
 <p><strong>performance</strong> provides many functions to check model assumptions, like <code><a href="reference/check_collinearity.html">check_collinearity()</a></code>, <code><a href="reference/check_normality.html">check_normality()</a></code> or <code><a href="reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code>. To get a comprehensive check, use <code><a href="reference/check_model.html">check_model()</a></code>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">*</span><span class="st"> </span>cyl <span class="op">+</span><span class="st"> </span>gear, <span class="dt">data =</span> mtcars)</a>
-<a class="sourceLine" id="cb11-2" title="2"><span class="kw"><a href="reference/check_model.html">check_model</a></span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">*</span><span class="st"> </span>cyl <span class="op">+</span><span class="st"> </span>gear, <span class="dt">data =</span> mtcars)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="kw"><a href="reference/check_model.html">check_model</a></span>(model)</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-13-1.png"><!-- --></p>
 </div>
 <div id="model-performance-summaries" class="section level2">
@@ -263,8 +263,8 @@
 <div id="linear-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#linear-model" class="anchor"></a>Linear model</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</a>
-<a class="sourceLine" id="cb12-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m1)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>m1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(mpg <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>cyl, <span class="dt">data =</span> mtcars)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m1)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">AIC</th>
@@ -285,8 +285,8 @@
 <div id="logistic-regression" class="section level3">
 <h3 class="hasAnchor">
 <a href="#logistic-regression" class="anchor"></a>Logistic regression</h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">m2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(vs <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>mpg, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> <span class="st">"binomial"</span>)</a>
-<a class="sourceLine" id="cb13-2" title="2"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m2)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>m2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(vs <span class="op">~</span><span class="st"> </span>wt <span class="op">+</span><span class="st"> </span>mpg, <span class="dt">data =</span> mtcars, <span class="dt">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m2)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">AIC</th>
@@ -313,9 +313,9 @@
 <div id="linear-mixed-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#linear-mixed-model" class="anchor"></a>Linear mixed model</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</a>
-<a class="sourceLine" id="cb14-2" title="2">m3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m3)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>m3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(Reaction <span class="op">~</span><span class="st"> </span>Days <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Days <span class="op">|</span><span class="st"> </span>Subject), <span class="dt">data =</span> sleepstudy)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw"><a href="reference/model_performance.html">model_performance</a></span>(m3)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">AIC</th>
@@ -338,36 +338,36 @@
 <div id="comparing-different-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#comparing-different-models" class="anchor"></a>Comparing different models</h3>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">counts &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">18</span>, <span class="dv">17</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">13</span>, <span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb15-2" title="2">outcome &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/gl.html">gl</a></span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">9</span>)</a>
-<a class="sourceLine" id="cb15-3" title="3">treatment &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/gl.html">gl</a></span>(<span class="dv">3</span>, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb15-4" title="4">m4 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(counts <span class="op">~</span><span class="st"> </span>outcome <span class="op">+</span><span class="st"> </span>treatment, <span class="dt">family =</span> <span class="kw"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span>())</a>
-<a class="sourceLine" id="cb15-5" title="5"></a>
-<a class="sourceLine" id="cb15-6" title="6"><span class="kw"><a href="reference/compare_performance.html">compare_performance</a></span>(m1, m2, m3, m4)</a>
-<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt; # Comparison of Model Performance Indices</span></a>
-<a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt; Model |    Type |     AIC |     BIC |  RMSE | SCORE_LOG | SCORE_SPHERICAL |   R2 | R2_adjusted | R2_Tjur | LOGLOSS |  PCP | R2_conditional | R2_marginal |  ICC | R2_Nagelkerke</span></a>
-<a class="sourceLine" id="cb15-10" title="10"><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb15-11" title="11"><span class="co">#&gt; m1    |      lm |  156.01 |  161.87 |  2.44 |           |                 | 0.83 |        0.82 |         |         |      |                |             |      |              </span></a>
-<a class="sourceLine" id="cb15-12" title="12"><span class="co">#&gt; m2    |     glm |   31.30 |   35.70 |  0.89 |    -14.90 |            0.10 |      |             |    0.48 |    0.40 | 0.74 |                |             |      |              </span></a>
-<a class="sourceLine" id="cb15-13" title="13"><span class="co">#&gt; m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |           |                 |      |             |         |         |      |           0.80 |        0.28 | 0.72 |              </span></a>
-<a class="sourceLine" id="cb15-14" title="14"><span class="co">#&gt; m4    |     glm |   56.76 |   57.75 |  0.76 |     -2.60 |            0.32 |      |             |         |         |      |                |             |      |          0.66</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>counts &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">18</span>, <span class="dv">17</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">13</span>, <span class="dv">12</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>outcome &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/gl.html">gl</a></span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">9</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>treatment &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/gl.html">gl</a></span>(<span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>m4 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(counts <span class="op">~</span><span class="st"> </span>outcome <span class="op">+</span><span class="st"> </span>treatment, <span class="dt">family =</span> <span class="kw"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span>())</span>
+<span id="cb15-5"><a href="#cb15-5"></a></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="kw"><a href="reference/compare_performance.html">compare_performance</a></span>(m1, m2, m3, m4)</span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; # Comparison of Model Performance Indices</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; </span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt; Model |    Type |     AIC |     BIC |  RMSE | SCORE_LOG | SCORE_SPHERICAL |   R2 | R2_adjusted | R2_Tjur | LOGLOSS |  PCP | R2_conditional | R2_marginal |  ICC | R2_Nagelkerke</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt; m1    |      lm |  156.01 |  161.87 |  2.44 |           |                 | 0.83 |        0.82 |         |         |      |                |             |      |              </span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt; m2    |     glm |   31.30 |   35.70 |  0.89 |    -14.90 |            0.10 |      |             |    0.48 |    0.40 | 0.74 |                |             |      |              </span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#&gt; m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |           |                 |      |             |         |         |      |           0.80 |        0.28 | 0.72 |              </span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co">#&gt; m4    |     glm |   56.76 |   57.75 |  0.76 |     -2.60 |            0.32 |      |             |         |         |      |                |             |      |          0.66</span></span></code></pre></div>
 </div>
 <div id="comparing-different-models-ordered-by-model-performance" class="section level3">
 <h3 class="hasAnchor">
 <a href="#comparing-different-models-ordered-by-model-performance" class="anchor"></a>Comparing different models, ordered by model performance</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="reference/compare_performance.html">compare_performance</a></span>(m1, m2, m3, m4, <span class="dt">rank =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="co">#&gt; # Comparison of Model Performance Indices</span></a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb16-4" title="4"><span class="co">#&gt; Model |    Type |     AIC |     BIC |  RMSE | Performance_Score</span></a>
-<a class="sourceLine" id="cb16-5" title="5"><span class="co">#&gt; ---------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb16-6" title="6"><span class="co">#&gt; m2    |     glm |   31.30 |   35.70 |  0.89 |            99.80%</span></a>
-<a class="sourceLine" id="cb16-7" title="7"><span class="co">#&gt; m4    |     glm |   56.76 |   57.75 |  0.76 |            99.09%</span></a>
-<a class="sourceLine" id="cb16-8" title="8"><span class="co">#&gt; m1    |      lm |  156.01 |  161.87 |  2.44 |            92.69%</span></a>
-<a class="sourceLine" id="cb16-9" title="9"><span class="co">#&gt; m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |             0.00%</span></a>
-<a class="sourceLine" id="cb16-10" title="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb16-11" title="11"><span class="co">#&gt; Model m2 (of class glm) performed best with an overall performance score of 99.80%.</span></a></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw"><a href="reference/compare_performance.html">compare_performance</a></span>(m1, m2, m3, m4, <span class="dt">rank =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw"><a href="reference/compare_performance.html">compare_performance</a></span>(m1, m2, m3, m4, <span class="dt">rank =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co">#&gt; # Comparison of Model Performance Indices</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#&gt; </span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co">#&gt; Model |    Type |     AIC |     BIC |  RMSE | Performance_Score</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co">#&gt; ---------------------------------------------------------------</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#&gt; m2    |     glm |   31.30 |   35.70 |  0.89 |            99.80%</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt; m4    |     glm |   56.76 |   57.75 |  0.76 |            99.09%</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#&gt; m1    |      lm |  156.01 |  161.87 |  2.44 |            92.69%</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">#&gt; m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |             0.00%</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt; </span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co">#&gt; Model m2 (of class glm) performed best with an overall performance score of 99.80%.</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw"><a href="reference/compare_performance.html">compare_performance</a></span>(m1, m2, m3, m4, <span class="dt">rank =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-22-1.png"><!-- --></p>
 </div>
 </div>

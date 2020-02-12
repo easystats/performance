@@ -78,7 +78,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4.1</span>
       </span>
     </div>
 
@@ -153,14 +153,12 @@
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"rstanarm"</span>)) {
   <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
   <span class='fu'>looic</span>(<span class='no'>model</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>rstanarm (Version 2.19.2, packaged: 2019-10-01 20:20:33 UTC)</span></div><div class='output co'>#&gt; <span class='message'>- Do not expect the default priors to remain the same in future rstanarm versions.</span></div><div class='output co'>#&gt; <span class='message'>Thus, R scripts should specify priors explicitly, even if they are just the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'>- bayesplot theme set to bayesplot::theme_default()</span></div><div class='output co'>#&gt; <span class='message'>   * Does _not_ affect other ggplot2 plots</span></div><div class='output co'>#&gt; <span class='message'>   * See ?bayesplot_theme_set for details on theme setting</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>rstanarm (Version 2.19.3, packaged: 2020-02-11 05:16:41 UTC)</span></div><div class='output co'>#&gt; <span class='message'>- Do not expect the default priors to remain the same in future rstanarm versions.</span></div><div class='output co'>#&gt; <span class='message'>Thus, R scripts should specify priors explicitly, even if they are just the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'>- bayesplot theme set to bayesplot::theme_default()</span></div><div class='output co'>#&gt; <span class='message'>   * Does _not_ affect other ggplot2 plots</span></div><div class='output co'>#&gt; <span class='message'>   * See ?bayesplot_theme_set for details on theme setting</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># LOOIC and ELPD with Standard Error
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># LOOIC and ELPD with Standard Error
 #&gt; 
-#&gt; </span><span>  LOOIC: 158.35 [9.28]
-#&gt;    ELPD: -79.17 [4.64]</div></span></pre>
+#&gt; </span><span>  LOOIC: 156.00 [8.49]
+#&gt;    ELPD: -78.00 [4.25]</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

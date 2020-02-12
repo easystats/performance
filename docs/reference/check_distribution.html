@@ -81,7 +81,7 @@ model family, consider this function as somewhat experimental." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.4.1</span>
       </span>
     </div>
 
@@ -186,7 +186,7 @@ distributions, however, only if the probability is greater than zero.</p>
   <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='no'>Days</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
   <span class='fu'>check_distribution</span>(<span class='no'>model</span>)
   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='fu'>check_distribution</span>(<span class='no'>model</span>))
-}</div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div></pre>
+}</div><div class='output co'>#&gt; <span class='error'>Error in plot.check_distribution(check_distribution(model)): Package 'see' needed to plot predicted distributions. Please install it.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
