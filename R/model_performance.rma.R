@@ -46,7 +46,7 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
     out$BIC <- .get_BIC(model)
   }
   if ("I2" %in% toupper(metrics)) {
-    out$I2 <- s$I2
+    out$I2 <- s$I2 / 100
   }
   if ("H2" %in% toupper(metrics)) {
     out$H2 <- s$H2
@@ -56,8 +56,10 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
   if ("R2" %in% toupper(metrics)) {
     R2 <- r2(model)
-    attrib$r2 <- attributes(R2)
-    out <- c(out, R2)
+    if (!is.null(R2)) {
+      attrib$r2 <- attributes(R2)
+      out <- c(out, R2)
+    }
   }
 
   out <- as.data.frame(out)

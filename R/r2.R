@@ -275,8 +275,12 @@ r2.betareg <- function(model, ...) {
 #' @export
 r2.rma <- function(model, ...) {
   s <- summary(model)
-  out <- list(R2 = s$R2 / 100)
 
+  if (is.null(s$R2)) {
+    return(NULL)
+  }
+
+  out <- list(R2 = s$R2 / 100)
   attr(out, "model_type") <- "Meta-Analysis"
   structure(class = "r2_generic", out)
 }
