@@ -1,8 +1,8 @@
 #' Performance of lavaan SEM / CFA Models
 #'
-#' Compute indices of model performance for SEM or CFA models from the \code{lavaan} package.
+#' Compute indices of model performance for SEM or CFA models from the \pkg{lavaan} package.
 #'
-#' @param model A \code{lavaan} model.
+#' @param model A \pkg{lavaan} model.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline", "Baseline_DoF", "Baseline_p", "CFI", "TLI", "NNFI", "RFI", "NFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted", "RMSEA", "SMRM")}).
 #' @param ... Arguments passed to or from other methods.
 #'

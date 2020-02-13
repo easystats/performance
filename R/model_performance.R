@@ -7,6 +7,7 @@
 #'   \item \link[=model_performance.merMod]{Mixed models}
 #'   \item \link[=model_performance.stanreg]{Bayesian models}
 #'   \item \link[=model_performance.lavaan]{CFA / SEM lavaan models}
+#'   \item \link[=model_performance.rma]{Meta-analysis models}
 #' }
 #'
 #' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.

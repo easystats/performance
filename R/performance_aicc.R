@@ -75,3 +75,9 @@ performance_aicc.vglm <- function(x, ...) {
   }
   VGAM::AICc(x)
 }
+
+
+#' @export
+performance_aicc.rma <- function(x, ...) {
+  stats::AIC(x, correct = TRUE)
+}

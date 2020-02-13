@@ -1,5 +1,9 @@
 # performance 0.4.5
 
+## General
+
+* `model_performance()` and `r2()` now support *rma*-objects from package *metafor*.
+
 ## Bug fixes
 
 * Fixed issue in `check_collinearity()` for *glmmTMB* models when zero-inflated formula only had one predictor.

@@ -17,8 +17,7 @@ print.compare_performance <- function(x, digits = 3, ...) {
     }
   })
 
-  ## TODO remove suppressWarnings() once insight is updated on CRAN (> 0.7.1)
-  cat(suppressWarnings(insight::format_table(x)))
+  cat(insight::format_table(x))
 
   if ("Performance_Score" %in% colnames(x)) {
     insight::print_color(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.\n", x$Model[1], x$Type[1], x$Performance_Score[1]), "yellow")
@@ -27,6 +26,7 @@ print.compare_performance <- function(x, digits = 3, ...) {
 
 
 
+#' @importFrom insight format_table
 #' @export
 print.performance_model <- function(x, digits = 3, ...) {
   insight::print_color("# Indices of model performance\n\n", "blue")
@@ -36,7 +36,7 @@ print.performance_model <- function(x, digits = 3, ...) {
     i
   })
 
-  print.data.frame(x, row.names = FALSE, ...)
+  cat(insight::format_table(x))
 }
 
 
