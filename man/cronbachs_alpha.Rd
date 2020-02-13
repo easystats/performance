@@ -31,3 +31,6 @@ data(mtcars)
 x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 cronbachs_alpha(x)
 }
+\references{
+Bland, J. M., \& Altman, D. G. Statistics notes: Cronbach's alpha. BMJ 1997;314:572. \doi{10.1136/bmj.314.7080.572 }
+}
