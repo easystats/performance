@@ -18,6 +18,7 @@ reference:
   - model_performance.merMod
   - model_performance.stanreg
   - model_performance.lavaan
+  - model_performance.rma
 
 - title: "Common Indices"
   contents:
