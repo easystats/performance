@@ -54,6 +54,7 @@ Suggests:
     loo,
     Matrix,
     MASS,
+    metafor,
     mlogit,
     nlme,
     ordinal,
