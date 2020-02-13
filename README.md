@@ -87,13 +87,12 @@ Schielzeth 2017).
 
 ``` r
 library(rstanarm)
-model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), 
-    data = iris, cores = 4)
+model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 [0.006]
-#>      Marginal R2: 0.825 [0.042]
+#>   Conditional R2: 0.953 [0.005]
+#>      Marginal R2: 0.825 [0.044]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -140,14 +139,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.55 0.78]
+#> Ratio: 0.39  CI 95%: [-0.56 0.78]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.69  CI 95%: [ 8.42 58.44]
-#> Conditioned on rand. effects: 37.71  CI 95%: [25.06 55.58]
+#> Conditioned on fixed effects: 22.73  CI 95%: [ 8.35 57.65]
+#> Conditioned on rand. effects: 37.78  CI 95%: [24.79 57.49]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.29  CI 95%: [-19.67 35.40]
+#> Difference: 14.37  CI 95%: [-18.64 36.42]
 ```
 
 ## Model diagnostics
@@ -220,13 +219,11 @@ sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
     filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), 
-        replace = TRUE)
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), 
-    data = sleepstudy)
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
 
 check_singularity(model)
 #> [1] TRUE
@@ -260,22 +257,24 @@ be r-squared, AIC, BIC, RMSE, ICC or LOOIC.
 ``` r
 m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
+#> # Indices of model performance
+#> 
+#>    AIC |    BIC |   R2 | R2_adjusted | RMSE
+#> -------------------------------------------
+#> 156.01 | 161.87 | 0.83 |        0.82 | 2.44
 ```
-
-| AIC |   BIC |   R2 | R2\_adjusted | RMSE |
-| --: | ----: | ---: | -----------: | ---: |
-| 156 | 161.9 | 0.83 |         0.82 | 2.44 |
 
 ### Logistic regression
 
 ``` r
 m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
+#> # Indices of model performance
+#> 
+#>   AIC |   BIC | R2_Tjur | RMSE | LOGLOSS | SCORE_LOG | SCORE_SPHERICAL |  PCP
+#> -----------------------------------------------------------------------------
+#> 31.30 | 35.70 |    0.48 | 0.89 |    0.40 |    -14.90 |            0.10 | 0.74
 ```
-
-|  AIC |  BIC | R2\_Tjur | RMSE | LOGLOSS | SCORE\_LOG | SCORE\_SPHERICAL |  PCP |
-| ---: | ---: | -------: | ---: | ------: | ---------: | ---------------: | ---: |
-| 31.3 | 35.7 |     0.48 | 0.89 |     0.4 |     \-14.9 |             0.09 | 0.74 |
 
 ### Linear mixed model
 
@@ -283,11 +282,12 @@ model_performance(m2)
 library(lme4)
 m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
+#> # Indices of model performance
+#> 
+#>     AIC |     BIC | R2_conditional | R2_marginal |  ICC |  RMSE
+#> ---------------------------------------------------------------
+#> 1755.63 | 1774.79 |           0.80 |        0.28 | 0.72 | 23.44
 ```
-
-|  AIC |  BIC | R2\_conditional | R2\_marginal |  ICC |  RMSE |
-| ---: | ---: | --------------: | -----------: | ---: | ----: |
-| 1756 | 1775 |             0.8 |         0.28 | 0.72 | 23.44 |
 
 ### Comparing different models
 
@@ -328,7 +328,7 @@ compare_performance(m1, m2, m3, m4, rank = TRUE)
 plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
 ```
 
-![](man/figures/unnamed-chunk-22-1.png)<!-- -->
+![](man/figures/unnamed-chunk-19-1.png)<!-- -->
 
 # References
 

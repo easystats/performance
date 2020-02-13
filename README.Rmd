@@ -18,9 +18,9 @@ bibliography: paper/paper.bib
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  tidy.opts = list(width.cutoff = 60),
+  tidy.opts = list(width.cutoff = 80),
   tidy = TRUE,
-  dpi=300,
+  dpi = 300, 
   fig.path = "man/figures/",
   comment = "#>"
 )
@@ -181,7 +181,7 @@ Remedies to cure issues with singular fits can be found [here](https://easystats
 
 **performance** provides many functions to check model assumptions, like `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To get a comprehensive check, use `check_model()`.
 
-```{r, warning=FALSE, message=FALSE, eval=TRUE}
+```{r, warning=FALSE, message=FALSE}
 model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
 check_model(model)
 ```
@@ -192,42 +192,29 @@ check_model(model)
 
 ### Linear model
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, warning=FALSE, message=FALSE}
 m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
-```
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-m1 <- lm(mpg ~ wt + cyl, data = mtcars)
-knitr::kable(model_performance(m1), digits = 2)
 ```
 
 ### Logistic regression
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, warning=FALSE, message=FALSE}
 m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
-```
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-knitr::kable(model_performance(m2), digits = 2)
 ```
 
 ### Linear mixed model
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, warning=FALSE, message=FALSE}
 library(lme4)
 m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 ```
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
-library(lme4)
-m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-knitr::kable(model_performance(m3), digits = 2)
-```
 
 ### Comparing different models
 
-```{r, warning=FALSE, message=FALSE, eval=TRUE}
+```{r, warning=FALSE, message=FALSE}
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 outcome <- gl(3, 1, 9)
 treatment <- gl(3, 3)

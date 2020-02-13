@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Performance of Mixed Models — model_performance.merMod • performance</title>
+<title>Performance of Meta-Analysis Models — model_performance.rma • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Performance of Mixed Models — model_performance.merMod" />
-<meta property="og:description" content="Compute indices of model performance for mixed models." />
+<meta property="og:title" content="Performance of Meta-Analysis Models — model_performance.rma" />
+<meta property="og:description" content="Compute indices of model performance for meta-analysis model from the metafor package." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -123,16 +123,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Performance of Mixed Models</h1>
+    <h1>Performance of Meta-Analysis Models</h1>
     
-    <div class="hidden name"><code>model_performance.merMod.Rd</code></div>
+    <div class="hidden name"><code>model_performance.rma.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Compute indices of model performance for mixed models.</p>
+    <p>Compute indices of model performance for meta-analysis model from the <span class="pkg">metafor</span> package.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for merMod</span>
+    <pre class="usage"><span class='co'># S3 method for rma</span>
 <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -140,15 +140,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A mixed effects model.</p></td>
+      <td><p>A <code>rma</code> object as returned by <code><a href='https://rdrr.io/pkg/metafor/man/rma.uni.html'>metafor::rma()</a></code>.</p></td>
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")</a></code>). <code>"common"</code> will compute AIC, BIC, R2, ICC and RMSE.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
+      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("AIC", "BIC", "I2", "H2", "TAU2", "R2")</a></code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -161,22 +157,27 @@
     <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This method returns the <em>adjusted ICC</em> only, as this is typically
-  of interest when judging the variance attributed to the random effects part
-  of the model (see also <code><a href='icc.html'>icc</a></code>).
-  <br /> <br />
-  Furthermore, see 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for
-  more details on returned indices.</p>
+    
+<h3>Indices of fit</h3>
+
+<ul>
+<li><p><strong>AIC</strong> Akaike's Information Criterion, see <code><a href='https://rdrr.io/r/stats/AIC.html'>AIC</a></code></p></li>
+<li><p><strong>BIC</strong> Bayesian Information Criterion, see <code><a href='https://rdrr.io/r/stats/AIC.html'>BIC</a></code></p></li>
+<li><p><strong>I2</strong>: For a random effects model, <code>I2</code> estimates (in percent) how much of the total variability in the effect size estimates can be attributed to heterogeneity among the true effects. For a mixed-effects model, <code>I2</code> estimates how much of the unaccounted variability can be attributed to residual heterogeneity.</p></li>
+<li><p><strong>H2</strong>: For a random-effects model, <code>H2</code> estimates the ratio of the total amount of variability in the effect size estimates to the amount of sampling variability. For a mixed-effects model, <code>H2</code> estimates the ratio of the unaccounted variability in the effect size estimates to the amount of sampling variability.</p></li>
+<li><p><strong>TAU2</strong>: The amount of (residual) heterogeneity in the random or mixed effects model.</p></li>
+<li><p><strong>R2</strong>: Pseudo-R2-statistic, which indicates the amount of heterogeneity accounted for by the moderators included in a fixed-effects model.</p></li>
+</ul><p>See the documentation for <code><a href='https://rdrr.io/pkg/metafor/man/fitstats.html'>fitstats</a></code>.</p>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"lme4"</span>)) {
-  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"metafor"</span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>dat.bcg</span>)
+  <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/metafor/man/escalc.html'>escalc</a></span>(<span class='kw'>measure</span> <span class='kw'>=</span> <span class='st'>"RR"</span>, <span class='kw'>ai</span> <span class='kw'>=</span> <span class='no'>tpos</span>, <span class='kw'>bi</span> <span class='kw'>=</span> <span class='no'>tneg</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='no'>cpos</span>, <span class='kw'>di</span> <span class='kw'>=</span> <span class='no'>cneg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat.bcg</span>)
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/metafor/man/rma.uni.html'>rma</a></span>(<span class='no'>yi</span>, <span class='no'>vi</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>dat</span>, <span class='kw'>method</span><span class='kw'>=</span> <span class='st'>" REML"</span>)
   <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)
-}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
-#&gt; 
-#&gt; </span><span>  AIC |   BIC | R2_conditional | R2_marginal |  ICC | RMSE
-#&gt; ----------------------------------------------------------
-#&gt; 77.32 | 89.36 |           0.97 |        0.10 | 0.97 | 0.28</div></span></pre>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: metafor</span></div><div class='output co'>#&gt; <span class='message'>Loading 'metafor' package (version 2.1-0). For an overview </span>
+#&gt; <span class='message'>and introduction to the package please type: help(metafor).</span></div><div class='output co'>#&gt; <span class='error'>Error in rma(yi, vi, data = dat, method = " REML"): Unknown 'method' specified.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

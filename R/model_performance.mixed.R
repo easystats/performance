@@ -63,6 +63,7 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
+  class(out) <- c("performance_model", class(out))
 
   out
 }
@@ -114,6 +115,7 @@ model_performance.mixor <- function(model, metrics = "all", verbose = TRUE, ...)
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
+  class(out) <- c("performance_model", class(out))
 
   out
 }

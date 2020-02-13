@@ -181,13 +181,15 @@
     <pre class="examples"><div class='input'><span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
 #&gt; 
-#&gt; </span><span>    AIC     BIC   R2 R2_adjusted  RMSE
-#&gt;  156.01 161.873 0.83       0.819 2.444</div><div class='input'>
+#&gt; </span><span>   AIC |    BIC |   R2 | R2_adjusted | RMSE
+#&gt; -------------------------------------------
+#&gt; 156.01 | 161.87 | 0.83 |        0.82 | 2.44</div><div class='input'>
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>wt</span> + <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
 <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Indices of model performance
 #&gt; 
-#&gt; </span><span>    AIC    BIC R2_Tjur  RMSE LOGLOSS SCORE_LOG SCORE_SPHERICAL   PCP
-#&gt;  31.298 35.695   0.478 0.889   0.395   -14.903           0.095 0.743</div></span></pre>
+#&gt; </span><span>  AIC |   BIC | R2_Tjur | RMSE | LOGLOSS | SCORE_LOG | SCORE_SPHERICAL |  PCP
+#&gt; -----------------------------------------------------------------------------
+#&gt; 31.30 | 35.70 |    0.48 | 0.89 |    0.40 |    -14.90 |            0.10 | 0.74</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
