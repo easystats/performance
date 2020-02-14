@@ -4,7 +4,13 @@
 \alias{compare_performance}
 \title{Compare performance of different models}
 \usage{
-compare_performance(..., metrics = "all", rank = FALSE, verbose = TRUE)
+compare_performance(
+  ...,
+  metrics = "all",
+  rank = FALSE,
+  bayesfactor = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{...}{Multiple model objects (also of different classes).}
@@ -13,6 +19,8 @@ compare_performance(..., metrics = "all", rank = FALSE, verbose = TRUE)
 
 \item{rank}{Logical, if \code{TRUE}, models are ranked according to "best overall
 model performance". See 'Details'.}
+
+\item{bayesfactor}{Logical, if \code{TRUE}, a Bayes factor for model comparisons is possibly returned. See 'Details'.}
 
 \item{verbose}{Toggle off warnings.}
 }

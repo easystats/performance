@@ -8,6 +8,7 @@
 #' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \link[=model_performance]{documentation} of object's class for details.
 #' @param rank Logical, if \code{TRUE}, models are ranked according to "best overall
 #'   model performance". See 'Details'.
+#' @param bayesfactor Logical, if \code{TRUE}, a Bayes factor for model comparisons is possibly returned. See 'Details'.
 #'
 #' @return A data frame (with one row per model) and one column per "index" (see \code{metrics}).
 #'
@@ -59,7 +60,7 @@
 #' @importFrom bayestestR bayesfactor_models
 #' @inheritParams model_performance.lm
 #' @export
-compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
+compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor = TRUE, verbose = TRUE) {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
@@ -78,14 +79,18 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
 
   # check for identical model class, for bayesfactor
-  BFs <- tryCatch(
-    {
-      bayestestR::bayesfactor_models(..., denominator = 1, verbose = FALSE)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  if (isTRUE(bayesfactor)) {
+    BFs <- tryCatch(
+      {
+        bayestestR::bayesfactor_models(..., denominator = 1, verbose = FALSE)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+  } else {
+    BFs <- NULL
+  }
 
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 

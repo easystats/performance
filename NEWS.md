@@ -4,6 +4,10 @@
 
 * `model_performance()` and `r2()` now support *rma*-objects from package *metafor*.
 
+## Changes to functions
+
+* `compare_performance()` gets a `bayesfactor` argument, to include or exclude the Bayes factor for model comparisons in the output.
+
 ## Bug fixes
 
 * Fixed issue in `check_collinearity()` for *glmmTMB* models when zero-inflated formula only had one predictor.
