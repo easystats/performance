@@ -717,3 +717,8 @@ as.numeric.check_outliers <- function(x, ...) {
 check_outliers.glmmTMB <- function(x, ...) {
   NULL
 }
+
+#' @export
+check_outliers.lme <- function(x, ...) {
+  NULL
+}

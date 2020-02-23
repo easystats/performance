@@ -76,11 +76,11 @@
 
   se <- tryCatch(
     {
-      lapply(re, function(.x) {
+      suppressWarnings(lapply(re, function(.x) {
         pv <- attr(.x, var_attr, exact = TRUE)
         cols <- seq_len(dim(pv)[1])
         unlist(lapply(cols, function(.y) sqrt(pv[.y, .y, ])))
-      })
+      }))
     },
     error = function(e) {
       NULL
