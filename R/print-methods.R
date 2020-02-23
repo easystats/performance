@@ -217,6 +217,31 @@ print.r2_generic <- function(x, digits = 3, ...) {
 
 #' @importFrom insight print_color
 #' @export
+print.r2_mlm <- function(x, digits = 3, ...) {
+  model_type <- attr(x, "model_type")
+  if (!is.null(model_type)) {
+    insight::print_color(sprintf("# R2 for %s Regression\n\n", model_type), "blue")
+  } else {
+    insight::print_color("# R2\n\n", "blue")
+  }
+
+  for (i in names(x)) {
+    insight::print_color(sprintf("## %s\n", i), "cyan")
+    out <- paste0(c(
+      sprintf("        R2: %.*f", digits, x[[i]]$R2),
+      sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
+    ),
+    collapse = "\n"
+    )
+    cat(out)
+    cat("\n\n")
+  }
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
 print.r2_nakagawa <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
   if (is.null(model_type)) {

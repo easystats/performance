@@ -80,6 +80,31 @@ r2.lm <- function(model, ...) {
 
 
 
+#' @importFrom stats pf
+#' @export
+r2.mlm <- function(model, ...) {
+  model_summary <- summary(model)
+
+  out <- lapply(names(model_summary), function(i) {
+    tmp <- list(
+      R2 = model_summary[[i]]$r.squared,
+      R2_adjusted = model_summary[[i]]$adj.r.squared,
+      Response = sub("Response ", "", i)
+    )
+    names(tmp$R2) <- "R2"
+    names(tmp$R2_adjusted) <- "adjusted R2"
+    names(tmp$Response) <- "Response"
+    tmp
+  })
+
+  names(out) <- names(model_summary)
+
+  attr(out, "model_type") <- "Multivariate Linear"
+  structure(class = "r2_mlm", out)
+}
+
+
+
 #' @importFrom insight model_info
 #' @export
 r2.glm <- function(model, ...) {
