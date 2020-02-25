@@ -59,6 +59,13 @@ r2_nagelkerke.glm <- function(model) {
 #' @export
 r2_nagelkerke.BBreg <- r2_nagelkerke.glm
 
+#' @export
+r2_nagelkerke.bife <- function(model) {
+  r2_nagelkerke <- r2_coxsnell(model) / (1 - exp(-model$null_deviance / insight::n_obs(model)))
+  names(r2_nagelkerke) <- "Nagelkerke's R2"
+  r2_nagelkerke
+}
+
 
 
 

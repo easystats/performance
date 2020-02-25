@@ -2,7 +2,7 @@
 
 ## General
 
-* `model_performance()` and `r2()` now support *rma*-objects from package *metafor* and *mlm* models.
+* `model_performance()` and `r2()` now support *rma*-objects from package *metafor*, *mlm* and *bife* models.
 
 ## Changes to functions
 

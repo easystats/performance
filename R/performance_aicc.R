@@ -55,6 +55,17 @@ performance_aic <- function(x, ...) {
 }
 
 
+#' @importFrom insight find_parameters n_obs
+#' @importFrom stats logLik
+#' @export
+AIC.bife <- function(object, ..., k = 2) {
+  nparam <- length(insight::find_parameters(object, effects = "fixed", flatten = TRUE))
+  n <- insight::n_obs(object)
+  -2 * as.numeric(stats::logLik(object)) + k * (n - nparam)
+}
+
+
+
 #' @importFrom insight n_obs
 #' @importFrom stats logLik
 #' @export
@@ -63,6 +74,16 @@ performance_aicc.default <- function(x, ...) {
   ll <- stats::logLik(x)
   k <- attr(ll, "df")
 
+  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+}
+
+
+#' @export
+performance_aicc.bife <- function(x, ...) {
+  n <- insight::n_obs(x)
+  ll <- stats::logLik(x)
+  nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
+  k <- n - nparam
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
 }
 

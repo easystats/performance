@@ -179,6 +179,9 @@ r2.bracl <- r2.censReg
 #' @export
 r2.brmultinom <- r2.censReg
 
+#' @export
+r2.bife <- r2.censReg
+
 
 
 

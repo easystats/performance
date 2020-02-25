@@ -206,7 +206,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   }
 
   # Cook
-  if ("cook" %in% c(method) & insight::model_info(x)$is_bayesian == FALSE) {
+  if ("cook" %in% c(method) & insight::model_info(x)$is_bayesian == FALSE & !inherits(x, "bife")) {
     df <- cbind(df, .check_outliers_cook(x, threshold = thresholds$cook)$data_cook)
   }
   # Pareto

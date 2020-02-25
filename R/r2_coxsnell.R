@@ -75,6 +75,13 @@ r2_coxsnell.BBreg <- r2_coxsnell.glm
 #' @export
 r2_coxsnell.mclogit <- r2_coxsnell.glm
 
+#' @export
+r2_coxsnell.bife <- function(model) {
+  r2_coxsnell <- (1 - exp((model$deviance - model$null_deviance) / insight::n_obs(model)))
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
+}
+
 
 
 
