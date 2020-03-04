@@ -72,7 +72,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     out$WAIC <- suppressWarnings(loo::waic(model)$estimates["waic", "Estimate"])
   }
   if ("R2" %in% c(metrics)) {
-    r2 <- r2_bayes(model, ...)
+    r2 <- r2_bayes(model)
     attri$r2_bayes <- attributes(r2) # save attributes
 
     # Format to df then to list
