@@ -28,9 +28,8 @@ check_heteroscedasticity <- function(x, ...) {
 
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
-  sumry <- summary(x)
   r <- stats::residuals(x, type = "pearson")
-  S.sq <- stats::df.residual(x) * (sumry$sigma)^2 / sum(!is.na(r))
+  S.sq <- stats::df.residual(x) * .sigma(x)^2 / sum(!is.na(r))
 
   .U <- (r^2) / S.sq
   mod <- lm(.U ~ stats::fitted(x))
@@ -51,4 +50,13 @@ check_heteroscedasticity.default <- function(x, ...) {
   class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
 
   invisible(p.val)
+}
+
+
+
+#' @importFrom insight get_parameters n_obs
+#' @importFrom stats deviance
+.sigma <- function(x) {
+  estimates <- insight::get_parameters(x)$Estimate
+  sqrt(stats::deviance(x) / (insight::n_obs(x) - sum(!is.na(estimates))))
 }

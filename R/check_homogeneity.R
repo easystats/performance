@@ -78,7 +78,10 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "auto
     "fligner" = "Fligner-Killeen Test"
   )
 
-  if (p.val < 0.05) {
+  if (is.na(p.val)) {
+    warning(paste0("Could not perform ", method.string, "."), call. = FALSE)
+    invisible(NULL)
+  } else if (p.val < 0.05) {
     insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, p.val), "red")
   } else {
     insight::print_color(sprintf("OK: Variances in each of the groups are the same (%s, p = %.3f).\n", method.string, p.val), "green")
