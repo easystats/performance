@@ -17,7 +17,12 @@ Authors@R: c(
 		"Waggoner", 
 		email = "philip.waggoner@gmail.com",
 		role = c("aut", "ctb"), 
-		comment = c(ORCID = "0000-0002-7825-7573"))
+		comment = c(ORCID = "0000-0002-7825-7573")),
+	person("Indrajeet", 
+	  "Patil", 
+	  role = c("aut", "ctb"), 
+	  email = "patilindrajeet.science@gmail.com", 
+	  comment = c(ORCID = "0000-0003-1995-6531"))
 	)
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
