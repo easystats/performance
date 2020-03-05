@@ -391,12 +391,13 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
+#' @importFrom stats median sd qnorm mad
 .check_outliers_zscore <- function(x, threshold = stats::qnorm(p = 1 - 0.025), robust = TRUE, method = "max") {
   # Standardize
   if (robust == FALSE) {
-    d <- abs(as.data.frame(sapply(x, function(x) (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE))))
+    d <- abs(as.data.frame(sapply(x, function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE))))
   } else {
-    d <- abs(as.data.frame(sapply(x, function(x) (x - median(x, na.rm = TRUE)) / mad(x, na.rm = TRUE))))
+    d <- abs(as.data.frame(sapply(x, function(x) (x - stats::median(x, na.rm = TRUE)) / stats::mad(x, na.rm = TRUE))))
   }
 
   out <- data.frame(Obs = 1:nrow(as.data.frame(d)))
@@ -653,7 +654,7 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 #' @importFrom utils packageVersion
-#' @importFrom stats median qnorm mad sd
+#' @importFrom stats median qnorm mad sd predict
 .check_outliers_iforest <- function(x, threshold = 0.025) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -665,7 +666,7 @@ as.numeric.check_outliers <- function(x, ...) {
   # Compute
   if (utils::packageVersion("solitude") < "0.2.0") {
     iforest <- solitude::isolationForest(x)
-    out$Distance_iforest <- predict(iforest, x, type = "anomaly_score")
+    out$Distance_iforest <- stats::predict(iforest, x, type = "anomaly_score")
   } else if (utils::packageVersion("solitude") == "0.2.0") {
     stop("Must update package `solitude` (above version 0.2.0). Please run `install.packages('solitude')`.", call. = FALSE)
   } else {
