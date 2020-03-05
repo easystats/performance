@@ -50,11 +50,11 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
   minfo <- insight::model_info(x)
 
   if (minfo$is_bayesian) {
-    ca <- .check_assumptions_stan(x)
+    ca <- suppressWarnings(.check_assumptions_stan(x))
   } else if (minfo$is_linear) {
-    ca <- .check_assumptions_linear(x, minfo)
+    ca <- suppressWarnings(.check_assumptions_linear(x, minfo))
   } else {
-    ca <- .check_assumptions_glm(x, minfo)
+    ca <- suppressWarnings(.check_assumptions_glm(x, minfo))
   }
   # else {
   #   stop(paste0("`check_assumptions()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)

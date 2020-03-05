@@ -356,20 +356,24 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
+.check_outliers_thresholds <- function(x) {
+  suppressWarnings(.check_outliers_thresholds_nowarn(x))
+}
+
 #' @importFrom stats qf qchisq
-.check_outliers_thresholds <- function(x,
-                                       zscore = stats::qnorm(p = 1 - 0.025),
-                                       iqr = 1.5,
-                                       cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
-                                       pareto = 0.7,
-                                       mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-                                       robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-                                       mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-                                       ics = 0.025,
-                                       optics = 2 * ncol(x),
-                                       iforest = 0.025,
-                                       lof = 0.025,
-                                       ...) {
+.check_outliers_thresholds_nowarn <- function(x) {
+  zscore <- stats::qnorm(p = 1 - 0.025)
+  iqr <- 1.5
+  cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
+  pareto <- 0.7
+  mahalanobis <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
+  robust <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
+  mcd <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
+  ics <- 0.025
+  optics <- 2 * ncol(x)
+  iforest <- 0.025
+  lof <- 0.025
+
   list(
     "zscore" = zscore,
     "iqr" = iqr,
