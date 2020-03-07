@@ -42,7 +42,7 @@ performance_rmse <- function(model, normalized = FALSE, verbose = TRUE) {
       if (normalized) {
         # get response
         resp <- .factor_to_numeric(insight::get_response(model))
-        # cpmpute rmse, normalized
+        # compute rmse, normalized
         rmse_val <- rmse_val / (max(resp, na.rm = T) - min(resp, na.rm = T))
       }
 
