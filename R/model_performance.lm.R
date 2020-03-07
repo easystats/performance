@@ -72,7 +72,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # TODO: What with sigma and deviance?
 
-  out <- as.data.frame(out)
+  out <- as.data.frame(.compact_list(out))
   row.names(out) <- NULL
   class(out) <- c("performance_model", class(out))
 
@@ -88,6 +88,9 @@ model_performance.glm <- model_performance.lm
 
 #' @export
 model_performance.glmx <- model_performance.lm
+
+#' @export
+model_performance.lmrob <- model_performance.lm
 
 #' @export
 model_performance.betareg <- model_performance.lm

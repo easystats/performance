@@ -245,10 +245,6 @@ check_outliers.numeric <- function(x, method = "zscore", threshold = NULL, ...) 
 
 
 
-
-
-
-
 #' @rdname check_outliers
 #' @export
 check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NULL, ...) {
@@ -718,6 +714,12 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
+
+
+
+
+# Non-supported model classes ---------------------------------------
+
 #' @export
 check_outliers.glmmTMB <- function(x, ...) {
   NULL
@@ -725,5 +727,15 @@ check_outliers.glmmTMB <- function(x, ...) {
 
 #' @export
 check_outliers.lme <- function(x, ...) {
+  NULL
+}
+
+#' @export
+check_outliers.lmrob <- function(x, ...) {
+  NULL
+}
+
+#' @export
+check_outliers.glmrob <- function(x, ...) {
   NULL
 }

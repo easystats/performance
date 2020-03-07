@@ -13,6 +13,7 @@
 * Fixed issue in `check_collinearity()` for *glmmTMB* models when zero-inflated formula only had one predictor.
 * Fixed issue in `check_model()` for *lme* models.
 * Fixed issue in `check_heteroscedasticity()` for *aov* objects.
+* Fixed issues for *lmrob* and *glmrob* objects.
 
 # performance 0.4.4
 
