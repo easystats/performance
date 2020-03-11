@@ -30,13 +30,20 @@ performance_aicc <- function(x, ...) {
 #' @importFrom stats AIC
 #' @export
 performance_aic <- function(x, ...) {
+  info <- insight::model_info(x)
+
+  ## TODO remove is.list() once insight 0.8.3 is on CRAN
+  if (is.null(info) || !is.list(info)) {
+    info <- list(family = "unknown")
+  }
+
   if (inherits(x, c("vgam", "vglm"))) {
     if (!requireNamespace("VGAM", quietly = TRUE)) {
       warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
       return(NULL)
     }
     VGAM::AIC(x)
-  } else if (insight::model_info(x)$family == "Tweedie") {
+  } else if (info$family == "Tweedie") {
     if (!requireNamespace("tweedie", quietly = TRUE)) {
       warning("Package 'tweedie' required for this function work. Please install it.", call. = FALSE)
       return(NULL)
@@ -86,6 +93,9 @@ performance_aicc.bife <- function(x, ...) {
   k <- n - nparam
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
 }
+
+#' @export
+performance_aicc.Arima <- performance_aicc.bife
 
 
 #' @export

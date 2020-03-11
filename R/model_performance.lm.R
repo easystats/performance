@@ -39,6 +39,11 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   info <- insight::model_info(model)
 
+  ## TODO remove is.list() once insight 0.8.3 is on CRAN
+  if (is.null(info) || !is.list(info)) {
+    info <- list(family = "unknown")
+  }
+
   out <- list()
   attrib <- list()
 
@@ -56,17 +61,17 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if ("RMSE" %in% toupper(metrics)) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
-  if (("LOGLOSS" %in% toupper(metrics)) && info$is_binomial) {
+  if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
     .logloss <- performance_logloss(model, verbose = verbose)
     if (!is.na(.logloss)) out$LOGLOSS <- .logloss
   }
-  if (("SCORE" %in% toupper(metrics)) && (info$is_binomial || info$is_count)) {
+  if (("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))) {
     .scoring_rules <- performance_score(model, verbose = verbose)
     if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
     if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
   }
 
-  if (("PCP" %in% toupper(metrics)) && info$is_binomial && !info$is_multinomial && !info$is_ordinal) {
+  if (("PCP" %in% toupper(metrics)) && isTRUE(info$is_binomial) && !isTRUE(info$is_multinomial) && !isTRUE(info$is_ordinal)) {
     out$PCP <- performance_pcp(model, verbose = verbose)$pcp_model
   }
 
@@ -82,9 +87,11 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   out
 }
 
-#' @rdname model_performance.lm
 #' @export
 model_performance.glm <- model_performance.lm
+
+#' @export
+model_performance.Arima <- model_performance.lm
 
 #' @export
 model_performance.glmx <- model_performance.lm

@@ -51,6 +51,7 @@ Suggests:
     cplm,
     dbscan,
     fixest,
+    forecast,
     glmmTMB,
     ICS,
     ICSOutlier,
