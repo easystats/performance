@@ -30,6 +30,17 @@ performance_aicc <- function(x, ...) {
 #' @importFrom stats AIC
 #' @export
 performance_aic <- function(x, ...) {
+  UseMethod("performance_aic")
+}
+
+
+
+
+# default -------------------------------------------------
+
+
+#' @export
+performance_aic.default <- function(x, ...) {
   info <- insight::model_info(x)
 
   ## TODO remove is.list() once insight 0.8.3 is on CRAN
@@ -37,13 +48,7 @@ performance_aic <- function(x, ...) {
     info <- list(family = "unknown")
   }
 
-  if (inherits(x, c("vgam", "vglm"))) {
-    if (!requireNamespace("VGAM", quietly = TRUE)) {
-      warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
-      return(NULL)
-    }
-    VGAM::AIC(x)
-  } else if (info$family == "Tweedie") {
+  if (info$family == "Tweedie") {
     if (!requireNamespace("tweedie", quietly = TRUE)) {
       warning("Package 'tweedie' required for this function work. Please install it.", call. = FALSE)
       return(NULL)
@@ -62,6 +67,59 @@ performance_aic <- function(x, ...) {
 }
 
 
+
+
+
+
+# VGAM models ------------------------------------
+
+
+#' @export
+performance_aic.vgam <- function(x, ...) {
+  if (!requireNamespace("VGAM", quietly = TRUE)) {
+    warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
+    return(NULL)
+  }
+  VGAM::AIC(x)
+}
+
+#' @export
+performance_aic.vglm <- performance_aic.vgam
+
+
+
+
+
+
+
+
+# Survey models --------------------------------------
+
+#' @export
+performance_aic.svyglm <- function(x, ...) {
+  tryCatch(
+    {
+      stats::AIC(x)[["AIC"]]
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+#' @export
+performance_aic.svycoxph <- performance_aic.svyglm
+
+
+
+
+
+
+
+
+# methods ------------------------------------------
+
+
 #' @importFrom insight find_parameters n_obs
 #' @importFrom stats logLik
 #' @export
@@ -71,6 +129,14 @@ AIC.bife <- function(object, ..., k = 2) {
   -2 * as.numeric(stats::logLik(object)) + k * (n - nparam)
 }
 
+
+
+
+
+
+
+
+# AICc ------------------------------------------
 
 
 #' @importFrom insight n_obs
