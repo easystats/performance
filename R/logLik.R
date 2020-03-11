@@ -94,3 +94,18 @@ logLik.iv_robust <- function(object, ...) {
 
   val
 }
+
+
+
+
+#' @importFrom insight n_obs
+#' @export
+logLik.svycoxph <- function(object, ...) {
+  val <- object$ll[2]
+  attr(val, "nall") <- insight::n_obs(object)
+  attr(val, "nobs") <- insight::n_obs(object)
+  attr(val, "df") <- object$degf.resid
+  class(val) <- "logLik"
+
+  val
+}

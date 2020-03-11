@@ -73,6 +73,7 @@ Suggests:
     rstanarm,
     rstantools,
     see (>= 0.4.0),
+    survey,
     survival,
     solitude,
     testthat,

@@ -103,6 +103,12 @@ r2_coxsnell.coxph <- function(model) {
 #' @export
 r2_coxsnell.survreg <- r2_coxsnell.coxph
 
+#' @export
+r2_coxsnell.svycoxph <- function(model) {
+  l_base <- model$ll[1]
+  .r2_coxsnell(model, l_base)
+}
+
 
 
 

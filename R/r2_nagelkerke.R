@@ -147,3 +147,9 @@ r2_nagelkerke.survreg <- r2_nagelkerke.coxph
 
 #' @export
 r2_nagelkerke.crch <- r2_nagelkerke.coxph
+
+#' @export
+r2_nagelkerke.svycoxph <- function(model) {
+  l_base <- model$ll[1]
+  .r2_nagelkerke(model, l_base)
+}
