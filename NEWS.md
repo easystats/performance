@@ -7,6 +7,7 @@
 ## Changes to functions
 
 * `compare_performance()` gets a `bayesfactor` argument, to include or exclude the Bayes factor for model comparisons in the output.
+* Added `r2.aov()`.
 
 ## Bug fixes
 

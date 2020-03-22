@@ -80,6 +80,25 @@ r2.lm <- function(model, ...) {
 
 
 
+#' @importFrom stats summary.lm
+#' @export
+r2.aov <- function(model, ...) {
+  model_summary <- stats::summary.lm(model)
+
+  out <- list(
+    R2 = model_summary$r.squared,
+    R2_adjusted = model_summary$adj.r.squared
+  )
+
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+
+  attr(out, "model_type") <- "Anova"
+  structure(class = "r2_generic", out)
+}
+
+
+
 #' @importFrom stats pf
 #' @export
 r2.mlm <- function(model, ...) {
