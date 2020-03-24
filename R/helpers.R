@@ -121,6 +121,7 @@
     if (is.character(x)) {
       x <- as.factor(x)
     }
+    x <- droplevels(x)
     levels(x) <- 1:nlevels(x)
   }
 
