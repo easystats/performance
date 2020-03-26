@@ -46,9 +46,9 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
 
       mp <- suppressWarnings(model_performance(model))
 
-      expect_equal(mp$R2, 0.02943044, tolerance = 0.01)
-      expect_equal(mp$AIC, 183.9723, tolerance = 0.01)
-      expect_equal(colnames(mp), c("AIC", "R2", "R2_adjusted", "RMSE", "SCORE_LOG", "PCP"))
+      expect_equal(mp$R2, 0.428856, tolerance = 0.01)
+      expect_equal(mp$AIC, 1474.2095277, tolerance = 0.01)
+      expect_equal(colnames(mp), c("AIC", "R2", "R2_adjusted", "RMSE"))
     })
   }
 }

@@ -5,6 +5,7 @@
 #' @param model A \code{rma} object as returned by \code{metafor::rma()}.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "I2", "H2", "TAU2", "R2")}).
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams model_performance.lm
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'

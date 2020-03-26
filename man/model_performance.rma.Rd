@@ -11,6 +11,8 @@
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "I2", "H2", "TAU2", "R2")}).}
 
+\item{verbose}{Toggle off warnings.}
+
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{

@@ -4,16 +4,19 @@ Akademiai
 al
 analyse
 Ankerst
+aov
 Archimbaud
 arXiv
 Asq
 autocorrelated
 Baayen
 behaviour
+bife
 bigglm
 biglm
 Biometrics
 Biometrika
+BMJ
 Bolker
 Bollen
 Bollen's
@@ -56,6 +59,7 @@ GLMM
 GLMMadaptive
 GLMMs
 glmmTMB
+glmrob
 Gnanadesikan
 grey
 Guilford
@@ -101,6 +105,7 @@ Lillo
 linar
 Liu
 lme
+lmrob
 lof
 LOF
 LOGLOSS
@@ -113,8 +118,10 @@ Mahwah
 Matuschek
 mcd
 McKelvey
+metafor
 Michalos
 mis
+mlm
 modelling
 multicollinearity
 multiresponse
@@ -145,6 +152,7 @@ repsectively
 rescaling
 RFI
 RL
+rma
 RMR
 rmse
 RMSEA
