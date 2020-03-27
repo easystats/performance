@@ -89,7 +89,11 @@ check_distribution.default <- function(model) {
     stop("Package `randomForest` required for this function to work. Please install it.", call. = FALSE)
   }
 
-  x <- stats::residuals(model)
+  if (inherits(model, "brmsfit")) {
+    x <- stats::residuals(model)[, "Estimate"]
+  } else {
+    x <- stats::residuals(model)
+  }
   # x_scaled <- .normalize(x)
   dat <- .extract_features(x)
 
@@ -115,6 +119,7 @@ check_distribution.default <- function(model) {
 
   out
 }
+
 
 
 .extract_features <- function(x) {
