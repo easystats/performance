@@ -1,3 +1,13 @@
+# performance 0.4.6
+
+## General
+
+* Minor revisions to `model_performance()` to meet changes in *mlogit* package.
+
+## Bug fixes
+
+* Fix issues in some functions for models with logical dependent variable.
+
 # performance 0.4.5
 
 ## General
