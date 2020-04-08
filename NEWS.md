@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * Fix issues in some functions for models with logical dependent variable.
+* Fix bug in `check_itemscale()`, which caused multiple computations of skewness statistics.
 
 # performance 0.4.5
 
