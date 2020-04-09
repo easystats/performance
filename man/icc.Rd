@@ -23,6 +23,9 @@ to calculate the variance decomposition for this group-level.}
 calculate the central tendency of the variances.}
 
 \item{ci}{The Credible Interval level.}
+
+\item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance
+components for each random-effects level (if there are multiple levels).}
 }
 \value{
 A list with two values, the adjusted and conditional ICC. For models
@@ -75,19 +78,23 @@ This function calculates the intraclass-correlation coefficient
  structure (random intercept).
  }
  \subsection{ICC for specific group-levels}{
- The proportion of variance for specific levels related to  each other
- (e.g., similarity of level-1-units within level-2-units or level-2-units
- within level-3-units) must be calculated manually. Use \code{\link[insight]{get_variance}}
- to get the random intercept variances (between-group-variances) and residual
- variance of the model, and calculate the ICC for the various level correlations.
- \cr \cr
- For example, for the ICC between level 1 and 2: \cr
- \code{sum(insight::get_variance_intercept(model)) /} \cr
- \code{  (sum(insight::get_variance_intercept(model)) + insight::get_variance_residual(model))}
- \cr \cr
- For for the ICC between level 2 and 3: \cr
- \code{insight::get_variance_intercept(model)[2] /} \cr
- \code{  sum(insight::get_variance_intercept(model))}
+ The proportion of variance for specific levels related to the overall model,
+ and related to each other (e.g., similarity of level-1-units within level-2-units
+ or level-2-units within level-3-units) can be computed by setting \code{by_group = TRUE}.
+ Now two different sets of ICCs are computed:
+ \itemize{
+   \item{First, the ICC for each group is reported (\emph{ICC by Group}),
+   which is the variance for each (random effect) group compared to the total
+   variance of the model. For mixed models with a simple random intercept,
+   this is identical to the classical (adjusted) ICC.
+   }
+   \item{Second, the ICC between random effect groups is reported. This is the
+   variance for each (random effect) group compared to each other (random effect)
+   group. More precise, this computes \code{var(group_x) / var(group _x) + var(group _y)},
+   where \code{var} refers to the random intercept variances (see
+   \code{\link[insight]{get_variance_intercept}}).
+   }
+ }
  }
  \subsection{ICC for brms-models}{
  If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
@@ -109,9 +116,28 @@ This function calculates the intraclass-correlation coefficient
 }
 \examples{
 if (require("lme4")) {
-  model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+  model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
   icc(model)
 }
+
+# ICC for specific group-levels
+if (require("lme4")) {
+  data(sleepstudy)
+  set.seed(12345)
+  sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$subgrp <- NA
+  for (i in 1:5) {
+    filter_group <- sleepstudy$grp == i
+    sleepstudy$subgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+  model <- lmer(
+    Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+  icc(model, by_group = TRUE)
+}
+
 }
 \references{
 \itemize{

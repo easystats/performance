@@ -4,6 +4,10 @@
 
 * Minor revisions to `model_performance()` to meet changes in *mlogit* package.
 
+## Changes to functions
+
+* `icc()` gains a `by_group` argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.
+
 ## Bug fixes
 
 * Fix issues in some functions for models with logical dependent variable.

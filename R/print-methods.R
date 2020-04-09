@@ -343,6 +343,19 @@ print.icc <- function(x, digits = 3, ...) {
 
 #' @importFrom insight print_color
 #' @export
+print.icc_by_group <- function(x, digits = 3, ...) {
+  insight::print_color("# ICC by Group\n\n", "blue")
+  cat(insight::format_table(x$icc, digits = digits))
+
+  insight::print_color("\n# ICC between Groups\n\n", "blue")
+  cat(insight::format_table(x$icc_between, digits = digits))
+  cat("\n")
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
 print.check_zi <- function(x, ...) {
   insight::print_color("# Check for zero-inflation\n\n", "blue")
   cat(sprintf("   Observed zeros: %i\n", x$observed.zeros))

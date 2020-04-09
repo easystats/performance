@@ -13,6 +13,8 @@
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the variance decomposition for this group-level.
 #' @param ci The Credible Interval level.
+#' @param by_group Logical, if \code{TRUE}, \code{icc()} returns the variance
+#'   components for each random-effects level (if there are multiple levels).
 #' @param ... Currently not used.
 #'
 #' @inheritParams r2_bayes
@@ -66,19 +68,23 @@
 #'  structure (random intercept).
 #'  }
 #'  \subsection{ICC for specific group-levels}{
-#'  The proportion of variance for specific levels related to  each other
-#'  (e.g., similarity of level-1-units within level-2-units or level-2-units
-#'  within level-3-units) must be calculated manually. Use \code{\link[insight]{get_variance}}
-#'  to get the random intercept variances (between-group-variances) and residual
-#'  variance of the model, and calculate the ICC for the various level correlations.
-#'  \cr \cr
-#'  For example, for the ICC between level 1 and 2: \cr
-#'  \code{sum(insight::get_variance_intercept(model)) /} \cr
-#'  \code{  (sum(insight::get_variance_intercept(model)) + insight::get_variance_residual(model))}
-#'  \cr \cr
-#'  For for the ICC between level 2 and 3: \cr
-#'  \code{insight::get_variance_intercept(model)[2] /} \cr
-#'  \code{  sum(insight::get_variance_intercept(model))}
+#'  The proportion of variance for specific levels related to the overall model,
+#'  and related to each other (e.g., similarity of level-1-units within level-2-units
+#'  or level-2-units within level-3-units) can be computed by setting \code{by_group = TRUE}.
+#'  Now two different sets of ICCs are computed:
+#'  \itemize{
+#'    \item{First, the ICC for each group is reported (\emph{ICC by Group}),
+#'    which is the variance for each (random effect) group compared to the total
+#'    variance of the model. For mixed models with a simple random intercept,
+#'    this is identical to the classical (adjusted) ICC.
+#'    }
+#'    \item{Second, the ICC between random effect groups is reported. This is the
+#'    variance for each (random effect) group compared to each other (random effect)
+#'    group. More precise, this computes \code{var(group_x) / var(group _x) + var(group _y)},
+#'    where \code{var} refers to the random intercept variances (see
+#'    \code{\link[insight]{get_variance_intercept}}).
+#'    }
+#'  }
 #'  }
 #'  \subsection{ICC for brms-models}{
 #'  If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
@@ -100,9 +106,28 @@
 #'
 #' @examples
 #' if (require("lme4")) {
-#'   model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#'   model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #'   icc(model)
 #' }
+#'
+#' # ICC for specific group-levels
+#' if (require("lme4")) {
+#'   data(sleepstudy)
+#'   set.seed(12345)
+#'   sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+#'   sleepstudy$subgrp <- NA
+#'   for (i in 1:5) {
+#'     filter_group <- sleepstudy$grp == i
+#'     sleepstudy$subgrp[filter_group] <-
+#'     sample(1:30, size = sum(filter_group), replace = TRUE)
+#'   }
+#'   model <- lmer(
+#'     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),
+#'     data = sleepstudy
+#'   )
+#'   icc(model, by_group = TRUE)
+#' }
+#'
 #' @importFrom insight model_info get_variance print_color
 #' @export
 icc <- function(model, ...) {
@@ -110,8 +135,10 @@ icc <- function(model, ...) {
 }
 
 
+#' @importFrom utils combn
+#' @importFrom insight find_random find_random_slopes
 #' @export
-icc.default <- function(model, ...) {
+icc.default <- function(model, by_group = FALSE, ...) {
   if (!insight::model_info(model)$is_mixed) {
     warning("'model' has no random effects.", call. = FALSE)
     return(NULL)
@@ -146,17 +173,50 @@ icc.default <- function(model, ...) {
   }
 
 
-  # Calculate ICC values
-  icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
-  icc_conditional <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
+  # Calculate ICC values by groups
+  if (isTRUE(by_group)) {
+    # with random slopes, icc is inaccurate
+    if (!is.null(insight::find_random_slopes(model))) {
+      warning("Model contains random slopes. Cannot compute accurate ICCs by group factors.", call. = FALSE)
+    }
 
-  structure(
-    class = "icc",
-    list(
-      "ICC_adjusted" = icc_adjusted,
-      "ICC_conditional" = icc_conditional
+    group_names <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)
+
+    # icc per group factor with reference to overall model
+    icc_overall <- vars$var.intercept / (vars$var.random + vars$var.residual)
+
+    out1 <- data.frame(
+      Group = group_names,
+      ICC = unname(icc_overall),
+      stringsAsFactors = FALSE
     )
-  )
+
+    # iccs between groups
+    n_grps <- length(vars$var.intercept)
+    level_combinations <- utils::combn(1:n_grps, m = n_grps - 1, simplify = FALSE)
+    icc_grp <- sapply(level_combinations, function(v) vars$var.intercept[v[1]] / (vars$var.intercept[v[1]] + vars$var.intercept[v[2]]))
+
+    out2 <- data.frame(
+      Group1 = group_names[sapply(level_combinations, function(i) i[1])],
+      Group2 = group_names[sapply(level_combinations, function(i) i[2])],
+      ICC = unname(icc_grp),
+      stringsAsFactors = FALSE
+    )
+
+    structure(class = "icc_by_group", list(icc = out1, icc_between = out2))
+  } else {
+    # Calculate ICC values
+    icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
+    icc_conditional <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
+
+    structure(
+      class = "icc",
+      list(
+        "ICC_adjusted" = icc_adjusted,
+        "ICC_conditional" = icc_conditional
+      )
+    )
+  }
 }
 
 
