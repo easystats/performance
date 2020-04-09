@@ -356,6 +356,16 @@ print.icc_by_group <- function(x, digits = 3, ...) {
 
 #' @importFrom insight print_color
 #' @export
+print.r2_nakagawa_by_group <- function(x, digits = 3, ...) {
+  insight::print_color("# Explained Variance by Level\n\n", "blue")
+  cat(insight::format_table(x, digits = digits))
+  cat("\n")
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
 print.check_zi <- function(x, ...) {
   insight::print_color("# Check for zero-inflation\n\n", "blue")
   cat(sprintf("   Observed zeros: %i\n", x$observed.zeros))

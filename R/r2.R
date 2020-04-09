@@ -5,7 +5,7 @@
 #'   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param ... Currently not used.
+#' @param ... Arguments passed down to the related r2-methods.
 #'
 #' @return Returns a list containing values related to the most appropriate R2
 #'   for the given model. See the list below:
@@ -233,7 +233,7 @@ r2.zeroinfl <- r2.hurdle
 
 #' @export
 r2.merMod <- function(model, ...) {
-  r2_nakagawa(model)
+  r2_nakagawa(model, ...)
 }
 
 #' @export

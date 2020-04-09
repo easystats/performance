@@ -137,7 +137,6 @@ if (require("lme4")) {
   )
   icc(model, by_group = TRUE)
 }
-
 }
 \references{
 \itemize{

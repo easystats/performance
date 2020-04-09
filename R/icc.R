@@ -127,7 +127,6 @@
 #'   )
 #'   icc(model, by_group = TRUE)
 #' }
-#'
 #' @importFrom insight model_info get_variance print_color
 #' @export
 icc <- function(model, ...) {
