@@ -34,7 +34,7 @@
 #'   r2_nakagawa(model)
 #'   r2_nakagawa(model, by_group = TRUE)
 #' }
-#' @importFrom insight get_variance print_color
+#' @importFrom insight get_variance print_color find_random_slopes null_model find_random
 #' @export
 r2_nakagawa <- function(model, by_group = FALSE) {
   vars <- tryCatch(
@@ -67,6 +67,11 @@ r2_nakagawa <- function(model, by_group = FALSE) {
 
   # compute R2 by group
   if (isTRUE(by_group)) {
+    # with random slopes, explained variance is inaccurate
+    if (!is.null(insight::find_random_slopes(model))) {
+      warning("Model contains random slopes. Explained variance by levels is not accurate.", call. = FALSE)
+    }
+
     # null-model
     null_model <- insight::null_model(model)
     vars_null <- insight::get_variance(null_model)
