@@ -184,25 +184,26 @@ icc.default <- function(model, by_group = FALSE, ...) {
     # icc per group factor with reference to overall model
     icc_overall <- vars$var.intercept / (vars$var.random + vars$var.residual)
 
-    out1 <- data.frame(
+    out <- data.frame(
       Group = group_names,
       ICC = unname(icc_overall),
       stringsAsFactors = FALSE
     )
 
     # iccs between groups
-    n_grps <- length(vars$var.intercept)
-    level_combinations <- utils::combn(1:n_grps, m = n_grps - 1, simplify = FALSE)
-    icc_grp <- sapply(level_combinations, function(v) vars$var.intercept[v[1]] / (vars$var.intercept[v[1]] + vars$var.intercept[v[2]]))
+    # n_grps <- length(vars$var.intercept)
+    # level_combinations <- utils::combn(1:n_grps, m = n_grps - 1, simplify = FALSE)
+    # icc_grp <- sapply(level_combinations, function(v) vars$var.intercept[v[1]] / (vars$var.intercept[v[1]] + vars$var.intercept[v[2]]))
+    #
+    # out2 <- data.frame(
+    #   Group1 = group_names[sapply(level_combinations, function(i) i[1])],
+    #   Group2 = group_names[sapply(level_combinations, function(i) i[2])],
+    #   ICC = unname(icc_grp),
+    #   stringsAsFactors = FALSE
+    # )
 
-    out2 <- data.frame(
-      Group1 = group_names[sapply(level_combinations, function(i) i[1])],
-      Group2 = group_names[sapply(level_combinations, function(i) i[2])],
-      ICC = unname(icc_grp),
-      stringsAsFactors = FALSE
-    )
-
-    structure(class = "icc_by_group", list(icc = out1, icc_between = out2))
+    class(out) <- c("icc_by_group", class(out))
+    out
   } else {
     # Calculate ICC values
     icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
