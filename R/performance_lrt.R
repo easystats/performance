@@ -41,30 +41,67 @@ performance_lrt.default <- function(...) {
     # }
     # -2 * (ll(m2, sd_mle(m2)) - ll(m3, sd_mle(m3)))
     lrt <- stats::anova(..., test = "LRT")
-
-    # create data frame with info about model name and class
-    m <- mapply(function(.x, .y) {
-      data.frame(Model = as.character(.y), Type = class(.x)[1], stringsAsFactors = FALSE)
-    }, objects, object_names, SIMPLIFY = FALSE)
-
-    # bind all data
-    out <- cbind(do.call(rbind, m), lrt)
-
-    # add AIC, if necessary
-    if (!"AIC" %in% names(out)) {
-      out$Df <- sapply(objects, function(i) length(insight::find_parameters(i, flatten = TRUE)))
-      out$AIC <- sapply(objects, performance_aic)
-    }
-
-    # preserve only some columns
-    out <- out[, intersect(c("Model", "Type", "Df", "AIC", "BIC", "F", "Chisq", "Pr(>Chisq)", "Pr(>Chi)", "Pr(>F)"), colnames(out))]
-    colnames(out)[names(out) %in% c("Chisq", "F")] <- "Statistic"
-    colnames(out)[grepl("^Pr\\(>", names(out))] <- "p"
-    rownames(out) <- NULL
-
-    class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")
-    out
+    .performance_lrt(objects, object_names, lrt)
   } else {
     warning("At least two models required for a Likelihood-Ratio-Test.", call. = FALSE)
   }
+}
+
+
+
+#' @importFrom stats anova
+#' @importFrom insight is_model
+#' @export
+performance_lrt.lavaan <- function(...) {
+  if (!all(sapply(list(...), insight::is_model))) {
+    stop("All objects must be valid regression model objects!")
+  }
+
+  if (!requireNamespace("lavaan", quietly = TRUE)) {
+    stop("Package 'lavaan' required. Please install it.")
+  }
+
+  objects <- list(...)
+  object_names <- match.call(expand.dots = FALSE)$`...`
+
+  # LRT for model comparison
+  if (length(list(...)) > 1) {
+    lrt <- lavaan::anova(..., test = "LRT")
+    .performance_lrt(objects, object_names, lrt)
+  } else {
+    warning("At least two models required for a Likelihood-Ratio-Test.", call. = FALSE)
+  }
+}
+
+
+
+
+
+
+# helper --------------------------
+
+
+.performance_lrt <- function(objects, object_names, lrt) {
+  # create data frame with info about model name and class
+  m <- mapply(function(.x, .y) {
+    data.frame(Model = as.character(.y), Type = class(.x)[1], stringsAsFactors = FALSE)
+  }, objects, object_names, SIMPLIFY = FALSE)
+
+  # bind all data
+  out <- cbind(do.call(rbind, m), lrt)
+
+  # add AIC, if necessary
+  if (!"AIC" %in% names(out)) {
+    out$Df <- sapply(objects, function(i) length(insight::find_parameters(i, flatten = TRUE)))
+    out$AIC <- suppressWarnings(sapply(objects, performance_aic))
+  }
+
+  # preserve only some columns
+  out <- out[, intersect(c("Model", "Type", "Df", "AIC", "BIC", "F", "Chisq", "Pr(>Chisq)", "Pr(>Chi)", "Pr(>F)"), colnames(out))]
+  colnames(out)[names(out) %in% c("Chisq", "F")] <- "Statistic"
+  colnames(out)[grepl("^Pr\\(>", names(out))] <- "p"
+  rownames(out) <- NULL
+
+  class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")
+  out
 }

@@ -8,6 +8,7 @@
 
 * `icc()` gains a `by_group` argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.
 * `r2_nakagawa()` gains a `by_group` argument, to compute explained variance at different levels (following the variance-reduction approach by Hox 2010).
+* `performance_lrt()` now works on *lavaan* objects.
 
 ## Bug fixes
 
