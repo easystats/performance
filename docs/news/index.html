@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -44,7 +48,6 @@
 
 <meta property="og:title" content="Changelog" />
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -62,7 +65,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -76,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.5.1</span>
       </span>
     </div>
 
@@ -108,7 +111,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/easystats/performance/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -122,20 +130,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/easystats/performance/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="performance-045" class="section level1">
-<h1 class="page-header">
-<a href="#performance-045" class="anchor"></a>performance 0.4.5<small> 2020-03-28 </small>
+    <div id="performance-046" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.6">
+<a href="#performance-046" class="anchor"></a>performance 0.4.6<small> Unreleased </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
 <ul>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/r2.html">r2()</a></code> now support <em>rma</em>-objects from package <em>metafor</em>, <em>mlm</em> and <em>bife</em> models.</li>
+<li>Minor revisions to <code><a href="../reference/model_performance.html">model_performance()</a></code> to meet changes in <em>mlogit</em> package.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -143,13 +150,46 @@
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>bayesfactor</code> argument, to include or exclude the Bayes factor for model comparisons in the output.</li>
-<li>Added <code>r2.aov()</code>.</li>
+<code><a href="../reference/icc.html">icc()</a></code> gains a <code>by_group</code> argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.</li>
+<li>
+<code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gains a <code>by_group</code> argument, to compute explained variance at different levels (following the variance-reduction approach by Hox 2010).</li>
+<li>
+<code><a href="../reference/performance_lrt.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fix issues in some functions for models with logical dependent variable.</li>
+<li>Fix bug in <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code>, which caused multiple computations of skewness statistics.</li>
+</ul>
+</div>
+</div>
+    <div id="performance-045" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.5">
+<a href="#performance-045" class="anchor"></a>performance 0.4.5<small> 2020-03-28 </small>
+</h1>
+<div id="general-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general-1" class="anchor"></a>General</h2>
+<ul>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/r2.html">r2()</a></code> now support <em>rma</em>-objects from package <em>metafor</em>, <em>mlm</em> and <em>bife</em> models.</li>
+</ul>
+</div>
+<div id="changes-to-functions-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>bayesfactor</code> argument, to include or exclude the Bayes factor for model comparisons in the output.</li>
+<li>Added <code>r2.aov()</code>.</li>
+</ul>
+</div>
+<div id="bug-fixes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> for models from package <em>survey</em>, which returned three different AIC values. Now only the AIC value is returned.</li>
 <li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models when zero-inflated formula only had one predictor.</li>
@@ -161,12 +201,12 @@
 </div>
 </div>
     <div id="performance-044" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.4.4">
 <a href="#performance-044" class="anchor"></a>performance 0.4.4<small> 2020-02-10 </small>
 </h1>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h2>
+<a href="#general-2" class="anchor"></a>General</h2>
 <ul>
 <li>Removed <code>logLik.felm()</code>, because this method is now implemented in the <em>lfe</em> package.</li>
 <li>Support for <code>DirichletRegModel</code> models.</li>
@@ -182,21 +222,21 @@
 <code><a href="../reference/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in documentation of <code><a href="../reference/performance_score.html">performance_score()</a></code>.</li>
 </ul>
 </div>
 </div>
     <div id="performance-043" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.4.3">
 <a href="#performance-043" class="anchor"></a>performance 0.4.3<small> 2020-01-22 </small>
 </h1>
-<div id="general-2" class="section level2">
+<div id="general-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-2" class="anchor"></a>General</h2>
+<a href="#general-3" class="anchor"></a>General</h2>
 <ul>
 <li>Support for <code>mixor</code>, <code>cpglm</code> and <code>cpglmm</code> models.</li>
 </ul>
@@ -211,16 +251,16 @@
 <code><a href="../reference/performance_lrt.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/r/stats/anova.html">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix issues with CRAN checks.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now calculates AIC for Tweedie models.</li>
@@ -228,12 +268,12 @@
 </div>
 </div>
     <div id="performance-042" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.4.2">
 <a href="#performance-042" class="anchor"></a>performance 0.4.2<small> 2019-12-11 </small>
 </h1>
-<div id="general-3" class="section level2">
+<div id="general-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-3" class="anchor"></a>General</h2>
+<a href="#general-4" class="anchor"></a>General</h2>
 <ul>
 <li>Support for <code>bracl</code>, <code>brmultinom</code>, <code>fixest</code>, <code>glmx</code>, <code>glmmadmb</code>, <code>mclogit</code>, <code>mmclogit</code>, <code>vgam</code> and <code>vglm</code> models.</li>
 <li>
@@ -244,9 +284,9 @@
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
@@ -265,9 +305,9 @@
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now no longer returns backticks in row- and column names.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
 <li>
@@ -277,12 +317,12 @@
 </div>
 </div>
     <div id="performance-040" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.4.0">
 <a href="#performance-040" class="anchor"></a>performance 0.4.0<small> 2019-10-21 </small>
 </h1>
-<div id="general-4" class="section level2">
+<div id="general-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-4" class="anchor"></a>General</h2>
+<a href="#general-5" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">performance()</a></code> is an alias for <code><a href="../reference/model_performance.html">model_performance()</a></code>.</li>
@@ -296,9 +336,9 @@
 <code>principal_components()</code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://rdrr.io/pkg/parameters/man/principal_components.html">parameters::principal_components()</a></code> now.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</li>
@@ -313,9 +353,9 @@
 <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
 <li>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occurred when checking for outliers.</li>
@@ -323,12 +363,12 @@
 </div>
 </div>
     <div id="performance-030" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.3.0">
 <a href="#performance-030" class="anchor"></a>performance 0.3.0<small> 2019-08-05 </small>
 </h1>
-<div id="general-5" class="section level2">
+<div id="general-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-5" class="anchor"></a>General</h2>
+<a href="#general-6" class="anchor"></a>General</h2>
 <ul>
 <li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
 <li>
@@ -344,9 +384,9 @@
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</li>
@@ -374,9 +414,9 @@
 <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> to check models for homogeneity of variances.</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues with <code><a href="../reference/compare_performance.html">compare_performance()</a></code> and row-ordering.</li>
 <li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inflated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
@@ -385,12 +425,12 @@
 </div>
 </div>
     <div id="performance-020" class="section level1">
-<h1 class="page-header">
+<h1 class="page-header" data-toc-text="0.2.0">
 <a href="#performance-020" class="anchor"></a>performance 0.2.0<small> 2019-06-04 </small>
 </h1>
-<div id="general-6" class="section level2">
+<div id="general-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-6" class="anchor"></a>General</h2>
+<a href="#general-7" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</li>
@@ -458,9 +498,9 @@
 <code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
 </ul>
 </div>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>
@@ -473,32 +513,23 @@
 <li>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
-<li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (#48).</li>
+<li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (<a href='https://github.com/easystats/performance/issues/48'>#48</a>).</li>
 <li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> did not sort the <code>name</code>-column properly, if the columns <code>class</code> and <code>name</code> were not in the same alphabetical order (#51).</li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> did not sort the <code>name</code>-column properly, if the columns <code>class</code> and <code>name</code> were not in the same alphabetical order (<a href='https://github.com/easystats/performance/issues/51'>#51</a>).</li>
 </ul>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#performance-045">0.4.5</a></li>
-        <li><a href="#performance-044">0.4.4</a></li>
-        <li><a href="#performance-043">0.4.3</a></li>
-        <li><a href="#performance-042">0.4.2</a></li>
-        <li><a href="#performance-040">0.4.0</a></li>
-        <li><a href="#performance-030">0.3.0</a></li>
-        <li><a href="#performance-020">0.2.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -510,7 +541,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

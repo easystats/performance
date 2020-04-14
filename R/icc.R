@@ -68,23 +68,11 @@
 #'  structure (random intercept).
 #'  }
 #'  \subsection{ICC for specific group-levels}{
-#'  The proportion of variance for specific levels related to the overall model,
-#'  and related to each other (e.g., similarity of level-1-units within level-2-units
-#'  or level-2-units within level-3-units) can be computed by setting \code{by_group = TRUE}.
-#'  Now two different sets of ICCs are computed:
-#'  \itemize{
-#'    \item{First, the ICC for each group is reported (\emph{ICC by Group}),
-#'    which is the variance for each (random effect) group compared to the total
-#'    variance of the model. For mixed models with a simple random intercept,
-#'    this is identical to the classical (adjusted) ICC.
-#'    }
-#'    \item{Second, the ICC between random effect groups is reported. This is the
-#'    variance for each (random effect) group compared to each other (random effect)
-#'    group. More precise, this computes \code{var(group_x) / var(group _x) + var(group _y)},
-#'    where \code{var} refers to the random intercept variances (see
-#'    \code{\link[insight]{get_variance_intercept}}).
-#'    }
-#'  }
+#'  The proportion of variance for specific levels related to the overall model
+#'  can be computed by setting \code{by_group = TRUE}. The reported ICC is
+#'  the variance for each (random effect) group compared to the total
+#'  variance of the model. For mixed models with a simple random intercept,
+#'  this is identical to the classical (adjusted) ICC.
 #'  }
 #'  \subsection{ICC for brms-models}{
 #'  If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
