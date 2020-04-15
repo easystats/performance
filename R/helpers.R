@@ -12,6 +12,8 @@
       return(NULL)
     }
     VGAM::BIC(x)
+  } else if (inherits(x, "bayesx")) {
+    stats::BIC(x)[["BIC"]]
   } else {
     tryCatch(
       {

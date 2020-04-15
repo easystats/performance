@@ -115,6 +115,16 @@ performance_aic.svycoxph <- performance_aic.svyglm
 
 
 
+# Other models --------------------------------------
+
+#' @export
+performance_aic.bayesx <- function(x, ...) {
+  stats::AIC(x)[["AIC"]]
+}
+
+
+
+
 
 
 # methods ------------------------------------------

@@ -133,6 +133,9 @@ model_performance.plm <- model_performance.lm
 model_performance.polr <- model_performance.lm
 
 #' @export
+model_performance.bayesx <- model_performance.lm
+
+#' @export
 model_performance.survreg <- model_performance.lm
 
 #' @export

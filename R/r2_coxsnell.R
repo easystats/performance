@@ -129,6 +129,13 @@ r2_coxsnell.clm2 <- function(model) {
   .r2_coxsnell(model, l_base)
 }
 
+#' @importFrom utils capture.output
+#' @export
+r2_coxsnell.bayesx <- function(model) {
+  junk <- utils::capture.output(l_base <- stats::logLik(stats::update(model, ~1)))
+  .r2_coxsnell(model, l_base)
+}
+
 #' @export
 r2_coxsnell.clm <- function(model) {
   l_base <- stats::logLik(stats::update(model, ~1))

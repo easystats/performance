@@ -152,6 +152,9 @@ r2.BBreg <- function(model, ...) {
 #' @export
 r2.crch <- r2.BBreg
 
+#' @export
+r2.bayesx <- r2.BBreg
+
 
 
 

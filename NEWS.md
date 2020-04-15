@@ -3,6 +3,7 @@
 ## General
 
 * Minor revisions to `model_performance()` to meet changes in *mlogit* package.
+* Support for `bayesx` models.
 
 ## Changes to functions
 
