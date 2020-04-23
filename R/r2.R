@@ -315,6 +315,19 @@ r2.stanreg <- r2.brmsfit
 
 
 #' @export
+r2.gam <- function(model, ...) {
+  s <- summary(model)
+  if (!is.null(s$r.sq)) {
+    list(
+      R2 = c(`Adjusted R2` = s$r.sq)
+    )
+  } else {
+    NextMethod()
+  }
+}
+
+
+#' @export
 r2.betareg <- function(model, ...) {
   list(
     R2 = c(`Pseudo R2` = model$pseudo.r.squared)

@@ -15,6 +15,7 @@
 
 * Fix issues in some functions for models with logical dependent variable.
 * Fix bug in `check_itemscale()`, which caused multiple computations of skewness statistics.
+* Fix issues in `r2()` for *gam* models.
 
 # performance 0.4.5
 
