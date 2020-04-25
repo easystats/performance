@@ -63,7 +63,7 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
     }
   }
 
-  out <- as.data.frame(out)
+  out <- as.data.frame(.compact_list(out))
   row.names(out) <- NULL
   class(out) <- c("performance_model", class(out))
 
