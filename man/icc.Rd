@@ -2,10 +2,13 @@
 % Please edit documentation in R/icc.R
 \name{icc}
 \alias{icc}
+\alias{icc.default}
 \alias{icc.brmsfit}
 \title{Intraclass Correlation Coefficient (ICC)}
 \usage{
 icc(model, ...)
+
+\method{icc}{default}(model, by_group = FALSE, ...)
 
 \method{icc}{brmsfit}(model, re.form = NULL, robust = TRUE, ci = 0.95, ...)
 }
@@ -13,6 +16,9 @@ icc(model, ...)
 \item{model}{A (Bayesian) mixed effects model.}
 
 \item{...}{Currently not used.}
+
+\item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance
+components for each random-effects level (if there are multiple levels).}
 
 \item{re.form}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
@@ -23,9 +29,6 @@ to calculate the variance decomposition for this group-level.}
 calculate the central tendency of the variances.}
 
 \item{ci}{The Credible Interval level.}
-
-\item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance
-components for each random-effects level (if there are multiple levels).}
 }
 \value{
 A list with two values, the adjusted and conditional ICC. For models

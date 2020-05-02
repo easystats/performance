@@ -124,6 +124,7 @@ icc <- function(model, ...) {
 
 #' @importFrom utils combn
 #' @importFrom insight find_random find_random_slopes
+#' @rdname icc
 #' @export
 icc.default <- function(model, by_group = FALSE, ...) {
   if (!insight::model_info(model)$is_mixed) {
