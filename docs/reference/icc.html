@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.6</span>
       </span>
     </div>
 
@@ -152,6 +152,9 @@
 
     <pre class="usage"><span class='fu'>icc</span>(<span class='no'>model</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for default</span>
+<span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>by_group</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
 <span class='co'># S3 method for brmsfit</span>
 <span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>re.form</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>)</pre>
 
@@ -165,6 +168,11 @@
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>by_group</th>
+      <td><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
+components for each random-effects level (if there are multiple levels).</p></td>
     </tr>
     <tr>
       <th>re.form</th>
@@ -181,11 +189,6 @@ calculate the central tendency of the variances.</p></td>
     <tr>
       <th>ci</th>
       <td><p>The Credible Interval level.</p></td>
-    </tr>
-    <tr>
-      <th>by_group</th>
-      <td><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
-components for each random-effects level (if there are multiple levels).</p></td>
     </tr>
     </table>
 

@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.6</span>
       </span>
     </div>
 
@@ -136,13 +136,14 @@
 
     <div id="performance-046" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.6">
-<a href="#performance-046" class="anchor"></a>performance 0.4.6<small> Unreleased </small>
+<a href="#performance-046" class="anchor"></a>performance 0.4.6<small> 2020-05-03 </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
 <ul>
 <li>Minor revisions to <code><a href="../reference/model_performance.html">model_performance()</a></code> to meet changes in <em>mlogit</em> package.</li>
+<li>Support for <code>bayesx</code> models.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -163,6 +164,7 @@
 <ul>
 <li>Fix issues in some functions for models with logical dependent variable.</li>
 <li>Fix bug in <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code>, which caused multiple computations of skewness statistics.</li>
+<li>Fix issues in <code><a href="../reference/r2.html">r2()</a></code> for <em>gam</em> models.</li>
 </ul>
 </div>
 </div>
@@ -281,7 +283,7 @@
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> now supports <em>complmrob</em> models.</li>
 <li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
 </ul>
 </div>
 <div id="changes-to-functions-3" class="section level2">
@@ -311,7 +313,7 @@
 <ul>
 <li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
 <li>
-<code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</li>
+<code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</li>
 <li>Fixed issues with models of class <code>rlmerMod</code>.</li>
 </ul>
 </div>
@@ -370,7 +372,7 @@
 <h2 class="hasAnchor">
 <a href="#general-6" class="anchor"></a>General</h2>
 <ul>
-<li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
+<li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>-method.</li>
 </ul>
