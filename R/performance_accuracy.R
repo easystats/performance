@@ -121,7 +121,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
 
       accuracy <- mapply(function(.x, .y) {
         roc <- performance_roc(x = .x, predictions = .y)
-        bayestestR::area_under_curve(roc$Sensivity, roc$Specifity)
+        bayestestR::area_under_curve(roc$Specifity, roc$Sensivity)
       }, response, predictions)
     } else {
 
@@ -142,7 +142,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
 
       accuracy <- mapply(function(.x, .y) {
         roc <- performance_roc(x = .x, predictions = .y)
-        bayestestR::area_under_curve(roc$Sensivity, roc$Specifity)
+        bayestestR::area_under_curve(roc$Specifity, roc$Sensivity)
       }, response, predictions)
     }
   }

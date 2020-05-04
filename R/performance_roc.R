@@ -32,7 +32,7 @@
 #' performance_roc(model, new_data = test_data)
 #'
 #' roc <- performance_roc(model, new_data = test_data)
-#' area_under_curve(roc$Sensivity, roc$Specifity)
+#' area_under_curve(roc$Specifity, roc$Sensivity)
 #'
 #' m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
 #' m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")

@@ -3,6 +3,7 @@
 ## Bug fixes
 
 * Fixed issue in `performance_accuracy()` for binomial models when response variable had non-numeric factor levels.
+* Fixed issues in `performance_roc()`, which printed 1 - AUC instead of AUC.
 
 # performance 0.4.6
 
