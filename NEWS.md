@@ -1,3 +1,9 @@
+# performance 0.4.7
+
+## Bug fixes
+
+* Fixed issue in `performance_accuracy()` for binomial models when response variable had non-numeric factor levels.
+
 # performance 0.4.6
 
 ## General
