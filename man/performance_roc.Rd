@@ -29,6 +29,9 @@ name.
 This function calculates a simple ROC curves of x/y coordinates
 based on response and predictions of a binomial model.
 }
+\note{
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+}
 \examples{
 library(bayestestR)
 data(iris)
@@ -43,7 +46,7 @@ model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomi
 performance_roc(model, new_data = test_data)
 
 roc <- performance_roc(model, new_data = test_data)
-area_under_curve(roc$Sensivity, roc$Specifity)
+area_under_curve(roc$Specifity, roc$Sensivity)
 
 m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
 m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
