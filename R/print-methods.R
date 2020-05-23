@@ -296,54 +296,6 @@ print.r2_bayes <- function(x, digits = 3, ...) {
 
 
 
-#' @export
-print.perf_pca_rotate <- function(x, cutoff = 0.1, digits = 3, ...) {
-  orig_x <- x
-  .rotation <- attr(x, "rotation", exact = TRUE)
-
-  if (.rotation == "none") {
-    insight::print_color("# Loadings from Principal Component Analysis (no rotation)\n\n", "blue")
-  } else {
-    insight::print_color(sprintf("# Rotated loadings from Principal Component Analysis (%s-rotation)\n\n", .rotation), "blue")
-  }
-
-
-  xs <- attr(x, "variance", exact = TRUE)
-  x <- round(x, digits = digits)
-
-  x <- as.data.frame(apply(x, MARGIN = c(1, 2), function(.y) {
-    if (abs(.y) < cutoff) {
-      ""
-    } else {
-      as.character(.y)
-    }
-  }), stringsAsFactors = FALSE)
-
-  xs <- as.data.frame(t(as.data.frame(round(xs, digits = digits))))
-
-  colnames(xs) <- sprintf("PC%i", 1:ncol(xs))
-  rownames(xs) <- c("Proportion variance", "Cumulative variance", "Proportion explained", "Cumulative explained")
-
-  print(x, quote = FALSE, ...)
-  insight::print_color("\n(Explained) Variance\n", "cyan")
-  print(xs, ...)
-
-  invisible(orig_x)
-}
-
-
-
-#' @export
-print.perf_pca <- function(x, digits = 3, ...) {
-  orig_x <- x
-  x <- as.data.frame(round(x, digits = digits))
-  rownames(x) <- c("Standard deviation", "Eigenvalue", "Proportion variance", "Cumulative variance")
-  print(x, ...)
-  invisible(orig_x)
-}
-
-
-
 #' @importFrom insight print_color
 #' @export
 print.icc <- function(x, digits = 3, ...) {
