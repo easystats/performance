@@ -2,8 +2,6 @@
 # performance <img src='man/figures/logo.png' align="right" height="139" />
 
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
-[![Build
-Status](https://travis-ci.org/easystats/performance.svg?branch=master)](https://travis-ci.org/easystats/performance)
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 
 ***Test if your model is a good model\!***
@@ -92,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.953 [0.005]
-#>      Marginal R2: 0.825 [0.044]
+#>      Marginal R2: 0.823 [0.045]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -139,14 +137,14 @@ icc(model)
 #> Conditioned on: all random effects
 #> 
 #> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.56 0.78]
+#> Ratio: 0.39  CI 95%: [-0.54 0.77]
 #> 
 #> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.73  CI 95%: [ 8.35 57.65]
-#> Conditioned on rand. effects: 37.78  CI 95%: [24.79 57.49]
+#> Conditioned on fixed effects: 22.76  CI 95%: [ 8.52 57.19]
+#> Conditioned on rand. effects: 37.60  CI 95%: [24.77 55.97]
 #> 
 #> ## Difference in Variances
-#> Difference: 14.37  CI 95%: [-18.64 36.42]
+#> Difference: 14.31  CI 95%: [-18.12 35.31]
 ```
 
 ## Model diagnostics
@@ -332,7 +330,7 @@ plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
 
 # References
 
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
 
 <div id="ref-gelman_data_2007">
 

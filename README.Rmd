@@ -30,7 +30,7 @@ options(knitr.kable.NA = '',
 ```
 
 
-[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![Build Status](https://travis-ci.org/easystats/performance.svg?branch=master)](https://travis-ci.org/easystats/performance) [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 
 
 ***Test if your model is a good model!***
