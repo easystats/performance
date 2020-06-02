@@ -53,6 +53,11 @@
 #' @importFrom stats dbinom dpois dnbinom ppois pnbinom
 #' @export
 performance_score <- function(model, verbose = TRUE) {
+  # check special case
+  if (inherits(model, c("logitor", "logitmfx", "probitmfx", "negbinirr", "negbinmfx", "poissonirr", "poissonmfx"))) {
+    model <- model$fit
+  }
+
   minfo <- insight::model_info(model)
 
   if (minfo$is_ordinal || minfo$is_multinomial) {

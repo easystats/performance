@@ -161,6 +161,44 @@ model_performance.hurdle <- model_performance.lm
 
 
 
+# mfx models -------------------------------
+
+#' @export
+model_performance.logitor <- function(model, ...) {
+  model_performance(model$fit, ...)
+}
+
+#' @export
+model_performance.logitmfx <- model_performance.logitor
+
+#' @export
+model_performance.probitmfx <- model_performance.logitor
+
+#' @export
+model_performance.poissonirr <- model_performance.logitor
+
+#' @export
+model_performance.poissonmfx <- model_performance.logitor
+
+#' @export
+model_performance.negbinirr <- model_performance.logitor
+
+#' @export
+model_performance.negbinmfx <- model_performance.logitor
+
+#' @export
+model_performance.betaor <- model_performance.logitor
+
+#' @export
+model_performance.betamfx <- model_performance.logitor
+
+
+
+
+
+# other models -------------------------------
+
+
 #' @export
 model_performance.mlogit <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (requireNamespace("mlogit", quietly = TRUE)) {

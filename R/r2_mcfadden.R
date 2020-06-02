@@ -95,6 +95,39 @@ r2_mcfadden.truncreg <- r2_mcfadden.glm
 
 
 
+# mfx models ---------------------
+
+
+#' @export
+r2_mcfadden.logitmfx <- function(model, ...) {
+  r2(model$fit, ...)
+}
+
+#' @export
+r2_mcfadden.logitor <- r2_mcfadden.logitmfx
+
+#' @export
+r2_mcfadden.poissonirr <- r2_mcfadden.logitmfx
+
+#' @export
+r2_mcfadden.poissonmfx <- r2_mcfadden.logitmfx
+
+#' @export
+r2_mcfadden.negbinirr <- r2_mcfadden.logitmfx
+
+#' @export
+r2_mcfadden.probitmfx <- r2_mcfadden.logitmfx
+
+#' @export
+r2_mcfadden.negbinmfx <- r2_mcfadden.logitmfx
+
+
+
+
+
+
+
+
 # special models -------------------------------------------
 
 

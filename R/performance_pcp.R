@@ -50,6 +50,11 @@
 #' @importFrom insight get_response n_obs model_info find_response get_data
 #' @export
 performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
+  # fix special cases
+  if (inherits(model, c("logitor", "logitmfx", "probitmfx"))) {
+    model <- model$fit
+  }
+
   method <- match.arg(method, choices = c("Herron", "Gelman-Hill", "herron", "gelman_hill"))
   mi <- insight::model_info(model)
 

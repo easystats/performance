@@ -141,6 +141,46 @@ r2.glmx <- r2.glm
 
 
 
+# mfx models ---------------------
+
+
+#' @export
+r2.logitmfx <- function(model, ...) {
+  r2(model$fit, ...)
+}
+
+#' @export
+r2.logitor <- r2.logitmfx
+
+#' @export
+r2.poissonirr <- r2.logitmfx
+
+#' @export
+r2.poissonmfx <- r2.logitmfx
+
+#' @export
+r2.probitmfx <- r2.logitmfx
+
+#' @export
+r2.negbinirr <- r2.logitmfx
+
+#' @export
+r2.negbinmfx <- r2.logitmfx
+
+#' @export
+r2.betamfx <- r2.logitmfx
+
+#' @export
+r2.betaor <- r2.logitmfx
+
+
+
+
+
+
+
+
+
 # Cox & Snell R2 ---------------------
 
 

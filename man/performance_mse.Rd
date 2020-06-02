@@ -5,14 +5,14 @@
 \alias{mse}
 \title{Mean Square Error of Linear Models}
 \usage{
-performance_mse(model, verbose = TRUE)
+performance_mse(model, ...)
 
-mse(model, verbose = TRUE)
+mse(model, ...)
 }
 \arguments{
 \item{model}{A model.}
 
-\item{verbose}{Toggle off warnings.}
+\item{...}{Arguments passed to or from other methods.}
 }
 \value{
 Numeric, the mean square error of \code{model}.

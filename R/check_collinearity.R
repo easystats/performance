@@ -56,6 +56,43 @@ check_collinearity.default <- function(x, ...) {
 }
 
 
+# mfx models -------------------------------
+
+#' @export
+check_collinearity.logitor <- function(x, ...) {
+  .check_collinearity(x$fit, component = "conditional")
+}
+
+#' @export
+check_collinearity.logitmfx <- check_collinearity.logitor
+
+#' @export
+check_collinearity.probitmfx <- check_collinearity.logitor
+
+#' @export
+check_collinearity.poissonirr <- check_collinearity.logitor
+
+#' @export
+check_collinearity.poissonmfx <- check_collinearity.logitor
+
+#' @export
+check_collinearity.negbinirr <- check_collinearity.logitor
+
+#' @export
+check_collinearity.negbinmfx <- check_collinearity.logitor
+
+#' @export
+check_collinearity.betaor <- check_collinearity.logitor
+
+#' @export
+check_collinearity.betamfx <- check_collinearity.logitor
+
+
+
+
+
+# zi-models -------------------------------------
+
 
 #' @rdname check_collinearity
 #' @export

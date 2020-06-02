@@ -56,3 +56,18 @@ performance_logloss.brmsfit <- function(model, verbose = TRUE, ...) {
 
   ll
 }
+
+
+
+# mfx models -------------------------------
+
+#' @export
+performance_logloss.logitor <- function(model, ...) {
+  performance_logloss(model$fit, ...)
+}
+
+#' @export
+performance_logloss.logitmfx <- performance_logloss.logitor
+
+#' @export
+performance_logloss.probitmfx <- performance_logloss.logitor

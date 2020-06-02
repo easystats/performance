@@ -1,5 +1,9 @@
 # performance 0.4.7
 
+## General
+
+* Support for models from package *mfx*.
+
 ## Bug fixes
 
 * Fixed issue in `performance_accuracy()` for binomial models when response variable had non-numeric factor levels.

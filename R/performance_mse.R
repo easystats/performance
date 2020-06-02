@@ -21,7 +21,18 @@
 #' @importFrom insight print_color
 #' @importFrom stats residuals
 #' @export
-performance_mse <- function(model, verbose = TRUE) {
+performance_mse <- function(model, ...) {
+  UseMethod("performance_mse")
+}
+
+#' @rdname performance_mse
+#' @export
+mse <- performance_mse
+
+
+
+#' @export
+performance_mse.default <- function(model, verbose = TRUE, ...) {
   res <- tryCatch(
     {
       if (inherits(model, c("vgam", "vglm"))) {
@@ -44,6 +55,35 @@ performance_mse <- function(model, verbose = TRUE) {
 }
 
 
-#' @rdname performance_mse
+
+
+# mfx models -------------------------------
+
 #' @export
-mse <- performance_mse
+performance_mse.logitor <- function(model, ...) {
+  performance_mse(model$fit, ...)
+}
+
+#' @export
+performance_mse.logitmfx <- performance_mse.logitor
+
+#' @export
+performance_mse.probitmfx <- performance_mse.logitor
+
+#' @export
+performance_mse.poissonirr <- performance_mse.logitor
+
+#' @export
+performance_mse.poissonmfx <- performance_mse.logitor
+
+#' @export
+performance_mse.negbinirr <- performance_mse.logitor
+
+#' @export
+performance_mse.negbinmfx <- performance_mse.logitor
+
+#' @export
+performance_mse.betaor <- performance_mse.logitor
+
+#' @export
+performance_mse.betamfx <- performance_mse.logitor

@@ -56,6 +56,9 @@ performance_roc <- function(x, ..., predictions, new_data) {
   } else if (inherits(x, "glm") && length(dots) == 0) {
     if (missing(new_data)) new_data <- NULL
     .performance_roc_model(x, new_data)
+  } else if (inherits(x, c("logitor", "logitmfx", "probitmfx")) && length(dots) == 0) {
+    if (missing(new_data)) new_data <- NULL
+    .performance_roc_model(x$fit, new_data)
   } else if (length(dots) > 0) {
     .performance_roc_models(list(x, ...), names = object_names)
   }

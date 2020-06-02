@@ -76,6 +76,39 @@ r2_nagelkerke.bife <- function(model) {
 
 
 
+# mfx models ---------------------
+
+
+#' @export
+r2_nagelkerke.logitmfx <- function(model, ...) {
+  r2(model$fit, ...)
+}
+
+#' @export
+r2_nagelkerke.logitor <- r2_nagelkerke.logitmfx
+
+#' @export
+r2_nagelkerke.poissonirr <- r2_nagelkerke.logitmfx
+
+#' @export
+r2_nagelkerke.poissonmfx <- r2_nagelkerke.logitmfx
+
+#' @export
+r2_nagelkerke.probitmfx <- r2_nagelkerke.logitmfx
+
+#' @export
+r2_nagelkerke.negbinirr <- r2_nagelkerke.logitmfx
+
+#' @export
+r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
+
+
+
+
+
+
+
+
 # Nagelkerke's R2 based on LogLik ----------------
 
 

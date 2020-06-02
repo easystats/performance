@@ -91,6 +91,39 @@ r2_coxsnell.bife <- function(model) {
 
 
 
+# mfx models ---------------------
+
+
+#' @export
+r2_coxsnell.logitmfx <- function(model, ...) {
+  r2(model$fit, ...)
+}
+
+#' @export
+r2_coxsnell.logitor <- r2_coxsnell.logitmfx
+
+#' @export
+r2_coxsnell.poissonirr <- r2_coxsnell.logitmfx
+
+#' @export
+r2_coxsnell.poissonmfx <- r2_coxsnell.logitmfx
+
+#' @export
+r2_coxsnell.probit <- r2_coxsnell.logitmfx
+
+#' @export
+r2_coxsnell.negbinirr <- r2_coxsnell.logitmfx
+
+#' @export
+r2_coxsnell.negbinmfx <- r2_coxsnell.logitmfx
+
+
+
+
+
+
+
+
 # r2-coxsnell based on loglik stored in model object ---------------------------
 
 

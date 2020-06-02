@@ -109,6 +109,24 @@ check_overdispersion.glmx <- check_overdispersion.glm
 
 
 
+# mfx models ------------------------------
+
+#' @export
+check_overdispersion.poissonmfx <- function(x, ...) {
+  check_overdispersion(x$fit, ...)
+}
+
+#' @export
+check_overdispersion.poissonirr <- check_overdispersion.poissonmfx
+
+#' @export
+check_overdispersion.negbinirr <- check_overdispersion.poissonmfx
+
+#' @export
+check_overdispersion.negbinmfx <- check_overdispersion.poissonmfx
+
+
+
 
 
 # Overdispersion for mixed models ---------------------------

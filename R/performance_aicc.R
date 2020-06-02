@@ -112,6 +112,38 @@ performance_aic.svycoxph <- performance_aic.svyglm
 
 
 
+# mfx models --------------------------------------
+
+#' @export
+performance_aic.logitor <- function(x, ...) {
+  performance_aic(x$fit, ...)
+}
+
+#' @export
+performance_aic.logitmfx <- performance_aic.logitor
+
+#' @export
+performance_aic.probitmfx <- performance_aic.logitor
+
+#' @export
+performance_aic.poissonirr <- performance_aic.logitor
+
+#' @export
+performance_aic.poissonmfx <- performance_aic.logitor
+
+#' @export
+performance_aic.negbinirr <- performance_aic.logitor
+
+#' @export
+performance_aic.negbinmfx <- performance_aic.logitor
+
+#' @export
+performance_aic.betaor <- performance_aic.logitor
+
+#' @export
+performance_aic.betamfx <- performance_aic.logitor
+
+
 
 
 
