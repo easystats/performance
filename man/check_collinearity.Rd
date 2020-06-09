@@ -2,10 +2,13 @@
 % Please edit documentation in R/check_collinearity.R
 \name{check_collinearity}
 \alias{check_collinearity}
+\alias{multicollinearity}
 \alias{check_collinearity.glmmTMB}
 \title{Check for multicollinearity of model terms}
 \usage{
 check_collinearity(x, ...)
+
+multicollinearity(x, ...)
 
 \method{check_collinearity}{glmmTMB}(
   x,
@@ -36,18 +39,40 @@ A data frame with three columns: The name of the model term, the
 \description{
 \code{check_collinearity()} checks regression models for
   multicollinearity by calculating the variance inflation factor (VIF).
+  \code{multicollinearity()} is an alias for \code{check_collinearity()}.
 }
 \details{
-The variance inflation factor is a measure to analyze the magnitude
+\subsection{Multicollinearity}{
+  Multicollinearity should not be confused with a raw strong correlation
+  between predictors. What matters is the association between one or more
+  predictor variables, \emph{conditional on the other variables in the model}.
+  In a nutshell, multicollinearity means that once you know the effect of
+  one predictor, the value of knowing the other predictor is rather low. Thus,
+  one of the predictors doesn't help much in terms of better understanding
+  the model or predicting the outcome. As a consequence, if multicollinearity
+  is a problem, the model seems to suggest that the predictors in question
+  don't seems to be reliably associated with the outcome (low estimates, high
+  standard errors), although these predictors actually are strongly associated
+  with the outcome, i.e. indeed might have strong effect (\cite{McElreath 2020, chapter 6.1}).
+  \cr \cr
+  Multicollinearity might arise when a third, unobserved variable has a causal
+  effect on each of the two predictors that are associated with the outcome.
+  In such cases, the actual relationship that matters would be the association
+  between the unobserved variable and the outcome.
+  \cr \cr
+  Remember: \dQuote{Pairwise correlations are not the problem. It is the conditional
+  associations - not correlations - that matter.} (\cite{McElreath 2020, p. 169})
+}
+\subsection{Interpretation of the Variance Inflation Factor}{
+  The variance inflation factor is a measure to analyze the magnitude
   of multicollinearity of model terms. A VIF less than 5 indicates
   a low correlation of that predictor with other predictors. A value between
   5 and 10 indicates a moderate correlation, while VIF values larger than 10
-  are a sign for high, not tolerable correlation of model predictors. The
-  \emph{Increased SE} column in the output indicates how much larger
-  the standard error is due to the correlation with other predictors.
-  \cr \cr
-  An informative blog post about collinearity can be found
-  \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{here}.
+  are a sign for high, not tolerable correlation of model predictors (\cite{James et al. 2013}).
+  The \emph{Increased SE} column in the output indicates how much larger
+  the standard error is due to the association with other predictors
+  conditional on the remaining variables in the model.
+}
 }
 \note{
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
@@ -61,5 +86,9 @@ x <- check_collinearity(m)
 plot(x)
 }
 \references{
-James, G., Witten, D., Hastie, T., & Tibshirani, R. (Hrsg.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.
+\itemize{
+  \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.
+  \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+  \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing. \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
+  }
 }

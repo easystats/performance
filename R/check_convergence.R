@@ -13,12 +13,30 @@
 #' @return \code{TRUE} if convergence is fine and \code{FALSE} if convergence
 #'   is suspicious. Additionally, the convergence value is returned as attribute.
 #'
-#' @details \code{check_convergence()} provides an alternative convergence test for
-#'   \code{\link[lme4]{merMod}}-objects, as discussed
-#'   \href{https://github.com/lme4/lme4/issues/120}{here}
-#'   and suggested by Ben Bolker in
-#'   \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment}.
-#'   Further details can be found in \code{\link[lme4]{convergence}}.
+#' @details \subsection{Convergence and log-likelihood}{
+#'   Convergence problems typically arise when the model hasn't converged
+#'   to a solution where the log-likelihood has a true maximum. This may result
+#'   in unreliable and overly complex (or non-estimable) estimates and standard
+#'   errors.
+#'   }
+#'   \subsection{Inspect model convergence}{
+#'   \pkg{lme4} performs a \code{\link[lme4:convergence]{convergence-check}},
+#'   however, as as discussed \href{https://github.com/lme4/lme4/issues/120}{here}
+#'   and suggested by one of the lme4-authors in
+#'   \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment},
+#'   this check can be too strict. \code{check_convergence()} thus provides an
+#'   alternative convergence test for \code{\link[lme4]{merMod}}-objects.
+#'   }
+#'   \subsection{Resolving convergence issues}{
+#'   Convergence issues are not easy to diagnose. The help page on
+#'   \code{\link[lme4]{convergence}} provides most of the current advice about
+#'   how to resolve convergence issues. Another clue might be large parameter
+#'   values, e.g. estimates (on the scale of the linear predictor) larger than
+#'   10 in (non-identity link) generalized linear model \emph{might} indicate
+#'   \href{https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/}{complete separation}.
+#'   Complete separation can be addressed by regularization, e.g. penalized
+#'   regression or Bayesian regression with appropriate priors on the fixed effects.
+#'   }
 #'
 #' @examples
 #' if (require("lme4")) {

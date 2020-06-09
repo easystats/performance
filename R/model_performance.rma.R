@@ -3,7 +3,7 @@
 #' Compute indices of model performance for meta-analysis model from the \pkg{metafor} package.
 #'
 #' @param model A \code{rma} object as returned by \code{metafor::rma()}.
-#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "I2", "H2", "TAU2", "R2")}).
+#' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "I2", "H2", "TAU2", "R2", "CochransQ", "QE", "Omnibus", "QM")}).
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams model_performance.lm
 #'
@@ -16,6 +16,8 @@
 #'    \item \strong{I2}: For a random effects model, \code{I2} estimates (in percent) how much of the total variability in the effect size estimates can be attributed to heterogeneity among the true effects. For a mixed-effects model, \code{I2} estimates how much of the unaccounted variability can be attributed to residual heterogeneity.
 #'    \item \strong{H2}: For a random-effects model, \code{H2} estimates the ratio of the total amount of variability in the effect size estimates to the amount of sampling variability. For a mixed-effects model, \code{H2} estimates the ratio of the unaccounted variability in the effect size estimates to the amount of sampling variability.
 #'    \item \strong{TAU2}: The amount of (residual) heterogeneity in the random or mixed effects model.
+#'    \item \strong{CochransQ (QE)}: Test for (residual) Heterogeneity. Without moderators in the model, this is simply Cochran's Q-test.
+#'    \item \strong{Omnibus (QM)}: Omnibus test of parameters.
 #'    \item \strong{R2}: Pseudo-R2-statistic, which indicates the amount of heterogeneity accounted for by the moderators included in a fixed-effects model.
 #' }
 #' See the documentation for \code{\link[metafor]{fitstats}}.
@@ -31,7 +33,7 @@
 #' @export
 model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "I2", "H2", "TAU2", "R2")
+    metrics <- c("AIC", "BIC", "I2", "H2", "TAU2", "COCHRANSQ", "OMNIBUS", "R2")
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "I2")
   }
@@ -54,6 +56,12 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
   if ("TAU2" %in% toupper(metrics)) {
     out$TAU2 <- s$tau2
+  }
+  if (any(c("QE", "COCHRANSQ") %in% toupper(metrics))) {
+    out$CochransQ <- s$QE
+  }
+  if (any(c("QM", "OMNIBUS") %in% toupper(metrics))) {
+    out$Omnibus <- s$QM
   }
   if ("R2" %in% toupper(metrics)) {
     R2 <- r2(model)
