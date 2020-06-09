@@ -202,14 +202,13 @@
                  speed   =~ x7 + x8 + x9 "</span>
   <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>lavaan</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span>(<span class='no'>structure</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>HolzingerSwineford1939</span>)
   <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: lavaan</span></div><div class='output co'>#&gt; <span class='message'>This is lavaan 0.6-6</span></div><div class='output co'>#&gt; <span class='message'>lavaan is BETA software! Please report any bugs.</span></div><div class='output co'>#&gt;      Chisq Chisq_df      Chisq_p Baseline Baseline_df Baseline_p       GFI
-#&gt; 1 85.30552       24 8.502553e-09 918.8516          36          0 0.9433321
-#&gt;        AGFI       NFI      NNFI       CFI      RMSEA RMSEA_CI_low RMSEA_CI_high
-#&gt; 1 0.8937476 0.9071607 0.8958395 0.9305597 0.09212148   0.07141849      0.113678
-#&gt;        RMSEA_p        RMR       SRMR       RFI      PNFI       IFI       RNI
-#&gt; 1 0.0006612368 0.08218433 0.06520506 0.8607411 0.6047738 0.9314908 0.9305597
-#&gt;   Loglikelihood     AIC      BIC BIC_adjusted
-#&gt; 1     -3737.745 7517.49 7595.339     7528.739</div></pre>
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: lavaan</span></div><div class='output co'>#&gt; <span class='message'>Error: package or namespace load failed for ‘lavaan’:</span>
+#&gt; <span class='message'> .onLoad failed in loadNamespace() for 'mnormt', details:</span>
+#&gt; <span class='message'>  call: dyn.load(file, DLLpath = DLLpath, ...)</span>
+#&gt; <span class='message'>  error: unable to load shared object '/Users/runner/runners/2.263.0/work/_temp/Library/mnormt/libs/mnormt.so':</span>
+#&gt; <span class='message'>  dlopen(/Users/runner/runners/2.263.0/work/_temp/Library/mnormt/libs/mnormt.so, 6): Library not loaded: /usr/local/gfortran/lib/libgfortran.3.dylib</span>
+#&gt; <span class='message'>  Referenced from: /Users/runner/runners/2.263.0/work/_temp/Library/mnormt/libs/mnormt.so</span>
+#&gt; <span class='message'>  Reason: image not found</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

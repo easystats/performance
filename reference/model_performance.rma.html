@@ -152,7 +152,7 @@
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("AIC", "BIC", "I2", "H2", "TAU2", "R2")</a></code>).</p></td>
+      <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("AIC", "BIC", "I2", "H2", "TAU2", "R2", "CochransQ", "QE", "Omnibus", "QM")</a></code>).</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -178,6 +178,8 @@
 <li><p><strong>I2</strong>: For a random effects model, <code>I2</code> estimates (in percent) how much of the total variability in the effect size estimates can be attributed to heterogeneity among the true effects. For a mixed-effects model, <code>I2</code> estimates how much of the unaccounted variability can be attributed to residual heterogeneity.</p></li>
 <li><p><strong>H2</strong>: For a random-effects model, <code>H2</code> estimates the ratio of the total amount of variability in the effect size estimates to the amount of sampling variability. For a mixed-effects model, <code>H2</code> estimates the ratio of the unaccounted variability in the effect size estimates to the amount of sampling variability.</p></li>
 <li><p><strong>TAU2</strong>: The amount of (residual) heterogeneity in the random or mixed effects model.</p></li>
+<li><p><strong>CochransQ (QE)</strong>: Test for (residual) Heterogeneity. Without moderators in the model, this is simply Cochran's Q-test.</p></li>
+<li><p><strong>Omnibus (QM)</strong>: Omnibus test of parameters.</p></li>
 <li><p><strong>R2</strong>: Pseudo-R2-statistic, which indicates the amount of heterogeneity accounted for by the moderators included in a fixed-effects model.</p></li>
 </ul><p>See the documentation for <code><a href='https://rdrr.io/pkg/metafor/man/fitstats.html'>fitstats</a></code>.</p>
 
@@ -191,9 +193,9 @@
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: metafor</span></div><div class='output co'>#&gt; <span class='message'>Loading 'metafor' package (version 2.4-0). For an overview </span>
 #&gt; <span class='message'>and introduction to the package please type: help(metafor).</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
 #&gt; 
-#&gt; </span><span>  AIC |   BIC |   I2 |    H2 | TAU2
-#&gt; -----------------------------------
-#&gt; 28.41 | 29.38 | 0.92 | 12.86 | 0.31</div></span></pre>
+#&gt; </span><span>  AIC |   BIC |   I2 |    H2 | TAU2 | CochransQ | Omnibus
+#&gt; ---------------------------------------------------------
+#&gt; 28.41 | 29.38 | 0.92 | 12.86 | 0.31 |    152.23 |   15.80</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
