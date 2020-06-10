@@ -59,9 +59,11 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
   if (any(c("QE", "COCHRANSQ") %in% toupper(metrics))) {
     out$CochransQ <- s$QE
+    out$p_CochransQ <- s$QEp
   }
   if (any(c("QM", "OMNIBUS") %in% toupper(metrics))) {
     out$Omnibus <- s$QM
+    out$p_Omnibus <- s$QMp
   }
   if ("R2" %in% toupper(metrics)) {
     R2 <- r2(model)

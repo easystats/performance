@@ -4,6 +4,10 @@
 
 * Support for models from package *mfx*.
 
+## Changes to functions
+
+* `model_performance.rma()` now includes results from heterogeneity test for meta-analysis objects.
+
 ## Bug fixes
 
 * Fixed issue in `performance_accuracy()` for binomial models when response variable had non-numeric factor levels.

@@ -10,6 +10,16 @@ print.compare_performance <- function(x, digits = 3, ...) {
     x <- x[!sapply(x, anyNA)]
   }
 
+  # format p-values for meta-analysis
+  if (requireNamespace("parameters", quietly = TRUE)) {
+    if ("p_CochransQ" %in% colnames(x)) {
+      x$p_CochransQ <- parameters::format_p(x$p_CochransQ)
+    }
+    if ("p_Omnibus" %in% colnames(x)) {
+      x$p_Omnibus <- parameters::format_p(x$p_Omnibus)
+    }
+  }
+
   x[] <- lapply(x, function(i) {
     if (is.numeric(i)) {
       round(i, digits = digits)
@@ -34,6 +44,16 @@ print.compare_performance <- function(x, digits = 3, ...) {
 print.performance_model <- function(x, digits = 3, ...) {
   orig_x <- x
   insight::print_color("# Indices of model performance\n\n", "blue")
+
+  # format p-values for meta-analysis
+  if (requireNamespace("parameters", quietly = TRUE)) {
+    if ("p_CochransQ" %in% colnames(x)) {
+      x$p_CochransQ <- parameters::format_p(x$p_CochransQ)
+    }
+    if ("p_Omnibus" %in% colnames(x)) {
+      x$p_Omnibus <- parameters::format_p(x$p_Omnibus)
+    }
+  }
 
   x[] <- lapply(x, function(i) {
     if (is.numeric(i)) i <- round(i, digits)

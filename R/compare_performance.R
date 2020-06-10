@@ -127,6 +127,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   # set reference for Bayes factors to 1
   if ("BF" %in% colnames(x)) x$BF[is.na(x$BF)] <- 1
 
+  # don't include test statistic in ranking
+  x$p_CochransQ <- NULL
+  x$p_Omnibus <- NULL
+
   out <- x
 
   # normalize indices, for comparison
