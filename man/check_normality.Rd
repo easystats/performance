@@ -2,14 +2,20 @@
 % Please edit documentation in R/check_normality.R
 \name{check_normality}
 \alias{check_normality}
+\alias{check_normality.merMod}
 \title{Check model for (non-)normality of residuals.}
 \usage{
 check_normality(x, ...)
+
+\method{check_normality}{merMod}(x, effects = c("fixed", "random"), ...)
 }
 \arguments{
 \item{x}{A model object.}
 
 \item{...}{Currently not used.}
+
+\item{effects}{Should parameters for fixed effects, random effects or both
+be returned? Only applies to mixed models. May be abbreviated.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value
@@ -20,12 +26,13 @@ Check model for (non-)normality of residuals.
 }
 \details{
 \code{check_normality()} calls \code{\link[stats]{shapiro.test}}
-and checks the standardized residuals for normal distribution. Note that
-this formal test almost always yields significant results for the distribution
-of residuals and visual inspection (e.g. Q-Q plots) are preferable.
+and checks the standardized residuals (or studentized residuals for mixed
+models) for normal distribution. Note that this formal test almost always
+yields significant results for the distribution of residuals and visual
+inspection (e.g. Q-Q plots) are preferable.
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+For mixed models, studentized residuals are used for the test, \emph{not} the standardized residuals. There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

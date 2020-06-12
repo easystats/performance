@@ -7,6 +7,8 @@
 ## Changes to functions
 
 * `model_performance.rma()` now includes results from heterogeneity test for meta-analysis objects.
+* `check_normality()` now also works for mixed models (with the limitation that studentized residuals are used).
+* `check_normality()` gets an `effects`-argument for mixed models, to check random effects for normality.
 
 ## Bug fixes
 
