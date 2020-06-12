@@ -14,8 +14,9 @@ check_normality(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{effects}{Should parameters for fixed effects, random effects or both
-be returned? Only applies to mixed models. May be abbreviated.}
+\item{effects}{Should normality for residuals (\code{"fixed"}) or random
+effects (\code{"random"}) be tested? Only applies to mixed models. May
+be abbreviated.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value

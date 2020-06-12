@@ -4,8 +4,9 @@
 #' @description Check model for (non-)normality of residuals.
 #'
 #' @param x A model object.
-#' @param effects Should parameters for fixed effects, random effects or both
-#' be returned? Only applies to mixed models. May be abbreviated.
+#' @param effects Should normality for residuals (\code{"fixed"}) or random
+#' effects (\code{"random"}) be tested? Only applies to mixed models. May
+#' be abbreviated.
 #' @param ... Currently not used.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value
