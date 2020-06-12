@@ -98,6 +98,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
         }
         cat("\n")
       }
+      attr(p.val, "re_qq") <- .diag_reqq(x, level = .95, model_info = info)
     }
   } else {
     # check for normality of residuals
