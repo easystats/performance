@@ -25,11 +25,11 @@
 #'   and suggested by one of the lme4-authors in
 #'   \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment},
 #'   this check can be too strict. \code{check_convergence()} thus provides an
-#'   alternative convergence test for \code{\link[lme4]{merMod}}-objects.
+#'   alternative convergence test for \code{\link[lme4:merMod]{merMod}}-objects.
 #'   }
 #'   \subsection{Resolving convergence issues}{
 #'   Convergence issues are not easy to diagnose. The help page on
-#'   \code{\link[lme4]{convergence}} provides most of the current advice about
+#'   \code{\link[lme4:convergence]{?lme4::convergence}} provides most of the current advice about
 #'   how to resolve convergence issues. Another clue might be large parameter
 #'   values, e.g. estimates (on the scale of the linear predictor) larger than
 #'   10 in (non-identity link) generalized linear model \emph{might} indicate

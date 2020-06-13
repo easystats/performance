@@ -11,8 +11,8 @@
 #'
 #' @details \subsection{Indices of fit}{
 #' \itemize{
-#'   \item{\strong{AIC}} {Akaike's Information Criterion, see \code{\link[stats]{AIC}}}
-#'   \item{\strong{BIC}} {Bayesian Information Criterion, see \code{\link[stats]{BIC}}}
+#'   \item{\strong{AIC}} {Akaike's Information Criterion, see \code{?stats::AIC}}
+#'   \item{\strong{BIC}} {Bayesian Information Criterion, see \code{?stats::BIC}}
 #'    \item \strong{I2}: For a random effects model, \code{I2} estimates (in percent) how much of the total variability in the effect size estimates can be attributed to heterogeneity among the true effects. For a mixed-effects model, \code{I2} estimates how much of the unaccounted variability can be attributed to residual heterogeneity.
 #'    \item \strong{H2}: For a random-effects model, \code{H2} estimates the ratio of the total amount of variability in the effect size estimates to the amount of sampling variability. For a mixed-effects model, \code{H2} estimates the ratio of the unaccounted variability in the effect size estimates to the amount of sampling variability.
 #'    \item \strong{TAU2}: The amount of (residual) heterogeneity in the random or mixed effects model.
