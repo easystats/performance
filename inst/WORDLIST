@@ -22,6 +22,7 @@ Bollen
 Bollen's
 Breunig
 brms
+brmsfit
 Bryk
 Byrne
 Carvalho
@@ -29,10 +30,12 @@ CFA
 CFI
 Chisq
 clmm
+CochransQ
 complmrob
 conceptionally
 Cronbach's
 crossvalidation
+CRC
 Csaki
 DBSCAN
 discriminations
@@ -48,6 +51,7 @@ EQS
 Erlbaum
 et
 Fligner
+gam
 Gabry
 Gazen
 Gelman
@@ -76,6 +80,7 @@ Hox
 Hrsg
 https
 Hurvich
+ICCs
 ics
 ICS
 IFI
@@ -117,11 +122,14 @@ mahalanobis
 Mahwah
 Matuschek
 mcd
+McElreath
 McKelvey
 metafor
+mfx
 Michalos
 mis
 mlm
+mlogit
 modelling
 multicollinearity
 multiresponse
@@ -144,6 +152,7 @@ poisson
 Postestimation
 preprint
 Psychometrika
+QE
 quartile
 quartiles
 Rabe
@@ -184,6 +193,7 @@ Tweedie
 unadjusted
 underfitted
 underfitting
+Vanhove
 Vasishth
 Vehtari
 VIF
