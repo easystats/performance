@@ -7,7 +7,7 @@
 check_itemscale(x)
 }
 \arguments{
-\item{x}{An object of class \code{parameters_pca}, as returned by \code{\link[parameters]{principal_components}}.}
+\item{x}{An object of class \code{parameters_pca}, as returned by \code{parameters::principal_components()}.}
 }
 \value{
 A list of data frames, with related measures of internal consistencies of each subscale.
@@ -15,13 +15,13 @@ A list of data frames, with related measures of internal consistencies of each s
 \description{
 Compute various measures of internal consistencies
   applied to (sub)scales, which items were extracted using
-  \code{\link[parameters]{principal_components}}.
+  \code{parameters::principal_components()}.
 }
 \details{
 \code{check_itemscale()} calculates various measures of internal
   consistencies, such as Cronbach's alpha, item difficulty or discrimination etc.
   on subscales which were built from several items. Subscales are retrieved from
-  the results of \code{\link[parameters]{principal_components}}, i.e. based on
+  the results of \code{parameters::principal_components()}, i.e. based on
   how many components were extracted from the PCA, \code{check_itemscale()}
   retrieves those variables that belong to a component and calculates the above
   mentioned measures.

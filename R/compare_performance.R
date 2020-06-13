@@ -5,7 +5,7 @@
 #' different models at once and hence allows comparison of indices across models.
 #'
 #' @param ... Multiple model objects (also of different classes).
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \link[=model_performance]{documentation} of object's class for details.
+#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \code{\link[=model_performance]{documentation}} of object's class for details.
 #' @param rank Logical, if \code{TRUE}, models are ranked according to "best overall
 #'   model performance". See 'Details'.
 #' @param bayesfactor Logical, if \code{TRUE}, a Bayes factor for model comparisons is possibly returned. See 'Details'.
@@ -17,7 +17,7 @@
 #' @details \subsection{Bayes factor for Model Comparison}{
 #'   If all models were fit from the same data, \code{compare_performance()}
 #'   returns an additional column named \code{BF}, which shows the Bayes factor
-#'   (see \code{\link[bayestestR]{bayesfactor_models}}) for each model against
+#'   (see \code{bayestestR::bayesfactor_models()}) for each model against
 #'   the denominator model. The \emph{first} model is used as denominator model,
 #'   and its Bayes factor is set to \code{NA} to indicate the reference model.
 #'   }

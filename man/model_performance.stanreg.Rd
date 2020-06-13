@@ -26,7 +26,7 @@ Depending on \code{model}, following indices are computed:
 \itemize{
   \item{\strong{ELPD}} {expected log predictive density, see \code{\link{looic}}}
   \item{\strong{LOOIC}} {leave-one-out cross-validation (LOO) information criterion, see \code{\link{looic}}}
-  \item{\strong{WAIC}} {widely applicable information criterion, see \code{loo::waic}}
+  \item{\strong{WAIC}} {widely applicable information criterion, see \code{?loo::waic}}
   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
   \item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see \code{\link{r2}}}
   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}

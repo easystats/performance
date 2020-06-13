@@ -14,7 +14,7 @@
 #'
 #' @note For mixed models, studentized residuals are used for the test, \emph{not} the standardized residuals. There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
-#' @details \code{check_normality()} calls \code{\link[stats]{shapiro.test}}
+#' @details \code{check_normality()} calls \code{stats::shapiro.test}
 #' and checks the standardized residuals (or studentized residuals for mixed
 #' models) for normal distribution. Note that this formal test almost always
 #' yields significant results for the distribution of residuals and visual

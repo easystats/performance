@@ -26,7 +26,7 @@ Invisibly returns the p-value of the test statistics. A p-value
 Check model for (non-)normality of residuals.
 }
 \details{
-\code{check_normality()} calls \code{\link[stats]{shapiro.test}}
+\code{check_normality()} calls \code{stats::shapiro.test}
 and checks the standardized residuals (or studentized residuals for mixed
 models) for normal distribution. Note that this formal test almost always
 yields significant results for the distribution of residuals and visual

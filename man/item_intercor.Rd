@@ -7,7 +7,7 @@
 item_intercor(x, method = c("pearson", "spearman", "kendall"))
 }
 \arguments{
-\item{x}{A matrix as returned by the \code{\link{cor}}-function,
+\item{x}{A matrix as returned by the \code{cor()}-function,
 or a data frame with items (e.g. from a test or questionnaire).}
 
 \item{method}{Correlation computation method. May be one of

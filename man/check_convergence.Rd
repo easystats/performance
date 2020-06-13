@@ -21,7 +21,7 @@ will be.}
 }
 \description{
 \code{check_convergence()} provides an alternative convergence
-  test for \code{\link[lme4]{merMod}}-objects.
+  test for \code{merMod}-objects.
 }
 \details{
 \subsection{Convergence and log-likelihood}{
@@ -31,16 +31,16 @@ will be.}
   errors.
   }
   \subsection{Inspect model convergence}{
-  \pkg{lme4} performs a \code{\link[lme4:convergence]{convergence-check}},
+  \pkg{lme4} performs a convergence-check (see \code{?lme4::convergence}),
   however, as as discussed \href{https://github.com/lme4/lme4/issues/120}{here}
   and suggested by one of the lme4-authors in
   \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment},
   this check can be too strict. \code{check_convergence()} thus provides an
-  alternative convergence test for \code{\link[lme4:merMod]{merMod}}-objects.
+  alternative convergence test for \code{merMod}-objects.
   }
   \subsection{Resolving convergence issues}{
   Convergence issues are not easy to diagnose. The help page on
-  \code{\link[lme4:convergence]{?lme4::convergence}} provides most of the current advice about
+  \code{?lme4::convergence} provides most of the current advice about
   how to resolve convergence issues. Another clue might be large parameter
   values, e.g. estimates (on the scale of the linear predictor) larger than
   10 in (non-identity link) generalized linear model \emph{might} indicate

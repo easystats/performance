@@ -13,7 +13,7 @@
 #'
 #' @details Marginal and conditional r-squared values for mixed models are calculated
 #'  based on \cite{Nakagawa et al. 2017}. For more details on the computation
-#'  of the variances, see \code{\link[insight]{get_variance}}.
+#'  of the variances, see \code{?insight::get_variance}.
 #'  \cr \cr
 #'  The marginal r-squared considers only the variance of the fixed effects, while the
 #'  conditional r-squared takes both the fixed and random effects into account.

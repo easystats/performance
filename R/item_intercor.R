@@ -4,7 +4,7 @@
 #' @description Compute various measures of internal consistencies
 #'    for tests or item-scales of questionnaires.
 #'
-#' @param x A matrix as returned by the \code{\link{cor}}-function,
+#' @param x A matrix as returned by the \code{cor()}-function,
 #'    or a data frame with items (e.g. from a test or questionnaire).
 #' @param method Correlation computation method. May be one of
 #'    \code{"spearman"} (default), \code{"pearson"} or \code{"kendall"}.

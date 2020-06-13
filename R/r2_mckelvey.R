@@ -19,7 +19,7 @@
 #'   for logit-link and 1 for probit-link. For poisson-models, the
 #'   residual variance is based on log-normal approximation, similar to
 #'   the \emph{distribution-specific variance} as described in
-#'   \code{\link[insight]{get_variance}}.
+#'   \code{?insight::get_variance}.
 #'
 #'
 #' @examples

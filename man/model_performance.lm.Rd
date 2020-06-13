@@ -25,7 +25,7 @@ Compute indices of model performance for regression models.
 Depending on \code{model}, following indices are computed:
 \itemize{
   \item{\strong{AIC}} {Akaike's Information Criterion, see \code{?stats::AIC}}
-  \item{\strong{BIC}} {Bayesian Information Criterion, see \code{\link[stats:BIC]{?stat::BIC}}}
+  \item{\strong{BIC}} {Bayesian Information Criterion, see \code{?stats::BIC}}
   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
   \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}

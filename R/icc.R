@@ -3,7 +3,7 @@
 #' This function calculates the intraclass-correlation coefficient
 #'  (ICC) - sometimes also called \emph{variance partition coefficient}
 #'  (VPC) - for mixed effects models. The ICC can be calculated for all models
-#'  supported by \code{\link[insight]{get_variance}}. For models fitted with
+#'  supported by \code{insight::get_variance()}. For models fitted with
 #'  the \pkg{brms}-package, a variance decomposition based on the posterior
 #'  predictive distribution is calculated (see 'Details').
 #'
@@ -57,7 +57,7 @@
 #'  complex random effects structures, like models with random slopes or nested
 #'  design (more than two levels) and is applicable for models with other distributions
 #'  than Gaussian. For more details on the computation of the variances, see
-#'  \code{\link[insight]{get_variance}}.
+#'  \code{?insight::get_variance}.
 #'  }
 #'  \subsection{ICC for unconditional and conditional models}{
 #'  Usually, the ICC is calculated for the null model ("unconditional model").

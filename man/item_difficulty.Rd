@@ -8,7 +8,7 @@ item_difficulty(x)
 }
 \arguments{
 \item{x}{Depending on the function, \code{x} may be a \code{matrix} as
-returned by the \code{\link{cor}}-function, or a data frame
+returned by the \code{cor()}-function, or a data frame
 with items (e.g. from a test or questionnaire).}
 }
 \value{

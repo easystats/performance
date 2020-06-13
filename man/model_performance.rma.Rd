@@ -33,7 +33,7 @@ Compute indices of model performance for meta-analysis model from the \pkg{metaf
    \item \strong{Omnibus (QM)}: Omnibus test of parameters.
    \item \strong{R2}: Pseudo-R2-statistic, which indicates the amount of heterogeneity accounted for by the moderators included in a fixed-effects model.
 }
-See the documentation for \code{\link[metafor]{fitstats}}.
+See the documentation for \code{?metafor::fitstats}.
 }
 }
 \examples{
