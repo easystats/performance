@@ -139,7 +139,7 @@
 
     <div class="ref-description">
     <p><code>check_convergence()</code> provides an alternative convergence
-  test for <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>merMod</a></code>-objects.</p>
+  test for <code>merMod</code>-objects.</p>
     </div>
 
     <pre class="usage"><span class='fu'>check_convergence</span>(<span class='no'>x</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.001</span>, <span class='no'>...</span>)</pre>
@@ -175,12 +175,12 @@ will be.</p></td>
   to a solution where the log-likelihood has a true maximum. This may result
   in unreliable and overly complex (or non-estimable) estimates and standard
   errors.</p><p></p><h3>Inspect model convergence</h3>
-<p><span class="pkg">lme4</span> performs a <code><a href='https://rdrr.io/pkg/lme4/man/convergence.html'>convergence-check</a></code>,
+<p><span class="pkg">lme4</span> performs a convergence-check (see <code><a href='https://rdrr.io/pkg/lme4/man/convergence.html'>?lme4::convergence</a></code>),
   however, as as discussed <a href='https://github.com/lme4/lme4/issues/120'>here</a>
   and suggested by one of the lme4-authors in
   <a href='https://github.com/lme4/lme4/issues/120#issuecomment-39920269'>this comment</a>,
   this check can be too strict. <code>check_convergence()</code> thus provides an
-  alternative convergence test for <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>merMod</a></code>-objects.</p><p></p><h3>Resolving convergence issues</h3>
+  alternative convergence test for <code>merMod</code>-objects.</p><p></p><h3>Resolving convergence issues</h3>
 <p>Convergence issues are not easy to diagnose. The help page on
   <code><a href='https://rdrr.io/pkg/lme4/man/convergence.html'>?lme4::convergence</a></code> provides most of the current advice about
   how to resolve convergence issues. Another clue might be large parameter

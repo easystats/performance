@@ -49,7 +49,7 @@
 <meta property="og:title" content="Describe Properties of Item Scales — check_itemscale" />
 <meta property="og:description" content="Compute various measures of internal consistencies
   applied to (sub)scales, which items were extracted using
-  principal_components." />
+  parameters::principal_components()." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -141,7 +141,7 @@
     <div class="ref-description">
     <p>Compute various measures of internal consistencies
   applied to (sub)scales, which items were extracted using
-  <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></code>.</p>
+  <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>parameters::principal_components()</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>check_itemscale</span>(<span class='no'>x</span>)</pre>
@@ -151,7 +151,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object of class <code>parameters_pca</code>, as returned by <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></code>.</p></td>
+      <td><p>An object of class <code>parameters_pca</code>, as returned by <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>parameters::principal_components()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -163,7 +163,7 @@
     <p><code>check_itemscale()</code> calculates various measures of internal
   consistencies, such as Cronbach's alpha, item difficulty or discrimination etc.
   on subscales which were built from several items. Subscales are retrieved from
-  the results of <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></code>, i.e. based on
+  the results of <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>parameters::principal_components()</a></code>, i.e. based on
   how many components were extracted from the PCA, <code>check_itemscale()</code>
   retrieves those variables that belong to a component and calculates the above
   mentioned measures.</p>

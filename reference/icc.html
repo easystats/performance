@@ -50,7 +50,7 @@
 <meta property="og:description" content="This function calculates the intraclass-correlation coefficient
  (ICC) - sometimes also called variance partition coefficient
  (VPC) - for mixed effects models. The ICC can be calculated for all models
- supported by get_variance. For models fitted with
+ supported by insight::get_variance(). For models fitted with
  the brms-package, a variance decomposition based on the posterior
  predictive distribution is calculated (see 'Details')." />
 <meta property="og:image" content="/logo.png" />
@@ -145,7 +145,7 @@
     <p>This function calculates the intraclass-correlation coefficient
  (ICC) - sometimes also called <em>variance partition coefficient</em>
  (VPC) - for mixed effects models. The ICC can be calculated for all models
- supported by <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance</a></code>. For models fitted with
+ supported by <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>insight::get_variance()</a></code>. For models fitted with
  the <span class="pkg">brms</span>-package, a variance decomposition based on the posterior
  predictive distribution is calculated (see 'Details').</p>
     </div>
@@ -222,7 +222,7 @@ calculate the central tendency of the variances.</p></td>
  complex random effects structures, like models with random slopes or nested
  design (more than two levels) and is applicable for models with other distributions
  than Gaussian. For more details on the computation of the variances, see
- <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>get_variance</a></code>.</p><p></p><h3>ICC for unconditional and conditional models</h3>
+ <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>?insight::get_variance</a></code>.</p><p></p><h3>ICC for unconditional and conditional models</h3>
 <p>Usually, the ICC is calculated for the null model ("unconditional model").
  However, according to <cite>Raudenbush and Bryk (2002)</cite> or
  <cite>Rabe-Hesketh and Skrondal (2012)</cite> it is also feasible to compute the ICC
