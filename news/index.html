@@ -134,9 +134,19 @@
       <small>Source: <a href='https://github.com/easystats/performance/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="performance-048" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.8">
+<a href="#performance-048" class="anchor"></a>performance 0.4.8<small> Unreleased </small>
+</h1>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<p><code><a href="../reference/icc.html">icc()</a></code> now also computes a “classical” ICC for <code>brmsfit</code> models. The former way of calculating an “ICC” for <code>brmsfit</code> models is now available as new function called <code><a href="../reference/icc.html">variance_decomposition()</a></code>.</p>
+</div>
+</div>
     <div id="performance-047" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.7">
-<a href="#performance-047" class="anchor"></a>performance 0.4.7<small> Unreleased </small>
+<a href="#performance-047" class="anchor"></a>performance 0.4.7<small> 2020-06-14 </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
@@ -145,9 +155,9 @@
 <li>Support for models from package <em>mfx</em>.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.rma.html">model_performance.rma()</a></code> now includes results from heterogeneity test for meta-analysis objects.</li>
@@ -178,9 +188,9 @@
 <li>Support for <code>bayesx</code> models.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/icc.html">icc()</a></code> gains a <code>by_group</code> argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.</li>
@@ -212,9 +222,9 @@
 <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/r2.html">r2()</a></code> now support <em>rma</em>-objects from package <em>metafor</em>, <em>mlm</em> and <em>bife</em> models.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>bayesfactor</code> argument, to include or exclude the Bayes factor for model comparisons in the output.</li>
@@ -292,9 +302,9 @@
 <li>Fix issues with CRAN checks.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now calculates AIC for Tweedie models.</li>
@@ -318,9 +328,9 @@
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
@@ -370,9 +380,9 @@
 <code>principal_components()</code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://rdrr.io/pkg/parameters/man/principal_components.html">parameters::principal_components()</a></code> now.</li>
 </ul>
 </div>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</li>
@@ -418,9 +428,9 @@
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</li>
 </ul>
 </div>
-<div id="changes-to-functions-6" class="section level2">
+<div id="changes-to-functions-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</li>
@@ -532,9 +542,9 @@
 <code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
 </ul>
 </div>
-<div id="changes-to-functions-7" class="section level2">
+<div id="changes-to-functions-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>

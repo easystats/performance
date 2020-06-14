@@ -51,8 +51,10 @@
  (ICC) - sometimes also called variance partition coefficient
  (VPC) - for mixed effects models. The ICC can be calculated for all models
  supported by insight::get_variance(). For models fitted with
- the brms-package, a variance decomposition based on the posterior
- predictive distribution is calculated (see 'Details')." />
+ the brms-package, icc() might fail due to the large variety
+ of models and families supported by the brms-package. In such cases,
+ an alternative to the ICC is the variance_decomposition(), which is
+ based on the posterior predictive distribution is calculated (see 'Details')." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,17 +148,15 @@
  (ICC) - sometimes also called <em>variance partition coefficient</em>
  (VPC) - for mixed effects models. The ICC can be calculated for all models
  supported by <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>insight::get_variance()</a></code>. For models fitted with
- the <span class="pkg">brms</span>-package, a variance decomposition based on the posterior
- predictive distribution is calculated (see 'Details').</p>
+ the <span class="pkg">brms</span>-package, <code>icc()</code> might fail due to the large variety
+ of models and families supported by the <span class="pkg">brms</span>-package. In such cases,
+ an alternative to the ICC is the <code>variance_decomposition()</code>, which is
+ based on the posterior predictive distribution is calculated (see 'Details').</p>
     </div>
 
-    <pre class="usage"><span class='fu'>icc</span>(<span class='no'>model</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>by_group</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='co'># S3 method for default</span>
-<span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>by_group</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for brmsfit</span>
-<span class='fu'>icc</span>(<span class='no'>model</span>, <span class='kw'>re.form</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>variance_decomposition</span>(<span class='no'>model</span>, <span class='kw'>re.form</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>robust</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,10 +164,6 @@
     <tr>
       <th>model</th>
       <td><p>A (Bayesian) mixed effects model.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Currently not used.</p></td>
     </tr>
     <tr>
       <th>by_group</th>
@@ -188,15 +184,19 @@ calculate the central tendency of the variances.</p></td>
     </tr>
     <tr>
       <th>ci</th>
-      <td><p>The Credible Interval level.</p></td>
+      <td><p>Credible interval level.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Currently not used.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with two values, the adjusted and conditional ICC. For models
-  of class <code>brmsfit</code>, a list with two values, the decomposed ICC as well
-  as the credible intervals for this ICC.</p>
+    <p>A list with two values, the adjusted and conditional ICC. For
+<code>variance_decomposition()</code>, a list with two values, the decomposed
+ICC as well as the credible intervals for this ICC.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
@@ -233,16 +233,19 @@ calculate the central tendency of the variances.</p></td>
  can be computed by setting <code>by_group = TRUE</code>. The reported ICC is
  the variance for each (random effect) group compared to the total
  variance of the model. For mixed models with a simple random intercept,
- this is identical to the classical (adjusted) ICC.</p><p></p><h3>ICC for brms-models</h3>
-<p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> calculates a
- variance decomposition based on the posterior predictive distribution. In
- this case, first, the draws from the posterior predictive distribution
- <em>not conditioned</em> on group-level terms (<code>posterior_predict(..., re.form = NA)</code>)
- are calculated as well as draws from this distribution <em>conditioned</em>
- on <em>all random effects</em> (by default, unless specified else in <code>re.form</code>)
- are taken. Then, second, the variances for each of these draws are calculated.
- The "ICC" is then the ratio between these two variances. This is the recommended
- way to analyse random-effect-variances for non-Gaussian models. It is then possible
+ this is identical to the classical (adjusted) ICC.</p><p></p><h3>Variance decomposition for brms-models</h3>
+<p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to
+ the large variety of models and families supported by the <span class="pkg">brms</span> package.
+ In such cases, <code>variance_decomposition()</code> is an alternative ICC measure.
+ The function calculates a variance decomposition based on the posterior
+ predictive distribution. In this case, first, the draws from the posterior
+ predictive distribution <em>not conditioned</em> on group-level terms
+ (<code>posterior_predict(..., re.form = NA)</code>) are calculated as well as
+ draws from this distribution <em>conditioned</em> on <em>all random effects</em>
+ (by default, unless specified else in <code>re.form</code>) are taken. Then,
+ second, the variances for each of these draws are calculated. The "ICC"
+ is then the ratio between these two variances. This is the recommended way
+ to analyse random-effect-variances for non-Gaussian models. It is then possible
  to compare variances across models, also by specifying different group-level
  terms via the <code>re.form</code>-argument.
  <br /> <br />
