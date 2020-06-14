@@ -4,24 +4,26 @@
 #'  (ICC) - sometimes also called \emph{variance partition coefficient}
 #'  (VPC) - for mixed effects models. The ICC can be calculated for all models
 #'  supported by \code{insight::get_variance()}. For models fitted with
-#'  the \pkg{brms}-package, a variance decomposition based on the posterior
-#'  predictive distribution is calculated (see 'Details').
+#'  the \pkg{brms}-package, \code{icc()} might fail due to the large variety
+#'  of models and families supported by the \pkg{brms}-package. In such cases,
+#'  an alternative to the ICC is the \code{variance_decomposition()}, which is
+#'  based on the posterior predictive distribution is calculated (see 'Details').
 #'
 #' @param model A (Bayesian) mixed effects model.
 #' @param re.form Formula containing group-level effects to be considered in
 #'   the prediction. If \code{NULL} (default), include all group-level effects.
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the variance decomposition for this group-level.
-#' @param ci The Credible Interval level.
+#' @param ci Credible interval level.
 #' @param by_group Logical, if \code{TRUE}, \code{icc()} returns the variance
 #'   components for each random-effects level (if there are multiple levels).
 #' @param ... Currently not used.
 #'
 #' @inheritParams r2_bayes
 #'
-#' @return A list with two values, the adjusted and conditional ICC. For models
-#'   of class \code{brmsfit}, a list with two values, the decomposed ICC as well
-#'   as the credible intervals for this ICC.
+#' @return A list with two values, the adjusted and conditional ICC. For
+#' \code{variance_decomposition()}, a list with two values, the decomposed
+#' ICC as well as the credible intervals for this ICC.
 #'
 #' @references \itemize{
 #'  \item Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.
@@ -74,16 +76,19 @@
 #'  variance of the model. For mixed models with a simple random intercept,
 #'  this is identical to the classical (adjusted) ICC.
 #'  }
-#'  \subsection{ICC for brms-models}{
-#'  If \code{model} is of class \code{brmsfit}, \code{icc()} calculates a
-#'  variance decomposition based on the posterior predictive distribution. In
-#'  this case, first, the draws from the posterior predictive distribution
-#'  \emph{not conditioned} on group-level terms (\code{posterior_predict(..., re.form = NA)})
-#'  are calculated as well as draws from this distribution \emph{conditioned}
-#'  on \emph{all random effects} (by default, unless specified else in \code{re.form})
-#'  are taken. Then, second, the variances for each of these draws are calculated.
-#'  The "ICC" is then the ratio between these two variances. This is the recommended
-#'  way to analyse random-effect-variances for non-Gaussian models. It is then possible
+#'  \subsection{Variance decomposition for brms-models}{
+#'  If \code{model} is of class \code{brmsfit}, \code{icc()} might fail due to
+#'  the large variety of models and families supported by the \pkg{brms} package.
+#'  In such cases, \code{variance_decomposition()} is an alternative ICC measure.
+#'  The function calculates a variance decomposition based on the posterior
+#'  predictive distribution. In this case, first, the draws from the posterior
+#'  predictive distribution \emph{not conditioned} on group-level terms
+#'  (\code{posterior_predict(..., re.form = NA)}) are calculated as well as
+#'  draws from this distribution \emph{conditioned} on \emph{all random effects}
+#'  (by default, unless specified else in \code{re.form}) are taken. Then,
+#'  second, the variances for each of these draws are calculated. The "ICC"
+#'  is then the ratio between these two variances. This is the recommended way
+#'  to analyse random-effect-variances for non-Gaussian models. It is then possible
 #'  to compare variances across models, also by specifying different group-level
 #'  terms via the \code{re.form}-argument.
 #'  \cr \cr
@@ -115,18 +120,9 @@
 #'   )
 #'   icc(model, by_group = TRUE)
 #' }
-#' @importFrom insight model_info get_variance print_color
+#' @importFrom insight model_info get_variance print_color find_random find_random_slopes
 #' @export
-icc <- function(model, ...) {
-  UseMethod("icc")
-}
-
-
-#' @importFrom utils combn
-#' @importFrom insight find_random find_random_slopes
-#' @rdname icc
-#' @export
-icc.default <- function(model, by_group = FALSE, ...) {
+icc <- function(model, by_group = FALSE) {
   if (!insight::model_info(model)$is_mixed) {
     warning("'model' has no random effects.", call. = FALSE)
     return(NULL)
@@ -213,9 +209,14 @@ icc.default <- function(model, by_group = FALSE, ...) {
 #' @importFrom bayestestR ci
 #' @importFrom insight is_multivariate find_response model_info
 #' @importFrom stats quantile var
+#' @inheritParams icc
 #' @rdname icc
 #' @export
-icc.brmsfit <- function(model, re.form = NULL, robust = TRUE, ci = .95, ...) {
+variance_decomposition <- function(model, re.form = NULL, robust = TRUE, ci = .95) {
+  if (!inherits(model, "brmsfit")) {
+    stop("Only models from package 'brms' are supported.")
+  }
+
   mi <- insight::model_info(model)
 
   # for multivariate response models, we need a more complicated check...
