@@ -24,8 +24,6 @@ to calculate the variance decomposition for this group-level.}
 calculate the central tendency of the variances.}
 
 \item{ci}{Credible interval level.}
-
-\item{...}{Currently not used.}
 }
 \value{
 A list with two values, the adjusted and conditional ICC. For

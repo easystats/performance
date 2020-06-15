@@ -17,7 +17,6 @@
 #' @param ci Credible interval level.
 #' @param by_group Logical, if \code{TRUE}, \code{icc()} returns the variance
 #'   components for each random-effects level (if there are multiple levels).
-#' @param ... Currently not used.
 #'
 #' @inheritParams r2_bayes
 #'
