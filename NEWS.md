@@ -1,8 +1,12 @@
 # performance 0.4.8
 
+## General
+
+* Removed suggested packages that have been removed from CRAN.
+
 ## Changes to functions
 
-`icc()` now also computes a "classical" ICC for `brmsfit` models. The former way of calculating an "ICC" for `brmsfit` models is now available as new function called `variance_decomposition()`.
+* `icc()` now also computes a "classical" ICC for `brmsfit` models. The former way of calculating an "ICC" for `brmsfit` models is now available as new function called `variance_decomposition()`.
 
 # performance 0.4.7
 

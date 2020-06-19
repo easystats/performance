@@ -4,7 +4,7 @@
 #' @description Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation of being classified as an outlier by at least one method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5 (i.e., that were classified as outliers by at least half of the methods). See the \strong{Details} section below for a description of the methods.
 #'
 #' @param x A model or a data.frame object.
-#' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "zscore", "iqr", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof").
+#' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "zscore", "iqr", "mahalanobis", "robust", "mcd", "ics", "optics", "lof").
 #' @param threshold A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 #'   considered as outlier. If \code{NULL}, default values will be used (see 'Details').
 #'
@@ -254,9 +254,9 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   # Check args
   if (all(method == "all")) {
-    method <- c("zscore", "iqr", "mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
+    method <- c("zscore", "iqr", "mahalanobis", "mcd", "ics", "optics", "lof")
   }
-  method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
+  method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "lof"), several.ok = TRUE)
 
   # Thresholds
   if (is.null(threshold)) {
@@ -305,9 +305,9 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   }
 
   # Isolation Forest
-  if ("iforest" %in% c(method)) {
-    out <- c(out, .check_outliers_iforest(x, threshold = thresholds$iforest))
-  }
+  # if ("iforest" %in% c(method)) {
+  #   out <- c(out, .check_outliers_iforest(x, threshold = thresholds$iforest))
+  # }
 
   # Local Outlier Factor
   if ("lof" %in% c(method)) {
@@ -649,40 +649,40 @@ as.numeric.check_outliers <- function(x, ...) {
 }
 
 
-#' @importFrom utils packageVersion
-#' @importFrom stats median qnorm mad sd predict
-.check_outliers_iforest <- function(x, threshold = 0.025) {
-  out <- data.frame(Obs = 1:nrow(x))
-
-  # Install packages
-  if (!requireNamespace("solitude", quietly = TRUE)) {
-    stop("Package `solitude` required for this function to work. Please install it by running `install.packages('solitude')`.", call. = FALSE)
-  }
-
-  # Compute
-  if (utils::packageVersion("solitude") < "0.2.0") {
-    iforest <- solitude::isolationForest(x)
-    out$Distance_iforest <- stats::predict(iforest, x, type = "anomaly_score")
-  } else if (utils::packageVersion("solitude") == "0.2.0") {
-    stop("Must update package `solitude` (above version 0.2.0). Please run `install.packages('solitude')`.", call. = FALSE)
-  } else {
-    iforest <- solitude::isolationForest$new(sample_size = nrow(x))
-    suppressMessages(iforest$fit(x))
-    out$Distance_iforest <- iforest$scores$anomaly_score
-  }
-
-
-  # Threshold
-  cutoff <- stats::median(out$Distance_iforest) + stats::qnorm(1 - threshold) * stats::mad(out$Distance_iforest)
-  # Filter
-  out$Outlier_iforest <- as.numeric(out$Distance_iforest >= cutoff)
-
-  out$Obs <- NULL
-  list(
-    "data_iforest" = out,
-    "threshold_iforest" = threshold
-  )
-}
+# @importFrom utils packageVersion
+# @importFrom stats median qnorm mad sd predict
+# .check_outliers_iforest <- function(x, threshold = 0.025) {
+#   out <- data.frame(Obs = 1:nrow(x))
+#
+#   # Install packages
+#   if (!requireNamespace("solitude", quietly = TRUE)) {
+#     stop("Package `solitude` required for this function to work. Please install it by running `install.packages('solitude')`.", call. = FALSE)
+#   }
+#
+#   # Compute
+#   if (utils::packageVersion("solitude") < "0.2.0") {
+#     iforest <- solitude::isolationForest(x)
+#     out$Distance_iforest <- stats::predict(iforest, x, type = "anomaly_score")
+#   } else if (utils::packageVersion("solitude") == "0.2.0") {
+#     stop("Must update package `solitude` (above version 0.2.0). Please run `install.packages('solitude')`.", call. = FALSE)
+#   } else {
+#     iforest <- solitude::isolationForest$new(sample_size = nrow(x))
+#     suppressMessages(iforest$fit(x))
+#     out$Distance_iforest <- iforest$scores$anomaly_score
+#   }
+#
+#
+#   # Threshold
+#   cutoff <- stats::median(out$Distance_iforest) + stats::qnorm(1 - threshold) * stats::mad(out$Distance_iforest)
+#   # Filter
+#   out$Outlier_iforest <- as.numeric(out$Distance_iforest >= cutoff)
+#
+#   out$Obs <- NULL
+#   list(
+#     "data_iforest" = out,
+#     "threshold_iforest" = threshold
+#   )
+# }
 
 
 

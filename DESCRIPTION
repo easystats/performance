@@ -1,7 +1,7 @@
 Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
-Version: 0.4.7
+Version: 0.4.7.1
 Authors@R: c(
 	person("Daniel", 
 		"Lüdecke", 
@@ -75,7 +75,6 @@ Suggests:
     see (>= 0.4.0),
     survey,
     survival,
-    solitude,
     testthat,
     tweedie,
     VGAM,
