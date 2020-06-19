@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -144,7 +144,7 @@
   <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>parameters::principal_components()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_itemscale</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_itemscale.html'>check_itemscale</a></span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,20 +160,20 @@
     <p>A list of data frames, with related measures of internal consistencies of each subscale.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>check_itemscale()</code> calculates various measures of internal
+    <p><code><a href='https://rdrr.io/pkg/performance/man/check_itemscale.html'>check_itemscale()</a></code> calculates various measures of internal
   consistencies, such as Cronbach's alpha, item difficulty or discrimination etc.
   on subscales which were built from several items. Subscales are retrieved from
   the results of <code><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>parameters::principal_components()</a></code>, i.e. based on
-  how many components were extracted from the PCA, <code>check_itemscale()</code>
+  how many components were extracted from the PCA, <code><a href='https://rdrr.io/pkg/performance/man/check_itemscale.html'>check_itemscale()</a></code>
   retrieves those variables that belong to a component and calculates the above
   mentioned measures.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     
 <ul>
-<li><p><em>Item difficulty</em> should range between 0.2 and 0.8. Ideal value is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See <code><a href='item_difficulty.html'>item_difficulty</a></code> for details.</p></li>
-<li><p>For <em>item discrimination</em>, acceptable values are 0.20 or higher; the closer to 1.00 the better. See <code><a href='item_reliability.html'>item_reliability</a></code> for more details.</p></li>
-<li><p>In case the total <em>Cronbach's alpha</em> value is below the acceptable cut-off of 0.7 (mostly if an index has few items), the <em>mean inter-item-correlation</em> is an alternative measure to indicate acceptability. Satisfactory range lies between 0.2 and 0.4. See also <code><a href='item_intercor.html'>item_intercor</a></code>.</p></li>
+<li><p><em>Item difficulty</em> should range between 0.2 and 0.8. Ideal value is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See <code><a href='https://rdrr.io/pkg/performance/man/item_difficulty.html'>item_difficulty</a></code> for details.</p></li>
+<li><p>For <em>item discrimination</em>, acceptable values are 0.20 or higher; the closer to 1.00 the better. See <code><a href='https://rdrr.io/pkg/performance/man/item_reliability.html'>item_reliability</a></code> for more details.</p></li>
+<li><p>In case the total <em>Cronbach's alpha</em> value is below the acceptable cut-off of 0.7 (mostly if an index has few items), the <em>mean inter-item-correlation</em> is an alternative measure to indicate acceptability. Satisfactory range lies between 0.2 and 0.4. See also <code><a href='https://rdrr.io/pkg/performance/man/item_intercor.html'>item_intercor</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -187,14 +187,14 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># data generation from '?prcomp', slightly modified</span>
-<span class='no'>C</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chol.html'>chol</a></span>(<span class='no'>S</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/toeplitz.html'>toeplitz</a></span>(<span class='fl'>.9</span>^(<span class='fl'>0</span>:<span class='fl'>15</span>)))
+<span class='kw'>C</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/chol.html'>chol</a></span>(<span class='kw'>S</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/toeplitz.html'>toeplitz</a></span>(<span class='fl'>.9</span><span class='op'>^</span>(<span class='fl'>0</span><span class='op'>:</span><span class='fl'>15</span>)))
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>17</span>)
-<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>16000</span>), <span class='fl'>100</span>, <span class='fl'>16</span>)
-<span class='no'>Z</span> <span class='kw'>&lt;-</span> <span class='no'>X</span> <span class='kw'>%*%</span> <span class='no'>C</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"parameters"</span>)) {
-  <span class='no'>pca</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Z</span>), <span class='kw'>rotation</span> <span class='kw'>=</span> <span class='st'>"varimax"</span>, <span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-  <span class='no'>pca</span>
-  <span class='fu'>check_itemscale</span>(<span class='no'>pca</span>)
+<span class='kw'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>16000</span>), <span class='fl'>100</span>, <span class='fl'>16</span>)
+<span class='kw'>Z</span> <span class='op'>&lt;-</span> <span class='kw'>X</span> <span class='op'>%*%</span> <span class='kw'>C</span>
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://easystats.github.io/parameters'>"parameters"</a></span>)) {
+  <span class='kw'>pca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='kw'>Z</span>), rotation = <span class='st'>"varimax"</span>, n = <span class='fl'>3</span>)
+  <span class='kw'>pca</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_itemscale.html'>check_itemscale</a></span>(<span class='kw'>pca</span>)
 }</div><div class='output co'>#&gt; <span class='error'>Error: Package `psych` required for `varimax`-rotation.</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

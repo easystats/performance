@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@
    for tests or item-scales of questionnaires.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>item_difficulty</span>(<span class='no'>x</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/item_difficulty.html'>item_difficulty</a></span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,9 +169,9 @@ with items (e.g. from a test or questionnaire).</p></td>
    cases, the ideal item difficulty lies between 0.5 and 0.8.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cyl"</span>, <span class='st'>"gear"</span>, <span class='st'>"carb"</span>, <span class='st'>"hp"</span>)]
-<span class='fu'>item_difficulty</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Item Difficulty
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>mtcars</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cyl"</span>, <span class='st'>"gear"</span>, <span class='st'>"carb"</span>, <span class='st'>"hp"</span>)]
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/item_difficulty.html'>item_difficulty</a></span>(<span class='kw'>x</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Item Difficulty
 #&gt; 
 #&gt; </span><span style='color: #BB0000;'>      difficulty  ideal
 #&gt; </span><span>   cyl      0.77   0.56

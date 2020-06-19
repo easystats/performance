@@ -82,7 +82,7 @@ multicollinearity)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -144,10 +144,10 @@ normality of random effects, heteroscedasticity, homogeneity of variance,
 multicollinearity).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_model</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_model.html'>check_model</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>check_model</span>(<span class='no'>x</span>, <span class='kw'>dot_size</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>line_size</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>check</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_model.html'>check_model</a></span>(<span class='kw'>x</span>, dot_size = <span class='fl'>2</span>, line_size = <span class='fl'>0.8</span>, panel = <span class='fl'>TRUE</span>, check = <span class='st'>"all"</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,18 +193,18 @@ By default, all possible checks are performed and plotted.</p></td>
 <a href='https://CRAN.R-project.org/package=see'><span class="pkg">see</span></a> needs to be installed.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>gear</span> + <span class='no'>disp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>check_model</span>(<span class='no'>m</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span> <span class='op'>+</span> <span class='kw'>disp</span>, data = <span class='kw'>mtcars</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_model.html'>check_model</a></span>(<span class='kw'>m</span>)
 
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"lme4"</span>)) {
-  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Reaction</span> ~ <span class='no'>Days</span> + (<span class='no'>Days</span> <span class='kw'>|</span> <span class='no'>Subject</span>), <span class='no'>sleepstudy</span>)
-  <span class='fu'>check_model</span>(<span class='no'>m</span>, <span class='kw'>panel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
+  <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='kw'>Days</span> <span class='op'>|</span> <span class='kw'>Subject</span>), <span class='kw'>sleepstudy</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_model.html'>check_model</a></span>(<span class='kw'>m</span>, panel = <span class='fl'>FALSE</span>)
 }
 
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"rstanarm"</span>)) {
-  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>gear</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>200</span>)
-  <span class='fu'>check_model</span>(<span class='no'>m</span>)
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
+  <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>gear</span>, data = <span class='kw'>mtcars</span>, chains = <span class='fl'>2</span>, iter = <span class='fl'>200</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_model.html'>check_model</a></span>(<span class='kw'>m</span>)
 }
 }</div></pre>
   </div>

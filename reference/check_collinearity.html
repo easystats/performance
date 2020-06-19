@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -139,20 +139,20 @@
     </div>
 
     <div class="ref-description">
-    <p><code>check_collinearity()</code> checks regression models for
+    <p><code><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>check_collinearity()</a></code> checks regression models for
   multicollinearity by calculating the variance inflation factor (VIF).
-  <code>multicollinearity()</code> is an alias for <code>check_collinearity()</code>.</p>
+  <code><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>multicollinearity()</a></code> is an alias for <code><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>check_collinearity()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_collinearity</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>check_collinearity</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'>multicollinearity</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>multicollinearity</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for glmmTMB</span>
-<span class='fu'>check_collinearity</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>component</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"count"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
-  <span class='no'>...</span>
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>check_collinearity</a></span>(
+  <span class='kw'>x</span>,
+  component = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"count"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span>),
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -220,7 +220,7 @@ Following model-classes are currently supported: <code>hurdle</code>,
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/base/plot.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
+    <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -232,8 +232,8 @@ Following model-classes are currently supported: <code>hurdle</code>,
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + <span class='no'>gear</span> + <span class='no'>disp</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>check_collinearity</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Check for Multicollinearity
+    <pre class="examples"><div class='input'><span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span> <span class='op'>+</span> <span class='kw'>disp</span>, data = <span class='kw'>mtcars</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>check_collinearity</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Check for Multicollinearity
 #&gt; </span><span>
 #&gt; </span><span style='color: #00BB00;'>Low Correlation
 #&gt; 
@@ -247,8 +247,8 @@ Following model-classes are currently supported: <code>hurdle</code>,
 #&gt;        cyl 5.41         2.33
 #&gt;       disp 9.97         3.16</div><div class='input'>
 <span class='co'># plot results</span>
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>check_collinearity</span>(<span class='no'>m</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='check_collinearity-1.png' alt='' width='700' height='433' /></div></span></pre>
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_collinearity.html'>check_collinearity</a></span>(<span class='kw'>m</span>)
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>x</span>)</div><div class='img'><img src='check_collinearity-1.png' alt='' width='700' height='433' /></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

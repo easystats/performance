@@ -81,7 +81,7 @@ based on response and predictions of a binomial model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@ based on response and predictions of a binomial model." />
 based on response and predictions of a binomial model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>performance_roc</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='no'>predictions</span>, <span class='no'>new_data</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, <span class='kw'>predictions</span>, <span class='kw'>new_data</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,26 +177,26 @@ curve (<code>Sensivity</code> and <code>Specifity</code>), and a column with the
 name.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/base/plot.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
+    <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>bayestestR</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>iris</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://easystats.github.io/bayestestR'>bayestestR</a></span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>iris</span>)
 
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
-<span class='no'>iris</span>$<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>iris</span>), <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='fl'>.3</span>)
-<span class='no'>folds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>iris</span>), <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>iris</span>) / <span class='fl'>8</span>, <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>test_data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[<span class='no'>folds</span>, ]
-<span class='no'>train_data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>[-<span class='no'>folds</span>, ]
+<span class='kw'>iris</span><span class='op'>$</span><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>iris</span>), size = <span class='fl'>1</span>, <span class='fl'>.3</span>)
+<span class='kw'>folds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>iris</span>), size = <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>iris</span>) <span class='op'>/</span> <span class='fl'>8</span>, replace = <span class='fl'>FALSE</span>)
+<span class='kw'>test_data</span> <span class='op'>&lt;-</span> <span class='kw'>iris</span>[<span class='kw'>folds</span>, ]
+<span class='kw'>train_data</span> <span class='op'>&lt;-</span> <span class='kw'>iris</span>[<span class='op'>-</span><span class='kw'>folds</span>, ]
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>y</span> ~ <span class='no'>Sepal.Length</span> + <span class='no'>Sepal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>train_data</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'>performance_roc</span>(<span class='no'>model</span>, <span class='kw'>new_data</span> <span class='kw'>=</span> <span class='no'>test_data</span>)</div><div class='output co'>#&gt; AUC: 37.66%</div><div class='input'>
-<span class='no'>roc</span> <span class='kw'>&lt;-</span> <span class='fu'>performance_roc</span>(<span class='no'>model</span>, <span class='kw'>new_data</span> <span class='kw'>=</span> <span class='no'>test_data</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/bayestestR/man/area_under_curve.html'>area_under_curve</a></span>(<span class='no'>roc</span>$<span class='no'>Specifity</span>, <span class='no'>roc</span>$<span class='no'>Sensivity</span>)</div><div class='output co'>#&gt; [1] 0.3766234</div><div class='input'>
-<span class='no'>m1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>y</span> ~ <span class='no'>Sepal.Length</span> + <span class='no'>Sepal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='no'>m2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>y</span> ~ <span class='no'>Sepal.Length</span> + <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='no'>m3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>y</span> ~ <span class='no'>Sepal.Length</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='st'>"binomial"</span>)
-<span class='fu'>performance_roc</span>(<span class='no'>m1</span>, <span class='no'>m2</span>, <span class='no'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Area under Curve
+<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Sepal.Width</span>, data = <span class='kw'>train_data</span>, family = <span class='st'>"binomial"</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>model</span>, new_data = <span class='kw'>test_data</span>)</div><div class='output co'>#&gt; AUC: 37.66%</div><div class='input'>
+<span class='kw'>roc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>model</span>, new_data = <span class='kw'>test_data</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/bayestestR/man/area_under_curve.html'>area_under_curve</a></span>(<span class='kw'>roc</span><span class='op'>$</span><span class='kw'>Specifity</span>, <span class='kw'>roc</span><span class='op'>$</span><span class='kw'>Sensivity</span>)</div><div class='output co'>#&gt; [1] 0.3766234</div><div class='input'>
+<span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Sepal.Width</span>, data = <span class='kw'>iris</span>, family = <span class='st'>"binomial"</span>)
+<span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Petal.Width</span>, data = <span class='kw'>iris</span>, family = <span class='st'>"binomial"</span>)
+<span class='kw'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Species</span>, data = <span class='kw'>iris</span>, family = <span class='st'>"binomial"</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Area under Curve
 #&gt; 
 #&gt; </span><span>  m1: 54.80%
 #&gt;   m2: 53.41%

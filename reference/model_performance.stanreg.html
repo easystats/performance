@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -141,7 +141,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>, metrics = <span class='st'>"all"</span>, verbose = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,16 +170,16 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Depending on <code>model</code>, following indices are computed:</p><ul>
-<li><p><strong>ELPD</strong> expected log predictive density, see <code><a href='looic.html'>looic</a></code></p></li>
-<li><p><strong>LOOIC</strong> leave-one-out cross-validation (LOO) information criterion, see <code><a href='looic.html'>looic</a></code></p></li>
+<li><p><strong>ELPD</strong> expected log predictive density, see <code><a href='https://rdrr.io/pkg/performance/man/looic.html'>looic</a></code></p></li>
+<li><p><strong>LOOIC</strong> leave-one-out cross-validation (LOO) information criterion, see <code><a href='https://rdrr.io/pkg/performance/man/looic.html'>looic</a></code></p></li>
 <li><p><strong>WAIC</strong> widely applicable information criterion, see <code><a href='https://mc-stan.org/loo/reference/waic.html'>?loo::waic</a></code></p></li>
-<li><p><strong>R2</strong> r-squared value, see <code><a href='r2.html'>r2</a></code></p></li>
-<li><p><strong>R2_LOO_adjusted</strong> adjusted r-squared, see <code><a href='r2.html'>r2</a></code></p></li>
-<li><p><strong>RMSE</strong> root mean squared error, see <code><a href='performance_rmse.html'>performance_rmse</a></code></p></li>
-<li><p><strong>LOGLOSS</strong> Log-loss, see <code><a href='performance_logloss.html'>performance_logloss</a></code></p></li>
-<li><p><strong>SCORE_LOG</strong> score of logarithmic proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
-<li><p><strong>SCORE_SPHERICAL</strong> score of spherical proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
-<li><p><strong>PCP</strong> percentage of correct predictions, see <code><a href='performance_pcp.html'>performance_pcp</a></code></p></li>
+<li><p><strong>R2</strong> r-squared value, see <code><a href='https://rdrr.io/pkg/performance/man/r2.html'>r2</a></code></p></li>
+<li><p><strong>R2_LOO_adjusted</strong> adjusted r-squared, see <code><a href='https://rdrr.io/pkg/performance/man/r2.html'>r2</a></code></p></li>
+<li><p><strong>RMSE</strong> root mean squared error, see <code><a href='https://rdrr.io/pkg/performance/man/performance_rmse.html'>performance_rmse</a></code></p></li>
+<li><p><strong>LOGLOSS</strong> Log-loss, see <code><a href='https://rdrr.io/pkg/performance/man/performance_logloss.html'>performance_logloss</a></code></p></li>
+<li><p><strong>SCORE_LOG</strong> score of logarithmic proper scoring rule, see <code><a href='https://rdrr.io/pkg/performance/man/performance_score.html'>performance_score</a></code></p></li>
+<li><p><strong>SCORE_SPHERICAL</strong> score of spherical proper scoring rule, see <code><a href='https://rdrr.io/pkg/performance/man/performance_score.html'>performance_score</a></code></p></li>
+<li><p><strong>PCP</strong> percentage of correct predictions, see <code><a href='https://rdrr.io/pkg/performance/man/performance_pcp.html'>performance_pcp</a></code></p></li>
 </ul>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -187,21 +187,21 @@
     <p>Gelman, A., Goodrich, B., Gabry, J., &amp; Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='r2_bayes.html'>r2_bayes</a></p></div>
+    <div class='dont-index'><p><a href='https://rdrr.io/pkg/performance/man/r2_bayes.html'>r2_bayes</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"rstanarm"</span>)) {
-  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>, <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>)
-  <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
+  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>, chains = <span class='fl'>1</span>, iter = <span class='fl'>500</span>, refresh = <span class='fl'>0</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)
 
-  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_glmer</a></span>(
-    <span class='no'>mpg</span> ~ <span class='no'>wt</span> + <span class='no'>cyl</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>gear</span>),
-    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>,
-    <span class='kw'>chains</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-    <span class='kw'>iter</span> <span class='kw'>=</span> <span class='fl'>500</span>,
-    <span class='kw'>refresh</span> <span class='kw'>=</span> <span class='fl'>0</span>
+  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_glmer</a></span>(
+    <span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>gear</span>),
+    data = <span class='kw'>mtcars</span>,
+    chains = <span class='fl'>1</span>,
+    iter = <span class='fl'>500</span>,
+    refresh = <span class='fl'>0</span>
   )
-  <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='no'>model</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)
 }</div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>

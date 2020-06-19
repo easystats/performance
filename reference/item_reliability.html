@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@
    for tests or item-scales of questionnaires.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>item_reliability</span>(<span class='no'>x</span>, <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>3</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/item_reliability.html'>item_reliability</a></span>(<span class='kw'>x</span>, standardize = <span class='fl'>FALSE</span>, digits = <span class='fl'>3</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,9 +182,9 @@ standardized. Recommended when the variables have different measures / scales.</
    reversed answer categories regarding positive and negative poles).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cyl"</span>, <span class='st'>"gear"</span>, <span class='st'>"carb"</span>, <span class='st'>"hp"</span>)]
-<span class='fu'>item_reliability</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt;   term alpha_if_deleted item_discrimination
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>mtcars</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cyl"</span>, <span class='st'>"gear"</span>, <span class='st'>"carb"</span>, <span class='st'>"hp"</span>)]
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/item_reliability.html'>item_reliability</a></span>(<span class='kw'>x</span>)</div><div class='output co'>#&gt;   term alpha_if_deleted item_discrimination
 #&gt; 1  cyl            0.048               0.826
 #&gt; 2 gear            0.110              -0.127
 #&gt; 3 carb            0.058               0.751

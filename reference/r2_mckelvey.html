@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@
     <p>Calculates McKelvey &amp; Zavoinas pseudo R2.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_mckelvey</span>(<span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_mckelvey.html'>r2_mckelvey</a></span>(<span class='kw'>model</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -174,12 +174,12 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>## Dobson (1990) Page 93: Randomized Controlled Trial:</span>
-<span class='no'>counts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>, <span class='fl'>17</span>, <span class='fl'>15</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>25</span>, <span class='fl'>13</span>, <span class='fl'>12</span>) <span class='co'>#</span>
-<span class='no'>outcome</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>9</span>)
-<span class='no'>treatment</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>counts</span> ~ <span class='no'>outcome</span> + <span class='no'>treatment</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>poisson</a></span>())
+<span class='kw'>counts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>18</span>, <span class='fl'>17</span>, <span class='fl'>15</span>, <span class='fl'>20</span>, <span class='fl'>10</span>, <span class='fl'>20</span>, <span class='fl'>25</span>, <span class='fl'>13</span>, <span class='fl'>12</span>) <span class='co'>#</span>
+<span class='kw'>outcome</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>9</span>)
+<span class='kw'>treatment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
+<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>counts</span> <span class='op'>~</span> <span class='kw'>outcome</span> <span class='op'>+</span> <span class='kw'>treatment</span>, family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>poisson</a></span>())
 
-<span class='fu'>r2_mckelvey</span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; McKelvey's R2 
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_mckelvey.html'>r2_mckelvey</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; McKelvey's R2 
 #&gt;     0.3776292 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

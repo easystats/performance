@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -138,11 +138,11 @@
     </div>
 
     <div class="ref-description">
-    <p><code>check_zeroinflation()</code> checks whether count models are over- or
+    <p><code><a href='https://rdrr.io/pkg/performance/man/check_zeroinflation.html'>check_zeroinflation()</a></code> checks whether count models are over- or
    underfitting zeros in the outcome.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_zeroinflation</span>(<span class='no'>x</span>, <span class='kw'>tolerance</span> <span class='kw'>=</span> <span class='fl'>0.05</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_zeroinflation.html'>check_zeroinflation</a></span>(<span class='kw'>x</span>, tolerance = <span class='fl'>0.05</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,10 +173,10 @@ beyond or below this threshold would indicate over- or underfitting.</p></td>
   negative binomial or zero-inflated models.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"glmmTMB"</span>)) {
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Salamanders</span>)
-  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='no'>count</span> ~ <span class='no'>spp</span> + <span class='no'>mined</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>poisson</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>Salamanders</span>)
-  <span class='fu'>check_zeroinflation</span>(<span class='no'>m</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/glmmTMB'>"glmmTMB"</a></span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>Salamanders</span>)
+  <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>count</span> <span class='op'>~</span> <span class='kw'>spp</span> <span class='op'>+</span> <span class='kw'>mined</span>, family = <span class='kw'>poisson</span>, data = <span class='kw'>Salamanders</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_zeroinflation.html'>check_zeroinflation</a></span>(<span class='kw'>m</span>)
 }</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Check for zero-inflation
 #&gt; 
 #&gt; </span><span>   Observed zeros: 387

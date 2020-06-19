@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@
   with binary outcome.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>performance_pcp</span>(<span class='no'>model</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"Herron"</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_pcp.html'>performance_pcp</a></span>(<span class='kw'>model</span>, ci = <span class='fl'>0.95</span>, method = <span class='st'>"Herron"</span>, verbose = <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -203,9 +203,9 @@ Default is <code>"Herron"</code>. May be abbreviated.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>formula</span> <span class='kw'>=</span> <span class='no'>vs</span> ~ <span class='no'>hp</span> + <span class='no'>wt</span>, <span class='kw'>family</span> <span class='kw'>=</span> <span class='no'>binomial</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
-<span class='fu'>performance_pcp</span>(<span class='no'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Percentage of Correct Predictions from Logistic Regression Model
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
+<span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(formula = <span class='kw'>vs</span> <span class='op'>~</span> <span class='kw'>hp</span> <span class='op'>+</span> <span class='kw'>wt</span>, family = <span class='kw'>binomial</span>, data = <span class='kw'>mtcars</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_pcp.html'>performance_pcp</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Percentage of Correct Predictions from Logistic Regression Model
 #&gt; 
 #&gt; </span><span>  Full model: 83.75% [70.96% - 96.53%]
 #&gt;   Null model: 50.78% [33.46% - 68.10%]
@@ -214,7 +214,7 @@ Default is <code>"Herron"</code>. May be abbreviated.</p></td>
 #&gt; 
 #&gt; </span><span>  Chi-squared: 27.751
 #&gt;       p-value:  0.000
-#&gt; </div><div class='input'><span class='fu'>performance_pcp</span>(<span class='no'>m</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"Gelman-Hill"</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Percentage of Correct Predictions from Logistic Regression Model
+#&gt; </div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_pcp.html'>performance_pcp</a></span>(<span class='kw'>m</span>, method = <span class='st'>"Gelman-Hill"</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Percentage of Correct Predictions from Logistic Regression Model
 #&gt; 
 #&gt; </span><span>  Full model: 87.50% [76.04% - 98.96%]
 #&gt;   Null model: 56.25% [39.06% - 73.44%]

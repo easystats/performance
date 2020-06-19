@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@
  mixed effects models with complex random effects structures.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>, <span class='kw'>by_group</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_nakagawa.html'>r2_nakagawa</a></span>(<span class='kw'>model</span>, by_group = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,10 +185,10 @@ similar to the variance reduction approach by <cite>Hox (2010), pp. 69-78</cite>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"lme4"</span>)) {
-  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Sepal.Length</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-  <span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>)
-  <span class='fu'>r2_nakagawa</span>(<span class='no'>model</span>, <span class='kw'>by_group</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
+  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_nakagawa.html'>r2_nakagawa</a></span>(<span class='kw'>model</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_nakagawa.html'>r2_nakagawa</a></span>(<span class='kw'>model</span>, by_group = <span class='fl'>TRUE</span>)
 }</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Explained Variance by Level
 #&gt; 
 #&gt; </span><span>Level   |     R2

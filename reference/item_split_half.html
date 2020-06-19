@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -142,7 +142,7 @@
    for tests or item-scales of questionnaires.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>item_split_half</span>(<span class='no'>x</span>, <span class='kw'>digits</span> <span class='kw'>=</span> <span class='fl'>3</span>)</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/item_split_half.html'>item_split_half</a></span>(<span class='kw'>x</span>, digits = <span class='fl'>3</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,9 +175,9 @@
             Brown W. 1910. Some experimental results in the correlation of mental abilities. British Journal of Psychology (3): 296-322. doi: <a href='https://doi.org/10.1111/j.2044-8295.1910.tb00207.x'>10.1111/j.2044-8295.1910.tb00207.x</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>mtcars</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cyl"</span>, <span class='st'>"gear"</span>, <span class='st'>"carb"</span>, <span class='st'>"hp"</span>)]
-<span class='fu'>item_split_half</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; $splithalf
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='kw'>mtcars</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cyl"</span>, <span class='st'>"gear"</span>, <span class='st'>"carb"</span>, <span class='st'>"hp"</span>)]
+<span class='fu'><a href='https://rdrr.io/pkg/performance/man/item_split_half.html'>item_split_half</a></span>(<span class='kw'>x</span>)</div><div class='output co'>#&gt; $splithalf
 #&gt; [1] 0.9070215
 #&gt; 
 #&gt; $spearmanbrown

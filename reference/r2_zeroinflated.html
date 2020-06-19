@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
       </span>
     </div>
 
@@ -140,7 +140,7 @@
     <p>Calculates R2 for models with zero-inflation component, including mixed effects models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_zeroinflated</span>(<span class='no'>model</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"default"</span>, <span class='st'>"correlation"</span>))</pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_zeroinflated.html'>r2_zeroinflated</a></span>(<span class='kw'>model</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"default"</span>, <span class='st'>"correlation"</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,14 +169,14 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"pscl"</span>)) {
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>bioChemists</span>)
-  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pscl/man/zeroinfl.html'>zeroinfl</a></span>(
-    <span class='no'>art</span> ~ <span class='no'>fem</span> + <span class='no'>mar</span> + <span class='no'>kid5</span> + <span class='no'>ment</span> <span class='kw'>|</span> <span class='no'>kid5</span> + <span class='no'>phd</span>,
-    <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bioChemists</span>
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='http://github.com/atahk/pscl'>"pscl"</a></span>)) {
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>bioChemists</span>)
+  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/pscl/man/zeroinfl.html'>zeroinfl</a></span>(
+    <span class='kw'>art</span> <span class='op'>~</span> <span class='kw'>fem</span> <span class='op'>+</span> <span class='kw'>mar</span> <span class='op'>+</span> <span class='kw'>kid5</span> <span class='op'>+</span> <span class='kw'>ment</span> <span class='op'>|</span> <span class='kw'>kid5</span> <span class='op'>+</span> <span class='kw'>phd</span>,
+    data = <span class='kw'>bioChemists</span>
   )
 
-  <span class='fu'>r2_zeroinflated</span>(<span class='no'>model</span>)
+  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_zeroinflated.html'>r2_zeroinflated</a></span>(<span class='kw'>model</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: pscl</span></div><div class='output co'>#&gt; <span class='message'>Classes and Methods for R developed in the</span>
 #&gt; <span class='message'>Political Science Computational Laboratory</span>
 #&gt; <span class='message'>Department of Political Science</span>
