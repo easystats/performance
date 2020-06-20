@@ -33,8 +33,8 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
     test_that("icc", {
       set.seed(123)
       expect_equal(
-        icc(m3)$ICC_decomposed,
-        0.3877,
+        variance_decomposition(m3)$ICC_decomposed,
+        0.3900683,
         tolerance = 0.05
       )
     })
