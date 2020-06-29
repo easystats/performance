@@ -195,7 +195,48 @@
   <span class='kw'>pca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='kw'>Z</span>), rotation = <span class='st'>"varimax"</span>, n = <span class='fl'>3</span>)
   <span class='kw'>pca</span>
   <span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_itemscale.html'>check_itemscale</a></span>(<span class='kw'>pca</span>)
-}</div><div class='output co'>#&gt; <span class='error'>Error: Package `psych` required for `varimax`-rotation.</span></div></pre>
+}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Description of (Sub-)Scales
+#&gt; </span><span style='color: #BB0000;'>
+#&gt; Component 1
+#&gt; 
+#&gt; </span><span>Item | Missings |  Mean |   SD | Skewness | Difficulty | Discrimination | alpha if deleted
+#&gt; ------------------------------------------------------------------------------------------
+#&gt; V1   |    0.00% | -0.02 | 1.06 |    -0.49 |      -0.01 |           0.80 |             0.96
+#&gt; V2   |    0.00% | -0.05 | 1.05 |    -0.29 |      -0.02 |           0.90 |             0.95
+#&gt; V3   |    0.00% |  0.00 | 1.10 |    -0.77 |       0.00 |           0.94 |             0.95
+#&gt; V4   |    0.00% | -0.00 | 1.10 |    -0.82 |       0.00 |           0.92 |             0.95
+#&gt; V5   |    0.00% | -0.07 | 1.09 |    -0.29 |      -0.03 |           0.90 |             0.95
+#&gt; V6   |    0.00% | -0.04 | 1.13 |    -0.27 |      -0.01 |           0.83 |             0.96
+#&gt; </span><span style='color: #BBBB00;'>
+#&gt; Mean inter-item-correlation = 0.813  Cronbach's alpha = 0.963
+#&gt; 
+#&gt; </span><span style='color: #BB0000;'>
+#&gt; Component 2
+#&gt; 
+#&gt; </span><span>Item | Missings |  Mean |   SD | Skewness | Difficulty | Discrimination | alpha if deleted
+#&gt; ------------------------------------------------------------------------------------------
+#&gt; V7   |    0.00% | -0.01 | 1.07 |     0.01 |       0.00 |           0.87 |             0.97
+#&gt; V8   |    0.00% |  0.02 | 0.96 |     0.23 |       0.01 |           0.89 |             0.96
+#&gt; V9   |    0.00% |  0.04 | 0.98 |     0.37 |       0.01 |           0.93 |             0.96
+#&gt; V10  |    0.00% |  0.08 | 1.00 |     0.18 |       0.03 |           0.93 |             0.96
+#&gt; V11  |    0.00% |  0.02 | 1.03 |     0.18 |       0.01 |           0.92 |             0.96
+#&gt; V12  |    0.00% | -0.00 | 1.04 |     0.27 |       0.00 |           0.84 |             0.97
+#&gt; </span><span style='color: #BBBB00;'>
+#&gt; Mean inter-item-correlation = 0.840  Cronbach's alpha = 0.969
+#&gt; 
+#&gt; </span><span style='color: #BB0000;'>
+#&gt; Component 3
+#&gt; 
+#&gt; </span><span>Item | Missings |  Mean |   SD | Skewness | Difficulty | Discrimination | alpha if deleted
+#&gt; ------------------------------------------------------------------------------------------
+#&gt; V13  |    0.00% |  0.04 | 0.95 |     0.10 |       0.02 |           0.81 |             0.95
+#&gt; V14  |    0.00% | -0.02 | 0.96 |     0.24 |      -0.01 |           0.93 |             0.91
+#&gt; V15  |    0.00% | -0.03 | 0.94 |     0.41 |      -0.01 |           0.92 |             0.91
+#&gt; V16  |    0.00% |  0.03 | 0.96 |     0.28 |       0.01 |           0.82 |             0.94
+#&gt; </span><span style='color: #BBBB00;'>
+#&gt; Mean inter-item-correlation = 0.811  Cronbach's alpha = 0.945
+#&gt; 
+#&gt; </span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
