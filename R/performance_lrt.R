@@ -41,6 +41,12 @@ performance_lrt.default <- function(...) {
     # }
     # -2 * (ll(m2, sd_mle(m2)) - ll(m3, sd_mle(m3)))
     lrt <- stats::anova(..., test = "LRT")
+
+    # sort
+    lrt_order <- order(order(rownames(lrt)))
+    objects <- objects[lrt_order]
+    object_names <- object_names[lrt_order]
+
     .performance_lrt(objects, object_names, lrt)
   } else {
     warning("At least two models required for a Likelihood-Ratio-Test.", call. = FALSE)

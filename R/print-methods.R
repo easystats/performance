@@ -631,7 +631,7 @@ print.check_collinearity <- function(x, ...) {
 
 #' @importFrom insight format_table print_color
 #' @export
-print.performance_lrt <- function(x, digits = 3, ...) {
+print.performance_lrt <- function(x, digits = 2, ...) {
   insight::print_color("# Likelihood-Ratio-Test for Model Comparison\n\n", "blue")
   cat(insight::format_table(x, digits = digits))
 
