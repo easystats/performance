@@ -153,6 +153,13 @@
 <code><a href="https://rdrr.io/pkg/performance/man/icc.html">icc()</a></code> now also computes a “classical” ICC for <code>brmsfit</code> models. The former way of calculating an “ICC” for <code>brmsfit</code> models is now available as new function called <code><a href="https://rdrr.io/pkg/performance/man/icc.html">variance_decomposition()</a></code>.</li>
 </ul>
 </div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fix issue with model order in <code><a href="https://rdrr.io/pkg/performance/man/performance_lrt.html">performance_lrt()</a></code>.</li>
+</ul>
+</div>
 </div>
     <div id="performance-047" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.7">
@@ -177,9 +184,9 @@
 <code><a href="https://rdrr.io/pkg/performance/man/check_normality.html">check_normality()</a></code> gets an <code>effects</code>-argument for mixed models, to check random effects for normality.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="https://rdrr.io/pkg/performance/man/performance_accuracy.html">performance_accuracy()</a></code> for binomial models when response variable had non-numeric factor levels.</li>
 <li>Fixed issues in <code><a href="https://rdrr.io/pkg/performance/man/performance_roc.html">performance_roc()</a></code>, which printed 1 - AUC instead of AUC.</li>
@@ -210,9 +217,9 @@
 <code><a href="https://rdrr.io/pkg/performance/man/performance_lrt.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix issues in some functions for models with logical dependent variable.</li>
 <li>Fix bug in <code><a href="https://rdrr.io/pkg/performance/man/check_itemscale.html">check_itemscale()</a></code>, which caused multiple computations of skewness statistics.</li>
@@ -241,9 +248,9 @@
 <li>Added <code>r2.aov()</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="https://rdrr.io/pkg/performance/man/performance_aicc.html">performance_aic()</a></code> for models from package <em>survey</em>, which returned three different AIC values. Now only the AIC value is returned.</li>
 <li>Fixed issue in <code><a href="https://rdrr.io/pkg/performance/man/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models when zero-inflated formula only had one predictor.</li>
@@ -276,9 +283,9 @@
 <code><a href="https://rdrr.io/pkg/performance/man/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in documentation of <code><a href="https://rdrr.io/pkg/performance/man/performance_score.html">performance_score()</a></code>.</li>
 </ul>
@@ -305,9 +312,9 @@
 <code><a href="https://rdrr.io/pkg/performance/man/performance_lrt.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix issues with CRAN checks.</li>
 </ul>
@@ -359,9 +366,9 @@
 <code><a href="https://rdrr.io/pkg/performance/man/check_collinearity.html">check_collinearity()</a></code> now no longer returns backticks in row- and column names.</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="https://rdrr.io/pkg/performance/man/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
 <li>
@@ -407,9 +414,9 @@
 <code><a href="https://rdrr.io/pkg/performance/man/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="https://rdrr.io/pkg/performance/man/compare_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
 <li>Fixed bug in <code><a href="https://rdrr.io/pkg/performance/man/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occurred when checking for outliers.</li>
@@ -468,9 +475,9 @@
 <code><a href="https://rdrr.io/pkg/performance/man/check_homogeneity.html">check_homogeneity()</a></code> to check models for homogeneity of variances.</li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues with <code><a href="https://rdrr.io/pkg/performance/man/compare_performance.html">compare_performance()</a></code> and row-ordering.</li>
 <li>Fixed issue in <code><a href="https://rdrr.io/pkg/performance/man/check_collinearity.html">check_collinearity()</a></code> for zero-inflated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
@@ -567,9 +574,9 @@
 <li>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="https://rdrr.io/pkg/performance/man/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
 <li>Fix issues in <code><a href="https://rdrr.io/pkg/performance/man/r2_bayes.html">r2_bayes()</a></code> and <code><a href="https://rdrr.io/pkg/performance/man/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (<a href='https://github.com/easystats/performance/issues/48'>#48</a>).</li>
