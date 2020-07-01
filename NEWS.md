@@ -8,6 +8,10 @@
 
 * `icc()` now also computes a "classical" ICC for `brmsfit` models. The former way of calculating an "ICC" for `brmsfit` models is now available as new function called `variance_decomposition()`.
 
+## Bug fixes
+
+* Fix issue with model order in `performance_lrt()`.
+
 # performance 0.4.7
 
 ## General
