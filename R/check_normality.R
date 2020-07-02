@@ -125,6 +125,7 @@ check_normality.glmmTMB <- check_normality.merMod
 # helper ---------------------
 
 
+#' @importFrom insight print_color format_p
 .check_normality <- function(x, model, type = "residuals") {
   ts <- tryCatch(
     {
@@ -142,11 +143,7 @@ check_normality.glmmTMB <- check_normality.merMod
 
   # format p-value
   p.val <- ts$p.value
-  if (requireNamespace("parameters", quietly = TRUE)) {
-    pstring <- parameters::format_p(p.val)
-  } else {
-    pstring <- sprintf("p = %.3f", p.val)
-  }
+  pstring <- insight::format_p(p.val)
 
   if (p.val < 0.05) {
     insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")

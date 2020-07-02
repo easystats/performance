@@ -1,4 +1,4 @@
-#' @importFrom insight format_table
+#' @importFrom insight format_table format_p
 #' @export
 print.compare_performance <- function(x, digits = 3, ...) {
   orig_x <- x
@@ -11,13 +11,11 @@ print.compare_performance <- function(x, digits = 3, ...) {
   }
 
   # format p-values for meta-analysis
-  if (requireNamespace("parameters", quietly = TRUE)) {
-    if ("p_CochransQ" %in% colnames(x)) {
-      x$p_CochransQ <- parameters::format_p(x$p_CochransQ)
-    }
-    if ("p_Omnibus" %in% colnames(x)) {
-      x$p_Omnibus <- parameters::format_p(x$p_Omnibus)
-    }
+  if ("p_CochransQ" %in% colnames(x)) {
+    x$p_CochransQ <- insight::format_p(x$p_CochransQ)
+  }
+  if ("p_Omnibus" %in% colnames(x)) {
+    x$p_Omnibus <- insight::format_p(x$p_Omnibus)
   }
 
   x[] <- lapply(x, function(i) {
@@ -39,20 +37,18 @@ print.compare_performance <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight format_table
+#' @importFrom insight format_table format_p
 #' @export
 print.performance_model <- function(x, digits = 3, ...) {
   orig_x <- x
   insight::print_color("# Indices of model performance\n\n", "blue")
 
   # format p-values for meta-analysis
-  if (requireNamespace("parameters", quietly = TRUE)) {
-    if ("p_CochransQ" %in% colnames(x)) {
-      x$p_CochransQ <- parameters::format_p(x$p_CochransQ)
-    }
-    if ("p_Omnibus" %in% colnames(x)) {
-      x$p_Omnibus <- parameters::format_p(x$p_Omnibus)
-    }
+  if ("p_CochransQ" %in% colnames(x)) {
+    x$p_CochransQ <- insight::format_p(x$p_CochransQ)
+  }
+  if ("p_Omnibus" %in% colnames(x)) {
+    x$p_Omnibus <- insight::format_p(x$p_Omnibus)
   }
 
   x[] <- lapply(x, function(i) {
@@ -629,10 +625,16 @@ print.check_collinearity <- function(x, ...) {
 
 
 
-#' @importFrom insight format_table print_color
+#' @importFrom insight format_table print_color format_p
 #' @export
 print.performance_lrt <- function(x, digits = 2, ...) {
   insight::print_color("# Likelihood-Ratio-Test for Model Comparison\n\n", "blue")
+
+  # value formatting
+  x$AIC <- round(x$AIC)
+  x$BIC <- round(x$BIC)
+  x$p <- insight::format_p(x$p, name = NULL)
+
   cat(insight::format_table(x, digits = digits))
 
   if (sum(x$p < .05, na.rm = TRUE) <= 1) {
