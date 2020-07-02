@@ -632,7 +632,7 @@ print.performance_lrt <- function(x, digits = 2, ...) {
 
   # value formatting
   x$AIC <- round(x$AIC)
-  x$BIC <- round(x$BIC)
+  if ("BIC" %in% colnames(x)) x$BIC <- round(x$BIC)
   x$p <- insight::format_p(x$p, name = NULL)
 
   cat(insight::format_table(x, digits = digits))
