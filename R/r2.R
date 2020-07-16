@@ -555,6 +555,11 @@ r2.mmclogit <- function(model, ...) {
 }
 
 
+#' @export
+r2.mclogit <- function(model, ...) {
+  list(R2 = NA)
+}
+
 
 #' @export
 r2.Arima <- function(model, ...) {
