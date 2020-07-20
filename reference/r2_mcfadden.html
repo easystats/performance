@@ -140,7 +140,7 @@
     <p>Calculates McFadden's pseudo R2.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_mcfadden.html'>r2_mcfadden</a></span>(<span class='kw'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_mcfadden</span>(<span class='kw'>model</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,7 +170,7 @@
   <span class='kw'>Fish</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mlogit/man/mlogit-deprecated.html'>mlogit.data</a></span>(<span class='kw'>Fishing</span>, varying = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span><span class='op'>:</span><span class='fl'>9</span>), shape = <span class='st'>"wide"</span>, choice = <span class='st'>"mode"</span>)
 
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mlogit/man/mlogit.html'>mlogit</a></span>(<span class='kw'>mode</span> <span class='op'>~</span> <span class='kw'>price</span> <span class='op'>+</span> <span class='kw'>catch</span>, data = <span class='kw'>Fish</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_mcfadden.html'>r2_mcfadden</a></span>(<span class='kw'>model</span>)
+  <span class='fu'>r2_mcfadden</span>(<span class='kw'>model</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: mlogit</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: dfidx</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘dfidx’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:stats’:</span>
 #&gt; <span class='message'></span>

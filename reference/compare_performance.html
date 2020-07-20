@@ -138,11 +138,11 @@ different models at once and hence allows comparison of indices across models." 
     </div>
 
     <div class="ref-description">
-    <p><code><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance()</a></code> computes indices of model performance for
+    <p><code>compare_performance()</code> computes indices of model performance for
 different models at once and hence allows comparison of indices across models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance</a></span>(
+    <pre class="usage"><span class='fu'>compare_performance</span>(
   <span class='kw'>...</span>,
   metrics = <span class='st'>"all"</span>,
   rank = <span class='fl'>FALSE</span>,
@@ -159,7 +159,7 @@ different models at once and hence allows comparison of indices across models.</
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed. See related <code><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>documentation</a></code> of object's class for details.</p></td>
+      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed. See related <code><a href='model_performance.html'>documentation</a></code> of object's class for details.</p></td>
     </tr>
     <tr>
       <th>rank</th>
@@ -183,7 +183,7 @@ model performance". See 'Details'.</p></td>
 
     
 <h3>Bayes factor for Model Comparison</h3>
-<p>If all models were fit from the same data, <code><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance()</a></code>
+<p>If all models were fit from the same data, <code>compare_performance()</code>
   returns an additional column named <code>BF</code>, which shows the Bayes factor
   (see <code><a href='https://rdrr.io/pkg/bayestestR/man/bayesfactor_models.html'>bayestestR::bayesfactor_models()</a></code>) for each model against
   the denominator model. The <em>first</em> model is used as denominator model,
@@ -200,7 +200,7 @@ model performance". See 'Details'.</p></td>
   model type, this model gets an <code>NA</code> value. All indices that have any
   <code>NA</code>s are excluded from calculating the performance score.
   <br /> <br />
-  There is a <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method for <code><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance()</a></code>,
+  There is a <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method for <code>compare_performance()</code>,
   which creates a "spiderweb" plot, where the different indices are
   normalized and larger values indicate better model performance.
   Hence, points closer to the center indicate worse fit indices
@@ -216,7 +216,7 @@ model performance". See 'Details'.</p></td>
   <span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
   <span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>vs</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>mpg</span>, data = <span class='kw'>mtcars</span>, family = <span class='st'>"binomial"</span>)
   <span class='kw'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance</a></span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)
+  <span class='fu'>compare_performance</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)
 }</div><div class='output co'>#&gt; <span class='warning'>Warning: When comparing models, please note that probably not all models were fit from same data.</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Comparison of Model Performance Indices
 #&gt; 
 #&gt; </span><span>Model |    Type |    AIC |    BIC | RMSE |   R2 | R2_adjusted | R2_Tjur | LOGLOSS | SCORE_LOG | SCORE_SPHERICAL |  PCP | R2_conditional | R2_marginal |  ICC
@@ -228,13 +228,13 @@ model performance". See 'Details'.</p></td>
 <span class='kw'>lm1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Species</span>, data = <span class='kw'>iris</span>)
 <span class='kw'>lm2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>+</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
 <span class='kw'>lm3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance</a></span>(<span class='kw'>lm1</span>, <span class='kw'>lm2</span>, <span class='kw'>lm3</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
+<span class='fu'>compare_performance</span>(<span class='kw'>lm1</span>, <span class='kw'>lm2</span>, <span class='kw'>lm3</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
 #&gt; 
 #&gt; </span><span>Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |       BF
 #&gt; ---------------------------------------------------------------------
 #&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |        0.61 | 0.51 |         
 #&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |        0.83 | 0.33 | 3.45e+26
-#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 | 1.30e+25</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance</a></span>(<span class='kw'>lm1</span>, <span class='kw'>lm2</span>, <span class='kw'>lm3</span>, rank = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
+#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 | 1.30e+25</div><div class='input'><span class='fu'>compare_performance</span>(<span class='kw'>lm1</span>, <span class='kw'>lm2</span>, <span class='kw'>lm3</span>, rank = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
 #&gt; 
 #&gt; </span><span>Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |       BF | Performance_Score
 #&gt; -----------------------------------------------------------------------------------------

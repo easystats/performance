@@ -148,15 +148,15 @@
  (ICC) - sometimes also called <em>variance partition coefficient</em>
  (VPC) - for mixed effects models. The ICC can be calculated for all models
  supported by <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>insight::get_variance()</a></code>. For models fitted with
- the <span class="pkg">brms</span>-package, <code><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc()</a></code> might fail due to the large variety
+ the <span class="pkg">brms</span>-package, <code>icc()</code> might fail due to the large variety
  of models and families supported by the <span class="pkg">brms</span>-package. In such cases,
- an alternative to the ICC is the <code><a href='https://rdrr.io/pkg/performance/man/icc.html'>variance_decomposition()</a></code>, which is
+ an alternative to the ICC is the <code>variance_decomposition()</code>, which is
  based on the posterior predictive distribution is calculated (see 'Details').</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc</a></span>(<span class='kw'>model</span>, by_group = <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>icc</span>(<span class='kw'>model</span>, by_group = <span class='fl'>FALSE</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/icc.html'>variance_decomposition</a></span>(<span class='kw'>model</span>, re.form = <span class='kw'>NULL</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.95</span>)</pre>
+<span class='fu'>variance_decomposition</span>(<span class='kw'>model</span>, re.form = <span class='kw'>NULL</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.95</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,7 +167,7 @@
     </tr>
     <tr>
       <th>by_group</th>
-      <td><p>Logical, if <code>TRUE</code>, <code><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc()</a></code> returns the variance
+      <td><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
 components for each random-effects level (if there are multiple levels).</p></td>
     </tr>
     <tr>
@@ -191,7 +191,7 @@ calculate the central tendency of the variances.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with two values, the adjusted and conditional ICC. For
-<code><a href='https://rdrr.io/pkg/performance/man/icc.html'>variance_decomposition()</a></code>, a list with two values, the decomposed
+<code>variance_decomposition()</code>, a list with two values, the decomposed
 ICC as well as the credible intervals for this ICC.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -209,12 +209,12 @@ ICC as well as the credible intervals for this ICC.</p>
  &sigma;<sup>2</sup><sub>i</sub>, by
  the total variance, i.e. the sum of the random effect variance and the
  residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>.</p><p></p><h3>Adjusted and conditional ICC</h3>
-<p><code><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc()</a></code> calculates an adjusted and conditional ICC, which both take
+<p><code>icc()</code> calculates an adjusted and conditional ICC, which both take
  all sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
  the <em>adjusted ICC</em> only relates to the random effects, the <em>conditional ICC</em>
  also takes the fixed effects variances into account (see <cite>Nakagawa et al. 2017</cite>).
  Typically, the <em>adjusted</em> ICC is of interest when the analysis of random
- effects is of interest. <code><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc()</a></code> returns a meaningful ICC also for more
+ effects is of interest. <code>icc()</code> returns a meaningful ICC also for more
  complex random effects structures, like models with random slopes or nested
  design (more than two levels) and is applicable for models with other distributions
  than Gaussian. For more details on the computation of the variances, see
@@ -230,9 +230,9 @@ ICC as well as the credible intervals for this ICC.</p>
  the variance for each (random effect) group compared to the total
  variance of the model. For mixed models with a simple random intercept,
  this is identical to the classical (adjusted) ICC.</p><p></p><h3>Variance decomposition for brms-models</h3>
-<p>If <code>model</code> is of class <code>brmsfit</code>, <code><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc()</a></code> might fail due to
+<p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to
  the large variety of models and families supported by the <span class="pkg">brms</span> package.
- In such cases, <code><a href='https://rdrr.io/pkg/performance/man/icc.html'>variance_decomposition()</a></code> is an alternative ICC measure.
+ In such cases, <code>variance_decomposition()</code> is an alternative ICC measure.
  The function calculates a variance decomposition based on the posterior
  predictive distribution. In this case, first, the draws from the posterior
  predictive distribution <em>not conditioned</em> on group-level terms
@@ -263,7 +263,7 @@ ICC as well as the credible intervals for this ICC.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc</a></span>(<span class='kw'>model</span>)
+  <span class='fu'>icc</span>(<span class='kw'>model</span>)
 }</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Intraclass Correlation Coefficient
 #&gt; 
 #&gt; </span><span>     Adjusted ICC: 0.910
@@ -283,7 +283,7 @@ ICC as well as the credible intervals for this ICC.</p>
     <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>grp</span> <span class='op'>/</span> <span class='kw'>subgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
     data = <span class='kw'>sleepstudy</span>
   )
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc</a></span>(<span class='kw'>model</span>, by_group = <span class='fl'>TRUE</span>)
+  <span class='fu'>icc</span>(<span class='kw'>model</span>, by_group = <span class='fl'>TRUE</span>)
 }</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># ICC by Group
 #&gt; 
 #&gt; </span><span>Group   |   ICC

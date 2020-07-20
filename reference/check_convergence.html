@@ -138,11 +138,11 @@
     </div>
 
     <div class="ref-description">
-    <p><code><a href='https://rdrr.io/pkg/performance/man/check_convergence.html'>check_convergence()</a></code> provides an alternative convergence
+    <p><code>check_convergence()</code> provides an alternative convergence
   test for <code>merMod</code>-objects.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_convergence.html'>check_convergence</a></span>(<span class='kw'>x</span>, tolerance = <span class='fl'>0.001</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>check_convergence</span>(<span class='kw'>x</span>, tolerance = <span class='fl'>0.001</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,7 +179,7 @@ will be.</p></td>
   however, as as discussed <a href='https://github.com/lme4/lme4/issues/120'>here</a>
   and suggested by one of the lme4-authors in
   <a href='https://github.com/lme4/lme4/issues/120#issuecomment-39920269'>this comment</a>,
-  this check can be too strict. <code><a href='https://rdrr.io/pkg/performance/man/check_convergence.html'>check_convergence()</a></code> thus provides an
+  this check can be too strict. <code>check_convergence()</code> thus provides an
   alternative convergence test for <code>merMod</code>-objects.</p><p></p><h3>Resolving convergence issues</h3>
 <p>Convergence issues are not easy to diagnose. The help page on
   <code><a href='https://rdrr.io/pkg/lme4/man/convergence.html'>?lme4::convergence</a></code> provides most of the current advice about
@@ -204,7 +204,7 @@ will be.</p></td>
     family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>()
   )
 
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/check_convergence.html'>check_convergence</a></span>(<span class='kw'>model</span>)
+  <span class='fu'>check_convergence</span>(<span class='kw'>model</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='output co'>#&gt; [1] TRUE
 #&gt; attr(,"gradient")
 #&gt; [1] 8.444895e-05</div></pre>

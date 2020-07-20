@@ -140,7 +140,7 @@
     <p>Compute the log loss for models with binary outcome.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_logloss.html'>performance_logloss</a></span>(<span class='kw'>model</span>, verbose = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>performance_logloss</span>(<span class='kw'>model</span>, verbose = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -165,18 +165,18 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Logistic regression models predict the probability of an outcome of
-  being a "success" or "failure" (or 1 and 0 etc.). <code><a href='https://rdrr.io/pkg/performance/man/performance_logloss.html'>performance_logloss()</a></code> evaluates
+  being a "success" or "failure" (or 1 and 0 etc.). <code>performance_logloss()</code> evaluates
   how good or bad the predicted probabilities are. High values indicate
   bad predictions, while low values indicate good predictions. The lower
   the log-loss, the better the model predicts the outcome.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/performance/man/performance_score.html'>performance_score()</a></code></p></div>
+    <div class='dont-index'><p><code><a href='performance_score.html'>performance_score()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>mtcars</span>)
 <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(formula = <span class='kw'>vs</span> <span class='op'>~</span> <span class='kw'>hp</span> <span class='op'>+</span> <span class='kw'>wt</span>, family = <span class='kw'>binomial</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_logloss.html'>performance_logloss</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] 0.2517054</div></pre>
+<span class='fu'>performance_logloss</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] 0.2517054</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

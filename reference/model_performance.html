@@ -145,18 +145,18 @@ Meta-analysis models
 
     <div class="ref-description">
     <p>See the documentation for your object's class:</p><ul>
-<li><p><a href='https://rdrr.io/pkg/performance/man/model_performance.lm.html'>Frequentist Regressions</a></p></li>
-<li><p><a href='https://rdrr.io/pkg/performance/man/model_performance.merMod.html'>Mixed models</a></p></li>
-<li><p><a href='https://rdrr.io/pkg/performance/man/model_performance.stanreg.html'>Bayesian models</a></p></li>
-<li><p><a href='https://rdrr.io/pkg/performance/man/model_performance.lavaan.html'>CFA / SEM lavaan models</a></p></li>
-<li><p><a href='https://rdrr.io/pkg/performance/man/model_performance.rma.html'>Meta-analysis models</a></p></li>
+<li><p><a href='model_performance.lm.html'>Frequentist Regressions</a></p></li>
+<li><p><a href='model_performance.merMod.html'>Mixed models</a></p></li>
+<li><p><a href='model_performance.stanreg.html'>Bayesian models</a></p></li>
+<li><p><a href='model_performance.lavaan.html'>CFA / SEM lavaan models</a></p></li>
+<li><p><a href='model_performance.rma.html'>Meta-analysis models</a></p></li>
 </ul>
 
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>model_performance</span>(<span class='kw'>model</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>performance</a></span>(<span class='kw'>model</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>performance</span>(<span class='kw'>model</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,7 +168,7 @@ Meta-analysis models
     <tr>
       <th>...</th>
       <td><p>Arguments passed to or from other methods, resp. for
-<code><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance()</a></code>, one or multiple model objects (also of
+<code><a href='compare_performance.html'>compare_performance()</a></code>, one or multiple model objects (also of
 different classes).</p></td>
     </tr>
     </table>
@@ -178,17 +178,17 @@ different classes).</p></td>
     <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
+    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
+<span class='fu'>model_performance</span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
 #&gt; 
 #&gt; </span><span>   AIC |    BIC |   R2 | R2_adjusted | RMSE
 #&gt; -------------------------------------------
 #&gt; 156.01 | 161.87 | 0.83 |        0.82 | 2.44</div><div class='input'>
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>vs</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>mpg</span>, data = <span class='kw'>mtcars</span>, family = <span class='st'>"binomial"</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Indices of model performance
+<span class='fu'>model_performance</span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Indices of model performance
 #&gt; 
 #&gt; </span><span>  AIC |   BIC | R2_Tjur | RMSE | LOGLOSS | SCORE_LOG | SCORE_SPHERICAL |  PCP
 #&gt; -----------------------------------------------------------------------------

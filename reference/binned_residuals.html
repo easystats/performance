@@ -140,7 +140,7 @@
     <p>Check model quality of logistic regression models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/binned_residuals.html'>binned_residuals</a></span>(<span class='kw'>model</span>, term = <span class='kw'>NULL</span>, n_bins = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>binned_residuals</span>(<span class='kw'>model</span>, term = <span class='kw'>NULL</span>, n_bins = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,9 +193,9 @@ taken.</p></td>
   predictor (cf. Gelman and Hill 2007, pp. 97ff).</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Since <code><a href='https://rdrr.io/pkg/performance/man/binned_residuals.html'>binned_residuals()</a></code> returns a data frame, the default
+    <p>Since <code>binned_residuals()</code> returns a data frame, the default
   action for the result is <em>printing</em>. However, the `print()`-method for
-  <code><a href='https://rdrr.io/pkg/performance/man/binned_residuals.html'>binned_residuals()</a></code> actually creates a plot. For further modifications
+  <code>binned_residuals()</code> actually creates a plot. For further modifications
   of the plot, use `print()` and add ggplot-layers to the return values,
   e.g <code>plot(binned_residuals(model)) + see::scale_color_pizza()</code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -204,7 +204,7 @@ taken.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>vs</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>mpg</span>, data = <span class='kw'>mtcars</span>, family = <span class='st'>"binomial"</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/binned_residuals.html'>binned_residuals</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Probably bad model fit. Only about 50% of the residuals are inside the error bounds.
+<span class='fu'>binned_residuals</span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Probably bad model fit. Only about 50% of the residuals are inside the error bounds.
 #&gt; </span><span></div><div class='img'><img src='binned_residuals-1.png' alt='' width='700' height='433' /></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

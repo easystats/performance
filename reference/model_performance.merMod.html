@@ -141,7 +141,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for merMod</span>
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>, metrics = <span class='st'>"all"</span>, verbose = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>, metrics = <span class='st'>"all"</span>, verbose = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,15 +171,15 @@
 
     <p>This method returns the <em>adjusted ICC</em> only, as this is typically
   of interest when judging the variance attributed to the random effects part
-  of the model (see also <code><a href='https://rdrr.io/pkg/performance/man/icc.html'>icc</a></code>).
+  of the model (see also <code><a href='icc.html'>icc</a></code>).
   <br /> <br />
-  Furthermore, see 'Details' in <code><a href='https://rdrr.io/pkg/performance/man/model_performance.lm.html'>model_performance.lm</a></code> for
+  Furthermore, see 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for
   more details on returned indices.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)
+  <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)
 }</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
 #&gt; 
 #&gt; </span><span>  AIC |   BIC | R2_conditional | R2_marginal |  ICC | RMSE

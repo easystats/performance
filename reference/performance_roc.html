@@ -142,7 +142,7 @@ based on response and predictions of a binomial model." />
 based on response and predictions of a binomial model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>, <span class='kw'>predictions</span>, <span class='kw'>new_data</span>)</pre>
+    <pre class="usage"><span class='fu'>performance_roc</span>(<span class='kw'>x</span>, <span class='kw'>...</span>, <span class='kw'>predictions</span>, <span class='kw'>new_data</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,13 +190,13 @@ name.</p>
 <span class='kw'>train_data</span> <span class='op'>&lt;-</span> <span class='kw'>iris</span>[<span class='op'>-</span><span class='kw'>folds</span>, ]
 
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Sepal.Width</span>, data = <span class='kw'>train_data</span>, family = <span class='st'>"binomial"</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>model</span>, new_data = <span class='kw'>test_data</span>)</div><div class='output co'>#&gt; AUC: 37.66%</div><div class='input'>
-<span class='kw'>roc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>model</span>, new_data = <span class='kw'>test_data</span>)
+<span class='fu'>performance_roc</span>(<span class='kw'>model</span>, new_data = <span class='kw'>test_data</span>)</div><div class='output co'>#&gt; AUC: 37.66%</div><div class='input'>
+<span class='kw'>roc</span> <span class='op'>&lt;-</span> <span class='fu'>performance_roc</span>(<span class='kw'>model</span>, new_data = <span class='kw'>test_data</span>)
 <span class='fu'><a href='https://rdrr.io/pkg/bayestestR/man/area_under_curve.html'>area_under_curve</a></span>(<span class='kw'>roc</span><span class='op'>$</span><span class='kw'>Specifity</span>, <span class='kw'>roc</span><span class='op'>$</span><span class='kw'>Sensivity</span>)</div><div class='output co'>#&gt; [1] 0.3766234</div><div class='input'>
 <span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Sepal.Width</span>, data = <span class='kw'>iris</span>, family = <span class='st'>"binomial"</span>)
 <span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Petal.Width</span>, data = <span class='kw'>iris</span>, family = <span class='st'>"binomial"</span>)
 <span class='kw'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>y</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> <span class='kw'>Species</span>, data = <span class='kw'>iris</span>, family = <span class='st'>"binomial"</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_roc.html'>performance_roc</a></span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Area under Curve
+<span class='fu'>performance_roc</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Area under Curve
 #&gt; 
 #&gt; </span><span>  m1: 54.80%
 #&gt;   m2: 53.41%

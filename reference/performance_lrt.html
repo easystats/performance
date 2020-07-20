@@ -140,7 +140,7 @@
     <p>Compute Likelihood-Ratio-Test for model comparison.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_lrt.html'>performance_lrt</a></span>(<span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>performance_lrt</span>(<span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,19 +159,19 @@
     <p>This only makes statistical sense if the models are nested. It is conventional to list the models from smallest to largest, but this is up to the user. The output shows the tests of the models against one another in the order specified.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/performance/man/compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
+    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
 <span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span>, data = <span class='kw'>mtcars</span>)
 <span class='kw'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span> <span class='op'>+</span> <span class='kw'>disp</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_lrt.html'>performance_lrt</a></span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test for Model Comparison
+<span class='fu'>performance_lrt</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test for Model Comparison
 #&gt; 
-#&gt; </span><span>Model | Type | Df |    AIC |    p
-#&gt; ---------------------------------
-#&gt; m1    |   lm |  3 | 156.01 |     
-#&gt; m2    |   lm |  4 | 157.50 | 0.51
-#&gt; m3    |   lm |  5 | 159.11 | 0.56
+#&gt; </span><span>Model | Type | Df | AIC |     p
+#&gt; -------------------------------
+#&gt; m1    |   lm |  3 | 156 |      
+#&gt; m2    |   lm |  4 | 157 | 0.507
+#&gt; m3    |   lm |  5 | 159 | 0.563
 #&gt; </span><span style='color: #BBBB00;'>
 #&gt; Model 'm1' seems to have the best model fit.
 #&gt; </span><span></div></span></pre>

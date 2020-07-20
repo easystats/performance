@@ -142,7 +142,7 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
 it additionally computes the R2 related to the fixed effects only (marginal R2).</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_bayes.html'>r2_bayes</a></span>(<span class='kw'>model</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.89</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_bayes</span>(<span class='kw'>model</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.89</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,7 +169,7 @@ calculate the central tendency of the variances.</p></td>
   and credible intervals for the R2 values are saved as attributes.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code><a href='https://rdrr.io/pkg/performance/man/r2_bayes.html'>r2_bayes()</a></code> returns an "unadjusted" R2 value. See <code><a href='https://rdrr.io/pkg/performance/man/r2_loo.html'>r2_loo</a></code>
+    <p><code>r2_bayes()</code> returns an "unadjusted" R2 value. See <code><a href='r2_loo.html'>r2_loo</a></code>
   to calculate a LOO-adjusted R2, which comes conceptionally closer to an
   adjusted R2 measure.
   <br /> <br />
@@ -184,7 +184,7 @@ calculate the central tendency of the variances.</p></td>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://easystats.github.io/performance'>performance</a></span>)
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>, chains = <span class='fl'>1</span>, iter = <span class='fl'>500</span>, refresh = <span class='fl'>0</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_bayes.html'>r2_bayes</a></span>(<span class='kw'>model</span>)
+  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
 
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_lmer</a></span>(
     <span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Width</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>),
@@ -193,23 +193,23 @@ calculate the central tendency of the variances.</p></td>
     iter = <span class='fl'>500</span>,
     refresh = <span class='fl'>0</span>
   )
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_bayes.html'>r2_bayes</a></span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; <span class='warning'>Warning: The largest R-hat is 1.05, indicating chains have not mixed.</span>
+  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
+}</div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#r-hat</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
-#&gt; </span><span>  Conditional R2: 0.953 [0.005]
-#&gt;      Marginal R2: 0.822 [0.047]</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+#&gt; </span><span>  Conditional R2: 0.954 [0.006]
+#&gt;      Marginal R2: 0.826 [0.035]</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='kw'>brms</span>::<span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_bayes.html'>r2_bayes</a></span>(<span class='kw'>model</span>)
+  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
 
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='kw'>brms</span>::<span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Width</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/performance/man/r2_bayes.html'>r2_bayes</a></span>(<span class='kw'>model</span>)
+  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
 }
 }</div></span></pre>
   </div>

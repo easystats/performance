@@ -143,14 +143,14 @@ a generic function that also works for some models that don't have a AIC method
     <div class="ref-description">
     <p>Compute the second-order Akaike's information criterion (AICc).
 The second-order (or small sample) is a AIC with a correction for small sample
-sizes. <code><a href='https://rdrr.io/pkg/performance/man/performance_aicc.html'>performance_aic()</a></code> is a small wrapper that returns the AIC. It is
+sizes. <code>performance_aic()</code> is a small wrapper that returns the AIC. It is
 a generic function that also works for some models that don't have a AIC method
 (like Tweedie models).</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_aicc.html'>performance_aicc</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>performance_aicc</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
-<span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_aicc.html'>performance_aic</a></span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>performance_aic</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,7 +179,7 @@ a generic function that also works for some models that don't have a AIC method
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span> <span class='op'>+</span> <span class='kw'>disp</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'><a href='https://rdrr.io/r/stats/AIC.html'>AIC</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] 159.1051</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/performance/man/performance_aicc.html'>performance_aicc</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] 162.4651</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/stats/AIC.html'>AIC</a></span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] 159.1051</div><div class='input'><span class='fu'>performance_aicc</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; [1] 162.4651</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
