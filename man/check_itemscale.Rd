@@ -39,7 +39,7 @@ C <- chol(S <- toeplitz(.9^(0:15)))
 set.seed(17)
 X <- matrix(rnorm(16000), 100, 16)
 Z <- X \%*\% C
-if (require("parameters")) {
+if (require("parameters") && require("psych")) {
   pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
   pca
   check_itemscale(pca)
