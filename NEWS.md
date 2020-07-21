@@ -10,6 +10,7 @@
 
 ## Bug fixes
 
+* Fix issue with new version of bigutilsr for `check_outliers()`.
 * Fix issue with model order in `performance_lrt()`.
 
 # performance 0.4.7

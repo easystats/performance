@@ -175,7 +175,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
   # Check args
   if (all(method == "all")) {
-    method <- c("zscore", "iqr", "cook", "pareto", "mahalanobis", "mcd", "ics", "optics", "iforest", "lof")
+    method <- c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof")
   }
   method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
@@ -526,7 +526,7 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
   # Compute
-  out$Distance_Robust <- bigutilsr::covRob(x, estim = "pairwiseGK")$dist
+  out$Distance_Robust <- bigutilsr::dist_ogk(as.matrix(x))
 
   # Filter
   out$Outlier_Robust <- as.numeric(out$Distance_Robust > threshold)
