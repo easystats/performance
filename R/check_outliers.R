@@ -254,7 +254,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   # Check args
   if (all(method == "all")) {
-    method <- c("zscore", "iqr", "mahalanobis", "mcd", "ics", "optics", "lof")
+    method <- c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof")
   }
   method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "lof"), several.ok = TRUE)
 
