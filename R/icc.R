@@ -7,16 +7,18 @@
 #'  the \pkg{brms}-package, \code{icc()} might fail due to the large variety
 #'  of models and families supported by the \pkg{brms}-package. In such cases,
 #'  an alternative to the ICC is the \code{variance_decomposition()}, which is
-#'  based on the posterior predictive distribution is calculated (see 'Details').
+#'  based on the posterior predictive distribution (see 'Details').
 #'
 #' @param model A (Bayesian) mixed effects model.
-#' @param re.form Formula containing group-level effects to be considered in
+#' @param re_formula Formula containing group-level effects to be considered in
 #'   the prediction. If \code{NULL} (default), include all group-level effects.
 #'   Else, for instance for nested models, name a specific group-level effect
-#'   to calculate the variance decomposition for this group-level.
+#'   to calculate the variance decomposition for this group-level. See 'Details'
+#'   and \code{?brms::posterior_predict}.
 #' @param ci Credible interval level.
 #' @param by_group Logical, if \code{TRUE}, \code{icc()} returns the variance
 #'   components for each random-effects level (if there are multiple levels).
+#'   See 'Details'.
 #'
 #' @inheritParams r2_bayes
 #'
@@ -82,14 +84,14 @@
 #'  The function calculates a variance decomposition based on the posterior
 #'  predictive distribution. In this case, first, the draws from the posterior
 #'  predictive distribution \emph{not conditioned} on group-level terms
-#'  (\code{posterior_predict(..., re.form = NA)}) are calculated as well as
+#'  (\code{posterior_predict(..., re_formula = NA)}) are calculated as well as
 #'  draws from this distribution \emph{conditioned} on \emph{all random effects}
-#'  (by default, unless specified else in \code{re.form}) are taken. Then,
+#'  (by default, unless specified else in \code{re_formula}) are taken. Then,
 #'  second, the variances for each of these draws are calculated. The "ICC"
 #'  is then the ratio between these two variances. This is the recommended way
 #'  to analyse random-effect-variances for non-Gaussian models. It is then possible
 #'  to compare variances across models, also by specifying different group-level
-#'  terms via the \code{re.form}-argument.
+#'  terms via the \code{re_formula}-argument.
 #'  \cr \cr
 #'  Sometimes, when the variance of the posterior predictive distribution is
 #'  very large, the variance ratio in the output makes no sense, e.g. because
@@ -211,7 +213,7 @@ icc <- function(model, by_group = FALSE) {
 #' @inheritParams icc
 #' @rdname icc
 #' @export
-variance_decomposition <- function(model, re.form = NULL, robust = TRUE, ci = .95) {
+variance_decomposition <- function(model, re_formula = NULL, robust = TRUE, ci = .95) {
   if (!inherits(model, "brmsfit")) {
     stop("Only models from package 'brms' are supported.")
   }
@@ -236,10 +238,10 @@ variance_decomposition <- function(model, re.form = NULL, robust = TRUE, ci = .9
     stop("Package `brms` needed for this function to work. Please install it.", call. = FALSE)
   }
 
-  PPD <- brms::posterior_predict(model, re.form = re.form, summary = FALSE)
+  PPD <- brms::posterior_predict(model, re_formula = re_formula, summary = FALSE)
   var_total <- apply(PPD, MARGIN = 1, FUN = stats::var)
 
-  PPD_0 <- brms::posterior_predict(model, re.form = NA, summary = FALSE)
+  PPD_0 <- brms::posterior_predict(model, re_formula = NA, summary = FALSE)
   var_rand_intercept <- apply(PPD_0, MARGIN = 1, FUN = stats::var)
 
   if (robust) {
@@ -267,7 +269,7 @@ variance_decomposition <- function(model, re.form = NULL, robust = TRUE, ci = .9
   attr(result, "ci.var_residual") <- bayestestR::ci(var_residual, ci = ci)
   attr(result, "ci.var_total") <- bayestestR::ci(var_total, ci = ci)
   attr(result, "ci") <- ci
-  attr(result, "re.form") <- re.form
+  attr(result, "re.form") <- re_formula
   attr(result, "ranef") <- model$ranef$group[1]
 
   # remove data
