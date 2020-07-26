@@ -1,15 +1,15 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
-if (require("testthat") && require("performance") && require("rstanarm")) {
-  if (.runThisTest && Sys.getenv("USER") != "travis") {
+if (require("testthat") && require("performance") && require("rstanarm") && require("brms")) {
+  if (.runThisTest) {
     test_that("model_performance.stanreg", {
       set.seed(333)
       model <- insight::download_model("stanreg_lm_1")
       perf <- model_performance(model)
 
-      expect_equal(perf$R2, 0.7381938, tolerance = 1e-3)
-      expect_equal(perf$R2_adjusted, 0.7110354, tolerance = 1e-3)
-      expect_equal(perf$ELPD, -83.40375, tolerance = 1e-3)
+      expect_equal(perf$R2, 0.7398733, tolerance = 1e-3)
+      expect_equal(perf$R2_adjusted, 0.7075685, tolerance = 1e-3)
+      expect_equal(perf$ELPD, --83.49838, tolerance = 1e-3)
 
       model <- insight::download_model("stanreg_lm_2")
       perf <- model_performance(model)
@@ -29,24 +29,23 @@ if (require("testthat") && require("performance") && require("rstanarm")) {
 
     test_that("model_performance.brmsfit", {
       set.seed(333)
-      library(brms)
 
       model <- insight::download_model("brms_1")
       perf <- model_performance(model)
-      expect_equal(perf$R2, 0.8267671, tolerance = 1e-3)
-      expect_equal(perf$R2_adjusted, 0.7908548, tolerance = 1e-3)
-      expect_equal(perf$ELPD, -78.43708, tolerance = 1e-3)
+      expect_equal(perf$R2, 0.8262673, tolerance = 1e-3)
+      expect_equal(perf$R2_adjusted, 0.7901985, tolerance = 1e-3)
+      expect_equal(perf$ELPD, -78.59823, tolerance = 1e-3)
 
       model <- insight::download_model("brms_mixed_4")
       perf <- model_performance(model)
-      expect_equal(perf$R2, 0.9545026, tolerance = 1e-3)
-      expect_equal(perf$R2_adjusted, 0.9524251, tolerance = 1e-3)
-      expect_equal(perf$ELPD, -70.2357, tolerance = 1e-3)
+      expect_equal(perf$R2, 0.954538, tolerance = 1e-3)
+      expect_equal(perf$R2_adjusted, 0.9523081, tolerance = 1e-3)
+      expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)
 
       model <- insight::download_model("brms_ordinal_1")
       perf <- model_performance(model)
-      expect_equal(perf$R2, 0.873797, tolerance = 1e-3)
-      expect_equal(perf$ELPD, -12.78422, tolerance = 1e-3)
+      expect_equal(perf$R2, 0.8760015, tolerance = 1e-3)
+      expect_equal(perf$ELPD, -11.65433, tolerance = 1e-3)
     })
   }
 }

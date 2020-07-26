@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
-if (.runThisTest && Sys.getenv("USER") != "travis") {
+if (.runThisTest) {
   if (require("testthat") && require("performance") && require("lme4") && require("insight")) {
     data(iris)
     m0 <- lm(Sepal.Length ~ Petal.Length, data = iris)
@@ -34,7 +34,16 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       set.seed(123)
       expect_equal(
         variance_decomposition(m3)$ICC_decomposed,
-        0.3900683,
+        0.3262006,
+        tolerance = 0.05
+      )
+    })
+
+    test_that("icc", {
+      set.seed(123)
+      expect_equal(
+        icc(m3),
+        structure(list(ICC_adjusted = 0.930217931275196, ICC_conditional = 0.771475122370036), class = "icc"),
         tolerance = 0.05
       )
     })
