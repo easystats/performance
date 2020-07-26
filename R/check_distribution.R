@@ -138,6 +138,23 @@ check_distribution.default <- function(model) {
     "Uniques" = length(unique(x)) / length(x),
     "N_Uniques" = length(unique(x)),
     "Min" = min(x),
-    "Max" = max(x)
+    "Max" = max(x),
+    "Proportion_Positive" = sum(x >= 0) / length(x),
+    "Integer" = all(.is_integer(x))
+  )
+}
+
+
+.is_integer <- function(x) {
+  tryCatch(
+    expr = {
+      ifelse(is.infinite(x), FALSE, x %% 1 == 0)
+    },
+    warning = function(w) {
+      is.integer(x)
+    },
+    error = function(e) {
+      FALSE
+    }
   )
 }

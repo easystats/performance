@@ -36,6 +36,7 @@ generate_distribution <- function(
     rweibull(size, location, scale)
   } else if (family == "tweedie") {
     tweedie::rtweedie(size, mu = mu, phi = scale, power = location)
+    # mgcv::rTweedie(mu = mu, p = location + 1, phi = scale)
   } else if (family == "uniform") {
     runif(size, location, location * 2)
   } else if (family == "negative binomial") {
@@ -60,6 +61,20 @@ distrs <- c(
   "weibull", "beta-binomial", "binomial", "pareto", "tweedie"
 )
 
+.is.integer <- function(x) {
+  tryCatch(
+    expr = {
+      ifelse(is.infinite(x), FALSE, x %% 1 == 0)
+    },
+    warning = function(w) {
+      is.integer(x)
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
+}
+
 pb <- txtProgressBar(min = 0, max = length(distrs), style = 3)
 
 for (di in 1:length(distrs)) {
@@ -68,7 +83,7 @@ for (di in 1:length(distrs)) {
   distribution <- distrs[di]
   cat("\n\n", sprintf("Distribution %i of %i:", di, length(distrs)), distribution, "\n")
 
-  n_samples <- 1250
+  n_samples <- 1500
 
   pb2 <- txtProgressBar(min = 1, max = n_samples, style = 3)
 
@@ -78,7 +93,11 @@ for (di in 1:length(distrs)) {
 
     size <- round(runif(1, 30, 2000))
     trials <- round(runif(1, 0, ifelse(size / 5 > 100, 100, size / 5)))
-    location <- runif(1, 0.01, 10)
+    location <- if (distribution == "tweedie") {
+      runif(1, 1.0001, 1.9999)
+    } else {
+      runif(1, 0.01, 10)
+    }
     scale <- runif(1, 0.02, 10)
     prob <- runif(1, .05, .9)
     mu <- runif(1, 1, ifelse(round(sqrt(trials)) < 2, 2, round(sqrt(trials))))
@@ -99,7 +118,7 @@ for (di in 1:length(distrs)) {
     x <- as.vector(na.omit(sjmisc::zap_inf(x)))
     # x_scaled <- parameters::normalize(x, verbose = FALSE)
 
-    if (length(x >= 10)) {
+    if (length(x) >= 10) {
       # Extract features
       data <- data.frame(
         "SD" = sd(x),
@@ -111,12 +130,14 @@ for (di in 1:length(distrs)) {
         "Range_SD" = diff(range(x)) / sd(x),
         "Range" = diff(range(x)),
         "IQR" = stats::IQR(x),
-        "Skewness" = parameters::skewness(x),
-        "Kurtosis" = parameters::kurtosis(x),
+        "Skewness" = as.numeric(parameters::skewness(x)),
+        "Kurtosis" = as.numeric(parameters::kurtosis(x)),
         "Uniques" = length(unique(x)) / length(x),
         "N_Uniques" = length(unique(x)),
         "Min" = min(x),
-        "Max" = max(x)
+        "Max" = max(x),
+        "Proportion_Positive" = sum(x >= 0) / length(x),
+        "Integer" = all(.is.integer(x))
         # "Proportion_Zero" = sum(x == 0) / length(x)
         # "Proportion_Minimum" = sum(x == min(x)) / length(x),
         # "Proportion_Maximum" = sum(x == max(x)) / length(x)
