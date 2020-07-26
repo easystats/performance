@@ -121,9 +121,18 @@
 #'   )
 #'   icc(model, by_group = TRUE)
 #' }
-#' @importFrom insight model_info get_variance print_color find_random find_random_slopes
+#' @importFrom insight model_info get_variance print_color find_random find_random_slopes is_multivariate
 #' @export
 icc <- function(model, by_group = FALSE) {
+  if (insight::is_multivariate(model)) {
+    if (inherits(model, "brmsfit")) {
+      return(variance_decomposition(model))
+    } else {
+      insight::print_color("Multiple response models not yet supported. You may use 'performance::variance_decomposition()'.\n", "red")
+      return(NULL)
+    }
+  }
+
   if (!insight::model_info(model)$is_mixed) {
     warning("'model' has no random effects.", call. = FALSE)
     return(NULL)
