@@ -287,7 +287,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
         assign <- switch(
           component,
           conditional = attr(stats::model.matrix(x), "assign"),
-          zero_inflated = .find_term_assignment(x, component)
+          zero_inflated = .zi_term_assignment(x, component)
         )
       } else if (inherits(x, "MixMod")) {
         assign <- switch(
@@ -335,4 +335,19 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     insight::clean_names(insight::find_parameters(x)[[component]]),
     parms
   )])
+}
+
+
+
+#' @importFrom insight find_formula get_data
+#' @importFrom stats model.matrix
+.zi_term_assignment <- function(x, component = "zero_inflated") {
+  tryCatch(
+    {
+      rhs <- insight::find_formula(x)[[component]]
+      d <- insight::get_data(x)
+      attr(stats::model.matrix(rhs, data = d), "assign")
+    },
+    error = function(e) { NULL }
+  )
 }
