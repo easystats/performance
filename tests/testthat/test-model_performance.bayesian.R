@@ -9,7 +9,7 @@ if (require("testthat") && require("performance") && require("rstanarm") && requ
 
       expect_equal(perf$R2, 0.7398733, tolerance = 1e-3)
       expect_equal(perf$R2_adjusted, 0.7075685, tolerance = 1e-3)
-      expect_equal(perf$ELPD, --83.49838, tolerance = 1e-3)
+      expect_equal(perf$ELPD, -83.49838, tolerance = 1e-3)
 
       model <- insight::download_model("stanreg_lm_2")
       perf <- model_performance(model)
