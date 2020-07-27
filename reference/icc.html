@@ -54,7 +54,7 @@
  the brms-package, icc() might fail due to the large variety
  of models and families supported by the brms-package. In such cases,
  an alternative to the ICC is the variance_decomposition(), which is
- based on the posterior predictive distribution is calculated (see 'Details')." />
+ based on the posterior predictive distribution (see 'Details')." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -87,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.8</span>
       </span>
     </div>
 
@@ -151,12 +151,12 @@
  the <span class="pkg">brms</span>-package, <code>icc()</code> might fail due to the large variety
  of models and families supported by the <span class="pkg">brms</span>-package. In such cases,
  an alternative to the ICC is the <code>variance_decomposition()</code>, which is
- based on the posterior predictive distribution is calculated (see 'Details').</p>
+ based on the posterior predictive distribution (see 'Details').</p>
     </div>
 
     <pre class="usage"><span class='fu'>icc</span>(<span class='kw'>model</span>, by_group = <span class='fl'>FALSE</span>)
 
-<span class='fu'>variance_decomposition</span>(<span class='kw'>model</span>, re.form = <span class='kw'>NULL</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.95</span>)</pre>
+<span class='fu'>variance_decomposition</span>(<span class='kw'>model</span>, re_formula = <span class='kw'>NULL</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.95</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,14 +168,16 @@
     <tr>
       <th>by_group</th>
       <td><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
-components for each random-effects level (if there are multiple levels).</p></td>
+components for each random-effects level (if there are multiple levels).
+See 'Details'.</p></td>
     </tr>
     <tr>
-      <th>re.form</th>
+      <th>re_formula</th>
       <td><p>Formula containing group-level effects to be considered in
 the prediction. If <code>NULL</code> (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
-to calculate the variance decomposition for this group-level.</p></td>
+to calculate the variance decomposition for this group-level. See 'Details'
+and <code><a href='https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html'>?brms::posterior_predict</a></code>.</p></td>
     </tr>
     <tr>
       <th>robust</th>
@@ -236,14 +238,14 @@ ICC as well as the credible intervals for this ICC.</p>
  The function calculates a variance decomposition based on the posterior
  predictive distribution. In this case, first, the draws from the posterior
  predictive distribution <em>not conditioned</em> on group-level terms
- (<code><a href='https://mc-stan.org/rstanarm/reference/posterior_predict.stanreg.html'>posterior_predict(..., re.form = NA)</a></code>) are calculated as well as
+ (<code><a href='https://mc-stan.org/rstanarm/reference/posterior_predict.stanreg.html'>posterior_predict(..., re_formula = NA)</a></code>) are calculated as well as
  draws from this distribution <em>conditioned</em> on <em>all random effects</em>
- (by default, unless specified else in <code>re.form</code>) are taken. Then,
+ (by default, unless specified else in <code>re_formula</code>) are taken. Then,
  second, the variances for each of these draws are calculated. The "ICC"
  is then the ratio between these two variances. This is the recommended way
  to analyse random-effect-variances for non-Gaussian models. It is then possible
  to compare variances across models, also by specifying different group-level
- terms via the <code>re.form</code>-argument.
+ terms via the <code>re_formula</code>-argument.
  <br /> <br />
  Sometimes, when the variance of the posterior predictive distribution is
  very large, the variance ratio in the output makes no sense, e.g. because

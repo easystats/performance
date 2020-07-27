@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.8</span>
       </span>
     </div>
 
@@ -191,11 +191,11 @@
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>17</span>)
 <span class='kw'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>16000</span>), <span class='fl'>100</span>, <span class='fl'>16</span>)
 <span class='kw'>Z</span> <span class='op'>&lt;-</span> <span class='kw'>X</span> <span class='op'>%*%</span> <span class='kw'>C</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://easystats.github.io/parameters'>"parameters"</a></span>)) {
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://easystats.github.io/parameters'>"parameters"</a></span>) <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://personality-project.org/r/psych'>"psych"</a></span>)) {
   <span class='kw'>pca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/parameters/man/principal_components.html'>principal_components</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='kw'>Z</span>), rotation = <span class='st'>"varimax"</span>, n = <span class='fl'>3</span>)
   <span class='kw'>pca</span>
   <span class='fu'>check_itemscale</span>(<span class='kw'>pca</span>)
-}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Description of (Sub-)Scales
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: psych</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Description of (Sub-)Scales
 #&gt; </span><span style='color: #BB0000;'>
 #&gt; Component 1
 #&gt; 

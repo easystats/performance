@@ -81,7 +81,7 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.7.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.8</span>
       </span>
     </div>
 
@@ -202,8 +202,8 @@ calculate the central tendency of the variances.</p></td>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
-#&gt; </span><span>  Conditional R2: 0.954 [0.006]
-#&gt;      Marginal R2: 0.826 [0.035]</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+#&gt; </span><span>  Conditional R2: 0.953 [0.006]
+#&gt;      Marginal R2: 0.823 [0.040]</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='kw'>brms</span>::<span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
   <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
