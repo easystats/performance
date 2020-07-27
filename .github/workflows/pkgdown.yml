@@ -16,6 +16,8 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 
+      - uses: r-lib/actions/setup-tinytex@v1
+
       - name: Query dependencies
         run: |
           install.packages('remotes')
@@ -33,6 +35,8 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages("remotes")
+          # To get links for homepage
+          remotes::install_cran("devtools")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
         shell: Rscript {0}
@@ -41,5 +45,7 @@ jobs:
         run: R CMD INSTALL .
 
       - name: Deploy package
-        run: pkgdown::deploy_to_branch(new_process = FALSE)
-        shell: Rscript {0}
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
