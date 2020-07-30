@@ -1,3 +1,9 @@
+# performance 0.4.9
+
+## General
+
+* `r2()` and `icc()` support `semLME` models (package *smicd*).
+
 # performance 0.4.8
 
 ## General

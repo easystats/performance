@@ -124,6 +124,12 @@
 #' @importFrom insight model_info get_variance print_color find_random find_random_slopes is_multivariate
 #' @export
 icc <- function(model, by_group = FALSE) {
+
+  # special handling for smicd::semLme()
+  if (all(inherits(model, c("sem", "lme")))) {
+    return(model$icc)
+  }
+
   if (insight::is_multivariate(model)) {
     if (inherits(model, "brmsfit")) {
       return(variance_decomposition(model))

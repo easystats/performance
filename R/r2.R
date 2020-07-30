@@ -348,6 +348,26 @@ r2.wbm <- function(model, ...) {
 
 
 
+#' @export
+r2.sem <- function(model, ...) {
+  r2_conditional <- model$r2c
+  r2_marginal <- model$r2m
+
+  names(r2_conditional) <- "Conditional R2"
+  names(r2_marginal) <- "Marginal R2"
+
+  structure(
+    class = "r2_nakagawa",
+    list(
+      "R2_conditional" = r2_conditional,
+      "R2_marginal" = r2_marginal
+    )
+  )
+}
+
+
+
+
 
 
 
