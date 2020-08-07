@@ -207,4 +207,3 @@ model_performance.mlogit <- function(model, metrics = "all", verbose = TRUE, ...
     NULL
   }
 }
-

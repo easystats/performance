@@ -22,7 +22,7 @@ editor_options:
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
-options(knitr.kable.NA = '')
+options(knitr.kable.NA = "")
 knitr::opts_chunk$set(comment = "#>")
 options(digits = 2)
 
@@ -41,10 +41,10 @@ It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1, and can be 
 As models become more complex, the computation of an R2 becomes less straightforward.
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-d <- data.frame("Model_class" = c("lm", "glm"),
-           "r2_simple" = c("X", NA),
-           "r2_Tjur" = c(NA, "X"))
+d <- data.frame(
+  "Model_class" = c("lm", "glm"),
+  "r2_simple" = c("X", NA),
+  "r2_Tjur" = c(NA, "X")
+)
 knitr::kable(d)
 ```
-
-

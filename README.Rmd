@@ -20,13 +20,15 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   tidy.opts = list(width.cutoff = 80),
   tidy = TRUE,
-  dpi = 300, 
+  dpi = 300,
   fig.path = "man/figures/",
   comment = "#>"
 )
-options(knitr.kable.NA = '',
-        digits = 4,
-        width = 60)
+options(
+  knitr.kable.NA = "",
+  digits = 4,
+  width = 60
+)
 ```
 
 
@@ -83,8 +85,8 @@ For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_
 ```{r, warning=FALSE, message=FALSE}
 library(rstanarm)
 model <- stan_glmer(
-  Petal.Length ~ Petal.Width + (1 | Species), 
-  data = iris, 
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
   cores = 4
 )
 r2(model)

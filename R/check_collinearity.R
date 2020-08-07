@@ -348,6 +348,8 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
       d <- insight::get_data(x)
       attr(stats::model.matrix(rhs, data = d), "assign")
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 }

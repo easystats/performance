@@ -113,7 +113,7 @@
 #'   for (i in 1:5) {
 #'     filter_group <- sleepstudy$grp == i
 #'     sleepstudy$subgrp[filter_group] <-
-#'     sample(1:30, size = sum(filter_group), replace = TRUE)
+#'       sample(1:30, size = sum(filter_group), replace = TRUE)
 #'   }
 #'   model <- lmer(
 #'     Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject),

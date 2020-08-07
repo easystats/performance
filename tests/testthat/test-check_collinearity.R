@@ -1,9 +1,10 @@
 if (require("testthat") && require("performance") && require("glmmTMB")) {
   data(Salamanders)
   m1 <- glmmTMB(count ~ spp + mined + (1 | site),
-                ziformula = ~ spp,
-                Salamanders,
-                family = poisson())
+    ziformula = ~spp,
+    Salamanders,
+    family = poisson()
+  )
 
   test_that("check_collinearity", {
     expect_equal(

@@ -1,13 +1,12 @@
 generate_distribution <- function(
-  family = "normal",
-  size = 1000,
-  location = 0,
-  scale = 1,
-  trials = 1,
-  prob = .5,
-  mu = 3,
-  zi = .2
-) {
+                                  family = "normal",
+                                  size = 1000,
+                                  location = 0,
+                                  scale = 1,
+                                  trials = 1,
+                                  prob = .5,
+                                  mu = 3,
+                                  zi = .2) {
   if (family == "normal") {
     rnorm(size, location, scale)
   } else if (family == "beta") {
@@ -78,7 +77,6 @@ distrs <- c(
 pb <- txtProgressBar(min = 0, max = length(distrs), style = 3)
 
 for (di in 1:length(distrs)) {
-
   setTxtProgressBar(pb, di - 1)
   distribution <- distrs[di]
   cat("\n\n", sprintf("Distribution %i of %i:", di, length(distrs)), distribution, "\n")
@@ -88,7 +86,6 @@ for (di in 1:length(distrs)) {
   pb2 <- txtProgressBar(min = 1, max = n_samples, style = 3)
 
   for (i in 1:n_samples) {
-
     setTxtProgressBar(pb2, i)
 
     size <- round(runif(1, 30, 2000))
