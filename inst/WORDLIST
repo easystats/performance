@@ -14,8 +14,10 @@ behaviour
 bife
 bigglm
 biglm
+bigutilsr
 Biometrics
 Biometrika
+bmj
 BMJ
 Bolker
 Bollen
@@ -33,9 +35,9 @@ clmm
 CochransQ
 complmrob
 conceptionally
+CRC
 Cronbach's
 crossvalidation
-CRC
 Csaki
 DBSCAN
 discriminations
@@ -51,8 +53,8 @@ EQS
 Erlbaum
 et
 Fligner
-gam
 Gabry
+gam
 Gazen
 Gelman
 geoms
@@ -77,14 +79,12 @@ Hoboken
 Holger
 Hosmer
 Hox
-Hrsg
 https
 Hurvich
 ICCs
 ics
 ICS
 IFI
-iforest
 Iglewicz
 intra
 Intra
@@ -132,6 +132,7 @@ mlm
 mlogit
 modelling
 multicollinearity
+Multicollinearity
 multiresponse
 Nagelkerke
 Nagelkerke's
@@ -175,6 +176,7 @@ Schumacker
 SEM
 Shinichi
 Skrondal
+smicd
 Springer
 SRMR
 Stata

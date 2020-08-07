@@ -4,7 +4,6 @@ if (require("testthat") &&
   require("AER") &&
   require("ordinal") &&
   require("betareg")) {
-
   data("Affairs", package = "AER")
   data("GasolineYield")
   data("wine")

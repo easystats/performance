@@ -91,7 +91,6 @@ r2_nakagawa <- function(model, by_group = FALSE) {
 
     class(out) <- c("r2_nakagawa_by_group", "data.frame")
     out
-
   } else {
     # Calculate R2 values
     if (.is_empty_object(vars$var.random) || is.na(vars$var.random)) {

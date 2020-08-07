@@ -56,27 +56,20 @@ model_performance.lavaan <- function(model, metrics = "all", ...) {
     "Chisq" = measures$chisq,
     "Chisq_df" = measures$df,
     "Chisq_p" = measures$pvalue,
-
     "Baseline" = measures$baseline.chisq,
     "Baseline_df" = measures$baseline.df,
     "Baseline_p" = measures$baseline.pvalue,
-
     "GFI" = measures$gfi,
     "AGFI" = measures$agfi,
-
     "NFI" = measures$nfi,
     "NNFI" = measures$tli,
-
     "CFI" = measures$cfi,
-
     "RMSEA" = measures$rmsea,
     "RMSEA_CI_low" = measures$rmsea.ci.lower,
     "RMSEA_CI_high" = measures$rmsea.ci.upper,
     "RMSEA_p" = measures$rmsea.pvalue,
-
     "RMR" = measures$rmr,
     "SRMR" = measures$srmr,
-
     "RFI" = measures$rfi,
     "PNFI" = measures$pnfi,
     "IFI" = measures$ifi,

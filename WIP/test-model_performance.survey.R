@@ -33,12 +33,12 @@ if (.runThisTest && Sys.getenv("USER") != "travis") {
       pbc$randomized <- with(pbc, !is.na(trt) & trt > 0)
       biasmodel <- glm(randomized ~ age * edema, data = pbc, family = binomial)
       pbc$randprob <- fitted(biasmodel)
-      if (is.null(pbc$albumin)) pbc$albumin <- pbc$alb ##pre2.9.0
+      if (is.null(pbc$albumin)) pbc$albumin <- pbc$alb ## pre2.9.0
 
       dpbc <- svydesign(
-        id =  ~ 1,
-        prob =  ~ randprob,
-        strata =  ~ edema,
+        id = ~1,
+        prob = ~randprob,
+        strata = ~edema,
         data = subset(pbc, randomized)
       )
       rpbc <- as.svrepdesign(dpbc)
