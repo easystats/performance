@@ -7,6 +7,7 @@
 ## Bug fixes
 
 * Fixed issue with incorrect labeling of groups from `icc()` when `by_group = TRUE`.
+* Fixed CRAN check issues.
 
 # performance 0.4.8
 

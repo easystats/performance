@@ -42,9 +42,7 @@
 #' distributions, however, only if the probability is greater than zero.
 #'
 #' @examples
-#' if (require("lme4")) {
-#'   library(lme4)
-#'   library(parameters)
+#' if (require("lme4") && require("parameters") && require("gridExtra")) {
 #'   data(sleepstudy)
 #'
 #'   model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)

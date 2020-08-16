@@ -40,7 +40,7 @@ See the documentation for \code{?metafor::fitstats}.
 if (require("metafor")) {
   data(dat.bcg)
   dat <- escalc(measure = "RR", ai = tpos, bi = tneg, ci = cpos, di = cneg, data = dat.bcg)
-  model <- rma(yi, vi, data = dat, method= "REML")
+  model <- rma(yi, vi, data = dat, method = "REML")
   model_performance(model)
 }
 }

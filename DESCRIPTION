@@ -52,6 +52,7 @@ Suggests:
     dbscan,
     fixest,
     forecast,
+    gridExtra,
     glmmTMB,
     ICS,
     ICSOutlier,
