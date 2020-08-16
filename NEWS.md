@@ -4,6 +4,10 @@
 
 * `r2()` and `icc()` support `semLME` models (package *smicd*).
 
+## Bug fixes
+
+* Fixed issue with incorrect labeling of groups from `icc()` when `by_group = TRUE`.
+
 # performance 0.4.8
 
 ## General

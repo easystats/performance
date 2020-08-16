@@ -180,13 +180,11 @@ icc <- function(model, by_group = FALSE) {
       warning("Model contains random slopes. Cannot compute accurate ICCs by group factors.", call. = FALSE)
     }
 
-    group_names <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)
-
     # icc per group factor with reference to overall model
     icc_overall <- vars$var.intercept / (vars$var.random + vars$var.residual)
 
     out <- data.frame(
-      Group = group_names,
+      Group = names(icc_overall),
       ICC = unname(icc_overall),
       stringsAsFactors = FALSE
     )
