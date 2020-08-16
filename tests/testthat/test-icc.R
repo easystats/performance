@@ -47,5 +47,27 @@ if (.runThisTest) {
         tolerance = 0.05
       )
     })
+
+    data(sleepstudy)
+    set.seed(12345)
+    sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+    sleepstudy$subgrp <- NA
+    for (i in 1:5) {
+      filter_group <- sleepstudy$grp == i
+      sleepstudy$subgrp[filter_group] <-
+        sample(1:30, size = sum(filter_group), replace = TRUE)
+    }
+    model <- lmer(
+      Reaction ~ Days + (1 | grp) + (1 | Subject),
+      data = sleepstudy
+    )
+
+    test_that("icc", {
+      expect_equal(
+        icc(model, by_group = TRUE),
+        structure(list(Group = c("Subject", "grp"), ICC = c(0.5896587,  0.0016551)), class = c("icc_by_group", "data.frame"), row.names = c(NA, -2L)),
+        tolerance = 0.05
+      )
+    })
   }
 }
