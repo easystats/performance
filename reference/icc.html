@@ -279,7 +279,7 @@ ICC as well as the credible intervals for this ICC.</p>
   <span class='co'>for</span> (<span class='kw'>i</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>) {
     <span class='kw'>filter_group</span> <span class='op'>&lt;-</span> <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>grp</span> <span class='op'>==</span> <span class='kw'>i</span>
     <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>subgrp</span>[<span class='kw'>filter_group</span>] <span class='op'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>, size = <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>filter_group</span>), replace = <span class='fl'>TRUE</span>)
+      <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>, size = <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>filter_group</span>), replace = <span class='fl'>TRUE</span>)
   }
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(
     <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>grp</span> <span class='op'>/</span> <span class='kw'>subgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
