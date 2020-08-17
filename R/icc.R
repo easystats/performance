@@ -223,10 +223,11 @@ icc <- function(model, by_group = FALSE) {
 #' @importFrom bayestestR ci
 #' @importFrom insight is_multivariate find_response model_info
 #' @importFrom stats quantile var
+#' @param ... Arguments passed down to \code{\link[brms:posterior_predict]{posterior_predict()}}.
 #' @inheritParams icc
 #' @rdname icc
 #' @export
-variance_decomposition <- function(model, re_formula = NULL, robust = TRUE, ci = .95) {
+variance_decomposition <- function(model, re_formula = NULL, robust = TRUE, ci = .95, ...) {
   if (!inherits(model, "brmsfit")) {
     stop("Only models from package 'brms' are supported.")
   }
@@ -251,10 +252,10 @@ variance_decomposition <- function(model, re_formula = NULL, robust = TRUE, ci =
     stop("Package `brms` needed for this function to work. Please install it.", call. = FALSE)
   }
 
-  PPD <- brms::posterior_predict(model, re_formula = re_formula, summary = FALSE)
+  PPD <- brms::posterior_predict(model, re_formula = re_formula, summary = FALSE, ...)
   var_total <- apply(PPD, MARGIN = 1, FUN = stats::var)
 
-  PPD_0 <- brms::posterior_predict(model, re_formula = NA, summary = FALSE)
+  PPD_0 <- brms::posterior_predict(model, re_formula = NA, summary = FALSE, ...)
   var_rand_intercept <- apply(PPD_0, MARGIN = 1, FUN = stats::var)
 
   if (robust) {
