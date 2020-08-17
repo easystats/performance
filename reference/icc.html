@@ -156,7 +156,7 @@
 
     <pre class="usage"><span class='fu'>icc</span>(<span class='kw'>model</span>, by_group = <span class='fl'>FALSE</span>)
 
-<span class='fu'>variance_decomposition</span>(<span class='kw'>model</span>, re_formula = <span class='kw'>NULL</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.95</span>)</pre>
+<span class='fu'>variance_decomposition</span>(<span class='kw'>model</span>, re_formula = <span class='kw'>NULL</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.95</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,6 +187,10 @@ calculate the central tendency of the variances.</p></td>
     <tr>
       <th>ci</th>
       <td><p>Credible interval level.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed down to <code><a href='https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html'>posterior_predict()</a></code>.</p></td>
     </tr>
     </table>
 
