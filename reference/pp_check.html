@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>LOO-related Indices for Bayesian regressions. — looic • performance</title>
+<title>Posterior predictive checks for frequentist models — pp_check • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="LOO-related Indices for Bayesian regressions. — looic" />
-<meta property="og:description" content="Compute LOOIC (leave-one-out cross-validation (LOO) information
-  criterion) and ELPD (expected log predictive density) for Bayesian regressions." />
+<meta property="og:title" content="Posterior predictive checks for frequentist models — pp_check" />
+<meta property="og:description" content="Posterior predictive checks for frequentist models." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -132,46 +131,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>LOO-related Indices for Bayesian regressions.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/looic.R'><code>R/looic.R</code></a></small>
-    <div class="hidden name"><code>looic.Rd</code></div>
+    <h1>Posterior predictive checks for frequentist models</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/pp_check.R'><code>R/pp_check.R</code></a></small>
+    <div class="hidden name"><code>pp_check.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Compute LOOIC (leave-one-out cross-validation (LOO) information
-  criterion) and ELPD (expected log predictive density) for Bayesian regressions.</p>
+    <p>Posterior predictive checks for frequentist models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>looic</span>(<span class='kw'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>pp_check</span>(<span class='kw'>object</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>A Bayesian regression model.</p></td>
+      <th>object</th>
+      <td><p>A statistical model.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not used.</p></td>
+    </tr>
+    <tr>
+      <th>iterations</th>
+      <td><p>The number of draws to simulate/bootstrap.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with four elements, the ELPD, LOOIC and their standard errors.</p>
+    <p>A data frame</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Posterior predictive checks means &#8220;simulating replicated data
+  under the fitted model and then comparing these to the observed data&#8221;
+  <cite>(Gelman and Hill, 2007, p. 158)</cite>. Posterior predictive checks
+  can be used to &#8220;look for systematic discrepancies between real and
+  simulated data&#8221;  <cite>(Gelman et al. 2014, p. 169)</cite>.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    
+<ul>
+<li><p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.</p></li>
+<li><p>Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.</p></li>
+</ul>
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>, chains = <span class='fl'>1</span>, iter = <span class='fl'>500</span>, refresh = <span class='fl'>0</span>)
-  <span class='fu'>looic</span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘rstanarm’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:psych’:</span>
+    <pre class="examples"><div class='input'><span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Width</span> <span class='op'>+</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='http://ggplot2.tidyverse.org'>"ggplot2"</a></span>) <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://easystats.github.io/see'>"see"</a></span>)) {
+  <span class='fu'>pp_check</span>(<span class='kw'>model</span>)
+}</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘ggplot2’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:psych’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    logit</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:performance’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    pp_check</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># LOOIC and ELPD with Standard Error
-#&gt; 
-#&gt; </span><span>  LOOIC: 155.90 [8.79]
-#&gt;    ELPD: -77.95 [4.39]</div></span></pre>
+#&gt; <span class='message'>    %+%, alpha</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: see</span></div><div class='output co'>#&gt; <span class='error'>Error in pp_check.default(model): argument "fun" is missing, with no default</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
