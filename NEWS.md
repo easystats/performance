@@ -4,6 +4,7 @@
 
 * `r2()` and `icc()` support `semLME` models (package *smicd*).
 * `check_heteroscedasticity()` should now also work with zero-inflated mixed models from *glmmTMB* and *GLMMadpative*.
+* `check_outliers()` now returns a logical vector. Original numerical vector is still accessible via `as.numeric()`.
 
 ## Bug fixes
 
