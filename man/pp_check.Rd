@@ -2,9 +2,15 @@
 % Please edit documentation in R/pp_check.R
 \name{pp_check}
 \alias{pp_check}
+\alias{pp_check.lm}
+\alias{posterior_predictive_check}
 \title{Posterior predictive checks for frequentist models}
 \usage{
 pp_check(object, ...)
+
+\method{pp_check}{lm}(object, iterations = 50, ...)
+
+posterior_predictive_check(object, iterations = 50, ...)
 }
 \arguments{
 \item{object}{A statistical model.}

@@ -31,8 +31,9 @@ pp_check <- function(object, ...) {
 }
 
 
+#' @rdname pp_check
 #' @export
-pp_check.default <- function(object, iterations = 1000, ...) {
+pp_check.lm <- function(object, iterations = 50, ...) {
   out <- tryCatch(
     {
       stats::simulate(object, nsim = iterations)
@@ -48,6 +49,45 @@ pp_check.default <- function(object, iterations = 1000, ...) {
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
+
+#' @export
+pp_check.merMod <- pp_check.lm
+
+#' @export
+pp_check.MixMod <- pp_check.lm
+
+#' @export
+pp_check.glmmTMB <- pp_check.lm
+
+#' @export
+pp_check.glm.nb <- pp_check.lm
+
+#' @export
+pp_check.lme <- pp_check.lm
+
+#' @export
+pp_check.negbin <- pp_check.lm
+
+#' @export
+pp_check.polr <- pp_check.lm
+
+#' @export
+pp_check.wbm <- pp_check.lm
+
+#' @export
+pp_check.mle2 <- pp_check.lm
+
+#' @export
+pp_check.vlm <- pp_check.lm
+
+#' @rdname pp_check
+#' @export
+posterior_predictive_check <- pp_check.lm
+
+
+
+
+# methods -----------------------
 
 
 #' @export
