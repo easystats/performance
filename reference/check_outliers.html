@@ -176,10 +176,11 @@ considered as outlier. If <code>NULL</code>, default values will be used (see 'D
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Check (message) on whether outliers were detected or not, as well as a
-data frame (with the original data that was used to fit the model), including
-information on the distance measure and whether or not an observation is considered
-as outlier.</p>
+    <p>A logical vector of the detected outliers with a nice printing
+  method: a check (message) on whether outliers were detected or not. The
+  information on the distance measure and whether or not an observation is
+  considered as outlier can be recovered with the <code>as.data.frame</code>
+  function.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.</p>
@@ -309,8 +310,9 @@ list(
 <span class='co'># fit model with outliers</span>
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>disp</span> <span class='op'>~</span> <span class='kw'>mpg</span> <span class='op'>+</span> <span class='kw'>hp</span>, data = <span class='kw'>mt2</span>)
 
-<span class='fu'>check_outliers</span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 2 outliers detected (cases 31, 34).
-#&gt; </span><span></div><div class='input'><span class='co'># plot(check_outliers(model))</span>
+<span class='kw'>ol</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span>(<span class='kw'>model</span>)
+<span class='co'># plot(ol)</span>
+<span class='kw'>insight</span>::<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>mode</span>)[<span class='kw'>ol</span>, ]</div><div class='output co'>#&gt; <span class='warning'>Warning: Could not get model data.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 
 <span class='fu'>check_outliers</span>(<span class='kw'>model</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mahalabonis"</span>, <span class='st'>"mcd"</span>))</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 6 outliers detected (cases 18, 20, 28, 31, 33, 34).
 #&gt; </span><span></div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
