@@ -27,10 +27,11 @@ passed down to \code{ICSOutlier::ics.outlier()}.}
 considered as outlier. If \code{NULL}, default values will be used (see 'Details').}
 }
 \value{
-Check (message) on whether outliers were detected or not, as well as a
-data frame (with the original data that was used to fit the model), including
-information on the distance measure and whether or not an observation is considered
-as outlier.
+A logical vector of the detected outliers with a nice printing
+  method: a check (message) on whether outliers were detected or not. The
+  information on the distance measure and whether or not an observation is
+  considered as outlier can be recovered with the \code{as.data.frame}
+  function.
 }
 \description{
 Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation of being classified as an outlier by at least one method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5 (i.e., that were classified as outliers by at least half of the methods). See the \strong{Details} section below for a description of the methods.
@@ -156,8 +157,10 @@ mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 12
 # fit model with outliers
 model <- lm(disp ~ mpg + hp, data = mt2)
 
-check_outliers(model)
-# plot(check_outliers(model))
+ol <- check_outliers(model)
+# plot(ol)
+insight::get_data(mode)[ol, ]
+
 
 check_outliers(model, method = c("mahalabonis", "mcd"))
 \dontrun{

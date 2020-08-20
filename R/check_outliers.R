@@ -11,10 +11,11 @@
 #' @param ... When \code{method = "ics"}, further arguments in \code{...} are
 #'   passed down to \code{ICSOutlier::ics.outlier()}.
 #'
-#' @return Check (message) on whether outliers were detected or not, as well as a
-#' data frame (with the original data that was used to fit the model), including
-#' information on the distance measure and whether or not an observation is considered
-#' as outlier.
+#' @return A logical vector of the detected outliers with a nice printing
+#'   method: a check (message) on whether outliers were detected or not. The
+#'   information on the distance measure and whether or not an observation is
+#'   considered as outlier can be recovered with the \code{as.data.frame}
+#'   function.
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
@@ -147,8 +148,10 @@
 #' # fit model with outliers
 #' model <- lm(disp ~ mpg + hp, data = mt2)
 #'
-#' check_outliers(model)
-#' # plot(check_outliers(model))
+#' ol <- check_outliers(model)
+#' # plot(ol)
+#' insight::get_data(mode)[ol, ]
+#'
 #'
 #' check_outliers(model, method = c("mahalabonis", "mcd"))
 #' \dontrun{
@@ -221,7 +224,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   df <- df[c(names(df)[names(df) != "Outlier"], "Outlier")]
 
   # Out
-  outlier <- df$Outlier
+  outlier <- df$Outlier > 0.5
 
   # Attributes
   class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
@@ -326,7 +329,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   df$Outlier <- rowMeans(df[grepl("Outlier_", names(df))])
 
   # Out
-  outlier <- df$Outlier
+  outlier <- df$Outlier > 0.5
 
   # Attributes
   class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
