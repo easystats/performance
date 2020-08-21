@@ -21,8 +21,8 @@
 #'   can be used to \dQuote{look for systematic discrepancies between real and
 #'   simulated data} \cite{(Gelman et al. 2014, p. 169)}.
 #'
-#' @note The default-method, \code{pp_check.default()} is \pkg{bayesplot}. Thus,
-#' \pkg{performance}, adds \code{pp_check()}-methods for different classes and
+#' @note The default-method, \code{pp_check.default()} is in package \pkg{bayesplot}.
+#' Thus, \pkg{performance}, adds \code{pp_check()}-methods for different classes and
 #' packages (like \code{lm}, \code{merMod}, \code{glmmTMB}, ...). However, since
 #' it might be that not all model objects that have a \code{simulate()} function
 #' are covered, and those objects probably can't be passed down to the default-method,
