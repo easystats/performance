@@ -20,6 +20,14 @@
 #'   \cite{(Gelman and Hill, 2007, p. 158)}. Posterior predictive checks
 #'   can be used to \dQuote{look for systematic discrepancies between real and
 #'   simulated data} \cite{(Gelman et al. 2014, p. 169)}.
+#'   \cr \cr
+#'   An example how posterior predictive checks can also be used for model
+#'   comparison is following plot (from \cite{Gabry et al. 2019, Figure 6}):
+#'   \cr
+#'   \if{html}{\cr \figure{pp_check.png}{options: width="90\%" alt="Posterior Predictive Check"} \cr}
+#'   The model shown in the right panel (b) can simulate new data that are more
+#'   similar to the observed outcome than the model in the left panel (b). Thus,
+#'   model (b) is likely to be preferred over model (a).
 #'
 #' @note The default-method, \code{pp_check.default()} is in package \pkg{bayesplot}.
 #' Thus, \pkg{performance} adds \code{pp_check()}-methods for different classes and
@@ -31,6 +39,7 @@
 #' \code{simulate()}-method should work with \code{posterior_predictive_check()}.
 #'
 #' @references \itemize{
+#'   \item Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019). Visualization in Bayesian workflow. Journal of the Royal Statistical Society: Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378
 #'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
 #'   \item Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., & Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
 #'   \item Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
