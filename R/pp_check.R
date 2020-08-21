@@ -11,7 +11,11 @@
 #'   the variation in the original data is captured by the model or not
 #'   (\cite{Gelman et al. 2020, pp.163}). The minimum and maximum values of \code{y} should
 #'   be inside the range of the related minimum and maximum values of \code{yrep}.
-#' @param ... Not used.
+#' @param re_formula Formula containing group-level effects (random effects) to
+#'   be considered in the simulated data. If \code{NULL} (default), condition
+#'   on all random effects. If \code{NA} or \code{~0}, condition on no random
+#'   effects. See \code{\link[lme4:simulate.merMod]{simulate()}} in \pkg{lme4}.
+#' @param ... Passed down to \code{simulate()}.
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'
@@ -61,10 +65,10 @@ pp_check <- function(object, ...) {
 
 #' @rdname pp_check
 #' @export
-pp_check.lm <- function(object, iterations = 50, check_range = FALSE, ...) {
+pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
   out <- tryCatch(
     {
-      stats::simulate(object, nsim = iterations)
+      stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
     },
     error = function(e) { NULL }
   )

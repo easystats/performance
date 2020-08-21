@@ -8,14 +8,20 @@
 \usage{
 pp_check(object, ...)
 
-\method{pp_check}{lm}(object, iterations = 50, check_range = FALSE, ...)
+\method{pp_check}{lm}(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...)
 
-posterior_predictive_check(object, iterations = 50, check_range = FALSE, ...)
+posterior_predictive_check(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{A statistical model.}
 
-\item{...}{Not used.}
+\item{...}{Passed down to \code{simulate()}.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
 
@@ -25,6 +31,11 @@ responses, and the same for the maximum value. This plot helps judging whether
 the variation in the original data is captured by the model or not
 (\cite{Gelman et al. 2020, pp.163}). The minimum and maximum values of \code{y} should
 be inside the range of the related minimum and maximum values of \code{yrep}.}
+
+\item{re_formula}{Formula containing group-level effects (random effects) to
+be considered in the simulated data. If \code{NULL} (default), condition
+on all random effects. If \code{NA} or \code{~0}, condition on no random
+effects. See \code{\link[lme4:simulate.merMod]{simulate()}} in \pkg{lme4}.}
 }
 \value{
 A data frame of simulated responses and the original response vector.
