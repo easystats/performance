@@ -182,7 +182,15 @@ be inside the range of the related minimum and maximum values of <code>yrep</cod
   under the fitted model and then comparing these to the observed data&#8221;
   <cite>(Gelman and Hill, 2007, p. 158)</cite>. Posterior predictive checks
   can be used to &#8220;look for systematic discrepancies between real and
-  simulated data&#8221; <cite>(Gelman et al. 2014, p. 169)</cite>.</p>
+  simulated data&#8221; <cite>(Gelman et al. 2014, p. 169)</cite>.
+  <br /> <br />
+  An example how posterior predictive checks can also be used for model
+  comparison is following plot (from <cite>Gabry et al. 2019, Figure 6</cite>):
+  <br />
+  <br /> <img src='figures/pp_check.png' width="90%" alt="Posterior Predictive Check" /> <br />
+  The model shown in the right panel (b) can simulate new data that are more
+  similar to the observed outcome than the model in the left panel (b). Thus,
+  model (b) is likely to be preferred over model (a).</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The default-method, <code>pp_check.default()</code> is in package <span class="pkg">bayesplot</span>.
@@ -197,6 +205,7 @@ just calls <code>pp_check.lm()</code>. Thus, every model object that has a
 
     
 <ul>
+<li><p>Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., &amp; Gelman, A. (2019). Visualization in Bayesian workflow. Journal of the Royal Statistical Society: Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378</p></li>
 <li><p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.</p></li>
 <li><p>Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., &amp; Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.</p></li>
 <li><p>Gelman, A., Hill, J., &amp; Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.</p></li>
