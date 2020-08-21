@@ -167,15 +167,15 @@
       <td><p>Logical, if <code>TRUE</code>, includes a plot with the minimum
 value of the original response against the minimum values of the replicated
 responses, and the same for the maximum value. This plot helps judging whether
-the variation on the original data is captured by the model or not
-(<cite>Gelam et al. 2020</cite>). The minimum and maximum values of <code>y</code> should
+the variation in the original data is captured by the model or not
+(<cite>Gelman et al. 2020, pp.163</cite>). The minimum and maximum values of <code>y</code> should
 be inside the range of the related minimum and maximum values of <code>yrep</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame</p>
+    <p>A data frame of simulated responses and the original response vector.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Posterior predictive checks means &#8220;simulating replicated data
@@ -186,7 +186,7 @@ be inside the range of the related minimum and maximum values of <code>yrep</cod
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>The default-method, <code>pp_check.default()</code> is in package <span class="pkg">bayesplot</span>.
-Thus, <span class="pkg">performance</span>, adds <code>pp_check()</code>-methods for different classes and
+Thus, <span class="pkg">performance</span> adds <code>pp_check()</code>-methods for different classes and
 packages (like <code>lm</code>, <code>merMod</code>, <code>glmmTMB</code>, ...). However, since
 it might be that not all model objects that have a <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code> function
 are covered, and those objects probably can't be passed down to the default-method,
