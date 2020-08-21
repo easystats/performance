@@ -55,7 +55,7 @@ Posterior predictive checks means \dQuote{simulating replicated data
   \cr
   \if{html}{\cr \figure{pp_check.png}{options: width="90\%" alt="Posterior Predictive Check"} \cr}
   The model shown in the right panel (b) can simulate new data that are more
-  similar to the observed outcome than the model in the left panel (b). Thus,
+  similar to the observed outcome than the model in the left panel (a). Thus,
   model (b) is likely to be preferred over model (a).
 }
 \note{
