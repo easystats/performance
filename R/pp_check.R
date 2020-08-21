@@ -5,6 +5,12 @@
 #'
 #' @param object A statistical model.
 #' @param iterations The number of draws to simulate/bootstrap.
+#' @param check_range Logical, if \code{TRUE}, includes a plot with the minimum
+#'   value of the original response against the minimum values of the replicated
+#'   responses, and the same for the maximum value. This plot helps judging whether
+#'   the variation on the original data is captured by the model or not
+#'   (\cite{Gelam et al. 2020}). The minimum and maximum values of \code{y} should
+#'   be inside the range of the related minimum and maximum values of \code{yrep}.
 #' @param ... Not used.
 #'
 #' @return A data frame
@@ -13,11 +19,21 @@
 #'   under the fitted model and then comparing these to the observed data}
 #'   \cite{(Gelman and Hill, 2007, p. 158)}. Posterior predictive checks
 #'   can be used to \dQuote{look for systematic discrepancies between real and
-#'   simulated data}  \cite{(Gelman et al. 2014, p. 169)}.
+#'   simulated data} \cite{(Gelman et al. 2014, p. 169)}.
+#'
+#' @note The default-method, \code{pp_check.default()} is \pkg{bayesplot}. Thus,
+#' \pkg{performance}, adds \code{pp_check()}-methods for different classes and
+#' packages (like \code{lm}, \code{merMod}, \code{glmmTMB}, ...). However, since
+#' it might be that not all model objects that have a \code{simulate()} function
+#' are covered, and those objects probably can't be passed down to the default-method,
+#' there is also a "generic" \code{posterior_predictive_check()} function, which
+#' just calls \code{pp_check.lm()}. Thus, every model object that has a
+#' \code{simulate()}-method should work with \code{posterior_predictive_check()}.
 #'
 #' @references \itemize{
 #'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
 #'   \item Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., & Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
+#'   \item Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
 #' }
 #'
 #' @examples
@@ -33,7 +49,7 @@ pp_check <- function(object, ...) {
 
 #' @rdname pp_check
 #' @export
-pp_check.lm <- function(object, iterations = 50, ...) {
+pp_check.lm <- function(object, iterations = 50, check_range = FALSE, ...) {
   out <- tryCatch(
     {
       stats::simulate(object, nsim = iterations)
@@ -46,6 +62,7 @@ pp_check.lm <- function(object, iterations = 50, ...) {
   }
 
   out$y <- insight::get_response(object)
+  attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
@@ -91,11 +108,26 @@ posterior_predictive_check <- pp_check.lm
 
 
 #' @export
-print.performance_pp_check <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' required to plot posterior predictive checks Please install it.")
+print.performance_pp_check <- function(x, verbose = TRUE, ...) {
+  original <- x$y
+  replicated <- x[which(names(x) != "y")]
+
+  if (min(replicated) > min(original)) {
+    if (verbose) {
+      warning("Minimum value of original data is not included in the replicated data. Model may not capture the variation of the data.", call. = FALSE)
+    }
   }
-  NextMethod()
+
+  if (max(replicated) < max(original)) {
+    if (verbose) {
+      warning("Maximum value of original data is not included in the replicated data. Model may not capture the variation of the data.", call. = FALSE)
+    }
+  }
+
+  if (requireNamespace("see", quietly = TRUE)) {
+    NextMethod()
+  }
+  invisible(x)
 }
 
 

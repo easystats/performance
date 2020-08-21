@@ -8,9 +8,9 @@
 \usage{
 pp_check(object, ...)
 
-\method{pp_check}{lm}(object, iterations = 50, ...)
+\method{pp_check}{lm}(object, iterations = 50, check_range = FALSE, ...)
 
-posterior_predictive_check(object, iterations = 50, ...)
+posterior_predictive_check(object, iterations = 50, check_range = FALSE, ...)
 }
 \arguments{
 \item{object}{A statistical model.}
@@ -18,6 +18,13 @@ posterior_predictive_check(object, iterations = 50, ...)
 \item{...}{Not used.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
+
+\item{check_range}{Logical, if \code{TRUE}, includes a plot with the minimum
+value of the original response against the minimum values of the replicated
+responses, and the same for the maximum value. This plot helps judging whether
+the variation on the original data is captured by the model or not
+(\cite{Gelam et al. 2020}). The minimum and maximum values of \code{y} should
+be inside the range of the related minimum and maximum values of \code{yrep}.}
 }
 \value{
 A data frame
@@ -30,7 +37,17 @@ Posterior predictive checks means \dQuote{simulating replicated data
   under the fitted model and then comparing these to the observed data}
   \cite{(Gelman and Hill, 2007, p. 158)}. Posterior predictive checks
   can be used to \dQuote{look for systematic discrepancies between real and
-  simulated data}  \cite{(Gelman et al. 2014, p. 169)}.
+  simulated data} \cite{(Gelman et al. 2014, p. 169)}.
+}
+\note{
+The default-method, \code{pp_check.default()} is \pkg{bayesplot}. Thus,
+\pkg{performance}, adds \code{pp_check()}-methods for different classes and
+packages (like \code{lm}, \code{merMod}, \code{glmmTMB}, ...). However, since
+it might be that not all model objects that have a \code{simulate()} function
+are covered, and those objects probably can't be passed down to the default-method,
+there is also a "generic" \code{posterior_predictive_check()} function, which
+just calls \code{pp_check.lm()}. Thus, every model object that has a
+\code{simulate()}-method should work with \code{posterior_predictive_check()}.
 }
 \examples{
 model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
@@ -42,5 +59,6 @@ if (require("ggplot2") && require("see")) {
 \itemize{
   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
   \item Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., & Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
+  \item Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
 }
 }
