@@ -143,9 +143,15 @@
     <pre class="usage"><span class='fu'>pp_check</span>(<span class='kw'>object</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for lm</span>
-<span class='fu'>pp_check</span>(<span class='kw'>object</span>, iterations = <span class='fl'>50</span>, check_range = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)
+<span class='fu'>pp_check</span>(<span class='kw'>object</span>, iterations = <span class='fl'>50</span>, check_range = <span class='fl'>FALSE</span>, re_formula = <span class='kw'>NULL</span>, <span class='kw'>...</span>)
 
-<span class='fu'>posterior_predictive_check</span>(<span class='kw'>object</span>, iterations = <span class='fl'>50</span>, check_range = <span class='fl'>FALSE</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>posterior_predictive_check</span>(
+  <span class='kw'>object</span>,
+  iterations = <span class='fl'>50</span>,
+  check_range = <span class='fl'>FALSE</span>,
+  re_formula = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,7 +162,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Not used.</p></td>
+      <td><p>Passed down to <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code>.</p></td>
     </tr>
     <tr>
       <th>iterations</th>
@@ -170,6 +176,13 @@ responses, and the same for the maximum value. This plot helps judging whether
 the variation in the original data is captured by the model or not
 (<cite>Gelman et al. 2020, pp.163</cite>). The minimum and maximum values of <code>y</code> should
 be inside the range of the related minimum and maximum values of <code>yrep</code>.</p></td>
+    </tr>
+    <tr>
+      <th>re_formula</th>
+      <td><p>Formula containing group-level effects (random effects) to
+be considered in the simulated data. If <code>NULL</code> (default), condition
+on all random effects. If <code>NA</code> or <code>~0</code>, condition on no random
+effects. See <code><a href='https://rdrr.io/pkg/lme4/man/simulate.merMod.html'>simulate()</a></code> in <span class="pkg">lme4</span>.</p></td>
     </tr>
     </table>
 
