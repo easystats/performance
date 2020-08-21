@@ -46,10 +46,13 @@
 #' }
 #'
 #' @examples
+#' library(performance)
 #' model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
 #' if (require("ggplot2") && require("see")) {
 #'   pp_check(model)
 #' }
+#' @importFrom stats simulate
+#' @importFrom insight get_response
 #' @export
 pp_check <- function(object, ...) {
   UseMethod("pp_check")
@@ -75,6 +78,9 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, ...) {
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
+
+#' @export
+pp_check.glm <- pp_check.lm
 
 #' @export
 pp_check.merMod <- pp_check.lm
