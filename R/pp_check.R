@@ -8,12 +8,12 @@
 #' @param check_range Logical, if \code{TRUE}, includes a plot with the minimum
 #'   value of the original response against the minimum values of the replicated
 #'   responses, and the same for the maximum value. This plot helps judging whether
-#'   the variation on the original data is captured by the model or not
-#'   (\cite{Gelam et al. 2020}). The minimum and maximum values of \code{y} should
+#'   the variation in the original data is captured by the model or not
+#'   (\cite{Gelman et al. 2020, pp.163}). The minimum and maximum values of \code{y} should
 #'   be inside the range of the related minimum and maximum values of \code{yrep}.
 #' @param ... Not used.
 #'
-#' @return A data frame
+#' @return A data frame of simulated responses and the original response vector.
 #'
 #' @details Posterior predictive checks means \dQuote{simulating replicated data
 #'   under the fitted model and then comparing these to the observed data}
@@ -22,7 +22,7 @@
 #'   simulated data} \cite{(Gelman et al. 2014, p. 169)}.
 #'
 #' @note The default-method, \code{pp_check.default()} is in package \pkg{bayesplot}.
-#' Thus, \pkg{performance}, adds \code{pp_check()}-methods for different classes and
+#' Thus, \pkg{performance} adds \code{pp_check()}-methods for different classes and
 #' packages (like \code{lm}, \code{merMod}, \code{glmmTMB}, ...). However, since
 #' it might be that not all model objects that have a \code{simulate()} function
 #' are covered, and those objects probably can't be passed down to the default-method,
