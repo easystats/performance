@@ -14,6 +14,7 @@
 
 * Fixed issue with incorrect labeling of groups from `icc()` when `by_group = TRUE`.
 * Fixed issue in `check_heteroscedasticity()` for mixed models where sigma could not be calculated in a straightforward way.
+* Fixed issues in `check_zeroinflation()` for `MASS::glm.nb()`.
 * Fixed CRAN check issues.
 
 # performance 0.4.8

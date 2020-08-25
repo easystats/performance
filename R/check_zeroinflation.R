@@ -26,12 +26,12 @@
 #'   check_zeroinflation(m)
 #' }
 #' @importFrom insight get_response model_info
-#' @importFrom stats fitted dpois
+#' @importFrom stats fitted dpois dnbinom
 #' @export
 check_zeroinflation <- function(x, tolerance = .05) {
   # check if we have poisson
   model_info <- insight::model_info(x)
-  if (!model_info$is_poisson) {
+  if (!model_info$is_count) {
     stop("Model must be from Poisson-family.", call. = F)
   }
 
@@ -47,7 +47,11 @@ check_zeroinflation <- function(x, tolerance = .05) {
   mu <- stats::fitted(x)
 
   # get predicted zero-counts
-  pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
+  if (model_info$is_negbin && !is.null(x$theta)) {
+    pred.zero <- round(sum(stats::dnbinom(x = 0, size = x$theta, mu = mu)))
+  } else {
+    pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
+  }
 
   # proportion
   structure(
