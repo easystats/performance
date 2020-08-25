@@ -202,7 +202,7 @@ ICC as well as the credible intervals for this ICC.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
-<h3>Interpretation</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Interpretation</h3>
 <p>The ICC can be interpreted as &#8220;the proportion of the variance explained
  by the grouping structure in the population&#8221;. This index goes from 0, if the
  grouping conveys no information, to 1, if all observations in a group are
@@ -210,11 +210,11 @@ ICC as well as the credible intervals for this ICC.</p>
  &#8220;can also be interpreted as the expected correlation between two
  randomly drawn units that are in the same group&#8221; <cite>(Hox 2010: 15)</cite>,
  although this definition might not apply to mixed models with more complex
- random effects structures.</p><p></p><h3>Calculation</h3>
+ random effects structures.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Calculation</h3>
 <p>The ICC is calculated by dividing the random effect variance,
  &sigma;<sup>2</sup><sub>i</sub>, by
  the total variance, i.e. the sum of the random effect variance and the
- residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>.</p><p></p><h3>Adjusted and conditional ICC</h3>
+ residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Adjusted and conditional ICC</h3>
 <p><code>icc()</code> calculates an adjusted and conditional ICC, which both take
  all sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
  the <em>adjusted ICC</em> only relates to the random effects, the <em>conditional ICC</em>
@@ -224,18 +224,18 @@ ICC as well as the credible intervals for this ICC.</p>
  complex random effects structures, like models with random slopes or nested
  design (more than two levels) and is applicable for models with other distributions
  than Gaussian. For more details on the computation of the variances, see
- <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>?insight::get_variance</a></code>.</p><p></p><h3>ICC for unconditional and conditional models</h3>
+ <code><a href='https://rdrr.io/pkg/insight/man/get_variance.html'>?insight::get_variance</a></code>.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>ICC for unconditional and conditional models</h3>
 <p>Usually, the ICC is calculated for the null model ("unconditional model").
  However, according to <cite>Raudenbush and Bryk (2002)</cite> or
  <cite>Rabe-Hesketh and Skrondal (2012)</cite> it is also feasible to compute the ICC
  for full models with covariates ("conditional models") and compare how
  much, e.g., a level-2 variable explains the portion of variation in the grouping
- structure (random intercept).</p><p></p><h3>ICC for specific group-levels</h3>
+ structure (random intercept).</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>ICC for specific group-levels</h3>
 <p>The proportion of variance for specific levels related to the overall model
  can be computed by setting <code>by_group = TRUE</code>. The reported ICC is
  the variance for each (random effect) group compared to the total
  variance of the model. For mixed models with a simple random intercept,
- this is identical to the classical (adjusted) ICC.</p><p></p><h3>Variance decomposition for brms-models</h3>
+ this is identical to the classical (adjusted) ICC.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Variance decomposition for brms-models</h3>
 <p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to
  the large variety of models and families supported by the <span class="pkg">brms</span> package.
  In such cases, <code>variance_decomposition()</code> is an alternative ICC measure.

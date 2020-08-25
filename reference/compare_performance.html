@@ -182,12 +182,12 @@ model performance". See 'Details'.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
-<h3>Bayes factor for Model Comparison</h3>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Bayes factor for Model Comparison</h3>
 <p>If all models were fit from the same data, <code>compare_performance()</code>
   returns an additional column named <code>BF</code>, which shows the Bayes factor
   (see <code><a href='https://rdrr.io/pkg/bayestestR/man/bayesfactor_models.html'>bayestestR::bayesfactor_models()</a></code>) for each model against
   the denominator model. The <em>first</em> model is used as denominator model,
-  and its Bayes factor is set to <code>NA</code> to indicate the reference model.</p><p></p><h3>Ranking Models</h3>
+  and its Bayes factor is set to <code>NA</code> to indicate the reference model.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Ranking Models</h3>
 <p>When <code>rank = TRUE</code>, a new column <code>Performance_Score</code> is returned. This
   score ranges from 0% to 100%, higher values indicating better model performance.
   Calculation is based on normalizing all indices (i.e. rescaling them to a
