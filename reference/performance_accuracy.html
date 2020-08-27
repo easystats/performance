@@ -188,13 +188,15 @@ is used to compute the accuracy values.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'>performance_accuracy</span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Accuracy of Model Predictions
+<span class='fu'>performance_accuracy</span>(<span class='kw'>model</span>)
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Accuracy of Model Predictions
 #&gt; 
 #&gt; </span><span>Accuracy: 91.39%
 #&gt;       SE: 2.17%-points
 #&gt;   Method: Correlation between observed and predicted</div><div class='input'>
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>vs</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>mpg</span>, data = <span class='kw'>mtcars</span>, family = <span class='st'>"binomial"</span>)
-<span class='fu'>performance_accuracy</span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Accuracy of Model Predictions
+<span class='fu'>performance_accuracy</span>(<span class='kw'>model</span>)
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Accuracy of Model Predictions
 #&gt; 
 #&gt; </span><span>Accuracy: 89.17%
 #&gt;       SE: 10.87%-points

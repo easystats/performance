@@ -192,7 +192,8 @@ distributions, however, only if the probability is greater than zero.</p>
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='kw'>Days</span> <span class='op'>|</span> <span class='kw'>Subject</span>), <span class='kw'>sleepstudy</span>)
   <span class='fu'>check_distribution</span>(<span class='kw'>model</span>)
   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='fu'>check_distribution</span>(<span class='kw'>model</span>))
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: parameters</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gridExtra</span></div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div></pre>
+}
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: parameters</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: gridExtra</span></div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

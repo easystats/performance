@@ -270,7 +270,8 @@ ICC as well as the credible intervals for this ICC.</p>
     <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
   <span class='fu'>icc</span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Intraclass Correlation Coefficient
+}
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Intraclass Correlation Coefficient
 #&gt; 
 #&gt; </span><span>     Adjusted ICC: 0.910
 #&gt;   Conditional ICC: 0.311</div><div class='input'>
@@ -290,7 +291,8 @@ ICC as well as the credible intervals for this ICC.</p>
     data = <span class='kw'>sleepstudy</span>
   )
   <span class='fu'>icc</span>(<span class='kw'>model</span>, by_group = <span class='fl'>TRUE</span>)
-}</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># ICC by Group
+}
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># ICC by Group
 #&gt; 
 #&gt; </span><span>Group      |   ICC
 #&gt; ------------------

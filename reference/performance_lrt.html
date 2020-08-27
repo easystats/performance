@@ -165,7 +165,8 @@
     <pre class="examples"><div class='input'><span class='kw'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
 <span class='kw'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span>, data = <span class='kw'>mtcars</span>)
 <span class='kw'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span> <span class='op'>+</span> <span class='kw'>disp</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'>performance_lrt</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test for Model Comparison
+<span class='fu'>performance_lrt</span>(<span class='kw'>m1</span>, <span class='kw'>m2</span>, <span class='kw'>m3</span>)
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test for Model Comparison
 #&gt; 
 #&gt; </span><span>Model | Type | Df | AIC |     p
 #&gt; -------------------------------

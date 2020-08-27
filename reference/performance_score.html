@@ -190,7 +190,8 @@ in <span class="pkg">lme4</span>.</p>
 <span class='kw'>treatment</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/gl.html'>gl</a></span>(<span class='fl'>3</span>, <span class='fl'>3</span>)
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>counts</span> <span class='op'>~</span> <span class='kw'>outcome</span> <span class='op'>+</span> <span class='kw'>treatment</span>, family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>poisson</a></span>())
 
-<span class='fu'>performance_score</span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Proper Scoring Rules
+<span class='fu'>performance_score</span>(<span class='kw'>model</span>)
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Proper Scoring Rules
 #&gt; 
 #&gt; </span><span>logarithmic: -2.5979
 #&gt;   quadratic:  0.2095
@@ -207,6 +208,7 @@ in <span class="pkg">lme4</span>.</p>
   <span class='fu'>performance_score</span>(<span class='kw'>model</span>)
 }
 }
+
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -177,7 +177,8 @@ beyond or below this threshold would indicate over- or underfitting.</p></td>
   <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>Salamanders</span>)
   <span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span>(<span class='kw'>count</span> <span class='op'>~</span> <span class='kw'>spp</span> <span class='op'>+</span> <span class='kw'>mined</span>, family = <span class='kw'>poisson</span>, data = <span class='kw'>Salamanders</span>)
   <span class='fu'>check_zeroinflation</span>(<span class='kw'>m</span>)
-}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Check for zero-inflation
+}
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Check for zero-inflation
 #&gt; 
 #&gt; </span><span>   Observed zeros: 387
 #&gt;   Predicted zeros: 298

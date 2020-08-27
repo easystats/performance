@@ -181,17 +181,21 @@ inspection (e.g. Q-Q plots) are preferable.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> <span class='kw'>gear</span> <span class='op'>+</span> <span class='kw'>disp</span>, data = <span class='kw'>mtcars</span>)
-<span class='fu'>check_normality</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; <span style='color: #00BB00;'>OK: residuals appear as normally distributed (p = 0.230).
+<span class='fu'>check_normality</span>(<span class='kw'>m</span>)
+</div><div class='output co'>#&gt; <span style='color: #00BB00;'>OK: residuals appear as normally distributed (p = 0.230).
 #&gt; </span><span></div><div class='input'>
 <span class='co'># plot results</span>
-<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>check_normality</span>(<span class='kw'>m</span>)</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>OK: residuals appear as normally distributed (p = 0.230).
-#&gt; </span><span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>x</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'>check_normality</span>(<span class='kw'>m</span>)
+</div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>OK: residuals appear as normally distributed (p = 0.230).
+#&gt; </span><span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>x</span>)
+</div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># QQ-plot</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='fu'>check_normality</span>(<span class='kw'>m</span>), type = <span class='st'>"qq"</span>)
 
 <span class='co'># PP-plot</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='fu'>check_normality</span>(<span class='kw'>m</span>), type = <span class='st'>"pp"</span>)
-}</div></span></pre>
+}
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

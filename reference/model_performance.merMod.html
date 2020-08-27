@@ -180,7 +180,8 @@
     <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Sepal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
   <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
+}
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
 #&gt; 
 #&gt; </span><span>  AIC |   BIC | R2_conditional | R2_marginal |  ICC | RMSE
 #&gt; ----------------------------------------------------------

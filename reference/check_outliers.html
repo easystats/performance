@@ -300,7 +300,8 @@ list(
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Univariate</span>
-<span class='fu'>check_outliers</span>(<span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>mpg</span>)</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: 4 outliers detected (cases 18, 19, 20, 28).
+<span class='fu'>check_outliers</span>(<span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>mpg</span>)
+</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: 4 outliers detected (cases 18, 19, 20, 28).
 #&gt; </span><span></div><div class='input'>
 <span class='co'># Multivariate</span>
 <span class='co'># select only mpg and disp (continuous)</span>
@@ -312,9 +313,11 @@ list(
 
 <span class='kw'>ol</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span>(<span class='kw'>model</span>)
 <span class='co'># plot(ol)</span>
-<span class='kw'>insight</span>::<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>mode</span>)[<span class='kw'>ol</span>, ]</div><div class='output co'>#&gt; <span class='warning'>Warning: Could not get model data.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='kw'>insight</span>::<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>mode</span>)[<span class='kw'>ol</span>, ]
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Could not get model data.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 
-<span class='fu'>check_outliers</span>(<span class='kw'>model</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mahalabonis"</span>, <span class='st'>"mcd"</span>))</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 6 outliers detected (cases 18, 20, 28, 31, 33, 34).
+<span class='fu'>check_outliers</span>(<span class='kw'>model</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mahalabonis"</span>, <span class='st'>"mcd"</span>))
+</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 6 outliers detected (cases 18, 20, 28, 31, 33, 34).
 #&gt; </span><span></div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># This one takes some seconds to finish...</span>
 <span class='fu'>check_outliers</span>(<span class='kw'>model</span>, method = <span class='st'>"ics"</span>)
@@ -322,7 +325,8 @@ list(
 <span class='co'># For dataframes</span>
 <span class='fu'>check_outliers</span>(<span class='kw'>mtcars</span>)
 <span class='fu'>check_outliers</span>(<span class='kw'>mtcars</span>, method = <span class='st'>"all"</span>)
-}</div></span></pre>
+}
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

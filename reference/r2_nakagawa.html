@@ -189,7 +189,8 @@ similar to the variance reduction approach by <cite>Hox (2010), pp. 69-78</cite>
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
   <span class='fu'>r2_nakagawa</span>(<span class='kw'>model</span>)
   <span class='fu'>r2_nakagawa</span>(<span class='kw'>model</span>, by_group = <span class='fl'>TRUE</span>)
-}</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Explained Variance by Level
+}
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Explained Variance by Level
 #&gt; 
 #&gt; </span><span>Level   |     R2
 #&gt; ----------------
