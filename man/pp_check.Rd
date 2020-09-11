@@ -69,11 +69,12 @@ just calls \code{pp_check.lm()}. Thus, every model object that has a
 \code{simulate()}-method should work with \code{posterior_predictive_check()}.
 }
 \examples{
+\dontrun{
 library(performance)
 model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
 if (require("ggplot2") && require("see")) {
   pp_check(model)
-}
+}}
 }
 \references{
 \itemize{
