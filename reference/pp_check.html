@@ -226,15 +226,13 @@ just calls <code>pp_check.lm()</code>. Thus, every model object that has a
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://easystats.github.io/performance'>performance</a></span>)
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://easystats.github.io/performance'>performance</a></span>)
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Length</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Width</span> <span class='op'>+</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='http://ggplot2.tidyverse.org'>"ggplot2"</a></span>) <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://easystats.github.io/see'>"see"</a></span>)) {
   <span class='fu'>pp_check</span>(<span class='kw'>model</span>)
-}
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘ggplot2’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:psych’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    %+%, alpha</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: see</span></div><div class='output co'>#&gt; <span class='error'>Error in pp_check.default(model): argument "fun" is missing, with no default</span></div></pre>
+}}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -250,7 +248,7 @@ just calls <code>pp_check.lm()</code>. Thus, every model object that has a
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
 </div>
 
       </footer>
