@@ -6,11 +6,11 @@ bibentry(
   year="2020",
   note="R package",
   doi="10.5281/zenodo.3952174",
-  url="https://easystats.github.io/performance",
+  url="https://easystats.github.io/performance/",
 
   textVersion =
     paste("Lüdecke, Makowski, Waggoner & Patil (2020). Assessment of Regression Models Performance. CRAN.",
-          "Available from https://easystats.github.io/performance"
+          "Available from https://easystats.github.io/performance/"
     ),
   mheader = "To cite performance in publications use:"
 )
