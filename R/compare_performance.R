@@ -126,12 +126,8 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
 
   # set reference for Bayes factors to 1
   if ("BF" %in% colnames(x)) {
-    ori_bf <- x$BF
-    ori_bf[is.na(ori_bf)] <- 1
     x$BF <- log(x$BF)
     x$BF[is.na(x$BF) | x$BF == 0] <- 1
-  } else {
-    ori_bf <- NULL
   }
 
   # don't include test statistic in ranking
@@ -167,7 +163,6 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   rank_index <- rowMeans(out[numeric_columns], na.rm = TRUE)
 
   x$Performance_Score <- rank_index
-  x$BF <- ori_bf
   x <- x[order(rank_index, decreasing = TRUE), ]
 
   rownames(x) <- NULL
