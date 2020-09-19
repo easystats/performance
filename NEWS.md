@@ -1,3 +1,9 @@
+# performance 0.5.1
+
+## Changes to functions
+
+* `compare_performance()` with `rank = TRUE` now uses the `log(BF)` value, to better fit the possible large differences between Bayes factors. This has a rather more "visual" effect, it does not affect the ranking itself.
+
 # performance 0.5.0
 
 ## General
