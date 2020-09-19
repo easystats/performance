@@ -139,6 +139,11 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
     i
   })
 
+  # don't rank with BF when there is also BIC (same information)
+  if ("BF" %in% colnames(out) && "BIC" %in% colnames(out)) {
+    out$BF <- NULL
+  }
+
   # recode some indices, so higher values = better fit
   for (i in c("AIC", "BIC", "RMSE")) {
     if (i %in% colnames(out)) {

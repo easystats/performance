@@ -1,3 +1,9 @@
++# performance 0.5.1
+
+## Changes to functions
+
+* `compare_performance()` with `rank = TRUE` doesn't uses the `BF` values when `BIC` are present, to prevent "double-dipping" of the BIC values ( #144 ).
+
 # performance 0.5.0
 
 ## General
