@@ -125,10 +125,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   }
 
   # set reference for Bayes factors to 1
-  if ("BF" %in% colnames(x)) {
-    x$BF <- log(x$BF)
-    x$BF[is.na(x$BF) | x$BF == 0] <- 1
-  }
+  if ("BF" %in% colnames(x)) x$BF[is.na(x$BF)] <- 1
 
   # don't include test statistic in ranking
   x$p_CochransQ <- NULL
