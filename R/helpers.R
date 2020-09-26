@@ -147,9 +147,9 @@
 # remove NULL elements from lists
 .compact_list <- function(x, remove_na = FALSE) {
   if (remove_na) {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (length(i) == 1 & is.na(i)) || any(i == "NULL"))]
+    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (length(i) == 1 & is.na(i)) || any(i == "NULL", na.rm = TRUE))]
   } else {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL"))]
+    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL", na.rm = TRUE))]
   }
 }
 
