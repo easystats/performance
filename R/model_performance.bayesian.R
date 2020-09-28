@@ -3,7 +3,7 @@
 #' Compute indices of model performance for (general) linear models.
 #'
 #' @param model Object of class \code{stanreg} or \code{brmsfit}.
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")}). \code{"common"} will compute LOOIC, WAIC, R2 and RMSE.
+#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute LOOIC, WAIC, R2 and RMSE.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams model_performance.lm
 #'
@@ -17,6 +17,7 @@
 #'   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
 #'   \item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see \code{\link{r2}}}
 #'   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
+#'   \item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight]{get_sigma}}}
 #'   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
 #'   \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
 #'   \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
@@ -40,13 +41,13 @@
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
 #'
-#' @importFrom insight find_algorithm
+#' @importFrom insight find_algorithm get_sigma
 #' @importFrom bayestestR map_estimate hdi
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
-    metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "LOGLOSS", "SCORE")
+    metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
   } else if (all(metrics == "common")) {
     metrics <- c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE")
   }
@@ -85,6 +86,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   }
   if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_multinomial && !mi$is_categorical) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
+  }
+  if ("SIGMA" %in% toupper(metrics)) {
+    out$SIGMA <- as.numeric(insight::get_sigma(model))
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
     out$LOGLOSS <- performance_logloss(model, verbose = verbose)

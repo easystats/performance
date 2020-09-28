@@ -9,7 +9,7 @@
 \arguments{
 \item{model}{A mixed effects model.}
 
-\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")}). \code{"common"} will compute AIC, BIC, R2, ICC and RMSE.}
+\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute AIC, BIC, R2, ICC and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
 

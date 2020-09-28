@@ -2,7 +2,7 @@
 #'
 #' Compute indices of model performance for mixed models.
 #'
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")}). \code{"common"} will compute AIC, BIC, R2, ICC and RMSE.
+#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute AIC, BIC, R2, ICC and RMSE.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams r2_nakagawa
 #' @inheritParams model_performance.lm
@@ -25,7 +25,7 @@
 #' @export
 model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE", "LOGLOSS", "SCORE")
+    metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE")
   }
@@ -49,6 +49,9 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
   }
   if ("RMSE" %in% metrics) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
+  }
+  if ("SIGMA" %in% toupper(metrics)) {
+    out$SIGMA <- as.numeric(insight::get_sigma(model))
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
     out$LOGLOSS <- performance_logloss(model, verbose = verbose)
