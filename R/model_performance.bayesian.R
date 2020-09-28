@@ -41,7 +41,7 @@
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
 #'
-#' @importFrom insight find_algorithm get_sigma
+#' @importFrom insight find_algorithm
 #' @importFrom bayestestR map_estimate hdi
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
@@ -88,7 +88,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
   if ("SIGMA" %in% toupper(metrics)) {
-    out$SIGMA <- as.numeric(insight::get_sigma(model))
+    out$SIGMA <- .get_sigma(model)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
     out$LOGLOSS <- performance_logloss(model, verbose = verbose)

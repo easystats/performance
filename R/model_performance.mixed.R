@@ -51,7 +51,7 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
   if ("SIGMA" %in% toupper(metrics)) {
-    out$SIGMA <- as.numeric(insight::get_sigma(model))
+    out$SIGMA <- .get_sigma(model)
   }
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
     out$LOGLOSS <- performance_logloss(model, verbose = verbose)

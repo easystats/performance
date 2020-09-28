@@ -29,7 +29,7 @@
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
-#' @importFrom insight model_info get_sigma
+#' @importFrom insight model_info
 #' @export
 model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
@@ -63,7 +63,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
   if ("SIGMA" %in% toupper(metrics)) {
-    out$SIGMA <- as.numeric(insight::get_sigma(model))
+    out$SIGMA <- .get_sigma(model)
   }
   if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
     .logloss <- performance_logloss(model, verbose = verbose)

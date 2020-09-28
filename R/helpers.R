@@ -170,3 +170,14 @@
   }
   x
 }
+
+
+#' @importFrom insight get_sigma
+.get_sigma <- function(model) {
+  s <- insight::get_sigma(model)
+  if (!is.null(s)) {
+    as.numeric(s)
+  } else {
+    NULL
+  }
+}
