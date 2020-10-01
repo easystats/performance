@@ -4,6 +4,7 @@
 
 * `compare_performance()` with `rank = TRUE` doesn't use the `BF` values when `BIC` are present, to prevent "double-dipping" of the BIC values (#144).
 * `model_performance()` now also includes the residual standard deviation.
+* The `method` argument in `check_homogeneity()` gains a `"levene"` option, to use Levene's Test for homogeneity.
 
 # performance 0.5.0
 
