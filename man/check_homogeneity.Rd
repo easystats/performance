@@ -4,7 +4,7 @@
 \alias{check_homogeneity}
 \title{Check model for homogeneity of variances}
 \usage{
-check_homogeneity(x, method = c("levene", "bartlett", "fligner", "auto"), ...)
+check_homogeneity(x, method = c("bartlett", "fligner", "levene", "auto"), ...)
 }
 \arguments{
 \item{x}{A linear model or an ANOVA object.}

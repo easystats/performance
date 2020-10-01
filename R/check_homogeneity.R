@@ -28,13 +28,13 @@
 #' @importFrom stats fligner.test bartlett.test shapiro.test
 #' @importFrom insight find_response find_predictors get_data get_response
 #' @export
-check_homogeneity <- function(x, method = c("levene", "bartlett", "fligner", "auto"), ...) {
+check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
   UseMethod("check_homogeneity")
 }
 
 
 #' @export
-check_homogeneity.default <- function(x, method = c("levene", "bartlett", "fligner", "auto"), ...) {
+check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
   method <- match.arg(method)
 
   resp <- insight::find_response(x)
