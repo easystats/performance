@@ -4,19 +4,20 @@
 \alias{check_homogeneity}
 \title{Check model for homogeneity of variances}
 \usage{
-check_homogeneity(x, method = c("bartlett", "fligner", "auto"), ...)
+check_homogeneity(x, method = c("levene", "bartlett", "fligner", "auto"), ...)
 }
 \arguments{
 \item{x}{A linear model or an ANOVA object.}
 
 \item{method}{Name of the method (underlying test) that should be performed
-to check the homogeneity of variances. May either be \code{"bartlett"} for
+to check the homogeneity of variances. May either be \code{"levene"} for
+Levene's Test for Homogeneity of Variance, \code{"bartlett"} for
 the Bartlett test (assuming normal distributed samples or groups),
 \code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric test),
 or \code{"auto"}. In the latter case, Bartlett test is used if the model response
 is normal distributed, else Fligner-Killeen test is used.}
 
-\item{...}{Currently not used.}
+\item{...}{Arguments passed down to \code{\link[car:leveneTest]{car::leveneTest()}}.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value

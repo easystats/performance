@@ -5,12 +5,13 @@
 #'
 #' @param x A linear model or an ANOVA object.
 #' @param method Name of the method (underlying test) that should be performed
-#' to check the homogeneity of variances. May either be \code{"bartlett"} for
+#' to check the homogeneity of variances. May either be \code{"levene"} for
+#' Levene's Test for Homogeneity of Variance, \code{"bartlett"} for
 #' the Bartlett test (assuming normal distributed samples or groups),
 #' \code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric test),
 #' or \code{"auto"}. In the latter case, Bartlett test is used if the model response
 #' is normal distributed, else Fligner-Killeen test is used.
-#' @param ... Currently not used.
+#' @param ... Arguments passed down to \code{\link[car:leveneTest]{car::leveneTest()}}.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value
 #' < 0.05 indicates a significant difference in the variance between the groups.
@@ -27,13 +28,13 @@
 #' @importFrom stats fligner.test bartlett.test shapiro.test
 #' @importFrom insight find_response find_predictors get_data get_response
 #' @export
-check_homogeneity <- function(x, method = c("bartlett", "fligner", "auto"), ...) {
+check_homogeneity <- function(x, method = c("levene", "bartlett", "fligner", "auto"), ...) {
   UseMethod("check_homogeneity")
 }
 
 
 #' @export
-check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "auto"), ...) {
+check_homogeneity.default <- function(x, method = c("levene", "bartlett", "fligner", "auto"), ...) {
   method <- match.arg(method)
 
   resp <- insight::find_response(x)
@@ -65,17 +66,25 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "auto
 
   if (method == "fligner") {
     r <- stats::fligner.test(f, data = insight::get_data(x))
+    p.val <- r$p.value
   } else if (method == "bartlett") {
     r <- stats::bartlett.test(f, data = insight::get_data(x))
+    p.val <- r$p.value
+  } else if (method == "levene") {
+    if (requireNamespace("car", quietly = TRUE)) {
+      r <- car::leveneTest(x, ...)
+      p.val <- r$`Pr(>F)`
+    } else {
+      stop("Package `car` required for this function to work. Please install it.", call. = FALSE)
+    }
   }
 
-
-  p.val <- r$p.value
 
   method.string <- switch(
     method,
     "bartlett" = "Bartlett Test",
-    "fligner" = "Fligner-Killeen Test"
+    "fligner" = "Fligner-Killeen Test",
+    "levene" = "Levene's Test"
   )
 
   if (is.na(p.val)) {

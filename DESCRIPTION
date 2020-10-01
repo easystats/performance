@@ -47,6 +47,7 @@ Suggests:
     betareg,
     bigutilsr,
     brms,
+    car,
     covr,
     cplm,
     dbscan,
