@@ -33,6 +33,13 @@
 #'   \item use some form of model selection to choose a model that balances predictive accuracy and overfitting/type I error (\cite{Bates et al. 2015}, \cite{Matuschek et al. 2017})
 #'   \item \dQuote{keep it maximal}, i.e. fit the most complex model consistent with the experimental design, removing only terms required to allow a non-singular fit (\cite{Barr et al. 2013})
 #'   }
+#'   \cr \cr
+#'   Note the different meaning between singularity and convergence: singularity
+#'   indicates an issue with the "true" best estimate, i.e. whether the maximum
+#'   likelihood estimation for the variance-covariance matrix of the random effects
+#'   is positive definite or only semi-definite. Convergence is a question of
+#'   whether we can assume that the numerical optimization has worked correctly
+#'   or not.
 #'
 #' @references \itemize{
 #'   \item Bates D, Kliegl R, Vasishth S, Baayen H. Parsimonious Mixed Models. arXiv:1506.04967, June 2015.

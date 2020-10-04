@@ -48,6 +48,14 @@ will be.}
   Complete separation can be addressed by regularization, e.g. penalized
   regression or Bayesian regression with appropriate priors on the fixed effects.
   }
+  \subsection{Convergence versus Singularity}{
+  Note the different meaning between singularity and convergence: singularity
+  indicates an issue with the "true" best estimate, i.e. whether the maximum
+  likelihood estimation for the variance-covariance matrix of the random effects
+  is positive definite or only semi-definite. Convergence is a question of
+  whether we can assume that the numerical optimization has worked correctly
+  or not.
+  }
 }
 \examples{
 if (require("lme4")) {
