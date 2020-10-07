@@ -76,9 +76,9 @@ model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
 r2(model)
 ```
 
-The different r-squared measures can also be accessed directly via functions like `r2_bayes()`, `r2_coxsnell()` or `r2_nagelkerke()` (see a full list of functions [here](https://easystats.github.io/performance/reference/index.html)).
+The different R-squared measures can also be accessed directly via functions like `r2_bayes()`, `r2_coxsnell()` or `r2_nagelkerke()` (see a full list of functions [here](https://easystats.github.io/performance/reference/index.html)).
 
-For mixed models, the _conditional_ and _marginal_ r-squared are returned. The _marginal r-squared_ considers only the variance of the fixed effects and indicates how much of the model's variance is explained by the fixed effects part only. The _conditional r-squared_ takes both the fixed and random effects into account and indicates how much of the model's variance is explained by the "complete" model.
+For mixed models, the _conditional_ and _marginal_ R-squared are returned. The _marginal R-squared_ considers only the variance of the fixed effects and indicates how much of the model's variance is explained by the fixed effects part only. The _conditional R-squared_ takes both the fixed and random effects into account and indicates how much of the model's variance is explained by the "complete" model.
 
 For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_ random effect variances, thus `r2()` is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects [@johnson_extension_2014; @nakagawa_coefficient_2017].
 
@@ -98,7 +98,7 @@ r2(model)
 
 ### Intraclass Correlation Coefficient (ICC)
 
-Similar to r-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" [@hox_multilevel_2010].
+Similar to R-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" [@hox_multilevel_2010].
 
 `icc()` calculates the ICC for various mixed model objects, including `stanreg` models.
 
@@ -179,7 +179,7 @@ check_singularity(model)
 
 Remedies to cure issues with singular fits can be found [here](https://easystats.github.io/performance/reference/check_singularity.html). 
 
-## Comprehensive model check
+### Comprehensive visualization of model checks
 
 **performance** provides many functions to check model assumptions, like `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To get a comprehensive check, use `check_model()`.
 
@@ -214,7 +214,9 @@ m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 ```
 
-### Comparing different models
+## Models comparison
+
+The `compare_performance()` function can be used to compare the performance and quality of several models (including models of different types).
 
 ```{r, warning=FALSE, message=FALSE}
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
@@ -225,14 +227,32 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 ```
 
-### Comparing different models, ordered by model performance
+### General index of model performance
+
+One can also easily compute and a [**composite index**](https://easystats.github.io/performance/reference/compare_performance.html#details) of model performance and sort the models from the best one to the worse.
 
 ```{r, warning=FALSE, message=FALSE}
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 ```
 
+### Visualisation of indices of models' performance
+
+Finally, we provide convenient visualisation (the `see` package must be installed).
+
 ```{r, warning=FALSE, message=FALSE}
 plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
+```
+
+### Comparing models with the Bayes Factor
+
+For some models (for instance, frequentist linear models), the `compare_performance()` function will compute the **Bayes factor (BF)**, testing if each model is better than the first one (which is used as a ground reference).
+
+```{r, warning=FALSE, message=FALSE}
+m1 <- lm(Sepal.Length ~ Petal.Length, data=iris)
+m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data=iris)
+m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data=iris)
+
+performance::compare_performance(m1, m2, m3)
 ```
 
 # References

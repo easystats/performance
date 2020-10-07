@@ -65,15 +65,15 @@ r2(model)
 #>          0.1084
 ```
 
-The different r-squared measures can also be accessed directly via
+The different R-squared measures can also be accessed directly via
 functions like `r2_bayes()`, `r2_coxsnell()` or `r2_nagelkerke()` (see a
 full list of functions
 [here](https://easystats.github.io/performance/reference/index.html)).
 
-For mixed models, the *conditional* and *marginal* r-squared are
-returned. The *marginal r-squared* considers only the variance of the
+For mixed models, the *conditional* and *marginal* R-squared are
+returned. The *marginal R-squared* considers only the variance of the
 fixed effects and indicates how much of the model’s variance is
-explained by the fixed effects part only. The *conditional r-squared*
+explained by the fixed effects part only. The *conditional R-squared*
 takes both the fixed and random effects into account and indicates how
 much of the model’s variance is explained by the “complete” model.
 
@@ -90,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.953 [0.005]
-#>      Marginal R2: 0.823 [0.045]
+#>      Marginal R2: 0.825 [0.044]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -103,7 +103,7 @@ r2(model)
 
 ### Intraclass Correlation Coefficient (ICC)
 
-Similar to r-squared, the ICC provides information on the explained
+Similar to R-squared, the ICC provides information on the explained
 variance and can be interpreted as “the proportion of the variance
 explained by the grouping structure in the population” (Hox 2010).
 
@@ -132,19 +132,10 @@ model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
 
 ``` r
 icc(model)
-#> # Random Effect Variances and ICC
+#> # Intraclass Correlation Coefficient
 #> 
-#> Conditioned on: all random effects
-#> 
-#> ## Variance Ratio (comparable to ICC)
-#> Ratio: 0.39  CI 95%: [-0.54 0.77]
-#> 
-#> ## Variances of Posterior Predicted Distribution
-#> Conditioned on fixed effects: 22.76  CI 95%: [ 8.52 57.19]
-#> Conditioned on rand. effects: 37.60  CI 95%: [24.77 55.97]
-#> 
-#> ## Difference in Variances
-#> Difference: 14.31  CI 95%: [-18.12 35.31]
+#>      Adjusted ICC: 0.930
+#>   Conditional ICC: 0.771
 ```
 
 ## Model diagnostics
@@ -230,7 +221,7 @@ check_singularity(model)
 Remedies to cure issues with singular fits can be found
 [here](https://easystats.github.io/performance/reference/check_singularity.html).
 
-## Comprehensive model check
+### Comprehensive visualization of model checks
 
 **performance** provides many functions to check model assumptions, like
 `check_collinearity()`, `check_normality()` or
@@ -287,7 +278,11 @@ model_performance(m3)
 #> 1755.63 | 1774.79 |           0.80 |        0.28 | 0.72 | 23.44
 ```
 
-### Comparing different models
+## Models comparison
+
+The `compare_performance()` function can be used to compare the
+performance and quality of several models (including models of different
+types).
 
 ``` r
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
@@ -306,7 +301,11 @@ compare_performance(m1, m2, m3, m4)
 #> m4    |     glm |   56.76 |   57.75 |  0.76 |     -2.60 |            0.32 |      |             |         |         |      |                |             |      |          0.66
 ```
 
-### Comparing different models, ordered by model performance
+### General index of model performance
+
+One can also easily compute and a [**composite
+index**](https://easystats.github.io/performance/reference/compare_performance.html#details)
+of model performance and sort the models from the best one to the worse.
 
 ``` r
 compare_performance(m1, m2, m3, m4, rank = TRUE)
@@ -322,15 +321,42 @@ compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> Model m2 (of class glm) performed best with an overall performance score of 99.80%.
 ```
 
+### Visualisation of indices of models’ performance
+
+Finally, we provide convenient visualisation (the `see` package must be
+installed).
+
 ``` r
 plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
 ```
 
 ![](man/figures/unnamed-chunk-19-1.png)<!-- -->
 
+### Comparing models with the Bayes Factor
+
+For some models (for instance, frequentist linear models), the
+`compare_performance()` function will compute the **Bayes factor (BF)**,
+testing if each model is better than the first one (which is used as a
+ground reference).
+
+``` r
+m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+
+performance::compare_performance(m1, m2, m3)
+#> # Comparison of Model Performance Indices
+#> 
+#> Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |       BF
+#> ---------------------------------------------------------------------
+#> m1    |   lm | 160.04 | 169.07 | 0.76 |        0.76 | 0.40 |         
+#> m2    |   lm | 158.05 | 170.09 | 0.77 |        0.76 | 0.40 |     0.60
+#> m3    |   lm | 130.69 | 145.75 | 0.81 |        0.80 | 0.36 | 1.16e+05
+```
+
 # References
 
-<div id="refs" class="references hanging-indent">
+<div id="refs" class="references">
 
 <div id="ref-gelman_data_2007">
 
