@@ -1,5 +1,9 @@
 #' @export
 model_performance.bife <- function(model, metrics = "all", verbose = TRUE, ...) {
+  if (any(tolower(metrics) == "log_loss")) {
+    metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
+  }
+
   if (all(metrics == "all")) {
     metrics <- c("AIC", "R2", "LOGLOSS", "PCP")
   } else if (all(metrics == "common")) {
@@ -21,7 +25,7 @@ model_performance.bife <- function(model, metrics = "all", verbose = TRUE, ...) 
   }
   if (("LOGLOSS" %in% toupper(metrics)) && info$is_binomial) {
     .logloss <- performance_logloss(model, verbose = verbose)
-    if (!is.na(.logloss)) out$LOGLOSS <- .logloss
+    if (!is.na(.logloss)) out$Log_loss <- .logloss
   }
   if (("PCP" %in% toupper(metrics)) && info$is_binomial && !info$is_multinomial && !info$is_ordinal) {
     out$PCP <- performance_pcp(model, verbose = verbose)$pcp_model

@@ -146,7 +146,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   }
 
   # recode some indices, so higher values = better fit
-  for (i in c("AIC", "BIC", "RMSE", "SIGMA")) {
+  for (i in c("AIC", "BIC", "RMSE", "Sigma")) {
     if (i %in% colnames(out)) {
       out[[i]] <- 1 - out[[i]]
     }

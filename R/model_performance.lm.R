@@ -32,6 +32,10 @@
 #' @importFrom insight model_info
 #' @export
 model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
+  if (any(tolower(metrics) == "log_loss")) {
+    metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
+  }
+
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
   } else if (all(metrics == "common")) {
@@ -63,16 +67,16 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
   if ("SIGMA" %in% toupper(metrics)) {
-    out$SIGMA <- .get_sigma(model)
+    out$Sigma <- .get_sigma(model)
   }
   if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
     .logloss <- performance_logloss(model, verbose = verbose)
-    if (!is.na(.logloss)) out$LOGLOSS <- .logloss
+    if (!is.na(.logloss)) out$Log_loss <- .logloss
   }
   if (("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))) {
     .scoring_rules <- performance_score(model, verbose = verbose)
-    if (!is.na(.scoring_rules$logarithmic)) out$SCORE_LOG <- .scoring_rules$logarithmic
-    if (!is.na(.scoring_rules$spherical)) out$SCORE_SPHERICAL <- .scoring_rules$spherical
+    if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
   }
   if (("PCP" %in% toupper(metrics)) && isTRUE(info$is_binomial) && !isTRUE(info$is_multinomial) && !isTRUE(info$is_ordinal)) {
     out$PCP <- performance_pcp(model, verbose = verbose)$pcp_model
