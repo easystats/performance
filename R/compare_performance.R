@@ -74,7 +74,8 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
 
   m <- mapply(function(.x, .y) {
     dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
-    cbind(data.frame(Model = as.character(.y), Type = class(.x)[1], stringsAsFactors = FALSE), dat)
+    model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
+    cbind(data.frame(Model = model_name, Type = class(.x)[1], stringsAsFactors = FALSE), dat)
   }, objects, object_names, SIMPLIFY = FALSE)
 
 

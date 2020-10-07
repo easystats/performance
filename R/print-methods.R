@@ -17,6 +17,10 @@ print.compare_performance <- function(x, digits = 3, ...) {
   if ("p_Omnibus" %in% colnames(x)) {
     x$p_Omnibus <- insight::format_p(x$p_Omnibus)
   }
+  if ("BF" %in% colnames(x)) {
+    x$BF[is.na(x$BF)] <- 1
+    x$BF <- insight::format_bf(x$BF)
+  }
 
   x[] <- lapply(x, function(i) {
     if (is.numeric(i)) {
