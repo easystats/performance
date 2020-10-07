@@ -90,7 +90,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.953 [0.005]
-#>      Marginal R2: 0.825 [0.044]
+#>      Marginal R2: 0.824 [0.045]
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -344,7 +344,7 @@ m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
 m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
-performance::compare_performance(m1, m2, m3)
+compare_performance(m1, m2, m3)
 #> # Comparison of Model Performance Indices
 #> 
 #> Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |       BF

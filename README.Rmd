@@ -252,7 +252,7 @@ m1 <- lm(Sepal.Length ~ Petal.Length, data=iris)
 m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data=iris)
 m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data=iris)
 
-performance::compare_performance(m1, m2, m3)
+compare_performance(m1, m2, m3)
 ```
 
 # References
