@@ -1,5 +1,9 @@
 # performance 0.5.1
 
+## Breaking changes
+
+* Column names for `model_performance()` and `compare_performance()` were changed to be in line with the _easystats_ naming convention: `LOGLOSS` is now `Log_loss`, `SCORE_LOG` is `Score_log` and `SCORE_SPHERICAL` is now `Score_spherical`.
+
 ## Changes to functions
 
 * Improved formatting for Bayes factors in `compare_performance()`.
