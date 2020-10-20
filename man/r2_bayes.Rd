@@ -48,6 +48,24 @@ if (require("rstanarm")) {
   )
   r2_bayes(model)
 }
+
+
+if (require(BayesFactor)) {
+  data(mtcars)
+
+  BFM <- generalTestBF(mpg ~ cyl * gear, data = mtcars, progress = FALSE)
+  FM <- lm(mpg ~ cyl * gear, data = mtcars)
+
+  r2(FM)
+  r2(BFM[4])
+
+
+  # with random effects:
+  mtcars$gear <- factor(mtcars$gear)
+  model <- lmBF(mpg ~ hp + cyl + gear + gear:wt, mtcars, progress = FALSE, whichRandom = c("gear", "gear:wt"))
+  r2(model)
+}
+
 \dontrun{
 if (require("brms")) {
   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
