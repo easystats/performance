@@ -383,6 +383,9 @@ r2.brmsfit <- function(model, ...) {
 r2.stanreg <- r2.brmsfit
 
 
+#' @export
+r2.BFBayesFactor <- r2.brmsfit
+
 
 
 

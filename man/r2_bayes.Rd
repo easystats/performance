@@ -7,7 +7,8 @@
 r2_bayes(model, robust = TRUE, ci = 0.89)
 }
 \arguments{
-\item{model}{A Bayesian regression model.}
+\item{model}{A Bayesian regression model (from \code{brms}, \code{rstanarm},
+\code{BayesFactor}, etc).}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
 calculate the central tendency of the variances.}
