@@ -66,16 +66,10 @@
 #' }
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
 #'
-#' @export
-r2_bayes <- function(model, robust = TRUE, ci = .89) {
-  UseMethod("r2_bayes")
-}
-
-#' @export
 #' @importFrom insight find_algorithm is_multivariate find_response
 #' @importFrom stats median mad sd
 #' @importFrom bayestestR ci
-r2_bayes.default <- function(model, robust = TRUE, ci = .89) {
+r2_bayes <- function(model, robust = TRUE, ci = .89) {
   r2_bayesian <- .r2_posterior(model)
 
   if (is.null(r2_bayesian)) {
@@ -104,62 +98,12 @@ r2_bayes.default <- function(model, robust = TRUE, ci = .89) {
 }
 
 
-#' @export
-#' @importFrom insight get_parameters get_response find_predictors
-#' @importFrom stats median mad sd
-#' @importFrom bayestestR point_estimate hdi
-r2_bayes.BFBayesFactor <- function(model, robust = TRUE, ci = .89, ...){
-  if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("Package `rstantools` needed for this function to work. Please install it.")
-  }
-
-  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("Package `BayesFactor` needed for this function to work. Please install it.")
-  }
-
-  # Estimates
-  params <- insight::get_parameters(model, unreduce = FALSE)
-  # remove sig and g cols
-  params <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
-
-  # Model Matrix
-  mm <- BayesFactor::model.matrix(model[1])
-  colnames(mm)[1] <- "mu"
-
-  # match?
-  all(colnames(params) == colnames(mm))
-
-  # Compute R2!
-  y <- insight::get_response(model)
-  yy <- as.matrix(params) %*% t(mm)
-  r2s <- rstantools::bayes_R2(yy, y = y)
-  r2_bayesian <- data.frame(R2_Bayes = r2s)
-
-  rand <- insight::find_predictors(model, effects = "random", flatten = TRUE)
-  if (!is.null(rand)) {
-    idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params))
-    idx <- apply(idx, 1, any)
-    params[idx] <- 0
-
-    yy <- as.matrix(params) %*% t(mm)
-    r2s_marginal <- rstantools::bayes_R2(yy, y = y)
-    r2_bayesian$R2_Bayes_marginal <- r2s_marginal
-  }
-
-  structure(
-    class = "r2_bayes",
-    lapply(r2_bayesian, ifelse(robust, stats::median, mean)),
-    "SE" = lapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd)),
-    "Estimates" = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
-    "CI" = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
-    "robust" = robust
-  )
+.r2_posterior <- function(model){
+  UseMethod(".r2_posterior")
 }
 
 
-
-
-.r2_posterior <- function(model) {
+.r2_posterior.default <- function(model) {
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` needed for this function to work. Please install it.")
   }
@@ -219,4 +163,49 @@ r2_bayes.BFBayesFactor <- function(model, robust = TRUE, ci = .89, ...){
       NULL
     }
   )
+}
+
+
+#' @importFrom insight get_parameters get_response find_predictors
+#' @importFrom stats median mad sd
+#' @importFrom bayestestR point_estimate hdi
+.r2_posterior.BFBayesFactor <- function(model){
+  if (!requireNamespace("rstantools", quietly = TRUE)) {
+    stop("Package `rstantools` needed for this function to work. Please install it.")
+  }
+
+  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
+    stop("Package `BayesFactor` needed for this function to work. Please install it.")
+  }
+
+  # Estimates
+  params <- insight::get_parameters(model, unreduce = FALSE)
+  # remove sig and g cols
+  params <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
+
+  # Model Matrix
+  mm <- BayesFactor::model.matrix(model[1])
+  colnames(mm)[1] <- "mu"
+
+  # match?
+  all(colnames(params) == colnames(mm))
+
+  # Compute R2!
+  y <- insight::get_response(model)
+  yy <- as.matrix(params) %*% t(mm)
+  r2s <- rstantools::bayes_R2(yy, y = y)
+  r2_bayesian <- data.frame(R2_Bayes = r2s)
+
+  rand <- insight::find_predictors(model, effects = "random", flatten = TRUE)
+  if (!is.null(rand)) {
+    idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params))
+    idx <- apply(idx, 1, any)
+    params[idx] <- 0
+
+    yy <- as.matrix(params) %*% t(mm)
+    r2s_marginal <- rstantools::bayes_R2(yy, y = y)
+    r2_bayesian$R2_Bayes_marginal <- r2s_marginal
+  }
+
+  r2_bayesian
 }
