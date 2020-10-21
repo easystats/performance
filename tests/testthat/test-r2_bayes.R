@@ -11,6 +11,12 @@ if (require("testthat") && require("performance")) {
       testthat::expect_equal(r_CI$CI_low, 0.62, tol = 0.05)
       testthat::expect_equal(r_CI$CI_high, 0.79, tol = 0.05)
 
+      r_post <- r2_posterior(BFM[1])
+      testthat::expect_is(r_post, "data.frame")
+
+      r_BF <- r2(BFM, average = TRUE)
+      testthat::expect_equal(r_BF$R2_Bayes, 0.72, tol = 0.05)
+
       # with random effects:
       mtcars$gear <- factor(mtcars$gear)
       model <- lmBF(mpg ~ hp + cyl + gear + gear:wt, mtcars, progress = FALSE, whichRandom = c("gear", "gear:wt"))

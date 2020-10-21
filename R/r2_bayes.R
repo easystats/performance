@@ -9,6 +9,7 @@
 #' @param robust Logical, if \code{TRUE}, the median instead of mean is used to
 #'   calculate the central tendency of the variances.
 #' @param ci Value or vector of probability of the CI (between 0 and 1) to be estimated.
+#' @param ... Arguments passed to \code{r2_posterior()}.
 #'
 #' @return A list with the Bayesian R2 value. For mixed models, a list with the
 #'   Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
@@ -42,11 +43,12 @@
 #' if (require(BayesFactor)) {
 #'   data(mtcars)
 #'
-#'   BFM <- generalTestBF(mpg ~ cyl * gear, data = mtcars, progress = FALSE)
-#'   FM <- lm(mpg ~ cyl * gear, data = mtcars)
+#'   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
+#'   FM <- lm(mpg ~ qsec + gear, data = mtcars)
 #'
 #'   r2(FM)
-#'   r2(BFM[4])
+#'   r2(BFM[3])
+#'   r2(BFM, average = TRUE) # across all models
 #'
 #'
 #'   # with random effects:
@@ -69,8 +71,8 @@
 #' @importFrom insight find_algorithm is_multivariate find_response
 #' @importFrom stats median mad sd
 #' @importFrom bayestestR ci
-r2_bayes <- function(model, robust = TRUE, ci = .89) {
-  r2_bayesian <- .r2_posterior(model)
+r2_bayes <- function(model, robust = TRUE, ci = .89, ...) {
+  r2_bayesian <- r2_posterior(model, ...)
 
   if (is.null(r2_bayesian)) {
     return(NULL)
@@ -97,13 +99,15 @@ r2_bayes <- function(model, robust = TRUE, ci = .89) {
   }
 }
 
-
-.r2_posterior <- function(model){
-  UseMethod(".r2_posterior")
+#' @export
+#' @rdname r2_bayes
+r2_posterior <- function(model, ...){
+  UseMethod("r2_posterior")
 }
 
-
-.r2_posterior.default <- function(model) {
+#' @export
+#' @rdname r2_bayes
+r2_posterior.brmsfit <- function(model, ...) {
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` needed for this function to work. Please install it.")
   }
@@ -166,10 +170,23 @@ r2_bayes <- function(model, robust = TRUE, ci = .89) {
 }
 
 
+#' @export
+#' @rdname r2_bayes
+r2_posterior.stanreg <- r2_posterior.brmsfit
+
+#' @param average Compute model-averaged r2? See
+#'   \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.
+#' @inheritParams bayestestR::weighted_posteriors
 #' @importFrom insight get_parameters get_response find_predictors
 #' @importFrom stats median mad sd
 #' @importFrom bayestestR point_estimate hdi
-.r2_posterior.BFBayesFactor <- function(model){
+#' @export
+#' @rdname r2_bayes
+r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, ...){
+  if (average) {
+    return(.r2_posterior_model_average(model, prior_odds = prior_odds))
+  }
+
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` needed for this function to work. Please install it.")
   }
@@ -208,4 +225,38 @@ r2_bayes <- function(model, robust = TRUE, ci = .89) {
   }
 
   r2_bayesian
+}
+
+#' @keywords internal
+.r2_posterior_model_average <- function(model, prior_odds = NULL) {
+  BFMods <- bayestestR::bayesfactor_models(model, verbose = FALSE)
+
+  # extract parameters
+  intercept_only <- which(BFMods$Model == "1")
+  params <- vector(mode = "list", length = nrow(BFMods))
+  for (m in seq_along(params)) {
+    if (length(intercept_only) && m == intercept_only) {
+      params[[m]] <- data.frame(R2_Bayes = rep(0, 4000))
+    } else if (m == 1) {
+      # If the model is the "den" model
+      params[[m]] <- suppressMessages(r2_posterior(1 / model[1]))
+    } else {
+      params[[m]] <- suppressMessages(r2_posterior(model[m - 1]))
+    }
+  }
+
+
+  # Compute posterior model probabilities
+  if (!is.null(prior_odds)) {
+    prior_odds <- c(1, prior_odds)
+  } else {
+    prior_odds <- rep(1, nrow(BFMods))
+  }
+  posterior_odds <- prior_odds * BFMods$BF
+  posterior_odds <- posterior_odds[-1] / posterior_odds[1]
+
+  wp <- do.call(bayestestR::weighted_posteriors,
+                c(params, list(missing = 0, prior_odds = posterior_odds)))
+  return(wp)
+
 }

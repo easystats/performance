@@ -2,9 +2,21 @@
 % Please edit documentation in R/r2_bayes.R
 \name{r2_bayes}
 \alias{r2_bayes}
+\alias{r2_posterior}
+\alias{r2_posterior.brmsfit}
+\alias{r2_posterior.stanreg}
+\alias{r2_posterior.BFBayesFactor}
 \title{Bayesian R2}
 \usage{
-r2_bayes(model, robust = TRUE, ci = 0.89)
+r2_bayes(model, robust = TRUE, ci = 0.89, ...)
+
+r2_posterior(model, ...)
+
+\method{r2_posterior}{brmsfit}(model, ...)
+
+\method{r2_posterior}{stanreg}(model, ...)
+
+\method{r2_posterior}{BFBayesFactor}(model, average = FALSE, prior_odds = NULL, ...)
 }
 \arguments{
 \item{model}{A Bayesian regression model (from \code{brms}, \code{rstanarm},
@@ -14,6 +26,13 @@ r2_bayes(model, robust = TRUE, ci = 0.89)
 calculate the central tendency of the variances.}
 
 \item{ci}{Value or vector of probability of the CI (between 0 and 1) to be estimated.}
+
+\item{...}{Arguments passed to \code{r2_posterior()}.}
+
+\item{average}{Compute model-averaged r2? See
+\code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.}
+
+\item{prior_odds}{Optional vector of prior odds for the models compared to the first model (or the denominator, for \code{BFBayesFactor} objects). For \code{data.frame}s, this will be used as the basis of weighting.}
 }
 \value{
 A list with the Bayesian R2 value. For mixed models, a list with the
@@ -53,11 +72,12 @@ if (require("rstanarm")) {
 if (require(BayesFactor)) {
   data(mtcars)
 
-  BFM <- generalTestBF(mpg ~ cyl * gear, data = mtcars, progress = FALSE)
-  FM <- lm(mpg ~ cyl * gear, data = mtcars)
+  BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
+  FM <- lm(mpg ~ qsec + gear, data = mtcars)
 
   r2(FM)
-  r2(BFM[4])
+  r2(BFM[3])
+  r2(BFM, average = TRUE) # across all models
 
 
   # with random effects:
