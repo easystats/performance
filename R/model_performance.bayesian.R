@@ -130,6 +130,8 @@ model_performance.brmsfit <- model_performance.stanreg
 
 #' @export
 #' @inheritParams r2_bayes
+#' @importFrom insight model_info
+#' @importFrom bayestestR point_estimate
 #' @rdname model_performance.stanreg
 model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TRUE,
                                             average = FALSE, prior_odds = NULL, ...) {
@@ -168,6 +170,15 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
   out
 }
 
+
+
+
+
+
+# helper -------------------
+
+
+#' @importFrom insight get_parameters
 .get_sigma_bfbayesfactor <- function(model, average = FALSE, prior_odds = NULL) {
   if (average) {
     return(.get_sigma_bfbayesfactor_model_average(model, prior_odds = prior_odds))
@@ -179,6 +190,9 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
 }
 
 
+#' @importFrom bayestestR bayesfactor_models weighted_posteriors
+#' @importFrom insight get_response
+#' @importFrom stats sd
 .get_sigma_bfbayesfactor_model_average <- function(model, prior_odds = NULL) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("Package `BayesFactor` needed for this function to work. Please install it.")
@@ -192,7 +206,7 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
   for (m in seq_along(params)) {
     if (length(intercept_only) && m == intercept_only) {
       y <- insight::get_response(model)
-      params[[m]] <- rep(sd(y), 4000)
+      params[[m]] <- rep(stats::sd(y), 4000)
     } else if (m == 1) {
       # If the model is the "den" model
       params[[m]] <- suppressMessages(.get_sigma_bfbayesfactor(1 / model[1]))
