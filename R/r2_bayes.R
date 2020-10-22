@@ -219,7 +219,7 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   r2s <- rstantools::bayes_R2(yy, y = y)
   r2_bayesian <- data.frame(R2_Bayes = r2s)
 
-  rand <- insight::find_predictors(model, effects = "random", flatten = TRUE)
+  rand <- insight::find_predictors(model[1], effects = "random", flatten = TRUE)
   if (!is.null(rand)) {
     idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params))
     idx <- apply(idx, 1, any)
