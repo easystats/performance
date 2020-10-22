@@ -243,6 +243,7 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   }
 
   BFMods <- bayestestR::bayesfactor_models(model, verbose = FALSE)
+  has_random <- !is.null(insight::find_predictors(model, effects = "random", flatten = TRUE))
 
   # extract parameters
   intercept_only <- which(BFMods$Model == "1")
@@ -255,6 +256,11 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
       params[[m]] <- suppressMessages(r2_posterior(1 / model[1]))
     } else {
       params[[m]] <- suppressMessages(r2_posterior(model[m - 1]))
+    }
+
+    # when there is no random effect, marginal = conditional
+    if (has_random && is.null(params[[m]]$R2_Bayes_marginal)){
+      params[[m]]$R2_Bayes_marginal <- params[[m]]$R2_Bayes
     }
   }
 
