@@ -166,6 +166,14 @@ model_performance.flexsurvreg <- model_performance.lm
 #' @export
 model_performance.hurdle <- model_performance.lm
 
+#' @export
+model_performance.zeroinfl <- model_performance.lm
+
+#' @export
+model_performance.zerotrunc <- model_performance.lm
+
+
+
 
 
 # mfx models -------------------------------
