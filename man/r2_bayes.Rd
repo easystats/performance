@@ -42,6 +42,8 @@ A list with the Bayesian R2 value. For mixed models, a list with the
 \description{
 Compute R2 for Bayesian models. For mixed models (including a random part),
 it additionally computes the R2 related to the fixed effects only (marginal R2).
+While \code{r2_bayes()} returns a single R2 value, \code{r2_posterior()} returns
+a posterior sample of Bayesian R2 values.
 }
 \details{
 \code{r2_bayes()} returns an "unadjusted" R2 value. See \code{\link{r2_loo}}
@@ -51,6 +53,9 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
   For mixed models, the conditional and marginal R2 are returned. The marginal
   R2 considers only the variance of the fixed effects, while the conditional
   R2 takes both the fixed and random effects into account.
+  \cr \cr
+  \code{r2_posterior()} is the actual workhorse for \code{r2_bayes()} and
+  returns a posterior sample of Bayesian R2 values.
 }
 \examples{
 library(performance)
@@ -69,21 +74,21 @@ if (require("rstanarm")) {
 }
 
 
-if (require(BayesFactor)) {
+if (require("BayesFactor")) {
   data(mtcars)
 
   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
   FM <- lm(mpg ~ qsec + gear, data = mtcars)
 
-  r2(FM)
-  r2(BFM[3])
-  r2(BFM, average = TRUE) # across all models
+  r2_bayes(FM)
+  r2_bayes(BFM[3])
+  r2_bayes(BFM, average = TRUE) # across all models
 
 
   # with random effects:
   mtcars$gear <- factor(mtcars$gear)
   model <- lmBF(mpg ~ hp + cyl + gear + gear:wt, mtcars, progress = FALSE, whichRandom = c("gear", "gear:wt"))
-  r2(model)
+  r2_bayes(model)
 }
 
 \dontrun{
