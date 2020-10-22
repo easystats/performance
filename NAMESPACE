@@ -2,6 +2,7 @@
 
 S3method(AIC,bife)
 S3method(as.data.frame,check_outliers)
+S3method(as.data.frame,r2_bayes)
 S3method(as.numeric,check_outliers)
 S3method(check_autocorrelation,default)
 S3method(check_collinearity,MixMod)

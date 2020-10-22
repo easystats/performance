@@ -259,7 +259,7 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
     }
 
     # when there is no random effect, marginal = conditional
-    if (has_random && is.null(params[[m]]$R2_Bayes_marginal)){
+    if (has_random && is.null(params[[m]]$R2_Bayes_marginal)) {
       params[[m]]$R2_Bayes_marginal <- params[[m]]$R2_Bayes
     }
   }
@@ -276,4 +276,32 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
 
   do.call(bayestestR::weighted_posteriors,
           c(params, list(missing = 0, prior_odds = posterior_odds)))
+}
+
+
+
+#' @export
+as.data.frame.r2_bayes <- function(x, ...) {
+  out <- data.frame(
+    R2 = x$R2_Bayes,
+    SD = attributes(x)$SE$R2_Bayes,
+    CI = attributes(x)$CI$R2_Bayes$CI,
+    CI_low = attributes(x)$CI$R2_Bayes$CI_low,
+    CI_high = attributes(x)$CI$R2_Bayes$CI_high,
+    stringsAsFactors = FALSE
+  )
+  if (!is.null(x$R2_Bayes_marginal)) {
+    out_marginal <- data.frame(
+      R2 = x$R2_Bayes_marginal,
+      SD = attributes(x)$SE$R2_Bayes_marginal,
+      CI = attributes(x)$CI$R2_Bayes_marginal$CI,
+      CI_low = attributes(x)$CI$R2_Bayes_marginal$CI_low,
+      CI_high = attributes(x)$CI$R2_Bayes_marginal$CI_high,
+      stringsAsFactors = FALSE
+    )
+    out$Component <- "conditional"
+    out_marginal$Component <- "marginal"
+    out <- rbind(out, out_marginal)
+  }
+  out
 }
