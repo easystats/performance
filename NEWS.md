@@ -7,6 +7,7 @@
 ## New functions
 * `r2_posterior()` for Bayesian models to obtain posterior distributions of R-squared.
 * `r2_bayes()` works with Bayesian models from `BayesFactor` ( #143 ).
+* `model_performance()` works with Bayesian models from `BayesFactor` ( #150 ).
 
 ## Changes to functions
 

@@ -180,7 +180,7 @@ r2_posterior.brmsfit <- function(model, ...) {
 #' @rdname r2_bayes
 r2_posterior.stanreg <- r2_posterior.brmsfit
 
-#' @param average Compute model-averaged r2? See
+#' @param average Compute model-averaged index? See
 #'   \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.
 #' @inheritParams bayestestR::weighted_posteriors
 #' @importFrom insight get_parameters get_response find_predictors

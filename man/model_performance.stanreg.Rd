@@ -2,9 +2,19 @@
 % Please edit documentation in R/model_performance.bayesian.R
 \name{model_performance.stanreg}
 \alias{model_performance.stanreg}
+\alias{model_performance.BFBayesFactor}
 \title{Performance of Bayesian Models}
 \usage{
 \method{model_performance}{stanreg}(model, metrics = "all", verbose = TRUE, ...)
+
+\method{model_performance}{BFBayesFactor}(
+  model,
+  metrics = "all",
+  verbose = TRUE,
+  average = FALSE,
+  prior_odds = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{Object of class \code{stanreg} or \code{brmsfit}.}
@@ -14,6 +24,11 @@
 \item{verbose}{Toggle off warnings.}
 
 \item{...}{Arguments passed to or from other methods.}
+
+\item{average}{Compute model-averaged index? See
+\code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.}
+
+\item{prior_odds}{Optional vector of prior odds for the models compared to the first model (or the denominator, for \code{BFBayesFactor} objects). For \code{data.frame}s, this will be used as the basis of weighting.}
 }
 \value{
 A data frame (with one row) and one column per "index" (see \code{metrics}).
@@ -50,6 +65,15 @@ if (require("rstanarm")) {
     refresh = 0
   )
   model_performance(model)
+}
+
+if (require("BayesFactor")) {
+  model <- generalTestBF(carb ~ am + mpg, mtcars)
+
+  model_performance(model)
+  model_performance(model[3])
+
+  model_performance(model, average = TRUE)
 }
 }
 \references{
