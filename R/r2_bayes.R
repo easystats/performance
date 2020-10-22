@@ -68,9 +68,9 @@
 #' }
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
 #'
-#' @importFrom insight find_algorithm is_multivariate find_response
+#' @importFrom insight find_algorithm is_multivariate find_response model_info get_response find_predictors
 #' @importFrom stats median mad sd
-#' @importFrom bayestestR ci
+#' @importFrom bayestestR ci hdi point_estimate
 r2_bayes <- function(model, robust = TRUE, ci = .89, ...) {
   r2_bayesian <- r2_posterior(model, ...)
 
@@ -227,8 +227,15 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   r2_bayesian
 }
 
+
+
+#' @importFrom bayestestR weighted_posteriors
 #' @keywords internal
 .r2_posterior_model_average <- function(model, prior_odds = NULL) {
+  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
+    stop("Package `BayesFactor` needed for this function to work. Please install it.")
+  }
+
   BFMods <- bayestestR::bayesfactor_models(model, verbose = FALSE)
 
   # extract parameters
@@ -255,8 +262,6 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   posterior_odds <- prior_odds * BFMods$BF
   posterior_odds <- posterior_odds[-1] / posterior_odds[1]
 
-  wp <- do.call(bayestestR::weighted_posteriors,
-                c(params, list(missing = 0, prior_odds = posterior_odds)))
-  return(wp)
-
+  do.call(bayestestR::weighted_posteriors,
+          c(params, list(missing = 0, prior_odds = posterior_odds)))
 }
