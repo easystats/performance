@@ -49,6 +49,7 @@ Imports:
 	utils
 Suggests:
     AER,
+    BayesFactor,
     betareg,
     bigutilsr,
     brms,

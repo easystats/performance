@@ -309,7 +309,7 @@ print.r2_bayes <- function(x, digits = 3, ...) {
     ci = attributes(x)$CI$R2_Bayes$CI / 100,
     digits = digits
   )
-  out <- sprintf("  Conditional R2: %.*f %s", digits, x$R2_Bayes, r2_ci)
+  out <- sprintf("  Conditional R2: %.*f (%s)", digits, x$R2_Bayes, r2_ci)
 
   if ("R2_Bayes_marginal" %in% names(x)) {
     r2_marginal_ci <- insight::format_ci(
@@ -318,7 +318,7 @@ print.r2_bayes <- function(x, digits = 3, ...) {
       ci = attributes(x)$CI$R2_Bayes_marginal$CI / 100,
       digits = digits
     )
-    out <- paste0(c(out, sprintf("     Marginal R2: %.*f %s", digits, x$R2_Bayes_marginal, r2_marginal_ci)), collapse = "\n")
+    out <- paste0(c(out, sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_Bayes_marginal, r2_marginal_ci)), collapse = "\n")
   }
 
   cat(out)
