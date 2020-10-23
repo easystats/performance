@@ -211,7 +211,9 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   colnames(mm)[1] <- "mu"
 
   # match?
-  all(colnames(params) == colnames(mm))
+  if (length(colnames(params)) != length(colnames(mm)) | !all(colnames(params) == colnames(mm))) {
+    # mattan, what to do now?
+  }
 
   # Compute R2!
   y <- insight::get_response(model)
