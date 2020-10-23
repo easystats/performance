@@ -211,8 +211,8 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   colnames(mm)[1] <- "mu"
 
   # match?
-  if (length(colnames(params)) != length(colnames(mm)) | !all(colnames(params) == colnames(mm))) {
-    # mattan, what to do now?
+  if ((length(colnames(params)) != length(colnames(mm))) || !all(colnames(params) == colnames(mm))) {
+    stop("Woops, you seem to have stumbled on some weird edge case. Please file an issue at https://github.com/easystats/performance/issues", call. = FALSE)
   }
 
   # Compute R2!
