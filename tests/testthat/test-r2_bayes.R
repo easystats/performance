@@ -22,9 +22,11 @@ if (require("testthat") && require("performance") && require("BayesFactor")) {
     r_BF <- r2(model, ci = 0.89)
     r_CI <- attr(r_BF, "CI")$R2_Bayes
 
-    testthat::expect_equal(r_BF$R2_Bayes, 0.36, tol = 0.05)
-    testthat::expect_equal(r_BF$R2_Bayes_marginal, 0.21, tol = 0.05)
-    testthat::expect_equal(r_CI$CI_low, 0.27, tol = 0.05)
-    testthat::expect_equal(r_CI$CI_high, 0.54, tol = 0.05)
+    if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
+      testthat::expect_equal(r_BF$R2_Bayes, 0.36, tol = 0.05)
+      testthat::expect_equal(r_BF$R2_Bayes_marginal, 0.21, tol = 0.05)
+      testthat::expect_equal(r_CI$CI_low, 0.27, tol = 0.05)
+      testthat::expect_equal(r_CI$CI_high, 0.54, tol = 0.05)
+    }
   })
 }
