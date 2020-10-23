@@ -186,6 +186,7 @@ r2_posterior.stanreg <- r2_posterior.brmsfit
 #' @importFrom insight get_parameters get_response find_predictors
 #' @importFrom stats median mad sd
 #' @importFrom bayestestR point_estimate hdi
+#' @importFrom utils packageVersion
 #' @export
 #' @rdname r2_bayes
 r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, ...){
