@@ -17,12 +17,12 @@ if (require("testthat") && require("performance") && require("BayesFactor")) {
     testthat::expect_equal(r_BF$R2_Bayes, 0.72, tol = 0.05)
 
     # with random effects:
-    mtcars$gear <- factor(mtcars$gear)
-    model <- lmBF(mpg ~ hp + cyl + gear + gear:wt, mtcars, progress = FALSE, whichRandom = c("gear", "gear:wt"))
-    r_BF <- r2(model, ci = 0.89)
-    r_CI <- attr(r_BF, "CI")$R2_Bayes
-
     if (utils::packageVersion("BayesFactor") >= package_version("0.9.12.4.3")) {
+      mtcars$gear <- factor(mtcars$gear)
+      model <- lmBF(mpg ~ hp + cyl + gear + gear:wt, mtcars, progress = FALSE, whichRandom = c("gear", "gear:wt"))
+      r_BF <- r2(model, ci = 0.89)
+      r_CI <- attr(r_BF, "CI")$R2_Bayes
+
       testthat::expect_equal(r_BF$R2_Bayes, 0.36, tol = 0.05)
       testthat::expect_equal(r_BF$R2_Bayes_marginal, 0.21, tol = 0.05)
       testthat::expect_equal(r_CI$CI_low, 0.27, tol = 0.05)
