@@ -80,3 +80,7 @@ reference:
   - r2_xu
   - r2_zeroinflated
 
+- title: "Sample Data"
+  contents:
+  - classify_distribution
+  
