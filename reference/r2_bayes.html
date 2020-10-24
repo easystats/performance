@@ -48,7 +48,9 @@
 
 <meta property="og:title" content="Bayesian R2 — r2_bayes" />
 <meta property="og:description" content="Compute R2 for Bayesian models. For mixed models (including a random part),
-it additionally computes the R2 related to the fixed effects only (marginal R2)." />
+it additionally computes the R2 related to the fixed effects only (marginal R2).
+While r2_bayes() returns a single R2 value, r2_posterior() returns
+a posterior sample of Bayesian R2 values." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -88,12 +90,6 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -139,17 +135,31 @@ it additionally computes the R2 related to the fixed effects only (marginal R2).
 
     <div class="ref-description">
     <p>Compute R2 for Bayesian models. For mixed models (including a random part),
-it additionally computes the R2 related to the fixed effects only (marginal R2).</p>
+it additionally computes the R2 related to the fixed effects only (marginal R2).
+While <code>r2_bayes()</code> returns a single R2 value, <code>r2_posterior()</code> returns
+a posterior sample of Bayesian R2 values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_bayes</span>(<span class='kw'>model</span>, robust = <span class='fl'>TRUE</span>, ci = <span class='fl'>0.89</span>)</pre>
+    <pre class="usage"><span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span>, robust <span class='op'>=</span> <span class='cn'>TRUE</span>, ci <span class='op'>=</span> <span class='fl'>0.89</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for brmsfit</span>
+<span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for stanreg</span>
+<span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for BFBayesFactor</span>
+<span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, average <span class='op'>=</span> <span class='cn'>FALSE</span>, prior_odds <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A Bayesian regression model.</p></td>
+      <td><p>A Bayesian regression model (from <code>brms</code>, <code>rstanarm</code>,
+<code>BayesFactor</code>, etc).</p></td>
     </tr>
     <tr>
       <th>robust</th>
@@ -159,6 +169,19 @@ calculate the central tendency of the variances.</p></td>
     <tr>
       <th>ci</th>
       <td><p>Value or vector of probability of the CI (between 0 and 1) to be estimated.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed to <code>r2_posterior()</code>.</p></td>
+    </tr>
+    <tr>
+      <th>average</th>
+      <td><p>Compute model-averaged index? See
+<code><a href='https://easystats.github.io/bayestestR/reference/weighted_posteriors.html'>bayestestR::weighted_posteriors()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>prior_odds</th>
+      <td><p>Optional vector of prior odds for the models compared to the first model (or the denominator, for <code>BFBayesFactor</code> objects). For <code>data.frame</code>s, this will be used as the basis of weighting.</p></td>
     </tr>
     </table>
 
@@ -175,26 +198,29 @@ calculate the central tendency of the variances.</p></td>
   <br /> <br />
   For mixed models, the conditional and marginal R2 are returned. The marginal
   R2 considers only the variance of the fixed effects, while the conditional
-  R2 takes both the fixed and random effects into account.</p>
+  R2 takes both the fixed and random effects into account.
+  <br /> <br />
+  <code>r2_posterior()</code> is the actual workhorse for <code>r2_bayes()</code> and
+  returns a posterior sample of Bayesian R2 values.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gelman, A., Goodrich, B., Gabry, J., &amp; Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. doi: <a href='https://doi.org/10.1080/00031305.2018.1549100'>10.1080/00031305.2018.1549100</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://easystats.github.io/performance'>performance</a></span>)
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>, chains = <span class='fl'>1</span>, iter = <span class='fl'>500</span>, refresh = <span class='fl'>0</span>)
-  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/performance/'>performance</a></span><span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, chains <span class='op'>=</span> <span class='fl'>1</span>, iter <span class='op'>=</span> <span class='fl'>500</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_lmer</a></span>(
-    <span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Width</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>),
-    data = <span class='kw'>iris</span>,
-    chains = <span class='fl'>1</span>,
-    iter = <span class='fl'>500</span>,
-    refresh = <span class='fl'>0</span>
-  )
-  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
-}
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_lmer</a></span><span class='op'>(</span>
+    <span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>,
+    data <span class='op'>=</span> <span class='va'>iris</span>,
+    chains <span class='op'>=</span> <span class='fl'>1</span>,
+    iter <span class='op'>=</span> <span class='fl'>500</span>,
+    refresh <span class='op'>=</span> <span class='fl'>0</span>
+  <span class='op'>)</span>
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
@@ -203,16 +229,40 @@ calculate the central tendency of the variances.</p></td>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayesian R2 with Standard Error
 #&gt; 
-#&gt; </span><span>  Conditional R2: 0.953 [0.006]
-#&gt;      Marginal R2: 0.823 [0.040]</div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span>)) {
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='kw'>brms</span>::<span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>)
-  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
+#&gt; </span><span>  Conditional R2: 0.953 (89% CI [0.943, 0.961])
+#&gt;      Marginal R2: 0.823 (89% CI [0.743, 0.875])</div><div class='input'>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='kw'>brms</span>::<span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Petal.Width</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
-  <span class='fu'>r2_bayes</span>(<span class='kw'>model</span>)
-}
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://richarddmorey.github.io/BayesFactor/'>"BayesFactor"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+
+  <span class='va'>BFM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/BayesFactor/man/generalTestBF.html'>generalTestBF</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>+</span> <span class='va'>gear</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, progress <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+  <span class='va'>FM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>qsec</span> <span class='op'>+</span> <span class='va'>gear</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>FM</span><span class='op'>)</span>
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>BFM</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>BFM</span>, average <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># across all models</span>
+
+
+  <span class='co'># with random effects:</span>
+  <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>gear</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>gear</span><span class='op'>)</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/BayesFactor/man/lmBF.html'>lmBF</a></span><span class='op'>(</span>
+    <span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span> <span class='op'>+</span> <span class='va'>gear</span><span class='op'>:</span><span class='va'>wt</span>,
+    <span class='va'>mtcars</span>,
+    progress <span class='op'>=</span> <span class='cn'>FALSE</span>,
+    whichRandom <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gear"</span>, <span class='st'>"gear:wt"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>brms</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>brms</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+  <span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='op'>}</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -225,7 +275,7 @@ calculate the central tendency of the variances.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">

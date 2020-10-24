@@ -87,12 +87,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -140,7 +134,7 @@
     <p>Check mixed models for boundary fits.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_singularity</span>(<span class='kw'>x</span>, tolerance = <span class='fl'>1e-05</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>check_singularity</span><span class='op'>(</span><span class='va'>x</span>, tolerance <span class='op'>=</span> <span class='fl'>1e-05</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,8 +180,13 @@ will be.</p></td>
 <li><p>avoid fitting overly complex models, such that the variance-covariance matrices can be estimated precisely enough (<cite>Matuschek et al. 2017</cite>)</p></li>
 <li><p>use some form of model selection to choose a model that balances predictive accuracy and overfitting/type I error (<cite>Bates et al. 2015</cite>, <cite>Matuschek et al. 2017</cite>)</p></li>
 <li><p>&#8220;keep it maximal&#8221;, i.e. fit the most complex model consistent with the experimental design, removing only terms required to allow a non-singular fit (<cite>Barr et al. 2013</cite>)</p></li>
-</ul>
-
+</ul><p><br /> <br />
+  Note the different meaning between singularity and convergence: singularity
+  indicates an issue with the "true" best estimate, i.e. whether the maximum
+  likelihood estimation for the variance-covariance matrix of the random effects
+  is positive definite or only semi-definite. Convergence is a question of
+  whether we can assume that the numerical optimization has worked correctly
+  or not.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -200,24 +199,24 @@ will be.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>sleepstudy</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
-  <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mygrp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, size = <span class='fl'>180</span>, replace = <span class='fl'>TRUE</span>)
-  <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mysubgrp</span> <span class='op'>&lt;-</span> <span class='fl'>NA</span>
-  <span class='co'>for</span> (<span class='kw'>i</span> <span class='co'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>) {
-    <span class='kw'>filter_group</span> <span class='op'>&lt;-</span> <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mygrp</span> <span class='op'>==</span> <span class='kw'>i</span>
-    <span class='kw'>sleepstudy</span><span class='op'>$</span><span class='kw'>mysubgrp</span>[<span class='kw'>filter_group</span>] <span class='op'>&lt;-</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>, size = <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='kw'>filter_group</span>), replace = <span class='fl'>TRUE</span>)
-  }
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>sleepstudy</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
+  <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mygrp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, size <span class='op'>=</span> <span class='fl'>180</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mysubgrp</span> <span class='op'>&lt;-</span> <span class='cn'>NA</span>
+  <span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='va'>filter_group</span> <span class='op'>&lt;-</span> <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mygrp</span> <span class='op'>==</span> <span class='va'>i</span>
+    <span class='va'>sleepstudy</span><span class='op'>$</span><span class='va'>mysubgrp</span><span class='op'>[</span><span class='va'>filter_group</span><span class='op'>]</span> <span class='op'>&lt;-</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>filter_group</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+  <span class='op'>}</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(
-    <span class='kw'>Reaction</span> <span class='op'>~</span> <span class='kw'>Days</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>mygrp</span> <span class='op'>/</span> <span class='kw'>mysubgrp</span>) <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Subject</span>),
-    data = <span class='kw'>sleepstudy</span>
-  )
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span>
+    <span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>mygrp</span> <span class='op'>/</span> <span class='va'>mysubgrp</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Subject</span><span class='op'>)</span>,
+    data <span class='op'>=</span> <span class='va'>sleepstudy</span>
+  <span class='op'>)</span>
 
-  <span class='fu'>check_singularity</span>(<span class='kw'>model</span>)
-}
+  <span class='fu'>check_singularity</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -230,7 +229,7 @@ will be.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">

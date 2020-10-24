@@ -87,12 +87,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -140,16 +134,16 @@
     <p>Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation of being classified as an outlier by at least one method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5 (i.e., that were classified as outliers by at least half of the methods). See the <strong>Details</strong> section below for a description of the methods.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_outliers</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>check_outliers</span>(<span class='kw'>x</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cook"</span>, <span class='st'>"pareto"</span>), threshold = <span class='kw'>NULL</span>, <span class='kw'>...</span>)
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cook"</span>, <span class='st'>"pareto"</span><span class='op'>)</span>, threshold <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for numeric</span>
-<span class='fu'>check_outliers</span>(<span class='kw'>x</span>, method = <span class='st'>"zscore"</span>, threshold = <span class='kw'>NULL</span>, <span class='kw'>...</span>)
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"zscore"</span>, threshold <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>check_outliers</span>(<span class='kw'>x</span>, method = <span class='st'>"mahalanobis"</span>, threshold = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"mahalanobis"</span>, threshold <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -300,32 +294,32 @@ list(
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Univariate</span>
-<span class='fu'>check_outliers</span>(<span class='kw'>mtcars</span><span class='op'>$</span><span class='kw'>mpg</span>)
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>mpg</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: 4 outliers detected (cases 18, 19, 20, 28).
 #&gt; </span><span></div><div class='input'>
 <span class='co'># Multivariate</span>
 <span class='co'># select only mpg and disp (continuous)</span>
-<span class='kw'>mt1</span> <span class='op'>&lt;-</span> <span class='kw'>mtcars</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>4</span>)]
+<span class='va'>mt1</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>]</span>
 <span class='co'># create some fake outliers and attach outliers to main df</span>
-<span class='kw'>mt2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span>(<span class='kw'>mt1</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(mpg = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>37</span>, <span class='fl'>40</span>), disp = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>300</span>, <span class='fl'>400</span>), hp = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>110</span>, <span class='fl'>120</span>)))
+<span class='va'>mt2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>mt1</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>mpg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>37</span>, <span class='fl'>40</span><span class='op'>)</span>, disp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>300</span>, <span class='fl'>400</span><span class='op'>)</span>, hp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>120</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># fit model with outliers</span>
-<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>disp</span> <span class='op'>~</span> <span class='kw'>mpg</span> <span class='op'>+</span> <span class='kw'>hp</span>, data = <span class='kw'>mt2</span>)
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>disp</span> <span class='op'>~</span> <span class='va'>mpg</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mt2</span><span class='op'>)</span>
 
-<span class='kw'>ol</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span>(<span class='kw'>model</span>)
+<span class='va'>ol</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='co'># plot(ol)</span>
-<span class='kw'>insight</span>::<span class='fu'><a href='https://rdrr.io/pkg/insight/man/get_data.html'>get_data</a></span>(<span class='kw'>mode</span>)[<span class='kw'>ol</span>, ]
+<span class='fu'>insight</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/insight/reference/get_data.html'>get_data</a></span><span class='op'>(</span><span class='va'>mode</span><span class='op'>)</span><span class='op'>[</span><span class='va'>ol</span>, <span class='op'>]</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Could not get model data.</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
 
-<span class='fu'>check_outliers</span>(<span class='kw'>model</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mahalabonis"</span>, <span class='st'>"mcd"</span>))
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mahalabonis"</span>, <span class='st'>"mcd"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 6 outliers detected (cases 18, 20, 28, 31, 33, 34).
-#&gt; </span><span></div><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+#&gt; </span><span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># This one takes some seconds to finish...</span>
-<span class='fu'>check_outliers</span>(<span class='kw'>model</span>, method = <span class='st'>"ics"</span>)
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='st'>"ics"</span><span class='op'>)</span>
 
 <span class='co'># For dataframes</span>
-<span class='fu'>check_outliers</span>(<span class='kw'>mtcars</span>)
-<span class='fu'>check_outliers</span>(<span class='kw'>mtcars</span>, method = <span class='st'>"all"</span>)
-}
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>mtcars</span>, method <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -338,7 +332,7 @@ list(
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">

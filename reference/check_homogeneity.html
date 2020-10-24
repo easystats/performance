@@ -88,12 +88,6 @@ by independent variables in a model." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -142,7 +136,7 @@ by independent variables in a model." />
 by independent variables in a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_homogeneity</span>(<span class='kw'>x</span>, method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"bartlett"</span>, <span class='st'>"fligner"</span>, <span class='st'>"auto"</span>), <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bartlett"</span>, <span class='st'>"fligner"</span>, <span class='st'>"levene"</span>, <span class='st'>"auto"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -154,7 +148,8 @@ by independent variables in a model.</p>
     <tr>
       <th>method</th>
       <td><p>Name of the method (underlying test) that should be performed
-to check the homogeneity of variances. May either be <code>"bartlett"</code> for
+to check the homogeneity of variances. May either be <code>"levene"</code> for
+Levene's Test for Homogeneity of Variance, <code>"bartlett"</code> for
 the Bartlett test (assuming normal distributed samples or groups),
 <code>"fligner"</code> for the Fligner-Killeen test (rank-based, non-parametric test),
 or <code>"auto"</code>. In the latter case, Bartlett test is used if the model response
@@ -162,7 +157,7 @@ is normal distributed, else Fligner-Killeen test is used.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <td><p>Arguments passed down to <code><a href='https://rdrr.io/pkg/car/man/leveneTest.html'>car::leveneTest()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -175,14 +170,14 @@ is normal distributed, else Fligner-Killeen test is used.</p></td>
     <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>len</span> <span class='op'>~</span> <span class='kw'>supp</span> <span class='op'>+</span> <span class='kw'>dose</span>, data = <span class='kw'>ToothGrowth</span>)
-<span class='fu'>check_homogeneity</span>(<span class='kw'>model</span>)
+    <pre class="examples"><div class='input'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>len</span> <span class='op'>~</span> <span class='va'>supp</span> <span class='op'>+</span> <span class='va'>dose</span>, data <span class='op'>=</span> <span class='va'>ToothGrowth</span><span class='op'>)</span>
+<span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #00BB00;'>OK: Variances in each of the groups are the same (Bartlett Test, p = 0.226).
 #&gt; </span><span></div><div class='input'>
 <span class='co'># plot results</span>
-<span class='kw'>result</span> <span class='op'>&lt;-</span> <span class='fu'>check_homogeneity</span>(<span class='kw'>model</span>)
+<span class='va'>result</span> <span class='op'>&lt;-</span> <span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #00BB00;'>OK: Variances in each of the groups are the same (Bartlett Test, p = 0.226).
-#&gt; </span><span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>result</span>)
+#&gt; </span><span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -195,7 +190,7 @@ is normal distributed, else Fligner-Killeen test is used.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">

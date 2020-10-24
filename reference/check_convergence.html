@@ -88,12 +88,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -142,7 +136,7 @@
   test for <code>merMod</code>-objects.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_convergence</span>(<span class='kw'>x</span>, tolerance = <span class='fl'>0.001</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>check_convergence</span><span class='op'>(</span><span class='va'>x</span>, tolerance <span class='op'>=</span> <span class='fl'>0.001</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,24 +182,30 @@ will be.</p></td>
   10 in (non-identity link) generalized linear model <em>might</em> indicate
   <a href='https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/'>complete separation</a>.
   Complete separation can be addressed by regularization, e.g. penalized
-  regression or Bayesian regression with appropriate priors on the fixed effects.</p>
+  regression or Bayesian regression with appropriate priors on the fixed effects.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Convergence versus Singularity</h3>
+<p>Note the different meaning between singularity and convergence: singularity
+  indicates an issue with the "true" best estimate, i.e. whether the maximum
+  likelihood estimation for the variance-covariance matrix of the random effects
+  is positive definite or only semi-definite. Convergence is a question of
+  whether we can assume that the numerical optimization has worked correctly
+  or not.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
-  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>cbpp</span>)
-  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
-  <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>cbpp</span>))
-  <span class='kw'>cbpp</span><span class='op'>$</span><span class='kw'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='kw'>cbpp</span>))
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>cbpp</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+  <span class='va'>cbpp</span><span class='op'>$</span><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cbpp</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>cbpp</span><span class='op'>$</span><span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>cbpp</span><span class='op'>)</span><span class='op'>)</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span>(
-    <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span>(<span class='kw'>incidence</span>, <span class='kw'>size</span> <span class='op'>-</span> <span class='kw'>incidence</span>) <span class='op'>~</span> <span class='kw'>period</span> <span class='op'>+</span> <span class='kw'>x</span> <span class='op'>+</span> <span class='kw'>x2</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>+</span> <span class='kw'>x</span> <span class='op'>|</span> <span class='kw'>herd</span>),
-    data = <span class='kw'>cbpp</span>,
-    family = <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span>()
-  )
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>incidence</span>, <span class='va'>size</span> <span class='op'>-</span> <span class='va'>incidence</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>period</span> <span class='op'>+</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>x2</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>x</span> <span class='op'>|</span> <span class='va'>herd</span><span class='op'>)</span>,
+    data <span class='op'>=</span> <span class='va'>cbpp</span>,
+    family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
-  <span class='fu'>check_convergence</span>(<span class='kw'>model</span>)
-}
+  <span class='fu'>check_convergence</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; <span class='message'>boundary (singular) fit: see ?isSingular</span></div><div class='output co'>#&gt; [1] TRUE
 #&gt; attr(,"gradient")
 #&gt; [1] 8.444895e-05</div></pre>
@@ -220,7 +220,7 @@ will be.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">

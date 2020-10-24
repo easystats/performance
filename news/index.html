@@ -86,12 +86,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -134,6 +128,49 @@
       <small>Source: <a href='https://github.com/easystats/performance/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="performance-051" class="section level1">
+<h1 class="page-header" data-toc-text="0.5.1">
+<a href="#performance-051" class="anchor"></a>performance 0.5.1<small> Unreleased </small>
+</h1>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<ul>
+<li>Column names for <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code> were changed to be in line with the <em>easystats</em> naming convention: <code>LOGLOSS</code> is now <code>Log_loss</code>, <code>SCORE_LOG</code> is <code>Score_log</code> and <code>SCORE_SPHERICAL</code> is now <code>Score_spherical</code>.</li>
+</ul>
+</div>
+<div id="new-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New functions</h2>
+<ul>
+<li>
+<code><a href="../reference/r2_bayes.html">r2_posterior()</a></code> for Bayesian models to obtain posterior distributions of R-squared.</li>
+<li>
+<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/143'>#143</a> ).</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/150'>#150</a> ).</li>
+</ul>
+</div>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<ul>
+<li>Improved formatting for Bayes factors in <code><a href="../reference/compare_performance.html">compare_performance()</a></code>.</li>
+<li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> with <code>rank = TRUE</code> doesn’t use the <code>BF</code> values when <code>BIC</code> are present, to prevent “double-dipping” of the BIC values (<a href='https://github.com/easystats/performance/issues/144'>#144</a>).</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> now also includes the residual standard deviation.</li>
+<li>The <code>method</code> argument in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> gains a <code>"levene"</code> option, to use Levene’s Test for homogeneity.</li>
+</ul>
+</div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<ul>
+<li>Fix bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> when <code>...</code> arguments were function calls to regression objects, instead of direct function calls.</li>
+</ul>
+</div>
+</div>
     <div id="performance-050" class="section level1">
 <h1 class="page-header" data-toc-text="0.5.0">
 <a href="#performance-050" class="anchor"></a>performance 0.5.0<small> 2020-09-12 </small>
@@ -150,17 +187,17 @@
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now returns a logical vector. Original numerical vector is still accessible via <code><a href="https://rdrr.io/r/base/numeric.html">as.numeric()</a></code>.</li>
 </ul>
 </div>
-<div id="new-functions" class="section level2">
+<div id="new-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
+<a href="#new-functions-1" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/pp_check.html">pp_check()</a></code> to compute posterior predictive checks for frequentist models.</li>
 </ul>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue with incorrect labeling of groups from <code><a href="../reference/icc.html">icc()</a></code> when <code>by_group = TRUE</code>.</li>
 <li>Fixed issue in <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for mixed models where sigma could not be calculated in a straightforward way.</li>
@@ -188,9 +225,9 @@
 <code><a href="../reference/icc.html">icc()</a></code> now also computes a “classical” ICC for <code>brmsfit</code> models. The former way of calculating an “ICC” for <code>brmsfit</code> models is now available as new function called <code><a href="../reference/icc.html">variance_decomposition()</a></code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix issue with new version of <em>bigutilsr</em> for <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</li>
 <li>Fix issue with model order in <code><a href="../reference/performance_lrt.html">performance_lrt()</a></code>.</li>
@@ -220,9 +257,9 @@
 <code><a href="../reference/check_normality.html">check_normality()</a></code> gets an <code>effects</code>-argument for mixed models, to check random effects for normality.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> for binomial models when response variable had non-numeric factor levels.</li>
 <li>Fixed issues in <code><a href="../reference/performance_roc.html">performance_roc()</a></code>, which printed 1 - AUC instead of AUC.</li>
@@ -253,9 +290,9 @@
 <code><a href="../reference/performance_lrt.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</li>
 </ul>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix issues in some functions for models with logical dependent variable.</li>
 <li>Fix bug in <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code>, which caused multiple computations of skewness statistics.</li>
@@ -284,9 +321,9 @@
 <li>Added <code>r2.aov()</code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> for models from package <em>survey</em>, which returned three different AIC values. Now only the AIC value is returned.</li>
 <li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models when zero-inflated formula only had one predictor.</li>
@@ -309,19 +346,19 @@
 <li>Support for <code>DirichletRegModel</code> models.</li>
 </ul>
 </div>
-<div id="new-functions-1" class="section level2">
+<div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-1" class="anchor"></a>New functions</h2>
+<a href="#new-functions-2" class="anchor"></a>New functions</h2>
 <ul>
 <li>
-<code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://rdrr.io/pkg/parameters/man/principal_components.html">parameters::principal_components()</a></code>.</li>
+<code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">parameters::principal_components()</a></code>.</li>
 <li>
 <code><a href="../reference/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in documentation of <code><a href="../reference/performance_score.html">performance_score()</a></code>.</li>
 </ul>
@@ -338,9 +375,9 @@
 <li>Support for <code>mixor</code>, <code>cpglm</code> and <code>cpglmm</code> models.</li>
 </ul>
 </div>
-<div id="new-functions-2" class="section level2">
+<div id="new-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-2" class="anchor"></a>New functions</h2>
+<a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</li>
@@ -348,9 +385,9 @@
 <code><a href="../reference/performance_lrt.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix issues with CRAN checks.</li>
 </ul>
@@ -388,7 +425,7 @@
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
 <li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> has a nicer <code><a href="https://rdrr.io/pkg/parameters/man/print.html">print()</a></code>-method now.</li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> has a nicer <code><a href="https://easystats.github.io/parameters/reference/print.html">print()</a></code>-method now.</li>
 <li>Verbosity for <code><a href="../reference/compare_performance.html">compare_performance()</a></code> was slightly adjusted.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code>-methods for different objects now also have a <code>verbose</code>-argument.</li>
@@ -402,9 +439,9 @@
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now no longer returns backticks in row- and column names.</li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
 <li>
@@ -430,7 +467,7 @@
 <a href="#deprecated-and-defunct" class="anchor"></a>Deprecated and Defunct</h2>
 <ul>
 <li>
-<code><a href="https://rdrr.io/pkg/parameters/man/principal_components.html">principal_components()</a></code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://rdrr.io/pkg/parameters/man/principal_components.html">parameters::principal_components()</a></code> now.</li>
+<code><a href="https://easystats.github.io/parameters/reference/principal_components.html">principal_components()</a></code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">parameters::principal_components()</a></code> now.</li>
 </ul>
 </div>
 <div id="changes-to-functions-7" class="section level2">
@@ -450,9 +487,9 @@
 <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
 <li>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occurred when checking for outliers.</li>
@@ -469,12 +506,12 @@
 <ul>
 <li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
 <li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/pkg/parameters/man/print.html">print()</a></code>-method.</li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://easystats.github.io/parameters/reference/print.html">print()</a></code>-method.</li>
 </ul>
 </div>
-<div id="breaking-changes" class="section level2">
+<div id="breaking-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>The attribute for the standard error of the Bayesian R2 (<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code>) was renamed from <code>std.error</code> to <code>SE</code> to be in line with the naming convention of other easystats-packages.</li>
 <li>
@@ -511,9 +548,9 @@
 <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> to check models for homogeneity of variances.</li>
 </ul>
 </div>
-<div id="bug-fixes-9" class="section level2">
+<div id="bug-fixes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issues with <code><a href="../reference/compare_performance.html">compare_performance()</a></code> and row-ordering.</li>
 <li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inflated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
@@ -585,9 +622,9 @@
 <code><a href="../reference/r2_xu.html">r2_xu()</a></code> as a crude R2 measure for linear (mixed) models.</li>
 </ul>
 </div>
-<div id="breaking-changes-1" class="section level2">
+<div id="breaking-changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-2" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.</li>
@@ -610,9 +647,9 @@
 <li>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</li>
 </ul>
 </div>
-<div id="bug-fixes-10" class="section level2">
+<div id="bug-fixes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-10" class="anchor"></a>Bug fixes</h2>
+<a href="#bug-fixes-11" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
 <li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (<a href='https://github.com/easystats/performance/issues/48'>#48</a>).</li>
@@ -634,7 +671,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">

@@ -87,12 +87,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -141,7 +135,17 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>, metrics = <span class='st'>"all"</span>, verbose = <span class='fl'>TRUE</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span>, metrics <span class='op'>=</span> <span class='st'>"all"</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for BFBayesFactor</span>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span>
+  <span class='va'>model</span>,
+  metrics <span class='op'>=</span> <span class='st'>"all"</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  average <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  prior_odds <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,7 +156,7 @@
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "LOGLOSS", "SCORE")</a></code>). <code>"common"</code> will compute LOOIC, WAIC, R2 and RMSE.</p></td>
+      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "SCORE")</a></code>). <code>"common"</code> will compute LOOIC, WAIC, R2 and RMSE.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -161,6 +165,15 @@
     <tr>
       <th>...</th>
       <td><p>Arguments passed to or from other methods.</p></td>
+    </tr>
+    <tr>
+      <th>average</th>
+      <td><p>Compute model-averaged index? See
+<code><a href='https://easystats.github.io/bayestestR/reference/weighted_posteriors.html'>bayestestR::weighted_posteriors()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>prior_odds</th>
+      <td><p>Optional vector of prior odds for the models compared to the first model (or the denominator, for <code>BFBayesFactor</code> objects). For <code>data.frame</code>s, this will be used as the basis of weighting.</p></td>
     </tr>
     </table>
 
@@ -176,6 +189,7 @@
 <li><p><strong>R2</strong> r-squared value, see <code><a href='r2.html'>r2</a></code></p></li>
 <li><p><strong>R2_LOO_adjusted</strong> adjusted r-squared, see <code><a href='r2.html'>r2</a></code></p></li>
 <li><p><strong>RMSE</strong> root mean squared error, see <code><a href='performance_rmse.html'>performance_rmse</a></code></p></li>
+<li><p><strong>SIGMA</strong> residual standard deviation, see <code><a href='https://easystats.github.io/insight/reference/get_sigma.html'>get_sigma</a></code></p></li>
 <li><p><strong>LOGLOSS</strong> Log-loss, see <code><a href='performance_logloss.html'>performance_logloss</a></code></p></li>
 <li><p><strong>SCORE_LOG</strong> score of logarithmic proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
 <li><p><strong>SCORE_SPHERICAL</strong> score of spherical proper scoring rule, see <code><a href='performance_score.html'>performance_score</a></code></p></li>
@@ -190,19 +204,19 @@
     <div class='dont-index'><p><a href='r2_bayes.html'>r2_bayes</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span>, data = <span class='kw'>mtcars</span>, chains = <span class='fl'>1</span>, iter = <span class='fl'>500</span>, refresh = <span class='fl'>0</span>)
-  <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, chains <span class='op'>=</span> <span class='fl'>1</span>, iter <span class='op'>=</span> <span class='fl'>500</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_glmer</a></span>(
-    <span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>wt</span> <span class='op'>+</span> <span class='kw'>cyl</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>gear</span>),
-    data = <span class='kw'>mtcars</span>,
-    chains = <span class='fl'>1</span>,
-    iter = <span class='fl'>500</span>,
-    refresh = <span class='fl'>0</span>
-  )
-  <span class='fu'><a href='model_performance.html'>model_performance</a></span>(<span class='kw'>model</span>)
-}
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glmer.html'>stan_glmer</a></span><span class='op'>(</span>
+    <span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>gear</span><span class='op'>)</span>,
+    data <span class='op'>=</span> <span class='va'>mtcars</span>,
+    chains <span class='op'>=</span> <span class='fl'>1</span>,
+    iter <span class='op'>=</span> <span class='fl'>500</span>,
+    refresh <span class='op'>=</span> <span class='fl'>0</span>
+  <span class='op'>)</span>
+  <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
@@ -211,9 +225,27 @@
 #&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
 #&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance
 #&gt; 
-#&gt; </span><span>  ELPD | ELPD_SE |  LOOIC | LOOIC_SE |   WAIC |   R2 | R2_marginal | R2_adjusted | RMSE
-#&gt; ---------------------------------------------------------------------------------------
-#&gt; -78.84 |    4.50 | 157.68 |     9.00 | 157.53 | 0.82 |        0.82 |        0.78 | 2.44</div></span></pre>
+#&gt; </span><span>  ELPD | ELPD_SE |  LOOIC | LOOIC_SE |   WAIC |   R2 | R2_marginal | R2_adjusted | RMSE | Sigma
+#&gt; -----------------------------------------------------------------------------------------------
+#&gt; -78.84 |    4.50 | 157.68 |     9.00 | 157.53 | 0.82 |        0.82 |        0.78 | 2.44 |  2.60</div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://richarddmorey.github.io/BayesFactor/'>"BayesFactor"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/BayesFactor/man/generalTestBF.html'>generalTestBF</a></span><span class='op'>(</span><span class='va'>carb</span> <span class='op'>~</span> <span class='va'>am</span> <span class='op'>+</span> <span class='va'>mpg</span>, <span class='va'>mtcars</span><span class='op'>)</span>
+
+  <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+  <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>
+
+  <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span>, average <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: BayesFactor</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: coda</span></div><div class='output co'>#&gt; <span class='message'>************</span>
+#&gt; <span class='message'>Welcome to BayesFactor 0.9.12-4.2. If you have questions, please contact Richard Morey (richarddmorey@gmail.com).</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>Type BFManual() to open the manual.</span>
+#&gt; <span class='message'>************</span></div><div class='output co'>#&gt; <span class='message'>Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.</span>
+#&gt; <span class='message'>See help("get_parameters", package = "insight").</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Indices of model performance
+#&gt; 
+#&gt; </span><span>  R2 | Sigma
+#&gt; ------------
+#&gt; 0.48 |  1.17</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -225,7 +257,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil.</p>
+  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">
