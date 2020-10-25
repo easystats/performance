@@ -406,6 +406,9 @@ r2.gam <- function(model, ...) {
   }
 }
 
+#' @export
+r2.scam <- r2.gam
+
 
 #' @export
 r2.betareg <- function(model, ...) {
