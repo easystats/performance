@@ -145,21 +145,21 @@
 <ul>
 <li>
 <code><a href="../reference/r2_bayes.html">r2_posterior()</a></code> for Bayesian models to obtain posterior distributions of R-squared.</li>
-<li>
-<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/143'>#143</a> ).</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/150'>#150</a> ).</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
+<li>
+<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/143'>#143</a> ).</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/150'>#150</a> ).</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> now also includes the residual standard deviation.</li>
 <li>Improved formatting for Bayes factors in <code><a href="../reference/compare_performance.html">compare_performance()</a></code>.</li>
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> with <code>rank = TRUE</code> doesn’t use the <code>BF</code> values when <code>BIC</code> are present, to prevent “double-dipping” of the BIC values (<a href='https://github.com/easystats/performance/issues/144'>#144</a>).</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> now also includes the residual standard deviation.</li>
 <li>The <code>method</code> argument in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> gains a <code>"levene"</code> option, to use Levene’s Test for homogeneity.</li>
 </ul>
 </div>
