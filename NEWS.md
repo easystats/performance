@@ -6,14 +6,14 @@
 
 ## New functions
 * `r2_posterior()` for Bayesian models to obtain posterior distributions of R-squared.
-* `r2_bayes()` works with Bayesian models from `BayesFactor` ( #143 ).
-* `model_performance()` works with Bayesian models from `BayesFactor` ( #150 ).
 
 ## Changes to functions
 
+* `r2_bayes()` works with Bayesian models from `BayesFactor` ( #143 ).
+* `model_performance()` works with Bayesian models from `BayesFactor` ( #150 ).
+* `model_performance()` now also includes the residual standard deviation.
 * Improved formatting for Bayes factors in `compare_performance()`.
 * `compare_performance()` with `rank = TRUE` doesn't use the `BF` values when `BIC` are present, to prevent "double-dipping" of the BIC values (#144).
-* `model_performance()` now also includes the residual standard deviation.
 * The `method` argument in `check_homogeneity()` gains a `"levene"` option, to use Levene's Test for homogeneity.
 
 ## Bug fixes
