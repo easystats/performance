@@ -6,8 +6,7 @@
 #'
 #' @param ... Multiple model objects (also of different classes).
 #' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \code{\link[=model_performance]{documentation}} of object's class for details.
-#' @param rank Logical, if \code{TRUE}, models are ranked according to "best overall
-#'   model performance". See 'Details'.
+#' @param rank Logical, if \code{TRUE}, models are ranked according to 'best' overall model performance. See 'Details'.
 #' @param bayesfactor Logical, if \code{TRUE}, a Bayes factor for model comparisons is possibly returned. See 'Details'.
 #'
 #' @return A data frame (with one row per model) and one column per "index" (see \code{metrics}).

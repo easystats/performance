@@ -29,7 +29,7 @@ Depending on \code{model}, following indices are computed:
   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
   \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
-  \item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight]{get_sigma}}}
+  \item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight:get_sigma]{get_sigma()}}}
   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
   \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
   \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
