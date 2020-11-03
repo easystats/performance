@@ -1,3 +1,9 @@
+# performance 0.5.2
+
+## Bug fixes
+
+* Fixed issue in `icc()` introduced in the last update that make `lme`-models fail.
+
 # performance 0.5.1
 
 ## Breaking changes

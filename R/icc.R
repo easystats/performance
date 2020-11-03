@@ -126,7 +126,7 @@
 icc <- function(model, by_group = FALSE) {
 
   # special handling for smicd::semLme()
-  if (all(inherits(model, c("sem", "lme")))) {
+  if (inherits(model, "sem") && inherits(model, "lme")) {
     return(model$icc)
   }
 
