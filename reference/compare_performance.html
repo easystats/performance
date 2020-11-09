@@ -211,14 +211,35 @@ different models at once and hence allows comparison of indices across models.</
   <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
   <span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in if (nrow(out) == 0 || ncol(out) == 0) {    warning(paste0("Models of class '", class(model)[1], "' are not yet supported."),         call. = FALSE)    return(NULL)}: missing value where TRUE/FALSE needed</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: When comparing models, please note that probably not all models were fit from same data.</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Comparison of Model Performance Indices
+#&gt; 
+#&gt; </span><span>Model |    Type |    AIC |    BIC | RMSE | Sigma |   R2 | R2_adjusted | R2_Tjur | Log_loss | Score_log | Score_spherical |  PCP | R2_conditional | R2_marginal |  ICC
+#&gt; ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#&gt; m1    |      lm | 156.01 | 161.87 | 2.44 |  2.57 | 0.83 |        0.82 |         |          |           |                 |      |                |             |     
+#&gt; m2    |     glm |  31.30 |  35.70 | 0.89 |  0.93 |      |             |    0.48 |     0.40 |    -14.90 |            0.10 | 0.74 |                |             |     
+#&gt; m3    | lmerMod |  77.32 |  89.36 | 0.28 |  0.28 |      |             |         |          |           |                 |      |           0.97 |        0.10 | 0.97</div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
 <span class='va'>lm1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 <span class='va'>lm2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 <span class='va'>lm3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 <span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in if (nrow(out) == 0 || ncol(out) == 0) {    warning(paste0("Models of class '", class(model)[1], "' are not yet supported."),         call. = FALSE)    return(NULL)}: missing value where TRUE/FALSE needed</span></div><div class='input'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span>, rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in if (nrow(out) == 0 || ncol(out) == 0) {    warning(paste0("Models of class '", class(model)[1], "' are not yet supported."),         call. = FALSE)    return(NULL)}: missing value where TRUE/FALSE needed</span></div></pre>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
+#&gt; 
+#&gt; </span><span>Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE | Sigma |        BF
+#&gt; ------------------------------------------------------------------------------
+#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |        0.61 | 0.51 |  0.52 | BF = 1.00
+#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |        0.83 | 0.33 |  0.34 | BF &gt; 1000
+#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 |  0.34 | BF &gt; 1000</div><div class='input'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span>, rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices
+#&gt; 
+#&gt; </span><span>Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE | Sigma |        BF | Performance_Score
+#&gt; --------------------------------------------------------------------------------------------------
+#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |        0.83 | 0.33 |  0.34 | BF &gt; 1000 |            99.10%
+#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |        0.83 | 0.33 |  0.34 | BF &gt; 1000 |            99.03%
+#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |        0.61 | 0.51 |  0.52 | BF = 1.00 |             0.00%
+#&gt; </span><span style='color: #BBBB00;'>
+#&gt; Model lm2 (of class lm) performed best with an overall performance score of 99.10%.
+#&gt; </span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
