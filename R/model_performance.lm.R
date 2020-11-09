@@ -99,7 +99,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   # SIGMA -------------
   if ("SIGMA" %in% toupper(metrics)) {
     out$Sigma <- tryCatch({
-      .get_sigma(model, verbose = verbose)
+      .get_sigma(model)
     },
     error = function(e) {
       NULL
