@@ -1,5 +1,9 @@
 # performance 0.5.2
 
+## Changes to functions
+
+* `model_performance()` gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.
+
 ## Bug fixes
 
 * Fixed issue in `icc()` introduced in the last update that make `lme`-models fail.
