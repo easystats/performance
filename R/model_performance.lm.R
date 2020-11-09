@@ -52,37 +52,104 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   out <- list()
   attrib <- list()
 
+  # AIC -------------
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- performance_aic(model)
-  }
-  if ("BIC" %in% toupper(metrics)) {
-    out$BIC <- .get_BIC(model)
-  }
-  if ("R2" %in% toupper(metrics)) {
-    R2 <- r2(model)
-    attrib$r2 <- attributes(R2)
-    out <- c(out, R2)
-  }
-  if ("RMSE" %in% toupper(metrics)) {
-    out$RMSE <- performance_rmse(model, verbose = verbose)
-  }
-  if ("SIGMA" %in% toupper(metrics)) {
-    out$Sigma <- .get_sigma(model)
-  }
-  if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
-    .logloss <- performance_logloss(model, verbose = verbose)
-    if (!is.na(.logloss)) out$Log_loss <- .logloss
-  }
-  if (("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))) {
-    .scoring_rules <- performance_score(model, verbose = verbose)
-    if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
-    if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
-  }
-  if (("PCP" %in% toupper(metrics)) && isTRUE(info$is_binomial) && !isTRUE(info$is_multinomial) && !isTRUE(info$is_ordinal)) {
-    out$PCP <- performance_pcp(model, verbose = verbose)$pcp_model
+    out$AIC <- tryCatch({
+      performance_aic(model)
+    },
+    error = function(e) {
+      NULL
+    })
   }
 
-  # TODO: What with sigma and deviance?
+  # BIC -------------
+  if ("BIC" %in% toupper(metrics)) {
+    out$BIC <- tryCatch({
+      .get_BIC(model)
+    },
+    error = function(e) {
+      NULL
+    })
+  }
+
+  # R2 -------------
+  if ("R2" %in% toupper(metrics)) {
+    R2 <- tryCatch({
+      r2(model)
+    },
+    error = function(e) {
+      NULL
+    })
+    if (!is.null(R2)) {
+      attrib$r2 <- attributes(R2)
+      out <- c(out, R2)
+    }
+  }
+
+  # RMSE -------------
+  if ("RMSE" %in% toupper(metrics)) {
+    out$RMSE <- tryCatch({
+      performance_rmse(model, verbose = verbose)
+    },
+    error = function(e) {
+      NULL
+    })
+  }
+
+  # SIGMA -------------
+  if ("SIGMA" %in% toupper(metrics)) {
+    out$Sigma <- tryCatch({
+      .get_sigma(model, verbose = verbose)
+    },
+    error = function(e) {
+      NULL
+    })
+  }
+
+  # LOGLOSS -------------
+  if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
+    out$Log_loss <- tryCatch({
+      .logloss <- performance_logloss(model, verbose = verbose)
+      if (!is.na(.logloss)) {
+        .logloss
+      } else {
+        NULL
+      }
+    },
+    error = function(e) {
+      NULL
+    })
+  }
+
+  # SCORE -------------
+  if (("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))) {
+    .scoring_rules <- tryCatch({
+      performance_score(model, verbose = verbose)
+    },
+    error = function(e) {
+      NULL
+    })
+    if (!is.null(.scoring_rules)) {
+      if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
+      if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
+    }
+  }
+
+  # PCP -------------
+  if (("PCP" %in% toupper(metrics)) && isTRUE(info$is_binomial) && !isTRUE(info$is_multinomial) && !isTRUE(info$is_ordinal)) {
+    out$PCP <- tryCatch({
+      performance_pcp(model, verbose = verbose)$pcp_model
+    },
+    error = function(e) {
+      NULL
+    })
+  }
+
+
+  if (nrow(out) == 0 || ncol(out) == 0) {
+    warning(paste0("Models of class '", class(model)[1], "' are not yet supported."), call. = FALSE)
+    return(NULL)
+  }
 
   out <- as.data.frame(.compact_list(out, remove_na = TRUE))
   row.names(out) <- NULL
