@@ -93,3 +93,6 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Language: en-US
+Config/testthat/edition: 3
+Config/testthat/parallel: true
+Config/testthat/start-first: watcher, parallel*
