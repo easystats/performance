@@ -293,3 +293,10 @@ model_performance.mlogit <- function(model, metrics = "all", verbose = TRUE, ...
     NULL
   }
 }
+
+
+#' @export
+model_performance.margins <- function(model, metrics = "all", verbose = TRUE, ...) {
+  orig_mod_call <- attributes(model)$call
+  model_performance(eval(orig_mod_call), metrics = metrics, verbose = verbose, ...)
+}

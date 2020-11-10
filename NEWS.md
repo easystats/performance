@@ -1,5 +1,9 @@
 # performance 0.5.2
 
+## General
+
+* Support for `margins`, `gamlss`.
+
 ## Changes to functions
 
 * `model_performance()` gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.
