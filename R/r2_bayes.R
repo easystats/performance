@@ -12,6 +12,7 @@
 #'   calculate the central tendency of the variances.
 #' @param ci Value or vector of probability of the CI (between 0 and 1) to be estimated.
 #' @param ... Arguments passed to \code{r2_posterior()}.
+#' @inheritParams model_performance.lm
 #'
 #' @return A list with the Bayesian R2 value. For mixed models, a list with the
 #'   Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
@@ -82,8 +83,8 @@
 #' @importFrom stats median mad sd
 #' @importFrom bayestestR ci hdi point_estimate
 #' @export
-r2_bayes <- function(model, robust = TRUE, ci = .89, ...) {
-  r2_bayesian <- r2_posterior(model, ...)
+r2_bayes <- function(model, robust = TRUE, ci = .89, verbose = TRUE, ...) {
+  r2_bayesian <- r2_posterior(model, verbose = verbose, ...)
 
   if (is.null(r2_bayesian)) {
     return(NULL)
@@ -184,6 +185,15 @@ r2_posterior.brmsfit <- function(model, ...) {
 #' @export
 #' @rdname r2_bayes
 r2_posterior.stanreg <- r2_posterior.brmsfit
+
+#' @export
+r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    warning("Models of class 'stanmvreg' not yet supported.", call. = FALSE)
+  }
+  NULL
+}
+
 
 #' @param average Compute model-averaged index? See
 #'   \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.

@@ -4,10 +4,12 @@
 \alias{looic}
 \title{LOO-related Indices for Bayesian regressions.}
 \usage{
-looic(model)
+looic(model, verbose = TRUE)
 }
 \arguments{
 \item{model}{A Bayesian regression model.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 A list with four elements, the ELPD, LOOIC and their standard errors.

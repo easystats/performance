@@ -4,10 +4,12 @@
 \alias{r2_loo}
 \title{LOO-adjusted R2}
 \usage{
-r2_loo(model)
+r2_loo(model, verbose = TRUE)
 }
 \arguments{
 \item{model}{A Bayesian regression model.}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 The LOO-adjusted R2 for \code{model}, as numeric value.
