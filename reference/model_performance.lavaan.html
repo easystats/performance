@@ -135,7 +135,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for lavaan</span>
-<span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span>, metrics <span class='op'>=</span> <span class='st'>"all"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span>, metrics <span class='op'>=</span> <span class='st'>"all"</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +147,10 @@
     <tr>
       <th>metrics</th>
       <td><p>Can be <code>"all"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline", "Baseline_DoF", "Baseline_p", "CFI", "TLI", "NNFI", "RFI", "NFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted", "RMSEA", "SMRM")</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle off warnings.</p></td>
     </tr>
     <tr>
       <th>...</th>
