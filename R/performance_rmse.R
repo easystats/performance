@@ -36,7 +36,7 @@ performance_rmse <- function(model, normalized = FALSE, verbose = TRUE) {
   tryCatch(
     {
       # compute rmse
-      rmse_val <- sqrt(performance_mse(model))
+      rmse_val <- sqrt(performance_mse(model, verbose = verbose))
 
       # if normalized, divide by range of response
       if (normalized) {

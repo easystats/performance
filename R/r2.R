@@ -5,6 +5,7 @@
 #'   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
+#' @param verbose Toggle messages and warnings.
 #' @param ... Arguments passed down to the related r2-methods.
 #'
 #' @return Returns a list containing values related to the most appropriate R2
@@ -44,8 +45,10 @@ r2 <- function(model, ...) {
 
 #' @importFrom insight print_color
 #' @export
-r2.default <- function(model, ...) {
-  insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
+r2.default <- function(model, verbose = TRUE, ...) {
+  if (isTRUE(verbose)) {
+    insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
+  }
   return(NA)
 }
 

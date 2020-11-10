@@ -60,8 +60,8 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
 # mfx models -------------------------------
 
 #' @export
-performance_mse.logitor <- function(model, ...) {
-  performance_mse(model$fit, ...)
+performance_mse.logitor <- function(model, verbose = TRUE, ...) {
+  performance_mse(model$fit, verbose = verbose, ...)
 }
 
 #' @export

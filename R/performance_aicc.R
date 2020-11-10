@@ -41,7 +41,7 @@ performance_aic <- function(x, ...) {
 
 #' @export
 performance_aic.default <- function(x, ...) {
-  info <- insight::model_info(x)
+  info <- suppressWarnings(insight::model_info(x))
 
   ## TODO remove is.list() once insight 0.8.3 is on CRAN
   if (is.null(info) || !is.list(info)) {
@@ -185,7 +185,7 @@ AIC.bife <- function(object, ..., k = 2) {
 #' @importFrom stats logLik
 #' @export
 performance_aicc.default <- function(x, ...) {
-  n <- insight::n_obs(x)
+  n <- suppressWarnings(insight::n_obs(x))
   ll <- stats::logLik(x)
   k <- attr(ll, "df")
 
@@ -195,7 +195,7 @@ performance_aicc.default <- function(x, ...) {
 
 #' @export
 performance_aicc.bife <- function(x, ...) {
-  n <- insight::n_obs(x)
+  n <- suppressWarnings(insight::n_obs(x))
   ll <- stats::logLik(x)
   nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
   k <- n - nparam

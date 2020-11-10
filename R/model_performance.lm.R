@@ -42,7 +42,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
 
-  info <- insight::model_info(model)
+  info <- suppressWarnings(insight::model_info(model))
 
   ## TODO remove is.list() once insight 0.8.3 is on CRAN
   if (is.null(info) || !is.list(info)) {
@@ -75,7 +75,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   # R2 -------------
   if ("R2" %in% toupper(metrics)) {
     R2 <- tryCatch({
-      r2(model)
+      r2(model, verbose = verbose)
     },
     error = function(e) {
       NULL
@@ -150,7 +150,9 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # check if model was actually supported...
   if (nrow(out) == 0 || ncol(out) == 0) {
-    warning(paste0("Models of class '", class(model)[1], "' are not yet supported."), call. = FALSE)
+    if (isTRUE(verbose)) {
+      warning(paste0("Models of class '", class(model)[1], "' are not yet supported."), call. = FALSE)
+    }
     return(NULL)
   }
 
