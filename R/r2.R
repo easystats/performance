@@ -5,7 +5,6 @@
 #'   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param verbose Toggle messages and warnings.
 #' @param ... Arguments passed down to the related r2-methods.
 #'
 #' @return Returns a list containing values related to the most appropriate R2

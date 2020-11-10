@@ -10,8 +10,6 @@ r2(model, ...)
 \item{model}{A statistical model.}
 
 \item{...}{Arguments passed down to the related r2-methods.}
-
-\item{verbose}{Toggle messages and warnings.}
 }
 \value{
 Returns a list containing values related to the most appropriate R2
