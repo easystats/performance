@@ -4,12 +4,14 @@
 \alias{model_performance.lavaan}
 \title{Performance of lavaan SEM / CFA Models}
 \usage{
-\method{model_performance}{lavaan}(model, metrics = "all", ...)
+\method{model_performance}{lavaan}(model, metrics = "all", verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A \pkg{lavaan} model.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline", "Baseline_DoF", "Baseline_p", "CFI", "TLI", "NNFI", "RFI", "NFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted", "RMSEA", "SMRM")}).}
+
+\item{verbose}{Toggle off warnings.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
