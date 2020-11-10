@@ -136,13 +136,15 @@
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
 <ul>
-<li>Support for <code>margins</code>, <code>gamlss</code>.</li>
+<li>Support for <code>margins</code>, <code>gamlss</code>, <code>stanmvreg</code>.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> is now more robust and doesn’t fail if an index could not be computed. Instead, it returns all indices that were possible to calculate.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.</li>
 </ul>

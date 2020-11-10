@@ -140,7 +140,7 @@ While <code>r2_bayes()</code> returns a single R2 value, <code>r2_posterior()</c
 a posterior sample of Bayesian R2 values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span>, robust <span class='op'>=</span> <span class='cn'>TRUE</span>, ci <span class='op'>=</span> <span class='fl'>0.89</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span>, robust <span class='op'>=</span> <span class='cn'>TRUE</span>, ci <span class='op'>=</span> <span class='fl'>0.89</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -169,6 +169,10 @@ calculate the central tendency of the variances.</p></td>
     <tr>
       <th>ci</th>
       <td><p>Value or vector of probability of the CI (between 0 and 1) to be estimated.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle off warnings.</p></td>
     </tr>
     <tr>
       <th>...</th>
