@@ -87,8 +87,8 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
   y_full <- .recode_to_zero(insight::get_response(model))
   y_null <- .recode_to_zero(insight::get_response(m0))
 
-  n_full <- insight::n_obs(model)
-  n_null <- insight::n_obs(m0)
+  n_full <- suppressWarnings(insight::n_obs(model))
+  n_null <- suppressWarnings(insight::n_obs(m0))
 
   pr_full <- stats::predict(model, type = "response")
   pr_null <- stats::predict(m0, type = "response")
@@ -124,8 +124,8 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
   y_full <- .recode_to_zero(insight::get_response(model))
   y_null <- .recode_to_zero(insight::get_response(m0))
 
-  n_full <- insight::n_obs(model)
-  n_null <- insight::n_obs(m0)
+  n_full <- suppressWarnings(insight::n_obs(model))
+  n_null <- suppressWarnings(insight::n_obs(m0))
 
   pr_full <- stats::predict(model, type = "response")
   pr_null <- stats::predict(m0, type = "response")

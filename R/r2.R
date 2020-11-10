@@ -535,7 +535,7 @@ r2.bigglm <- function(model, ...) {
 #' @export
 r2.biglm <- function(model, ...) {
   df.int <- ifelse(insight::has_intercept(model), 1, 0)
-  n <- insight::n_obs(model)
+  n <- suppressWarnings(insight::n_obs(model))
 
   rsq <- summary(model)$rsq
   adj.rsq <- 1 - (1 - rsq) * ((n - df.int) / model$df.resid)

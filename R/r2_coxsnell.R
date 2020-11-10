@@ -42,10 +42,10 @@ r2_coxsnell <- function(model) {
 
   # Is it still necessary?
   if (inherits(model, c("vglm", "vgam", "clm2"))) {
-    n <- insight::n_obs(model)
+    n <- suppressWarnings(insight::n_obs(model))
   } else {
     n <- attr(l_full, "nobs")
-    if (is.null(n)) n <- insight::n_obs(model)
+    if (is.null(n)) n <- suppressWarnings(insight::n_obs(model))
   }
 
   r2_coxsnell <- as.vector(1 - exp(-G2 / n))
