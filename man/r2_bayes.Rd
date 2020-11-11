@@ -12,9 +12,9 @@ r2_bayes(model, robust = TRUE, ci = 0.89, verbose = TRUE, ...)
 
 r2_posterior(model, ...)
 
-\method{r2_posterior}{brmsfit}(model, ...)
+\method{r2_posterior}{brmsfit}(model, verbose = TRUE, ...)
 
-\method{r2_posterior}{stanreg}(model, ...)
+\method{r2_posterior}{stanreg}(model, verbose = TRUE, ...)
 
 \method{r2_posterior}{BFBayesFactor}(model, average = FALSE, prior_odds = NULL, ...)
 }
