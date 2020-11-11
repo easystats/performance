@@ -2,7 +2,7 @@
 
 ## General
 
-* Support for `margins`, `gamlss`, `stanmvreg`.
+* * `model_performance()` now supports `margins`, `gamlss`, `stanmvreg` and `semLme`.
 
 ## Changes to functions
 

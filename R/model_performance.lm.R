@@ -300,3 +300,13 @@ model_performance.margins <- function(model, metrics = "all", verbose = TRUE, ..
   orig_mod_call <- attributes(model)$call
   model_performance(eval(orig_mod_call), metrics = metrics, verbose = verbose, ...)
 }
+
+
+#' @export
+model_performance.sem <- function(model, metrics = "all", verbose = TRUE, ...) {
+  if (inherits(model, "sem") && inherits(model, "lme")) {
+    model_performance.lm(model, metrics = metrics, verbose = verbose, ...)
+  } else {
+    NULL
+  }
+}
