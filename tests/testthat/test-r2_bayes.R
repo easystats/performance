@@ -11,7 +11,7 @@ if (require("testthat") && require("performance") && require("BayesFactor")) {
     testthat::expect_equal(r_CI$CI_high, 0.79, tolerance = 0.05)
 
     r_post <- r2_posterior(BFM[1])
-    testthat::expect_is(r_post, "data.frame")
+    testthat::expect_s3_class(r_post, "data.frame")
 
     r_BF <- r2(BFM, average = TRUE)
     testthat::expect_equal(r_BF$R2_Bayes, 0.72, tolerance = 0.05)
