@@ -1,7 +1,12 @@
 # performance 0.5.2
 
+## General
+
+* * `model_performance()` now supports `margins`, `gamlss`, `stanmvreg` and `semLme`.
+
 ## Changes to functions
 
+* `model_performance()` is now more robust and doesn't fail if an index could not be computed. Instead, it returns all indices that were possible to calculate.
 * `model_performance()` gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.
 
 ## Bug fixes

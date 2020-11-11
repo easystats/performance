@@ -4,6 +4,7 @@
 #'
 #' @param model A \pkg{lavaan} model.
 #' @param metrics Can be \code{"all"} or a character vector of metrics to be computed (some of \code{c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline", "Baseline_DoF", "Baseline_p", "CFI", "TLI", "NNFI", "RFI", "NFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted", "RMSEA", "SMRM")}).
+#' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
@@ -44,12 +45,17 @@
 #' }
 #'
 #' @export
-model_performance.lavaan <- function(model, metrics = "all", ...) {
+model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (!requireNamespace("lavaan", quietly = TRUE)) {
     stop("Package `lavaan` needed for this function to work. Please install it.", call. = FALSE)
   }
 
-  measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
+  if (isTRUE(verbose)) {
+    measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
+  } else {
+    measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(model, ...)))))
+  }
+
   row.names(measures) <- NULL
 
   out <- data.frame(

@@ -5,6 +5,7 @@
 #'   criterion) and ELPD (expected log predictive density) for Bayesian regressions.
 #'
 #' @param model A Bayesian regression model.
+#' @inheritParams model_performance.lm
 #'
 #' @return A list with four elements, the ELPD, LOOIC and their standard errors.
 #'
@@ -16,7 +17,7 @@
 #' @importFrom insight find_algorithm print_color
 #' @importFrom stats var
 #' @export
-looic <- function(model) {
+looic <- function(model, verbose = TRUE) {
   if (!requireNamespace("loo", quietly = TRUE)) {
     stop("Package `loo` needed for this function to work. Please install it.")
   }
@@ -24,7 +25,9 @@ looic <- function(model) {
   algorithm <- insight::find_algorithm(model)
 
   if (algorithm$algorithm != "sampling") {
-    warning("`looic()` only available for models fit using the 'sampling' algorithm.", call. = FALSE)
+    if (verbose) {
+      warning("`looic()` only available for models fit using the 'sampling' algorithm.", call. = FALSE)
+    }
     return(NA)
   }
 

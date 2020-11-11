@@ -50,7 +50,7 @@
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
 #'
-#' @importFrom insight find_algorithm
+#' @importFrom insight find_algorithm is_multivariate model_info
 #' @importFrom bayestestR map_estimate hdi
 #' @importFrom stats AIC BIC mad median sd setNames
 #' @export
@@ -62,8 +62,10 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   if (all(metrics == "all")) {
     metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
   } else if (all(metrics == "common")) {
-    metrics <- c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE")
+    metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE")
   }
+
+  metrics <- toupper(metrics)
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
@@ -79,43 +81,92 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   out <- list()
   attri <- list()
-  if ("LOOIC" %in% c(metrics)) {
-    out <- append(out, suppressWarnings(looic(model)))
+
+  if (insight::is_multivariate(model)) {
+    out$Response <- insight::find_response(model, combine = FALSE)
+    mi <- mi[[1]]
   }
-  if ("WAIC" %in% c(metrics)) {
+
+  # LOOIC ------------------
+  if ("LOOIC" %in% metrics) {
+    out <- append(out, suppressWarnings(looic(model, verbose = verbose)))
+  }
+
+  # WAIC ------------------
+  if ("WAIC" %in% metrics) {
     out$WAIC <- suppressWarnings(loo::waic(model)$estimates["waic", "Estimate"])
   }
-  if ("R2" %in% c(metrics)) {
-    r2 <- r2_bayes(model)
-    attri$r2_bayes <- attributes(r2) # save attributes
 
-    # Format to df then to list
-    r2_df <- as.data.frame(t(as.numeric(r2)))
-    names(r2_df) <- gsub("_Bayes", "", names(r2), fixed = TRUE)
-    out <- append(out, as.list(r2_df))
+  # R2 ------------------
+  if ("R2" %in% metrics) {
+    r2 <- r2_bayes(model, verbose = verbose)
+    if (!is.null(r2)) {
+      attri$r2_bayes <- attributes(r2) # save attributes
+
+      # Format to df then to list
+      r2_df <- as.data.frame(t(as.numeric(r2)))
+      names(r2_df) <- gsub("_Bayes", "", names(r2), fixed = TRUE)
+      out <- append(out, as.list(r2_df))
+    }
   }
-  if ("R2_adjusted" %in% c(metrics) && mi$is_linear) {
-    out$R2_adjusted <- suppressWarnings(r2_loo(model))
+
+  # LOO-R2 ------------------
+  if ("R2_ADJUSTED" %in% metrics && mi$is_linear) {
+    out$R2_adjusted <- tryCatch({
+      suppressWarnings(r2_loo(model, verbose = verbose))
+    },
+    error = function(e) {
+      NULL
+    })
   }
-  if ("RMSE" %in% c(metrics) && !mi$is_ordinal && !mi$is_multinomial && !mi$is_categorical) {
+
+  # RMSE ------------------
+  if ("RMSE" %in% metrics && !mi$is_ordinal && !mi$is_multinomial && !mi$is_categorical) {
     out$RMSE <- performance_rmse(model, verbose = verbose)
   }
-  if ("SIGMA" %in% toupper(metrics)) {
-    out$Sigma <- .get_sigma(model)
-  }
-  if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$Log_loss <- performance_logloss(model, verbose = verbose)
-  }
-  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
-    .scoring_rules <- performance_score(model, verbose = verbose)
-    if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
-    if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
+
+  # SIGMA ------------------
+  if ("SIGMA" %in% metrics) {
+    out$Sigma <- tryCatch({
+      .get_sigma(model)
+    },
+    error = function(e) {
+      NULL
+    })
   }
 
-  # TODO: What with sigma and deviance?
+  # LOGLOSS ------------------
+  if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
+    out$Log_loss <- tryCatch({
+      .logloss <- performance_logloss(model, verbose = verbose)
+      if (!is.na(.logloss)) {
+        .logloss
+      } else {
+        NULL
+      }
+    },
+    error = function(e) {
+      NULL
+    })
+  }
+
+  # SCORE ------------------
+  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
+    .scoring_rules <- tryCatch({
+      performance_score(model, verbose = verbose)
+    },
+    error = function(e) {
+      NULL
+    })
+    if (!is.null(.scoring_rules)) {
+      if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
+      if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
+    }
+  }
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
+  out <- out[sapply(out, function(i) !all(is.na(i)))]
 
   attributes(out) <- c(attributes(out), attri)
   class(out) <- c("performance_model", class(out))
@@ -126,6 +177,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
 #' @export
 model_performance.brmsfit <- model_performance.stanreg
+
+#' @export
+model_performance.stanmvreg <- model_performance.stanreg
 
 
 #' @export

@@ -4,6 +4,7 @@
 #' @description Compute LOO-adjusted R2.
 #'
 #' @param model A Bayesian regression model.
+#' @inheritParams model_performance.lm
 #'
 #' @return The LOO-adjusted R2 for \code{model}, as numeric value.
 #'
@@ -19,7 +20,14 @@
 #' @importFrom insight get_response find_algorithm
 #' @importFrom stats var
 #' @export
-r2_loo <- function(model) {
+r2_loo <- function(model, verbose = TRUE) {
+  if (inherits(model, "stanmvreg")) {
+    if (isTRUE(verbose)) {
+      warning("Models of class 'stanmvreg' not yet supported.", call. = FALSE)
+      return(NULL)
+    }
+  }
+
   if (!requireNamespace("rstantools", quietly = TRUE)) {
     stop("Package `rstantools` needed for this function to work. Please install it.", call. = FALSE)
   }
