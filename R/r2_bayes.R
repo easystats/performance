@@ -206,9 +206,7 @@ r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 #' @rdname r2_bayes
 r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, ...){
   mi <- insight::model_info(model)
-  if (!mi$is_linear ||
-      mi$is_correlation || mi$is_ttest || inherits(model@numerator[[1]], "BFproportion")) {
-    # inherits is used because insight marks proportions as linear
+  if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     warning("Can produce R2 only for linear models.", call. = FALSE)
     return(NULL)
   }

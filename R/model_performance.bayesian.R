@@ -194,9 +194,7 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
   }
 
   mi <- insight::model_info(model)
-  if (!mi$is_linear ||
-      mi$is_correlation || mi$is_ttest || inherits(model@numerator[[1]], "BFproportion")) {
-    # inherits is used because insight marks proportions as linear
+  if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.", call. = FALSE)
     return(NULL)
   }

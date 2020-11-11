@@ -72,6 +72,13 @@ if (require("testthat") && require("performance") && require("BayesFactor")) {
     expect_warning(p <- model_performance(mod))
     expect_null(p)
 
+    t <- c(-.15, 2.39, 2.42, 2.43, -.15, 2.39, 2.42, 2.43)
+    N <- c(100, 150, 97, 99, 99, 97, 100, 150)
+    mod <- meta.ttestBF(t, N)
+    expect_warning(p <- model_performance(mod))
+    expect_null(p)
+
+
     mod <- regressionBF(mpg ~ cyl , mtcars, progress = FALSE)
     modF <- lm(mpg ~ cyl , mtcars)
     p <- model_performance(mod)
