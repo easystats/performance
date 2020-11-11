@@ -49,3 +49,33 @@ if (require("testthat") && require("performance") && require("rstanarm") && requ
     })
   }
 }
+
+if (require("testthat") && require("performance") && require("BayesFactor")) {
+  test_that("model_performance.BFBayesFactor", {
+    mod <- ttestBF(mtcars$wt, mu = 3)
+    expect_warning(p <- model_performance(mod))
+    expect_null(p)
+
+    mod <- ttestBF(mtcars$wt, factor(mtcars$am))
+    expect_warning(p <- model_performance(mod))
+    expect_null(p)
+
+    mods <- contingencyTableBF(matrix(1:4, 2), sampleType = "indepMulti", fixedMargin = "cols")
+    expect_warning(p <- model_performance(mod))
+    expect_null(p)
+
+    mod <- correlationBF(mtcars$wt, mtcars$am)
+    expect_warning(p <- model_performance(mod))
+    expect_null(p)
+
+    mod <- proportionBF(y = 15, N = 25, p = .5)
+    expect_warning(p <- model_performance(mod))
+    expect_null(p)
+
+    mod <- regressionBF(mpg ~ cyl , mtcars, progress = FALSE)
+    modF <- lm(mpg ~ cyl , mtcars)
+    p <- model_performance(mod)
+    expect_equal(p$R2, unname(r2(modF)[[1]]), tolerance = 0.05)
+    expect_equal(p$Sigma, sigma(modF), tolerance = 0.05)
+  })
+}
