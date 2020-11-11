@@ -43,14 +43,14 @@ if (require("testthat") && require("performance") && require("rstanarm") && requ
       expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)
 
       model <- insight::download_model("brms_ordinal_1")
-      perf <- model_performance(model)
+      perf <- suppressWarnings(model_performance(model))
       expect_equal(perf$R2, 0.8760015, tolerance = 1e-3)
       expect_equal(perf$ELPD, -11.65433, tolerance = 1e-3)
     })
   }
 }
 
-if (require("testthat") && require("performance") && require("BayesFactor")) {
+if (require("testthat") && require("performance") && require("BayesFactor") && packageVersion("insight") > "0.10.0") {
   test_that("model_performance.BFBayesFactor", {
     mod <- ttestBF(mtcars$wt, mu = 3)
     expect_warning(p <- model_performance(mod))
