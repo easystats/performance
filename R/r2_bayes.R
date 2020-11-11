@@ -195,11 +195,6 @@ r2_posterior.stanreg <- r2_posterior.brmsfit
 #' @export
 #' @rdname r2_bayes
 r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, ...){
-  mi <- insight::model_info(model)
-  if (!(mi$is_linear && !mi$is_ttest)) {
-    stop("Can produce R2 only for linear models.", call. = FALSE)
-  }
-
   if (average) {
     return(.r2_posterior_model_average(model, prior_odds = prior_odds))
   }

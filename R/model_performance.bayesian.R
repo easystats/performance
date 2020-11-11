@@ -140,10 +140,6 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
   }
 
   mi <- insight::model_info(model)
-  if (!(mi$is_linear && !mi$is_ttest)) {
-    stop("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.", call. = FALSE)
-  }
-
 
   out <- list()
   attri <- list()
