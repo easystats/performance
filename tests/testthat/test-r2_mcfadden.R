@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance") && require("MASS")) {
-  context("r2_mcfadden")
-
   options(contrasts = c("contr.treatment", "contr.poly"))
   data(housing, package = "MASS")
   model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)

@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance")) {
-  context("item_intercor")
-
   test_that("item_intercor", {
     data(iris)
     x <- iris[, 1:4]

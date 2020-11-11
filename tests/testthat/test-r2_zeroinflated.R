@@ -1,6 +1,4 @@
 if (require("testthat") && require("performance") && require("pscl")) {
-  context("r2_zeroinflated")
-
   data(bioChemists)
 
   model <- zeroinfl(
