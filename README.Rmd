@@ -100,7 +100,7 @@ r2(model)
 
 Similar to R-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" [@hox_multilevel_2010].
 
-`icc()` calculates the ICC for various mixed model objects, including `stanreg` models.
+`icc()` calculates the ICC for various mixed model objects, including `stanreg` models...
 
 ```{r, warning=FALSE, message=FALSE}
 library(lme4)
@@ -108,7 +108,7 @@ model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 icc(model)
 ```
 
-For models of class `brmsfit`, an ICC based on variance decomposition is returned (for details, see the [documentation](https://easystats.github.io/performance/reference/icc.html)).
+...and models of class `brmsfit`.
  
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
 model <- insight::download_model("brms_mixed_1")
@@ -240,7 +240,7 @@ compare_performance(m1, m2, m3, m4, rank = TRUE)
 Finally, we provide convenient visualisation (the `see` package must be installed).
 
 ```{r, warning=FALSE, message=FALSE}
-plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
+plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
 ### Comparing models with the Bayes Factor
@@ -248,9 +248,9 @@ plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
 For some models (for instance, frequentist linear models), the `compare_performance()` function will compute the **Bayes factor (BF)**, testing if each model is better than the first one (which is used as a ground reference).
 
 ```{r, warning=FALSE, message=FALSE}
-m1 <- lm(Sepal.Length ~ Petal.Length, data=iris)
-m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data=iris)
-m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data=iris)
+m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
+m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 compare_performance(m1, m2, m3)
 ```

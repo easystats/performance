@@ -89,8 +89,8 @@ model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cor
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 [0.005]
-#>      Marginal R2: 0.824 [0.045]
+#>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
+#>      Marginal R2: 0.826 (89% CI [0.750, 0.889])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -108,7 +108,7 @@ variance and can be interpreted as “the proportion of the variance
 explained by the grouping structure in the population” (Hox 2010).
 
 `icc()` calculates the ICC for various mixed model objects, including
-`stanreg` models.
+`stanreg` models…
 
 ``` r
 library(lme4)
@@ -120,9 +120,7 @@ icc(model)
 #>   Conditional ICC: 0.521
 ```
 
-For models of class `brmsfit`, an ICC based on variance decomposition is
-returned (for details, see the
-[documentation](https://easystats.github.io/performance/reference/icc.html)).
+…and models of class `brmsfit`.
 
 ``` r
 library(brms)
@@ -248,9 +246,9 @@ m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
 #> # Indices of model performance
 #> 
-#>    AIC |    BIC |   R2 | R2_adjusted | RMSE
-#> -------------------------------------------
-#> 156.01 | 161.87 | 0.83 |        0.82 | 2.44
+#>    AIC |    BIC |   R2 | R2_adjusted | RMSE | Sigma
+#> ---------------------------------------------------
+#> 156.01 | 161.87 | 0.83 |        0.82 | 2.44 |  2.57
 ```
 
 ### Logistic regression
@@ -260,9 +258,9 @@ m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
 #> # Indices of model performance
 #> 
-#>   AIC |   BIC | R2_Tjur | RMSE | LOGLOSS | SCORE_LOG | SCORE_SPHERICAL |  PCP
-#> -----------------------------------------------------------------------------
-#> 31.30 | 35.70 |    0.48 | 0.89 |    0.40 |    -14.90 |            0.10 | 0.74
+#>   AIC |   BIC | R2_Tjur | RMSE | Sigma | Log_loss | Score_log | Score_spherical |  PCP
+#> --------------------------------------------------------------------------------------
+#> 31.30 | 35.70 |    0.48 | 0.89 |  0.93 |     0.40 |    -14.90 |            0.10 | 0.74
 ```
 
 ### Linear mixed model
@@ -273,9 +271,9 @@ m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 #> # Indices of model performance
 #> 
-#>     AIC |     BIC | R2_conditional | R2_marginal |  ICC |  RMSE
-#> ---------------------------------------------------------------
-#> 1755.63 | 1774.79 |           0.80 |        0.28 | 0.72 | 23.44
+#>     AIC |     BIC | R2_conditional | R2_marginal |  ICC |  RMSE | Sigma
+#> -----------------------------------------------------------------------
+#> 1755.63 | 1774.79 |           0.80 |        0.28 | 0.72 | 23.44 | 25.59
 ```
 
 ## Models comparison
@@ -293,12 +291,12 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 #> # Comparison of Model Performance Indices
 #> 
-#> Model |    Type |     AIC |     BIC |  RMSE | SCORE_LOG | SCORE_SPHERICAL |   R2 | R2_adjusted | R2_Tjur | LOGLOSS |  PCP | R2_conditional | R2_marginal |  ICC | R2_Nagelkerke
-#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#> m1    |      lm |  156.01 |  161.87 |  2.44 |           |                 | 0.83 |        0.82 |         |         |      |                |             |      |              
-#> m2    |     glm |   31.30 |   35.70 |  0.89 |    -14.90 |            0.10 |      |             |    0.48 |    0.40 | 0.74 |                |             |      |              
-#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |           |                 |      |             |         |         |      |           0.80 |        0.28 | 0.72 |              
-#> m4    |     glm |   56.76 |   57.75 |  0.76 |     -2.60 |            0.32 |      |             |         |         |      |                |             |      |          0.66
+#> Model |    Type |     AIC |     BIC |  RMSE | Sigma | Score_log | Score_spherical |   R2 | R2_adjusted | R2_Tjur | Log_loss |  PCP | R2_conditional | R2_marginal |  ICC | R2_Nagelkerke
+#> ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> m1    |      lm |  156.01 |  161.87 |  2.44 |  2.57 |           |                 | 0.83 |        0.82 |         |          |      |                |             |      |              
+#> m2    |     glm |   31.30 |   35.70 |  0.89 |  0.93 |    -14.90 |            0.10 |      |             |    0.48 |     0.40 | 0.74 |                |             |      |              
+#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 | 25.59 |           |                 |      |             |         |          |      |           0.80 |        0.28 | 0.72 |              
+#> m4    |     glm |   56.76 |   57.75 |  0.76 |  1.13 |     -2.60 |            0.32 |      |             |         |          |      |                |             |      |          0.66
 ```
 
 ### General index of model performance
@@ -311,14 +309,14 @@ of model performance and sort the models from the best one to the worse.
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> # Comparison of Model Performance Indices
 #> 
-#> Model |    Type |     AIC |     BIC |  RMSE | Performance_Score
-#> ---------------------------------------------------------------
-#> m2    |     glm |   31.30 |   35.70 |  0.89 |            99.80%
-#> m4    |     glm |   56.76 |   57.75 |  0.76 |            99.09%
-#> m1    |      lm |  156.01 |  161.87 |  2.44 |            92.69%
-#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 |             0.00%
+#> Model |    Type |     AIC |     BIC |  RMSE | Sigma | Performance_Score
+#> -----------------------------------------------------------------------
+#> m2    |     glm |   31.30 |   35.70 |  0.89 |  0.93 |            99.85%
+#> m4    |     glm |   56.76 |   57.75 |  0.76 |  1.13 |            99.11%
+#> m1    |      lm |  156.01 |  161.87 |  2.44 |  2.57 |            92.86%
+#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 | 25.59 |             0.00%
 #> 
-#> Model m2 (of class glm) performed best with an overall performance score of 99.80%.
+#> Model m2 (of class glm) performed best with an overall performance score of 99.85%.
 ```
 
 ### Visualisation of indices of models’ performance
@@ -327,7 +325,7 @@ Finally, we provide convenient visualisation (the `see` package must be
 installed).
 
 ``` r
-plot(compare_performance(m1, m2, m3, m4, rank = TRUE))
+plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
 ![](man/figures/unnamed-chunk-19-1.png)<!-- -->
@@ -347,16 +345,16 @@ m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 compare_performance(m1, m2, m3)
 #> # Comparison of Model Performance Indices
 #> 
-#> Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE |       BF
-#> ---------------------------------------------------------------------
-#> m1    |   lm | 160.04 | 169.07 | 0.76 |        0.76 | 0.40 |         
-#> m2    |   lm | 158.05 | 170.09 | 0.77 |        0.76 | 0.40 |     0.60
-#> m3    |   lm | 130.69 | 145.75 | 0.81 |        0.80 | 0.36 | 1.16e+05
+#> Model | Type |    AIC |    BIC |   R2 | R2_adjusted | RMSE | Sigma |         BF
+#> -------------------------------------------------------------------------------
+#> m1    |   lm | 160.04 | 169.07 | 0.76 |        0.76 | 0.40 |  0.41 |  BF = 1.00
+#> m2    |   lm | 158.05 | 170.09 | 0.77 |        0.76 | 0.40 |  0.40 | BF = 0.601
+#> m3    |   lm | 130.69 | 145.75 | 0.81 |        0.80 | 0.36 |  0.37 |  BF > 1000
 ```
 
 # References
 
-<div id="refs" class="references">
+<div id="refs" class="references hanging-indent">
 
 <div id="ref-gelman_data_2007">
 
