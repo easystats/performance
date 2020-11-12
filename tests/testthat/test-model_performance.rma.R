@@ -9,7 +9,7 @@ if (require("testthat") && require("performance") && require("metafor")) {
     expect_equal(mp$I2, 0.9222139, tolerance = 1e-3)
     expect_equal(colnames(mp), c(
       "AIC", "BIC", "I2", "H2", "TAU2", "CochransQ",
-      "p_CochransQ", "Omnibus", "p_Omnibus"
+      "p_CochransQ", "df_error", "Omnibus", "p_Omnibus"
     ))
   })
 
@@ -21,7 +21,7 @@ if (require("testthat") && require("performance") && require("metafor")) {
     expect_equal(mp$I2, 0.719778, tolerance = 1e-3)
     expect_equal(colnames(mp), c(
       "AIC", "BIC", "I2", "H2", "TAU2", "CochransQ",
-      "p_CochransQ", "Omnibus", "p_Omnibus", "R2"
+      "p_CochransQ", "df_error", "Omnibus", "p_Omnibus", "R2"
     ))
   })
 }
