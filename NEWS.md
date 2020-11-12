@@ -6,8 +6,11 @@
 
 ## Changes to functions
 
+### `model_performance()`
+
 * `model_performance()` is now more robust and doesn't fail if an index could not be computed. Instead, it returns all indices that were possible to calculate.
 * `model_performance()` gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.
+* `model_performance()` for metafor-models now includes the degrees of freedom for Cochran's Q.
 
 ## Bug fixes
 
