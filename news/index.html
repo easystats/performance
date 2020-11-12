@@ -145,12 +145,19 @@
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<div id="model_performance" class="section level3">
+<h3 class="hasAnchor">
+<a href="#model_performance" class="anchor"></a><code>model_performance()</code>
+</h3>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> is now more robust and doesn’t fail if an index could not be computed. Instead, it returns all indices that were possible to calculate.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.</li>
+<li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> for metafor-models now includes the degrees of freedom for Cochran’s Q.</li>
 </ul>
+</div>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
