@@ -30,6 +30,7 @@
 #'   model <- rma(yi, vi, data = dat, method = "REML")
 #'   model_performance(model)
 #' }
+#' @importFrom stats df.residual
 #' @export
 model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
@@ -60,6 +61,14 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(c("QE", "COCHRANSQ") %in% toupper(metrics))) {
     out$CochransQ <- s$QE
     out$p_CochransQ <- s$QEp
+    out$df_error <- tryCatch(
+      {
+        stats::df.residual(model)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
   if (any(c("QM", "OMNIBUS") %in% toupper(metrics))) {
     out$Omnibus <- s$QM

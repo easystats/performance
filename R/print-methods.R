@@ -55,6 +55,9 @@ print.performance_model <- function(x, digits = 3, ...) {
     x$p_Omnibus <- insight::format_p(x$p_Omnibus)
   }
 
+  x <- .format_df_columns(x)
+  x <- .format_freq_stats(x)
+
   x[] <- lapply(x, function(i) {
     if (is.numeric(i)) i <- round(i, digits)
     i
@@ -683,4 +686,42 @@ print.check_itemscale <- function(x, digits = 2, ...) {
       attributes(out)$item_intercorrelation, attributes(out)$cronbachs_alpha
     ), "yellow")
   }
+}
+
+
+
+
+
+
+# helper -------------------------------
+
+#' @importFrom insight format_value
+.format_df_columns <- function(x) {
+  # generic df
+  if ("df" %in% names(x)) x$df <- insight::format_value(x$df, protect_integers = TRUE)
+  # residual df
+  if ("df_residual" %in% names(x)) x$df_residual <- insight::format_value(x$df_residual, protect_integers = TRUE)
+  names(x)[names(x) == "df_residual"] <- "df"
+  # df for errors
+  if ("df_error" %in% names(x)) x$df_error <- insight::format_value(x$df_error, protect_integers = TRUE)
+  names(x)[names(x) == "df_error"] <- "df"
+  # denominator and numerator df
+  if ("df_num" %in% names(x)) x$df_num <- insight::format_value(x$df_num, protect_integers = TRUE)
+  if ("df_denom" %in% names(x)) x$df_denom <- insight::format_value(x$df_denom, protect_integers = TRUE)
+  x
+}
+
+
+#' @importFrom stats na.omit
+.format_freq_stats <- function(x) {
+  stats <- "CochransQ"
+  if (stats %in% names(x) && "df" %in% names(x)) {
+    df <- stats::na.omit(unique(x$df))
+    if (length(df) == 1 && !all(is.infinite(df))) {
+      names(x)[names(x) == stats] <- paste0(stats, "(", df, ")")
+      x$df <- NULL
+    }
+  }
+
+  x
 }
