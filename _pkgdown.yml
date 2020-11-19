@@ -76,6 +76,7 @@ reference:
   - r2_mckelvey
   - r2_nagelkerke
   - r2_nakagawa
+  - r2_somers
   - r2_tjur
   - r2_xu
   - r2_zeroinflated
@@ -83,4 +84,4 @@ reference:
 - title: "Sample Data"
   contents:
   - classify_distribution
-  
+

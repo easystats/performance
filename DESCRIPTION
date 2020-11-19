@@ -54,6 +54,7 @@ Suggests:
     bigutilsr,
     brms,
     car,
+    correlation,
     covr,
     cplm,
     dbscan,

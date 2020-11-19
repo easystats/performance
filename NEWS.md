@@ -4,6 +4,10 @@
 
 * * `model_performance()` now supports `margins`, `gamlss`, `stanmvreg` and `semLme`.
 
+## New functions
+
+* `r2_somers()`, to compute Somers' Dxy rank-correlation as R2-measure for logistic regression models.
+
 ## Changes to functions
 
 ### `model_performance()`
