@@ -81,6 +81,10 @@ reference:
   - r2_xu
   - r2_zeroinflated
 
+- title: "Table Formatting"
+  contents:
+  - to_table
+
 - title: "Sample Data"
   contents:
   - classify_distribution
