@@ -5,7 +5,7 @@
 \alias{to_table.performance_model}
 \title{Export tables into different output formats}
 \usage{
-table_to_markdown.performance_model(x, digits = 2, ...)
+\method{table_to_markdown}{performance_model}(x, digits = 2, ...)
 
 \method{to_table}{performance_model}(x, format = "markdown", digits = 2, ...)
 }

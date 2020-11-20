@@ -24,7 +24,7 @@
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
 #' mp <- model_performance(model)
 #' to_table(mp)
-#' @importFrom insight format_table format_p
+#' @importFrom insight export_table format_p
 #' @export
 to_table.performance_model <- function(x, format = "markdown", digits = 2, ...) {
   table_caption <- "Indices of model performance"
@@ -40,7 +40,7 @@ to_table.performance_model <- function(x, format = "markdown", digits = 2, ...) 
   x <- .format_df_columns(x)
   x <- .format_freq_stats(x)
 
-  insight::format_table(x = x, digits = digits, format = format, caption = table_caption, align = "firstleft")
+  insight::export_table(x = x, digits = digits, format = format, caption = table_caption, align = "firstleft")
 }
 
 
@@ -75,7 +75,7 @@ to_table.compare_performance <- function(x, format = "markdown", digits = 2, ...
   x <- .format_df_columns(x)
   x <- .format_freq_stats(x)
 
-  insight::format_table(x = x, digits = digits, format = format, caption = table_caption, footer = footer, align = "firstleft")
+  insight::export_table(x = x, digits = digits, format = format, caption = table_caption, footer = footer, align = "firstleft")
 }
 
 

@@ -1,4 +1,4 @@
-#' @importFrom insight format_table format_p
+#' @importFrom insight export_table format_p
 #' @export
 print.compare_performance <- function(x, digits = 3, ...) {
   orig_x <- x
@@ -30,7 +30,7 @@ print.compare_performance <- function(x, digits = 3, ...) {
     }
   })
 
-  cat(insight::format_table(x))
+  cat(insight::export_table(x))
 
   if ("Performance_Score" %in% colnames(x)) {
     insight::print_color(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.\n", x$Model[1], x$Type[1], x$Performance_Score[1]), "yellow")
@@ -41,7 +41,7 @@ print.compare_performance <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight format_table format_p
+#' @importFrom insight export_table format_p
 #' @export
 print.performance_model <- function(x, digits = 3, ...) {
   orig_x <- x
@@ -63,7 +63,7 @@ print.performance_model <- function(x, digits = 3, ...) {
     i
   })
 
-  cat(insight::format_table(x))
+  cat(insight::export_table(x))
   invisible(orig_x)
 }
 
@@ -354,7 +354,7 @@ print.icc <- function(x, digits = 3, ...) {
 #' @export
 print.icc_by_group <- function(x, digits = 3, ...) {
   insight::print_color("# ICC by Group\n\n", "blue")
-  cat(insight::format_table(x, digits = digits))
+  cat(insight::export_table(x, digits = digits))
   invisible(x)
 }
 
@@ -364,7 +364,7 @@ print.icc_by_group <- function(x, digits = 3, ...) {
 #' @export
 print.r2_nakagawa_by_group <- function(x, digits = 3, ...) {
   insight::print_color("# Explained Variance by Level\n\n", "blue")
-  cat(insight::format_table(x, digits = digits))
+  cat(insight::export_table(x, digits = digits))
   cat("\n")
   invisible(x)
 }
@@ -644,7 +644,7 @@ print.check_collinearity <- function(x, ...) {
 
 
 
-#' @importFrom insight format_table print_color format_p
+#' @importFrom insight export_table print_color format_p
 #' @export
 print.performance_lrt <- function(x, digits = 2, ...) {
   insight::print_color("# Likelihood-Ratio-Test for Model Comparison\n\n", "blue")
@@ -654,7 +654,7 @@ print.performance_lrt <- function(x, digits = 2, ...) {
   if ("BIC" %in% colnames(x)) x$BIC <- round(x$BIC)
   x$p <- insight::format_p(x$p, name = NULL)
 
-  cat(insight::format_table(x, digits = digits))
+  cat(insight::export_table(x, digits = digits))
 
   if (sum(x$p < .05, na.rm = TRUE) <= 1) {
     best <- which(x$p < .05)
@@ -667,7 +667,7 @@ print.performance_lrt <- function(x, digits = 2, ...) {
 
 
 
-#' @importFrom insight print_color format_table
+#' @importFrom insight print_color export_table
 #' @export
 print.check_itemscale <- function(x, digits = 2, ...) {
   insight::print_color("# Description of (Sub-)Scales\n", "blue")
@@ -679,7 +679,7 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     out[["Mean"]] <- sprintf("%.*f", digits, out[["Mean"]])
     out[["SD"]] <- sprintf("%.*f", digits, out[["SD"]])
 
-    cat(insight::format_table(out, missing = "<NA>"))
+    cat(insight::export_table(out, missing = "<NA>"))
 
     insight::print_color(sprintf(
       "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f\n\n",
