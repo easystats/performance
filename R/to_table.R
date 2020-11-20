@@ -79,6 +79,26 @@ to_table.compare_performance <- function(x, format = "markdown", digits = 2, ...
 }
 
 
+#' @export
+to_table.check_itemscale <- function(x, digits = 2, format = "markdown", ...) {
+  insight::export_table(
+    lapply(1:length(x), function(i) {
+      out <- x[[i]]
+      attr(out, "caption") <- sprintf("Component %i", i)
+      attr(out, "footer") <- sprintf("Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+                                   attributes(out)$item_intercorrelation,
+                                   attributes(out)$cronbachs_alpha)
+      out
+    }),
+    digits = digits,
+    format = format,
+    missing = "<NA>",
+    align = "firstleft",
+    zap_small = TRUE
+  )
+}
+
+
 
 
 # Reexports models ------------------------

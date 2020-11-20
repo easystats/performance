@@ -672,20 +672,21 @@ print.performance_lrt <- function(x, digits = 2, ...) {
 print.check_itemscale <- function(x, digits = 2, ...) {
   insight::print_color("# Description of (Sub-)Scales\n", "blue")
 
-  for (i in 1:length(x)) {
-    insight::print_color(sprintf("\nComponent %i\n\n", i), "red")
-    out <- x[[i]]
-    out[["Missings"]] <- sprintf("%.*f%%", digits, 100 * out[["Missings"]])
-    out[["Mean"]] <- sprintf("%.*f", digits, out[["Mean"]])
-    out[["SD"]] <- sprintf("%.*f", digits, out[["SD"]])
+  cat(insight::export_table(
+    lapply(1:length(x), function(i) {
+      out <- x[[i]]
+      attr(out, "table_caption") <- c(sprintf("Component %i", i), "red")
+      attr(out, "table_footer") <- c(sprintf("Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+                                             attributes(out)$item_intercorrelation,
+                                             attributes(out)$cronbachs_alpha), "yellow")
 
-    cat(insight::export_table(out, missing = "<NA>"))
-
-    insight::print_color(sprintf(
-      "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f\n\n",
-      attributes(out)$item_intercorrelation, attributes(out)$cronbachs_alpha
-    ), "yellow")
-  }
+      out
+    }),
+    digits = digits,
+    format = "text",
+    missing = "<NA>",
+    zap_small = TRUE
+  ))
 }
 
 
