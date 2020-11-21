@@ -17,6 +17,10 @@
 * `model_performance()` gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.
 * `model_performance()` for metafor-models now includes the degrees of freedom for Cochran's Q.
 
+### Other functions
+
+* `performance_mse()` and `performance_rmse()` now always try to return the (R)MSE on the response scale.
+
 ## Bug fixes
 
 * Fixed issue in `icc()` introduced in the last update that make `lme`-models fail.
