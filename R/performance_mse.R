@@ -37,7 +37,7 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
     {
       pred <- stats::predict(model, type = "response")
       observed <- .factor_to_numeric(insight::get_response(model))
-      pred - observed
+      observed - pred
     },
     error = function(e) {
       NULL
