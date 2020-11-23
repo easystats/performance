@@ -7,7 +7,7 @@
 ## New functions
 
 * `r2_somers()`, to compute Somers' Dxy rank-correlation as R2-measure for logistic regression models.
-* `to_table()`, to format output from package-functions into markdown-format. `table_to_markdown` is an alias for `to_table(format = "markdown")`.
+* `display()`, to print output from package-functions into different formats. `print_md()` is an alias for `display(format = "markdown")`.
 
 ## Changes to functions
 

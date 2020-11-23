@@ -1,42 +1,17 @@
 #' @importFrom insight export_table format_p
 #' @export
 print.compare_performance <- function(x, digits = 3, ...) {
-  orig_x <- x
-  insight::print_color("# Comparison of Model Performance Indices\n\n", "blue")
+  table_caption <- c("# Comparison of Model Performance Indices", "blue")
+  formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
-  # if we have ranking, add score and remove incomplete indices in print
-  if ("Performance_Score" %in% colnames(x)) {
-    x$Performance_Score <- sprintf("%.2f%%", 100 * x$Performance_Score)
-    x <- x[!sapply(x, anyNA)]
+  if ("Performance_Score" %in% colnames(formatted_table)) {
+    footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+  } else {
+    footer <- NULL
   }
 
-  # format p-values for meta-analysis
-  if ("p_CochransQ" %in% colnames(x)) {
-    x$p_CochransQ <- insight::format_p(x$p_CochransQ)
-  }
-  if ("p_Omnibus" %in% colnames(x)) {
-    x$p_Omnibus <- insight::format_p(x$p_Omnibus)
-  }
-  if ("BF" %in% colnames(x)) {
-    x$BF[is.na(x$BF)] <- 1
-    x$BF <- insight::format_bf(x$BF)
-  }
-
-  x[] <- lapply(x, function(i) {
-    if (is.numeric(i)) {
-      round(i, digits = digits)
-    } else {
-      i
-    }
-  })
-
-  cat(insight::export_table(x))
-
-  if ("Performance_Score" %in% colnames(x)) {
-    insight::print_color(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.\n", x$Model[1], x$Type[1], x$Performance_Score[1]), "yellow")
-  }
-
-  invisible(orig_x)
+  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))
+  invisible(x)
 }
 
 
@@ -44,27 +19,9 @@ print.compare_performance <- function(x, digits = 3, ...) {
 #' @importFrom insight export_table format_p
 #' @export
 print.performance_model <- function(x, digits = 3, ...) {
-  orig_x <- x
-  insight::print_color("# Indices of model performance\n\n", "blue")
-
-  # format p-values for meta-analysis
-  if ("p_CochransQ" %in% colnames(x)) {
-    x$p_CochransQ <- insight::format_p(x$p_CochransQ)
-  }
-  if ("p_Omnibus" %in% colnames(x)) {
-    x$p_Omnibus <- insight::format_p(x$p_Omnibus)
-  }
-
-  x <- .format_df_columns(x)
-  x <- .format_freq_stats(x)
-
-  x[] <- lapply(x, function(i) {
-    if (is.numeric(i)) i <- round(i, digits)
-    i
-  })
-
-  cat(insight::export_table(x))
-  invisible(orig_x)
+  formatted_table <- format(x = x, digits = digits, format = "text", ...)
+  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = c("# Indices of model performance", "blue"), ...))
+  invisible(x)
 }
 
 
