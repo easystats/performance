@@ -83,7 +83,7 @@ reference:
 
 - title: "Table Formatting"
   contents:
-  - display
+  - display.performance_model
   - print_md
 
 - title: "Sample Data"
