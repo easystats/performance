@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Performance of Mixed Models — model_performance.merMod • performance</title>
+<title>Print tables in different output formats — display.performance_model • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Performance of Mixed Models — model_performance.merMod" />
-<meta property="og:description" content="Compute indices of model performance for mixed models." />
+<meta property="og:title" content="Print tables in different output formats — display.performance_model" />
+<meta property="og:description" content="Prints tables (i.e. data frame) in different output formats.
+  print_md() is a alias for display(format = &quot;markdown&quot;)." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -125,61 +126,70 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Performance of Mixed Models</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/model_performance.mixed.R'><code>R/model_performance.mixed.R</code></a></small>
-    <div class="hidden name"><code>model_performance.merMod.Rd</code></div>
+    <h1>Print tables in different output formats</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/display.R'><code>R/display.R</code></a>, <a href='https://github.com/easystats/performance/blob/master/R/print_md.R'><code>R/print_md.R</code></a></small>
+    <div class="hidden name"><code>display.performance_model.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Compute indices of model performance for mixed models.</p>
+    <p>Prints tables (i.e. data frame) in different output formats.
+  <code><a href='https://easystats.github.io/insight/reference/display.html'>print_md()</a></code> is a alias for <code><a href='https://easystats.github.io/insight/reference/display.html'>display(format = "markdown")</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for merMod</span>
-<span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span>, metrics <span class='op'>=</span> <span class='st'>"all"</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for performance_model</span>
+<span class='fu'><a href='https://easystats.github.io/insight/reference/display.html'>display</a></span><span class='op'>(</span><span class='va'>object</span>, format <span class='op'>=</span> <span class='st'>"markdown"</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for performance_model</span>
+<span class='fu'><a href='https://easystats.github.io/insight/reference/display.html'>print_md</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>A mixed effects model.</p></td>
+      <th>object, x</th>
+      <td><p>An object returned by <code><a href='model_performance.html'>model_performance()</a></code>
+or <code><a href='compare_performance.html'>compare_performance()</a></code>.
+or its summary.</p></td>
     </tr>
     <tr>
-      <th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed (some of <code><a href='https://rdrr.io/r/base/c.html'>c("AIC", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")</a></code>). <code>"common"</code> will compute AIC, BIC, R2, ICC and RMSE.</p></td>
+      <th>format</th>
+      <td><p>String, indicating the output format. Currently, only
+<code>"markdown"</code> is supported.</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
+      <th>digits</th>
+      <td><p>Number of decimal places.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
+      <td><p>Currently not used.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
+    <p>A character vector. If <code>format = "markdown"</code>, the return value
+  will be a character vector in markdown-table format.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This method returns the <em>adjusted ICC</em> only, as this is typically
-  of interest when judging the variance attributed to the random effects part
-  of the model (see also <code><a href='icc.html'>icc</a></code>).
-  <br /> <br />
-  Furthermore, see 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for
-  more details on returned indices.</p>
+    <p><code><a href='https://easystats.github.io/insight/reference/display.html'>display()</a></code> is useful when the table-output from functions,
+  which is usually printed as formatted text-table to console, should
+  be formatted for pretty table-rendering in markdown documents, or if
+  knitted from rmarkdown to PDF or Word files. See
+  <a href='https://easystats.github.io/parameters/articles/model_parameters_formatting.html'>vignette</a>
+  for examples.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
-  <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance</span><span>
+    <pre class="examples"><div class='input'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='va'>mp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='fu'><a href='https://easystats.github.io/insight/reference/display.html'>display</a></span><span class='op'>(</span><span class='va'>mp</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; 
 #&gt; 
-#&gt; AIC   |   BIC | R2_conditional | R2_marginal |  ICC | RMSE | Sigma
-#&gt; ------------------------------------------------------------------
-#&gt; 77.32 | 89.36 |           0.97 |        0.10 | 0.97 | 0.28 |  0.28</div></span></pre>
+#&gt; Table: Indices of model performance
+#&gt; 
+#&gt; |AIC    |    BIC |   R2 | R2_adjusted | RMSE | Sigma |
+#&gt; |:------|:------:|:----:|:-----------:|:----:|:-----:|
+#&gt; |156.01 | 161.87 | 0.83 |        0.82 | 2.44 |  2.57 |</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -148,6 +148,8 @@
 <ul>
 <li>
 <code><a href="../reference/r2_somers.html">r2_somers()</a></code>, to compute Somers’ Dxy rank-correlation as R2-measure for logistic regression models.</li>
+<li>
+<code><a href="https://easystats.github.io/insight/reference/display.html">display()</a></code>, to print output from package-functions into different formats. <code><a href="https://easystats.github.io/insight/reference/display.html">print_md()</a></code> is an alias for <code><a href="https://easystats.github.io/insight/reference/display.html">display(format = "markdown")</a></code>.</li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -164,6 +166,14 @@
 <code><a href="../reference/model_performance.html">model_performance()</a></code> gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> for metafor-models now includes the degrees of freedom for Cochran’s Q.</li>
+</ul>
+</div>
+<div id="other-functions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#other-functions" class="anchor"></a>Other functions</h3>
+<ul>
+<li>
+<code><a href="../reference/performance_mse.html">performance_mse()</a></code> and <code><a href="../reference/performance_rmse.html">performance_rmse()</a></code> now always try to return the (R)MSE on the response scale.</li>
 </ul>
 </div>
 </div>
