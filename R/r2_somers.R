@@ -8,10 +8,12 @@
 #' @return A named vector with the R2 value.
 #'
 #' @examples
-#' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' r2_somers(model)
+#' \dontrun{
+#' if (require("correlation")) {
+#'   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#'   r2_somers(model)
+#' }}
 #' @references Somers, R. H. (1962). A new asymmetric measure of association for ordinal variables. American Sociological Review. 27 (6).
-#'
 #' @export
 r2_somers <- function(model) {
   info <- insight::model_info(model)

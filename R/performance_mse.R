@@ -49,6 +49,8 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
       {
         if (inherits(model, c("vgam", "vglm"))) {
           model@residuals
+        } else if (inherits(model, "coxph")) {
+          stats::residuals(model)
         } else {
           stats::residuals(model, type = "response")
         }
