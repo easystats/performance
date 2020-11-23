@@ -83,7 +83,8 @@ reference:
 
 - title: "Table Formatting"
   contents:
-  - to_table
+  - display
+  - print_md
 
 - title: "Sample Data"
   contents:
