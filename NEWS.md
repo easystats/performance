@@ -20,6 +20,7 @@
 ### Other functions
 
 * `performance_mse()` and `performance_rmse()` now always try to return the (R)MSE on the response scale.
+* `performance_accuracy()` now accepts in general linear or logistic regression models, even if these are not of class `lm` or `glm`.
 
 ## Bug fixes
 

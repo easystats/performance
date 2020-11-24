@@ -4,8 +4,7 @@
 #' @description This function calculates the predictive accuracy of linear
 #'    or logistic regression models.
 #'
-#' @param model Fitted model object of class \code{lm} or \code{glm}, the latter
-#'    being a logistic regression model (binary response).
+#' @param model A linear or logistic regression model. May also be a mixed model.
 #' @param k The number of folds for the kfold-crossvalidation.
 #' @param method Character string, indicating whether crossvalidation
 #'    (\code{method = "cv"}) or bootstrapping (\code{method = "boot"})
@@ -35,7 +34,7 @@
 #' performance_accuracy(model)
 #' @importFrom bayestestR area_under_curve
 #' @importFrom insight find_response get_data
-#' @importFrom stats lm cor glm predict predict.glm model.frame formula binomial sd
+#' @importFrom stats lm cor glm predict predict model.frame formula binomial sd update
 #' @export
 performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000) {
   method <- match.arg(method)
@@ -49,8 +48,10 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
   # model data, for cross validation
   model_data <- insight::get_data(model)
 
+  info <- insight::model_info(model)
+
   # accuracy for linear models
-  if (inherits(model, "lm") && !inherits(model, "glm")) {
+  if (info$is_linear) {
     measure <- "Correlation between observed and predicted"
 
     # check if bootstrapping or cross validation is requested
@@ -61,7 +62,11 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
 
       models <- lapply(bootstr, function(.x) {
-        stats::lm(formula, data = model_data[.x, ])
+        text <- utils::capture.output(
+          model_upd <- stats::update(model, data = model_data[.x, ])
+        )
+        # stats::lm(formula, data = model_data[.x, ])
+        model_upd
       })
 
       predictions <- mapply(function(.x, .y) {
@@ -82,7 +87,11 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       cv <- .crossv_kfold(model_data, k = k)
 
       models <- lapply(cv, function(.x) {
-        stats::lm(formula, data = model_data[.x$train, ])
+        text <- utils::capture.output(
+          model_upd <- stats::update(model, data = model_data[.x$train, ])
+        )
+        model_upd
+        # stats::lm(formula, data = model_data[.x$train, ])
       })
 
       predictions <- mapply(function(.x, .y) {
@@ -97,7 +106,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
         stats::cor(.x, .y, use = "pairwise.complete.obs")
       }, predictions, response)
     }
-  } else if (inherits(model, "glm") && stats::family(model)$family == "binomial") {
+  } else if (info$is_binomial) {
     measure <- "Area under Curve"
 
     # check if bootstrapping or cross validation is requested
@@ -108,11 +117,14 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
 
       models <- lapply(bootstr, function(.x) {
-        stats::glm(formula, data = model_data[.x, ], family = stats::binomial(link = "logit"))
+        text <- utils::capture.output(
+          model_upd <- stats::update(model, data = model_data[.x, ])
+        )
+        # stats::glm(formula, data = model_data[.x, ], family = stats::binomial(link = "logit"))
       })
 
       predictions <- mapply(function(.x, .y) {
-        stats::predict.glm(.y, newdata = model_data[.x, ])
+        stats::predict(.y, newdata = model_data[.x, ], type = "link")
       }, bootstr, models, SIMPLIFY = FALSE)
 
       response <- lapply(bootstr, function(.x) {
@@ -129,11 +141,15 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       cv <- .crossv_kfold(model_data, k = k)
 
       models <- lapply(cv, function(.x) {
-        stats::glm(formula, data = model_data[.x$train, ], family = stats::binomial(link = "logit"))
+        text <- utils::capture.output(
+          model_upd <- stats::update(model, data = model_data[.x$train, ])
+        )
+        model_upd
+        # stats::glm(formula, data = model_data[.x$train, ], family = stats::binomial(link = "logit"))
       })
 
       predictions <- mapply(function(.x, .y) {
-        stats::predict.glm(.y, newdata = model_data[.x$test, ])
+        stats::predict(.y, newdata = model_data[.x$test, ], type = "link")
       }, cv, models, SIMPLIFY = FALSE)
 
       response <- lapply(cv, function(.x) {
@@ -145,6 +161,9 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
         bayestestR::area_under_curve(roc$Specifity, roc$Sensivity)
       }, response, predictions)
     }
+  } else {
+    warning(paste0("Models of class '", class(model)[1], "' are not supported."), call. = FALSE)
+    return(NULL)
   }
 
   # return mean value of accuracy

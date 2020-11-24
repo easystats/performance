@@ -7,8 +7,7 @@
 performance_accuracy(model, method = c("cv", "boot"), k = 5, n = 1000)
 }
 \arguments{
-\item{model}{Fitted model object of class \code{lm} or \code{glm}, the latter
-being a logistic regression model (binary response).}
+\item{model}{A linear or logistic regression model. May also be a mixed model.}
 
 \item{method}{Character string, indicating whether crossvalidation
 (\code{method = "cv"}) or bootstrapping (\code{method = "boot"})
