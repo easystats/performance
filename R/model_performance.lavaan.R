@@ -91,6 +91,6 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   }
   out <- out[, metrics]
 
-  class(out) <- c("performance_model", class(out))
+  class(out) <- c("performance_lavaan", "performance_model", class(out))
   out
 }
