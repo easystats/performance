@@ -161,6 +161,11 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
         bayestestR::area_under_curve(roc$Specifity, roc$Sensivity)
       }, response, predictions)
     }
+
+    if (anyNA(accuracy)) {
+      m <- ifelse(method == "cv", "cross-validated", "bootstrapped")
+      warning(paste0("Some of the ", m, " samples were not eligible for calculating AUC."), call. = FALSE)
+    }
   } else {
     warning(paste0("Models of class '", class(model)[1], "' are not supported."), call. = FALSE)
     return(NULL)
@@ -170,8 +175,8 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
   structure(
     class = c("performance_accuracy"),
     list(
-      Accuracy = mean(accuracy),
-      SE = stats::sd(accuracy),
+      Accuracy = mean(accuracy, na.rm = TRUE),
+      SE = stats::sd(accuracy, na.rm = TRUE),
       Method = measure
     )
   )
