@@ -49,7 +49,7 @@ check_itemscale <- function(x) {
     stop("Package 'parameters' required for this function to work. Please install it.", call. = FALSE)
   }
 
-  data_set <- attributes(x)$data
+  data_set <- attributes(x)$data_set
   subscales <- parameters::closest_component(x)
 
   out <- lapply(sort(unique(subscales)), function(.subscale) {
