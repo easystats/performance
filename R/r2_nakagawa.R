@@ -8,6 +8,12 @@
 #' @param by_group Logical, if \code{TRUE}, returns the explained variance
 #'   at different levels (if there are multiple levels). This is essentially
 #'   similar to the variance reduction approach by \cite{Hox (2010), pp. 69-78}.
+#' @param tolerance Tolerance for singularity check of random effects, to decide
+#'   whether to compute random effect variances for the conditional r-squared
+#'   or not. Indicates up to which value the convergence result is accepted. When
+#'   \code{r2_nakagawa()} returns a warning, stating that random effect variances
+#'   can't be computed (and thus, the conditional r-squared is \code{NA}),
+#'   decrease the tolerance-level. See also \code{\link{is_singular}}.
 #'
 #' @return A list with the conditional and marginal R2 values.
 #'
@@ -36,10 +42,10 @@
 #' }
 #' @importFrom insight get_variance print_color find_random_slopes null_model find_random
 #' @export
-r2_nakagawa <- function(model, by_group = FALSE) {
+r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
   vars <- tryCatch(
     {
-      insight::get_variance(model, name_fun = "r2()", name_full = "r-squared")
+      insight::get_variance(model, tolerance = tolerance, name_fun = "r2()", name_full = "r-squared")
     },
     error = function(e) {
       if (inherits(e, c("simpleError", "error"))) {
@@ -74,7 +80,7 @@ r2_nakagawa <- function(model, by_group = FALSE) {
 
     # null-model
     null_model <- insight::null_model(model)
-    vars_null <- insight::get_variance(null_model)
+    vars_null <- insight::get_variance(null_model, tolerance = tolerance)
 
     # names of group levels
     group_names <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)

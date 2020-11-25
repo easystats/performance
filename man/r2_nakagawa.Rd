@@ -4,7 +4,7 @@
 \alias{r2_nakagawa}
 \title{Nakagawa's R2 for mixed models}
 \usage{
-r2_nakagawa(model, by_group = FALSE)
+r2_nakagawa(model, by_group = FALSE, tolerance = 1e-05)
 }
 \arguments{
 \item{model}{A mixed effects model.}
@@ -12,6 +12,13 @@ r2_nakagawa(model, by_group = FALSE)
 \item{by_group}{Logical, if \code{TRUE}, returns the explained variance
 at different levels (if there are multiple levels). This is essentially
 similar to the variance reduction approach by \cite{Hox (2010), pp. 69-78}.}
+
+\item{tolerance}{Tolerance for singularity check of random effects, to decide
+whether to compute random effect variances for the conditional r-squared
+or not. Indicates up to which value the convergence result is accepted. When
+\code{r2_nakagawa()} returns a warning, stating that random effect variances
+can't be computed (and thus, the conditional r-squared is \code{NA}),
+decrease the tolerance-level. See also \code{\link{is_singular}}.}
 }
 \value{
 A list with the conditional and marginal R2 values.

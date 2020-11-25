@@ -6,6 +6,7 @@
 #'
 #' @param model A statistical model.
 #' @param ... Arguments passed down to the related r2-methods.
+#' @inheritParams r2_nakagawa
 #'
 #' @return Returns a list containing values related to the most appropriate R2
 #'   for the given model. See the list below:
@@ -293,9 +294,10 @@ r2.zeroinfl <- r2.hurdle
 # Nakagawa R2 ----------------------
 
 
+#' @rdname r2
 #' @export
-r2.merMod <- function(model, ...) {
-  r2_nakagawa(model, ...)
+r2.merMod <- function(model, tolerance = 1e-5, ...) {
+  r2_nakagawa(model, tolerance = tolerance, ...)
 }
 
 #' @export
@@ -324,8 +326,8 @@ r2.rlmerMod <- r2.merMod
 
 
 #' @export
-r2.wbm <- function(model, ...) {
-  out <- r2_nakagawa(model)
+r2.wbm <- function(model, tolerance = 1e-5, ...) {
+  out <- r2_nakagawa(model, tolerance = tolerance)
 
   if (is.null(out) || is.na(out)) {
     s <- summary(model)

@@ -2,7 +2,7 @@
 
 ## General
 
-* * `model_performance()` now supports `margins`, `gamlss`, `stanmvreg` and `semLme`.
+* `model_performance()` now supports `margins`, `gamlss`, `stanmvreg` and `semLme`.
 
 ## New functions
 
@@ -22,7 +22,8 @@
 * `performance_mse()` and `performance_rmse()` now always try to return the (R)MSE on the response scale.
 * `performance_accuracy()` now accepts all types of linear or logistic regression models, even if these are not of class `lm` or `glm`.
 * `performance_roc()` now accepts all types of logistic regression models, even if these are not of class `glm`.
-
+* `r2()` for mixed models and `r2_nakagawa()` gain a `tolerance`-argument, to set the tolerance level for singularity checks when computing random effect variances for the conditional r-squared.
+  
 ## Bug fixes
 
 * Fixed issue in `icc()` introduced in the last update that make `lme`-models fail.
