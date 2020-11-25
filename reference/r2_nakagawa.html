@@ -136,7 +136,7 @@
  mixed effects models with complex random effects structures.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_nakagawa</span><span class='op'>(</span><span class='va'>model</span>, by_group <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>r2_nakagawa</span><span class='op'>(</span><span class='va'>model</span>, by_group <span class='op'>=</span> <span class='cn'>FALSE</span>, tolerance <span class='op'>=</span> <span class='fl'>1e-05</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,6 +150,15 @@
       <td><p>Logical, if <code>TRUE</code>, returns the explained variance
 at different levels (if there are multiple levels). This is essentially
 similar to the variance reduction approach by <cite>Hox (2010), pp. 69-78</cite>.</p></td>
+    </tr>
+    <tr>
+      <th>tolerance</th>
+      <td><p>Tolerance for singularity check of random effects, to decide
+whether to compute random effect variances for the conditional r-squared
+or not. Indicates up to which value the convergence result is accepted. When
+<code>r2_nakagawa()</code> returns a warning, stating that random effect variances
+can't be computed (and thus, the conditional r-squared is <code>NA</code>),
+decrease the tolerance-level. See also <code>is_singular</code>.</p></td>
     </tr>
     </table>
 

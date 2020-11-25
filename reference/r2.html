@@ -136,7 +136,10 @@
   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for merMod</span>
+<span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, tolerance <span class='op'>=</span> <span class='fl'>1e-05</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -148,6 +151,15 @@
     <tr>
       <th>...</th>
       <td><p>Arguments passed down to the related r2-methods.</p></td>
+    </tr>
+    <tr>
+      <th>tolerance</th>
+      <td><p>Tolerance for singularity check of random effects, to decide
+whether to compute random effect variances for the conditional r-squared
+or not. Indicates up to which value the convergence result is accepted. When
+<code><a href='r2_nakagawa.html'>r2_nakagawa()</a></code> returns a warning, stating that random effect variances
+can't be computed (and thus, the conditional r-squared is <code>NA</code>),
+decrease the tolerance-level. See also <code>is_singular</code>.</p></td>
     </tr>
     </table>
 
