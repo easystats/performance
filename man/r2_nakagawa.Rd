@@ -18,7 +18,7 @@ whether to compute random effect variances for the conditional r-squared
 or not. Indicates up to which value the convergence result is accepted. When
 \code{r2_nakagawa()} returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is \code{NA}),
-decrease the tolerance-level. See also \code{\link{is_singular}}.}
+decrease the tolerance-level. See also \code{\link{check_singularity}}.}
 }
 \value{
 A list with the conditional and marginal R2 values.
