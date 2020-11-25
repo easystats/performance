@@ -50,7 +50,7 @@ cronbachs_alpha.data.frame <- function(x) {
 
 #' @export
 cronbachs_alpha.parameters_pca <- function(x) {
-  pca_data <- attr(x, "data")
+  pca_data <- attr(x, "data_name")
 
   if (is.null(pca_data)) {
     warning("Could not find data frame that was used for the PCA.", call. = FALSE)
