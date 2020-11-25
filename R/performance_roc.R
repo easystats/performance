@@ -51,14 +51,16 @@ performance_roc <- function(x, ..., predictions, new_data) {
     sapply(match.call(expand.dots = FALSE)$`...`, .safe_deparse)
   )
 
+  info <- insight::model_info(x)
+
   if (is.numeric(x) && !missing(predictions) && !is.null(predictions)) {
     .performance_roc_numeric(x, predictions)
-  } else if (inherits(x, "glm") && length(dots) == 0) {
-    if (missing(new_data)) new_data <- NULL
-    .performance_roc_model(x, new_data)
   } else if (inherits(x, c("logitor", "logitmfx", "probitmfx")) && length(dots) == 0) {
     if (missing(new_data)) new_data <- NULL
     .performance_roc_model(x$fit, new_data)
+  } else if (info$is_binomial && length(dots) == 0) {
+    if (missing(new_data)) new_data <- NULL
+    .performance_roc_model(x, new_data)
   } else if (length(dots) > 0) {
     .performance_roc_models(list(x, ...), names = object_names)
   }
