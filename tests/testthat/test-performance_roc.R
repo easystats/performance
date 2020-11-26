@@ -15,4 +15,28 @@ if (require("testthat") &&
       tolerance = 1e-3
     )
   })
+
+  data(iris)
+  set.seed(123)
+  d <- iris[sample(1:nrow(iris), size = 50), ]
+  d$y <- rbinom(nrow(d), size = 1, .3)
+  m <- glm(
+    y ~ Sepal.Length + Sepal.Width,
+    data = transform(d, y = as.factor(y)),
+    family = "binomial"
+  )
+  test_that("performance_roc", {
+    roc <- performance_roc(m)
+    expect_equal(
+      roc$Sensivity,
+      c(0, 0, 0.07692, 0.07692, 0.07692, 0.15385, 0.23077, 0.23077,
+        0.23077, 0.23077, 0.23077, 0.30769, 0.30769, 0.30769, 0.30769,
+        0.30769, 0.38462, 0.38462, 0.38462, 0.46154, 0.46154, 0.53846,
+        0.53846, 0.53846, 0.53846, 0.61538, 0.61538, 0.61538, 0.61538,
+        0.61538, 0.69231, 0.76923, 0.76923, 0.76923, 0.84615, 0.92308,
+        0.92308, 0.92308, 0.92308, 0.92308, 0.92308, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1),
+      tolerance = 1e-3
+    )
+  })
 }
