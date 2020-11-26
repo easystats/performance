@@ -27,6 +27,7 @@
 ## Bug fixes
 
 * Fixed issue in `icc()` introduced in the last update that make `lme`-models fail.
+* Fixed issue in `performance_roc()` for models with factors as reponse.
 
 # performance 0.5.1
 

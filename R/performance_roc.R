@@ -73,6 +73,7 @@ performance_roc <- function(x, ..., predictions, new_data) {
     stop("'x' and ' predictions' must be of same length.", call. = FALSE)
   }
 
+  x <- .factor_to_numeric(x)
   x <- x[order(predictions, decreasing = TRUE)]
 
   res <- data.frame(
