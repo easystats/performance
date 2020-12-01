@@ -102,3 +102,29 @@ performance_mse.betaor <- performance_mse.logitor
 
 #' @export
 performance_mse.betamfx <- performance_mse.logitor
+
+
+
+
+# other models --------------------------
+
+#' @export
+performance_mse.slm <- function(model, verbose = TRUE, ...) {
+  res <- tryCatch(
+    {
+      junk <- utils::capture.output(pred <- stats::predict(model, type = "response"))
+      observed <- .factor_to_numeric(insight::get_response(model))
+      observed - pred
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(res) || all(is.na(res))) {
+    if (verbose) insight::print_color("Can't extract residuals from model.\n", "red")
+    return(NA)
+  }
+
+  mean(res^2, na.rm = T)
+}
