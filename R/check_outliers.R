@@ -150,7 +150,7 @@
 #'
 #' ol <- check_outliers(model)
 #' # plot(ol)
-#' insight::get_data(mode)[ol, ]
+#' insight::get_data(model)[ol, ]
 #'
 #'
 #' check_outliers(model, method = c("mahalabonis", "mcd"))
