@@ -152,8 +152,9 @@
 #' # plot(ol)
 #' insight::get_data(model)[ol, ]
 #'
-#'
-#' check_outliers(model, method = c("mahalabonis", "mcd"))
+#' if (require("MASS")) {
+#'   check_outliers(model, method = c("mahalabonis", "mcd"))
+#' }
 #' \dontrun{
 #' # This one takes some seconds to finish...
 #' check_outliers(model, method = "ics")
