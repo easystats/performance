@@ -26,6 +26,8 @@ m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_heteroscedasticity(m)
 
 # plot results
-x <- check_heteroscedasticity(m)
-plot(x)
+if (require("see")) {
+  x <- check_heteroscedasticity(m)
+  plot(x)
+}
 }
