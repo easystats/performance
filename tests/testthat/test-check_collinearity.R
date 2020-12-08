@@ -17,7 +17,7 @@ if (require("testthat") && require("performance") && require("glmmTMB")) {
       c(1.00037354840318, 1.00037354840318),
       tolerance = 1e-3
     )
-    expect_null(check_collinearity(m1, component = "zero_inflated"))
+    expect_null(check_collinearity(m1, component = "zero_inflated", verbose = FALSE))
   })
 
   m2 <- glmmTMB(

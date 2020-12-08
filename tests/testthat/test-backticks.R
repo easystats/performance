@@ -6,7 +6,8 @@ if (require("testthat") && require("performance")) {
   m2 <- lm(Sepal.Width ~ Petal.Length + Species * log(Sepal.Length), data = iris)
 
   test_that("check_collinearity, backticks", {
-    expect_equal(check_collinearity(m1)$Parameter, c("Petal.Length", "a m", "log(Sepal.Length)", "a m:log(Sepal.Length)"))
-    expect_equal(check_collinearity(m2)$Parameter, c("Petal.Length", "Species", "log(Sepal.Length)", "Species:log(Sepal.Length)"))
+    expect_warning(check_collinearity(m1))
+    expect_equal(check_collinearity(m1, verbose = FALSE)$Parameter, c("Petal.Length", "a m", "log(Sepal.Length)", "a m:log(Sepal.Length)"))
+    expect_equal(check_collinearity(m2, verbose = FALSE)$Parameter, c("Petal.Length", "Species", "log(Sepal.Length)", "Species:log(Sepal.Length)"))
   })
 }
