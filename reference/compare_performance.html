@@ -180,7 +180,11 @@ different models at once and hence allows comparison of indices across models.</
   returns an additional column named <code>BF</code>, which shows the Bayes factor
   (see <code><a href='https://easystats.github.io/bayestestR/reference/bayesfactor_models.html'>bayestestR::bayesfactor_models()</a></code>) for each model against
   the denominator model. The <em>first</em> model is used as denominator model,
-  and its Bayes factor is set to <code>NA</code> to indicate the reference model.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Ranking Models</h3>
+  and its Bayes factor is set to <code>NA</code> to indicate the reference model.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Likelihood-Ratio Test</h3>
+<p>If possible, <code>compare_performance()</code> conducts a likelihood-ratio test
+  (see <code><a href='performance_lrt.html'>performance_lrt</a></code>) and adds a column with the p-values
+  from that test to the output. Thus, when a <code>"p"</code>-column is included,
+  this refers to the likelihood-ratio test.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Ranking Models</h3>
 <p>When <code>rank = TRUE</code>, a new column <code>Performance_Score</code> is returned. This
   score ranges from 0% to 100%, higher values indicating better model performance.
   Note that all score value do not necessarily sum up to 100%. Rather,
@@ -231,11 +235,11 @@ different models at once and hence allows comparison of indices across models.</
 <span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
 #&gt; 
-#&gt; Model | Type |    AIC |    BIC |   R2 | R2 (adj.) | RMSE | Sigma |     BF
-#&gt; -------------------------------------------------------------------------
-#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |      0.61 | 0.51 |  0.51 |   1.00
-#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |      0.83 | 0.33 |  0.34 | &gt; 1000
-#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |      0.83 | 0.33 |  0.34 | &gt; 1000</div><div class='input'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span>, rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+#&gt; Model | Type |    AIC |    BIC |   R2 | R2 (adj.) | RMSE | Sigma |     BF |      p
+#&gt; ----------------------------------------------------------------------------------
+#&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |      0.61 | 0.51 |  0.51 |   1.00 |       
+#&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |      0.83 | 0.33 |  0.34 | &gt; 1000 | &lt; .001
+#&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |      0.83 | 0.33 |  0.34 | &gt; 1000 | 0.186 </div><div class='input'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span>, rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Bayes factor is based on BIC approximation, thus BF and BIC hold the same information. Ignoring BF for performance-score.</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
 #&gt; 
 #&gt; Model | Type |    AIC |    BIC |   R2 | R2 (adj.) | RMSE | Sigma |     BF | Performance-Score
