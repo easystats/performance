@@ -1,3 +1,9 @@
+# performance 0.6.1
+
+## Bug fixes
+
+* Fixed examples, now using suggested packages only conditionally.
+
 # performance 0.6.0
 
 ## General
