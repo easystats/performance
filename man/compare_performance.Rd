@@ -38,6 +38,12 @@ different models at once and hence allows comparison of indices across models.
   the denominator model. The \emph{first} model is used as denominator model,
   and its Bayes factor is set to \code{NA} to indicate the reference model.
   }
+  \subsection{Likelihood-Ratio Test}{
+  If possible, \code{compare_performance()} conducts a likelihood-ratio test
+  (see \code{\link{performance_lrt}}) and adds a column with the p-values
+  from that test to the output. Thus, when a \code{"p"}-column is included,
+  this refers to the likelihood-ratio test.
+  }
   \subsection{Ranking Models}{
   When \code{rank = TRUE}, a new column \code{Performance_Score} is returned. This
   score ranges from 0\% to 100\%, higher values indicating better model performance.
