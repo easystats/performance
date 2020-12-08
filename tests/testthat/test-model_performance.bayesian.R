@@ -50,7 +50,7 @@ if (require("testthat") && require("performance") && require("rstanarm") && requ
   }
 }
 
-if (require("testthat") && require("performance") && require("BayesFactor") && packageVersion("insight") > "0.10.0") {
+if (require("testthat") && require("performance") && require("BayesFactor") && require("rstantools")) {
   test_that("model_performance.BFBayesFactor", {
     mod <- ttestBF(mtcars$wt, mu = 3)
     expect_warning(p <- model_performance(mod))
