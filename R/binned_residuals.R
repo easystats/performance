@@ -43,8 +43,10 @@
 #' @references Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
 #'
 #' @examples
-#' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#' binned_residuals(model)
+#' if (require("see")) {
+#'   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#'   binned_residuals(model)
+#' }
 #' @importFrom stats fitted sd complete.cases
 #' @importFrom insight get_data get_response find_response
 #' @export
