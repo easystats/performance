@@ -183,9 +183,15 @@ different models at once and hence allows comparison of indices across models.</
   and its Bayes factor is set to <code>NA</code> to indicate the reference model.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Ranking Models</h3>
 <p>When <code>rank = TRUE</code>, a new column <code>Performance_Score</code> is returned. This
   score ranges from 0% to 100%, higher values indicating better model performance.
-  Calculation is based on normalizing all indices (i.e. rescaling them to a
+  Note that all score value do not necessarily sum up to 100%. Rather,
+  calculation is based on normalizing all indices (i.e. rescaling them to a
   range from 0 to 1), and taking the mean value of all indices for each model.
   This is a rather quick heuristic, but might be helpful as exploratory index.
+  <br /> <br />
+  When comparing frequentist models, both BIC and Bayes factor can be available.
+  In such cases, since Bayes factor and BIC hold the same information (i.e.
+  <code>cor(-$BIC, BF, method = "spearman")</code> is 1), the Bayes factor is ignored
+  for the performance-score during ranking.
   <br /> <br />
   In particular when models are of different types (e.g. mixed models, classical
   linear models, logistic regression, ...), not all indices will be computed
@@ -230,7 +236,7 @@ different models at once and hence allows comparison of indices across models.</
 #&gt; lm1   |   lm | 231.45 | 243.49 | 0.62 |      0.61 | 0.51 |  0.51 |   1.00
 #&gt; lm2   |   lm | 106.23 | 121.29 | 0.84 |      0.83 | 0.33 |  0.34 | &gt; 1000
 #&gt; lm3   |   lm | 106.77 | 127.84 | 0.84 |      0.83 | 0.33 |  0.34 | &gt; 1000</div><div class='input'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span>, rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
+</div><div class='output co'>#&gt; <span class='message'>Bayes factor is based on BIC approximation, thus BF and BIC hold the same information. Ignoring BF for performance-score.</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
 #&gt; 
 #&gt; Model | Type |    AIC |    BIC |   R2 | R2 (adj.) | RMSE | Sigma |     BF | Performance-Score
 #&gt; ---------------------------------------------------------------------------------------------
