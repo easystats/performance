@@ -142,10 +142,14 @@
 
 <span class='fu'>multicollinearity</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='co'># S3 method for default</span>
+<span class='fu'>check_collinearity</span><span class='op'>(</span><span class='va'>x</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for glmmTMB</span>
 <span class='fu'>check_collinearity</span><span class='op'>(</span>
   <span class='va'>x</span>,
   component <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"conditional"</span>, <span class='st'>"count"</span>, <span class='st'>"zi"</span>, <span class='st'>"zero_inflated"</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -161,6 +165,10 @@ work without <code><a href='https://rdrr.io/r/stats/model.matrix.html'>model.mat
     <tr>
       <th>...</th>
       <td><p>Currently not used.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle off warnings or messages.</p></td>
     </tr>
     <tr>
       <th>component</th>
@@ -211,6 +219,11 @@ Following model-classes are currently supported: <code>hurdle</code>,
   The <em>Increased SE</em> column in the output indicates how much larger
   the standard error is due to the association with other predictors
   conditional on the remaining variables in the model.</p>
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Multicollinearity and Interaction Terms</h3>
+<p>If interaction terms are included in a model, high VIF values are expected.
+  This portion of multicollinearity among the component terms of an interaction
+  is also called "inessential ill-conditioning", which leads to inflated VIF
+  values that are typically seen for models with interaction terms <cite>(Francoeur 2013)</cite>.</p>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -219,6 +232,7 @@ Following model-classes are currently supported: <code>hurdle</code>,
 
     
 <ul>
+<li><p>Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom Clusters. Open Journal of Statistics, 03(06), 24–44.</p></li>
 <li><p>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (eds.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.</p></li>
 <li><p>McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <li><p>Vanhove, J. (2019). Collinearity isn't a disease that needs curing. <a href='https://janhove.github.io/analysis/2019/09/11/collinearity'>webpage</a></p></li>
