@@ -35,6 +35,8 @@ model <- lm(len ~ supp + dose, data = ToothGrowth)
 check_homogeneity(model)
 
 # plot results
-result <- check_homogeneity(model)
-plot(result)
+if (require("see")) {
+  result <- check_homogeneity(model)
+  plot(result)
+}
 }

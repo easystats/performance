@@ -23,8 +23,10 @@
 #' check_homogeneity(model)
 #'
 #' # plot results
-#' result <- check_homogeneity(model)
-#' plot(result)
+#' if (require("see")) {
+#'   result <- check_homogeneity(model)
+#'   plot(result)
+#' }
 #' @importFrom stats fligner.test bartlett.test shapiro.test
 #' @importFrom insight find_response find_predictors get_data get_response
 #' @export
