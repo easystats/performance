@@ -41,9 +41,15 @@ different models at once and hence allows comparison of indices across models.
   \subsection{Ranking Models}{
   When \code{rank = TRUE}, a new column \code{Performance_Score} is returned. This
   score ranges from 0\% to 100\%, higher values indicating better model performance.
-  Calculation is based on normalizing all indices (i.e. rescaling them to a
+  Note that all score value do not necessarily sum up to 100\%. Rather,
+  calculation is based on normalizing all indices (i.e. rescaling them to a
   range from 0 to 1), and taking the mean value of all indices for each model.
   This is a rather quick heuristic, but might be helpful as exploratory index.
+  \cr \cr
+  When comparing frequentist models, both BIC and Bayes factor can be available.
+  In such cases, since Bayes factor and BIC hold the same information (i.e.
+  \code{cor(-$BIC, BF, method = "spearman")} is 1), the Bayes factor is ignored
+  for the performance-score during ranking.
   \cr \cr
   In particular when models are of different types (e.g. mixed models, classical
   linear models, logistic regression, ...), not all indices will be computed
