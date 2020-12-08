@@ -15,6 +15,7 @@
 #'  \code{component = "zi"}) or both components (\code{component = "all"}).
 #'  Following model-classes are currently supported: \code{hurdle},
 #'  \code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.
+#' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with three columns: The name of the model term, the
@@ -53,9 +54,16 @@
 #'   the standard error is due to the association with other predictors
 #'   conditional on the remaining variables in the model.
 #' }
+#' \subsection{Multicollinearity and Interaction Terms}{
+#'   If interaction terms are included in a model, high VIF values are expected.
+#'   This portion of multicollinearity among the component terms of an interaction
+#'   is also called "inessential ill-conditioning", which leads to inflated VIF
+#'   values that are typically seen for models with interaction terms \cite{(Francoeur 2013)}.
+#' }
 #'
 #' @references
 #'   \itemize{
+#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom Clusters. Open Journal of Statistics, 03(06), 24–44.
 #'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.
 #'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing. \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
@@ -85,17 +93,18 @@ check_collinearity <- function(x, ...) {
 multicollinearity <- check_collinearity
 
 
+#' @rdname check_collinearity
 #' @export
-check_collinearity.default <- function(x, ...) {
-  .check_collinearity(x, component = "conditional")
+check_collinearity.default <- function(x, verbose = TRUE, ...) {
+  .check_collinearity(x, component = "conditional", verbose = verbose)
 }
 
 
 # mfx models -------------------------------
 
 #' @export
-check_collinearity.logitor <- function(x, ...) {
-  .check_collinearity(x$fit, component = "conditional")
+check_collinearity.logitor <- function(x, verbose = TRUE, ...) {
+  .check_collinearity(x$fit, component = "conditional", verbose = verbose)
 }
 
 #' @export
@@ -131,46 +140,46 @@ check_collinearity.betamfx <- check_collinearity.logitor
 
 #' @rdname check_collinearity
 #' @export
-check_collinearity.glmmTMB <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+check_collinearity.glmmTMB <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .check_collinearity_zi_model(x, component)
+  .check_collinearity_zi_model(x, component, verbose = verbose)
 }
 
 
 
 #' @export
-check_collinearity.MixMod <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+check_collinearity.MixMod <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = TRUE, ...) {
   component <- match.arg(component)
-  .check_collinearity_zi_model(x, component)
+  .check_collinearity_zi_model(x, component, verbose = verbose)
 }
 
 
 
 #' @export
-check_collinearity.hurdle <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+check_collinearity.hurdle <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = verbose, ...) {
   component <- match.arg(component)
-  .check_collinearity_zi_model(x, component)
+  .check_collinearity_zi_model(x, component, verbose = verbose)
 }
 
 
 
 #' @export
-check_collinearity.zeroinfl <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+check_collinearity.zeroinfl <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = verbose, ...) {
   component <- match.arg(component)
-  .check_collinearity_zi_model(x, component)
+  .check_collinearity_zi_model(x, component, verbose = verbose)
 }
 
 
 
 #' @export
-check_collinearity.zerocount <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), ...) {
+check_collinearity.zerocount <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = verbose, ...) {
   component <- match.arg(component)
-  .check_collinearity_zi_model(x, component)
+  .check_collinearity_zi_model(x, component, verbose = verbose)
 }
 
 
 
-.check_collinearity_zi_model <- function(x, component) {
+.check_collinearity_zi_model <- function(x, component, verbose = TRUE) {
   if (component == "count") component <- "conditional"
   if (component == "zi") component <- "zero_inflated"
 
@@ -178,8 +187,8 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   if (!mi$is_zero_inflated) component <- "conditional"
 
   if (component == "all") {
-    cond <- .check_collinearity(x, "conditional")
-    zi <- .check_collinearity(x, "zero_inflated")
+    cond <- .check_collinearity(x, "conditional", verbose = verbose)
+    zi <- .check_collinearity(x, "zero_inflated", verbose = FALSE)
     if (is.null(cond) && is.null(zi)) {
       return(NULL)
     }
@@ -199,7 +208,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     attr(dat, "data") <- rbind(dat_cond, dat_zi)
     dat
   } else {
-    .check_collinearity(x, component)
+    .check_collinearity(x, component, verbose = verbose)
   }
 }
 
@@ -207,15 +216,18 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 #' @importFrom insight get_varcov
-.check_collinearity <- function(x, component) {
+.check_collinearity <- function(x, component, verbose = TRUE) {
   v <- insight::get_varcov(x, component = component)
   assign <- .term_assignments(x, component)
 
+  # check for missing intercept
   if (insight::has_intercept(x)) {
     v <- v[-1, -1]
     assign <- assign[-1]
   } else {
-    warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
+    if (isTRUE(verbose)) {
+      warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
+    }
   }
 
   f <- insight::find_formula(x)
@@ -233,7 +245,9 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   n.terms <- length(terms)
 
   if (n.terms < 2) {
-    insight::print_color(sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.\n", component), "red")
+    if (isTRUE(verbose)) {
+      warning(sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.\n", component), call. = FALSE)
+    }
     return(NULL)
   }
 
@@ -248,6 +262,13 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
       result,
       det(as.matrix(R[subs, subs])) * det(as.matrix(R[-subs, -subs])) / detR
     )
+  }
+
+  # check for interactions, VIF might be inflated...
+  if (!is.null(insight::find_interactions(x)) && any(result > 10)) {
+    if (isTRUE(verbose)) {
+      warning("Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms.", call. = FALSE)
+    }
   }
 
   structure(

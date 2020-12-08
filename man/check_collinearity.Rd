@@ -3,6 +3,7 @@
 \name{check_collinearity}
 \alias{check_collinearity}
 \alias{multicollinearity}
+\alias{check_collinearity.default}
 \alias{check_collinearity.glmmTMB}
 \title{Check for multicollinearity of model terms}
 \usage{
@@ -10,9 +11,12 @@ check_collinearity(x, ...)
 
 multicollinearity(x, ...)
 
+\method{check_collinearity}{default}(x, verbose = TRUE, ...)
+
 \method{check_collinearity}{glmmTMB}(
   x,
   component = c("all", "conditional", "count", "zi", "zero_inflated"),
+  verbose = TRUE,
   ...
 )
 }
@@ -22,6 +26,8 @@ and if possible, also to \code{model.matrix()} - however, it also should
 work without \code{model.matrix()}).}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle off warnings or messages.}
 
 \item{component}{For models with zero-inflation component, multicollinearity
 can be checked for the conditional model (count component,
@@ -73,6 +79,12 @@ A data frame with three columns: The name of the model term, the
   the standard error is due to the association with other predictors
   conditional on the remaining variables in the model.
 }
+\subsection{Multicollinearity and Interaction Terms}{
+  If interaction terms are included in a model, high VIF values are expected.
+  This portion of multicollinearity among the component terms of an interaction
+  is also called "inessential ill-conditioning", which leads to inflated VIF
+  values that are typically seen for models with interaction terms \cite{(Francoeur 2013)}.
+}
 }
 \note{
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
@@ -89,6 +101,7 @@ if (require("see")) {
 }
 \references{
 \itemize{
+  \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom Clusters. Open Journal of Statistics, 03(06), 24–44.
   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.
   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing. \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
