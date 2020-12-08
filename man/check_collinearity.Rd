@@ -82,8 +82,10 @@ m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)
 
 # plot results
-x <- check_collinearity(m)
-plot(x)
+if (require("see")) {
+  x <- check_collinearity(m)
+  plot(x)
+}
 }
 \references{
 \itemize{

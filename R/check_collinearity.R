@@ -68,8 +68,10 @@
 #' check_collinearity(m)
 #'
 #' # plot results
-#' x <- check_collinearity(m)
-#' plot(x)
+#' if (require("see")) {
+#'   x <- check_collinearity(m)
+#'   plot(x)
+#' }
 #' @importFrom stats vcov cov2cor terms
 #' @importFrom insight has_intercept find_formula model_info print_color
 #' @export
