@@ -141,7 +141,15 @@ multicollinearity).</p>
     <pre class="usage"><span class='fu'>check_model</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>check_model</span><span class='op'>(</span><span class='va'>x</span>, dot_size <span class='op'>=</span> <span class='fl'>2</span>, line_size <span class='op'>=</span> <span class='fl'>0.8</span>, panel <span class='op'>=</span> <span class='cn'>TRUE</span>, check <span class='op'>=</span> <span class='st'>"all"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>check_model</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  dot_size <span class='op'>=</span> <span class='fl'>2</span>,
+  line_size <span class='op'>=</span> <span class='fl'>0.8</span>,
+  panel <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  check <span class='op'>=</span> <span class='st'>"all"</span>,
+  alpha <span class='op'>=</span> <span class='fl'>0.2</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -175,6 +183,10 @@ and plotted. May be one or more of
 <code>"reqq"</code> is a QQ-plot for random effects and only available for mixed models.
 <code>"ncv"</code> checks for non-constant variance, i.e. for heteroscedasticity.
 By default, all possible checks are performed and plotted.</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>The alpha level of the confidence bands. Scalar from 0 to 1.</p></td>
     </tr>
     </table>
 
