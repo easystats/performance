@@ -16,6 +16,7 @@
 #'   \code{"reqq"} is a QQ-plot for random effects and only available for mixed models.
 #'   \code{"ncv"} checks for non-constant variance, i.e. for heteroscedasticity.
 #'   By default, all possible checks are performed and plotted.
+#' @param alpha The alpha level of the confidence bands. Scalar from 0 to 1.
 #' @param ... Currently not used.
 #'
 #' @return The data frame that is used for plotting.
@@ -46,7 +47,7 @@ check_model <- function(x, ...) {
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", ...) {
+check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", alpha = .2, ...) {
   minfo <- insight::model_info(x)
 
   if (minfo$is_bayesian) {
@@ -64,6 +65,7 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
   attr(ca, "dot_size") <- dot_size
   attr(ca, "line_size") <- line_size
   attr(ca, "check") <- check
+  attr(ca, "alpha") <- alpha
 
   ca
 }

@@ -7,7 +7,15 @@
 \usage{
 check_model(x, ...)
 
-\method{check_model}{default}(x, dot_size = 2, line_size = 0.8, panel = TRUE, check = "all", ...)
+\method{check_model}{default}(
+  x,
+  dot_size = 2,
+  line_size = 0.8,
+  panel = TRUE,
+  check = "all",
+  alpha = 0.2,
+  ...
+)
 }
 \arguments{
 \item{x}{A model object.}
@@ -27,6 +35,8 @@ and plotted. May be one or more of
 \code{"reqq"} is a QQ-plot for random effects and only available for mixed models.
 \code{"ncv"} checks for non-constant variance, i.e. for heteroscedasticity.
 By default, all possible checks are performed and plotted.}
+
+\item{alpha}{The alpha level of the confidence bands. Scalar from 0 to 1.}
 }
 \value{
 The data frame that is used for plotting.
