@@ -1,3 +1,9 @@
+# performance 0.6.2
+
+## Bug fixes
+
+* Fixed issue in `icc()` and `variance_decomposition()` for multivariate response models, where not all model parts contained random effects.
+
 # performance 0.6.1
 
 ## General

@@ -1,7 +1,7 @@
 Package: performance
 Type: Package
 Title: Assessment of Regression Models Performance
-Version: 0.6.1
+Version: 0.6.1.1
 Authors@R: c(
 	person("Daniel", 
 		"Lüdecke", 
@@ -94,6 +94,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
 Language: en-US
+Remotes: easystats/insight
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Config/testthat/start-first: watcher, parallel*

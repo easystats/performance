@@ -121,7 +121,7 @@
 #'   )
 #'   icc(model, by_group = TRUE)
 #' }
-#' @importFrom insight model_info get_variance print_color find_random find_random_slopes is_multivariate
+#' @importFrom insight is_mixed_model get_variance print_color find_random find_random_slopes is_multivariate
 #' @export
 icc <- function(model, by_group = FALSE) {
 
@@ -139,7 +139,7 @@ icc <- function(model, by_group = FALSE) {
     }
   }
 
-  if (!insight::model_info(model)$is_mixed) {
+  if (!insight::is_mixed_model(model)) {
     warning("'model' has no random effects.", call. = FALSE)
     return(NULL)
   }
@@ -221,7 +221,7 @@ icc <- function(model, by_group = FALSE) {
 
 
 #' @importFrom bayestestR ci
-#' @importFrom insight is_multivariate find_response model_info
+#' @importFrom insight is_multivariate find_response model_info is_mixed_model
 #' @importFrom stats quantile var
 #' @param ... Arguments passed down to \code{\link[brms:posterior_predict]{posterior_predict()}}.
 #' @inheritParams icc
@@ -237,12 +237,12 @@ variance_decomposition <- function(model, re_formula = NULL, robust = TRUE, ci =
   # for multivariate response models, we need a more complicated check...
   if (insight::is_multivariate(model)) {
     resp <- insight::find_response(model)
-    is.mixed <- sapply(resp, function(i) mi[[i]]$is_mixed, simplify = TRUE)
+    is.mixed <- unlist(lapply(resp, function(i) mi[[i]]$is_mixed))
     if (!any(is.mixed)) {
       warning("'model' has no random effects.", call. = FALSE)
       return(NULL)
     }
-  } else if (!mi$is_mixed) {
+  } else if (!insight::is_mixed_model(model)) {
     warning("'model' has no random effects.", call. = FALSE)
     return(NULL)
   }
