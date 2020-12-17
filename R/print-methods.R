@@ -604,20 +604,25 @@ print.check_collinearity <- function(x, ...) {
 #' @importFrom insight export_table print_color format_p
 #' @export
 print.performance_lrt <- function(x, digits = 2, ...) {
-  insight::print_color("# Likelihood-Ratio-Test for Model Comparison\n\n", "blue")
-
   # value formatting
   x$AIC <- round(x$AIC)
   if ("BIC" %in% colnames(x)) x$BIC <- round(x$BIC)
   x$p <- insight::format_p(x$p, name = NULL)
 
-  cat(insight::export_table(x, digits = digits))
-
   if (sum(x$p < .05, na.rm = TRUE) <= 1) {
     best <- which(x$p < .05)
     if (length(best) == 0) best <- 1
-    insight::print_color(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
+    footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
+  } else {
+    footer <- NULL
   }
+
+  cat(insight::export_table(
+    x,
+    digits = digits,
+    caption = c("# Likelihood-Ratio-Test for Model Comparison", "blue"),
+    footer = footer
+  ))
 
   invisible(x)
 }
@@ -627,12 +632,12 @@ print.performance_lrt <- function(x, digits = 2, ...) {
 #' @importFrom insight print_color export_table
 #' @export
 print.check_itemscale <- function(x, digits = 2, ...) {
-  insight::print_color("# Description of (Sub-)Scales\n", "blue")
+  insight::print_color("# Description of (Sub-)Scales", "blue")
 
   cat(insight::export_table(
     lapply(1:length(x), function(i) {
       out <- x[[i]]
-      attr(out, "table_caption") <- c(sprintf("Component %i\n", i), "red")
+      attr(out, "table_caption") <- c(sprintf("\nComponent %i", i), "red")
       attr(out, "table_footer") <- c(sprintf("\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
                                              attributes(out)$item_intercorrelation,
                                              attributes(out)$cronbachs_alpha), "yellow")
