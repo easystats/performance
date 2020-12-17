@@ -632,8 +632,8 @@ print.check_itemscale <- function(x, digits = 2, ...) {
   cat(insight::export_table(
     lapply(1:length(x), function(i) {
       out <- x[[i]]
-      attr(out, "table_caption") <- c(sprintf("Component %i", i), "red")
-      attr(out, "table_footer") <- c(sprintf("Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+      attr(out, "table_caption") <- c(sprintf("Component %i\n", i), "red")
+      attr(out, "table_footer") <- c(sprintf("\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
                                              attributes(out)$item_intercorrelation,
                                              attributes(out)$cronbachs_alpha), "yellow")
 
