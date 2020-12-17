@@ -160,9 +160,9 @@
 <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span> <span class='op'>+</span> <span class='va'>disp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test for Model Comparison
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test for Model Comparison</span><span>
 #&gt; 
-#&gt; </span><span>Model | Type | Df | AIC |     p
+#&gt; Model | Type | Df | AIC |     p
 #&gt; -------------------------------
 #&gt; m1    |   lm |  3 | 156 |      
 #&gt; m2    |   lm |  4 | 157 | 0.507
