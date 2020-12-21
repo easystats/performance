@@ -1,5 +1,11 @@
 # performance 0.6.2
 
+## Changes to functions
+
+### `model_performance()`
+
+* Added more diagnostics to models of class `ivreg`.
+
 ## Bug fixes
 
 * Fixed issue in `icc()` and `variance_decomposition()` for multivariate response models, where not all model parts contained random effects.
