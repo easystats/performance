@@ -123,9 +123,9 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   }
 
   if (!is.null(LRTs)) {
-    LRTs$Df <- NULL
+    LRTs <- LRTs[c("Model", "Type", "p")]
     LRTs$Model <- sapply(object_names, deparse)
-    dfs <- merge(dfs, LRTs, all = TRUE, sort = FALSE)
+    dfs <- merge(dfs, LRTs, by = c("Model", "Type"), all = TRUE, sort = FALSE)
   }
 
   # check if all models were fit from same data
