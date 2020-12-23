@@ -136,3 +136,75 @@ performance_lrt.lavaan <- function(...) {
   class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")
   out
 }
+
+
+
+
+
+
+
+
+
+# Linear Models --------------------------
+
+# m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+# m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+# m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+# objects <- list(m1 = m1, m2 = m2, m3 = m3)
+#
+# So 'OLS' is equivalent to the anova() implementation
+# .performance_lrt_lm(objects, estimator="OLS")
+# anova(m1, m2, test="LRT")
+# anova(m1, m3, test="LRT")
+#
+# And 'ML' to the lmtest one
+# .performance_lrt_lm(objects, estimator="ML")
+# lmtest::lrtest(m1, m2)
+# lmtest::lrtest(m1, m3)
+.performance_lrt_lm <- function(objects, estimator="OLS", ref_model=1) {
+
+  # Get reference model
+  ref <- objects[[ref_model]]
+
+  out <- .performance_lrt_lm_pairwise(ref, ref, estimator=estimator)
+  out$p <- out$Chi2 <- NA
+
+  out <- rbind(out,
+               t(sapply(objects[-ref_model], .performance_lrt_lm_pairwise, ref=ref, estimator=estimator)))
+  row.names(out) <- NULL
+  out <- cbind(data.frame(Model = names(objects)), out)
+
+  out
+}
+
+
+.performance_lrt_lm_pairwise <- function(model, ref, estimator="OLS") {
+  # See https://stats.stackexchange.com/questions/155474/why-does-lrtest-not-match-anovatest-lrt
+
+  # Get DF
+  # TODO: Would be good to use parameters::dof if available in insight
+  df_ref <- df.residual(ref)
+  df_model <- df.residual(model)
+  df_diff <- df_model - df_ref
+
+  # LogLik Function
+  loglik_function <- function(object, estimator) {
+    sum(dnorm(model.response(model.frame(object)), mean = fitted(object), sd = estimator, log = TRUE))
+  }
+
+  # Get Statistic
+  if(tolower(estimator) == "ols"){
+    estim <- function(object) sqrt(sum(residuals(object)^2) / df.residual(object))
+    loglik <- loglik_function(ref, estim(model))
+    stat <- -2 * (loglik - loglik_function(model, estim(model)))
+  } else{
+    estim <- function(object) sqrt(mean(residuals(object)^2))
+    loglik <- loglik_function(ref, estim(ref))
+    stat <- -2 * (loglik - loglik_function(model, estim(model)))
+  }
+  # Get p-value
+  p <- pchisq(stat, abs(df_diff), lower.tail = FALSE)
+
+  # Out
+  data.frame("df"=df_model, "LogLik"=loglik, "Chi2"=stat, "p"=p)
+}
