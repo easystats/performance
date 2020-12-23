@@ -8,7 +8,7 @@ if (require("testthat") && require("performance")) {
   test_that("compare_performance", {
     expect_equal(
       colnames(compare_performance(lm1, lm2, lm3)),
-      c("Model", "Type", "AIC", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma", "BF", "df", "p")
+      c("Model", "Type", "AIC", "BIC", "BF", "R2", "R2_adjusted", "RMSE", "Sigma", "df", "p")
     )
 
     expect_warning(

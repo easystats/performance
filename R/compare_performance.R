@@ -140,6 +140,14 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
     dfs <- .rank_performance_indices(dfs, verbose)
   }
 
+  # Reorder columns
+  if(all(c("BIC", "BF") %in% names(dfs))){
+    idx1 <- grep("BIC", names(dfs))
+    idx2 <- grep("BF", names(dfs))
+    last_part <- (idx1+1):ncol(dfs)
+    dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
+  }
+
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
   class(dfs) <- c("compare_performance", "see_compare_performance", class(dfs))
   dfs
