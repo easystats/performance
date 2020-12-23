@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_performance.ivreg.R
 \name{model_performance.ivreg}
 \alias{model_performance.ivreg}
-\title{Performance of Regression Models}
+\title{Performance of instrumental variable regression models}
 \usage{
 \method{model_performance}{ivreg}(model, metrics = "all", verbose = TRUE, ...)
 }
@@ -16,5 +16,5 @@
 \item{...}{Arguments passed to or from other methods.}
 }
 \description{
-Performance of Regression Models
+Performance of instrumental variable regression models
 }

@@ -19,6 +19,7 @@ reference:
   - model_performance.stanreg
   - model_performance.lavaan
   - model_performance.rma
+  - model_performance.ivreg
 
 - title: "Common Indices"
   contents:

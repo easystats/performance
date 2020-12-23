@@ -1,4 +1,4 @@
-#' @importFrom insight format_value format_p format_bf parameters_table
+#' @importFrom insight format_value format_p format_bf format_table
 #' @export
 format.compare_performance <- function(x, digits = 2, format = NULL, ...) {
   # if we have ranking, add score and remove incomplete indices in print
@@ -10,12 +10,12 @@ format.compare_performance <- function(x, digits = 2, format = NULL, ...) {
     x$BF[is.na(x$BF)] <- 1
     # x$BF <- insight::format_bf(x$BF)
   }
-  insight::parameters_table(x)
+  insight::format_table(x)
 }
 
 
 #' @export
 format.performance_model <- function(x, digits = 2, format = NULL, ...) {
   # format p-values for meta-analysis
-  insight::parameters_table(x)
+  insight::format_table(x)
 }

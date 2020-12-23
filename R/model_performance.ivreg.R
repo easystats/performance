@@ -1,4 +1,4 @@
-#' Performance of Regression Models
+#' Performance of instrumental variable regression models
 #'
 #' @inheritParams model_performance.lm
 #' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "SIGMA", "Sargan", "Sargan_p", "Wu_Hausman", "Wu_Hausman_p")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
