@@ -13,7 +13,7 @@ performance_lrt(...)
 A data frame, based on the results from \code{anova()}.
 }
 \description{
-Compute Likelihood-Ratio-Test for model comparison.
+Compute Likelihood-Ratio-Test (LRT) for model comparison. For regression models, this is obtained through the \code{anova(..., test="LRT")} function. This test gives usually somewhat close results (if not equivalent) to the commonly used F-test (obtained by default with \code{anova(...)}). The LRT is a maximum likelihood test used to see which model is a better (more likely) explanation of the data. Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in return are more efficient.
 }
 \details{
 This only makes statistical sense if the models are nested. It is conventional to list the models from smallest to largest, but this is up to the user. The output shows the tests of the models against one another in the order specified.
@@ -23,6 +23,20 @@ m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
 m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 performance_lrt(m1, m2, m3)
+
+if (require("lavaan")) {
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9 "
+  m1 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+
+  structure <- " visual  =~ x2 + x3
+                 textual =~ x4 + x6
+                 speed   =~ x8 + x9 "
+  m2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+
+  performance_lrt(m1, m2)
+}
 }
 \seealso{
 \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.

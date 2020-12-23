@@ -1,7 +1,7 @@
 #' @title Likelihood-Ratio-Test for Model Comparison
 #' @name performance_lrt
 #'
-#' @description Compute Likelihood-Ratio-Test for model comparison.
+#' @description Compute Likelihood-Ratio-Test (LRT) for model comparison. For regression models, this is obtained through the \code{anova(..., test="LRT")} function. This test gives usually somewhat close results (if not equivalent) to the commonly used F-test (obtained by default with \code{anova(...)}). The LRT is a maximum likelihood test used to see which model is a better (more likely) explanation of the data. Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in return are more efficient.
 #'
 #' @param ... Multiple model objects, which should respond to \code{anova()}.
 #'
@@ -16,6 +16,20 @@
 #' m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
 #' m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' performance_lrt(m1, m2, m3)
+#'
+#' if (require("lavaan")) {
+#'   structure <- " visual  =~ x1 + x2 + x3
+#'                  textual =~ x4 + x5 + x6
+#'                  speed   =~ x7 + x8 + x9 "
+#'   m1 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+#'
+#'   structure <- " visual  =~ x2 + x3
+#'                  textual =~ x4 + x6
+#'                  speed   =~ x8 + x9 "
+#'   m2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+#'
+#'   performance_lrt(m1, m2)
+#' }
 #' @export
 performance_lrt <- function(...) {
   UseMethod("performance_lrt")
@@ -26,15 +40,16 @@ performance_lrt <- function(...) {
 #' @importFrom insight is_model
 #' @export
 performance_lrt.default <- function(...) {
-  if (!all(sapply(list(...), insight::is_model))) {
-    stop("All objects must be valid regression model objects!")
+  objects <- list(...)
+
+  if (!all(sapply(objects, insight::is_model))) {
+    stop("All objects must be valid regression model objects.")
   }
 
-  objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
   # LRT for model comparison
-  if (length(list(...)) > 1) {
+  if (length(objects) > 1) {
     # sd_mle <- function(model) sqrt(mean(residuals(model)^2))
     # ll <- function(model, sd) {
     #   sum(dnorm(insight::get_response(model), mean = fitted(model), sd = sd, log = TRUE))
@@ -59,19 +74,20 @@ performance_lrt.default <- function(...) {
 #' @importFrom insight is_model
 #' @export
 performance_lrt.lavaan <- function(...) {
-  if (!all(sapply(list(...), insight::is_model))) {
-    stop("All objects must be valid regression model objects!")
+  objects <- list(...)
+
+  if (!all(sapply(objects, insight::is_model))) {
+    stop("All objects must be valid lavaan models.")
   }
 
   if (!requireNamespace("lavaan", quietly = TRUE)) {
     stop("Package 'lavaan' required. Please install it.")
   }
 
-  objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
   # LRT for model comparison
-  if (length(list(...)) > 1) {
+  if (length(objects) > 1) {
     lrt <- lavaan::anova(..., test = "LRT")
     .performance_lrt(objects, object_names, lrt)
   } else {
@@ -96,17 +112,26 @@ performance_lrt.lavaan <- function(...) {
   # bind all data
   out <- cbind(do.call(rbind, m), lrt)
 
-  # add AIC, if necessary
-  if (!"AIC" %in% names(out)) {
-    out$Df <- sapply(objects, function(i) length(insight::find_parameters(i, flatten = TRUE)))
-    out$AIC <- suppressWarnings(sapply(objects, performance_aic))
-  }
+  # Drop cols
+  out <- out[!names(out) %in% c("AIC", "BIC", "Df diff", "Chisq diff")]  # For regressions
 
-  # preserve only some columns
-  out <- out[, intersect(c("Model", "Type", "Df", "AIC", "BIC", "F", "Chisq", "Pr(>Chisq)", "Pr(>Chi)", "Pr(>F)"), colnames(out))]
-  colnames(out)[names(out) %in% c("Chisq", "F")] <- "Statistic"
+  # Rename columns
+  colnames(out)[names(out) == "Df"] <- "df"
+  colnames(out)[names(out) == "Res.Df"] <- "df_error"
+  colnames(out)[names(out) == "Chisq"] <- "Chi2"
+  colnames(out)[names(out) == "Sum of Sq"] <- "Sum_Squares"
   colnames(out)[grepl("^Pr\\(>", names(out))] <- "p"
   rownames(out) <- NULL
+
+  # Reorder columns
+  cols <- colnames(out)
+  if(all(c("df", "Chi2") %in% cols)) {
+    cols[cols %in% c("df", "Chi2")] <- c("Chi2", "df")  # Move 'df' column after Chi2
+  }
+  if(all(c("df_error", "RSS", "df", "Sum_Squares") %in% cols)) {
+    cols[cols %in% c("df_error", "RSS", "df", "Sum_Squares")] <- c("RSS", "Sum_Squares", "df", "df_error")  # 'df_error' after 'df'
+  }
+  out <- out[cols]
 
   class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")
   out

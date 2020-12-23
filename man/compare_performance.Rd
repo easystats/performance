@@ -75,6 +75,13 @@ different models at once and hence allows comparison of indices across models.
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
+data(iris)
+lm1 <- lm(Sepal.Length ~ Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
+compare_performance(lm1, lm2, lm3)
+compare_performance(lm1, lm2, lm3, rank = TRUE)
+
 if (require("lme4")) {
   m1 <- lm(mpg ~ wt + cyl, data = mtcars)
   m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
@@ -82,10 +89,4 @@ if (require("lme4")) {
   compare_performance(m1, m2, m3)
 }
 
-data(iris)
-lm1 <- lm(Sepal.Length ~ Species, data = iris)
-lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
-lm3 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris)
-compare_performance(lm1, lm2, lm3)
-compare_performance(lm1, lm2, lm3, rank = TRUE)
 }

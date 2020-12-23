@@ -605,8 +605,6 @@ print.check_collinearity <- function(x, ...) {
 #' @export
 print.performance_lrt <- function(x, digits = 2, ...) {
   # value formatting
-  x$AIC <- round(x$AIC)
-  if ("BIC" %in% colnames(x)) x$BIC <- round(x$BIC)
   x$p <- insight::format_p(x$p, name = NULL)
 
   if (sum(x$p < .05, na.rm = TRUE) <= 1) {

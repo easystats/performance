@@ -2,6 +2,11 @@
 
 ## Changes to functions
 
+### `performance_lrt()`
+
+* Does not return AIC/BIC now (as they are not related to LRT *per se* and can be easily obtained with other functions).
+* Fixed column names for consistency.
+
 ### `model_performance()`
 
 * Added more diagnostics to models of class `ivreg`.
