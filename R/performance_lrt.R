@@ -125,10 +125,10 @@ performance_lrt.lavaan <- function(...) {
 
   # Reorder columns
   cols <- colnames(out)
-  if(all(c("df", "Chi2") %in% cols)) {
+  if (all(c("df", "Chi2") %in% cols)) {
     cols[cols %in% c("df", "Chi2")] <- c("Chi2", "df")  # Move 'df' column after Chi2
   }
-  if(all(c("df_error", "RSS", "df", "Sum_Squares") %in% cols)) {
+  if (all(c("df_error", "RSS", "df", "Sum_Squares") %in% cols)) {
     cols[cols %in% c("df_error", "RSS", "df", "Sum_Squares")] <- c("RSS", "Sum_Squares", "df", "df_error")  # 'df_error' after 'df'
   }
   out <- out[cols]
@@ -161,50 +161,56 @@ performance_lrt.lavaan <- function(...) {
 # .performance_lrt_lm(objects, estimator="ML")
 # lmtest::lrtest(m1, m2)
 # lmtest::lrtest(m1, m3)
-.performance_lrt_lm <- function(objects, estimator="OLS", ref_model=1) {
+.performance_lrt_lm <- function(objects, estimator = "OLS", ref_model = 1) {
 
   # Get reference model
   ref <- objects[[ref_model]]
 
-  out <- .performance_lrt_lm_pairwise(ref, ref, estimator=estimator)
+  out <- .performance_lrt_lm_pairwise(ref, ref, estimator = estimator)
   out$p <- out$Chi2 <- NA
 
-  out <- rbind(out,
-               t(sapply(objects[-ref_model], .performance_lrt_lm_pairwise, ref=ref, estimator=estimator)))
+  out <- rbind(out, t(sapply(objects[-ref_model], .performance_lrt_lm_pairwise, ref = ref, estimator = estimator)))
   row.names(out) <- NULL
-  out <- cbind(data.frame(Model = names(objects)), out)
+  out <- cbind(data.frame(Model = names(objects), stringsAsFactors = FALSE), out)
 
   out
 }
 
 
+#' @importFrom stats df.residual dnorm fitted model.frame model.response dnorm residuals pchisq
 .performance_lrt_lm_pairwise <- function(model, ref, estimator="OLS") {
   # See https://stats.stackexchange.com/questions/155474/why-does-lrtest-not-match-anovatest-lrt
 
   # Get DF
   # TODO: Would be good to use parameters::dof if available in insight
-  df_ref <- df.residual(ref)
-  df_model <- df.residual(model)
+  df_ref <- stats::df.residual(ref)
+  df_model <- stats::df.residual(model)
   df_diff <- df_model - df_ref
 
   # LogLik Function
   loglik_function <- function(object, estimator) {
-    sum(dnorm(model.response(model.frame(object)), mean = fitted(object), sd = estimator, log = TRUE))
+    sum(stats::dnorm(stats::model.response(stats::model.frame(object)), mean = stats::fitted(object), sd = estimator, log = TRUE))
   }
 
   # Get Statistic
-  if(tolower(estimator) == "ols"){
-    estim <- function(object) sqrt(sum(residuals(object)^2) / df.residual(object))
+  if (tolower(estimator) == "ols") {
+    estim <- function(object) sqrt(sum(stats::residuals(object)^2) / stats::df.residual(object))
     loglik <- loglik_function(ref, estim(model))
     stat <- -2 * (loglik - loglik_function(model, estim(model)))
   } else{
-    estim <- function(object) sqrt(mean(residuals(object)^2))
+    estim <- function(object) sqrt(mean(stats::residuals(object)^2))
     loglik <- loglik_function(ref, estim(ref))
     stat <- -2 * (loglik - loglik_function(model, estim(model)))
   }
   # Get p-value
-  p <- pchisq(stat, abs(df_diff), lower.tail = FALSE)
+  p <- stats::pchisq(stat, abs(df_diff), lower.tail = FALSE)
 
   # Out
-  data.frame("df"=df_model, "LogLik"=loglik, "Chi2"=stat, "p"=p)
+  data.frame(
+    "df" = df_model,
+    "LogLik" = loglik,
+    "Chi2" = stat,
+    "p" = p,
+    stringsAsFactors = FALSE
+  )
 }
