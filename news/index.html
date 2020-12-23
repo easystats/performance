@@ -132,6 +132,27 @@
 <h1 class="page-header" data-toc-text="0.6.2">
 <a href="#performance-062" class="anchor"></a>performance 0.6.2<small> Unreleased </small>
 </h1>
+<div id="changes-to-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<div id="performance_lrt" class="section level3">
+<h3 class="hasAnchor">
+<a href="#performance_lrt" class="anchor"></a><code>performance_lrt()</code>
+</h3>
+<ul>
+<li>Does not return AIC/BIC now (as they are not related to LRT <em>per se</em> and can be easily obtained with other functions).</li>
+<li>Fixed column names for consistency.</li>
+</ul>
+</div>
+<div id="model_performance" class="section level3">
+<h3 class="hasAnchor">
+<a href="#model_performance" class="anchor"></a><code>model_performance()</code>
+</h3>
+<ul>
+<li>Added more diagnostics to models of class <code>ivreg</code>.</li>
+</ul>
+</div>
+</div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug fixes</h2>
@@ -183,12 +204,12 @@
 <code><a href="https://easystats.github.io/insight/reference/display.html">display()</a></code>, to print output from package-functions into different formats. <code><a href="https://easystats.github.io/insight/reference/display.html">print_md()</a></code> is an alias for <code><a href="https://easystats.github.io/insight/reference/display.html">display(format = "markdown")</a></code>.</li>
 </ul>
 </div>
-<div id="changes-to-functions" class="section level2">
+<div id="changes-to-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
-<div id="model_performance" class="section level3">
+<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<div id="model_performance-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#model_performance" class="anchor"></a><code>model_performance()</code>
+<a href="#model_performance-1" class="anchor"></a><code>model_performance()</code>
 </h3>
 <ul>
 <li>
@@ -242,9 +263,9 @@
 <code><a href="../reference/r2_bayes.html">r2_posterior()</a></code> for Bayesian models to obtain posterior distributions of R-squared.</li>
 </ul>
 </div>
-<div id="changes-to-functions-1" class="section level2">
+<div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-1" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/143'>#143</a> ).</li>
@@ -312,9 +333,9 @@
 <li>Removed suggested packages that have been removed from CRAN.</li>
 </ul>
 </div>
-<div id="changes-to-functions-2" class="section level2">
+<div id="changes-to-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/icc.html">icc()</a></code> now also computes a “classical” ICC for <code>brmsfit</code> models. The former way of calculating an “ICC” for <code>brmsfit</code> models is now available as new function called <code><a href="../reference/icc.html">variance_decomposition()</a></code>.</li>
@@ -340,9 +361,9 @@
 <li>Support for models from package <em>mfx</em>.</li>
 </ul>
 </div>
-<div id="changes-to-functions-3" class="section level2">
+<div id="changes-to-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.rma.html">model_performance.rma()</a></code> now includes results from heterogeneity test for meta-analysis objects.</li>
@@ -373,9 +394,9 @@
 <li>Support for <code>bayesx</code> models.</li>
 </ul>
 </div>
-<div id="changes-to-functions-4" class="section level2">
+<div id="changes-to-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-4" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/icc.html">icc()</a></code> gains a <code>by_group</code> argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.</li>
@@ -407,9 +428,9 @@
 <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/r2.html">r2()</a></code> now support <em>rma</em>-objects from package <em>metafor</em>, <em>mlm</em> and <em>bife</em> models.</li>
 </ul>
 </div>
-<div id="changes-to-functions-5" class="section level2">
+<div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>bayesfactor</code> argument, to include or exclude the Bayes factor for model comparisons in the output.</li>
@@ -487,9 +508,9 @@
 <li>Fix issues with CRAN checks.</li>
 </ul>
 </div>
-<div id="changes-to-functions-6" class="section level2">
+<div id="changes-to-functions-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now calculates AIC for Tweedie models.</li>
@@ -513,9 +534,9 @@
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
 </ul>
 </div>
-<div id="changes-to-functions-7" class="section level2">
+<div id="changes-to-functions-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
@@ -565,9 +586,9 @@
 <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">principal_components()</a></code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">parameters::principal_components()</a></code> now.</li>
 </ul>
 </div>
-<div id="changes-to-functions-8" class="section level2">
+<div id="changes-to-functions-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-8" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</li>
@@ -613,9 +634,9 @@
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</li>
 </ul>
 </div>
-<div id="changes-to-functions-9" class="section level2">
+<div id="changes-to-functions-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-10" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</li>
@@ -727,9 +748,9 @@
 <code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
 </ul>
 </div>
-<div id="changes-to-functions-10" class="section level2">
+<div id="changes-to-functions-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-to-functions-10" class="anchor"></a>Changes to functions</h2>
+<a href="#changes-to-functions-11" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>
