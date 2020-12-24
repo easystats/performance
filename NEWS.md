@@ -5,6 +5,7 @@
 ### `performance_lrt()`
 
 * Does not return AIC/BIC now (as they are not related to LRT *per se* and can be easily obtained with other functions).
+* Now contains a column with the difference in degrees of freedom between models.
 * Fixed column names for consistency.
 
 ### `model_performance()`

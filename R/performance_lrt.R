@@ -115,12 +115,13 @@ performance_lrt.lavaan <- function(...) {
 
   # Rename columns
   colnames(out)[names(out) == "Df"] <- "df"
+  colnames(out)[names(out) == "Df diff"] <- "df_diff"
   colnames(out)[names(out) == "Chisq"] <- "Chi2"
   colnames(out)[grepl("^Pr\\(>", names(out))] <- "p"
   out$Model <- row.names(out)
 
   # Bind all data
-  out <- merge(names_types, out[c("Model", "df", "Chi2", "p")], by = "Model")
+  out <- merge(names_types, out[c("Model", "df", "df_diff", "Chi2", "p")], by = "Model")
 
   class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")
   out
@@ -187,6 +188,7 @@ performance_lrt.lavaan <- function(...) {
   out <- stats::anova(..., test = "LRT")
   data.frame(
     "df" = out$Res.Df,
+    "df_diff" = out$Df,
     "Chi2" = stats::qchisq(out$`Pr(>Chi)`, out$Df, lower.tail = TRUE),
     "p" = out$`Pr(>Chi)`,
     stringsAsFactors = FALSE
@@ -226,6 +228,7 @@ performance_lrt.lavaan <- function(...) {
   # Out
   data.frame(
     "df" = df_model,
+    "df_diff" = df_diff,
     "LogLik" = loglik,
     "Chi2" = stat,
     "p" = p,
