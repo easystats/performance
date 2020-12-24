@@ -52,7 +52,7 @@ performance_lrt <- function(...) {
 #' @importFrom stats anova
 #' @importFrom insight is_model
 #' @export
-performance_lrt.List_of_Regressions <- function(..., estimator="OLS") {
+performance_lrt.List_of_Regressions <- function(..., estimator = "OLS") {
   objects <- list(...)
 
   if (!all(sapply(objects, insight::is_model))) {
@@ -64,7 +64,7 @@ performance_lrt.List_of_Regressions <- function(..., estimator="OLS") {
 
   # LRT for model comparison
   if (length(objects) > 1) {
-    out <- .performance_lrt_lm(..., objects = objects, estimator=estimator)
+    out <- .performance_lrt_lm(..., objects = objects, estimator = estimator)
   } else {
     warning("At least two models required for a Likelihood-Ratio-Test.", call. = FALSE)
   }
@@ -106,7 +106,7 @@ performance_lrt.lavaan <- function(...) {
     data.frame(Model = as.character(.y), Type = class(.x)[1], stringsAsFactors = FALSE)
   }, objects, object_names, SIMPLIFY = FALSE))
 
-  out <- as.data.frame(lavaan::lavTestLRT(..., test = "LRT", model.names=object_names))
+  out <- as.data.frame(lavaan::lavTestLRT(..., test = "LRT", model.names = object_names))
 
   # Rename columns
   colnames(out)[names(out) == "Df"] <- "df"
@@ -115,7 +115,7 @@ performance_lrt.lavaan <- function(...) {
   out$Model <- row.names(out)
 
   # Bind all data
-  out <- merge(names_types, out[c("Model", "df", "Chi2", "p")], by="Model")
+  out <- merge(names_types, out[c("Model", "df", "Chi2", "p")], by = "Model")
 
   class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")
   out
@@ -152,13 +152,13 @@ performance_lrt.lavaan <- function(...) {
 # lmtest::lrtest(m1, m3)
 .performance_lrt_lm <- function(..., objects, estimator = "OLS") {
 
-  if(tolower(estimator) == "ols"){
+  if (tolower(estimator) == "ols") {
     out <- .performance_lrt_lm_OLS(...)
   } else{
     out <- .performance_lrt_lm_ML(objects[[1]], objects[[1]], estimator = estimator)
     out$p <- out$Chi2 <- NA
-    for(i in 2:length(objects)){
-      out <- rbind(out, .performance_lrt_lm_ML(objects[[i]], objects[[i-1]], estimator = estimator))
+    for (i in 2:length(objects)) {
+      out <- rbind(out, .performance_lrt_lm_ML(objects[[i]], objects[[i - 1]], estimator = estimator))
     }
   }
 
@@ -177,12 +177,12 @@ performance_lrt.lavaan <- function(...) {
 
 
 
-#' @importFrom stats df.residual dnorm fitted model.frame model.response dnorm residuals pchisq
+#' @importFrom stats qchisq anova
 .performance_lrt_lm_OLS <- function(...) {
-  out <- anova(..., test="LRT")
+  out <- stats::anova(..., test = "LRT")
   data.frame(
     "df" = out$Res.Df,
-    "Chi2" = qchisq(out$`Pr(>Chi)`, out$Df, lower.tail = TRUE),
+    "Chi2" = stats::qchisq(out$`Pr(>Chi)`, out$Df, lower.tail = TRUE),
     "p" = out$`Pr(>Chi)`,
     stringsAsFactors = FALSE
   )
