@@ -140,6 +140,7 @@
 <a href="#performance_lrt" class="anchor"></a><code>performance_lrt()</code>
 </h3>
 <ul>
+<li>All models are now tested against the same reference model (the first one). This is a breaking change and a different behaviour that <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html">anova(..., test="LRT")</a></code>, which tests each model to the previous one. But makes more sense to have the same reference and is consistent with how the BIC-BF comparison is done.</li>
 <li>Does not return AIC/BIC now (as they are not related to LRT <em>per se</em> and can be easily obtained with other functions).</li>
 <li>Fixed column names for consistency.</li>
 </ul>
