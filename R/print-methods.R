@@ -608,11 +608,7 @@ print.performance_lrt <- function(x, digits = 2, ...) {
   # Footer
   if("LogLik" %in% names(x)){
     best <- which.max(x$LogLik)
-    if (best == 1) {
-      footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
-    } else {
-      footer <- c(sprintf("\nModel '%s' seems to have the best model fit, %s different from the reference model '%s'.", x$Model[best], ifelse(x$p[best] < .05, "being significantly", "altough being non significantly"), x$Model[1]), "yellow")
-    }
+    footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
   } else{
     footer <- NULL
   }

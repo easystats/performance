@@ -2,12 +2,17 @@
 % Please edit documentation in R/performance_lrt.R
 \name{performance_lrt}
 \alias{performance_lrt}
+\alias{performance_lrt.List_of_Regressions}
 \title{Likelihood-Ratio-Test for Model Comparison}
 \usage{
 performance_lrt(...)
+
+\method{performance_lrt}{List_of_Regressions}(..., estimator = "OLS")
 }
 \arguments{
 \item{...}{Multiple model objects.}
+
+\item{estimator}{Applied when comparing regression models. Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), then it uses the same method as \code{anova(..., test="LRT")} implemented in base R, i.e., scaling by n−k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If \code{estimator="ML"}, which is for instance used by \code{lrtest(...)} in the \code{lmtest}, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.}
 }
 \value{
 A data frame, based on the results from \code{anova()}.
@@ -15,7 +20,7 @@ A data frame, based on the results from \code{anova()}.
 \description{
 Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used F-test (obtained by default with \code{anova(...)}). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient.
 \itemize{
-\item For regression models, this is similar to \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, with one major difference: all models are tested against the same reference model (the first one), instead of testing each model to its previous neighbour.
+\item For regression models, this is similar to \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, depending on the estimator.
 \item For \code{lavaan} models (SEM, CFA), the function calls \code{lavaan::lavTestLRT()}.
 }
 }
@@ -41,7 +46,11 @@ if (require("lavaan")) {
                  speed   =~ x8 + x9 "
   m2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 
-  performance_lrt(m1, m2)
+  structure <- " visual  =~ x3
+                 textual =~ x6
+                 speed   =~ x8 "
+  m3 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+  performance_lrt(m1, m2, m3)
 }
 }
 \seealso{

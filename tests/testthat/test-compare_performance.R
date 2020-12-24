@@ -6,20 +6,20 @@ if (require("testthat") && require("performance")) {
   lm4 <- lm(Sepal.Length ~ Species * Petal.Length, data = iris[-1, ])
 
   test_that("compare_performance", {
-    expect_equal(
+    testthat::expect_equal(
       colnames(compare_performance(lm1, lm2, lm3)),
       c("Model", "Type", "AIC", "BIC", "BF", "R2", "R2_adjusted", "RMSE", "Sigma", "Chi2", "df", "p")
     )
 
-    expect_warning(
-      expect_equal(
+    testthat::expect_warning(
+      testthat::expect_equal(
         colnames(compare_performance(lm1, lm2, lm3, lm4)),
-        c("Model", "Type", "AIC", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma", "Chi2", "df", "p")
+        c("Model", "Type", "AIC", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma")
       )
     )
-    expect_equal(
+    testthat::expect_equal(
       colnames(compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)),
-      c("Model", "Type", "AIC", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma", "Chi2", "df", "p")
+      c("Model", "Type", "AIC", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma")
     )
   })
 }

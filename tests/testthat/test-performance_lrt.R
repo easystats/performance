@@ -10,22 +10,19 @@ if (require("testthat") &&
     # anova
     rez <- performance_lrt(m1, m2, m3, estimator="OLS")
 
-    ref <- anova(m1, m2, test="LRT")
-    testthat::expect_equal(ref$`Pr(>Chi)`[2], rez$p[2], tol=1e-06)
-
-    ref <- anova(m1, m3, test="LRT")
-    testthat::expect_equal(ref$`Pr(>Chi)`[2], rez$p[3], tol=1e-06)
+    ref <- anova(m1, m2, m3, test="LRT")
+    testthat::expect_equal(ref$`Pr(>Chi)`, rez$p, tol=1e-06)
 
     # lrtest
     rez <- performance_lrt(m1, m2, m3, estimator="ML")
 
-    # lmtest::lrtest(m1, m2)$`Pr(>Chisq)`[2]
-    testthat::expect_equal(0.4747344, rez$p[2], tol=1e-06)
-    # lmtest::lrtest(m1, m2)$LogLik[2]
-    testthat::expect_equal(-73.74957, rez$LogLik[2], tol=1e-06)
-
-    # lmtest::lrtest(m1, m3)$`Pr(>Chisq)`[2]
-    testthat::expect_equal(0.636056, rez$p[3], tol=1e-06)
+    # ref <- lmtest::lrtest(m1, m2, m3)
+    # ref$`Pr(>Chisq)`
+    testthat::expect_equal(c(NA, 0.4747344, 0.5302030), rez$p, tol=1e-06)
+    # ref$LogLik
+    testthat::expect_equal(c(-74.00503, -73.74957, -73.55256), rez$LogLik, tol=1e-06)
+    # ref$Chisq
+    testthat::expect_equal(c(NA, 0.5109349, 0.3940024), rez$Chi2, tol=1e-06)
   })
 
 }
