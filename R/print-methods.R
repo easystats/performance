@@ -604,21 +604,26 @@ print.check_collinearity <- function(x, ...) {
 #' @importFrom insight export_table print_color format_p
 #' @export
 print.performance_lrt <- function(x, digits = 2, ...) {
-  # value formatting
-  x$p <- insight::format_p(x$p, name = NULL)
 
-  if (sum(x$p < .05, na.rm = TRUE) <= 1) {
-    best <- which(x$p < .05)
-    if (length(best) == 0) best <- 1
-    footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
-  } else {
+  # Footer
+  if("LogLik" %in% names(x)){
+    best <- which.max(x$LogLik)
+    if (best == 1) {
+      footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
+    } else {
+      footer <- c(sprintf("\nModel '%s' seems to have the best model fit, %s different from the reference model '%s'.", x$Model[best], ifelse(x$p[best] < .05, "being significantly", "altough being non significantly"), x$Model[1]), "yellow")
+    }
+  } else{
     footer <- NULL
   }
+
+  # value formatting
+  x$p <- insight::format_p(x$p, name = NULL)
 
   cat(insight::export_table(
     x,
     digits = digits,
-    caption = c("# Likelihood-Ratio-Test for Model Comparison", "blue"),
+    caption = c("# Likelihood-Ratio-Test (LRT) for Model Comparison", "blue"),
     footer = footer
   ))
 

@@ -124,7 +124,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   }
 
   if (!is.null(LRTs)) {
-    LRTs <- LRTs[c("Model", "Type", "df", "p")]
+    LRTs <- LRTs[c("Model", "Type", "Chi2", "df", "p")]
     LRTs$Model <- sapply(object_names, deparse)
     dfs <- merge(dfs, LRTs, by = c("Model", "Type"), all = TRUE, sort = FALSE)
   }

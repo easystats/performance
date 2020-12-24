@@ -4,6 +4,7 @@
 
 ### `performance_lrt()`
 
+* All models are now tested against the same reference model (the first one). This is a breaking change and a different behaviour that `anova(..., test="LRT")`, which tests each model to the previous one. But makes more sense to have the same reference and is consistent with how the BIC-BF comparison is done.
 * Does not return AIC/BIC now (as they are not related to LRT *per se* and can be easily obtained with other functions).
 * Fixed column names for consistency.
 
