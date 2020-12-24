@@ -189,7 +189,7 @@ performance_lrt.lavaan <- function(...) {
   data.frame(
     "df" = out$Res.Df,
     "df_diff" = out$Df,
-    "Chi2" = stats::qchisq(out$`Pr(>Chi)`, out$Df, lower.tail = TRUE),
+    "Chi2" = stats::qchisq(out$`Pr(>Chi)`, abs(out$Df), lower.tail = TRUE),
     "p" = out$`Pr(>Chi)`,
     stringsAsFactors = FALSE
   )
