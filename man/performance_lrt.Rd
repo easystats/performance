@@ -38,19 +38,24 @@ performance_lrt(m1, m2, m3)
 if (require("lavaan")) {
   structure <- " visual  =~ x1 + x2 + x3
                  textual =~ x4 + x5 + x6
-                 speed   =~ x7 + x8 + x9 "
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ textual + speed"
   m1 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 
-  structure <- " visual  =~ x2 + x3
-                 textual =~ x4 + x6
-                 speed   =~ x8 + x9 "
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ 0*textual + speed"
   m2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 
-  structure <- " visual  =~ x3
-                 textual =~ x6
-                 speed   =~ x8 "
+  structure <- " visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ 0*textual + 0*speed"
   m3 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
-  performance_lrt(m1, m2, m3)
 }
 }
 \seealso{

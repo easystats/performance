@@ -20,12 +20,6 @@
 #'   the denominator model. The \emph{first} model is used as denominator model,
 #'   and its Bayes factor is set to \code{NA} to indicate the reference model.
 #'   }
-#'   \subsection{Likelihood-Ratio Test}{
-#'   If possible, \code{compare_performance()} conducts a likelihood-ratio test
-#'   (see \code{\link{performance_lrt}}) and adds a column with the p-values
-#'   from that test to the output. Thus, when a \code{"p"}-column is included,
-#'   this refers to the likelihood-ratio test.
-#'   }
 #'   \subsection{Ranking Models}{
 #'   When \code{rank = TRUE}, a new column \code{Performance_Score} is returned. This
 #'   score ranges from 0\% to 100\%, higher values indicating better model performance.
@@ -91,17 +85,6 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   }, objects, object_names, SIMPLIFY = FALSE)
 
 
-  # likelihood ratio tests
-  LRTs <- tryCatch(
-    {
-      performance_lrt(...)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-
-
   # check for identical model class, for bayesfactor
   if (isTRUE(bayesfactor)) {
     BFs <- tryCatch(
@@ -123,12 +106,6 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
     dfs$BF[dfs$Model == object_names[1]] <- NA
   }
 
-  if (!is.null(LRTs)) {
-    LRTs <- LRTs[c("Model", "Type", "Chi2", "df", "p")]
-    LRTs$Model <- sapply(object_names, deparse)
-    dfs <- merge(dfs, LRTs, by = c("Model", "Type"), all = TRUE, sort = FALSE)
-  }
-
   # check if all models were fit from same data
   resps <- lapply(objects, insight::get_response)
   if (!all(sapply(resps[-1], function(x) identical(x, resps[[1]]))) && verbose) {
@@ -141,10 +118,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, bayesfactor 
   }
 
   # Reorder columns
-  if(all(c("BIC", "BF") %in% names(dfs))){
+  if (all(c("BIC", "BF") %in% names(dfs))) {
     idx1 <- grep("BIC", names(dfs))
     idx2 <- grep("BF", names(dfs))
-    last_part <- (idx1+1):ncol(dfs)
+    last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
 
