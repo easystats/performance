@@ -56,8 +56,11 @@ r2.default <- function(model, verbose = TRUE, ...) {
 #' @importFrom stats pf
 #' @export
 r2.lm <- function(model, ...) {
-  model_summary <- summary(model)
+  .r2_lm(summary(model))
+}
 
+
+.r2_lm <- function(model_summary) {
   out <- list(
     R2 = model_summary$r.squared,
     R2_adjusted = model_summary$adj.r.squared
@@ -79,6 +82,13 @@ r2.lm <- function(model, ...) {
 
   attr(out, "model_type") <- "Linear"
   structure(class = "r2_generic", out)
+}
+
+
+
+#' @export
+r2.summary.lm <- function(model, ...) {
+  .r2_lm(model)
 }
 
 
