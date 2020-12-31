@@ -39,9 +39,11 @@ performance_aic <- function(x, ...) {
 # default -------------------------------------------------
 
 
+#' @importFrom insight get_loglikelihood n_parameters n_obs model_info
 #' @export
 performance_aic.default <- function(x, ...) {
   info <- suppressWarnings(insight::model_info(x))
+  aic <- NULL
 
   ## TODO remove is.list() once insight 0.8.3 is on CRAN
   if (is.null(info) || !is.list(info)) {
@@ -53,9 +55,9 @@ performance_aic.default <- function(x, ...) {
       warning("Package 'tweedie' required for this function work. Please install it.", call. = FALSE)
       return(NULL)
     }
-    suppressMessages(tweedie::AICtweedie(x))
+    aic <- suppressMessages(tweedie::AICtweedie(x))
   } else {
-    tryCatch(
+    aic <- tryCatch(
       {
         stats::AIC(x)
       },
@@ -63,7 +65,21 @@ performance_aic.default <- function(x, ...) {
         NULL
       }
     )
+
+    if (is.null(aic)) {
+      aic <- tryCatch(
+        {
+          n <- insight::n_obs(x)
+          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * (n - insight::n_parameters(x))
+        },
+        error = function(e) {
+          NULL
+        }
+      )
+    }
   }
+
+  aic
 }
 
 
