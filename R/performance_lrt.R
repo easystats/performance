@@ -7,6 +7,7 @@
 #' \item For \code{lavaan} models (SEM, CFA), the function calls \code{lavaan::lavTestLRT()}.
 #' }
 #'
+#' @param estimator Applied when comparing regression models. Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), then it uses the same method as \code{anova(..., test="LRT")} implemented in base R, i.e., scaling by n−k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If \code{estimator="ML"}, which is for instance used by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.
 #' @param ... Multiple model objects.
 #'
 #' @return A data frame, based on the results from \code{anova()}.
@@ -53,8 +54,6 @@ performance_lrt <- function(...) {
 
 
 #' @rdname performance_lrt
-#' @param estimator Applied when comparing regression models. Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), then it uses the same method as \code{anova(..., test="LRT")} implemented in base R, i.e., scaling by n−k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If \code{estimator="ML"}, which is for instance used by \code{lrtest(...)} in the \code{lmtest}, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.
-#' @importFrom stats anova
 #' @importFrom insight is_model
 #' @export
 performance_lrt.List_of_Regressions <- function(..., estimator = "OLS") {
@@ -85,7 +84,6 @@ performance_lrt.default <- performance_lrt.List_of_Regressions
 
 
 
-#' @importFrom stats anova
 #' @importFrom insight is_model
 #' @export
 performance_lrt.lavaan <- function(...) {
@@ -196,14 +194,14 @@ performance_lrt.lavaan <- function(...) {
 }
 
 
-#' @importFrom stats df.residual dnorm fitted model.frame model.response dnorm residuals pchisq
-.performance_lrt_lm_ML <- function(model, model2, estimator="ML") {
+#' @importFrom insight get_df get_loglikelihood get_residuals
+#' @importFrom stats dnorm fitted model.frame model.response pchisq
+.performance_lrt_lm_ML <- function(model, model2, estimator = "ML") {
   # See https://stats.stackexchange.com/questions/155474/why-does-lrtest-not-match-anovatest-lrt
 
   # Get DF
-  # TODO: Would be good to use parameters::dof if available in insight
-  df_model <- stats::df.residual(model)
-  df_model2 <- stats::df.residual(model2)
+  df_model <- insight::get_df(model, type = "residual")
+  df_model2 <- insight::get_df(model2, type = "residual")
   df_diff <- df_model - df_model2
 
   # LogLik Function
@@ -212,15 +210,14 @@ performance_lrt.lavaan <- function(...) {
   }
 
   # Get Statistic
-  # TODO: Could use a possible insight::get_residuals()
   if (tolower(estimator) == "ols") {
-    estim <- function(object) sqrt(sum(stats::residuals(object)^2) / stats::df.residual(object))
+    estim <- function(object) sqrt(sum(insight::get_residuals(object)^2) / insight::get_df(object, type = "residual"))
     loglik <- loglik_function(model2, estim(model))
     stat <- -2 * (loglik - loglik_function(model, estim(model)))
   } else{
-    estim <- function(object) sqrt(mean(stats::residuals(object)^2))
-    stat <- -2 * (loglik_function(model2, estim(model2)) - loglik_function(model, estim(model)))
-    loglik <- as.numeric(stats::logLik(model)) # This is the loglik returned
+    estim <- function(object) sqrt(mean(insight::get_residuals(object)^2))
+    stat <- as.numeric(-2 * (insight::get_loglikelihood(model2) - insight::get_loglikelihood(model)))
+    loglik <- as.numeric(insight::get_loglikelihood(model)) # This is the loglik returned
   }
   # Get p-value
   p <- stats::pchisq(abs(stat), abs(df_diff), lower.tail = FALSE)

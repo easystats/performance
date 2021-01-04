@@ -606,7 +606,7 @@ print.check_collinearity <- function(x, ...) {
 print.performance_lrt <- function(x, digits = 2, ...) {
 
   # Footer
-  if("LogLik" %in% names(x)){
+  if ("LogLik" %in% names(x)) {
     best <- which.max(x$LogLik)
     footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
   } else{
