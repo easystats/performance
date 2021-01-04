@@ -22,8 +22,8 @@
 #'   model <- mlogit(mode ~ price + catch, data = Fish)
 #'   r2_mcfadden(model)
 #' }
-#' @importFrom insight find_parameters
-#' @importFrom stats logLik update
+#' @importFrom insight find_parameters get_loglikelihood
+#' @importFrom stats update
 #' @export
 r2_mcfadden <- function(model) {
   UseMethod("r2_mcfadden")
@@ -35,7 +35,7 @@ r2_mcfadden <- function(model) {
 
 
 .r2_mcfadden <- function(model, l_null) {
-  l_full <- stats::logLik(model)
+  l_full <- insight::get_loglikelihood(model)
   k <- length(insight::find_parameters(model))
   mcfadden <- 1 - (as.vector(l_full) / as.vector(l_null))
   mcfadden_adjusted <- 1 - ((as.vector(l_full) - k) / as.vector(l_null))
@@ -60,7 +60,7 @@ r2_mcfadden <- function(model) {
 
 #' @export
 r2_mcfadden.glm <- function(model) {
-  l_null <- stats::logLik(stats::update(model, ~1))
+  l_null <- insight::get_loglikelihood(stats::update(model, ~1))
   .r2_mcfadden(model, l_null)
 }
 
@@ -137,14 +137,14 @@ r2_mcfadden.vglm <- function(model) {
     stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
   }
 
-  l_null <- stats::logLik(stats::update(model, ~1))
+  l_null <- insight::get_loglikelihood(stats::update(model, ~1))
   .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
 r2_mcfadden.clm2 <- function(model) {
-  l_null <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
+  l_null <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
   .r2_mcfadden(model, l_null)
 }
 
@@ -152,7 +152,7 @@ r2_mcfadden.clm2 <- function(model) {
 
 #' @export
 r2_mcfadden.multinom <- function(model) {
-  l_null <- stats::logLik(stats::update(model, ~1, trace = FALSE))
+  l_null <- insight::get_loglikelihood(stats::update(model, ~1, trace = FALSE))
   .r2_mcfadden(model, l_null)
 }
 

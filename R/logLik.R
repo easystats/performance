@@ -29,7 +29,7 @@ logLik.ivreg <- function(object, ...) {
 }
 
 
-#' @importFrom insight find_parameters
+#' @importFrom insight find_parameters get_df
 #' @export
 logLik.plm <- function(object, ...) {
   res <- object$residuals
@@ -53,7 +53,7 @@ logLik.plm <- function(object, ...) {
 
   attr(val, "nall") <- N0
   attr(val, "nobs") <- N
-  attr(val, "df") <- length(insight::find_parameters(object, effects = "fixed", flatten = TRUE))
+  attr(val, "df") <- insight::get_df(object, type = "model")
   class(val) <- "logLik"
 
   val
@@ -64,10 +64,10 @@ logLik.cpglm <- logLik.plm
 
 
 
-#' @importFrom stats residuals
+#' @importFrom insight get_residuals
 #' @export
 logLik.iv_robust <- function(object, ...) {
-  res <- stats::residuals(object)
+  res <- insight::get_residuals(object)
   p <- object$rank
   w <- object$weights
 

@@ -46,8 +46,8 @@
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 #' performance_pcp(m)
 #' performance_pcp(m, method = "Gelman-Hill")
-#' @importFrom stats predict qnorm binomial predict.glm pchisq logLik weights as.formula glm
-#' @importFrom insight get_response n_obs model_info find_response get_data
+#' @importFrom stats predict qnorm binomial predict.glm pchisq weights as.formula glm
+#' @importFrom insight get_response n_obs model_info find_response get_data get_loglikelihood
 #' @export
 performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
   # fix special cases
@@ -102,7 +102,7 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
     lower.tail = TRUE
   )
 
-  lrt.chisq <- 2 * abs(stats::logLik(model) - stats::logLik(m0))
+  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model) - insight::get_loglikelihood(m0))
 
   structure(
     class = "performance_pcp",
@@ -139,7 +139,7 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
     lower.tail = TRUE
   )
 
-  lrt.chisq <- 2 * abs(stats::logLik(model) - stats::logLik(m0))
+  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model) - insight::get_loglikelihood(m0))
 
   structure(
     class = "performance_pcp",

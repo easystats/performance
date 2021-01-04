@@ -39,7 +39,7 @@ performance_aic <- function(x, ...) {
 # default -------------------------------------------------
 
 
-#' @importFrom insight get_loglikelihood n_parameters n_obs model_info
+#' @importFrom insight get_loglikelihood get_df model_info
 #' @export
 performance_aic.default <- function(x, ...) {
   info <- suppressWarnings(insight::model_info(x))
@@ -69,8 +69,7 @@ performance_aic.default <- function(x, ...) {
     if (is.null(aic)) {
       aic <- tryCatch(
         {
-          n <- insight::n_obs(x)
-          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * (n - insight::n_parameters(x))
+          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model")
         },
         error = function(e) {
           NULL
@@ -178,13 +177,10 @@ performance_aic.bayesx <- function(x, ...) {
 # methods ------------------------------------------
 
 
-#' @importFrom insight find_parameters n_obs
-#' @importFrom stats logLik
+#' @importFrom insight find_parameters n_obs get_loglikelihood
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
-  nparam <- length(insight::find_parameters(object, effects = "fixed", flatten = TRUE))
-  n <- insight::n_obs(object)
-  -2 * as.numeric(stats::logLik(object)) + k * (n - nparam)
+  -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
 }
 
 
@@ -197,12 +193,11 @@ AIC.bife <- function(object, ..., k = 2) {
 # AICc ------------------------------------------
 
 
-#' @importFrom insight n_obs
-#' @importFrom stats logLik
+#' @importFrom insight n_obs get_loglikelihood
 #' @export
 performance_aicc.default <- function(x, ...) {
   n <- suppressWarnings(insight::n_obs(x))
-  ll <- stats::logLik(x)
+  ll <- insight::get_loglikelihood(x)
   k <- attr(ll, "df")
 
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
@@ -212,7 +207,7 @@ performance_aicc.default <- function(x, ...) {
 #' @export
 performance_aicc.bife <- function(x, ...) {
   n <- suppressWarnings(insight::n_obs(x))
-  ll <- stats::logLik(x)
+  ll <- insight::get_loglikelihood(x)
   nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
   k <- n - nparam
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))

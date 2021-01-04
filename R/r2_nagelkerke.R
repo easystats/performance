@@ -25,7 +25,7 @@ r2_nagelkerke <- function(model) {
 
 
 .r2_nagelkerke <- function(model, l_base) {
-  L.full <- stats::logLik(model)
+  L.full <- insight::get_loglikelihood(model)
   D.full <- -2 * L.full
 
   D.base <- -2 * l_base
@@ -114,19 +114,19 @@ r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
 
 #' @export
 r2_nagelkerke.multinom <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
+  l_base <- insight::get_loglikelihood(stats::update(model, ~1, trace = FALSE))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm2 <- function(model) {
-  l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
+  l_base <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1))
+  l_base <- insight::get_loglikelihood(stats::update(model, ~1))
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
     return(NULL)

@@ -25,8 +25,8 @@
 #'   \item Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
 #' }
 #'
-#' @importFrom insight n_obs
-#' @importFrom stats logLik update
+#' @importFrom insight n_obs get_loglikelihood
+#' @importFrom stats update
 #' @export
 r2_coxsnell <- function(model) {
   UseMethod("r2_coxsnell")
@@ -37,7 +37,7 @@ r2_coxsnell <- function(model) {
 
 
 .r2_coxsnell <- function(model, l_base) {
-  l_full <- stats::logLik(model)
+  l_full <- insight::get_loglikelihood(model)
   G2 <- -2 * (l_base - l_full)
 
   # Is it still necessary?
@@ -152,26 +152,26 @@ r2_coxsnell.svycoxph <- function(model) {
 
 #' @export
 r2_coxsnell.multinom <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1, trace = FALSE))
+  l_base <- insight::get_loglikelihood(stats::update(model, ~1, trace = FALSE))
   .r2_coxsnell(model, l_base)
 }
 
 #' @export
 r2_coxsnell.clm2 <- function(model) {
-  l_base <- stats::logLik(stats::update(model, location = ~1, scale = ~1))
+  l_base <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
   .r2_coxsnell(model, l_base)
 }
 
 #' @importFrom utils capture.output
 #' @export
 r2_coxsnell.bayesx <- function(model) {
-  junk <- utils::capture.output(l_base <- stats::logLik(stats::update(model, ~1)))
+  junk <- utils::capture.output(l_base <- insight::get_loglikelihood(stats::update(model, ~1)))
   .r2_coxsnell(model, l_base)
 }
 
 #' @export
 r2_coxsnell.clm <- function(model) {
-  l_base <- stats::logLik(stats::update(model, ~1))
+  l_base <- insight::get_loglikelihood(stats::update(model, ~1))
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
     return(NULL)
