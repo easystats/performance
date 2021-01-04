@@ -32,12 +32,13 @@ mse <- performance_mse
 
 #' @export
 performance_mse.default <- function(model, verbose = TRUE, ...) {
+  ## TODO https://github.com/easystats/performance/issues/184
   res <- insight::get_residuals(model, verbose = verbose, ...)
   if (is.null(res) || all(is.na(res))) {
     return(NA)
   }
 
-  mean(res^2, na.rm = T)
+  mean(res^2, na.rm = TRUE)
 }
 
 

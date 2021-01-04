@@ -14,9 +14,9 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ hp + gear, data = mtcars)
 #' performance_rse(m)
-#' @importFrom stats residuals df.residual
+#' @importFrom insight get_residuals get_df
 #' @export
 performance_rse <- function(model) {
   # Residual standard error
-  sqrt(sum(stats::residuals(model)^2, na.rm = T) / stats::df.residual(model))
+  sqrt(sum(insight::get_residuals(model)^2, na.rm = TRUE) / insight::get_df(model, type = "residual"))
 }

@@ -32,7 +32,7 @@ item_difficulty <- function(x) {
 
   # ideal item item_difficulty
   fun.diff.ideal <- function(.x) {
-    p <- 1 / max(.x, na.rm = T)
+    p <- 1 / max(.x, na.rm = TRUE)
     round(p + (1 - p) / 2, 2)
   }
 
