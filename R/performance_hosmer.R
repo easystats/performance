@@ -28,7 +28,7 @@ performance_hosmer <- function(model, n_bins = 10) {
 
   # check for valid object class
   if (!inherits(model, c("glmerMod", "glm"))) {
-    stop("`model` must be an object of class 'glm' or 'glmerMod'.", call. = F)
+    stop("`model` must be an object of class 'glm' or 'glmerMod'.", call. = FALSE)
   }
 
   # mixed models (lme4)

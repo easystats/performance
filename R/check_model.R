@@ -116,7 +116,7 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
     # check if brms can be loaded
 
     if (!requireNamespace("brms", quietly = TRUE)) {
-      stop("Package `brms` needs to be loaded first!", call. = F)
+      stop("Package `brms` needs to be loaded first!", call. = FALSE)
     }
 
     # check if prior sample are available
@@ -137,7 +137,7 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
 
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
-      stop("Package `rstanarm` needs to be loaded first!", call. = F)
+      stop("Package `rstanarm` needs to be loaded first!", call. = FALSE)
     }
 
 

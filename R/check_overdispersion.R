@@ -76,7 +76,7 @@ check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
   model_info <- insight::model_info(x)
   if (!model_info$is_poisson) {
-    stop("Model must be from Poisson-family.", call. = F)
+    stop("Model must be from Poisson-family.", call. = FALSE)
   }
 
   yhat <- stats::fitted(x)
@@ -138,7 +138,7 @@ check_overdispersion.negbinmfx <- check_overdispersion.poissonmfx
 check_overdispersion.merMod <- function(x, ...) {
   # check if we have poisson
   if (!insight::model_info(x)$is_poisson) {
-    stop("Model must be from Poisson-family.", call. = F)
+    stop("Model must be from Poisson-family.", call. = FALSE)
   }
 
   rdf <- stats::df.residual(x)

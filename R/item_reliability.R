@@ -34,7 +34,7 @@
 item_reliability <- function(x, standardize = FALSE, digits = 3) {
   # check param
   if (!is.matrix(x) && !is.data.frame(x)) {
-    warning("`x` needs to be a data frame or matrix.", call. = F)
+    warning("`x` needs to be a data frame or matrix.", call. = FALSE)
     return(NULL)
   }
 
@@ -69,7 +69,7 @@ item_reliability <- function(x, standardize = FALSE, digits = 3) {
       stringsAsFactors = FALSE
     )
   } else {
-    warning("Data frame needs at least three columns for reliability-test.", call. = F)
+    warning("Data frame needs at least three columns for reliability-test.", call. = FALSE)
   }
 
   ret.df

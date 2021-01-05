@@ -38,7 +38,7 @@ cronbachs_alpha.data.frame <- function(x) {
 
   # we need at least two columns for Cronach's Alpha
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
-    warning("Too less columns in `x` to compute Cronbach's Alpha.", call. = F)
+    warning("Too less columns in `x` to compute Cronbach's Alpha.", call. = FALSE)
     return(NULL)
   }
 
