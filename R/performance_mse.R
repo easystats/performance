@@ -32,8 +32,28 @@ mse <- performance_mse
 
 #' @export
 performance_mse.default <- function(model, verbose = TRUE, ...) {
-  ## TODO https://github.com/easystats/performance/issues/184
-  res <- insight::get_residuals(model, verbose = verbose, type = "response", ...)
+  res <- tryCatch(
+    {
+      insight::get_residuals(model, verbose = verbose, type = "response", ...)
+    }, error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(res)) {
+    res <- tryCatch(
+      {
+        def_res <- insight::get_residuals(model, verbose = verbose, ...)
+        if (verbose) {
+          warning("Response residuals not available to calculate mean square error. (R)MSE is probably not reliable.", call. = FALSE)
+        }
+        def_res
+      }, error = function(e) {
+        NULL
+      }
+    )
+  }
+
   if (is.null(res) || all(is.na(res))) {
     return(NA)
   }
