@@ -10,22 +10,20 @@
 #'
 #' @examples
 #' # Nested Models
-#' m1 <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
-#' m2 <- lm(Sepal.Length ~ Petal.Width + Species, data=iris)
-#' m3 <- lm(Sepal.Length ~ Petal.Width, data=iris)
+#' m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+#' m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+#' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 #'
 #' test_performance(m1, m2, m3)
 #'
 #' # Non-nested
-#' if(require("lme4") & require("mgcv")){
-#' m1 <- lm(Sepal.Length ~ Petal.Length + Species, data=iris)
-#' m2 <- lme4::lmer(Sepal.Length ~ Petal.Length + (1|Species), data=iris)
-#' m3 <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by=Species) + Species, data=iris)
+#' if (require("lme4") & require("mgcv")) {
+#'   m1 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+#'   m2 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#'   m3 <- gam(Sepal.Length ~ s(Petal.Length, by = Species) + Species, data = iris)
 #'
-#' test_performance(m1, m2, m3)
+#'   test_performance(m1, m2, m3)
 #' }
-#'
-#'
 #' @export
 test_performance <- function(...) {
   UseMethod("test_performance")
@@ -43,7 +41,7 @@ test_performance.default <- function(...) {
   names(objects) <- object_names
 
   # If a suitable class is found, run the more specific method on it
-  if(any(c("ListNestedRegressions", "ListNonNestedRegressions") %in% class(objects))){
+  if (any(c("ListNestedRegressions", "ListNonNestedRegressions") %in% class(objects))) {
     test_performance(objects)
   } else{
     stop("The models cannot be compared for some reason :/")
@@ -54,17 +52,17 @@ test_performance.default <- function(...) {
 
 
 #' @export
-test_performance.ListNestedRegressions <- function(objects, reference=1, ...) {
+test_performance.ListNestedRegressions <- function(objects, reference = 1, ...) {
   # BF test
-  out <- .test_performance_testBF(objects, reference=reference)
+  out <- .test_performance_testBF(objects, reference = reference)
   out
 }
 
 
 #' @export
-test_performance.ListNonNestedRegressions <- function(objects, reference=1, ...) {
+test_performance.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   # BF test
-  out <- .test_performance_testBF(objects, reference=reference)
+  out <- .test_performance_testBF(objects, reference = reference)
   out
 }
 
@@ -94,9 +92,9 @@ test_performance.ListNonNestedRegressions <- function(objects, reference=1, ...)
 
 # Helpers -----------------------------------------------------------------
 
-.test_performance_testBF <- function(objects, reference=1){
-  if(.test_performance_areBayesian(objects) %in% c("yes", "no")){
-    rez <- bayestestR::bayesfactor_models(objects, denominator=reference)
+.test_performance_testBF <- function(objects, reference = 1) {
+  if (.test_performance_areBayesian(objects) %in% c("yes", "no")) {
+    rez <- bayestestR::bayesfactor_models(objects, denominator = reference)
     method <- attributes(rez)$BF_method
     reference <- attributes(rez)$denominator
     out <- as.data.frame(rez)
@@ -109,11 +107,11 @@ test_performance.ListNonNestedRegressions <- function(objects, reference=1, ...)
 }
 
 
-.test_performance_areBayesian <- function(objects){
-  info <- sapply(objects, insight::model_info)
-  if(all(unlist(info["is_bayesian", ]))){
+.test_performance_areBayesian <- function(objects) {
+  bayesian_models <- sapply(objects, function(i) isTRUE(insight::model_info(i)$is_bayesian))
+  if (all(bayesian_models == TRUE)) {
     "yes"
-  } else if(all(unlist(info["is_bayesian", ]) == FALSE)){
+  } else if (all(bayesian_models == FALSE)) {
     "no"
   } else {
     "mixed"

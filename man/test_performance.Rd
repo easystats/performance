@@ -17,22 +17,20 @@ Test if models are different using different tests.
 }
 \examples{
 # Nested Models
-m1 <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
-m2 <- lm(Sepal.Length ~ Petal.Width + Species, data=iris)
-m3 <- lm(Sepal.Length ~ Petal.Width, data=iris)
+m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 
 test_performance(m1, m2, m3)
 
 # Non-nested
-if(require("lme4") & require("mgcv")){
-m1 <- lm(Sepal.Length ~ Petal.Length + Species, data=iris)
-m2 <- lme4::lmer(Sepal.Length ~ Petal.Length + (1|Species), data=iris)
-m3 <- mgcv::gam(Sepal.Length ~ s(Petal.Length, by=Species) + Species, data=iris)
+if (require("lme4") & require("mgcv")) {
+  m1 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+  m2 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+  m3 <- gam(Sepal.Length ~ s(Petal.Length, by = Species) + Species, data = iris)
 
-test_performance(m1, m2, m3)
+  test_performance(m1, m2, m3)
 }
-
-
 }
 \seealso{
 \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.
