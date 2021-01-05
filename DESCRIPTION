@@ -71,6 +71,7 @@ Suggests:
     Matrix,
     MASS,
     metafor,
+    mgcv,
     mlogit,
     nlme,
     ordinal,
