@@ -3,6 +3,7 @@
 #' @description Test if models are different using different tests.
 #'
 #' @param ... Multiple model objects.
+#' @param reference Which model should be taken as a reference, against which all the other models are tested.
 #'
 #' @return A data frame.
 #'
@@ -15,6 +16,7 @@
 #' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 #'
 #' test_performance(m1, m2, m3)
+#' test_performance(m1, m2, m3, include_formula=TRUE)
 #'
 #' # Non-nested
 #' if (require("lme4") & require("mgcv")) {
@@ -25,16 +27,21 @@
 #'   test_performance(m1, m2, m3)
 #' }
 #' @export
-test_performance <- function(...) {
+test_performance <- function(..., reference = 1) {
   UseMethod("test_performance")
 }
 
 #' @importFrom insight ellipsis_info
 #' @export
-test_performance.default <- function(...) {
+test_performance.default <- function(..., reference = 1, include_formula=FALSE) {
 
   # Attribute class to list
-  objects <- insight::ellipsis_info(...)
+  objects <- insight::ellipsis_info(..., only_models = TRUE)
+
+  # Sanity checks
+  if(attributes(objects)$same_response == FALSE) {
+    stop("The models don't have the same response variable, which is a prerequisite to compare them.")
+  }
 
   # Replace with names from the global environment
   object_names <- match.call(expand.dots = FALSE)$`...`
@@ -42,7 +49,7 @@ test_performance.default <- function(...) {
 
   # If a suitable class is found, run the more specific method on it
   if (any(c("ListNestedRegressions", "ListNonNestedRegressions") %in% class(objects))) {
-    test_performance(objects)
+    test_performance(objects, reference = reference, include_formula=include_formula)
   } else{
     stop("The models cannot be compared for some reason :/")
   }
@@ -52,23 +59,28 @@ test_performance.default <- function(...) {
 
 
 #' @export
-test_performance.ListNestedRegressions <- function(objects, reference = 1, ...) {
+test_performance.ListNestedRegressions <- function(objects, reference = 1, include_formula=FALSE, ...) {
+  out <- .test_performance_init(objects, include_formula=include_formula, ...)
+
   # BF test
-  out <- .test_performance_testBF(objects, reference = reference)
+  out <- .test_performance_testBF(objects, out, reference = reference)
   out
 }
 
 
 #' @export
-test_performance.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
+test_performance.ListNonNestedRegressions <- function(objects, reference = 1, include_formula=FALSE, ...) {
+  out <- .test_performance_init(objects, include_formula=include_formula, ...)
+
   # BF test
-  out <- .test_performance_testBF(objects, reference = reference)
+  out <- .test_performance_testBF(objects, out, reference = reference)
   out
 }
 
 
 
 # TESTS IMPLEMENTED IN OTHER PACKAGES
+
 # # Nested
 # anova(m2, m2)
 # lmtest::waldtest(m2, m3)
@@ -80,11 +92,6 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, ..
 # lmtest::coxtest(m2, m3)
 # lmtest::jtest(m2, m3)
 # lmtest::encomptest(m2, m3)
-#
-#
-# m2 <- lm(Sepal.Length ~ Species, data=iris)
-# m3 <- lm(Sepal.Length ~ Petal.Width, data=iris)
-#
 # nonnest2::vuongtest(m2, m3)
 # nonnest2::icci(m2, m3)
 
@@ -92,16 +99,27 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, ..
 
 # Helpers -----------------------------------------------------------------
 
-.test_performance_testBF <- function(objects, reference = 1) {
+.test_performance_init <- function(objects, include_formula=FALSE){
+  names <- insight::model_name(objects, include_formula=include_formula)
+  out <- data.frame(Name = names(objects),
+                    Model = names)
+  row.names(out) <- NULL
+  out
+}
+
+
+
+.test_performance_testBF <- function(objects, out, reference = 1) {
   if (.test_performance_areBayesian(objects) %in% c("yes", "no")) {
     rez <- bayestestR::bayesfactor_models(objects, denominator = reference)
     method <- attributes(rez)$BF_method
     reference <- attributes(rez)$denominator
-    out <- as.data.frame(rez)
-    out$BF[reference] <- NA
-    row.names(out) <- NULL
-  } else{
-    out <- data.frame()
+    rez <- as.data.frame(rez)
+    rez$Model <- NULL  # Remove Model col - there's already one in 'out'
+    rez$BF[reference] <- NA
+    row.names(rez) <- NULL
+
+    out <- cbind(out, rez)
   }
   out
 }

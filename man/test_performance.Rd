@@ -4,10 +4,12 @@
 \alias{test_performance}
 \title{Test if Models are Different}
 \usage{
-test_performance(...)
+test_performance(..., reference = 1)
 }
 \arguments{
 \item{...}{Multiple model objects.}
+
+\item{reference}{Which model should be taken as a reference, against which all the other models are tested.}
 }
 \value{
 A data frame.
@@ -22,6 +24,7 @@ m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 
 test_performance(m1, m2, m3)
+test_performance(m1, m2, m3, include_formula=TRUE)
 
 # Non-nested
 if (require("lme4") & require("mgcv")) {
