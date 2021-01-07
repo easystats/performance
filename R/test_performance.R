@@ -33,13 +33,13 @@ test_performance <- function(..., reference = 1) {
 
 #' @importFrom insight ellipsis_info
 #' @export
-test_performance.default <- function(..., reference = 1, include_formula=FALSE) {
+test_performance.default <- function(..., reference = 1, include_formula = FALSE) {
 
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks
-  if(attributes(objects)$same_response == FALSE) {
+  if (attributes(objects)$same_response == FALSE) {
     stop("The models don't have the same response variable, which is a prerequisite to compare them.")
   }
 
@@ -49,7 +49,7 @@ test_performance.default <- function(..., reference = 1, include_formula=FALSE) 
 
   # If a suitable class is found, run the more specific method on it
   if (any(c("ListNestedRegressions", "ListNonNestedRegressions") %in% class(objects))) {
-    test_performance(objects, reference = reference, include_formula=include_formula)
+    test_performance(objects, reference = reference, include_formula = include_formula)
   } else{
     stop("The models cannot be compared for some reason :/")
   }
@@ -59,8 +59,8 @@ test_performance.default <- function(..., reference = 1, include_formula=FALSE) 
 
 
 #' @export
-test_performance.ListNestedRegressions <- function(objects, reference = 1, include_formula=FALSE, ...) {
-  out <- .test_performance_init(objects, include_formula=include_formula, ...)
+test_performance.ListNestedRegressions <- function(objects, reference = 1, include_formula = FALSE, ...) {
+  out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
   out <- .test_performance_testBF(objects, out, reference = reference)
@@ -69,8 +69,8 @@ test_performance.ListNestedRegressions <- function(objects, reference = 1, inclu
 
 
 #' @export
-test_performance.ListNonNestedRegressions <- function(objects, reference = 1, include_formula=FALSE, ...) {
-  out <- .test_performance_init(objects, include_formula=include_formula, ...)
+test_performance.ListNonNestedRegressions <- function(objects, reference = 1, include_formula = FALSE, ...) {
+  out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
   out <- .test_performance_testBF(objects, out, reference = reference)
@@ -99,8 +99,9 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 # Helpers -----------------------------------------------------------------
 
-.test_performance_init <- function(objects, include_formula=FALSE){
-  names <- insight::model_name(objects, include_formula=include_formula)
+#' @importFrom insight model_name
+.test_performance_init <- function(objects, include_formula = FALSE){
+  names <- insight::model_name(objects, include_formula = include_formula)
   out <- data.frame(Name = names(objects),
                     Model = names)
   row.names(out) <- NULL
@@ -109,6 +110,7 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 
 
+#' @importFrom bayestestR bayesfactor_models
 .test_performance_testBF <- function(objects, out, reference = 1) {
   if (.test_performance_areBayesian(objects) %in% c("yes", "no")) {
     rez <- bayestestR::bayesfactor_models(objects, denominator = reference)
@@ -125,6 +127,7 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 }
 
 
+#' @importFrom insight model_info
 .test_performance_areBayesian <- function(objects) {
   bayesian_models <- sapply(objects, function(i) isTRUE(insight::model_info(i)$is_bayesian))
   if (all(bayesian_models == TRUE)) {
