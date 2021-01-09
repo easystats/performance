@@ -2,17 +2,17 @@
 % Please edit documentation in R/performance_lrt.R
 \name{performance_lrt}
 \alias{performance_lrt}
-\alias{performance_lrt.List_of_Regressions}
+\alias{performance_lrt.default}
 \title{Likelihood-Ratio-Test for Model Comparison}
 \usage{
 performance_lrt(...)
 
-\method{performance_lrt}{List_of_Regressions}(..., estimator = "OLS")
+\method{performance_lrt}{default}(..., estimator = "ML")
 }
 \arguments{
 \item{...}{Multiple model objects.}
 
-\item{estimator}{Applied when comparing regression models. Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), then it uses the same method as \code{anova(..., test="LRT")} implemented in base R, i.e., scaling by n−k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If \code{estimator="ML"}, which is for instance used by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.}
+\item{estimator}{Applied when comparing regression models. Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), then it uses the same method as \code{anova(..., test="LRT")} implemented in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If \code{estimator="ML"}, which is for instance used by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.}
 }
 \value{
 A data frame, based on the results from \code{anova()}.
@@ -25,14 +25,16 @@ Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which mode
 }
 }
 \details{
-This only makes statistical sense if the models are nested. It is conventional to list the models from smallest to largest, but this is up to the user. The output shows the tests of the models against one another in the order specified.
+This only makes statistical sense if the models are nested, in which case the models must be ordered from largest (the encompassing model) to smallest.
 }
 \examples{
 # Regression Models
-m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+m1 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
-m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-performance_lrt(m1, m2, m3)
+m3 <- lm(mpg ~ wt + cyl, data = mtcars)
+
+performance_lrt(m1, m2, m3, estimator = "ML") # Equivalent to lmtest::lrtest(m1, m2, m3)
+performance_lrt(m1, m2, m3, estimator = "OLS") # Equivalent to anova(m1, m2, m3, test='LRT')
 
 # Lavaan Models
 if (require("lavaan")) {
@@ -40,22 +42,24 @@ if (require("lavaan")) {
                  textual =~ x4 + x5 + x6
                  speed   =~ x7 + x8 + x9
 
-                  visual ~~ textual + speed"
+                  visual ~~ textual + speed "
   m1 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 
   structure <- " visual  =~ x1 + x2 + x3
                  textual =~ x4 + x5 + x6
                  speed   =~ x7 + x8 + x9
 
-                  visual ~~ 0*textual + speed"
+                  visual ~~ 0 * textual + speed "
   m2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 
   structure <- " visual  =~ x1 + x2 + x3
                  textual =~ x4 + x5 + x6
                  speed   =~ x7 + x8 + x9
 
-                  visual ~~ 0*textual + 0*speed"
+                  visual ~~ 0 * textual + 0 * speed "
   m3 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+
+  performance_lrt(m1, m2, m3)
 }
 }
 \seealso{
