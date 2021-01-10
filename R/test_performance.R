@@ -48,7 +48,7 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   names(objects) <- object_names
 
   # If a suitable class is found, run the more specific method on it
-  if (any(c("ListNestedRegressions", "ListNonNestedRegressions") %in% class(objects))) {
+  if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_performance(objects, reference = reference, include_formula = include_formula)
   } else{
     stop("The models cannot be compared for some reason :/")

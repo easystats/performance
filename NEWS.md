@@ -1,5 +1,10 @@
 # performance 0.6.2
 
+
+## New functions
+
+* `test_performance_vuong()`, to compare models using Vuong's (1989) Test.
+
 ## Changes to functions
 
 ### `performance_lrt()`
