@@ -60,7 +60,19 @@ test_performance.ListNestedRegressions <- function(objects, reference = 1, inclu
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
-  out <- .test_performance_testBF(objects, out, reference = reference)
+  out <- .test_performance_testBF(objects, out)
+
+  # Vuong
+  out <- tryCatch(
+    {
+      rez <- test_vuong(objects)
+      rez$Model <- NULL
+      out <- merge(out, rez)
+    },
+    error = function(e) {
+      out
+    }
+  )
   out
 }
 
@@ -71,6 +83,18 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
   # BF test
   out <- .test_performance_testBF(objects, out, reference = reference)
+
+  # Vuong
+  out <- tryCatch(
+    {
+      rez <- test_vuong(objects, reference = reference)
+      rez$Model <- NULL
+      out <- merge(out, rez)
+    },
+    error = function(e) {
+      out
+    }
+  )
   out
 }
 

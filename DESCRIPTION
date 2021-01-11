@@ -68,6 +68,7 @@ Suggests:
     ICSOutlier,
     lavaan,
     lme4,
+    lmtest,
     loo,
     Matrix,
     MASS,
