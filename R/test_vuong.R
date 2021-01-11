@@ -16,28 +16,28 @@
 #' m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 #' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 #'
-#' test_performance_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
+#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
 #'
 #' # Non-nested
 #' m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 #' m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
 #' m3 <- lm(Sepal.Length ~ Species, data = iris)
 #'
-#' test_performance_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
+#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
 #' @references
 #' \itemize{
 #'   \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.
 #'   \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested structural equation models. Psychological Methods, 21, 151-163.
 #' }
 #' @export
-test_performance_vuong <- function(...) {
-  UseMethod("test_performance_vuong")
+test_vuong <- function(...) {
+  UseMethod("test_vuong")
 }
 
 
 #' @importFrom insight ellipsis_info
 #' @export
-test_performance_vuong.default <- function(..., reference = 1) {
+test_vuong.default <- function(..., reference = 1) {
 
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
@@ -53,7 +53,7 @@ test_performance_vuong.default <- function(..., reference = 1) {
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_performance_vuong(objects, reference = reference)
+    test_vuong(objects, reference = reference)
   } else {
     stop("The models cannot be compared for some reason :/")
   }
@@ -63,14 +63,14 @@ test_performance_vuong.default <- function(..., reference = 1) {
 # TODO: Add a nice printing method with some interpretation (see nonnest2's output)
 
 #' @export
-test_performance_vuong.ListNestedRegressions <- function(objects, ...) {
-  .test_performance_vuong(objects, nested = TRUE, reference = NULL)
+test_vuong.ListNestedRegressions <- function(objects, ...) {
+  .test_vuong(objects, nested = TRUE, reference = NULL)
 }
 
 
 #' @export
-test_performance_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
-  .test_performance_vuong(objects, nested = FALSE, reference = reference)
+test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
+  .test_vuong(objects, nested = FALSE, reference = reference)
 }
 
 
@@ -89,7 +89,7 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
 # - CompQuadForm::imhof()
 
 
-.test_performance_vuong <- function(objects, nested = FALSE, reference = NULL, ...) {
+.test_vuong <- function(objects, nested = FALSE, reference = NULL, ...) {
   out <- data.frame(Omega2 = NA, p_Omega2 = NA, LR = NA, p_LR = NA)
 
   for (i in 2:length(objects)) {
@@ -98,7 +98,7 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
     } else {
       ref <- objects[[reference]]
     }
-    rez <- .test_performance_vuong_pairs(ref, objects[[i]], nested = nested, adj = "none")
+    rez <- .test_vuong_pairs(ref, objects[[i]], nested = nested, adj = "none")
     out <- rbind(out, data.frame(Omega2 = rez$Omega2, p_Omega2 = rez$p_Omega2, LR = rez$LRTstat, p_LR = rez$p_LRT))
   }
 
@@ -114,7 +114,7 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
 # m1 <- lm(mpg ~ disp, data=mtcars)
 # m2 <- lm(mpg ~ drat, data=mtcars)
 # ref <- nonnest2::vuongtest(m1, m2, nested=FALSE)
-# rez <- .test_performance_vuong(m1, m2, nested=FALSE)
+# rez <- .test_vuong(m1, m2, nested=FALSE)
 # all(ref$omega == rez$Omega2)
 # ref$p_omega == rez$p_Omega2
 # ref$LRTstat == rez$LRTstat
@@ -123,17 +123,17 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
 # m2 <- lm(mpg ~ disp + drat, data=mtcars)
 # object1 <- m1; object2 <- m2
 # ref <- nonnest2::vuongtest(m1, m2, nested=TRUE)
-# rez <- .test_performance_vuong(m1, m2, nested=TRUE)
+# rez <- .test_vuong(m1, m2, nested=TRUE)
 # all(ref$omega == rez$Omega2)
 # ref$p_omega == rez$p_Omega2
 # ref$LRTstat == rez$LRTstat
 #
 # ref <- nonnest2::vuongtest(m2, m1, nested=TRUE)
-# rez <- .test_performance_vuong(m2, m1, nested=TRUE)
+# rez <- .test_vuong(m2, m1, nested=TRUE)
 # all(ref$omega == rez$Omega2)
 # ref$p_omega == rez$p_Omega2
 # ref$LRTstat == rez$LRTstat
-.test_performance_vuong_pairs <- function(object1, object2, nested = FALSE, adj = "none") {
+.test_vuong_pairs <- function(object1, object2, nested = FALSE, adj = "none") {
   if (!requireNamespace("CompQuadForm", quietly = TRUE)) {
     stop("Package 'CompQuadForm' required. Please install it by running `install.packages('CompQuadForm')`.")
   }
@@ -159,7 +159,7 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
   omega_hat_2 <- (n - 1) / n * var(llA - llB, na.rm = TRUE)
 
   # Get p-value of weighted chi-square dist
-  lamstar <- .test_performance_vuong_lambda(object1, object2)
+  lamstar <- .test_vuong_lambda(object1, object2)
 
   # Note: dr package requires non-negative weights, which does not help when nested==TRUE
   # tmp <- dr::dr.pvalue(lamstar^2, n * omega_hat_2)
@@ -218,14 +218,14 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
 # m1 <- lm(Sepal.Length ~ Petal.Width, data=iris)
 # m2 <- lm(Sepal.Length ~ Sepal.Width, data=iris)
 # ref <- nonnest2:::calcLambda(m1, m2, n=150, score1=NULL, score2=NULL, vc1=stats::vcov, vc2=stats::vcov)
-# rez <- .test_performance_vuong_lambda(m1, m2)
+# rez <- .test_vuong_lambda(m1, m2)
 # all(ref == rez)
-.test_performance_vuong_lambda <- function(model1, model2) {
+.test_vuong_lambda <- function(model1, model2) {
   # Compute lambda (Eq 3.6)
 
   # Get AB
-  AB1 <- .test_performance_vuong_AB(model1)
-  AB2 <- .test_performance_vuong_AB(model2)
+  AB1 <- .test_vuong_AB(model1)
+  AB2 <- .test_vuong_AB(model2)
 
   # Eq (2.7)
   Bc <- crossprod(AB1$sc, AB2$sc) / AB1$n
@@ -255,7 +255,7 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
 
 # m <- lm(Sepal.Length ~ Petal.Width * Species, data=iris)
 # ref <- nonnest2:::calcAB(m, n=150, scfun = NULL, vc = stats::vcov)
-# rez <- .test_performance_vuong_AB(m)
+# rez <- .test_vuong_AB(m)
 # all(ref$A == rez$A)
 # all(ref$B == rez$B)
 # all(ref$sc == rez$sc)
@@ -267,11 +267,11 @@ test_performance_vuong.ListNonNestedRegressions <- function(objects, reference =
 #                   visual ~~ textual + speed "
 # model <- lavaan::sem(structure, data = lavaan::HolzingerSwineford1939)
 # ref <- nonnest2:::calcAB(model, n=insight::n_obs(model), scfun = NULL, vc = lavaan::vcov)
-# rez <- .test_performance_vuong_AB(model)
+# rez <- .test_vuong_AB(model)
 # all(ref$A == rez$A)
 # all(ref$B == rez$B)
 # all(ref$sc == rez$sc)
-.test_performance_vuong_AB <- function(model) {
+.test_vuong_AB <- function(model) {
   # A, B as defined in Vuong Eq (2.1) and (2.2)
 
   n <- insight::n_obs(model)
