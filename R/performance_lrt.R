@@ -1,7 +1,7 @@
 #' @title Likelihood-Ratio-Test for Model Comparison
 #' @name performance_lrt
 #'
-#' @description Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used F-test (obtained by default with \code{anova(...)}). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient.
+#' @description Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used Wald F-test (obtained by default with \code{anova(...)}). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes or if the parameters are large. A "small" sample size is under about 30.
 #' \itemize{
 #' \item For regression models, this is similar to \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, depending on the estimator.
 #' \item For \code{lavaan} models (SEM, CFA), the function calls \code{lavaan::lavTestLRT()}.
@@ -112,7 +112,7 @@ performance_lrt.ListNestedRegressions <- function(objects, estimator = "ML", ...
 
     # anova(..., test="LRT")
   } else {
-    out <- .test_model_wald(objects, test = "LRT")
+    out <- .test_wald(objects, test = "LRT")
     out$df <- dfs # Replace residual df with model's df
   }
 
@@ -148,56 +148,3 @@ performance_lrt_ListLavaan <- function(..., objects = NULL) {
   out
 }
 
-
-
-
-
-
-
-
-
-# Helpers --------------------------
-
-
-
-
-#' @importFrom insight get_df
-#' @importFrom stats pchisq pf deviance
-.test_model_wald <- function(objects, test = "F") {
-
-  # Compute stuff
-  dfs <- sapply(objects, insight::get_df, type = "residual")
-  dfs_diff <- c(NA, diff(sapply(objects, insight::get_df, type = "model")))
-  dev <- as.numeric(lapply(objects, stats::deviance))
-  dev_diff <- c(NA, -diff(dev))
-
-  out <- data.frame(
-    Model = names(objects),
-    df = dfs,
-    df_diff = dfs_diff
-  )
-
-
-  # Find reference-model related stuff
-  refmodel <- order(dfs)[1]
-  scale <- dev[refmodel] / dfs[refmodel]
-
-  # test = "F"
-  if (test == "F") {
-    f_value <- (dev_diff / dfs_diff) / scale
-    f_value[!is.na(f_value) & f_value < 0] <- NA # rather than p = 0
-    out$`F` <- f_value
-    p <- stats::pf(f_value, abs(dfs_diff), dfs[refmodel], lower.tail = FALSE)
-
-    # test = "LRT"
-  } else {
-    chi2 <- dev_diff / scale * sign(dfs_diff)
-    chi2[!is.na(chi2) & chi2 < 0] <- NA # rather than p = 0
-    out$Chi2 <- chi2
-    p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
-  }
-  out$p <- p
-
-  row.names(out) <- NULL
-  out
-}

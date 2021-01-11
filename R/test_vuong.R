@@ -39,17 +39,14 @@ test_vuong <- function(...) {
 #' @export
 test_vuong.default <- function(..., reference = 1) {
 
-  # Attribute class to list
+  # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
+  names(objects) <- match.call(expand.dots = FALSE)$`...`
 
   # Sanity checks
   if (attributes(objects)$same_response == FALSE) {
     stop("The models don't have the same response variable, which is a prerequisite to compare them.")
   }
-
-  # Replace with names from the global environment
-  object_names <- match.call(expand.dots = FALSE)$`...`
-  names(objects) <- object_names
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
