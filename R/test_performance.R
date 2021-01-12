@@ -57,7 +57,6 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
 #' @export
 test_performance.ListNestedRegressions <- function(objects, reference = 1, include_formula = FALSE, ...) {
-
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
@@ -134,14 +133,27 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 format.test_performance <- function(x, ...){
 
   # Format cols
-  if("p_Omega2" %in% names(x)) x$p_Omega2 <- insight::format_p(x$p_Omega2)
-  if("p_LR" %in% names(x)) x$p_LR <- insight::format_p(x$p_LR)
+  if("p_Omega2" %in% names(x)) x$p_Omega2 <- insight::format_p(x$p_Omega2, name = NULL)
+  if("p_LR" %in% names(x)) x$p_LR <- insight::format_p(x$p_LR, name = NULL)
 
   # Format names
   n <- names(x)
   names(x)[n == "p_Omega2"] <- "p (Omega2)"
   names(x)[n == "p_LR"] <- "p (LR)"
-  insight::format_table(x)
+
+  out <- insight::format_table(x)
+
+  if(attributes(x)$is_nested){
+    footer <- paste0("Models were detected as nested. Each model is compared to ",
+                     ifelse(attributes(x)$reference == "increasing", "the one below", "the one above"),
+                     ".")
+  } else{
+    footer <- paste0("Each model is compared to ",
+                     x$Name[attributes(x)$reference],
+                     ".")
+  }
+  attr(out, "table_footer") <- footer
+  out
 }
 
 
@@ -149,20 +161,7 @@ format.test_performance <- function(x, ...){
 #' @importFrom insight export_table
 #' @export
 print.test_performance <- function(x, ...){
-
-  if(attributes(x)$is_nested){
-    footer <- paste0("Models were detected as nested. Each model is compared to ",
-                     ifelse(attributes(x)$is_nested_increasing, "the one below", "the one above"),
-                     ".")
-  } else{
-    footer <- paste0("Each model is compared to ",
-                      x$Name[attributes(x)$reference],
-                      ".")
-  }
-
-  out <- insight::export_table(format(x),
-                               footer = footer,
-                               ...)
+  out <- insight::export_table(format(x), ...)
   cat(out)
 }
 
