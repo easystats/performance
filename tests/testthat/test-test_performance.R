@@ -11,7 +11,7 @@ if (require("testthat") &&
 
     rez <- test_performance(m1, m2, m3)
 
-    testthat::expect_equal(rez$Name, c("m1", "m2", "m3"))
+    expect_equal(rez$Name, c("m1", "m2", "m3"), ignore_attr = TRUE)
 
     # Increasing
     # TODO: Increasing order must be fixed and double checked, because the empty line should be the bottom one (?)
