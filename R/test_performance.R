@@ -1,6 +1,6 @@
 #' @title Test if Models are Different
 #'
-#' @description Test if models are different using different tests.
+#' @description This function aggregates different tests to compare different models. It tries to pick the appropriate based on whether the models have 'nested' predictors or 'non-nested' (i.e., different predictors).
 #'
 #' @param ... Multiple model objects.
 #' @param reference Which model should be taken as a reference, against which all the other models are tested.

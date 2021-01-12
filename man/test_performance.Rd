@@ -15,7 +15,7 @@ test_performance(..., reference = 1)
 A data frame.
 }
 \description{
-Test if models are different using different tests.
+This function aggregates different tests to compare different models. It tries to pick the appropriate based on whether the models have 'nested' predictors or 'non-nested' (i.e., different predictors).
 }
 \examples{
 # Nested Models
