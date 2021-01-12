@@ -172,7 +172,8 @@ print.test_performance <- function(x, ...) {
 .test_performance_init <- function(objects, include_formula = FALSE) {
   names <- insight::model_name(objects, include_formula = include_formula)
   out <- data.frame(Name = names(objects),
-                    Model = names)
+                    Model = names,
+                    stringsAsFactors = FALSE)
   row.names(out) <- NULL
   out
 }
@@ -196,7 +197,7 @@ print.test_performance <- function(x, ...) {
     }
 
     method <- attributes(rez)$BF_method
-    rez <- as.data.frame(rez)
+    rez <- as.data.frame(rez, stringsAsFactors = FALSE)
     rez$Model <- NULL  # Remove Model col - there's already one in 'out'
     rez$BF[ref] <- NA
     row.names(rez) <- NULL

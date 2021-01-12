@@ -114,7 +114,8 @@ performance_lrt.ListNestedRegressions <- function(objects, estimator = "ML", ...
       df = dfs,
       df_diff = dfs_diff,
       Chi2 = chi2,
-      p = p
+      p = p,
+      stringsAsFactors = FALSE
     )
 
     # anova(..., test="LRT")
@@ -137,9 +138,9 @@ performance_lrt_ListLavaan <- function(..., objects = NULL) {
   }
 
   # Create data frame with info about model name and class
-  names_types <- data.frame(Model = names(objects), Type = sapply(objects, function(x) class(x)[1]))
+  names_types <- data.frame(Model = names(objects), Type = sapply(objects, function(x) class(x)[1]), stringsAsFactors = FALSE)
 
-  out <- as.data.frame(lavaan::lavTestLRT(..., test = "LRT", model.names = names(objects)))
+  out <- as.data.frame(lavaan::lavTestLRT(..., test = "LRT", model.names = names(objects)), stringsAsFactors = FALSE)
 
   # Rename columns
   colnames(out)[names(out) == "Df"] <- "df"

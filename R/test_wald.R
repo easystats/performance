@@ -77,7 +77,8 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
   out <- data.frame(
     Model = names(objects),
     df = dfs,
-    df_diff = dfs_diff
+    df_diff = dfs_diff,
+    stringsAsFactors = FALSE
   )
 
 

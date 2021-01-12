@@ -87,7 +87,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 
 
 .test_vuong <- function(objects, nested = FALSE, reference = NULL, ...) {
-  out <- data.frame(Omega2 = NA, p_Omega2 = NA, LR = NA, p_LR = NA)
+  out <- data.frame(Omega2 = NA, p_Omega2 = NA, LR = NA, p_LR = NA, stringsAsFactors = FALSE)
 
   for (i in 2:length(objects)) {
     if (is.null(reference)) {
@@ -96,7 +96,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
       ref <- objects[[reference]]
     }
     rez <- .test_vuong_pairs(ref, objects[[i]], nested = nested, adj = "none")
-    out <- rbind(out, data.frame(Omega2 = rez$Omega2, p_Omega2 = rez$p_Omega2, LR = rez$LRTstat, p_LR = rez$p_LRT))
+    out <- rbind(out, data.frame(Omega2 = rez$Omega2, p_Omega2 = rez$p_Omega2, LR = rez$LRTstat, p_LR = rez$p_LRT, stringsAsFactors = FALSE))
   }
 
   out <- cbind(.test_performance_init(objects), out)
