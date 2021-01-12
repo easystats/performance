@@ -2,10 +2,16 @@
 % Please edit documentation in R/performance_lrt.R
 \name{performance_lrt}
 \alias{performance_lrt}
+\alias{test_likelihoodratio}
+\alias{test_lrt}
 \alias{performance_lrt.default}
 \title{Likelihood-Ratio-Test for Model Comparison}
 \usage{
 performance_lrt(...)
+
+test_likelihoodratio(...)
+
+test_lrt(...)
 
 \method{performance_lrt}{default}(..., estimator = "ML")
 }

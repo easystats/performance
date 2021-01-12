@@ -55,6 +55,13 @@ performance_lrt <- function(...) {
   UseMethod("performance_lrt")
 }
 
+#' @rdname performance_lrt
+#' @export
+test_likelihoodratio <- performance_lrt
+
+#' @rdname performance_lrt
+#' @export
+test_lrt <- performance_lrt
 
 
 #' @rdname performance_lrt

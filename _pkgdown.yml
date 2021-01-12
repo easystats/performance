@@ -49,13 +49,19 @@ reference:
   - performance_aicc
   - performance_hosmer
   - performance_logloss
-  - performance_lrt
   - performance_mse
   - performance_pcp
   - performance_rmse
   - performance_roc
   - performance_rse
   - performance_score
+
+- title: "Comparing Models"
+  contents:
+  - test_performance
+  - test_lrt
+  - test_vuong
+  - test_wald
 
 - title: "Check Items and Scales"
   contents:

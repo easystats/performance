@@ -25,6 +25,7 @@
 #' }
 #'
 #' @examples
+#' \dontrun{
 #' if (require("rstanarm") && require("rstantools")) {
 #'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
 #'   model_performance(model)
@@ -46,6 +47,7 @@
 #'   model_performance(model[3])
 #'
 #'   model_performance(model, average = TRUE)
+#' }
 #' }
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.

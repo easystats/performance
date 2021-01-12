@@ -53,6 +53,7 @@ Depending on \code{model}, following indices are computed:
 }
 }
 \examples{
+\dontrun{
 if (require("rstanarm") && require("rstantools")) {
   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
   model_performance(model)
@@ -74,6 +75,7 @@ if (require("BayesFactor") && require("rstantools")) {
   model_performance(model[3])
 
   model_performance(model, average = TRUE)
+}
 }
 }
 \references{
