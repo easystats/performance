@@ -130,6 +130,9 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # all(ref$omega == rez$Omega2)
 # ref$p_omega == rez$p_Omega2
 # ref$LRTstat == rez$LRTstat
+
+#' @importFrom insight get_df get_loglikelihood n_obs n_parameters
+#' @importFrom stats pnorm
 .test_vuong_pairs <- function(object1, object2, nested = FALSE, adj = "none") {
   if (!requireNamespace("CompQuadForm", quietly = TRUE)) {
     stop("Package 'CompQuadForm' required. Please install it by running `install.packages('CompQuadForm')`.")
@@ -268,6 +271,9 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # all(ref$A == rez$A)
 # all(ref$B == rez$B)
 # all(ref$sc == rez$sc)
+
+#' @importFrom insight get_sigma
+#' @importFrom stats vcov
 .test_vuong_AB <- function(model) {
   # A, B as defined in Vuong Eq (2.1) and (2.2)
 

@@ -64,8 +64,8 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
 
 
 
-#' @importFrom insight get_df
-#' @importFrom stats pchisq pf deviance
+#' @importFrom insight get_df get_deviance
+#' @importFrom stats pchisq pf
 .test_wald <- function(objects, test = "F") {
 
   # Compute stuff

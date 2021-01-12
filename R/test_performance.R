@@ -128,7 +128,7 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 # Helpers -----------------------------------------------------------------
 
-#' @importFrom insight format_table
+#' @importFrom insight format_table format_p
 #' @export
 format.test_performance <- function(x, ...){
 

@@ -31,7 +31,10 @@ Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which mode
 }
 }
 \details{
-This only makes statistical sense if the models are nested, in which case the models must be ordered from largest (the encompassing model) to smallest.
+@details This only makes statistical sense if the models are nested.
+It is conventional to list the models from smallest to largest, but this is
+up to the user. The output shows the tests of the models against one another
+in the order specified.
 }
 \examples{
 # Regression Models

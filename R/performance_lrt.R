@@ -12,7 +12,10 @@
 #'
 #' @return A data frame, based on the results from \code{anova()}.
 #'
-#' @details This only makes statistical sense if the models are nested, in which case the models must be ordered from largest (the encompassing model) to smallest.
+#' @details @details This only makes statistical sense if the models are nested.
+#' It is conventional to list the models from smallest to largest, but this is
+#' up to the user. The output shows the tests of the models against one another
+#' in the order specified.
 #'
 #' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.
 #'
