@@ -187,13 +187,13 @@ print.test_performance <- function(x, ...){
     rez <- bayestestR::bayesfactor_models(objects, denominator = ref)
 
     # Adjust BFs for sequential testing
-    # if(reference == "sequential"){
-    #   if(attributes(objects)$is_nested_increasing){
-    #     rez$BFseq <- rez$BF / c(1, rez$BF[1:nrow(rez)-1])
-    #   } else{
-    #     rez$BFseq <- rez$BF # TODO: correct the formula for other way round
-    #   }
-    # }
+    if(reference == "sequential"){
+      if(attributes(objects)$is_nested_increasing){
+        rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez)-1])
+      } else{
+        rez$BF <- rez$BF # TODO: correct the formula for other way round
+      }
+    }
 
     method <- attributes(rez)$BF_method
     rez <- as.data.frame(rez)
