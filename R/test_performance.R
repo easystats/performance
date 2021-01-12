@@ -57,10 +57,11 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
 #' @export
 test_performance.ListNestedRegressions <- function(objects, reference = 1, include_formula = FALSE, ...) {
+
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
-  out <- .test_performance_testBF(objects, out)
+  out <- .test_BF(objects, out, reference = "sequential")
 
   # Vuong
   out <- tryCatch(
@@ -86,7 +87,7 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
-  out <- .test_performance_testBF(objects, out, reference = reference)
+  out <- .test_BF(objects, out, reference = reference)
 
   # Vuong
   out <- tryCatch(
@@ -133,8 +134,8 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 format.test_performance <- function(x, ...){
 
   # Format cols
-  x$p_Omega2 <- insight::format_p(x$p_Omega2)
-  x$p_LR <- insight::format_p(x$p_LR)
+  if("p_Omega2" %in% names(x)) x$p_Omega2 <- insight::format_p(x$p_Omega2)
+  if("p_LR" %in% names(x)) x$p_LR <- insight::format_p(x$p_LR)
 
   # Format names
   n <- names(x)
@@ -151,7 +152,7 @@ print.test_performance <- function(x, ...){
 
   if(attributes(x)$is_nested){
     footer <- paste0("Models were detected as nested. Each model is compared to ",
-                     ifelse(attributes(x)$reference == "increasing", "the one below", "the one above"),
+                     ifelse(attributes(x)$is_nested_increasing, "the one below", "the one above"),
                      ".")
   } else{
     footer <- paste0("Each model is compared to ",
@@ -180,14 +181,25 @@ print.test_performance <- function(x, ...){
 
 
 #' @importFrom bayestestR bayesfactor_models
-.test_performance_testBF <- function(objects, out, reference = 1) {
+.test_BF <- function(objects, out, reference = 1) {
   if (.test_performance_areBayesian(objects) %in% c("yes", "no")) {
-    rez <- bayestestR::bayesfactor_models(objects, denominator = reference)
+    if(reference == "sequential") ref <- 1 else ref <- reference
+
+    rez <- bayestestR::bayesfactor_models(objects, denominator = ref)
+
+    # Adjust BFs for sequential testing
+    # if(reference == "sequential"){
+    #   if(attributes(objects)$is_nested_increasing){
+    #     rez$BFseq <- rez$BF / c(1, rez$BF[1:nrow(rez)-1])
+    #   } else{
+    #     rez$BFseq <- rez$BF # TODO: correct the formula for other way round
+    #   }
+    # }
+
     method <- attributes(rez)$BF_method
-    reference <- attributes(rez)$denominator
     rez <- as.data.frame(rez)
     rez$Model <- NULL  # Remove Model col - there's already one in 'out'
-    rez$BF[reference] <- NA
+    rez$BF[ref] <- NA
     row.names(rez) <- NULL
 
     out <- cbind(out, rez)
