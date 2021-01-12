@@ -73,6 +73,10 @@ test_performance.ListNestedRegressions <- function(objects, reference = 1, inclu
       out
     }
   )
+
+  attr(out, "is_nested") <- attributes(objects)$is_nested
+  attr(out, "reference") <- if(attributes(objects)$is_nested_increasing) "increasing" else "decreasing"
+  class(out) <- c("test_performance", class(out))
   out
 }
 
@@ -95,6 +99,10 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
       out
     }
   )
+
+  attr(out, "is_nested") <- attributes(objects)$is_nested
+  attr(out, "reference") <- reference
+  class(out) <- c("test_performance", class(out))
   out
 }
 
@@ -119,6 +127,46 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 
 # Helpers -----------------------------------------------------------------
+
+#' @importFrom insight format_table
+#' @export
+format.test_performance <- function(x, ...){
+
+  # Format cols
+  x$p_Omega2 <- insight::format_p(x$p_Omega2)
+  x$p_LR <- insight::format_p(x$p_LR)
+
+  # Format names
+  n <- names(x)
+  names(x)[n == "p_Omega2"] <- "p (Omega2)"
+  names(x)[n == "p_LR"] <- "p (LR)"
+  insight::format_table(x)
+}
+
+
+
+#' @importFrom insight export_table
+#' @export
+print.test_performance <- function(x, ...){
+
+  if(attributes(x)$is_nested){
+    footer <- paste0("Models were detected as nested. Each model is compared to ",
+                     ifelse(attributes(x)$reference == "increasing", "the one below", "the one above"),
+                     ".")
+  } else{
+    footer <- paste0("Each model is compared to ",
+                      x$Name[attributes(x)$reference],
+                      ".")
+  }
+
+  out <- insight::export_table(format(x),
+                               footer = footer,
+                               ...)
+  cat(out)
+}
+
+
+
 
 #' @importFrom insight model_name
 .test_performance_init <- function(objects, include_formula = FALSE){
