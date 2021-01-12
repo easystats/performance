@@ -47,12 +47,14 @@
 
 
 <meta property="og:title" content="Likelihood-Ratio-Test for Model Comparison — performance_lrt" />
-<meta property="og:description" content="Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used F-test (obtained by default with anova(...)). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient.
+<meta property="og:description" content="Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used Wald F-test (obtained by default with anova(...)). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes or if the parameters are large. A &quot;small&quot; sample size is under about 30.
 For regression models, this is similar to anova(..., test=&quot;LRT&quot;) or lmtest::lrtest(...), depending on the estimator.
 For lavaan models (SEM, CFA), the function calls lavaan::lavTestLRT().
 
 " />
 <meta property="og:image" content="/logo.png" />
+
+
 
 
 
@@ -135,7 +137,7 @@ For lavaan models (SEM, CFA), the function calls lavaan::lavTestLRT().
     </div>
 
     <div class="ref-description">
-    <p>Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used F-test (obtained by default with <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(...)</a></code>). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient.</p><ul>
+    <p>Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used Wald F-test (obtained by default with <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(...)</a></code>). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes or if the parameters are large. A "small" sample size is under about 30.</p><ul>
 <li><p>For regression models, this is similar to <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(..., test="LRT")</a></code> or <code><a href='https://rdrr.io/pkg/lmtest/man/lrtest.html'>lmtest::lrtest(...)</a></code>, depending on the estimator.</p></li>
 <li><p>For <code>lavaan</code> models (SEM, CFA), the function calls <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>lavaan::lavTestLRT()</a></code>.</p></li>
 </ul>
@@ -144,8 +146,12 @@ For lavaan models (SEM, CFA), the function calls lavaan::lavTestLRT().
 
     <pre class="usage"><span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S3 method for List_of_Regressions</span>
-<span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>...</span>, estimator <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span></pre>
+<span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>test_lrt</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>...</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,7 +162,7 @@ For lavaan models (SEM, CFA), the function calls lavaan::lavTestLRT().
     </tr>
     <tr>
       <th>estimator</th>
-      <td><p>Applied when comparing regression models. Corresponds to the different estimators for the standard deviation of the errors. If <code>estimator="OLS"</code> (default), then it uses the same method as <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(..., test="LRT")</a></code> implemented in base R, i.e., scaling by n−k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If <code>estimator="ML"</code>, which is for instance used by <code>lrtest(...)</code> in package <span class="pkg">lmtest</span>, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.</p></td>
+      <td><p>Applied when comparing regression models. Corresponds to the different estimators for the standard deviation of the errors. If <code>estimator="OLS"</code> (default), then it uses the same method as <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(..., test="LRT")</a></code> implemented in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If <code>estimator="ML"</code>, which is for instance used by <code>lrtest(...)</code> in package <span class="pkg">lmtest</span>, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.</p></td>
     </tr>
     </table>
 
@@ -165,48 +171,64 @@ For lavaan models (SEM, CFA), the function calls lavaan::lavTestLRT().
     <p>A data frame, based on the results from <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova()</a></code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This only makes statistical sense if the models are nested. It is conventional to list the models from smallest to largest, but this is up to the user. The output shows the tests of the models against one another in the order specified.</p>
+    <p>This only makes statistical sense if the models are nested, in which case the models must be ordered from largest (the encompassing model) to smallest.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Regression Models</span>
-<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span> <span class='op'>+</span> <span class='va'>disp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span> <span class='op'>+</span> <span class='va'>disp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
+<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+
+<span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span> <span class='co'># Equivalent to lmtest::lrtest(m1, m2, m3)</span>
 </div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
 #&gt; 
-#&gt; Model | Type | df | df_diff | Chi2 |     p
-#&gt; ------------------------------------------
-#&gt; m1    |   lm | 29 |         |      |      
-#&gt; m2    |   lm | 28 |       1 | 0.47 | 0.507
-#&gt; m3    |   lm | 27 |       1 | 0.60 | 0.563</div><div class='input'>
+#&gt; Model | df | df_diff | Chi2 |     p
+#&gt; -----------------------------------
+#&gt; m1    |  6 |         |      |      
+#&gt; m2    |  5 |      -1 | 0.39 | 0.530
+#&gt; m3    |  4 |      -1 | 0.51 | 0.475</div><div class='input'><span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span> <span class='co'># Equivalent to anova(m1, m2, m3, test='LRT')</span>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
+#&gt; 
+#&gt; Model | df | df_diff | Chi2 |     p
+#&gt; -----------------------------------
+#&gt; m1    |  6 |         |      |      
+#&gt; m2    |  5 |      -1 | 0.33 | 0.563
+#&gt; m3    |  4 |      -1 | 0.44 | 0.507</div><div class='input'>
 <span class='co'># Lavaan Models</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='http://lavaan.org'>"lavaan"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3
                  textual =~ x4 + x5 + x6
                  speed   =~ x7 + x8 + x9
 
-                  visual ~~ textual + speed"</span>
+                  visual ~~ textual + speed "</span>
   <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span>
 
   <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3
                  textual =~ x4 + x5 + x6
                  speed   =~ x7 + x8 + x9
 
-                  visual ~~ 0*textual + speed"</span>
+                  visual ~~ 0 * textual + speed "</span>
   <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span>
 
   <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3
                  textual =~ x4 + x5 + x6
                  speed   =~ x7 + x8 + x9
 
-                  visual ~~ 0*textual + 0*speed"</span>
+                  visual ~~ 0 * textual + 0 * speed "</span>
   <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span>
+
+  <span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div></span></pre>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
+#&gt; 
+#&gt; Model |   Type | df | df_diff |   Chi2 |      p
+#&gt; -----------------------------------------------
+#&gt; m1    | lavaan | 24 |         |  85.31 |       
+#&gt; m2    | lavaan | 25 |       1 | 121.47 | &lt; .001
+#&gt; m3    | lavaan | 26 |       1 | 140.60 | &lt; .001</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

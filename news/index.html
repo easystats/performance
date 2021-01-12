@@ -52,6 +52,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -132,6 +134,14 @@
 <h1 class="page-header" data-toc-text="0.6.2">
 <a href="#performance-062" class="anchor"></a>performance 0.6.2<small> Unreleased </small>
 </h1>
+<div id="new-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions" class="anchor"></a>New functions</h2>
+<ul>
+<li>
+<code>test_performance_vuong()</code>, to compare models using Vuong’s (1989) Test.</li>
+</ul>
+</div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
@@ -195,9 +205,9 @@
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now supports <code>margins</code>, <code>gamlss</code>, <code>stanmvreg</code> and <code>semLme</code>.</li>
 </ul>
 </div>
-<div id="new-functions" class="section level2">
+<div id="new-functions-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions" class="anchor"></a>New functions</h2>
+<a href="#new-functions-1" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/r2_somers.html">r2_somers()</a></code>, to compute Somers’ Dxy rank-correlation as R2-measure for logistic regression models.</li>
@@ -256,9 +266,9 @@
 <li>Column names for <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code> were changed to be in line with the <em>easystats</em> naming convention: <code>LOGLOSS</code> is now <code>Log_loss</code>, <code>SCORE_LOG</code> is <code>Score_log</code> and <code>SCORE_SPHERICAL</code> is now <code>Score_spherical</code>.</li>
 </ul>
 </div>
-<div id="new-functions-1" class="section level2">
+<div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-1" class="anchor"></a>New functions</h2>
+<a href="#new-functions-2" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/r2_bayes.html">r2_posterior()</a></code> for Bayesian models to obtain posterior distributions of R-squared.</li>
@@ -304,9 +314,9 @@
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now returns a logical vector. Original numerical vector is still accessible via <code><a href="https://rdrr.io/r/base/numeric.html">as.numeric()</a></code>.</li>
 </ul>
 </div>
-<div id="new-functions-2" class="section level2">
+<div id="new-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-2" class="anchor"></a>New functions</h2>
+<a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/pp_check.html">pp_check()</a></code> to compute posterior predictive checks for frequentist models.</li>
@@ -463,9 +473,9 @@
 <li>Support for <code>DirichletRegModel</code> models.</li>
 </ul>
 </div>
-<div id="new-functions-3" class="section level2">
+<div id="new-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-3" class="anchor"></a>New functions</h2>
+<a href="#new-functions-4" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">parameters::principal_components()</a></code>.</li>
@@ -492,9 +502,9 @@
 <li>Support for <code>mixor</code>, <code>cpglm</code> and <code>cpglmm</code> models.</li>
 </ul>
 </div>
-<div id="new-functions-4" class="section level2">
+<div id="new-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-4" class="anchor"></a>New functions</h2>
+<a href="#new-functions-5" class="anchor"></a>New functions</h2>
 <ul>
 <li>
 <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</li>

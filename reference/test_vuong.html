@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Somers' Dxy rank correlation for binary outcomes — r2_somers • performance</title>
+<title>Test if Models are Different using Vuong's (1989) Test — test_vuong • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Somers' Dxy rank correlation for binary outcomes — r2_somers" />
-<meta property="og:description" content="Calculates the Somers' Dxy rank correlation for logistic regression models." />
+<meta property="og:title" content="Test if Models are Different using Vuong's (1989) Test — test_vuong" />
+<meta property="og:description" content="Test if models are different using Vuong's (1989) test, which can be used both for nested and non-nested models. It actually consists of two tests. The test of distinguishability (the Omega2) indicates whether or not the models can possibly be distinguished on the basis of the observed data. If its p-value is significant, it means the models are distinguishable. The second test indicates whether each model fits better than the reference model. If the models are nested, then the test works as a robust LRT." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -127,40 +127,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Somers' Dxy rank correlation for binary outcomes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/r2_somers.R'><code>R/r2_somers.R</code></a></small>
-    <div class="hidden name"><code>r2_somers.Rd</code></div>
+    <h1>Test if Models are Different using Vuong's (1989) Test</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/test_vuong.R'><code>R/test_vuong.R</code></a></small>
+    <div class="hidden name"><code>test_vuong.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculates the Somers' Dxy rank correlation for logistic regression models.</p>
+    <p>Test if models are different using Vuong's (1989) test, which can be used both for nested and non-nested models. It actually consists of two tests. The test of distinguishability (the Omega2) indicates whether or not the models can possibly be distinguished on the basis of the observed data. If its p-value is significant, it means the models are distinguishable. The second test indicates whether each model fits better than the reference model. If the models are nested, then the test works as a robust LRT.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_somers</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>A logistic regression model.</p></td>
+      <th>...</th>
+      <td><p>Multiple model objects.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named vector with the R2 value.</p>
+    <p>A data frame.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The code for this function is adapted from the <code>nonnest2</code> package, and all credit go to their authors.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Somers, R. H. (1962). A new asymmetric measure of association for ordinal variables. American Sociological Review. 27 (6).</p>
+    
+<ul>
+<li><p>Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.</p></li>
+<li><p>Merkle, E. C., You, D., &amp; Preacher, K. (2016). Testing non-nested structural equation models. Psychological Methods, 21, 151-163.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/correlation/'>"correlation"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
-  <span class='fu'>r2_somers</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># Nested Models</span>
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+
+<span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2)</span>
+</div><div class='output co'>#&gt;   Name Model       Omega2   p_Omega2        LR       p_LR
+#&gt; 1   m1    lm           NA         NA        NA         NA
+#&gt; 2   m2    lm 0.0225040529 0.08112211 3.4092877 0.09903392
+#&gt; 3   m3    lm 0.0009541423 0.93491015 0.1535725 0.91912847</div><div class='input'>
+<span class='co'># Non-nested</span>
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+
+<span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2, nested=TRUE)</span>
+</div><div class='output co'>#&gt;   Name Model    Omega2      p_Omega2        LR         p_LR
+#&gt; 1   m1    lm        NA            NA        NA           NA
+#&gt; 2   m2    lm 0.1855419 -2.242953e-06 -4.566458 2.480171e-06
+#&gt; 3   m3    lm 0.1193515  1.379073e-04  2.508828 6.056629e-03</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

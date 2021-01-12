@@ -53,6 +53,8 @@
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -204,7 +206,8 @@
     <div class='dont-index'><p><a href='r2_bayes.html'>r2_bayes</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstantools/'>"rstantools"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstantools/'>"rstantools"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, chains <span class='op'>=</span> <span class='fl'>1</span>, iter <span class='op'>=</span> <span class='fl'>500</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
   <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 
@@ -217,17 +220,7 @@
   <span class='op'>)</span>
   <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstantools</span></div><div class='output co'>#&gt; <span class='message'>This is rstantools version 2.1.1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance</span><span>
-#&gt; 
-#&gt; ELPD   | ELPD_SE |  LOOIC | LOOIC_SE |   WAIC |   R2 | R2 (marg.) | R2 (adj.) | RMSE | Sigma
-#&gt; --------------------------------------------------------------------------------------------
-#&gt; -78.84 |    4.50 | 157.68 |     9.00 | 157.53 | 0.82 |       0.82 |      0.78 | 2.44 |  2.60</div><div class='input'>
+
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://richarddmorey.github.io/BayesFactor/'>"BayesFactor"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstantools/'>"rstantools"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/BayesFactor/man/generalTestBF.html'>generalTestBF</a></span><span class='op'>(</span><span class='va'>carb</span> <span class='op'>~</span> <span class='va'>am</span> <span class='op'>+</span> <span class='va'>mpg</span>, <span class='va'>mtcars</span><span class='op'>)</span>
 
@@ -236,16 +229,8 @@
 
   <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span>, average <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: BayesFactor</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: coda</span></div><div class='output co'>#&gt; <span class='message'>************</span>
-#&gt; <span class='message'>Welcome to BayesFactor 0.9.12-4.2. If you have questions, please contact Richard Morey (richarddmorey@gmail.com).</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>Type BFManual() to open the manual.</span>
-#&gt; <span class='message'>************</span></div><div class='output co'>#&gt; <span class='message'>Multiple `BFBayesFactor` models detected - posteriors are extracted from the first numerator model.</span>
-#&gt; <span class='message'>See help("get_parameters", package = "insight").</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Indices of model performance</span><span>
-#&gt; 
-#&gt; R2   | Sigma
-#&gt; ------------
-#&gt; 0.49 |  1.17</div></span></pre>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

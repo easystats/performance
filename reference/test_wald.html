@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Somers' Dxy rank correlation for binary outcomes — r2_somers • performance</title>
+<title>Test if Models are Different using Wald Test — test_wald • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Somers' Dxy rank correlation for binary outcomes — r2_somers" />
-<meta property="og:description" content="Calculates the Somers' Dxy rank correlation for logistic regression models." />
+<meta property="og:title" content="Test if Models are Different using Wald Test — test_wald" />
+<meta property="og:description" content="The Wald test (also called the Wald Chi-Squared Test) is a rough approximation of the Likelihood Ratio Test (see test_lrt()). That said, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes or if the parameters are large. A &quot;small&quot; sample size is under about 30." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -127,40 +127,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Somers' Dxy rank correlation for binary outcomes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/r2_somers.R'><code>R/r2_somers.R</code></a></small>
-    <div class="hidden name"><code>r2_somers.Rd</code></div>
+    <h1>Test if Models are Different using Wald Test</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/test_wald.R'><code>R/test_wald.R</code></a></small>
+    <div class="hidden name"><code>test_wald.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculates the Somers' Dxy rank correlation for logistic regression models.</p>
+    <p>The Wald test (also called the Wald Chi-Squared Test) is a rough approximation of the Likelihood Ratio Test (see <code><a href='performance_lrt.html'>test_lrt()</a></code>). That said, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes or if the parameters are large. A "small" sample size is under about 30.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>r2_somers</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>A logistic regression model.</p></td>
+      <th>...</th>
+      <td><p>Multiple model objects.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named vector with the R2 value.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <p>A data frame.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Somers, R. H. (1962). A new asymmetric measure of association for ordinal variables. American Sociological Review. 27 (6).</p>
+    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/correlation/'>"correlation"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
-  <span class='fu'>r2_somers</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-<span class='op'>}</span><span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># Nested Models</span>
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+
+<span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>  <span class='co'># equivalent to anova(m1, m2, m3)</span>
+</div><div class='output co'>#&gt;   Name Model  df df_diff          F         p
+#&gt; 1   m1    lm 144      NA         NA        NA
+#&gt; 2   m2    lm 146      -2 1.65519698 0.1946683
+#&gt; 3   m3    lm 148      -2 0.07544805 0.9273645</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
