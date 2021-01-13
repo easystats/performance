@@ -169,13 +169,13 @@
 #&gt; -------------------------------------------------------------
 #&gt; m1   |    lm |        |          |            |      |       
 #&gt; m2   |    lm |  27.28 |     0.02 |      0.081 | 3.41 |  0.099
-#&gt; m3   |    lm | &gt; 1000 | 9.54e-04 |      0.935 | 0.15 |  0.919
+#&gt; m3   |    lm | 138.91 | 9.54e-04 |      0.935 | 0.15 |  0.919
 #&gt; Models were detected as nested. Each model is compared to the one above.</div><div class='input'><span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, include_formula<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Name |                                    Model |     BF |   Omega2 | p (Omega2) |   LR | p (LR)
 #&gt; ------------------------------------------------------------------------------------------------
 #&gt; m1   | lm(Sepal.Length ~ Petal.Width * Species) |        |          |            |      |       
 #&gt; m2   | lm(Sepal.Length ~ Petal.Width + Species) |  27.28 |     0.02 |      0.081 | 3.41 |  0.099
-#&gt; m3   |           lm(Sepal.Length ~ Petal.Width) | &gt; 1000 | 9.54e-04 |      0.935 | 0.15 |  0.919
+#&gt; m3   |           lm(Sepal.Length ~ Petal.Width) | 138.91 | 9.54e-04 |      0.935 | 0.15 |  0.919
 #&gt; Models were detected as nested. Each model is compared to the one above.</div><div class='input'>
 <span class='co'># Non-nested</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"mgcv"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
