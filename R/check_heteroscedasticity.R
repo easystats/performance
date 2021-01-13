@@ -56,13 +56,12 @@ check_heteroscedasticity.default <- function(x, ...) {
 
 
 
-#' @importFrom insight get_parameters n_obs get_variance_residual
-#' @importFrom stats deviance
+#' @importFrom insight get_parameters n_obs get_variance_residual get_deviance
 .sigma <- function(x) {
   s <- tryCatch(
     {
       estimates <- insight::get_parameters(x)$Estimate
-      sqrt(stats::deviance(x) / (insight::n_obs(x) - sum(!is.na(estimates))))
+      sqrt(insight::get_deviance(x) / (insight::n_obs(x) - sum(!is.na(estimates))))
     },
     error = function(e) { NULL }
   )

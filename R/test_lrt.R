@@ -1,5 +1,5 @@
 #' @title Likelihood-Ratio-Test for Model Comparison
-#' @name performance_lrt
+#' @name test_lrt
 #'
 #' @description Compute Likelihood-Ratio-Test (LRT) for model comparison, which tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the commonly used Wald F-test (obtained by default with \code{anova(...)}). Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes or if the parameters are large. A "small" sample size is under about 30.
 #' \itemize{
@@ -12,7 +12,7 @@
 #'
 #' @return A data frame, based on the results from \code{anova()}.
 #'
-#' @details @details This only makes statistical sense if the models are nested.
+#' @details This only makes statistical sense if the models are nested.
 #' It is conventional to list the models from smallest to largest, but this is
 #' up to the user. The output shows the tests of the models against one another
 #' in the order specified.
@@ -21,12 +21,15 @@
 #'
 #' @examples
 #' # Regression Models
-#' m1 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+#' m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 #' m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
-#' m3 <- lm(mpg ~ wt + cyl, data = mtcars)
+#' m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #'
-#' performance_lrt(m1, m2, m3, estimator = "ML") # Equivalent to lmtest::lrtest(m1, m2, m3)
-#' performance_lrt(m1, m2, m3, estimator = "OLS") # Equivalent to anova(m1, m2, m3, test='LRT')
+#' test_lrt(m1, m2, m3, estimator = "ML") # Equivalent to lmtest::lrtest(m1, m2, m3)
+#' test_lrt(m1, m2, m3, estimator = "OLS") # Equivalent to anova(m1, m2, m3, test='LRT')
+#'
+#' # nested from "largest" to "smallest" model.
+#' test_lrt(m3, m2, m1)
 #'
 #' # Lavaan Models
 #' if (require("lavaan")) {
@@ -51,26 +54,26 @@
 #'                   visual ~~ 0 * textual + 0 * speed "
 #'   m3 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 #'
-#'   performance_lrt(m1, m2, m3)
+#'   test_lrt(m1, m2, m3)
 #' }
 #' @export
-performance_lrt <- function(...) {
-  UseMethod("performance_lrt")
+test_lrt <- function(...) {
+  UseMethod("test_lrt")
 }
 
-#' @rdname performance_lrt
+#' @rdname test_lrt
 #' @export
-test_likelihoodratio <- performance_lrt
+test_likelihoodratio <- test_lrt
 
-#' @rdname performance_lrt
+#' @rdname test_lrt
 #' @export
-test_lrt <- performance_lrt
+performance_lrt <- test_lrt
 
 
-#' @rdname performance_lrt
+#' @rdname test_lrt
 #' @importFrom insight ellipsis_info
 #' @export
-performance_lrt.default <- function(..., estimator = "ML") {
+test_lrt.default <- function(..., estimator = "ML") {
 
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
@@ -85,11 +88,11 @@ performance_lrt.default <- function(..., estimator = "ML") {
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, "ListNestedRegressions")) {
-    performance_lrt(objects, estimator = estimator)
+    test_lrt(objects, estimator = estimator)
   } else if (inherits(objects, "ListLavaan")) {
-    performance_lrt_ListLavaan(..., objects = objects) # Because lavaanLRT requires the ellipsis
+    test_lrt_ListLavaan(..., objects = objects) # Because lavaanLRT requires the ellipsis
   } else {
-    stop("The models are not nested models, which is a prerequisite for `performance_lrt()`. See the details section.")
+    stop("The models are not nested models, which is a prerequisite for `test_lrt()`. See the 'Details' section.")
   }
 }
 
@@ -102,7 +105,7 @@ performance_lrt.default <- function(..., estimator = "ML") {
 #' @importFrom insight is_model get_df get_loglikelihood
 #' @importFrom stats pchisq
 #' @export
-performance_lrt.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
+test_lrt.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
   dfs <- sapply(objects, insight::get_df, type = "model")
   dfs_diff <- c(NA, diff(sapply(objects, insight::get_df, type = "model")))
 
@@ -127,6 +130,8 @@ performance_lrt.ListNestedRegressions <- function(objects, estimator = "ML", ...
     out$df <- dfs # Replace residual df with model's df
   }
 
+  attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
+  attr(out, "is_nested_decreasing") <- attributes(objects)$is_nested_decreasing
   class(out) <- c("performance_lrt", "see_performance_lrt", "data.frame")
   out
 }
@@ -135,7 +140,7 @@ performance_lrt.ListNestedRegressions <- function(objects, estimator = "ML", ...
 
 
 #' @importFrom insight is_model
-performance_lrt_ListLavaan <- function(..., objects = NULL) {
+test_lrt_ListLavaan <- function(..., objects = NULL) {
   if (!requireNamespace("lavaan", quietly = TRUE)) {
     stop("Package 'lavaan' required. Please install it.")
   }
