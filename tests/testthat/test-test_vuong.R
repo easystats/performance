@@ -22,6 +22,14 @@ if (require("testthat") &&
     testthat::expect_equal(rez[3, "p_LR"], ref$p_LRT$A)
   })
 
+
+  test_that("test_vuong - nested (reversed)", {
+    # m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+    # m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+    # m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+  })
+
+
   test_that("test_vuong - non-nested", {
     m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
     m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)

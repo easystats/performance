@@ -12,6 +12,16 @@ if (require("testthat") &&
 
     testthat::expect_equal(rez$`F`, ref$`F`)
     testthat::expect_equal(rez$p, ref$`Pr(>F)`)
+
+    # Reversed
+    m3 <- m1
+    m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+
+    rez <- test_wald(m1, m2, m3)
+    ref <- as.data.frame(anova(m1, m2, m3))
+
+    testthat::expect_equal(rez$`F`, ref$`F`)
+    testthat::expect_equal(rez$p, ref$`Pr(>F)`)
   })
 
   test_that("test_wald - glm", {

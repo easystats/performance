@@ -192,7 +192,7 @@ print.test_performance <- function(x, ...) {
       if (attributes(objects)$is_nested_increasing) {
         rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez) - 1])
       } else{
-        rez$BF <- rez$BF # TODO: correct the formula for other way round
+        rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez) - 1]) # TODO: correct the formula for other way round
       }
     }
 
