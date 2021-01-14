@@ -1,30 +1,101 @@
 #' @title Test if Models are Different
 #'
-#' @description This function aggregates different tests to compare different models. It tries to pick the appropriate based on whether the models have 'nested' predictors or 'non-nested' (i.e., different predictors).
+#' @description Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation and set of strengths and weaknesses.\cr \cr The \code{test_performance()} function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are \emph{nested} or not) See the \strong{details} section for more information regarding the different tests and their interpretation.
 #'
 #' @param ... Multiple model objects.
-#' @param reference Which model should be taken as a reference, against which all the other models are tested.
+#' @param reference This only applies when models are non-nested, and determines which model should be taken as a reference, against which all the other models are tested.
 #'
-#' @return A data frame.
+#' @return A data frame containing the relevant indices.
 #'
-#' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.
+#' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare the performance indices of many different models.
+#'
+#' @details
+#' \subsection{Nested vs. Non-nested Models}{
+#' Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are \emph{"nested",} i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, \code{model1 (y ~ x1 + x2)} is "nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually, people have a list of nested models, for instance \code{m1 (y ~ x1 + x2 + x3)}, \code{m2 (y ~ x1 + x2)}, \code{m3 (y ~ x1)}, \code{m4 (y ~ 1)}, and they are "ordered" from the largest to smallest on vice versa, to test whether a more parcimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared \emph{sequentially}: m2 is tested against m1, m3 against m2, m4 against m3, etc.
+#' \cr\cr
+#' Two models are considered as \emph{"non-nested"} if their predictors are different. For instance, \code{model1 (y ~ x1 + x2)} and \code{model2 (y ~ x3 + x4)}. In the case of non-nested models, all models are usually compared against the same \emph{reference} model (by default, the first of the list).
+#' \cr\cr
+#' Nesting is detected via the \code{insight::is_nested_models()} function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variable (the response) must be the same. You cannot meaningfuly test whether apples are significantly different from oranges!
+#' } \subsection{Tests Description}{
+#'
+#' \itemize{
+#'   \item \strong{Wald's F-Test} - \code{test_wald()}: The Wald test is a rough approximation of the Likelihood Ratio Test. However, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run.Importantly, this test only makes statistical sense if the models are nested.\cr \cr This test is also available in base R through the \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column as a statistic and its associated \code{p-value}.
+#'   \item \strong{Likelihood Ratio Test (LRT)} - \code{test_likelihoodratio()}: The LRT tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the Wald test and, similarly, only makes sense for nested models. However, Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes (under or about 30) or if the parameters are large.\cr \cr For regression models, this is similar to \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, depending on the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the function calls \code{lavaan::lavTestLRT()}.
+#'   \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can be used both for nested and non-nested models, and actually consists of two tests.\itemize{
+#'   \item The \strong{Test of Distinguishability} (the \code{Omega2} column and its associated p-value) indicates whether or not the models can possibly be distinguished on the basis of the observed data. If its p-value is significant, it means the models are distinguishable.
+#'   \item The \strong{Robust Likelihood Test} (the \code{LR} column and its associated p-value) indicates whether each model fits better than the reference model. If the models are nested, then the test works as a robust LRT. The code for this function is adapted from the \code{nonnest2} package, and all credit go to their authors.}
+#' }
+#' }
 #'
 #' @examples
 #' # Nested Models
+#' # -------------
 #' m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
 #' m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
 #' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 #'
 #' test_performance(m1, m2, m3)
+#' test_wald(m1, m2, m3)  # equivalent to anova(m1, m2, m3)
+#' test_likelihoodratio(m1, m2, m3, estimator = "ML") # Equivalent to lmtest::lrtest(m1, m2, m3)
+#' test_likelihoodratio(m1, m2, m3, estimator = "OLS") # Equivalent to anova(m1, m2, m3, test='LRT')
+#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
+#'
+#' # Non-nested Models
+#' # -----------------
+#' m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+#' m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+#' m3 <- lm(Sepal.Length ~ Species, data = iris)
+#'
+#' test_performance(m1, m2, m3)
+#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
+#'
+#' # Tweak the output
+#' # ----------------
 #' test_performance(m1, m2, m3, include_formula=TRUE)
 #'
-#' # Non-nested
+#'
+#' # SEM / CFA (lavaan objects)
+#' # --------------------------
+#' # Lavaan Models
+#' if (require("lavaan")) {
+#'   structure <- " visual  =~ x1 + x2 + x3
+#'                  textual =~ x4 + x5 + x6
+#'                  speed   =~ x7 + x8 + x9
+#'
+#'                   visual ~~ textual + speed "
+#'   m1 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+#'
+#'   structure <- " visual  =~ x1 + x2 + x3
+#'                  textual =~ x4 + x5 + x6
+#'                  speed   =~ x7 + x8 + x9
+#'
+#'                   visual ~~ 0 * textual + speed "
+#'   m2 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+#'
+#'   structure <- " visual  =~ x1 + x2 + x3
+#'                  textual =~ x4 + x5 + x6
+#'                  speed   =~ x7 + x8 + x9
+#'
+#'                   visual ~~ 0 * textual + 0 * speed "
+#'   m3 <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+#'
+#'   test_likelihoodratio(m1, m2, m3)
+#'
+#' # Different Model Types
+#' # ---------------------
 #' if (require("lme4") & require("mgcv")) {
 #'   m1 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
 #'   m2 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 #'   m3 <- gam(Sepal.Length ~ s(Petal.Length, by = Species) + Species, data = iris)
 #'
 #'   test_performance(m1, m2, m3)
+#' }
+#' }
+#'
+#' @references
+#' \itemize{
+#'   \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.
+#'   \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested structural equation models. Psychological Methods, 21, 151-163.
 #' }
 #' @export
 test_performance <- function(..., reference = 1) {

@@ -1,34 +1,4 @@
-#' @title Test if Models are Different using Vuong's (1989) Test
-#'
-#' @description Test if models are different using Vuong's (1989) test, which can be used both for nested and non-nested models. It actually consists of two tests. The test of distinguishability (the Omega2) indicates whether or not the models can possibly be distinguished on the basis of the observed data. If its p-value is significant, it means the models are distinguishable. The second test indicates whether each model fits better than the reference model. If the models are nested, then the test works as a robust LRT.
-#'
-#' @inheritParams test_performance
-#'
-#' @return A data frame.
-#'
-#' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.
-#'
-#' @details The code for this function is adapted from the \code{nonnest2} package, and all credit go to their authors.
-#'
-#' @examples
-#' # Nested Models
-#' m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
-#' m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
-#' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-#'
-#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
-#'
-#' # Non-nested
-#' m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-#' m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
-#' m3 <- lm(Sepal.Length ~ Species, data = iris)
-#'
-#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
-#' @references
-#' \itemize{
-#'   \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.
-#'   \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested structural equation models. Psychological Methods, 21, 151-163.
-#' }
+#' @rdname test_performance
 #' @export
 test_vuong <- function(...) {
   UseMethod("test_vuong")

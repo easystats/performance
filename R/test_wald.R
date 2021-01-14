@@ -1,21 +1,4 @@
-#' @title Test if Models are Different using Wald Test
-#'
-#' @description The Wald test (also called the Wald Chi-Squared Test) is a rough approximation of the Likelihood Ratio Test (see \code{test_lrt()}). That said, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes or if the parameters are large. A "small" sample size is under about 30.
-#'
-#' @inheritParams test_performance
-#'
-#' @return A data frame.
-#'
-#' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.
-#'
-#'
-#' @examples
-#' # Nested Models
-#' m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
-#' m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
-#' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-#'
-#' test_wald(m1, m2, m3)  # equivalent to anova(m1, m2, m3)
+#' @rdname test_performance
 #' @export
 test_wald <- function(...) {
   UseMethod("test_wald")
@@ -24,7 +7,7 @@ test_wald <- function(...) {
 
 #' @importFrom insight ellipsis_info
 #' @export
-test_wald.default <- function(..., reference = 1) {
+test_wald.default <- function(...) {
 
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
@@ -37,7 +20,7 @@ test_wald.default <- function(..., reference = 1) {
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_wald(objects, reference = reference)
+    test_wald(objects)
   } else {
     stop("The models cannot be compared for some reason :/")
   }

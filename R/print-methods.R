@@ -603,7 +603,7 @@ print.check_collinearity <- function(x, ...) {
 
 #' @importFrom insight export_table print_color format_p
 #' @export
-print.performance_lrt <- function(x, digits = 2, ...) {
+print.test_likelihoodratio <- function(x, digits = 2, ...) {
 
   # Footer
   if ("LogLik" %in% names(x)) {
