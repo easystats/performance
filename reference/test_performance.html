@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test if Models are Different — test_performance • performance</title>
+<title>Test if Models are Different — test_likelihoodratio • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Test if Models are Different — test_performance" />
-<meta property="og:description" content="This function aggregates different tests to compare different models. It tries to pick the appropriate based on whether the models have 'nested' predictors or 'non-nested' (i.e., different predictors)." />
+<meta property="og:title" content="Test if Models are Different — test_likelihoodratio" />
+<meta property="og:description" content="Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation and set of strengths and weaknesses.  The test_performance() function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not) See the details section for more information regarding the different tests and their interpretation." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -128,15 +128,23 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Test if Models are Different</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/test_performance.R'><code>R/test_performance.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/test_likelihoodratio.R'><code>R/test_likelihoodratio.R</code></a>, <a href='https://github.com/easystats/performance/blob/master/R/test_performance.R'><code>R/test_performance.R</code></a>, <a href='https://github.com/easystats/performance/blob/master/R/test_vuong.R'><code>R/test_vuong.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>test_performance.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function aggregates different tests to compare different models. It tries to pick the appropriate based on whether the models have 'nested' predictors or 'non-nested' (i.e., different predictors).</p>
+    <p>Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation and set of strengths and weaknesses.<br /> <br /> The <code>test_performance()</code> function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are <em>nested</em> or not) See the <strong>details</strong> section for more information regarding the different tests and their interpretation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>...</span>, reference <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>...</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span>
+
+<span class='fu'>performance_lrt</span><span class='op'>(</span><span class='va'>...</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span>
+
+<span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>...</span>, reference <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,20 +154,54 @@
       <td><p>Multiple model objects.</p></td>
     </tr>
     <tr>
+      <th>estimator</th>
+      <td><p>Applied when comparing regression models using <code>test_likelihoodratio()</code>. Corresponds to the different estimators for the standard deviation of the errors. If <code>estimator="OLS"</code> (default), then it uses the same method as <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(..., test="LRT")</a></code> implemented in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If <code>estimator="ML"</code>, which is for instance used by <code><a href='https://rdrr.io/pkg/lmtest/man/lrtest.html'>lrtest(...)</a></code> in package <span class="pkg">lmtest</span>, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.</p></td>
+    </tr>
+    <tr>
       <th>reference</th>
-      <td><p>Which model should be taken as a reference, against which all the other models are tested.</p></td>
+      <td><p>This only applies when models are non-nested, and determines which model should be taken as a reference, against which all the other models are tested.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame.</p>
+    <p>A data frame containing the relevant indices.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Nested vs. Non-nested Models</h3>
+<p>Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are <em>"nested",</em> i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, <code>model1 (y ~ x1 + x2)</code> is "nested" within <code>model2 (y ~ x1 + x2 + x3)</code>. Usually, people have a list of nested models, for instance <code>m1 (y ~ x1 + x2 + x3)</code>, <code>m2 (y ~ x1 + x2)</code>, <code>m3 (y ~ x1)</code>, <code>m4 (y ~ 1)</code>, and they are "ordered" from the largest to smallest on vice versa, to test whether a more parcimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared <em>sequentially</em>: m2 is tested against m1, m3 against m2, m4 against m3, etc.
+<br /><br />
+Two models are considered as <em>"non-nested"</em> if their predictors are different. For instance, <code>model1 (y ~ x1 + x2)</code> and <code>model2 (y ~ x3 + x4)</code>. In the case of non-nested models, all models are usually compared against the same <em>reference</em> model (by default, the first of the list).
+<br /><br />
+Nesting is detected via the <code><a href='https://easystats.github.io/insight/reference/is_nested_models.html'>insight::is_nested_models()</a></code> function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variable (the response) must be the same. You cannot meaningfuly test whether apples are significantly different from oranges!</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Tests Description</h3>
+
+
+<ul>
+<li><p><strong>Wald's F-Test</strong> - <code>test_wald()</code>: The Wald test is a rough approximation of the Likelihood Ratio Test. However, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run.Importantly, this test only makes statistical sense if the models are nested.<br /> <br /> This test is also available in base R through the <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova()</a></code> function. It returns an <code>F-value</code> column as a statistic and its associated <code>p-value</code>.</p></li>
+<li><p><strong>Likelihood Ratio Test (LRT)</strong> - <code>test_likelihoodratio()</code>: The LRT tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the Wald test and, similarly, only makes sense for nested models. However, Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes (under or about 30) or if the parameters are large.<br /> <br /> For regression models, this is similar to <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(..., test="LRT")</a></code> or <code><a href='https://rdrr.io/pkg/lmtest/man/lrtest.html'>lmtest::lrtest(...)</a></code>, depending on the <code>estimator</code> argument. For <code>lavaan</code> models (SEM, CFA), the function calls <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>lavaan::lavTestLRT()</a></code>.</p></li>
+<li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can be used both for nested and non-nested models, and actually consists of two tests.</p><ul>
+<li><p>The <strong>Test of Distinguishability</strong> (the <code>Omega2</code> column and its associated p-value) indicates whether or not the models can possibly be distinguished on the basis of the observed data. If its p-value is significant, it means the models are distinguishable.</p></li>
+<li><p>The <strong>Robust Likelihood Test</strong> (the <code>LR</code> column and its associated p-value) indicates whether each model fits better than the reference model. If the models are nested, then the test works as a robust LRT. The code for this function is adapted from the <code>nonnest2</code> package, and all credit go to their authors.</p></li>
+</ul></li>
+</ul>
+
+
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    
+<ul>
+<li><p>Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.</p></li>
+<li><p>Merkle, E. C., You, D., &amp; Preacher, K. (2016). Testing non-nested structural equation models. Psychological Methods, 21, 151-163.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare performance of many different models.</p></div>
+    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare the performance indices of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Nested Models</span>
+<span class='co'># -------------</span>
 <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
@@ -170,14 +212,85 @@
 #&gt; m1   |    lm |        |          |            |      |       
 #&gt; m2   |    lm |  27.28 |     0.02 |      0.081 | 3.41 |  0.099
 #&gt; m3   |    lm | 138.91 | 9.54e-04 |      0.935 | 0.15 |  0.919
-#&gt; Models were detected as nested. Each model is compared to the one below.</div><div class='input'><span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, include_formula<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Name |                                    Model |     BF |   Omega2 | p (Omega2) |   LR | p (LR)
-#&gt; ------------------------------------------------------------------------------------------------
-#&gt; m1   | lm(Sepal.Length ~ Petal.Width * Species) |        |          |            |      |       
-#&gt; m2   | lm(Sepal.Length ~ Petal.Width + Species) |  27.28 |     0.02 |      0.081 | 3.41 |  0.099
-#&gt; m3   |           lm(Sepal.Length ~ Petal.Width) | 138.91 | 9.54e-04 |      0.935 | 0.15 |  0.919
-#&gt; Models were detected as nested. Each model is compared to the one below.</div><div class='input'>
-<span class='co'># Non-nested</span>
+#&gt; Models were detected as nested. Each model is compared to the one below.</div><div class='input'><span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>  <span class='co'># equivalent to anova(m1, m2, m3)</span>
+</div><div class='output co'>#&gt;   Name Model  df df_diff          F         p
+#&gt; 1   m1    lm 144      NA         NA        NA
+#&gt; 2   m2    lm 146      -2 1.65519698 0.1946683
+#&gt; 3   m3    lm 148      -2 0.07544805 0.9273645</div><div class='input'><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span> <span class='co'># Equivalent to lmtest::lrtest(m1, m2, m3)</span>
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
+#&gt; 
+#&gt; Model | df | df_diff | Chi2 |     p
+#&gt; -----------------------------------
+#&gt; m1    |  7 |         |      |      
+#&gt; m2    |  5 |      -2 | 3.41 | 0.182
+#&gt; m3    |  3 |      -2 | 0.15 | 0.926</div><div class='input'><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span> <span class='co'># Equivalent to anova(m1, m2, m3, test='LRT')</span>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
+#&gt; 
+#&gt; Model | df | df_diff | Chi2 |     p
+#&gt; -----------------------------------
+#&gt; m1    |  7 |         |      |      
+#&gt; m2    |  5 |      -2 | 3.31 | 0.191
+#&gt; m3    |  3 |      -2 | 0.15 | 0.927</div><div class='input'><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2, nested=TRUE)</span>
+</div><div class='output co'>#&gt;   Name Model       Omega2   p_Omega2        LR       p_LR
+#&gt; 1   m1    lm           NA         NA        NA         NA
+#&gt; 2   m2    lm 0.0225040529 0.08112211 3.4092877 0.09903392
+#&gt; 3   m3    lm 0.0009541423 0.93491015 0.1535725 0.91912847</div><div class='input'>
+<span class='co'># Non-nested Models</span>
+<span class='co'># -----------------</span>
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+
+<span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Name | Model |      BF | Omega2 | p (Omega2) |    LR | p (LR)
+#&gt; -------------------------------------------------------------
+#&gt; m1   |    lm |         |        |            |       |       
+#&gt; m2   |    lm |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001
+#&gt; m3   |    lm | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 |  0.006
+#&gt; Each model is compared to m1.</div><div class='input'><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2)</span>
+</div><div class='output co'>#&gt;   Name Model    Omega2      p_Omega2        LR         p_LR
+#&gt; 1   m1    lm        NA            NA        NA           NA
+#&gt; 2   m2    lm 0.1855419 -2.242953e-06 -4.566458 2.480171e-06
+#&gt; 3   m3    lm 0.1193515  1.379073e-04  2.508828 6.056629e-03</div><div class='input'>
+<span class='co'># Tweak the output</span>
+<span class='co'># ----------------</span>
+<span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, include_formula<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Name |                           Model |      BF | Omega2 | p (Omega2) |    LR | p (LR)
+#&gt; ---------------------------------------------------------------------------------------
+#&gt; m1   |  lm(Sepal.Length ~ Petal.Width) |         |        |            |       |       
+#&gt; m2   | lm(Sepal.Length ~ Petal.Length) |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001
+#&gt; m3   |      lm(Sepal.Length ~ Species) | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 |  0.006
+#&gt; Each model is compared to m1.</div><div class='input'>
+
+<span class='co'># SEM / CFA (lavaan objects)</span>
+<span class='co'># --------------------------</span>
+<span class='co'># Lavaan Models</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='http://lavaan.org'>"lavaan"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ textual + speed "</span>
+  <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span>
+
+  <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ 0 * textual + speed "</span>
+  <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span>
+
+  <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3
+                 textual =~ x4 + x5 + x6
+                 speed   =~ x7 + x8 + x9
+
+                  visual ~~ 0 * textual + 0 * speed "</span>
+  <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span>
+
+  <span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
+
+<span class='co'># Different Model Types</span>
+<span class='co'># ---------------------</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"mgcv"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
   <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
@@ -185,12 +298,14 @@
 
   <span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 <span class='op'>}</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: mgcv</span></div><div class='output co'>#&gt; <span class='message'>This is mgcv 1.8-33. For overview type 'help("mgcv-package")'.</span></div><div class='output co'>#&gt; Name |   Model |      BF
 #&gt; ------------------------
 #&gt; m1   |      lm |        
 #&gt; m2   | lmerMod | &lt; 0.001
 #&gt; m3   |     gam |   0.038
-#&gt; Each model is compared to m1.</div></pre>
+#&gt; Each model is compared to m1.</div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
