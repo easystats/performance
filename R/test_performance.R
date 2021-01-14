@@ -145,8 +145,7 @@ format.test_performance <- function(x, ...){
 
   if (attributes(x)$is_nested) {
     footer <- paste0("Models were detected as nested. Each model is compared to ",
-                     ifelse(attributes(x)$reference == "increasing", "the one below", "the one above"),
-                     ".")
+                     "the one below.")
   } else{
     footer <- paste0("Each model is compared to ",
                      x$Name[attributes(x)$reference],
@@ -189,11 +188,9 @@ print.test_performance <- function(x, ...) {
 
     # Adjust BFs for sequential testing
     if (reference == "sequential") {
-      if (attributes(objects)$is_nested_increasing) {
-        rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez) - 1])
-      } else{
-        rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez) - 1]) # TODO: correct the formula for other way round
-      }
+      # TODO: Double check that formula and whether it works for increasing and
+      # decreasing order.
+      rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez) - 1])
     }
 
     method <- attributes(rez)$BF_method

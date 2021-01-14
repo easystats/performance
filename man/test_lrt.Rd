@@ -46,7 +46,7 @@ test_lrt(m1, m2, m3, estimator = "ML") # Equivalent to lmtest::lrtest(m1, m2, m3
 test_lrt(m1, m2, m3, estimator = "OLS") # Equivalent to anova(m1, m2, m3, test='LRT')
 
 # nested from "largest" to "smallest" model.
-test_lrt(m3, m2, m1) # Equivalent to lmtest::lrtest(m1, m2, m3)
+test_lrt(m3, m2, m1)
 
 # Lavaan Models
 if (require("lavaan")) {
