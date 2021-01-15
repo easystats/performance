@@ -32,7 +32,7 @@ set.seed(333)
 
 # What is the R2?
 
-The **coefficient of determination**, denoted **R2** and pronounced "R squared", is the proportion of the variance in the dependent variable (the response) that is explained (i.e., predictable) from the independent variables (the predictors).
+The **coefficient of determination**, denoted **R2** and pronounced "R squared", is the proportion of the variance in the dependent variable (the response) that is *explained* (i.e., predictable) from the independent variables (the predictors).
 
 It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1, and can be used for model performance assessment or models comparison.
 
@@ -40,7 +40,8 @@ It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1, and can be 
 
 As models become more complex, the computation of an R2 becomes less straightforward.
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE, include=FALSE}
+# DONT INCLUDE FOR NOW AS IT's NOT COMPLETE
 d <- data.frame(
   "Model_class" = c("lm", "glm"),
   "r2_simple" = c("X", NA),
@@ -48,3 +49,19 @@ d <- data.frame(
 )
 knitr::kable(d)
 ```
+
+*TO BE COMPLETED.*
+
+# R2 for GLMs
+
+In this context, R2 doesn't measure the percentage of *"explained variance"*, as this concept doesn't apply. However, the R2s that have been adapted for GLMs have retained the name of "R2", mostly because of the similar properties (the range, the sensitivity and the interpretation).
+
+# R2 for Mixed Models
+
+*TO BE COMPLETED.*
+
+## Marginal vs. Conditional R2
+
+# R2 for Bayesian Models
+
+*TO BE COMPLETED.*

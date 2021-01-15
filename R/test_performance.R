@@ -1,6 +1,6 @@
 #' @title Test if Models are Different
 #'
-#' @description Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation and set of strengths and weaknesses.\cr \cr The \code{test_performance()} function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are \emph{nested} or not) See the \strong{details} section for more information regarding the different tests and their interpretation.
+#' @description Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation, and set of strengths and weaknesses.\cr \cr The \code{test_performance()} function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are \emph{nested} or not). That said, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the \strong{details} section for more information regarding the different tests and their interpretation.
 #'
 #' @param ... Multiple model objects.
 #' @param reference This only applies when models are non-nested, and determines which model should be taken as a reference, against which all the other models are tested.
@@ -234,7 +234,10 @@ print.test_performance <- function(x, ...) {
   out <- insight::export_table(format(x), ...)
   cat(out)
 }
-
+#' @export
+print_md.test_performance <- function(x, ...) {
+  insight::export_table(format(x), format="markdown", ...)
+}
 
 
 

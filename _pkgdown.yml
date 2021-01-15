@@ -12,7 +12,6 @@ reference:
 - title: "Comprehensive Summaries"
   contents:
   - check_model
-  - compare_performance
   - model_performance
   - model_performance.lm
   - model_performance.merMod
@@ -20,12 +19,6 @@ reference:
   - model_performance.lavaan
   - model_performance.rma
   - model_performance.ivreg
-
-- title: "Common Indices"
-  contents:
-  - icc
-  - looic
-  - r2
 
 - title: "Check Model Assumptions or Properties"
   contents:
@@ -55,13 +48,8 @@ reference:
   - performance_roc
   - performance_rse
   - performance_score
-
-- title: "Comparing Models"
-  contents:
-  - test_performance
-  - test_lrt
-  - test_vuong
-  - test_wald
+  - icc
+  - looic
 
 - title: "Check Items and Scales"
   contents:
@@ -72,8 +60,17 @@ reference:
   - item_reliability
   - item_split_half
 
-- title: "Further R2 Functions"
+- title: "Comparing and Testing Models"
   contents:
+  - compare_performance
+  - test_performance
+  - test_lrt
+  - test_vuong
+  - test_wald
+  
+- title: "R2 Functions"
+  contents:
+  - r2
   - r2_bayes
   - r2_coxsnell
   - r2_efron
