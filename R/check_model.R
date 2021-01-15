@@ -22,7 +22,10 @@
 #' @return The data frame that is used for plotting.
 #'
 #' @note This function just prepares the data for plotting. To create the plots,
-#' \CRANpkg{see} needs to be installed.
+#' \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+#' all possible warnings. In case you observe suspicious plots, please refer to
+#' the dedicated functions (like \code{check_collinearity()}, \code{check_normality()}
+#' etc.) to get informative messages and warnings.
 #'
 #' @examples
 #' \dontrun{
