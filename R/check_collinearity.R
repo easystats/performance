@@ -217,8 +217,16 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 #' @importFrom insight get_varcov
 .check_collinearity <- function(x, component, verbose = TRUE) {
-  v <- insight::get_varcov(x, component = component)
+  v <- insight::get_varcov(x, component = component, verbose = FALSE)
   assign <- .term_assignments(x, component)
+
+  # we have rank-deficiency here. remove NA columns from assignment
+  if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
+    assign <- assign[-attributes(v)$na_columns_index]
+    if (isTRUE(verbose)) {
+      warning("Model matrix is rank deficient. VIFs may not be sensible.", call. = FALSE)
+    }
+  }
 
   # check for missing intercept
   if (insight::has_intercept(x)) {
@@ -255,13 +263,23 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   detR <- det(R)
 
   result <- vector("numeric")
+  na_terms <- vector("numeric")
 
   for (term in 1:n.terms) {
     subs <- which(assign == term)
-    result <- c(
-      result,
-      det(as.matrix(R[subs, subs])) * det(as.matrix(R[-subs, -subs])) / detR
-    )
+    if (length(subs)) {
+      result <- c(
+        result,
+        det(as.matrix(R[subs, subs])) * det(as.matrix(R[-subs, -subs])) / detR
+      )
+    } else {
+      na_terms <- c(na_terms, term)
+    }
+  }
+
+  # any terms to remove, due to rank deficiency?
+  if (length(na_terms)) {
+    terms <- terms[-na_terms]
   }
 
   # check for interactions, VIF might be inflated...
