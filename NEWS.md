@@ -1,6 +1,5 @@
 # performance 0.6.2
 
-
 ## New functions
 
 * `test_performance_vuong()`, to compare models using Vuong's (1989) Test.
@@ -21,6 +20,7 @@
 
 * Fixed issue in `icc()` and `variance_decomposition()` for multivariate response models, where not all model parts contained random effects.
 * Fixed issue in `compare_performance()` with duplicated rows.
+* `check_collinearity()` no longer breaks for models with rank deficient model matrix, but gives a warning instead.
 
 # performance 0.6.1
 
