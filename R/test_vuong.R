@@ -267,10 +267,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   A <- chol2inv(chol(covmat))
 
   # Get B (Eq 2.2)
-  if (!requireNamespace("sandwich", quietly = TRUE)) {
-    stop("Package 'sandwich' required. Please install it by running `install.packages('sandwich')`.")
-  }
-  sc <- (1 / scaling) * sandwich::estfun(model, remove.duplicated = TRUE)
+  sc <- (1 / scaling) * .get_gradients(model)
   sc.cp <- crossprod(sc) / n
   B <- matrix(sc.cp, nrow(A), nrow(A))
 
