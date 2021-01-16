@@ -13,6 +13,5 @@ if (require("testthat") && require("performance") && require("lme4")) {
 
   test_that("rmse", {
     expect_equal(cp$RMSE, c(47.4489, 47.39881, 47.38701, 47.41375, 47.39979, 47.38705), tolerance = 1e-3)
-    expect_equal(cp$BF, c(NA, 1.20939, 1.26483, 1234.82916, 1287.70981, 1360.58689), tolerance = 1e-3)
   })
 }

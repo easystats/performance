@@ -1,5 +1,9 @@
 # performance 0.6.2
 
+## Breaking Changes
+
+- `compare_performance()` doesn't return the models' Bayes Factors, now returned by `test_performance()`.
+
 ## New functions
 
 * `test_performance_vuong()`, to compare models using Vuong's (1989) Test.
@@ -57,7 +61,7 @@
 * `performance_accuracy()` now accepts all types of linear or logistic regression models, even if these are not of class `lm` or `glm`.
 * `performance_roc()` now accepts all types of logistic regression models, even if these are not of class `glm`.
 * `r2()` for mixed models and `r2_nakagawa()` gain a `tolerance`-argument, to set the tolerance level for singularity checks when computing random effect variances for the conditional r-squared.
-  
+
 ## Bug fixes
 
 * Fixed issue in `icc()` introduced in the last update that make `lme`-models fail.
