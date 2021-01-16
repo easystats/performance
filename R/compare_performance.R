@@ -13,14 +13,7 @@
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
-#' @details \subsection{Bayes factor for Model Comparison}{
-#'   If all models were fit from the same data, \code{compare_performance()}
-#'   returns an additional column named \code{BF}, which shows the Bayes factor
-#'   (see \code{bayestestR::bayesfactor_models()}) for each model against
-#'   the denominator model. The \emph{first} model is used as denominator model,
-#'   and its Bayes factor is set to \code{NA} to indicate the reference model.
-#'   }
-#'   \subsection{Ranking Models}{
+#' @details \subsection{Ranking Models}{
 #'   When \code{rank = TRUE}, a new column \code{Performance_Score} is returned. This
 #'   score ranges from 0\% to 100\%, higher values indicating better model performance.
 #'   Note that all score value do not necessarily sum up to 100\%. Rather,
