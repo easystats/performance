@@ -32,7 +32,7 @@ options(
 ```
 
 
-[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/) [![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html) [![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions) [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/) [![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
 
 
 ***Test if your model is a good model!***
@@ -52,8 +52,6 @@ library("performance")
 
 
 # Examples
-
-[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/) [![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html) [![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
 
 There is a nice introduction into the package on [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
 
@@ -245,16 +243,16 @@ Finally, we provide convenient visualisation (the `see` package must be installe
 plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
-### Comparing models with the Bayes Factor
+### Testing models
 
-For some models (for instance, frequentist linear models), the `compare_performance()` function will compute the **Bayes factor (BF)**, testing if each model is better than the first one (which is used as a ground reference).
+`test_performance()` carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not). 
 
 ```{r, warning=FALSE, message=FALSE}
 m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
 m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
-compare_performance(m1, m2, m3)
+test_performance(m1, m2, m3)
 ```
 
 # References

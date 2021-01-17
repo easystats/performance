@@ -2,7 +2,13 @@
 # performance <img src='man/figures/logo.png' align="right" height="139" />
 
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
+[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
+[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html)
+[![R
+check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
 
 ***Test if your model is a good model\!***
 
@@ -26,10 +32,6 @@ library("performance")
 ```
 
 # Examples
-
-[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
-[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html)
-[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
 
 There is a nice introduction into the package on
 [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
@@ -93,7 +95,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
-#>      Marginal R2: 0.823 (89% CI [0.740, 0.885])
+#>      Marginal R2: 0.826 (89% CI [0.751, 0.886])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -331,26 +333,23 @@ plot(compare_performance(m1, m2, m4, rank = TRUE))
 
 ![](man/figures/unnamed-chunk-19-1.png)<!-- -->
 
-### Comparing models with the Bayes Factor
+### Testing models
 
-For some models (for instance, frequentist linear models), the
-`compare_performance()` function will compute the **Bayes factor (BF)**,
-testing if each model is better than the first one (which is used as a
-ground reference).
+`test_performance()` carries out the most relevant and appropriate tests
+based on the input (for instance, whether the models are nested or not).
 
 ``` r
 m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
 m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
-compare_performance(m1, m2, m3)
-#> # Comparison of Model Performance Indices
-#> 
-#> Model | Type |    AIC |    BIC |   R2 | R2 (adj.) | RMSE | Sigma |     BF
-#> -------------------------------------------------------------------------
-#> m1    |   lm | 160.04 | 169.07 | 0.76 |      0.76 | 0.40 |  0.41 |   1.00
-#> m2    |   lm | 158.05 | 170.09 | 0.77 |      0.76 | 0.40 |  0.40 |  0.601
-#> m3    |   lm | 130.70 | 145.75 | 0.81 |      0.80 | 0.36 |  0.37 | > 1000
+test_performance(m1, m2, m3)
+#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
+#> ------------------------------------------------------------
+#> m1   |    lm |        |        |            |       |       
+#> m2   |    lm |  0.601 |   0.03 |      0.062 |  3.99 |  0.057
+#> m3   |    lm | > 1000 |   0.16 |     < .001 | 29.35 | < .001
+#> Models were detected as nested. Each model is compared to the one below.
 ```
 
 # References
