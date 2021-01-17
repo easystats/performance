@@ -1,5 +1,9 @@
 # performance 0.6.2
 
+## General
+
+* Roll-back R dependency to R >= 3.3.
+
 ## Breaking Changes
 
 - `compare_performance()` doesn't return the models' Bayes Factors, now returned by `test_performance()`.

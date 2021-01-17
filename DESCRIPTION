@@ -41,7 +41,7 @@ Description: Utilities for computing measures to assess model quality,
 URL: https://easystats.github.io/performance/
 BugReports: https://github.com/easystats/performance/issues
 Depends:
-  R (>= 3.6)
+  R (>= 3.3)
 Imports:
 	insight (>= 0.11.0),
 	bayestestR (>= 0.7.5),
