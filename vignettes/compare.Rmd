@@ -22,6 +22,7 @@ editor_options:
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
+library(performance)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(comment = "#>")
 options(digits = 2)
@@ -30,9 +31,9 @@ set.seed(333)
 ```
 
 
-# Comparing *vs.* Testing
+# Comparing vs. Testing
 
-Let's imagine that we are interested in explaining the variability in the **Sepal.Length** using 3 different predictors. For that, we can build 3 linear models.
+Let's imagine that we are interested in explaining the variability in the `Sepal.Length` using 3 different predictors. For that, we can build 3 linear models.
 
 ```{r message=FALSE, warning=FALSE}
 model1 <- lm(Sepal.Length ~ Petal.Length, data=iris)
@@ -43,7 +44,7 @@ model3 <- lm(Sepal.Length ~ Sepal.Width, data=iris)
 
 ## Comparing Indices of Model Performance
 
-The eponym function of the package, [**performance()**](https://easystats.github.io/performance/reference/model_performance.html), can be used to compute different indices of performance (an umbrella term for indices of fit, ...).
+The eponym function of the package, [`performance()`](https://easystats.github.io/performance/reference/model_performance.html), can be used to compute different indices of performance (an umbrella term for indices of fit, ...).
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(performance)
@@ -54,7 +55,7 @@ performance(model1)
 insight::print_md(performance(model1))
 ```
 
-But for multiple models, one can obtain a useful table to compare these indices at a glance using the [**compare_performance()**](https://easystats.github.io/performance/reference/compare_performance.html) function.
+But for multiple models, one can obtain a useful table to compare these indices at a glance using the [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html) function.
 
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
@@ -68,7 +69,7 @@ insight::print_md(compare_performance(model1, model2, model3))
 
 While comparing these indices is often useful, making a decision (for instance, which model to keep or drop) can be hard, as the indices can give conflicting suggestions, and it's often not obvious which index to favour depending on the scenario one is in.
 
-This is one of the reason why ***tests*** are useful, as they facilitate decisions, enabled by (infamous) "significance" indices, like *p*-values or [**Bayes Factors**](https://easystats.github.io/bayestestR/articles/bayes_factors.html). However, these tests also have strong limitations and shortcomings, and cannot be used as the **one ring to rule them all**. 
+This is one of the reason why *tests* are useful, as they facilitate decisions, enabled by (infamous) "significance" indices, like *p*-values or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html). However, these tests also have strong limitations and shortcomings, and cannot be used as the **one ring to rule them all**. 
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 test_performance(model1, model2, model3)
