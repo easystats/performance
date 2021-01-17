@@ -88,22 +88,22 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/r2.html">R-squared (R2)</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li>
+  <a href="../articles/compare.html">Compare, Test and Select Models</a>
+</li>
+<li>
+  <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -158,12 +158,6 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="compare_performance.html">compare_performance()</a></code> </p>
-        </td>
-        <td><p>Compare performance of different models</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="model_performance.html">model_performance()</a></code> <code><a href="model_performance.html">performance()</a></code> </p>
         </td>
         <td><p>Model Performance</p></td>
@@ -203,37 +197,6 @@
           <p><code><a href="model_performance.ivreg.html">model_performance(<i>&lt;ivreg&gt;</i>)</a></code> </p>
         </td>
         <td><p>Performance of instrumental variable regression models</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-common-indices" class="hasAnchor"><a href="#section-common-indices" class="anchor"></a>Common Indices</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="icc.html">icc()</a></code> <code><a href="icc.html">variance_decomposition()</a></code> </p>
-        </td>
-        <td><p>Intraclass Correlation Coefficient (ICC)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="looic.html">looic()</a></code> </p>
-        </td>
-        <td><p>LOO-related Indices for Bayesian regressions.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="r2.html">r2()</a></code> </p>
-        </td>
-        <td><p>Compute the model's R2</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -398,25 +361,18 @@
           <p><code><a href="performance_score.html">performance_score()</a></code> </p>
         </td>
         <td><p>Proper Scoring Rules</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-comparing-models" class="hasAnchor"><a href="#section-comparing-models" class="anchor"></a>Comparing Models</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
+      </tr><tr>
         
         <td>
-          <p><code><a href="test_performance.html">test_likelihoodratio()</a></code> <code><a href="test_performance.html">performance_lrt()</a></code> <code><a href="test_performance.html">test_performance()</a></code> <code><a href="test_performance.html">test_vuong()</a></code> <code><a href="test_performance.html">test_wald()</a></code> </p>
+          <p><code><a href="icc.html">icc()</a></code> <code><a href="icc.html">variance_decomposition()</a></code> </p>
         </td>
-        <td><p>Test if Models are Different</p></td>
+        <td><p>Intraclass Correlation Coefficient (ICC)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="looic.html">looic()</a></code> </p>
+        </td>
+        <td><p>LOO-related Indices for Bayesian regressions.</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -470,7 +426,7 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-further-r-functions" class="hasAnchor"><a href="#section-further-r-functions" class="anchor"></a>Further R2 Functions</h2>
+          <h2 id="section-comparing-and-testing-models" class="hasAnchor"><a href="#section-comparing-and-testing-models" class="anchor"></a>Comparing and Testing Models</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -480,6 +436,37 @@
       
       
       <tr>
+        
+        <td>
+          <p><code><a href="compare_performance.html">compare_performance()</a></code> </p>
+        </td>
+        <td><p>Compare performance of different models</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="test_performance.html">test_bf()</a></code> <code><a href="test_performance.html">test_likelihoodratio()</a></code> <code><a href="test_performance.html">performance_lrt()</a></code> <code><a href="test_performance.html">test_performance()</a></code> <code><a href="test_performance.html">test_vuong()</a></code> <code><a href="test_performance.html">test_wald()</a></code> </p>
+        </td>
+        <td><p>Test if Models are Different</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-r-functions" class="hasAnchor"><a href="#section-r-functions" class="anchor"></a>R2 Functions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="r2.html">r2()</a></code> </p>
+        </td>
+        <td><p>Compute the model's R2</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="r2_bayes.html">r2_bayes()</a></code> <code><a href="r2_bayes.html">r2_posterior()</a></code> </p>

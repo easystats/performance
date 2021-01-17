@@ -88,22 +88,22 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/r2.html">R-squared (R2)</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li>
+  <a href="../articles/compare.html">Compare, Test and Select Models</a>
+</li>
+<li>
+  <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -134,6 +134,21 @@
 <h1 class="page-header" data-toc-text="0.6.2">
 <a href="#performance-062" class="anchor"></a>performance 0.6.2<small> Unreleased </small>
 </h1>
+<div id="general" class="section level2">
+<h2 class="hasAnchor">
+<a href="#general" class="anchor"></a>General</h2>
+<ul>
+<li>Roll-back R dependency to R &gt;= 3.4.</li>
+</ul>
+</div>
+<div id="breaking-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#breaking-changes" class="anchor"></a>Breaking Changes</h2>
+<ul>
+<li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> doesn’t return the models’ Bayes Factors, now returned by <code><a href="../reference/test_bf.html">test_performance()</a></code>.</li>
+</ul>
+</div>
 <div id="new-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New functions</h2>
@@ -170,6 +185,8 @@
 <ul>
 <li>Fixed issue in <code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/icc.html">variance_decomposition()</a></code> for multivariate response models, where not all model parts contained random effects.</li>
 <li>Fixed issue in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> with duplicated rows.</li>
+<li>
+<code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> no longer breaks for models with rank deficient model matrix, but gives a warning instead.</li>
 </ul>
 </div>
 </div>
@@ -177,9 +194,9 @@
 <h1 class="page-header" data-toc-text="0.6.1">
 <a href="#performance-061" class="anchor"></a>performance 0.6.1<small> 2020-12-09 </small>
 </h1>
-<div id="general" class="section level2">
+<div id="general-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general" class="anchor"></a>General</h2>
+<a href="#general-1" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> gains a <code>verbose</code> argument, to toggle warnings and messages.</li>
@@ -197,9 +214,9 @@
 <h1 class="page-header" data-toc-text="0.6.0">
 <a href="#performance-060" class="anchor"></a>performance 0.6.0<small> 2020-12-01 </small>
 </h1>
-<div id="general-1" class="section level2">
+<div id="general-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-1" class="anchor"></a>General</h2>
+<a href="#general-2" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now supports <code>margins</code>, <code>gamlss</code>, <code>stanmvreg</code> and <code>semLme</code>.</li>
@@ -259,9 +276,9 @@
 <h1 class="page-header" data-toc-text="0.5.1">
 <a href="#performance-051" class="anchor"></a>performance 0.5.1<small> 2020-10-29 </small>
 </h1>
-<div id="breaking-changes" class="section level2">
+<div id="breaking-changes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>Column names for <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code> were changed to be in line with the <em>easystats</em> naming convention: <code>LOGLOSS</code> is now <code>Log_loss</code>, <code>SCORE_LOG</code> is <code>Score_log</code> and <code>SCORE_SPHERICAL</code> is now <code>Score_spherical</code>.</li>
 </ul>
@@ -302,9 +319,9 @@
 <h1 class="page-header" data-toc-text="0.5.0">
 <a href="#performance-050" class="anchor"></a>performance 0.5.0<small> 2020-09-12 </small>
 </h1>
-<div id="general-2" class="section level2">
+<div id="general-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-2" class="anchor"></a>General</h2>
+<a href="#general-3" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> and <code><a href="../reference/icc.html">icc()</a></code> support <code>semLME</code> models (package <em>smicd</em>).</li>
@@ -337,9 +354,9 @@
 <h1 class="page-header" data-toc-text="0.4.8">
 <a href="#performance-048" class="anchor"></a>performance 0.4.8<small> 2020-07-27 </small>
 </h1>
-<div id="general-3" class="section level2">
+<div id="general-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-3" class="anchor"></a>General</h2>
+<a href="#general-4" class="anchor"></a>General</h2>
 <ul>
 <li>Removed suggested packages that have been removed from CRAN.</li>
 </ul>
@@ -357,7 +374,7 @@
 <a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
 <li>Fix issue with new version of <em>bigutilsr</em> for <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</li>
-<li>Fix issue with model order in <code><a href="../reference/test_likelihoodratio.html">performance_lrt()</a></code>.</li>
+<li>Fix issue with model order in <code><a href="../reference/test_bf.html">performance_lrt()</a></code>.</li>
 </ul>
 </div>
 </div>
@@ -365,9 +382,9 @@
 <h1 class="page-header" data-toc-text="0.4.7">
 <a href="#performance-047" class="anchor"></a>performance 0.4.7<small> 2020-06-14 </small>
 </h1>
-<div id="general-4" class="section level2">
+<div id="general-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-4" class="anchor"></a>General</h2>
+<a href="#general-5" class="anchor"></a>General</h2>
 <ul>
 <li>Support for models from package <em>mfx</em>.</li>
 </ul>
@@ -397,9 +414,9 @@
 <h1 class="page-header" data-toc-text="0.4.6">
 <a href="#performance-046" class="anchor"></a>performance 0.4.6<small> 2020-05-03 </small>
 </h1>
-<div id="general-5" class="section level2">
+<div id="general-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-5" class="anchor"></a>General</h2>
+<a href="#general-6" class="anchor"></a>General</h2>
 <ul>
 <li>Minor revisions to <code><a href="../reference/model_performance.html">model_performance()</a></code> to meet changes in <em>mlogit</em> package.</li>
 <li>Support for <code>bayesx</code> models.</li>
@@ -414,7 +431,7 @@
 <li>
 <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gains a <code>by_group</code> argument, to compute explained variance at different levels (following the variance-reduction approach by Hox 2010).</li>
 <li>
-<code><a href="../reference/test_likelihoodratio.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</li>
+<code><a href="../reference/test_bf.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</li>
 </ul>
 </div>
 <div id="bug-fixes-7" class="section level2">
@@ -431,9 +448,9 @@
 <h1 class="page-header" data-toc-text="0.4.5">
 <a href="#performance-045" class="anchor"></a>performance 0.4.5<small> 2020-03-28 </small>
 </h1>
-<div id="general-6" class="section level2">
+<div id="general-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-6" class="anchor"></a>General</h2>
+<a href="#general-7" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/r2.html">r2()</a></code> now support <em>rma</em>-objects from package <em>metafor</em>, <em>mlm</em> and <em>bife</em> models.</li>
@@ -465,9 +482,9 @@
 <h1 class="page-header" data-toc-text="0.4.4">
 <a href="#performance-044" class="anchor"></a>performance 0.4.4<small> 2020-02-10 </small>
 </h1>
-<div id="general-7" class="section level2">
+<div id="general-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-7" class="anchor"></a>General</h2>
+<a href="#general-8" class="anchor"></a>General</h2>
 <ul>
 <li>Removed <code>logLik.felm()</code>, because this method is now implemented in the <em>lfe</em> package.</li>
 <li>Support for <code>DirichletRegModel</code> models.</li>
@@ -495,9 +512,9 @@
 <h1 class="page-header" data-toc-text="0.4.3">
 <a href="#performance-043" class="anchor"></a>performance 0.4.3<small> 2020-01-22 </small>
 </h1>
-<div id="general-8" class="section level2">
+<div id="general-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-8" class="anchor"></a>General</h2>
+<a href="#general-9" class="anchor"></a>General</h2>
 <ul>
 <li>Support for <code>mixor</code>, <code>cpglm</code> and <code>cpglmm</code> models.</li>
 </ul>
@@ -509,7 +526,7 @@
 <li>
 <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</li>
 <li>
-<code><a href="../reference/test_likelihoodratio.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
+<code><a href="../reference/test_bf.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
 </ul>
 </div>
 <div id="bug-fixes-10" class="section level2">
@@ -532,9 +549,9 @@
 <h1 class="page-header" data-toc-text="0.4.2">
 <a href="#performance-042" class="anchor"></a>performance 0.4.2<small> 2019-12-11 </small>
 </h1>
-<div id="general-9" class="section level2">
+<div id="general-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-9" class="anchor"></a>General</h2>
+<a href="#general-10" class="anchor"></a>General</h2>
 <ul>
 <li>Support for <code>bracl</code>, <code>brmultinom</code>, <code>fixest</code>, <code>glmx</code>, <code>glmmadmb</code>, <code>mclogit</code>, <code>mmclogit</code>, <code>vgam</code> and <code>vglm</code> models.</li>
 <li>
@@ -581,9 +598,9 @@
 <h1 class="page-header" data-toc-text="0.4.0">
 <a href="#performance-040" class="anchor"></a>performance 0.4.0<small> 2019-10-21 </small>
 </h1>
-<div id="general-10" class="section level2">
+<div id="general-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-10" class="anchor"></a>General</h2>
+<a href="#general-11" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.html">performance()</a></code> is an alias for <code><a href="../reference/model_performance.html">model_performance()</a></code>.</li>
@@ -627,18 +644,18 @@
 <h1 class="page-header" data-toc-text="0.3.0">
 <a href="#performance-030" class="anchor"></a>performance 0.3.0<small> 2019-08-05 </small>
 </h1>
-<div id="general-11" class="section level2">
+<div id="general-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-11" class="anchor"></a>General</h2>
+<a href="#general-12" class="anchor"></a>General</h2>
 <ul>
 <li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>-method.</li>
 </ul>
 </div>
-<div id="breaking-changes-1" class="section level2">
+<div id="breaking-changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes-1" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-2" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>The attribute for the standard error of the Bayesian R2 (<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code>) was renamed from <code>std.error</code> to <code>SE</code> to be in line with the naming convention of other easystats-packages.</li>
 <li>
@@ -689,9 +706,9 @@
 <h1 class="page-header" data-toc-text="0.2.0">
 <a href="#performance-020" class="anchor"></a>performance 0.2.0<small> 2019-06-04 </small>
 </h1>
-<div id="general-12" class="section level2">
+<div id="general-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-12" class="anchor"></a>General</h2>
+<a href="#general-13" class="anchor"></a>General</h2>
 <ul>
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</li>
@@ -749,9 +766,9 @@
 <code><a href="../reference/r2_xu.html">r2_xu()</a></code> as a crude R2 measure for linear (mixed) models.</li>
 </ul>
 </div>
-<div id="breaking-changes-2" class="section level2">
+<div id="breaking-changes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#breaking-changes-2" class="anchor"></a>Breaking changes</h2>
+<a href="#breaking-changes-3" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>
 <code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.</li>

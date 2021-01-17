@@ -91,22 +91,22 @@ multicollinearity)." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/r2.html">R-squared (R2)</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li>
+  <a href="../articles/compare.html">Compare, Test and Select Models</a>
+</li>
+<li>
+  <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -198,7 +198,10 @@ By default, all possible checks are performed and plotted.</p></td>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function just prepares the data for plotting. To create the plots,
-<a href='https://CRAN.R-project.org/package=see'><span class="pkg">see</span></a> needs to be installed.</p>
+<a href='https://CRAN.R-project.org/package=see'><span class="pkg">see</span></a> needs to be installed. Furthermore, this function suppresses
+all possible warnings. In case you observe suspicious plots, please refer to
+the dedicated functions (like <code><a href='check_collinearity.html'>check_collinearity()</a></code>, <code><a href='check_normality.html'>check_normality()</a></code>
+etc.) to get informative messages and warnings.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>

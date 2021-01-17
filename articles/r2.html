@@ -45,22 +45,22 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
      
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/r2.html">R-squared (R2)</a>
-    </li>
-  </ul>
 </li>
 <li>
-  <a href="../news/index.html">Changelog</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li>
+  <a href="../articles/compare.html">Compare, Test and Select Models</a>
+</li>
+<li>
+  <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -96,32 +96,33 @@
 <div id="what-is-the-r2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#what-is-the-r2" class="anchor"></a>What is the R2?</h1>
-<p>The <strong>coefficient of determination</strong>, denoted <strong>R2</strong> and pronounced “R squared”, is the proportion of the variance in the dependent variable (the response) that is explained (i.e., predictable) from the independent variables (the predictors).</p>
+<p>The <strong>coefficient of determination</strong>, denoted <strong>R2</strong> and pronounced “R squared”, is the proportion of the variance in the dependent variable (the response) that is <em>explained</em> (i.e., predictable) from the independent variables (the predictors).</p>
 <p>It is an “absolute” index of <em>goodness-of-fit</em>, ranging from 0 to 1, and can be used for model performance assessment or models comparison.</p>
 </div>
 <div id="different-types-of-r2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#different-types-of-r2" class="anchor"></a>Different types of R2</h1>
 <p>As models become more complex, the computation of an R2 becomes less straightforward.</p>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Model_class</th>
-<th align="left">r2_simple</th>
-<th align="left">r2_Tjur</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">lm</td>
-<td align="left">X</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">glm</td>
-<td align="left"></td>
-<td align="left">X</td>
-</tr>
-</tbody>
-</table>
+<p><em>TO BE COMPLETED.</em></p>
+</div>
+<div id="r2-for-glms" class="section level1">
+<h1 class="hasAnchor">
+<a href="#r2-for-glms" class="anchor"></a>R2 for GLMs</h1>
+<p>In this context, R2 doesn’t measure the percentage of <em>“explained variance”</em>, as this concept doesn’t apply. However, the R2s that have been adapted for GLMs have retained the name of “R2”, mostly because of the similar properties (the range, the sensitivity and the interpretation).</p>
+</div>
+<div id="r2-for-mixed-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#r2-for-mixed-models" class="anchor"></a>R2 for Mixed Models</h1>
+<p><em>TO BE COMPLETED.</em></p>
+<div id="marginal-vs--conditional-r2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#marginal-vs--conditional-r2" class="anchor"></a>Marginal vs. Conditional R2</h2>
+</div>
+</div>
+<div id="r2-for-bayesian-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#r2-for-bayesian-models" class="anchor"></a>R2 for Bayesian Models</h1>
+<p><em>TO BE COMPLETED.</em></p>
 </div>
   </div>
 
