@@ -2,7 +2,7 @@
 
 ## General
 
-* Roll-back R dependency to R >= 3.3.
+* Roll-back R dependency to R >= 3.4.
 
 ## Breaking Changes
 
