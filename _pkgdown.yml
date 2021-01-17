@@ -67,7 +67,7 @@ reference:
   - test_lrt
   - test_vuong
   - test_wald
-  
+
 - title: "R2 Functions"
   contents:
   - r2
@@ -94,3 +94,16 @@ reference:
   contents:
   - classify_distribution
 
+navbar:
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: News
+    href: news/index.html
+  - text: Features
+    href: reference/index.html
+  - text: Compare, Test and Select Models
+    href: articles/compare.html
+  - text: Explained Variance (R-Squared)
+    href: articles/r2.html
