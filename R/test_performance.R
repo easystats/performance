@@ -19,7 +19,7 @@
 #' } \subsection{Tests Description}{
 #'
 #' \itemize{
-#'   \item \strong{Bayes factor for Model Comparison} - \code{bayestestR::bayesfactor_models()}: If all models were fit from the same data, the returned \code{BF} shows the Bayes factor (see \code{bayestestR::bayesfactor_models()}) for each model against the reference model (which depends on whether the models are nested or not).
+#'   \item \strong{Bayes factor for Model Comparison} - \code{test_bf()}: If all models were fit from the same data, the returned \code{BF} shows the Bayes Factor (see \code{bayestestR::bayesfactor_models()}) for each model against the reference model (which depends on whether the models are nested or not). Check out \href{https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models}{this vignette} for more details.
 #'   \item \strong{Wald's F-Test} - \code{test_wald()}: The Wald test is a rough approximation of the Likelihood Ratio Test. However, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run.Importantly, this test only makes statistical sense if the models are nested.\cr \cr This test is also available in base R through the \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column as a statistic and its associated \code{p-value}.
 #'   \item \strong{Likelihood Ratio Test (LRT)} - \code{test_likelihoodratio()}: The LRT tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the Wald test and, similarly, only makes sense for nested models. However, Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes (under or about 30) or if the parameters are large.\cr \cr For regression models, this is similar to \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, depending on the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the function calls \code{lavaan::lavTestLRT()}.
 #'   \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can be used both for nested and non-nested models, and actually consists of two tests.\itemize{
@@ -36,7 +36,8 @@
 #' m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 #'
 #' test_performance(m1, m2, m3)
-#' test_wald(m1, m2, m3)  # equivalent to anova(m1, m2, m3)
+#' test_bf(m1, m2, m3)
+#' test_wald(m1, m2, m3) # equivalent to anova(m1, m2, m3)
 #' test_likelihoodratio(m1, m2, m3, estimator = "ML") # Equivalent to lmtest::lrtest(m1, m2, m3)
 #' test_likelihoodratio(m1, m2, m3, estimator = "OLS") # Equivalent to anova(m1, m2, m3, test='LRT')
 #' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
@@ -48,11 +49,12 @@
 #' m3 <- lm(Sepal.Length ~ Species, data = iris)
 #'
 #' test_performance(m1, m2, m3)
+#' test_bf(m1, m2, m3)
 #' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
 #'
 #' # Tweak the output
 #' # ----------------
-#' test_performance(m1, m2, m3, include_formula=TRUE)
+#' test_performance(m1, m2, m3, include_formula = TRUE)
 #'
 #'
 #' # SEM / CFA (lavaan objects)
@@ -82,17 +84,16 @@
 #'
 #'   test_likelihoodratio(m1, m2, m3)
 #'
-#' # Different Model Types
-#' # ---------------------
-#' if (require("lme4") & require("mgcv")) {
-#'   m1 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
-#'   m2 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-#'   m3 <- gam(Sepal.Length ~ s(Petal.Length, by = Species) + Species, data = iris)
+#'   # Different Model Types
+#'   # ---------------------
+#'   if (require("lme4") & require("mgcv")) {
+#'     m1 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
+#'     m2 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#'     m3 <- gam(Sepal.Length ~ s(Petal.Length, by = Species) + Species, data = iris)
 #'
-#'   test_performance(m1, m2, m3)
+#'     test_performance(m1, m2, m3)
+#'   }
 #' }
-#' }
-#'
 #' @references
 #' \itemize{
 #'   \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.
@@ -102,6 +103,7 @@
 test_performance <- function(..., reference = 1) {
   UseMethod("test_performance")
 }
+
 
 #' @importFrom insight ellipsis_info
 #' @export
@@ -117,7 +119,7 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_performance(objects, reference = reference, include_formula = include_formula)
-  } else{
+  } else {
     stop("The models cannot be compared for some reason :/")
   }
 }
@@ -130,17 +132,28 @@ test_performance.ListNestedRegressions <- function(objects, reference = 1, inclu
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
-  out <- .test_BF(objects, out, reference = "sequential")
+  tryCatch(
+    {
+      rez <- test_bf(objects, reference = "sequential")
+      if (!is.null(rez)) {
+        rez$Model <- NULL
+        out <- cbind(out, rez)
+      }
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
 
   # Vuong
-  out <- tryCatch(
+  tryCatch(
     {
       rez <- test_vuong(objects)
       rez$Model <- NULL
       out <- merge(out, rez)
     },
     error = function(e) {
-      out
+      # Do nothing
     }
   )
 
@@ -156,17 +169,28 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
-  out <- .test_BF(objects, out, reference = reference)
+  tryCatch(
+    {
+      rez <- test_bf(objects, reference = reference)
+      if (!is.null(rez)) {
+        rez$Model <- NULL
+        out <- cbind(out, rez)
+      }
+    },
+    error = function(e) {
+      # Do nothing
+    }
+  )
 
   # Vuong
-  out <- tryCatch(
+  tryCatch(
     {
       rez <- test_vuong(objects, reference = reference)
       rez$Model <- NULL
       out <- merge(out, rez)
     },
     error = function(e) {
-      out
+      # Do nothing
     }
   )
 
@@ -180,18 +204,10 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 # TESTS IMPLEMENTED IN OTHER PACKAGES
 
-# # Nested
-# anova(m2, m2)
-# lmtest::waldtest(m2, m3)
-# anova(m1, m2, test="LRT")
-# lmtest::lrtest(m1, m2)
-# nonnest2::vuongtest(m1, m2, nested=TRUE)
-#
 # # Non-nested
 # lmtest::coxtest(m2, m3)
 # lmtest::jtest(m2, m3)
 # lmtest::encomptest(m2, m3)
-# nonnest2::vuongtest(m2, m3)
 # nonnest2::icci(m2, m3)
 
 
@@ -200,7 +216,7 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 #' @importFrom insight format_table format_p
 #' @export
-format.test_performance <- function(x, ...){
+format.test_performance <- function(x, ...) {
 
   # Format cols
   if ("p_Omega2" %in% names(x)) x$p_Omega2 <- insight::format_p(x$p_Omega2, name = NULL)
@@ -214,12 +230,16 @@ format.test_performance <- function(x, ...){
   out <- insight::format_table(x)
 
   if (attributes(x)$is_nested) {
-    footer <- paste0("Models were detected as nested. Each model is compared to ",
-                     "the one below.")
-  } else{
-    footer <- paste0("Each model is compared to ",
-                     x$Name[attributes(x)$reference],
-                     ".")
+    footer <- paste0(
+      "Models were detected as nested. Each model is compared to ",
+      "the one below."
+    )
+  } else {
+    footer <- paste0(
+      "Each model is compared to ",
+      x$Name[attributes(x)$reference],
+      "."
+    )
   }
   attr(out, "table_footer") <- footer
   out
@@ -235,7 +255,7 @@ print.test_performance <- function(x, ...) {
 }
 #' @export
 print_md.test_performance <- function(x, ...) {
-  insight::export_table(format(x), format="markdown", ...)
+  insight::export_table(format(x), format = "markdown", ...)
 }
 
 
@@ -243,58 +263,23 @@ print_md.test_performance <- function(x, ...) {
 #' @importFrom insight model_name
 .test_performance_init <- function(objects, include_formula = FALSE) {
   names <- insight::model_name(objects, include_formula = include_formula)
-  out <- data.frame(Name = names(objects),
-                    Model = names,
-                    stringsAsFactors = FALSE)
+  out <- data.frame(
+    Name = names(objects),
+    Model = names,
+    stringsAsFactors = FALSE
+  )
   row.names(out) <- NULL
   out
 }
 
 
 
-#' @importFrom bayestestR bayesfactor_models
-.test_BF <- function(objects, out, reference = 1) {
-  if (.test_performance_areBayesian(objects) %in% c("yes", "no")) {
-    if (reference == "sequential") ref <- 1 else ref <- reference
-
-    rez <- bayestestR::bayesfactor_models(objects, denominator = ref)
-
-    # Adjust BFs for sequential testing
-    if (reference == "sequential") {
-      # TODO: Double check that formula and whether it works for increasing and
-      # decreasing order.
-      rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez) - 1])
-    }
-
-    method <- attributes(rez)$BF_method
-    rez <- as.data.frame(rez, stringsAsFactors = FALSE)
-    rez$Model <- NULL  # Remove Model col - there's already one in 'out'
-    rez$BF[ref] <- NA
-    row.names(rez) <- NULL
-
-    out <- cbind(out, rez)
-  }
-  out
-}
 
 
-#' @importFrom insight model_info
-.test_performance_areBayesian <- function(objects) {
-  bayesian_models <- sapply(objects, function(i) isTRUE(insight::model_info(i)$is_bayesian))
-  if (all(bayesian_models == TRUE)) {
-    "yes"
-  } else if (all(bayesian_models == FALSE)) {
-    "no"
-  } else {
-    "mixed"
-  }
-}
-
-
-.test_performance_checks <- function(objects, same_response = TRUE){
+.test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE) {
 
   # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
-  if (insight::is_model(objects)) {
+  if (multiple && insight::is_model(objects)) {
     stop("At least two models are required to test them.", call. = FALSE)
   }
 
