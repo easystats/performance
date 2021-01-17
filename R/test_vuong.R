@@ -13,10 +13,8 @@ test_vuong.default <- function(..., reference = 1) {
   objects <- insight::ellipsis_info(..., only_models = TRUE)
   names(objects) <- match.call(expand.dots = FALSE)$`...`
 
-  # Sanity checks
-  if (attributes(objects)$same_response == FALSE) {
-    stop("The models don't have the same response variable, which is a prerequisite to compare them.")
-  }
+  # Sanity checks (will throw error if non-valid objects)
+  .test_performance_checks(objects)
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {

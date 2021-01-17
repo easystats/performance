@@ -19,9 +19,8 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
-  if (length(objects) == 1) {
-    stop("At least two models required for a Likelihood-Ratio-Test.", call. = FALSE)
-  }
+  # Sanity checks (will throw error if non-valid objects)
+  .test_performance_checks(objects)
 
   # Replace with names from the global environment
   object_names <- match.call(expand.dots = FALSE)$`...`

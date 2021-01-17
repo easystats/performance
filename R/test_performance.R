@@ -111,10 +111,8 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   objects <- insight::ellipsis_info(..., only_models = TRUE)
   names(objects) <- match.call(expand.dots = FALSE)$`...`
 
-  # Sanity checks
-  if (attributes(objects)$same_response == FALSE) {
-    stop("The models don't have the same response variable, which is a prerequisite to compare them.")
-  }
+  # Sanity checks (will throw error if non-valid objects)
+  .test_performance_checks(objects)
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
@@ -292,3 +290,17 @@ print_md.test_performance <- function(x, ...) {
   }
 }
 
+
+.test_performance_checks <- function(objects, same_response = TRUE){
+
+  # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
+  if (insight::is_model(objects)) {
+    stop("At least two models are required to test them.", call. = FALSE)
+  }
+
+  if (same_response && !inherits(objects, "ListLavaan") && attributes(objects)$same_response == FALSE) {
+    stop("The models don't have the same response variable, which is a prerequisite to compare them.")
+  }
+
+  objects
+}
