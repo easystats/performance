@@ -132,7 +132,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   # Note: dr package requires non-negative weights, which does not help when nested==TRUE
   # tmp <- dr::dr.pvalue(lamstar^2, n * omega_hat_2)
   # pOmega <- tmp[[4]]
-  p <- CompQuadForm::imhof(n * omega_hat_2, lamstar^2)$Qq
+  p <- suppressWarnings(CompQuadForm::imhof(n * omega_hat_2, lamstar^2)$Qq)
 
   # ROBUST LRTEST -----------
   # Calculate likelihood ratio; Eq (6.4)
