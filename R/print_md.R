@@ -21,6 +21,19 @@ print_md.compare_performance <- function(x, digits = 2, ...) {
 
 
 #' @export
+print_html.compare_performance <- function(x, digits = 2, ...) {
+  table_caption <- "Comparison of Model Performance Indices"
+  formatted_table <- format(x = x, digits = digits, format = "html", ...)
+  if ("Performance_Score" %in% colnames(x)) {
+    footer <- sprintf("Model %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1])
+  } else {
+    footer <- NULL
+  }
+  insight::export_table(x = formatted_table, digits = digits, format = "html", caption = table_caption, footer = footer, align = "firstleft")
+}
+
+
+#' @export
 print_md.check_itemscale <- function(x, digits = 2, ...) {
   insight::export_table(
     lapply(1:length(x), function(i) {

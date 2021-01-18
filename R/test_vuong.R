@@ -68,6 +68,11 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   }
 
   out <- cbind(.test_performance_init(objects), out)
+
+  attr(out, "is_nested") <- nested
+  attr(out, "reference") <- reference
+  class(out) <- c("test_performance", class(out))
+
   out
 }
 

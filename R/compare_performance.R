@@ -73,7 +73,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE,verbose = TRU
   m <- mapply(function(.x, .y) {
     dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
     model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
-    cbind(data.frame(Model = model_name, Type = class(.x)[1], stringsAsFactors = FALSE), dat)
+    cbind(data.frame(Name = model_name, Model = class(.x)[1], stringsAsFactors = FALSE), dat)
   }, objects, object_names, SIMPLIFY = FALSE)
 
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)

@@ -18,10 +18,14 @@ test_wald.default <- function(...) {
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_wald(objects)
+    out <- test_wald(objects)
   } else {
     stop("The models cannot be compared for some reason :/")
   }
+
+  attr(out, "is_nested") <- TRUE
+  class(out) <- c("test_performance", class(out))
+  out
 }
 
 
