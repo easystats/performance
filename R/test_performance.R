@@ -150,7 +150,7 @@ test_performance.ListNestedRegressions <- function(objects, reference = 1, inclu
     {
       rez <- test_vuong(objects)
       rez$Model <- NULL
-      out <- merge(out, rez)
+      out <- merge(out, rez, sort = FALSE)
     },
     error = function(e) {
       # Do nothing
@@ -187,7 +187,7 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
     {
       rez <- test_vuong(objects, reference = reference)
       rez$Model <- NULL
-      out <- merge(out, rez)
+      out <- merge(out, rez, sort = FALSE)
     },
     error = function(e) {
       # Do nothing
@@ -216,23 +216,14 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 #' @importFrom insight format_table format_p
 #' @export
-format.test_performance <- function(x, ...) {
+format.test_performance <- function(x, digits = 2, ...) {
 
-  # Format cols
-  if ("p_Omega2" %in% names(x)) x$p_Omega2 <- insight::format_p(x$p_Omega2, name = NULL)
-  if ("p_LR" %in% names(x)) x$p_LR <- insight::format_p(x$p_LR, name = NULL)
-
-  # Format names
-  n <- names(x)
-  names(x)[n == "p_Omega2"] <- "p (Omega2)"
-  names(x)[n == "p_LR"] <- "p (LR)"
-
-  out <- insight::format_table(x)
+  # Format cols and names
+  out <- insight::format_table(x, digits = digits, ...)
 
   if (attributes(x)$is_nested) {
     footer <- paste0(
-      "Models were detected as nested. Each model is compared to ",
-      "the one below."
+      "Models were detected as nested and are compared in sequential order."
     )
   } else {
     footer <- paste0(
@@ -249,13 +240,28 @@ format.test_performance <- function(x, ...) {
 
 #' @importFrom insight export_table
 #' @export
-print.test_performance <- function(x, ...) {
-  out <- insight::export_table(format(x), ...)
+print.test_performance <- function(x, digits = 2, ...) {
+  out <- insight::export_table(format(x, digits = digits, ...), ...)
   cat(out)
 }
+
 #' @export
-print_md.test_performance <- function(x, ...) {
-  insight::export_table(format(x), format = "markdown", ...)
+print_md.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "markdown", ...)
+}
+
+#' @export
+print_html.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
+}
+
+#' @export
+display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
+  if (format == "markdown") {
+    print_md(x = object, digits = digits, ...)
+  } else {
+    print_html(x = object, digits = digits, ...)
+  }
 }
 
 
