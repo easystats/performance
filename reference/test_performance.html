@@ -210,12 +210,12 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 
 <span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Name | Model |     BF |   Omega2 | p (Omega2) |   LR | p (LR)
-#&gt; -------------------------------------------------------------
-#&gt; m1   |    lm |        |          |            |      |       
-#&gt; m2   |    lm |  27.28 |     0.02 |      0.081 | 3.41 |  0.099
-#&gt; m3   |    lm | 138.91 | 9.54e-04 |      0.935 | 0.15 |  0.919
-#&gt; Models were detected as nested. Each model is compared to the one below.</div><div class='input'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Name | Model |     BF |   Omega2 | p(Omega2) |   LR | p(LR)
+#&gt; -----------------------------------------------------------
+#&gt; m1   |    lm |        |          |           |      |      
+#&gt; m2   |    lm |  27.28 |     0.02 |     0.081 | 3.41 | 0.099
+#&gt; m3   |    lm | 138.91 | 9.54e-04 |     0.935 | 0.15 | 0.919
+#&gt; Models were detected as nested and are compared in sequential order.</div><div class='input'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayes Factors for Model Comparison</span><span>
 #&gt; 
 #&gt; Model                           BF
@@ -253,11 +253,11 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 
 <span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Name | Model |      BF | Omega2 | p (Omega2) |    LR | p (LR)
-#&gt; -------------------------------------------------------------
-#&gt; m1   |    lm |         |        |            |       |       
-#&gt; m2   |    lm |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001
-#&gt; m3   |    lm | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 |  0.006
+</div><div class='output co'>#&gt; Name | Model |      BF | Omega2 | p(Omega2) |    LR |  p(LR)
+#&gt; ------------------------------------------------------------
+#&gt; m1   |    lm |         |        |           |       |       
+#&gt; m2   |    lm |  &gt; 1000 |   0.19 |    &lt; .001 | -4.57 | &lt; .001
+#&gt; m3   |    lm | &lt; 0.001 |   0.12 |    &lt; .001 |  2.51 | 0.006 
 #&gt; Each model is compared to m1.</div><div class='input'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Bayes Factors for Model Comparison</span><span>
 #&gt; 
@@ -274,11 +274,11 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 <span class='co'># Tweak the output</span>
 <span class='co'># ----------------</span>
 <span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, include_formula <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Name |                           Model |      BF | Omega2 | p (Omega2) |    LR | p (LR)
-#&gt; ---------------------------------------------------------------------------------------
-#&gt; m1   |  lm(Sepal.Length ~ Petal.Width) |         |        |            |       |       
-#&gt; m2   | lm(Sepal.Length ~ Petal.Length) |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001
-#&gt; m3   |      lm(Sepal.Length ~ Species) | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 |  0.006
+</div><div class='output co'>#&gt; Name |                           Model |      BF | Omega2 | p(Omega2) |    LR |  p(LR)
+#&gt; --------------------------------------------------------------------------------------
+#&gt; m1   |  lm(Sepal.Length ~ Petal.Width) |         |        |           |       |       
+#&gt; m2   | lm(Sepal.Length ~ Petal.Length) |  &gt; 1000 |   0.19 |    &lt; .001 | -4.57 | &lt; .001
+#&gt; m3   |      lm(Sepal.Length ~ Species) | &lt; 0.001 |   0.12 |    &lt; .001 |  2.51 | 0.006 
 #&gt; Each model is compared to m1.</div><div class='input'>
 
 <span class='co'># SEM / CFA (lavaan objects)</span>
