@@ -16,8 +16,8 @@ test_bf.default <- function(...) {
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects, multiple = FALSE)
 
-  if(insight::is_model(objects)) {
-    stop("test_bf() is designed to compare multiple models together. You might want to run bayestestR::bf_parameters() instead.")
+  if (length(objects) == 1 && isTRUE(insight::is_model(objects))) {
+    stop("'test_bf()' is designed to compare multiple models together. For a single model, you might want to run bayestestR::bf_parameters() instead.", call. = FALSE)
   }
 
   # If a suitable class is found, run the more specific method on it
@@ -34,7 +34,7 @@ test_bf.default <- function(...) {
 #' @export
 test_bf.ListModels <- function(objects, reference = 1, ...) {
   if (.test_bf_areAllBayesian(objects) == "mixed") {
-    stop("test_bf() can only be run if all models are Bayesian or non at all (no mixing).")
+    stop("You cannot mix Bayesian and non-Bayesian models in 'test_bf()'.", call. = FALSE)
   }
 
   # Adapt reference but keep original input
