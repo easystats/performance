@@ -29,11 +29,12 @@ options(
   digits = 4,
   width = 60
 )
+
+library(performance)
 ```
 
-
-[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/) [![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html) [![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions) [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/) [![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
-
+[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/performance/blob/master/inst/CITATION)
+[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/) 
 
 ***Test if your model is a good model!***
 
@@ -41,23 +42,34 @@ The primary goal of the **performance** package is to provide utilities for comp
 
 ## Installation
 
-Run the following:
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
+[![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
+Run the following to install the stable release of **performance** from CRAN:
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
 install.packages("performance")
 ```
-```{r message=FALSE, warning=FALSE}
-library("performance")
+
+Or this one to install the latest development version:
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+install.packages("remotes")
+remotes::install_github("easystats/performance")
 ```
 
 
-# Examples
+## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html) 
 
 There is a nice introduction into the package on [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
 
-## Assessing model quality
+### Assessing model quality
 
-### R-squared
+#### R-squared
 
 **performance** has a generic `r2()` function, which computes the r-squared for many different models, including mixed effects and Bayesian regression models.
 
@@ -96,7 +108,7 @@ model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 r2(model)
 ```
 
-### Intraclass Correlation Coefficient (ICC)
+#### Intraclass Correlation Coefficient (ICC)
 
 Similar to R-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" [@hox_multilevel_2010].
 
@@ -122,9 +134,9 @@ model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
 icc(model)
 ```
 
-## Model diagnostics
+### Model diagnostics
 
-### Check for overdispersion
+#### Check for overdispersion
 
 Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). `check_overdispersion()` checks if a count model (including mixed models) is overdispersed or not.
 
@@ -137,7 +149,7 @@ check_overdispersion(model)
 
 Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family [like Quasi-Poisson, or negative binomial, see [@gelman_data_2007].
 
-### Check for zero-inflation
+#### Check for zero-inflation
 
 Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of observed zeros is larger than the amount of predicted zeros, so the model is _underfitting_ zeros. In such cases, it is recommended to use negative binomial or zero-inflated models.
 
@@ -148,7 +160,7 @@ model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(model)
 ```
 
-### Check for singular model fits
+#### Check for singular model fits
 
 A "singular" model fit means that some dimensions of the variance-covariance matrix have been estimated as exactly zero. This often occurs for mixed models with overly complex random effects structures.
 
@@ -179,7 +191,7 @@ check_singularity(model)
 
 Remedies to cure issues with singular fits can be found [here](https://easystats.github.io/performance/reference/check_singularity.html). 
 
-### Comprehensive visualization of model checks
+#### Comprehensive visualization of model checks
 
 **performance** provides many functions to check model assumptions, like `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To get a comprehensive check, use `check_model()`.
 
@@ -188,25 +200,25 @@ model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
 check_model(model)
 ```
 
-## Model performance summaries
+### Model performance summaries
 
 `model_performance()` computes indices of model performance for regression models. Depending on the model object, typical indices might be r-squared, AIC, BIC, RMSE, ICC or LOOIC.
 
-### Linear model
+#### Linear model
 
 ```{r, warning=FALSE, message=FALSE}
 m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
 ```
 
-### Logistic regression
+#### Logistic regression
 
 ```{r, warning=FALSE, message=FALSE}
 m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
 ```
 
-### Linear mixed model
+#### Linear mixed model
 
 ```{r, warning=FALSE, message=FALSE}
 library(lme4)
@@ -214,7 +226,7 @@ m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 ```
 
-## Models comparison
+### Models comparison
 
 The `compare_performance()` function can be used to compare the performance and quality of several models (including models of different types).
 
@@ -227,7 +239,7 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 ```
 
-### General index of model performance
+#### General index of model performance
 
 One can also easily compute and a [**composite index**](https://easystats.github.io/performance/reference/compare_performance.html#details) of model performance and sort the models from the best one to the worse.
 
@@ -235,7 +247,7 @@ One can also easily compute and a [**composite index**](https://easystats.github
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 ```
 
-### Visualisation of indices of models' performance
+#### Visualisation of indices of models' performance
 
 Finally, we provide convenient visualisation (the `see` package must be installed).
 
@@ -255,4 +267,4 @@ m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 test_performance(m1, m2, m3)
 ```
 
-# References
+## References
