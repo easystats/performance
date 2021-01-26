@@ -1,6 +1,16 @@
+osx <- tryCatch({
+  si <- Sys.info()
+  if (!is.null(si["sysname"])) {
+    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+  } else {
+    FALSE
+  }
+})
+
+
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
-if (.runThisTest) {
+if (.runThisTest && !osx) {
   if (require("testthat") && require("performance") && require("lme4") && require("nlme") && require("insight")) {
     data(iris)
     m0 <- lm(Sepal.Length ~ Petal.Length, data = iris)
