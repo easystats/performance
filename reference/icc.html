@@ -144,8 +144,8 @@
  (ICC) - sometimes also called <em>variance partition coefficient</em>
  (VPC) - for mixed effects models. The ICC can be calculated for all models
  supported by <code><a href='https://easystats.github.io/insight/reference/get_variance.html'>insight::get_variance()</a></code>. For models fitted with
- the <span class="pkg">brms</span>-package, <code>icc()</code> might fail due to the large variety
- of models and families supported by the <span class="pkg">brms</span>-package. In such cases,
+ the <strong>brms</strong>-package, <code>icc()</code> might fail due to the large variety
+ of models and families supported by the <strong>brms</strong>-package. In such cases,
  an alternative to the ICC is the <code>variance_decomposition()</code>, which is
  based on the posterior predictive distribution (see 'Details').</p>
     </div>
@@ -186,7 +186,7 @@ calculate the central tendency of the variances.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed down to <code><a href='https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html'>posterior_predict()</a></code>.</p></td>
+      <td><p>Arguments passed down to <code><a href='https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html'>brms::posterior_predict()</a></code>.</p></td>
     </tr>
     </table>
 
@@ -233,7 +233,7 @@ ICC as well as the credible intervals for this ICC.</p>
  variance of the model. For mixed models with a simple random intercept,
  this is identical to the classical (adjusted) ICC.</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Variance decomposition for brms-models</h3>
 <p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to
- the large variety of models and families supported by the <span class="pkg">brms</span> package.
+ the large variety of models and families supported by the <strong>brms</strong> package.
  In such cases, <code>variance_decomposition()</code> is an alternative ICC measure.
  The function calculates a variance decomposition based on the posterior
  predictive distribution. In this case, first, the draws from the posterior
