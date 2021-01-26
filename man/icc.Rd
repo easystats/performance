@@ -27,7 +27,7 @@ calculate the central tendency of the variances.}
 
 \item{ci}{Credible interval level.}
 
-\item{...}{Arguments passed down to \code{\link[brms:posterior_predict]{posterior_predict()}}.}
+\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
 }
 \value{
 A list with two values, the adjusted and conditional ICC. For
@@ -39,8 +39,8 @@ This function calculates the intraclass-correlation coefficient
  (ICC) - sometimes also called \emph{variance partition coefficient}
  (VPC) - for mixed effects models. The ICC can be calculated for all models
  supported by \code{insight::get_variance()}. For models fitted with
- the \pkg{brms}-package, \code{icc()} might fail due to the large variety
- of models and families supported by the \pkg{brms}-package. In such cases,
+ the \strong{brms}-package, \code{icc()} might fail due to the large variety
+ of models and families supported by the \strong{brms}-package. In such cases,
  an alternative to the ICC is the \code{variance_decomposition()}, which is
  based on the posterior predictive distribution (see 'Details').
 }
@@ -90,7 +90,7 @@ This function calculates the intraclass-correlation coefficient
  }
  \subsection{Variance decomposition for brms-models}{
  If \code{model} is of class \code{brmsfit}, \code{icc()} might fail due to
- the large variety of models and families supported by the \pkg{brms} package.
+ the large variety of models and families supported by the \strong{brms} package.
  In such cases, \code{variance_decomposition()} is an alternative ICC measure.
  The function calculates a variance decomposition based on the posterior
  predictive distribution. In this case, first, the draws from the posterior

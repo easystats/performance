@@ -6,8 +6,8 @@
 #' While \code{r2_bayes()} returns a single R2 value, \code{r2_posterior()} returns
 #' a posterior sample of Bayesian R2 values.
 #'
-#' @param model A Bayesian regression model (from \code{brms}, \code{rstanarm},
-#'   \code{BayesFactor}, etc).
+#' @param model A Bayesian regression model (from \strong{brms}, \strong{rstanarm},
+#'   \strong{BayesFactor}, etc).
 #' @param robust Logical, if \code{TRUE}, the median instead of mean is used to
 #'   calculate the central tendency of the variances.
 #' @param ci Value or vector of probability of the CI (between 0 and 1) to be estimated.

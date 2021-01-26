@@ -19,8 +19,8 @@ r2_posterior(model, ...)
 \method{r2_posterior}{BFBayesFactor}(model, average = FALSE, prior_odds = NULL, ...)
 }
 \arguments{
-\item{model}{A Bayesian regression model (from \code{brms}, \code{rstanarm},
-\code{BayesFactor}, etc).}
+\item{model}{A Bayesian regression model (from \strong{brms}, \strong{rstanarm},
+\strong{BayesFactor}, etc).}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
 calculate the central tendency of the variances.}

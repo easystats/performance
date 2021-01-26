@@ -11,7 +11,7 @@
 #' \code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric test),
 #' or \code{"auto"}. In the latter case, Bartlett test is used if the model response
 #' is normal distributed, else Fligner-Killeen test is used.
-#' @param ... Arguments passed down to \code{\link[car:leveneTest]{car::leveneTest()}}.
+#' @param ... Arguments passed down to \code{car::leveneTest()}.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value
 #' < 0.05 indicates a significant difference in the variance between the groups.

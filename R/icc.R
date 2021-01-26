@@ -4,8 +4,8 @@
 #'  (ICC) - sometimes also called \emph{variance partition coefficient}
 #'  (VPC) - for mixed effects models. The ICC can be calculated for all models
 #'  supported by \code{insight::get_variance()}. For models fitted with
-#'  the \pkg{brms}-package, \code{icc()} might fail due to the large variety
-#'  of models and families supported by the \pkg{brms}-package. In such cases,
+#'  the \strong{brms}-package, \code{icc()} might fail due to the large variety
+#'  of models and families supported by the \strong{brms}-package. In such cases,
 #'  an alternative to the ICC is the \code{variance_decomposition()}, which is
 #'  based on the posterior predictive distribution (see 'Details').
 #'
@@ -79,7 +79,7 @@
 #'  }
 #'  \subsection{Variance decomposition for brms-models}{
 #'  If \code{model} is of class \code{brmsfit}, \code{icc()} might fail due to
-#'  the large variety of models and families supported by the \pkg{brms} package.
+#'  the large variety of models and families supported by the \strong{brms} package.
 #'  In such cases, \code{variance_decomposition()} is an alternative ICC measure.
 #'  The function calculates a variance decomposition based on the posterior
 #'  predictive distribution. In this case, first, the draws from the posterior
@@ -223,7 +223,7 @@ icc <- function(model, by_group = FALSE) {
 #' @importFrom bayestestR ci
 #' @importFrom insight is_multivariate find_response model_info is_mixed_model
 #' @importFrom stats quantile var
-#' @param ... Arguments passed down to \code{\link[brms:posterior_predict]{posterior_predict()}}.
+#' @param ... Arguments passed down to \code{brms::posterior_predict()}.
 #' @inheritParams icc
 #' @rdname icc
 #' @export

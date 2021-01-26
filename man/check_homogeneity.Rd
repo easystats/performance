@@ -17,7 +17,7 @@ the Bartlett test (assuming normal distributed samples or groups),
 or \code{"auto"}. In the latter case, Bartlett test is used if the model response
 is normal distributed, else Fligner-Killeen test is used.}
 
-\item{...}{Arguments passed down to \code{\link[car:leveneTest]{car::leveneTest()}}.}
+\item{...}{Arguments passed down to \code{car::leveneTest()}.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value
