@@ -19,7 +19,7 @@
 #' For \code{stan_lmer()} and \code{stan_glmer()} models, the predicted values
 #' are based on \code{posterior_predict()}, instead of \code{predict()}. Thus,
 #' results may differ more than expected from their non-Bayesian counterparts
-#' in \pkg{lme4}.
+#' in \strong{lme4}.
 #'
 #' @references Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 #'

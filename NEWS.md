@@ -6,16 +6,21 @@
 
 ## Breaking Changes
 
-- `compare_performance()` doesn't return the models' Bayes Factors, now returned by `test_performance()`.
+* `compare_performance()` doesn't return the models' Bayes Factors, now returned by `test_performance()` and `test_bf()`.
 
-## New functions
+## New functions to test or compare models
 
-* `test_performance_vuong()`, to compare models using Vuong's (1989) Test.
+* `test_vuong()`, to compare models using Vuong's (1989) Test.
+* `test_bf()`, to compare models using Bayes factors.
+* `test_likelihoodratio()` as an alias for `performance_lrt()`.
+* `test_wald()`, as a rough approximation for the LRT.
+* `test_performance()`, to run the most relevant and appropriate tests based on the input.
 
 ## Changes to functions
 
 ### `performance_lrt()`
 
+* `performance_lrt()` get an alias `test_likelihoodratio()`.
 * Does not return AIC/BIC now (as they are not related to LRT *per se* and can be easily obtained with other functions).
 * Now contains a column with the difference in degrees of freedom between models.
 * Fixed column names for consistency.

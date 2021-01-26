@@ -29,7 +29,7 @@ with values closer to 0 indicating a more accurate model.
 For \code{stan_lmer()} and \code{stan_glmer()} models, the predicted values
 are based on \code{posterior_predict()}, instead of \code{predict()}. Thus,
 results may differ more than expected from their non-Bayesian counterparts
-in \pkg{lme4}.
+in \strong{lme4}.
 }
 \note{
 Code is partially based on \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.

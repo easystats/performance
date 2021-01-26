@@ -20,7 +20,7 @@
 #'   errors.
 #'   }
 #'   \subsection{Inspect model convergence}{
-#'   \pkg{lme4} performs a convergence-check (see \code{?lme4::convergence}),
+#'   \strong{lme4} performs a convergence-check (see \code{?lme4::convergence}),
 #'   however, as as discussed \href{https://github.com/lme4/lme4/issues/120}{here}
 #'   and suggested by one of the lme4-authors in
 #'   \href{https://github.com/lme4/lme4/issues/120#issuecomment-39920269}{this comment},

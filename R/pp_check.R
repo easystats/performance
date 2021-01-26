@@ -14,7 +14,7 @@
 #' @param re_formula Formula containing group-level effects (random effects) to
 #'   be considered in the simulated data. If \code{NULL} (default), condition
 #'   on all random effects. If \code{NA} or \code{~0}, condition on no random
-#'   effects. See \code{\link[lme4:simulate.merMod]{simulate()}} in \pkg{lme4}.
+#'   effects. See \code{simulate()} in \strong{lme4}.
 #' @param ... Passed down to \code{simulate()}.
 #'
 #' @return A data frame of simulated responses and the original response vector.
