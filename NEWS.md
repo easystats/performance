@@ -29,6 +29,11 @@
 
 * Added more diagnostics to models of class `ivreg`.
 
+### Other functions
+
+* Revised computation of `performance_mse()`, to ensure that it's always bayed on response residuals.
+* `performance_aic()` is now more robust.
+
 ## Bug fixes
 
 * Fixed issue in `icc()` and `variance_decomposition()` for multivariate response models, where not all model parts contained random effects.
