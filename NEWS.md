@@ -31,7 +31,7 @@
 
 ### Other functions
 
-* Revised computation of `performance_mse()`, to ensure that it's always bayed on response residuals.
+* Revised computation of `performance_mse()`, to ensure that it's always based on response residuals.
 * `performance_aic()` is now more robust.
 
 ## Bug fixes
