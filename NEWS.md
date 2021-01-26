@@ -39,6 +39,7 @@
 * Fixed issue in `icc()` and `variance_decomposition()` for multivariate response models, where not all model parts contained random effects.
 * Fixed issue in `compare_performance()` with duplicated rows.
 * `check_collinearity()` no longer breaks for models with rank deficient model matrix, but gives a warning instead.
+* Fixed issue in `check_homogeneity()` for `method = "auto"`, which wrongly tested the response variable, not the residuals.
 
 # performance 0.6.1
 
