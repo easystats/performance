@@ -42,6 +42,12 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   resp <- insight::find_response(x)
   pred <- insight::find_predictors(x, component = "conditional", flatten = TRUE)
 
+  # edge case, whitespace in name, so surround with backticks
+  ws_pred <- grepl("\\s", pred)
+  if (any(ws_pred)) {
+    pred[ws_pred] <- paste0("`", pred[ws_pred], "`")
+  }
+
   if (length(pred) > 1) {
     pred <- paste0("interaction(", paste0(pred, collapse = ", "), ")", collapse = "")
   }

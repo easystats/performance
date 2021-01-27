@@ -1,4 +1,4 @@
-# performance 0.6.2
+# performance 0.7.0
 
 ## General
 
@@ -40,6 +40,7 @@
 * Fixed issue in `compare_performance()` with duplicated rows.
 * `check_collinearity()` no longer breaks for models with rank deficient model matrix, but gives a warning instead.
 * Fixed issue in `check_homogeneity()` for `method = "auto"`, which wrongly tested the response variable, not the residuals.
+* Fixed issue in `check_homogeneity()` for edge cases where predictor had non-syntactic names.
 
 # performance 0.6.1
 
