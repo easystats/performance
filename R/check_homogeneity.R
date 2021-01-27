@@ -43,7 +43,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   pred <- insight::find_predictors(x, component = "conditional", flatten = TRUE)
 
   # edge case, whitespace in name, so surround with backticks
-  ws_pred <- grepl("\\s", pred)
+  ws_pred <- pred != make.names(pred)
   if (any(ws_pred)) {
     pred[ws_pred] <- paste0("`", pred[ws_pred], "`")
   }
