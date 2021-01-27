@@ -130,9 +130,9 @@
       <small>Source: <a href='https://github.com/easystats/performance/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="performance-062" class="section level1">
-<h1 class="page-header" data-toc-text="0.6.2">
-<a href="#performance-062" class="anchor"></a>performance 0.6.2<small> Unreleased </small>
+    <div id="performance-070" class="section level1">
+<h1 class="page-header" data-toc-text="0.7.0">
+<a href="#performance-070" class="anchor"></a>performance 0.7.0<small> Unreleased </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
@@ -207,6 +207,7 @@
 <li>
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> no longer breaks for models with rank deficient model matrix, but gives a warning instead.</li>
 <li>Fixed issue in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> for <code>method = "auto"</code>, which wrongly tested the response variable, not the residuals.</li>
+<li>Fixed issue in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> for edge cases where predictor had non-syntactic names.</li>
 </ul>
 </div>
 </div>
