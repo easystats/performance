@@ -63,7 +63,7 @@ m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 
 test_performance(m1, m2, m3)
 test_bf(m1, m2, m3)
-test_wald(m1, m2, m3) # equivalent to anova(m1, m2, m3)
+test_wald(m1, m2, m3) # Equivalent to anova(m1, m2, m3)
 test_likelihoodratio(m1, m2, m3, estimator = "ML") # Equivalent to lmtest::lrtest(m1, m2, m3)
 test_likelihoodratio(m1, m2, m3, estimator = "OLS") # Equivalent to anova(m1, m2, m3, test='LRT')
 test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)

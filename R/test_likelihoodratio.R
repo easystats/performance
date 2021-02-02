@@ -56,7 +56,6 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
     out <- data.frame(
-      Model = names(objects),
       df = dfs,
       df_diff = dfs_diff,
       Chi2 = chi2,
@@ -64,11 +63,13 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
       stringsAsFactors = FALSE
     )
 
-    # anova(..., test="LRT")
+    out <- cbind(.test_performance_init(objects), out)
+
   } else {
     out <- .test_wald(objects, test = "LRT")
     out$df <- dfs # Replace residual df with model's df
   }
+
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
   attr(out, "is_nested_decreasing") <- attributes(objects)$is_nested_decreasing

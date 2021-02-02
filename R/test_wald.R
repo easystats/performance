@@ -18,14 +18,10 @@ test_wald.default <- function(...) {
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    out <- test_wald(objects)
+    test_wald(objects)
   } else {
     stop("The models cannot be compared for some reason :/")
   }
-
-  attr(out, "is_nested") <- TRUE
-  class(out) <- c("test_performance", class(out))
-  out
 }
 
 
@@ -33,8 +29,9 @@ test_wald.default <- function(...) {
 #' @export
 test_wald.ListNestedRegressions <- function(objects, ...) {
   out <- .test_wald(objects, test = "F")
-  out$Model <- NULL
-  out <- cbind(.test_performance_init(objects), out)
+
+  attr(out, "is_nested") <- TRUE
+  class(out) <- c("test_performance", class(out))
   out
 }
 
@@ -60,7 +57,6 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
   dev_diff <- c(NA, -diff(dev))
 
   out <- data.frame(
-    Model = names(objects),
     df = dfs,
     df_diff = dfs_diff,
     stringsAsFactors = FALSE
@@ -88,5 +84,6 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
   out$p <- p
 
   row.names(out) <- NULL
+  out <- cbind(.test_performance_init(objects), out)
   out
 }
