@@ -223,7 +223,7 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 #&gt; [3] Petal.Width           3788.936
 #&gt; 
 #&gt; * Against Denominator: </span><span style='color: #00BBBB;'>[1] Petal.Width * Species</span><span>
-#&gt; *   Bayes Factor Type: </span><span style='color: #00BBBB;'>BIC approximation</span><span></div><div class='input'><span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># equivalent to anova(m1, m2, m3)</span>
+#&gt; *   Bayes Factor Type: </span><span style='color: #00BBBB;'>BIC approximation</span><span></div><div class='input'><span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># Equivalent to anova(m1, m2, m3)</span>
 </div><div class='output co'>#&gt; Name | Model |  df | df_diff |    F |     p
 #&gt; -------------------------------------------
 #&gt; m1   |    lm | 144 |         |      |      
@@ -232,18 +232,18 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 #&gt; Models were detected as nested and are compared in sequential order.</div><div class='input'><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span> <span class='co'># Equivalent to lmtest::lrtest(m1, m2, m3)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
 #&gt; 
-#&gt; Model | df | df_diff | Chi2 |     p
-#&gt; -----------------------------------
-#&gt; m1    |  7 |         |      |      
-#&gt; m2    |  5 |      -2 | 3.41 | 0.182
-#&gt; m3    |  3 |      -2 | 0.15 | 0.926</div><div class='input'><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span> <span class='co'># Equivalent to anova(m1, m2, m3, test='LRT')</span>
+#&gt; Name | Model | df | df_diff | Chi2 |     p
+#&gt; ------------------------------------------
+#&gt; m1   |    lm |  7 |         |      |      
+#&gt; m2   |    lm |  5 |      -2 | 3.41 | 0.182
+#&gt; m3   |    lm |  3 |      -2 | 0.15 | 0.926</div><div class='input'><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span> <span class='co'># Equivalent to anova(m1, m2, m3, test='LRT')</span>
 </div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
 #&gt; 
-#&gt; Model | df | df_diff | Chi2 |     p
-#&gt; -----------------------------------
-#&gt; m1    |  7 |         |      |      
-#&gt; m2    |  5 |      -2 | 3.31 | 0.191
-#&gt; m3    |  3 |      -2 | 0.15 | 0.927</div><div class='input'><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2, nested=TRUE)</span>
+#&gt; Name | Model | df | df_diff | Chi2 |     p
+#&gt; ------------------------------------------
+#&gt; m1   |    lm |  7 |         |      |      
+#&gt; m2   |    lm |  5 |      -2 | 3.31 | 0.191
+#&gt; m3   |    lm |  3 |      -2 | 0.15 | 0.927</div><div class='input'><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2, nested=TRUE)</span>
 </div><div class='output co'>#&gt; Name | Model |   Omega2 | p(Omega2) |   LR | p(LR)
 #&gt; --------------------------------------------------
 #&gt; m1   |    lm |          |           |      |      
