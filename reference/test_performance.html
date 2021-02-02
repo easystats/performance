@@ -172,11 +172,11 @@
 
     
 <h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Nested vs. Non-nested Models</h3>
-<p>Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are <em>"nested",</em> i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, <code>model1 (y ~ x1 + x2)</code> is "nested" within <code>model2 (y ~ x1 + x2 + x3)</code>. Usually, people have a list of nested models, for instance <code>m1 (y ~ x1 + x2 + x3)</code>, <code>m2 (y ~ x1 + x2)</code>, <code>m3 (y ~ x1)</code>, <code>m4 (y ~ 1)</code>, and they are "ordered" from the largest to smallest on vice versa, to test whether a more parcimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared <em>sequentially</em>: m2 is tested against m1, m3 against m2, m4 against m3, etc.
+<p>Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are <em>"nested",</em> i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, <code>model1 (y ~ x1 + x2)</code> is "nested" within <code>model2 (y ~ x1 + x2 + x3)</code>. Usually, people have a list of nested models, for instance <code>m1 (y ~ x1 + x2 + x3)</code>, <code>m2 (y ~ x1 + x2)</code>, <code>m3 (y ~ x1)</code>, <code>m4 (y ~ 1)</code>, and they are "ordered" from the largest to smallest on vice versa, to test whether a more parsimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared <em>sequentially</em>: m2 is tested against m1, m3 against m2, m4 against m3, etc.
 <br /><br />
 Two models are considered as <em>"non-nested"</em> if their predictors are different. For instance, <code>model1 (y ~ x1 + x2)</code> and <code>model2 (y ~ x3 + x4)</code>. In the case of non-nested models, all models are usually compared against the same <em>reference</em> model (by default, the first of the list).
 <br /><br />
-Nesting is detected via the <code><a href='https://easystats.github.io/insight/reference/is_nested_models.html'>insight::is_nested_models()</a></code> function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variable (the response) must be the same. You cannot meaningfuly test whether apples are significantly different from oranges!</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Tests Description</h3>
+Nesting is detected via the <code><a href='https://easystats.github.io/insight/reference/is_nested_models.html'>insight::is_nested_models()</a></code> function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variables (the response) must be the same. You cannot meaningfully test whether apples are significantly different from oranges!</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Tests Description</h3>
 
 
 <ul>
@@ -215,7 +215,8 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 #&gt; m1   |    lm |        |          |           |      |      
 #&gt; m2   |    lm |  27.28 |     0.02 |     0.081 | 3.41 | 0.099
 #&gt; m3   |    lm | 138.91 | 9.54e-04 |     0.935 | 0.15 | 0.919
-#&gt; Models were detected as nested and are compared in sequential order.</div><div class='input'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
+#&gt; Models were detected as nested and are compared in sequential order.</div><div class='input'>
+<span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayes Factors for Model Comparison</span><span>
 #&gt; 
 #&gt; Model                           BF
@@ -229,21 +230,26 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 #&gt; m1   |    lm | 144 |         |      |      
 #&gt; m2   |    lm | 146 |   -2.00 | 1.66 | 0.195
 #&gt; m3   |    lm | 148 |   -2.00 | 0.08 | 0.927
-#&gt; Models were detected as nested and are compared in sequential order.</div><div class='input'><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span> <span class='co'># Equivalent to lmtest::lrtest(m1, m2, m3)</span>
+#&gt; Models were detected as nested and are compared in sequential order.</div><div class='input'>
+<span class='co'># Equivalent to lmtest::lrtest(m1, m2, m3)</span>
+<span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
 #&gt; 
 #&gt; Name | Model | df | df_diff | Chi2 |     p
 #&gt; ------------------------------------------
 #&gt; m1   |    lm |  7 |         |      |      
 #&gt; m2   |    lm |  5 |      -2 | 3.41 | 0.182
-#&gt; m3   |    lm |  3 |      -2 | 0.15 | 0.926</div><div class='input'><span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span> <span class='co'># Equivalent to anova(m1, m2, m3, test='LRT')</span>
+#&gt; m3   |    lm |  3 |      -2 | 0.15 | 0.926</div><div class='input'>
+<span class='co'># Equivalent to anova(m1, m2, m3, test='LRT')</span>
+<span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, estimator <span class='op'>=</span> <span class='st'>"OLS"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Likelihood-Ratio-Test (LRT) for Model Comparison</span><span>
 #&gt; 
 #&gt; Name | Model | df | df_diff | Chi2 |     p
 #&gt; ------------------------------------------
 #&gt; m1   |    lm |  7 |         |      |      
 #&gt; m2   |    lm |  5 |      -2 | 3.31 | 0.191
-#&gt; m3   |    lm |  3 |      -2 | 0.15 | 0.927</div><div class='input'><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2, nested=TRUE)</span>
+#&gt; m3   |    lm |  3 |      -2 | 0.15 | 0.927</div><div class='input'>
+<span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2, nested=TRUE)</span>
 </div><div class='output co'>#&gt; Name | Model |   Omega2 | p(Omega2) |   LR | p(LR)
 #&gt; --------------------------------------------------
 #&gt; m1   |    lm |          |           |      |      
@@ -316,7 +322,7 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 
   <span class='co'># Different Model Types</span>
   <span class='co'># ---------------------</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"mgcv"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"mgcv"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
     <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
     <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
     <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/gam.html'>gam</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/pkg/mgcv/man/s.html'>s</a></span><span class='op'>(</span><span class='va'>Petal.Length</span>, by <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
