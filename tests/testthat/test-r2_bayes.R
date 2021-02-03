@@ -6,15 +6,15 @@ if (require("testthat") && require("performance") && require("BayesFactor") && r
     r_BF <- r2(BFM[4], ci = 0.89)
     r_CI <- attr(r_BF, "CI")$R2_Bayes
 
-    testthat::expect_equal(r_BF$R2_Bayes, 0.71, tolerance = 0.05)
-    testthat::expect_equal(r_CI$CI_low, 0.62, tolerance = 0.05)
-    testthat::expect_equal(r_CI$CI_high, 0.79, tolerance = 0.05)
+    expect_equal(r_BF$R2_Bayes, 0.71, tolerance = 0.05)
+    expect_equal(r_CI$CI_low, 0.62, tolerance = 0.05)
+    expect_equal(r_CI$CI_high, 0.79, tolerance = 0.05)
 
     r_post <- r2_posterior(BFM[1])
-    testthat::expect_s3_class(r_post, "data.frame")
+    expect_s3_class(r_post, "data.frame")
 
     r_BF <- r2(BFM, average = TRUE)
-    testthat::expect_equal(r_BF$R2_Bayes, 0.72, tolerance = 0.05)
+    expect_equal(r_BF$R2_Bayes, 0.72, tolerance = 0.05)
 
     # with random effects:
     if (utils::packageVersion("BayesFactor") >= package_version("0.9.12.4.3")) {
@@ -23,10 +23,10 @@ if (require("testthat") && require("performance") && require("BayesFactor") && r
       r_BF <- r2(model, ci = 0.89)
       r_CI <- attr(r_BF, "CI")$R2_Bayes
 
-      testthat::expect_equal(r_BF$R2_Bayes, 0.36, tolerance = 0.05)
-      testthat::expect_equal(r_BF$R2_Bayes_marginal, 0.21, tolerance = 0.05)
-      testthat::expect_equal(r_CI$CI_low, 0.27, tolerance = 0.05)
-      testthat::expect_equal(r_CI$CI_high, 0.54, tolerance = 0.05)
+      expect_equal(r_BF$R2_Bayes, 0.36, tolerance = 0.05)
+      expect_equal(r_BF$R2_Bayes_marginal, 0.21, tolerance = 0.05)
+      expect_equal(r_CI$CI_low, 0.27, tolerance = 0.05)
+      expect_equal(r_CI$CI_high, 0.54, tolerance = 0.05)
     }
   })
 }
