@@ -21,7 +21,7 @@
 #'   plot(x)
 #' }
 #' @importFrom stats residuals df.residual fitted anova pchisq
-#' @importFrom insight print_color
+#' @importFrom insight print_color get_df
 #' @export
 check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")
@@ -31,7 +31,7 @@ check_heteroscedasticity <- function(x, ...) {
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
   r <- .pearson_residuals(x)
-  S.sq <- stats::df.residual(x) * .sigma(x)^2 / sum(!is.na(r))
+  S.sq <- insight::get_df(x, type = "residual") * .sigma(x)^2 / sum(!is.na(r))
 
   .U <- (r^2) / S.sq
   mod <- lm(.U ~ stats::fitted(x))
