@@ -44,6 +44,8 @@ The primary goal of the **performance** package is to provide utilities for comp
 
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
 [![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/performance?branch=master)
 
 Run the following to install the stable release of **performance** from CRAN:
 

@@ -5,7 +5,7 @@
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
 
-***Test if your model is a good model!***
+***Test if your model is a good model\!***
 
 The primary goal of the **performance** package is to provide utilities
 for computing **indices of model quality** and **goodness of fit**. This
@@ -19,6 +19,8 @@ singularity.
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
 [![R
 check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/performance?branch=master)
 
 Run the following to install the stable release of **performance** from
 CRAN:
@@ -101,8 +103,8 @@ model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cor
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
-#>      Marginal R2: 0.825 (89% CI [0.748, 0.891])
+#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
+#>      Marginal R2: 0.825 (0.89% CI [0.744, 0.887])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -258,9 +260,9 @@ m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
 #> # Indices of model performance
 #> 
-#> AIC    |    BIC |   R2 | R2 (adj.) | RMSE | Sigma
-#> -------------------------------------------------
-#> 156.01 | 161.87 | 0.83 |      0.82 | 2.44 |  2.57
+#> AIC     |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
+#> -----------------------------------------------------
+#> 156.010 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568
 ```
 
 #### Logistic regression
@@ -270,9 +272,9 @@ m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
 #> # Indices of model performance
 #> 
-#> AIC   |   BIC | Tjur's R2 | RMSE | Sigma | Log_loss | Score_log | Score_spherical |  PCP
-#> ----------------------------------------------------------------------------------------
-#> 31.30 | 35.70 |      0.48 | 0.36 |  0.93 |     0.40 |    -14.90 |            0.09 | 0.74
+#> AIC    |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP
+#> --------------------------------------------------------------------------------------------
+#> 31.298 | 35.695 |     0.478 | 0.359 | 0.934 |    0.395 |   -14.903 |           0.095 | 0.743
 ```
 
 #### Linear mixed model
@@ -283,9 +285,9 @@ m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 #> # Indices of model performance
 #> 
-#> AIC     |     BIC | R2 (cond.) | R2 (marg.) |  ICC |  RMSE | Sigma
-#> ------------------------------------------------------------------
-#> 1755.63 | 1774.79 |       0.80 |       0.28 | 0.72 | 23.44 | 25.59
+#> AIC      |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma
+#> -----------------------------------------------------------------------
+#> 1755.628 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
 ```
 
 ### Models comparison
@@ -303,12 +305,12 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 #> # Comparison of Model Performance Indices
 #> 
-#> Model |    Type |     AIC |     BIC |  RMSE | Sigma | Score_log | Score_spherical |   R2 | R2 (adj.) | Tjur's R2 | Log_loss |  PCP | R2 (cond.) | R2 (marg.) |  ICC | Nagelkerke's R2
-#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#> m1    |      lm |  156.01 |  161.87 |  2.44 |  2.57 |           |                 | 0.83 |      0.82 |           |          |      |            |            |      |                
-#> m2    |     glm |   31.30 |   35.70 |  0.36 |  0.93 |    -14.90 |            0.09 |      |           |      0.48 |     0.40 | 0.74 |            |            |      |                
-#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 | 25.59 |           |                 |      |           |           |          |      |       0.80 |       0.28 | 0.72 |                
-#> m4    |     glm |   56.76 |   57.75 |  3.04 |  1.13 |     -2.60 |            0.32 |      |           |           |          |      |            |            |      |            0.66
+#> Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
+#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                
+#> m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                
+#> m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                
+#> m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657
 ```
 
 #### General index of model performance
@@ -321,12 +323,12 @@ of model performance and sort the models from the best one to the worse.
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> # Comparison of Model Performance Indices
 #> 
-#> Model |    Type |     AIC |     BIC |  RMSE | Sigma | Performance-Score
-#> -----------------------------------------------------------------------
-#> m2    |     glm |   31.30 |   35.70 |  0.36 |  0.93 |           100.00%
-#> m4    |     glm |   56.76 |   57.75 |  3.04 |  1.13 |            96.21%
-#> m1    |      lm |  156.01 |  161.87 |  2.44 |  2.57 |            92.46%
-#> m3    | lmerMod | 1755.63 | 1774.79 | 23.44 | 25.59 |             0.00%
+#> Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Performance-Score
+#> --------------------------------------------------------------------------
+#> m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |           100.00%
+#> m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |            96.21%
+#> m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |            92.46%
+#> m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |             0.00%
 ```
 
 #### Visualisation of indices of models’ performance
@@ -351,19 +353,19 @@ m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 test_performance(m1, m2, m3)
-#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
-#> ------------------------------------------------------------
-#> m1   |    lm |        |        |            |       |       
-#> m2   |    lm |  0.601 |   0.03 |      0.062 |  3.99 |  0.057
-#> m3   |    lm | > 1000 |   0.16 |     < .001 | 29.35 | < .001
-#> Models were detected as nested. Each model is compared to the one below.
+#> Name | Model |     BF | Omega2 | p(Omega2) |    LR |  p(LR)
+#> -----------------------------------------------------------
+#> m1   |    lm |        |        |           |       |       
+#> m2   |    lm |  0.601 |   0.03 |    0.062  |  3.99 | 0.057 
+#> m3   |    lm | > 1000 |   0.16 |    < .001 | 29.35 | < .001
+#> Models were detected as nested and are compared in sequential order.
 ```
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references hanging-indent">
 
-<div id="ref-gelman_data_2007" class="csl-entry">
+<div id="ref-gelman_data_2007">
 
 Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
 and Multilevel/Hierarchical Models*. Analytical Methods for Social
@@ -371,14 +373,14 @@ Research. Cambridge ; New York: Cambridge University Press.
 
 </div>
 
-<div id="ref-hox_multilevel_2010" class="csl-entry">
+<div id="ref-hox_multilevel_2010">
 
 Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
 ed. Quantitative Methodology Series. New York: Routledge.
 
 </div>
 
-<div id="ref-johnson_extension_2014" class="csl-entry">
+<div id="ref-johnson_extension_2014">
 
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
@@ -387,12 +389,12 @@ Ecology and Evolution* 5 (9): 944–46.
 
 </div>
 
-<div id="ref-nakagawa_coefficient_2017" class="csl-entry">
+<div id="ref-nakagawa_coefficient_2017">
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
-Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
+Expanded.” *Journal of the Royal Society Interface* 14 (134): 20170213.
 <https://doi.org/10.1098/rsif.2017.0213>.
 
 </div>
