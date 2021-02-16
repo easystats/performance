@@ -61,6 +61,7 @@ Suggests:
     dbscan,
     fixest,
     forecast,
+    gamm4,
     ggplot2,
     gridExtra,
     glmmTMB,
