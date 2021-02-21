@@ -21,6 +21,7 @@
 #'   See 'Details'.
 #'
 #' @inheritParams r2_bayes
+#' @inheritParams insight::get_variance
 #'
 #' @return A list with two values, the adjusted and conditional ICC. For
 #' \code{variance_decomposition()}, a list with two values, the decomposed
@@ -123,7 +124,7 @@
 #' }
 #' @importFrom insight is_mixed_model get_variance print_color find_random find_random_slopes is_multivariate
 #' @export
-icc <- function(model, by_group = FALSE) {
+icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
 
   # special handling for smicd::semLme()
   if (inherits(model, "sem") && inherits(model, "lme")) {
@@ -146,7 +147,7 @@ icc <- function(model, by_group = FALSE) {
 
   vars <- tryCatch(
     {
-      insight::get_variance(model, name_fun = "icc()", name_full = "ICC")
+      insight::get_variance(model, name_fun = "icc()", name_full = "ICC", tolerance  = tolerance)
     },
     error = function(e) {
       if (inherits(e, c("simpleError", "error"))) {

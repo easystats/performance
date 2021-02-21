@@ -5,7 +5,7 @@
 \alias{variance_decomposition}
 \title{Intraclass Correlation Coefficient (ICC)}
 \usage{
-icc(model, by_group = FALSE)
+icc(model, by_group = FALSE, tolerance = 1e-05)
 
 variance_decomposition(model, re_formula = NULL, robust = TRUE, ci = 0.95, ...)
 }
@@ -15,6 +15,11 @@ variance_decomposition(model, re_formula = NULL, robust = TRUE, ci = 0.95, ...)
 \item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance
 components for each random-effects level (if there are multiple levels).
 See 'Details'.}
+
+\item{tolerance}{Tolerance for singularity check of random effects, to decide
+whether to compute random effect variances or not. Indicates up to which
+value the convergence result is accepted. The larger tolerance is, the
+stricter the test will be. See \code{\link[performance:check_singularity]{check_singularity()}}.}
 
 \item{re_formula}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
