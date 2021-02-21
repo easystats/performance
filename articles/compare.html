@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -65,7 +67,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -86,7 +88,7 @@
       <h1 data-toc-skip>Compare, Test and Select Models</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/vignettes/compare.Rmd"><code>vignettes/compare.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/vignettes/compare.Rmd" class="external-link"><code>vignettes/compare.Rmd</code></a></small>
       <div class="hidden name"><code>compare.Rmd</code></div>
 
     </div>
@@ -98,15 +100,15 @@
 <a href="#comparing-vs--testing" class="anchor"></a>Comparing vs. Testing</h1>
 <p>Let’s imagine that we are interested in explaining the variability in the <code>Sepal.Length</code> using 3 different predictors. For that, we can build 3 linear models.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
-<span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
-<span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
+<span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
+<span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
 <div id="comparing-indices-of-model-performance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-indices-of-model-performance" class="anchor"></a>Comparing Indices of Model Performance</h2>
-<p>The eponym function of the package, <a href="https://easystats.github.io/performance/reference/model_performance.html"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit, …).</p>
+<p>The eponym function of the package, <a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit, …).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/" class="external-link">performance</a></span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/model_performance.html">performance</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -128,7 +130,7 @@
 <td align="center">0.41</td>
 </tr></tbody>
 </table>
-<p>But for multiple models, one can obtain a useful table to compare these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html"><code>compare_performance()</code></a> function.</p>
+<p>But for multiple models, one can obtain a useful table to compare these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html" class="external-link"><code>compare_performance()</code></a> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -181,7 +183,7 @@
 <h2 class="hasAnchor">
 <a href="#testing-models" class="anchor"></a>Testing Models</h2>
 <p>While comparing these indices is often useful, making a decision (for instance, which model to keep or drop) can be hard, as the indices can give conflicting suggestions, and it’s often not obvious which index to favour depending on the scenario one is in.</p>
-<p>This is one of the reason why <em>tests</em> are useful, as they facilitate decisions, enabled by (infamous) “significance” indices, like <em>p</em>-values or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html">Bayes Factors</a>. However, these tests also have strong limitations and shortcomings, and cannot be used as the <strong>one ring to rule them all</strong>.</p>
+<p>This is one of the reason why <em>tests</em> are useful, as they facilitate decisions, enabled by (infamous) “significance” indices, like <em>p</em>-values or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes Factors</a>. However, these tests also have strong limitations and shortcomings, and cannot be used as the <strong>one ring to rule them all</strong>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/test_bf.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></code></pre></div>
 <table class="table">
@@ -190,9 +192,9 @@
 <th align="right">Model</th>
 <th align="right">BF</th>
 <th align="right">Omega2</th>
-<th align="right">p(Omega2)</th>
+<th align="right">p (Omega2)</th>
 <th align="right">LR</th>
-<th align="right">p(LR)</th>
+<th align="right">p (LR)</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -225,7 +227,7 @@
 </tbody>
 </table>
 <p>Each model is compared to model1.</p>
-<p>You can find more information on how these tests <a href="https://easystats.github.io/performance/reference/test_performance.html"><strong>here</strong></a>.</p>
+<p>You can find more information on how these tests <a href="https://easystats.github.io/performance/reference/test_performance.html" class="external-link"><strong>here</strong></a>.</p>
 </div>
 </div>
   </div>
@@ -241,11 +243,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
+  <p></p>
+<p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
@@ -253,6 +257,8 @@
 
   
 
+
+  
 
   </body>
 </html>

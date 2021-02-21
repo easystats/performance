@@ -65,9 +65,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -250,7 +256,7 @@
 <li>
 <code><a href="../reference/r2_somers.html">r2_somers()</a></code>, to compute Somers’ Dxy rank-correlation as R2-measure for logistic regression models.</li>
 <li>
-<code><a href="https://easystats.github.io/insight/reference/display.html">display()</a></code>, to print output from package-functions into different formats. <code><a href="https://easystats.github.io/insight/reference/display.html">print_md()</a></code> is an alias for <code><a href="https://easystats.github.io/insight/reference/display.html">display(format = "markdown")</a></code>.</li>
+<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code>, to print output from package-functions into different formats. <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> is an alias for <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display(format = "markdown")</a></code>.</li>
 </ul>
 </div>
 <div id="changes-to-functions-1" class="section level2">
@@ -349,7 +355,7 @@
 <li>
 <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> should now also work with zero-inflated mixed models from <em>glmmTMB</em> and <em>GLMMadpative</em>.</li>
 <li>
-<code><a href="../reference/check_outliers.html">check_outliers()</a></code> now returns a logical vector. Original numerical vector is still accessible via <code><a href="https://rdrr.io/r/base/numeric.html">as.numeric()</a></code>.</li>
+<code><a href="../reference/check_outliers.html">check_outliers()</a></code> now returns a logical vector. Original numerical vector is still accessible via <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code>.</li>
 </ul>
 </div>
 <div id="new-functions-2" class="section level2">
@@ -366,7 +372,7 @@
 <ul>
 <li>Fixed issue with incorrect labeling of groups from <code><a href="../reference/icc.html">icc()</a></code> when <code>by_group = TRUE</code>.</li>
 <li>Fixed issue in <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for mixed models where sigma could not be calculated in a straightforward way.</li>
-<li>Fixed issues in <code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> for <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">MASS::glm.nb()</a></code>.</li>
+<li>Fixed issues in <code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> for <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">MASS::glm.nb()</a></code>.</li>
 <li>Fixed CRAN check issues.</li>
 </ul>
 </div>
@@ -516,7 +522,7 @@
 <a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
 <li>
-<code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">parameters::principal_components()</a></code>.</li>
+<code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::principal_components()</a></code>.</li>
 <li>
 <code><a href="../reference/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</li>
 </ul>
@@ -547,7 +553,7 @@
 <li>
 <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</li>
 <li>
-<code><a href="../reference/test_bf.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
+<code><a href="../reference/test_bf.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
 </ul>
 </div>
 <div id="bug-fixes-10" class="section level2">
@@ -580,7 +586,7 @@
 <li>
 <code><a href="../reference/r2.html">r2()</a></code> now supports <em>complmrob</em> models.</li>
 <li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method (requires package <strong>see</strong>).</li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method (requires package <strong>see</strong>).</li>
 </ul>
 </div>
 <div id="changes-to-functions-8" class="section level2">
@@ -590,7 +596,7 @@
 <li>
 <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
 <li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> has a nicer <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>-method now.</li>
+<code><a href="../reference/compare_performance.html">compare_performance()</a></code> has a nicer <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>-method now.</li>
 <li>Verbosity for <code><a href="../reference/compare_performance.html">compare_performance()</a></code> was slightly adjusted.</li>
 <li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code>-methods for different objects now also have a <code>verbose</code>-argument.</li>
@@ -610,7 +616,7 @@
 <ul>
 <li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
 <li>
-<code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</li>
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</li>
 <li>Fixed issues with models of class <code>rlmerMod</code>.</li>
 </ul>
 </div>
@@ -632,7 +638,7 @@
 <a href="#deprecated-and-defunct" class="anchor"></a>Deprecated and Defunct</h2>
 <ul>
 <li>
-<code><a href="https://easystats.github.io/parameters/reference/principal_components.html">principal_components()</a></code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">parameters::principal_components()</a></code> now.</li>
+<code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">principal_components()</a></code> was removed and re-implemented in the <strong>parameters</strong>-package. Please use <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::principal_components()</a></code> now.</li>
 </ul>
 </div>
 <div id="changes-to-functions-9" class="section level2">
@@ -643,7 +649,7 @@
 <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</li>
 <li>Added more methods to <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</li>
 <li>
-<code><a href="../reference/performance_score.html">performance_score()</a></code> now also works on <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html">stan_glmer()</a></code> objects.</li>
+<code><a href="../reference/performance_score.html">performance_score()</a></code> now also works on <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer()</a></code> objects.</li>
 <li>
 <code><a href="../reference/check_singularity.html">check_singularity()</a></code> now works with models of class <em>clmm</em>.</li>
 <li>
@@ -669,9 +675,9 @@
 <h2 class="hasAnchor">
 <a href="#general-12" class="anchor"></a>General</h2>
 <ul>
-<li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
+<li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
 <li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>-method.</li>
+<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>-method.</li>
 </ul>
 </div>
 <div id="breaking-changes-2" class="section level2">
@@ -836,11 +842,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
+  <p><p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
@@ -848,6 +854,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -73,9 +73,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -150,7 +156,7 @@
  based on the posterior predictive distribution (see 'Details').</p>
     </div>
 
-    <pre class="usage"><span class='fu'>icc</span><span class='op'>(</span><span class='va'>model</span>, by_group <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>icc</span><span class='op'>(</span><span class='va'>model</span>, by_group <span class='op'>=</span> <span class='cn'>FALSE</span>, tolerance <span class='op'>=</span> <span class='fl'>1e-05</span><span class='op'>)</span>
 
 <span class='fu'>variance_decomposition</span><span class='op'>(</span><span class='va'>model</span>, re_formula <span class='op'>=</span> <span class='cn'>NULL</span>, robust <span class='op'>=</span> <span class='cn'>TRUE</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
@@ -166,6 +172,13 @@
       <td><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
 components for each random-effects level (if there are multiple levels).
 See 'Details'.</p></td>
+    </tr>
+    <tr>
+      <th>tolerance</th>
+      <td><p>Tolerance for singularity check of random effects, to decide
+whether to compute random effect variances or not. Indicates up to which
+value the convergence result is accepted. The larger tolerance is, the
+stricter the test will be. See <code><a href='check_singularity.html'>check_singularity()</a></code>.</p></td>
     </tr>
     <tr>
       <th>re_formula</th>
@@ -306,11 +319,11 @@ ICC as well as the credible intervals for this ICC.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p>
+  <p><p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, Philip Waggoner, Indrajeet Patil, Mattan S. Ben-Shachar.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
@@ -318,6 +331,8 @@ ICC as well as the credible intervals for this ICC.</p>
 
   
 
+
+  
 
   </body>
 </html>
