@@ -53,7 +53,7 @@
 #' @importFrom bayestestR bayesfactor_models
 #' @inheritParams model_performance.lm
 #' @export
-compare_performance <- function(..., metrics = "all", rank = FALSE,verbose = TRUE) {
+compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
   objects <- list(...)
   object_names <- match.call(expand.dots = FALSE)$`...`
 
@@ -132,7 +132,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE,verbose = TRU
   }
 
   # recode some indices, so higher values = better fit
-  for (i in c("AIC", "BIC", "RMSE", "Sigma")) {
+  for (i in c("AIC", "AICc", "BIC", "RMSE", "Sigma")) {
     if (i %in% colnames(out)) {
       out[[i]] <- 1 - out[[i]]
     }

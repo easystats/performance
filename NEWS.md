@@ -1,3 +1,10 @@
+# performance 0.7.1
+
+## Changes to functions
+
+* The `metrics` argument from `model_performance()` and `compare_performance()`
+  gains a `"AICc"` option, to also compute the 2nd order AIC.
+
 # performance 0.7.0
 
 ## General

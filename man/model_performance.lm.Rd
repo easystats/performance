@@ -9,7 +9,7 @@
 \arguments{
 \item{model}{A model.}
 
-\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "BIC", "R2", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.}
+\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
 
@@ -25,6 +25,7 @@ Compute indices of model performance for regression models.
 Depending on \code{model}, following indices are computed:
 \itemize{
   \item{\strong{AIC}} {Akaike's Information Criterion, see \code{?stats::AIC}}
+  \item{\strong{AICc}} {Second-order (or small sample) AIC with a correction for small sample sizes}
   \item{\strong{BIC}} {Bayesian Information Criterion, see \code{?stats::BIC}}
   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
   \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
