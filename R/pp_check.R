@@ -154,7 +154,7 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
 #' @export
 plot.performance_pp_check <- function(x, ...) {
   if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' required to plot posterior predictive checks Please install it.")
+    stop("Package 'see' required to plot posterior predictive checks. Please install it.")
   }
   NextMethod()
 }
