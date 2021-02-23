@@ -5,6 +5,9 @@
 * The `metrics` argument from `model_performance()` and `compare_performance()`
   gains a `"AICc"` option, to also compute the 2nd order AIC.
 
+* `"R2_adj"` is now an explicit option in the `metrics` argument from
+  `model_performance()` and `compare_performance()`.
+
 # performance 0.7.0
 
 ## General

@@ -3,7 +3,7 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
+#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -84,7 +84,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
   # R2 -------------
-  if ("R2" %in% toupper(metrics)) {
+  if (any(c("R2", "R2_ADJ") %in% toupper(metrics))) {
     R2 <- tryCatch({
       r2(model, verbose = verbose)
     },
@@ -93,7 +93,12 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     })
     if (!is.null(R2)) {
       attrib$r2 <- attributes(R2)
-      out <- c(out, R2)
+      if ("R2" %in% toupper(metrics) && "R2" %in% names(R2)) {
+        out$R2 <- out$R2
+      }
+      if ("R2_ADJ" %in% toupper(metrics) && "R2_adjusted" %in% names(R2)) {
+        out$R2_adjusted <- R2$R2_adjusted
+      }
     }
   }
 
