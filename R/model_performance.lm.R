@@ -94,7 +94,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     if (!is.null(R2)) {
       attrib$r2 <- attributes(R2)
       if ("R2" %in% toupper(metrics) && "R2" %in% names(R2)) {
-        out$R2 <- out$R2
+        out$R2 <- R2$R2
       }
       if ("R2_ADJ" %in% toupper(metrics) && "R2_adjusted" %in% names(R2)) {
         out$R2_adjusted <- R2$R2_adjusted
