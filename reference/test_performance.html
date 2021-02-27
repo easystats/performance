@@ -88,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0.1</span>
       </span>
     </div>
 
@@ -177,12 +177,12 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Nested vs. Non-nested Models</h3>
+<h3 class='hasAnchor' id='nested-vs-non-nested-models'><a class='anchor' href='#nested-vs-non-nested-models'></a>Nested vs. Non-nested Models</h3>
 <p>Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are <em>"nested",</em> i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, <code>model1 (y ~ x1 + x2)</code> is "nested" within <code>model2 (y ~ x1 + x2 + x3)</code>. Usually, people have a list of nested models, for instance <code>m1 (y ~ x1 + x2 + x3)</code>, <code>m2 (y ~ x1 + x2)</code>, <code>m3 (y ~ x1)</code>, <code>m4 (y ~ 1)</code>, and they are "ordered" from the largest to smallest on vice versa, to test whether a more parsimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared <em>sequentially</em>: m2 is tested against m1, m3 against m2, m4 against m3, etc.
 <br /><br />
 Two models are considered as <em>"non-nested"</em> if their predictors are different. For instance, <code>model1 (y ~ x1 + x2)</code> and <code>model2 (y ~ x3 + x4)</code>. In the case of non-nested models, all models are usually compared against the same <em>reference</em> model (by default, the first of the list).
 <br /><br />
-Nesting is detected via the <code><a href='https://easystats.github.io/insight/reference/is_nested_models.html'>insight::is_nested_models()</a></code> function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variables (the response) must be the same. You cannot meaningfully test whether apples are significantly different from oranges!</p><p></p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Tests Description</h3>
+Nesting is detected via the <code><a href='https://easystats.github.io/insight/reference/is_nested_models.html'>insight::is_nested_models()</a></code> function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variables (the response) must be the same. You cannot meaningfully test whether apples are significantly different from oranges!</p><p></p><h3 class='hasAnchor' id='tests-description'><a class='anchor' href='#tests-description'></a>Tests Description</h3>
 
 
 <ul>

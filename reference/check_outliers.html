@@ -88,7 +88,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0.1</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ considered as outlier. If <code>NULL</code>, default values will be used (see 'D
     <p>Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.</p>
 <p>An <strong>example sentence</strong> for reporting the usage of the composite method could be:</p>
 <p><em>"Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2019) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan &amp; Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded n participants that were classified as outliers by at least half of the methods used."</em></p>
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Model-specific methods</h3>
+<h3 class='hasAnchor' id='model-specific-methods'><a class='anchor' href='#model-specific-methods'></a>Model-specific methods</h3>
 
 <ul>
 <li><p><strong>Cook's Distance</strong>:
@@ -205,7 +205,7 @@ The reliability and approximate convergence of Bayesian models can be assessed u
 </ul>
 
 
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Univariate methods</h3>
+<h3 class='hasAnchor' id='univariate-methods'><a class='anchor' href='#univariate-methods'></a>Univariate methods</h3>
 
 <ul>
 <li><p><strong>Z-scores</strong>:
@@ -214,7 +214,7 @@ The reliability and approximate convergence of Bayesian models can be assessed u
  Using the IQR (interquartile range) is a robust method developed by John Tukey, which often appears in box-and-whisker plots (e.g., in <code>geom_boxplot</code>). The interquartile range is the range between the first and the third quartiles. Tukey considered as outliers any data point that fell outside of either 1.5 times (the default threshold) the IQR below the first or above the third quartile. Similar to the Z-score method, this is a univariate method for outliers detection, returning outliers detected for at least one column, and might thus not be suited to high dimensional data.</p></li>
 </ul>
 
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Multivariate methods</h3>
+<h3 class='hasAnchor' id='multivariate-methods'><a class='anchor' href='#multivariate-methods'></a>Multivariate methods</h3>
 
 <ul>
 <li><p><strong>Mahalanobis Distance</strong>:
@@ -263,7 +263,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
  Requires the <span class="pkg">dbscan</span> package.</p></li>
 </ul>
 
-<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Threshold specification</h3>
+<h3 class='hasAnchor' id='threshold-specification'><a class='anchor' href='#threshold-specification'></a>Threshold specification</h3>
 <p>Default thresholds are currently specified as follows:</p>
 <p><code><a href='https://rdrr.io/r/base/list.html'>
 list(
