@@ -19,8 +19,6 @@ singularity.
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
 [![R
 check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
-[![Codecov test
-coverage](https://codecov.io/gh/easystats/performance/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/performance?branch=master)
 
 Run the following to install the stable release of **performance** from
 CRAN:
@@ -104,7 +102,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
-#>      Marginal R2: 0.825 (0.89% CI [0.744, 0.887])
+#>      Marginal R2: 0.824 (0.89% CI [0.747, 0.888])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -353,11 +351,11 @@ m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 test_performance(m1, m2, m3)
-#> Name | Model |     BF | Omega2 | p(Omega2) |    LR |  p(LR)
-#> -----------------------------------------------------------
-#> m1   |    lm |        |        |           |       |       
-#> m2   |    lm |  0.601 |   0.03 |    0.062  |  3.99 | 0.057 
-#> m3   |    lm | > 1000 |   0.16 |    < .001 | 29.35 | < .001
+#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
+#> ------------------------------------------------------------
+#> m1   |    lm |        |        |            |       |       
+#> m2   |    lm |  0.601 |   0.03 |     0.062  |  3.99 | 0.057 
+#> m3   |    lm | > 1000 |   0.16 |     < .001 | 29.35 | < .001
 #> Models were detected as nested and are compared in sequential order.
 ```
 
