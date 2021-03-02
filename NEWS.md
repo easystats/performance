@@ -8,6 +8,11 @@
 * `"R2_adj"` is now an explicit option in the `metrics` argument from
   `model_performance()` and `compare_performance()`.
 
+## Bug fixes
+
+* `test_likelihoodratio()` now correctly sorts models with identical
+  fixed effects part, but different other model parts (like zero-inflation).
+
 # performance 0.7.0
 
 ## General
