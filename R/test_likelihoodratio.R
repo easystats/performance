@@ -47,7 +47,14 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
 #' @export
 test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
   dfs <- sapply(objects, insight::get_df, type = "model")
-  dfs_diff <- c(NA, diff(sapply(objects, insight::get_df, type = "model")))
+
+  # sort by df
+  if (!all(sort(dfs) == dfs)) {
+    objects <- objects[order(dfs)]
+    dfs <- dfs[order(dfs)]
+  }
+
+  dfs_diff <- c(NA, diff(dfs))
 
   # lmtest::lrtest()
   if (tolower(estimator) %in% c("ml", "mle")) {

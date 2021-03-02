@@ -52,6 +52,13 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
 
   # Compute stuff
   dfs <- sapply(objects, insight::get_df, type = "residual")
+
+  # sort by df
+  if (!all(sort(dfs) == dfs)) {
+    objects <- objects[order(dfs)]
+    dfs <- dfs[order(dfs)]
+  }
+
   dfs_diff <- c(NA, diff(sapply(objects, insight::get_df, type = "model")))
   dev <- as.numeric(lapply(objects, insight::get_deviance))
   dev_diff <- c(NA, -diff(dev))
