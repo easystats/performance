@@ -49,3 +49,13 @@
 #   w <- as.vector(insight::get_residuals(x, "working")) * insight::get_weights(x, "working")
 #   w * stats::model.matrix(x) / insight::get_auxiliary(x, type = "dispersion")
 # }
+
+
+.get_gradients.glmmTMB <- function(x, ...) {
+  if (insight::model_info(x)$is_linear) {
+    insight::get_residuals(x) * insight::get_weights(x) * stats::model.matrix(x)
+  } else {
+    w <- as.vector(insight::get_residuals(x)) * insight::get_weights(x)
+    w * stats::model.matrix(x) / insight::get_auxiliary(x, type = "dispersion")
+  }
+}
