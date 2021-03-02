@@ -246,7 +246,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # all(ref$sc == rez$sc)
 
 #' @importFrom insight get_sigma get_varcov n_obs
-#' @importFrom stats vcov
 .test_vuong_AB <- function(model) {
   # A, B as defined in Vuong Eq (2.1) and (2.2)
 
