@@ -159,7 +159,7 @@ a posterior sample of Bayesian R2 values.</p>
 <span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for BFBayesFactor</span>
-<span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, average <span class='op'>=</span> <span class='cn'>FALSE</span>, prior_odds <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>r2_posterior</span><span class='op'>(</span><span class='va'>model</span>, average <span class='op'>=</span> <span class='cn'>FALSE</span>, prior_odds <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,8 +188,7 @@ calculate the central tendency of the variances.</p></td>
     </tr>
     <tr>
       <th>average</th>
-      <td><p>Compute model-averaged index? See
-<code><a href='https://easystats.github.io/bayestestR/reference/weighted_posteriors.html'>bayestestR::weighted_posteriors()</a></code>.</p></td>
+      <td><p>Compute model-averaged index? See <code><a href='https://easystats.github.io/bayestestR/reference/weighted_posteriors.html'>bayestestR::weighted_posteriors()</a></code>.</p></td>
     </tr>
     <tr>
       <th>prior_odds</th>
