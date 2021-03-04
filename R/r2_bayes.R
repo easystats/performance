@@ -195,24 +195,26 @@ r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 }
 
 
-#' @param average Compute model-averaged index? See
-#'   \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.
+#' @param average Compute model-averaged index? See \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.
 #' @inheritParams bayestestR::weighted_posteriors
+#' @inheritParams r2_bayes
 #' @importFrom insight get_parameters get_response find_predictors
 #' @importFrom stats median mad sd
 #' @importFrom bayestestR point_estimate hdi
 #' @importFrom utils packageVersion
 #' @export
 #' @rdname r2_bayes
-r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, ...){
+r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE, ...){
   mi <- insight::model_info(model)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
-    warning("Can produce R2 only for linear models.", call. = FALSE)
+    if (verbose) {
+      warning("Can produce R2 only for linear models.", call. = FALSE)
+    }
     return(NULL)
   }
 
   if (average) {
-    return(.r2_posterior_model_average(model, prior_odds = prior_odds))
+    return(.r2_posterior_model_average(model, prior_odds = prior_odds, verbose = verbose))
   }
 
   if (!requireNamespace("rstantools", quietly = TRUE)) {
@@ -265,13 +267,20 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
 
 #' @importFrom bayestestR weighted_posteriors
 #' @keywords internal
-.r2_posterior_model_average <- function(model, prior_odds = NULL) {
+.r2_posterior_model_average <- function(model, prior_odds = NULL, verbose = TRUE) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("Package `BayesFactor` needed for this function to work. Please install it.")
   }
 
   BFMods <- bayestestR::bayesfactor_models(model, verbose = FALSE)
   has_random <- !is.null(insight::find_predictors(model, effects = "random", flatten = TRUE))
+
+  if (any(is.na(BFMods$BF) | is.infinite(BFMods$BF))) {
+    if (verbose) {
+      warning("Can't compute model-averaged index. One or more Bayes factors are NA or infinite.", call. = FALSE)
+    }
+    return(NULL)
+  }
 
   # extract parameters
   intercept_only <- which(BFMods$Model == "1")

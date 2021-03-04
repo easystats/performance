@@ -16,7 +16,7 @@ r2_posterior(model, ...)
 
 \method{r2_posterior}{stanreg}(model, verbose = TRUE, ...)
 
-\method{r2_posterior}{BFBayesFactor}(model, average = FALSE, prior_odds = NULL, ...)
+\method{r2_posterior}{BFBayesFactor}(model, average = FALSE, prior_odds = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A Bayesian regression model (from \strong{brms}, \strong{rstanarm},
@@ -31,8 +31,7 @@ calculate the central tendency of the variances.}
 
 \item{...}{Arguments passed to \code{r2_posterior()}.}
 
-\item{average}{Compute model-averaged index? See
-\code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.}
+\item{average}{Compute model-averaged index? See \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.}
 
 \item{prior_odds}{Optional vector of prior odds for the models compared to the first model (or the denominator, for \code{BFBayesFactor} objects). For \code{data.frame}s, this will be used as the basis of weighting.}
 }

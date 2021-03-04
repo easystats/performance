@@ -1,5 +1,10 @@
 # performance 0.7.1
 
+## General
+
+* Give more informative warning when `r2_bayes()` for *BFBayesFactor* objects
+  can't be calculated.
+
 ## Changes to functions
 
 * The `metrics` argument from `model_performance()` and `compare_performance()`
