@@ -1,6 +1,7 @@
 if (require("testthat") &&
-  require("lavaan") &&
-  require("lmtest")) {
+    require("performance") &&
+    require("lavaan") &&
+    require("lmtest")) {
 
   test_that("test_wald - lm", {
     m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)

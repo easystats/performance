@@ -54,7 +54,7 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
   dfs <- sapply(objects, insight::get_df, type = "residual")
 
   # sort by df
-  if (!all(sort(dfs) == dfs)) {
+  if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
     objects <- objects[order(dfs)]
     dfs <- dfs[order(dfs)]
   }

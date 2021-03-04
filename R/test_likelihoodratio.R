@@ -49,7 +49,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   dfs <- sapply(objects, insight::get_df, type = "model")
 
   # sort by df
-  if (!all(sort(dfs) == dfs)) {
+  if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
     objects <- objects[order(dfs)]
     dfs <- dfs[order(dfs)]
   }
