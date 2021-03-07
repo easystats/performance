@@ -4,6 +4,7 @@
 \alias{pp_check}
 \alias{pp_check.lm}
 \alias{posterior_predictive_check}
+\alias{check_posterior_predictions}
 \title{Posterior predictive checks for frequentist models}
 \usage{
 pp_check(object, ...)
@@ -11,6 +12,14 @@ pp_check(object, ...)
 \method{pp_check}{lm}(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...)
 
 posterior_predictive_check(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  ...
+)
+
+check_posterior_predictions(
   object,
   iterations = 50,
   check_range = FALSE,
@@ -64,9 +73,10 @@ Thus, \pkg{performance} adds \code{pp_check()}-methods for different classes and
 packages (like \code{lm}, \code{merMod}, \code{glmmTMB}, ...). However, since
 it might be that not all model objects that have a \code{simulate()} function
 are covered, and those objects probably can't be passed down to the default-method,
-there is also a "generic" \code{posterior_predictive_check()} function, which
-just calls \code{pp_check.lm()}. Thus, every model object that has a
-\code{simulate()}-method should work with \code{posterior_predictive_check()}.
+there is also a "generic" \code{posterior_predictive_check()} function (and
+its alias \code{check_posterior_predictions()}), which just calls
+\code{pp_check.lm()}. Thus, every model object that has a \code{simulate()}-method
+should work with \code{posterior_predictive_check()}.
 }
 \examples{
 \dontrun{
