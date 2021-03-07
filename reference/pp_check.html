@@ -153,6 +153,14 @@
   check_range <span class='op'>=</span> <span class='cn'>FALSE</span>,
   re_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>check_posterior_predictions</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  iterations <span class='op'>=</span> <span class='fl'>50</span>,
+  check_range <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  re_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -213,9 +221,10 @@ Thus, <span class="pkg">performance</span> adds <code>pp_check()</code>-methods 
 packages (like <code>lm</code>, <code>merMod</code>, <code>glmmTMB</code>, ...). However, since
 it might be that not all model objects that have a <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code> function
 are covered, and those objects probably can't be passed down to the default-method,
-there is also a "generic" <code>posterior_predictive_check()</code> function, which
-just calls <code>pp_check.lm()</code>. Thus, every model object that has a
-<code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code>-method should work with <code>posterior_predictive_check()</code>.</p>
+there is also a "generic" <code>posterior_predictive_check()</code> function (and
+its alias <code>check_posterior_predictions()</code>), which just calls
+<code>pp_check.lm()</code>. Thus, every model object that has a <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code>-method
+should work with <code>posterior_predictive_check()</code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
