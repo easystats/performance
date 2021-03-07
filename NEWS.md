@@ -5,6 +5,8 @@
 * Give more informative warning when `r2_bayes()` for *BFBayesFactor* objects
   can't be calculated.
 
+* `r2()` supports `mhurdle` (*mhurdle*) models.
+
 ## Changes to functions
 
 * The `metrics` argument from `model_performance()` and `compare_performance()`

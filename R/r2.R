@@ -110,6 +110,30 @@ r2.cph <- r2.ols
 
 
 
+#' @importFrom insight get_response n_parameters
+#' @export
+r2.mhurdle <- function(model, ...) {
+  resp <- insight::get_response(model)
+  mean_resp <- mean(resp, na.rm = TRUE)
+  ftd <- model$fitted.values[, "pos", drop = TRUE] * (1 - model$fitted.values[, "zero", drop = TRUE])
+  n <- length(resp)
+  K <- insight::n_parameters(model)
+  Ko <- length(model$naive$coefficients)
+
+  out <- list(
+    R2 = 1 - sum((resp - ftd) ^ 2) / sum((resp - mean_resp) ^ 2),
+    R2_adjusted = 1 - (n - Ko) / (n - K) * sum((resp - ftd) ^ 2) / sum((resp - mean_resp) ^ 2)
+  )
+
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+
+  attr(out, "model_type") <- "Limited Dependent Variable"
+  structure(class = "r2_generic", out)
+}
+
+
+
 #' @importFrom stats summary.lm
 #' @export
 r2.aov <- function(model, ...) {
