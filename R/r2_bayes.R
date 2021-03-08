@@ -19,7 +19,7 @@
 #'   and credible intervals for the R2 values are saved as attributes.
 #'
 #' @details \code{r2_bayes()} returns an "unadjusted" R2 value. See \code{\link{r2_loo}}
-#'   to calculate a LOO-adjusted R2, which comes conceptionally closer to an
+#'   to calculate a LOO-adjusted R2, which comes conceptually closer to an
 #'   adjusted R2 measure.
 #'   \cr \cr
 #'   For mixed models, the conditional and marginal R2 are returned. The marginal

@@ -97,6 +97,6 @@ Suggests:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9001
 Language: en-US
 Config/testthat/edition: 3
