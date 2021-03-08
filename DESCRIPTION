@@ -1,52 +1,53 @@
-Package: performance
 Type: Package
+Package: performance
 Title: Assessment of Regression Models Performance
 Version: 0.7.0.1
-Authors@R: c(
-	person("Daniel", 
-		"Lüdecke", 
-		role = c("aut", "cre"), 
-		email = "d.luedecke@uke.de", 
-		comment = c(ORCID = "0000-0002-8895-3206")),
-	person("Dominique", 
-		"Makowski", 
-		email = "dom.makowski@gmail.com",
-		role = c("aut", "ctb"), 
-		comment = c(ORCID = "0000-0001-5375-9967")),
-	person("Philip", 
-		"Waggoner", 
-		email = "philip.waggoner@gmail.com",
-		role = c("aut", "ctb"), 
-		comment = c(ORCID = "0000-0002-7825-7573")),
-	person("Indrajeet", 
-	  "Patil", 
-	  role = c("aut", "ctb"), 
-	  email = "patilindrajeet.science@gmail.com", 
-	  comment = c(ORCID = "0000-0003-1995-6531")),
-	person("Mattan S.", 
-		"Ben-Shachar", 
-		role = c("aut", "ctb"), 
-		email = "matanshm@post.bgu.ac.il", 
-		comment = c(ORCID = "0000-0002-4287-4801"))
-	)
+Authors@R: 
+    c(person(given = "Daniel",
+             family = "Lüdecke",
+             role = c("aut", "cre"),
+             email = "d.luedecke@uke.de",
+             comment = c(ORCID = "0000-0002-8895-3206")),
+      person(given = "Dominique",
+             family = "Makowski",
+             role = c("aut", "ctb"),
+             email = "dom.makowski@gmail.com",
+             comment = c(ORCID = "0000-0001-5375-9967")),
+      person(given = "Philip",
+             family = "Waggoner",
+             role = c("aut", "ctb"),
+             email = "philip.waggoner@gmail.com",
+             comment = c(ORCID = "0000-0002-7825-7573")),
+      person(given = "Indrajeet",
+             family = "Patil",
+             role = c("aut", "ctb"),
+             email = "patilindrajeet.science@gmail.com",
+             comment = c(ORCID = "0000-0003-1995-6531")),
+      person(given = "Mattan S.",
+             family = "Ben-Shachar",
+             role = c("aut", "ctb"),
+             email = "matanshm@post.bgu.ac.il",
+             comment = c(ORCID = "0000-0002-4287-4801")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
-    which are not directly provided by R's 'base' or 'stats' packages. These 
-    include e.g. measures like r-squared, intraclass correlation coefficient
-    (Nakagawa, Johnson & Schielzeth (2017) <doi:10.1098/rsif.2017.0213>), 
-    root mean squared error or functions to check models for overdispersion, 
-    singularity or zero-inflation and more. Functions apply to a large variety of
-    regression models, including generalized linear models, mixed effects models
-    and Bayesian models.
+    which are not directly provided by R's 'base' or 'stats' packages.
+    These include e.g. measures like r-squared, intraclass correlation
+    coefficient (Nakagawa, Johnson & Schielzeth (2017)
+    <doi:10.1098/rsif.2017.0213>), root mean squared error or functions to
+    check models for overdispersion, singularity or zero-inflation and
+    more. Functions apply to a large variety of regression models,
+    including generalized linear models, mixed effects models and Bayesian
+    models.
+License: GPL-3
 URL: https://easystats.github.io/performance/
 BugReports: https://github.com/easystats/performance/issues
 Depends:
-  R (>= 3.4)
+    R (>= 3.4)
 Imports:
-	insight (>= 0.11.0),
-	bayestestR (>= 0.7.5),
-	stats,
-	utils
+    bayestestR (>= 0.7.5),
+    insight (>= 0.11.0),
+    stats,
+    utils
 Suggests:
     AER,
     BayesFactor,
@@ -62,16 +63,16 @@ Suggests:
     forecast,
     gamm4,
     ggplot2,
-    gridExtra,
     glmmTMB,
+    gridExtra,
     ICS,
     ICSOutlier,
     lavaan,
     lme4,
     lmtest,
     loo,
-    Matrix,
     MASS,
+    Matrix,
     metafor,
     mgcv,
     mlogit,
@@ -88,15 +89,14 @@ Suggests:
     rstantools,
     sandwich,
     see,
+    spelling,
     survey,
     survival,
     testthat,
     tweedie,
-    VGAM,
-    spelling
-License: GPL-3
+    VGAM
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 RoxygenNote: 7.1.1.9001
-Language: en-US
 Config/testthat/edition: 3

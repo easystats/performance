@@ -17,7 +17,7 @@
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @return A data frame with three columns, the x/y-coordinate pairs for the ROC
-#' curve (\code{Sensivity} and \code{Specifity}), and a column with the model
+#' curve (\code{Sensitivity} and \code{Specificity}), and a column with the model
 #' name.
 #'
 #' @examples
@@ -34,7 +34,7 @@
 #' performance_roc(model, new_data = test_data)
 #'
 #' roc <- performance_roc(model, new_data = test_data)
-#' area_under_curve(roc$Specifity, roc$Sensivity)
+#' area_under_curve(roc$Specificity, roc$Sensitivity)
 #'
 #' m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
 #' m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
@@ -77,8 +77,8 @@ performance_roc <- function(x, ..., predictions, new_data) {
   x <- x[order(predictions, decreasing = TRUE)]
 
   res <- data.frame(
-    Sensivity = c(0, cumsum(x) / sum(x), 1),
-    Specifity = c(0, cumsum(!x) / sum(!x), 1)
+    Sensitivity = c(0, cumsum(x) / sum(x), 1),
+    Specificity = c(0, cumsum(!x) / sum(!x), 1)
   )
 
   class(res) <- c("performance_roc", "see_performance_roc", "data.frame")

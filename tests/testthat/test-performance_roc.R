@@ -7,7 +7,7 @@ if (require("testthat") &&
   test_that("performance_roc", {
     roc <- performance_roc(m)
     expect_equal(
-      roc$Sensivity,
+      roc$Sensitivity,
       c(0, 0.07143, 0.14286, 0.21429, 0.28571, 0.35714, 0.42857, 0.5,
         0.57143, 0.57143, 0.64286, 0.64286, 0.64286, 0.71429, 0.78571,
         0.85714, 0.85714, 0.92857, 0.92857, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -28,7 +28,7 @@ if (require("testthat") &&
   test_that("performance_roc", {
     roc <- performance_roc(m)
     expect_equal(
-      roc$Sensivity,
+      roc$Sensitivity,
       c(0, 0, 0.07692, 0.07692, 0.07692, 0.15385, 0.23077, 0.23077,
         0.23077, 0.23077, 0.23077, 0.30769, 0.30769, 0.30769, 0.30769,
         0.30769, 0.38462, 0.38462, 0.38462, 0.46154, 0.46154, 0.53846,
