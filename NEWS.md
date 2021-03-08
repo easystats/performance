@@ -20,6 +20,9 @@
 * `test_likelihoodratio()` now correctly sorts models with identical
   fixed effects part, but different other model parts (like zero-inflation).
 
+* Fixed incorrect computation of models from inverse-Gaussian families, or
+  Gaussian families fitted with `glm()`.
+
 # performance 0.7.0
 
 ## General
