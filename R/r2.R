@@ -196,7 +196,8 @@ r2.glm <- function(model, ...) {
 r2.glmx <- r2.glm
 
 
-#' @importFrom insight get_response n_parameters
+#' @importFrom insight get_response
+#' @importFrom stats fitted
 .r2_glm_gaussian <- function(model, ...) {
   resp <- insight::get_response(model)
   mean_resp <- mean(resp, na.rm = TRUE)
