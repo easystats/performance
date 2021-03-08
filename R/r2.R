@@ -181,7 +181,11 @@ r2.mlm <- function(model, ...) {
 #' @importFrom insight model_info
 #' @export
 r2.glm <- function(model, ...) {
-  if (insight::model_info(model)$is_logit) {
+  info <- insight::model_info(model)
+
+  if (info$family %in% c("gaussian", "inverse.gaussian")) {
+    .r2_glm_gaussian(model, ...)
+  } else if (info$is_logit) {
     list("R2_Tjur" = r2_tjur(model))
   } else {
     list("R2_Nagelkerke" = r2_nagelkerke(model))
@@ -191,6 +195,21 @@ r2.glm <- function(model, ...) {
 #' @export
 r2.glmx <- r2.glm
 
+
+#' @importFrom insight get_response n_parameters
+.r2_glm_gaussian <- function(model, ...) {
+  resp <- insight::get_response(model)
+  mean_resp <- mean(resp, na.rm = TRUE)
+  ftd <- stats::fitted(model)
+
+  out <- list(
+    R2 = 1 - sum((resp - ftd) ^ 2) / sum((resp - mean_resp) ^ 2)
+  )
+
+  names(out$R2) <- "R2"
+  attr(out, "model_type") <- "(Inverse) Gaussian"
+  structure(class = "r2_generic", out)
+}
 
 
 
