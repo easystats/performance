@@ -14,6 +14,10 @@
 
 * `"R2_adj"` is now an explicit option in the `metrics` argument from
   `model_performance()` and `compare_performance()`.
+  
+* The default-method for `r2()` now tries to compute an r-squared for all models
+  that have no specific `r2()`-method yet, by using following formula:
+  `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
 
 ## Bug fixes
 

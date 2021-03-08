@@ -19,6 +19,10 @@
 #'   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
 #' }
 #'
+#' @note If there is no \code{r2()}-method defined for the given model class,
+#'   \code{r2()} tries to return a "genericE r2 value, calculated as following:
+#'   \code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
+#'
 #' @seealso \code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kullback}},
 #'   \code{\link{r2_loo}}, \code{\link{r2_mcfadden}}, \code{\link{r2_nagelkerke}},
 #'   \code{\link{r2_nakagawa}}, \code{\link{r2_tjur}}, \code{\link{r2_xu}} and
@@ -43,13 +47,26 @@ r2 <- function(model, ...) {
 # Default models -----------------------------------------------
 
 
-#' @importFrom insight print_color
+#' @importFrom insight print_color get_response get_predicted
 #' @export
 r2.default <- function(model, verbose = TRUE, ...) {
-  if (isTRUE(verbose)) {
+  out <- tryCatch(
+    {
+      resp <- .factor_to_numeric(insight::get_response(model))
+      mean_resp <- mean(resp, na.rm = TRUE)
+      pred <- insight::get_predicted(model, verbose = FALSE)
+      list(R2 = 1 - sum((resp - pred) ^ 2) / sum((resp - mean_resp) ^ 2))
+    },
+    error = function(e) {
+      NA
+    }
+  )
+
+  if (is.na(out) && isTRUE(verbose)) {
     insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
   }
-  return(NA)
+
+  out
 }
 
 
@@ -184,7 +201,7 @@ r2.glm <- function(model, ...) {
   info <- insight::model_info(model)
 
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
-    .r2_glm_gaussian(model, ...)
+    r2.default(model, ...)
   } else if (info$is_logit) {
     list("R2_Tjur" = r2_tjur(model))
   } else {
@@ -194,23 +211,6 @@ r2.glm <- function(model, ...) {
 
 #' @export
 r2.glmx <- r2.glm
-
-
-#' @importFrom insight get_response
-#' @importFrom stats fitted
-.r2_glm_gaussian <- function(model, ...) {
-  resp <- insight::get_response(model)
-  mean_resp <- mean(resp, na.rm = TRUE)
-  ftd <- stats::fitted(model)
-
-  out <- list(
-    R2 = 1 - sum((resp - ftd) ^ 2) / sum((resp - mean_resp) ^ 2)
-  )
-
-  names(out$R2) <- "R2"
-  attr(out, "model_type") <- "(Inverse) Gaussian"
-  structure(class = "r2_generic", out)
-}
 
 
 

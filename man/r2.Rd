@@ -37,6 +37,11 @@ Returns a list containing values related to the most appropriate R2
 Calculate the R2 value for different model objects. Depending
   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
 }
+\note{
+If there is no \code{r2()}-method defined for the given model class,
+  \code{r2()} tries to return a "genericE r2 value, calculated as following:
+  \code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
+}
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)
