@@ -183,6 +183,11 @@ decrease the tolerance-level. See also <code><a href='check_singularity.html'>ch
 <li><p>Bayesian models: <a href='r2_bayes.html'>R2 bayes</a></p></li>
 </ul>
 
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>If there is no <code>r2()</code>-method defined for the given model class,
+  <code>r2()</code> tries to return a "genericE r2 value, calculated as following:
+  <code>1-sum((y-y_hat)^2)/sum((y-y_bar)^2))</code></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='r2_bayes.html'>r2_bayes</a></code>, <code><a href='r2_coxsnell.html'>r2_coxsnell</a></code>, <code><a href='r2_kullback.html'>r2_kullback</a></code>,
