@@ -1,9 +1,9 @@
-#' @title Binned residuals for logistic regression
+#' @title Binned residuals for binomial logistic regression
 #' @name binned_residuals
 #'
-#' @description Check model quality of logistic regression models.
+#' @description Check model quality of binomial logistic regression models.
 #'
-#' @param model A \code{glm}-object with binomial-family.
+#' @param model A \code{glm}-object with \emph{binomial}-family.
 #' @param term Name of independent variable from \code{x}. If not \code{NULL},
 #'   average residuals for the categories of \code{term} are plotted; else,
 #'   average residuals for the estimated probabilities of the response are
@@ -14,12 +14,12 @@
 #' @param ... Further argument like \code{size} (for point-size) or
 #'   \code{color} (for point-colors).
 #'
-#' @return A data frame representing the data that is mapped to the plot, which is
-#'   automatically plotted. In case all residuals are inside the error bounds,
-#'   points are black. If some of the residuals are outside the error bounds
-#'   (indicates by the grey-shaded area), blue points indicate residuals that
-#'   are OK, while red points indicate model under- or overfitting for the
-#'   related range of estimated probabilities.
+#' @return A data frame representing the data that is mapped in the accompanying
+#'   plot. In case all residuals are inside the error bounds, points are black.
+#'   If some of the residuals are outside the error bounds (indicated by the
+#'   grey-shaded area), blue points indicate residuals that are OK, while red
+#'   points indicate model under- or over-fitting for the relevant range of
+#'   estimated probabilities.
 #'
 #' @details Binned residual plots are achieved by \dQuote{dividing the data into
 #'   categories (bins) based on their fitted values, and then plotting
@@ -28,27 +28,37 @@
 #'   expect about 95\% of the residuals to fall inside the error bounds.
 #'   \cr \cr
 #'   If \code{term} is not \code{NULL}, one can compare the residuals in
-#'   relation to a specific model predictor. This may be helpful to check
-#'   if a term would fit better when transformed, e.g. a rising and falling
-#'   pattern of residuals along the x-axis (the pattern is indicated by
-#'   a green line) is a signal to consider taking the logarithm of the
-#'   predictor (cf. Gelman and Hill 2007, pp. 97ff).
+#'   relation to a specific model predictor. This may be helpful to check if a
+#'   term would fit better when transformed, e.g. a rising and falling pattern
+#'   of residuals along the x-axis is a signal to consider taking the logarithm
+#'   of the predictor (cf. Gelman and Hill 2007, pp. 97-98).
 #'
 #' @note Since \code{binned_residuals()} returns a data frame, the default
 #'   action for the result is \emph{printing}. However, the `print()`-method for
-#'   \code{binned_residuals()} actually creates a plot. For further modifications
-#'   of the plot, use `print()` and add ggplot-layers to the return values,
-#'   e.g \code{plot(binned_residuals(model)) + see::scale_color_pizza()}.
+#'   \code{binned_residuals()} actually creates a plot. For further
+#'   modifications of the plot, use `print()` and add ggplot-layers to the
+#'   return values, e.g. \code{plot(binned_residuals(model)) +
+#'   see::scale_color_pizza()}.
 #'
-#' @references Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
+#' @references
+#' Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#' multilevel/hierarchical models. Cambridge; New York: Cambridge University
+#' Press.
 #'
 #' @examples
 #' if (require("see")) {
+#'   # creating a model
 #'   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#'   binned_residuals(model)
+#'
+#'   # this will automatically plot the results
+#'   (result <- binned_residuals(model))
+#'
+#'   # if you assign results to an object, you can also look at the dataframe
+#'   as.data.frame(result)
 #' }
 #' @importFrom stats fitted sd complete.cases
 #' @importFrom insight get_data get_response find_response
+#'
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)

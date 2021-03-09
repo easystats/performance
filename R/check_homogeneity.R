@@ -88,8 +88,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   }
 
 
-  method.string <- switch(
-    method,
+  method.string <- switch(method,
     "bartlett" = "Bartlett Test",
     "fligner" = "Fligner-Killeen Test",
     "levene" = "Levene's Test"

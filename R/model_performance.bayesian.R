@@ -114,12 +114,14 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # LOO-R2 ------------------
   if ("R2_ADJUSTED" %in% metrics && mi$is_linear) {
-    out$R2_adjusted <- tryCatch({
-      suppressWarnings(r2_loo(model, verbose = verbose))
-    },
-    error = function(e) {
-      NULL
-    })
+    out$R2_adjusted <- tryCatch(
+      {
+        suppressWarnings(r2_loo(model, verbose = verbose))
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   # RMSE ------------------
@@ -129,37 +131,43 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # SIGMA ------------------
   if ("SIGMA" %in% metrics) {
-    out$Sigma <- tryCatch({
-      .get_sigma(model)
-    },
-    error = function(e) {
-      NULL
-    })
+    out$Sigma <- tryCatch(
+      {
+        .get_sigma(model)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   # LOGLOSS ------------------
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$Log_loss <- tryCatch({
-      .logloss <- performance_logloss(model, verbose = verbose)
-      if (!is.na(.logloss)) {
-        .logloss
-      } else {
+    out$Log_loss <- tryCatch(
+      {
+        .logloss <- performance_logloss(model, verbose = verbose)
+        if (!is.na(.logloss)) {
+          .logloss
+        } else {
+          NULL
+        }
+      },
+      error = function(e) {
         NULL
       }
-    },
-    error = function(e) {
-      NULL
-    })
+    )
   }
 
   # SCORE ------------------
   if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
-    .scoring_rules <- tryCatch({
-      performance_score(model, verbose = verbose)
-    },
-    error = function(e) {
-      NULL
-    })
+    .scoring_rules <- tryCatch(
+      {
+        performance_score(model, verbose = verbose)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
     if (!is.null(.scoring_rules)) {
       if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
       if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
@@ -287,6 +295,8 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
   posterior_odds <- prior_odds * BFMods$BF
   posterior_odds <- posterior_odds[-1] / posterior_odds[1]
 
-  do.call(bayestestR::weighted_posteriors,
-          c(params, list(missing = 0, prior_odds = posterior_odds)))[[1]]
+  do.call(
+    bayestestR::weighted_posteriors,
+    c(params, list(missing = 0, prior_odds = posterior_odds))
+  )[[1]]
 }

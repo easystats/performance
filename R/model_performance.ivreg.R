@@ -4,7 +4,6 @@
 #' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
 #' @export
 model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...) {
-
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")
   } else if (all(metrics == "common")) {
@@ -18,13 +17,13 @@ model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...)
     s <- summary(model, diagnostics = TRUE)
 
     if ("Sargan" %in% metrics) {
-      out$Sargan = s$diagnostics["Sargan", "statistic"]
-      out$Sargan_p = s$diagnostics["Sargan", "p-value"]
+      out$Sargan <- s$diagnostics["Sargan", "statistic"]
+      out$Sargan_p <- s$diagnostics["Sargan", "p-value"]
     }
 
     if ("Wu_Hausman" %in% metrics) {
-      out$Wu_Hausman = s$diagnostics["Wu-Hausman", "statistic"]
-      out$Wu_Hausman_p = s$diagnostics["Wu-Hausman", "p-value"]
+      out$Wu_Hausman <- s$diagnostics["Wu-Hausman", "statistic"]
+      out$Wu_Hausman_p <- s$diagnostics["Wu-Hausman", "p-value"]
     }
 
     # remove NA columns

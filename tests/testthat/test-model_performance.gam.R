@@ -1,7 +1,6 @@
 if (require("testthat") && require("performance") && require("gamm4") && require("mgcv")) {
-
   test_that("mgcv::gam", {
-    model <- mgcv::gam(mpg ~ s(hp), data=mtcars)
+    model <- mgcv::gam(mpg ~ s(hp), data = mtcars)
 
     # TODO: improve output
     expect_equal(as.numeric(performance::r2(model)$R2), 0.7348, tolerance = 0.01)

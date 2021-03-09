@@ -44,8 +44,6 @@
 #'   )
 #'   r2_bayes(model)
 #' }
-#'
-#'
 #' \dontrun{
 #' if (require("BayesFactor")) {
 #'   data(mtcars)
@@ -113,7 +111,7 @@ r2_bayes <- function(model, robust = TRUE, ci = .89, verbose = TRUE, ...) {
 
 #' @export
 #' @rdname r2_bayes
-r2_posterior <- function(model, ...){
+r2_posterior <- function(model, ...) {
   UseMethod("r2_posterior")
 }
 
@@ -204,7 +202,7 @@ r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 #' @importFrom utils packageVersion
 #' @export
 #' @rdname r2_bayes
-r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE, ...){
+r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE, ...) {
   mi <- insight::model_info(model)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     if (verbose) {
@@ -236,7 +234,7 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
 
   # match?
   if ((length(colnames(params)) != length(colnames(mm))) ||
-      !all(colnames(params) == colnames(mm))) {
+    !all(colnames(params) == colnames(mm))) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
       stop("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher.", call. = FALSE)
     }
@@ -311,8 +309,10 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   posterior_odds <- prior_odds * BFMods$BF
   posterior_odds <- posterior_odds[-1] / posterior_odds[1]
 
-  do.call(bayestestR::weighted_posteriors,
-          c(params, list(missing = 0, prior_odds = posterior_odds)))
+  do.call(
+    bayestestR::weighted_posteriors,
+    c(params, list(missing = 0, prior_odds = posterior_odds))
+  )
 }
 
 

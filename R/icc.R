@@ -147,7 +147,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
 
   vars <- tryCatch(
     {
-      insight::get_variance(model, name_fun = "icc()", name_full = "ICC", tolerance  = tolerance)
+      insight::get_variance(model, name_fun = "icc()", name_full = "ICC", tolerance = tolerance)
     },
     error = function(e) {
       if (inherits(e, c("simpleError", "error"))) {

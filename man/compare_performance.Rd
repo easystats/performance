@@ -62,5 +62,4 @@ if (require("lme4")) {
   m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
   compare_performance(m1, m2, m3)
 }
-
 }

@@ -1,8 +1,7 @@
 if (require("testthat") &&
-    require("performance") &&
-    require("lavaan") &&
-    require("lmtest")) {
-
+  require("performance") &&
+  require("lavaan") &&
+  require("lmtest")) {
   test_that("test_wald - lm", {
     m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
     m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
@@ -26,9 +25,9 @@ if (require("testthat") &&
   })
 
   test_that("test_wald - glm", {
-    m1 <- glm(vs ~ disp + hp + drat, data = mtcars, family="binomial")
-    m2 <- glm(vs ~ disp + hp, data = mtcars, family="binomial")
-    m3 <- glm(vs ~ disp, data = mtcars, family="binomial")
+    m1 <- glm(vs ~ disp + hp + drat, data = mtcars, family = "binomial")
+    m2 <- glm(vs ~ disp + hp, data = mtcars, family = "binomial")
+    m3 <- glm(vs ~ disp, data = mtcars, family = "binomial")
 
     rez <- test_wald(m1, m2, m3)
     # Why different?

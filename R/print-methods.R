@@ -95,7 +95,7 @@ print.check_distribution_numeric <- function(x, ...) {
 #' @export
 print.performance_roc <- function(x, ...) {
   if (length(unique(x$Model)) == 1) {
-    cat(sprintf("AUC: %.2f%%\n", 100 * bayestestR::area_under_curve(x$Specifity, x$Sensivity)))
+    cat(sprintf("AUC: %.2f%%\n", 100 * bayestestR::area_under_curve(x$Specificity, x$Sensitivity)))
   } else {
     insight::print_color("# Area under Curve\n\n", "blue")
 
@@ -107,7 +107,7 @@ print.performance_roc <- function(x, ...) {
         "  %*s: %.2f%%\n",
         max_space,
         names(dat)[i],
-        100 * bayestestR::area_under_curve(dat[[i]]$Specifity, dat[[i]]$Sensivity)
+        100 * bayestestR::area_under_curve(dat[[i]]$Specificity, dat[[i]]$Sensitivity)
       ))
     }
   }

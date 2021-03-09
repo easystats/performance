@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("lavaan") &&
   require("lmtest")) {
-
   test_that("test_performance - nested", {
 
     # Decreasing
