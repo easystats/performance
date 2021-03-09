@@ -7,10 +7,10 @@
 
 * `r2()` supports `mhurdle` (*mhurdle*) models.
 
-* The `performance_roc` and `performance_accuracy` functions unfortunately had
-  spelling mistakes in the output columns: 
-  *Sensitivity* was called *Sensivity* and *Specificity* was called *Specifity*.
-  We think these are understandable mistakes :-)
+* The `performance_roc()` and `performance_accuracy()` functions unfortunately 
+  had spelling mistakes in the output columns: *Sensitivity* was called 
+  *Sensivity* and *Specificity* was called *Specifity*. We think these are 
+  understandable mistakes :-)
 
 ## Changes to functions
 
@@ -31,6 +31,8 @@
 
 * Fixed incorrect computation of models from inverse-Gaussian families, or
   Gaussian families fitted with `glm()`.
+
+* Fixed issue in `performance_roc()` for models where outcome was not 0/1 coded.
 
 # performance 0.7.0
 

@@ -67,6 +67,7 @@ Suggests:
     gridExtra,
     ICS,
     ICSOutlier,
+    ISLR,
     lavaan,
     lme4,
     lmtest,
