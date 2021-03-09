@@ -71,7 +71,6 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     )
 
     out <- cbind(.test_performance_init(objects), out)
-
   } else {
     out <- .test_wald(objects, test = "LRT")
     out$df <- dfs # Replace residual df with model's df
@@ -111,4 +110,3 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
 }
-

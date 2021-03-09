@@ -4,24 +4,26 @@
 #' @description This function calculates the predictive accuracy of linear
 #'    or logistic regression models.
 #'
-#' @param model A linear or logistic regression model. May also be a mixed model.
-#' @param k The number of folds for the kfold-crossvalidation.
-#' @param method Character string, indicating whether crossvalidation
-#'    (\code{method = "cv"}) or bootstrapping (\code{method = "boot"})
-#'    is used to compute the accuracy values.
+#' @param model A linear or logistic regression model. A mixed-effects model is
+#'   also accepted.
+#' @param k The number of folds for the k-fold cross-validation.
+#' @param method Character string, indicating whether cross-validation
+#'   (\code{method = "cv"}) or bootstrapping (\code{method = "boot"}) is used to
+#'   compute the accuracy values.
 #' @param n Number of bootstrap-samples.
 #'
-#' @return A list with three values: The \code{Accuracy} of the model predictions, i.e.
-#'    the proportion of accurately predicted values from the model, its standard
-#'    error, \code{SE}, and the \code{Method} used to compute the accuracy.
+#' @return A list with three values: The \code{Accuracy} of the model
+#'   predictions, i.e. the proportion of accurately predicted values from the
+#'   model, its standard error, \code{SE}, and the \code{Method} used to compute
+#'   the accuracy.
 #'
-#' @details For linar models, the accuracy is the correlation coefficient
+#' @details For linear models, the accuracy is the correlation coefficient
 #'    between the actual and the predicted value of the outcome. For
 #'    logistic regression models, the accuracy corresponds to the
 #'    AUC-value, calculated with the \code{bayestestR::auc()}-function.
 #'    \cr \cr
 #'    The accuracy is the mean value of multiple correlation resp.
-#'    AUC-values, which are either computed with crossvalidation
+#'    AUC-values, which are either computed with cross-validation
 #'    or non-parametric bootstrapping (see argument \code{method}).
 #'    The standard error is the standard deviation of the computed
 #'    correlation resp. AUC-values.

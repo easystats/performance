@@ -63,7 +63,9 @@ check_heteroscedasticity.default <- function(x, ...) {
       estimates <- insight::get_parameters(x)$Estimate
       sqrt(insight::get_deviance(x) / (insight::n_obs(x) - sum(!is.na(estimates))))
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   if (.is_empty_object(s)) {
@@ -80,7 +82,9 @@ check_heteroscedasticity.default <- function(x, ...) {
     {
       stats::residuals(x, type = "pearson")
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   if (.is_empty_object(pr) && inherits(x, c("glmmTMB", "MixMod"))) {
@@ -111,8 +115,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     mu <- stats::predict(model, type = "conditional")
     # sigma
     betad <- model$fit$par["betad"]
-    k <- switch(
-      faminfo$family,
+    k <- switch(faminfo$family,
       gaussian = exp(0.5 * betad),
       Gamma = exp(-0.5 * betad),
       exp(betad)

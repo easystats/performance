@@ -1,5 +1,4 @@
-generate_distribution <- function(
-                                  family = "normal",
+generate_distribution <- function(family = "normal",
                                   size = 1000,
                                   location = 0,
                                   scale = 1,
@@ -158,22 +157,21 @@ df2 <- na.omit(df)
 infinite <- is.infinite(rowSums(df2[sapply(df2, is.numeric)]))
 df2 <- df2[!infinite, ]
 
-model2 <- model <-
-  randomForest::randomForest(
-    as.factor(Distribution) ~ .,
-    data = df2,
-    localImp = FALSE,
-    importance = FALSE,
-    keep.forest = TRUE,
-    keep.inbag = FALSE,
-    proximity = FALSE,
-    maxDepth = 20,
-    maxBins = 32,
-    minInstancesPerNode = 1,
-    minInfoGain = 0.0,
-    maxMemoryInMB = 128,
-    ntree = 32
-  )
+model2 <- model <- randomForest::randomForest(
+  as.factor(Distribution) ~ .,
+  data = df2,
+  localImp = FALSE,
+  importance = FALSE,
+  keep.forest = TRUE,
+  keep.inbag = FALSE,
+  proximity = FALSE,
+  maxDepth = 20,
+  maxBins = 32,
+  minInstancesPerNode = 1,
+  minInfoGain = 0.0,
+  maxMemoryInMB = 128,
+  ntree = 32
+)
 
 
 model <- strip::strip(model, keep = "predict", use_trim = TRUE)

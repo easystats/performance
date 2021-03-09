@@ -319,20 +319,17 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   tryCatch(
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
-        assign <- switch(
-          component,
+        assign <- switch(component,
           conditional = attr(stats::model.matrix(x, model = "count"), "assign"),
           zero_inflated = attr(stats::model.matrix(x, model = "zero"), "assign")
         )
       } else if (inherits(x, "glmmTMB")) {
-        assign <- switch(
-          component,
+        assign <- switch(component,
           conditional = attr(stats::model.matrix(x), "assign"),
           zero_inflated = .zi_term_assignment(x, component)
         )
       } else if (inherits(x, "MixMod")) {
-        assign <- switch(
-          component,
+        assign <- switch(component,
           conditional = attr(stats::model.matrix(x, type = "fixed"), "assign"),
           zero_inflated = attr(stats::model.matrix(x, type = "zi_fixed"), "assign")
         )

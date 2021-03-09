@@ -75,13 +75,13 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(model, by_group = TRUE),
-        structure(list(Group = c("Subject", "grp"), ICC = c(0.5896587,  0.0016551)), class = c("icc_by_group", "data.frame"), row.names = c(NA, -2L)),
+        structure(list(Group = c("Subject", "grp"), ICC = c(0.5896587, 0.0016551)), class = c("icc_by_group", "data.frame"), row.names = c(NA, -2L)),
         tolerance = 0.05
       )
     })
 
     data(iris)
-    m <- nlme::lme(Sepal.Length ~ Petal.Length, random = ~1 | Species, data = iris)
+    m <- nlme::lme(Sepal.Length ~ Petal.Length, random = ~ 1 | Species, data = iris)
     out <- icc(m)
     test_that("icc", {
       expect_equal(out$ICC_adjusted, 0.9104331, tolerance = 0.01)

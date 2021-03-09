@@ -73,8 +73,6 @@ if (require("rstanarm") && require("rstantools")) {
   )
   r2_bayes(model)
 }
-
-
 \dontrun{
 if (require("BayesFactor")) {
   data(mtcars)

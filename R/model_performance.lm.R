@@ -55,42 +55,50 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # AIC -------------
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- tryCatch({
-      performance_aic(model)
-    },
-    error = function(e) {
-      NULL
-    })
+    out$AIC <- tryCatch(
+      {
+        performance_aic(model)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   # AICc -------------
   if ("AICC" %in% toupper(metrics)) {
-    out$AICc <- tryCatch({
-      performance_aicc(model)
-    },
-    error = function(e) {
-      NULL
-    })
+    out$AICc <- tryCatch(
+      {
+        performance_aicc(model)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   # BIC -------------
   if ("BIC" %in% toupper(metrics)) {
-    out$BIC <- tryCatch({
-      .get_BIC(model)
-    },
-    error = function(e) {
-      NULL
-    })
+    out$BIC <- tryCatch(
+      {
+        .get_BIC(model)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   # R2 -------------
   if (any(c("R2", "R2_ADJ") %in% toupper(metrics))) {
-    R2 <- tryCatch({
-      r2(model, verbose = verbose)
-    },
-    error = function(e) {
-      NULL
-    })
+    R2 <- tryCatch(
+      {
+        r2(model, verbose = verbose)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
     if (!is.null(R2)) {
       attrib$r2 <- attributes(R2)
       if ("R2" %in% toupper(metrics) && "R2" %in% names(R2)) {
@@ -107,47 +115,55 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # RMSE -------------
   if ("RMSE" %in% toupper(metrics)) {
-    out$RMSE <- tryCatch({
-      performance_rmse(model, verbose = verbose)
-    },
-    error = function(e) {
-      NULL
-    })
+    out$RMSE <- tryCatch(
+      {
+        performance_rmse(model, verbose = verbose)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   # SIGMA -------------
   if ("SIGMA" %in% toupper(metrics)) {
-    out$Sigma <- tryCatch({
-      .get_sigma(model)
-    },
-    error = function(e) {
-      NULL
-    })
+    out$Sigma <- tryCatch(
+      {
+        .get_sigma(model)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   # LOGLOSS -------------
   if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
-    out$Log_loss <- tryCatch({
-      .logloss <- performance_logloss(model, verbose = verbose)
-      if (!is.na(.logloss)) {
-        .logloss
-      } else {
+    out$Log_loss <- tryCatch(
+      {
+        .logloss <- performance_logloss(model, verbose = verbose)
+        if (!is.na(.logloss)) {
+          .logloss
+        } else {
+          NULL
+        }
+      },
+      error = function(e) {
         NULL
       }
-    },
-    error = function(e) {
-      NULL
-    })
+    )
   }
 
   # SCORE -------------
   if (("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))) {
-    .scoring_rules <- tryCatch({
-      performance_score(model, verbose = verbose)
-    },
-    error = function(e) {
-      NULL
-    })
+    .scoring_rules <- tryCatch(
+      {
+        performance_score(model, verbose = verbose)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
     if (!is.null(.scoring_rules)) {
       if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
       if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
@@ -156,12 +172,14 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # PCP -------------
   if (("PCP" %in% toupper(metrics)) && isTRUE(info$is_binomial) && isFALSE(info$is_multinomial) && isFALSE(info$is_ordinal)) {
-    out$PCP <- tryCatch({
-      performance_pcp(model, verbose = verbose)$pcp_model
-    },
-    error = function(e) {
-      NULL
-    })
+    out$PCP <- tryCatch(
+      {
+        performance_pcp(model, verbose = verbose)$pcp_model
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
 

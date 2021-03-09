@@ -1,7 +1,6 @@
 if (require("testthat") &&
   require("performance") &&
   require("lavaan")) {
-
   test_that("test_likelihoodratio - regression models", {
     m1 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
     m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
@@ -18,11 +17,11 @@ if (require("testthat") &&
 
     # lmtest::lrtest()
     rez <- test_likelihoodratio(m1, m2, m3, estimator = "ML")
-    p <- c(NA, 0.5302030, 0.4747344)  # lmtest::lrtest(m1, m2, m3)$`Pr(>Chisq)`
+    p <- c(NA, 0.5302030, 0.4747344) # lmtest::lrtest(m1, m2, m3)$`Pr(>Chisq)`
     expect_equal(p, rez$p, tolerance = 1e-03)
 
     rez <- test_likelihoodratio(m3, m2, m1, estimator = "ML")
-    p <- c(NA, 0.4747344, 0.5302030)  # lmtest::lrtest(m3, m2, m1)$`Pr(>Chisq)`
+    p <- c(NA, 0.4747344, 0.5302030) # lmtest::lrtest(m3, m2, m1)$`Pr(>Chisq)`
     expect_equal(p, rez$p, tolerance = 1e-03)
   })
 
@@ -36,7 +35,7 @@ if (require("testthat") &&
     expect_equal(ref$`Pr(>Chi)`, rez$p, tolerance = 1e-03)
 
     rez <- test_likelihoodratio(m1, m2, m3, estimator = "ML")
-    p <- c(NA, 0.4747344, 0.5302030)  # lmtest::lrtest(m1, m2, m3)$`Pr(>Chisq)`
+    p <- c(NA, 0.4747344, 0.5302030) # lmtest::lrtest(m1, m2, m3)$`Pr(>Chisq)`
     expect_equal(p, rez$p, tolerance = 1e-03)
   })
 }

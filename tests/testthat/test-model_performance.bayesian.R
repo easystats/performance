@@ -79,8 +79,8 @@ if (require("testthat") && require("performance") && require("BayesFactor") && r
     expect_null(p)
 
 
-    mod <- regressionBF(mpg ~ cyl , mtcars, progress = FALSE)
-    modF <- lm(mpg ~ cyl , mtcars)
+    mod <- regressionBF(mpg ~ cyl, mtcars, progress = FALSE)
+    modF <- lm(mpg ~ cyl, mtcars)
     p <- model_performance(mod)
     expect_equal(p$R2, unname(r2(modF)[[1]]), tolerance = 0.05)
     expect_equal(p$Sigma, sigma(modF), tolerance = 0.05)

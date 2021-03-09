@@ -55,7 +55,7 @@ r2.default <- function(model, verbose = TRUE, ...) {
       resp <- .factor_to_numeric(insight::get_response(model))
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, verbose = FALSE)
-      list(R2 = 1 - sum((resp - pred) ^ 2) / sum((resp - mean_resp) ^ 2))
+      list(R2 = 1 - sum((resp - pred)^2) / sum((resp - mean_resp)^2))
     },
     error = function(e) {
       NA
@@ -138,8 +138,8 @@ r2.mhurdle <- function(model, ...) {
   Ko <- length(model$naive$coefficients)
 
   out <- list(
-    R2 = 1 - sum((resp - ftd) ^ 2) / sum((resp - mean_resp) ^ 2),
-    R2_adjusted = 1 - (n - Ko) / (n - K) * sum((resp - ftd) ^ 2) / sum((resp - mean_resp) ^ 2)
+    R2 = 1 - sum((resp - ftd)^2) / sum((resp - mean_resp)^2),
+    R2_adjusted = 1 - (n - Ko) / (n - K) * sum((resp - ftd)^2) / sum((resp - mean_resp)^2)
   )
 
   names(out$R2) <- "R2"
