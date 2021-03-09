@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Binned residuals for logistic regression — binned_residuals • performance</title>
+<title>Binned residuals for binomial logistic regression — binned_residuals • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Binned residuals for logistic regression — binned_residuals" />
-<meta property="og:description" content="Check model quality of logistic regression models." />
+<meta property="og:title" content="Binned residuals for binomial logistic regression — binned_residuals" />
+<meta property="og:description" content="Check model quality of binomial logistic regression models." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -133,13 +133,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Binned residuals for logistic regression</h1>
+    <h1>Binned residuals for binomial logistic regression</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/binned_residuals.R'><code>R/binned_residuals.R</code></a></small>
     <div class="hidden name"><code>binned_residuals.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Check model quality of logistic regression models.</p>
+    <p>Check model quality of binomial logistic regression models.</p>
     </div>
 
     <pre class="usage"><span class='fu'>binned_residuals</span><span class='op'>(</span><span class='va'>model</span>, term <span class='op'>=</span> <span class='cn'>NULL</span>, n_bins <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -149,7 +149,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A <code>glm</code>-object with binomial-family.</p></td>
+      <td><p>A <code>glm</code>-object with <em>binomial</em>-family.</p></td>
     </tr>
     <tr>
       <th>term</th>
@@ -173,12 +173,12 @@ taken.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame representing the data that is mapped to the plot, which is
-  automatically plotted. In case all residuals are inside the error bounds,
-  points are black. If some of the residuals are outside the error bounds
-  (indicates by the grey-shaded area), blue points indicate residuals that
-  are OK, while red points indicate model under- or overfitting for the
-  related range of estimated probabilities.</p>
+    <p>A data frame representing the data that is mapped in the accompanying
+  plot. In case all residuals are inside the error bounds, points are black.
+  If some of the residuals are outside the error bounds (indicated by the
+  grey-shaded area), blue points indicate residuals that are OK, while red
+  points indicate model under- or over-fitting for the relevant range of
+  estimated probabilities.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Binned residual plots are achieved by &#8220;dividing the data into
@@ -188,29 +188,43 @@ taken.</p></td>
   expect about 95% of the residuals to fall inside the error bounds.
   <br /> <br />
   If <code>term</code> is not <code>NULL</code>, one can compare the residuals in
-  relation to a specific model predictor. This may be helpful to check
-  if a term would fit better when transformed, e.g. a rising and falling
-  pattern of residuals along the x-axis (the pattern is indicated by
-  a green line) is a signal to consider taking the logarithm of the
-  predictor (cf. Gelman and Hill 2007, pp. 97ff).</p>
+  relation to a specific model predictor. This may be helpful to check if a
+  term would fit better when transformed, e.g. a rising and falling pattern
+  of residuals along the x-axis is a signal to consider taking the logarithm
+  of the predictor (cf. Gelman and Hill 2007, pp. 97-98).</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Since <code>binned_residuals()</code> returns a data frame, the default
   action for the result is <em>printing</em>. However, the `print()`-method for
-  <code>binned_residuals()</code> actually creates a plot. For further modifications
-  of the plot, use `print()` and add ggplot-layers to the return values,
-  e.g <code>plot(binned_residuals(model)) + see::scale_color_pizza()</code>.</p>
+  <code>binned_residuals()</code> actually creates a plot. For further
+  modifications of the plot, use `print()` and add ggplot-layers to the
+  return values, e.g. <code>plot(binned_residuals(model)) +
+  see::scale_color_pizza()</code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.</p>
+    <p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and
+multilevel/hierarchical models. Cambridge; New York: Cambridge University
+Press.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># creating a model</span>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
-  <span class='fu'>binned_residuals</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+
+  <span class='co'># this will automatically plot the results</span>
+  <span class='op'>(</span><span class='va'>result</span> <span class='op'>&lt;-</span> <span class='fu'>binned_residuals</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># if you assign results to an object, you can also look at the dataframe</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>result</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: see</span></div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Probably bad model fit. Only about 50% of the residuals are inside the error bounds.
-#&gt; </span><span></div><div class='img'><img src='binned_residuals-1.png' alt='' width='700' height='433' /></div></span></pre>
+#&gt; </span><span></div><div class='output co'>#&gt;         xbar        ybar n       x.lo       x.hi         se group
+#&gt; 1 0.03786483 -0.03786483 5 0.01744776 0.06917366 0.01937882    no
+#&gt; 2 0.09514191 -0.09514191 5 0.07087498 0.15160143 0.02873921    no
+#&gt; 3 0.25910531  0.07422802 6 0.17159955 0.35374001 0.43367801   yes
+#&gt; 4 0.47954643 -0.07954643 5 0.38363314 0.54063600 0.50744089   yes
+#&gt; 5 0.71108931  0.28891069 5 0.57299903 0.89141359 0.11199575    no
+#&gt; 6 0.97119262 -0.13785929 6 0.91147360 0.99815623 0.30981245   yes</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

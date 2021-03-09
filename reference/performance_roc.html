@@ -175,8 +175,8 @@ the full model is calculated.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with three columns, the x/y-coordinate pairs for the ROC
-curve (<code>Sensivity</code> and <code>Specifity</code>), and a column with the model
-name.</p>
+  curve (<code>Sensitivity</code> and <code>Specificity</code>), and a column with the
+  model name.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
@@ -192,10 +192,30 @@ name.</p>
 <span class='va'>train_data</span> <span class='op'>&lt;-</span> <span class='va'>iris</span><span class='op'>[</span><span class='op'>-</span><span class='va'>folds</span>, <span class='op'>]</span>
 
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Sepal.Width</span>, data <span class='op'>=</span> <span class='va'>train_data</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
-<span class='fu'>performance_roc</span><span class='op'>(</span><span class='va'>model</span>, new_data <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; AUC: 37.66%</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>performance_roc</span><span class='op'>(</span><span class='va'>model</span>, new_data <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Sensitivity Specificity   Model
+#&gt; 1    0.0000000  0.00000000 Model 1
+#&gt; 2    0.1428571  0.00000000 Model 1
+#&gt; 3    0.1428571  0.09090909 Model 1
+#&gt; 4    0.1428571  0.18181818 Model 1
+#&gt; 5    0.1428571  0.27272727 Model 1
+#&gt; 6    0.1428571  0.36363636 Model 1
+#&gt; 7    0.2857143  0.36363636 Model 1
+#&gt; 8    0.2857143  0.45454545 Model 1
+#&gt; 9    0.2857143  0.54545455 Model 1
+#&gt; 10   0.2857143  0.63636364 Model 1
+#&gt; 11   0.2857143  0.72727273 Model 1
+#&gt; 12   0.4285714  0.72727273 Model 1
+#&gt; 13   0.5714286  0.72727273 Model 1
+#&gt; 14   0.5714286  0.81818182 Model 1
+#&gt; 15   0.7142857  0.81818182 Model 1
+#&gt; 16   0.8571429  0.81818182 Model 1
+#&gt; 17   0.8571429  0.90909091 Model 1
+#&gt; 18   1.0000000  0.90909091 Model 1
+#&gt; 19   1.0000000  1.00000000 Model 1
+#&gt; 20   1.0000000  1.00000000 Model 1</div><div class='input'>
 <span class='va'>roc</span> <span class='op'>&lt;-</span> <span class='fu'>performance_roc</span><span class='op'>(</span><span class='va'>model</span>, new_data <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>)</span>
-<span class='fu'><a href='https://easystats.github.io/bayestestR/reference/area_under_curve.html'>area_under_curve</a></span><span class='op'>(</span><span class='va'>roc</span><span class='op'>$</span><span class='va'>Specifity</span>, <span class='va'>roc</span><span class='op'>$</span><span class='va'>Sensivity</span><span class='op'>)</span>
+<span class='fu'><a href='https://easystats.github.io/bayestestR/reference/area_under_curve.html'>area_under_curve</a></span><span class='op'>(</span><span class='va'>roc</span><span class='op'>$</span><span class='va'>Specificity</span>, <span class='va'>roc</span><span class='op'>$</span><span class='va'>Sensitivity</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] 0.3766234</div><div class='input'>
 <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Sepal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
 <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
@@ -205,7 +225,11 @@ name.</p>
 #&gt; 
 #&gt; </span><span>  m1: 54.80%
 #&gt;   m2: 53.41%
-#&gt;   m3: 53.58%</div></span></pre>
+#&gt;   m3: 53.58%</div><div class='input'>
+<span class='co'># if you have \code{see} package installed, you can also plot comparison of</span>
+<span class='co'># ROC curves for different models</span>
+<span class='co'># if (require("see")) plot(performance_roc(m1, m2, m3))</span>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

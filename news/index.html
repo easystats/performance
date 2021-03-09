@@ -146,6 +146,7 @@
 <ul>
 <li><p>Give more informative warning when <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> for <em>BFBayesFactor</em> objects can’t be calculated.</p></li>
 <li><p><code><a href="../reference/r2.html">r2()</a></code> supports <code>mhurdle</code> (<em>mhurdle</em>) models.</p></li>
+<li><p>The <code>performance_roc</code> and <code>performance_accuracy</code> functions unfortunately had spelling mistakes in the output columns: <em>Sensitivity</em> was called <em>Sensivity</em> and <em>Specificity</em> was called <em>Specifity</em>. We think these are understandable mistakes :-)</p></li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
@@ -189,16 +190,11 @@
 <h2 class="hasAnchor">
 <a href="#new-functions-to-test-or-compare-models" class="anchor"></a>New functions to test or compare models</h2>
 <ul>
-<li>
-<code><a href="../reference/test_bf.html">test_vuong()</a></code>, to compare models using Vuong’s (1989) Test.</li>
-<li>
-<code><a href="../reference/test_bf.html">test_bf()</a></code>, to compare models using Bayes factors.</li>
-<li>
-<code><a href="../reference/test_bf.html">test_likelihoodratio()</a></code> as an alias for <code><a href="../reference/test_bf.html">performance_lrt()</a></code>.</li>
-<li>
-<code><a href="../reference/test_bf.html">test_wald()</a></code>, as a rough approximation for the LRT.</li>
-<li>
-<code><a href="../reference/test_bf.html">test_performance()</a></code>, to run the most relevant and appropriate tests based on the input.</li>
+<li><p><code><a href="../reference/test_bf.html">test_vuong()</a></code>, to compare models using Vuong’s (1989) Test.</p></li>
+<li><p><code><a href="../reference/test_bf.html">test_bf()</a></code>, to compare models using Bayes factors.</p></li>
+<li><p><code><a href="../reference/test_bf.html">test_likelihoodratio()</a></code> as an alias for <code><a href="../reference/test_bf.html">performance_lrt()</a></code>.</p></li>
+<li><p><code><a href="../reference/test_bf.html">test_wald()</a></code>, as a rough approximation for the LRT.</p></li>
+<li><p><code><a href="../reference/test_bf.html">test_performance()</a></code>, to run the most relevant and appropriate tests based on the input.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-1" class="section level2">
@@ -209,11 +205,10 @@
 <a href="#performance_lrt" class="anchor"></a><code>performance_lrt()</code>
 </h3>
 <ul>
-<li>
-<code><a href="../reference/test_bf.html">performance_lrt()</a></code> get an alias <code><a href="../reference/test_bf.html">test_likelihoodratio()</a></code>.</li>
-<li>Does not return AIC/BIC now (as they are not related to LRT <em>per se</em> and can be easily obtained with other functions).</li>
-<li>Now contains a column with the difference in degrees of freedom between models.</li>
-<li>Fixed column names for consistency.</li>
+<li><p><code><a href="../reference/test_bf.html">performance_lrt()</a></code> get an alias <code><a href="../reference/test_bf.html">test_likelihoodratio()</a></code>.</p></li>
+<li><p>Does not return AIC/BIC now (as they are not related to LRT <em>per se</em> and can be easily obtained with other functions).</p></li>
+<li><p>Now contains a column with the difference in degrees of freedom between models.</p></li>
+<li><p>Fixed column names for consistency.</p></li>
 </ul>
 </div>
 <div id="model_performance" class="section level3">
@@ -228,9 +223,8 @@
 <h3 class="hasAnchor">
 <a href="#other-functions" class="anchor"></a>Other functions</h3>
 <ul>
-<li>Revised computation of <code><a href="../reference/performance_mse.html">performance_mse()</a></code>, to ensure that it’s always based on response residuals.</li>
-<li>
-<code><a href="../reference/performance_aicc.html">performance_aic()</a></code> is now more robust.</li>
+<li><p>Revised computation of <code><a href="../reference/performance_mse.html">performance_mse()</a></code>, to ensure that it’s always based on response residuals.</p></li>
+<li><p><code><a href="../reference/performance_aicc.html">performance_aic()</a></code> is now more robust.</p></li>
 </ul>
 </div>
 </div>
@@ -238,12 +232,11 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-1" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/icc.html">variance_decomposition()</a></code> for multivariate response models, where not all model parts contained random effects.</li>
-<li>Fixed issue in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> with duplicated rows.</li>
-<li>
-<code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> no longer breaks for models with rank deficient model matrix, but gives a warning instead.</li>
-<li>Fixed issue in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> for <code>method = "auto"</code>, which wrongly tested the response variable, not the residuals.</li>
-<li>Fixed issue in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> for edge cases where predictor had non-syntactic names.</li>
+<li><p>Fixed issue in <code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/icc.html">variance_decomposition()</a></code> for multivariate response models, where not all model parts contained random effects.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> with duplicated rows.</p></li>
+<li><p><code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> no longer breaks for models with rank deficient model matrix, but gives a warning instead.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> for <code>method = "auto"</code>, which wrongly tested the response variable, not the residuals.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> for edge cases where predictor had non-syntactic names.</p></li>
 </ul>
 </div>
 </div>
@@ -283,10 +276,8 @@
 <h2 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New functions</h2>
 <ul>
-<li>
-<code><a href="../reference/r2_somers.html">r2_somers()</a></code>, to compute Somers’ Dxy rank-correlation as R2-measure for logistic regression models.</li>
-<li>
-<code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code>, to print output from package-functions into different formats. <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> is an alias for <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display(format = "markdown")</a></code>.</li>
+<li><p><code><a href="../reference/r2_somers.html">r2_somers()</a></code>, to compute Somers’ Dxy rank-correlation as R2-measure for logistic regression models.</p></li>
+<li><p><code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code>, to print output from package-functions into different formats. <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> is an alias for <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display(format = "markdown")</a></code>.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-2" class="section level2">
@@ -297,26 +288,19 @@
 <a href="#model_performance-1" class="anchor"></a><code>model_performance()</code>
 </h3>
 <ul>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> is now more robust and doesn’t fail if an index could not be computed. Instead, it returns all indices that were possible to calculate.</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> for metafor-models now includes the degrees of freedom for Cochran’s Q.</li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> is now more robust and doesn’t fail if an index could not be computed. Instead, it returns all indices that were possible to calculate.</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> gains a default-method that catches all model objects not previously supported. If model object is also not supported by the default-method, a warning is given.</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> for metafor-models now includes the degrees of freedom for Cochran’s Q.</p></li>
 </ul>
 </div>
 <div id="other-functions-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#other-functions-1" class="anchor"></a>Other functions</h3>
 <ul>
-<li>
-<code><a href="../reference/performance_mse.html">performance_mse()</a></code> and <code><a href="../reference/performance_rmse.html">performance_rmse()</a></code> now always try to return the (R)MSE on the response scale.</li>
-<li>
-<code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> now accepts all types of linear or logistic regression models, even if these are not of class <code>lm</code> or <code>glm</code>.</li>
-<li>
-<code><a href="../reference/performance_roc.html">performance_roc()</a></code> now accepts all types of logistic regression models, even if these are not of class <code>glm</code>.</li>
-<li>
-<code><a href="../reference/r2.html">r2()</a></code> for mixed models and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances for the conditional r-squared.</li>
+<li><p><code><a href="../reference/performance_mse.html">performance_mse()</a></code> and <code><a href="../reference/performance_rmse.html">performance_rmse()</a></code> now always try to return the (R)MSE on the response scale.</p></li>
+<li><p><code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> now accepts all types of linear or logistic regression models, even if these are not of class <code>lm</code> or <code>glm</code>.</p></li>
+<li><p><code><a href="../reference/performance_roc.html">performance_roc()</a></code> now accepts all types of logistic regression models, even if these are not of class <code>glm</code>.</p></li>
+<li><p><code><a href="../reference/r2.html">r2()</a></code> for mixed models and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gain a <code>tolerance</code>-argument, to set the tolerance level for singularity checks when computing random effect variances for the conditional r-squared.</p></li>
 </ul>
 </div>
 </div>
@@ -324,8 +308,8 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-3" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/icc.html">icc()</a></code> introduced in the last update that make <code>lme</code>-models fail.</li>
-<li>Fixed issue in <code><a href="../reference/performance_roc.html">performance_roc()</a></code> for models with factors as response.</li>
+<li><p>Fixed issue in <code><a href="../reference/icc.html">icc()</a></code> introduced in the last update that make <code>lme</code>-models fail.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/performance_roc.html">performance_roc()</a></code> for models with factors as response.</p></li>
 </ul>
 </div>
 </div>
@@ -352,16 +336,12 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-3" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/143'>#143</a> ).</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/150'>#150</a> ).</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> now also includes the residual standard deviation.</li>
-<li>Improved formatting for Bayes factors in <code><a href="../reference/compare_performance.html">compare_performance()</a></code>.</li>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> with <code>rank = TRUE</code> doesn’t use the <code>BF</code> values when <code>BIC</code> are present, to prevent “double-dipping” of the BIC values (<a href='https://github.com/easystats/performance/issues/144'>#144</a>).</li>
-<li>The <code>method</code> argument in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> gains a <code>"levene"</code> option, to use Levene’s Test for homogeneity.</li>
+<li><p><code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/143'>#143</a> ).</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> works with Bayesian models from <code>BayesFactor</code> ( <a href='https://github.com/easystats/performance/issues/150'>#150</a> ).</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> now also includes the residual standard deviation.</p></li>
+<li><p>Improved formatting for Bayes factors in <code><a href="../reference/compare_performance.html">compare_performance()</a></code>.</p></li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> with <code>rank = TRUE</code> doesn’t use the <code>BF</code> values when <code>BIC</code> are present, to prevent “double-dipping” of the BIC values (<a href='https://github.com/easystats/performance/issues/144'>#144</a>).</p></li>
+<li><p>The <code>method</code> argument in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> gains a <code>"levene"</code> option, to use Levene’s Test for homogeneity.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-4" class="section level2">
@@ -380,12 +360,9 @@
 <h2 class="hasAnchor">
 <a href="#general-4" class="anchor"></a>General</h2>
 <ul>
-<li>
-<code><a href="../reference/r2.html">r2()</a></code> and <code><a href="../reference/icc.html">icc()</a></code> support <code>semLME</code> models (package <em>smicd</em>).</li>
-<li>
-<code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> should now also work with zero-inflated mixed models from <em>glmmTMB</em> and <em>GLMMadpative</em>.</li>
-<li>
-<code><a href="../reference/check_outliers.html">check_outliers()</a></code> now returns a logical vector. Original numerical vector is still accessible via <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code>.</li>
+<li><p><code><a href="../reference/r2.html">r2()</a></code> and <code><a href="../reference/icc.html">icc()</a></code> support <code>semLME</code> models (package <em>smicd</em>).</p></li>
+<li><p><code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> should now also work with zero-inflated mixed models from <em>glmmTMB</em> and <em>GLMMadpative</em>.</p></li>
+<li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> now returns a logical vector. Original numerical vector is still accessible via <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code>.</p></li>
 </ul>
 </div>
 <div id="new-functions-2" class="section level2">
@@ -400,10 +377,10 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-5" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue with incorrect labeling of groups from <code><a href="../reference/icc.html">icc()</a></code> when <code>by_group = TRUE</code>.</li>
-<li>Fixed issue in <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for mixed models where sigma could not be calculated in a straightforward way.</li>
-<li>Fixed issues in <code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> for <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">MASS::glm.nb()</a></code>.</li>
-<li>Fixed CRAN check issues.</li>
+<li><p>Fixed issue with incorrect labeling of groups from <code><a href="../reference/icc.html">icc()</a></code> when <code>by_group = TRUE</code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for mixed models where sigma could not be calculated in a straightforward way.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> for <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html" class="external-link">MASS::glm.nb()</a></code>.</p></li>
+<li><p>Fixed CRAN check issues.</p></li>
 </ul>
 </div>
 </div>
@@ -430,8 +407,8 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-6" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fix issue with new version of <em>bigutilsr</em> for <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</li>
-<li>Fix issue with model order in <code><a href="../reference/test_bf.html">performance_lrt()</a></code>.</li>
+<li><p>Fix issue with new version of <em>bigutilsr</em> for <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</p></li>
+<li><p>Fix issue with model order in <code><a href="../reference/test_bf.html">performance_lrt()</a></code>.</p></li>
 </ul>
 </div>
 </div>
@@ -450,20 +427,17 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-5" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/model_performance.rma.html">model_performance.rma()</a></code> now includes results from heterogeneity test for meta-analysis objects.</li>
-<li>
-<code><a href="../reference/check_normality.html">check_normality()</a></code> now also works for mixed models (with the limitation that studentized residuals are used).</li>
-<li>
-<code><a href="../reference/check_normality.html">check_normality()</a></code> gets an <code>effects</code>-argument for mixed models, to check random effects for normality.</li>
+<li><p><code><a href="../reference/model_performance.rma.html">model_performance.rma()</a></code> now includes results from heterogeneity test for meta-analysis objects.</p></li>
+<li><p><code><a href="../reference/check_normality.html">check_normality()</a></code> now also works for mixed models (with the limitation that studentized residuals are used).</p></li>
+<li><p><code><a href="../reference/check_normality.html">check_normality()</a></code> gets an <code>effects</code>-argument for mixed models, to check random effects for normality.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-7" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> for binomial models when response variable had non-numeric factor levels.</li>
-<li>Fixed issues in <code><a href="../reference/performance_roc.html">performance_roc()</a></code>, which printed 1 - AUC instead of AUC.</li>
+<li><p>Fixed issue in <code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> for binomial models when response variable had non-numeric factor levels.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/performance_roc.html">performance_roc()</a></code>, which printed 1 - AUC instead of AUC.</p></li>
 </ul>
 </div>
 </div>
@@ -475,29 +449,26 @@
 <h2 class="hasAnchor">
 <a href="#general-7" class="anchor"></a>General</h2>
 <ul>
-<li>Minor revisions to <code><a href="../reference/model_performance.html">model_performance()</a></code> to meet changes in <em>mlogit</em> package.</li>
-<li>Support for <code>bayesx</code> models.</li>
+<li><p>Minor revisions to <code><a href="../reference/model_performance.html">model_performance()</a></code> to meet changes in <em>mlogit</em> package.</p></li>
+<li><p>Support for <code>bayesx</code> models.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-6" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-6" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/icc.html">icc()</a></code> gains a <code>by_group</code> argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.</li>
-<li>
-<code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gains a <code>by_group</code> argument, to compute explained variance at different levels (following the variance-reduction approach by Hox 2010).</li>
-<li>
-<code><a href="../reference/test_bf.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</li>
+<li><p><code><a href="../reference/icc.html">icc()</a></code> gains a <code>by_group</code> argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.</p></li>
+<li><p><code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gains a <code>by_group</code> argument, to compute explained variance at different levels (following the variance-reduction approach by Hox 2010).</p></li>
+<li><p><code><a href="../reference/test_bf.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-8" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fix issues in some functions for models with logical dependent variable.</li>
-<li>Fix bug in <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code>, which caused multiple computations of skewness statistics.</li>
-<li>Fix issues in <code><a href="../reference/r2.html">r2()</a></code> for <em>gam</em> models.</li>
+<li><p>Fix issues in some functions for models with logical dependent variable.</p></li>
+<li><p>Fix bug in <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code>, which caused multiple computations of skewness statistics.</p></li>
+<li><p>Fix issues in <code><a href="../reference/r2.html">r2()</a></code> for <em>gam</em> models.</p></li>
 </ul>
 </div>
 </div>
@@ -517,21 +488,20 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-7" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>bayesfactor</code> argument, to include or exclude the Bayes factor for model comparisons in the output.</li>
-<li>Added <code>r2.aov()</code>.</li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>bayesfactor</code> argument, to include or exclude the Bayes factor for model comparisons in the output.</p></li>
+<li><p>Added <code>r2.aov()</code>.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-9" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> for models from package <em>survey</em>, which returned three different AIC values. Now only the AIC value is returned.</li>
-<li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models when zero-inflated formula only had one predictor.</li>
-<li>Fixed issue in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>lme</em> models.</li>
-<li>Fixed issue in <code><a href="../reference/check_distribution.html">check_distribution()</a></code> for <em>brmsfit</em> models.</li>
-<li>Fixed issue in <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for <em>aov</em> objects.</li>
-<li>Fixed issues for <em>lmrob</em> and <em>glmrob</em> objects.</li>
+<li><p>Fixed issue in <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> for models from package <em>survey</em>, which returned three different AIC values. Now only the AIC value is returned.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models when zero-inflated formula only had one predictor.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>lme</em> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_distribution.html">check_distribution()</a></code> for <em>brmsfit</em> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for <em>aov</em> objects.</p></li>
+<li><p>Fixed issues for <em>lmrob</em> and <em>glmrob</em> objects.</p></li>
 </ul>
 </div>
 </div>
@@ -543,18 +513,16 @@
 <h2 class="hasAnchor">
 <a href="#general-9" class="anchor"></a>General</h2>
 <ul>
-<li>Removed <code>logLik.felm()</code>, because this method is now implemented in the <em>lfe</em> package.</li>
-<li>Support for <code>DirichletRegModel</code> models.</li>
+<li><p>Removed <code>logLik.felm()</code>, because this method is now implemented in the <em>lfe</em> package.</p></li>
+<li><p>Support for <code>DirichletRegModel</code> models.</p></li>
 </ul>
 </div>
 <div id="new-functions-3" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-functions-3" class="anchor"></a>New functions</h2>
 <ul>
-<li>
-<code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::principal_components()</a></code>.</li>
-<li>
-<code><a href="../reference/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</li>
+<li><p><code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::principal_components()</a></code>.</p></li>
+<li><p><code><a href="../reference/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-10" class="section level2">
@@ -580,10 +548,8 @@
 <h2 class="hasAnchor">
 <a href="#new-functions-4" class="anchor"></a>New functions</h2>
 <ul>
-<li>
-<code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</li>
-<li>
-<code><a href="../reference/test_bf.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</li>
+<li><p><code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</p></li>
+<li><p><code><a href="../reference/test_bf.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-11" class="section level2">
@@ -610,26 +576,20 @@
 <h2 class="hasAnchor">
 <a href="#general-11" class="anchor"></a>General</h2>
 <ul>
-<li>Support for <code>bracl</code>, <code>brmultinom</code>, <code>fixest</code>, <code>glmx</code>, <code>glmmadmb</code>, <code>mclogit</code>, <code>mmclogit</code>, <code>vgam</code> and <code>vglm</code> models.</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> now supports <em>plm</em> models.</li>
-<li>
-<code><a href="../reference/r2.html">r2()</a></code> now supports <em>complmrob</em> models.</li>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method (requires package <strong>see</strong>).</li>
+<li><p>Support for <code>bracl</code>, <code>brmultinom</code>, <code>fixest</code>, <code>glmx</code>, <code>glmmadmb</code>, <code>mclogit</code>, <code>mmclogit</code>, <code>vgam</code> and <code>vglm</code> models.</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> now supports <em>plm</em> models.</p></li>
+<li><p><code><a href="../reference/r2.html">r2()</a></code> now supports <em>complmrob</em> models.</p></li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> now gets a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method (requires package <strong>see</strong>).</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-9" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-9" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</li>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> has a nicer <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>-method now.</li>
-<li>Verbosity for <code><a href="../reference/compare_performance.html">compare_performance()</a></code> was slightly adjusted.</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code>-methods for different objects now also have a <code>verbose</code>-argument.</li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> gets a <code>rank</code>-argument, to rank models according to their overall model performance.</p></li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> has a nicer <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>-method now.</p></li>
+<li><p>Verbosity for <code><a href="../reference/compare_performance.html">compare_performance()</a></code> was slightly adjusted.</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code>-methods for different objects now also have a <code>verbose</code>-argument.</p></li>
 </ul>
 </div>
 <div id="minor-changes" class="section level2">
@@ -644,10 +604,9 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-12" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</li>
-<li>
-<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</li>
-<li>Fixed issues with models of class <code>rlmerMod</code>.</li>
+<li><p>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</p></li>
+<li><p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</p></li>
+<li><p>Fixed issues with models of class <code>rlmerMod</code>.</p></li>
 </ul>
 </div>
 </div>
@@ -675,25 +634,20 @@
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-10" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</li>
-<li>Added more methods to <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</li>
-<li>
-<code><a href="../reference/performance_score.html">performance_score()</a></code> now also works on <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer()</a></code> objects.</li>
-<li>
-<code><a href="../reference/check_singularity.html">check_singularity()</a></code> now works with models of class <em>clmm</em>.</li>
-<li>
-<code><a href="../reference/r2.html">r2()</a></code> now works with models of class <em>clmm</em>, <em>bigglm</em> and <em>biglm</em>.</li>
-<li>
-<code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</li>
+<li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works on data frames.</p></li>
+<li><p>Added more methods to <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</p></li>
+<li><p><code><a href="../reference/performance_score.html">performance_score()</a></code> now also works on <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer()</a></code> objects.</p></li>
+<li><p><code><a href="../reference/check_singularity.html">check_singularity()</a></code> now works with models of class <em>clmm</em>.</p></li>
+<li><p><code><a href="../reference/r2.html">r2()</a></code> now works with models of class <em>clmm</em>, <em>bigglm</em> and <em>biglm</em>.</p></li>
+<li><p><code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-13" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-13" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</li>
-<li>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occurred when checking for outliers.</li>
+<li><p>Fixed bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</p></li>
+<li><p>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occurred when checking for outliers.</p></li>
 </ul>
 </div>
 </div>
@@ -705,40 +659,30 @@
 <h2 class="hasAnchor">
 <a href="#general-13" class="anchor"></a>General</h2>
 <ul>
-<li>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>-method.</li>
+<li><p>Many <code>check_*()</code>-methods now get a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method. Package <strong>see</strong> is required for plotting.</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> gets a preliminary <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>-method.</p></li>
 </ul>
 </div>
 <div id="breaking-changes-2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#breaking-changes-2" class="anchor"></a>Breaking changes</h2>
 <ul>
-<li>The attribute for the standard error of the Bayesian R2 (<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code>) was renamed from <code>std.error</code> to <code>SE</code> to be in line with the naming convention of other easystats-packages.</li>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</li>
+<li><p>The attribute for the standard error of the Bayesian R2 (<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code>) was renamed from <code>std.error</code> to <code>SE</code> to be in line with the naming convention of other easystats-packages.</p></li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are fit from the same data. Previous behaviour was that the BF was shown when models were of same class.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-11" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-11" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</li>
-<li>
-<code><a href="../reference/check_outliers.html">check_outliers()</a></code> gets a <code>method</code>-argument to choose the method for detecting outliers. Furthermore, two new methods (Mahalanobis Distance and Invariant Coordinate Selection) were implemented.</li>
-<li>
-<code><a href="../reference/check_model.html">check_model()</a></code> now performs more checks for GLM(M)s and other model objects.</li>
-<li>
-<code><a href="../reference/check_model.html">check_model()</a></code> gets a <code>check</code>-argument to plot selected checks only.</li>
-<li>
-<code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with <code>MuMIn::r.squaredGLMM()</code>, which returned a value for models with singular fit.</li>
-<li>
-<code><a href="../reference/check_distribution.html">check_distribution()</a></code> now detects negative binomial and zero-inflated distributions. Furthermore, attempt to improve accuracy.</li>
-<li>
-<code><a href="../reference/check_distribution.html">check_distribution()</a></code> now also accepts a numeric vector as input.</li>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> warns if models were not fit from same data.</li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> now also works for <em>lavaan</em>-objects.</p></li>
+<li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> gets a <code>method</code>-argument to choose the method for detecting outliers. Furthermore, two new methods (Mahalanobis Distance and Invariant Coordinate Selection) were implemented.</p></li>
+<li><p><code><a href="../reference/check_model.html">check_model()</a></code> now performs more checks for GLM(M)s and other model objects.</p></li>
+<li><p><code><a href="../reference/check_model.html">check_model()</a></code> gets a <code>check</code>-argument to plot selected checks only.</p></li>
+<li><p><code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now returns r-squared for models with singular fit, where no random effect variances could be computed. The r-squared then does not take random effect variances into account. This behaviour was changed to be in line with <code>MuMIn::r.squaredGLMM()</code>, which returned a value for models with singular fit.</p></li>
+<li><p><code><a href="../reference/check_distribution.html">check_distribution()</a></code> now detects negative binomial and zero-inflated distributions. Furthermore, attempt to improve accuracy.</p></li>
+<li><p><code><a href="../reference/check_distribution.html">check_distribution()</a></code> now also accepts a numeric vector as input.</p></li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> warns if models were not fit from same data.</p></li>
 </ul>
 </div>
 <div id="new-check-functions" class="section level2">
@@ -753,9 +697,9 @@
 <h2 class="hasAnchor">
 <a href="#bug-fixes-14" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Fixed issues with <code><a href="../reference/compare_performance.html">compare_performance()</a></code> and row-ordering.</li>
-<li>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inflated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</li>
-<li>Fixed issue in some <code>check_*()</code> and <code>performance_*()</code> functions for models with binary outcome, when outcome variable was a factor.</li>
+<li><p>Fixed issues with <code><a href="../reference/compare_performance.html">compare_performance()</a></code> and row-ordering.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inflated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</p></li>
+<li><p>Fixed issue in some <code>check_*()</code> and <code>performance_*()</code> functions for models with binary outcome, when outcome variable was a factor.</p></li>
 </ul>
 </div>
 </div>
@@ -767,95 +711,70 @@
 <h2 class="hasAnchor">
 <a href="#general-14" class="anchor"></a>General</h2>
 <ul>
-<li>
-<code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</li>
-<li>
-<code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> now works for multivariate response models.</li>
-<li>
-<code><a href="../reference/model_performance.html">model_performance()</a></code> now works for more regression models, and also includes the log-loss, proper scoring rules and percentage of correct predictions as new metric for models with binary outcome.</li>
+<li><p><code><a href="../reference/r2.html">r2()</a></code> now works for more regression models.</p></li>
+<li><p><code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> now works for multivariate response models.</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> now works for more regression models, and also includes the log-loss, proper scoring rules and percentage of correct predictions as new metric for models with binary outcome.</p></li>
 </ul>
 </div>
 <div id="new-performance-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-performance-functions" class="anchor"></a>New performance-functions</h2>
 <ul>
-<li>
-<code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code>, which calculates the predictive accuracy of linear or logistic regression models.</li>
-<li>
-<code><a href="../reference/performance_logloss.html">performance_logloss()</a></code> to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the <code><a href="../reference/performance_rmse.html">rmse()</a></code>.</li>
-<li>
-<code><a href="../reference/performance_score.html">performance_score()</a></code> to compute the logarithmic, quadratic and spherical proper scoring rules.</li>
-<li>
-<code><a href="../reference/performance_pcp.html">performance_pcp()</a></code> to calculate the percentage of correct predictions for models with binary outcome.</li>
-<li>
-<code><a href="../reference/performance_roc.html">performance_roc()</a></code>, to calculate ROC-curves.</li>
-<li>
-<code><a href="../reference/performance_aicc.html">performance_aicc()</a></code>, to calculate the second-order AIC (AICc).</li>
+<li><p><code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code>, which calculates the predictive accuracy of linear or logistic regression models.</p></li>
+<li><p><code><a href="../reference/performance_logloss.html">performance_logloss()</a></code> to compute the log-loss of models with binary outcome. The log-loss is a proper scoring function comparable to the <code><a href="../reference/performance_rmse.html">rmse()</a></code>.</p></li>
+<li><p><code><a href="../reference/performance_score.html">performance_score()</a></code> to compute the logarithmic, quadratic and spherical proper scoring rules.</p></li>
+<li><p><code><a href="../reference/performance_pcp.html">performance_pcp()</a></code> to calculate the percentage of correct predictions for models with binary outcome.</p></li>
+<li><p><code><a href="../reference/performance_roc.html">performance_roc()</a></code>, to calculate ROC-curves.</p></li>
+<li><p><code><a href="../reference/performance_aicc.html">performance_aicc()</a></code>, to calculate the second-order AIC (AICc).</p></li>
 </ul>
 </div>
 <div id="new-check-functions-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-check-functions-1" class="anchor"></a>New check-functions</h2>
 <ul>
-<li>
-<code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> to calculate the variance inflation factor and check model predictors for multicollinearity.</li>
-<li>
-<code><a href="../reference/check_outliers.html">check_outliers()</a></code> to check models for influential observations.</li>
-<li>
-<code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> to check models for (non-)constant error variance.</li>
-<li>
-<code><a href="../reference/check_normality.html">check_normality()</a></code> to check models for (non-)normality of residuals.</li>
-<li>
-<code><a href="../reference/check_autocorrelation.html">check_autocorrelation()</a></code> to check models for auto-correlated residuals.</li>
-<li>
-<code><a href="../reference/check_distribution.html">check_distribution()</a></code> to classify the distribution of a model-family using machine learning.</li>
+<li><p><code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> to calculate the variance inflation factor and check model predictors for multicollinearity.</p></li>
+<li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> to check models for influential observations.</p></li>
+<li><p><code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> to check models for (non-)constant error variance.</p></li>
+<li><p><code><a href="../reference/check_normality.html">check_normality()</a></code> to check models for (non-)normality of residuals.</p></li>
+<li><p><code><a href="../reference/check_autocorrelation.html">check_autocorrelation()</a></code> to check models for auto-correlated residuals.</p></li>
+<li><p><code><a href="../reference/check_distribution.html">check_distribution()</a></code> to classify the distribution of a model-family using machine learning.</p></li>
 </ul>
 </div>
 <div id="new-indices-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-indices-functions" class="anchor"></a>New indices-functions</h2>
 <ul>
-<li>
-<code><a href="../reference/r2_mckelvey.html">r2_mckelvey()</a></code> to compute McKelvey and Zavoinas R2 value.</li>
-<li>
-<code><a href="../reference/r2_zeroinflated.html">r2_zeroinflated()</a></code> to compute R2 for zero-inflated (non-mixed) models.</li>
-<li>
-<code><a href="../reference/r2_xu.html">r2_xu()</a></code> as a crude R2 measure for linear (mixed) models.</li>
+<li><p><code><a href="../reference/r2_mckelvey.html">r2_mckelvey()</a></code> to compute McKelvey and Zavoinas R2 value.</p></li>
+<li><p><code><a href="../reference/r2_zeroinflated.html">r2_zeroinflated()</a></code> to compute R2 for zero-inflated (non-mixed) models.</p></li>
+<li><p><code><a href="../reference/r2_xu.html">r2_xu()</a></code> as a crude R2 measure for linear (mixed) models.</p></li>
 </ul>
 </div>
 <div id="breaking-changes-3" class="section level2">
 <h2 class="hasAnchor">
 <a href="#breaking-changes-3" class="anchor"></a>Breaking changes</h2>
 <ul>
-<li>
-<code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.</li>
-<li>
-<code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</li>
+<li><p><code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now only return one R2-value and its standard error, instead of different (robust) R2 measures and credible intervals.</p></li>
+<li><p><code>error_rate()</code> is now integrated in the <code><a href="../reference/performance_pcp.html">performance_pcp()</a></code>-function.</p></li>
 </ul>
 </div>
 <div id="changes-to-functions-12" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-12" class="anchor"></a>Changes to functions</h2>
 <ul>
-<li>
-<code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</li>
-<li>
-<code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now calculates the full R2 for mixed models with zero-inflation.</li>
-<li>
-<code><a href="../reference/icc.html">icc()</a></code> now returns <code>NULL</code> and no longer stops when no mixed model is provided.</li>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are of same class.</li>
-<li>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</li>
+<li><p><code><a href="../reference/model_performance.stanreg.html">model_performance.stanreg()</a></code> and <code>model_performance.brmsfit()</code> now also return the <em>WAIC</em> (widely applicable information criterion).</p></li>
+<li><p><code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> now calculates the full R2 for mixed models with zero-inflation.</p></li>
+<li><p><code><a href="../reference/icc.html">icc()</a></code> now returns <code>NULL</code> and no longer stops when no mixed model is provided.</p></li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> now shows the Bayes factor when all compared models are of same class.</p></li>
+<li><p>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</p></li>
 </ul>
 </div>
 <div id="bug-fixes-15" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-15" class="anchor"></a>Bug fixes</h2>
 <ul>
-<li>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</li>
-<li>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (<a href='https://github.com/easystats/performance/issues/48'>#48</a>).</li>
-<li>
-<code><a href="../reference/compare_performance.html">compare_performance()</a></code> did not sort the <code>name</code>-column properly, if the columns <code>class</code> and <code>name</code> were not in the same alphabetical order (<a href='https://github.com/easystats/performance/issues/51'>#51</a>).</li>
+<li><p>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</p></li>
+<li><p>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (<a href='https://github.com/easystats/performance/issues/48'>#48</a>).</p></li>
+<li><p><code><a href="../reference/compare_performance.html">compare_performance()</a></code> did not sort the <code>name</code>-column properly, if the columns <code>class</code> and <code>name</code> were not in the same alphabetical order (<a href='https://github.com/easystats/performance/issues/51'>#51</a>).</p></li>
 </ul>
 </div>
 </div>
