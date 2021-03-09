@@ -45,7 +45,7 @@
 #' # ROC curves for different models
 #' # if (require("see")) plot(performance_roc(m1, m2, m3))
 #' @importFrom stats predict
-#' @importFrom insight find_response get_data
+#' @importFrom insight find_response get_data is_model model_info
 #' @export
 performance_roc <- function(x, ..., predictions, new_data) {
   dots <- list(...)
@@ -55,7 +55,11 @@ performance_roc <- function(x, ..., predictions, new_data) {
     sapply(match.call(expand.dots = FALSE)$`...`, .safe_deparse)
   )
 
-  info <- insight::model_info(x)
+  if (insight::is_model(x)) {
+    info <- insight::model_info(x)
+  } else {
+    info <- NULL
+  }
 
   if (is.numeric(x) && !missing(predictions) && !is.null(predictions)) {
     .performance_roc_numeric(x, predictions)
