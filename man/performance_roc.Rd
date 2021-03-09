@@ -55,7 +55,5 @@ performance_roc(m1, m2, m3)
 
 # if you have \code{see} package installed, you can also plot comparison of
 # ROC curves for different models
-if (require("see")) {
-  plot(performance_roc(m1, m2, m3))
-}
+# if (require("see")) plot(performance_roc(m1, m2, m3))
 }
