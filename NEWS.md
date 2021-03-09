@@ -34,6 +34,9 @@
 
 * Fixed issue in `performance_roc()` for models where outcome was not 0/1 coded.
 
+* Fixed issue in `performance_accuracy()` for logistic regression models when
+  `method = "boot"`.
+
 # performance 0.7.0
 
 ## General

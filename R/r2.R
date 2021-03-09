@@ -52,7 +52,11 @@ r2 <- function(model, ...) {
 r2.default <- function(model, verbose = TRUE, ...) {
   out <- tryCatch(
     {
-      resp <- .factor_to_numeric(insight::get_response(model))
+      if (insight::model_info(model)$is_binomial) {
+        resp <- .recode_to_zero(insight::get_response(model))
+      } else {
+        resp <- .factor_to_numeric(insight::get_response(model))
+      }
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, verbose = FALSE)
       list(R2 = 1 - sum((resp - pred)^2) / sum((resp - mean_resp)^2))

@@ -123,6 +123,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
           model_upd <- stats::update(model, data = model_data[.x, ])
         )
         # stats::glm(formula, data = model_data[.x, ], family = stats::binomial(link = "logit"))
+        model_upd
       })
 
       predictions <- mapply(function(.x, .y) {
@@ -130,7 +131,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       }, bootstr, models, SIMPLIFY = FALSE)
 
       response <- lapply(bootstr, function(.x) {
-        .factor_to_numeric(as.data.frame(model_data[.x, ])[[resp.name]], lowest = 0)
+        .recode_to_zero(as.data.frame(model_data[.x, ])[[resp.name]])
       })
 
       accuracy <- mapply(function(.x, .y) {
@@ -155,7 +156,7 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
       }, cv, models, SIMPLIFY = FALSE)
 
       response <- lapply(cv, function(.x) {
-        .factor_to_numeric(as.data.frame(model_data[.x$test, ])[[resp.name]], lowest = 0)
+        .recode_to_zero(as.data.frame(model_data[.x$test, ])[[resp.name]])
       })
 
       accuracy <- mapply(function(.x, .y) {

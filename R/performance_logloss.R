@@ -31,7 +31,7 @@ performance_logloss <- function(model, verbose = TRUE, ...) {
 
 #' @export
 performance_logloss.default <- function(model, verbose = TRUE, ...) {
-  resp <- .factor_to_numeric(insight::get_response(model))
+  resp <- .recode_to_zero(insight::get_response(model))
   ll <- suppressWarnings(mean(log(1 - abs(resp - stats::fitted(model))) * -1))
 
   if (is.na(ll)) {
@@ -46,7 +46,7 @@ performance_logloss.default <- function(model, verbose = TRUE, ...) {
 #' @export
 performance_logloss.brmsfit <- function(model, verbose = TRUE, ...) {
   yhat <- stats::fitted(object = model, summary = TRUE, ...)[, "Estimate"]
-  resp <- .factor_to_numeric(insight::get_response(model))
+  resp <- .recode_to_zero(insight::get_response(model))
   ll <- suppressWarnings(mean(log(1 - abs(resp - yhat)) * -1))
 
   if (is.na(ll)) {
