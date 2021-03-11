@@ -37,6 +37,9 @@
 * Fixed issue in `performance_accuracy()` for logistic regression models when
   `method = "boot"`.
 
+* `cronbachs_alpha()` did not work for `matrix`-objects, as stated in the docs.
+  It now does.
+
 # performance 0.7.0
 
 ## General
