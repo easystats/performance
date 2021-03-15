@@ -166,6 +166,7 @@
 <li><p>Fixed incorrect computation of models from inverse-Gaussian families, or Gaussian families fitted with <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/performance_roc.html">performance_roc()</a></code> for models where outcome was not 0/1 coded.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> for logistic regression models when <code>method = "boot"</code>.</p></li>
+<li><p><code><a href="../reference/cronbachs_alpha.html">cronbachs_alpha()</a></code> did not work for <code>matrix</code>-objects, as stated in the docs. It now does.</p></li>
 </ul>
 </div>
 </div>
