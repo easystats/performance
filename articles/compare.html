@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compare, Test and Select Models • performance</title>
+<title>Compare, Test, and Select Models • performance</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Compare, Test and Select Models">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Compare, Test, and Select Models">
 <meta property="og:description" content="performance">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -85,7 +85,7 @@
       </header><script src="compare_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Compare, Test and Select Models</h1>
+      <h1 data-toc-skip>Compare, Test, and Select Models</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/vignettes/compare.Rmd" class="external-link"><code>vignettes/compare.Rmd</code></a></small>
@@ -100,17 +100,21 @@
 <a href="#comparing-vs--testing" class="anchor"></a>Comparing vs. Testing</h1>
 <p>Let’s imagine that we are interested in explaining the variability in the <code>Sepal.Length</code> using 3 different predictors. For that, we can build 3 linear models.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
-<span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
-<span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></code></pre></div>
 <div id="comparing-indices-of-model-performance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-indices-of-model-performance" class="anchor"></a>Comparing Indices of Model Performance</h2>
-<p>The eponym function of the package, <a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit, …).</p>
+<p>The eponymous function from the package, <a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/" class="external-link">performance</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># for pipe operator</span>
 
-<span class="fu"><a href="../reference/model_performance.html">performance</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></code></pre></div>
+<span class="co"># we will use `print_md` function to display a well-formatted table</span>
+<span class="fu"><a href="../reference/model_performance.html">performance</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Indices of model performance</caption>
 <thead><tr class="header">
@@ -132,7 +136,8 @@
 </table>
 <p>But for multiple models, one can obtain a useful table to compare these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html" class="external-link"><code>compare_performance()</code></a> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Comparison of Model Performance Indices</caption>
 <thead><tr class="header">
@@ -178,14 +183,23 @@
 </tr>
 </tbody>
 </table>
+<p>If you remember your stats lessons, while comparing different model fits, you would like to choose a model that has a high <span class="math inline">\(R^2\)</span> value (a measure of how much variance is explained by predictors), low AIC and BIC values, and low root mean squared error (RMSE). Based on these criteria, we can immediately see that <code>model1</code> has the best fit.</p>
+<p>If you don’t like looking at tables, you can also plot them using a plotting method supported in <code>see</code> package:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="compare_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<p>For more, see: <a href="https://easystats.github.io/see/articles/performance.html" class="external-link uri">https://easystats.github.io/see/articles/performance.html</a></p>
 </div>
 <div id="testing-models" class="section level2">
 <h2 class="hasAnchor">
 <a href="#testing-models" class="anchor"></a>Testing Models</h2>
-<p>While comparing these indices is often useful, making a decision (for instance, which model to keep or drop) can be hard, as the indices can give conflicting suggestions, and it’s often not obvious which index to favour depending on the scenario one is in.</p>
-<p>This is one of the reason why <em>tests</em> are useful, as they facilitate decisions, enabled by (infamous) “significance” indices, like <em>p</em>-values or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes Factors</a>. However, these tests also have strong limitations and shortcomings, and cannot be used as the <strong>one ring to rule them all</strong>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/test_bf.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></code></pre></div>
+<p>While <strong>comparing</strong> these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.</p>
+<p>This is one of the reason why <strong>tests</strong> are useful, as they facilitate decisions via (infamous) “significance” indices, like <em>p</em>-values (in frequentist framework) or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes Factors</a> (in Bayesian framework).</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/test_bf.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">Name</th>
@@ -227,7 +241,83 @@
 </tbody>
 </table>
 <p>Each model is compared to model1.</p>
+<p>However, these tests also have strong limitations and shortcomings, and cannot be used as the <strong>one criterion to rule them all</strong>!</p>
 <p>You can find more information on how these tests <a href="https://easystats.github.io/performance/reference/test_performance.html" class="external-link"><strong>here</strong></a>.</p>
+</div>
+<div id="experimenting" class="section level2">
+<h2 class="hasAnchor">
+<a href="#experimenting" class="anchor"></a>Experimenting</h2>
+<p>Although we have shown here examples only with simple linear models, we will highly encourage you to try these functions out with models of your choosing. For example, these functions work with mixed-effects regression models, Bayesian regression models, etc.</p>
+<p>To demonstrate this, we will run Bayesian versions of linear regression models we just compared:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span>
+
+<span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+
+<span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<caption>Comparison of Model Performance Indices</caption>
+<thead><tr class="header">
+<th align="left">Name</th>
+<th align="center">Model</th>
+<th align="center">ELPD</th>
+<th align="center">ELPD_SE</th>
+<th align="center">LOOIC</th>
+<th align="center">LOOIC_SE</th>
+<th align="center">WAIC</th>
+<th align="center">R2</th>
+<th align="center">R2 (adj.)</th>
+<th align="center">RMSE</th>
+<th align="center">Sigma</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">model1</td>
+<td align="center">stanreg</td>
+<td align="center">-80.02</td>
+<td align="center">8.35</td>
+<td align="center">160.04</td>
+<td align="center">16.70</td>
+<td align="center">160.03</td>
+<td align="center">0.76</td>
+<td align="center">0.75</td>
+<td align="center">0.40</td>
+<td align="center">0.41</td>
+</tr>
+<tr class="even">
+<td align="left">model2</td>
+<td align="center">stanreg</td>
+<td align="center">-104.22</td>
+<td align="center">9.26</td>
+<td align="center">208.43</td>
+<td align="center">18.52</td>
+<td align="center">208.42</td>
+<td align="center">0.67</td>
+<td align="center">0.66</td>
+<td align="center">0.47</td>
+<td align="center">0.48</td>
+</tr>
+<tr class="odd">
+<td align="left">model3</td>
+<td align="center">stanreg</td>
+<td align="center">-185.70</td>
+<td align="center">7.88</td>
+<td align="center">371.41</td>
+<td align="center">15.76</td>
+<td align="center">371.39</td>
+<td align="center">0.01</td>
+<td align="center">-9.78e-03</td>
+<td align="center">0.82</td>
+<td align="center">0.83</td>
+</tr>
+</tbody>
+</table>
+<p>Note that, since these are Bayesian regression models, the function automatically picked up the appropriate indices to compare!</p>
+<p>If you are unfamiliar with some of these, explore more <a href="https://easystats.github.io/performance/reference/looic.html" class="external-link">here</a>]</p>
+<p><strong>Now it’s your turn to play!</strong> :)</p>
 </div>
 </div>
   </div>
