@@ -1,10 +1,6 @@
 ---
-title: "Compare, Test and Select Models"
+title: "Compare, Test, and Select Models"
 output: 
-  github_document:
-    toc: true
-    fig_width: 10.08
-    fig_height: 6
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -18,64 +14,124 @@ editor_options:
   chunk_output_type: console
 ---
 
-
-
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r , include=FALSE}
 library(knitr)
 library(performance)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = "#>")
+knitr::opts_chunk$set(
+  comment = ">",
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%",
+  dpi = 450
+)
 options(digits = 2)
 
 set.seed(333)
-```
 
+library(rstanarm)
+```
 
 # Comparing vs. Testing
 
 Let's imagine that we are interested in explaining the variability in the `Sepal.Length` using 3 different predictors. For that, we can build 3 linear models.
 
-```{r message=FALSE, warning=FALSE}
-model1 <- lm(Sepal.Length ~ Petal.Length, data=iris)
-model2 <- lm(Sepal.Length ~ Petal.Width, data=iris)
-model3 <- lm(Sepal.Length ~ Sepal.Width, data=iris)
+```{r}
+model1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+model2 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+model3 <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 ```
-
 
 ## Comparing Indices of Model Performance
 
-The eponym function of the package, [`performance()`](https://easystats.github.io/performance/reference/model_performance.html), can be used to compute different indices of performance (an umbrella term for indices of fit, ...).
+The eponymous function from the package,
+[`performance()`](https://easystats.github.io/performance/reference/model_performance.html),
+can be used to compute different indices of performance (an umbrella term for
+indices of fit).
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
+```{r}
 library(performance)
+library(insight)
+library(magrittr) # for pipe operator
 
-performance(model1)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-insight::print_md(performance(model1))
+# we will use `print_md` function to display a well-formatted table
+performance(model1) %>%
+  print_md()
 ```
 
-But for multiple models, one can obtain a useful table to compare these indices at a glance using the [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html) function.
+But for multiple models, one can obtain a useful table to compare these indices
+at a glance using the
+[`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html)
+function.
 
+```{r}
+compare_performance(model1, model2, model3) %>%
+  print_md()
+```
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-compare_performance(model1, model2, model3)
+If you remember your stats lessons, while comparing different model fits, you
+would like to choose a model that has a high $R^2$ value (a measure of how much
+variance is explained by predictors), low AIC and BIC values, and low root mean
+squared error (RMSE). Based on these criteria, we can immediately see that
+`model1` has the best fit.
+
+If you don't like looking at tables, you can also plot them using a plotting method supported in `see` package:
+
+```{r}
+library(see)
+
+plot(compare_performance(model1, model2, model3))
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-insight::print_md(compare_performance(model1, model2, model3))
-```
+
+For more, see: <https://easystats.github.io/see/articles/performance.html>
 
 ## Testing Models
 
-While comparing these indices is often useful, making a decision (for instance, which model to keep or drop) can be hard, as the indices can give conflicting suggestions, and it's often not obvious which index to favour depending on the scenario one is in.
+While **comparing** these indices is often useful, making a decision (for
+instance, which model to keep or drop) can often be hard, as the indices can
+give conflicting suggestions. Additionally, it is sometimes unclear which index
+to favour in the given context.
 
-This is one of the reason why *tests* are useful, as they facilitate decisions, enabled by (infamous) "significance" indices, like *p*-values or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html). However, these tests also have strong limitations and shortcomings, and cannot be used as the **one ring to rule them all**. 
+This is one of the reason why **tests** are useful, as they facilitate decisions
+via (infamous) "significance" indices, like *p*-values (in frequentist
+framework) or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in
+Bayesian framework).
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-test_performance(model1, model2, model3)
+```{r}
+test_performance(model1, model2, model3) %>%
+  print_md()
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-insight::print_md(test_performance(model1, model2, model3))
-```
+
+However, these tests also have strong limitations and shortcomings, and cannot
+be used as the **one criterion to rule them all**!
 
 You can find more information on how these tests [**here**](https://easystats.github.io/performance/reference/test_performance.html).
+
+## Experimenting
+
+Although we have shown here examples only with simple linear models, we will
+highly encourage you to try these functions out with models of your choosing.
+For example, these functions work with mixed-effects regression models, Bayesian
+regression models, etc.
+
+To demonstrate this, we will run Bayesian versions of linear regression models
+we just compared:
+
+```{r}
+library(rstanarm)
+
+model1 <- stan_glm(Sepal.Length ~ Petal.Length, data = iris, refresh = 0)
+model2 <- stan_glm(Sepal.Length ~ Petal.Width, data = iris, refresh = 0)
+model3 <- stan_glm(Sepal.Length ~ Sepal.Width, data = iris, refresh = 0)
+
+compare_performance(model1, model2, model3) %>%
+  print_md()
+```
+
+Note that, since these are Bayesian regression models, the function
+automatically picked up the appropriate indices to
+compare!
+
+If you are unfamiliar with some of these, explore more [here](https://easystats.github.io/performance/reference/looic.html)] 
+
+**Now it's your turn to play!** :)
