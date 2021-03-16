@@ -81,6 +81,25 @@ the $R^2$s that have been adapted for GLMs have retained the name of "R2",
 mostly because of the similar properties (the range, the sensitivity, and the
 interpretation).
 
+```{r}
+utils::data(anorexia, package = "MASS")
+library(performance)
+
+# defining a generalized linear model
+model <- glm(Postwt ~ Prewt + Treat + offset(Prewt),
+                family = gaussian, data = anorexia)
+
+r2(model)
+```
+
+Note that `r2` functions only return the $R^2$ values. We would encourage users
+to instead always use the `compare_performance` function to get a more
+comprehensive set of indices of model fit.
+
+```{r}
+model_performance(model)
+```
+
 # R2 for Mixed Models
 
 ## Marginal vs. Conditional R2
@@ -95,18 +114,11 @@ account.
 
 ```{r}
 library(lme4)
-library(performance)
 
 # defining a linear mixed-effects model
 model <- lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
 
 r2(model)
-```
-
-Note that `r2` functions only return the $R^2$ values. We would encourage users to instead always use the `compare_performance` function to get a more comprehensive set of indices of model fit. 
-
-```{r}
-model_performance(model)
 ```
 
 But, in the current vignette, we would like to exclusively focus on this family
@@ -117,20 +129,24 @@ of functions and will only talk about this measure.
 ```{r}
 library(rstanarm)
 
+# defining a Bayesian generalized linear model
 model <- stan_glm(mpg ~ wt + cyl, data = mtcars, refresh = 0)
+
 r2(model)
 ```
 
 As discussed above, for mixed-effects models, there will be two components associated with $R^2$.
 
 ```{r}
-# defining a Bayesian mixed-effects model
+# defining a Bayesian linear mixed-effects model
 model <- stan_lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, refresh = 0)
 
 r2(model)
 ```
 
-If you want to know more about these indices, you can check out details and references in the functions that compute them [**here**](https://easystats.github.io/performance/reference/index.html#section-r-functions).
+If you want to know more about these indices, you can check out details and
+references in the functions that compute them
+[**here**](https://easystats.github.io/performance/reference/index.html#section-r-functions).
 
 # Interpretation
 
