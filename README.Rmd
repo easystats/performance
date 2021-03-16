@@ -58,7 +58,6 @@ install.packages("remotes")
 remotes::install_github("easystats/performance")
 ```
 
-
 ## Documentation
 
 [![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
