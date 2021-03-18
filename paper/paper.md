@@ -52,6 +52,10 @@ A crucial aspect in statistical analysis, particularly with regression models, i
 
 # Comparison to other Packages
 
+- *lmtest* [@lmtest]
+- *MuMIn::r.squaredGLMM()* [@MuMin]
+- *car* [@car]
+
 # Examples of Features
 
 ## Assessing Model Quality
