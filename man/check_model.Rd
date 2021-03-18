@@ -14,6 +14,7 @@ check_model(x, ...)
   panel = TRUE,
   check = "all",
   alpha = 0.2,
+  detrend = FALSE,
   ...
 )
 }
@@ -38,6 +39,8 @@ variance, i.e. for heteroscedasticity, as well as the linear relationship.
 By default, all possible checks are performed and plotted.}
 
 \item{alpha}{The alpha level of the confidence bands. Scalar from 0 to 1.}
+
+\item{detrend}{Should QQ/PP plots be detrended?}
 }
 \value{
 The data frame that is used for plotting.

@@ -23,6 +23,8 @@
 * The default-method for `r2()` now tries to compute an r-squared for all models
   that have no specific `r2()`-method yet, by using following formula:
   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
+  
+* Added option to detrend QQ/PP plots in `check_model()`.
 
 ## Bug fixes
 
