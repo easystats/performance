@@ -42,20 +42,13 @@ affiliations:
 
 # Summary
 
-The `performance` package provides utilities for computing measures to assess
-model quality, which are not directly provided by R's `base` or `stats`
-packages. These include e.g. measures like $R^2$, intraclass correlation
-coefficient, root mean squared error, etc., or functions to check models for
-overdispersion, singularity or zero-inflation and more. Functions apply to a
-large variety of regression models, including generalized linear models, mixed
-effects models, and Bayesian models.
+A crucial aspect in statistical analysis, particularly with regression models, is to evaluate the quality of fit. During data analysis, researchers should investigate how well models fit to the data to find out whether the best model is chosen. In the context of presenting results, fit indices should be reported, so that readers can judge the quality of regression models.
 
 # Aims of the Package
 
-**performance** is part of the
-[*easystats*](https://github.com/easystats/performance) ecosystem, a
-collaborative project created to facilitate the usage of R for statistical
-analyses.
+*performance* is an R-package [@rcore] that provides utilities for computing measures to assess model quality, which are not directly provided by R's *base* or *stats* packages. These include e.g. measures like $R^2$, intraclass correlation coefficient, root mean squared error, etc., or functions to check models for overdispersion, singularity or zero-inflation and more. Functions apply to a large variety of regression models, including generalized linear models, mixed effects models, and Bayesian models.
+
+**performance** is part of the [*easystats*](https://github.com/easystats/performance) ecosystem, a collaborative project created to facilitate the usage of R for statistical analyses.
 
 # Comparison to other Packages
 
@@ -63,10 +56,7 @@ analyses.
 
 ## Assessing Model Quality
 
-The `model_performance()` function is the workhorse of this package and allows
-you to extract a comprehensive set of model fit indices from various models in a
-consistent way. Depending on the regression model object, the list of computed
-indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
+The `model_performance()` function is the workhorse of this package and allows you to extract a comprehensive set of model fit indices from various models in a consistent way. Depending on the regression model object, the list of computed indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
 
 Example with linear model
 
@@ -107,9 +97,7 @@ model_performance(m3)
 
 ## Visualisation
 
-**performance** functions also include plotting capabilities via the [**see** package](https://easystats.github.io/see/) [@ludecke2020see]. A complete
-overview of plotting functions is available at the *see* website
-(https://easystats.github.io/see/articles/performance.html).
+**performance** functions also include plotting capabilities via the [**see** package](https://easystats.github.io/see/) [@ludecke2020see]. A complete overview of plotting functions is available at the *see* website (https://easystats.github.io/see/articles/performance.html).
 
 ## Visual Check of Model Assumptions
 
@@ -140,18 +128,10 @@ plot(compare_performance(lm1, lm2, lm3, lm4))
 
 # Licensing and Availability
 
-**performance** is licensed under the GNU General Public License (v3.0), with
-all source code stored at GitHub (https://github.com/easystats/performance), and
-with a corresponding issue tracker for bug reporting and feature enhancements.
-In the spirit of honest and open science, we encourage requests/tips for fixes,
-feature updates, as well as general questions and concerns via direct
-interaction with contributors and developers.
+**performance** is licensed under the GNU General Public License (v3.0), with all source code stored at GitHub (https://github.com/easystats/performance), and with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests/tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
 
 # Acknowledgments
 
-**performance** is part of the collaborative
-[*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we would
-like to thank the [members of easystats](https://github.com/orgs/easystats/people) 
-as well as the users.
+**performance** is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we would like to thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
 
 # References
