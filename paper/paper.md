@@ -116,6 +116,8 @@ While **comparing** these indices is often useful, making a decision (for instan
 
 This is one of the reason why tests are useful, as they facilitate decisions via (infamous) "significance" indices, like *p*-values (in frequentist framework) or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in Bayesian framework).
 
+The generic `test_performance()` runs the most relevant and appropriate tests based on the input, in the below example, the results from *Vuong's Test* (see also `?test_vuong`).
+
 ```r
 test_performance(lm1, lm2, lm3, lm4)
 #> Name | Model | Omega2 | p (Omega2) |    LR | p (LR)
@@ -126,6 +128,8 @@ test_performance(lm1, lm2, lm3, lm4)
 #> lm4  |    lm |   0.73 |     < .001 | -7.77 | < .001
 #> Each model is compared to lm1.
 ```
+
+An overview of different test functions is [available here](https://easystats.github.io/performance/reference/test_performance.html).
 
 ## Visualisation
 
