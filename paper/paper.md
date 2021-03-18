@@ -1,5 +1,5 @@
 ---
-title: "Extracting, Computing and Exploring the Parameters of Statistical Models using R"
+title: "Assessment, Testing and Comparison of Statistical Models using R"
 authors:
 - affiliation: 1
   name: Daniel Lüdecke
