@@ -58,7 +58,7 @@ A crucial aspect in statistical analysis, particularly with regression models, i
 
 # Examples of Features
 
-## Assessing Model Quality
+## Assessing and Comparing Indices of Model Performance
 
 The `model_performance()` function is the workhorse of this package and allows you to extract a comprehensive set of model fit indices from various models in a consistent way. Depending on the regression model object, the list of computed indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
 
@@ -74,18 +74,6 @@ model_performance(m1)
 #> 156.010 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568
 ```
 
-Example with logistic regression
-
-``` r
-m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-model_performance(m2)
-#> # Indices of model performance
-#> 
-#> AIC    |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP
-#> --------------------------------------------------------------------------------------------
-#> 31.298 | 35.695 |     0.478 | 0.359 | 0.934 |    0.395 |   -14.903 |           0.095 | 0.743
-```
-
 Example with linear mixed model:
 
 ``` r
@@ -99,6 +87,46 @@ model_performance(m3)
 #> 1755.628 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
 ```
 
+For multiple models, one can obtain a useful table to compare these indices
+at a glance using the [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html) function.
+
+```r
+data(iris)
+
+lm1 <- lm(Sepal.Length ~ Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
+          Petal.Length + Petal.Width, data = iris)
+
+compare_performance(lm1, lm2, lm3, lm4)
+#> # Comparison of Model Performance Indices
+#> 
+#> Name | Model |     AIC |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
+#> --------------------------------------------------------------------
+#> lm1  |    lm | 231.452 | 243.494 | 0.619 |     0.614 | 0.510 | 0.515
+#> lm2  |    lm | 106.233 | 121.286 | 0.837 |     0.833 | 0.333 | 0.338
+#> lm3  |    lm | 187.092 | 208.167 | 0.727 |     0.718 | 0.431 | 0.440
+#> lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305
+```
+
+## Testing Models
+
+While **comparing** these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.
+
+This is one of the reason why tests are useful, as they facilitate decisions via (infamous) "significance" indices, like *p*-values (in frequentist framework) or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in Bayesian framework).
+
+```r
+test_performance(lm1, lm2, lm3, lm4)
+#> Name | Model | Omega2 | p (Omega2) |    LR | p (LR)
+#> ---------------------------------------------------
+#> lm1  |    lm |        |            |       |       
+#> lm2  |    lm |   0.69 |     < .001 | -6.25 | < .001
+#> lm3  |    lm |   0.36 |     < .001 | -3.44 | < .001
+#> lm4  |    lm |   0.73 |     < .001 | -7.77 | < .001
+#> Each model is compared to lm1.
+```
+
 ## Visualisation
 
 **performance** functions also include plotting capabilities via the [**see** package](https://easystats.github.io/see/) [@ludecke2020see]. A complete overview of plotting functions is available at the *see* website (https://easystats.github.io/see/articles/performance.html).
@@ -107,24 +135,17 @@ model_performance(m3)
 
 ```r
 library(see)
-library(lme4)
-data(sleepstudy)
-
-model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+model <- lm(Sepal.Length ~ Species + Sepal.Width + 
+            Petal.Length + Petal.Width, data = iris)
 check_model(model)
 ```
+
+![](figure1.png)
 
 ## Visual Comparison of Model Fits
 
 ```r
 library(see)
-data(iris)
-
-lm1 <- lm(Sepal.Length ~ Species, data = iris)
-lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
-lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
-lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
-
 plot(compare_performance(lm1, lm2, lm3, lm4))
 ```
 
