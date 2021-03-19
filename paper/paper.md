@@ -57,9 +57,32 @@ A crucial aspect in statistical analysis, particularly with regression models, i
 - *car* [@car]
 - *broom::glance()* [robinson_broom_2020]
 
-# Examples of Features
 
-## Assessing and Comparing Indices of Model Performance
+# Features
+
+*performance* functions also include plotting capabilities via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see]. A complete overview of plotting functions is available at the *see* website (https://easystats.github.io/see/articles/performance.html).
+
+
+## Checking if a Model is Valid
+
+In addition to providing numerical indices of model fits, *performance* also provides convenience functions to *visually* assess statistical assumptions for regression models. Moreover, these visual checks adjust to the object entered and support various regression models, like linear models, linear mixed-effects models, their Bayesian equivalents, and more.
+Here we show what the function output for linear models:
+
+<!-- TO DO: Regenerate plot once feedback from other has been incorporated -->
+
+```r
+library(see)
+model <- lm(Sepal.Length ~ Species + Sepal.Width + 
+            Petal.Length + Petal.Width, data = iris)
+check_model(model)
+```
+
+![](figure1.png)
+
+
+## Computing Indices of Performance 
+
+<!-- Here I'd start with like some of the individual indices and then finish on "you can get them all at once with model_performance -->
 
 The `model_performance()` function is the workhorse of this package and allows you to extract a comprehensive set of model fit indices from various models in a consistent way. Depending on the regression model object, the list of computed indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
 
@@ -88,6 +111,13 @@ model_performance(m3)
 #> 1755.628 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
 ```
 
+
+
+## Comparing Multiple Models 
+
+<!-- Here I'd build upon it: you can also compare these indices. Here I'd mention the radar plot etc. -->
+
+
 For multiple models, one can obtain a useful table to compare these indices
 at a glance using the [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html) function.
 
@@ -111,7 +141,25 @@ compare_performance(lm1, lm2, lm3, lm4)
 #> lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305
 ```
 
+
+Similarly, in addition to the formal tests to compare several models, *performance* also provides visual ways to compare model fit indices. 
+
+
+```r
+library(see)
+plot(compare_performance(lm1, lm2, lm3, lm4))
+```
+
+<!-- TO DO: too big; before submission change dimentions -->
+
+![](figure2.png)
+
+
+
 ## Testing Models
+
+<!-- Here I'd end with the actual tests -->
+
 
 While **comparing** these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.
 
@@ -134,38 +182,8 @@ For Bayesian framework, *performance* also provides `test_bf()` function to comp
 
 An overview of different test functions is [available here](https://easystats.github.io/performance/reference/test_performance.html).
 
-## Visualisation
 
-*performance* functions also include plotting capabilities via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see]. A complete overview of plotting functions is available at the *see* website (https://easystats.github.io/see/articles/performance.html).
 
-## Visual Check of Model Assumptions
-
-In addition to providing numerical indices of model fits, *performance* also provides convenience functions to *visually* assess statistical assumptions for regression models. Moreover, these visual checks adjust to the object entered and support various regression models, like linear models, linear mixed-effects models, their Bayesian equivalents, and more.
-Here we show what the function output for linear models:
-
-<!-- TO DO: Regenerate plot once feedback from other has been incorporated -->
-
-```r
-library(see)
-model <- lm(Sepal.Length ~ Species + Sepal.Width + 
-            Petal.Length + Petal.Width, data = iris)
-check_model(model)
-```
-
-![](figure1.png)
-
-## Visual Comparison of Model Fits
-
-Similarly, in addition to the formal tests to compare several models, *performance* also provides visual ways to compare model fit indices.
-
-```r
-library(see)
-plot(compare_performance(lm1, lm2, lm3, lm4))
-```
-
-<!-- TO DO: too big; before submission change dimentions -->
-
-![](figure2.png)
 
 # Licensing and Availability
 
