@@ -5,7 +5,7 @@
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
 
-***Test if your model is a good model\!***
+***Test if your model is a good model!***
 
 The primary goal of the **performance** package is to provide utilities
 for computing **indices of model quality** and **goodness of fit**. This
@@ -32,6 +32,33 @@ Or this one to install the latest development version:
 ``` r
 install.packages("remotes")
 remotes::install_github("easystats/performance")
+```
+
+## Citation
+
+To cite performance in publications use:
+
+``` r
+citation("performance")
+#> 
+#> To cite performance in publications use:
+#> 
+#>   Lüdecke, Makowski, Ben-Shachar, Patil, & Waggoner
+#>   (2020). Assessment of Regression Models
+#>   Performance. CRAN. Available from
+#>   https://easystats.github.io/performance/
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{,
+#>     title = {performance: Assessment of Regression Models Performance},
+#>     author = {Daniel Lüdecke and Dominique Makowski and Mattan S. Ben-Shachar and Indrajeet Patil and Philip Waggoner},
+#>     journal = {CRAN},
+#>     year = {2020},
+#>     note = {R package},
+#>     doi = {10.5281/zenodo.3952174},
+#>     url = {https://easystats.github.io/performance/},
+#>   }
 ```
 
 ## Documentation
@@ -97,12 +124,16 @@ Schielzeth 2017).
 
 ``` r
 library(rstanarm)
-model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  cores = 4
+)
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
-#>      Marginal R2: 0.824 (0.89% CI [0.747, 0.888])
+#>      Marginal R2: 0.824 (0.89% CI [0.748, 0.890])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -168,7 +199,6 @@ check_overdispersion(model)
 #>        dispersion ratio =    2.946
 #>   Pearson's Chi-Squared = 1873.710
 #>                 p-value =  < 0.001
-#> Overdispersion detected.
 ```
 
 Overdispersion can be fixed by either modelling the dispersion parameter
@@ -194,7 +224,6 @@ check_zeroinflation(model)
 #>    Observed zeros: 387
 #>   Predicted zeros: 298
 #>             Ratio: 0.77
-#> Model is underfitting zeros (probable zero-inflation).
 ```
 
 #### Check for singular model fits
@@ -217,12 +246,16 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
+model <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
 
 check_singularity(model)
 #> [1] TRUE
@@ -243,7 +276,7 @@ model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
 check_model(model)
 ```
 
-![](man/figures/unnamed-chunk-13-1.png)<!-- -->
+![](man/figures/unnamed-chunk-14-1.png)<!-- -->
 
 ### Model performance summaries
 
@@ -338,7 +371,7 @@ installed).
 plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
-![](man/figures/unnamed-chunk-19-1.png)<!-- -->
+![](man/figures/unnamed-chunk-20-1.png)<!-- -->
 
 ### Testing models
 
@@ -361,9 +394,9 @@ test_performance(m1, m2, m3)
 
 ## References
 
-<div id="refs" class="references hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-<div id="ref-gelman_data_2007">
+<div id="ref-gelman_data_2007" class="csl-entry">
 
 Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
 and Multilevel/Hierarchical Models*. Analytical Methods for Social
@@ -371,14 +404,14 @@ Research. Cambridge ; New York: Cambridge University Press.
 
 </div>
 
-<div id="ref-hox_multilevel_2010">
+<div id="ref-hox_multilevel_2010" class="csl-entry">
 
 Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
 ed. Quantitative Methodology Series. New York: Routledge.
 
 </div>
 
-<div id="ref-johnson_extension_2014">
+<div id="ref-johnson_extension_2014" class="csl-entry">
 
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
@@ -387,12 +420,12 @@ Ecology and Evolution* 5 (9): 944–46.
 
 </div>
 
-<div id="ref-nakagawa_coefficient_2017">
+<div id="ref-nakagawa_coefficient_2017" class="csl-entry">
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
-Expanded.” *Journal of the Royal Society Interface* 14 (134): 20170213.
+Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
 <https://doi.org/10.1098/rsif.2017.0213>.
 
 </div>

@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   tidy.opts = list(width.cutoff = 80),
   tidy = TRUE,
+  warning = FALSE,
+  message = FALSE,
   dpi = 300,
   fig.path = "man/figures/",
   comment = "#>"
@@ -47,15 +49,23 @@ The primary goal of the **performance** package is to provide utilities for comp
 
 Run the following to install the stable release of **performance** from CRAN:
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, eval=FALSE}
 install.packages("performance")
 ```
 
 Or this one to install the latest development version:
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, eval=FALSE}
 install.packages("remotes")
 remotes::install_github("easystats/performance")
+```
+
+## Citation
+
+To cite performance in publications use:
+
+```{r}
+citation("performance")
 ```
 
 ## Documentation
@@ -74,7 +84,7 @@ There is a nice introduction into the package on [youtube](https://www.youtube.c
 
 `r2()` returns a list containing values related to the "most appropriate" r-squared for the given model.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 model <- lm(mpg ~ wt + cyl, data = mtcars)
 r2(model)
 
@@ -93,7 +103,7 @@ For mixed models, the _conditional_ and _marginal_ R-squared are returned. The _
 
 For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_ random effect variances, thus `r2()` is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects [@johnson_extension_2014; @nakagawa_coefficient_2017].
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 library(rstanarm)
 model <- stan_glmer(
   Petal.Length ~ Petal.Width + (1 | Species),
@@ -113,7 +123,7 @@ Similar to R-squared, the ICC provides information on the explained variance and
 
 `icc()` calculates the ICC for various mixed model objects, including `stanreg` models...
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 icc(model)
@@ -121,15 +131,15 @@ icc(model)
 
 ...and models of class `brmsfit`.
  
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
+```{r, echo=FALSE}
 model <- insight::download_model("brms_mixed_1")
 ```
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, eval=FALSE}
 library(brms)
 set.seed(123)
 model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
 ```
-```{r, warning=FALSE, message=FALSE}
+```{r}
 icc(model)
 ```
 
@@ -139,7 +149,7 @@ icc(model)
 
 Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). `check_overdispersion()` checks if a count model (including mixed models) is overdispersed or not.
 
-```{r, warning=FALSE, message=TRUE}
+```{r}
 library(glmmTMB)
 data(Salamanders)
 model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
@@ -154,7 +164,7 @@ Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of obser
 
 Use `check_zeroinflation()` to check if zero-inflation is present in the fitted model.
 
-```{r, warning=FALSE, message=TRUE}
+```{r}
 model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(model)
 ```
@@ -165,7 +175,7 @@ A "singular" model fit means that some dimensions of the variance-covariance mat
 
 `check_singularity()` checks mixed models (of class `lme`, `merMod`, `glmmTMB` or `MixMod`) for singularity, and returns `TRUE` if the model fit is singular.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 library(lme4)
 data(sleepstudy)
 
@@ -194,7 +204,7 @@ Remedies to cure issues with singular fits can be found [here](https://easystats
 
 **performance** provides many functions to check model assumptions, like `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To get a comprehensive check, use `check_model()`.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
 check_model(model)
 ```
@@ -205,21 +215,21 @@ check_model(model)
 
 #### Linear model
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
 ```
 
 #### Logistic regression
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
 ```
 
 #### Linear mixed model
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 library(lme4)
 m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
@@ -229,7 +239,7 @@ model_performance(m3)
 
 The `compare_performance()` function can be used to compare the performance and quality of several models (including models of different types).
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 outcome <- gl(3, 1, 9)
 treatment <- gl(3, 3)
@@ -242,7 +252,7 @@ compare_performance(m1, m2, m3, m4)
 
 One can also easily compute and a [**composite index**](https://easystats.github.io/performance/reference/compare_performance.html#details) of model performance and sort the models from the best one to the worse.
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 ```
 
@@ -250,7 +260,7 @@ compare_performance(m1, m2, m3, m4, rank = TRUE)
 
 Finally, we provide convenient visualisation (the `see` package must be installed).
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
@@ -258,7 +268,7 @@ plot(compare_performance(m1, m2, m4, rank = TRUE))
 
 `test_performance()` carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not). 
 
-```{r, warning=FALSE, message=FALSE}
+```{r}
 m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
 m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
 m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)

@@ -1,7 +1,7 @@
 bibentry(
   bibtype="Article",
   title="performance: Assessment of Regression Models Performance",
-  author=c(person("Daniel", "Lüdecke"), person("Dominique", "Makowski"), person("Philip", "Waggoner"), person("Indrajeet", "Patil")),
+  author=c(person("Daniel", "Lüdecke"), person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Indrajeet", "Patil"), person("Philip", "Waggoner")),
   journal="CRAN",
   year="2020",
   note="R package",
@@ -9,7 +9,7 @@ bibentry(
   url="https://easystats.github.io/performance/",
 
   textVersion =
-    paste("Lüdecke, Makowski, Waggoner & Patil (2020). Assessment of Regression Models Performance. CRAN.",
+    paste("Lüdecke, Makowski, Ben-Shachar, Patil, & Waggoner (2020). Assessment of Regression Models Performance. CRAN.",
           "Available from https://easystats.github.io/performance/"
     ),
   mheader = "To cite performance in publications use:"
