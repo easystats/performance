@@ -314,6 +314,7 @@ relevant and appropriate tests based on the input (for instance, whether the
 models are nested or not).
 
 ```{r}
+set.seed(123)
 data(iris)
 
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
@@ -326,5 +327,18 @@ compare_performance(lm1, lm2, lm3, lm4)
 
 test_bf(lm1, lm2, lm3, lm4)
 ```
+
+# Code of Conduct
+
+Please note that the performance project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
+# Contributing
+
+We are happy to receive bug reports, suggestions, questions, and (most of all)
+contributions to fix problems and add features.
+
+Please follow contributing guidelines mentioned here:
+
+<https://easystats.github.io/performance/CONTRIBUTING.html>
 
 ## References

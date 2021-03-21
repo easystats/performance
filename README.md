@@ -132,8 +132,8 @@ model <- stan_glmer(
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (0.89% CI [0.945, 0.962])
-#>      Marginal R2: 0.825 (0.89% CI [0.753, 0.894])
+#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
+#>      Marginal R2: 0.825 (0.89% CI [0.749, 0.889])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -394,6 +394,7 @@ the most relevant and appropriate tests based on the input (for
 instance, whether the models are nested or not).
 
 ``` r
+set.seed(123)
 data(iris)
 
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
@@ -423,6 +424,22 @@ test_bf(lm1, lm2, lm3, lm4)
 #> * Against Denominator: [lm1] Species
 #> *   Bayes Factor Type: BIC approximation
 ```
+
+# Code of Conduct
+
+Please note that the performance project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+# Contributing
+
+We are happy to receive bug reports, suggestions, questions, and (most
+of all) contributions to fix problems and add features.
+
+Please follow contributing guidelines mentioned here:
+
+<https://easystats.github.io/performance/CONTRIBUTING.html>
 
 ## References
 
