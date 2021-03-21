@@ -100,7 +100,7 @@ check_model(model)
 
 ![](figure1.png)
 
-## Computing Quality of Model
+## Computing Quality Indices of Models
 
 <!-- Here I'd start with like some of the individual indices and then finish on
 "you can get them all at once with model_performance - D.M. -->
