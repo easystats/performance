@@ -8,11 +8,11 @@
 ***Test if your model is a good model!***
 
 The primary goal of the **performance** package is to provide utilities
-for computing **indices of model quality** and **goodness of fit**. This
-includes measures like r-squared (R2), root mean squared error (RMSE) or
-intraclass correlation coefficient (ICC) , but also functions to check
-(mixed) models for overdispersion, zero-inflation, convergence or
-singularity.
+for computing **indices of model quality** and **goodness of fit**.
+These include measures like r-squared (R2), root mean squared error
+(RMSE) or intraclass correlation coefficient (ICC) , but also functions
+to check (mixed) models for overdispersion, zero-inflation, convergence
+or singularity.
 
 ## Installation
 
@@ -107,7 +107,7 @@ r2(model)
 The different R-squared measures can also be accessed directly via
 functions like `r2_bayes()`, `r2_coxsnell()` or `r2_nagelkerke()` (see a
 full list of functions
-[here](https://easystats.github.io/performance/reference/index.html)).
+[here](https://easystats.github.io/performance/reference/index.html#section-r-functions)).
 
 For mixed models, the *conditional* and *marginal* R-squared are
 returned. The *marginal R-squared* considers only the variance of the
@@ -132,8 +132,8 @@ model <- stan_glmer(
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
-#>      Marginal R2: 0.824 (0.89% CI [0.748, 0.890])
+#>   Conditional R2: 0.953 (0.89% CI [0.945, 0.962])
+#>      Marginal R2: 0.824 (0.89% CI [0.745, 0.886])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -151,7 +151,7 @@ variance and can be interpreted as “the proportion of the variance
 explained by the grouping structure in the population” (Hox 2010).
 
 `icc()` calculates the ICC for various mixed model objects, including
-`stanreg` models…
+`stanreg` models.
 
 ``` r
 library(lme4)
@@ -203,8 +203,8 @@ check_overdispersion(model)
 
 Overdispersion can be fixed by either modelling the dispersion parameter
 (not possible with all packages), or by choosing a different
-distributional family \[like Quasi-Poisson, or negative binomial, see
-(Gelman and Hill 2007).
+distributional family (like Quasi-Poisson, or negative binomial, see
+(Gelman and Hill 2007)).
 
 #### Check for zero-inflation
 
@@ -263,6 +263,20 @@ check_singularity(model)
 
 Remedies to cure issues with singular fits can be found
 [here](https://easystats.github.io/performance/reference/check_singularity.html).
+\#\#\#\# Check for heteroskedasticity
+
+Linear models assume constant error variance (homoskedasticity).
+
+The `check_heteroscedasticity()` functions assess if this assumption has
+been violated:
+
+``` r
+data(cars)
+model <- lm(dist ~ speed, data = cars)
+
+check_heteroscedasticity(model)
+#> Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.031).
+```
 
 #### Comprehensive visualization of model checks
 
@@ -276,7 +290,7 @@ model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
 check_model(model)
 ```
 
-![](man/figures/unnamed-chunk-14-1.png)<!-- -->
+![](man/figures/unnamed-chunk-15-1.png)<!-- -->
 
 ### Model performance summaries
 
@@ -371,7 +385,7 @@ installed).
 plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
-![](man/figures/unnamed-chunk-20-1.png)<!-- -->
+![](man/figures/unnamed-chunk-21-1.png)<!-- -->
 
 ### Testing models
 

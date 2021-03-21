@@ -80,9 +80,11 @@ There is a nice introduction into the package on [youtube](https://www.youtube.c
 
 #### R-squared
 
-**performance** has a generic `r2()` function, which computes the r-squared for many different models, including mixed effects and Bayesian regression models.
+**performance** has a generic `r2()` function, which computes the r-squared for
+many different models, including mixed effects and Bayesian regression models.
 
-`r2()` returns a list containing values related to the "most appropriate" r-squared for the given model.
+`r2()` returns a list containing values related to the "most appropriate"
+r-squared for the given model.
 
 ```{r}
 model <- lm(mpg ~ wt + cyl, data = mtcars)
@@ -99,9 +101,17 @@ r2(model)
 
 The different R-squared measures can also be accessed directly via functions like `r2_bayes()`, `r2_coxsnell()` or `r2_nagelkerke()` (see a full list of functions [here](https://easystats.github.io/performance/reference/index.html#section-r-functions)).
 
-For mixed models, the _conditional_ and _marginal_ R-squared are returned. The _marginal R-squared_ considers only the variance of the fixed effects and indicates how much of the model's variance is explained by the fixed effects part only. The _conditional R-squared_ takes both the fixed and random effects into account and indicates how much of the model's variance is explained by the "complete" model.
+For mixed models, the _conditional_ and _marginal_ R-squared are returned. The
+_marginal R-squared_ considers only the variance of the fixed effects and
+indicates how much of the model's variance is explained by the fixed effects
+part only. The _conditional R-squared_ takes both the fixed and random effects
+into account and indicates how much of the model's variance is explained by the
+"complete" model.
 
-For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_ random effect variances, thus `r2()` is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects [@johnson_extension_2014; @nakagawa_coefficient_2017].
+For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes the _mean_
+random effect variances, thus `r2()` is also appropriate for mixed models with
+more complex random effects structures, like random slopes or nested random
+effects [@johnson_extension_2014; @nakagawa_coefficient_2017].
 
 ```{r}
 library(rstanarm)
@@ -119,9 +129,12 @@ r2(model)
 
 #### Intraclass Correlation Coefficient (ICC)
 
-Similar to R-squared, the ICC provides information on the explained variance and can be interpreted as "the proportion of the variance explained by the grouping structure in the population" [@hox_multilevel_2010].
+Similar to R-squared, the ICC provides information on the explained variance and
+can be interpreted as "the proportion of the variance explained by the grouping
+structure in the population" [@hox_multilevel_2010].
 
-`icc()` calculates the ICC for various mixed model objects, including `stanreg` models...
+`icc()` calculates the ICC for various mixed model objects, including `stanreg`
+models.
 
 ```{r}
 library(lme4)
@@ -147,7 +160,10 @@ icc(model)
 
 #### Check for overdispersion
 
-Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). `check_overdispersion()` checks if a count model (including mixed models) is overdispersed or not.
+Overdispersion occurs when the observed variance in the data is higher than the
+expected variance from the model assumption (for Poisson, variance roughly
+equals the mean of an outcome). `check_overdispersion()` checks if a count model
+(including mixed models) is overdispersed or not.
 
 ```{r}
 library(glmmTMB)
@@ -156,11 +172,16 @@ model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_overdispersion(model)
 ```
 
-Overdispersion can be fixed by either modelling the dispersion parameter (not possible with all packages), or by choosing a different distributional family [like Quasi-Poisson, or negative binomial, see [@gelman_data_2007].
+Overdispersion can be fixed by either modelling the dispersion parameter (not
+possible with all packages), or by choosing a different distributional family
+(like Quasi-Poisson, or negative binomial, see [@gelman_data_2007]).
 
 #### Check for zero-inflation
 
-Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of observed zeros is larger than the amount of predicted zeros, so the model is _underfitting_ zeros. In such cases, it is recommended to use negative binomial or zero-inflated models.
+Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of
+observed zeros is larger than the amount of predicted zeros, so the model is
+_underfitting_ zeros. In such cases, it is recommended to use negative binomial
+or zero-inflated models.
 
 Use `check_zeroinflation()` to check if zero-inflation is present in the fitted model.
 
@@ -171,9 +192,12 @@ check_zeroinflation(model)
 
 #### Check for singular model fits
 
-A "singular" model fit means that some dimensions of the variance-covariance matrix have been estimated as exactly zero. This often occurs for mixed models with overly complex random effects structures.
+A "singular" model fit means that some dimensions of the variance-covariance
+matrix have been estimated as exactly zero. This often occurs for mixed models
+with overly complex random effects structures.
 
-`check_singularity()` checks mixed models (of class `lme`, `merMod`, `glmmTMB` or `MixMod`) for singularity, and returns `TRUE` if the model fit is singular.
+`check_singularity()` checks mixed models (of class `lme`, `merMod`, `glmmTMB`
+or `MixMod`) for singularity, and returns `TRUE` if the model fit is singular.
 
 ```{r}
 library(lme4)
@@ -199,6 +223,19 @@ check_singularity(model)
 ```
 
 Remedies to cure issues with singular fits can be found [here](https://easystats.github.io/performance/reference/check_singularity.html). 
+#### Check for heteroskedasticity
+
+Linear models assume constant error variance (homoskedasticity).
+
+The `check_heteroscedasticity()` functions assess if this assumption has been
+violated:
+
+```{r}
+data(cars)
+model <- lm(dist ~ speed, data = cars)
+
+check_heteroscedasticity(model)
+```
 
 #### Comprehensive visualization of model checks
 

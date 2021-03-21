@@ -44,14 +44,18 @@
 #'
 #' @details
 #'  \subsection{Interpretation}{
-#'  The ICC can be interpreted as \dQuote{the proportion of the variance explained
-#'  by the grouping structure in the population}. This index goes from 0, if the
-#'  grouping conveys no information, to 1, if all observations in a group are
-#'  identical (Gelman \& Hill, 2007, p. 258). In other word, the ICC
-#'  \dQuote{can also be interpreted as the expected correlation between two
-#'  randomly drawn units that are in the same group} \cite{(Hox 2010: 15)},
-#'  although this definition might not apply to mixed models with more complex
-#'  random effects structures.
+#'  The ICC can be interpreted as \dQuote{the proportion of the variance
+#'  explained by the grouping structure in the population}. The grouping
+#'  structure entails that measurements are organized into groups (e.g., test
+#'  scores in a school can be grouped by classroom if there are multiple
+#'  classrooms and each classroom was administered the same test) and ICC indexes
+#'  how strongly measurements in the same group resemble each other. This index
+#'  goes from 0, if the grouping conveys no information, to 1, if all
+#'  observations in a group are identical (Gelman \& Hill, 2007, p. 258). In
+#'  other word, the ICC \dQuote{can also be interpreted as the expected
+#'  correlation between two randomly drawn units that are in the same group}
+#'  \cite{(Hox 2010: 15)}, although this definition might not apply to mixed
+#'  models with more complex random effects structures.
 #'  }
 #'  \subsection{Calculation}{
 #'  The ICC is calculated by dividing the random effect variance,

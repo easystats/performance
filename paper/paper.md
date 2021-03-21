@@ -88,13 +88,48 @@ overview of plotting functions is available at the *see* website
 
 ## Checking if a Model is Valid
 
+When a model is specified to describe the empirical data, its validity needs to
+be checked by assessing if any of the underlying assumptions are violated. These
+assumptions vary based on the model and *performance* offers a collection of
+functions to check them. We will look at a couple of them before we mention the
+key function that runs a comprehensive suite of checks in one go.
 
-In addition to providing numerical indices of model fits, *performance* also
-provides convenience functions to *visually* assess statistical assumptions for
-regression models. Moreover, these visual checks adjust to the object entered
-and support various regression models, like linear models, linear mixed-effects
-models, their Bayesian equivalents, and more. Here we show what the function
-output for linear models:
+Linear models assume constant error variance (homoskedasticity), and
+`check_heteroscedasticity()` functions in *performance* checks if this
+assumption has been violated:
+
+``` r
+data(cars)
+model <- lm(dist ~ speed, data = cars)
+
+check_heteroscedasticity(model)
+#> Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.031).
+```
+
+Another concern for regression models can be overdispersion, which occurs when
+the observed variance in the data is higher than the expected variance from the
+model assumption. The `check_overdispersion()` in *performance* checks this
+assumption.
+
+```r
+library(glmmTMB)
+data(Salamanders)
+model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_overdispersion(model)
+#> # Overdispersion test
+#> 
+#>        dispersion ratio =    2.946
+#>   Pearson's Chi-Squared = 1873.710
+#>                 p-value =  < 0.001
+```
+
+In addition to providing such numerical indices of model fits, *performance*
+also provides convenience functions to *visually* assess statistical assumptions
+for regression models. Moreover, these visual checks adjust to the object
+entered and support various regression models, like linear models, linear
+mixed-effects models, their Bayesian equivalents, and more. 
+
+Here we show what the function output looks like for linear models:
 
 <!-- TO DO: Regenerate plot once feedback from other has been incorporated -->
 
@@ -107,7 +142,7 @@ check_model(model)
 
 ![](figure1.png)
 
-## Computing Indices of Performance 
+## Computing Quality of Model
 
 <!-- Here I'd start with like some of the individual indices and then finish on
 "you can get them all at once with model_performance - D.M. -->
