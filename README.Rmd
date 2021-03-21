@@ -314,6 +314,7 @@ relevant and appropriate tests based on the input (for instance, whether the
 models are nested or not).
 
 ```{r}
+set.seed(123)
 data(iris)
 
 lm1 <- lm(Sepal.Length ~ Species, data = iris)

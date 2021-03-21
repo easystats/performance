@@ -132,8 +132,8 @@ model <- stan_glmer(
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.961])
-#>      Marginal R2: 0.824 (0.89% CI [0.745, 0.887])
+#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
+#>      Marginal R2: 0.825 (0.89% CI [0.749, 0.889])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -394,6 +394,7 @@ the most relevant and appropriate tests based on the input (for
 instance, whether the models are nested or not).
 
 ``` r
+set.seed(123)
 data(iris)
 
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
