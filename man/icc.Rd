@@ -40,14 +40,14 @@ A list with two values, the adjusted and conditional ICC. For
 ICC as well as the credible intervals for this ICC.
 }
 \description{
-This function calculates the intraclass-correlation coefficient
- (ICC) - sometimes also called \emph{variance partition coefficient}
- (VPC) - for mixed effects models. The ICC can be calculated for all models
- supported by \code{insight::get_variance()}. For models fitted with
- the \strong{brms}-package, \code{icc()} might fail due to the large variety
- of models and families supported by the \strong{brms}-package. In such cases,
- an alternative to the ICC is the \code{variance_decomposition()}, which is
- based on the posterior predictive distribution (see 'Details').
+This function calculates the intraclass-correlation coefficient (ICC) -
+sometimes also called \emph{variance partition coefficient} (VPC) - for mixed
+effects models. The ICC can be calculated for all models supported by
+\code{insight::get_variance()}. For models fitted with the
+\strong{brms}-package, \code{icc()} might fail due to the large variety of
+models and families supported by the \strong{brms}-package. In such cases, an
+alternative to the ICC is the \code{variance_decomposition()}, which is based
+on the posterior predictive distribution (see 'Details').
 }
 \details{
 \subsection{Interpretation}{
@@ -67,24 +67,25 @@ This function calculates the intraclass-correlation coefficient
  residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
  }
  \subsection{Adjusted and conditional ICC}{
- \code{icc()} calculates an adjusted and conditional ICC, which both take
- all sources of uncertainty (i.e. of \emph{all random effects}) into account. While
- the \emph{adjusted ICC} only relates to the random effects, the \emph{conditional ICC}
- also takes the fixed effects variances into account (see \cite{Nakagawa et al. 2017}).
- Typically, the \emph{adjusted} ICC is of interest when the analysis of random
- effects is of interest. \code{icc()} returns a meaningful ICC also for more
- complex random effects structures, like models with random slopes or nested
- design (more than two levels) and is applicable for models with other distributions
- than Gaussian. For more details on the computation of the variances, see
+ \code{icc()} calculates an adjusted and conditional ICC, which both take all
+ sources of uncertainty (i.e. of \emph{all random effects}) into account.
+ While the \emph{adjusted ICC} only relates to the random effects, the
+ \emph{conditional ICC} also takes the fixed effects variances into account
+ (see \cite{Nakagawa et al. 2017}). Typically, the \emph{adjusted} ICC is of
+ interest when the analysis of random effects is of interest. \code{icc()}
+ returns a meaningful ICC also for more complex random effects structures,
+ like models with random slopes or nested design (more than two levels) and
+ is applicable for models with other distributions than Gaussian. For more
+ details on the computation of the variances, see
  \code{?insight::get_variance}.
  }
  \subsection{ICC for unconditional and conditional models}{
  Usually, the ICC is calculated for the null model ("unconditional model").
  However, according to \cite{Raudenbush and Bryk (2002)} or
- \cite{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the ICC
- for full models with covariates ("conditional models") and compare how
- much, e.g., a level-2 variable explains the portion of variation in the grouping
- structure (random intercept).
+ \cite{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the
+ ICC for full models with covariates ("conditional models") and compare how
+ much, e.g., a level-2 variable explains the portion of variation in the
+ grouping structure (random intercept).
  }
  \subsection{ICC for specific group-levels}{
  The proportion of variance for specific levels related to the overall model
@@ -95,19 +96,19 @@ This function calculates the intraclass-correlation coefficient
  }
  \subsection{Variance decomposition for brms-models}{
  If \code{model} is of class \code{brmsfit}, \code{icc()} might fail due to
- the large variety of models and families supported by the \strong{brms} package.
- In such cases, \code{variance_decomposition()} is an alternative ICC measure.
- The function calculates a variance decomposition based on the posterior
- predictive distribution. In this case, first, the draws from the posterior
- predictive distribution \emph{not conditioned} on group-level terms
- (\code{posterior_predict(..., re_formula = NA)}) are calculated as well as
- draws from this distribution \emph{conditioned} on \emph{all random effects}
- (by default, unless specified else in \code{re_formula}) are taken. Then,
- second, the variances for each of these draws are calculated. The "ICC"
- is then the ratio between these two variances. This is the recommended way
- to analyse random-effect-variances for non-Gaussian models. It is then possible
- to compare variances across models, also by specifying different group-level
- terms via the \code{re_formula}-argument.
+ the large variety of models and families supported by the \strong{brms}
+ package. In such cases, \code{variance_decomposition()} is an alternative
+ ICC measure. The function calculates a variance decomposition based on the
+ posterior predictive distribution. In this case, first, the draws from the
+ posterior predictive distribution \emph{not conditioned} on group-level
+ terms (\code{posterior_predict(..., re_formula = NA)}) are calculated as
+ well as draws from this distribution \emph{conditioned} on \emph{all random
+ effects} (by default, unless specified else in \code{re_formula}) are taken.
+ Then, second, the variances for each of these draws are calculated. The
+ "ICC" is then the ratio between these two variances. This is the recommended
+ way to analyse random-effect-variances for non-Gaussian models. It is then
+ possible to compare variances across models, also by specifying different
+ group-level terms via the \code{re_formula}-argument.
  \cr \cr
  Sometimes, when the variance of the posterior predictive distribution is
  very large, the variance ratio in the output makes no sense, e.g. because
@@ -140,9 +141,17 @@ if (require("lme4")) {
 }
 \references{
 \itemize{
- \item Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.
- \item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
- \item Rabe-Hesketh, S., & Skrondal, A. (2012). Multilevel and longitudinal modeling using Stata (3rd ed). College Station, Tex: Stata Press Publication.
- \item Raudenbush, S. W., & Bryk, A. S. (2002). Hierarchical linear models: applications and data analysis methods (2nd ed). Thousand Oaks: Sage Publications.
+ \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
+ (2nd ed). New York: Routledge.
+ \item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The
+ coefficient of determination R2 and intra-class correlation coefficient from
+ generalized linear mixed-effects models revisited and expanded. Journal of
+ The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+ \item Rabe-Hesketh, S., & Skrondal, A. (2012). Multilevel and longitudinal
+ modeling using Stata (3rd ed). College Station, Tex: Stata Press
+ Publication.
+ \item Raudenbush, S. W., & Bryk, A. S. (2002). Hierarchical linear models:
+ applications and data analysis methods (2nd ed). Thousand Oaks: Sage
+ Publications.
  }
 }
