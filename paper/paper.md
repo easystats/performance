@@ -121,21 +121,20 @@ r2(model)
 #>   adj. R2: 0.819
 ```
 
-Example with generalized Bayesian mixed-effects model:
+Example with mixed-effects model:
 
 ```r
-library(rstanarm)
-model <- stan_glmer(
+library(lme4)
+model <- lmer(
   Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  cores = 4
+  data = iris
 )
 
 r2(model)
-#> # Bayesian R2 with Standard Error
+#> # R2 for Mixed Models
 #> 
-#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
-#>      Marginal R2: 0.824 (0.89% CI [0.748, 0.890])
+#>   Conditional R2: 0.933
+#>      Marginal R2: 0.303
 ```
 
 Similar to $R^2$, the Intraclass Correlation Coefficient (ICC) provides information on the explained variance and can be interpreted as the proportion of the variance explained by the grouping structure in the population [@hox2017multilevel]. The `icc()` function in *performance* calculates the ICC for various mixed-effects regression models. 
