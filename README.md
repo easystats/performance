@@ -7,12 +7,19 @@
 
 ***Test if your model is a good model!***
 
-The primary goal of the **performance** package is to provide utilities
-for computing **indices of model quality** and **goodness of fit**.
-These include measures like r-squared (R2), root mean squared error
-(RMSE) or intraclass correlation coefficient (ICC) , but also functions
-to check (mixed) models for overdispersion, zero-inflation, convergence
-or singularity.
+A crucial aspect when building regression models is to evaluate the
+quality of modelfit. It is important to investigate how well models fit
+to the data and which fit indices to report. Functions to create
+diagnostic plots or to compute fit measures do exist, however, mostly
+spread over different packages. There is no unique and consistent
+approach to assess the model quality for different kind of models.
+
+The primary goal of the **performance** package is to fill this gap and
+to provide utilities for computing **indices of model quality** and
+**goodness of fit**. These include measures like r-squared (R2), root
+mean squared error (RMSE) or intraclass correlation coefficient (ICC) ,
+but also functions to check (mixed) models for overdispersion,
+zero-inflation, convergence or singularity.
 
 ## Installation
 
@@ -124,16 +131,12 @@ Schielzeth 2017).
 
 ``` r
 library(rstanarm)
-model <- stan_glmer(
-  Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  cores = 4
-)
+model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
-#>      Marginal R2: 0.825 (0.89% CI [0.749, 0.889])
+#>   Conditional R2: 0.953 (0.89% CI [0.945, 0.962])
+#>      Marginal R2: 0.825 (0.89% CI [0.746, 0.886])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -246,16 +249,12 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
 
 check_singularity(model)
 #> [1] TRUE
@@ -400,8 +399,7 @@ data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
-lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
-          Petal.Length + Petal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
 
 compare_performance(lm1, lm2, lm3, lm4)
 #> # Comparison of Model Performance Indices
@@ -414,14 +412,14 @@ compare_performance(lm1, lm2, lm3, lm4)
 #> lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305
 
 test_bf(lm1, lm2, lm3, lm4)
-#> # Bayes Factors for Model Comparison
+#> Bayes Factors for Model Comparison
 #> 
-#> Model                                                           BF
-#> [lm2] Species + Petal.Length                             3.446e+26
-#> [lm3] Species * Sepal.Width                              4.692e+07
-#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.584e+29
+#>     Model                                                  BF
+#> [2] Species + Petal.Length                             > 1000
+#> [3] Species * Sepal.Width                              > 1000
+#> [4] Species * Sepal.Width + Petal.Length + Petal.Width > 1000
 #> 
-#> * Against Denominator: [lm1] Species
+#> * Against Denominator: [1] Species
 #> *   Bayes Factor Type: BIC approximation
 ```
 
