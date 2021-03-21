@@ -99,7 +99,8 @@
 </h1></div>
 
 <p><strong><em>Test if your model is a good model!</em></strong></p>
-<p>The primary goal of the <strong>performance</strong> package is to provide utilities for computing <strong>indices of model quality</strong> and <strong>goodness of fit</strong>. These include measures like r-squared (R2), root mean squared error (RMSE) or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
+<p>A crucial aspect when building regression models is to evaluate the quality of modelfit. It is important to investigate how well models fit to the data and which fit indices to report. Functions to create diagnostic plots or to compute fit measures do exist, however, mostly spread over different packages. There is no unique and consistent approach to assess the model quality for different kind of models.</p>
+<p>The primary goal of the <strong>performance</strong> package is to fill this gap and to provide utilities for computing <strong>indices of model quality</strong> and <strong>goodness of fit</strong>. These include measures like r-squared (R2), root mean squared error (RMSE) or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -177,16 +178,12 @@
 <p>For frequentist mixed models, <code><a href="reference/r2.html">r2()</a></code> (resp. <code><a href="reference/r2_nakagawa.html">r2_nakagawa()</a></code>) computes the <em>mean</em> random effect variances, thus <code><a href="reference/r2.html">r2()</a></code> is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (Johnson 2014; Nakagawa, Johnson, and Schielzeth 2017).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span>
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span>
-  <span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>,
-  data <span class="op">=</span> <span class="va">iris</span>,
-  cores <span class="op">=</span> <span class="fl">4</span>
-<span class="op">)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; # Bayesian R2 with Standard Error</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])</span>
-<span class="co">#&gt;      Marginal R2: 0.825 (0.89% CI [0.749, 0.889])</span>
+<span class="co">#&gt;   Conditional R2: 0.953 (0.89% CI [0.945, 0.962])</span>
+<span class="co">#&gt;      Marginal R2: 0.825 (0.89% CI [0.746, 0.886])</span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
@@ -269,16 +266,12 @@
 <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size <span class="op">=</span> <span class="fl">180</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">==</span> <span class="va">i</span>
-  <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+    <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">==</span> <span class="va">i</span>
+    <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="co"># fit strange model</span>
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span>
-  <span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span> <span class="op">/</span> <span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,
-  data <span class="op">=</span> <span class="va">sleepstudy</span>
-<span class="op">)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span><span class="op">/</span><span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/check_singularity.html">check_singularity</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span></code></pre></div>
@@ -398,8 +391,7 @@
 <span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="va">lm4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Width</span> <span class="op">+</span> 
-          <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">lm4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Width</span> <span class="op">+</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span>
 <span class="co">#&gt; # Comparison of Model Performance Indices</span>
@@ -412,14 +404,14 @@
 <span class="co">#&gt; lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305</span>
 
 <span class="fu"><a href="reference/test_bf.html">test_bf</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span>
-<span class="co">#&gt; # Bayes Factors for Model Comparison</span>
+<span class="co">#&gt; Bayes Factors for Model Comparison</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Model                                                           BF</span>
-<span class="co">#&gt; [lm2] Species + Petal.Length                             3.446e+26</span>
-<span class="co">#&gt; [lm3] Species * Sepal.Width                              4.692e+07</span>
-<span class="co">#&gt; [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.584e+29</span>
+<span class="co">#&gt;     Model                                                  BF</span>
+<span class="co">#&gt; [2] Species + Petal.Length                             &gt; 1000</span>
+<span class="co">#&gt; [3] Species * Sepal.Width                              &gt; 1000</span>
+<span class="co">#&gt; [4] Species * Sepal.Width + Petal.Length + Petal.Width &gt; 1000</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; * Against Denominator: [lm1] Species</span>
+<span class="co">#&gt; * Against Denominator: [1] Species</span>
 <span class="co">#&gt; *   Bayes Factor Type: BIC approximation</span></code></pre></div>
 </div>
 </div>
