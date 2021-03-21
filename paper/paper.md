@@ -43,10 +43,10 @@ affiliations:
 # Summary
 
 A crucial aspect in statistical analysis, particularly with regression models,
-is to evaluate the quality of fit. During data analysis, researchers should
+is to evaluate the quality of modelfit. During data analysis, researchers should
 investigate how well models fit to the data to find out whether the best model
-has been chosen. In the context of presenting results, fit indices should be
-reported, so that readers can judge the quality of regression models. Functions
+has been chosen. In the context of reporting results, fit indices should be
+mentioned, so that readers can judge the quality of regression models. Functions
 to create diagnostic plots or to compute fit measures do exist, however, these
 are located in many different packages, and there is no unique and consistent
 approach to assess the model quality for different kind of models. This makes it
@@ -59,15 +59,15 @@ any packages for specific regression models exist at all.
 measures to assess model quality, which are not directly provided by R's *base*
 or *stats* packages. These include measures like $R^2$, intraclass correlation
 coefficient, root mean squared error, etc., or functions to check models for
-overdispersion, singularity or zero-inflation, and more. Functions apply to a
-large variety of regression models, including generalized linear models, mixed
-effects models, and Bayesian models.
+overdispersion, singularity or zero-inflation, and more. These functions support
+a large variety of regression models, including generalized linear models,
+mixed-effects models, their Bayesian cousins, and more.
 
 *performance* is part of the
 [*easystats*](https://github.com/easystats/performance) ecosystem, a
 collaborative project created to facilitate the usage of R for statistical
-analyses [@benshachar2020effecsize; @ludecke2020see; @makowski2019bayetestR;
-@Makowski2020].
+analyses [@benshachar2020effectsize; @ludecke2020see; @Lüdecke2020parameters;
+@makowski2019bayetestR; @Makowski2020correlation].
 
 # Comparison to other Packages
 
@@ -77,7 +77,7 @@ analyses [@benshachar2020effecsize; @ludecke2020see; @makowski2019bayetestR;
 
 - *car* [@car]
 
-- *broom::glance()* [robinson_broom_2020]
+- *broom::glance()* [@robinson_broom_2020]
 
 # Features
 
@@ -87,6 +87,7 @@ overview of plotting functions is available at the *see* website
 (https://easystats.github.io/see/articles/performance.html).
 
 ## Checking if a Model is Valid
+
 
 In addition to providing numerical indices of model fits, *performance* also
 provides convenience functions to *visually* assess statistical assumptions for
@@ -109,14 +110,72 @@ check_model(model)
 ## Computing Indices of Performance 
 
 <!-- Here I'd start with like some of the individual indices and then finish on
-"you can get them all at once with model_performance -->
+"you can get them all at once with model_performance - D.M. -->
 
-The `model_performance()` function is the workhorse of this package and allows
-you to extract a comprehensive set of model fit indices from various models in a
-consistent way. Depending on the regression model object, the list of computed
-indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
+*performance* offers a number of indices to assess the goodness of fit of a
+model. We will discuss only a few before discussing a key function that
+returns all of these indices in one fell swoop.
 
-Example with linear model
+For example, $R^2$, also known as the coefficient of determination, is a popular
+statistical measure to gauges how much of the variance in the dependent variable
+is accounted for by the specified model. The `r2()` function in *performance*
+can compute this index for a wide variety of regression models. Depending on the
+model, $R^2$, pseudo-$R^2$, or marginal / adjusted $R^2$, etc. values are
+returned.
+
+Example with linear regression model:
+
+```r
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+
+r2(model)
+#> # R2 for Linear Regression
+#> 
+#>        R2: 0.830
+#>   adj. R2: 0.819
+```
+
+Example with generalized Bayesian mixed-effects model:
+
+```r
+library(rstanarm)
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  cores = 4
+)
+
+r2(model)
+#> # Bayesian R2 with Standard Error
+#> 
+#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
+#>      Marginal R2: 0.824 (0.89% CI [0.748, 0.890])
+```
+
+Similar to $R^2$, the Intraclass Correlation Coefficient (ICC) provides
+information on the explained variance and can be interpreted as the proportion
+of the variance explained by the grouping structure in the population
+[@hox2017multilevel]. The `icc()` function in *performance* calculates the ICC
+for various mixed-effects regression models.
+
+``` r
+library(brms)
+set.seed(123)
+model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
+
+icc(model)
+#> # Intraclass Correlation Coefficient
+#> 
+#>      Adjusted ICC: 0.930
+#>   Conditional ICC: 0.771
+```
+
+The `model_performance()` function is the workhorse of this package when it
+comes to extracting a comprehensive set of model fit indices from various models
+in a consistent manner. Depending on the regression model object, the list of
+computed indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
+
+Example with linear model:
 
 ``` r
 m1 <- lm(mpg ~ wt + cyl, data = mtcars)
@@ -128,7 +187,7 @@ model_performance(m1)
 #> 156.010 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568
 ```
 
-Example with linear mixed model:
+Example with linear mixed-effects model:
 
 ``` r
 library(lme4)

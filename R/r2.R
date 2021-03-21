@@ -1,8 +1,9 @@
 #' @title Compute the model's R2
 #' @name r2
 #'
-#' @description Calculate the R2 value for different model objects. Depending
-#'   on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.
+#' @description Calculate the R2, also known as the coefficient of
+#'   determination, value for different model objects. Depending on the model,
+#'   R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
 #' @param ... Arguments passed down to the related r2-methods.
@@ -20,7 +21,7 @@
 #' }
 #'
 #' @note If there is no \code{r2()}-method defined for the given model class,
-#'   \code{r2()} tries to return a "genericE r2 value, calculated as following:
+#'   \code{r2()} tries to return a "generic r2 value, calculated as following:
 #'   \code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
 #'
 #' @seealso \code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kullback}},
@@ -254,11 +255,6 @@ r2.betaor <- r2.logitmfx
 
 
 
-
-
-
-
-
 # Cox & Snell R2 ---------------------
 
 
@@ -272,8 +268,6 @@ r2.crch <- r2.BBreg
 
 #' @export
 r2.bayesx <- r2.BBreg
-
-
 
 
 
@@ -343,10 +337,6 @@ r2.zerotrunc <- r2.hurdle
 
 #' @export
 r2.zeroinfl <- r2.hurdle
-
-
-
-
 
 
 # Nakagawa R2 ----------------------
@@ -429,10 +419,6 @@ r2.sem <- function(model, ...) {
 
 
 
-
-
-
-
 # Bayes R2 ------------------------
 
 
@@ -447,10 +433,6 @@ r2.stanreg <- r2.brmsfit
 
 #' @export
 r2.BFBayesFactor <- r2.brmsfit
-
-
-
-
 
 
 # Other methods ------------------------------
