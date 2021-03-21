@@ -14,39 +14,44 @@ or \code{glm.nb} (package \pkg{MASS}).}
 }
 \value{
 A list with results from the overdispersion test, like chi-squared
- statistics, p-value or dispersion ratio.
+  statistics, p-value or dispersion ratio.
 }
 \description{
-\code{check_overdispersion()} checks generalized linear (mixed) models
-   for overdispersion.
+\code{check_overdispersion()} checks generalized linear (mixed)
+  models for overdispersion.
 }
 \details{
-Overdispersion occurs when the observed variance is higher than
-the variance of a theoretical model. For Poisson models, variance increases
-with the mean, thus, variance usually (roughly) equals the mean value. If
-the variance is much higher, the data are "overdispersed".
+Overdispersion occurs when the observed variance is higher than the
+  variance of a theoretical model. For Poisson models, variance increases
+  with the mean and, therefore, variance usually (roughly) equals the mean
+  value. If the variance is much higher, the data are "overdispersed".
+
 \subsection{Interpretation of the Dispersion Ratio}{
-If the dispersion ratio is close to one, a Poisson model fits well
-to the data. Dispersion ratios larger than one indicate overdispersion,
-thus a negative binomial model or similar might fit better to the data.
-A p-value < .05 indicates overdispersion.
+If the dispersion ratio is close to one, a Poisson model fits well to the
+data. Dispersion ratios larger than one indicate overdispersion, thus a
+negative binomial model or similar might fit better to the data. A p-value <
+.05 indicates overdispersion.
 }
+
 \subsection{Overdispersion in Poisson Models}{
-For Poisson models, the overdispersion test is based on the code
-from \cite{Gelman and Hill (2007), page 115}.
+For Poisson models, the overdispersion test is based on the code from
+\cite{Gelman and Hill (2007), page 115}.
 }
+
 \subsection{Overdispersion in Mixed Models}{
 For \code{merMod}- and \code{glmmTMB}-objects, \code{check_overdispersion()}
-is based on the code in the \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
-section \emph{How can I deal with overdispersion in GLMMs?}. Note that
-this function only returns an \emph{approximate} estimate of an
-overdispersion parameter, and is probably inaccurate for zero-inflated
-mixed models (fitted with \code{glmmTMB}).
+is based on the code in the
+\href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
+section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
+function only returns an \emph{approximate} estimate of an overdispersion
+parameter, and is probably inaccurate for zero-inflated mixed models (fitted
+with \code{glmmTMB}).
 }
+
 \subsection{How to fix Overdispersion}{
-Overdispersion can be fixed by either modeling the dispersion parameter,
-or by choosing a different distributional family (like Quasi-Poisson,
-or negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
+Overdispersion can be fixed by either modeling the dispersion parameter, or
+by choosing a different distributional family (like Quasi-Poisson, or
+negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
 }
 }
 \examples{
@@ -65,7 +70,10 @@ if (require("glmmTMB")) {
 }
 \references{
 \itemize{
- \item Bolker B et al. (2017): \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ.}
- \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
+ \item Bolker B et al. (2017):
+ \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ.}
+ \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+ multilevel/hierarchical models. Cambridge; New York: Cambridge University
+ Press.
  }
 }

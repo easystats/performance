@@ -609,7 +609,7 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
   if ("LogLik" %in% names(x)) {
     best <- which.max(x$LogLik)
     footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
-  } else{
+  } else {
     footer <- NULL
   }
 
@@ -637,9 +637,11 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     lapply(1:length(x), function(i) {
       out <- x[[i]]
       attr(out, "table_caption") <- c(sprintf("\nComponent %i", i), "red")
-      attr(out, "table_footer") <- c(sprintf("\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-                                             attributes(out)$item_intercorrelation,
-                                             attributes(out)$cronbachs_alpha), "yellow")
+      attr(out, "table_footer") <- c(sprintf(
+        "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+        attributes(out)$item_intercorrelation,
+        attributes(out)$cronbachs_alpha
+      ), "yellow")
 
       out
     }),

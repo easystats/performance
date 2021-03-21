@@ -8,11 +8,11 @@
 ***Test if your model is a good model!***
 
 The primary goal of the **performance** package is to provide utilities
-for computing **indices of model quality** and **goodness of fit**. This
-includes measures like r-squared (R2), root mean squared error (RMSE) or
-intraclass correlation coefficient (ICC) , but also functions to check
-(mixed) models for overdispersion, zero-inflation, convergence or
-singularity.
+for computing **indices of model quality** and **goodness of fit**.
+These include measures like r-squared (R2), root mean squared error
+(RMSE) or intraclass correlation coefficient (ICC) , but also functions
+to check (mixed) models for overdispersion, zero-inflation, convergence
+or singularity.
 
 ## Installation
 
@@ -107,7 +107,7 @@ r2(model)
 The different R-squared measures can also be accessed directly via
 functions like `r2_bayes()`, `r2_coxsnell()` or `r2_nagelkerke()` (see a
 full list of functions
-[here](https://easystats.github.io/performance/reference/index.html)).
+[here](https://easystats.github.io/performance/reference/index.html#section-r-functions)).
 
 For mixed models, the *conditional* and *marginal* R-squared are
 returned. The *marginal R-squared* considers only the variance of the
@@ -132,8 +132,8 @@ model <- stan_glmer(
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])
-#>      Marginal R2: 0.824 (0.89% CI [0.748, 0.890])
+#>   Conditional R2: 0.953 (0.89% CI [0.945, 0.962])
+#>      Marginal R2: 0.825 (0.89% CI [0.753, 0.894])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -151,7 +151,7 @@ variance and can be interpreted as “the proportion of the variance
 explained by the grouping structure in the population” (Hox 2010).
 
 `icc()` calculates the ICC for various mixed model objects, including
-`stanreg` models…
+`stanreg` models.
 
 ``` r
 library(lme4)
@@ -203,8 +203,8 @@ check_overdispersion(model)
 
 Overdispersion can be fixed by either modelling the dispersion parameter
 (not possible with all packages), or by choosing a different
-distributional family \[like Quasi-Poisson, or negative binomial, see
-(Gelman and Hill 2007).
+distributional family (like Quasi-Poisson, or negative binomial, see
+(Gelman and Hill 2007)).
 
 #### Check for zero-inflation
 
@@ -263,6 +263,20 @@ check_singularity(model)
 
 Remedies to cure issues with singular fits can be found
 [here](https://easystats.github.io/performance/reference/check_singularity.html).
+\#\#\#\# Check for heteroskedasticity
+
+Linear models assume constant error variance (homoskedasticity).
+
+The `check_heteroscedasticity()` functions assess if this assumption has
+been violated:
+
+``` r
+data(cars)
+model <- lm(dist ~ speed, data = cars)
+
+check_heteroscedasticity(model)
+#> Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.031).
+```
 
 #### Comprehensive visualization of model checks
 
@@ -276,7 +290,7 @@ model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
 check_model(model)
 ```
 
-![](man/figures/unnamed-chunk-14-1.png)<!-- -->
+![](man/figures/unnamed-chunk-15-1.png)<!-- -->
 
 ### Model performance summaries
 
@@ -371,25 +385,43 @@ installed).
 plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
-![](man/figures/unnamed-chunk-20-1.png)<!-- -->
+![](man/figures/unnamed-chunk-21-1.png)<!-- -->
 
 ### Testing models
 
-`test_performance()` carries out the most relevant and appropriate tests
-based on the input (for instance, whether the models are nested or not).
+`test_performance()` (and `test_bf`, its Bayesian sister) carries out
+the most relevant and appropriate tests based on the input (for
+instance, whether the models are nested or not).
 
 ``` r
-m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
-m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+data(iris)
 
-test_performance(m1, m2, m3)
-#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
-#> ------------------------------------------------------------
-#> m1   |    lm |        |        |            |       |       
-#> m2   |    lm |  0.601 |   0.03 |     0.062  |  3.99 | 0.057 
-#> m3   |    lm | > 1000 |   0.16 |     < .001 | 29.35 | < .001
-#> Models were detected as nested and are compared in sequential order.
+lm1 <- lm(Sepal.Length ~ Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
+          Petal.Length + Petal.Width, data = iris)
+
+compare_performance(lm1, lm2, lm3, lm4)
+#> # Comparison of Model Performance Indices
+#> 
+#> Name | Model |     AIC |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
+#> --------------------------------------------------------------------
+#> lm1  |    lm | 231.452 | 243.494 | 0.619 |     0.614 | 0.510 | 0.515
+#> lm2  |    lm | 106.233 | 121.286 | 0.837 |     0.833 | 0.333 | 0.338
+#> lm3  |    lm | 187.092 | 208.167 | 0.727 |     0.718 | 0.431 | 0.440
+#> lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305
+
+test_bf(lm1, lm2, lm3, lm4)
+#> # Bayes Factors for Model Comparison
+#> 
+#> Model                                                           BF
+#> [lm2] Species + Petal.Length                             3.446e+26
+#> [lm3] Species * Sepal.Width                              4.692e+07
+#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.584e+29
+#> 
+#> * Against Denominator: [lm1] Species
+#> *   Bayes Factor Type: BIC approximation
 ```
 
 ## References

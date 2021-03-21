@@ -51,12 +51,12 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
 #' library(performance)
 #' model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
 #' if (require("ggplot2") && require("see")) {
 #'   pp_check(model)
-#' }}
+#' }
+#'
 #' @importFrom stats simulate
 #' @importFrom insight get_response
 #' @export
@@ -72,7 +72,9 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula
     {
       stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
     },
-    error = function(e) { NULL }
+    error = function(e) {
+      NULL
+    }
   )
 
   if (is.null(out)) {

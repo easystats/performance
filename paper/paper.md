@@ -71,13 +71,11 @@ analyses [@benshachar2020effectsize; @ludecke2020see; @Lüdecke2020parameters;
 
 # Comparison to other Packages
 
-- *lmtest* [@lmtest]
-
-- *MuMIn::r.squaredGLMM()* [@MuMin]
-
-- *car* [@car]
-
-- *broom::glance()* [@robinson_broom_2020]
+Compared to other packages (e.g., *lmtest* [@lmtest],  *MuMIn::r.squaredGLMM()*
+[@MuMin], *car* [@car], *broom::glance()* [@robinson_broom_2020]), *performance*
+package offers functions for *both* checking validity and quality of the model,
+and it does so systematically and comprehensively for linear, mixed-effects,
+Baysian, etc. regression model objects.
 
 # Features
 
@@ -88,13 +86,48 @@ overview of plotting functions is available at the *see* website
 
 ## Checking if a Model is Valid
 
+When a model is specified to describe the empirical data, its validity needs to
+be checked by assessing if any of the underlying assumptions are violated. These
+assumptions vary based on the model and *performance* offers a collection of
+functions to check them. We will look at a couple of them before we mention the
+key function that runs a comprehensive suite of checks in one go.
 
-In addition to providing numerical indices of model fits, *performance* also
-provides convenience functions to *visually* assess statistical assumptions for
-regression models. Moreover, these visual checks adjust to the object entered
-and support various regression models, like linear models, linear mixed-effects
-models, their Bayesian equivalents, and more. Here we show what the function
-output for linear models:
+Linear models assume constant error variance (homoskedasticity), and
+`check_heteroscedasticity()` functions in *performance* checks if this
+assumption has been violated:
+
+``` r
+data(cars)
+model <- lm(dist ~ speed, data = cars)
+
+check_heteroscedasticity(model)
+#> Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.031).
+```
+
+Another concern for regression models can be overdispersion, which occurs when
+the observed variance in the data is higher than the expected variance from the
+model assumption. The `check_overdispersion()` in *performance* checks this
+assumption.
+
+```r
+library(glmmTMB)
+data(Salamanders)
+model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_overdispersion(model)
+#> # Overdispersion test
+#> 
+#>        dispersion ratio =    2.946
+#>   Pearson's Chi-Squared = 1873.710
+#>                 p-value =  < 0.001
+```
+
+In addition to providing such numerical indices of model fits, *performance*
+also provides convenience functions to *visually* assess statistical assumptions
+for regression models. Moreover, these visual checks adjust to the object
+entered and support various regression models, like linear models, linear
+mixed-effects models, their Bayesian equivalents, and more. 
+
+Here we show what the function output looks like for linear models:
 
 <!-- TO DO: Regenerate plot once feedback from other has been incorporated -->
 
@@ -107,7 +140,7 @@ check_model(model)
 
 ![](figure1.png)
 
-## Computing Indices of Performance 
+## Computing Quality of Model
 
 <!-- Here I'd start with like some of the individual indices and then finish on
 "you can get them all at once with model_performance - D.M. -->
@@ -251,7 +284,7 @@ instance, which model to keep or drop) can often be hard, as the indices can
 give conflicting suggestions. Additionally, it is sometimes unclear which index
 to favour in the given context.
 
-This is one of the reason why tests are useful, as they facilitate decisions via
+This is one of the reason why **tests** are useful, as they facilitate decisions via
 "significance" indices, like *p*-values (in Frequentist framework) or [Bayes
 Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in
 Bayesian framework).
@@ -272,10 +305,20 @@ test_performance(lm1, lm2, lm3, lm4)
 ```
 
 For Bayesian framework, *performance* also provides `test_bf()` function to
-compare models.
+compare models:
 
-An overview of different test functions is [available
-here](https://easystats.github.io/performance/reference/test_performance.html).
+```r
+test_bf(lm1, lm2, lm3, lm4)
+#> # Bayes Factors for Model Comparison
+#> 
+#> Model                                                           BF
+#> [lm2] Species + Petal.Length                             3.446e+26
+#> [lm3] Species * Sepal.Width                              4.692e+07
+#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.584e+29
+#> 
+#> * Against Denominator: [lm1] Species
+#> *   Bayes Factor Type: BIC approximation
+```
 
 # Licensing and Availability
 

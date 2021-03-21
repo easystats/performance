@@ -39,9 +39,11 @@ print_md.check_itemscale <- function(x, digits = 2, ...) {
     lapply(1:length(x), function(i) {
       out <- x[[i]]
       attr(out, "caption") <- sprintf("Component %i", i)
-      attr(out, "footer") <- sprintf("Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-                                     attributes(out)$item_intercorrelation,
-                                     attributes(out)$cronbachs_alpha)
+      attr(out, "footer") <- sprintf(
+        "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+        attributes(out)$item_intercorrelation,
+        attributes(out)$cronbachs_alpha
+      )
       out
     }),
     digits = digits,

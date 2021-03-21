@@ -79,12 +79,12 @@ its alias \code{check_posterior_predictions()}), which just calls
 should work with \code{posterior_predictive_check()}.
 }
 \examples{
-\dontrun{
 library(performance)
 model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
 if (require("ggplot2") && require("see")) {
   pp_check(model)
-}}
+}
+
 }
 \references{
 \itemize{
