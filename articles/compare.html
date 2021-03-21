@@ -19,7 +19,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Compare, Test, and Select Models">
 <meta property="og:description" content="performance">
-<meta property="og:image" content="/logo.png">
+<meta property="og:image" content="https://easystats.github.io/performance/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -106,9 +106,9 @@
 <div id="comparing-indices-of-model-performance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comparing-indices-of-model-performance" class="anchor"></a>Comparing Indices of Model Performance</h2>
-<p>The eponymous function from the package, <a href="https://easystats.github.io/performance/reference/model_performance.html" class="external-link"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit).</p>
+<p>The eponymous function from the package, <a href="https://easystats.github.io/performance/reference/model_performance.html"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/" class="external-link">performance</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># for pipe operator</span>
 
@@ -134,7 +134,7 @@
 <td align="center">0.41</td>
 </tr></tbody>
 </table>
-<p>But for multiple models, one can obtain a useful table to compare these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html" class="external-link"><code>compare_performance()</code></a> function.</p>
+<p>But for multiple models, one can obtain a useful table to compare these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html"><code>compare_performance()</code></a> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -242,7 +242,7 @@
 </table>
 <p>Each model is compared to model1.</p>
 <p>However, these tests also have strong limitations and shortcomings, and cannot be used as the <strong>one criterion to rule them all</strong>!</p>
-<p>You can find more information on how these tests <a href="https://easystats.github.io/performance/reference/test_performance.html" class="external-link"><strong>here</strong></a>.</p>
+<p>You can find more information on how these tests <a href="https://easystats.github.io/performance/reference/test_performance.html"><strong>here</strong></a>.</p>
 </div>
 <div id="experimenting" class="section level2">
 <h2 class="hasAnchor">
@@ -316,7 +316,7 @@
 </tbody>
 </table>
 <p>Note that, since these are Bayesian regression models, the function automatically picked up the appropriate indices to compare!</p>
-<p>If you are unfamiliar with some of these, explore more <a href="https://easystats.github.io/performance/reference/looic.html" class="external-link">here</a>.</p>
+<p>If you are unfamiliar with some of these, explore more <a href="https://easystats.github.io/performance/reference/looic.html">here</a>.</p>
 <p><strong>Now it’s your turn to play!</strong> :)</p>
 </div>
 </div>
