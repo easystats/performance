@@ -42,31 +42,58 @@ affiliations:
 
 # Summary
 
-A crucial aspect in statistical analysis, particularly with regression models, is to evaluate the quality of fit. During data analysis, researchers should investigate how well models fit to the data to find out whether the best model has been chosen. In the context of presenting results, fit indices should be reported, so that readers can judge the quality of regression models. Functions to create diagnostic plots or to compute fit measures do exist, however, these are located in many different packages, and there is no unique and consistent approach to assess the model quality for different kind of models. This makes it hard for researchers to discover the package they need or to find out whether any packages for specific regression models exist at all.
+A crucial aspect in statistical analysis, particularly with regression models,
+is to evaluate the quality of fit. During data analysis, researchers should
+investigate how well models fit to the data to find out whether the best model
+has been chosen. In the context of presenting results, fit indices should be
+reported, so that readers can judge the quality of regression models. Functions
+to create diagnostic plots or to compute fit measures do exist, however, these
+are located in many different packages, and there is no unique and consistent
+approach to assess the model quality for different kind of models. This makes it
+hard for researchers to discover the package they need or to find out whether
+any packages for specific regression models exist at all.
 
 # Aims of the Package
 
-*performance* is an R-package [@rcore] that provides utilities for computing measures to assess model quality, which are not directly provided by R's *base* or *stats* packages. These include measures like $R^2$, intraclass correlation coefficient, root mean squared error, etc., or functions to check models for overdispersion, singularity or zero-inflation, and more. Functions apply to a large variety of regression models, including generalized linear models, mixed effects models, and Bayesian models.
+*performance* is an R-package [@rcore] that provides utilities for computing
+measures to assess model quality, which are not directly provided by R's *base*
+or *stats* packages. These include measures like $R^2$, intraclass correlation
+coefficient, root mean squared error, etc., or functions to check models for
+overdispersion, singularity or zero-inflation, and more. Functions apply to a
+large variety of regression models, including generalized linear models, mixed
+effects models, and Bayesian models.
 
-*performance* is part of the [*easystats*](https://github.com/easystats/performance) ecosystem, a collaborative project created to facilitate the usage of R for statistical analyses [@benshachar2020effecsize; @ludecke2020see; @makowski2019bayetestR; @Makowski2020].
+*performance* is part of the
+[*easystats*](https://github.com/easystats/performance) ecosystem, a
+collaborative project created to facilitate the usage of R for statistical
+analyses [@benshachar2020effecsize; @ludecke2020see; @makowski2019bayetestR;
+@Makowski2020].
 
 # Comparison to other Packages
 
 - *lmtest* [@lmtest]
-- *MuMIn::r.squaredGLMM()* [@MuMin]
-- *car* [@car]
-- *broom::glance()* [robinson_broom_2020]
 
+- *MuMIn::r.squaredGLMM()* [@MuMin]
+
+- *car* [@car]
+
+- *broom::glance()* [robinson_broom_2020]
 
 # Features
 
-*performance* functions also include plotting capabilities via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see]. A complete overview of plotting functions is available at the *see* website (https://easystats.github.io/see/articles/performance.html).
-
+*performance* functions also include plotting capabilities via the [*see*
+package](https://easystats.github.io/see/) [@ludecke2020see]. A complete
+overview of plotting functions is available at the *see* website
+(https://easystats.github.io/see/articles/performance.html).
 
 ## Checking if a Model is Valid
 
-In addition to providing numerical indices of model fits, *performance* also provides convenience functions to *visually* assess statistical assumptions for regression models. Moreover, these visual checks adjust to the object entered and support various regression models, like linear models, linear mixed-effects models, their Bayesian equivalents, and more.
-Here we show what the function output for linear models:
+In addition to providing numerical indices of model fits, *performance* also
+provides convenience functions to *visually* assess statistical assumptions for
+regression models. Moreover, these visual checks adjust to the object entered
+and support various regression models, like linear models, linear mixed-effects
+models, their Bayesian equivalents, and more. Here we show what the function
+output for linear models:
 
 <!-- TO DO: Regenerate plot once feedback from other has been incorporated -->
 
@@ -79,12 +106,15 @@ check_model(model)
 
 ![](figure1.png)
 
-
 ## Computing Indices of Performance 
 
-<!-- Here I'd start with like some of the individual indices and then finish on "you can get them all at once with model_performance -->
+<!-- Here I'd start with like some of the individual indices and then finish on
+"you can get them all at once with model_performance -->
 
-The `model_performance()` function is the workhorse of this package and allows you to extract a comprehensive set of model fit indices from various models in a consistent way. Depending on the regression model object, the list of computed indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
+The `model_performance()` function is the workhorse of this package and allows
+you to extract a comprehensive set of model fit indices from various models in a
+consistent way. Depending on the regression model object, the list of computed
+indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
 
 Example with linear model
 
@@ -111,15 +141,15 @@ model_performance(m3)
 #> 1755.628 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
 ```
 
-
-
 ## Comparing Multiple Models 
 
-<!-- Here I'd build upon it: you can also compare these indices. Here I'd mention the radar plot etc. -->
+<!-- Here I'd build upon it: you can also compare these indices. Here I'd
+mention the radar plot etc. -->
 
-
-For multiple models, one can obtain a useful table to compare these indices
-at a glance using the [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html) function.
+For multiple models, one can obtain a useful table to compare these indices at a
+glance using the
+[`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html)
+function.
 
 ```r
 data(iris)
@@ -141,9 +171,8 @@ compare_performance(lm1, lm2, lm3, lm4)
 #> lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305
 ```
 
-
-Similarly, in addition to the formal tests to compare several models, *performance* also provides visual ways to compare model fit indices. 
-
+Similarly, in addition to the formal tests to compare several models,
+*performance* also provides visual ways to compare model fit indices.
 
 ```r
 library(see)
@@ -154,18 +183,23 @@ plot(compare_performance(lm1, lm2, lm3, lm4))
 
 ![](figure2.png)
 
-
-
 ## Testing Models
 
 <!-- Here I'd end with the actual tests -->
 
+While **comparing** these indices is often useful, making a decision (for
+instance, which model to keep or drop) can often be hard, as the indices can
+give conflicting suggestions. Additionally, it is sometimes unclear which index
+to favour in the given context.
 
-While **comparing** these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.
+This is one of the reason why tests are useful, as they facilitate decisions via
+"significance" indices, like *p*-values (in Frequentist framework) or [Bayes
+Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in
+Bayesian framework).
 
-This is one of the reason why tests are useful, as they facilitate decisions via  "significance" indices, like *p*-values (in Frequentist framework) or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in Bayesian framework).
-
-The generic `test_performance()` runs the most relevant and appropriate tests based on the input. For instance, in the example below, the results from *Vuong's Test* are displayed:
+The generic `test_performance()` runs the most relevant and appropriate tests
+based on the input. For instance, in the example below, the results from
+*Vuong's Test* are displayed:
 
 ```r
 test_performance(lm1, lm2, lm3, lm4)
@@ -178,19 +212,27 @@ test_performance(lm1, lm2, lm3, lm4)
 #> Each model is compared to lm1.
 ```
 
-For Bayesian framework, *performance* also provides `test_bf()` function to compare models.
+For Bayesian framework, *performance* also provides `test_bf()` function to
+compare models.
 
-An overview of different test functions is [available here](https://easystats.github.io/performance/reference/test_performance.html).
-
-
-
+An overview of different test functions is [available
+here](https://easystats.github.io/performance/reference/test_performance.html).
 
 # Licensing and Availability
 
-*performance* is licensed under the GNU General Public License (v3.0), with all source code stored at GitHub (https://github.com/easystats/performance), and with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests/tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
+*performance* is licensed under the GNU General Public License (v3.0), with all
+source code stored at GitHub (https://github.com/easystats/performance), and
+with a corresponding issue tracker for bug reporting and feature enhancements.
+In the spirit of honest and open science, we encourage requests/tips for fixes,
+feature updates, as well as general questions and concerns via direct
+interaction with contributors and developers.
 
 # Acknowledgments
 
-*performance* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we would like to thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
+*performance* is part of the collaborative
+[*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we would
+like to thank the [members of
+easystats](https://github.com/orgs/easystats/people) as well as the users.
 
 # References
+
