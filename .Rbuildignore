@@ -16,3 +16,5 @@
 ^WIP/.
 ^paper/.
 ^.github/.
+^CODE_OF_CONDUCT\.md$
+^\.github$

@@ -267,4 +267,17 @@ m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 test_performance(m1, m2, m3)
 ```
 
+# Code of Conduct
+
+Please note that the performance project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
+# Contributing
+
+We are happy to receive bug reports, suggestions, questions, and (most of all)
+contributions to fix problems and add features.
+
+Please follow contributing guidelines mentioned here:
+
+<https://easystats.github.io/performance/CONTRIBUTING.html>
+
 ## References
