@@ -84,7 +84,9 @@ library(performance)
 model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
 if (require("ggplot2") && require("see")) {
   pp_check(model)
-}}
+}
+}
+
 }
 \references{
 \itemize{

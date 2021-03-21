@@ -239,7 +239,9 @@ check_heteroscedasticity(model)
 
 #### Comprehensive visualization of model checks
 
-**performance** provides many functions to check model assumptions, like `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To get a comprehensive check, use `check_model()`.
+**performance** provides many functions to check model assumptions, like
+`check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To
+get a comprehensive check, use `check_model()`.
 
 ```{r}
 model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
@@ -248,7 +250,9 @@ check_model(model)
 
 ### Model performance summaries
 
-`model_performance()` computes indices of model performance for regression models. Depending on the model object, typical indices might be r-squared, AIC, BIC, RMSE, ICC or LOOIC.
+`model_performance()` computes indices of model performance for regression
+models. Depending on the model object, typical indices might be r-squared, AIC,
+BIC, RMSE, ICC or LOOIC.
 
 #### Linear model
 
@@ -274,7 +278,8 @@ model_performance(m3)
 
 ### Models comparison
 
-The `compare_performance()` function can be used to compare the performance and quality of several models (including models of different types).
+The `compare_performance()` function can be used to compare the performance and
+quality of several models (including models of different types).
 
 ```{r}
 counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
@@ -295,7 +300,8 @@ compare_performance(m1, m2, m3, m4, rank = TRUE)
 
 #### Visualisation of indices of models' performance
 
-Finally, we provide convenient visualisation (the `see` package must be installed).
+Finally, we provide convenient visualisation (the `see` package must be
+installed).
 
 ```{r}
 plot(compare_performance(m1, m2, m4, rank = TRUE))
@@ -303,14 +309,22 @@ plot(compare_performance(m1, m2, m4, rank = TRUE))
 
 ### Testing models
 
-`test_performance()` carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not). 
+`test_performance()` (and `test_bf`, its Bayesian sister) carries out the most
+relevant and appropriate tests based on the input (for instance, whether the
+models are nested or not).
 
 ```{r}
-m1 <- lm(Sepal.Length ~ Petal.Length, data = iris)
-m2 <- lm(Sepal.Length ~ Petal.Length + Petal.Width, data = iris)
-m3 <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+data(iris)
 
-test_performance(m1, m2, m3)
+lm1 <- lm(Sepal.Length ~ Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
+          Petal.Length + Petal.Width, data = iris)
+
+compare_performance(lm1, lm2, lm3, lm4)
+
+test_bf(lm1, lm2, lm3, lm4)
 ```
 
 ## References

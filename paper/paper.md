@@ -71,13 +71,11 @@ analyses [@benshachar2020effectsize; @ludecke2020see; @Lüdecke2020parameters;
 
 # Comparison to other Packages
 
-- *lmtest* [@lmtest]
-
-- *MuMIn::r.squaredGLMM()* [@MuMin]
-
-- *car* [@car]
-
-- *broom::glance()* [@robinson_broom_2020]
+Compared to other packages (e.g., *lmtest* [@lmtest],  *MuMIn::r.squaredGLMM()*
+[@MuMin], *car* [@car], *broom::glance()* [@robinson_broom_2020]), *performance*
+package offers functions for *both* checking validity and quality of the model,
+and it does so systematically and comprehensively for linear, mixed-effects,
+Baysian, etc. regression model objects.
 
 # Features
 
@@ -286,7 +284,7 @@ instance, which model to keep or drop) can often be hard, as the indices can
 give conflicting suggestions. Additionally, it is sometimes unclear which index
 to favour in the given context.
 
-This is one of the reason why tests are useful, as they facilitate decisions via
+This is one of the reason why **tests** are useful, as they facilitate decisions via
 "significance" indices, like *p*-values (in Frequentist framework) or [Bayes
 Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in
 Bayesian framework).
@@ -307,10 +305,20 @@ test_performance(lm1, lm2, lm3, lm4)
 ```
 
 For Bayesian framework, *performance* also provides `test_bf()` function to
-compare models.
+compare models:
 
-An overview of different test functions is [available
-here](https://easystats.github.io/performance/reference/test_performance.html).
+```r
+test_bf(lm1, lm2, lm3, lm4)
+#> # Bayes Factors for Model Comparison
+#> 
+#> Model                                                           BF
+#> [lm2] Species + Petal.Length                             3.446e+26
+#> [lm3] Species * Sepal.Width                              4.692e+07
+#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.584e+29
+#> 
+#> * Against Denominator: [lm1] Species
+#> *   Bayes Factor Type: BIC approximation
+```
 
 # Licensing and Availability
 
