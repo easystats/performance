@@ -92,6 +92,7 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
+
 <div id="performance-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#performance-" class="anchor"></a>performance <img src="reference/figures/logo.png" align="right" height="139">
@@ -184,8 +185,8 @@
 <span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; # Bayesian R2 with Standard Error</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;   Conditional R2: 0.953 (0.89% CI [0.945, 0.962])</span>
-<span class="co">#&gt;      Marginal R2: 0.825 (0.89% CI [0.753, 0.894])</span>
+<span class="co">#&gt;   Conditional R2: 0.953 (0.89% CI [0.944, 0.962])</span>
+<span class="co">#&gt;      Marginal R2: 0.825 (0.89% CI [0.749, 0.889])</span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
@@ -391,7 +392,8 @@
 <a href="#testing-models" class="anchor"></a>Testing models</h3>
 <p><code><a href="reference/test_bf.html">test_performance()</a></code> (and <code>test_bf</code>, its Bayesian sister) carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
 
 <span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
@@ -421,6 +423,18 @@
 <span class="co">#&gt; *   Bayes Factor Type: BIC approximation</span></code></pre></div>
 </div>
 </div>
+</div>
+<div id="code-of-conduct" class="section level1">
+<h1 class="hasAnchor">
+<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h1>
+<p>Please note that the performance project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
+<div id="contributing" class="section level1">
+<h1 class="hasAnchor">
+<a href="#contributing" class="anchor"></a>Contributing</h1>
+<p>We are happy to receive bug reports, suggestions, questions, and (most of all) contributions to fix problems and add features.</p>
+<p>Please follow contributing guidelines mentioned here:</p>
+<p><a href="https://easystats.github.io/performance/CONTRIBUTING.html" class="external-link uri">https://easystats.github.io/performance/CONTRIBUTING.html</a></p>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h2>
@@ -440,6 +454,7 @@
 </div>
 </div>
 </div>
+
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
