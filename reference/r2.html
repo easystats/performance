@@ -47,8 +47,9 @@
 
 
 <meta property="og:title" content="Compute the model's R2 — r2" />
-<meta property="og:description" content="Calculate the R2 value for different model objects. Depending
-  on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned." />
+<meta property="og:description" content="Calculate the R2, also known as the coefficient of
+  determination, value for different model objects. Depending on the model,
+  R2, pseudo-R2, or marginal / adjusted R2 values are returned." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -140,8 +141,9 @@
     </div>
 
     <div class="ref-description">
-    <p>Calculate the R2 value for different model objects. Depending
-  on the model, R2, pseudo-R2 or marginal / adjusted R2 values are returned.</p>
+    <p>Calculate the R2, also known as the coefficient of
+  determination, value for different model objects. Depending on the model,
+  R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
     </div>
 
     <pre class="usage"><span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -186,7 +188,7 @@ decrease the tolerance-level. See also <code><a href='check_singularity.html'>ch
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>If there is no <code>r2()</code>-method defined for the given model class,
-  <code>r2()</code> tries to return a "genericE r2 value, calculated as following:
+  <code>r2()</code> tries to return a "generic r2 value, calculated as following:
   <code>1-sum((y-y_hat)^2)/sum((y-y_bar)^2))</code></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

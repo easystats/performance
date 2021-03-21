@@ -47,14 +47,14 @@
 
 
 <meta property="og:title" content="Intraclass Correlation Coefficient (ICC) — icc" />
-<meta property="og:description" content="This function calculates the intraclass-correlation coefficient
- (ICC) - sometimes also called variance partition coefficient
- (VPC) - for mixed effects models. The ICC can be calculated for all models
- supported by insight::get_variance(). For models fitted with
- the brms-package, icc() might fail due to the large variety
- of models and families supported by the brms-package. In such cases,
- an alternative to the ICC is the variance_decomposition(), which is
- based on the posterior predictive distribution (see 'Details')." />
+<meta property="og:description" content="This function calculates the intraclass-correlation coefficient (ICC) -
+sometimes also called variance partition coefficient (VPC) - for mixed
+effects models. The ICC can be calculated for all models supported by
+insight::get_variance(). For models fitted with the
+brms-package, icc() might fail due to the large variety of
+models and families supported by the brms-package. In such cases, an
+alternative to the ICC is the variance_decomposition(), which is based
+on the posterior predictive distribution (see 'Details')." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -146,14 +146,14 @@
     </div>
 
     <div class="ref-description">
-    <p>This function calculates the intraclass-correlation coefficient
- (ICC) - sometimes also called <em>variance partition coefficient</em>
- (VPC) - for mixed effects models. The ICC can be calculated for all models
- supported by <code><a href='https://easystats.github.io/insight/reference/get_variance.html'>insight::get_variance()</a></code>. For models fitted with
- the <strong>brms</strong>-package, <code>icc()</code> might fail due to the large variety
- of models and families supported by the <strong>brms</strong>-package. In such cases,
- an alternative to the ICC is the <code>variance_decomposition()</code>, which is
- based on the posterior predictive distribution (see 'Details').</p>
+    <p>This function calculates the intraclass-correlation coefficient (ICC) -
+sometimes also called <em>variance partition coefficient</em> (VPC) - for mixed
+effects models. The ICC can be calculated for all models supported by
+<code><a href='https://easystats.github.io/insight/reference/get_variance.html'>insight::get_variance()</a></code>. For models fitted with the
+<strong>brms</strong>-package, <code>icc()</code> might fail due to the large variety of
+models and families supported by the <strong>brms</strong>-package. In such cases, an
+alternative to the ICC is the <code>variance_decomposition()</code>, which is based
+on the posterior predictive distribution (see 'Details').</p>
     </div>
 
     <pre class="usage"><span class='fu'>icc</span><span class='op'>(</span><span class='va'>model</span>, by_group <span class='op'>=</span> <span class='cn'>FALSE</span>, tolerance <span class='op'>=</span> <span class='fl'>1e-05</span><span class='op'>)</span>
@@ -224,41 +224,42 @@ ICC as well as the credible intervals for this ICC.</p>
  &sigma;<sup>2</sup><sub>i</sub>, by
  the total variance, i.e. the sum of the random effect variance and the
  residual variance, &sigma;<sup>2</sup><sub>&epsilon;</sub>.</p><p></p><h3 class='hasAnchor' id='adjusted-and-conditional-icc'><a class='anchor' href='#adjusted-and-conditional-icc'></a>Adjusted and conditional ICC</h3>
-<p><code>icc()</code> calculates an adjusted and conditional ICC, which both take
- all sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
- the <em>adjusted ICC</em> only relates to the random effects, the <em>conditional ICC</em>
- also takes the fixed effects variances into account (see <cite>Nakagawa et al. 2017</cite>).
- Typically, the <em>adjusted</em> ICC is of interest when the analysis of random
- effects is of interest. <code>icc()</code> returns a meaningful ICC also for more
- complex random effects structures, like models with random slopes or nested
- design (more than two levels) and is applicable for models with other distributions
- than Gaussian. For more details on the computation of the variances, see
+<p><code>icc()</code> calculates an adjusted and conditional ICC, which both take all
+ sources of uncertainty (i.e. of <em>all random effects</em>) into account.
+ While the <em>adjusted ICC</em> only relates to the random effects, the
+ <em>conditional ICC</em> also takes the fixed effects variances into account
+ (see <cite>Nakagawa et al. 2017</cite>). Typically, the <em>adjusted</em> ICC is of
+ interest when the analysis of random effects is of interest. <code>icc()</code>
+ returns a meaningful ICC also for more complex random effects structures,
+ like models with random slopes or nested design (more than two levels) and
+ is applicable for models with other distributions than Gaussian. For more
+ details on the computation of the variances, see
  <code><a href='https://easystats.github.io/insight/reference/get_variance.html'>?insight::get_variance</a></code>.</p><p></p><h3 class='hasAnchor' id='icc-for-unconditional-and-conditional-models'><a class='anchor' href='#icc-for-unconditional-and-conditional-models'></a>ICC for unconditional and conditional models</h3>
 <p>Usually, the ICC is calculated for the null model ("unconditional model").
  However, according to <cite>Raudenbush and Bryk (2002)</cite> or
- <cite>Rabe-Hesketh and Skrondal (2012)</cite> it is also feasible to compute the ICC
- for full models with covariates ("conditional models") and compare how
- much, e.g., a level-2 variable explains the portion of variation in the grouping
- structure (random intercept).</p><p></p><h3 class='hasAnchor' id='icc-for-specific-group-levels'><a class='anchor' href='#icc-for-specific-group-levels'></a>ICC for specific group-levels</h3>
+ <cite>Rabe-Hesketh and Skrondal (2012)</cite> it is also feasible to compute the
+ ICC for full models with covariates ("conditional models") and compare how
+ much, e.g., a level-2 variable explains the portion of variation in the
+ grouping structure (random intercept).</p><p></p><h3 class='hasAnchor' id='icc-for-specific-group-levels'><a class='anchor' href='#icc-for-specific-group-levels'></a>ICC for specific group-levels</h3>
 <p>The proportion of variance for specific levels related to the overall model
  can be computed by setting <code>by_group = TRUE</code>. The reported ICC is
  the variance for each (random effect) group compared to the total
  variance of the model. For mixed models with a simple random intercept,
  this is identical to the classical (adjusted) ICC.</p><p></p><h3 class='hasAnchor' id='variance-decomposition-for-brms-models'><a class='anchor' href='#variance-decomposition-for-brms-models'></a>Variance decomposition for brms-models</h3>
 <p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to
- the large variety of models and families supported by the <strong>brms</strong> package.
- In such cases, <code>variance_decomposition()</code> is an alternative ICC measure.
- The function calculates a variance decomposition based on the posterior
- predictive distribution. In this case, first, the draws from the posterior
- predictive distribution <em>not conditioned</em> on group-level terms
- (<code><a href='https://mc-stan.org/rstanarm/reference/posterior_predict.stanreg.html'>posterior_predict(..., re_formula = NA)</a></code>) are calculated as well as
- draws from this distribution <em>conditioned</em> on <em>all random effects</em>
- (by default, unless specified else in <code>re_formula</code>) are taken. Then,
- second, the variances for each of these draws are calculated. The "ICC"
- is then the ratio between these two variances. This is the recommended way
- to analyse random-effect-variances for non-Gaussian models. It is then possible
- to compare variances across models, also by specifying different group-level
- terms via the <code>re_formula</code>-argument.
+ the large variety of models and families supported by the <strong>brms</strong>
+ package. In such cases, <code>variance_decomposition()</code> is an alternative
+ ICC measure. The function calculates a variance decomposition based on the
+ posterior predictive distribution. In this case, first, the draws from the
+ posterior predictive distribution <em>not conditioned</em> on group-level
+ terms (<code><a href='https://mc-stan.org/rstanarm/reference/posterior_predict.stanreg.html'>posterior_predict(..., re_formula = NA)</a></code>) are calculated as
+ well as draws from this distribution <em>conditioned</em> on <em>all random
+ effects</em> (by default, unless specified else in <code>re_formula</code>) are taken.
+ Then, second, the variances for each of these draws are calculated. The
+ "ICC" is then the ratio between these two variances. This is the recommended
+ way to analyse random-effect-variances for non-Gaussian models. It is then
+ possible to compare variances across models, also by specifying different
+ group-level terms via the <code>re_formula</code>-argument.
  <br /> <br />
  Sometimes, when the variance of the posterior predictive distribution is
  very large, the variance ratio in the output makes no sense, e.g. because
@@ -268,10 +269,18 @@ ICC as well as the credible intervals for this ICC.</p>
 
     
 <ul>
-<li><p>Hox, J. J. (2010). Multilevel analysis: techniques and applications (2nd ed). New York: Routledge.</p></li>
-<li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The coefficient of determination R2 and intra-class correlation coefficient from generalized linear mixed-effects models revisited and expanded. Journal of The Royal Society Interface, 14(134), 20170213. doi: <a href='https://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
-<li><p>Rabe-Hesketh, S., &amp; Skrondal, A. (2012). Multilevel and longitudinal modeling using Stata (3rd ed). College Station, Tex: Stata Press Publication.</p></li>
-<li><p>Raudenbush, S. W., &amp; Bryk, A. S. (2002). Hierarchical linear models: applications and data analysis methods (2nd ed). Thousand Oaks: Sage Publications.</p></li>
+<li><p>Hox, J. J. (2010). Multilevel analysis: techniques and applications
+ (2nd ed). New York: Routledge.</p></li>
+<li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The
+ coefficient of determination R2 and intra-class correlation coefficient from
+ generalized linear mixed-effects models revisited and expanded. Journal of
+ The Royal Society Interface, 14(134), 20170213. doi: <a href='https://doi.org/10.1098/rsif.2017.0213'>10.1098/rsif.2017.0213</a></p></li>
+<li><p>Rabe-Hesketh, S., &amp; Skrondal, A. (2012). Multilevel and longitudinal
+ modeling using Stata (3rd ed). College Station, Tex: Stata Press
+ Publication.</p></li>
+<li><p>Raudenbush, S. W., &amp; Bryk, A. S. (2002). Hierarchical linear models:
+ applications and data analysis methods (2nd ed). Thousand Oaks: Sage
+ Publications.</p></li>
 </ul>
 
 
