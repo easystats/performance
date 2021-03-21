@@ -42,7 +42,7 @@ affiliations:
 
 # Summary
 
-A crucial aspect in statistical analysis, particularly with regression models, is to evaluate the quality of modelfit. During data analysis, researchers should investigate how well models fit to the data to find out whether the best model has been chosen. In the context of reporting results, fit indices should be mentioned, so that readers can judge the quality of regression models. Functions to create diagnostic plots or to compute fit measures do exist, however, thes eare located in many different packages, and there is no unique and consistent approach to assess the model quality for different kind of models. This makes it hard for researchers to discover the package they need or to find out whether any packages for specific regression models exist at all.
+A crucial aspect in statistical analysis, particularly with regression models, is to evaluate the quality of modelfit. During data analysis, researchers should investigate how well models fit to the data to find out whether the best model has been chosen. In the context of reporting results, fit indices should be mentioned, so that readers can judge the quality of regression models. Functions to create diagnostic plots or to compute fit measures do exist, however, these are located in many different packages, and there is no unique and consistent approach to assess the model quality for different kind of models. This makes it hard for researchers to discover the package they need or to find out whether any packages for specific regression models exist at all.
 
 # Aims of the Package
 
