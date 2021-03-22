@@ -52,13 +52,13 @@ A crucial aspect in statistical analysis, particularly with regression models, i
 
 # Comparison to other Packages
 
-Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn::r.squaredGLMM()* [@MuMin], *car* [@car], *broom::glance()* [@robinson_broom_2020]), the *performance* package offers functions for *both* checking validity and quality of the model, and it does so systematically and comprehensively for (generalized) linear, mixed-effects, Bayesian, etc. regression model objects. Furthermore, *performance* provides functions to compare and test multiple models simultaneously in order to evaluate which model fits best to the data.
+Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn* [@MuMin], *car* [@car], *broom* [@robinson_broom_2020]), the *performance* package offers functions for *both* checking validity and quality of the model, and it does so systematically and comprehensively for (generalized) linear, mixed-effects, Bayesian, etc. regression model objects. Furthermore, *performance* provides functions to compare and test multiple models simultaneously in order to evaluate which model fits best to the data.
 
 # Features
 
 *performance* functions also include plotting capabilities via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see]. A complete overview of plotting functions is available at the *see* website (https://easystats.github.io/see/articles/performance.html). 
 
-## Checking if a Model is Valid
+## Validating / Checking Assumptions
 
 When a model is specified to describe or predict the empirical data, its validity must be checked by assessing if any of the underlying assumptions are violated. These assumptions vary based on the model and *performance* offers a collection of functions to check them. We will look at a couple of them before we mention the key function that runs a comprehensive suite of checks in one go. 
 
