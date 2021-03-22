@@ -17,9 +17,7 @@ authors:
   name: Dominique Makowski
   orcid: 0000-0001-5375-9967
 date: "21 March 2021"
-output: pdf_document
 bibliography: paper.bib
-csl: apa.csl
 tags:
 - R
 - easystats
@@ -38,6 +36,10 @@ affiliations:
   name: University of Chicago, USA  
 - index: 5
   name: Nanyang Technological University, Singapore
+output: rticles::joss_article
+csl: apa.csl
+journal: JOSS
+link-citations: yes  
 ---
 
 # Summary
@@ -103,10 +105,6 @@ check_model(model)
 
 ## Computing Quality Indices of Models
 
-```{=html}
-<!-- Here I'd start with like some of the individual indices and then finish on
-"you can get them all at once with model_performance - D.M. -->
-```
 *performance* offers a number of indices to assess the goodness of fit of a model. We will discuss only a few before discussing a key function that returns all of these indices in one fell swoop.
 
 For example, $R^2$, also known as the coefficient of determination, is a popular statistical measure to gauges how much of the variance in the dependent variable is accounted for by the specified model. The `r2()` function in *performance* can compute this index for a wide variety of regression models. Depending on the model, $R^2$, pseudo-$R^2$, or marginal / adjusted $R^2$, etc. values are returned.
@@ -182,10 +180,6 @@ model_performance(m3)
 
 ## Comparing Multiple Models
 
-```{=html}
-<!-- Here I'd build upon it: you can also compare these indices. Here I'd
-mention the radar plot etc. -->
-```
 For multiple models, one can obtain a useful table to compare these indices at a glance using the [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html) function.
 
 ``` {.r}
@@ -215,13 +209,11 @@ library(see)
 plot(compare_performance(lm1, lm2, lm3, lm4))
 ```
 
-<!-- TO DO: too big; before submission change dimentions -->
+<!-- TO DO: too big; change dimensions before submission -->
 
 ![](figure2.png)
 
 ## Testing Models
-
-<!-- Here I'd end with the actual tests -->
 
 While **comparing** these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.
 
