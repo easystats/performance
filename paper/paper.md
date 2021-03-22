@@ -42,17 +42,17 @@ affiliations:
 
 # Summary
 
-A crucial aspect in statistical analysis, particularly with regression models, is to evaluate the quality of modelfit. During data analysis, researchers should investigate how well models fit to the data to find out whether the best model has been chosen. In the context of reporting results, fit indices should be mentioned, so that readers can judge the quality of regression models. Functions to create diagnostic plots or to compute fit measures do exist, however, these are located in many different packages, and there is no unique and consistent approach to assess the model quality for different kind of models. This makes it hard for researchers to discover the package they need or to find out whether any packages for specific regression models exist at all.
+A crucial aspect in statistical analysis, particularly with regression models, is evaluating the model's quality by assessing its fit. During data analysis, researchers should investigate how well their models fit to data, or to select a model the best fitting model among competing models. In the context of reporting results, fit indices should be mentioned, to allow readers to judge the quality of regression models. Functions to create diagnostic plots or to compute fit measures do exist, however, these are located in many different packages, and there is no unique and consistent approach to assess the model quality for different kind of models. This makes it hard for researchers to locate and thus use the fit indices that are relevant for their specific regression models.
 
 # Aims of the Package
 
-*performance* is an R-package [@rcore] that provides utilities for computing measures to assess model quality, which are not directly provided by R's *base* or *stats* packages. These include measures like $R^2$, intraclass correlation coefficient, root mean squared error, etc., or functions to check models for overdispersion, singularity or zero-inflation, and more. These functions support a large variety of regression models, including generalized linear models, mixed-effects models, their Bayesian cousins, and more. 
+*performance* is an R-package [@rcore] that provides utilities for computing measures to assess model quality, many of which are not directly provided by R's *base* or *stats* packages. These include measures like $R^2$, intraclass correlation coefficient (ICC), root mean squared error (RMSE), etc., or functions to check models for overdispersion, singularity or zero-inflation, and more. These functions support a large variety of regression models, including generalized linear models, (generalized) mixed-effects models, their Bayesian cousins, and more. 
 
 *performance* is part of the [*easystats*](https://github.com/easystats/performance) ecosystem, a collaborative project created to facilitate the usage of R for statistical analyses [@benshachar2020effectsize; @ludecke2020see; @Lüdecke2020parameters; @makowski2019bayetestR; @Makowski2020correlation]. 
 
 # Comparison to other Packages
 
-Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn::r.squaredGLMM()* [@MuMin], *car* [@car], *broom::glance()* [@robinson_broom_2020]), the *performance* package offers functions for *both* checking validity and quality of the model, and it does so systematically and comprehensively for (generalized) linear, mixed-effects, Bayesian, etc. regression model objects. Furthermore, *performance* provides functions to compare and test multiple models in order to evaluate which model fits best to the data.
+Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn::r.squaredGLMM()* [@MuMin], *car* [@car], *broom::glance()* [@robinson_broom_2020]), the *performance* package offers functions for *both* checking validity and quality of the model, and it does so systematically and comprehensively for (generalized) linear, mixed-effects, Bayesian, etc. regression model objects. Furthermore, *performance* provides functions to compare and test multiple models simultaneously in order to evaluate which model fits best to the data.
 
 # Features
 
@@ -60,7 +60,7 @@ Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn::r.squaredGLMM()* [
 
 ## Checking if a Model is Valid
 
-When a model is specified to describe the empirical data, its validity needs to be checked by assessing if any of the underlying assumptions are violated. These assumptions vary based on the model and *performance* offers a collection of functions to check them. We will look at a couple of them before we mention the key function that runs a comprehensive suite of checks in one go. 
+When a model is specified to describe or predict the empirical data, its validity must be checked by assessing if any of the underlying assumptions are violated. These assumptions vary based on the model and *performance* offers a collection of functions to check them. We will look at a couple of them before we mention the key function that runs a comprehensive suite of checks in one go. 
 
 Linear models assume constant error variance (homoskedasticity), and `check_heteroscedasticity()` functions in *performance* checks if this assumption has been violated: 
 
