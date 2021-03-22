@@ -42,9 +42,9 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   p.val <- 2 * (min(p, 1 - p))
 
   if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Autocorrelated residuals detected (p = %.3f).", p.val), "red")
+    insight::print_color(sprintf("Warning: Autocorrelated residuals detected (%s).", insight::format_p(p.val)), "red")
   } else {
-    insight::print_color(sprintf("OK: Residuals appear to be independent and not autocorrelated (p = %.3f).", p.val), "green")
+    insight::print_color(sprintf("OK: Residuals appear to be independent and not autocorrelated (%s).", insight::format_p(p.val)), "green")
   }
 
   invisible(p.val)

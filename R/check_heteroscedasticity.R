@@ -21,7 +21,7 @@
 #'   plot(x)
 #' }
 #' @importFrom stats residuals df.residual fitted anova pchisq
-#' @importFrom insight print_color get_df
+#' @importFrom insight print_color get_df format_p
 #' @export
 check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")
@@ -43,9 +43,9 @@ check_heteroscedasticity.default <- function(x, ...) {
   p.val <- stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
 
   if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (p = %.3f).\n", p.val), "red")
+    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(p.val)), "red")
   } else {
-    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (p = %.3f).\n", p.val), "green")
+    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(p.val)), "green")
   }
 
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
