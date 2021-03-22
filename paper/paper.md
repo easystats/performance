@@ -44,43 +44,46 @@ link-citations: yes
 
 # Summary
 
-A crucial aspect in statistical analysis, particularly with regression models, is evaluating the model's quality by assessing its fit. During data analysis, researchers should investigate how well their models fit to data, or to select a model the best fitting model among competing models. In the context of reporting results, fit indices should be mentioned, to allow readers to judge the quality of regression models. Functions to create diagnostic plots or to compute fit measures do exist, however, these are located in many different packages, and there is no unique and consistent approach to assess the model quality for different kind of models. This makes it hard for researchers to locate and thus use the fit indices that are relevant for their specific regression models.
+A crucial part of statistical analysis is evaluating a model's quality and fit, or *performance*. During analysis, especially with regression models, investigating the fit models to data also often involves selecting the best fitting model among many competing models. Upon investigation, fit indices should also be reported both visually and numerically to bring readers in on the investigative effort. While functions to build and produce diagnostic plots or to compute fit statistics exist, these are located across many packages, which results in a lack of a unique and consistent approach to assess the performance of many types of models. The result is a difficult-to-navigate, unorganized ecosystem of individual packages with different syntax, making it onerous for researchers to locate and use fit indices relevant for their unique purposes. The performance package in R fills this gap by offering researchers a suite of intuitive functions with consistent syntax for computing, building, and presenting regression model fit statistics and visualizations.
 
 # Aims of the Package
 
-*performance* is an R-package [@rcore] that provides utilities for computing measures to assess model quality, many of which are not directly provided by R's *base* or *stats* packages. These include measures like $R^2$, intraclass correlation coefficient (ICC), root mean squared error (RMSE), etc., or functions to check models for overdispersion, singularity or zero-inflation, and more. These functions support a large variety of regression models, including generalized linear models, (generalized) mixed-effects models, their Bayesian cousins, and more.
+*performance* is an R-package [@rcore] that provides utilities for computing measures to assess model quality, many of which are not directly provided by R's *base* or *stats* packages. These include measures like $R^2$, intraclass correlation coefficient (ICC), root mean squared error (RMSE), or functions to check for vexing issues like overdispersion, singularity, or zero-inflation. These functions support a large variety of regression models including generalized linear models, (generalized) mixed-effects models, their Bayesian cousins, and many others.
 
-*performance* is part of the [*easystats*](https://github.com/easystats/performance) ecosystem, a collaborative project created to facilitate the usage of R for statistical analyses [@benshachar2020effectsize; @ludecke2020see; @Lüdecke2020parameters; @makowski2019bayetestR; @Makowski2020correlation].
+*performance* is part of the [*easystats*](https://github.com/easystats/performance) ecosystem, which is a collaborative project focused on facilitating simple and intuitive usage of R for statistical analysis [@benshachar2020effectsize; @ludecke2020see; @Lüdecke2020parameters; @makowski2019bayetestR; @Makowski2020correlation].
 
 # Comparison to other Packages
 
-Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn* [@MuMin], *car* [@car], *broom* [@robinson_broom_2020]), the *performance* package offers functions for *both* checking validity and quality of the model, and it does so systematically and comprehensively for (generalized) linear, mixed-effects, Bayesian, etc. regression model objects. Furthermore, *performance* provides functions to compare and test multiple models simultaneously in order to evaluate which model fits best to the data.
+Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn* [@MuMin], *car* [@car], *broom* [@robinson_broom_2020]), the *performance* package offers functions for checking validity *and* model quality systematically and comprehensively for many regression model objects such as (generalized) linear, mixed-effects, and Bayesian. *performance* aloso offers functions to compare and test multiple models simultaneously to evaluate the best fitting model to the data.
 
 # Features
 
-*performance* functions also include plotting capabilities via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see]. A complete overview of plotting functions is available at the *see* website (<https://easystats.github.io/see/articles/performance.html>).
+Beyond validity and quality checks and consistent with *easystats* syntax, *performance* also includes plotting functions via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see].^[A complete overview of plotting functions is available at the *see* website (<https://easystats.github.io/see/articles/performance.html>).]
 
 ## Checking Assumptions
 
-Inferences made from regression models (such as significance tests, interpretation of coefficients, etc.) require various assumption be met. These assumptions vary based on the type of model in question, and *performance* offers a collection of functions to check if they are met. We will look at a couple of them before we mention the key function that runs a comprehensive suite of checks in one go.
+Inferences made from regression models such as significance tests or interpretation of coefficients require meeting several assumptions, which vary based on the type of model. *performance* offers a collection of functions to check if assumptions are met. To demonstrate the efficiency of the package, we overview a few functions, followed by a broader function that runs a comprehensive suite of checks in a single call.
 
-Linear (Gaussian) models assume constant error variance (homoscedasticity), and `check_heteroscedasticity()` functions in *performance* can be used to check if this assumption has been violated:
+For example, linear (Gaussian) models assume constant error variance (homoscedasticity). We can use `check_heteroscedasticity()` from *performance* to check if this assumption has been violated.
 
 ``` {.r}
 data(cars)
 model <- lm(dist ~ speed, data = cars)
 
 check_heteroscedasticity(model)
+
 #> Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.031).
 ```
 
-Another possible concern, for Poisson regression models, is of overdispersion, which occurs when the observed variance in the data is higher than the expected variance according to the model. The `check_overdispersion()` in *performance* can be used to check if this assumption is met.
+For another example, Poisson regression models assume equidispersion. Violating this assumption leads to *overdispersion*, which occurs when the observed variance in the data is higher than the expected variance from the model. We can call `check_overdispersion()` to check if overdispersion is an issue.
 
 ``` {.r}
 library(glmmTMB)
 data(Salamanders)
 model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+
 check_overdispersion(model)
+
 #> # Overdispersion test
 #> 
 #>        dispersion ratio =    2.946
@@ -88,16 +91,18 @@ check_overdispersion(model)
 #>                 p-value =  < 0.001
 ```
 
-In addition to providing tests for the checking of assumptions, *performance* also provides convenience functions to *visually* assess statistical assumptions for regression models. Moreover, these visual checks detect the type of model entered and present the appropriate visual checks for each model type, with various types of regression models supported, including linear models, linear mixed-effects models, their Bayesian equivalents, and more.
+In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models, their Bayesian equivalents, and more. Inspect the package documentation for a complete listing.
 
-Here we show what the function output looks like for linear models:
+For example, consider the visual checks from a simple linear regression model.
 
 <!-- TO DO: Regenerate plot once feedback from other has been incorporated -->
 
 ``` {.r}
 library(see)
+
 model <- lm(Sepal.Length ~ Species + Sepal.Width + 
             Petal.Length + Petal.Width, data = iris)
+            
 check_model(model)
 ```
 
@@ -105,23 +110,22 @@ check_model(model)
 
 ## Computing Quality Indices of Models
 
-*performance* offers a number of indices to assess the goodness of fit of a model. We will discuss only a few before discussing a key function that returns all of these indices in one fell swoop.
+*performance* offers a number of indices to assess the goodness of fit of a model. For example, $R^2$, also known as the coefficient of determination, is a popular statistical measure to gauge the amount of the variance in the dependent variable accounted for by the specified model. The `r2()` function from *performance* computes and returns this index for a variety of regression models. Depending on the model, the returned value may be $R^2$, pseudo-$R^2$, or marginal/adjusted $R^2$.
 
-For example, $R^2$, also known as the coefficient of determination, is a popular statistical measure to gauges how much of the variance in the dependent variable is accounted for by the specified model. The `r2()` function in *performance* can compute this index for a wide variety of regression models. Depending on the model, $R^2$, pseudo-$R^2$, or marginal / adjusted $R^2$, etc. values are returned.
-
-Example with linear regression model:
+First, consider a simple linear model.
 
 ``` {.r}
 model <- lm(mpg ~ wt + cyl, data = mtcars)
 
 r2(model)
+
 #> # R2 for Linear Regression
 #> 
 #>        R2: 0.830
 #>   adj. R2: 0.819
 ```
 
-Example with mixed-effects model:
+Next, consider a mixed-effects model.
 
 ``` {.r}
 library(lme4)
@@ -131,33 +135,39 @@ model <- lmer(
 )
 
 r2(model)
+
 #> # R2 for Mixed Models
 #> 
 #>   Conditional R2: 0.933
 #>      Marginal R2: 0.303
 ```
 
-Similar to $R^2$, the Intraclass Correlation Coefficient (ICC) provides information on the explained variance and can be interpreted as the proportion of the variance explained by the grouping structure in the population [@hox2017multilevel]. The `icc()` function in *performance* calculates the ICC for various mixed-effects regression models.
+Similar to $R^2$, the Intraclass Correlation Coefficient (ICC) provides information on the explained variance and can be interpreted as the proportion of the variance explained by the grouping structure in the population [@hox2017multilevel]. The `icc()` function from *performance* computes and returns the ICC for various mixed-effects regression models.
 
 ``` {.r}
 library(brms)
 set.seed(123)
-model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
+model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), 
+  data = mtcars
+  )
 
 icc(model)
+
 #> # Intraclass Correlation Coefficient
 #> 
 #>      Adjusted ICC: 0.930
 #>   Conditional ICC: 0.771
 ```
 
-The `model_performance()` function is the workhorse of this package when it comes to extracting a comprehensive set of model fit indices from various models in a consistent manner. Depending on the regression model object, the list of computed indices might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
+Instead of computing and returning individual indices, users can obtain *all* indices from the model by simply passing the fitted model object to `model_performance()`. A list of computed indices is returned, which might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
 
-Example with linear model:
+For example, consider a simple linear model.
 
 ``` {.r}
 m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+
 model_performance(m1)
+
 #> # Indices of model performance
 #> 
 #> AIC     |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
@@ -165,12 +175,14 @@ model_performance(m1)
 #> 156.010 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568
 ```
 
-Example with linear mixed-effects model:
+Next, consider a mixed-effects model.
 
 ``` {.r}
 library(lme4)
 m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+
 model_performance(m3)
+
 #> # Indices of model performance
 #> 
 #> AIC      |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma
@@ -180,11 +192,10 @@ model_performance(m3)
 
 ## Comparing Multiple Models
 
-For multiple models, one can obtain a useful table to compare these indices at a glance using the [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html) function.
+For multiple models, users can inspect a table of these indices by calling, [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.html).
 
 ``` {.r}
 data(iris)
-
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
@@ -192,6 +203,7 @@ lm4 <- lm(Sepal.Length ~ Species * Sepal.Width +
           Petal.Length + Petal.Width, data = iris)
 
 compare_performance(lm1, lm2, lm3, lm4)
+
 #> # Comparison of Model Performance Indices
 #> 
 #> Name | Model |     AIC |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
@@ -202,10 +214,11 @@ compare_performance(lm1, lm2, lm3, lm4)
 #> lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305
 ```
 
-Similarly, in addition to the formal tests to compare several models, *performance* also provides visual ways to compare model fit indices.
+As noted previously, in addition to the returning numeric results, *performance* also offers visualizations of model fit indices.
 
 ``` {.r}
 library(see)
+
 plot(compare_performance(lm1, lm2, lm3, lm4))
 ```
 
@@ -215,14 +228,13 @@ plot(compare_performance(lm1, lm2, lm3, lm4))
 
 ## Testing Models
 
-While **comparing** these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.
+While comparing these indices is often useful, making a decision such as whether to keep or drop a model, can often be difficult as some indices can give conflicting suggestions. Additionally, it may be unclear which index to favour in different contexts. This difficulty is one of the reasons why *tests* are often useful as they facilitate decisions via "significance" indices like *p*-values (in a frequentist framework) or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in a Bayesian framework).
 
-This is one of the reason why **tests** are useful, as they facilitate decisions via "significance" indices, like *p*-values (in frequentist framework) or [Bayes Factors](https://easystats.github.io/bayestestR/articles/bayes_factors.html) (in Bayesian framework).
-
-The generic `test_performance()` runs the most relevant and appropriate tests based on the input. For instance, in the example below, the results from *Vuong's Test* are displayed:
+The generic `test_performance()` function computes the appropriate test(s) based on the supplied input. For instance, the following example shows results from *Vuong's Test*.
 
 ``` {.r}
 test_performance(lm1, lm2, lm3, lm4)
+
 #> Name | Model | Omega2 | p (Omega2) |    LR | p (LR)
 #> ---------------------------------------------------
 #> lm1  |    lm |        |            |       |       
@@ -232,10 +244,11 @@ test_performance(lm1, lm2, lm3, lm4)
 #> Each model is compared to lm1.
 ```
 
-For Bayesian framework, *performance* also provides `test_bf()` function to compare models:
+*performance* also provides `test_bf()` to compare models via Bayes factors in a Bayesian framework.
 
 ``` {.r}
 test_bf(lm1, lm2, lm3, lm4)
+
 #> # Bayes Factors for Model Comparison
 #> 
 #> Model                                                           BF
@@ -249,10 +262,10 @@ test_bf(lm1, lm2, lm3, lm4)
 
 # Licensing and Availability
 
-*performance* is licensed under the GNU General Public License (v3.0), with all source code stored at GitHub (<https://github.com/easystats/performance>), and with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests/tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
+*performance* is licensed under the GNU General Public License (v3.0), with all source code stored at GitHub (<https://github.com/easystats/performance>), and with a corresponding issue tracker for bug reporting and feature enhancements. In the spirit of honest and open science, we encourage requests, tips for fixes, feature updates, as well as general questions and concerns via direct interaction with contributors and developers.
 
 # Acknowledgments
 
-*performance* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we would like to thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
+*performance* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem. Thus, we thank the [members of easystats](https://github.com/orgs/easystats/people) as well as the users.
 
 # References
