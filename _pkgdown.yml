@@ -70,7 +70,7 @@ reference:
   contents:
   - compare_performance
   - test_performance
-  - test_lrt
+  - test_likelihoodratio
   - test_vuong
   - test_wald
 

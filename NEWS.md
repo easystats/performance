@@ -7,6 +7,8 @@
 
 * `r2()` supports `mhurdle` (*mhurdle*) models.
 
+* `model_performance` supports *kmeans* models.
+
 * The `performance_roc()` and `performance_accuracy()` functions unfortunately 
   had spelling mistakes in the output columns: *Sensitivity* was called 
   *Sensivity* and *Specificity* was called *Specifity*. We think these are 
