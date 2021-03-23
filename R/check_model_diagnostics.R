@@ -17,10 +17,12 @@
 }
 
 
-#' @importFrom stats residuals rstudent fitted
+#' @importFrom stats residuals rstudent fitted rstandard
 .diag_qq <- function(model) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB"))) {
     res_ <- sort(stats::residuals(model), na.last = NA)
+  } else if (inherits(model, "glm")) {
+    res_ <- sort(stats::rstandard(model, type = "pearson"), na.last = NA)
   } else {
     res_ <- tryCatch(
       {
@@ -177,6 +179,8 @@
           .sigma_glmmTMB_nonmixed(model, faminfo)
         }
         stats::residuals(model) / sigma
+      } else if (inherits(model, "glm")) {
+        stats::rstandard(model, type = "pearson")
       } else {
         stats::rstandard(model)
       }
