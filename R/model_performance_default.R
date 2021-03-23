@@ -4,10 +4,23 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
+  # all available options...
+  all_metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
+
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
+    metrics <- all_metrics
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
+  }
+
+  # check for valid input
+  bad_metrics <- which(!metrics %in% all_metrics)
+  if (length(bad_metrics)) {
+    if (verbose) {
+      warning(paste0("Following elements are no valid metric: ",
+                     metrics[bad_metrics], collapse = ", "))
+    }
+    metrics <- metrics[-bad_metrics]
   }
 
   if (!insight::is_model(model) || !insight::is_model_supported(model)) {
