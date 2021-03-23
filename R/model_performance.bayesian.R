@@ -14,8 +14,8 @@
 #'   \item{\strong{ELPD}} {expected log predictive density, see \code{\link{looic}}}
 #'   \item{\strong{LOOIC}} {leave-one-out cross-validation (LOO) information criterion, see \code{\link{looic}}}
 #'   \item{\strong{WAIC}} {widely applicable information criterion, see \code{?loo::waic}}
-#'   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
-#'   \item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see \code{\link{r2}}}
+#'   \item{\strong{R2}} {r-squared value, see \code{\link{r2_bayes}}}
+#'   \item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see \code{\link{r2_loo}}}
 #'   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
 #'   \item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight:get_sigma]{get_sigma()}}}
 #'   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
@@ -64,7 +64,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   if (all(metrics == "all")) {
     metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
   } else if (all(metrics == "common")) {
-    metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE")
+    metrics <- c("LOOIC", "WAIC", "R2", "RMSE")
   }
 
   metrics <- toupper(metrics)
