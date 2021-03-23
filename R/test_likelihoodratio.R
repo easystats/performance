@@ -1,5 +1,15 @@
 #' @rdname test_performance
-#' @param estimator Applied when comparing regression models using \code{test_likelihoodratio()}. Corresponds to the different estimators for the standard deviation of the errors. If \code{estimator="OLS"} (default), then it uses the same method as \code{anova(..., test="LRT")} implemented in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If \code{estimator="ML"}, which is for instance used by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.
+#' @param estimator Applied when comparing regression models using
+#'   \code{test_likelihoodratio()}. Corresponds to the different estimators for
+#'   the standard deviation of the errors. If \code{estimator="OLS"} (default),
+#'   then it uses the same method as \code{anova(..., test="LRT")} implemented
+#'   in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this
+#'   estimator under the alternative hypothesis. If \code{estimator="ML"}, which
+#'   is for instance used by \code{lrtest(...)} in package \pkg{lmtest}, the
+#'   scaling is done by n (the biased ML estimator) and the estimator under the
+#'   null hypothesis. In moderately large samples, the differences should be
+#'   negligible, but it is possible that OLS would perform slightly better in
+#'   small samples with Gaussian errors.
 #' @export
 test_likelihoodratio <- function(..., estimator = "ML") {
   UseMethod("test_likelihoodratio")
@@ -35,10 +45,6 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
     stop("The models are not nested models, which is a prerequisite for `test_likelihoodratio()`. See the 'Details' section.")
   }
 }
-
-
-
-
 
 
 

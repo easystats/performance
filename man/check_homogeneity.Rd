@@ -11,17 +11,17 @@ check_homogeneity(x, method = c("bartlett", "fligner", "levene", "auto"), ...)
 
 \item{method}{Name of the method (underlying test) that should be performed
 to check the homogeneity of variances. May either be \code{"levene"} for
-Levene's Test for Homogeneity of Variance, \code{"bartlett"} for
-the Bartlett test (assuming normal distributed samples or groups),
-\code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric test),
-or \code{"auto"}. In the latter case, Bartlett test is used if the model response
-is normal distributed, else Fligner-Killeen test is used.}
+Levene's Test for Homogeneity of Variance, \code{"bartlett"} for the
+Bartlett test (assuming normal distributed samples or groups),
+\code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric
+test), or \code{"auto"}. In the latter case, Bartlett test is used if the
+model response is normal distributed, else Fligner-Killeen test is used.}
 
 \item{...}{Arguments passed down to \code{car::leveneTest()}.}
 }
 \value{
-Invisibly returns the p-value of the test statistics. A p-value
-< 0.05 indicates a significant difference in the variance between the groups.
+Invisibly returns the p-value of the test statistics. A p-value <
+  0.05 indicates a significant difference in the variance between the groups.
 }
 \description{
 Check model for homogeneity of variances between groups described
