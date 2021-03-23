@@ -6,7 +6,23 @@ model <- lmer(satisfaction ~ salary_c + (1 + salary_c | schoolID), data = r2mlm:
 
 
 
+# Utils -------------------------------------------------------------------
 
+
+add_interaction_vars_to_data <- function(data, interaction_vars) {
+
+  for (whole in interaction_vars) {
+    pieces <- stringr::str_split_fixed(whole, ":", 2)
+    newcol <- dplyr::pull(data[pieces[1]] * data[pieces[2]])
+    data <- dplyr::mutate(data, !!whole := newcol)
+  }
+  data
+}
+
+
+
+
+r2mlm:::get_interaction_vars(lm(Sepal.Length ~ Species * Petal.Width, data=iris))
 
 # Step 1: Components Extraction ------------------------------------------------------
 # TODO: this needs to be simplified and "generalized"
@@ -20,9 +36,13 @@ r2mlm_init <- function(model) {
   all_variables <- all.vars(formula(model))
   cluster_variable <- all_variables[length(all_variables)] # pull cluster, we'll need it later
 
-  # Step 3a) pull and prepare data
+  # Step 3a) pull and prepare data (r2mlm:::prepare_data(model, "lme4", cluster_variable))
+  modelframe <- model.frame(model)
+  interaction_vars <- insight::find_interactions(model, flatten = TRUE)
+  modelframe <- add_interaction_vars_to_data(modelframe, interaction_vars)
+  data <- dplyr::group_by(modelframe, modelframe[cluster_variable])
 
-  data <- r2mlm:::prepare_data(model, "lme4", cluster_variable)
+
 
   # Step 3b) determine whether data is appropriate format. Only the cluster variable can be a factor, for now
   # a) Pull all variables except for cluster
@@ -48,9 +68,9 @@ r2mlm_init <- function(model) {
   #     predictors is null, just call get_interaction_vars just in case
 
   if (length(outcome_and_predictors) == 1) {
-    predictors <- r2mlm:::get_interaction_vars(model)
+    predictors <- insight::find_interactions(model, flatten = TRUE)
   } else {
-    predictors <- append(outcome_and_predictors[2:length(outcome_and_predictors)], r2mlm:::get_interaction_vars(model))
+    predictors <- append(outcome_and_predictors[2:length(outcome_and_predictors)], insight::find_interactions(model, flatten = TRUE))
   }
 
   # * Step 4b) Create and fill vectors
