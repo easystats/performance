@@ -100,6 +100,6 @@ Suggests:
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
 Remotes: easystats/insight
