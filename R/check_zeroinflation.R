@@ -1,8 +1,8 @@
 #' @title Check for zero-inflation in count models
 #' @name check_zeroinflation
 #'
-#' @description \code{check_zeroinflation()} checks whether count models are over- or
-#'    underfitting zeros in the outcome.
+#' @description \code{check_zeroinflation()} checks whether count models are
+#'   over- or underfitting zeros in the outcome.
 #'
 #' @param x Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
 #'    or \code{glm.nb} (package \pkg{MASS}).

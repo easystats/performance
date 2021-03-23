@@ -25,6 +25,7 @@ reference:
   - model_performance.lavaan
   - model_performance.rma
   - model_performance.ivreg
+  - model_performance.kmeans
 
 - title: "Check Model Assumptions or Properties"
   contents:

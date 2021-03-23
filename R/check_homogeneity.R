@@ -5,16 +5,16 @@
 #'
 #' @param x A linear model or an ANOVA object.
 #' @param method Name of the method (underlying test) that should be performed
-#' to check the homogeneity of variances. May either be \code{"levene"} for
-#' Levene's Test for Homogeneity of Variance, \code{"bartlett"} for
-#' the Bartlett test (assuming normal distributed samples or groups),
-#' \code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric test),
-#' or \code{"auto"}. In the latter case, Bartlett test is used if the model response
-#' is normal distributed, else Fligner-Killeen test is used.
+#'   to check the homogeneity of variances. May either be \code{"levene"} for
+#'   Levene's Test for Homogeneity of Variance, \code{"bartlett"} for the
+#'   Bartlett test (assuming normal distributed samples or groups),
+#'   \code{"fligner"} for the Fligner-Killeen test (rank-based, non-parametric
+#'   test), or \code{"auto"}. In the latter case, Bartlett test is used if the
+#'   model response is normal distributed, else Fligner-Killeen test is used.
 #' @param ... Arguments passed down to \code{car::leveneTest()}.
 #'
-#' @return Invisibly returns the p-value of the test statistics. A p-value
-#' < 0.05 indicates a significant difference in the variance between the groups.
+#' @return Invisibly returns the p-value of the test statistics. A p-value <
+#'   0.05 indicates a significant difference in the variance between the groups.
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'

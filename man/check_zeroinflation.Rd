@@ -20,8 +20,8 @@ A list with information about the amount of predicted and observed
    zeros in the outcome, as well as the ratio between these two values.
 }
 \description{
-\code{check_zeroinflation()} checks whether count models are over- or
-   underfitting zeros in the outcome.
+\code{check_zeroinflation()} checks whether count models are
+  over- or underfitting zeros in the outcome.
 }
 \details{
 If the amount of observed zeros is larger than the amount of
