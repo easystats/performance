@@ -16,8 +16,9 @@ authors:
 - affiliation: 5
   name: Dominique Makowski
   orcid: 0000-0001-5375-9967
-date: "21 March 2021"
+date: "23 March 2021"
 bibliography: paper.bib
+citation_author: Lüdecke
 tags:
 - R
 - easystats
@@ -39,7 +40,7 @@ affiliations:
 output: rticles::joss_article
 csl: apa.csl
 journal: JOSS
-link-citations: yes  
+link-citations: yes
 ---
 
 # Summary
