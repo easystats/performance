@@ -50,7 +50,15 @@ Visual check of model various assumptions (normality of residuals,
 normality of random effects, linear relationship, homogeneity of variance,
 multicollinearity).
 }
-\details{
+\note{
+This function just prepares the data for plotting. To create the plots,
+\CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+all possible warnings. In case you observe suspicious plots, please refer to
+the dedicated functions (like \code{check_collinearity()}, \code{check_normality()}
+etc.) to get informative messages and warnings.
+}
+\section{Linearity Assumption}{
+
 The plot \strong{Linearity} checks the assumption of linear
 relationship. However, the spread of dots also indicate possible
 heteroscedasticity (i.e. non-constant variance); hence, the alias \code{"ncv"}
@@ -60,13 +68,17 @@ necessarily indicate so-called "lack of fit", e.g. missed non-linear
 relationships or interactions. Thus, it is always recommended to also look
 at \href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect plots, including partial residuals}.
 }
-\note{
-This function just prepares the data for plotting. To create the plots,
-\CRANpkg{see} needs to be installed. Furthermore, this function suppresses
-all possible warnings. In case you observe suspicious plots, please refer to
-the dedicated functions (like \code{check_collinearity()}, \code{check_normality()}
-etc.) to get informative messages and warnings.
+
+\section{Residuals for (Generalized) Linear Models}{
+
+Plots that check the normality of residuals (QQ-plot) or the homogeneity of
+variance use standardized Pearson's residuals for generalized linear models,
+and standardized residuals for linear models. The plots for the normality of
+residuals (with overlayed normal curve) and for the linearity assumption use
+the default residuals for \code{lm} and \code{glm} (which are deviance
+residuals for \code{glm}).
 }
+
 \examples{
 \dontrun{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

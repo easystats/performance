@@ -29,7 +29,8 @@
 #' the dedicated functions (like \code{check_collinearity()}, \code{check_normality()}
 #' etc.) to get informative messages and warnings.
 #'
-#' @details The plot \strong{Linearity} checks the assumption of linear
+#' @section Linearity Assumption:
+#' The plot \strong{Linearity} checks the assumption of linear
 #' relationship. However, the spread of dots also indicate possible
 #' heteroscedasticity (i.e. non-constant variance); hence, the alias \code{"ncv"}
 #' for this plot. \strong{Some caution is needed} when interpreting these plots.
@@ -37,6 +38,14 @@
 #' necessarily indicate so-called "lack of fit", e.g. missed non-linear
 #' relationships or interactions. Thus, it is always recommended to also look
 #' at \href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect plots, including partial residuals}.
+#'
+#' @section Residuals for (Generalized) Linear Models:
+#' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
+#' variance use standardized Pearson's residuals for generalized linear models,
+#' and standardized residuals for linear models. The plots for the normality of
+#' residuals (with overlayed normal curve) and for the linearity assumption use
+#' the default residuals for \code{lm} and \code{glm} (which are deviance
+#' residuals for \code{glm}).
 #'
 #' @examples
 #' \dontrun{
