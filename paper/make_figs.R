@@ -21,4 +21,4 @@ lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, dat
 set.seed(123)
 result2 <- plot(compare_performance(lm1, lm2, lm3, lm4))
 
-ggplot2::ggsave("figure2.png", result2, height = 7, width = 6)
+ggplot2::ggsave("figure2.png", result2, height = 3, width = 3)
