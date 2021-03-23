@@ -2,30 +2,12 @@ library(lme4)
 library(dplyr)
 library(r2mlm)
 
-model <- lmer(satisfaction ~ salary_c + (1 + salary_c | schoolID), data = r2mlm::teachsat)
-
-
 
 # Utils -------------------------------------------------------------------
-
-
-add_interaction_vars_to_data <- function(data, interaction_vars) {
-
-  for (whole in interaction_vars) {
-    pieces <- stringr::str_split_fixed(whole, ":", 2)
-    newcol <- dplyr::pull(data[pieces[1]] * data[pieces[2]])
-    data <- dplyr::mutate(data, !!whole := newcol)
-  }
-  data
-}
+source("r2mlm_utils.R")
 
 
 
-
-r2mlm:::get_interaction_vars(lm(Sepal.Length ~ Species * Petal.Width, data=iris))
-
-# Step 1: Components Extraction ------------------------------------------------------
-# TODO: this needs to be simplified and "generalized"
 
 r2mlm_init <- function(model) {
 
@@ -34,14 +16,21 @@ r2mlm_init <- function(model) {
 
   # Step 2) Pull all variable names from the formula
   all_variables <- all.vars(formula(model))
-  cluster_variable <- all_variables[length(all_variables)] # pull cluster, we'll need it later
+  if(inherits(model, "merMod")) {
+    cluster_variable <- all_variables[length(all_variables)] # pull cluster, we'll need it later
+  } else if(inherit(model, "lme")) {
+    cluster_variable <- nlme::getGroups(model) %>% attr("label") # in nlme, formula(model) doesn't return grouping var, but we'll need that later on, so let's grab it here
+  }
 
-  # Step 3a) pull and prepare data (r2mlm:::prepare_data(model, "lme4", cluster_variable))
+  # Step 3a) pull and prepare data - r2mlm:::prepare_data(model, "lme4", cluster_variable)
   modelframe <- model.frame(model)
   interaction_vars <- insight::find_interactions(model, flatten = TRUE)
-  modelframe <- add_interaction_vars_to_data(modelframe, interaction_vars)
+  for (var in interaction_vars) {
+    pieces <- stringr::str_split_fixed(var, ":", 2)
+    newcol <- modelframe[[pieces[1]]] * modelframe[[pieces[2]]]
+    modelframe[var] <- newcol
+  }
   data <- dplyr::group_by(modelframe, modelframe[cluster_variable])
-
 
 
   # Step 3b) determine whether data is appropriate format. Only the cluster variable can be a factor, for now
@@ -65,7 +54,7 @@ r2mlm_init <- function(model) {
   # take the outcome out of the predictors with [2:length(outcome_and_predictors)], then add interaction terms
 
   # sometimes the outcome_and_predictors is only an outcome variable (for the null model). If that's the case, then
-  #     predictors is null, just call get_interaction_vars just in case
+  # predictors is null, just call get_interaction_vars just in case
 
   if (length(outcome_and_predictors) == 1) {
     predictors <- insight::find_interactions(model, flatten = TRUE)
@@ -74,34 +63,35 @@ r2mlm_init <- function(model) {
   }
 
   # * Step 4b) Create and fill vectors
-  l1_vars <- r2mlm:::sort_variables(data, predictors, cluster_variable)$l1_vars
-  l2_vars <- r2mlm:::sort_variables(data, predictors, cluster_variable)$l2_vars
+  out <- r2mlm_sort_variables(data, predictors, cluster_variable)
+  l1_vars <- out$l1_vars
+  l2_vars <- out$l2_vars
 
   # Step 5) pull variable names for L1 predictors with random slopes into a variable called random_slope_vars
 
-  random_slope_vars <- r2mlm:::get_random_slope_vars(model, has_intercept, "lme4")
+  random_slope_vars <- r2mlm_get_random_slope_vars(model)
 
   # Step 6) determine value of centeredwithincluster
 
   if (is.null(l1_vars)) {
     centeredwithincluster <- TRUE
   } else {
-    centeredwithincluster <- r2mlm:::get_cwc(l1_vars, cluster_variable, data)
+    centeredwithincluster <- r2mlm_get_cwc(l1_vars, cluster_variable, data)
   }
 
   # Step 7) pull column numbers for _covs variables
   # 7a) within_covs (l1 variables)
   # for (each value in l1_vars list) {match(value, names(data))}
 
-  within <- r2mlm:::get_covs(l1_vars, data)
+  within <- r2mlm_get_covs(l1_vars, data)
 
   # 7b) pull column numbers for between_covs (l2 variables)
 
-  between <- r2mlm:::get_covs(l2_vars, data)
+  between <- r2mlm_get_covs(l2_vars, data)
 
   # 7c) pull column numbers for random_covs (l1 variables with random slopes)
 
-  random <- r2mlm:::get_covs(random_slope_vars, data)
+  random <- r2mlm_get_covs(random_slope_vars, data)
 
   # Step 8) pull gamma values (fixed slopes)
   # 8a) gamma_w, fixed slopes for L1 variables (from l1_vars list)
@@ -149,16 +139,3 @@ r2mlm_init <- function(model) {
 }
 
 
-# Step 2 computation ------------------------------------------------------
-
-
-l <- r2mlm_init(model)
-
-r2mlm_manual(data = l$data, within_covs = l$within_covs, between_covs = l$between_covs, random_covs = l$random_covs, gamma_w = l$gamma_w, gamma_b = l$gamma_b, Tau = l$Tau, sigma2 = l$sigma2, has_intercept = l$has_intercept, clustermeancentered = l$clustermeancentered)
-
-
-
-# Gold standard -----------------------------------------------------------
-
-
-r2mlm::r2mlm(model)
