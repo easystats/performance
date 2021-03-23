@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Machine learning model trained to classify distributions — classify_distribution • performance</title>
+<title>Model summary for k-means clustering — model_performance.kmeans • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Machine learning model trained to classify distributions — classify_distribution" />
-<meta property="og:description" content="Mean accuracy and Kappa of 0.86 and 0.85, repsectively." />
+<meta property="og:title" content="Model summary for k-means clustering — model_performance.kmeans" />
+<meta property="og:description" content="Model summary for k-means clustering" />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -65,6 +65,8 @@
 <![endif]-->
 
 
+
+<!-- dependencies from examples -->
 
 
   
@@ -134,22 +136,50 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Machine learning model trained to classify distributions</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/check_distribution.R'><code>R/check_distribution.R</code></a></small>
-    <div class="hidden name"><code>classify_distribution.Rd</code></div>
+    <h1>Model summary for k-means clustering</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/model_performance.kmeans.R'><code>R/model_performance.kmeans.R</code></a></small>
+    <div class="hidden name"><code>model_performance.kmeans.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Mean accuracy and Kappa of 0.86 and 0.85, repsectively.</p>
+    <p>Model summary for k-means clustering</p>
     </div>
 
-    <pre class="usage"><span class='va'>classify_distribution</span></pre>
+    <pre class="usage"><span class='co'># S3 method for kmeans</span>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>model</th>
+      <td><p>Object of type <code>kmeans</code>.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle off warnings.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed to or from other methods.</p></td>
+    </tr>
+    </table>
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An object of class <code>randomForest.formula</code> (inherits from <code>randomForest</code>) of length 8.</p>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># a 2-dimensional example</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span>, sd <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>,
+  <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span>, mean <span class='op'>=</span> <span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/kmeans.html'>kmeans</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='fl'>2</span><span class='op'>)</span>
+<span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Indices of model performance</span><span>
+#&gt; 
+#&gt; Sum_Squares_Within | Sum_Squares_Between | Sum_Squares_Total | Iterations
+#&gt; -------------------------------------------------------------------------
+#&gt; 71.530             |              16.523 |            55.007 |      1.000</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

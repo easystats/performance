@@ -66,6 +66,9 @@
 
 
 
+<!-- dependencies from examples -->
+
+
   
 
   
@@ -163,7 +166,17 @@
     </tr>
     <tr>
       <th>estimator</th>
-      <td><p>Applied when comparing regression models using <code>test_likelihoodratio()</code>. Corresponds to the different estimators for the standard deviation of the errors. If <code>estimator="OLS"</code> (default), then it uses the same method as <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(..., test="LRT")</a></code> implemented in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this estimator under the alternative hypothesis. If <code>estimator="ML"</code>, which is for instance used by <code><a href='https://rdrr.io/pkg/lmtest/man/lrtest.html'>lrtest(...)</a></code> in package <span class="pkg">lmtest</span>, the scaling is done by n (the biased ML estimator) and the estimator under the null hypothesis. In moderately large samples, the differences should be negligible, but it is possible that OLS would perform slightly better in small samples with Gaussian errors.</p></td>
+      <td><p>Applied when comparing regression models using
+<code>test_likelihoodratio()</code>. Corresponds to the different estimators for
+the standard deviation of the errors. If <code>estimator="OLS"</code> (default),
+then it uses the same method as <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova(..., test="LRT")</a></code> implemented
+in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this
+estimator under the alternative hypothesis. If <code>estimator="ML"</code>, which
+is for instance used by <code><a href='https://rdrr.io/pkg/lmtest/man/lrtest.html'>lrtest(...)</a></code> in package <span class="pkg">lmtest</span>, the
+scaling is done by n (the biased ML estimator) and the estimator under the
+null hypothesis. In moderately large samples, the differences should be
+negligible, but it is possible that OLS would perform slightly better in
+small samples with Gaussian errors.</p></td>
     </tr>
     <tr>
       <th>reference</th>
@@ -357,7 +370,7 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
