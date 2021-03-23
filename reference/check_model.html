@@ -207,16 +207,6 @@ By default, all possible checks are performed and plotted.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The data frame that is used for plotting.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The plot <strong>Linearity</strong> checks the assumption of linear
-relationship. However, the spread of dots also indicate possible
-heteroscedasticity (i.e. non-constant variance); hence, the alias <code>"ncv"</code>
-for this plot. <strong>Some caution is needed</strong> when interpreting these plots.
-Although these plots are helpful to check model assumptions, they do not
-necessarily indicate so-called "lack of fit", e.g. missed non-linear
-relationships or interactions. Thus, it is always recommended to also look
-at <a href='https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html'>effect plots, including partial residuals</a>.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function just prepares the data for plotting. To create the plots,
@@ -224,6 +214,28 @@ at <a href='https://strengejacke.github.io/ggeffects/articles/introduction_parti
 all possible warnings. In case you observe suspicious plots, please refer to
 the dedicated functions (like <code><a href='check_collinearity.html'>check_collinearity()</a></code>, <code><a href='check_normality.html'>check_normality()</a></code>
 etc.) to get informative messages and warnings.</p>
+    <h2 class="hasAnchor" id="linearity-assumption"><a class="anchor" href="#linearity-assumption"></a>Linearity Assumption</h2>
+
+    
+
+<p>The plot <strong>Linearity</strong> checks the assumption of linear
+relationship. However, the spread of dots also indicate possible
+heteroscedasticity (i.e. non-constant variance); hence, the alias <code>"ncv"</code>
+for this plot. <strong>Some caution is needed</strong> when interpreting these plots.
+Although these plots are helpful to check model assumptions, they do not
+necessarily indicate so-called "lack of fit", e.g. missed non-linear
+relationships or interactions. Thus, it is always recommended to also look
+at <a href='https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html'>effect plots, including partial residuals</a>.</p>
+    <h2 class="hasAnchor" id="residuals-for-generalized-linear-models"><a class="anchor" href="#residuals-for-generalized-linear-models"></a>Residuals for (Generalized) Linear Models</h2>
+
+    
+
+<p>Plots that check the normality of residuals (QQ-plot) or the homogeneity of
+variance use standardized Pearson's residuals for generalized linear models,
+and standardized residuals for linear models. The plots for the normality of
+residuals (with overlayed normal curve) and for the linearity assumption use
+the default residuals for <code>lm</code> and <code>glm</code> (which are deviance
+residuals for <code>glm</code>).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
