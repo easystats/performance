@@ -173,8 +173,8 @@
 
 
 #' @importFrom insight get_sigma
-.get_sigma <- function(model) {
-  s <- insight::get_sigma(model)
+.get_sigma <- function(model, verbose = TRUE) {
+  s <- insight::get_sigma(model, verbose = verbose)
   if (!is.null(s)) {
     as.numeric(s)
   } else {

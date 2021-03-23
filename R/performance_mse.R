@@ -60,6 +60,14 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
     return(NA)
   }
 
+  # for multivariate response models...
+  if (is.data.frame(res)) {
+    if (verbose) {
+      warning("Multiple response variables detected. Cannot reliably compute (R)MSE.", call. = FALSE)
+    }
+    return(NA)
+  }
+
   mean(res^2, na.rm = TRUE)
 }
 
