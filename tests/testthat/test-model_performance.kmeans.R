@@ -8,9 +8,9 @@ if (require("testthat") && require("performance")) {
       model_performance(cl),
       structure(
         list(
-          Within_Sum_Squares = 681.3706,
-          Between_Sum_Squares = 78.851441426146,
-          Total_Sum_Squares = 602.519158573854,
+          Sum_Squares_Within = 681.3706,
+          Sum_Squares_Between = 78.851441426146,
+          Sum_Squares_Total = 602.519158573854,
           Iterations = 2L
         ),
         class = c("performance_model", "data.frame"),
@@ -28,9 +28,9 @@ if (require("testthat") && require("performance")) {
       model_performance(mod),
       structure(
         list(
-          Within_Sum_Squares = 681.3706,
-          Between_Sum_Squares = 78.851441426146,
-          Total_Sum_Squares = 602.519158573854,
+          Sum_Squares_Within = 681.3706,
+          Sum_Squares_Between = 78.851441426146,
+          Sum_Squares_Total = 602.519158573854,
           Iterations = 2L
         ),
         class = c(

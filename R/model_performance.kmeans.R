@@ -17,7 +17,7 @@
 model_performance.kmeans <- function(model, verbose = TRUE, ...) {
   out <- as.data.frame(model[c("totss", "tot.withinss", "betweenss", "iter")])
   colnames(out) <- c(
-    "Within_Sum_Squares", "Between_Sum_Squares", "Total_Sum_Squares",
+    "Sum_Squares_Within", "Sum_Squares_Between", "Sum_Squares_Total",
     "Iterations"
   )
 
