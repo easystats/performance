@@ -140,6 +140,55 @@
 
 
 
+#' @importFrom stats qf influence rstandard cooks.distance
+#' @importFrom insight get_residuals get_predicted n_parameters
+.diag_influential_obs <- function(model) {
+  s <- summary(model)
+
+  if (inherits(model, "lm", which = TRUE) == 1) {
+    cook_levels <- round(stats::qf(.5, s$fstatistic[2], s$fstatistic[3]), 2)
+  } else {
+    cook_levels <- c(.5, 1)
+  }
+
+  n_params <- tryCatch(
+    {
+      model$rank
+    },
+    error = function(e) {
+      insight::n_parameters(model)
+    }
+  )
+
+  infl <- stats::influence(model, do.coef = FALSE)
+  resid <- insight::get_residuals(model)
+
+  std_resid <- tryCatch(
+    {
+      stats::rstandard(model, infl)
+    },
+    error = function(e) {
+      resid
+    }
+  )
+
+  plot_data <- data.frame(
+    Hat = infl$hat,
+    Sigma = infl$sigma,
+    Cooks_Distance = stats::cooks.distance(model, infl),
+    Fitted = insight::get_predicted(model),
+    Residuals = resid,
+    Std_Residuals = std_resid,
+    stringsAsFactors = FALSE
+  )
+  plot_data$Index = 1:nrow(plot_data)
+
+  attr(plot_data, "cook_levels") <- cook_levels
+  attr(plot_data, "n_params") <- n_params
+  plot_data
+}
+
+
 
 #' @importFrom stats residuals fitted
 .diag_ncv <- function(model) {
