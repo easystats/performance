@@ -143,7 +143,7 @@ list(
 }}
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please note} that the range of the distance-values along the y-axis is re-scaled to range from 0 to 1!
 }
 \examples{
 # Univariate
