@@ -233,6 +233,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
+  attr(outlier, "influential_obs") <- .influential_obs(x)
   outlier
 }
 
@@ -717,6 +718,20 @@ as.numeric.check_outliers <- function(x, ...) {
 }
 
 
+
+
+# influential observations data --------
+
+.influential_obs <- function(x) {
+  tryCatch(
+    {
+      .diag_influential_obs(x)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
 
 
 
