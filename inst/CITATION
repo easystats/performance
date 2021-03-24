@@ -1,17 +1,13 @@
 bibentry(
-  bibtype="Article",
-  title="performance: Assessment of Regression Models Performance",
-  author=c(person("Daniel", "Lüdecke"), person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Indrajeet", "Patil"), person("Philip", "Waggoner")),
-  journal="CRAN",
-  year="2020",
-  note="R package",
-  doi="10.5281/zenodo.3952174",
-  url="https://easystats.github.io/performance/",
-
-  textVersion =
-    paste("Lüdecke, Makowski, Ben-Shachar, Patil, & Waggoner (2020). Assessment of Regression Models Performance. CRAN.",
-          "Available from https://easystats.github.io/performance/"
-    ),
-  mheader = "To cite performance in publications use:"
+  "Article",
+  title = "Assessment, Testing and Comparison of Statistical Models using R",
+author = c(person("Daniel", "Lüdecke"), person("Mattan S.", "Ben-Shachar"), person("Indrajeet", "Patil"), person("Philip", "Waggoner"), person("Dominique", "Makowski")),
+  year = 2021,
+  journal = "Journal of Open Source Software",
+  volume = 6,
+  number = 59,
+  pages = 3112,
+  doi = "10.31234/osf.io/vtq8f",
+  textVersion = "Lüdecke et al., (2021). Assessment, Testing and Comparison of Statistical Models using R. Journal of Open Source Software,
+6(59), 3112. https://doi.org/10.31234/osf.io/vtq8f"
 )
-
