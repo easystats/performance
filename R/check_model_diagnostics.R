@@ -176,7 +176,6 @@
 
   plot_data <- data.frame(
     Hat = infl$hat,
-    Sigma = infl$sigma,
     Cooks_Distance = stats::cooks.distance(model, infl),
     Fitted = insight::get_predicted(model),
     Residuals = resid,
