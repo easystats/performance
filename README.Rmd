@@ -64,6 +64,8 @@ remotes::install_github("easystats/performance")
 
 ## Citation
 
+<!-- TO DO: once accepted, replace psyarxiv doi with joss doi -->
+
 To cite performance in publications use:
 
 ```{r}
