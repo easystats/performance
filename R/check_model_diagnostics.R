@@ -142,11 +142,13 @@
 
 #' @importFrom stats qf influence rstandard cooks.distance
 #' @importFrom insight get_residuals get_predicted n_parameters
-.diag_influential_obs <- function(model) {
+.diag_influential_obs <- function(model, threshold = NULL) {
   s <- summary(model)
 
   if (inherits(model, "lm", which = TRUE) == 1) {
     cook_levels <- round(stats::qf(.5, s$fstatistic[2], s$fstatistic[3]), 2)
+  } else if (!is.null(threshold)) {
+    cook_levels <- threshold
   } else {
     cook_levels <- c(.5, 1)
   }
@@ -181,7 +183,9 @@
     Std_Residuals = std_resid,
     stringsAsFactors = FALSE
   )
-  plot_data$Index = 1:nrow(plot_data)
+  plot_data$Index <- 1:nrow(plot_data)
+  plot_data$Influential <- NA
+  plot_data$Influential[abs(plot_data$Cooks_Distance) >= max(cook_levels)] <- "Influential"
 
   attr(plot_data, "cook_levels") <- cook_levels
   attr(plot_data, "n_params") <- n_params

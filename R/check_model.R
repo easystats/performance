@@ -107,7 +107,12 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
   dat$NCV <- .diag_ncv(model)
   dat$HOMOGENEITY <- .diag_homogeneity(model)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
-  dat$INFLUENTIAL <- .diag_influential_obs(model)
+  if (!is.null(dat$OUTLIERS)) {
+    threshold <- attributes(dat$OUTLIERS)$threshold$cook
+  } else {
+    threshold <- NULL
+  }
+  dat$INFLUENTIAL <- .diag_influential_obs(model, threshold = threshold)
 
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -125,7 +130,12 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
   dat$HOMOGENEITY <- .diag_homogeneity(model)
   dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
-  dat$INFLUENTIAL <- .diag_influential_obs(model)
+  if (!is.null(dat$OUTLIERS)) {
+    threshold <- attributes(dat$OUTLIERS)$threshold$cook
+  } else {
+    threshold <- NULL
+  }
+  dat$INFLUENTIAL <- .diag_influential_obs(model, threshold = threshold)
 
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
