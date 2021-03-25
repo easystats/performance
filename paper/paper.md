@@ -1,5 +1,5 @@
 ---
-title: "Assessment, Testing and Comparison of Statistical Models using R"
+title: "Assessment, Comparison and Testing of Statistical Models using R"
 authors:
 - affiliation: 1
   name: Daniel Lüdecke
