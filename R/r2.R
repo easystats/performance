@@ -220,7 +220,7 @@ r2.glm <- function(model, ...) {
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
   } else {
-    list("R2_Nagelkerke" = r2_nagelkerke(model))
+    out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
     attr(out, "model_type") <- "Generalized Linear"
     class(out) <- c("r2_pseudo", class(out))
