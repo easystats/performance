@@ -63,12 +63,19 @@ r2.default <- function(model, verbose = TRUE, ...) {
       list(R2 = 1 - sum((resp - pred)^2) / sum((resp - mean_resp)^2))
     },
     error = function(e) {
-      NA
+      NULL
     }
   )
 
-  if (is.na(out) && isTRUE(verbose)) {
+  if (is.na(NULL) && isTRUE(verbose)) {
     insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
+  }
+
+  if (!is.null(out)) {
+    names(out$R2) <- "R2"
+    class(out) <- c("r2_generic", class(out))
+  } else {
+    out <- NA
   }
 
   out
@@ -206,12 +213,19 @@ r2.glm <- function(model, ...) {
   info <- insight::model_info(model)
 
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
-    r2.default(model, ...)
+    out <- r2.default(model, ...)
   } else if (info$is_logit) {
-    list("R2_Tjur" = r2_tjur(model))
+    out <- list("R2_Tjur" = r2_tjur(model))
+    attr(out, "model_type") <- "Logistic"
+    names(out$R2_Tjur) <- "Tjur's R2"
+    class(out) <- c("r2_pseudo", class(out))
   } else {
     list("R2_Nagelkerke" = r2_nagelkerke(model))
+    names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
+    attr(out, "model_type") <- "Generalized Linear"
+    class(out) <- c("r2_pseudo", class(out))
   }
+  out
 }
 
 #' @export
@@ -252,6 +266,9 @@ r2.betamfx <- r2.logitmfx
 #' @export
 r2.betaor <- r2.logitmfx
 
+#' @export
+r2.model_fit <- r2.logitmfx
+
 
 
 
@@ -260,7 +277,10 @@ r2.betaor <- r2.logitmfx
 
 #' @export
 r2.BBreg <- function(model, ...) {
-  list("R2_CoxSnell" = r2_coxsnell(model))
+  out <- list("R2_CoxSnell" = r2_coxsnell(model))
+  names(out$R2_CoxSnell) <- "Cox & Snell's R2"
+  class(out) <- c("r2_pseudo", class(out))
+  out
 }
 
 #' @export
@@ -277,7 +297,10 @@ r2.bayesx <- r2.BBreg
 
 #' @export
 r2.censReg <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
+  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+  names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
+  class(out) <- c("r2_pseudo", class(out))
+  out
 }
 
 #' @export
@@ -456,9 +479,10 @@ r2.scam <- r2.gam
 
 #' @export
 r2.betareg <- function(model, ...) {
-  list(
-    R2 = c(`Pseudo R2` = model$pseudo.r.squared)
-  )
+  out <- list(R2 = c(`Pseudo R2` = model$pseudo.r.squared))
+  attr(out, "model_type") <- "Beta"
+  class(out) <- c("r2_generic", class(out))
+  out
 }
 
 
@@ -568,7 +592,10 @@ r2.ivreg <- function(model, ...) {
 
 #' @export
 r2.bigglm <- function(model, ...) {
-  list("R2_CoxSnell" = summary(model)$rsq)
+  out <- list("R2_CoxSnell" = summary(model)$rsq)
+  names(out$R2_CoxSnell) <- "Cox & Snell's R2"
+  class(out) <- c("r2_pseudo", class(out))
+  out
 }
 
 
@@ -614,7 +641,10 @@ r2.complmrob <- r2.lmrob
 
 #' @export
 r2.mlogit <- function(model, ...) {
-  list("R2_McFadden" = r2_mcfadden(model))
+  out <- list("R2_McFadden" = r2_mcfadden(model))
+  names(out$R2_McFadden) <- "McFadden's R2"
+  class(out) <- c("r2_pseudo", class(out))
+  out
 }
 
 
@@ -674,7 +704,10 @@ r2.svyglm <- function(model, ...) {
 
 #' @export
 r2.vglm <- function(model, ...) {
-  list("R2_McKelvey" = r2_mckelvey(model))
+  out <- list("R2_McKelvey" = r2_mckelvey(model))
+  names(out$McKelvey) <- "McKelvey's R2"
+  class(out) <- c("r2_pseudo", class(out))
+  out
 }
 
 #' @export
@@ -684,5 +717,8 @@ r2.vgam <- r2.vglm
 
 #' @export
 r2.DirichletRegModel <- function(model, ...) {
-  list("R2_Nagelkerke" = r2_nagelkerke(model))
+  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+  names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
+  class(out) <- c("r2_pseudo", class(out))
+  out
 }

@@ -19,7 +19,8 @@ if (require("testthat") && require("performance") && require("MASS")) {
     expect_equal(
       r2(model),
       list(R2_Nagelkerke = c(`Nagelkerke's R2` = 0.108408289848161)),
-      tolerance = 1e-3
+      tolerance = 1e-3,
+      ignore_attr = TRUE
     )
   })
 }

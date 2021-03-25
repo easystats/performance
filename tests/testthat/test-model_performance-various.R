@@ -23,10 +23,10 @@ if (require("testthat") &&
   )
 
   test_that("model_performance various", {
-    expect_equal(model_performance(m1)$R2, 0.9617312, tolerance = 1e-4)
-    expect_equal(model_performance(m3)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
-    expect_equal(model_performance(m4)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
-    expect_equal(model_performance(m5)$R2, 0.4294224, tolerance = 1e-4)
+    expect_equal(model_performance(m1, verbose = FALSE)$R2, 0.9617312, tolerance = 1e-4)
+    expect_equal(model_performance(m3, verbose = FALSE)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
+    expect_equal(model_performance(m4, verbose = FALSE)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
+    expect_equal(model_performance(m5, verbose = FALSE)$R2, 0.4294224, tolerance = 1e-4)
   })
 }
 

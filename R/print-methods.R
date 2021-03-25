@@ -176,9 +176,7 @@ print.looic <- function(x, digits = 2, ...) {
 print.r2_generic <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
   if (!is.null(model_type)) {
-    insight::print_color(sprintf("# R2 for %s Regression\n\n", model_type), "blue")
-  } else {
-    insight::print_color("# R2\n\n", "blue")
+    insight::print_color(sprintf("# R2 for %s Regression\n", model_type), "blue")
   }
 
   if (all(c("R2_adjusted", "R2_within_adjusted") %in% names(x))) {
@@ -198,11 +196,24 @@ print.r2_generic <- function(x, digits = 3, ...) {
     collapse = "\n"
     )
   } else {
-    out <- sprintf("  R2: %.*f", digits, x$R2)
+    out <- sprintf("  %s: %.*f", names(x$R2), digits, x$R2)
   }
 
   cat(out)
   cat("\n")
+  invisible(x)
+}
+
+
+
+#' @importFrom insight print_color
+#' @export
+print.r2_pseudo <- function(x, digits = 3, ...) {
+  model_type <- attr(x, "model_type")
+  if (!is.null(model_type)) {
+    insight::print_color(sprintf("# R2 for %s Regression\n", model_type), "blue")
+  }
+  cat(sprintf("  %s: %.*f\n", names(x[[1]]), digits, x[[1]]))
   invisible(x)
 }
 

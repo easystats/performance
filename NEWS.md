@@ -7,6 +7,8 @@
 
 * `r2()` supports `mhurdle` (*mhurdle*) models.
 
+* Added `print()` methods for more classes of `r2()`.
+
 * `model_performance` supports *kmeans* models.
 
 * The `performance_roc()` and `performance_accuracy()` functions unfortunately 
