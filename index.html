@@ -179,7 +179,7 @@
 <span class="co">#&gt; # Bayesian R2 with Standard Error</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   Conditional R2: 0.953 (89% CI [0.944, 0.962])</span>
-<span class="co">#&gt;      Marginal R2: 0.824 (89% CI [0.745, 0.887])</span>
+<span class="co">#&gt;      Marginal R2: 0.825 (89% CI [0.750, 0.890])</span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
@@ -346,12 +346,12 @@
 <span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span><span class="op">)</span>
 <span class="co">#&gt; # Comparison of Model Performance Indices</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC</span>
-<span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="co">#&gt; m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |      </span>
-<span class="co">#&gt; m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |      </span>
-<span class="co">#&gt; m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722</span>
-<span class="co">#&gt; m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |</span></code></pre></div>
+<span class="co">#&gt; Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span>
+<span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                </span>
+<span class="co">#&gt; m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                </span>
+<span class="co">#&gt; m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                </span>
+<span class="co">#&gt; m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657</span></code></pre></div>
 <div id="general-index-of-model-performance" class="section level4">
 <h4 class="hasAnchor">
 <a href="#general-index-of-model-performance" class="anchor"></a>General index of model performance</h4>
