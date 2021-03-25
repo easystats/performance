@@ -1,5 +1,5 @@
 ---
-title: "Assessment, Comparison and Testing of Statistical Models using R"
+title: "performance: an R Package for Assessment, Testing and Comparison of Statistical Models."
 authors:
 - affiliation: 1
   name: Daniel Lüdecke
