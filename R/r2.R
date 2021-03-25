@@ -705,7 +705,7 @@ r2.svyglm <- function(model, ...) {
 #' @export
 r2.vglm <- function(model, ...) {
   out <- list("R2_McKelvey" = r2_mckelvey(model))
-  names(out$McKelvey) <- "McKelvey's R2"
+  names(out$R2_McKelvey) <- "McKelvey's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
 }
