@@ -98,8 +98,8 @@
 <div id="what-is-the-r2" class="section level1">
 <h1 class="hasAnchor">
 <a href="#what-is-the-r2" class="anchor"></a>What is the R2?</h1>
-<p>The <strong>coefficient of determination</strong>, denoted <span class="math inline">\(R^2\)</span> and pronounced “R squared”, is the proportion of the variance in the dependent variable (the response) that is <em>explained</em> (i.e., predicted) by the independent variable(s) (i.e., the predictor(s)).</p>
-<p>It is an “absolute” index of <em>goodness-of-fit</em>, ranging from 0 to 1, and can be used for model performance assessment or models comparison.</p>
+<p>The <strong>coefficient of determination</strong>, denoted <span class="math inline">\(R^2\)</span> and pronounced “R squared”, typically corresponds the proportion of the variance in the dependent variable (the response) that is <em>explained</em> (i.e., predicted) by the independent variables (the predictors).</p>
+<p>It is an “absolute” index of <em>goodness-of-fit</em>, ranging from 0 to 1 (often expressed in percentage), and can be used for model performance assessment or models comparison.</p>
 </div>
 <div id="different-types-of-r2" class="section level1">
 <h1 class="hasAnchor">
@@ -135,7 +135,7 @@
 <div id="r2-for-glms" class="section level1">
 <h1 class="hasAnchor">
 <a href="#r2-for-glms" class="anchor"></a>R2 for GLMs</h1>
-<p>In the context of a generalized linear model, <span class="math inline">\(R^2\)</span> doesn’t measure the percentage of <em>“explained variance”</em>, as this concept doesn’t apply. However, the <span class="math inline">\(R^2\)</span>s that have been adapted for GLMs have retained the name of “R2”, mostly because of the similar properties (the range, the sensitivity, and the interpretation).</p>
+<p>In the context of a generalized linear model (e.g., a logistic model which outcome is binary), <span class="math inline">\(R^2\)</span> doesn’t measure the percentage of <em>“explained variance”</em>, as this concept doesn’t apply. However, the <span class="math inline">\(R^2\)</span>s that have been adapted for GLMs have retained the name of “R2”, mostly because of the similar properties (the range, the sensitivity, and the interpretation as the amount of explanatory power).</p>
 </div>
 <div id="r2-for-mixed-models" class="section level1">
 <h1 class="hasAnchor">
@@ -143,8 +143,14 @@
 <div id="marginal-vs--conditional-r2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#marginal-vs--conditional-r2" class="anchor"></a>Marginal vs. Conditional R2</h2>
-<p>For mixed models, <code>performance</code> will return two different <span class="math inline">\(R^2\)</span>s: - the conditional <span class="math inline">\(R^2\)</span> - marginal <span class="math inline">\(R^2\)</span></p>
-<p>The marginal <span class="math inline">\(R^2\)</span> considers only the variance of the <strong>fixed effects</strong>, while the conditional <span class="math inline">\(R^2\)</span> takes <em>both</em> the <strong>fixed and random effects</strong> into account.</p>
+<p>For mixed models, <code>performance</code> will return two different <span class="math inline">\(R^2\)</span>s:</p>
+<ul>
+<li>The <strong>conditional</strong> <span class="math inline">\(R^2\)</span>
+</li>
+<li>The <strong>marginal</strong> <span class="math inline">\(R^2\)</span>
+</li>
+</ul>
+<p>The marginal <span class="math inline">\(R^2\)</span> considers only the variance of the <strong>fixed effects</strong> (without the random effects), while the conditional <span class="math inline">\(R^2\)</span> takes <em>both</em> the <strong>fixed and random effects</strong> into account (i.e., the total model).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span>
@@ -194,7 +200,7 @@
 <div id="interpretation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#interpretation" class="anchor"></a>Interpretation</h1>
-<p>If you want to know about how to <em>interpret</em> these <span class="math inline">\(R^2\)</span> values, see <a href="https://easystats.github.io/effectsize/reference/interpret_r2.html" class="external-link"><code>effectsize</code></a>.</p>
+<p>If you want to know about how to <em>interpret</em> these <span class="math inline">\(R^2\)</span> values, see these <a href="https://easystats.github.io/effectsize/reference/interpret_r2.html" class="external-link"><strong>interpretation guidelines</strong></a>.</p>
 </div>
   </div>
 
