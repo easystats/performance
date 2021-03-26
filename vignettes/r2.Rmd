@@ -33,11 +33,11 @@ library(rstanarm)
 # What is the R2?
 
 The **coefficient of determination**, denoted $R^2$ and pronounced "R squared",
-is the proportion of the variance in the dependent variable (the response) that
-is *explained* (i.e., predicted) by the independent variable(s) (i.e., the
-predictor(s)).
+typically corresponds the proportion of the variance in the dependent variable (the response) that
+is *explained* (i.e., predicted) by the independent variables (the
+predictors).
 
-It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1, and can be used for model performance assessment or models comparison.
+It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1 (often expressed in percentage), and can be used for model performance assessment or models comparison.
 
 # Different types of R2
 
@@ -75,23 +75,24 @@ knitr::kable(d)
 
 # R2 for GLMs
 
-In the context of a generalized linear model, $R^2$ doesn't measure the
+In the context of a generalized linear model (e.g., a logistic model which outcome is binary), $R^2$ doesn't measure the
 percentage of *"explained variance"*, as this concept doesn't apply. However,
 the $R^2$s that have been adapted for GLMs have retained the name of "R2",
 mostly because of the similar properties (the range, the sensitivity, and the
-interpretation).
+interpretation as the amount of explanatory power).
 
 # R2 for Mixed Models
 
 ## Marginal vs. Conditional R2
 
 For mixed models, `performance` will return two different $R^2$s:
-- the conditional $R^2$ 
-- marginal $R^2$ 
 
-The marginal $R^2$ considers only the variance of the **fixed effects**, while
+- The **conditional** $R^2$ 
+- The **marginal** $R^2$ 
+
+The marginal $R^2$ considers only the variance of the **fixed effects** (without the random effects), while
 the conditional $R^2$ takes *both* the **fixed and random effects** into
-account.
+account (i.e., the total model).
 
 ```{r}
 library(lme4)
@@ -134,4 +135,4 @@ If you want to know more about these indices, you can check out details and refe
 
 # Interpretation
 
-If you want to know about how to *interpret* these $R^2$ values, see [`effectsize`](https://easystats.github.io/effectsize/reference/interpret_r2.html).
+If you want to know about how to *interpret* these $R^2$ values, see these [**interpretation guidelines**](https://easystats.github.io/effectsize/reference/interpret_r2.html).
