@@ -379,7 +379,7 @@
 <div id="testing-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#testing-models" class="anchor"></a>Testing models</h3>
-<p><code><a href="reference/test_bf.html">test_performance()</a></code> (and <code>test_bf</code>, its Bayesian sister) carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not).</p>
+<p><code><a href="reference/test_performance.html">test_performance()</a></code> (and <code>test_bf</code>, its Bayesian sister) carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
@@ -399,7 +399,7 @@
 <span class="co">#&gt; lm3  |    lm | 187.092 | 208.167 | 0.727 |     0.718 | 0.431 | 0.440</span>
 <span class="co">#&gt; lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305</span>
 
-<span class="fu"><a href="reference/test_bf.html">test_bf</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span>
+<span class="fu"><a href="reference/test_performance.html">test_bf</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span>
 <span class="co">#&gt; Bayes Factors for Model Comparison</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     Model                                                  BF</span>
