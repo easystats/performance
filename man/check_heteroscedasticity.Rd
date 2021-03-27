@@ -18,6 +18,10 @@ indicates a non-constant variance (heteroskedasticity).
 \description{
 Check model for (non-)constant error variance.
 }
+\details{
+This test of the hypothesis of (non-)constant error is also called
+\emph{Breusch-Pagan test} (\cite{1979}).
+}
 \note{
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
@@ -30,4 +34,7 @@ if (require("see")) {
   x <- check_heteroscedasticity(m)
   plot(x)
 }
+}
+\references{
+Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287–1294.
 }

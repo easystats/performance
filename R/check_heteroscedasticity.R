@@ -11,6 +11,11 @@
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
+#' @details This test of the hypothesis of (non-)constant error is also called
+#' \emph{Breusch-Pagan test} (\cite{1979}).
+#'
+#' @references Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287–1294.
+#'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_heteroscedasticity(m)
