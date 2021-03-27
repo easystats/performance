@@ -61,13 +61,16 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
+  all_metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
+
   if (all(metrics == "all")) {
-    metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
+    metrics <- all_metrics
   } else if (all(metrics == "common")) {
     metrics <- c("LOOIC", "WAIC", "R2", "RMSE")
   }
 
-  metrics <- toupper(metrics)
+  # check for valid input
+  metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {

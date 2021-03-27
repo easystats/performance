@@ -28,11 +28,17 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
+  # all available metrics
+  all_metrics <- c("AIC", "AICc", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
+
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
+    metrics <- all_metrics
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE")
   }
+
+  # check for valid input
+  metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   mi <- insight::model_info(model)
 

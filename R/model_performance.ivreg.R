@@ -4,11 +4,16 @@
 #' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
 #' @export
 model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...) {
+  all_metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")
+
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")
+    metrics <- all_metrics
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
+
+  # check for valid input
+  metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   out <- model_performance.lm(model, metrics = metrics, verbose = verbose, ...)
 

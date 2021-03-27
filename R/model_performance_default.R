@@ -14,14 +14,7 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
   }
 
   # check for valid input
-  bad_metrics <- which(!metrics %in% all_metrics)
-  if (length(bad_metrics)) {
-    if (verbose) {
-      warning(paste0("Following elements are no valid metric: ",
-                     metrics[bad_metrics], collapse = ", "))
-    }
-    metrics <- metrics[-bad_metrics]
-  }
+  metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   if (!insight::is_model(model) || !insight::is_model_supported(model)) {
     if (isTRUE(verbose)) {
@@ -34,6 +27,20 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
 }
 
 
+
+
+.check_bad_metrics <- function(metrics, all_metrics, verbose = TRUE) {
+  # check for valid input
+  bad_metrics <- which(!metrics %in% all_metrics)
+  if (length(bad_metrics)) {
+    if (verbose) {
+      warning(paste0("Following elements are no valid metric: ",
+                     metrics[bad_metrics], collapse = ", "))
+    }
+    metrics <- metrics[-bad_metrics]
+  }
+  metrics
+}
 
 
 # default methods -----------------------
