@@ -4,6 +4,8 @@
 #' @description \code{check_collinearity()} checks regression models for
 #'   multicollinearity by calculating the variance inflation factor (VIF).
 #'   \code{multicollinearity()} is an alias for \code{check_collinearity()}.
+#'   (When printed, VIF are also translated to Tolerance values, where
+#'   \code{tolerance = 1/vif}.)
 #'
 #' @param x A model object (that should at least respond to \code{vcov()},
 #'  and if possible, also to \code{model.matrix()} - however, it also should

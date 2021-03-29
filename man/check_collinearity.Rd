@@ -46,6 +46,8 @@ A data frame with three columns: The name of the model term, the
 \code{check_collinearity()} checks regression models for
   multicollinearity by calculating the variance inflation factor (VIF).
   \code{multicollinearity()} is an alias for \code{check_collinearity()}.
+  (When printed, VIF are also translated to Tolerance values, where
+  \code{tolerance = 1/vif}.)
 }
 \details{
 \subsection{Multicollinearity}{
