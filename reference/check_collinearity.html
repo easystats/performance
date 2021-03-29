@@ -49,7 +49,9 @@
 <meta property="og:title" content="Check for multicollinearity of model terms — check_collinearity" />
 <meta property="og:description" content="check_collinearity() checks regression models for
   multicollinearity by calculating the variance inflation factor (VIF).
-  multicollinearity() is an alias for check_collinearity()." />
+  multicollinearity() is an alias for check_collinearity().
+  (When printed, VIF are also translated to Tolerance values, where
+  tolerance = 1/vif.)" />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -146,7 +148,9 @@
     <div class="ref-description">
     <p><code>check_collinearity()</code> checks regression models for
   multicollinearity by calculating the variance inflation factor (VIF).
-  <code>multicollinearity()</code> is an alias for <code>check_collinearity()</code>.</p>
+  <code>multicollinearity()</code> is an alias for <code>check_collinearity()</code>.
+  (When printed, VIF are also translated to Tolerance values, where
+  <code>tolerance = 1/vif</code>.)</p>
     </div>
 
     <pre class="usage"><span class='fu'>check_collinearity</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -257,15 +261,15 @@ Following model-classes are currently supported: <code>hurdle</code>,
 #&gt; </span><span>
 #&gt; </span><span style='color: #00BB00;'>Low Correlation
 #&gt; 
-#&gt; </span><span> Parameter  VIF Increased SE
-#&gt;       gear 1.53         1.24
+#&gt; </span><span> Parameter  VIF Increased SE Tolerance
+#&gt;       gear 1.53         1.24      0.65
 #&gt; 
 #&gt; </span><span style='color: #BBBB00;'>Moderate Correlation
 #&gt; 
-#&gt; </span><span> Parameter  VIF Increased SE
-#&gt;         wt 5.05         2.25
-#&gt;        cyl 5.41         2.33
-#&gt;       disp 9.97         3.16</div><div class='input'>
+#&gt; </span><span> Parameter  VIF Increased SE Tolerance
+#&gt;         wt 5.05         2.25      0.20
+#&gt;        cyl 5.41         2.33      0.18
+#&gt;       disp 9.97         3.16      0.10</div><div class='input'>
 <span class='co'># plot results</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>check_collinearity</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
