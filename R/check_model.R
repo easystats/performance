@@ -95,6 +95,13 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
 }
 
 
+#' @export
+check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", alpha = .2, detrend = FALSE, ...) {
+  check_model(x$fit, dot_size = dot_size, line_size = line_size, panel = panel, check = check, alpha = alpha, detrend = detrend, ...)
+}
+
+
+
 
 
 .check_assumptions_linear <- function(model, model_info) {

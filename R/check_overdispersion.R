@@ -72,6 +72,11 @@ check_overdispersion <- function(x, ...) {
 }
 
 
+#' @export
+check_overdispersion.default <- function(x, ...) {
+  stop(paste0("'check_overdisperion()' not yet implemented for models of class '", class(x)[1], "'."))
+}
+
 
 
 # Overdispersion for classical models -----------------------------
@@ -132,6 +137,9 @@ check_overdispersion.negbinirr <- check_overdispersion.poissonmfx
 
 #' @export
 check_overdispersion.negbinmfx <- check_overdispersion.poissonmfx
+
+#' @export
+check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 
 
 

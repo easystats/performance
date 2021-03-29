@@ -20,9 +20,7 @@ Check model for (non-)constant error variance.
 }
 \details{
 This test of the hypothesis of (non-)constant error is also called
-\emph{Breusch-Pagan test} (\cite{1979}). \code{check_heteroscedasticity()}
-should return correct results for all models for which Pearson residuals can
-be calculated, and for which residual degrees of freedom are available.
+\emph{Breusch-Pagan test} (\cite{1979}).
 }
 \note{
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.

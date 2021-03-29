@@ -2,6 +2,8 @@
 
 ## General
 
+* Add support for `model_fit` (*tidymodels*).
+
 * Give more informative warning when `r2_bayes()` for *BFBayesFactor* objects
   can't be calculated.
 
