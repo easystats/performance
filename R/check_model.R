@@ -6,8 +6,7 @@
 #' multicollinearity).
 #'
 #' @param x A model object.
-#' @param dot_size Size of dot-geoms.
-#' @param line_size Size of line-geoms.
+#' @param dot_size,line_size Size of line and dot-geoms.
 #' @param panel Logical, if \code{TRUE}, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
@@ -17,7 +16,13 @@
 #'   \code{"ncv"} is an alias for \code{"linearity"}, and checks for non-constant
 #'   variance, i.e. for heteroscedasticity, as well as the linear relationship.
 #'   By default, all possible checks are performed and plotted.
-#' @param alpha The alpha level of the confidence bands. Scalar from 0 to 1.
+#' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
+#'   Scalar from 0 to 1.
+#' @param colors Character vector with color codes (hex-format). Must be of
+#'   length 3. First color is usually used for reference lines, second color
+#'   for dots, and third color for outliers or extreme values.
+#' @param theme String, indicating the name of the plot-theme. Must be in the
+#'   format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).
 #' @param detrend Should QQ/PP plots be detrended?
 #' @param ... Currently not used.
 #'
@@ -70,7 +75,7 @@ check_model <- function(x, ...) {
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", alpha = .2, detrend = FALSE, ...) {
+check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", alpha = .2, dot_alpha = .8, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), theme = "see::theme_lucid", detrend = FALSE, ...) {
   minfo <- insight::model_info(x)
 
   if (minfo$is_bayesian) {
@@ -89,8 +94,10 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
   attr(ca, "line_size") <- line_size
   attr(ca, "check") <- check
   attr(ca, "alpha") <- alpha
+  attr(ca, "dot_alpha") <- dot_alpha
   attr(ca, "detrend") <- detrend
-
+  attr(ca, "colors") <- colors
+  attr(ca, "theme") <- theme
   ca
 }
 

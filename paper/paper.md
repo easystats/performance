@@ -103,9 +103,9 @@ For example, consider the visual checks from a simple linear regression model.
 ``` {.r}
 library(see)
 
-model <- lm(Sepal.Length ~ Species + Sepal.Width + 
-            Petal.Length + Petal.Width, data = iris)
-            
+model <- lm(mpg ~ wt + am + gear + vs * cyl, 
+            data = mtcars)
+
 check_model(model)
 ```
 

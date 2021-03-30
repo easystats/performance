@@ -14,6 +14,9 @@ check_model(x, ...)
   panel = TRUE,
   check = "all",
   alpha = 0.2,
+  dot_alpha = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = "see::theme_lucid",
   detrend = FALSE,
   ...
 )
@@ -23,9 +26,7 @@ check_model(x, ...)
 
 \item{...}{Currently not used.}
 
-\item{dot_size}{Size of dot-geoms.}
-
-\item{line_size}{Size of line-geoms.}
+\item{dot_size, line_size}{Size of line and dot-geoms.}
 
 \item{panel}{Logical, if \code{TRUE}, plots are arranged as panels; else,
 single plots for each diagnostic are returned.}
@@ -38,7 +39,15 @@ and plotted. May be one or more of
 variance, i.e. for heteroscedasticity, as well as the linear relationship.
 By default, all possible checks are performed and plotted.}
 
-\item{alpha}{The alpha level of the confidence bands. Scalar from 0 to 1.}
+\item{alpha, dot_alpha}{The alpha level of the confidence bands and dot-geoms.
+Scalar from 0 to 1.}
+
+\item{colors}{Character vector with color codes (hex-format). Must be of
+length 3. First color is usually used for reference lines, second color
+for dots, and third color for outliers or extreme values.}
+
+\item{theme}{String, indicating the name of the plot-theme. Must be in the
+format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
 \item{detrend}{Should QQ/PP plots be detrended?}
 }
