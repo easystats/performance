@@ -132,8 +132,8 @@ model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cor
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
-#>      Marginal R2: 0.825 (89% CI [0.750, 0.890])
+#>   Conditional R2: 0.953 (89% CI [0.944, 0.961])
+#>      Marginal R2: 0.826 (89% CI [0.748, 0.888])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
