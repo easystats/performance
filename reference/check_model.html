@@ -159,6 +159,9 @@ multicollinearity).</p>
   panel <span class='op'>=</span> <span class='cn'>TRUE</span>,
   check <span class='op'>=</span> <span class='st'>"all"</span>,
   alpha <span class='op'>=</span> <span class='fl'>0.2</span>,
+  dot_alpha <span class='op'>=</span> <span class='fl'>0.8</span>,
+  colors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#3aaf85"</span>, <span class='st'>"#1b6ca8"</span>, <span class='st'>"#cd201f"</span><span class='op'>)</span>,
+  theme <span class='op'>=</span> <span class='st'>"see::theme_lucid"</span>,
   detrend <span class='op'>=</span> <span class='cn'>FALSE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -175,12 +178,8 @@ multicollinearity).</p>
       <td><p>Currently not used.</p></td>
     </tr>
     <tr>
-      <th>dot_size</th>
-      <td><p>Size of dot-geoms.</p></td>
-    </tr>
-    <tr>
-      <th>line_size</th>
-      <td><p>Size of line-geoms.</p></td>
+      <th>dot_size, line_size</th>
+      <td><p>Size of line and dot-geoms.</p></td>
     </tr>
     <tr>
       <th>panel</th>
@@ -198,8 +197,20 @@ variance, i.e. for heteroscedasticity, as well as the linear relationship.
 By default, all possible checks are performed and plotted.</p></td>
     </tr>
     <tr>
-      <th>alpha</th>
-      <td><p>The alpha level of the confidence bands. Scalar from 0 to 1.</p></td>
+      <th>alpha, dot_alpha</th>
+      <td><p>The alpha level of the confidence bands and dot-geoms.
+Scalar from 0 to 1.</p></td>
+    </tr>
+    <tr>
+      <th>colors</th>
+      <td><p>Character vector with color codes (hex-format). Must be of
+length 3. First color is usually used for reference lines, second color
+for dots, and third color for outliers or extreme values.</p></td>
+    </tr>
+    <tr>
+      <th>theme</th>
+      <td><p>String, indicating the name of the plot-theme. Must be in the
+format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</code>).</p></td>
     </tr>
     <tr>
       <th>detrend</th>

@@ -158,6 +158,7 @@
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
 <ul>
 <li><p>The <code>metrics</code> argument from <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gains a <code>"AICc"</code> option, to also compute the 2nd order AIC.</p></li>
+<li><p><code><a href="../reference/check_model.html">check_model()</a></code> gains more arguments, to customize plot appearance.</p></li>
 <li><p><code>"R2_adj"</code> is now an explicit option in the <code>metrics</code> argument from <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code>.</p></li>
 <li><p>The default-method for <code><a href="../reference/r2.html">r2()</a></code> now tries to compute an r-squared for all models that have no specific <code><a href="../reference/r2.html">r2()</a></code>-method yet, by using following formula: <code>1-sum((y-y_hat)^2)/sum((y-y_bar)^2))</code></p></li>
 <li><p>Added option to detrend QQ/PP plots in <code><a href="../reference/check_model.html">check_model()</a></code>.</p></li>
