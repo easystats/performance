@@ -23,6 +23,8 @@
 * The `metrics` argument from `model_performance()` and `compare_performance()`
   gains a `"AICc"` option, to also compute the 2nd order AIC.
 
+* `check_model()` gains more arguments, to customize plot appearance.
+
 * `"R2_adj"` is now an explicit option in the `metrics` argument from
   `model_performance()` and `compare_performance()`.
 
