@@ -78,6 +78,10 @@ citation("performance")
 There is a nice introduction into the package on
 [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
 
+## The *performance* workflow
+
+![](man/figures/figure_workflow.png)
+
 ### Assessing model quality
 
 #### R-squared
@@ -132,8 +136,8 @@ model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cor
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (89% CI [0.944, 0.961])
-#>      Marginal R2: 0.826 (89% CI [0.748, 0.888])
+#>   Conditional R2: 0.953 (89% CI [0.945, 0.962])
+#>      Marginal R2: 0.825 (89% CI [0.746, 0.888])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -259,7 +263,8 @@ check_singularity(model)
 
 Remedies to cure issues with singular fits can be found
 [here](https://easystats.github.io/performance/reference/check_singularity.html).
-\#\#\#\# Check for heteroskedasticity
+
+#### Check for heteroskedasticity
 
 Linear models assume constant error variance (homoskedasticity).
 

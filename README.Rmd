@@ -2,7 +2,7 @@
 output: 
   github_document:
     toc: false
-    fig_width: 10.08
+    fig_width: 10
     fig_height: 6
 tags: [r, reports]
 vignette: >
@@ -79,6 +79,12 @@ citation("performance")
 [![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html) 
 
 There is a nice introduction into the package on [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
+
+## The *performance* workflow
+
+![](man/figures/figure_workflow.png)
+
+
 
 ### Assessing model quality
 
@@ -227,6 +233,7 @@ check_singularity(model)
 ```
 
 Remedies to cure issues with singular fits can be found [here](https://easystats.github.io/performance/reference/check_singularity.html). 
+
 #### Check for heteroskedasticity
 
 Linear models assume constant error variance (homoskedasticity).
