@@ -22,6 +22,7 @@ knitr::opts_chunk$set(
   tidy = TRUE,
   warning = FALSE,
   message = FALSE,
+  out.width = "100%",
   dpi = 300,
   fig.path = "man/figures/",
   comment = "#>"
@@ -82,9 +83,9 @@ There is a nice introduction into the package on [youtube](https://www.youtube.c
 
 ## The *performance* workflow
 
-![](man/figures/figure_workflow.png)
-
-
+```{r workflow, echo=FALSE, out.width="75%"}
+knitr::include_graphics("man/figures/figure_workflow.png")
+```
 
 ### Assessing model quality
 
@@ -124,12 +125,15 @@ more complex random effects structures, like random slopes or nested random
 effects [@johnson_extension_2014; @nakagawa_coefficient_2017].
 
 ```{r}
+set.seed(123)
 library(rstanarm)
+
 model <- stan_glmer(
   Petal.Length ~ Petal.Width + (1 | Species),
   data = iris,
   cores = 4
 )
+
 r2(model)
 
 library(lme4)
@@ -254,8 +258,11 @@ check_heteroscedasticity(model)
 `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To
 get a comprehensive check, use `check_model()`.
 
-```{r}
-model <- lm(mpg ~ wt * cyl + gear, data = mtcars)
+```{r, fig.height=9, fig.width=7}
+# defining a model
+model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
+
+# checking model assumptions
 check_model(model)
 ```
 
