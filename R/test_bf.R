@@ -51,10 +51,16 @@ test_bf.ListModels <- function(objects, reference = 1, ...) {
   if (reference == "sequential") {
     # TODO: Double check that formula and whether it works for increasing and
     # decreasing order.
-    rez$BF <- rez$BF / c(1, rez$BF[1:nrow(rez) - 1])
-  }
 
-  rez$BF[ref] <- NA
+    # For increasing
+    rez$BF <- exp(c(NA, diff(log(rez$BF))))
+
+    # For decreasing
+    # ref <- nrow(rez)
+    # rez$BF <- exp(c(-diff(log(rez$BF)), NA))
+  } else {
+    rez$BF[ref] <- NA
+  }
 
   # Replace denominator
   attr(rez, "denominator") <- ref
