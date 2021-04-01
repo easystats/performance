@@ -295,7 +295,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     class = c("check_collinearity", "see_check_collinearity", "data.frame"),
     .remove_backticks_from_parameter_names(
       data.frame(
-        Parameter = terms,
+        Term = terms,
         VIF = result,
         SE_factor = sqrt(result),
         stringsAsFactors = FALSE
@@ -303,7 +303,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     ),
     data = .remove_backticks_from_parameter_names(
       data.frame(
-        Parameter = terms,
+        Term = terms,
         VIF = result,
         SE_factor = sqrt(result),
         Component = component,
