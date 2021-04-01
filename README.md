@@ -5,7 +5,7 @@
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
 
-***Test if your model is a good model!***
+***Test if your model is a good model\!***
 
 A crucial aspect when building regression models is to evaluate the
 quality of modelfit. It is important to investigate how well models fit
@@ -134,17 +134,13 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(
-  Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  cores = 4
-)
+model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (89% CI [0.945, 0.962])
-#>      Marginal R2: 0.825 (89% CI [0.746, 0.888])
+#>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
+#>      Marginal R2: 0.825 (89% CI [0.749, 0.889])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -257,16 +253,12 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
 
 check_singularity(model)
 #> [1] TRUE
@@ -415,8 +407,7 @@ data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
-lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
-          Petal.Length + Petal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
 
 compare_performance(lm1, lm2, lm3, lm4)
 #> # Comparison of Model Performance Indices
@@ -458,9 +449,9 @@ Please follow contributing guidelines mentioned here:
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references hanging-indent">
 
-<div id="ref-gelman_data_2007" class="csl-entry">
+<div id="ref-gelman_data_2007">
 
 Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
 and Multilevel/Hierarchical Models*. Analytical Methods for Social
@@ -468,14 +459,14 @@ Research. Cambridge ; New York: Cambridge University Press.
 
 </div>
 
-<div id="ref-hox_multilevel_2010" class="csl-entry">
+<div id="ref-hox_multilevel_2010">
 
 Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
 ed. Quantitative Methodology Series. New York: Routledge.
 
 </div>
 
-<div id="ref-johnson_extension_2014" class="csl-entry">
+<div id="ref-johnson_extension_2014">
 
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
@@ -484,12 +475,12 @@ Ecology and Evolution* 5 (9): 944–46.
 
 </div>
 
-<div id="ref-nakagawa_coefficient_2017" class="csl-entry">
+<div id="ref-nakagawa_coefficient_2017">
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
-Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
+Expanded.” *Journal of the Royal Society Interface* 14 (134): 20170213.
 <https://doi.org/10.1098/rsif.2017.0213>.
 
 </div>
