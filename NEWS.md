@@ -34,6 +34,9 @@
   
 * Added option to detrend QQ/PP plots in `check_model()`.
 
+* The column name `Parameter` in `check_collinearity()` is now more
+  appropriately named `Term`.
+
 ## Bug fixes
 
 * `test_likelihoodratio()` now correctly sorts models with identical fixed
