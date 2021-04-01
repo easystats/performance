@@ -92,6 +92,8 @@ check_overdispersion(model)
 #>        dispersion ratio =    2.946
 #>   Pearson's Chi-Squared = 1873.710
 #>                 p-value =  < 0.001
+#>
+#> Overdispersion detected.
 ```
 
 In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models, their Bayesian equivalents, and more. Inspect the package documentation for a complete listing.
@@ -123,7 +125,6 @@ model <- lm(mpg ~ wt + cyl, data = mtcars)
 r2(model)
 
 #> # R2 for Linear Regression
-#> 
 #>        R2: 0.830
 #>   adj. R2: 0.819
 ```
@@ -158,8 +159,8 @@ icc(model)
 
 #> # Intraclass Correlation Coefficient
 #> 
-#>      Adjusted ICC: 0.930
-#>   Conditional ICC: 0.771
+#>      Adjusted ICC: 0.872
+#>   Conditional ICC: 0.660
 ```
 
 Instead of computing and returning individual indices, users can obtain *all* indices from the model by simply passing the fitted model object to `model_performance()`. A list of computed indices is returned, which might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.

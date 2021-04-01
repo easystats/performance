@@ -47,7 +47,7 @@ Testing whether models are different is a delicate and often complex procedure, 
 }
 \details{
 \subsection{Nested vs. Non-nested Models}{
-Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are \emph{"nested",} i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, \code{model1 (y ~ x1 + x2)} is "nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually, people have a list of nested models, for instance \code{m1 (y ~ x1 + x2 + x3)}, \code{m2 (y ~ x1 + x2)}, \code{m3 (y ~ x1)}, \code{m4 (y ~ 1)}, and they are "ordered" from the largest to smallest on vice versa, to test whether a more parsimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared \emph{sequentially}: m2 is tested against m1, m3 against m2, m4 against m3, etc.
+Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are \emph{"nested",} i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, \code{model1 (y ~ x1 + x2)} is "nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually, people have a list of nested models, for instance \code{m1 (y ~ 1)}, \code{m2 (y ~ x1)}, \code{m3 (y ~ x1 + x2)}, \code{m4 (y ~ x1 + x2 + x3)}, and it is conventional that they are "ordered" from the smallest to largest, but it is up to the user to reverse the order from largest to smallest. The test then shows whether a more parsimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared \emph{sequentially}: m2 is tested against m1, m3 against m2, m4 against m3, etc.
 \cr\cr
 Two models are considered as \emph{"non-nested"} if their predictors are different. For instance, \code{model1 (y ~ x1 + x2)} and \code{model2 (y ~ x3 + x4)}. In the case of non-nested models, all models are usually compared against the same \emph{reference} model (by default, the first of the list).
 \cr\cr
@@ -67,9 +67,9 @@ Nesting is detected via the \code{insight::is_nested_models()} function. Aside o
 \examples{
 # Nested Models
 # -------------
-m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
-m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+m3 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
 
 test_performance(m1, m2, m3)
 
