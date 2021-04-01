@@ -255,10 +255,10 @@ test_bf(lm1, lm2, lm3, lm4)
 
 #> # Bayes Factors for Model Comparison
 #> 
-#> Model                                                           BF
-#> [lm2] Species + Petal.Length                             3.446e+26
-#> [lm3] Species * Sepal.Width                              4.692e+07
-#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.584e+29
+#> Model                                                        BF
+#> [lm2] Species + Petal.Length                             > 1000
+#> [lm3] Species * Sepal.Width                              > 1000
+#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width > 1000
 #> 
 #> * Against Denominator: [lm1] Species
 #> *   Bayes Factor Type: BIC approximation
