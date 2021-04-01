@@ -54,11 +54,13 @@ test_bf.ListModels <- function(objects, reference = 1, ...) {
 
     # For increasing
     rez$BF <- exp(c(NA, diff(log(rez$BF))))
-    # For decreasing
-    # rez$BF <- exp(c(-diff(log(rez$BF)), NA))
-  }
 
-  rez$BF[ref] <- NA
+    # For decreasing
+    # ref <- nrow(rez)
+    # rez$BF <- exp(c(-diff(log(rez$BF)), NA))
+  } else {
+    rez$BF[ref] <- NA
+  }
 
   # Replace denominator
   attr(rez, "denominator") <- ref
