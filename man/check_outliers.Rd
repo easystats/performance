@@ -126,7 +126,7 @@ and removing outliers than regular Mahalanobis distance.
 \subsection{Threshold specification}{
 Default thresholds are currently specified as follows:
 
-\code{
+\preformatted{
 list(
   zscore = stats::qnorm(p = 1 - 0.025),
   iqr = 1.5,
@@ -143,7 +143,7 @@ list(
 }}
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please note} that the range of the distance-values along the y-axis is re-scaled to range from 0 to 1!
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please note} that the range of the distance-values along the y-axis is re-scaled to range from 0 to 1.
 }
 \examples{
 # Univariate
