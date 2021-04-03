@@ -507,7 +507,7 @@ as.numeric.check_outliers <- function(x, ...) {
   out <- data.frame(Obs = 1:nrow(x))
 
   # Compute
-  out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), ...)
+  out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), cov = stats::cov(x), ...)
 
   # Filter
   out$Outlier_Mahalanobis <- as.numeric(out$Distance_Mahalanobis > threshold)
