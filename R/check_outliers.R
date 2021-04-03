@@ -286,7 +286,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   # Mahalanobis
   if ("mahalanobis" %in% c(method)) {
-    out <- c(out, .check_outliers_mahalanobis(x, threshold = thresholds$mahalanobis))
+    out <- c(out, .check_outliers_mahalanobis(x, threshold = thresholds$mahalanobis, ...))
   }
 
   # Robust Mahalanobis
@@ -503,11 +503,11 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 #' @importFrom stats mahalanobis cov
-.check_outliers_mahalanobis <- function(x, threshold = NULL) {
+.check_outliers_mahalanobis <- function(x, threshold = NULL, ...) {
   out <- data.frame(Obs = 1:nrow(x))
 
   # Compute
-  out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), cov = stats::cov(x))
+  out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), ...)
 
   # Filter
   out$Outlier_Mahalanobis <- as.numeric(out$Distance_Mahalanobis > threshold)
