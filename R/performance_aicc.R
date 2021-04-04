@@ -1,11 +1,10 @@
-#' @title Compute AIC and second order AIC
+#' @title Compute the AIC or second-order AIC
 #' @name performance_aicc
 #'
-#' @description Compute the second-order Akaike's information criterion (AICc).
-#' The second-order (or small sample) is a AIC with a correction for small sample
-#' sizes. \code{performance_aic()} is a small wrapper that returns the AIC. It is
+#' @description Compute the AIC or the second-order Akaike's information criterion (AICc).
+#' \code{performance_aic()} is a small wrapper that returns the AIC. It is
 #' a generic function that also works for some models that don't have a AIC method
-#' (like Tweedie models).
+#' (like Tweedie models). \code{performance_aicc()} returns the second-order (or "small sample") AIC that incorporates a correction for small sample sizes.
 #'
 #' @param x A model object.
 #' @param ... Currently not used.
