@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compute AIC and second order AIC — performance_aicc • performance</title>
+<title>Compute the AIC or second-order AIC — performance_aicc • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,12 +46,11 @@
 
 
 
-<meta property="og:title" content="Compute AIC and second order AIC — performance_aicc" />
-<meta property="og:description" content="Compute the second-order Akaike's information criterion (AICc).
-The second-order (or small sample) is a AIC with a correction for small sample
-sizes. performance_aic() is a small wrapper that returns the AIC. It is
+<meta property="og:title" content="Compute the AIC or second-order AIC — performance_aicc" />
+<meta property="og:description" content="Compute the AIC or the second-order Akaike's information criterion (AICc).
+performance_aic() is a small wrapper that returns the AIC. It is
 a generic function that also works for some models that don't have a AIC method
-(like Tweedie models)." />
+(like Tweedie models). performance_aicc() returns the second-order (or &quot;small sample&quot;) AIC that incorporates a correction for small sample sizes." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -140,17 +139,16 @@ a generic function that also works for some models that don't have a AIC method
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Compute AIC and second order AIC</h1>
+    <h1>Compute the AIC or second-order AIC</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/performance_aicc.R'><code>R/performance_aicc.R</code></a></small>
     <div class="hidden name"><code>performance_aicc.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Compute the second-order Akaike's information criterion (AICc).
-The second-order (or small sample) is a AIC with a correction for small sample
-sizes. <code>performance_aic()</code> is a small wrapper that returns the AIC. It is
+    <p>Compute the AIC or the second-order Akaike's information criterion (AICc).
+<code>performance_aic()</code> is a small wrapper that returns the AIC. It is
 a generic function that also works for some models that don't have a AIC method
-(like Tweedie models).</p>
+(like Tweedie models). <code>performance_aicc()</code> returns the second-order (or "small sample") AIC that incorporates a correction for small sample sizes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>performance_aicc</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
