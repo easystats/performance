@@ -22,6 +22,12 @@ test_likelihoodratio <- function(..., estimator = "ML") {
 performance_lrt <- test_likelihoodratio
 
 
+# Short name for test_likelihoodratio using the test_* naming convention
+#' @rdname test_performance
+#' @export
+test_lrt <- test_likelihoodratio
+
+
 #' @importFrom insight ellipsis_info
 #' @export
 test_likelihoodratio.default <- function(..., estimator = "ML") {

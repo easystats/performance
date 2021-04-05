@@ -5,6 +5,7 @@
 \alias{test_bf}
 \alias{test_likelihoodratio}
 \alias{performance_lrt}
+\alias{test_lrt}
 \alias{test_performance}
 \alias{test_vuong}
 \alias{test_wald}
@@ -15,6 +16,8 @@ test_bf(...)
 test_likelihoodratio(..., estimator = "ML")
 
 performance_lrt(..., estimator = "ML")
+
+test_lrt(..., estimator = "ML")
 
 test_performance(..., reference = 1)
 
