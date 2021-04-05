@@ -14,24 +14,24 @@ confint_r2 <- function(model, ci = .95, ...) {
     }
   )
 
-  r2 <- r2(model)[[1]]
+  r2 <- as.vector(r2(model)[[1]])
 
   ci_low <- stats::uniroot(
     pRsq,
     c(.00001, .99999),
-    alpha = 1 - alpha / 2,
-    n = n,
+    R2_obs = r2,
     p = model_rank,
-    R2_obs = r2
+    nobs = n,
+    alpha = 1 - alpha / 2
   )$root
 
   ci_high <- stats::uniroot(
     pRsq,
     c(.00001, .99999),
-    alpha = alpha / 2,
-    n = n,
+    R2_obs = r2,
     p = model_rank,
-    R2_obs = r2
+    nobs = n,
+    alpha = alpha / 2
   )$root
 
   data.frame(R2 = r2, CI_low = ci_low, CI_high = ci_high, stringsAsFactors = FALSE)
