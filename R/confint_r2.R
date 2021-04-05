@@ -14,7 +14,7 @@
     }
   )
 
-  model_r2 <- r2(model)
+  model_r2 <- r2(model, ci = NULL)
 
   out <- lapply(model_r2, function(rsq) {
     ci_low <- stats::uniroot(

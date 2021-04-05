@@ -20,6 +20,12 @@ or not. Indicates up to which value the convergence result is accepted. When
 \code{r2_nakagawa()} returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is \code{NA}),
 decrease the tolerance-level. See also \code{\link{check_singularity}}.}
+
+\item{ci}{Confidence Interval (CI) level. Default is \code{NULL}. Confidence
+intervals for R2 can be calculated based on different methods, see
+\code{ci_method}.}
+
+\item{ci_method}{to do}
 }
 \value{
 Returns a list containing values related to the most appropriate R2
