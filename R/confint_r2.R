@@ -14,27 +14,32 @@
     }
   )
 
-  r2 <- as.vector(r2(model)[[1]])
+  model_r2 <- r2(model)
 
-  ci_low <- stats::uniroot(
-    .pRsq,
-    c(.00001, .99999),
-    R2_obs = r2,
-    p = model_rank,
-    nobs = n,
-    alpha = 1 - alpha / 2
-  )$root
+  out <- lapply(model_r2, function(rsq) {
+    ci_low <- stats::uniroot(
+      .pRsq,
+      c(.00001, .99999),
+      R2_obs = as.vector(rsq),
+      p = model_rank,
+      nobs = n,
+      alpha = 1 - alpha / 2
+    )$root
 
-  ci_high <- stats::uniroot(
-    .pRsq,
-    c(.00001, .99999),
-    R2_obs = r2,
-    p = model_rank,
-    nobs = n,
-    alpha = alpha / 2
-  )$root
+    ci_high <- stats::uniroot(
+      .pRsq,
+      c(.00001, .99999),
+      R2_obs = as.vector(rsq),
+      p = model_rank,
+      nobs = n,
+      alpha = alpha / 2
+    )$root
 
-  data.frame(R2 = r2, CI_low = ci_low, CI_high = ci_high, stringsAsFactors = FALSE)
+    c(rsq, CI_low = ci_low, CI_high = ci_high)
+  })
+
+  names(out) <- names(model_r2)
+  out
 }
 
 
