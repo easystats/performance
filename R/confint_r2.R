@@ -1,6 +1,6 @@
 #' @importFrom stats uniroot
 #' @importFrom insight n_obs has_intercept n_parameters
-confint_r2 <- function(model, ci = .95, ...) {
+.confint_r2 <- function(model, ci = .95, ...) {
   alpha <- 1 - ci
   n <- insight::n_obs(model)
   df_int <- ifelse(insight::has_intercept(model), 1, 0)
@@ -17,7 +17,7 @@ confint_r2 <- function(model, ci = .95, ...) {
   r2 <- as.vector(r2(model)[[1]])
 
   ci_low <- stats::uniroot(
-    pRsq,
+    .pRsq,
     c(.00001, .99999),
     R2_obs = r2,
     p = model_rank,
@@ -26,7 +26,7 @@ confint_r2 <- function(model, ci = .95, ...) {
   )$root
 
   ci_high <- stats::uniroot(
-    pRsq,
+    .pRsq,
     c(.00001, .99999),
     R2_obs = r2,
     p = model_rank,
@@ -39,7 +39,7 @@ confint_r2 <- function(model, ci = .95, ...) {
 
 
 #' @importFrom stats pf dchisq
-dRsq <- function(K1, R2_pop, R2_obs, p, nobs) {
+.dRsq <- function(K1, R2_pop, R2_obs, p, nobs) {
   NCP <- R2_pop / (1 - R2_pop)
   F1_obs <- ((nobs - p - 1) / p) * (R2_obs / (1 - R2_obs))
   exp(log(
@@ -55,13 +55,13 @@ dRsq <- function(K1, R2_pop, R2_obs, p, nobs) {
 
 
 #' @importFrom stats integrate
-pRsq <- function(R2_pop, R2_obs, p, nobs, alpha = 1) {
+.pRsq <- function(R2_pop, R2_obs, p, nobs, alpha = 1) {
   a1 <- 1 - alpha
   # This approach avoids undersampling the area of the chi-squared
   # distribution that actually has any density
   integrals <- mapply(function(i, j, ...) {
     dots <- list(...)
-    stats::integrate(dRsq,
+    stats::integrate(.dRsq,
                      i, j,
                      R2_pop = dots$R2_pop,
                      R2_obs = dots$R2_obs,
