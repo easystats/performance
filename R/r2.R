@@ -52,6 +52,7 @@ r2 <- function(model, ...) {
 # Default models -----------------------------------------------
 
 
+#' @rdname r2
 #' @importFrom insight print_color get_response get_predicted
 #' @export
 r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRUE, ...) {
