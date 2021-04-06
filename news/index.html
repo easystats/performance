@@ -137,33 +137,57 @@
       <small>Source: <a href='https://github.com/easystats/performance/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="performance-071" class="section level1">
-<h1 class="page-header" data-toc-text="0.7.1">
-<a href="#performance-071" class="anchor"></a>performance 0.7.1<small> Unreleased </small>
+    <div id="performance-072" class="section level1">
+<h1 class="page-header" data-toc-text="0.7.2">
+<a href="#performance-072" class="anchor"></a>performance 0.7.2<small> Unreleased </small>
 </h1>
+<div id="new-supported-models" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-supported-models" class="anchor"></a>New supported models</h2>
+<ul>
+<li><p>Add support for <code>model_fit</code> (<em>tidymodels</em>).</p></li>
+<li><p><code>model_performance</code> supports <em>kmeans</em> models.</p></li>
+</ul>
+</div>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor"></a>General</h2>
 <ul>
-<li><p>Add support for <code>model_fit</code> (<em>tidymodels</em>).</p></li>
 <li><p>Give more informative warning when <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> for <em>BFBayesFactor</em> objects can’t be calculated.</p></li>
 <li><p><code><a href="../reference/r2.html">r2()</a></code> supports <code>mhurdle</code> (<em>mhurdle</em>) models.</p></li>
 <li><p>Added <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> methods for more classes of <code><a href="../reference/r2.html">r2()</a></code>.</p></li>
-<li><p><code>model_performance</code> supports <em>kmeans</em> models.</p></li>
 <li><p>The <code><a href="../reference/performance_roc.html">performance_roc()</a></code> and <code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> functions unfortunately had spelling mistakes in the output columns: <em>Sensitivity</em> was called <em>Sensivity</em> and <em>Specificity</em> was called <em>Specifity</em>. We think these are understandable mistakes :-)</p></li>
 </ul>
 </div>
 <div id="changes-to-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions" class="anchor"></a>Changes to functions</h2>
+<div id="check_model" class="section level3">
+<h3 class="hasAnchor">
+<a href="#check_model" class="anchor"></a><code>check_model()</code>
+</h3>
+<ul>
+<li><p><code><a href="../reference/check_model.html">check_model()</a></code> gains more arguments, to customize plot appearance.</p></li>
+<li><p>Added option to detrend QQ/PP plots in <code><a href="../reference/check_model.html">check_model()</a></code>.</p></li>
+</ul>
+</div>
+<div id="model_performance" class="section level3">
+<h3 class="hasAnchor">
+<a href="#model_performance" class="anchor"></a><code>model_performance()</code>
+</h3>
 <ul>
 <li><p>The <code>metrics</code> argument from <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code> gains a <code>"AICc"</code> option, to also compute the 2nd order AIC.</p></li>
-<li><p><code><a href="../reference/check_model.html">check_model()</a></code> gains more arguments, to customize plot appearance.</p></li>
 <li><p><code>"R2_adj"</code> is now an explicit option in the <code>metrics</code> argument from <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code>.</p></li>
+</ul>
+</div>
+<div id="other-functions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#other-functions" class="anchor"></a>Other functions</h3>
+<ul>
 <li><p>The default-method for <code><a href="../reference/r2.html">r2()</a></code> now tries to compute an r-squared for all models that have no specific <code><a href="../reference/r2.html">r2()</a></code>-method yet, by using following formula: <code>1-sum((y-y_hat)^2)/sum((y-y_bar)^2))</code></p></li>
-<li><p>Added option to detrend QQ/PP plots in <code><a href="../reference/check_model.html">check_model()</a></code>.</p></li>
 <li><p>The column name <code>Parameter</code> in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> is now more appropriately named <code>Term</code>.</p></li>
 </ul>
+</div>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
@@ -221,17 +245,17 @@
 <li><p>Fixed column names for consistency.</p></li>
 </ul>
 </div>
-<div id="model_performance" class="section level3">
+<div id="model_performance-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#model_performance" class="anchor"></a><code>model_performance()</code>
+<a href="#model_performance-1" class="anchor"></a><code>model_performance()</code>
 </h3>
 <ul>
 <li>Added more diagnostics to models of class <code>ivreg</code>.</li>
 </ul>
 </div>
-<div id="other-functions" class="section level3">
+<div id="other-functions-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#other-functions" class="anchor"></a>Other functions</h3>
+<a href="#other-functions-1" class="anchor"></a>Other functions</h3>
 <ul>
 <li><p>Revised computation of <code><a href="../reference/performance_mse.html">performance_mse()</a></code>, to ensure that it’s always based on response residuals.</p></li>
 <li><p><code><a href="../reference/performance_aicc.html">performance_aic()</a></code> is now more robust.</p></li>
@@ -293,9 +317,9 @@
 <div id="changes-to-functions-2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-to-functions-2" class="anchor"></a>Changes to functions</h2>
-<div id="model_performance-1" class="section level3">
+<div id="model_performance-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#model_performance-1" class="anchor"></a><code>model_performance()</code>
+<a href="#model_performance-2" class="anchor"></a><code>model_performance()</code>
 </h3>
 <ul>
 <li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> is now more robust and doesn’t fail if an index could not be computed. Instead, it returns all indices that were possible to calculate.</p></li>
@@ -303,9 +327,9 @@
 <li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> for metafor-models now includes the degrees of freedom for Cochran’s Q.</p></li>
 </ul>
 </div>
-<div id="other-functions-1" class="section level3">
+<div id="other-functions-2" class="section level3">
 <h3 class="hasAnchor">
-<a href="#other-functions-1" class="anchor"></a>Other functions</h3>
+<a href="#other-functions-2" class="anchor"></a>Other functions</h3>
 <ul>
 <li><p><code><a href="../reference/performance_mse.html">performance_mse()</a></code> and <code><a href="../reference/performance_rmse.html">performance_rmse()</a></code> now always try to return the (R)MSE on the response scale.</p></li>
 <li><p><code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> now accepts all types of linear or logistic regression models, even if these are not of class <code>lm</code> or <code>glm</code>.</p></li>
