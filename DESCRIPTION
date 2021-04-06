@@ -104,6 +104,5 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-LazyData: true
 RoxygenNote: 7.1.1
 Config/testthat/edition: 3
