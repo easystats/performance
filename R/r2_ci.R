@@ -1,6 +1,6 @@
 #' @importFrom stats uniroot
 #' @importFrom insight n_obs has_intercept n_parameters
-.confint_r2 <- function(model, ci = .95, ...) {
+.r2_ci <- function(model, ci = .95, ...) {
   alpha <- 1 - ci
   n <- insight::n_obs(model)
   df_int <- ifelse(insight::has_intercept(model), 1, 0)
