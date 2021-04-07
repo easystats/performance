@@ -86,7 +86,7 @@ median plus or minus a coefficient times the MAD method (Leys et al., 2013).
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan \& Kettenring, 1972).
-Requires the \pkg{bigutilsr} package.
+Requires the \pkg{bigutilsr} package. See the \code{bigutilsr::dist_ogk()} function.
 
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that Mahalanobis Distance is not a robust way to
@@ -146,10 +146,37 @@ list(
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please note} that the range of the distance-values along the y-axis is re-scaled to range from 0 to 1.
 }
 \examples{
-# Univariate
-check_outliers(mtcars$mpg)
+data <- mtcars  # Size nrow(data) = 32
 
-# Multivariate
+# For single variables ------------------------------------------------------
+outliers_list <- check_outliers(data$mpg)  # Find outliers
+outliers_list  # Show the row index of the outliers
+as.numeric(outliers_list)  # The object is a binary vector...
+filtered_data <- data[!outliers_list, ] # And can be used to filter a dataframe
+nrow(filtered_data)  # New size, 28 (4 outliers removed)
+
+
+# For dataframes ------------------------------------------------------------
+check_outliers(data)  # It works the same way on dataframes
+
+# You can also use multiple methods at once
+outliers_list <- check_outliers(data, method = c("mahalanobis",
+                                                 "iqr",
+                                                 "zscore"))
+outliers_list
+# Using `as.data.frame()`, we can access more details!
+outliers_info <- as.data.frame(outliers_list)
+head(outliers_info)
+outliers_info$Outlier  # Including the probability of being an outlier
+# And we can be more stringent in our outliers removal process
+filtered_data <- data[outliers_info$Outlier < 0.1, ]
+
+\dontrun{
+# You can also run all the methods
+check_outliers(data, method = "all")
+}
+
+# For statistical models ----------------------------------------------------
 # select only mpg and disp (continuous)
 mt1 <- mtcars[, c(1, 3, 4)]
 # create some fake outliers and attach outliers to main df
@@ -157,21 +184,16 @@ mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 12
 # fit model with outliers
 model <- lm(disp ~ mpg + hp, data = mt2)
 
-ol <- check_outliers(model)
-# plot(ol)
-insight::get_data(model)[ol, ]
+outliers_list <- check_outliers(model)
+# plot(outliers_list)
+insight::get_data(model)[outliers_list, ]  # Show outliers data
 
 if (require("MASS")) {
   check_outliers(model, method = c("mahalabonis", "mcd"))
 }
-\dontrun{
 # This one takes some seconds to finish...
 check_outliers(model, method = "ics")
 
-# For dataframes
-check_outliers(mtcars)
-check_outliers(mtcars, method = "all")
-}
 }
 \references{
 \itemize{
