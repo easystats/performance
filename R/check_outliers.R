@@ -147,7 +147,7 @@
 #' nrow(filtered_data)  # New size, 28 (4 outliers removed)
 #'
 #'
-#' # For dataframes ------------------------------------------------------------
+#' # For dataframes ------------------------------------------------------
 #' check_outliers(data)  # It works the same way on dataframes
 #'
 #' # You can also use multiple methods at once
@@ -165,13 +165,13 @@
 #' \dontrun{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all")
-#' }
 #'
-#' # For statistical models ----------------------------------------------------
+#' # For statistical models ---------------------------------------------
 #' # select only mpg and disp (continuous)
 #' mt1 <- mtcars[, c(1, 3, 4)]
 #' # create some fake outliers and attach outliers to main df
-#' mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400), hp = c(110, 120)))
+#' mt2 <- rbind(mt1, data.frame(mpg = c(37, 40), disp = c(300, 400),
+#'                              hp = c(110, 120)))
 #' # fit model with outliers
 #' model <- lm(disp ~ mpg + hp, data = mt2)
 #'
@@ -182,9 +182,11 @@
 #' if (require("MASS")) {
 #'   check_outliers(model, method = c("mahalabonis", "mcd"))
 #' }
-#' # This one takes some seconds to finish...
-#' check_outliers(model, method = "ics")
-#'
+#' if (require("ICS")) {
+#'   # This one takes some seconds to finish...
+#'   check_outliers(model, method = "ics")
+#' }
+#' }
 #' @importFrom insight n_obs get_predictors get_data
 #' @importFrom stats cooks.distance mahalanobis cov
 #' @export
