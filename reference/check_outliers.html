@@ -315,7 +315,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>filtered_data</span><span class='op'>)</span>  <span class='co'># New size, 28 (4 outliers removed)</span>
 </div><div class='output co'>#&gt; [1] 28</div><div class='input'>
 
-<span class='co'># For dataframes ------------------------------------------------------------</span>
+<span class='co'># For dataframes ------------------------------------------------------</span>
 <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>  <span class='co'># It works the same way on dataframes</span>
 </div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 1 outliers detected (cases 9).
 #&gt; </span><span></div><div class='input'>
@@ -352,30 +352,28 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># You can also run all the methods</span>
 <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span>, method <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
-<span class='op'>}</span>
 
-<span class='co'># For statistical models ----------------------------------------------------</span>
+<span class='co'># For statistical models ---------------------------------------------</span>
 <span class='co'># select only mpg and disp (continuous)</span>
 <span class='va'>mt1</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>]</span>
 <span class='co'># create some fake outliers and attach outliers to main df</span>
-<span class='va'>mt2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>mt1</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>mpg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>37</span>, <span class='fl'>40</span><span class='op'>)</span>, disp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>300</span>, <span class='fl'>400</span><span class='op'>)</span>, hp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>120</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>mt2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>mt1</span>, <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>mpg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>37</span>, <span class='fl'>40</span><span class='op'>)</span>, disp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>300</span>, <span class='fl'>400</span><span class='op'>)</span>,
+                             hp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>120</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># fit model with outliers</span>
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>disp</span> <span class='op'>~</span> <span class='va'>mpg</span> <span class='op'>+</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>mt2</span><span class='op'>)</span>
 
 <span class='va'>outliers_list</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='co'># plot(outliers_list)</span>
 <span class='fu'>insight</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/insight/reference/get_data.html'>get_data</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span><span class='op'>[</span><span class='va'>outliers_list</span>, <span class='op'>]</span>  <span class='co'># Show outliers data</span>
-</div><div class='output co'>#&gt;               disp mpg  hp
-#&gt; Maserati Bora  301  15 335
-#&gt; 2              400  40 120</div><div class='input'>
+
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='http://www.stats.ox.ac.uk/pub/MASS4/'>"MASS"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mahalabonis"</span>, <span class='st'>"mcd"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: MASS</span></div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 6 outliers detected (cases 18, 20, 28, 31, 33, 34).
-#&gt; </span><span></div><div class='input'><span class='co'># This one takes some seconds to finish...</span>
-<span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='st'>"ics"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 3 outliers detected (cases 31, 33, 34).
-#&gt; </span><span></div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"ICS"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># This one takes some seconds to finish...</span>
+  <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='st'>"ics"</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='op'>}</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
