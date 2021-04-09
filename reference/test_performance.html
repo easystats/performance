@@ -238,13 +238,13 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 #&gt; m3   |    lm | 0.037 |     0.02 |      0.081 | 3.41 |  0.099
 #&gt; Models were detected as nested and are compared in sequential order.</div><div class='input'>
 <span class='fu'><a href='test_performance.html'>test_bf</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Bayes Factors for Model Comparison</span><span>
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'>Bayes Factors for Model Comparison</span><span>
 #&gt; 
-#&gt; Model                            BF
-#&gt; [2] Petal.Width + Species     0.007
-#&gt; [3] Petal.Width * Species 2.639e-04
+#&gt;      Model                      BF
+#&gt; [m2] Petal.Width + Species   0.007
+#&gt; [m3] Petal.Width * Species &lt; 0.001
 #&gt; 
-#&gt; * Against Denominator: </span><span style='color: #00BBBB;'>[1] Petal.Width</span><span>
+#&gt; * Against Denominator: </span><span style='color: #00BBBB;'>[m1] Petal.Width</span><span>
 #&gt; *   Bayes Factor Type: </span><span style='color: #00BBBB;'>BIC approximation</span><span></div><div class='input'><span class='fu'><a href='test_performance.html'>test_wald</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># Equivalent to anova(m1, m2, m3)</span>
 </div><div class='output co'>#&gt; Name | Model |  df | df_diff |    F |     p
 #&gt; -------------------------------------------
@@ -290,13 +290,13 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 #&gt; m2   |    lm |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001
 #&gt; m3   |    lm | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 | 0.006 
 #&gt; Each model is compared to m1.</div><div class='input'><span class='fu'><a href='test_performance.html'>test_bf</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Bayes Factors for Model Comparison</span><span>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Bayes Factors for Model Comparison</span><span>
 #&gt; 
-#&gt; Model                   BF
-#&gt; [2] Petal.Length 2.900e+10
-#&gt; [3] Species      2.004e-06
+#&gt;      Model             BF
+#&gt; [m2] Petal.Length  &gt; 1000
+#&gt; [m3] Species      &lt; 0.001
 #&gt; 
-#&gt; * Against Denominator: </span><span style='color: #00BBBB;'>[1] Petal.Width</span><span>
+#&gt; * Against Denominator: </span><span style='color: #00BBBB;'>[m1] Petal.Width</span><span>
 #&gt; *   Bayes Factor Type: </span><span style='color: #00BBBB;'>BIC approximation</span><span></div><div class='input'><span class='fu'><a href='test_performance.html'>test_vuong</a></span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2)</span>
 </div><div class='output co'>#&gt; Name | Model | Omega2 | p (Omega2) |    LR | p (LR)
 #&gt; ---------------------------------------------------
