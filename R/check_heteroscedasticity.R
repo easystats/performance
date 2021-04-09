@@ -41,8 +41,14 @@ check_heteroskedasticity <- check_heteroscedasticity
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
   # only for linear models
-  if (!insight::model_info(x)$is_linear) {
-    stop("This Breusch-Pagan Test currently only works Gaussian models.")
+  info <- insight::model_info(x)
+  if (!info$is_linear) {
+    msg <- "This Breusch-Pagan Test currently only works Gaussian models."
+    if (info$is_count) {
+      paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
+    }
+    message(msg)
+    return(NULL)
   }
 
   r <- .pearson_residuals(x)
