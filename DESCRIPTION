@@ -49,7 +49,7 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.4)
 Imports:
-    bayestestR (>= 0.9.0),
+    bayestestR (>= 0.8.2),
     insight (>= 0.13.2),
     stats,
     utils
