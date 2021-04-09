@@ -11,6 +11,9 @@
 * Give more informative warning when `r2_bayes()` for *BFBayesFactor* objects
   can't be calculated.
 
+* Several `check_*()` functions now return informative messages for invalid
+  model types as input.
+
 * `r2()` supports `mhurdle` (*mhurdle*) models.
 
 * Added `print()` methods for more classes of `r2()`.
