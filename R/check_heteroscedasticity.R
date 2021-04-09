@@ -32,6 +32,11 @@ check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")
 }
 
+#' @name check_heteroscedasticity
+#' @aliases check_heteroscedasticity
+#' @export
+check_heteroskedasticity <- check_heteroscedasticity
+
 
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
