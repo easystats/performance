@@ -239,12 +239,12 @@ The generic `test_performance()` function computes the appropriate test(s) based
 ``` {.r}
 test_performance(lm1, lm2, lm3, lm4)
 
-#> Name | Model | Omega2 | p (Omega2) |    LR | p (LR)
-#> ---------------------------------------------------
-#> lm1  |    lm |        |            |       |       
-#> lm2  |    lm |   0.69 |     < .001 | -6.25 | < .001
-#> lm3  |    lm |   0.36 |     < .001 | -3.44 | < .001
-#> lm4  |    lm |   0.73 |     < .001 | -7.77 | < .001
+#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
+#> ------------------------------------------------------------
+#> lm1  |    lm |        |        |            |       |       
+#> lm2  |    lm | > 1000 |   0.69 |     < .001 | -6.25 | < .001
+#> lm3  |    lm | > 1000 |   0.36 |     < .001 | -3.44 | < .001
+#> lm4  |    lm | > 1000 |   0.73 |     < .001 | -7.77 | < .001
 #> Each model is compared to lm1.
 ```
 
