@@ -76,6 +76,35 @@ check_heteroscedasticity.default <- function(x, ...) {
 }
 
 
+#' @export
+check_heteroscedasticity.afex_aov <- function(x, ...) {
+  if (!requireNamespace("afex"))
+    stop("afex required for this function to work.")
+
+  test <- afex::test_levene(x)
+
+  is_covar <- sapply(attr(x,'between'), is.null)
+  if (any(is_covar)) {
+    between <- between[!is_covar]
+    warning("Levene's test is not appropriate with quantitative explanatory variables. ",
+            "Testing assumption of homogeneity among factor groups only.")
+  }
+
+  p.val <- test[1, "Pr(>F)"]
+
+  if (p.val < 0.05) {
+    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(p.val)), "red")
+  } else {
+    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(p.val)), "green")
+  }
+
+  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
+
+  invisible(p.val)
+
+}
+
 
 #' @importFrom insight get_parameters n_obs get_variance_residual get_deviance
 .sigma <- function(x) {
