@@ -96,7 +96,7 @@ check_overdispersion(model)
 #> Overdispersion detected.
 ```
 
-In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models, their Bayesian equivalents, and more. Inspect the package documentation for a complete listing.
+In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models or their Bayesian equivalents. Inspect the package documentation for a complete listing.
 
 For example, consider the visual checks from a simple linear regression model.
 
