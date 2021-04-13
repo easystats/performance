@@ -51,7 +51,7 @@
 #' @export
 performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
   # fix special cases
-  if (inherits(model, c("logitor", "logitmfx", "probitmfx"))) {
+  if (inherits(model, c("model_fit", "logitor", "logitmfx", "probitmfx"))) {
     model <- model$fit
   }
 
