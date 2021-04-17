@@ -39,7 +39,6 @@
 #'   pca
 #'   check_itemscale(pca)
 #' }
-#' @importFrom stats sd
 #' @export
 check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {

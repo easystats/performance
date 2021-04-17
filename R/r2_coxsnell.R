@@ -24,9 +24,6 @@
 #'   \item Maddala, G. S. (1986). Limited-dependent and qualitative variables in econometrics (No. 3). Cambridge university press.
 #'   \item Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
 #' }
-#'
-#' @importFrom insight n_obs get_loglikelihood
-#' @importFrom stats update
 #' @export
 r2_coxsnell <- function(model) {
   UseMethod("r2_coxsnell")
@@ -162,7 +159,6 @@ r2_coxsnell.clm2 <- function(model) {
   .r2_coxsnell(model, l_base)
 }
 
-#' @importFrom utils capture.output
 #' @export
 r2_coxsnell.bayesx <- function(model) {
   junk <- utils::capture.output(l_base <- insight::get_loglikelihood(stats::update(model, ~1)))

@@ -55,7 +55,6 @@ if (require("glmmTMB")) {
   performance_score(model)
 }
 }
-
 }
 \references{
 Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}

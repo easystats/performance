@@ -25,8 +25,6 @@
 #'   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 #'   check_zeroinflation(m)
 #' }
-#' @importFrom insight get_response model_info
-#' @importFrom stats fitted dpois dnbinom
 #' @export
 check_zeroinflation <- function(x, tolerance = .05) {
   # check if we have poisson

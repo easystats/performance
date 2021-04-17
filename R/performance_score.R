@@ -48,9 +48,6 @@
 #'   performance_score(model)
 #' }
 #' }
-#'
-#' @importFrom insight get_response model_info
-#' @importFrom stats dbinom dpois dnbinom ppois pnbinom
 #' @export
 performance_score <- function(model, verbose = TRUE) {
   # check special case
@@ -133,7 +130,6 @@ performance_score <- function(model, verbose = TRUE) {
 
 
 
-#' @importFrom stats residuals df.residual
 .dispersion_parameter <- function(model, minfo) {
   if (inherits(model, "MixMod")) {
     model$phis
@@ -160,7 +156,6 @@ performance_score <- function(model, verbose = TRUE) {
 
 
 
-#' @importFrom stats predict
 .predict_score_y <- function(model) {
   pred <- NULL
   pred_zi <- NULL

@@ -17,7 +17,6 @@
 }
 
 
-#' @importFrom stats residuals rstudent fitted rstandard
 .diag_qq <- function(model) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB"))) {
     res_ <- sort(stats::residuals(model), na.last = NA)
@@ -55,8 +54,6 @@
 
 
 
-#' @importFrom stats qnorm ppoints
-#' @importFrom insight print_color
 .diag_reqq <- function(model, level = .95, model_info) {
   # check if we have mixed model
   if (!model_info$is_mixed) {
@@ -123,8 +120,6 @@
 
 
 
-#' @importFrom bayestestR estimate_density
-#' @importFrom stats residuals sd
 .diag_norm <- function(model) {
   r <- try(stats::residuals(model), silent = TRUE)
 
@@ -140,8 +135,6 @@
 
 
 
-#' @importFrom stats qf influence rstandard cooks.distance
-#' @importFrom insight get_residuals get_predicted n_parameters
 .diag_influential_obs <- function(model, threshold = NULL) {
   s <- summary(model)
 
@@ -193,7 +186,6 @@
 
 
 
-#' @importFrom stats residuals fitted
 .diag_ncv <- function(model) {
   ncv <- tryCatch(
     {
@@ -216,8 +208,6 @@
 }
 
 
-#' @importFrom insight get_variance_residual
-#' @importFrom stats rstandard fitted
 .diag_homogeneity <- function(model) {
   faminfo <- insight::model_info(model)
   r <- tryCatch(
@@ -255,7 +245,6 @@
 
 
 
-#' @importFrom insight model_info
 .sigma_glmmTMB_nonmixed <- function(model, faminfo) {
   if (!is.na(match(faminfo$family, c("binomial", "poisson", "truncated_poisson")))) {
     return(1)

@@ -159,7 +159,6 @@ check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE,
 
 
 
-#' @importFrom stats reshape update
 .check_assumptions_stan <- function(model) {
   if (inherits(model, "brmsfit")) {
 

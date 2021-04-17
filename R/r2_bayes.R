@@ -76,10 +76,6 @@
 #' }
 #' }
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
-#'
-#' @importFrom insight find_algorithm is_multivariate find_response model_info get_response find_predictors
-#' @importFrom stats median mad sd
-#' @importFrom bayestestR ci hdi point_estimate
 #' @export
 r2_bayes <- function(model, robust = TRUE, ci = .89, verbose = TRUE, ...) {
   r2_bayesian <- r2_posterior(model, verbose = verbose, ...)
@@ -196,10 +192,6 @@ r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 #' @param average Compute model-averaged index? See \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.
 #' @inheritParams bayestestR::weighted_posteriors
 #' @inheritParams r2_bayes
-#' @importFrom insight get_parameters get_response find_predictors
-#' @importFrom stats median mad sd
-#' @importFrom bayestestR point_estimate hdi
-#' @importFrom utils packageVersion
 #' @export
 #' @rdname r2_bayes
 r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE, ...) {
@@ -263,7 +255,6 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
 
 
 
-#' @importFrom bayestestR weighted_posteriors
 #' @keywords internal
 .r2_posterior_model_average <- function(model, prior_odds = NULL, verbose = TRUE) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {

@@ -48,8 +48,6 @@
 #'   m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #'   compare_performance(m1, m2, m3)
 #' }
-#' @importFrom insight is_model_supported all_models_equal get_response
-#' @importFrom bayestestR bayesfactor_models
 #' @inheritParams model_performance.lm
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {

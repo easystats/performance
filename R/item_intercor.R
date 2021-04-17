@@ -33,7 +33,6 @@
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_intercor(x)
-#' @importFrom stats cor na.omit
 #' @export
 item_intercor <- function(x, method = c("pearson", "spearman", "kendall")) {
   # Check parameter

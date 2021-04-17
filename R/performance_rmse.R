@@ -30,7 +30,6 @@
 #'   # normalized RMSE
 #'   performance_rmse(m, normalized = TRUE)
 #' }
-#' @importFrom insight get_response
 #' @export
 performance_rmse <- function(model, normalized = FALSE, verbose = TRUE) {
   tryCatch(

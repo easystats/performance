@@ -34,8 +34,6 @@ r2_efron.default <- function(model) {
 }
 
 
-#' @importFrom insight get_response
-#' @importFrom stats predict
 .r2_efron <- function(model) {
   y_hat <- stats::predict(model, type = "response")
   y <- .factor_to_numeric(insight::get_response(model), lowest = 0)

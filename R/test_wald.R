@@ -5,7 +5,6 @@ test_wald <- function(...) {
 }
 
 
-#' @importFrom insight ellipsis_info
 #' @export
 test_wald.default <- function(...) {
 
@@ -46,8 +45,6 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
 
 
 
-#' @importFrom insight get_df get_deviance
-#' @importFrom stats pchisq pf
 .test_wald <- function(objects, test = "F") {
 
   # Compute stuff

@@ -111,7 +111,6 @@ test_performance <- function(..., reference = 1) {
 }
 
 
-#' @importFrom insight ellipsis_info
 #' @export
 test_performance.default <- function(..., reference = 1, include_formula = FALSE) {
 
@@ -220,7 +219,6 @@ test_performance.ListNonNestedRegressions <- function(objects, reference = 1, in
 
 # Helpers -----------------------------------------------------------------
 
-#' @importFrom insight format_table format_p
 #' @export
 format.test_performance <- function(x, digits = 2, ...) {
 
@@ -244,7 +242,6 @@ format.test_performance <- function(x, digits = 2, ...) {
 
 
 
-#' @importFrom insight export_table
 #' @export
 print.test_performance <- function(x, digits = 2, ...) {
   out <- insight::export_table(format(x, digits = digits, ...), ...)
@@ -272,7 +269,6 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
 
 
 
-#' @importFrom insight model_name
 .test_performance_init <- function(objects, include_formula = FALSE) {
   names <- insight::model_name(objects, include_formula = include_formula)
   out <- data.frame(

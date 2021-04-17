@@ -22,8 +22,6 @@
 #'   model <- mlogit(mode ~ price + catch, data = Fish)
 #'   r2_mcfadden(model)
 #' }
-#' @importFrom insight find_parameters get_loglikelihood
-#' @importFrom stats update
 #' @export
 r2_mcfadden <- function(model) {
   UseMethod("r2_mcfadden")

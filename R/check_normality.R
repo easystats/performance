@@ -40,7 +40,6 @@
 #' # PP-plot
 #' plot(check_normality(m), type = "pp")
 #' }
-#' @importFrom stats shapiro.test rstandard rstudent
 #' @export
 check_normality <- function(x, ...) {
   UseMethod("check_normality")
@@ -144,7 +143,6 @@ check_normality.glmmTMB <- check_normality.merMod
 # helper ---------------------
 
 
-#' @importFrom insight print_color format_p
 .check_normality <- function(x, model, type = "residuals") {
   ts <- tryCatch(
     {

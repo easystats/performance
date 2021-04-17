@@ -21,7 +21,6 @@
 #'   model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #'   model_performance(model)
 #' }
-#' @importFrom insight model_info
 #' @export
 model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(tolower(metrics) == "log_loss")) {

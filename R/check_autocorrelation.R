@@ -19,7 +19,6 @@
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_autocorrelation(m)
-#' @importFrom stats residuals model.matrix fitted
 #' @export
 check_autocorrelation <- function(x, ...) {
   UseMethod("check_autocorrelation")
@@ -32,7 +31,7 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   n <- length(.residuals)
   dw <- .durbWats(.residuals)
 
-  X <- stats::model.matrix(x)
+  X <- insight::get_modelmatrix(x)
   mu <- stats::fitted(x)
   Y <- matrix(sample(.residuals, n * nsim, replace = TRUE), n, nsim) + matrix(mu, n, nsim)
   E <- stats::residuals(lm(Y ~ X - 1))

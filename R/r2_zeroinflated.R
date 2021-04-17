@@ -27,8 +27,6 @@
 #'   r2_zeroinflated(model)
 #' }
 #' }
-#' @importFrom stats cor predict coef model.matrix
-#' @importFrom insight model_info get_response find_parameters n_obs
 #' @export
 r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   method <- match.arg(method)
