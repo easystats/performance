@@ -1,17 +1,28 @@
+# performance 0.7.2
+
+## New functions
+
+* `performance_mae()` to calculate the mean absolute error.
+
 # performance 0.7.1
 
-## General
+## New supported models
 
 * Add support for `model_fit` (*tidymodels*).
+
+* `model_performance` supports *kmeans* models.
+
+## General
 
 * Give more informative warning when `r2_bayes()` for *BFBayesFactor* objects
   can't be calculated.
 
+* Several `check_*()` functions now return informative messages for invalid
+  model types as input.
+
 * `r2()` supports `mhurdle` (*mhurdle*) models.
 
 * Added `print()` methods for more classes of `r2()`.
-
-* `model_performance` supports *kmeans* models.
 
 * The `performance_roc()` and `performance_accuracy()` functions unfortunately 
   had spelling mistakes in the output columns: *Sensitivity* was called 
@@ -20,20 +31,26 @@
 
 ## Changes to functions
 
-* The `metrics` argument from `model_performance()` and `compare_performance()`
-  gains a `"AICc"` option, to also compute the 2nd order AIC.
+### `check_model()`
 
 * `check_model()` gains more arguments, to customize plot appearance.
 
+* Added option to detrend QQ/PP plots in `check_model()`.
+
+### `model_performance()`
+
+* The `metrics` argument from `model_performance()` and `compare_performance()`
+  gains a `"AICc"` option, to also compute the 2nd order AIC.
+
 * `"R2_adj"` is now an explicit option in the `metrics` argument from
   `model_performance()` and `compare_performance()`.
+
+### Other functions
 
 * The default-method for `r2()` now tries to compute an r-squared for all models
   that have no specific `r2()`-method yet, by using following formula:
   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
   
-* Added option to detrend QQ/PP plots in `check_model()`.
-
 * The column name `Parameter` in `check_collinearity()` is now more
   appropriately named `Term`.
 

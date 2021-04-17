@@ -16,6 +16,7 @@ Bolker
 Bollen
 Bollen's
 Breunig
+Breusch
 Bryk
 Byrne
 CFA
@@ -194,6 +195,7 @@ intra
 intraclass
 io
 iqr
+kmeans
 lavaan
 lfe
 lme
@@ -207,6 +209,7 @@ mhurdle
 mis
 mlm
 mlogit
+modelfit
 modelling
 models’
 multicollinearity
@@ -232,6 +235,7 @@ se
 smicd
 subscale
 subscales
+tidymodels
 unadjusted
 underfitted
 underfitting

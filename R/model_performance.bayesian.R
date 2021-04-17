@@ -133,7 +133,11 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   if ("SIGMA" %in% metrics) {
     out$Sigma <- tryCatch(
       {
-        .get_sigma(model, verbose = verbose)
+        s <- .get_sigma(model, verbose = verbose)
+        if (.is_empty_object(s)) {
+          s <- NULL
+        }
+        s
       },
       error = function(e) {
         NULL

@@ -49,8 +49,8 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.4)
 Imports:
-    bayestestR (>= 0.7.5),
-    insight (>= 0.11.0),
+    bayestestR (>= 0.8.2),
+    insight (>= 0.13.2),
     stats,
     utils
 Suggests:
@@ -104,7 +104,6 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-LazyData: true
 RoxygenNote: 7.1.1
 Remotes: easystats/insight
 Config/testthat/edition: 3

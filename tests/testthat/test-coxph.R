@@ -11,7 +11,7 @@ if (require("testthat") && require("performance") && require("survival")) {
   })
 
   test_that("model_performance", {
-    perf <- model_performance(m1, verbose = FALSE)
+    perf <- suppressWarnings(model_performance(m1, verbose = FALSE))
 
     expect_equal(perf$AIC, 1457.19458886438, tolerance = 1e-3)
     expect_equal(perf$BIC, 1469.5695896676, tolerance = 1e-3)

@@ -103,3 +103,6 @@ performance_mse.betaor <- performance_mse.logitor
 
 #' @export
 performance_mse.betamfx <- performance_mse.logitor
+
+#' @export
+performance_mse.model_fit <- performance_mse.logitor

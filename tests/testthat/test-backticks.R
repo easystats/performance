@@ -7,7 +7,7 @@ if (require("testthat") && require("performance")) {
 
   test_that("check_collinearity, backticks", {
     expect_warning(check_collinearity(m1))
-    expect_equal(check_collinearity(m1, verbose = FALSE)$Parameter, c("Petal.Length", "a m", "log(Sepal.Length)", "a m:log(Sepal.Length)"))
-    expect_equal(check_collinearity(m2, verbose = FALSE)$Parameter, c("Petal.Length", "Species", "log(Sepal.Length)", "Species:log(Sepal.Length)"))
+    expect_equal(check_collinearity(m1, verbose = FALSE)$Term, c("Petal.Length", "a m", "log(Sepal.Length)", "a m:log(Sepal.Length)"))
+    expect_equal(check_collinearity(m2, verbose = FALSE)$Term, c("Petal.Length", "Species", "log(Sepal.Length)", "Species:log(Sepal.Length)"))
   })
 }

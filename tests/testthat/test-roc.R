@@ -1,5 +1,5 @@
 if (require("testthat") && require("performance") && require("ISLR") && require("bayestestR")) {
-  data(smarket, package = "ISLR")
+  data(Smarket, package = "ISLR")
 
   m1 <- glm(am ~ vs + wt, family = binomial(), data = mtcars)
   m2 <- glm(Direction ~ Lag1 + Volume, family = binomial(), data = Smarket)
