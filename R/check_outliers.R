@@ -358,7 +358,6 @@ as.numeric.check_outliers <- function(x, ...) {
   suppressWarnings(.check_outliers_thresholds_nowarn(x))
 }
 
-#' @importFrom stats qf qchisq
 .check_outliers_thresholds_nowarn <- function(x) {
   zscore <- stats::qnorm(p = 1 - 0.025)
   iqr <- 1.5

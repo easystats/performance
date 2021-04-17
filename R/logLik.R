@@ -29,7 +29,6 @@ logLik.ivreg <- function(object, ...) {
 }
 
 
-#' @importFrom insight find_parameters get_df
 #' @export
 logLik.plm <- function(object, ...) {
   res <- object$residuals
@@ -64,7 +63,6 @@ logLik.cpglm <- logLik.plm
 
 
 
-#' @importFrom insight get_residuals
 #' @export
 logLik.iv_robust <- function(object, ...) {
   res <- insight::get_residuals(object)
@@ -98,7 +96,6 @@ logLik.iv_robust <- function(object, ...) {
 
 
 
-#' @importFrom insight n_obs
 #' @export
 logLik.svycoxph <- function(object, ...) {
   val <- object$ll[2]

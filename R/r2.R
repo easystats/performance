@@ -48,7 +48,6 @@ r2 <- function(model, ...) {
 # Default models -----------------------------------------------
 
 
-#' @importFrom insight print_color get_response get_predicted
 #' @export
 r2.default <- function(model, verbose = TRUE, ...) {
   out <- tryCatch(
@@ -82,7 +81,6 @@ r2.default <- function(model, verbose = TRUE, ...) {
 }
 
 
-#' @importFrom stats pf
 #' @export
 r2.lm <- function(model, ...) {
   .r2_lm(summary(model))
@@ -139,7 +137,6 @@ r2.cph <- r2.ols
 
 
 
-#' @importFrom insight get_response n_parameters
 #' @export
 r2.mhurdle <- function(model, ...) {
   resp <- insight::get_response(model)
@@ -163,7 +160,6 @@ r2.mhurdle <- function(model, ...) {
 
 
 
-#' @importFrom stats summary.lm
 #' @export
 r2.aov <- function(model, ...) {
   model_summary <- stats::summary.lm(model)
@@ -182,7 +178,6 @@ r2.aov <- function(model, ...) {
 
 
 
-#' @importFrom stats pf
 #' @export
 r2.mlm <- function(model, ...) {
   model_summary <- summary(model)
@@ -207,7 +202,6 @@ r2.mlm <- function(model, ...) {
 
 
 
-#' @importFrom insight model_info
 #' @export
 r2.glm <- function(model, ...) {
   info <- insight::model_info(model)

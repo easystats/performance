@@ -28,7 +28,6 @@ performance_lrt <- test_likelihoodratio
 test_lrt <- test_likelihoodratio
 
 
-#' @importFrom insight ellipsis_info
 #' @export
 test_likelihoodratio.default <- function(..., estimator = "ML") {
 
@@ -54,8 +53,6 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
 
 
 
-#' @importFrom insight is_model get_df get_loglikelihood
-#' @importFrom stats pchisq
 #' @export
 test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
   dfs <- sapply(objects, insight::get_df, type = "model")
@@ -98,7 +95,6 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
 
 
-#' @importFrom insight is_model
 test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   if (!requireNamespace("lavaan", quietly = TRUE)) {
     stop("Package 'lavaan' required. Please install it.")

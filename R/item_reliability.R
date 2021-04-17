@@ -29,7 +29,6 @@
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_reliability(x)
-#' @importFrom stats cor var na.omit
 #' @export
 item_reliability <- function(x, standardize = FALSE, digits = 3) {
   # check param

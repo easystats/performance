@@ -40,7 +40,6 @@
 #'   r2_nakagawa(model)
 #'   r2_nakagawa(model, by_group = TRUE)
 #' }
-#' @importFrom insight get_variance print_color find_random_slopes null_model find_random
 #' @export
 r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
   vars <- tryCatch(

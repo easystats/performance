@@ -16,8 +16,6 @@
 #' r2_tjur(model)
 #' @references Tjur, T. (2009). Coefficients of determination in logistic regression models - A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
 #'
-#' @importFrom stats predict residuals
-#' @importFrom insight get_response model_info
 #' @export
 r2_tjur <- function(model) {
   # check for valid object class
