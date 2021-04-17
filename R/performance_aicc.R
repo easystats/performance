@@ -26,7 +26,6 @@ performance_aicc <- function(x, ...) {
 }
 
 #' @rdname performance_aicc
-#' @importFrom stats AIC
 #' @export
 performance_aic <- function(x, ...) {
   UseMethod("performance_aic")
@@ -38,7 +37,6 @@ performance_aic <- function(x, ...) {
 # default -------------------------------------------------
 
 
-#' @importFrom insight get_loglikelihood get_df model_info
 #' @export
 performance_aic.default <- function(x, ...) {
   info <- suppressWarnings(insight::model_info(x))
@@ -176,7 +174,6 @@ performance_aic.bayesx <- function(x, ...) {
 # methods ------------------------------------------
 
 
-#' @importFrom insight find_parameters n_obs get_loglikelihood
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
   -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
@@ -192,7 +189,6 @@ AIC.bife <- function(object, ..., k = 2) {
 # AICc ------------------------------------------
 
 
-#' @importFrom insight n_obs get_loglikelihood
 #' @export
 performance_aicc.default <- function(x, ...) {
   n <- suppressWarnings(insight::n_obs(x))

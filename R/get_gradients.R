@@ -11,7 +11,6 @@
 # x <- glm(vs ~ mpg, data=mtcars, weights = wt)
 # all(sandwich::estfun(x) == .get_gradients(x))
 
-#' @importFrom insight get_residuals get_weights
 .get_gradients <- function(x, ...) {
   UseMethod(".get_gradients")
 }

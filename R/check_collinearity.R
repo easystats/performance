@@ -82,8 +82,6 @@
 #'   x <- check_collinearity(m)
 #'   plot(x)
 #' }
-#' @importFrom stats vcov cov2cor terms
-#' @importFrom insight has_intercept find_formula model_info print_color
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
@@ -217,7 +215,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom insight get_varcov
 .check_collinearity <- function(x, component, verbose = TRUE) {
   v <- insight::get_varcov(x, component = component, verbose = FALSE)
   assign <- .term_assignments(x, component)
@@ -316,7 +313,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom stats model.matrix
 .term_assignments <- function(x, component) {
   tryCatch(
     {
@@ -354,7 +350,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom insight get_data find_predictors find_parameters clean_names
 .find_term_assignment <- function(x, component) {
   pred <- insight::find_predictors(x)[[component]]
   dat <- insight::get_data(x)[, pred, drop = FALSE]
@@ -379,8 +374,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom insight find_formula get_data
-#' @importFrom stats model.matrix
 .zi_term_assignment <- function(x, component = "zero_inflated") {
   tryCatch(
     {

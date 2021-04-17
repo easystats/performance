@@ -4,7 +4,6 @@
 
 
 
-#' @importFrom stats BIC
 .get_BIC <- function(x) {
   if (inherits(x, c("vgam", "vglm"))) {
     if (!requireNamespace("VGAM", quietly = TRUE)) {
@@ -65,7 +64,6 @@
 
 
 
-#' @importFrom stats na.omit sd
 .std <- function(x) {
   if (!is.numeric(x)) {
     return(x)
@@ -105,7 +103,6 @@
 
 
 # safe conversion from factor to numeric
-#' @importFrom stats na.omit
 .factor_to_numeric <- function(x, lowest = NULL) {
   if (is.data.frame(x)) {
     as.data.frame(lapply(x, .factor_to_numeric_helper, lowest = lowest))
@@ -172,7 +169,6 @@
 }
 
 
-#' @importFrom insight get_sigma
 .get_sigma <- function(model, verbose = TRUE) {
   s <- insight::get_sigma(model, verbose = verbose)
   if (!is.null(s)) {

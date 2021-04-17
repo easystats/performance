@@ -19,7 +19,6 @@
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_autocorrelation(m)
-#' @importFrom stats residuals model.matrix fitted
 #' @export
 check_autocorrelation <- function(x, ...) {
   UseMethod("check_autocorrelation")
