@@ -101,6 +101,27 @@ check_collinearity.default <- function(x, verbose = TRUE, ...) {
   .check_collinearity(x, component = "conditional", verbose = verbose)
 }
 
+#' @export
+check_collinearity.afex_aov <- function(x, verbose = TRUE, ...){
+  f <- paste(row.names(x$anova_table), collapse = "+")
+  f <- paste0(insight::find_response(x), "~", f)
+  # f <- insight::find_formula(x)[[1]]
+  # f <- Reduce(paste, deparse(f))
+  # f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
+  # f <- as.formula(f)
+
+  d <- insight::get_data(x)
+  is_num <- sapply(d, is.numeric)
+  d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
+  is_fac <- sapply(d, is.factor) | sapply(d, is.character)
+  contrs <- lapply(is_fac, function(...) contr.sum)[is_fac]
+
+  if (verbose)
+    message("All predictors have been centered (factors with contr.sum(), numerics with scale())")
+
+  check_collinearity(suppressWarnings(stats::lm(formula = f, data = d, contrasts = contrs)))
+}
+
 
 # mfx models -------------------------------
 
