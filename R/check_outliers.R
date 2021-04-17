@@ -184,7 +184,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
   # Remove non-numerics
-  data <- model.matrix(x)
+  data <- stats::model.matrix(x)
 
 
 
