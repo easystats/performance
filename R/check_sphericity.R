@@ -21,7 +21,7 @@ check_sphericity.default <- function(x, ...) {
 
 #' @export
 check_sphericity.Anova.mlm <- function(x, ...) {
-  S <- summary(x, multivariate = FALSE, univariate = FALSE)
+  S <- summary(x, multivariate = FALSE, univariate = TRUE)
   test <- S$sphericity.tests
 
   p.val <- test[,2]
