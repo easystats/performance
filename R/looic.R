@@ -14,8 +14,6 @@
 #'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
 #'   looic(model)
 #' }
-#' @importFrom insight find_algorithm print_color
-#' @importFrom stats var
 #' @export
 looic <- function(model, verbose = TRUE) {
   if (!requireNamespace("loo", quietly = TRUE)) {

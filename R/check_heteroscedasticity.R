@@ -25,26 +25,35 @@
 #'   x <- check_heteroscedasticity(m)
 #'   plot(x)
 #' }
-#' @importFrom stats residuals df.residual fitted anova pchisq
-#' @importFrom insight print_color get_df format_p
 #' @export
 check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")
 }
 
+#' @name check_heteroscedasticity
+#' @aliases check_heteroscedasticity
+#' @export
+check_heteroskedasticity <- check_heteroscedasticity
+
 
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
   # only for linear models
-  if (!insight::model_info(x)$is_linear) {
-    stop("This Breusch-Pagan Test currently only works Gaussian models.")
+  info <- insight::model_info(x)
+  if (!info$is_linear) {
+    msg <- "This Breusch-Pagan Test currently only works Gaussian models."
+    if (info$is_count) {
+      paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
+    }
+    message(msg)
+    return(NULL)
   }
 
   r <- .pearson_residuals(x)
   S.sq <- insight::get_df(x, type = "residual") * .sigma(x)^2 / sum(!is.na(r))
 
   .U <- (r^2) / S.sq
-  mod <- lm(.U ~ stats::fitted(x))
+  mod <- stats::lm(.U ~ stats::fitted(x))
 
   SS <- stats::anova(mod)$"Sum Sq"
   RegSS <- sum(SS) - SS[length(SS)]
@@ -66,7 +75,6 @@ check_heteroscedasticity.default <- function(x, ...) {
 
 
 
-#' @importFrom insight get_parameters n_obs get_variance_residual get_deviance
 .sigma <- function(x) {
   s <- tryCatch(
     {
@@ -114,8 +122,6 @@ check_heteroscedasticity.default <- function(x, ...) {
 
 
 
-#' @importFrom insight get_response get_variance_distribution
-#' @importFrom stats predict family plogis
 .resid_zinb <- function(model, faminfo) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance

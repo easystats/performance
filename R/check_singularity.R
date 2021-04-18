@@ -137,7 +137,6 @@ check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
 
 
 
-#' @importFrom stats na.omit
 #' @export
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
   if (!requireNamespace("nlme", quietly = TRUE)) {

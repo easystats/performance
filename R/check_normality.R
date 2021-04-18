@@ -40,7 +40,6 @@
 #' # PP-plot
 #' plot(check_normality(m), type = "pp")
 #' }
-#' @importFrom stats shapiro.test rstandard rstudent
 #' @export
 check_normality <- function(x, ...) {
   UseMethod("check_normality")
@@ -49,6 +48,12 @@ check_normality <- function(x, ...) {
 
 #' @export
 check_normality.default <- function(x, ...) {
+  # valid model?
+  if (!insight::model_info(x)$is_linear) {
+    message("Checking normality of residuals is only useful an appropriate assumption for linear models.")
+    return(NULL)
+  }
+
   # check for normality of residuals
   p.val <- .check_normality(stats::rstandard(x), x)
 
@@ -72,6 +77,12 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   # args
   effects <- match.arg(effects)
   info <- insight::model_info(x)
+
+  # valid model?
+  if (!info$is_linear) {
+    message("Checking normality of residuals is only useful an appropriate assumption for linear models.")
+    return(NULL)
+  }
 
   if (effects == "random") {
     if (!requireNamespace("lme4", quietly = TRUE)) {
@@ -131,7 +142,6 @@ check_normality.glmmTMB <- check_normality.merMod
 # helper ---------------------
 
 
-#' @importFrom insight print_color format_p
 .check_normality <- function(x, model, type = "residuals") {
   ts <- tryCatch(
     {

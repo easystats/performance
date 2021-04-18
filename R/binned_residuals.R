@@ -56,9 +56,6 @@
 #'   # if you assign results to an object, you can also look at the dataframe
 #'   as.data.frame(result)
 #' }
-#' @importFrom stats fitted sd complete.cases
-#' @importFrom insight get_data get_response find_response
-#'
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)

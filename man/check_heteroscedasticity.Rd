@@ -2,9 +2,12 @@
 % Please edit documentation in R/check_heteroscedasticity.R
 \name{check_heteroscedasticity}
 \alias{check_heteroscedasticity}
+\alias{check_heteroskedasticity}
 \title{Check model for (non-)constant error variance}
 \usage{
 check_heteroscedasticity(x, ...)
+
+check_heteroskedasticity(x, ...)
 }
 \arguments{
 \item{x}{A model object.}

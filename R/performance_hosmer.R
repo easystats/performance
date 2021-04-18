@@ -19,7 +19,6 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_hosmer(model)
-#' @importFrom stats fitted quantile xtabs pchisq
 #' @export
 performance_hosmer <- function(model, n_bins = 10) {
   if (inherits(model, "merMod") && !requireNamespace("lme4", quietly = TRUE)) {

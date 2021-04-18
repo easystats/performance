@@ -30,7 +30,6 @@
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
-#' @importFrom insight model_info
 #' @export
 model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(tolower(metrics) == "log_loss")) {
@@ -129,7 +128,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if ("SIGMA" %in% toupper(metrics)) {
     out$Sigma <- tryCatch(
       {
-        .get_sigma(model)
+        .get_sigma(model, verbose = verbose)
       },
       error = function(e) {
         NULL

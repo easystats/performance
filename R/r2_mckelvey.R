@@ -30,8 +30,6 @@
 #' model <- glm(counts ~ outcome + treatment, family = poisson())
 #'
 #' r2_mckelvey(model)
-#' @importFrom insight n_obs model_info
-#' @importFrom stats predict family coef update
 #' @export
 r2_mckelvey <- function(model) {
   UseMethod("r2_mckelvey")

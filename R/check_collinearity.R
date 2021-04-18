@@ -82,8 +82,6 @@
 #'   x <- check_collinearity(m)
 #'   plot(x)
 #' }
-#' @importFrom stats vcov cov2cor terms
-#' @importFrom insight has_intercept find_formula model_info print_color
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
@@ -217,7 +215,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom insight get_varcov
 .check_collinearity <- function(x, component, verbose = TRUE) {
   v <- insight::get_varcov(x, component = component, verbose = FALSE)
   assign <- .term_assignments(x, component)
@@ -316,27 +313,26 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom stats model.matrix
 .term_assignments <- function(x, component) {
   tryCatch(
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
         assign <- switch(component,
-          conditional = attr(stats::model.matrix(x, model = "count"), "assign"),
-          zero_inflated = attr(stats::model.matrix(x, model = "zero"), "assign")
+          conditional = attr(insight::get_modelmatrix(x, model = "count"), "assign"),
+          zero_inflated = attr(insight::get_modelmatrix(x, model = "zero"), "assign")
         )
       } else if (inherits(x, "glmmTMB")) {
         assign <- switch(component,
-          conditional = attr(stats::model.matrix(x), "assign"),
+          conditional = attr(insight::get_modelmatrix(x), "assign"),
           zero_inflated = .zi_term_assignment(x, component)
         )
       } else if (inherits(x, "MixMod")) {
         assign <- switch(component,
-          conditional = attr(stats::model.matrix(x, type = "fixed"), "assign"),
-          zero_inflated = attr(stats::model.matrix(x, type = "zi_fixed"), "assign")
+          conditional = attr(insight::get_modelmatrix(x, type = "fixed"), "assign"),
+          zero_inflated = attr(insight::get_modelmatrix(x, type = "zi_fixed"), "assign")
         )
       } else {
-        assign <- attr(stats::model.matrix(x), "assign")
+        assign <- attr(insight::get_modelmatrix(x), "assign")
       }
 
       if (is.null(assign)) {
@@ -354,7 +350,6 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom insight get_data find_predictors find_parameters clean_names
 .find_term_assignment <- function(x, component) {
   pred <- insight::find_predictors(x)[[component]]
   dat <- insight::get_data(x)[, pred, drop = FALSE]
@@ -379,14 +374,12 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-#' @importFrom insight find_formula get_data
-#' @importFrom stats model.matrix
 .zi_term_assignment <- function(x, component = "zero_inflated") {
   tryCatch(
     {
       rhs <- insight::find_formula(x)[[component]]
       d <- insight::get_data(x)
-      attr(stats::model.matrix(rhs, data = d), "assign")
+      attr(insight::get_modelmatrix(rhs, data = d), "assign")
     },
     error = function(e) {
       NULL

@@ -34,9 +34,6 @@
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_accuracy(model)
-#' @importFrom bayestestR area_under_curve
-#' @importFrom insight find_response get_data
-#' @importFrom stats lm cor glm predict predict model.frame formula binomial sd update
 #' @export
 performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000) {
   method <- match.arg(method)

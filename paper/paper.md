@@ -57,15 +57,15 @@ While functions to build and produce diagnostic plots or to compute fit statisti
 
 # Comparison to other Packages
 
-Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn* [@MuMin], *car* [@car], *broom* [@robinson_broom_2020]), the *performance* package offers functions for checking validity *and* model quality systematically and comprehensively for many regression model objects such as (generalized) linear, mixed-effects, and Bayesian. *performance* also offers functions to compare and test multiple models simultaneously to evaluate the best fitting model to the data.
+Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn* [@MuMin], *car* [@car], *broom* [@robinson_broom_2020]), the *performance* package offers functions for checking validity *and* model quality systematically and comprehensively for many regression model objects such as (generalized) linear models, mixed-effects models, and Bayesian models. *performance* also offers functions to compare and test multiple models simultaneously to evaluate the best fitting model to the data.
 
 # Features
 
-Beyond validity and quality checks and consistent with *easystats* syntax, *performance* also includes plotting functions via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see].^[A complete overview of plotting functions is available at the *see* website (<https://easystats.github.io/see/articles/performance.html>).]
+Beyond validity and quality checks, *performance* also includes plotting functions via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see].^[A complete overview of plotting functions is available at the *see* website (<https://easystats.github.io/see/articles/performance.html>).]
 
 ## Checking Model Assumptions
 
-Inferences made from regression models such as significance tests or interpretation of coefficients require meeting several assumptions, which vary based on the type of model. *performance* offers a collection of functions to check if assumptions are met. To demonstrate the efficiency of the package, we overview a few functions, followed by a broader function that runs a comprehensive suite of checks in a single call.
+Inferences made from regression models such as significance tests or interpretation of coefficients require meeting several assumptions, which vary based on the type of model. *performance* offers a collection of functions to check if assumptions are met. To demonstrate the efficiency of the package, we provide examples for a few functions, followed by a broader function that runs a comprehensive suite of checks in a single call.
 
 For example, linear (Gaussian) models assume constant error variance (homoscedasticity). We can use `check_heteroscedasticity()` from *performance* to check if this assumption has been violated.
 
@@ -96,7 +96,7 @@ check_overdispersion(model)
 #> Overdispersion detected.
 ```
 
-In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models, their Bayesian equivalents, and more. Inspect the package documentation for a complete listing.
+In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models or their Bayesian equivalents. Inspect the package documentation for a complete listing.
 
 For example, consider the visual checks from a simple linear regression model.
 
@@ -239,12 +239,12 @@ The generic `test_performance()` function computes the appropriate test(s) based
 ``` {.r}
 test_performance(lm1, lm2, lm3, lm4)
 
-#> Name | Model | Omega2 | p (Omega2) |    LR | p (LR)
-#> ---------------------------------------------------
-#> lm1  |    lm |        |            |       |       
-#> lm2  |    lm |   0.69 |     < .001 | -6.25 | < .001
-#> lm3  |    lm |   0.36 |     < .001 | -3.44 | < .001
-#> lm4  |    lm |   0.73 |     < .001 | -7.77 | < .001
+#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
+#> ------------------------------------------------------------
+#> lm1  |    lm |        |        |            |       |       
+#> lm2  |    lm | > 1000 |   0.69 |     < .001 | -6.25 | < .001
+#> lm3  |    lm | > 1000 |   0.36 |     < .001 | -3.44 | < .001
+#> lm4  |    lm | > 1000 |   0.73 |     < .001 | -7.77 | < .001
 #> Each model is compared to lm1.
 ```
 

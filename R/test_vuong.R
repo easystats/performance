@@ -5,7 +5,6 @@ test_vuong <- function(...) {
 }
 
 
-#' @importFrom insight ellipsis_info
 #' @export
 test_vuong.default <- function(..., reference = 1) {
 
@@ -103,9 +102,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # all(ref$omega == rez$Omega2)
 # ref$p_omega == rez$p_Omega2
 # ref$LRTstat == rez$LRTstat
-
-#' @importFrom insight get_df get_loglikelihood n_obs n_parameters
-#' @importFrom stats pnorm
 .test_vuong_pairs <- function(object1, object2, nested = FALSE, adj = "none") {
   if (!requireNamespace("CompQuadForm", quietly = TRUE)) {
     stop("Package 'CompQuadForm' required. Please install it by running `install.packages('CompQuadForm')`.")
@@ -129,7 +125,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   # DISTINGUISABILITY TEST --------
   # Eq (4.2)
   n <- insight::n_obs(object1)
-  omega_hat_2 <- (n - 1) / n * var(llA - llB, na.rm = TRUE)
+  omega_hat_2 <- (n - 1) / n * stats::var(llA - llB, na.rm = TRUE)
 
   # Get p-value of weighted chi-square dist
   lamstar <- .test_vuong_lambda(object1, object2)
@@ -244,8 +240,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # all(ref$A == rez$A)
 # all(ref$B == rez$B)
 # all(ref$sc == rez$sc)
-
-#' @importFrom insight get_sigma get_varcov n_obs
 .test_vuong_AB <- function(model) {
   # A, B as defined in Vuong Eq (2.1) and (2.2)
 

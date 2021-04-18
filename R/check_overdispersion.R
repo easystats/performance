@@ -82,8 +82,6 @@ check_overdispersion.default <- function(x, ...) {
 # Overdispersion for classical models -----------------------------
 
 
-#' @importFrom insight get_response model_info find_parameters
-#' @importFrom stats fitted nobs coef pchisq
 #' @export
 check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
@@ -148,8 +146,6 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 # Overdispersion for mixed models ---------------------------
 
 
-#' @importFrom insight model_info
-#' @importFrom stats df.residual residuals pchisq
 #' @export
 check_overdispersion.merMod <- function(x, ...) {
   # check if we have poisson
