@@ -57,7 +57,8 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   if (method == "auto") {
     check <- tryCatch(
       {
-        stats::shapiro.test(insight::get_residuals(x))$p.value
+        capture.output(p <- check_normality(x))
+        p
       },
       error = function(e) {
         NULL
@@ -79,12 +80,11 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
     r <- stats::bartlett.test(f, data = insight::get_data(x))
     p.val <- r$p.value
   } else if (method == "levene") {
-    if (requireNamespace("car", quietly = TRUE)) {
-      r <- car::leveneTest(x, ...)
-      p.val <- r$`Pr(>F)`
-    } else {
+    if (!requireNamespace("car", quietly = TRUE)) {
       stop("Package `car` required for this function to work. Please install it.", call. = FALSE)
     }
+    r <- car::leveneTest(x, ...)
+    p.val <- r$`Pr(>F)`
   }
 
 
@@ -93,6 +93,44 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
     "fligner" = "Fligner-Killeen Test",
     "levene" = "Levene's Test"
   )
+
+  if (is.na(p.val)) {
+    warning(paste0("Could not perform ", method.string, "."), call. = FALSE)
+    invisible(NULL)
+  } else if (p.val < 0.05) {
+    insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, p.val), "red")
+  } else {
+    insight::print_color(sprintf("OK: Variances in each of the groups are the same (%s, p = %.3f).\n", method.string, p.val), "green")
+  }
+
+  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(p.val, "method") <- method.string
+  class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))
+
+  invisible(p.val)
+}
+
+
+#' @export
+check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
+  if (!requireNamespace("afex"))
+    stop("afex required for this function to work.")
+
+  if (tolower(method) != "levene")
+    message("Only Levene's test for homogeneity supported for afex_aov")
+
+  test <- afex::test_levene(x)
+
+  is_covar <- sapply(attr(x,'between'), is.null)
+  if (any(is_covar)) {
+    between <- between[!is_covar]
+    warning("Levene's test is not appropriate with quantitative explanatory variables. ",
+            "Testing assumption of homogeneity among factor groups only.")
+  }
+
+  p.val <- test[1, "Pr(>F)"]
+
+  method.string <- "Levene's Test"
 
   if (is.na(p.val)) {
     warning(paste0("Could not perform ", method.string, "."), call. = FALSE)
