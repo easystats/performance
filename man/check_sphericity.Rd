@@ -9,7 +9,7 @@ check_sphericity(x, ...)
 \arguments{
 \item{x}{A model object.}
 
-\item{...}{Currently not used.}
+\item{...}{Arguments passed to \code{car::Anova}.}
 }
 \value{
 Invisibly returns the p-values of the test statistics. A p-value < 0.05
