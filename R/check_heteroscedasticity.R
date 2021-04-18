@@ -53,7 +53,7 @@ check_heteroscedasticity.default <- function(x, ...) {
   S.sq <- insight::get_df(x, type = "residual") * .sigma(x)^2 / sum(!is.na(r))
 
   .U <- (r^2) / S.sq
-  mod <- lm(.U ~ stats::fitted(x))
+  mod <- stats::lm(.U ~ stats::fitted(x))
 
   SS <- stats::anova(mod)$"Sum Sq"
   RegSS <- sum(SS) - SS[length(SS)]

@@ -125,7 +125,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   # DISTINGUISABILITY TEST --------
   # Eq (4.2)
   n <- insight::n_obs(object1)
-  omega_hat_2 <- (n - 1) / n * var(llA - llB, na.rm = TRUE)
+  omega_hat_2 <- (n - 1) / n * stats::var(llA - llB, na.rm = TRUE)
 
   # Get p-value of weighted chi-square dist
   lamstar <- .test_vuong_lambda(object1, object2)

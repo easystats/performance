@@ -74,7 +74,7 @@ performance_score <- function(model, verbose = TRUE) {
   } else if (minfo$is_poisson && !minfo$is_zero_inflated) {
     function(x, mean, pis, n) stats::dpois(x, lambda = mean)
   } else if (minfo$is_negbin && !minfo$is_zero_inflated) {
-    function(x, mean, pis, n) dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo)))
+    function(x, mean, pis, n) stats::dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo)))
   } else if (minfo$is_poisson && minfo$is_zero_inflated && !minfo$is_hurdle) {
     function(x, mean, pis, n) {
       ind0 <- x == 0

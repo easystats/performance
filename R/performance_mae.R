@@ -12,7 +12,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ hp + gear, data = mtcars)
 #' performance_mae(m)
-#' @importFrom insight get_predicted get_response
 #' @export
 performance_mae <- function(model, ...) {
   UseMethod("performance_mae")

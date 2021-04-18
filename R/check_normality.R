@@ -46,7 +46,6 @@ check_normality <- function(x, ...) {
 }
 
 
-#' @importFrom insight model_info
 #' @export
 check_normality.default <- function(x, ...) {
   # valid model?

@@ -34,7 +34,7 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   X <- insight::get_modelmatrix(x)
   mu <- stats::fitted(x)
   Y <- matrix(sample(.residuals, n * nsim, replace = TRUE), n, nsim) + matrix(mu, n, nsim)
-  E <- stats::residuals(lm(Y ~ X - 1))
+  E <- stats::residuals(stats::lm(Y ~ X - 1))
   DW <- rbind(apply(E, 2, .durbWats))
 
   p <- (sum(dw < DW[1, ])) / nsim
