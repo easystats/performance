@@ -1,5 +1,3 @@
-#' @importFrom stats uniroot
-#' @importFrom insight n_obs has_intercept n_parameters
 .r2_ci <- function(model, ci = .95, ...) {
   alpha <- 1 - ci
   n <- insight::n_obs(model)
@@ -43,7 +41,6 @@
 }
 
 
-#' @importFrom stats pf dchisq
 .dRsq <- function(K1, R2_pop, R2_obs, p, nobs) {
   NCP <- R2_pop / (1 - R2_pop)
   F1_obs <- ((nobs - p - 1) / p) * (R2_obs / (1 - R2_obs))
@@ -59,7 +56,6 @@
 }
 
 
-#' @importFrom stats integrate
 .pRsq <- function(R2_pop, R2_obs, p, nobs, alpha = 1) {
   a1 <- 1 - alpha
   # This approach avoids undersampling the area of the chi-squared
