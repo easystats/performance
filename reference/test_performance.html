@@ -147,6 +147,9 @@
 
     <pre class="usage"><span class='fu'><a href='test_performance.html'>test_bf</a></span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
+<span class='co'># S3 method for default</span>
+<span class='fu'><a href='test_performance.html'>test_bf</a></span><span class='op'>(</span><span class='va'>...</span>, text_length <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+
 <span class='fu'><a href='test_performance.html'>test_likelihoodratio</a></span><span class='op'>(</span><span class='va'>...</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span>
 
 <span class='fu'><a href='test_performance.html'>performance_lrt</a></span><span class='op'>(</span><span class='va'>...</span>, estimator <span class='op'>=</span> <span class='st'>"ML"</span><span class='op'>)</span>
@@ -165,6 +168,10 @@
     <tr>
       <th>...</th>
       <td><p>Multiple model objects.</p></td>
+    </tr>
+    <tr>
+      <th>text_length</th>
+      <td><p>Numeric, length (number of chars) of output lines. <code><a href='test_performance.html'>test_bf()</a></code> describes models by their formulas, which can lead to overly long lines in the output. <code>text_length</code> fixes the length of lines to a specified limit.</p></td>
     </tr>
     <tr>
       <th>estimator</th>
