@@ -50,6 +50,7 @@ reference:
   - performance_aicc
   - performance_hosmer
   - performance_logloss
+  - performance_mae
   - performance_mse
   - performance_pcp
   - performance_rmse

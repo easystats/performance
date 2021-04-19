@@ -1,4 +1,3 @@
-#' @importFrom insight export_table format_p
 #' @rdname display.performance_model
 #' @export
 print_md.performance_model <- function(x, digits = 2, ...) {

@@ -21,8 +21,6 @@
 #' data(mtcars)
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 #' performance_logloss(m)
-#' @importFrom stats fitted
-#' @importFrom insight get_response print_color
 #' @export
 performance_logloss <- function(model, verbose = TRUE, ...) {
   UseMethod("performance_logloss")

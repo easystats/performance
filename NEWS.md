@@ -1,3 +1,9 @@
+# performance 0.7.2
+
+## New functions
+
+* `performance_mae()` to calculate the mean absolute error.
+
 # performance 0.7.1
 
 ## New supported models

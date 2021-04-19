@@ -48,9 +48,6 @@
 #'   performance_score(model)
 #' }
 #' }
-#'
-#' @importFrom insight get_response model_info
-#' @importFrom stats dbinom dpois dnbinom ppois pnbinom
 #' @export
 performance_score <- function(model, verbose = TRUE) {
   # check special case
@@ -77,7 +74,7 @@ performance_score <- function(model, verbose = TRUE) {
   } else if (minfo$is_poisson && !minfo$is_zero_inflated) {
     function(x, mean, pis, n) stats::dpois(x, lambda = mean)
   } else if (minfo$is_negbin && !minfo$is_zero_inflated) {
-    function(x, mean, pis, n) dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo)))
+    function(x, mean, pis, n) stats::dnbinom(x, mu = mean, size = exp(.dispersion_parameter(model, minfo)))
   } else if (minfo$is_poisson && minfo$is_zero_inflated && !minfo$is_hurdle) {
     function(x, mean, pis, n) {
       ind0 <- x == 0
@@ -133,7 +130,6 @@ performance_score <- function(model, verbose = TRUE) {
 
 
 
-#' @importFrom stats residuals df.residual
 .dispersion_parameter <- function(model, minfo) {
   if (inherits(model, "MixMod")) {
     model$phis
@@ -160,7 +156,6 @@ performance_score <- function(model, verbose = TRUE) {
 
 
 
-#' @importFrom stats predict
 .predict_score_y <- function(model) {
   pred <- NULL
   pred_zi <- NULL

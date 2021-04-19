@@ -40,14 +40,12 @@
 #' # PP-plot
 #' plot(check_normality(m), type = "pp")
 #' }
-#' @importFrom stats shapiro.test rstandard rstudent
 #' @export
 check_normality <- function(x, ...) {
   UseMethod("check_normality")
 }
 
 
-#' @importFrom insight model_info
 #' @export
 check_normality.default <- function(x, ...) {
   # valid model?
@@ -153,7 +151,6 @@ check_normality.afex_aov <- function(x, ...) {
 # helper ---------------------
 
 
-#' @importFrom insight print_color format_p
 .check_normality <- function(x, model, type = "residuals") {
   ts <- tryCatch(
     {

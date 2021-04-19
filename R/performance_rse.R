@@ -14,7 +14,6 @@
 #' data(mtcars)
 #' m <- lm(mpg ~ hp + gear, data = mtcars)
 #' performance_rse(m)
-#' @importFrom insight get_residuals get_df
 #' @export
 performance_rse <- function(model) {
   # Residual standard error

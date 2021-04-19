@@ -1,4 +1,3 @@
-#' @importFrom insight export_table format_p
 #' @export
 print.compare_performance <- function(x, digits = 3, ...) {
   table_caption <- c("# Comparison of Model Performance Indices", "blue")
@@ -16,7 +15,6 @@ print.compare_performance <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight export_table format_p
 #' @export
 print.performance_model <- function(x, digits = 3, ...) {
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
@@ -49,7 +47,6 @@ print.check_model <- function(x, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.check_distribution <- function(x, ...) {
   insight::print_color("# Distribution of Model Family\n\n", "blue")
@@ -74,7 +71,6 @@ print.check_distribution <- function(x, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.check_distribution_numeric <- function(x, ...) {
   insight::print_color("# Predicted Distribution of Vector\n\n", "blue")
@@ -90,8 +86,6 @@ print.check_distribution_numeric <- function(x, ...) {
 
 
 
-#' @importFrom bayestestR area_under_curve
-#' @importFrom insight print_color
 #' @export
 print.performance_roc <- function(x, ...) {
   if (length(unique(x$Model)) == 1) {
@@ -115,7 +109,6 @@ print.performance_roc <- function(x, ...) {
 }
 
 
-#' @importFrom insight print_color
 #' @export
 print.item_difficulty <- function(x, ...) {
   spaces <- max(nchar(x$item))
@@ -130,7 +123,6 @@ print.item_difficulty <- function(x, ...) {
 }
 
 
-#' @importFrom insight print_color
 #' @export
 print.performance_pcp <- function(x, digits = 2, ...) {
   insight::print_color("# Percentage of Correct Predictions from Logistic Regression Model\n\n", "blue")
@@ -152,7 +144,6 @@ print.performance_pcp <- function(x, digits = 2, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.looic <- function(x, digits = 2, ...) {
   insight::print_color("# LOOIC and ELPD with Standard Error\n\n", "blue")
@@ -171,7 +162,6 @@ print.looic <- function(x, digits = 2, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.r2_generic <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
@@ -206,7 +196,6 @@ print.r2_generic <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.r2_pseudo <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
@@ -219,7 +208,6 @@ print.r2_pseudo <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.r2_mlm <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
@@ -245,7 +233,6 @@ print.r2_mlm <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.r2_nakagawa <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
@@ -269,7 +256,6 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.r2_bayes <- function(x, digits = 3, ...) {
   insight::print_color("# Bayesian R2 with Standard Error\n\n", "blue")
@@ -299,7 +285,6 @@ print.r2_bayes <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.icc <- function(x, digits = 3, ...) {
   insight::print_color("# Intraclass Correlation Coefficient\n\n", "blue")
@@ -318,7 +303,6 @@ print.icc <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.icc_by_group <- function(x, digits = 3, ...) {
   insight::print_color("# ICC by Group\n\n", "blue")
@@ -328,7 +312,6 @@ print.icc_by_group <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.r2_nakagawa_by_group <- function(x, digits = 3, ...) {
   insight::print_color("# Explained Variance by Level\n\n", "blue")
@@ -339,7 +322,6 @@ print.r2_nakagawa_by_group <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.check_zi <- function(x, ...) {
   insight::print_color("# Check for zero-inflation\n\n", "blue")
@@ -395,7 +377,6 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
 
 
-#' @importFrom insight print_color
 #' @export
 print.icc_decomposed <- function(x, digits = 2, ...) {
   # print model information
@@ -614,7 +595,6 @@ print.check_collinearity <- function(x, ...) {
 
 
 
-#' @importFrom insight export_table print_color format_p
 #' @export
 print.test_likelihoodratio <- function(x, digits = 2, ...) {
 
@@ -641,7 +621,6 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
 
 
 
-#' @importFrom insight print_color export_table
 #' @export
 print.check_itemscale <- function(x, digits = 2, ...) {
   insight::print_color("# Description of (Sub-)Scales", "blue")

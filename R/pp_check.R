@@ -56,9 +56,6 @@
 #' if (require("ggplot2") && require("see")) {
 #'   pp_check(model)
 #' }
-#'
-#' @importFrom stats simulate
-#' @importFrom insight get_response
 #' @export
 pp_check <- function(object, ...) {
   UseMethod("pp_check")

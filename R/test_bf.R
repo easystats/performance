@@ -5,7 +5,6 @@ test_bf <- function(...) {
 }
 
 
-#' @importFrom insight ellipsis_info
 #' @export
 test_bf.default <- function(...) {
 
@@ -30,7 +29,6 @@ test_bf.default <- function(...) {
 
 
 
-#' @importFrom bayestestR bayesfactor_models
 #' @export
 test_bf.ListModels <- function(objects, reference = 1, ...) {
   if (.test_bf_areAllBayesian(objects) == "mixed") {
@@ -72,7 +70,6 @@ test_bf.ListModels <- function(objects, reference = 1, ...) {
 
 # Helpers -----------------------------------------------------------------
 
-#' @importFrom insight model_info
 .test_bf_areAllBayesian <- function(objects) {
   bayesian_models <- sapply(objects, function(i) isTRUE(insight::model_info(i)$is_bayesian))
   if (all(bayesian_models == TRUE)) {
