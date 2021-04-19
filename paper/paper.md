@@ -159,8 +159,8 @@ icc(model)
 
 #> # Intraclass Correlation Coefficient
 #> 
-#>      Adjusted ICC: 0.872
-#>   Conditional ICC: 0.660
+#>      Adjusted ICC: 0.874
+#>   Conditional ICC: 0.663
 ```
 
 Instead of computing and returning individual indices, users can obtain *all* indices from the model by simply passing the fitted model object to `model_performance()`. A list of computed indices is returned, which might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
@@ -226,8 +226,6 @@ library(see)
 plot(compare_performance(lm1, lm2, lm3, lm4))
 ```
 
-<!-- TO DO: too big; change dimensions before submission -->
-
 ![](figure2.png)
 
 ## Testing Models
@@ -253,9 +251,9 @@ test_performance(lm1, lm2, lm3, lm4)
 ``` {.r}
 test_bf(lm1, lm2, lm3, lm4)
 
-#> # Bayes Factors for Model Comparison
+#> Bayes Factors for Model Comparison
 #> 
-#> Model                                                        BF
+#>       Model                                                  BF
 #> [lm2] Species + Petal.Length                             > 1000
 #> [lm3] Species * Sepal.Width                              > 1000
 #> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width > 1000
