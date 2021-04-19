@@ -4,6 +4,7 @@
 #'
 #' @param ... Multiple model objects.
 #' @param reference This only applies when models are non-nested, and determines which model should be taken as a reference, against which all the other models are tested.
+#' @param text_length Numeric, length (number of chars) of output lines. \code{test_bf()} describes models by their formulas, which can lead to overly long lines in the output. \code{text_length} fixes the length of lines to a specified limit.
 #'
 #' @return A data frame containing the relevant indices.
 #'

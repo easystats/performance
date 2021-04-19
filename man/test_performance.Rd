@@ -3,6 +3,7 @@
 %   R/test_performance.R, R/test_vuong.R, R/test_wald.R
 \name{test_bf}
 \alias{test_bf}
+\alias{test_bf.default}
 \alias{test_likelihoodratio}
 \alias{performance_lrt}
 \alias{test_lrt}
@@ -12,6 +13,8 @@
 \title{Test if Models are Different}
 \usage{
 test_bf(...)
+
+\method{test_bf}{default}(..., text_length = NULL)
 
 test_likelihoodratio(..., estimator = "ML")
 
@@ -27,6 +30,8 @@ test_wald(...)
 }
 \arguments{
 \item{...}{Multiple model objects.}
+
+\item{text_length}{Numeric, length (number of chars) of output lines. \code{test_bf()} describes models by their formulas, which can lead to overly long lines in the output. \code{text_length} fixes the length of lines to a specified limit.}
 
 \item{estimator}{Applied when comparing regression models using
 \code{test_likelihoodratio()}. Corresponds to the different estimators for
