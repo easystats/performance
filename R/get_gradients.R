@@ -52,9 +52,9 @@
 
 .get_gradients.glmmTMB <- function(x, ...) {
   if (insight::model_info(x)$is_linear) {
-    insight::get_residuals(x) * insight::get_weights(x, null_as_ones = TRUE) * insight::get_modelmatrix(x)
+    insight::get_residuals(x) * insight::get_weights(x, null_as_ones = TRUE) * stats::model.matrix(x)
   } else {
     w <- as.vector(insight::get_residuals(x)) * insight::get_weights(x, null_as_ones = TRUE)
-    w * insight::get_modelmatrix(x) / insight::get_auxiliary(x, type = "dispersion")
+    w * stats::model.matrix(x) / insight::get_auxiliary(x, type = "dispersion")
   }
 }
