@@ -36,6 +36,7 @@ check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "au
 
 
 #' @export
+#' @importFrom utils capture.output
 check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
   method <- match.arg(method)
 
@@ -57,7 +58,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   if (method == "auto") {
     check <- tryCatch(
       {
-        capture.output(p <- check_normality(x))
+        utils::capture.output(p <- check_normality(x))
         p
       },
       error = function(e) {

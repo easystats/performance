@@ -102,6 +102,8 @@ check_collinearity.default <- function(x, verbose = TRUE, ...) {
 }
 
 #' @export
+#' @importFrom stats contr.sum lm
+#' @importFrom insight find_response get_data
 check_collinearity.afex_aov <- function(x, verbose = TRUE, ...){
   f <- paste(row.names(x$anova_table), collapse = "+")
   f <- paste0(insight::find_response(x), "~", f)
@@ -114,7 +116,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...){
   is_num <- sapply(d, is.numeric)
   d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
   is_fac <- sapply(d, is.factor) | sapply(d, is.character)
-  contrs <- lapply(is_fac, function(...) contr.sum)[is_fac]
+  contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
   if (verbose)
     message("All predictors have been centered (factors with contr.sum(), numerics with scale())")
