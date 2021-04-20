@@ -5,6 +5,7 @@
 #'
 #' @param model A generalized linear model, including cumulative links resp.
 #'   multinomial models.
+#' @param ... Currently not used.
 #'
 #' @return A named vector with the R2 value.
 #'
@@ -14,7 +15,7 @@
 #' @references Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
 #'
 #' @export
-r2_nagelkerke <- function(model) {
+r2_nagelkerke <- function(model, ...) {
   UseMethod("r2_nagelkerke")
 }
 
@@ -50,21 +51,29 @@ r2_nagelkerke <- function(model) {
 # Nagelkerke's R2 based on Cox&Snell's R2 ----------------
 
 #' @export
-r2_nagelkerke.glm <- function(model) {
-  r2cox <- r2_coxsnell(model)
-  if (is.na(r2cox) || is.null(r2cox)) {
+r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
+  info <- insight::model_info(model)
+  if (info$is_binomial && !info$is_bernoulli) {
+    if (verbose) {
+      warning("Can't calculate accurate R2 for binomial models\n  that are not Bernoulli models.", call. = FALSE)
+    }
     return(NULL)
+  } else {
+    r2cox <- r2_coxsnell(model)
+    if (is.na(r2cox) || is.null(r2cox)) {
+      return(NULL)
+    }
+    r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model)))
+    names(r2_nagelkerke) <- "Nagelkerke's R2"
+    r2_nagelkerke
   }
-  r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model)))
-  names(r2_nagelkerke) <- "Nagelkerke's R2"
-  r2_nagelkerke
 }
 
 #' @export
 r2_nagelkerke.BBreg <- r2_nagelkerke.glm
 
 #' @export
-r2_nagelkerke.bife <- function(model) {
+r2_nagelkerke.bife <- function(model, ...) {
   r2_nagelkerke <- r2_coxsnell(model) / (1 - exp(-model$null_deviance / insight::n_obs(model)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
@@ -81,7 +90,7 @@ r2_nagelkerke.bife <- function(model) {
 
 #' @export
 r2_nagelkerke.logitmfx <- function(model, ...) {
-  r2(model$fit, ...)
+  r2_nagelkerke(model$fit, ...)
 }
 
 #' @export
@@ -113,19 +122,19 @@ r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
 
 
 #' @export
-r2_nagelkerke.multinom <- function(model) {
+r2_nagelkerke.multinom <- function(model, ...) {
   l_base <- insight::get_loglikelihood(stats::update(model, ~1, trace = FALSE))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
-r2_nagelkerke.clm2 <- function(model) {
+r2_nagelkerke.clm2 <- function(model, ...) {
   l_base <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
-r2_nagelkerke.clm <- function(model) {
+r2_nagelkerke.clm <- function(model, ...) {
   l_base <- insight::get_loglikelihood(stats::update(model, ~1))
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
@@ -170,7 +179,7 @@ r2_nagelkerke.DirichletRegModel <- r2_coxsnell.clm
 
 
 #' @export
-r2_nagelkerke.coxph <- function(model) {
+r2_nagelkerke.coxph <- function(model, ...) {
   l_base <- model$loglik[1]
   .r2_nagelkerke(model, l_base)
 }
@@ -182,7 +191,7 @@ r2_nagelkerke.survreg <- r2_nagelkerke.coxph
 r2_nagelkerke.crch <- r2_nagelkerke.coxph
 
 #' @export
-r2_nagelkerke.svycoxph <- function(model) {
+r2_nagelkerke.svycoxph <- function(model, ...) {
   l_base <- model$ll[1]
   .r2_nagelkerke(model, l_base)
 }

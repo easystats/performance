@@ -203,16 +203,21 @@ r2.mlm <- function(model, ...) {
 
 
 #' @export
-r2.glm <- function(model, ...) {
+r2.glm <- function(model, verbose = TRUE, ...) {
   info <- insight::model_info(model)
 
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
-  } else if (info$is_logit) {
+  } else if (info$is_logit && info$is_bernoulli) {
     out <- list("R2_Tjur" = r2_tjur(model))
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
+  } else if (info$is_binomial && !info$is_bernoulli) {
+    if (verbose) {
+      warning("Can't calculate accurate R2 for binomial models\n  that are not Bernoulli models.", call. = FALSE)
+    }
+    out <- NULL
   } else {
     out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
