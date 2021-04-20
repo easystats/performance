@@ -63,7 +63,7 @@ r2_coxsnell <- function(model, ...) {
 #' @export
 r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   info <- insight::model_info(model)
-  if (info$is_binomial && !info$is_bernoulli) {
+  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       warning("Can't calculate accurate R2 for binomial models\n  that are not Bernoulli models.", call. = FALSE)
     }

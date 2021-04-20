@@ -213,7 +213,7 @@ r2.glm <- function(model, verbose = TRUE, ...) {
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
-  } else if (info$is_binomial && !info$is_bernoulli) {
+  } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       warning("Can't calculate accurate R2 for binomial models\n  that are not Bernoulli models.", call. = FALSE)
     }
