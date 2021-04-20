@@ -11,7 +11,6 @@
 # x <- glm(vs ~ mpg, data=mtcars, weights = wt)
 # all(sandwich::estfun(x) == .get_gradients(x))
 
-#' @importFrom insight get_residuals get_weights
 .get_gradients <- function(x, ...) {
   UseMethod(".get_gradients")
 }
@@ -41,7 +40,7 @@
 #   } else{
 #     dispersion <- sum(w^2, na.rm = TRUE)/sum(weights(x, "working"), na.rm = TRUE)
 #   }
-#   rez <- w * model.matrix(x) / dispersion
+#   rez <- w * stats::model.matrix(x) / dispersion
 #   rez
 # }
 #

@@ -30,7 +30,6 @@
 #'   model <- rma(yi, vi, data = dat, method = "REML")
 #'   model_performance(model)
 #' }
-#' @importFrom stats df.residual
 #' @export
 model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {

@@ -25,8 +25,6 @@
 #'   x <- check_heteroscedasticity(m)
 #'   plot(x)
 #' }
-#' @importFrom stats residuals df.residual fitted anova pchisq
-#' @importFrom insight print_color get_df format_p
 #' @export
 check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")
@@ -55,7 +53,7 @@ check_heteroscedasticity.default <- function(x, ...) {
   S.sq <- insight::get_df(x, type = "residual") * .sigma(x)^2 / sum(!is.na(r))
 
   .U <- (r^2) / S.sq
-  mod <- lm(.U ~ stats::fitted(x))
+  mod <- stats::lm(.U ~ stats::fitted(x))
 
   SS <- stats::anova(mod)$"Sum Sq"
   RegSS <- sum(SS) - SS[length(SS)]
@@ -76,7 +74,6 @@ check_heteroscedasticity.default <- function(x, ...) {
 }
 
 
-#' @importFrom insight get_parameters n_obs get_variance_residual get_deviance
 .sigma <- function(x) {
   s <- tryCatch(
     {
@@ -124,8 +121,6 @@ check_heteroscedasticity.default <- function(x, ...) {
 
 
 
-#' @importFrom insight get_response get_variance_distribution
-#' @importFrom stats predict family plogis
 .resid_zinb <- function(model, faminfo) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance

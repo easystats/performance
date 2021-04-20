@@ -1,4 +1,3 @@
-#' @importFrom insight format_value format_p format_bf format_table
 #' @export
 format.compare_performance <- function(x, digits = 2, ...) {
   # if we have ranking, add score and remove incomplete indices in print

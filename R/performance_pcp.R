@@ -46,12 +46,10 @@
 #' m <- glm(formula = vs ~ hp + wt, family = binomial, data = mtcars)
 #' performance_pcp(m)
 #' performance_pcp(m, method = "Gelman-Hill")
-#' @importFrom stats predict qnorm binomial predict.glm pchisq weights as.formula glm
-#' @importFrom insight get_response n_obs model_info find_response get_data get_loglikelihood
 #' @export
 performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
   # fix special cases
-  if (inherits(model, c("logitor", "logitmfx", "probitmfx"))) {
+  if (inherits(model, c("model_fit", "logitor", "logitmfx", "probitmfx"))) {
     model <- model$fit
   }
 

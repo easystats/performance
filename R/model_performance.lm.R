@@ -30,7 +30,6 @@
 #'
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' model_performance(model)
-#' @importFrom insight model_info
 #' @export
 model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(tolower(metrics) == "log_loss")) {

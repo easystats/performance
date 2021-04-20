@@ -52,9 +52,6 @@
 #' @seealso \link{r2_bayes}
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
 #'
-#' @importFrom insight find_algorithm is_multivariate model_info
-#' @importFrom bayestestR map_estimate hdi
-#' @importFrom stats AIC BIC mad median sd setNames
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(tolower(metrics) == "log_loss")) {
@@ -201,8 +198,6 @@ model_performance.stanmvreg <- model_performance.stanreg
 
 #' @export
 #' @inheritParams r2_bayes
-#' @importFrom insight model_info
-#' @importFrom bayestestR point_estimate
 #' @rdname model_performance.stanreg
 model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TRUE,
                                             average = FALSE, prior_odds = NULL, ...) {
@@ -253,7 +248,6 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
 # helper -------------------
 
 
-#' @importFrom insight get_parameters
 .get_sigma_bfbayesfactor <- function(model, average = FALSE, prior_odds = NULL) {
   if (average) {
     return(.get_sigma_bfbayesfactor_model_average(model, prior_odds = prior_odds))
@@ -265,9 +259,6 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
 }
 
 
-#' @importFrom bayestestR bayesfactor_models weighted_posteriors
-#' @importFrom insight get_response
-#' @importFrom stats sd
 .get_sigma_bfbayesfactor_model_average <- function(model, prior_odds = NULL) {
   if (!requireNamespace("BayesFactor", quietly = TRUE)) {
     stop("Package `BayesFactor` needed for this function to work. Please install it.")

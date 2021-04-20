@@ -187,8 +187,6 @@
 #'   check_outliers(model, method = "ics")
 #' }
 #' }
-#' @importFrom insight n_obs get_predictors get_data
-#' @importFrom stats cooks.distance mahalanobis cov
 #' @export
 check_outliers <- function(x, ...) {
   UseMethod("check_outliers")
@@ -208,8 +206,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
   # Remove non-numerics
-  data <- insight::get_predictors(x)
-  data <- data[, sapply(data, is.numeric), drop = FALSE]
+  data <- stats::model.matrix(x)
 
 
 
@@ -385,7 +382,6 @@ as.numeric.check_outliers <- function(x, ...) {
   suppressWarnings(.check_outliers_thresholds_nowarn(x))
 }
 
-#' @importFrom stats qf qchisq
 .check_outliers_thresholds_nowarn <- function(x) {
   zscore <- stats::qnorm(p = 1 - 0.025)
   iqr <- 1.5
@@ -416,7 +412,6 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
-#' @importFrom stats median sd qnorm mad
 .check_outliers_zscore <- function(x, threshold = stats::qnorm(p = 1 - 0.025), robust = TRUE, method = "max") {
   # Standardize
   if (robust == FALSE) {
@@ -441,7 +436,6 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
-#' @importFrom stats IQR quantile
 .check_outliers_iqr <- function(x, threshold = 1.5, method = "tukey") {
   d <- data.frame(Obs = 1:nrow(as.data.frame(x)))
   for (col in 1:ncol(as.data.frame(x))) {
@@ -480,7 +474,6 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
-#' @importFrom stats cooks.distance
 .check_outliers_cook <- function(x, threshold = NULL) {
   # Compute
   d <- unname(stats::cooks.distance(x))
@@ -526,7 +519,6 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
-#' @importFrom stats mahalanobis cov
 .check_outliers_mahalanobis <- function(x, threshold = NULL, ...) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -679,8 +671,6 @@ as.numeric.check_outliers <- function(x, ...) {
 }
 
 
-# @importFrom utils packageVersion
-# @importFrom stats median qnorm mad sd predict
 # .check_outliers_iforest <- function(x, threshold = 0.025) {
 #   out <- data.frame(Obs = 1:nrow(x))
 #

@@ -57,15 +57,15 @@ While functions to build and produce diagnostic plots or to compute fit statisti
 
 # Comparison to other Packages
 
-Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn* [@MuMin], *car* [@car], *broom* [@robinson_broom_2020]), the *performance* package offers functions for checking validity *and* model quality systematically and comprehensively for many regression model objects such as (generalized) linear, mixed-effects, and Bayesian. *performance* also offers functions to compare and test multiple models simultaneously to evaluate the best fitting model to the data.
+Compared to other packages (e.g., *lmtest* [@lmtest], *MuMIn* [@MuMin], *car* [@car], *broom* [@robinson_broom_2020]), the *performance* package offers functions for checking validity *and* model quality systematically and comprehensively for many regression model objects such as (generalized) linear models, mixed-effects models, and Bayesian models. *performance* also offers functions to compare and test multiple models simultaneously to evaluate the best fitting model to the data.
 
 # Features
 
-Beyond validity and quality checks and consistent with *easystats* syntax, *performance* also includes plotting functions via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see].^[A complete overview of plotting functions is available at the *see* website (<https://easystats.github.io/see/articles/performance.html>).]
+Beyond validity and quality checks, *performance* also includes plotting functions via the [*see* package](https://easystats.github.io/see/) [@ludecke2020see].^[A complete overview of plotting functions is available at the *see* website (<https://easystats.github.io/see/articles/performance.html>).]
 
 ## Checking Model Assumptions
 
-Inferences made from regression models such as significance tests or interpretation of coefficients require meeting several assumptions, which vary based on the type of model. *performance* offers a collection of functions to check if assumptions are met. To demonstrate the efficiency of the package, we overview a few functions, followed by a broader function that runs a comprehensive suite of checks in a single call.
+Inferences made from regression models such as significance tests or interpretation of coefficients require meeting several assumptions, which vary based on the type of model. *performance* offers a collection of functions to check if assumptions are met. To demonstrate the efficiency of the package, we provide examples for a few functions, followed by a broader function that runs a comprehensive suite of checks in a single call.
 
 For example, linear (Gaussian) models assume constant error variance (homoscedasticity). We can use `check_heteroscedasticity()` from *performance* to check if this assumption has been violated.
 
@@ -96,7 +96,7 @@ check_overdispersion(model)
 #> Overdispersion detected.
 ```
 
-In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models, their Bayesian equivalents, and more. Inspect the package documentation for a complete listing.
+In addition to tests for checking assumptions, *performance* also provides convenience functions to *visually* assess these assumptions of regression models. *performance*'s visual checks detect the type of model passed to the function call, and return the appropriate visual checks for each model type. At present, there are many supported regression models, such as linear models, linear mixed-effects models or their Bayesian equivalents. Inspect the package documentation for a complete listing.
 
 For example, consider the visual checks from a simple linear regression model.
 
@@ -159,8 +159,8 @@ icc(model)
 
 #> # Intraclass Correlation Coefficient
 #> 
-#>      Adjusted ICC: 0.872
-#>   Conditional ICC: 0.660
+#>      Adjusted ICC: 0.874
+#>   Conditional ICC: 0.663
 ```
 
 Instead of computing and returning individual indices, users can obtain *all* indices from the model by simply passing the fitted model object to `model_performance()`. A list of computed indices is returned, which might include $R^2$, AIC, BIC, RMSE, ICC, LOOIC, etc.
@@ -226,8 +226,6 @@ library(see)
 plot(compare_performance(lm1, lm2, lm3, lm4))
 ```
 
-<!-- TO DO: too big; change dimensions before submission -->
-
 ![](figure2.png)
 
 ## Testing Models
@@ -253,9 +251,9 @@ test_performance(lm1, lm2, lm3, lm4)
 ``` {.r}
 test_bf(lm1, lm2, lm3, lm4)
 
-#> # Bayes Factors for Model Comparison
+#> Bayes Factors for Model Comparison
 #> 
-#> Model                                                        BF
+#>       Model                                                  BF
 #> [lm2] Species + Petal.Length                             > 1000
 #> [lm3] Species * Sepal.Width                              > 1000
 #> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width > 1000
