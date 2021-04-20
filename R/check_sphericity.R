@@ -38,7 +38,6 @@ check_sphericity.Anova.mlm <- function(x, ...) {
 }
 
 #' @export
-#' @importFrom insight print_color format_p
 check_sphericity.afex_aov <- function(x, ...) {
   if (length(attr(x, "within")) == 0) {
     stop("Mauchly Test of Sphericity is only aplicable to ANOVAs with within-subjects factors.")

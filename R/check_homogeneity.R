@@ -34,7 +34,6 @@ check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "au
 
 
 #' @export
-#' @importFrom utils capture.output
 check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
   method <- match.arg(method)
 
