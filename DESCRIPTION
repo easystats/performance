@@ -106,4 +106,5 @@ Suggests:
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.1
+Remotes: easystats/insight
 Config/testthat/edition: 3

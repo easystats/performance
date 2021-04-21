@@ -85,9 +85,18 @@ check_overdispersion.default <- function(x, ...) {
 #' @export
 check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
-  model_info <- insight::model_info(x)
-  if (!model_info$is_poisson) {
-    stop("Model must be from Poisson-family.", call. = FALSE)
+  info <- insight::model_info(x)
+  if (!info$is_poisson && !info$is_binomial) {
+    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+  }
+
+  # check for Bernoulli
+  if (info$is_bernoulli) {
+    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
+  }
+
+  if (info$is_binomial) {
+    return(check_overdispersion.merMod(x, ...))
   }
 
   yhat <- stats::fitted(x)
@@ -148,9 +157,15 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 
 #' @export
 check_overdispersion.merMod <- function(x, ...) {
-  # check if we have poisson
-  if (!insight::model_info(x)$is_poisson) {
-    stop("Model must be from Poisson-family.", call. = FALSE)
+  # check if we have poisson or binomial
+  info <- insight::model_info(x)
+  if (!info$is_poisson && !info$is_binomial) {
+    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+  }
+
+  # check for Bernoulli
+  if (info$is_bernoulli) {
+    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
   }
 
   rdf <- stats::df.residual(x)
