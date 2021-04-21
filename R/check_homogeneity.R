@@ -108,7 +108,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   invisible(p.val)
 }
 
-
+#' @rdname check_homogeneity
 #' @export
 check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   if (!requireNamespace("afex"))
