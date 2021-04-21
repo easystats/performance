@@ -4,10 +4,12 @@
 \alias{r2_coxsnell}
 \title{Cox & Snell's R2}
 \usage{
-r2_coxsnell(model)
+r2_coxsnell(model, ...)
 }
 \arguments{
 \item{model}{Model with binary outcome.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A named vector with the R2 value.

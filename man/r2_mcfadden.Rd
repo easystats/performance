@@ -4,10 +4,12 @@
 \alias{r2_mcfadden}
 \title{McFadden's R2}
 \usage{
-r2_mcfadden(model)
+r2_mcfadden(model, ...)
 }
 \arguments{
 \item{model}{Generalized linear or multinomial logit (\code{mlogit}) model.}
+
+\item{...}{Currently not used.}
 }
 \value{
 For most models, a list with McFadden's R2 and adjusted McFadden's

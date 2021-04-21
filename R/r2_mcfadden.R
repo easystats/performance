@@ -4,6 +4,7 @@
 #' @description Calculates McFadden's pseudo R2.
 #'
 #' @param model Generalized linear or multinomial logit (\code{mlogit}) model.
+#' @param ... Currently not used.
 #'
 #' @return For most models, a list with McFadden's R2 and adjusted McFadden's
 #'   R2 value. For some models, only McFadden's R2 is available.
@@ -23,7 +24,7 @@
 #'   r2_mcfadden(model)
 #' }
 #' @export
-r2_mcfadden <- function(model) {
+r2_mcfadden <- function(model, ...) {
   UseMethod("r2_mcfadden")
 }
 
@@ -57,9 +58,17 @@ r2_mcfadden <- function(model) {
 
 
 #' @export
-r2_mcfadden.glm <- function(model) {
-  l_null <- insight::get_loglikelihood(stats::update(model, ~1))
-  .r2_mcfadden(model, l_null)
+r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
+  info <- insight::model_info(model)
+  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+    if (verbose) {
+      warning("Can't calculate accurate R2 for binomial models\n  that are not Bernoulli models.", call. = FALSE)
+    }
+    return(NULL)
+  } else {
+    l_null <- insight::get_loglikelihood(stats::update(model, ~1))
+    .r2_mcfadden(model, l_null)
+  }
 }
 
 #' @export
@@ -98,7 +107,7 @@ r2_mcfadden.truncreg <- r2_mcfadden.glm
 
 #' @export
 r2_mcfadden.logitmfx <- function(model, ...) {
-  r2(model$fit, ...)
+  r2_mcfadden(model$fit, ...)
 }
 
 #' @export
@@ -130,7 +139,7 @@ r2_mcfadden.negbinmfx <- r2_mcfadden.logitmfx
 
 
 #' @export
-r2_mcfadden.vglm <- function(model) {
+r2_mcfadden.vglm <- function(model, ...) {
   if (!(is.null(model@call$summ) && !identical(model@call$summ, 0))) {
     stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
   }
@@ -141,7 +150,7 @@ r2_mcfadden.vglm <- function(model) {
 
 
 #' @export
-r2_mcfadden.clm2 <- function(model) {
+r2_mcfadden.clm2 <- function(model, ...) {
   l_null <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
   .r2_mcfadden(model, l_null)
 }
@@ -149,14 +158,14 @@ r2_mcfadden.clm2 <- function(model) {
 
 
 #' @export
-r2_mcfadden.multinom <- function(model) {
+r2_mcfadden.multinom <- function(model, ...) {
   l_null <- insight::get_loglikelihood(stats::update(model, ~1, trace = FALSE))
   .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
-r2_mcfadden.mlogit <- function(model) {
+r2_mcfadden.mlogit <- function(model, ...) {
   R2 <- as.vector(summary(model)$mfR2)
   names(R2) <- "McFadden's R2"
   R2
