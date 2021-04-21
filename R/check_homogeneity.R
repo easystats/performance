@@ -111,20 +111,36 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
 #' @rdname check_homogeneity
 #' @export
 check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
-  if (!requireNamespace("afex"))
-    stop("afex required for this function to work.")
+  if (!requireNamespace("car"))
+    stop("car required for this function to work.")
 
   if (tolower(method) != "levene")
     message("Only Levene's test for homogeneity supported for afex_aov")
 
-  test <- afex::test_levene(x)
-
-  is_covar <- sapply(attr(x,'between'), is.null)
-  if (any(is_covar)) {
-    between <- between[!is_covar]
-    warning("Levene's test is not appropriate with quantitative explanatory variables. ",
-            "Testing assumption of homogeneity among factor groups only.")
+  if (length(attr(x, "between")) == 0) {
+    stop("Levene test is only aplicable to ANOVAs with between-subjects factors.")
   }
+
+  data <- insight::get_data(x)
+  dv <- attr(x, "dv")
+  id <- attr(x, "id")
+  between <- names(attr(x, "between"))
+  is_covar <- sapply(attr(x,'between'), is.null)
+
+  ag_data <- aggregate(data[, dv], data[, c(between, id)], mean)
+  colnames(ag_data)[length(c(between, id)) + 1] <- dv
+
+  if (any(is_covar)) {
+    warning("Levene's test is not appropriate with quantitative explanatory variables. ",
+            "Testing assumption of homogeneity among factor groups only.", call. = FALSE)
+    # ## TODO maybe add as option?
+    # warning("Testing assumption of homogeneity on residualzied data among factor groups only.", call. = FALSE)
+    # ag_data[dv] <- stats::residuals(stats::lm(ag_data[,dv] ~ as.matrix(ag_data[between[is_covar]])))
+    between <- between[!is_covar]
+  }
+
+  form <- stats::formula(paste0(dv, "~", paste0(between, collapse = "*")))
+  test <- car::leveneTest(form, ag_data, center = mean, ...)
 
   p.val <- test[1, "Pr(>F)"]
 
