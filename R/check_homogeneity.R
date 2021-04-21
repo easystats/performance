@@ -121,7 +121,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
     stop("Levene test is only aplicable to ANOVAs with between-subjects factors.")
   }
 
-  data <- insight::get_data(x)
+  data <- x$data$long # Use this to also get id column
   dv <- attr(x, "dv")
   id <- attr(x, "id")
   between <- names(attr(x, "between"))
