@@ -2,9 +2,12 @@
 % Please edit documentation in R/check_homogeneity.R
 \name{check_homogeneity}
 \alias{check_homogeneity}
+\alias{check_homogeneity.afex_aov}
 \title{Check model for homogeneity of variances}
 \usage{
 check_homogeneity(x, method = c("bartlett", "fligner", "levene", "auto"), ...)
+
+\method{check_homogeneity}{afex_aov}(x, method = "levene", ...)
 }
 \arguments{
 \item{x}{A linear model or an ANOVA object.}

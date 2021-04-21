@@ -135,7 +135,16 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
 check_normality.glmmTMB <- check_normality.merMod
 
 
+#' @export
+check_normality.afex_aov <- function(x, ...) {
+  r <- suppressMessages(stats::residuals(x, append = FALSE))
+  p.val <- .check_normality(r, x)
 
+  attr(p.val, "object_name") <- .safe_deparse(substitute(x))
+  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+
+  invisible(p.val)
+}
 
 
 

@@ -35,6 +35,7 @@ reference:
   - check_convergence
   - check_distribution
   - check_heteroscedasticity
+  - check_sphericity
   - check_homogeneity
   - check_normality
   - check_outliers

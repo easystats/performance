@@ -55,6 +55,7 @@ Imports:
     utils
 Suggests:
     AER,
+    afex,
     BayesFactor,
     betareg,
     bigutilsr,
