@@ -339,21 +339,21 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
         assign <- switch(component,
-          conditional = attr(stats::model.matrix(x, model = "count"), "assign"),
-          zero_inflated = attr(stats::model.matrix(x, model = "zero"), "assign")
+          conditional = attr(insight::get_modelmatrix(x, model = "count"), "assign"),
+          zero_inflated = attr(insight::get_modelmatrix(x, model = "zero"), "assign")
         )
       } else if (inherits(x, "glmmTMB")) {
         assign <- switch(component,
-          conditional = attr(stats::model.matrix(x), "assign"),
+          conditional = attr(insight::get_modelmatrix(x), "assign"),
           zero_inflated = .zi_term_assignment(x, component)
         )
       } else if (inherits(x, "MixMod")) {
         assign <- switch(component,
-          conditional = attr(stats::model.matrix(x, type = "fixed"), "assign"),
-          zero_inflated = attr(stats::model.matrix(x, type = "zi_fixed"), "assign")
+          conditional = attr(insight::get_modelmatrix(x, type = "fixed"), "assign"),
+          zero_inflated = attr(insight::get_modelmatrix(x, type = "zi_fixed"), "assign")
         )
       } else {
-        assign <- attr(stats::model.matrix(x), "assign")
+        assign <- attr(insight::get_modelmatrix(x), "assign")
       }
 
       if (is.null(assign)) {
@@ -400,7 +400,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
     {
       rhs <- insight::find_formula(x)[[component]]
       d <- insight::get_data(x)
-      attr(stats::model.matrix(rhs, data = d), "assign")
+      attr(insight::get_modelmatrix(rhs, data = d), "assign")
     },
     error = function(e) {
       NULL
