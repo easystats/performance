@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check model for (non-)constant error variance — check_heteroscedasticity • performance</title>
+<title>Check model for violation of sphericity — check_sphericity • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Check model for (non-)constant error variance — check_heteroscedasticity" />
-<meta property="og:description" content="Check model for (non-)constant error variance." />
+<meta property="og:title" content="Check model for violation of sphericity — check_sphericity" />
+<meta property="og:description" content="Check model for violation of sphericity" />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -65,8 +65,6 @@
 <![endif]-->
 
 
-
-<!-- dependencies from examples -->
 
 
   
@@ -136,18 +134,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check model for (non-)constant error variance</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/check_heteroscedasticity.R'><code>R/check_heteroscedasticity.R</code></a></small>
-    <div class="hidden name"><code>check_heteroscedasticity.Rd</code></div>
+    <h1>Check model for violation of sphericity</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/check_sphericity.R'><code>R/check_sphericity.R</code></a></small>
+    <div class="hidden name"><code>check_sphericity.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Check model for (non-)constant error variance.</p>
+    <p>Check model for violation of sphericity</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_heteroscedasticity</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='fu'>check_heteroskedasticity</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>check_sphericity</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,37 +154,15 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Currently not used.</p></td>
+      <td><p>Arguments passed to <code><a href='https://rdrr.io/pkg/car/man/Anova.html'>car::Anova</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Invisibly returns the p-value of the test statistics. A p-value &lt; 0.05
-indicates a non-constant variance (heteroskedasticity).</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>Invisibly returns the p-values of the test statistics. A p-value &lt; 0.05
+indicates a violation of sphericity.</p>
 
-    <p>This test of the hypothesis of (non-)constant error is also called
-  <em>Breusch-Pagan test</em> (<cite>1979</cite>).</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287–1294.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span> <span class='op'>+</span> <span class='va'>disp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>check_heteroscedasticity</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).
-#&gt; </span><span></div><div class='input'>
-<span class='co'># plot results</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>check_heteroscedasticity</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.042).
-#&gt; </span><span></div><div class='output co'>#&gt; <span class='error'>Error: Failed at retrieving data :( Please provide original model or data through the `data` argument</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
