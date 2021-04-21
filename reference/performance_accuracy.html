@@ -147,7 +147,13 @@
    or logistic regression models.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>performance_accuracy</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cv"</span>, <span class='st'>"boot"</span><span class='op'>)</span>, k <span class='op'>=</span> <span class='fl'>5</span>, n <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>performance_accuracy</span><span class='op'>(</span>
+  <span class='va'>model</span>,
+  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cv"</span>, <span class='st'>"boot"</span><span class='op'>)</span>,
+  k <span class='op'>=</span> <span class='fl'>5</span>,
+  n <span class='op'>=</span> <span class='fl'>1000</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -170,6 +176,10 @@ compute the accuracy values.</p></td>
     <tr>
       <th>n</th>
       <td><p>Number of bootstrap-samples.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Toggle warnings.</p></td>
     </tr>
     </table>
 
