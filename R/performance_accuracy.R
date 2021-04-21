@@ -11,6 +11,7 @@
 #'   (\code{method = "cv"}) or bootstrapping (\code{method = "boot"}) is used to
 #'   compute the accuracy values.
 #' @param n Number of bootstrap-samples.
+#' @param verbose Toggle warnings.
 #'
 #' @return A list with three values: The \code{Accuracy} of the model
 #'   predictions, i.e. the proportion of accurately predicted values from the
@@ -35,7 +36,7 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_accuracy(model)
 #' @export
-performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000) {
+performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000, verbose = TRUE) {
   method <- match.arg(method)
 
   # get formula from model fit
@@ -45,9 +46,9 @@ performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 100
   resp.name <- insight::find_response(model)
 
   # model data, for cross validation
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = verbose)
 
-  info <- insight::model_info(model)
+  info <- insight::model_info(model, verbose = verbose)
 
   # accuracy for linear models
   if (info$is_linear) {

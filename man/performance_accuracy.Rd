@@ -4,7 +4,13 @@
 \alias{performance_accuracy}
 \title{Accuracy of predictions from model fit}
 \usage{
-performance_accuracy(model, method = c("cv", "boot"), k = 5, n = 1000)
+performance_accuracy(
+  model,
+  method = c("cv", "boot"),
+  k = 5,
+  n = 1000,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{model}{A linear or logistic regression model. A mixed-effects model is
@@ -17,6 +23,8 @@ compute the accuracy values.}
 \item{k}{The number of folds for the k-fold cross-validation.}
 
 \item{n}{Number of bootstrap-samples.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A list with three values: The \code{Accuracy} of the model

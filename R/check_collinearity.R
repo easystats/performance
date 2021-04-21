@@ -108,7 +108,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...){
   # f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
   # f <- as.formula(f)
 
-  d <- insight::get_data(x)
+  d <- insight::get_data(x, verbose = verbose)
   is_num <- sapply(d, is.numeric)
   d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
   is_fac <- sapply(d, is.factor) | sapply(d, is.character)
@@ -238,7 +238,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 .check_collinearity <- function(x, component, verbose = TRUE) {
   v <- insight::get_varcov(x, component = component, verbose = FALSE)
-  assign <- .term_assignments(x, component)
+  assign <- .term_assignments(x, component, verbose = verbose)
 
   # we have rank-deficiency here. remove NA columns from assignment
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
@@ -334,7 +334,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-.term_assignments <- function(x, component) {
+.term_assignments <- function(x, component, verbose = TRUE) {
   tryCatch(
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
@@ -345,7 +345,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
       } else if (inherits(x, "glmmTMB")) {
         assign <- switch(component,
           conditional = attr(insight::get_modelmatrix(x), "assign"),
-          zero_inflated = .zi_term_assignment(x, component)
+          zero_inflated = .zi_term_assignment(x, component, verbose = verbose)
         )
       } else if (inherits(x, "MixMod")) {
         assign <- switch(component,
@@ -357,13 +357,13 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
       }
 
       if (is.null(assign)) {
-        assign <- .find_term_assignment(x, component)
+        assign <- .find_term_assignment(x, component, verbose = verbose)
       }
 
       assign
     },
     error = function(e) {
-      .find_term_assignment(x, component)
+      .find_term_assignment(x, component, verbose = verbose)
     }
   )
 }
@@ -371,9 +371,9 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-.find_term_assignment <- function(x, component) {
+.find_term_assignment <- function(x, component, verbose = TRUE) {
   pred <- insight::find_predictors(x)[[component]]
-  dat <- insight::get_data(x)[, pred, drop = FALSE]
+  dat <- insight::get_data(x, verbose = verbose)[, pred, drop = FALSE]
 
   parms <- unlist(lapply(1:length(pred), function(i) {
     p <- pred[i]
@@ -395,11 +395,11 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 
 
-.zi_term_assignment <- function(x, component = "zero_inflated") {
+.zi_term_assignment <- function(x, component = "zero_inflated", verbose = TRUE) {
   tryCatch(
     {
       rhs <- insight::find_formula(x)[[component]]
-      d <- insight::get_data(x)
+      d <- insight::get_data(x, verbose = verbose)
       attr(insight::get_modelmatrix(rhs, data = d), "assign")
     },
     error = function(e) {

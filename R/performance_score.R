@@ -55,14 +55,14 @@ performance_score <- function(model, verbose = TRUE) {
     model <- model$fit
   }
 
-  minfo <- insight::model_info(model)
+  minfo <- insight::model_info(model, verbose = verbose)
 
   if (minfo$is_ordinal || minfo$is_multinomial) {
     if (verbose) insight::print_color("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.\n", "red")
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
 
-  resp <- insight::get_response(model)
+  resp <- insight::get_response(model, verbose = verbose)
 
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
     if (verbose) insight::print_color("Can't calculate proper scoring rules for models without integer response values.\n", "red")
