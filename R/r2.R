@@ -10,7 +10,7 @@
 #' @inheritParams r2_nakagawa
 #'
 #' @return Returns a list containing values related to the most appropriate R2
-#'   for the given model (or \code{NA} if no R2 could be extracted). See the
+#'   for the given model (or \code{NULL} if no R2 could be extracted). See the
 #'   list below:
 #' \itemize{
 #'   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
@@ -67,15 +67,13 @@ r2.default <- function(model, verbose = TRUE, ...) {
     }
   )
 
-  if (is.na(NULL) && isTRUE(verbose)) {
+  if (is.null(out) && isTRUE(verbose)) {
     insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
   }
 
   if (!is.null(out)) {
     names(out$R2) <- "R2"
     class(out) <- c("r2_generic", class(out))
-  } else {
-    out <- NA
   }
 
   out
@@ -494,7 +492,7 @@ r2.rma <- function(model, ...) {
   s <- summary(model)
 
   if (is.null(s$R2)) {
-    return(NA)
+    return(NULL)
   }
 
   out <- list(R2 = s$R2 / 100)
@@ -693,7 +691,7 @@ r2.plm <- function(model, ...) {
 r2.selection <- function(model, ...) {
   model_summary <- summary(model)
   if (is.null(model_summary$rSquared)) {
-    return(NA)
+    return(NULL)
   }
   out <- list(
     "R2" = c(`R2` = model_summary$rSquared$R2),

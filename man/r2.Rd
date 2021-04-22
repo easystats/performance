@@ -23,7 +23,7 @@ decrease the tolerance-level. See also \code{\link{check_singularity}}.}
 }
 \value{
 Returns a list containing values related to the most appropriate R2
-  for the given model (or \code{NA} if no R2 could be extracted). See the
+  for the given model (or \code{NULL} if no R2 could be extracted). See the
   list below:
 \itemize{
   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
