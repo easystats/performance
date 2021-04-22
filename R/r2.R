@@ -696,8 +696,8 @@ r2.selection <- function(model, ...) {
     return(NA)
   }
   out <- list(
-    "R2" = c(`R2` = model_summary$rSquared[1]),
-    "R2_adjusted" = c(`adjusted R2` = model_summary$rSquared[2])
+    "R2" = c(`R2` = model_summary$rSquared$R2),
+    "R2_adjusted" = c(`adjusted R2` = model_summary$rSquared$R2adj)
   )
 
   attr(out, "model_type") <- "Tobit 2"
