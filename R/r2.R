@@ -10,7 +10,8 @@
 #' @inheritParams r2_nakagawa
 #'
 #' @return Returns a list containing values related to the most appropriate R2
-#'   for the given model. See the list below:
+#'   for the given model (or \code{NA} if no R2 could be extracted). See the
+#'   list below:
 #' \itemize{
 #'   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
 #'   \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
@@ -493,7 +494,7 @@ r2.rma <- function(model, ...) {
   s <- summary(model)
 
   if (is.null(s$R2)) {
-    return(NULL)
+    return(NA)
   }
 
   out <- list(R2 = s$R2 / 100)
@@ -683,6 +684,23 @@ r2.plm <- function(model, ...) {
   )
 
   attr(out, "model_type") <- "Panel Data"
+  structure(class = "r2_generic", out)
+}
+
+
+
+#' @export
+r2.selection <- function(model, ...) {
+  model_summary <- summary(model)
+  if (is.null(model_summary$rSquared)) {
+    return(NA)
+  }
+  out <- list(
+    "R2" = c(`R2` = model_summary$rSquared[1]),
+    "R2_adjusted" = c(`adjusted R2` = model_summary$rSquared[2])
+  )
+
+  attr(out, "model_type") <- "Tobit 2"
   structure(class = "r2_generic", out)
 }
 
