@@ -228,13 +228,13 @@ format.test_performance <- function(x, digits = 2, ...) {
 
   if (isTRUE(attributes(x)$is_nested)) {
     footer <- paste0(
-      "Models were detected as nested and are compared in sequential order."
+      "Models were detected as nested and are compared in sequential order.\n"
     )
   } else {
     footer <- paste0(
       "Each model is compared to ",
       x$Name[attributes(x)$reference],
-      "."
+      ".\n"
     )
   }
   attr(out, "table_footer") <- footer
