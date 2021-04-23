@@ -76,7 +76,12 @@ check_model <- function(x, ...) {
 #' @rdname check_model
 #' @export
 check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", alpha = .2, dot_alpha = .8, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), theme = "see::theme_lucid", detrend = FALSE, ...) {
-  minfo <- insight::model_info(x)
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
+  minfo <- insight::model_info(x, verbose = FALSE)
 
   if (minfo$is_bayesian) {
     ca <- suppressWarnings(.check_assumptions_stan(x))

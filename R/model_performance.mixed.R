@@ -39,7 +39,12 @@ model_performance.merMod <- function(model, metrics = "all", verbose = TRUE, ...
   # check for valid input
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
-  mi <- insight::model_info(model)
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
+  mi <- insight::model_info(model, verbose = FALSE)
 
   out <- list()
   if ("AIC" %in% toupper(metrics)) {

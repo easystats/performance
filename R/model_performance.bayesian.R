@@ -207,7 +207,7 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
     metrics <- c("R2", "SIGMA")
   }
 
-  mi <- insight::model_info(model)
+  mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.", call. = FALSE)
     return(NULL)

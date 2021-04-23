@@ -296,5 +296,16 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
     stop("The models don't have the same response variable, which is a prerequisite to compare them.")
   }
 
+  # check formula of all models, but warn only once
+  already_warned <- FALSE
+  for (i in objects) {
+    if (!already_warned) {
+      check_formula <- insight::formula_ok(i)
+    }
+    if (check_formula) {
+      already_warned <- TRUE
+    }
+  }
+
   objects
 }

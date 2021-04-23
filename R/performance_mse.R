@@ -43,7 +43,7 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
   if (is.null(res)) {
     res <- tryCatch(
       {
-        def_res <- insight::get_residuals(model, verbose = verbose, ...)
+        def_res <- insight::get_residuals(model, verbose = FALSE, ...)
         if (verbose) {
           warning(insight::format_message("Response residuals not available to calculate mean square error. (R)MSE is probably not reliable."), call. = FALSE)
         }
