@@ -95,7 +95,7 @@
 
 <div id="performance-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#performance-" class="anchor"></a>performance <img src="reference/figures/logo.png" align="right" height="139">
+<a href="#performance-" class="anchor" aria-hidden="true"></a>performance <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
 <p><strong><em>Test if your model is a good model!</em></strong></p>
@@ -103,7 +103,7 @@
 <p>The primary goal of the <strong>performance</strong> package is to fill this gap and to provide utilities for computing <strong>indices of model quality</strong> and <strong>goodness of fit</strong>. These include measures like r-squared (R2), root mean squared error (RMSE) or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
 <p><a href="https://cran.r-project.org/package=performance" class="external-link"><img src="http://www.r-pkg.org/badges/version/performance" alt="CRAN"></a> <a href="https://github.com/easystats/performance/actions" class="external-link"><img src="https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master" alt="R check"></a></p>
 <p>Run the following to install the stable release of <strong>performance</strong> from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -115,7 +115,7 @@
 </div>
 <div id="citation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h2>
+<a href="#citation" class="anchor" aria-hidden="true"></a>Citation</h2>
 <!-- TO DO: once accepted, replace psyarxiv doi with joss doi -->
 <p>To cite performance in publications use:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -142,20 +142,20 @@
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
+<a href="#documentation" class="anchor" aria-hidden="true"></a>Documentation</h2>
 <p><a href="https://easystats.github.io/performance/"><img src="https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/" class="external-link"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/performance/reference/index.html"><img src="https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3" alt="Features"></a></p>
 <p>There is a nice introduction into the package on <a href="https://www.youtube.com/watch?v=EPIxQ5i5oxs" class="external-link">youtube</a>.</p>
 </div>
 <div id="the-performance-workflow" class="section level2">
 <h2 class="hasAnchor">
-<a href="#the-performance-workflow" class="anchor"></a>The <em>performance</em> workflow</h2>
+<a href="#the-performance-workflow" class="anchor" aria-hidden="true"></a>The <em>performance</em> workflow</h2>
 <p><img src="reference/figures/figure_workflow.png" width="75%"></p>
 <div id="assessing-model-quality" class="section level3">
 <h3 class="hasAnchor">
-<a href="#assessing-model-quality" class="anchor"></a>Assessing model quality</h3>
+<a href="#assessing-model-quality" class="anchor" aria-hidden="true"></a>Assessing model quality</h3>
 <div id="r-squared" class="section level4">
 <h4 class="hasAnchor">
-<a href="#r-squared" class="anchor"></a>R-squared</h4>
+<a href="#r-squared" class="anchor" aria-hidden="true"></a>R-squared</h4>
 <p><strong>performance</strong> has a generic <code><a href="reference/r2.html">r2()</a></code> function, which computes the r-squared for many different models, including mixed effects and Bayesian regression models.</p>
 <p><code><a href="reference/r2.html">r2()</a></code> returns a list containing values related to the “most appropriate” r-squared for the given model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -200,7 +200,7 @@
 </div>
 <div id="intraclass-correlation-coefficient-icc" class="section level4">
 <h4 class="hasAnchor">
-<a href="#intraclass-correlation-coefficient-icc" class="anchor"></a>Intraclass Correlation Coefficient (ICC)</h4>
+<a href="#intraclass-correlation-coefficient-icc" class="anchor" aria-hidden="true"></a>Intraclass Correlation Coefficient (ICC)</h4>
 <p>Similar to R-squared, the ICC provides information on the explained variance and can be interpreted as “the proportion of the variance explained by the grouping structure in the population” (Hox 2010).</p>
 <p><code><a href="reference/icc.html">icc()</a></code> calculates the ICC for various mixed model objects, including <code>stanreg</code> models.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -226,10 +226,10 @@
 </div>
 <div id="model-diagnostics" class="section level3">
 <h3 class="hasAnchor">
-<a href="#model-diagnostics" class="anchor"></a>Model diagnostics</h3>
+<a href="#model-diagnostics" class="anchor" aria-hidden="true"></a>Model diagnostics</h3>
 <div id="check-for-overdispersion" class="section level4">
 <h4 class="hasAnchor">
-<a href="#check-for-overdispersion" class="anchor"></a>Check for overdispersion</h4>
+<a href="#check-for-overdispersion" class="anchor" aria-hidden="true"></a>Check for overdispersion</h4>
 <p>Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). <code><a href="reference/check_overdispersion.html">check_overdispersion()</a></code> checks if a count model (including mixed models) is overdispersed or not.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/glmmTMB/glmmTMB" class="external-link">glmmTMB</a></span><span class="op">)</span>
@@ -245,7 +245,7 @@
 </div>
 <div id="check-for-zero-inflation" class="section level4">
 <h4 class="hasAnchor">
-<a href="#check-for-zero-inflation" class="anchor"></a>Check for zero-inflation</h4>
+<a href="#check-for-zero-inflation" class="anchor" aria-hidden="true"></a>Check for zero-inflation</h4>
 <p>Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of observed zeros is larger than the amount of predicted zeros, so the model is <em>underfitting</em> zeros. In such cases, it is recommended to use negative binomial or zero-inflated models.</p>
 <p>Use <code><a href="reference/check_zeroinflation.html">check_zeroinflation()</a></code> to check if zero-inflation is present in the fitted model.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -259,7 +259,7 @@
 </div>
 <div id="check-for-singular-model-fits" class="section level4">
 <h4 class="hasAnchor">
-<a href="#check-for-singular-model-fits" class="anchor"></a>Check for singular model fits</h4>
+<a href="#check-for-singular-model-fits" class="anchor" aria-hidden="true"></a>Check for singular model fits</h4>
 <p>A “singular” model fit means that some dimensions of the variance-covariance matrix have been estimated as exactly zero. This often occurs for mixed models with overly complex random effects structures.</p>
 <p><code><a href="reference/check_singularity.html">check_singularity()</a></code> checks mixed models (of class <code>lme</code>, <code>merMod</code>, <code>glmmTMB</code> or <code>MixMod</code>) for singularity, and returns <code>TRUE</code> if the model fit is singular.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -284,7 +284,7 @@
 </div>
 <div id="check-for-heteroskedasticity" class="section level4">
 <h4 class="hasAnchor">
-<a href="#check-for-heteroskedasticity" class="anchor"></a>Check for heteroskedasticity</h4>
+<a href="#check-for-heteroskedasticity" class="anchor" aria-hidden="true"></a>Check for heteroskedasticity</h4>
 <p>Linear models assume constant error variance (homoskedasticity).</p>
 <p>The <code><a href="reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> functions assess if this assumption has been violated:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -296,7 +296,7 @@
 </div>
 <div id="comprehensive-visualization-of-model-checks" class="section level4">
 <h4 class="hasAnchor">
-<a href="#comprehensive-visualization-of-model-checks" class="anchor"></a>Comprehensive visualization of model checks</h4>
+<a href="#comprehensive-visualization-of-model-checks" class="anchor" aria-hidden="true"></a>Comprehensive visualization of model checks</h4>
 <p><strong>performance</strong> provides many functions to check model assumptions, like <code><a href="reference/check_collinearity.html">check_collinearity()</a></code>, <code><a href="reference/check_normality.html">check_normality()</a></code> or <code><a href="reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code>. To get a comprehensive check, use <code><a href="reference/check_model.html">check_model()</a></code>.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># defining a model</span>
@@ -309,11 +309,11 @@
 </div>
 <div id="model-performance-summaries" class="section level3">
 <h3 class="hasAnchor">
-<a href="#model-performance-summaries" class="anchor"></a>Model performance summaries</h3>
+<a href="#model-performance-summaries" class="anchor" aria-hidden="true"></a>Model performance summaries</h3>
 <p><code><a href="reference/model_performance.html">model_performance()</a></code> computes indices of model performance for regression models. Depending on the model object, typical indices might be r-squared, AIC, BIC, RMSE, ICC or LOOIC.</p>
 <div id="linear-model" class="section level4">
 <h4 class="hasAnchor">
-<a href="#linear-model" class="anchor"></a>Linear model</h4>
+<a href="#linear-model" class="anchor" aria-hidden="true"></a>Linear model</h4>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 <span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>
@@ -325,7 +325,7 @@
 </div>
 <div id="logistic-regression" class="section level4">
 <h4 class="hasAnchor">
-<a href="#logistic-regression" class="anchor"></a>Logistic regression</h4>
+<a href="#logistic-regression" class="anchor" aria-hidden="true"></a>Logistic regression</h4>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>
 <span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>
@@ -337,7 +337,7 @@
 </div>
 <div id="linear-mixed-model" class="section level4">
 <h4 class="hasAnchor">
-<a href="#linear-mixed-model" class="anchor"></a>Linear mixed model</h4>
+<a href="#linear-mixed-model" class="anchor" aria-hidden="true"></a>Linear mixed model</h4>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
@@ -351,7 +351,7 @@
 </div>
 <div id="models-comparison" class="section level3">
 <h3 class="hasAnchor">
-<a href="#models-comparison" class="anchor"></a>Models comparison</h3>
+<a href="#models-comparison" class="anchor" aria-hidden="true"></a>Models comparison</h3>
 <p>The <code><a href="reference/compare_performance.html">compare_performance()</a></code> function can be used to compare the performance and quality of several models (including models of different types).</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span>
@@ -370,7 +370,7 @@
 <span class="co">#&gt; m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657</span></code></pre></div>
 <div id="general-index-of-model-performance" class="section level4">
 <h4 class="hasAnchor">
-<a href="#general-index-of-model-performance" class="anchor"></a>General index of model performance</h4>
+<a href="#general-index-of-model-performance" class="anchor" aria-hidden="true"></a>General index of model performance</h4>
 <p>One can also easily compute and a <a href="https://easystats.github.io/performance/reference/compare_performance.html#details"><strong>composite index</strong></a> of model performance and sort the models from the best one to the worse.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -385,7 +385,7 @@
 </div>
 <div id="visualisation-of-indices-of-models-performance" class="section level4">
 <h4 class="hasAnchor">
-<a href="#visualisation-of-indices-of-models-performance" class="anchor"></a>Visualisation of indices of models’ performance</h4>
+<a href="#visualisation-of-indices-of-models-performance" class="anchor" aria-hidden="true"></a>Visualisation of indices of models’ performance</h4>
 <p>Finally, we provide convenient visualisation (the <code>see</code> package must be installed).</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -394,7 +394,7 @@
 </div>
 <div id="testing-models" class="section level3">
 <h3 class="hasAnchor">
-<a href="#testing-models" class="anchor"></a>Testing models</h3>
+<a href="#testing-models" class="anchor" aria-hidden="true"></a>Testing models</h3>
 <p><code><a href="reference/test_performance.html">test_performance()</a></code> (and <code>test_bf</code>, its Bayesian sister) carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
@@ -430,18 +430,18 @@
 </div>
 <div id="code-of-conduct" class="section level1">
 <h1 class="hasAnchor">
-<a href="#code-of-conduct" class="anchor"></a>Code of Conduct</h1>
+<a href="#code-of-conduct" class="anchor" aria-hidden="true"></a>Code of Conduct</h1>
 <p>Please note that the performance project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 <div id="contributing" class="section level1">
 <h1 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h1>
+<a href="#contributing" class="anchor" aria-hidden="true"></a>Contributing</h1>
 <p>We are happy to receive bug reports, suggestions, questions, and (most of all) contributions to fix problems and add features.</p>
 <p>Please follow contributing guidelines mentioned here:</p>
 <p><a href="https://easystats.github.io/performance/CONTRIBUTING.html" class="uri">https://easystats.github.io/performance/CONTRIBUTING.html</a></p>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
+<a href="#references" class="anchor" aria-hidden="true"></a>References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-gelman_data_2007" class="csl-entry">
 <p>Gelman, Andrew, and Jennifer Hill. 2007. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Analytical Methods for Social Research. Cambridge ; New York: Cambridge University Press.</p>

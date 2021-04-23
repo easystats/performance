@@ -173,17 +173,17 @@ or <code>glm.nb</code> (package <span class="pkg">MASS</span>).</p></td>
   variance of a theoretical model. For Poisson models, variance increases
   with the mean and, therefore, variance usually (roughly) equals the mean
   value. If the variance is much higher, the data are "overdispersed".</p>
-<h3 class='hasAnchor' id='interpretation-of-the-dispersion-ratio'><a class='anchor' href='#interpretation-of-the-dispersion-ratio'></a>Interpretation of the Dispersion Ratio</h3>
+<h3 class='hasAnchor' id='interpretation-of-the-dispersion-ratio'><a class='anchor' aria-hidden='true' href='#interpretation-of-the-dispersion-ratio'></a>Interpretation of the Dispersion Ratio</h3>
 <p>If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
 negative binomial model or similar might fit better to the data. A p-value &lt;
 .05 indicates overdispersion.</p>
 
-<h3 class='hasAnchor' id='overdispersion-in-poisson-models'><a class='anchor' href='#overdispersion-in-poisson-models'></a>Overdispersion in Poisson Models</h3>
+<h3 class='hasAnchor' id='overdispersion-in-poisson-models'><a class='anchor' aria-hidden='true' href='#overdispersion-in-poisson-models'></a>Overdispersion in Poisson Models</h3>
 <p>For Poisson models, the overdispersion test is based on the code from
 <cite>Gelman and Hill (2007), page 115</cite>.</p>
 
-<h3 class='hasAnchor' id='overdispersion-in-mixed-models'><a class='anchor' href='#overdispersion-in-mixed-models'></a>Overdispersion in Mixed Models</h3>
+<h3 class='hasAnchor' id='overdispersion-in-mixed-models'><a class='anchor' aria-hidden='true' href='#overdispersion-in-mixed-models'></a>Overdispersion in Mixed Models</h3>
 <p>For <code>merMod</code>- and <code>glmmTMB</code>-objects, <code>check_overdispersion()</code>
 is based on the code in the
 <a href='http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html'>GLMM FAQ</a>,
@@ -192,7 +192,7 @@ function only returns an <em>approximate</em> estimate of an overdispersion
 parameter, and is probably inaccurate for zero-inflated mixed models (fitted
 with <code>glmmTMB</code>).</p>
 
-<h3 class='hasAnchor' id='how-to-fix-overdispersion'><a class='anchor' href='#how-to-fix-overdispersion'></a>How to fix Overdispersion</h3>
+<h3 class='hasAnchor' id='how-to-fix-overdispersion'><a class='anchor' aria-hidden='true' href='#how-to-fix-overdispersion'></a>How to fix Overdispersion</h3>
 <p>Overdispersion can be fixed by either modeling the dispersion parameter, or
 by choosing a different distributional family (like Quasi-Poisson, or
 negative binomial, see <cite>Gelman and Hill (2007), pages 115-116</cite>).</p>

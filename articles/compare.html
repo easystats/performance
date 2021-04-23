@@ -97,7 +97,7 @@
     
 <div id="comparing-vs--testing" class="section level1">
 <h1 class="hasAnchor">
-<a href="#comparing-vs--testing" class="anchor"></a>Comparing vs. Testing</h1>
+<a href="#comparing-vs--testing" class="anchor" aria-hidden="true"></a>Comparing vs. Testing</h1>
 <p>Let’s imagine that we are interested in explaining the variability in the <code>Sepal.Length</code> using 3 different predictors. For that, we can build 3 linear models.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
@@ -105,7 +105,7 @@
 <span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></code></pre></div>
 <div id="comparing-indices-of-model-performance" class="section level2">
 <h2 class="hasAnchor">
-<a href="#comparing-indices-of-model-performance" class="anchor"></a>Comparing Indices of Model Performance</h2>
+<a href="#comparing-indices-of-model-performance" class="anchor" aria-hidden="true"></a>Comparing Indices of Model Performance</h2>
 <p>The eponymous function from the package, <a href="https://easystats.github.io/performance/reference/model_performance.html"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span>
@@ -194,7 +194,7 @@
 </div>
 <div id="testing-models" class="section level2">
 <h2 class="hasAnchor">
-<a href="#testing-models" class="anchor"></a>Testing Models</h2>
+<a href="#testing-models" class="anchor" aria-hidden="true"></a>Testing Models</h2>
 <p>While <strong>comparing</strong> these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.</p>
 <p>This is one of the reason why <strong>tests</strong> are useful, as they facilitate decisions via (infamous) “significance” indices, like <em>p</em>-values (in frequentist framework) or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes Factors</a> (in Bayesian framework).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -246,7 +246,7 @@
 </div>
 <div id="experimenting" class="section level2">
 <h2 class="hasAnchor">
-<a href="#experimenting" class="anchor"></a>Experimenting</h2>
+<a href="#experimenting" class="anchor" aria-hidden="true"></a>Experimenting</h2>
 <p>Although we have shown here examples only with simple linear models, we will highly encourage you to try these functions out with models of your choosing. For example, these functions work with mixed-effects regression models, Bayesian regression models, etc.</p>
 <p>To demonstrate this, we will run Bayesian versions of linear regression models we just compared:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
