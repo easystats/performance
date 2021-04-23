@@ -19,11 +19,11 @@
 #' @export
 r2_tjur <- function(model) {
   # check for valid object class
-  if (!insight::model_info(model)$is_binomial) {
+  if (!insight::model_info(model, verbose = FALSE)$is_binomial) {
     stop("`model` must be binomial.")
   }
 
-  y <- .recode_to_zero(insight::get_response(model))
+  y <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
   pred <- stats::predict(model, type = "response", re.form = NULL)
 
   # delete pred for cases with missing residuals

@@ -104,7 +104,7 @@ check_overdispersion.glm <- function(x, ...) {
   n <- stats::nobs(x)
   k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
 
-  zi <- (insight::get_response(x) - yhat) / sqrt(yhat)
+  zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
   chisq <- sum(zi^2)
   ratio <- chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)

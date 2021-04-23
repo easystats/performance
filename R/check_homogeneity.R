@@ -131,8 +131,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   colnames(ag_data)[length(c(between, id)) + 1] <- dv
 
   if (any(is_covar)) {
-    warning("Levene's test is not appropriate with quantitative explanatory variables. ",
-            "Testing assumption of homogeneity among factor groups only.", call. = FALSE)
+    warning(insight::format_message("Levene's test is not appropriate with quantitative explanatory variables. Testing assumption of homogeneity among factor groups only."), call. = FALSE)
     # ## TODO maybe add as option?
     # warning("Testing assumption of homogeneity on residualzied data among factor groups only.", call. = FALSE)
     # ag_data[dv] <- stats::residuals(stats::lm(ag_data[,dv] ~ as.matrix(ag_data[between[is_covar]])))

@@ -31,7 +31,7 @@
 r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   method <- match.arg(method)
 
-  mi <- insight::model_info(model)
+  mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_zero_inflated) {
     warning("Model has no zero-inflation component.")
   }
@@ -45,7 +45,7 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
 
 
 .r2_zi_correlation <- function(model) {
-  r2_zi <- stats::cor(insight::get_response(model), stats::predict(model, type = "response"))^2
+  r2_zi <- stats::cor(insight::get_response(model, verbose = FALSE), stats::predict(model, type = "response"))^2
   names(r2_zi) <- "R2 for ZI-models"
   r2_zi
 }
@@ -55,7 +55,7 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   n <- insight::n_obs(model)
   k <- length(insight::find_parameters(model)[["conditional"]])
 
-  y <- insight::get_response(model)
+  y <- insight::get_response(model, verbose = FALSE)
   # pred <- stats::predict(model, type = "response")
 
   var_fixed <- sum((stats::fitted(model) - mean(y))^2)

@@ -34,7 +34,7 @@ check_zeroinflation <- function(x, tolerance = .05) {
   }
 
   # get actual zero of response
-  obs.zero <- sum(insight::get_response(x) == 0)
+  obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0)
 
   if (obs.zero == 0) {
     insight::print_color("Model has no observed zeros in the response variable.\n", "red")

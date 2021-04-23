@@ -73,7 +73,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   # check if all models were fit from same data
   resps <- lapply(objects, insight::get_response)
   if (!all(sapply(resps[-1], function(x) identical(x, resps[[1]]))) && verbose) {
-    warning("When comparing models, please note that probably not all models were fit from same data.", call. = FALSE)
+    warning(insight::format_message("When comparing models, please note that probably not all models were fit from same data."), call. = FALSE)
   }
 
   # create "ranking" of models
@@ -100,7 +100,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
   if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
-    warning("Models are not of same type. Comparison of indices might be not meaningful.", call. = FALSE)
+    warning(insight::format_message("Models are not of same type. Comparison of indices might be not meaningful."), call. = FALSE)
   }
 
   # set reference for Bayes factors to 1
@@ -123,7 +123,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   # don't rank with BF when there is also BIC (same information)
   if ("BF" %in% colnames(out) && "BIC" %in% colnames(out)) {
     if (isTRUE(verbose)) {
-      message("Bayes factor is based on BIC approximation, thus BF and BIC hold the same information. Ignoring BF for performance-score.")
+      message(insight::format_message("Bayes factor is based on BIC approximation, thus BF and BIC hold the same information. Ignoring BF for performance-score."))
     }
     out$BF <- NULL
   }
@@ -138,10 +138,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   # any indices with NA?
   missing_indices <- sapply(out, anyNA)
   if (any(missing_indices) && isTRUE(verbose)) {
-    warning(sprintf(
+    warning(insight::format_message(sprintf(
       "Following indices with missing values are not used for ranking: %s",
       paste0(colnames(out)[missing_indices], collapse = ", ")
-    ), call. = FALSE)
+    )), call. = FALSE)
   }
 
   # create rank-index, only for complete indices

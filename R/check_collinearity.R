@@ -115,7 +115,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...){
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
   if (verbose)
-    message("All predictors have been centered (factors with contr.sum(), numerics with scale())")
+    message(insight::format_message("All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."))
 
   check_collinearity(suppressWarnings(stats::lm(formula = f, data = d, contrasts = contrs)))
 }
@@ -204,7 +204,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   if (component == "count") component <- "conditional"
   if (component == "zi") component <- "zero_inflated"
 
-  mi <- insight::model_info(x)
+  mi <- insight::model_info(x, verbose = FALSE)
   if (!mi$is_zero_inflated) component <- "conditional"
 
   if (component == "all") {
@@ -244,7 +244,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     assign <- assign[-attributes(v)$na_columns_index]
     if (isTRUE(verbose)) {
-      warning("Model matrix is rank deficient. VIFs may not be sensible.", call. = FALSE)
+      warning(insight::format_message("Model matrix is rank deficient. VIFs may not be sensible."), call. = FALSE)
     }
   }
 
@@ -274,7 +274,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
-      warning(sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.\n", component), call. = FALSE)
+      warning(insight::format_message(sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)), call. = FALSE)
     }
     return(NULL)
   }
@@ -305,7 +305,7 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   # check for interactions, VIF might be inflated...
   if (!is.null(insight::find_interactions(x)) && any(result > 10)) {
     if (isTRUE(verbose)) {
-      warning("Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms.", call. = FALSE)
+      warning(insight::format_message("Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms."), call. = FALSE)
     }
   }
 

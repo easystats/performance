@@ -96,7 +96,7 @@ check_distribution.default <- function(model) {
 
 
   # Extract features
-  x <- .factor_to_numeric(insight::get_response(model))
+  x <- .factor_to_numeric(insight::get_response(model, verbose = FALSE))
   dat <- .extract_features(x)
 
   dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))

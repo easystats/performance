@@ -194,7 +194,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
   if (isTRUE(by_group)) {
     # with random slopes, icc is inaccurate
     if (!is.null(insight::find_random_slopes(model))) {
-      warning("Model contains random slopes. Cannot compute accurate ICCs by group factors.", call. = FALSE)
+      warning(insight::format_message("Model contains random slopes. Cannot compute accurate ICCs by group factors."), call. = FALSE)
     }
 
     # icc per group factor with reference to overall model

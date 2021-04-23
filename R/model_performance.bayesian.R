@@ -71,7 +71,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
-    if (verbose) warning("`model_performance()` only possible for models fit using the 'sampling' algorithm.", call. = FALSE)
+    if (verbose) {
+      warning(insight::format_message("`model_performance()` only possible for models fit using the 'sampling' algorithm."), call. = FALSE)
+    }
     return(NULL)
   }
 

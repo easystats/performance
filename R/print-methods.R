@@ -337,7 +337,7 @@ print.check_zi <- function(x, ...) {
   } else if (x$ratio > upper) {
     message("Model is overfitting zeros.")
   } else {
-    message("Model seems ok, ratio of observed and predicted zeros is within the tolerance range.")
+    message(insight::format_message("Model seems ok, ratio of observed and predicted zeros is within the tolerance range."))
   }
 
   invisible(x)

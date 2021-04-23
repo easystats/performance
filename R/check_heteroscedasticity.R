@@ -45,7 +45,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     if (info$is_count) {
       paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
     }
-    message(msg)
+    message(insight::format_message(msg))
     return(NULL)
   }
 
@@ -152,7 +152,7 @@ check_heteroscedasticity.default <- function(x, ...) {
   }
 
   # pearson residuals
-  (insight::get_response(model) - pred) / sqrt(pvar)
+  (insight::get_response(model, verbose = FALSE) - pred) / sqrt(pvar)
 }
 
 

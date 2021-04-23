@@ -54,9 +54,9 @@ r2.default <- function(model, verbose = TRUE, ...) {
   out <- tryCatch(
     {
       if (insight::model_info(model)$is_binomial) {
-        resp <- .recode_to_zero(insight::get_response(model))
+        resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
-        resp <- .factor_to_numeric(insight::get_response(model))
+        resp <- .factor_to_numeric(insight::get_response(model, verbose = FALSE))
       }
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, verbose = FALSE)
@@ -138,7 +138,7 @@ r2.cph <- r2.ols
 
 #' @export
 r2.mhurdle <- function(model, ...) {
-  resp <- insight::get_response(model)
+  resp <- insight::get_response(model, verbose = FALSE)
   mean_resp <- mean(resp, na.rm = TRUE)
   ftd <- model$fitted.values[, "pos", drop = TRUE] * (1 - model$fitted.values[, "zero", drop = TRUE])
   n <- length(resp)
@@ -214,7 +214,7 @@ r2.glm <- function(model, verbose = TRUE, ...) {
     class(out) <- c("r2_pseudo", class(out))
   } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning("Can't calculate accurate R2 for binomial models\n  that are not Bernoulli models.", call. = FALSE)
+      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
     }
     out <- NULL
   } else {

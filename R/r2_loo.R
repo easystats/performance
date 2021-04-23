@@ -34,7 +34,7 @@ r2_loo <- function(model, verbose = TRUE) {
     stop("Package `loo` needed for this function to work. Please install it.", call. = FALSE)
   }
 
-  y <- insight::get_response(model)
+  y <- insight::get_response(model, verbose = FALSE)
   ypred <- rstantools::posterior_linpred(model)
 
 

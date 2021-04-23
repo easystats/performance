@@ -62,7 +62,7 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
   info <- insight::model_info(model)
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning("Can't calculate accurate R2 for binomial models\n  that are not Bernoulli models.", call. = FALSE)
+      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
     }
     return(NULL)
   } else {

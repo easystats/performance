@@ -67,7 +67,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
     pred <- mf[[term]]
   }
 
-  y <- .recode_to_zero(insight::get_response(model)) - fv
+  y <- .recode_to_zero(insight::get_response(model, verbose = FALSE)) - fv
 
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 

@@ -120,7 +120,7 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
-    warning("`r2()` only available for models fit using the 'sampling' algorithm.", call. = FALSE)
+    warning(insight::format_message("`r2()` only available for models fit using the 'sampling' algorithm."), call. = FALSE)
     return(NA)
   }
 
@@ -195,7 +195,7 @@ r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 #' @export
 #' @rdname r2_bayes
 r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE, ...) {
-  mi <- insight::model_info(model)
+  mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     if (verbose) {
       warning("Can produce R2 only for linear models.", call. = FALSE)
@@ -234,12 +234,12 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   }
 
   # Compute R2!
-  y <- insight::get_response(model)
+  y <- insight::get_response(model, verbose = FALSE)
   yy <- as.matrix(params) %*% t(mm)
   r2s <- rstantools::bayes_R2(yy, y = y)
   r2_bayesian <- data.frame(R2_Bayes = r2s)
 
-  rand <- insight::find_predictors(model[1], effects = "random", flatten = TRUE)
+  rand <- insight::find_predictors(model[1], effects = "random", flatten = TRUE, verbose = FALSE)
   if (!is.null(rand)) {
     idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params))
     idx <- apply(idx, 1, any)
@@ -266,7 +266,7 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
 
   if (any(is.na(BFMods$BF) | is.infinite(BFMods$BF))) {
     if (verbose) {
-      warning("Can't compute model-averaged index. One or more Bayes factors are NA or infinite.", call. = FALSE)
+      warning(insight::format_message("Can't compute model-averaged index. One or more Bayes factors are NA or infinite."), call. = FALSE)
     }
     return(NULL)
   }
