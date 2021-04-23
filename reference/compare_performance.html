@@ -227,7 +227,8 @@ different models at once and hence allows comparison of indices across models.</
   <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
   <span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: When comparing models, please note that probably not all models were fit from same data.</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: When comparing models, please note that probably not all models were fit from</span>
+#&gt; <span class='warning'>  same data.</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
 #&gt; 
 #&gt; Name |   Model |     AIC |     BIC |  RMSE | Sigma |    R2 | R2 (adj.) | Tjur's R2 | Log_loss | Score_log | Score_spherical |   PCP | R2 (cond.) | R2 (marg.) |   ICC
 #&gt; ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
