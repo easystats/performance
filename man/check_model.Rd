@@ -18,6 +18,7 @@ check_model(x, ...)
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
   detrend = FALSE,
+  verbose = TRUE,
   ...
 )
 }
@@ -50,6 +51,8 @@ for dots, and third color for outliers or extreme values.}
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
 \item{detrend}{Should QQ/PP plots be detrended?}
+
+\item{verbose}{Toggle off warnings.}
 }
 \value{
 The data frame that is used for plotting.

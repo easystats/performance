@@ -127,7 +127,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   between <- names(attr(x, "between"))
   is_covar <- sapply(attr(x,'between'), is.null)
 
-  ag_data <- aggregate(data[, dv], data[, c(between, id)], mean)
+  ag_data <- stats::aggregate(data[, dv], data[, c(between, id)], mean)
   colnames(ag_data)[length(c(between, id)) + 1] <- dv
 
   if (any(is_covar)) {
