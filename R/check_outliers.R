@@ -737,10 +737,10 @@ as.numeric.check_outliers <- function(x, ...) {
 
 # influential observations data --------
 
-.influential_obs <- function(x) {
+.influential_obs <- function(x, threshold = NULL) {
   tryCatch(
     {
-      .diag_influential_obs(x)
+      .diag_influential_obs(x, threshold = threshold)
     },
     error = function(e) {
       NULL

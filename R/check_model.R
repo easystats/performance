@@ -132,7 +132,7 @@ check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE,
   } else {
     threshold <- NULL
   }
-  dat$INFLUENTIAL <- .diag_influential_obs(model, threshold = threshold)
+  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
 
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -155,7 +155,7 @@ check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE,
   } else {
     threshold <- NULL
   }
-  dat$INFLUENTIAL <- .diag_influential_obs(model, threshold = threshold)
+  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
 
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")

@@ -186,6 +186,7 @@
 
 
 
+
 .diag_ncv <- function(model) {
   ncv <- tryCatch(
     {
