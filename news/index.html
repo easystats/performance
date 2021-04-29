@@ -149,6 +149,14 @@
 <code><a href="../reference/performance_mae.html">performance_mae()</a></code> to calculate the mean absolute error.</li>
 </ul>
 </div>
+<div id="bug-fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<ul>
+<li><p>Fixed issue in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models with zero-inflation, where the zero-inflated model was an intercept-only model.</p></li>
+</ul>
+</div>
 </div>
     <div id="performance-071" class="section level1">
 <h1 class="page-header" data-toc-text="0.7.1">
@@ -203,9 +211,9 @@
 </ul>
 </div>
 </div>
-<div id="bug-fixes" class="section level2">
+<div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p><code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> now correctly sorts models with identical fixed effects part, but different other model parts (like zero-inflation).</p></li>
 <li><p>Fixed incorrect computation of models from inverse-Gaussian families, or Gaussian families fitted with <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>.</p></li>
@@ -276,9 +284,9 @@
 </ul>
 </div>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-2" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/icc.html">variance_decomposition()</a></code> for multivariate response models, where not all model parts contained random effects.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> with duplicated rows.</p></li>
@@ -300,9 +308,9 @@
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> gains a <code>verbose</code> argument, to toggle warnings and messages.</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-3" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li>Fixed examples, now using suggested packages only conditionally.</li>
 </ul>
@@ -352,9 +360,9 @@
 </ul>
 </div>
 </div>
-<div id="bug-fixes-3" class="section level2">
+<div id="bug-fixes-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-3" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-4" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/icc.html">icc()</a></code> introduced in the last update that make <code>lme</code>-models fail.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/performance_roc.html">performance_roc()</a></code> for models with factors as response.</p></li>
@@ -392,9 +400,9 @@
 <li><p>The <code>method</code> argument in <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> gains a <code>"levene"</code> option, to use Levene’s Test for homogeneity.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-4" class="section level2">
+<div id="bug-fixes-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-4" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-5" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li>Fix bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> when <code>...</code> arguments were function calls to regression objects, instead of direct function calls.</li>
 </ul>
@@ -421,9 +429,9 @@
 <code><a href="../reference/pp_check.html">pp_check()</a></code> to compute posterior predictive checks for frequentist models.</li>
 </ul>
 </div>
-<div id="bug-fixes-5" class="section level2">
+<div id="bug-fixes-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-5" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-6" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue with incorrect labeling of groups from <code><a href="../reference/icc.html">icc()</a></code> when <code>by_group = TRUE</code>.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> for mixed models where sigma could not be calculated in a straightforward way.</p></li>
@@ -451,9 +459,9 @@
 <code><a href="../reference/icc.html">icc()</a></code> now also computes a “classical” ICC for <code>brmsfit</code> models. The former way of calculating an “ICC” for <code>brmsfit</code> models is now available as new function called <code><a href="../reference/icc.html">variance_decomposition()</a></code>.</li>
 </ul>
 </div>
-<div id="bug-fixes-6" class="section level2">
+<div id="bug-fixes-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-6" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-7" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fix issue with new version of <em>bigutilsr</em> for <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</p></li>
 <li><p>Fix issue with model order in <code><a href="../reference/test_performance.html">performance_lrt()</a></code>.</p></li>
@@ -480,9 +488,9 @@
 <li><p><code><a href="../reference/check_normality.html">check_normality()</a></code> gets an <code>effects</code>-argument for mixed models, to check random effects for normality.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-7" class="section level2">
+<div id="bug-fixes-8" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-7" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-8" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> for binomial models when response variable had non-numeric factor levels.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/performance_roc.html">performance_roc()</a></code>, which printed 1 - AUC instead of AUC.</p></li>
@@ -510,9 +518,9 @@
 <li><p><code><a href="../reference/test_performance.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-8" class="section level2">
+<div id="bug-fixes-9" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-8" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-9" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fix issues in some functions for models with logical dependent variable.</p></li>
 <li><p>Fix bug in <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code>, which caused multiple computations of skewness statistics.</p></li>
@@ -540,9 +548,9 @@
 <li><p>Added <code>r2.aov()</code>.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-9" class="section level2">
+<div id="bug-fixes-10" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-9" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-10" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/performance_aicc.html">performance_aic()</a></code> for models from package <em>survey</em>, which returned three different AIC values. Now only the AIC value is returned.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models when zero-inflated formula only had one predictor.</p></li>
@@ -573,9 +581,9 @@
 <li><p><code><a href="../reference/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-10" class="section level2">
+<div id="bug-fixes-11" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-10" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-11" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li>Fixed issue in documentation of <code><a href="../reference/performance_score.html">performance_score()</a></code>.</li>
 </ul>
@@ -600,9 +608,9 @@
 <li><p><code><a href="../reference/test_performance.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-11" class="section level2">
+<div id="bug-fixes-12" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-11" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-12" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li>Fix issues with CRAN checks.</li>
 </ul>
@@ -648,9 +656,9 @@
 <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now no longer returns backticks in row- and column names.</li>
 </ul>
 </div>
-<div id="bug-fixes-12" class="section level2">
+<div id="bug-fixes-13" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-12" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-13" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issue in <code><a href="../reference/r2.html">r2()</a></code> for <code>wbm</code>-models with cross-level interactions.</p></li>
 <li><p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-methods for <code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> and <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> now work without requiring to load package <em>see</em> before.</p></li>
@@ -690,9 +698,9 @@
 <li><p><code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> for mixed models now checks that model family is Poisson.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-13" class="section level2">
+<div id="bug-fixes-14" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-13" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-14" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed bug in <code><a href="../reference/compare_performance.html">compare_performance()</a></code> that toggled a warning although models were fit from same data.</p></li>
 <li><p>Fixed bug in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models that occurred when checking for outliers.</p></li>
@@ -741,9 +749,9 @@
 <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> to check models for homogeneity of variances.</li>
 </ul>
 </div>
-<div id="bug-fixes-14" class="section level2">
+<div id="bug-fixes-15" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-14" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-15" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Fixed issues with <code><a href="../reference/compare_performance.html">compare_performance()</a></code> and row-ordering.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for zero-inflated models, where the zero-inflation component had not enough model terms to calculate multicollinearity.</p></li>
@@ -816,9 +824,9 @@
 <li><p>Some functions get a <code>verbose</code>-argument to show or suppress warnings.</p></li>
 </ul>
 </div>
-<div id="bug-fixes-15" class="section level2">
+<div id="bug-fixes-16" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-15" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
+<a href="#bug-fixes-16" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
 <ul>
 <li><p>Renamed <code>r2_coxnell()</code> to <code><a href="../reference/r2_coxsnell.html">r2_coxsnell()</a></code>.</p></li>
 <li><p>Fix issues in <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> and <code><a href="../reference/model_performance.html">model_performance()</a></code> for ordinal models resp. models with cumulative link (<a href='https://github.com/easystats/performance/issues/48'>#48</a>).</p></li>
