@@ -4,6 +4,13 @@
 
 * `performance_mae()` to calculate the mean absolute error.
 
+## Bug fixes
+
+* Fixed issue in `check_model()` for *glmmTMB* models.
+
+* Fixed issue in `check_collinearity()` for *glmmTMB* models with zero-inflation,
+  where the zero-inflated model was an intercept-only model.
+
 # performance 0.7.1
 
 ## New supported models

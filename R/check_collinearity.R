@@ -240,6 +240,15 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
   v <- insight::get_varcov(x, component = component, verbose = FALSE)
   assign <- .term_assignments(x, component, verbose = verbose)
 
+  # any assignment found?
+  if (is.null(assign)) {
+    if (verbose) {
+      warning(insight::format_message(sprintf("Could not extract model terms for the %s component of the model.", component), call. = FALSE))
+    }
+    return(NULL)
+  }
+
+
   # we have rank-deficiency here. remove NA columns from assignment
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     assign <- assign[-attributes(v)$na_columns_index]
@@ -373,6 +382,11 @@ check_collinearity.zerocount <- function(x, component = c("all", "conditional", 
 
 .find_term_assignment <- function(x, component, verbose = TRUE) {
   pred <- insight::find_predictors(x)[[component]]
+
+  if (is.null(pred)) {
+    return(NULL)
+  }
+
   dat <- insight::get_data(x, verbose = verbose)[, pred, drop = FALSE]
 
   parms <- unlist(lapply(1:length(pred), function(i) {
