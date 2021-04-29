@@ -171,19 +171,19 @@
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, chains <span class='op'>=</span> <span class='fl'>1</span>, iter <span class='op'>=</span> <span class='fl'>500</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
   <span class='fu'>looic</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘rstanarm’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:psych’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    logit</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:parameters’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    compare_models</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:performance’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    pp_check</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span style='color: #0000BB;'># LOOIC and ELPD with Standard Error
+</div><div class='co'>#&gt; Loading required package: rstanarm</div><div class='co'>#&gt; Loading required package: Rcpp</div><div class='co'>#&gt; This is rstanarm version 2.21.1</div><div class='co'>#&gt; - See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</div><div class='co'>#&gt; - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</div><div class='co'>#&gt; - For execution on a local, multicore CPU with excess RAM we recommend calling</div><div class='co'>#&gt;   options(mc.cores = parallel::detectCores())</div><div class='co'>#&gt; 
+#&gt; Attaching package: ‘rstanarm’</div><div class='co'>#&gt; The following object is masked from ‘package:psych’:
 #&gt; 
-#&gt; </span><span>  LOOIC: 155.90 [8.79]
-#&gt;    ELPD: -77.95 [4.39]</div></span></pre>
+#&gt;     logit</div><div class='co'>#&gt; The following object is masked from ‘package:parameters’:
+#&gt; 
+#&gt;     compare_models</div><div class='co'>#&gt; The following object is masked from ‘package:performance’:
+#&gt; 
+#&gt;     pp_check</div><div class='co'>#&gt; <span class='warning'>Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+#&gt; Running the chains for more iterations may help. See
+#&gt; http://mc-stan.org/misc/warnings.html#bulk-ess</div><div class='co'>#&gt; <span style='color: #0000BB;'># LOOIC and ELPD with Standard Error</span>
+<span style='color: #0000BB;'>#&gt; </span>
+<span style='color: #0000BB;'>#&gt; </span><span>  LOOIC: 155.90 [8.79]</span>
+#&gt;    ELPD: -77.95 [4.39]</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

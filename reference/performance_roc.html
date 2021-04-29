@@ -196,7 +196,7 @@ the full model is calculated.</p></td>
 
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Sepal.Width</span>, data <span class='op'>=</span> <span class='va'>train_data</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>performance_roc</span><span class='op'>(</span><span class='va'>model</span>, new_data <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Sensitivity Specificity   Model
+</div><div class='co'>#&gt;    Sensitivity Specificity   Model
 #&gt; 1    0.0000000  0.00000000 Model 1
 #&gt; 2    0.1428571  0.00000000 Model 1
 #&gt; 3    0.1428571  0.09090909 Model 1
@@ -219,20 +219,20 @@ the full model is calculated.</p></td>
 #&gt; 20   1.0000000  1.00000000 Model 1</div><div class='input'>
 <span class='va'>roc</span> <span class='op'>&lt;-</span> <span class='fu'>performance_roc</span><span class='op'>(</span><span class='va'>model</span>, new_data <span class='op'>=</span> <span class='va'>test_data</span><span class='op'>)</span>
 <span class='fu'><a href='https://easystats.github.io/bayestestR/reference/area_under_curve.html'>area_under_curve</a></span><span class='op'>(</span><span class='va'>roc</span><span class='op'>$</span><span class='va'>Specificity</span>, <span class='va'>roc</span><span class='op'>$</span><span class='va'>Sensitivity</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.3766234</div><div class='input'>
+</div><div class='co'>#&gt; [1] 0.3766234</div><div class='input'>
 <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Sepal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
 <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
 <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
 <span class='fu'>performance_roc</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Area under Curve
-#&gt; 
-#&gt; </span><span>  m1: 54.80%
+</div><div class='co'>#&gt; <span style='color: #0000BB;'># Area under Curve</span>
+<span style='color: #0000BB;'>#&gt; </span>
+<span style='color: #0000BB;'>#&gt; </span><span>  m1: 54.80%</span>
 #&gt;   m2: 53.41%
 #&gt;   m3: 53.58%</div><div class='input'>
 <span class='co'># if you have \code{see} package installed, you can also plot comparison of</span>
 <span class='co'># ROC curves for different models</span>
 <span class='co'># if (require("see")) plot(performance_roc(m1, m2, m3))</span>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

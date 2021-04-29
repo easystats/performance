@@ -257,16 +257,16 @@ Following model-classes are currently supported: <code>hurdle</code>,
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span> <span class='op'>+</span> <span class='va'>disp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
 <span class='fu'>check_collinearity</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Check for Multicollinearity
-#&gt; </span><span>
-#&gt; </span><span style='color: #00BB00;'>Low Correlation
-#&gt; 
-#&gt; </span><span> Term  VIF Increased SE Tolerance
+</div><div class='co'>#&gt; <span style='color: #0000BB;'># Check for Multicollinearity</span>
+<span style='color: #0000BB;'>#&gt; </span>
+#&gt; <span style='color: #00BB00;'>Low Correlation</span>
+<span style='color: #00BB00;'>#&gt; </span>
+<span style='color: #00BB00;'>#&gt; </span><span> Term  VIF Increased SE Tolerance</span>
 #&gt;  gear 1.53         1.24      0.65
 #&gt; 
-#&gt; </span><span style='color: #BBBB00;'>Moderate Correlation
-#&gt; 
-#&gt; </span><span> Term  VIF Increased SE Tolerance
+#&gt; <span style='color: #BBBB00;'>Moderate Correlation</span>
+<span style='color: #BBBB00;'>#&gt; </span>
+<span style='color: #BBBB00;'>#&gt; </span><span> Term  VIF Increased SE Tolerance</span>
 #&gt;    wt 5.05         2.25      0.20
 #&gt;   cyl 5.41         2.33      0.18
 #&gt;  disp 9.97         3.16      0.10</div><div class='input'>
@@ -275,7 +275,7 @@ Following model-classes are currently supported: <code>hurdle</code>,
   <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>check_collinearity</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='img'><img src='check_collinearity-1.png' alt='' width='700' height='433' /></div></span></pre>
+</div><div class='img'><img src='check_collinearity-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

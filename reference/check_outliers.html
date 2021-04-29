@@ -174,7 +174,7 @@ passed down to <code><a href='https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.htm
     </tr>
     <tr>
       <th>threshold</th>
-      <td><p>A list containing the threshold values for each method (e.g. <code><a href='https://rdrr.io/r/base/list.html'>list('mahalanobis' = 7, 'cook' = 1)</a></code>), above which an observation is
+      <td><p>A list containing the threshold values for each method (e.g. <code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is
 considered as outlier. If <code>NULL</code>, default values will be used (see 'Details').</p></td>
     </tr>
     </table>
@@ -212,7 +212,7 @@ The reliability and approximate convergence of Bayesian models can be assessed u
 
 <ul>
 <li><p><strong>Z-scores</strong>:
- The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean or, as it is here the case by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (<code>threshold = list("zscore" = = 1.959)</code>), corresponding to the 2.5% (<code><a href='https://rdrr.io/r/stats/Normal.html'>qnorm(0.975)</a></code>) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a data.frame is passed, then the maximum distance is kept for each observations. Thus, all observations that are extreme for at least one variable will be detected. However, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).</p></li>
+ The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean or, as it is here the case by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (<code>threshold = list("zscore" = = 1.959)</code>), corresponding to the 2.5% (<code>qnorm(0.975)</code>) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a data.frame is passed, then the maximum distance is kept for each observations. Thus, all observations that are extreme for at least one variable will be detected. However, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).</p></li>
 <li><p><strong>IQR</strong>:
  Using the IQR (interquartile range) is a robust method developed by John Tukey, which often appears in box-and-whisker plots (e.g., in <code>geom_boxplot</code>). The interquartile range is the range between the first and the third quartiles. Tukey considered as outliers any data point that fell outside of either 1.5 times (the default threshold) the IQR below the first or above the third quartile. Similar to the Z-score method, this is a univariate method for outliers detection, returning outliers detected for at least one column, and might thus not be suited to high dimensional data.</p></li>
 </ul>
@@ -309,26 +309,26 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='co'># For single variables ------------------------------------------------------</span>
 <span class='va'>outliers_list</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>mpg</span><span class='op'>)</span>  <span class='co'># Find outliers</span>
 <span class='va'>outliers_list</span>  <span class='co'># Show the row index of the outliers</span>
-</div><div class='output co'>#&gt; <span style='color: #BB0000;'>Warning: 4 outliers detected (cases 18, 19, 20, 28).
-#&gt; </span><span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>outliers_list</span><span class='op'>)</span>  <span class='co'># The object is a binary vector...</span>
-</div><div class='output co'>#&gt;  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 1 0 0 0 0</div><div class='input'><span class='va'>filtered_data</span> <span class='op'>&lt;-</span> <span class='va'>data</span><span class='op'>[</span><span class='op'>!</span><span class='va'>outliers_list</span>, <span class='op'>]</span> <span class='co'># And can be used to filter a dataframe</span>
+</div><div class='co'>#&gt; <span style='color: #BB0000;'>Warning: 4 outliers detected (cases 18, 19, 20, 28).</span>
+<span style='color: #BB0000;'>#&gt; </span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>outliers_list</span><span class='op'>)</span>  <span class='co'># The object is a binary vector...</span>
+</div><div class='co'>#&gt;  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 1 0 0 0 0</div><div class='input'><span class='va'>filtered_data</span> <span class='op'>&lt;-</span> <span class='va'>data</span><span class='op'>[</span><span class='op'>!</span><span class='va'>outliers_list</span>, <span class='op'>]</span> <span class='co'># And can be used to filter a dataframe</span>
 <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>filtered_data</span><span class='op'>)</span>  <span class='co'># New size, 28 (4 outliers removed)</span>
-</div><div class='output co'>#&gt; [1] 28</div><div class='input'>
+</div><div class='co'>#&gt; [1] 28</div><div class='input'>
 
 <span class='co'># For dataframes ------------------------------------------------------</span>
 <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>  <span class='co'># It works the same way on dataframes</span>
-</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 1 outliers detected (cases 9).
-#&gt; </span><span></div><div class='input'>
+</div><div class='co'>#&gt; <span style='color: #BB0000;'>Warning: 1 outliers detected (cases 9).</span>
+<span style='color: #BB0000;'>#&gt; </span></div><div class='input'>
 <span class='co'># You can also use multiple methods at once</span>
 <span class='va'>outliers_list</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mahalanobis"</span>,
                                                  <span class='st'>"iqr"</span>,
                                                  <span class='st'>"zscore"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>outliers_list</span>
-</div><div class='output co'>#&gt; </span><span style='color: #BB0000;'>Warning: 6 outliers detected (cases 9, 15, 16, 17, 20, 31).
-#&gt; </span><span></div><div class='input'><span class='co'># Using `as.data.frame()`, we can access more details!</span>
+</div><div class='co'>#&gt; <span style='color: #BB0000;'>Warning: 6 outliers detected (cases 9, 15, 16, 17, 20, 31).</span>
+<span style='color: #BB0000;'>#&gt; </span></div><div class='input'><span class='co'># Using `as.data.frame()`, we can access more details!</span>
 <span class='va'>outliers_info</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>outliers_list</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>outliers_info</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   Distance_Zscore Outlier_Zscore Distance_IQR Outlier_IQR Distance_Mahalanobis
+</div><div class='co'>#&gt;   Distance_Zscore Outlier_Zscore Distance_IQR Outlier_IQR Distance_Mahalanobis
 #&gt; 1             Inf              1            0           0             8.946673
 #&gt; 2             Inf              1            0           0             8.287933
 #&gt; 3             Inf              1            0           0             8.937150
@@ -342,7 +342,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 #&gt; 4                   0 0.3333333
 #&gt; 5                   0 0.0000000
 #&gt; 6                   0 0.3333333</div><div class='input'><span class='va'>outliers_info</span><span class='op'>$</span><span class='va'>Outlier</span>  <span class='co'># Including the probability of being an outlier</span>
-</div><div class='output co'>#&gt;  [1] 0.3333333 0.3333333 0.3333333 0.3333333 0.0000000 0.3333333 0.0000000
+</div><div class='co'>#&gt;  [1] 0.3333333 0.3333333 0.3333333 0.3333333 0.0000000 0.3333333 0.0000000
 #&gt;  [8] 0.3333333 1.0000000 0.3333333 0.3333333 0.0000000 0.0000000 0.0000000
 #&gt; [15] 0.6666667 0.6666667 0.6666667 0.3333333 0.3333333 0.6666667 0.3333333
 #&gt; [22] 0.0000000 0.0000000 0.0000000 0.0000000 0.3333333 0.3333333 0.3333333
@@ -374,7 +374,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
   <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>model</span>, method <span class='op'>=</span> <span class='st'>"ics"</span><span class='op'>)</span>
 <span class='op'>}</span>
 <span class='op'>}</span>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

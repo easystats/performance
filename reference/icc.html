@@ -259,7 +259,7 @@ ICC as well as the credible intervals for this ICC.</p>
  ICC measure. The function calculates a variance decomposition based on the
  posterior predictive distribution. In this case, first, the draws from the
  posterior predictive distribution <em>not conditioned</em> on group-level
- terms (<code><a href='https://mc-stan.org/rstanarm/reference/posterior_predict.stanreg.html'>posterior_predict(..., re_formula = NA)</a></code>) are calculated as
+ terms (<code>posterior_predict(..., re_formula = NA)</code>) are calculated as
  well as draws from this distribution <em>conditioned</em> on <em>all random
  effects</em> (by default, unless specified else in <code>re_formula</code>) are taken.
  Then, second, the variances for each of these draws are calculated. The
@@ -296,9 +296,9 @@ ICC as well as the credible intervals for this ICC.</p>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Length</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
   <span class='fu'>icc</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Intraclass Correlation Coefficient
-#&gt; 
-#&gt; </span><span>     Adjusted ICC: 0.910
+</div><div class='co'>#&gt; <span style='color: #0000BB;'># Intraclass Correlation Coefficient</span>
+<span style='color: #0000BB;'>#&gt; </span>
+<span style='color: #0000BB;'>#&gt; </span><span>     Adjusted ICC: 0.910</span>
 #&gt;   Conditional ICC: 0.311</div><div class='input'>
 <span class='co'># ICC for specific group-levels</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
@@ -317,13 +317,13 @@ ICC as well as the credible intervals for this ICC.</p>
   <span class='op'>)</span>
   <span class='fu'>icc</span><span class='op'>(</span><span class='va'>model</span>, by_group <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># ICC by Group
-#&gt; 
-#&gt; </span><span>Group      |   ICC
+</div><div class='co'>#&gt; <span style='color: #0000BB;'># ICC by Group</span>
+<span style='color: #0000BB;'>#&gt; </span>
+<span style='color: #0000BB;'>#&gt; </span><span>Group      |   ICC</span>
 #&gt; ------------------
 #&gt; subgrp:grp | 0.017
 #&gt; Subject    | 0.589
-#&gt; grp        | 0.001</div></span></pre>
+#&gt; grp        | 0.001</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -207,14 +207,14 @@ different models at once and hence allows comparison of indices across models.</
 <span class='va'>lm2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 <span class='va'>lm3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 <span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
+</div><div class='co'>#&gt; <span style='color: #0000BB;'># Comparison of Model Performance Indices</span>
 #&gt; 
 #&gt; Name | Model |     AIC |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
 #&gt; --------------------------------------------------------------------
 #&gt; lm1  |    lm | 231.452 | 243.494 | 0.619 |     0.614 | 0.510 | 0.515
 #&gt; lm2  |    lm | 106.233 | 121.286 | 0.837 |     0.833 | 0.333 | 0.338
 #&gt; lm3  |    lm | 106.767 | 127.842 | 0.840 |     0.835 | 0.330 | 0.336</div><div class='input'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span>, rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
+</div><div class='co'>#&gt; <span style='color: #0000BB;'># Comparison of Model Performance Indices</span>
 #&gt; 
 #&gt; Name | Model |     AIC |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma | Performance-Score
 #&gt; ----------------------------------------------------------------------------------------
@@ -227,14 +227,14 @@ different models at once and hence allows comparison of indices across models.</
   <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Length</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Species</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
   <span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: When comparing models, please note that probably not all models were fit from</span>
-#&gt; <span class='warning'>  same data.</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'># Comparison of Model Performance Indices</span><span>
+</div><div class='co'>#&gt; <span class='warning'>Warning: </span>When comparing models, please note that probably not all models were fit from
+#&gt;   same data.</div><div class='co'>#&gt; <span style='color: #0000BB;'># Comparison of Model Performance Indices</span>
 #&gt; 
 #&gt; Name |   Model |     AIC |     BIC |  RMSE | Sigma |    R2 | R2 (adj.) | Tjur's R2 | Log_loss | Score_log | Score_spherical |   PCP | R2 (cond.) | R2 (marg.) |   ICC
 #&gt; ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #&gt; m1   |      lm | 156.010 | 161.873 | 2.444 | 2.568 | 0.830 |     0.819 |           |          |           |                 |       |            |            |      
 #&gt; m2   |     glm |  31.298 |  35.695 | 0.359 | 0.934 |       |           |     0.478 |    0.395 |   -14.903 |           0.095 | 0.743 |            |            |      
-#&gt; m3   | lmerMod |  77.320 |  89.362 | 0.279 | 0.283 |       |           |           |          |           |                 |       |      0.972 |      0.096 | 0.969</div></span></pre>
+#&gt; m3   | lmerMod |  77.320 |  89.362 | 0.279 | 0.283 |       |           |           |          |           |                 |       |      0.972 |      0.096 | 0.969</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
