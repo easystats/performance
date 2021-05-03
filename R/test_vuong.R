@@ -255,7 +255,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
     covmat <- n * covmat[!duplicates, !duplicates]
     scaling <- 1
   } else {
-    scaling <- insight::get_sigma(model)^2
+    scaling <- insight::get_sigma(model, ci = NULL, verbose = FALSE)^2
     if (is.null(scaling) || is.na(scaling)) scaling <- 1
     covmat <- n * insight::get_varcov(model, component = "conditional")
   }

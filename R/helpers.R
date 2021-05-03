@@ -176,7 +176,7 @@
 
 
 .get_sigma <- function(model, verbose = TRUE) {
-  s <- insight::get_sigma(model, verbose = verbose)
+  s <- insight::get_sigma(model, ci = NULL, verbose = verbose)
   if (!is.null(s)) {
     as.numeric(s)
   } else {
