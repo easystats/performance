@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://easystats.github.io/performance/404.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/CONTRIBUTING.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/articles/compare.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/articles/r2.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/authors.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/performance/index.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/news/index.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/binned_residuals.html</loc>
@@ -62,6 +89,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/icc.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/reference/index.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/item_difficulty.html</loc>
@@ -185,11 +215,5 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/test_performance.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/performance/articles/compare.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/performance/articles/r2.html</loc>
   </url>
 </urlset>
