@@ -47,7 +47,17 @@
 
 
 <meta property="og:title" content="Test if Models are Different — test_bf" />
-<meta property="og:description" content="Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation, and set of strengths and weaknesses.  The test_performance() function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not). That said, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the details section for more information regarding the different tests and their interpretation." />
+<meta property="og:description" content="Testing whether models are different is a delicate and often complex
+procedure, with many limitations and requisites. Moreover, several tests are
+available, each coming with its own interpretation, and set of strengths and
+weaknesses.
+ 
+The test_performance() function is available to run the most relevant
+and appropriate tests based on the input (for instance, whether the models
+are nested or not). That said, it still requires the user to
+understand what the tests are and what they do in order to prevent their
+misinterpretation. See the details section for more information
+regarding the different tests and their interpretation." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -142,7 +152,17 @@
     </div>
 
     <div class="ref-description">
-    <p>Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation, and set of strengths and weaknesses.<br /> <br /> The <code><a href='test_performance.html'>test_performance()</a></code> function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are <em>nested</em> or not). That said, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the <strong>details</strong> section for more information regarding the different tests and their interpretation.</p>
+    <p>Testing whether models are different is a delicate and often complex
+procedure, with many limitations and requisites. Moreover, several tests are
+available, each coming with its own interpretation, and set of strengths and
+weaknesses.
+<br /> <br />
+The <code><a href='test_performance.html'>test_performance()</a></code> function is available to run the most relevant
+and appropriate tests based on the input (for instance, whether the models
+are <em>nested</em> or not). That said, it still requires the user to
+understand what the tests are and what they do in order to prevent their
+misinterpretation. See the <strong>details</strong> section for more information
+regarding the different tests and their interpretation.</p>
     </div>
 
     <pre class="usage"><span class='fu'><a href='test_performance.html'>test_bf</a></span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
@@ -171,7 +191,10 @@
     </tr>
     <tr>
       <th>text_length</th>
-      <td><p>Numeric, length (number of chars) of output lines. <code><a href='test_performance.html'>test_bf()</a></code> describes models by their formulas, which can lead to overly long lines in the output. <code>text_length</code> fixes the length of lines to a specified limit.</p></td>
+      <td><p>Numeric, length (number of chars) of output lines.
+<code><a href='test_performance.html'>test_bf()</a></code> describes models by their formulas, which can lead to
+overly long lines in the output. <code>text_length</code> fixes the length of
+lines to a specified limit.</p></td>
     </tr>
     <tr>
       <th>estimator</th>
@@ -189,7 +212,9 @@ small samples with Gaussian errors.</p></td>
     </tr>
     <tr>
       <th>reference</th>
-      <td><p>This only applies when models are non-nested, and determines which model should be taken as a reference, against which all the other models are tested.</p></td>
+      <td><p>This only applies when models are non-nested, and determines
+which model should be taken as a reference, against which all the other
+models are tested.</p></td>
     </tr>
     </table>
 
@@ -200,20 +225,74 @@ small samples with Gaussian errors.</p></td>
 
     
 <h3 class='hasAnchor' id='nested-vs-non-nested-models'><a class='anchor' aria-hidden='true' href='#nested-vs-non-nested-models'></a>Nested vs. Non-nested Models</h3>
-<p>Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are <em>"nested",</em> i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, <code>model1 (y ~ x1 + x2)</code> is "nested" within <code>model2 (y ~ x1 + x2 + x3)</code>. Usually, people have a list of nested models, for instance <code>m1 (y ~ 1)</code>, <code>m2 (y ~ x1)</code>, <code>m3 (y ~ x1 + x2)</code>, <code>m4 (y ~ x1 + x2 + x3)</code>, and it is conventional that they are "ordered" from the smallest to largest, but it is up to the user to reverse the order from largest to smallest. The test then shows whether a more parsimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared <em>sequentially</em>: m2 is tested against m1, m3 against m2, m4 against m3, etc.
+<p>Model's "nesting" is an important concept of models comparison. Indeed, many
+tests only make sense when the models are <em>"nested",</em> i.e., when their
+predictors are nested. This means that all the predictors of a model are
+contained within the predictors of a larger model (sometimes referred to as
+the encompassing model). For instance, <code>model1 (y ~ x1 + x2)</code> is
+"nested" within <code>model2 (y ~ x1 + x2 + x3)</code>. Usually, people have a list
+of nested models, for instance <code>m1 (y ~ 1)</code>, <code>m2 (y ~ x1)</code>,
+<code>m3 (y ~ x1 + x2)</code>, <code>m4 (y ~ x1 + x2 + x3)</code>, and it is conventional
+that they are "ordered" from the smallest to largest, but it is up to the
+user to reverse the order from largest to smallest. The test then shows
+whether a more parsimonious model, or whether adding a predictor, results in
+a significant difference in the model's performance. In this case, models are
+usually compared <em>sequentially</em>: m2 is tested against m1, m3 against m2,
+m4 against m3, etc.
 <br /><br />
-Two models are considered as <em>"non-nested"</em> if their predictors are different. For instance, <code>model1 (y ~ x1 + x2)</code> and <code>model2 (y ~ x3 + x4)</code>. In the case of non-nested models, all models are usually compared against the same <em>reference</em> model (by default, the first of the list).
+Two models are considered as <em>"non-nested"</em> if their predictors are
+different. For instance, <code>model1 (y ~ x1 + x2)</code> and <code>model2 (y ~ x3
++ x4)</code>. In the case of non-nested models, all models are usually compared
+against the same <em>reference</em> model (by default, the first of the list).
 <br /><br />
-Nesting is detected via the <code><a href='https://easystats.github.io/insight/reference/is_nested_models.html'>insight::is_nested_models()</a></code> function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variables (the response) must be the same. You cannot meaningfully test whether apples are significantly different from oranges!</p><p></p><h3 class='hasAnchor' id='tests-description'><a class='anchor' aria-hidden='true' href='#tests-description'></a>Tests Description</h3>
+Nesting is detected via the <code><a href='https://easystats.github.io/insight/reference/is_nested_models.html'>insight::is_nested_models()</a></code> function.
+Note that, apart from the nesting, in order for the tests to be valid,
+other requirements have often to be the fulfilled. For instance, outcome
+variables (the response) must be the same. You cannot meaningfully test
+whether apples are significantly different from oranges!</p>
+
+<h3 class='hasAnchor' id='tests-description'><a class='anchor' aria-hidden='true' href='#tests-description'></a>Tests Description</h3>
 
 
 <ul>
-<li><p><strong>Bayes factor for Model Comparison</strong> - <code><a href='test_performance.html'>test_bf()</a></code>: If all models were fit from the same data, the returned <code>BF</code> shows the Bayes Factor (see <code><a href='https://easystats.github.io/bayestestR/reference/bayesfactor_models.html'>bayestestR::bayesfactor_models()</a></code>) for each model against the reference model (which depends on whether the models are nested or not). Check out <a href='https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models'>this vignette</a> for more details.</p></li>
-<li><p><strong>Wald's F-Test</strong> - <code><a href='test_performance.html'>test_wald()</a></code>: The Wald test is a rough approximation of the Likelihood Ratio Test. However, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run. Importantly, this test only makes statistical sense if the models are nested.<br /> <br /> This test is also available in base R through the <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova()</a></code> function. It returns an <code>F-value</code> column as a statistic and its associated <code>p-value</code>.</p></li>
-<li><p><strong>Likelihood Ratio Test (LRT)</strong> - <code><a href='test_performance.html'>test_likelihoodratio()</a></code>: The LRT tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the Wald test and, similarly, only makes sense for nested models. However, Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes (under or about 30) or if the parameters are large.<br /> <br /> For regression models, this is similar to <code>anova(..., test="LRT")</code> or <code>lmtest::lrtest(...)</code>, depending on the <code>estimator</code> argument. For <code>lavaan</code> models (SEM, CFA), the function calls <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>lavaan::lavTestLRT()</a></code>.</p></li>
-<li><p><strong>Vuong's Test</strong> - <code><a href='test_performance.html'>test_vuong()</a></code>: Vuong's (1989) test can be used both for nested and non-nested models, and actually consists of two tests.</p><ul>
-<li><p>The <strong>Test of Distinguishability</strong> (the <code>Omega2</code> column and its associated p-value) indicates whether or not the models can possibly be distinguished on the basis of the observed data. If its p-value is significant, it means the models are distinguishable.</p></li>
-<li><p>The <strong>Robust Likelihood Test</strong> (the <code>LR</code> column and its associated p-value) indicates whether each model fits better than the reference model. If the models are nested, then the test works as a robust LRT. The code for this function is adapted from the <code>nonnest2</code> package, and all credit go to their authors.</p></li>
+<li><p><strong>Bayes factor for Model Comparison</strong> - <code><a href='test_performance.html'>test_bf()</a></code>: If all
+  models were fit from the same data, the returned <code>BF</code> shows the Bayes
+  Factor (see <code><a href='https://easystats.github.io/bayestestR/reference/bayesfactor_models.html'>bayestestR::bayesfactor_models()</a></code>) for each model against
+  the reference model (which depends on whether the models are nested or
+  not). Check out
+  <a href='https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models'>this
+  vignette</a> for more details.</p></li>
+<li><p><strong>Wald's F-Test</strong> - <code><a href='test_performance.html'>test_wald()</a></code>: The Wald test is a rough
+  approximation of the Likelihood Ratio Test. However, it is more applicable
+  than the LRT: you can often run a Wald test in situations where no other
+  test can be run. Importantly, this test only makes statistical sense if the
+  models are nested.<br /> <br /> This test is also available in base R through the
+  <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova()</a></code> function. It returns an <code>F-value</code> column
+  as a statistic and its associated <code>p-value</code>.</p></li>
+<li><p><strong>Likelihood Ratio Test (LRT)</strong> - <code><a href='test_performance.html'>test_likelihoodratio()</a></code>:
+  The LRT tests which model is a better (more likely) explanation of the
+  data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if
+  not equivalent) to the Wald test and, similarly, only makes sense for
+  nested models. However, Maximum likelihood tests make stronger assumptions
+  than method of moments tests like the F-test, and in turn are more
+  efficient. Agresti (1990) suggests that you should use the LRT instead of
+  the Wald test for small sample sizes (under or about 30) or if the
+  parameters are large.<br /> <br /> For regression models, this is similar to
+  <code>anova(..., test="LRT")</code> or <code>lmtest::lrtest(...)</code>, depending on
+  the <code>estimator</code> argument. For <code>lavaan</code> models (SEM, CFA), the
+  function calls <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>lavaan::lavTestLRT()</a></code>.</p></li>
+<li><p><strong>Vuong's Test</strong> - <code><a href='test_performance.html'>test_vuong()</a></code>: Vuong's (1989) test can
+  be used both for nested and non-nested models, and actually consists of two
+  tests.</p><ul>
+<li><p>The <strong>Test of Distinguishability</strong> (the <code>Omega2</code> column and
+  its associated p-value) indicates whether or not the models can possibly be
+  distinguished on the basis of the observed data. If its p-value is
+  significant, it means the models are distinguishable.</p></li>
+<li><p>The <strong>Robust Likelihood Test</strong> (the <code>LR</code> column and its
+  associated p-value) indicates whether each model fits better than the
+  reference model. If the models are nested, then the test works as a robust
+  LRT. The code for this function is adapted from the <code>nonnest2</code>
+  package, and all credit go to their authors.</p></li>
 </ul></li>
 </ul>
 
@@ -222,8 +301,10 @@ Nesting is detected via the <code><a href='https://easystats.github.io/insight/r
 
     
 <ul>
-<li><p>Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.</p></li>
-<li><p>Merkle, E. C., You, D., &amp; Preacher, K. (2016). Testing non-nested structural equation models. Psychological Methods, 21, 151-163.</p></li>
+<li><p>Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
+  non-nested hypotheses. Econometrica, 57, 307-333.</p></li>
+<li><p>Merkle, E. C., You, D., &amp; Preacher, K. (2016). Testing non-nested
+  structural equation models. Psychological Methods, 21, 151-163.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
