@@ -35,7 +35,9 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
   if (length(bad_metrics)) {
     if (verbose) {
       warning(paste0("Following elements are no valid metric: ",
-                     metrics[bad_metrics], collapse = ", "))
+        metrics[bad_metrics],
+        collapse = ", "
+      ))
     }
     metrics <- metrics[-bad_metrics]
   }

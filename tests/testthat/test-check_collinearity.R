@@ -52,14 +52,17 @@ if (require("testthat") && require("performance") && require("glmmTMB")) {
 
     obk.long$treatment <- as.character(obk.long$treatment)
     suppressWarnings(suppressMessages({
-      aM <- afex::aov_car(value ~ treatment * gender + Error(id/(phase*hour)),
-                          data = obk.long)
+      aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+        data = obk.long
+      )
 
-      aW <- afex::aov_car(value ~ Error(id/(phase*hour)),
-                          data = obk.long)
+      aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
+        data = obk.long
+      )
 
       aB <- afex::aov_car(value ~ treatment * gender + Error(id),
-                          data = obk.long)
+        data = obk.long
+      )
     }))
 
     expect_message(ccoM <- check_collinearity(aM))

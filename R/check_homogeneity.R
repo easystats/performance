@@ -111,11 +111,13 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
 #' @rdname check_homogeneity
 #' @export
 check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
-  if (!requireNamespace("car"))
+  if (!requireNamespace("car")) {
     stop("car required for this function to work.")
+  }
 
-  if (tolower(method) != "levene")
+  if (tolower(method) != "levene") {
     message("Only Levene's test for homogeneity supported for afex_aov")
+  }
 
   if (length(attr(x, "between")) == 0) {
     stop("Levene test is only aplicable to ANOVAs with between-subjects factors.")
@@ -125,7 +127,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   dv <- attr(x, "dv")
   id <- attr(x, "id")
   between <- names(attr(x, "between"))
-  is_covar <- sapply(attr(x,'between'), is.null)
+  is_covar <- sapply(attr(x, "between"), is.null)
 
   ag_data <- stats::aggregate(data[, dv], data[, c(between, id)], mean)
   colnames(ag_data)[length(c(between, id)) + 1] <- dv

@@ -110,6 +110,6 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.1.9001
 Remotes: easystats/insight
 Config/testthat/edition: 3

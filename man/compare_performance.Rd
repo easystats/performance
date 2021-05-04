@@ -16,11 +16,13 @@ compare_performance(..., metrics = "all", rank = FALSE, verbose = TRUE)
 \item{verbose}{Toggle off warnings.}
 }
 \value{
-A data frame (with one row per model) and one column per "index" (see \code{metrics}).
+A data frame (with one row per model) and one column per "index" (see
+  \code{metrics}).
 }
 \description{
-\code{compare_performance()} computes indices of model performance for
-different models at once and hence allows comparison of indices across models.
+\code{compare_performance()} computes indices of model
+  performance for different models at once and hence allows comparison of
+  indices across models.
 }
 \details{
 \subsection{Ranking Models}{

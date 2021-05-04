@@ -4,7 +4,6 @@
 
 
 r2mlm_sort_variables <- function(data, predictors, cluster_variable) {
-
   l1_vars <- c()
   l2_vars <- c()
 
@@ -24,16 +23,14 @@ r2mlm_sort_variables <- function(data, predictors, cluster_variable) {
       dplyr::group_map(~ var(.))
 
     # var returns NA if group only 1 row. Replace with 0
-    counter = 1
+    counter <- 1
 
     while (counter <= length(t)) {
-
       if (is.na(t[[counter]])) {
         t[[counter]] <- 0
       }
 
       counter <- counter + 1
-
     }
 
     # variable to track variance
@@ -52,11 +49,9 @@ r2mlm_sort_variables <- function(data, predictors, cluster_variable) {
       l1_vars[l1_counter] <- variable
       l1_counter <- l1_counter + 1
     }
-
   }
 
   list("l1_vars" = l1_vars, "l2_vars" = l2_vars)
-
 }
 
 
@@ -71,7 +66,6 @@ r2mlm_sort_variables <- function(data, predictors, cluster_variable) {
 
 
 r2mlm_get_random_slope_vars <- function(model) {
-
   temp_cov_list <- insight::get_parameters(model, effects = "random")
   if (inherits(model, "merMod")) {
     temp_cov_list <- temp_cov_list[[1]]
@@ -95,7 +89,6 @@ r2mlm_get_random_slope_vars <- function(model) {
   }
 
   random_slope_vars
-
 }
 
 
@@ -135,7 +128,6 @@ r2mlm_get_cwc <- function(l1_vars, cluster_variable, data) {
   }
 
   centeredwithincluster
-
 }
 
 
@@ -148,22 +140,14 @@ r2mlm_get_cwc <- function(l1_vars, cluster_variable, data) {
 
 
 r2mlm_get_covs <- function(variable_list, data) {
-
   cov_list <- c() # create empty list to fill
 
-  i = 1
+  i <- 1
   for (variable in variable_list) {
     tmp <- match(variable, names(data)) # get column number
     cov_list[i] <- tmp # add column number to list
-    i = i + 1
+    i <- i + 1
   }
 
   cov_list
-
 }
-
-
-
-
-
-
