@@ -31,7 +31,10 @@ test_wald(...)
 \arguments{
 \item{...}{Multiple model objects.}
 
-\item{text_length}{Numeric, length (number of chars) of output lines. \code{test_bf()} describes models by their formulas, which can lead to overly long lines in the output. \code{text_length} fixes the length of lines to a specified limit.}
+\item{text_length}{Numeric, length (number of chars) of output lines.
+\code{test_bf()} describes models by their formulas, which can lead to
+overly long lines in the output. \code{text_length} fixes the length of
+lines to a specified limit.}
 
 \item{estimator}{Applied when comparing regression models using
 \code{test_likelihoodratio()}. Corresponds to the different estimators for
@@ -45,30 +48,100 @@ null hypothesis. In moderately large samples, the differences should be
 negligible, but it is possible that OLS would perform slightly better in
 small samples with Gaussian errors.}
 
-\item{reference}{This only applies when models are non-nested, and determines which model should be taken as a reference, against which all the other models are tested.}
+\item{reference}{This only applies when models are non-nested, and determines
+which model should be taken as a reference, against which all the other
+models are tested.}
 }
 \value{
 A data frame containing the relevant indices.
 }
 \description{
-Testing whether models are different is a delicate and often complex procedure, with many limitations and requisites. Moreover, several tests are available, each coming with its own interpretation, and set of strengths and weaknesses.\cr \cr The \code{test_performance()} function is available to run the most relevant and appropriate tests based on the input (for instance, whether the models are \emph{nested} or not). That said, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the \strong{details} section for more information regarding the different tests and their interpretation.
+Testing whether models are different is a delicate and often complex
+procedure, with many limitations and requisites. Moreover, several tests are
+available, each coming with its own interpretation, and set of strengths and
+weaknesses.
+\cr \cr
+The \code{test_performance()} function is available to run the most relevant
+and appropriate tests based on the input (for instance, whether the models
+are \emph{nested} or not). That said, it still requires the user to
+understand what the tests are and what they do in order to prevent their
+misinterpretation. See the \strong{details} section for more information
+regarding the different tests and their interpretation.
 }
 \details{
 \subsection{Nested vs. Non-nested Models}{
-Model's "nesting" is an important concept of models comparison. Indeed, many tests only make sense when the models are \emph{"nested",} i.e., when their predictors are nested. This means that all the predictors of a model are contained within the predictors of a larger model (sometimes referred to as the encompassing model). For instance, \code{model1 (y ~ x1 + x2)} is "nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually, people have a list of nested models, for instance \code{m1 (y ~ 1)}, \code{m2 (y ~ x1)}, \code{m3 (y ~ x1 + x2)}, \code{m4 (y ~ x1 + x2 + x3)}, and it is conventional that they are "ordered" from the smallest to largest, but it is up to the user to reverse the order from largest to smallest. The test then shows whether a more parsimonious model, or whether adding a predictor, results in a significant difference in the model's performance. In this case, models are usually compared \emph{sequentially}: m2 is tested against m1, m3 against m2, m4 against m3, etc.
+Model's "nesting" is an important concept of models comparison. Indeed, many
+tests only make sense when the models are \emph{"nested",} i.e., when their
+predictors are nested. This means that all the predictors of a model are
+contained within the predictors of a larger model (sometimes referred to as
+the encompassing model). For instance, \code{model1 (y ~ x1 + x2)} is
+"nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually, people have a list
+of nested models, for instance \code{m1 (y ~ 1)}, \code{m2 (y ~ x1)},
+\code{m3 (y ~ x1 + x2)}, \code{m4 (y ~ x1 + x2 + x3)}, and it is conventional
+that they are "ordered" from the smallest to largest, but it is up to the
+user to reverse the order from largest to smallest. The test then shows
+whether a more parsimonious model, or whether adding a predictor, results in
+a significant difference in the model's performance. In this case, models are
+usually compared \emph{sequentially}: m2 is tested against m1, m3 against m2,
+m4 against m3, etc.
 \cr\cr
-Two models are considered as \emph{"non-nested"} if their predictors are different. For instance, \code{model1 (y ~ x1 + x2)} and \code{model2 (y ~ x3 + x4)}. In the case of non-nested models, all models are usually compared against the same \emph{reference} model (by default, the first of the list).
+Two models are considered as \emph{"non-nested"} if their predictors are
+different. For instance, \code{model1 (y ~ x1 + x2)} and \code{model2 (y ~ x3
++ x4)}. In the case of non-nested models, all models are usually compared
+against the same \emph{reference} model (by default, the first of the list).
 \cr\cr
-Nesting is detected via the \code{insight::is_nested_models()} function. Aside of the nesting, note also that in order for the tests to be valid, other requirements have often to be the fulfilled. For instance, outcome variables (the response) must be the same. You cannot meaningfully test whether apples are significantly different from oranges!
-} \subsection{Tests Description}{
+Nesting is detected via the \code{insight::is_nested_models()} function.
+Note that, apart from the nesting, in order for the tests to be valid,
+other requirements have often to be the fulfilled. For instance, outcome
+variables (the response) must be the same. You cannot meaningfully test
+whether apples are significantly different from oranges!
+}
+
+\subsection{Tests Description}{
 
 \itemize{
-  \item \strong{Bayes factor for Model Comparison} - \code{test_bf()}: If all models were fit from the same data, the returned \code{BF} shows the Bayes Factor (see \code{bayestestR::bayesfactor_models()}) for each model against the reference model (which depends on whether the models are nested or not). Check out \href{https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models}{this vignette} for more details.
-  \item \strong{Wald's F-Test} - \code{test_wald()}: The Wald test is a rough approximation of the Likelihood Ratio Test. However, it is more applicable than the LRT: you can often run a Wald test in situations where no other test can be run. Importantly, this test only makes statistical sense if the models are nested.\cr \cr This test is also available in base R through the \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column as a statistic and its associated \code{p-value}.
-  \item \strong{Likelihood Ratio Test (LRT)} - \code{test_likelihoodratio()}: The LRT tests which model is a better (more likely) explanation of the data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if not equivalent) to the Wald test and, similarly, only makes sense for nested models. However, Maximum likelihood tests make stronger assumptions than method of moments tests like the F-test, and in turn are more efficient. Agresti (1990) suggests that you should use the LRT instead of the Wald test for small sample sizes (under or about 30) or if the parameters are large.\cr \cr For regression models, this is similar to \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, depending on the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the function calls \code{lavaan::lavTestLRT()}.
-  \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can be used both for nested and non-nested models, and actually consists of two tests.\itemize{
-  \item The \strong{Test of Distinguishability} (the \code{Omega2} column and its associated p-value) indicates whether or not the models can possibly be distinguished on the basis of the observed data. If its p-value is significant, it means the models are distinguishable.
-  \item The \strong{Robust Likelihood Test} (the \code{LR} column and its associated p-value) indicates whether each model fits better than the reference model. If the models are nested, then the test works as a robust LRT. The code for this function is adapted from the \code{nonnest2} package, and all credit go to their authors.}
+  \item \strong{Bayes factor for Model Comparison} - \code{test_bf()}: If all
+  models were fit from the same data, the returned \code{BF} shows the Bayes
+  Factor (see \code{bayestestR::bayesfactor_models()}) for each model against
+  the reference model (which depends on whether the models are nested or
+  not). Check out
+  \href{https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models}{this
+  vignette} for more details.
+
+  \item \strong{Wald's F-Test} - \code{test_wald()}: The Wald test is a rough
+  approximation of the Likelihood Ratio Test. However, it is more applicable
+  than the LRT: you can often run a Wald test in situations where no other
+  test can be run. Importantly, this test only makes statistical sense if the
+  models are nested.\cr \cr This test is also available in base R through the
+  \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
+  as a statistic and its associated \code{p-value}.
+
+  \item \strong{Likelihood Ratio Test (LRT)} - \code{test_likelihoodratio()}:
+  The LRT tests which model is a better (more likely) explanation of the
+  data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if
+  not equivalent) to the Wald test and, similarly, only makes sense for
+  nested models. However, Maximum likelihood tests make stronger assumptions
+  than method of moments tests like the F-test, and in turn are more
+  efficient. Agresti (1990) suggests that you should use the LRT instead of
+  the Wald test for small sample sizes (under or about 30) or if the
+  parameters are large.\cr \cr For regression models, this is similar to
+  \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, depending on
+  the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the
+  function calls \code{lavaan::lavTestLRT()}.
+
+  \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can
+  be used both for nested and non-nested models, and actually consists of two
+  tests.
+  \itemize{
+  \item The \strong{Test of Distinguishability} (the \code{Omega2} column and
+  its associated p-value) indicates whether or not the models can possibly be
+  distinguished on the basis of the observed data. If its p-value is
+  significant, it means the models are distinguishable.
+  \item The \strong{Robust Likelihood Test} (the \code{LR} column and its
+  associated p-value) indicates whether each model fits better than the
+  reference model. If the models are nested, then the test works as a robust
+  LRT. The code for this function is adapted from the \code{nonnest2}
+  package, and all credit go to their authors.}
 }
 }
 }
@@ -147,8 +220,11 @@ if (require("lavaan")) {
 }
 \references{
 \itemize{
-  \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and non-nested hypotheses. Econometrica, 57, 307-333.
-  \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested structural equation models. Psychological Methods, 21, 151-163.
+  \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
+  non-nested hypotheses. Econometrica, 57, 307-333.
+
+  \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested
+  structural equation models. Psychological Methods, 21, 151-163.
 }
 }
 \seealso{

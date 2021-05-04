@@ -5,17 +5,17 @@
 #'
 #' @param x A model object.
 #' @param effects Should normality for residuals (\code{"fixed"}) or random
-#' effects (\code{"random"}) be tested? Only applies to mixed models. May
-#' be abbreviated.
+#'   effects (\code{"random"}) be tested? Only applies to mixed-effects models.
+#'   May be abbreviated.
 #' @param ... Currently not used.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value
 #' < 0.05 indicates a significant deviation from normal distribution
 #'
-#' @note For mixed models, studentized residuals are used for the test,
-#'   \emph{not} the standardized residuals. There is also a
+#' @note For mixed-effects models, studentized residuals, and \emph{not}
+#'   standardized residuals, are used for the test. There is also a
 #'   \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-#'   implemented in the
+#'    implemented in the
 #'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @details \code{check_normality()} calls \code{stats::shapiro.test}

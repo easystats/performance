@@ -24,7 +24,7 @@ check_sphericity.Anova.mlm <- function(x, ...) {
   S <- summary(x, multivariate = FALSE, univariate = TRUE)
   test <- S$sphericity.tests
 
-  p.val <- test[,2]
+  p.val <- test[, 2]
   if (any(p.val < .05)) {
     pp <- p.val[p.val < .05]
     pp <- paste0("\n - ", names(pp), " (", insight::format_p(pp), ")", collapse = "")
@@ -49,9 +49,9 @@ check_sphericity.afex_aov <- function(x, ...) {
 
 #' @export
 check_sphericity.mlm <- function(x, ...) {
-  if (!requireNamespace("car"))
+  if (!requireNamespace("car")) {
     stop("car required for this function to work.")
+  }
 
   check_sphericity.Anova.mlm(car::Anova(x, ...))
 }
-

@@ -1,5 +1,4 @@
 if (require("testthat") && require("performance")) {
-
   test_that("check_homogeneity | afex", {
     skip_if_not_installed("afex")
 
@@ -7,14 +6,17 @@ if (require("testthat") && require("performance")) {
 
     obk.long$treatment <- as.character(obk.long$treatment)
     suppressWarnings(suppressMessages({
-      aM <- afex::aov_car(value ~ treatment * gender + Error(id/(phase*hour)),
-                          data = obk.long)
+      aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+        data = obk.long
+      )
 
-      aW <- afex::aov_car(value ~ Error(id/(phase*hour)),
-                          data = obk.long)
+      aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
+        data = obk.long
+      )
 
       aB <- afex::aov_car(value ~ treatment * gender + Error(id),
-                          data = obk.long)
+        data = obk.long
+      )
     }))
 
     expect_error(check_homogeneity(aW))
@@ -26,5 +28,4 @@ if (require("testthat") && require("performance")) {
     expect_equal(pM, 0.3496516, ignore_attr = TRUE, tolerance = 0.001)
     expect_equal(pB, 0.3496516, ignore_attr = TRUE, tolerance = 0.001)
   })
-
 }

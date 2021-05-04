@@ -1,14 +1,16 @@
 #' @title Compare performance of different models
 #' @name compare_performance
 #'
-#' @description \code{compare_performance()} computes indices of model performance for
-#' different models at once and hence allows comparison of indices across models.
+#' @description \code{compare_performance()} computes indices of model
+#'   performance for different models at once and hence allows comparison of
+#'   indices across models.
 #'
 #' @param ... Multiple model objects (also of different classes).
 #' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \code{\link[=model_performance]{documentation}} of object's class for details.
 #' @param rank Logical, if \code{TRUE}, models are ranked according to 'best' overall model performance. See 'Details'.
 #'
-#' @return A data frame (with one row per model) and one column per "index" (see \code{metrics}).
+#' @return A data frame (with one row per model) and one column per "index" (see
+#'   \code{metrics}).
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'

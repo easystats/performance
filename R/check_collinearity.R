@@ -100,7 +100,7 @@ check_collinearity.default <- function(x, verbose = TRUE, ...) {
 }
 
 #' @export
-check_collinearity.afex_aov <- function(x, verbose = TRUE, ...){
+check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   f <- paste(row.names(x$anova_table), collapse = "+")
   f <- paste0(insight::find_response(x), "~", f)
   # f <- insight::find_formula(x)[[1]]
@@ -114,8 +114,9 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...){
   is_fac <- sapply(d, is.factor) | sapply(d, is.character)
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
-  if (verbose)
+  if (verbose) {
     message(insight::format_message("All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."))
+  }
 
   check_collinearity(suppressWarnings(stats::lm(formula = f, data = d, contrasts = contrs)))
 }

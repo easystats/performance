@@ -563,7 +563,7 @@ print.check_collinearity <- function(x, ...) {
 
 .print_collinearity <- function(x) {
   vifs <- x$VIF
-  x$Tolerance <- 1/x$VIF
+  x$Tolerance <- 1 / x$VIF
 
   x$VIF <- sprintf("%.2f", x$VIF)
   x$SE_factor <- sprintf("%.2f", x$SE_factor)
