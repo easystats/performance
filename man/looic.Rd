@@ -16,7 +16,7 @@ A list with four elements, the ELPD, LOOIC and their standard errors.
 }
 \description{
 Compute LOOIC (leave-one-out cross-validation (LOO) information
-  criterion) and ELPD (expected log predictive density) for Bayesian regressions.
+  criterion) and ELPD (expected log predictive density) for Bayesian regressions. For LOOIC and ELPD, smaller and larger values are respectively indicative of a better fit.
 }
 \examples{
 if (require("rstanarm")) {

@@ -2,7 +2,7 @@
 #' @name looic
 #'
 #' @description Compute LOOIC (leave-one-out cross-validation (LOO) information
-#'   criterion) and ELPD (expected log predictive density) for Bayesian regressions.
+#'   criterion) and ELPD (expected log predictive density) for Bayesian regressions. For LOOIC and ELPD, smaller and larger values are respectively indicative of a better fit.
 #'
 #' @param model A Bayesian regression model.
 #' @inheritParams model_performance.lm
