@@ -32,7 +32,7 @@
 #' # data generation from '?prcomp', slightly modified
 #' C <- chol(S <- toeplitz(.9^(0:15)))
 #' set.seed(17)
-#' X <- matrix(rnorm(16000), 100, 16)
+#' X <- matrix(rnorm(1600), 100, 16)
 #' Z <- X %*% C
 #' if (require("parameters") && require("psych")) {
 #'   pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
