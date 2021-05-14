@@ -76,8 +76,6 @@ regarding the different tests and their interpretation." />
 
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -165,7 +163,7 @@ misinterpretation. See the <strong>details</strong> section for more information
 regarding the different tests and their interpretation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
 <span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>...</span>, text_length <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
@@ -180,7 +178,7 @@ regarding the different tests and their interpretation.</p>
 
 <span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>test_wald</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -312,7 +310,7 @@ whether apples are significantly different from oranges!</p>
     <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare the performance indices of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='co'># Nested Models</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># Nested Models</span></span>
 <span class='r-in'><span class='co'># -------------</span></span>
 <span class='r-in'><span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
@@ -457,7 +455,7 @@ whether apples are significantly different from oranges!</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> m2   | lmerMod | &lt; 0.001</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |     gam |   0.038</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Each model is compared to m1.</span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

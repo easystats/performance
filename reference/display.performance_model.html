@@ -67,8 +67,6 @@
 
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -147,11 +145,11 @@
   <code><a href='https://easystats.github.io/insight/reference/display.html'>print_md()</a></code> is a alias for <code>display(format = "markdown")</code>.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for performance_model</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for performance_model</span>
 <span class='fu'><a href='https://easystats.github.io/insight/reference/display.html'>display</a></span><span class='op'>(</span><span class='va'>object</span>, format <span class='op'>=</span> <span class='st'>"markdown"</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for performance_model</span>
-<span class='fu'><a href='https://easystats.github.io/insight/reference/display.html'>print_md</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://easystats.github.io/insight/reference/display.html'>print_md</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,7 +189,7 @@ or its summary.</p></td>
   for examples.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>mp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='model_performance.html'>model_performance</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://easystats.github.io/insight/reference/display.html'>display</a></span><span class='op'>(</span><span class='va'>mp</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
@@ -201,7 +199,7 @@ or its summary.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> |AIC    |    BIC |   R2 | R2 (adj.) | RMSE | Sigma |</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> |:------|:------:|:----:|:---------:|:----:|:-----:|</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> |156.01 | 161.87 | 0.83 |      0.82 | 2.44 |  2.57 |</span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

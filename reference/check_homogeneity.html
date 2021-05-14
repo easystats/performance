@@ -67,8 +67,6 @@ by independent variables in a model." />
 
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -147,10 +145,10 @@ by independent variables in a model." />
 by independent variables in a model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bartlett"</span>, <span class='st'>"fligner"</span>, <span class='st'>"levene"</span>, <span class='st'>"auto"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bartlett"</span>, <span class='st'>"fligner"</span>, <span class='st'>"levene"</span>, <span class='st'>"auto"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for afex_aov</span>
-<span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"levene"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"levene"</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,7 +182,7 @@ model response is normal distributed, else Fligner-Killeen test is used.</p></td
     <p>There is also a <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a> implemented in the <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>len</span> <span class='op'>~</span> <span class='va'>supp</span> <span class='op'>+</span> <span class='va'>dose</span>, data <span class='op'>=</span> <span class='va'>ToothGrowth</span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>len</span> <span class='op'>~</span> <span class='va'>supp</span> <span class='op'>+</span> <span class='va'>dose</span>, data <span class='op'>=</span> <span class='va'>ToothGrowth</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>check_homogeneity</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BB00;'>OK: Variances in each of the groups are the same (Bartlett Test, p = 0.226).</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BB00;'></span></span>
@@ -197,7 +195,7 @@ model response is normal distributed, else Fligner-Killeen test is used.</p></td
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BB00;'>OK: Variances in each of the groups are the same (Bartlett Test, p = 0.226).</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BB00;'></span></span>
 <span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> Failed at retrieving data :( Please provide original model or data through the `data` argument</span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
