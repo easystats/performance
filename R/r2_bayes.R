@@ -279,9 +279,7 @@ r2_posterior.BFBayesFactor <- function(model,
 
 #' @keywords internal
 .r2_posterior_model_average <- function(model, prior_odds = NULL, verbose = TRUE) {
-  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("Package `BayesFactor` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("BayesFactor")
 
   BFMods <- bayestestR::bayesfactor_models(model, verbose = FALSE)
 

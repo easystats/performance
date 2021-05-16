@@ -74,6 +74,7 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
 
 .test_bf_areAllBayesian <- function(objects) {
   bayesian_models <- sapply(objects, function(i) isTRUE(insight::model_info(i)$is_bayesian))
+
   if (all(bayesian_models == TRUE)) {
     "yes"
   } else if (all(bayesian_models == FALSE)) {
