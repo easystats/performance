@@ -1,16 +1,17 @@
 #' @title Bayesian R2
 #' @name r2_bayes
 #'
-#' @description Compute R2 for Bayesian models. For mixed models (including a random part),
-#' it additionally computes the R2 related to the fixed effects only (marginal R2).
-#' While \code{r2_bayes()} returns a single R2 value, \code{r2_posterior()} returns
-#' a posterior sample of Bayesian R2 values.
+#' @description Compute R2 for Bayesian models. For mixed models (including a
+#'   random part), it additionally computes the R2 related to the fixed effects
+#'   only (marginal R2). While \code{r2_bayes()} returns a single R2 value,
+#'   \code{r2_posterior()} returns a posterior sample of Bayesian R2 values.
 #'
-#' @param model A Bayesian regression model (from \strong{brms}, \strong{rstanarm},
-#'   \strong{BayesFactor}, etc).
+#' @param model A Bayesian regression model (from \strong{brms},
+#'   \strong{rstanarm}, \strong{BayesFactor}, etc).
 #' @param robust Logical, if \code{TRUE}, the median instead of mean is used to
 #'   calculate the central tendency of the variances.
-#' @param ci Value or vector of probability of the CI (between 0 and 1) to be estimated.
+#' @param ci Value or vector of probability of the CI (between 0 and 1) to be
+#'   estimated.
 #' @param ... Arguments passed to \code{r2_posterior()}.
 #' @inheritParams model_performance.lm
 #'
@@ -18,9 +19,9 @@
 #'   Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
 #'   and credible intervals for the R2 values are saved as attributes.
 #'
-#' @details \code{r2_bayes()} returns an "unadjusted" R2 value. See \code{\link{r2_loo}}
-#'   to calculate a LOO-adjusted R2, which comes conceptually closer to an
-#'   adjusted R2 measure.
+#' @details \code{r2_bayes()} returns an "unadjusted" R2 value. See
+#'   \code{\link{r2_loo}} to calculate a LOO-adjusted R2, which comes
+#'   conceptually closer to an adjusted R2 measure.
 #'   \cr \cr
 #'   For mixed models, the conditional and marginal R2 are returned. The marginal
 #'   R2 considers only the variance of the fixed effects, while the conditional
@@ -132,8 +133,18 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
         res <- insight::find_response(model)
         if (mi[[1]]$is_mixed) {
           br2_mv <- list(
-            "R2_Bayes" = rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE),
-            "R2_Bayes_marginal" = rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE)
+            "R2_Bayes" = rstantools::bayes_R2(
+              model,
+              re.form = NULL,
+              re_formula = NULL,
+              summary = FALSE
+            ),
+            "R2_Bayes_marginal" = rstantools::bayes_R2(
+              model,
+              re.form = NA,
+              re_formula = NA,
+              summary = FALSE
+            )
           )
           br2 <- lapply(1:length(res), function(x) {
             list(
@@ -152,8 +163,18 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
       } else {
         if (mi$is_mixed) {
           br2 <- list(
-            "R2_Bayes" = as.vector(rstantools::bayes_R2(model, re.form = NULL, re_formula = NULL, summary = FALSE)),
-            "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(model, re.form = NA, re_formula = NA, summary = FALSE))
+            "R2_Bayes" = as.vector(rstantools::bayes_R2(
+              model,
+              re.form = NULL,
+              re_formula = NULL,
+              summary = FALSE
+            )),
+            "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(
+              model,
+              re.form = NA,
+              re_formula = NA,
+              summary = FALSE
+            ))
           )
           names(br2$R2_Bayes) <- "Conditional R2"
           names(br2$R2_Bayes_marginal) <- "Marginal R2"
@@ -194,7 +215,11 @@ r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 #' @inheritParams r2_bayes
 #' @export
 #' @rdname r2_bayes
-r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE, ...) {
+r2_posterior.BFBayesFactor <- function(model,
+                                       average = FALSE,
+                                       prior_odds = NULL,
+                                       verbose = TRUE,
+                                       ...) {
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     if (verbose) {
@@ -207,16 +232,12 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
     return(.r2_posterior_model_average(model, prior_odds = prior_odds, verbose = verbose))
   }
 
-  if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("Package `rstantools` needed for this function to work. Please install it.")
-  }
-
-  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("Package `BayesFactor` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("rstantools")
+  insight::check_if_installed("BayesFactor")
 
   # Estimates
   params <- insight::get_parameters(model, unreduce = FALSE)
+
   # remove sig and g cols
   params <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
 
@@ -240,6 +261,7 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
   r2_bayesian <- data.frame(R2_Bayes = r2s)
 
   rand <- insight::find_predictors(model[1], effects = "random", flatten = TRUE, verbose = FALSE)
+
   if (!is.null(rand)) {
     idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params))
     idx <- apply(idx, 1, any)
@@ -257,11 +279,14 @@ r2_posterior.BFBayesFactor <- function(model, average = FALSE, prior_odds = NULL
 
 #' @keywords internal
 .r2_posterior_model_average <- function(model, prior_odds = NULL, verbose = TRUE) {
-  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("Package `BayesFactor` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("BayesFactor")
 
   BFMods <- bayestestR::bayesfactor_models(model, verbose = FALSE)
+
+  if (!is.null(BFMods$log_BF)) {
+    BFMods$BF <- exp(BFMods$log_BF)
+  }
+
   has_random <- !is.null(insight::find_predictors(model, effects = "random", flatten = TRUE))
 
   if (any(is.na(BFMods$BF) | is.infinite(BFMods$BF))) {
@@ -318,6 +343,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
     CI_high = attributes(x)$CI$R2_Bayes$CI_high,
     stringsAsFactors = FALSE
   )
+
   if (!is.null(x$R2_Bayes_marginal)) {
     out_marginal <- data.frame(
       R2 = x$R2_Bayes_marginal,
@@ -327,9 +353,11 @@ as.data.frame.r2_bayes <- function(x, ...) {
       CI_high = attributes(x)$CI$R2_Bayes_marginal$CI_high,
       stringsAsFactors = FALSE
     )
+
     out$Component <- "conditional"
     out_marginal$Component <- "marginal"
     out <- rbind(out, out_marginal)
   }
+
   out
 }
