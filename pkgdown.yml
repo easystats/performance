@@ -1,10 +1,10 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: 55fde80bf03a1e6ef901045b77af9f13fe19c5f5
+pkgdown_sha: 5bd377e7cb6d268565018b73e4bb99d2788182ed
 articles:
   compare: compare.html
   r2: r2.html
-last_built: 2021-05-14T13:36Z
+last_built: 2021-05-16T17:08Z
 urls:
   reference: https://easystats.github.io/performance/reference
   article: https://easystats.github.io/performance/articles
