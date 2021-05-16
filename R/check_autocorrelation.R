@@ -1,20 +1,22 @@
 #' @title Check model for independence of residuals.
 #' @name check_autocorrelation
 #'
-#' @description Check model for independence of residuals, i.e. for autocorrelation
-#' of error terms.
+#' @description Check model for independence of residuals, i.e. for
+#'   autocorrelation of error terms.
 #'
 #' @param x A model object.
 #' @param nsim Number of simulations for the Durbin-Watson-Test.
 #' @param ... Currently not used.
 #'
-#' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
+#' @return
+#' Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates autocorrelated residuals.
 #'
-#' @details Performs a Durbin-Watson-Test to check for autocorrelated residuals.
-#' In case of autocorrelation, robust standard errors return more accurate
-#' results for the estimates, or maybe a mixed model with error term for the
-#' cluster groups should be used.
+#' @details
+#' Performs a Durbin-Watson-Test to check for autocorrelated residuals. In case
+#' of autocorrelation, robust standard errors return more accurate results for
+#' the estimates, or maybe a mixed model with error term for the cluster groups
+#' should be used.
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

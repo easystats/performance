@@ -2,9 +2,12 @@
 % Please edit documentation in R/check_distribution.R
 \name{check_distribution}
 \alias{check_distribution}
+\alias{classify_distribution}
 \title{Classify the distribution of a model-family using machine learning}
 \usage{
 check_distribution(model)
+
+classify_distribution(model)
 }
 \arguments{
 \item{model}{Typically, a model (that should response to \code{residuals()}).
@@ -16,6 +19,8 @@ to get more accurate estimates and standard errors. This function may help to
 check a models' distributional family and see if the model-family probably
 should be reconsidered. Since it is difficult to exactly predict the correct
 model family, consider this function as somewhat experimental.
+
+Mean accuracy and Kappa of 0.86 and 0.85, respectively.
 }
 \details{
 This function uses an internal random forest model to classify the

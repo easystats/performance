@@ -32,7 +32,8 @@ results may differ more than expected from their non-Bayesian counterparts
 in \strong{lme4}.
 }
 \note{
-Code is partially based on \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
+Code is partially based on
+  \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
 }
 \examples{
 ## Dobson (1990) Page 93: Randomized Controlled Trial :
@@ -57,7 +58,8 @@ if (require("glmmTMB")) {
 }
 }
 \references{
-Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
+Carvalho, A. (2016). An overview of applications of proper scoring rules.
+Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 }
 \seealso{
 \code{\link[=performance_logloss]{performance_logloss()}}

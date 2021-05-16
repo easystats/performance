@@ -65,10 +65,19 @@
 #'
 #' @references
 #'   \itemize{
-#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom Clusters. Open Journal of Statistics, 03(06), 24–44.
-#'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.
-#'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
-#'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing. \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
+#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
+#'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+#'   Clusters. Open Journal of Statistics, 03(06), 24–44.
+#'
+#'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013).
+#'   An introduction to statistical learning: with applications in R. New York:
+#'   Springer.
+#'
+#'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
+#'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#'
+#'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
+#'   \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
 #'   }
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.

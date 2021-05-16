@@ -1,13 +1,3 @@
-#' Machine learning model trained to classify distributions
-#'
-#' Mean accuracy and Kappa of 0.86 and 0.85, repsectively.
-#'
-"classify_distribution"
-
-
-
-
-
 #' Classify the distribution of a model-family using machine learning
 #'
 #' Choosing the right distributional family for regression models is essential
@@ -54,6 +44,9 @@ check_distribution <- function(model) {
   UseMethod("check_distribution")
 }
 
+#' @rdname check_distribution
+#' @export
+classify_distribution <- check_distribution
 
 #' @export
 check_distribution.numeric <- function(model) {

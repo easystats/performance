@@ -21,9 +21,13 @@
 #' results may differ more than expected from their non-Bayesian counterparts
 #' in \strong{lme4}.
 #'
-#' @references Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
+#' @references
+#' Carvalho, A. (2016). An overview of applications of proper scoring rules.
+#' Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 #'
-#' @note Code is partially based on \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
+#' @note Code is partially based on
+#'   \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
+#'
 #'
 #' @seealso \code{\link[=performance_logloss]{performance_logloss()}}
 #'
