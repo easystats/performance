@@ -136,6 +136,10 @@ check_normality.glmmTMB <- check_normality.merMod
 
 
 #' @export
+check_normality.lmerModLmerTest <- check_normality.merMod
+
+
+#' @export
 check_normality.afex_aov <- function(x, ...) {
   r <- suppressMessages(stats::residuals(x, append = FALSE))
   p.val <- .check_normality(r, x)
@@ -154,7 +158,11 @@ check_normality.afex_aov <- function(x, ...) {
 .check_normality <- function(x, model, type = "residuals") {
   ts <- tryCatch(
     {
-      stats::shapiro.test(x)
+      if (length(x) >= 5000) {
+        suppressWarnings(stats::ks.test(x, y = "pnorm", alternative = "two.sided"))
+      } else {
+        stats::shapiro.test(x)
+      }
     },
     error = function(e) {
       NULL
