@@ -44,6 +44,13 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
   }
 
   rez <- bayestestR::bayesfactor_models(objects, denominator = ref)
+
+  # check for log-BF
+  if (!is.null(rez$log_BF)) {
+    rez$BF <- exp(rez$log_BF)
+    rez$log_BF <- NULL
+  }
+
   row.names(rez) <- NULL
 
   # Adjust BFs for sequential testing
