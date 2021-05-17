@@ -48,7 +48,6 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
   # check for log-BF
   if (!is.null(rez$log_BF)) {
     rez$BF <- exp(rez$log_BF)
-    rez$log_BF <- NULL
   }
 
   row.names(rez) <- NULL
@@ -67,6 +66,9 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
   } else {
     rez$BF[ref] <- NA
   }
+
+  # add log-BF
+  rez$log_BF <- log(rez$BF)
 
   # Replace denominator
   attr(rez, "denominator") <- ref
