@@ -308,7 +308,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='r-in'><span class='va'>outliers_list</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>mpg</span><span class='op'>)</span> <span class='co'># Find outliers</span></span>
 <span class='r-in'><span class='va'>outliers_list</span> <span class='co'># Show the row index of the outliers</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BB0000;'>Warning: 4 outliers detected (cases 18, 19, 20, 28).</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BB0000;'></span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>outliers_list</span><span class='op'>)</span> <span class='co'># The object is a binary vector...</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 1 0 0 0 0</span>
 <span class='r-in'><span class='va'>filtered_data</span> <span class='op'>&lt;-</span> <span class='va'>data</span><span class='op'>[</span><span class='op'>!</span><span class='va'>outliers_list</span>, <span class='op'>]</span> <span class='co'># And can be used to filter a dataframe</span></span>
@@ -319,7 +319,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='r-in'><span class='co'># For dataframes ------------------------------------------------------</span></span>
 <span class='r-in'><span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span> <span class='co'># It works the same way on dataframes</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BB0000;'>Warning: 1 outliers detected (cases 9).</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BB0000;'></span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># You can also use multiple methods at once</span></span>
 <span class='r-in'><span class='va'>outliers_list</span> <span class='op'>&lt;-</span> <span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span>, method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span></span>
@@ -329,7 +329,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='r-in'><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>outliers_list</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BB0000;'>Warning: 6 outliers detected (cases 9, 15, 16, 17, 20, 31).</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BB0000;'></span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='co'># Using `as.data.frame()`, we can access more details!</span></span>
 <span class='r-in'><span class='va'>outliers_info</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>outliers_list</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>outliers_info</span><span class='op'>)</span></span>

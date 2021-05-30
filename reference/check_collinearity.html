@@ -256,15 +256,15 @@ Following model-classes are currently supported: <code>hurdle</code>,
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span> <span class='op'>+</span> <span class='va'>gear</span> <span class='op'>+</span> <span class='va'>disp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'>check_collinearity</span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># Check for Multicollinearity</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'></span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BB00;'>Low Correlation</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BB00;'></span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #00BB00;'></span><span> Term  VIF Increased SE Tolerance</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Term  VIF Increased SE Tolerance</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  gear 1.53         1.24      0.65</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'>Moderate Correlation</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'></span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BBBB00;'></span><span> Term  VIF Increased SE Tolerance</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Term  VIF Increased SE Tolerance</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>    wt 5.05         2.25      0.20</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   cyl 5.41         2.33      0.18</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  disp 9.97         3.16      0.10</span>
