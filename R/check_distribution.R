@@ -2,6 +2,20 @@
 #'
 #' Choosing the right distributional family for regression models is essential
 #' to get more accurate estimates and standard errors. This function may help to
+#' Machine learning model trained to classify distributions
+#'
+#' Mean accuracy and Kappa of 0.86 and 0.85, repsectively.
+#'
+"classify_distribution"
+
+
+
+
+
+#' Classify the distribution of a model-family using machine learning
+#'
+#' Choosing the right distributional family for regression models is essential
+#' to get more accurate estimates and standard errors. This function may help to
 #' check a models' distributional family and see if the model-family probably
 #' should be reconsidered. Since it is difficult to exactly predict the correct
 #' model family, consider this function as somewhat experimental.
@@ -9,9 +23,9 @@
 #' @param model Typically, a model (that should response to \code{residuals()}).
 #'   May also be a numeric vector.
 #'
-#' @note This function is somewhat experimental and might be improved in future
-#'   releases. The final decision on the model-family should also be based on
-#'   theoretical aspects and other information about the data and the model.
+#' @note This function is somewhat experimental and might be improved in future releases.
+#'   The final decision on the model-family should also be based on theoretical
+#'   aspects and other information about the data and the model.
 #'   \cr \cr
 #'   There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
