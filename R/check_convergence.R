@@ -75,10 +75,7 @@ check_convergence.default <- function(x, tolerance = 0.001, ...) {
 
 #' @export
 check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
-  # check for package availability
-  if (!requireNamespace("Matrix", quietly = TRUE)) {
-    stop("Package `Matrix` needed for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("Matrix")
 
   relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
 

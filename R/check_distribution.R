@@ -1,3 +1,7 @@
+#' Classify the distribution of a model-family using machine learning
+#'
+#' Choosing the right distributional family for regression models is essential
+#' to get more accurate estimates and standard errors. This function may help to
 #' Machine learning model trained to classify distributions
 #'
 #' Mean accuracy and Kappa of 0.86 and 0.85, repsectively.
@@ -54,12 +58,9 @@ check_distribution <- function(model) {
   UseMethod("check_distribution")
 }
 
-
 #' @export
 check_distribution.numeric <- function(model) {
-  if (!requireNamespace("randomForest", quietly = TRUE)) {
-    stop("Package `randomForest` required for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("randomForest")
 
   dat <- .extract_features(model)
   dist <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
@@ -80,9 +81,7 @@ check_distribution.numeric <- function(model) {
 
 #' @export
 check_distribution.default <- function(model) {
-  if (!requireNamespace("randomForest", quietly = TRUE)) {
-    stop("Package `randomForest` required for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("randomForest")
 
   if (inherits(model, "brmsfit")) {
     x <- stats::residuals(model)[, "Estimate"]

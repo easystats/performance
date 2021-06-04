@@ -18,9 +18,7 @@
 #' }
 #' @export
 looic <- function(model, verbose = TRUE) {
-  if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("loo")
 
   algorithm <- insight::find_algorithm(model)
 

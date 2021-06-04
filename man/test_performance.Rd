@@ -228,5 +228,6 @@ if (require("lavaan")) {
 }
 }
 \seealso{
-\code{\link[=compare_performance]{compare_performance()}} to compare the performance indices of many different models.
+\code{\link[=compare_performance]{compare_performance()}} to compare
+  the performance indices of many different models.
 }

@@ -39,12 +39,10 @@ print.check_outliers <- function(x, ...) {
 
 #' @export
 print.check_model <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' required to plot model assumptions. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot model assumptions")
+
   NextMethod()
 }
-
 
 
 #' @export
@@ -475,9 +473,8 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 #' @export
 print.binned_residuals <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' required to plot binned residuals. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot binned residuals")
+
   NextMethod()
 }
 

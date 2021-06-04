@@ -17,9 +17,8 @@
 
 
 .get_gradients.default <- function(x, ...) {
-  if (!requireNamespace("sandwich", quietly = TRUE)) {
-    stop("Package 'sandwich' required. Please install it by running `install.packages('sandwich')`.")
-  }
+  insight::check_if_installed("sandwich")
+
   sandwich::estfun(x, ...)
 }
 

@@ -96,9 +96,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
 
 test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
-  if (!requireNamespace("lavaan", quietly = TRUE)) {
-    stop("Package 'lavaan' required. Please install it.")
-  }
+  insight::check_if_installed("lavaan")
 
   # Create data frame with info about model name and class
   names_types <- data.frame(Model = names(objects), Type = sapply(objects, function(x) class(x)[1]), stringsAsFactors = FALSE)

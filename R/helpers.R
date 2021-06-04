@@ -6,10 +6,7 @@
 
 .get_BIC <- function(x) {
   if (inherits(x, c("vgam", "vglm"))) {
-    if (!requireNamespace("VGAM", quietly = TRUE)) {
-      warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
-      return(NULL)
-    }
+    insight::check_if_installed("VGAM")
     VGAM::BIC(x)
   } else if (inherits(x, "bayesx")) {
     stats::BIC(x)[["BIC"]]

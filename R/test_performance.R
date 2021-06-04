@@ -25,7 +25,8 @@
 #'
 #' @return A data frame containing the relevant indices.
 #'
-#' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare the performance indices of many different models.
+#' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare
+#'   the performance indices of many different models.
 #'
 #' @details
 #'

@@ -517,9 +517,7 @@ r2.feis <- function(model, ...) {
 
 #' @export
 r2.fixest <- function(model, ...) {
-  if (!requireNamespace("fixest", quietly = TRUE)) {
-    stop("Package 'fixest' needed to calculate R2. Please install it.")
-  }
+  insight::check_if_installed("fixest")
 
   r2 <- fixest::r2(model)
 

@@ -44,9 +44,8 @@ check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {
     stop("'x' must be an object of class 'parameters_pca', as returned by 'parameters::principal_components()'.")
   }
-  if (!requireNamespace("parameters", quietly = TRUE)) {
-    stop("Package 'parameters' required for this function to work. Please install it.", call. = FALSE)
-  }
+
+  insight::check_if_installed("parameters")
 
   data_set <- attributes(x)$data_set
   subscales <- parameters::closest_component(x)

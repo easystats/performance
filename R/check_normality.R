@@ -85,9 +85,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   }
 
   if (effects == "random") {
-    if (!requireNamespace("lme4", quietly = TRUE)) {
-      stop("Package 'lme4' required for this function to work. Please install it.", call. = FALSE)
-    }
+    insight::check_if_installed("lme4")
 
     re <- tryCatch(
       {
