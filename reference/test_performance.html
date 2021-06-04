@@ -76,7 +76,6 @@ regarding the different tests and their interpretation." />
 
 
 
-
   
 
   
@@ -307,7 +306,8 @@ whether apples are significantly different from oranges!</p>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare the performance indices of many different models.</p></div>
+    <div class='dont-index'><p><code><a href='compare_performance.html'>compare_performance()</a></code> to compare
+  the performance indices of many different models.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># Nested Models</span></span>
@@ -327,9 +327,9 @@ whether apples are significantly different from oranges!</p>
 <span class='r-in'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Bayes Factors for Model Comparison</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      Model                      BF</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [m2] Petal.Width + Species   0.007</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [m3] Petal.Width * Species &lt; 0.001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Model                       BF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [m2] Petal.Width + Species    0.007</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [m3] Petal.Width * Species 2.64e-04</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> * Against Denominator: <span style='color: #00BBBB;'>[m1] Petal.Width</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> *   Bayes Factor Type: <span style='color: #00BBBB;'>BIC approximation</span></span>
@@ -385,9 +385,9 @@ whether apples are significantly different from oranges!</p>
 <span class='r-in'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Bayes Factors for Model Comparison</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      Model             BF</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [m2] Petal.Length  &gt; 1000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [m3] Species      &lt; 0.001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      Model              BF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [m2] Petal.Length 2.90e+10</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [m3] Species      2.00e-06</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> * Against Denominator: <span style='color: #00BBBB;'>[m1] Petal.Width</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> *   Bayes Factor Type: <span style='color: #00BBBB;'>BIC approximation</span></span>
