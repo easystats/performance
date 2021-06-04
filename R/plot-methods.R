@@ -1,18 +1,13 @@
 #' @export
 plot.performance_roc <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed to plot ROC-curves. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot ROC-curves")
   NextMethod()
 }
 
 
-
 #' @export
 plot.check_outliers <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed to plot outliers. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot outliers")
   NextMethod()
 }
 
@@ -20,9 +15,7 @@ plot.check_outliers <- function(x, ...) {
 
 #' @export
 plot.check_collinearity <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed to plot collinearity-check. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot collinearity-check")
   NextMethod()
 }
 
@@ -30,9 +23,7 @@ plot.check_collinearity <- function(x, ...) {
 
 #' @export
 plot.check_distribution <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed to plot predicted distributions. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot predicted distributions")
   NextMethod()
 }
 
@@ -40,9 +31,7 @@ plot.check_distribution <- function(x, ...) {
 
 #' @export
 plot.check_distribution_numeric <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed to plot predicted distributions. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot predicted distributions")
   NextMethod()
 }
 
@@ -50,35 +39,27 @@ plot.check_distribution_numeric <- function(x, ...) {
 
 #' @export
 plot.check_normality <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed for residual plots. Please install it.")
-  }
+  insight::check_if_installed("see", "for residual plots")
   NextMethod()
 }
 
 
 #' @export
 plot.check_heteroscedasticity <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed for residual plots. Please install it.")
-  }
+  insight::check_if_installed("see", "for residual plots")
   NextMethod()
 }
 
 
 #' @export
 plot.check_homogeneity <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed for homogeneity plots. Please install it.")
-  }
+  insight::check_if_installed("see", "for homogeneity plots")
   NextMethod()
 }
 
 
 #' @export
 plot.compare_performance <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' needed for model comparison plots. Please install it.")
-  }
+  insight::check_if_installed("see", "for model comparison plots")
   NextMethod()
 }

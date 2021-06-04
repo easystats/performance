@@ -497,11 +497,7 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 .check_outliers_pareto <- function(x, threshold = 0.7) {
-
-  # Install packages
-  if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` required for this function to work. Please install it by running `install.packages('loo')`.", call. = FALSE)
-  }
+  insight::check_if_installed("loo")
 
   # Compute
   d <- suppressWarnings(loo::pareto_k_values(loo::loo(x)))
@@ -543,11 +539,7 @@ as.numeric.check_outliers <- function(x, ...) {
 .check_outliers_robust <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
 
-  # Install packages
-  if (!requireNamespace("bigutilsr", quietly = TRUE)) {
-    stop("Package `bigutilsr` required for this function to work. Please install it by running `install.packages('bigutilsr')`.", call. = FALSE)
-  }
-
+  insight::check_if_installed("bigutilsr")
 
   # Compute
   U <- svd(scale(x))$u
@@ -567,11 +559,7 @@ as.numeric.check_outliers <- function(x, ...) {
 
 .check_outliers_mcd <- function(x, threshold = NULL, percentage_central = .50) {
   out <- data.frame(Obs = 1:nrow(x))
-
-  # Install packages
-  if (!requireNamespace("MASS", quietly = TRUE)) {
-    stop("Package `MASS` required for this function to work. Please install it by running `install.packages('MASS')`.", call. = FALSE)
-  }
+  insight::check_if_installed("MASS")
 
   # Compute
   mcd <- MASS::cov.mcd(x, quantile.used = percentage_central * nrow(x))
@@ -593,13 +581,8 @@ as.numeric.check_outliers <- function(x, ...) {
 .check_outliers_ics <- function(x, threshold = 0.025, ...) {
   out <- data.frame(Obs = 1:nrow(x))
 
-  # Install packages
-  if (!requireNamespace("ICS", quietly = TRUE)) {
-    stop("Package `ICS` required for this function to work. Please install it by running `install.packages('ICS')`.", call. = FALSE)
-  }
-  if (!requireNamespace("ICSOutlier", quietly = TRUE)) {
-    stop("Package `ICSOutlier` required for this function to work. Please install it by running `install.packages('ICSOutlier')`.", call. = FALSE)
-  }
+  insight::check_if_installed("ICS")
+  insight::check_if_installed("ICSOutlier")
 
   # Get n cores
   n_cores <- if (!requireNamespace("parallel", quietly = TRUE)) {
@@ -623,8 +606,7 @@ as.numeric.check_outliers <- function(x, ...) {
   if (is.null(outliers)) {
     if (ncol(x) == 1) {
       insight::print_color("At least two numeric predictors are required to detect outliers.\n", "red")
-    }
-    else {
+    } else {
       insight::print_color(sprintf("'check_outliers()' does not support models of class '%s'.\n", class(x)[1]), "red")
     }
   }
@@ -647,11 +629,7 @@ as.numeric.check_outliers <- function(x, ...) {
 
 .check_outliers_optics <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
-
-  # Install packages
-  if (!requireNamespace("dbscan", quietly = TRUE)) {
-    stop("Package `dbscan` required for this function to work. Please install it by running `install.packages('dbscan')`.", call. = FALSE)
-  }
+  insight::check_if_installed("dbscan")
 
   # Compute
   rez <- dbscan::optics(x, minPts = threshold)
@@ -678,9 +656,7 @@ as.numeric.check_outliers <- function(x, ...) {
 #   out <- data.frame(Obs = 1:nrow(x))
 #
 #   # Install packages
-#   if (!requireNamespace("solitude", quietly = TRUE)) {
-#     stop("Package `solitude` required for this function to work. Please install it by running `install.packages('solitude')`.", call. = FALSE)
-#   }
+#  insight::check_if_installed("solitude")
 #
 #   # Compute
 #   if (utils::packageVersion("solitude") < "0.2.0") {
@@ -711,12 +687,7 @@ as.numeric.check_outliers <- function(x, ...) {
 
 .check_outliers_lof <- function(x, threshold = NULL) {
   out <- data.frame(Obs = 1:nrow(x))
-
-  # Install packages
-  if (!requireNamespace("dbscan", quietly = TRUE)) {
-    stop("Package `dbscan` required for this function to work. Please install it by running `install.packages('dbscan')`.", call. = FALSE)
-  }
-
+  insight::check_if_installed("dbscan")
 
   # Compute
   out$Distance_LOF <- log(dbscan::lof(x, k = ncol(x) - 1))
@@ -736,8 +707,6 @@ as.numeric.check_outliers <- function(x, ...) {
 }
 
 
-
-
 # influential observations data --------
 
 .influential_obs <- function(x, threshold = NULL) {
@@ -750,9 +719,6 @@ as.numeric.check_outliers <- function(x, ...) {
     }
   )
 }
-
-
-
 
 
 # Non-supported model classes ---------------------------------------

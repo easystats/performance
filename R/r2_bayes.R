@@ -115,9 +115,7 @@ r2_posterior <- function(model, ...) {
 #' @export
 #' @rdname r2_bayes
 r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
-  if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("Package `rstantools` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("rstantools")
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {

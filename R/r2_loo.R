@@ -26,13 +26,8 @@ r2_loo <- function(model, verbose = TRUE) {
     }
   }
 
-  if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("Package `rstantools` needed for this function to work. Please install it.", call. = FALSE)
-  }
-
-  if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` needed for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("rstantools")
+  insight::check_if_installed("loo")
 
   y <- insight::get_response(model, verbose = FALSE)
   ypred <- rstantools::posterior_linpred(model)

@@ -75,9 +75,7 @@ check_singularity <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("lme4")
 
   theta <- lme4::getME(x, "theta")
   # diagonal elements are identifiable because they are fitted
@@ -93,9 +91,7 @@ check_singularity.rlmerMod <- check_singularity.merMod
 
 #' @export
 check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("lme4")
 
   vc <- .collapse_cond(lme4::VarCorr(x))
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
@@ -108,9 +104,7 @@ check_singularity.glmmadmb <- check_singularity.glmmTMB
 
 #' @export
 check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("ordinal", quietly = TRUE)) {
-    stop("Package `ordinal` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("ordinal")
 
   vc <- ordinal::VarCorr(x)
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
@@ -120,10 +114,7 @@ check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.cpglmm <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("cplm", quietly = TRUE)) {
-    stop("Package `cplm` needed for this function to work. Please install it.")
-  }
-
+  insight::check_if_installed("cplm")
   vc <- cplm::VarCorr(x)
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
 }
@@ -139,9 +130,7 @@ check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("nlme", quietly = TRUE)) {
-    stop("Package `nlme` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("nlme")
 
   any(abs(stats::na.omit(as.numeric(diag(nlme::getVarCov(x)))) < tolerance))
 }
@@ -152,10 +141,6 @@ check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
 check_singularity.default <- function(x, ...) {
   FALSE
 }
-
-
-
-
 
 
 .collapse_cond <- function(x) {

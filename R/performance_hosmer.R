@@ -21,8 +21,8 @@
 #' performance_hosmer(model)
 #' @export
 performance_hosmer <- function(model, n_bins = 10) {
-  if (inherits(model, "merMod") && !requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needed for this function to work. Please install it.", call. = FALSE)
+  if (inherits(model, "merMod")) {
+    insight::check_if_installed("lme4")
   }
 
   # check for valid object class

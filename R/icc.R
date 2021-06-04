@@ -265,10 +265,7 @@ variance_decomposition <- function(model,
     return(NULL)
   }
 
-
-  if (!requireNamespace("brms", quietly = TRUE)) {
-    stop("Package `brms` needed for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("brms")
 
   PPD <- brms::posterior_predict(model, re_formula = re_formula, summary = FALSE, ...)
   var_total <- apply(PPD, MARGIN = 1, FUN = stats::var)

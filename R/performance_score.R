@@ -135,9 +135,7 @@ performance_score <- function(model, verbose = TRUE) {
     model$phis
   } else if (inherits(model, "glmmTMB")) {
     if (minfo$is_zero_inflated) {
-      if (!requireNamespace("glmmTMB")) {
-        stop("Package 'glmmTMB' required for this function work. Please install it.")
-      }
+      insight::check_if_installed("glmmTMB")
       glmmTMB::getME(model, "theta")
     } else {
       sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
@@ -174,9 +172,7 @@ performance_score <- function(model, verbose = TRUE) {
       } else if (inherits(model, c("clm", "clm2", "clmm"))) {
         pred <- stats::predict(model)
       } else if (all(inherits(model, c("stanreg", "lmerMod"), which = TRUE)) > 0) {
-        if (!requireNamespace("rstanarm", quietly = TRUE)) {
-          stop("Package `rstanarm` required for this function to work. Please install it.")
-        }
+        insight::check_if_installed("rstanarm")
         pred <- colMeans(rstanarm::posterior_predict(model))
       } else {
         pred <- stats::predict(model, type = "response")

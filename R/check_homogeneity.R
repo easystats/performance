@@ -78,9 +78,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
     r <- stats::bartlett.test(f, data = insight::get_data(x))
     p.val <- r$p.value
   } else if (method == "levene") {
-    if (!requireNamespace("car", quietly = TRUE)) {
-      stop("Package `car` required for this function to work. Please install it.", call. = FALSE)
-    }
+    insight::check_if_installed("car")
     r <- car::leveneTest(x, ...)
     p.val <- r$`Pr(>F)`
   }

@@ -14,16 +14,16 @@
 #'   r2_somers(model)
 #' }}
 #'
-#' @references Somers, R. H. (1962). A new asymmetric measure of association for ordinal variables. American Sociological Review. 27 (6).
+#' @references Somers, R. H. (1962). A new asymmetric measure of association for
+#'   ordinal variables. American Sociological Review. 27 (6).
 #' @export
 r2_somers <- function(model) {
   info <- insight::model_info(model, verbose = FALSE)
   if (!info$is_binomial) {
     stop("'r2_somers()' only accepts logistic regression models.", call. = FALSE)
   }
-  if (!requireNamespace("correlation", quietly = TRUE)) {
-    stop("Package 'correlation' needed for this function to work. Please install it.", call. = FALSE)
-  }
+
+  insight::check_if_installed("correlation")
 
   input <- data.frame(
     y = .recode_to_zero(insight::get_response(model, verbose = FALSE)),
