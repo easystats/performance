@@ -2,9 +2,12 @@
 % Please edit documentation in R/check_distribution.R
 \name{check_distribution}
 \alias{check_distribution}
+\alias{classify_distribution}
 \title{Classify the distribution of a model-family using machine learning}
 \usage{
 check_distribution(model)
+
+classify_distribution(model)
 }
 \arguments{
 \item{model}{Typically, a model (that should response to \code{residuals()}).
@@ -35,9 +38,9 @@ There is a \code{plot()} method, which shows the probabilities of all predicted
 distributions, however, only if the probability is greater than zero.
 }
 \note{
-This function is somewhat experimental and might be improved in future releases.
-  The final decision on the model-family should also be based on theoretical
-  aspects and other information about the data and the model.
+This function is somewhat experimental and might be improved in future
+  releases. The final decision on the model-family should also be based on
+  theoretical aspects and other information about the data and the model.
   \cr \cr
   There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
