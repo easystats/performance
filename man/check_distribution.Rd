@@ -2,12 +2,9 @@
 % Please edit documentation in R/check_distribution.R
 \name{check_distribution}
 \alias{check_distribution}
-\alias{classify_distribution}
 \title{Classify the distribution of a model-family using machine learning}
 \usage{
 check_distribution(model)
-
-classify_distribution(model)
 }
 \arguments{
 \item{model}{Typically, a model (that should response to \code{residuals()}).

@@ -58,10 +58,6 @@ check_distribution <- function(model) {
   UseMethod("check_distribution")
 }
 
-#' @rdname check_distribution
-#' @export
-classify_distribution <- check_distribution
-
 #' @export
 check_distribution.numeric <- function(model) {
   insight::check_if_installed("randomForest")

@@ -5,7 +5,7 @@
 \alias{classify_distribution}
 \title{Classify the distribution of a model-family using machine learning}
 \format{
-An object of class \code{function} of length 1.
+An object of class \code{randomForest.formula} (inherits from \code{randomForest}) of length 8.
 }
 \usage{
 classify_distribution
