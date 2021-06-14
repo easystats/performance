@@ -366,7 +366,7 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
   }
 
   if (same_response && !inherits(objects, "ListLavaan") && attributes(objects)$same_response == FALSE) {
-    stop("The models don't have the same response variable, which is a prerequisite to compare them.")
+    stop(insight::format_message("The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models."), call. = FALSE)
   }
 
   # check formula of all models, but warn only once
