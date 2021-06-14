@@ -47,17 +47,10 @@
 
 
 <meta property="og:title" content="Test if Models are Different — test_bf" />
-<meta property="og:description" content="Testing whether models are different is a delicate and often complex
-procedure, with many limitations and requisites. Moreover, several tests are
-available, each coming with its own interpretation, and set of strengths and
-weaknesses.
+<meta property="og:description" content="Testing whether models are &quot;different&quot; in terms of accuracy or explanatory power is a delicate and often complex
+procedure, with many limitations and prerequisites. Moreover, many tests exist, each coming with its own interpretation, and set of strengths and weaknesses.
  
-The test_performance() function is available to run the most relevant
-and appropriate tests based on the input (for instance, whether the models
-are nested or not). That said, it still requires the user to
-understand what the tests are and what they do in order to prevent their
-misinterpretation. See the details section for more information
-regarding the different tests and their interpretation." />
+The test_performance() function runs the most relevant and appropriate tests based on the type of input (for instance, whether the models are nested or not). However, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the details section for more information regarding the different tests and their interpretation." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -149,17 +142,10 @@ regarding the different tests and their interpretation." />
     </div>
 
     <div class="ref-description">
-    <p>Testing whether models are different is a delicate and often complex
-procedure, with many limitations and requisites. Moreover, several tests are
-available, each coming with its own interpretation, and set of strengths and
-weaknesses.
+    <p>Testing whether models are "different" in terms of accuracy or explanatory power is a delicate and often complex
+procedure, with many limitations and prerequisites. Moreover, many tests exist, each coming with its own interpretation, and set of strengths and weaknesses.
 <br /> <br />
-The <code>test_performance()</code> function is available to run the most relevant
-and appropriate tests based on the input (for instance, whether the models
-are <em>nested</em> or not). That said, it still requires the user to
-understand what the tests are and what they do in order to prevent their
-misinterpretation. See the <strong>details</strong> section for more information
-regarding the different tests and their interpretation.</p>
+The <code>test_performance()</code> function runs the most relevant and appropriate tests based on the type of input (for instance, whether the models are <em>nested</em> or not). However, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the <strong>details</strong> section for more information regarding the different tests and their interpretation.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
@@ -263,7 +249,7 @@ whether apples are significantly different from oranges!</p>
   approximation of the Likelihood Ratio Test. However, it is more applicable
   than the LRT: you can often run a Wald test in situations where no other
   test can be run. Importantly, this test only makes statistical sense if the
-  models are nested.<br /> <br /> This test is also available in base R through the
+  models are nested.<br /> Note: this test is also available in base R through the
   <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova()</a></code> function. It returns an <code>F-value</code> column
   as a statistic and its associated <code>p-value</code>.</p></li>
 <li><p><strong>Likelihood Ratio Test (LRT)</strong> - <code>test_likelihoodratio()</code>:
@@ -274,8 +260,8 @@ whether apples are significantly different from oranges!</p>
   than method of moments tests like the F-test, and in turn are more
   efficient. Agresti (1990) suggests that you should use the LRT instead of
   the Wald test for small sample sizes (under or about 30) or if the
-  parameters are large.<br /> <br /> For regression models, this is similar to
-  <code>anova(..., test="LRT")</code> or <code>lmtest::lrtest(...)</code>, depending on
+  parameters are large.<br /> Note: for regression models, this is similar to
+  <code>anova(..., test="LRT")</code> (on models) or <code>lmtest::lrtest(...)</code>, depending on
   the <code>estimator</code> argument. For <code>lavaan</code> models (SEM, CFA), the
   function calls <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>lavaan::lavTestLRT()</a></code>.</p></li>
 <li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can
