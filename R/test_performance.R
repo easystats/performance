@@ -2,17 +2,10 @@
 #'
 #' @description
 #'
-#' Testing whether models are different is a delicate and often complex
-#' procedure, with many limitations and requisites. Moreover, several tests are
-#' available, each coming with its own interpretation, and set of strengths and
-#' weaknesses.
+#' Testing whether models are "different" in terms of accuracy or explanatory power is a delicate and often complex
+#' procedure, with many limitations and prerequisites. Moreover, many tests exist, each coming with its own interpretation, and set of strengths and weaknesses.
 #' \cr \cr
-#' The \code{test_performance()} function is available to run the most relevant
-#' and appropriate tests based on the input (for instance, whether the models
-#' are \emph{nested} or not). That said, it still requires the user to
-#' understand what the tests are and what they do in order to prevent their
-#' misinterpretation. See the \strong{details} section for more information
-#' regarding the different tests and their interpretation.
+#' The \code{test_performance()} function runs the most relevant and appropriate tests based on the type of input (for instance, whether the models are \emph{nested} or not). However, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the \strong{details} section for more information regarding the different tests and their interpretation.
 #'
 #' @param ... Multiple model objects.
 #' @param reference This only applies when models are non-nested, and determines
@@ -73,7 +66,7 @@
 #'   approximation of the Likelihood Ratio Test. However, it is more applicable
 #'   than the LRT: you can often run a Wald test in situations where no other
 #'   test can be run. Importantly, this test only makes statistical sense if the
-#'   models are nested.\cr \cr This test is also available in base R through the
+#'   models are nested.\cr Note: this test is also available in base R through the
 #'   \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
 #'   as a statistic and its associated \code{p-value}.
 #'
@@ -85,8 +78,8 @@
 #'   than method of moments tests like the F-test, and in turn are more
 #'   efficient. Agresti (1990) suggests that you should use the LRT instead of
 #'   the Wald test for small sample sizes (under or about 30) or if the
-#'   parameters are large.\cr \cr For regression models, this is similar to
-#'   \code{anova(..., test="LRT")} or \code{lmtest::lrtest(...)}, depending on
+#'   parameters are large.\cr Note: for regression models, this is similar to
+#'   \code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)}, depending on
 #'   the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the
 #'   function calls \code{lavaan::lavTestLRT()}.
 #'
