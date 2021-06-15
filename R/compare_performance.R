@@ -58,8 +58,39 @@
 #' @inheritParams model_performance.lm
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
+  # objects <- list(...)
+  # object_names <- match.call(expand.dots = FALSE)$`...`
   objects <- list(...)
-  object_names <- match.call(expand.dots = FALSE)$`...`
+
+  if (length(objects) == 1) {
+    if (insight::is_model(objects[[1]])) {
+      modellist <- FALSE
+    } else {
+      objects <- objects[[1]]
+      modellist <- TRUE
+    }
+  } else {
+    modellist <- FALSE
+  }
+
+  if (isTRUE(modellist)) {
+    object_names <- names(objects)
+    if (length(object_names) == 0) {
+      object_names <- paste("Model", seq_along(objects), sep = " ")
+      names(objects) <- object_names
+    }
+  } else {
+    object_names <- match.call(expand.dots = FALSE)$`...`
+    if (length(names(object_names)) > 0) {
+      object_names <- names(object_names)
+    } else if (any(sapply(object_names, is.call))) {
+      object_names <- paste("Model", seq_along(objects), sep = " ")
+    } else {
+      object_names <- sapply(object_names, as.character)
+      names(objects) <- object_names
+    }
+  }
+
 
   supported_models <- sapply(objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
 

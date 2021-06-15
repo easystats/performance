@@ -1,3 +1,9 @@
+# performance 0.7.3
+
+## Changes to functions
+
+* `compare_performance()` now also accepts a list of model objects.
+
 # performance 0.7.2
 
 ## New functions
