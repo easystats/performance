@@ -4,7 +4,7 @@
 #' @description Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation of being classified as an outlier by at least one method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5 (i.e., that were classified as outliers by at least half of the methods). See the \strong{Details} section below for a description of the methods.
 #'
 #' @param x A model or a data.frame object.
-#' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "zscore", "iqr", "mahalanobis", "robust", "mcd", "ics", "optics", "lof").
+#' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "zscore", "zscore_robust", "iqr", "eti", "hdi", "bci", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").
 #' @param threshold A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 #'   considered as outlier. If \code{NULL}, default values will be used (see 'Details').
 #'
@@ -19,11 +19,11 @@
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please note} that the range of the distance-values along the y-axis is re-scaled to range from 0 to 1.
 #'
-#' @details Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.
+#' @details Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to consider for the researcher, rather than to be an automatized procedure which mindless application is a substitute for thinking.
 #'
 #' An \strong{example sentence} for reporting the usage of the composite method could be:
 #'
-#' \emph{"Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2019) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan & Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded n participants that were classified as outliers by at least half of the methods used."}
+#' \emph{"Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2021) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan & Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded n participants that were classified as outliers by at least half of the methods used."}
 #'
 #' \subsection{Model-specific methods}{
 #' \itemize{
@@ -44,12 +44,16 @@
 #'
 #' \subsection{Univariate methods}{
 #' \itemize{
-#' \item \strong{Z-scores}:
-#'  The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean or, as it is here the case by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = = 1.959)}), corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a data.frame is passed, then the maximum distance is kept for each observations. Thus, all observations that are extreme for at least one variable will be detected. However, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).
+#' \item \strong{Z-scores} \code{("zscore", "zscore_robust")}:
+#'  The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean (\code{"zscore"}) or, as it is here the case (\code{"zscore_robust"}) by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = = 1.959)}), corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a dataframe is passed, the Z-score is calculated for each variable separately, and the maximum (absolute) Z-score is kept for each observations. Thus, all observations that are extreme on at least one variable might be detected as outliers. Thus, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).
 #'
-#' \item \strong{IQR}:
+#' \item \strong{IQR} \code{("iqr")}:
 #'  Using the IQR (interquartile range) is a robust method developed by John Tukey, which often appears in box-and-whisker plots (e.g., in \code{geom_boxplot}). The interquartile range is the range between the first and the third quartiles. Tukey considered as outliers any data point that fell outside of either 1.5 times (the default threshold) the IQR below the first or above the third quartile. Similar to the Z-score method, this is a univariate method for outliers detection, returning outliers detected for at least one column, and might thus not be suited to high dimensional data.
+#'
+#' \item \strong{CI} \code{("ci", "eti", "hdi", "bci")}:
+#'  Another univariate method is to compute, for each variable, some sort of "confidence" interval and consider as outliers values lying beyond the edges of that interval. By default, \code{"ci"} computes the Equal-Tailed Interval (\code{"eti"}), but other types of intervals are available, such as Highest Density Interval (\code{"hdi"}) or the Bias Corrected and Accelerated Interval (\code{"bci"}). The default threshold is \code{0.95}, considering as outliers all observations that are outside the 95\% CI on any of the variable. See \code{\link[bayestestR:ci]{bayestestR::ci()}} for more details about the intervals.
 #' }}
+#'
 #'
 #' \subsection{Multivariate methods}{
 #' \itemize{
@@ -120,7 +124,8 @@
 #'   ics = 0.025,
 #'   optics = 2 * ncol(x),
 #'   iforest = 0.025,
-#'   lof = 0.025
+#'   lof = 0.025,
+#'   ci = 0.95
 #' )
 #' }}
 #'
@@ -133,6 +138,7 @@
 #' \item Iglewicz, B., & Hoaglin, D. C. (1993). How to detect and handle outliers (Vol. 16). Asq Press.
 #' \item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
 #' \item Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008, December). Isolation forest. In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422). IEEE.
+#' \item Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., \& Makowski, D. (2021). performance: An R package for assessment, comparison and testing of statistical models. Journal of Open Source Software, 6(60).
 #' \item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
 #' }
 #'
@@ -204,9 +210,9 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
   # Check args
   if (all(method == "all")) {
-    method <- c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof")
+    method <- c("zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "iforest", "lof")
   }
-  method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
+  method <- match.arg(method, c("zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook", "pareto", "mahalanobis", "mahalanobis_robust", "robust", "mcd", "ics", "optics", "iforest", "lof"), several.ok = TRUE)
 
   # Remove non-numerics
   data <- insight::get_modelmatrix(x)
@@ -234,11 +240,11 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   }
 
   # Cook
-  if ("cook" %in% c(method) & insight::model_info(x)$is_bayesian == FALSE & !inherits(x, "bife")) {
+  if ("cook" %in% method & insight::model_info(x)$is_bayesian == FALSE & !inherits(x, "bife")) {
     df <- cbind(df, .check_outliers_cook(x, threshold = thresholds$cook)$data_cook)
   }
   # Pareto
-  if ("pareto" %in% c(method) & insight::model_info(x)$is_bayesian) {
+  if ("pareto" %in% method & insight::model_info(x)$is_bayesian) {
     df <- cbind(df, .check_outliers_pareto(x, threshold = thresholds$pareto)$data_pareto)
   }
 
@@ -268,7 +274,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 #' @rdname check_outliers
 #' @export
-check_outliers.numeric <- function(x, method = "zscore", threshold = NULL, ...) {
+check_outliers.numeric <- function(x, method = "zscore_robust", threshold = NULL, ...) {
   check_outliers(as.data.frame(x), method = method, threshold = threshold, ...)
 }
 
@@ -283,9 +289,9 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   # Check args
   if (all(method == "all")) {
-    method <- c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "iforest", "lof")
+    method <- c("zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "iforest", "lof")
   }
-  method <- match.arg(method, c("zscore", "iqr", "cook", "pareto", "mahalanobis", "robust", "mcd", "ics", "optics", "lof"), several.ok = TRUE)
+  method <- match.arg(method, c("zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook", "pareto", "mahalanobis", "mahalanobis_robust", "robust", "mcd", "ics", "optics", "lof"), several.ok = TRUE)
 
   # Thresholds
   if (is.null(threshold)) {
@@ -299,47 +305,57 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   out <- list()
   # Z-score
-  if ("zscore" %in% c(method)) {
+  if ("zscore" %in% method) {
+    out <- c(out, .check_outliers_zscore(x, threshold = thresholds$zscore, robust = FALSE, method = "max"))
+  }
+  if ("zscore_robust" %in% method) {
     out <- c(out, .check_outliers_zscore(x, threshold = thresholds$zscore, robust = TRUE, method = "max"))
   }
 
   # IQR
-  if ("iqr" %in% c(method)) {
+  if ("iqr" %in% method) {
     out <- c(out, .check_outliers_iqr(x, threshold = thresholds$iqr, method = "tukey"))
   }
 
+  # CI
+  if (any(c("ci", "hdi", "eti", "bci") %in% method)) {
+    for(i in method[method %in% c("ci", "hdi", "eti", "bci")]) {
+      out <- c(out, .check_outliers_ci(x, threshold = thresholds$ci, method = i))
+    }
+  }
+
   # Mahalanobis
-  if ("mahalanobis" %in% c(method)) {
+  if ("mahalanobis" %in% method) {
     out <- c(out, .check_outliers_mahalanobis(x, threshold = thresholds$mahalanobis, ...))
   }
 
   # Robust Mahalanobis
-  if ("robust" %in% c(method)) {
+  if (any(c("robust", "mahalanobis_robust") %in% method)) {
     out <- c(out, .check_outliers_robust(x, threshold = thresholds$robust))
   }
 
   # MCD
-  if ("mcd" %in% c(method)) {
+  if ("mcd" %in% method) {
     out <- c(out, .check_outliers_mcd(x, threshold = thresholds$mcd, percentage_central = .66))
   }
 
   # ICS
-  if ("ics" %in% c(method)) {
+  if ("ics" %in% method) {
     out <- c(out, .check_outliers_ics(x, threshold = thresholds$ics))
   }
 
   # OPTICS
-  if ("optics" %in% c(method)) {
+  if ("optics" %in% method) {
     out <- c(out, .check_outliers_optics(x, threshold = thresholds$optics))
   }
 
   # Isolation Forest
-  # if ("iforest" %in% c(method)) {
+  # if ("iforest" %in% method) {
   #   out <- c(out, .check_outliers_iforest(x, threshold = thresholds$iforest))
   # }
 
   # Local Outlier Factor
-  if ("lof" %in% c(method)) {
+  if ("lof" %in% method) {
     out <- c(out, .check_outliers_lof(x, threshold = thresholds$lof))
   }
 
@@ -397,6 +413,7 @@ as.numeric.check_outliers <- function(x, ...) {
   optics <- 2 * ncol(x)
   iforest <- 0.025
   lof <- 0.025
+  ci <- 0.95
 
   list(
     "zscore" = zscore,
@@ -409,7 +426,8 @@ as.numeric.check_outliers <- function(x, ...) {
     "ics" = ics,
     "optics" = optics,
     "iforest" = iforest,
-    "lof" = lof
+    "lof" = lof,
+    "ci" = ci
   )
 }
 
@@ -706,6 +724,33 @@ as.numeric.check_outliers <- function(x, ...) {
   )
 }
 
+
+
+.check_outliers_ci <- function(x, threshold = 0.95, method = "HDI") {
+  # get CIs
+  cis <- bayestestR::ci(x, ci = threshold, method = method)
+
+  # Run through columns
+  d <- data.frame(Obs = 1:nrow(x))
+  for(col in names(x)) {
+    d[col] <- ifelse(x[[col]] > cis[cis$Parameter == col, "CI_high"] | x[[col]] < cis[cis$Parameter == col, "CI_low"], 1, 0)
+  }
+  d$Obs <- NULL
+
+  # Average over rows
+  out <- data.frame(x = as.numeric(sapply(as.data.frame(t(d)), mean, na.omit = TRUE, na.rm = TRUE)))
+  names(out) <- paste0("Distance_", method)
+
+  # Filter
+  out[paste0("Outlier_", method)] <- as.numeric(out[[paste0("Distance_", method)]] > 0)
+
+  output <- list(
+    "data_" = out,
+    "threshold_" = threshold
+  )
+  names(output) <- paste0(names(output), method)
+  output
+}
 
 # influential observations data --------
 

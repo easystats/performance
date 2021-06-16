@@ -2,6 +2,8 @@
 
 ## Changes to functions
 
+* `check_outliers()` has new `ci` (or `hdi`, `eti`) method to filter based on Confidence/Credible intervals.
+
 * `compare_performance()` now also accepts a list of model objects.
 
 # performance 0.7.2

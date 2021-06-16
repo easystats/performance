@@ -11,7 +11,7 @@ check_outliers(x, ...)
 
 \method{check_outliers}{default}(x, method = c("cook", "pareto"), threshold = NULL, ...)
 
-\method{check_outliers}{numeric}(x, method = "zscore", threshold = NULL, ...)
+\method{check_outliers}{numeric}(x, method = "zscore_robust", threshold = NULL, ...)
 
 \method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ...)
 }
@@ -21,7 +21,7 @@ check_outliers(x, ...)
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are
 passed down to \code{ICSOutlier::ics.outlier()}.}
 
-\item{method}{The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "zscore", "iqr", "mahalanobis", "robust", "mcd", "ics", "optics", "lof").}
+\item{method}{The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "zscore", "zscore_robust", "iqr", "eti", "hdi", "bci", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").}
 
 \item{threshold}{A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 considered as outlier. If \code{NULL}, default values will be used (see 'Details').}
@@ -37,11 +37,11 @@ A logical vector of the detected outliers with a nice printing
 Checks for and locates influential observations (i.e., "outliers") via several distance and/or clustering methods. If several methods are selected, the returned "Outlier" vector will be a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation of being classified as an outlier by at least one method. The decision rule used by default is to classify as outliers observations which composite outlier score is superior or equal to 0.5 (i.e., that were classified as outliers by at least half of the methods). See the \strong{Details} section below for a description of the methods.
 }
 \details{
-Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to the researcher, rather than being an automatized procedure which mindless application is a substitute for thinking.
+Outliers can be defined as particularly influential observations. Most methods rely on the computation of some distance metric, and the observations greater than a certain threshold are considered outliers. Importantly, outliers detection methods are meant to provide information to consider for the researcher, rather than to be an automatized procedure which mindless application is a substitute for thinking.
 
 An \strong{example sentence} for reporting the usage of the composite method could be:
 
-\emph{"Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2019) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan & Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded n participants that were classified as outliers by at least half of the methods used."}
+\emph{"Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2021) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan & Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded n participants that were classified as outliers by at least half of the methods used."}
 
 \subsection{Model-specific methods}{
 \itemize{
@@ -62,12 +62,16 @@ The reliability and approximate convergence of Bayesian models can be assessed u
 
 \subsection{Univariate methods}{
 \itemize{
-\item \strong{Z-scores}:
- The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean or, as it is here the case by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = = 1.959)}), corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a data.frame is passed, then the maximum distance is kept for each observations. Thus, all observations that are extreme for at least one variable will be detected. However, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).
+\item \strong{Z-scores} \code{("zscore", "zscore_robust")}:
+ The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean (\code{"zscore"}) or, as it is here the case (\code{"zscore_robust"}) by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = = 1.959)}), corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a dataframe is passed, the Z-score is calculated for each variable separately, and the maximum (absolute) Z-score is kept for each observations. Thus, all observations that are extreme on at least one variable might be detected as outliers. Thus, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).
 
-\item \strong{IQR}:
+\item \strong{IQR} \code{("iqr")}:
  Using the IQR (interquartile range) is a robust method developed by John Tukey, which often appears in box-and-whisker plots (e.g., in \code{geom_boxplot}). The interquartile range is the range between the first and the third quartiles. Tukey considered as outliers any data point that fell outside of either 1.5 times (the default threshold) the IQR below the first or above the third quartile. Similar to the Z-score method, this is a univariate method for outliers detection, returning outliers detected for at least one column, and might thus not be suited to high dimensional data.
+
+\item \strong{CI} \code{("ci", "eti", "hdi", "bci")}:
+ Another univariate method is to compute, for each variable, some sort of "confidence" interval and consider as outliers values lying beyond the edges of that interval. By default, \code{"ci"} computes the Equal-Tailed Interval (\code{"eti"}), but other types of intervals are available, such as Highest Density Interval (\code{"hdi"}) or the Bias Corrected and Accelerated Interval (\code{"bci"}). The default threshold is \code{0.95}, considering as outliers all observations that are outside the 95\% CI on any of the variable. See \code{\link[bayestestR:ci]{bayestestR::ci()}} for more details about the intervals.
 }}
+
 
 \subsection{Multivariate methods}{
 \itemize{
@@ -138,7 +142,8 @@ list(
   ics = 0.025,
   optics = 2 * ncol(x),
   iforest = 0.025,
-  lof = 0.025
+  lof = 0.025,
+  ci = 0.95
 )
 }}
 }
@@ -210,6 +215,7 @@ if (require("ICS")) {
 \item Iglewicz, B., & Hoaglin, D. C. (1993). How to detect and handle outliers (Vol. 16). Asq Press.
 \item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
 \item Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008, December). Isolation forest. In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422). IEEE.
+\item Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., \& Makowski, D. (2021). performance: An R package for assessment, comparison and testing of statistical models. Journal of Open Source Software, 6(60).
 \item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
 }
 }
