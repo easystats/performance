@@ -5,8 +5,7 @@
 #'
 #' @param x A model or a data.frame object.
 #' @param method The outlier detection method(s). Can be "all" or some of c("cook", "pareto", "zscore", "zscore_robust", "iqr", "eti", "hdi", "bci", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").
-#' @param threshold A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
-#'   considered as outlier. If \code{NULL}, default values will be used (see 'Details').
+#' @param threshold A list containing the threshold values for each method (e.g. \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is considered as outlier. If \code{NULL}, default values will be used (see 'Details'). If a numeric value is given, it will be used as the threshold for any of the method run.
 #'
 #' @param ... When \code{method = "ics"}, further arguments in \code{...} are
 #'   passed down to \code{ICSOutlier::ics.outlier()}.
@@ -45,7 +44,7 @@
 #' \subsection{Univariate methods}{
 #' \itemize{
 #' \item \strong{Z-scores} \code{("zscore", "zscore_robust")}:
-#'  The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean (\code{"zscore"}) or, as it is here the case (\code{"zscore_robust"}) by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = = 1.959)}), corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a dataframe is passed, the Z-score is calculated for each variable separately, and the maximum (absolute) Z-score is kept for each observations. Thus, all observations that are extreme on at least one variable might be detected as outliers. Thus, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).
+#'  The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean (\code{"zscore"}) or, as it is here the case (\code{"zscore_robust"}) by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = 1.959)}), corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a dataframe is passed, the Z-score is calculated for each variable separately, and the maximum (absolute) Z-score is kept for each observations. Thus, all observations that are extreme on at least one variable might be detected as outliers. Thus, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).
 #'
 #' \item \strong{IQR} \code{("iqr")}:
 #'  Using the IQR (interquartile range) is a robust method developed by John Tukey, which often appears in box-and-whisker plots (e.g., in \code{geom_boxplot}). The interquartile range is the range between the first and the third quartiles. Tukey considered as outliers any data point that fell outside of either 1.5 times (the default threshold) the IQR below the first or above the third quartile. Similar to the Z-score method, this is a univariate method for outliers detection, returning outliers detected for at least one column, and might thus not be suited to high dimensional data.
@@ -116,6 +115,7 @@
 #' list(
 #'   zscore = stats::qnorm(p = 1 - 0.025),
 #'   iqr = 1.5,
+#'   ci = 0.95,
 #'   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
 #'   pareto = 0.7,
 #'   mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
@@ -124,8 +124,7 @@
 #'   ics = 0.025,
 #'   optics = 2 * ncol(x),
 #'   iforest = 0.025,
-#'   lof = 0.025,
-#'   ci = 0.95
+#'   lof = 0.025
 #' )
 #' }}
 #'
@@ -152,6 +151,8 @@
 #' filtered_data <- data[!outliers_list, ] # And can be used to filter a dataframe
 #' nrow(filtered_data) # New size, 28 (4 outliers removed)
 #'
+#' # Find all observations beyond +/- 2 SD
+#' check_outliers(data$mpg, method = "zscore", threshold = 2)
 #'
 #' # For dataframes ------------------------------------------------------
 #' check_outliers(data) # It works the same way on dataframes
@@ -299,6 +300,9 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   } else if (is.list(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
     thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
+  } else if(is.numeric(threshold)) {
+    thresholds <- .check_outliers_thresholds(x)
+    thresholds <- lapply(thresholds, function(x) threshold)
   } else {
     stop("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).")
   }
@@ -404,6 +408,7 @@ as.numeric.check_outliers <- function(x, ...) {
 .check_outliers_thresholds_nowarn <- function(x) {
   zscore <- stats::qnorm(p = 1 - 0.025)
   iqr <- 1.5
+  ci <- 0.95
   cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
   pareto <- 0.7
   mahalanobis <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
@@ -413,11 +418,11 @@ as.numeric.check_outliers <- function(x, ...) {
   optics <- 2 * ncol(x)
   iforest <- 0.025
   lof <- 0.025
-  ci <- 0.95
 
   list(
     "zscore" = zscore,
     "iqr" = iqr,
+    "ci" = ci,
     "cook" = cook,
     "pareto" = pareto,
     "mahalanobis" = mahalanobis,
@@ -426,8 +431,7 @@ as.numeric.check_outliers <- function(x, ...) {
     "ics" = ics,
     "optics" = optics,
     "iforest" = iforest,
-    "lof" = lof,
-    "ci" = ci
+    "lof" = lof
   )
 }
 
@@ -490,6 +494,34 @@ as.numeric.check_outliers <- function(x, ...) {
     "data_iqr" = out,
     "threshold_iqr" = threshold
   )
+}
+
+
+
+.check_outliers_ci <- function(x, threshold = 0.95, method = "HDI") {
+  # get CIs
+  cis <- bayestestR::ci(x, ci = threshold, method = method)
+
+  # Run through columns
+  d <- data.frame(Obs = 1:nrow(x))
+  for(col in names(x)) {
+    d[col] <- ifelse(x[[col]] > cis[cis$Parameter == col, "CI_high"] | x[[col]] < cis[cis$Parameter == col, "CI_low"], 1, 0)
+  }
+  d$Obs <- NULL
+
+  # Average over rows
+  out <- data.frame(x = as.numeric(sapply(as.data.frame(t(d)), mean, na.omit = TRUE, na.rm = TRUE)))
+  names(out) <- paste0("Distance_", method)
+
+  # Filter
+  out[paste0("Outlier_", method)] <- as.numeric(out[[paste0("Distance_", method)]] > 0)
+
+  output <- list(
+    "data_" = out,
+    "threshold_" = threshold
+  )
+  names(output) <- paste0(names(output), method)
+  output
 }
 
 
@@ -725,32 +757,6 @@ as.numeric.check_outliers <- function(x, ...) {
 }
 
 
-
-.check_outliers_ci <- function(x, threshold = 0.95, method = "HDI") {
-  # get CIs
-  cis <- bayestestR::ci(x, ci = threshold, method = method)
-
-  # Run through columns
-  d <- data.frame(Obs = 1:nrow(x))
-  for(col in names(x)) {
-    d[col] <- ifelse(x[[col]] > cis[cis$Parameter == col, "CI_high"] | x[[col]] < cis[cis$Parameter == col, "CI_low"], 1, 0)
-  }
-  d$Obs <- NULL
-
-  # Average over rows
-  out <- data.frame(x = as.numeric(sapply(as.data.frame(t(d)), mean, na.omit = TRUE, na.rm = TRUE)))
-  names(out) <- paste0("Distance_", method)
-
-  # Filter
-  out[paste0("Outlier_", method)] <- as.numeric(out[[paste0("Distance_", method)]] > 0)
-
-  output <- list(
-    "data_" = out,
-    "threshold_" = threshold
-  )
-  names(output) <- paste0(names(output), method)
-  output
-}
 
 # influential observations data --------
 
