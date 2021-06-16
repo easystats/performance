@@ -171,8 +171,7 @@ passed down to <code><a href='https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.htm
     </tr>
     <tr>
       <th>threshold</th>
-      <td><p>A list containing the threshold values for each method (e.g. <code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is
-considered as outlier. If <code>NULL</code>, default values will be used (see 'Details').</p></td>
+      <td><p>A list containing the threshold values for each method (e.g. <code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is considered as outlier. If <code>NULL</code>, default values will be used (see 'Details'). If a numeric value is given, it will be used as the threshold for any of the method run.</p></td>
     </tr>
     </table>
 
@@ -209,7 +208,7 @@ The reliability and approximate convergence of Bayesian models can be assessed u
 
 <ul>
 <li><p><strong>Z-scores</strong> <code>("zscore", "zscore_robust")</code>:
- The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean (<code>"zscore"</code>) or, as it is here the case (<code>"zscore_robust"</code>) by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (<code>threshold = list("zscore" = = 1.959)</code>), corresponding to the 2.5% (<code>qnorm(0.975)</code>) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a dataframe is passed, the Z-score is calculated for each variable separately, and the maximum (absolute) Z-score is kept for each observations. Thus, all observations that are extreme on at least one variable might be detected as outliers. Thus, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).</p></li>
+ The Z-score, or standard score, is a way of describing a data point as deviance from a central value, in terms of standard deviations from the mean (<code>"zscore"</code>) or, as it is here the case (<code>"zscore_robust"</code>) by default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from the median (which are robust measures of dispersion and centrality). The default threshold to classify outliers is 1.959 (<code>threshold = list("zscore" = 1.959)</code>), corresponding to the 2.5% (<code>qnorm(0.975)</code>) most extreme observations (assuming the data is normally distributed). Importantly, the Z-score method is univariate: it is computed column by column. If a dataframe is passed, the Z-score is calculated for each variable separately, and the maximum (absolute) Z-score is kept for each observations. Thus, all observations that are extreme on at least one variable might be detected as outliers. Thus, this method is not suited for high dimensional data (with many columns), returning too liberal results (detecting many outliers).</p></li>
 <li><p><strong>IQR</strong> <code>("iqr")</code>:
  Using the IQR (interquartile range) is a robust method developed by John Tukey, which often appears in box-and-whisker plots (e.g., in <code>geom_boxplot</code>). The interquartile range is the range between the first and the third quartiles. Tukey considered as outliers any data point that fell outside of either 1.5 times (the default threshold) the IQR below the first or above the third quartile. Similar to the Z-score method, this is a univariate method for outliers detection, returning outliers detected for at least one column, and might thus not be suited to high dimensional data.</p></li>
 <li><p><strong>CI</strong> <code>("ci", "eti", "hdi", "bci")</code>:
@@ -272,6 +271,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
   zscore <span class='op'>=</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>qnorm</a></span><span class='op'>(</span>p <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>-</span> <span class='fl'>0.025</span><span class='op'>)</span>,
   iqr <span class='op'>=</span> <span class='fl'>1.5</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
   cook <span class='op'>=</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Fdist.html'>qf</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>,
   pareto <span class='op'>=</span> <span class='fl'>0.7</span>,
   mahalanobis <span class='op'>=</span> <span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/Chisquare.html'>qchisq</a></span><span class='op'>(</span>p <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>-</span> <span class='fl'>0.025</span>, df <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>,
@@ -280,8 +280,7 @@ and removing outliers than regular Mahalanobis distance.</p></li>
   ics <span class='op'>=</span> <span class='fl'>0.025</span>,
   optics <span class='op'>=</span> <span class='fl'>2</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
   iforest <span class='op'>=</span> <span class='fl'>0.025</span>,
-  lof <span class='op'>=</span> <span class='fl'>0.025</span>,
-  ci <span class='op'>=</span> <span class='fl'>0.95</span>
+  lof <span class='op'>=</span> <span class='fl'>0.025</span>
 <span class='op'>)</span>
 </code></pre>
 
@@ -319,6 +318,10 @@ and removing outliers than regular Mahalanobis distance.</p></li>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>filtered_data</span><span class='op'>)</span> <span class='co'># New size, 28 (4 outliers removed)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 28</span>
 <span class='r-in'></span>
+<span class='r-in'><span class='co'># Find all observations beyond +/- 2 SD</span></span>
+<span class='r-in'><span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>mpg</span>, method <span class='op'>=</span> <span class='st'>"zscore"</span>, threshold <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BB0000;'>Warning: 2 outliers detected (cases 18, 20).</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># For dataframes ------------------------------------------------------</span></span>
 <span class='r-in'><span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span> <span class='co'># It works the same way on dataframes</span></span>
