@@ -10,7 +10,8 @@ item_reliability(x, standardize = FALSE, digits = 3)
 \item{x}{A matrix or a data frame.}
 
 \item{standardize}{Logical, if \code{TRUE}, the data frame's vectors will be
-standardized. Recommended when the variables have different measures / scales.}
+standardized. Recommended when the variables have different measures /
+scales.}
 
 \item{digits}{Amount of digits for returned values.}
 }
@@ -26,15 +27,14 @@ Compute various measures of internal consistencies
 }
 \details{
 This function calculates the item discriminations (corrected item-total
-   correlations for each item of \code{x} with the remaining items) and
-   the Cronbach's alpha for each item, if it was deleted from the scale.
-   The absolute value of the item discrimination indices should be
-   above 0.1. An index between 0.1 and 0.3 is considered as "fair",
-   while an index above 0.3 (or below -0.3) is "good". Items with
-   low discrimination indices are often ambiguously worded and
-   should be examined. Items with negative indices should be
-   examined to determine why a negative value was obtained (e.g.
-   reversed answer categories regarding positive and negative poles).
+correlations for each item of \code{x} with the remaining items) and the
+Cronbach's alpha for each item, if it was deleted from the scale. The
+absolute value of the item discrimination indices should be above 0.1. An
+index between 0.1 and 0.3 is considered as "fair", while an index above 0.3
+(or below -0.3) is "good". Items with low discrimination indices are often
+ambiguously worded and should be examined. Items with negative indices should
+be examined to determine why a negative value was obtained (e.g. reversed
+answer categories regarding positive and negative poles).
 }
 \examples{
 data(mtcars)

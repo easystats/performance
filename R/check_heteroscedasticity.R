@@ -1,13 +1,15 @@
 #' @title Check model for (non-)constant error variance
 #' @name check_heteroscedasticity
 #'
-#' @description Check model for (non-)constant error variance.
+#' @description Significance testing for linear regression models assumes that
+#'   the model errors (or residuals) have constant variance. If this assumption
+#'   is violated the p-values from the model are no longer reliable.
 #'
 #' @param x A model object.
 #' @param ... Currently not used.
 #'
-#' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
-#' indicates a non-constant variance (heteroskedasticity).
+#' @return Invisibly returns the p-value of the test statistics. A p-value <
+#'   0.05 indicates a non-constant variance (heteroskedasticity).
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'

@@ -9,22 +9,26 @@
 \arguments{
 \item{model}{A mixed effects model.}
 
-\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute AIC, BIC, R2, ICC and RMSE.}
+\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of
+metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "ICC",
+"RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute AIC,
+BIC, R2, ICC and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-A data frame (with one row) and one column per "index" (see \code{metrics}).
+A data frame (with one row) and one column per "index" (see
+  \code{metrics}).
 }
 \description{
 Compute indices of model performance for mixed models.
 }
 \details{
-This method returns the \emph{adjusted ICC} only, as this is typically
-  of interest when judging the variance attributed to the random effects part
-  of the model (see also \code{\link{icc}}).
+This method returns the \emph{adjusted ICC} only, as this is typically of
+ interest when judging the variance attributed to the random effects part of
+ the model (see also \code{\link{icc}}).
   \cr \cr
   Furthermore, see 'Details' in \code{\link{model_performance.lm}} for
   more details on returned indices.

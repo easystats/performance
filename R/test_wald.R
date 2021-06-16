@@ -43,8 +43,6 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
 # Helpers --------------------------
 
 
-
-
 .test_wald <- function(objects, test = "F") {
 
   # Compute stuff

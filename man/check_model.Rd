@@ -35,7 +35,8 @@ single plots for each diagnostic are returned.}
 \item{check}{Character vector, indicating which checks for should be performed
 and plotted. May be one or more of
 \code{"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"}.
-\code{"reqq"} is a QQ-plot for random effects and only available for mixed models.
+\code{"reqq"} is a QQ-plot for random effects and only available for mixed
+models.
 \code{"ncv"} is an alias for \code{"linearity"}, and checks for non-constant
 variance, i.e. for heteroscedasticity, as well as the linear relationship.
 By default, all possible checks are performed and plotted.}
@@ -58,27 +59,28 @@ format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 The data frame that is used for plotting.
 }
 \description{
-Visual check of model various assumptions (normality of residuals,
-normality of random effects, linear relationship, homogeneity of variance,
+Visual check of model various assumptions (normality of residuals, normality
+of random effects, linear relationship, homogeneity of variance,
 multicollinearity).
 }
 \note{
 This function just prepares the data for plotting. To create the plots,
-\CRANpkg{see} needs to be installed. Furthermore, this function suppresses
-all possible warnings. In case you observe suspicious plots, please refer to
-the dedicated functions (like \code{check_collinearity()}, \code{check_normality()}
-etc.) to get informative messages and warnings.
+  \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+  all possible warnings. In case you observe suspicious plots, please refer
+  to the dedicated functions (like \code{check_collinearity()},
+  \code{check_normality()} etc.) to get informative messages and warnings.
 }
 \section{Linearity Assumption}{
 
-The plot \strong{Linearity} checks the assumption of linear
-relationship. However, the spread of dots also indicate possible
-heteroscedasticity (i.e. non-constant variance); hence, the alias \code{"ncv"}
-for this plot. \strong{Some caution is needed} when interpreting these plots.
-Although these plots are helpful to check model assumptions, they do not
-necessarily indicate so-called "lack of fit", e.g. missed non-linear
-relationships or interactions. Thus, it is always recommended to also look
-at \href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect plots, including partial residuals}.
+The plot \strong{Linearity} checks the assumption of linear relationship.
+However, the spread of dots also indicate possible heteroscedasticity (i.e.
+non-constant variance); hence, the alias \code{"ncv"} for this plot.
+\strong{Some caution is needed} when interpreting these plots. Although these
+plots are helpful to check model assumptions, they do not necessarily
+indicate so-called "lack of fit", e.g. missed non-linear relationships or
+interactions. Thus, it is always recommended to also look at
+\href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect
+plots, including partial residuals}.
 }
 
 \section{Residuals for (Generalized) Linear Models}{

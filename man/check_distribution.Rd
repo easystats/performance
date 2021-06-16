@@ -20,12 +20,13 @@ model family, consider this function as somewhat experimental.
 \details{
 This function uses an internal random forest model to classify the
 distribution from a model-family. Currently, following distributions are
-trained (i.e. results of \code{check_distribution()} may be one of the following):
-\code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"}, \code{"binomial"},
-\code{"chi"}, \code{"exponential"}, \code{"F"}, \code{"gamma"}, \code{"lognormal"},
-\code{"normal"}, \code{"negative binomial"}, \code{"negative binomial (zero-inflated)"},
-\code{"pareto"}, \code{"poisson"}, \code{"poisson (zero-inflated)"},
-\code{"uniform"} and \code{"weibull"}.
+trained (i.e. results of \code{check_distribution()} may be one of the
+following): \code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"},
+\code{"binomial"}, \code{"chi"}, \code{"exponential"}, \code{"F"},
+\code{"gamma"}, \code{"lognormal"}, \code{"normal"}, \code{"negative
+binomial"}, \code{"negative binomial (zero-inflated)"}, \code{"pareto"},
+\code{"poisson"}, \code{"poisson (zero-inflated)"}, \code{"uniform"} and
+\code{"weibull"}.
 \cr \cr
 Note the similarity between certain distributions according to shape, skewness,
 etc. Thus, the predicted distribution may not be perfectly representing the

@@ -127,10 +127,12 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
 
 #' @export
 as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...) {
-  data.frame(R2_conditional = x$R2_conditional,
-             R2_marginal = x$R2_marginal,
-             stringsAsFactors = FALSE,
-             row.names = row.names,
-             optional = optional,
-             ...)
+  data.frame(
+    R2_conditional = x$R2_conditional,
+    R2_marginal = x$R2_marginal,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    optional = optional,
+    ...
+  )
 }

@@ -12,9 +12,9 @@ performance_hosmer(model, n_bins = 10)
 \item{n_bins}{Numeric, the number of bins to divide the data.}
 }
 \value{
-An object of class \code{hoslem_test} with following values: \code{chisq},
-  the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees of freedom
-  and \code{p.value} the p-value for the goodness-of-fit test.
+An object of class \code{hoslem_test} with following values:
+  \code{chisq}, the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees
+  of freedom and \code{p.value} the p-value for the goodness-of-fit test.
 }
 \description{
 Check model quality of logistic regression models.
@@ -29,5 +29,6 @@ model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 performance_hosmer(model)
 }
 \references{
-Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken, NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}
+Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
+NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}
 }

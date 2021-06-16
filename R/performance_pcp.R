@@ -37,8 +37,12 @@
 #'
 #'
 #' @references \itemize{
-#'   \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
-#'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
+#'   \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
+#'   Variable Models. Political Analysis, 8, 83–98.
+#'
+#'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#'   multilevel/hierarchical models. Cambridge; New York: Cambridge University
+#'   Press, 99.
 #' }
 #'
 #' @examples
@@ -47,7 +51,10 @@
 #' performance_pcp(m)
 #' performance_pcp(m, method = "Gelman-Hill")
 #' @export
-performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
+performance_pcp <- function(model,
+                            ci = 0.95,
+                            method = "Herron",
+                            verbose = TRUE) {
   # fix special cases
   if (inherits(model, c("model_fit", "logitor", "logitmfx", "probitmfx"))) {
     model <- model$fit
