@@ -1,7 +1,9 @@
 #' @title Check for multicollinearity of model terms
 #' @name check_collinearity
 #'
-#' @description \code{check_collinearity()} checks regression models for
+#' @description
+#'
+#' \code{check_collinearity()} checks regression models for
 #'   multicollinearity by calculating the variance inflation factor (VIF).
 #'   \code{multicollinearity()} is an alias for \code{check_collinearity()}.
 #'   (When printed, VIF are also translated to Tolerance values, where
@@ -25,50 +27,65 @@
 #'   is increased due to possible correlation with other terms.
 #'
 #' @details
+#'
 #' \subsection{Multicollinearity}{
 #'   Multicollinearity should not be confused with a raw strong correlation
 #'   between predictors. What matters is the association between one or more
-#'   predictor variables, \emph{conditional on the other variables in the model}.
-#'   In a nutshell, multicollinearity means that once you know the effect of
-#'   one predictor, the value of knowing the other predictor is rather low. Thus,
-#'   one of the predictors doesn't help much in terms of better understanding
-#'   the model or predicting the outcome. As a consequence, if multicollinearity
-#'   is a problem, the model seems to suggest that the predictors in question
-#'   don't seems to be reliably associated with the outcome (low estimates, high
-#'   standard errors), although these predictors actually are strongly associated
-#'   with the outcome, i.e. indeed might have strong effect (\cite{McElreath 2020, chapter 6.1}).
+#'   predictor variables, \emph{conditional on the other variables in the
+#'   model}. In a nutshell, multicollinearity means that once you know the
+#'   effect of one predictor, the value of knowing the other predictor is rather
+#'   low. Thus, one of the predictors doesn't help much in terms of better
+#'   understanding the model or predicting the outcome. As a consequence, if
+#'   multicollinearity is a problem, the model seems to suggest that the
+#'   predictors in question don't seems to be reliably associated with the
+#'   outcome (low estimates, high standard errors), although these predictors
+#'   actually are strongly associated with the outcome, i.e. indeed might have
+#'   strong effect (\cite{McElreath 2020, chapter 6.1}).
 #'   \cr \cr
 #'   Multicollinearity might arise when a third, unobserved variable has a causal
 #'   effect on each of the two predictors that are associated with the outcome.
 #'   In such cases, the actual relationship that matters would be the association
 #'   between the unobserved variable and the outcome.
 #'   \cr \cr
-#'   Remember: \dQuote{Pairwise correlations are not the problem. It is the conditional
-#'   associations - not correlations - that matter.} (\cite{McElreath 2020, p. 169})
+#'   Remember: \dQuote{Pairwise correlations are not the problem. It is the
+#'   conditional associations - not correlations - that matter.}
+#'   (\cite{McElreath 2020, p. 169})
 #' }
+#'
 #' \subsection{Interpretation of the Variance Inflation Factor}{
-#'   The variance inflation factor is a measure to analyze the magnitude
-#'   of multicollinearity of model terms. A VIF less than 5 indicates
-#'   a low correlation of that predictor with other predictors. A value between
-#'   5 and 10 indicates a moderate correlation, while VIF values larger than 10
-#'   are a sign for high, not tolerable correlation of model predictors (\cite{James et al. 2013}).
-#'   The \emph{Increased SE} column in the output indicates how much larger
-#'   the standard error is due to the association with other predictors
-#'   conditional on the remaining variables in the model.
+#'   The variance inflation factor is a measure to analyze the magnitude of
+#'   multicollinearity of model terms. A VIF less than 5 indicates a low
+#'   correlation of that predictor with other predictors. A value between 5 and
+#'   10 indicates a moderate correlation, while VIF values larger than 10 are a
+#'   sign for high, not tolerable correlation of model predictors (\cite{James
+#'   et al. 2013}). The \emph{Increased SE} column in the output indicates how
+#'   much larger the standard error is due to the association with other
+#'   predictors conditional on the remaining variables in the model.
 #' }
+#'
 #' \subsection{Multicollinearity and Interaction Terms}{
 #'   If interaction terms are included in a model, high VIF values are expected.
-#'   This portion of multicollinearity among the component terms of an interaction
-#'   is also called "inessential ill-conditioning", which leads to inflated VIF
-#'   values that are typically seen for models with interaction terms \cite{(Francoeur 2013)}.
+#'   This portion of multicollinearity among the component terms of an
+#'   interaction is also called "inessential ill-conditioning", which leads to
+#'   inflated VIF values that are typically seen for models with interaction
+#'   terms \cite{(Francoeur 2013)}.
 #' }
 #'
 #' @references
 #'   \itemize{
-#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom Clusters. Open Journal of Statistics, 03(06), 24–44.
-#'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013). An introduction to statistical learning: with applications in R. New York: Springer.
-#'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
-#'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing. \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
+#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
+#'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+#'   Clusters. Open Journal of Statistics, 03(06), 24–44.
+#'
+#'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013).
+#'   An introduction to statistical learning: with applications in R. New York:
+#'   Springer.
+#'
+#'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
+#'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#'
+#'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
+#'   \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
 #'   }
 #'
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
@@ -118,7 +135,11 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
     message(insight::format_message("All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."))
   }
 
-  check_collinearity(suppressWarnings(stats::lm(formula = f, data = d, contrasts = contrs)))
+  check_collinearity(suppressWarnings(stats::lm(
+    formula = f,
+    data = d,
+    contrasts = contrs
+  )))
 }
 
 
@@ -162,7 +183,10 @@ check_collinearity.betamfx <- check_collinearity.logitor
 
 #' @rdname check_collinearity
 #' @export
-check_collinearity.glmmTMB <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = TRUE, ...) {
+check_collinearity.glmmTMB <- function(x,
+                                       component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                       verbose = TRUE,
+                                       ...) {
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
@@ -170,7 +194,10 @@ check_collinearity.glmmTMB <- function(x, component = c("all", "conditional", "c
 
 
 #' @export
-check_collinearity.MixMod <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = TRUE, ...) {
+check_collinearity.MixMod <- function(x,
+                                      component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                      verbose = TRUE,
+                                      ...) {
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
@@ -178,7 +205,10 @@ check_collinearity.MixMod <- function(x, component = c("all", "conditional", "co
 
 
 #' @export
-check_collinearity.hurdle <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = verbose, ...) {
+check_collinearity.hurdle <- function(x,
+                                      component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                      verbose = verbose,
+                                      ...) {
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
@@ -186,7 +216,10 @@ check_collinearity.hurdle <- function(x, component = c("all", "conditional", "co
 
 
 #' @export
-check_collinearity.zeroinfl <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = verbose, ...) {
+check_collinearity.zeroinfl <- function(x,
+                                        component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                        verbose = verbose,
+                                        ...) {
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
@@ -194,7 +227,10 @@ check_collinearity.zeroinfl <- function(x, component = c("all", "conditional", "
 
 
 #' @export
-check_collinearity.zerocount <- function(x, component = c("all", "conditional", "count", "zi", "zero_inflated"), verbose = verbose, ...) {
+check_collinearity.zerocount <- function(x,
+                                         component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                         verbose = verbose,
+                                         ...) {
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }

@@ -79,9 +79,9 @@
 #'   efficient. Agresti (1990) suggests that you should use the LRT instead of
 #'   the Wald test for small sample sizes (under or about 30) or if the
 #'   parameters are large.\cr Note: for regression models, this is similar to
-#'   \code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)}, depending on
-#'   the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the
-#'   function calls \code{lavaan::lavTestLRT()}.
+#'   \code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)},
+#'   depending on the \code{estimator} argument. For \code{lavaan} models (SEM,
+#'   CFA), the function calls \code{lavaan::lavTestLRT()}.
 #'
 #'   \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
@@ -207,7 +207,10 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
 
 #' @export
-test_performance.ListNestedRegressions <- function(objects, reference = 1, include_formula = FALSE, ...) {
+test_performance.ListNestedRegressions <- function(objects,
+                                                   reference = 1,
+                                                   include_formula = FALSE,
+                                                   ...) {
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test
@@ -244,7 +247,10 @@ test_performance.ListNestedRegressions <- function(objects, reference = 1, inclu
 
 
 #' @export
-test_performance.ListNonNestedRegressions <- function(objects, reference = 1, include_formula = FALSE, ...) {
+test_performance.ListNonNestedRegressions <- function(objects,
+                                                      reference = 1,
+                                                      include_formula = FALSE,
+                                                      ...) {
   out <- .test_performance_init(objects, include_formula = include_formula, ...)
 
   # BF test

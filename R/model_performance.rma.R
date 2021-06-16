@@ -70,18 +70,23 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   if ("AIC" %in% toupper(metrics)) {
     out$AIC <- performance_aic(model)
   }
+
   if ("BIC" %in% toupper(metrics)) {
     out$BIC <- .get_BIC(model)
   }
+
   if ("I2" %in% toupper(metrics)) {
     out$I2 <- s$I2 / 100
   }
+
   if ("H2" %in% toupper(metrics)) {
     out$H2 <- s$H2
   }
+
   if ("TAU2" %in% toupper(metrics)) {
     out$TAU2 <- s$tau2
   }
+
   if (any(c("QE", "COCHRANSQ") %in% toupper(metrics))) {
     out$CochransQ <- s$QE
     out$p_CochransQ <- s$QEp
@@ -94,10 +99,12 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
       }
     )
   }
+
   if (any(c("QM", "OMNIBUS") %in% toupper(metrics))) {
     out$Omnibus <- s$QM
     out$p_Omnibus <- s$QMp
   }
+
   if ("R2" %in% toupper(metrics)) {
     R2 <- r2(model)
     if (!is.null(R2)) {

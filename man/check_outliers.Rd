@@ -185,7 +185,6 @@ if (require("dplyr")) {
     group_by(Species) \%>\%
     check_outliers()
 }
-
 \dontrun{
 # You can also run all the methods
 check_outliers(data, method = "all")

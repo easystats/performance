@@ -12,9 +12,19 @@ check_sphericity(x, ...)
 \item{...}{Arguments passed to \code{car::Anova}.}
 }
 \value{
-Invisibly returns the p-values of the test statistics. A p-value < 0.05
-indicates a violation of sphericity.
+Invisibly returns the p-values of the test statistics. A p-value <
+  0.05 indicates a violation of sphericity.
 }
 \description{
 Check model for violation of sphericity
+}
+\examples{
+if (require("car")) {
+  soils.mod <- lm(
+    cbind(pH, N, Dens, P, Ca, Mg, K, Na, Conduc) ~ Block + Contour * Depth,
+    data = Soils
+  )
+
+  check_sphericity(Manova(soils.mod))
+}
 }

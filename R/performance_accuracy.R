@@ -36,7 +36,11 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_accuracy(model)
 #' @export
-performance_accuracy <- function(model, method = c("cv", "boot"), k = 5, n = 1000, verbose = TRUE) {
+performance_accuracy <- function(model,
+                                 method = c("cv", "boot"),
+                                 k = 5,
+                                 n = 1000,
+                                 verbose = TRUE) {
   method <- match.arg(method)
 
   # get formula from model fit

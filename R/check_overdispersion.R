@@ -127,8 +127,6 @@ check_overdispersion.fixest <- check_overdispersion.glm
 check_overdispersion.glmx <- check_overdispersion.glm
 
 
-
-
 # mfx models ------------------------------
 
 #' @export
@@ -147,9 +145,6 @@ check_overdispersion.negbinmfx <- check_overdispersion.poissonmfx
 
 #' @export
 check_overdispersion.model_fit <- check_overdispersion.poissonmfx
-
-
-
 
 
 # Overdispersion for mixed models ---------------------------

@@ -177,7 +177,6 @@
 #'     group_by(Species) %>%
 #'     check_outliers()
 #' }
-#'
 #' \dontrun{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all")
@@ -308,7 +307,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   } else if (is.list(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
     thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
-  } else if(is.numeric(threshold)) {
+  } else if (is.numeric(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
   } else {
@@ -331,7 +330,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
   # CI
   if (any(c("ci", "hdi", "eti", "bci") %in% method)) {
-    for(i in method[method %in% c("ci", "hdi", "eti", "bci")]) {
+    for (i in method[method %in% c("ci", "hdi", "eti", "bci")]) {
       out <- c(out, .check_outliers_ci(x, threshold = thresholds$ci, method = i))
     }
   }
@@ -399,7 +398,6 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 #' @export
 check_outliers.grouped_df <- function(x, method = "mahalanobis", threshold = NULL, ...) {
-
   info <- attributes(x)
 
   # dplyr < 0.8.0?
@@ -557,7 +555,7 @@ as.numeric.check_outliers <- function(x, ...) {
 
   # Run through columns
   d <- data.frame(Obs = 1:nrow(x))
-  for(col in names(x)) {
+  for (col in names(x)) {
     d[col] <- ifelse(x[[col]] > cis[cis$Parameter == col, "CI_high"] | x[[col]] < cis[cis$Parameter == col, "CI_low"], 1, 0)
   }
   d$Obs <- NULL

@@ -6,15 +6,17 @@
 #' @param model A \code{glm}-object with binomial-family.
 #' @param n_bins Numeric, the number of bins to divide the data.
 #'
-#' @return An object of class \code{hoslem_test} with following values: \code{chisq},
-#'   the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees of freedom
-#'   and \code{p.value} the p-value for the goodness-of-fit test.
+#' @return An object of class \code{hoslem_test} with following values:
+#'   \code{chisq}, the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees
+#'   of freedom and \code{p.value} the p-value for the goodness-of-fit test.
 #'
 #' @details A well-fitting model shows \emph{no} significant difference between
 #'   the model and the observed data, i.e. the reported p-value should be
 #'   greater than 0.05.
 #'
-#' @references Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken, NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}
+#' @references
+#' Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
+#' NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

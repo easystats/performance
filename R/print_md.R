@@ -1,8 +1,21 @@
 #' @rdname display.performance_model
 #' @export
 print_md.performance_model <- function(x, digits = 2, ...) {
-  formatted_table <- format(x = x, digits = digits, format = "markdown", ...)
-  insight::export_table(x = formatted_table, digits = digits, format = "markdown", caption = "Indices of model performance", align = "firstleft", ...)
+  formatted_table <- format(
+    x = x,
+    digits = digits,
+    format = "markdown",
+    ...
+  )
+
+  insight::export_table(
+    x = formatted_table,
+    digits = digits,
+    format = "markdown",
+    caption = "Indices of model performance",
+    align = "firstleft",
+    ...
+  )
 }
 
 
@@ -10,12 +23,21 @@ print_md.performance_model <- function(x, digits = 2, ...) {
 print_md.compare_performance <- function(x, digits = 2, ...) {
   table_caption <- "Comparison of Model Performance Indices"
   formatted_table <- format(x = x, digits = digits, format = "markdown", ...)
+
   if ("Performance_Score" %in% colnames(x)) {
     footer <- sprintf("Model %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1])
   } else {
     footer <- NULL
   }
-  insight::export_table(x = formatted_table, digits = digits, format = "markdown", caption = table_caption, footer = footer, align = "firstleft")
+
+  insight::export_table(
+    x = formatted_table,
+    digits = digits,
+    format = "markdown",
+    caption = table_caption,
+    footer = footer,
+    align = "firstleft"
+  )
 }
 
 
@@ -23,12 +45,21 @@ print_md.compare_performance <- function(x, digits = 2, ...) {
 print_html.compare_performance <- function(x, digits = 2, ...) {
   table_caption <- "Comparison of Model Performance Indices"
   formatted_table <- format(x = x, digits = digits, format = "html", ...)
+
   if ("Performance_Score" %in% colnames(x)) {
     footer <- sprintf("Model %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1])
   } else {
     footer <- NULL
   }
-  insight::export_table(x = formatted_table, digits = digits, format = "html", caption = table_caption, footer = footer, align = "firstleft")
+
+  insight::export_table(
+    x = formatted_table,
+    digits = digits,
+    format = "html",
+    caption = table_caption,
+    footer = footer,
+    align = "firstleft"
+  )
 }
 
 

@@ -118,9 +118,9 @@ whether apples are significantly different from oranges!
   efficient. Agresti (1990) suggests that you should use the LRT instead of
   the Wald test for small sample sizes (under or about 30) or if the
   parameters are large.\cr Note: for regression models, this is similar to
-  \code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)}, depending on
-  the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the
-  function calls \code{lavaan::lavTestLRT()}.
+  \code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)},
+  depending on the \code{estimator} argument. For \code{lavaan} models (SEM,
+  CFA), the function calls \code{lavaan::lavTestLRT()}.
 
   \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can
   be used both for nested and non-nested models, and actually consists of two
