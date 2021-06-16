@@ -153,37 +153,50 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object of class <code>parameters_pca</code>, as returned by <code><a href='https://easystats.github.io/parameters/reference/principal_components.html'>parameters::principal_components()</a></code>.</p></td>
+      <td><p>An object of class <code>parameters_pca</code>, as returned by
+<code><a href='https://easystats.github.io/parameters/reference/principal_components.html'>parameters::principal_components()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of data frames, with related measures of internal consistencies of each subscale.</p>
+    <p>A list of data frames, with related measures of internal
+  consistencies of each subscale.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>check_itemscale()</code> calculates various measures of internal
-  consistencies, such as Cronbach's alpha, item difficulty or discrimination etc.
-  on subscales which were built from several items. Subscales are retrieved from
-  the results of <code><a href='https://easystats.github.io/parameters/reference/principal_components.html'>parameters::principal_components()</a></code>, i.e. based on
-  how many components were extracted from the PCA, <code>check_itemscale()</code>
-  retrieves those variables that belong to a component and calculates the above
-  mentioned measures.</p>
+consistencies, such as Cronbach's alpha, item difficulty or discrimination
+etc. on subscales which were built from several items. Subscales are
+retrieved from the results of <code><a href='https://easystats.github.io/parameters/reference/principal_components.html'>parameters::principal_components()</a></code>, i.e.
+based on how many components were extracted from the PCA,
+<code>check_itemscale()</code> retrieves those variables that belong to a component
+and calculates the above mentioned measures.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     
 <ul>
-<li><p><em>Item difficulty</em> should range between 0.2 and 0.8. Ideal value is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See <code><a href='item_difficulty.html'>item_difficulty</a></code> for details.</p></li>
-<li><p>For <em>item discrimination</em>, acceptable values are 0.20 or higher; the closer to 1.00 the better. See <code><a href='item_reliability.html'>item_reliability</a></code> for more details.</p></li>
-<li><p>In case the total <em>Cronbach's alpha</em> value is below the acceptable cut-off of 0.7 (mostly if an index has few items), the <em>mean inter-item-correlation</em> is an alternative measure to indicate acceptability. Satisfactory range lies between 0.2 and 0.4. See also <code><a href='item_intercor.html'>item_intercor</a></code>.</p></li>
+<li><p><em>Item difficulty</em> should range between 0.2 and 0.8. Ideal value
+  is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See
+  <code><a href='item_difficulty.html'>item_difficulty</a></code> for details.</p></li>
+<li><p>For <em>item discrimination</em>, acceptable values are 0.20 or higher;
+  the closer to 1.00 the better. See <code><a href='item_reliability.html'>item_reliability</a></code> for more
+  details.</p></li>
+<li><p>In case the total <em>Cronbach's alpha</em> value is below the
+  acceptable cut-off of 0.7 (mostly if an index has few items), the
+  <em>mean inter-item-correlation</em> is an alternative measure to indicate
+  acceptability. Satisfactory range lies between 0.2 and 0.4. See also
+  <code><a href='item_intercor.html'>item_intercor</a></code>.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
 <ul>
-<li><p>Briggs SR, Cheek JM (1986) The role of factor analysis in the development and evaluation of personality scales. Journal of Personality, 54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x</p></li>
-<li><p>Trochim WMK (2008) Types of Reliability. (<a href='https://conjointly.com/kb/types-of-reliability/'>web</a>)</p></li>
+<li><p>Briggs SR, Cheek JM (1986) The role of factor analysis in the
+  development and evaluation of personality scales. Journal of Personality,
+  54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x</p></li>
+<li><p>Trochim WMK (2008) Types of Reliability.
+  (<a href='https://conjointly.com/kb/types-of-reliability/'>web</a>)</p></li>
 </ul>
 
 

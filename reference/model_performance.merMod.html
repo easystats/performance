@@ -154,7 +154,10 @@
     </tr>
     <tr>
       <th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be computed (some of <code>c("AIC", "AICc", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")</code>). <code>"common"</code> will compute AIC, BIC, R2, ICC and RMSE.</p></td>
+      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
+metrics to be computed (some of <code>c("AIC", "AICc", "BIC", "R2", "ICC",
+"RMSE", "SIGMA", "LOGLOSS", "SCORE")</code>). <code>"common"</code> will compute AIC,
+BIC, R2, ICC and RMSE.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -168,12 +171,13 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
+    <p>A data frame (with one row) and one column per "index" (see
+  <code>metrics</code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This method returns the <em>adjusted ICC</em> only, as this is typically
-  of interest when judging the variance attributed to the random effects part
-  of the model (see also <code><a href='icc.html'>icc</a></code>).
+    <p>This method returns the <em>adjusted ICC</em> only, as this is typically of
+ interest when judging the variance attributed to the random effects part of
+ the model (see also <code><a href='icc.html'>icc</a></code>).
   <br /> <br />
   Furthermore, see 'Details' in <code><a href='model_performance.lm.html'>model_performance.lm</a></code> for
   more details on returned indices.</p>
