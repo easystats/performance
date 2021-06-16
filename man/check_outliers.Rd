@@ -178,6 +178,14 @@ head(outliers_info)
 outliers_info$Outlier # Including the probability of being an outlier
 # And we can be more stringent in our outliers removal process
 filtered_data <- data[outliers_info$Outlier < 0.1, ]
+
+# We can run the function stratified by groups:
+if (require("dplyr")) {
+  iris \%>\%
+    group_by(Species) \%>\%
+    check_outliers()
+}
+
 \dontrun{
 # You can also run all the methods
 check_outliers(data, method = "all")

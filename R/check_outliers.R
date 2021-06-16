@@ -170,6 +170,14 @@
 #' outliers_info$Outlier # Including the probability of being an outlier
 #' # And we can be more stringent in our outliers removal process
 #' filtered_data <- data[outliers_info$Outlier < 0.1, ]
+#'
+#' # We can run the function stratified by groups:
+#' if (require("dplyr")) {
+#'   iris %>%
+#'     group_by(Species) %>%
+#'     check_outliers()
+#' }
+#'
 #' \dontrun{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all")
@@ -388,6 +396,45 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 
 
+
+#' @export
+check_outliers.grouped_df <- function(x, method = "mahalanobis", threshold = NULL, ...) {
+
+  info <- attributes(x)
+
+  # dplyr < 0.8.0?
+  if ("indices" %in% names(info)) {
+    grps <- lapply(attr(x, "indices", exact = TRUE), function(x) x + 1)
+  } else {
+    grps <- attr(x, "groups", exact = TRUE)[[".rows"]]
+  }
+
+  # Initialize elements
+  data <- data.frame()
+  out <- c()
+  thresholds <- list()
+
+  # Loop through groups
+  for (i in 1:length(grps)) {
+    rows <- grps[[i]]
+    subset <- check_outliers(as.data.frame(x[rows, ]), method = method, threshold = threshold, ...)
+    data <- rbind(data, as.data.frame(subset))
+    out <- c(out, subset)
+    thresholds[[paste0("group_", i)]] <- attributes(subset)$threshold
+  }
+
+  class(out) <- c("check_outliers", "see_check_outliers", class(out))
+  attr(out, "data") <- data
+  attr(out, "method") <- method
+  attr(out, "threshold") <- thresholds
+  attr(out, "text_size") <- 3
+  out
+}
+
+
+# Methods -----------------------------------------------------------------
+
+
 #' @export
 as.data.frame.check_outliers <- function(x, ...) {
   attributes(x)$data
@@ -398,6 +445,9 @@ as.numeric.check_outliers <- function(x, ...) {
   attributes(x)$data$Outlier
 }
 
+
+
+# Thresholds --------------------------------------------------------------
 
 
 
@@ -434,6 +484,9 @@ as.numeric.check_outliers <- function(x, ...) {
     "lof" = lof
   )
 }
+
+
+# Methods -----------------------------------------------------------------
 
 
 
