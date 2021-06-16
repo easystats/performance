@@ -237,6 +237,18 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
 
 
 
+#' @export
+as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
+  data.frame(ICC_adjusted = x$ICC_adjusted,
+             ICC_conditional = x$ICC_conditional,
+             stringsAsFactors = FALSE,
+             row.names = row.names,
+             optional = optional,
+             ...)
+}
+
+
+
 #' @param ... Arguments passed down to \code{brms::posterior_predict()}.
 #' @inheritParams icc
 #' @rdname icc

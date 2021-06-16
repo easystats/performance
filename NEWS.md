@@ -6,6 +6,9 @@
 
 * `compare_performance()` now also accepts a list of model objects.
 
+* Several functions, like `icc()` or `r2_nakagawa()`, now have an 
+  `as.data.frame()` method.
+
 # performance 0.7.2
 
 ## New functions
