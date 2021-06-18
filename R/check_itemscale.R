@@ -83,7 +83,7 @@ check_itemscale <- function(x) {
       Missings = sapply(items, function(i) sum(is.na(i)) / nrow(items)),
       Mean = sapply(items, mean, na.rm = TRUE),
       SD = sapply(items, stats::sd, na.rm = TRUE),
-      Skewness = sapply(items, function(i) as.numeric(parameters::skewness(i))),
+      Skewness = sapply(items, function(i) as.numeric(datawizard::skewness(i))),
       "Difficulty" = item_difficulty(items)$difficulty,
       "Discrimination" = .item_discr,
       "alpha if deleted" = .item_alpha,
