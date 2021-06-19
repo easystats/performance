@@ -198,3 +198,16 @@ performance_accuracy <- function(model,
   }
   lapply(fold_idx, fold)
 }
+
+
+#' @export
+as.data.frame.performance_accuracy <- function(x, row.names = NULL, ...) {
+  data.frame(
+    Accuracy = x$Accuracy,
+    SE = x$SE,
+    Method = x$Method,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
+  )
+}

@@ -185,3 +185,16 @@ performance_score <- function(model, verbose = TRUE) {
 
   list(pred = pred, pred_zi = pred_zi)
 }
+
+
+#' @export
+as.data.frame.performance_score <- function(x, row.names = NULL, ...) {
+  data.frame(
+    logarithmic = x$logarithmic,
+    quadratic = x$quadratic,
+    spherical = x$spherical,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
+  )
+}

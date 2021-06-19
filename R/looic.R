@@ -55,8 +55,19 @@ looic <- function(model, verbose = TRUE) {
 
   # Leave p_loo as I am not sure it is an index of performance
 
-  structure(
-    class = "looic",
-    out
+  structure(class = "looic", out)
+}
+
+
+#' @export
+as.data.frame.looic <- function(x, row.names = NULL, ...) {
+  data.frame(
+    ELPD = x$ELPD,
+    ELPD_SE = x$ELPD_SE,
+    LOOIC = x$LOOIC,
+    LOOIC_SE = x$LOOIC_SE,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
   )
 }
