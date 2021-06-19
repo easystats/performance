@@ -31,7 +31,7 @@ This test of the hypothesis of (non-)constant error is also called
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_heteroscedasticity(m)
 
 # plot results

@@ -40,7 +40,7 @@ For mixed-effects models, studentized residuals, and \emph{not}
   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
 
 # plot results

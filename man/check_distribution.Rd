@@ -43,10 +43,10 @@ This function is somewhat experimental and might be improved in future releases.
   There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-if (require("lme4") && require("parameters") && require("gridExtra")) {
+if (require("lme4") && require("parameters") && require("see") && require("gridExtra")) {
   data(sleepstudy)
 
-  model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+  model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
   check_distribution(model)
   plot(check_distribution(model))
 }

@@ -20,7 +20,8 @@ Calculates the Somers' Dxy rank correlation for logistic regression models.
 if (require("correlation")) {
   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
   r2_somers(model)
-}}
+}
+}
 
 }
 \references{
