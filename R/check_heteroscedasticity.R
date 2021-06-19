@@ -19,7 +19,7 @@
 #' @references Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287–1294.
 #'
 #' @examples
-#' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+#' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_heteroscedasticity(m)
 #'
 #' # plot results

@@ -19,7 +19,7 @@
 #' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @examples
-#' model <- lm(len ~ supp + dose, data = ToothGrowth)
+#' model <<- lm(len ~ supp + dose, data = ToothGrowth)
 #' check_homogeneity(model)
 #'
 #' # plot results

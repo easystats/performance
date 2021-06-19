@@ -25,7 +25,7 @@
 #' inspection (e.g. Q-Q plots) are preferable.
 #'
 #' @examples
-#' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+#' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_normality(m)
 #'
 #' # plot results
@@ -69,7 +69,6 @@ check_normality.default <- function(x, ...) {
 
 
 # mixed models ---------------------
-
 
 #' @rdname check_normality
 #' @export
