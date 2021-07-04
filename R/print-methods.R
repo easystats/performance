@@ -130,12 +130,14 @@ print.performance_pcp <- function(x, digits = 2, ...) {
   insight::print_color("\n# Likelihood-Ratio-Test\n\n", "blue")
 
   v1 <- sprintf("%.3f", x$lrt_chisq)
-  v2 <- sprintf("%.3f", x$lrt_p)
+  v2 <- sprintf("%.3f", x$lrt_df_error)
+  v3 <- sprintf("%.3f", x$lrt_p)
 
   space <- max(nchar(c(v1, v2)))
 
   cat(sprintf("  Chi-squared: %*s\n", space, v1))
-  cat(sprintf("      p-value: %*s\n\n", space, v2))
+  cat(sprintf("  df: %*s\n", space, v2))
+  cat(sprintf("  p-value: %*s\n\n", space, v3))
 
   invisible(x)
 }
