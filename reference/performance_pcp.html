@@ -183,9 +183,10 @@ Default is <code>"Herron"</code>. May be abbreviated.</p></td>
   although y=0 (and vice versa) (see also <cite>Herron 1999, 90</cite>).
   <br /> <br />
   <code>method = "Herron"</code> (or <code>"herron"</code>) computes a modified version
-  of the PCP (<cite>Herron 1999, 90-92</cite>), which is the sum of predicted probabilities,
-  where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
-  by the number of observations. This approach is said to be more accurate.
+  of the PCP (<cite>Herron 1999, 90-92</cite>), which is the sum of predicted
+  probabilities, where y=1, plus the sum of 1 - predicted probabilities,
+  where y=0, divided by the number of observations. This approach is said to
+  be more accurate.
   <br /> <br />
   The PCP ranges from 0 to 1, where values closer to 1 mean that the model
   predicts the outcome better than models with an PCP closer to 0. In general,
@@ -219,7 +220,8 @@ Default is <code>"Herron"</code>. May be abbreviated.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># Likelihood-Ratio-Test</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   Chi-squared: 27.751</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       p-value:  0.000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   df:  2.000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   p-value:  0.000</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='fu'>performance_pcp</span><span class='op'>(</span><span class='va'>m</span>, method <span class='op'>=</span> <span class='st'>"Gelman-Hill"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># Percentage of Correct Predictions from Logistic Regression Model</span></span>
@@ -230,7 +232,8 @@ Default is <code>"Herron"</code>. May be abbreviated.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># Likelihood-Ratio-Test</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   Chi-squared: 27.751</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       p-value:  0.000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   df:  2.000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   p-value:  0.000</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 </code></pre></div>
   </div>
