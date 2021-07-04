@@ -22,9 +22,10 @@
 #'   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
 #'   \cr \cr
 #'   \code{method = "Herron"} (or \code{"herron"}) computes a modified version
-#'   of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
-#'   where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
-#'   by the number of observations. This approach is said to be more accurate.
+#'   of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted
+#'   probabilities, where y=1, plus the sum of 1 - predicted probabilities,
+#'   where y=0, divided by the number of observations. This approach is said to
+#'   be more accurate.
 #'   \cr \cr
 #'   The PCP ranges from 0 to 1, where values closer to 1 mean that the model
 #'   predicts the outcome better than models with an PCP closer to 0. In general,
@@ -119,6 +120,7 @@ performance_pcp <- function(model,
       null_ci_low = pcp_null - stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       null_ci_high = pcp_null + stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       lrt_chisq = as.vector(lrt.chisq),
+      lrt_df_error = model$df.null - model$df.residual,
       lrt_p = lrt.p
     )
   )
@@ -156,6 +158,7 @@ performance_pcp <- function(model,
       null_ci_low = pcp_null - stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       null_ci_high = pcp_null + stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       lrt_chisq = as.vector(lrt.chisq),
+      lrt_df_error = model$df.null - model$df.residual,
       lrt_p = lrt.p
     )
   )
@@ -169,6 +172,7 @@ as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
     "CI_low" = c(x$model_ci_low, x$null_ci_low),
     "CI_high" = c(x$model_ci_high, x$null_ci_high),
     "Chisq" = c(NA, x$lrt_chisq),
+    "df_error" = c(NA, x$lrt_df_error),
     "p" = c(NA, x$lrt_p),
     stringsAsFactors = FALSE,
     row.names = row.names,

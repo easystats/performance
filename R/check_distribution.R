@@ -20,11 +20,14 @@
 #' @param model Typically, a model (that should response to \code{residuals()}).
 #'   May also be a numeric vector.
 #'
-#' @note This function is somewhat experimental and might be improved in future releases.
-#'   The final decision on the model-family should also be based on theoretical
-#'   aspects and other information about the data and the model.
+#' @note This function is somewhat experimental and might be improved in future
+#'   releases. The final decision on the model-family should also be based on
+#'   theoretical aspects and other information about the data and the model.
 #'   \cr \cr
-#'   There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#'   There is also a
+#'   \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+#'   implemented in the
+#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @details
 #'
@@ -46,7 +49,7 @@
 #' distributions, however, only if the probability is greater than zero.
 #'
 #' @examples
-#' if (require("lme4") && require("parameters") && require("see") && require("gridExtra")) {
+#' if (require("lme4") && require("parameters") && require("see") && require("patchwork")) {
 #'   data(sleepstudy)
 #'
 #'   model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
