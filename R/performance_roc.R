@@ -61,7 +61,7 @@ performance_roc <- function(x, ..., predictions, new_data) {
 
   if (is.numeric(x) && !missing(predictions) && !is.null(predictions)) {
     .performance_roc_numeric(x, predictions)
-  } else if (inherits(x, c("logitor", "logitmfx", "probitmfx")) && length(dots) == 0) {
+  } else if (inherits(x, c("logitor", "logitmfx", "probitmfx", "model_fit")) && length(dots) == 0) {
     if (missing(new_data)) new_data <- NULL
     .performance_roc_model(x$fit, new_data)
   } else if (info$is_binomial && length(dots) == 0) {
@@ -98,6 +98,10 @@ performance_roc <- function(x, ..., predictions, new_data) {
   if (is.null(new_data)) new_data <- insight::get_data(x)
   response <- new_data[[insight::find_response(x)]]
 
+  if (is.data.frame(response) && ncol(response) > 1) {
+    stop(insight::format_message("Can't calculate ROC for models with response-matrix (i.e. response variables with suvvess/trials)."), call. = FALSE)
+  }
+
   dat <- .performance_roc_numeric(response, predictions)
   dat$Model <- model_name
   dat
@@ -107,11 +111,22 @@ performance_roc <- function(x, ..., predictions, new_data) {
 
 .performance_roc_models <- function(x, names) {
   l <- lapply(1:length(x), function(i) {
-    if (inherits(x[[i]], "glm")) {
+    if (.valid_roc_models(x[[i]])) {
       .performance_roc_model(x = x[[i]], new_data = NULL, model_name = names[i])
     } else {
       warning("Object '", names[i], "' is not valid.", call. = FALSE)
     }
   })
   do.call(rbind, l)
+}
+
+
+
+# add supported glm models here
+
+.valid_roc_models <- function(x) {
+  if (inherits(x, "model_fit")) {
+    x <- x$fit
+  }
+  inherits(x, c("glm", "glmerMod", "logitor", "logitmfx", "probitmfx"))
 }
