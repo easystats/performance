@@ -99,7 +99,7 @@ performance_roc <- function(x, ..., predictions, new_data) {
   response <- new_data[[insight::find_response(x)]]
 
   if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {
-    stop(insight::format_message("Can't calculate ROC for models with response-matrix (i.e. response variables with suvvess/trials)."), call. = FALSE)
+    stop(insight::format_message("Can't calculate ROC for models with response-matrix (i.e. response variables with success/trials)."), call. = FALSE)
   }
 
   dat <- .performance_roc_numeric(response, predictions)
