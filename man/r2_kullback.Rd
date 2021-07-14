@@ -9,7 +9,8 @@ r2_kullback(model, adjust = TRUE)
 \arguments{
 \item{model}{A generalized linear model.}
 
-\item{adjust}{Logical, if \code{TRUE} (the default), the adjusted R2 value is returned.}
+\item{adjust}{Logical, if \code{TRUE} (the default), the adjusted R2 value is
+returned.}
 }
 \value{
 A named vector with the R2 value.
@@ -23,5 +24,7 @@ model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_kullback(model)
 }
 \references{
-Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness of fit for some common nonlinear regression models. Journal of Econometrics, 77: 329-342.
+Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness
+of fit for some common nonlinear regression models. Journal of Econometrics,
+77: 329-342.
 }

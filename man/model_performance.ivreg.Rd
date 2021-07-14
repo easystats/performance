@@ -9,7 +9,10 @@
 \arguments{
 \item{model}{A model.}
 
-\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.}
+\item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of
+metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "RMSE",
+"SIGMA", "Sargan", "Wu_Hausman")}). \code{"common"} will compute AIC, BIC,
+R2 and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
 

@@ -29,7 +29,10 @@ if (require("mlogit")) {
 }
 \references{
 \itemize{
-  \item McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
-  \item McFadden, D. (1973). Conditional logit analysis of qualitative choice behavior.
+  \item McFadden, D. (1987). Regression-based specification tests for the
+  multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
+
+  \item McFadden, D. (1973). Conditional logit analysis of qualitative choice
+  behavior.
 }
 }

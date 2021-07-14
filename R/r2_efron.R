@@ -7,7 +7,13 @@
 #'
 #' @return The R2 value.
 #'
-#' @details Efron's R2 is calculated by taking the sum of the squared model residuals, divided by the total variability in the dependent variable. This R2 equals the squared correlation between the predicted values and actual values, however, note that model residuals from generalized linear models are not generally comparable to those of OLS.
+#' @details
+#'
+#' Efron's R2 is calculated by taking the sum of the squared model residuals,
+#' divided by the total variability in the dependent variable. This R2 equals
+#' the squared correlation between the predicted values and actual values,
+#' however, note that model residuals from generalized linear models are not
+#' generally comparable to those of OLS.
 #'
 #' @references
 #' \itemize{

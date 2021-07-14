@@ -27,7 +27,10 @@
 #'    .40, the items may be only capturing a small bandwidth of the construct.}
 #'    \cite{(Piedmont 2014)}
 #'
-#' @references Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds) Encyclopedia of Quality of Life and Well-Being Research. Dordrecht: Springer, 3303-3304. \doi{10.1007/978-94-007-0753-5_1493}
+#' @references
+#' Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds)
+#' Encyclopedia of Quality of Life and Well-Being Research. Dordrecht: Springer,
+#' 3303-3304. \doi{10.1007/978-94-007-0753-5_1493}
 #'
 #' @examples
 #' data(mtcars)

@@ -3,11 +3,15 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
+#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of
+#'   metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2",
+#'   "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"}
+#'   will compute AIC, BIC, R2 and RMSE.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
-#' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
+#' @return
+#' A data frame (with one row) and one column per "index" (see \code{metrics}).
 #'
 #' @details Depending on \code{model}, following indices are computed:
 #' \itemize{

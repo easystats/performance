@@ -11,8 +11,11 @@
 #'
 #' @references
 #' \itemize{
-#'   \item McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
-#'   \item McFadden, D. (1973). Conditional logit analysis of qualitative choice behavior.
+#'   \item McFadden, D. (1987). Regression-based specification tests for the
+#'   multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
+#'
+#'   \item McFadden, D. (1973). Conditional logit analysis of qualitative choice
+#'   behavior.
 #' }
 #'
 #' @examples
@@ -127,11 +130,6 @@ r2_mcfadden.probitmfx <- r2_mcfadden.logitmfx
 
 #' @export
 r2_mcfadden.negbinmfx <- r2_mcfadden.logitmfx
-
-
-
-
-
 
 
 

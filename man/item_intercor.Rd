@@ -43,5 +43,7 @@ x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 item_intercor(x)
 }
 \references{
-Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds) Encyclopedia of Quality of Life and Well-Being Research. Dordrecht: Springer, 3303-3304. \doi{10.1007/978-94-007-0753-5_1493}
+Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds)
+Encyclopedia of Quality of Life and Well-Being Research. Dordrecht: Springer,
+3303-3304. \doi{10.1007/978-94-007-0753-5_1493}
 }

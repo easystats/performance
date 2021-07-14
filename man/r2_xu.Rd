@@ -13,7 +13,8 @@ r2_xu(model)
 The R2 value.
 }
 \description{
-Calculates Xu' Omega-squared value, a simple R2 equivalent for linear mixed models.
+Calculates Xu' Omega-squared value, a simple R2 equivalent for
+  linear mixed models.
 }
 \details{
 \code{r2_xu()} is a crude measure for the explained variance from
@@ -25,5 +26,6 @@ model <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
 r2_xu(model)
 }
 \references{
-Xu, R. (2003). Measuring explained variation in linear mixed effects models. Statistics in Medicine, 22(22), 3527–3541. \doi{10.1002/sim.1572}
+Xu, R. (2003). Measuring explained variation in linear mixed effects models.
+Statistics in Medicine, 22(22), 3527–3541. \doi{10.1002/sim.1572}
 }

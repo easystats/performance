@@ -37,7 +37,7 @@
 #'   action for the result is \emph{printing}. However, the `print()`-method for
 #'   \code{binned_residuals()} actually creates a plot. For further
 #'   modifications of the plot, use `print()` and add ggplot-layers to the
-#'   return values, e.g. \code{plot(binned_residuals(model)) +
+#'   return values, e.g. \code{print(binned_residuals(model)) +
 #'   see::scale_color_pizza()}.
 #'
 #' @references
