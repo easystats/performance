@@ -10,6 +10,9 @@
 * Several functions, like `icc()` or `r2_nakagawa()`, now have an 
   `as.data.frame()` method.
 
+* `check_collinearity()` now correctly handles objects from forthcoming *afex* 
+  update.
+
 # performance 0.7.2
 
 ## New functions
