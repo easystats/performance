@@ -118,24 +118,10 @@ check_collinearity.default <- function(x, verbose = TRUE, ...) {
 
 #' @export
 check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
-
-  # for now, give error when no aov-slot is present.
-  # see https://github.com/easystats/performance/issues/326
-
-  if (is.null(x$aov)) {
-    stop(
-      insight::format_message("Can't check for multicollinearity when aov-slot is missing.",
-                              "Please refit the model with 'include_aov = TRUE' or use a mixed model instead."),
-      call. = FALSE
-    )
-  }
-
-  f <- paste(row.names(x$anova_table), collapse = "+")
-  f <- paste0(insight::find_response(x), "~", f)
-  # f <- insight::find_formula(x)[[1]]
-  # f <- Reduce(paste, deparse(f))
-  # f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
-  # f <- as.formula(f)
+  f <- insight::find_formula(x)[[1]]
+  f <- Reduce(paste, deparse(f))
+  f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
+  f <- as.formula(f)
 
   d <- insight::get_data(x, verbose = verbose)
   is_num <- sapply(d, is.numeric)
