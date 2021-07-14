@@ -1,10 +1,13 @@
 #' @title R2 for models with zero-inflation
 #' @name r2_zeroinflated
 #'
-#' @description Calculates R2 for models with zero-inflation component, including mixed effects models.
+#' @description
+#' Calculates R2 for models with zero-inflation component, including mixed
+#' effects models.
 #'
 #' @param model A model.
-#' @param method Indicates the method to calculate R2. See 'Details'. May be abbreviated.
+#' @param method Indicates the method to calculate R2. See 'Details'. May be
+#'   abbreviated.
 #'
 #' @return For the default-method, a list with the R2 and adjusted R2 values.
 #'   For \code{method = "correlation"}, a named numeric vector with the
@@ -45,7 +48,10 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
 
 
 .r2_zi_correlation <- function(model) {
-  r2_zi <- stats::cor(insight::get_response(model, verbose = FALSE), stats::predict(model, type = "response"))^2
+  r2_zi <- stats::cor(
+    insight::get_response(model, verbose = FALSE),
+    stats::predict(model, type = "response")
+  )^2
   names(r2_zi) <- "R2 for ZI-models"
   r2_zi
 }

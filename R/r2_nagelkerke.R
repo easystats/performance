@@ -81,10 +81,6 @@ r2_nagelkerke.bife <- function(model, ...) {
 
 
 
-
-
-
-
 # mfx models ---------------------
 
 
@@ -110,10 +106,6 @@ r2_nagelkerke.negbinirr <- r2_nagelkerke.logitmfx
 
 #' @export
 r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
-
-
-
-
 
 
 
@@ -169,9 +161,6 @@ r2_nagelkerke.truncreg <- r2_nagelkerke.clm
 
 #' @export
 r2_nagelkerke.DirichletRegModel <- r2_coxsnell.clm
-
-
-
 
 
 
