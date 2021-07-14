@@ -7,6 +7,9 @@
 
 * `compare_performance()` now also accepts a list of model objects.
 
+* `performance_roc()` now also works for binomial models from other classes 
+  than *glm*.
+
 * Several functions, like `icc()` or `r2_nakagawa()`, now have an 
   `as.data.frame()` method.
 
