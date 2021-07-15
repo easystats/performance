@@ -118,6 +118,10 @@ check_collinearity.default <- function(x, verbose = TRUE, ...) {
 
 #' @export
 check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
+  if (length(attr(x, "within")) == 0L) {
+    return(check_collinearity(x$lm, verbose = verbose, ...))
+  }
+
   f <- insight::find_formula(x)[[1]]
   f <- Reduce(paste, deparse(f))
   f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
@@ -126,7 +130,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   d <- insight::get_data(x, verbose = verbose)
   is_num <- sapply(d, is.numeric)
   d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
-  is_fac <- sapply(d, is.factor) | sapply(d, is.character)
+  is_fac <- !is_num
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
   if (verbose) {
