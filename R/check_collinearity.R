@@ -125,7 +125,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   f <- insight::find_formula(x)[[1]]
   f <- Reduce(paste, deparse(f))
   f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
-  f <- as.formula(f)
+  f <- stats::as.formula(f)
 
   d <- insight::get_data(x, verbose = verbose)
   is_num <- sapply(d, is.numeric)

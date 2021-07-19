@@ -46,6 +46,11 @@ reference:
   - check_zeroinflation
   - pp_check
 
+- title: "Check Data Properties"
+  contents:
+  - check_heterogeneity_bias
+  - check_multimodal
+
 - title: "Check Model Performance or Quality"
   contents:
   - performance_accuracy
