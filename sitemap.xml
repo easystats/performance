@@ -46,6 +46,9 @@
     <loc>https://easystats.github.io/performance/reference/check_distribution.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/performance/reference/check_heterogeneity_bias.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/performance/reference/check_heteroscedasticity.html</loc>
   </url>
   <url>
@@ -56,6 +59,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_model.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/reference/check_multimodal.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_normality.html</loc>
