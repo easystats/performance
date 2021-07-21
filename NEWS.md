@@ -1,3 +1,7 @@
+# performance 0.7.3.1
+
+* Two new functions: `check_multimodal()` and `check_heterogeneity_bias()`.
+
 # performance 0.7.3
 
 ## Changes to functions
