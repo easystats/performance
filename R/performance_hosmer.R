@@ -3,14 +3,14 @@
 #'
 #' @description Check model quality of logistic regression models.
 #'
-#' @param model A \code{glm}-object with binomial-family.
+#' @param model A `glm`-object with binomial-family.
 #' @param n_bins Numeric, the number of bins to divide the data.
 #'
-#' @return An object of class \code{hoslem_test} with following values:
-#'   \code{chisq}, the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees
-#'   of freedom and \code{p.value} the p-value for the goodness-of-fit test.
+#' @return An object of class `hoslem_test` with following values:
+#'   `chisq`, the Hosmer-Lemeshow chi-squared statistic; `df`, degrees
+#'   of freedom and `p.value` the p-value for the goodness-of-fit test.
 #'
-#' @details A well-fitting model shows \emph{no} significant difference between
+#' @details A well-fitting model shows *no* significant difference between
 #'   the model and the observed data, i.e. the reported p-value should be
 #'   greater than 0.05.
 #'

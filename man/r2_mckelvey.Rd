@@ -17,13 +17,13 @@ Calculates McKelvey & Zavoinas pseudo R2.
 }
 \details{
 McKelvey & Zavoinas R2 is based on the explained variance,
-  where the variance of the predicted response is divided by the sum
-  of the variance of the predicted response and residual variance.
-  For binomial models, the residual variance is either \code{pi^2/3}
-  for logit-link and 1 for probit-link. For poisson-models, the
-  residual variance is based on log-normal approximation, similar to
-  the \emph{distribution-specific variance} as described in
-  \code{?insight::get_variance}.
+where the variance of the predicted response is divided by the sum
+of the variance of the predicted response and residual variance.
+For binomial models, the residual variance is either \code{pi^2/3}
+for logit-link and 1 for probit-link. For poisson-models, the
+residual variance is based on log-normal approximation, similar to
+the \emph{distribution-specific variance} as described in
+\code{?insight::get_variance}.
 }
 \examples{
 ## Dobson (1990) Page 93: Randomized Controlled Trial:
@@ -36,6 +36,6 @@ r2_mckelvey(model)
 }
 \references{
 \itemize{
-  \item McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.
+\item McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.
 }
 }

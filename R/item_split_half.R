@@ -7,13 +7,13 @@
 #' @param x A matrix or a data frame.
 #' @param digits Amount of digits for returned values.
 #'
-#' @return A list with two elements: the split-half reliability \code{splithalf}
+#' @return A list with two elements: the split-half reliability `splithalf`
 #'   and the Spearman-Brown corrected split-half reliability
-#'   \code{spearmanbrown}.
+#'   `spearmanbrown`.
 #'
 #' @details This function calculates the split-half reliability for items in
-#'    \code{x}, including the Spearman-Brown adjustment. Splitting is done by
-#'    selecting odd versus even columns in \code{x}. A value closer to 1
+#'    `x`, including the Spearman-Brown adjustment. Splitting is done by
+#'    selecting odd versus even columns in `x`. A value closer to 1
 #'    indicates greater internal consistency.
 #'
 #' @references

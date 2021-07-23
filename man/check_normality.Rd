@@ -34,10 +34,10 @@ inspection (e.g. Q-Q plots) are preferable.
 }
 \note{
 For mixed-effects models, studentized residuals, and \emph{not}
-  standardized residuals, are used for the test. There is also a
-  \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-   implemented in the
-  \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+standardized residuals, are used for the test. There is also a
+\href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the
+\href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

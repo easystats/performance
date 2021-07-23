@@ -6,7 +6,7 @@
 #' @inheritParams performance_rmse
 #' @inheritParams model_performance.lm
 #'
-#' @return Numeric, the mean absolute error of \code{model}.
+#' @return Numeric, the mean absolute error of `model`.
 #'
 #' @examples
 #' data(mtcars)

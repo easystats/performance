@@ -23,19 +23,19 @@ or its summary.}
 }
 \value{
 A character vector. If \code{format = "markdown"}, the return value
-  will be a character vector in markdown-table format.
+will be a character vector in markdown-table format.
 }
 \description{
 Prints tables (i.e. data frame) in different output formats.
-  \code{print_md()} is a alias for \code{display(format = "markdown")}.
+\code{print_md()} is a alias for \code{display(format = "markdown")}.
 }
 \details{
 \code{display()} is useful when the table-output from functions,
-  which is usually printed as formatted text-table to console, should
-  be formatted for pretty table-rendering in markdown documents, or if
-  knitted from rmarkdown to PDF or Word files. See
-  \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{vignette}
-  for examples.
+which is usually printed as formatted text-table to console, should
+be formatted for pretty table-rendering in markdown documents, or if
+knitted from rmarkdown to PDF or Word files. See
+\href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{vignette}
+for examples.
 }
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)

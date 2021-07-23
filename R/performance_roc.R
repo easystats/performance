@@ -6,18 +6,18 @@
 #'
 #' @param x A numeric vector, representing the outcome (0/1), or a model with
 #'   binomial outcome.
-#' @param predictions If \code{x} is numeric, a numeric vector of same length
-#'   as \code{x}, representing the actual predicted values.
-#' @param new_data If \code{x} is a model, a data frame that is passed to
-#'   \code{predict()} as \code{newdata}-argument. If \code{NULL}, the ROC for
+#' @param predictions If `x` is numeric, a numeric vector of same length
+#'   as `x`, representing the actual predicted values.
+#' @param new_data If `x` is a model, a data frame that is passed to
+#'   `predict()` as `newdata`-argument. If `NULL`, the ROC for
 #'   the full model is calculated.
 #' @param ... One or more models with binomial outcome. In this case,
-#'   \code{new_data} is ignored.
+#'   `new_data` is ignored.
 #'
-#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @return A data frame with three columns, the x/y-coordinate pairs for the ROC
-#'   curve (\code{Sensitivity} and \code{Specificity}), and a column with the
+#'   curve (`Sensitivity` and `Specificity`), and a column with the
 #'   model name.
 #'
 #' @examples
@@ -41,7 +41,7 @@
 #' m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
 #' performance_roc(m1, m2, m3)
 #'
-#' # if you have \code{see} package installed, you can also plot comparison of
+#' # if you have `see` package installed, you can also plot comparison of
 #' # ROC curves for different models
 #' if (require("see")) plot(performance_roc(m1, m2, m3))
 #' @export

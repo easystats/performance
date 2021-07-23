@@ -13,16 +13,16 @@ performance_hosmer(model, n_bins = 10)
 }
 \value{
 An object of class \code{hoslem_test} with following values:
-  \code{chisq}, the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees
-  of freedom and \code{p.value} the p-value for the goodness-of-fit test.
+\code{chisq}, the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees
+of freedom and \code{p.value} the p-value for the goodness-of-fit test.
 }
 \description{
 Check model quality of logistic regression models.
 }
 \details{
 A well-fitting model shows \emph{no} significant difference between
-  the model and the observed data, i.e. the reported p-value should be
-  greater than 0.05.
+the model and the observed data, i.e. the reported p-value should be
+greater than 0.05.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

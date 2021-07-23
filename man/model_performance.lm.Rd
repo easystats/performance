@@ -10,8 +10,7 @@
 \item{model}{A model.}
 
 \item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of
-metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2",
-"R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"}
+metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"}
 will compute AIC, BIC, R2 and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
@@ -27,17 +26,17 @@ Compute indices of model performance for regression models.
 \details{
 Depending on \code{model}, following indices are computed:
 \itemize{
-  \item{\strong{AIC}} {Akaike's Information Criterion, see \code{?stats::AIC}}
-  \item{\strong{AICc}} {Second-order (or small sample) AIC with a correction for small sample sizes}
-  \item{\strong{BIC}} {Bayesian Information Criterion, see \code{?stats::BIC}}
-  \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
-  \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
-  \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
-  \item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight:get_sigma]{get_sigma()}}}
-  \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
-  \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
-  \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
-  \item{\strong{PCP}} {percentage of correct predictions, see \code{\link{performance_pcp}}}
+\item{\strong{AIC}} {Akaike's Information Criterion, see \code{?stats::AIC}}
+\item{\strong{AICc}} {Second-order (or small sample) AIC with a correction for small sample sizes}
+\item{\strong{BIC}} {Bayesian Information Criterion, see \code{?stats::BIC}}
+\item{\strong{R2}} {r-squared value, see \code{\link[=r2]{r2()}}}
+\item{\strong{R2_adj}} {adjusted r-squared, see \code{\link[=r2]{r2()}}}
+\item{\strong{RMSE}} {root mean squared error, see \code{\link[=performance_rmse]{performance_rmse()}}}
+\item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight:get_sigma]{insight::get_sigma()}}}
+\item{\strong{LOGLOSS}} {Log-loss, see \code{\link[=performance_logloss]{performance_logloss()}}}
+\item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link[=performance_score]{performance_score()}}}
+\item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link[=performance_score]{performance_score()}}}
+\item{\strong{PCP}} {percentage of correct predictions, see \code{\link[=performance_pcp]{performance_pcp()}}}
 }
 }
 \examples{

@@ -22,8 +22,8 @@ the full model is calculated.}
 }
 \value{
 A data frame with three columns, the x/y-coordinate pairs for the ROC
-  curve (\code{Sensitivity} and \code{Specificity}), and a column with the
-  model name.
+curve (\code{Sensitivity} and \code{Specificity}), and a column with the
+model name.
 }
 \description{
 This function calculates a simple ROC curves of x/y coordinates
@@ -53,7 +53,7 @@ m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
 m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
 performance_roc(m1, m2, m3)
 
-# if you have \code{see} package installed, you can also plot comparison of
+# if you have `see` package installed, you can also plot comparison of
 # ROC curves for different models
 if (require("see")) plot(performance_roc(m1, m2, m3))
 }

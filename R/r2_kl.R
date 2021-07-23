@@ -5,7 +5,7 @@
 #'   R2 for generalized linear models.
 #'
 #' @param model A generalized linear model.
-#' @param adjust Logical, if \code{TRUE} (the default), the adjusted R2 value is
+#' @param adjust Logical, if `TRUE` (the default), the adjusted R2 value is
 #'   returned.
 #'
 #' @return A named vector with the R2 value.

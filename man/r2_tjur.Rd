@@ -14,10 +14,10 @@ A named vector with the R2 value.
 }
 \description{
 This method calculates the Coefficient of Discrimination \code{D}
-  (also known as Tjur's R2; \cite{Tjur, 2009}) for generalized linear (mixed) models
-  for binary outcomes. It is an alternative to other pseudo-R2 values like
-  Nagelkerke's R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D}
-  can be read like any other (pseudo-)R2 value.
+(also known as Tjur's R2; \cite{Tjur, 2009}) for generalized linear (mixed) models
+for binary outcomes. It is an alternative to other pseudo-R2 values like
+Nagelkerke's R2 or Cox-Snell R2. The Coefficient of Discrimination \code{D}
+can be read like any other (pseudo-)R2 value.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

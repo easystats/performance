@@ -9,14 +9,14 @@
 #'
 #' @param x A model object.
 #' @param dot_size,line_size Size of line and dot-geoms.
-#' @param panel Logical, if \code{TRUE}, plots are arranged as panels; else,
+#' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
 #'   and plotted. May be one or more of
-#'   \code{"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"}.
-#'   \code{"reqq"} is a QQ-plot for random effects and only available for mixed
+#'   `"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"`.
+#'   `"reqq"` is a QQ-plot for random effects and only available for mixed
 #'   models.
-#'   \code{"ncv"} is an alias for \code{"linearity"}, and checks for non-constant
+#'   `"ncv"` is an alias for `"linearity"`, and checks for non-constant
 #'   variance, i.e. for heteroscedasticity, as well as the linear relationship.
 #'   By default, all possible checks are performed and plotted.
 #' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
@@ -25,7 +25,7 @@
 #'   length 3. First color is usually used for reference lines, second color
 #'   for dots, and third color for outliers or extreme values.
 #' @param theme String, indicating the name of the plot-theme. Must be in the
-#'   format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).
+#'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
 #' @param detrend Should QQ/PP plots be detrended?
 #' @param verbose Toggle off warnings.
 #' @param ... Currently not used.
@@ -35,27 +35,27 @@
 #' @note This function just prepares the data for plotting. To create the plots,
 #'   \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
 #'   all possible warnings. In case you observe suspicious plots, please refer
-#'   to the dedicated functions (like \code{check_collinearity()},
-#'   \code{check_normality()} etc.) to get informative messages and warnings.
+#'   to the dedicated functions (like `check_collinearity()`,
+#'   `check_normality()` etc.) to get informative messages and warnings.
 #'
 #' @section Linearity Assumption:
-#' The plot \strong{Linearity} checks the assumption of linear relationship.
+#' The plot **Linearity** checks the assumption of linear relationship.
 #' However, the spread of dots also indicate possible heteroscedasticity (i.e.
-#' non-constant variance); hence, the alias \code{"ncv"} for this plot.
-#' \strong{Some caution is needed} when interpreting these plots. Although these
+#' non-constant variance); hence, the alias `"ncv"` for this plot.
+#' **Some caution is needed** when interpreting these plots. Although these
 #' plots are helpful to check model assumptions, they do not necessarily
 #' indicate so-called "lack of fit", e.g. missed non-linear relationships or
 #' interactions. Thus, it is always recommended to also look at
-#' \href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect
-#' plots, including partial residuals}.
+#' [effect
+#' plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
 #'
 #' @section Residuals for (Generalized) Linear Models:
 #' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
 #' variance use standardized Pearson's residuals for generalized linear models,
 #' and standardized residuals for linear models. The plots for the normality of
 #' residuals (with overlayed normal curve) and for the linearity assumption use
-#' the default residuals for \code{lm} and \code{glm} (which are deviance
-#' residuals for \code{glm}).
+#' the default residuals for `lm` and `glm` (which are deviance
+#' residuals for `glm`).
 #'
 #' @examples
 #' \dontrun{

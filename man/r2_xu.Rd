@@ -14,12 +14,12 @@ The R2 value.
 }
 \description{
 Calculates Xu' Omega-squared value, a simple R2 equivalent for
-  linear mixed models.
+linear mixed models.
 }
 \details{
 \code{r2_xu()} is a crude measure for the explained variance from
-  linear (mixed) effects models, which is originally denoted as
-  \ifelse{html}{\out{&Omega;<sup>2</sup>}}{\eqn{\Omega^2}}.
+linear (mixed) effects models, which is originally denoted as
+\ifelse{html}{\out{&Omega;<sup>2</sup>}}{\eqn{\Omega^2}}.
 }
 \examples{
 model <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)

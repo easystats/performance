@@ -26,5 +26,5 @@ if (require("correlation")) {
 }
 \references{
 Somers, R. H. (1962). A new asymmetric measure of association for
-  ordinal variables. American Sociological Review. 27 (6).
+ordinal variables. American Sociological Review. 27 (6).
 }

@@ -20,8 +20,7 @@
 \item{model}{Object of class \code{stanreg} or \code{brmsfit}.}
 
 \item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of
-metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj",
-"RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute LOOIC,
+metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute LOOIC,
 WAIC, R2 and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
@@ -34,7 +33,7 @@ WAIC, R2 and RMSE.}
 }
 \value{
 A data frame (with one row) and one column per "index" (see
-  \code{metrics}).
+\code{metrics}).
 }
 \description{
 Compute indices of model performance for (general) linear models.
@@ -42,36 +41,36 @@ Compute indices of model performance for (general) linear models.
 \details{
 Depending on \code{model}, following indices are computed:
 \itemize{
-  \item{\strong{ELPD}} {expected log predictive density. Larger ELPD values
-  mean better fit. See \code{\link{looic}}.}
+\item{\strong{ELPD}} {expected log predictive density. Larger ELPD values
+mean better fit. See \code{\link[=looic]{looic()}}.}
 
-  \item{\strong{LOOIC}} {leave-one-out cross-validation (LOO) information
-  criterion. Lower LOOIC values mean better fit. See \code{\link{looic}}.}
+\item{\strong{LOOIC}} {leave-one-out cross-validation (LOO) information
+criterion. Lower LOOIC values mean better fit. See \code{\link[=looic]{looic()}}.}
 
-  \item{\strong{WAIC}} {widely applicable information criterion. Lower WAIC
-  values mean better fit. See \code{?loo::waic}.}
+\item{\strong{WAIC}} {widely applicable information criterion. Lower WAIC
+values mean better fit. See \code{?loo::waic}.}
 
-  \item{\strong{R2}} {r-squared value, see \code{\link{r2_bayes}}.}
+\item{\strong{R2}} {r-squared value, see \code{\link[=r2_bayes]{r2_bayes()}}.}
 
-  \item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see
-  \code{\link{r2_loo}}.}
+\item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see
+\code{\link[=r2_loo]{r2_loo()}}.}
 
-  \item{\strong{RMSE}} {root mean squared error, see
-  \code{\link{performance_rmse}}.}
+\item{\strong{RMSE}} {root mean squared error, see
+\code{\link[=performance_rmse]{performance_rmse()}}.}
 
-  \item{\strong{SIGMA}} {residual standard deviation, see
-  \code{\link[insight:get_sigma]{get_sigma()}}.}
+\item{\strong{SIGMA}} {residual standard deviation, see
+\code{\link[insight:get_sigma]{insight::get_sigma()}}.}
 
-  \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}.}
+\item{\strong{LOGLOSS}} {Log-loss, see \code{\link[=performance_logloss]{performance_logloss()}}.}
 
-  \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see
-  \code{\link{performance_score}}.}
+\item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see
+\code{\link[=performance_score]{performance_score()}}.}
 
-  \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule,
-  see \code{\link{performance_score}}.}
+\item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule,
+see \code{\link[=performance_score]{performance_score()}}.}
 
-  \item{\strong{PCP}} {percentage of correct predictions, see
-  \code{\link{performance_pcp}}.}
+\item{\strong{PCP}} {percentage of correct predictions, see
+\code{\link[=performance_pcp]{performance_pcp()}}.}
 }
 }
 \examples{
@@ -102,8 +101,8 @@ if (require("BayesFactor") && require("rstantools")) {
 }
 \references{
 Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018).
-  R-squared for Bayesian regression models. The American Statistician, The
-  American Statistician, 1-6.
+R-squared for Bayesian regression models. The American Statistician, The
+American Statistician, 1-6.
 }
 \seealso{
 \link{r2_bayes}

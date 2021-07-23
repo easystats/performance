@@ -8,7 +8,7 @@
 #'
 #' @return The R2 value.
 #'
-#' @details \code{r2_xu()} is a crude measure for the explained variance from
+#' @details `r2_xu()` is a crude measure for the explained variance from
 #'   linear (mixed) effects models, which is originally denoted as
 #'   \ifelse{html}{\out{&Omega;<sup>2</sup>}}{\eqn{\Omega^2}}.
 #'

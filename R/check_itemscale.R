@@ -3,38 +3,38 @@
 #'
 #' @description Compute various measures of internal consistencies
 #'   applied to (sub)scales, which items were extracted using
-#'   \code{parameters::principal_components()}.
+#'   `parameters::principal_components()`.
 #'
-#' @param x An object of class \code{parameters_pca}, as returned by
-#'   \code{parameters::principal_components()}.
+#' @param x An object of class `parameters_pca`, as returned by
+#'   `parameters::principal_components()`.
 #'
 #' @return A list of data frames, with related measures of internal
 #'   consistencies of each subscale.
 #'
 #' @details
 #'
-#' \code{check_itemscale()} calculates various measures of internal
+#' `check_itemscale()` calculates various measures of internal
 #' consistencies, such as Cronbach's alpha, item difficulty or discrimination
 #' etc. on subscales which were built from several items. Subscales are
-#' retrieved from the results of \code{parameters::principal_components()}, i.e.
+#' retrieved from the results of `parameters::principal_components()`, i.e.
 #' based on how many components were extracted from the PCA,
-#' \code{check_itemscale()} retrieves those variables that belong to a component
+#' `check_itemscale()` retrieves those variables that belong to a component
 #' and calculates the above mentioned measures.
 #'
 #' @note \itemize{
-#'   \item \emph{Item difficulty} should range between 0.2 and 0.8. Ideal value
-#'   is \code{p+(1-p)/2} (which mostly is between 0.5 and 0.8). See
-#'   \code{\link{item_difficulty}} for details.
+#'   \item *Item difficulty* should range between 0.2 and 0.8. Ideal value
+#'   is `p+(1-p)/2` (which mostly is between 0.5 and 0.8). See
+#'   [item_difficulty()] for details.
 #'
-#'   \item For \emph{item discrimination}, acceptable values are 0.20 or higher;
-#'   the closer to 1.00 the better. See \code{\link{item_reliability}} for more
+#'   \item For *item discrimination*, acceptable values are 0.20 or higher;
+#'   the closer to 1.00 the better. See [item_reliability()] for more
 #'   details.
 #'
-#'   \item In case the total \emph{Cronbach's alpha} value is below the
+#'   \item In case the total *Cronbach's alpha* value is below the
 #'   acceptable cut-off of 0.7 (mostly if an index has few items), the
-#'   \emph{mean inter-item-correlation} is an alternative measure to indicate
+#'   *mean inter-item-correlation* is an alternative measure to indicate
 #'   acceptability. Satisfactory range lies between 0.2 and 0.4. See also
-#'   \code{\link{item_intercor}}.
+#'   [item_intercor()].
 #' }
 #'
 #' @references \itemize{
@@ -43,7 +43,7 @@
 #'   54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x
 #'
 #'   \item Trochim WMK (2008) Types of Reliability.
-#'   (\href{https://conjointly.com/kb/types-of-reliability/}{web})
+#'   ([web](https://conjointly.com/kb/types-of-reliability/))
 #' }
 #'
 #' @examples

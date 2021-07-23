@@ -13,18 +13,18 @@ item_split_half(x, digits = 3)
 }
 \value{
 A list with two elements: the split-half reliability \code{splithalf}
-  and the Spearman-Brown corrected split-half reliability
-  \code{spearmanbrown}.
+and the Spearman-Brown corrected split-half reliability
+\code{spearmanbrown}.
 }
 \description{
 Compute various measures of internal consistencies
-   for tests or item-scales of questionnaires.
+for tests or item-scales of questionnaires.
 }
 \details{
 This function calculates the split-half reliability for items in
-   \code{x}, including the Spearman-Brown adjustment. Splitting is done by
-   selecting odd versus even columns in \code{x}. A value closer to 1
-   indicates greater internal consistency.
+\code{x}, including the Spearman-Brown adjustment. Splitting is done by
+selecting odd versus even columns in \code{x}. A value closer to 1
+indicates greater internal consistency.
 }
 \examples{
 data(mtcars)

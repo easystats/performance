@@ -10,25 +10,25 @@
 #' @inheritParams r2_nakagawa
 #'
 #' @return Returns a list containing values related to the most appropriate R2
-#'   for the given model (or \code{NULL} if no R2 could be extracted). See the
+#'   for the given model (or `NULL` if no R2 could be extracted). See the
 #'   list below:
 #' \itemize{
-#'   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
-#'   \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
-#'   \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
-#'   \item Models with zero-inflation: \link[=r2_zeroinflated]{R2 for zero-inflated models}
-#'   \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
-#'   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
+#'   \item Logistic models: [Tjur's R2][r2_tjur]
+#'   \item General linear models: [Nagelkerke's R2][r2_nagelkerke]
+#'   \item Multinomial Logit: [McFadden's R2][r2_mcfadden]
+#'   \item Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
+#'   \item Mixed models: [Nakagawa's R2][r2_nakagawa]
+#'   \item Bayesian models: [R2 bayes][r2_bayes]
 #' }
 #'
-#' @note If there is no \code{r2()}-method defined for the given model class,
-#'   \code{r2()} tries to return a "generic r2 value, calculated as following:
-#'   \code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
+#' @note If there is no `r2()`-method defined for the given model class,
+#'   `r2()` tries to return a "generic r2 value, calculated as following:
+#'   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
 #'
-#' @seealso \code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kullback}},
-#'   \code{\link{r2_loo}}, \code{\link{r2_mcfadden}}, \code{\link{r2_nagelkerke}},
-#'   \code{\link{r2_nakagawa}}, \code{\link{r2_tjur}}, \code{\link{r2_xu}} and
-#'   \code{\link{r2_zeroinflated}}.
+#' @seealso [r2_bayes()], [r2_coxsnell()], [r2_kullback()],
+#'   [r2_loo()], [r2_mcfadden()], [r2_nagelkerke()],
+#'   [r2_nakagawa()], [r2_tjur()], [r2_xu()] and
+#'   [r2_zeroinflated()].
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

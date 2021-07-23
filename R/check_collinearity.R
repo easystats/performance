@@ -3,22 +3,22 @@
 #'
 #' @description
 #'
-#' \code{check_collinearity()} checks regression models for
+#' `check_collinearity()` checks regression models for
 #'   multicollinearity by calculating the variance inflation factor (VIF).
-#'   \code{multicollinearity()} is an alias for \code{check_collinearity()}.
+#'   `multicollinearity()` is an alias for `check_collinearity()`.
 #'   (When printed, VIF are also translated to Tolerance values, where
-#'   \code{tolerance = 1/vif}.)
+#'   `tolerance = 1/vif`.)
 #'
-#' @param x A model object (that should at least respond to \code{vcov()},
-#'  and if possible, also to \code{model.matrix()} - however, it also should
-#'  work without \code{model.matrix()}).
+#' @param x A model object (that should at least respond to `vcov()`,
+#'  and if possible, also to `model.matrix()` - however, it also should
+#'  work without `model.matrix()`).
 #' @param component For models with zero-inflation component, multicollinearity
 #'  can be checked for the conditional model (count component,
-#'  \code{component = "conditional"} or \code{component = "count"}),
-#'  zero-inflation component (\code{component = "zero_inflated"} or
-#'  \code{component = "zi"}) or both components (\code{component = "all"}).
-#'  Following model-classes are currently supported: \code{hurdle},
-#'  \code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.
+#'  `component = "conditional"` or `component = "count"`),
+#'  zero-inflation component (`component = "zero_inflated"` or
+#'  `component = "zi"`) or both components (`component = "all"`).
+#'  Following model-classes are currently supported: `hurdle`,
+#'  `zeroinfl`, `zerocount`, `MixMod` and `glmmTMB`.
 #' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
@@ -31,8 +31,8 @@
 #' \subsection{Multicollinearity}{
 #'   Multicollinearity should not be confused with a raw strong correlation
 #'   between predictors. What matters is the association between one or more
-#'   predictor variables, \emph{conditional on the other variables in the
-#'   model}. In a nutshell, multicollinearity means that once you know the
+#'   predictor variables, *conditional on the other variables in the
+#'   model*. In a nutshell, multicollinearity means that once you know the
 #'   effect of one predictor, the value of knowing the other predictor is rather
 #'   low. Thus, one of the predictors doesn't help much in terms of better
 #'   understanding the model or predicting the outcome. As a consequence, if
@@ -58,7 +58,7 @@
 #'   correlation of that predictor with other predictors. A value between 5 and
 #'   10 indicates a moderate correlation, while VIF values larger than 10 are a
 #'   sign for high, not tolerable correlation of model predictors (\cite{James
-#'   et al. 2013}). The \emph{Increased SE} column in the output indicates how
+#'   et al. 2013}). The *Increased SE* column in the output indicates how
 #'   much larger the standard error is due to the association with other
 #'   predictors conditional on the remaining variables in the model.
 #' }
@@ -85,10 +85,10 @@
 #'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
 #'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#'   \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
+#'   [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
 #'   }
 #'
-#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

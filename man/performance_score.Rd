@@ -16,14 +16,14 @@ A list with three elements, the logarithmic, quadratic/Brier and spherical score
 }
 \description{
 Calculates the logarithmic, quadratic/Brier and spherical score
-  from a model with binary or count outcome.
+from a model with binary or count outcome.
 }
 \details{
 Proper scoring rules can be used to evaluate the quality of model
 predictions and model fit. \code{performance_score()} calculates the logarithmic,
 quadratic/Brier and spherical scoring rules. The spherical rule takes values
-in the interval \code{[0, 1]}, with values closer to 1 indicating a more
-accurate model, and the logarithmic rule in the interval \code{[-Inf, 0]},
+in the interval \verb{[0, 1]}, with values closer to 1 indicating a more
+accurate model, and the logarithmic rule in the interval \verb{[-Inf, 0]},
 with values closer to 0 indicating a more accurate model.
 \cr \cr
 For \code{stan_lmer()} and \code{stan_glmer()} models, the predicted values
