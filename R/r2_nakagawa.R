@@ -5,15 +5,15 @@
 #'  mixed effects models with complex random effects structures.
 #'
 #' @param model A mixed effects model.
-#' @param by_group Logical, if \code{TRUE}, returns the explained variance
+#' @param by_group Logical, if `TRUE`, returns the explained variance
 #'   at different levels (if there are multiple levels). This is essentially
 #'   similar to the variance reduction approach by \cite{Hox (2010), pp. 69-78}.
 #' @param tolerance Tolerance for singularity check of random effects, to decide
 #'   whether to compute random effect variances for the conditional r-squared
 #'   or not. Indicates up to which value the convergence result is accepted. When
-#'   \code{r2_nakagawa()} returns a warning, stating that random effect variances
-#'   can't be computed (and thus, the conditional r-squared is \code{NA}),
-#'   decrease the tolerance-level. See also \code{\link{check_singularity}}.
+#'   `r2_nakagawa()` returns a warning, stating that random effect variances
+#'   can't be computed (and thus, the conditional r-squared is `NA`),
+#'   decrease the tolerance-level. See also [check_singularity()].
 #'
 #' @return A list with the conditional and marginal R2 values.
 #'
@@ -21,7 +21,7 @@
 #'
 #' Marginal and conditional r-squared values for mixed models are calculated
 #' based on \cite{Nakagawa et al. 2017}. For more details on the computation of
-#' the variances, see \code{?insight::get_variance}.
+#' the variances, see `?insight::get_variance`.
 #'  \cr \cr
 #'  The marginal r-squared considers only the variance of the fixed effects,
 #'  while the conditional r-squared takes both the fixed and random effects into

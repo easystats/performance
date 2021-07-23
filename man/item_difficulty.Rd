@@ -13,19 +13,19 @@ with items (e.g. from a test or questionnaire).}
 }
 \value{
 A data frame with three columns: The name(s) of the item(s), the item
-     difficulties for each item, and the ideal item difficulty.
+difficulties for each item, and the ideal item difficulty.
 }
 \description{
 Compute various measures of internal consistencies
-   for tests or item-scales of questionnaires.
+for tests or item-scales of questionnaires.
 }
 \details{
 This function calculates the item difficulty, which should
-   range between 0.2 and 0.8. Lower values are a signal for
-   more difficult items, while higher values close to one
-   are a sign for easier items. The ideal value for item difficulty
-   is \code{p + (1 - p) / 2}, where \code{p = 1 / max(x)}. In most
-   cases, the ideal item difficulty lies between 0.5 and 0.8.
+range between 0.2 and 0.8. Lower values are a signal for
+more difficult items, while higher values close to one
+are a sign for easier items. The ideal value for item difficulty
+is \code{p + (1 - p) / 2}, where \code{p = 1 / max(x)}. In most
+cases, the ideal item difficulty lies between 0.5 and 0.8.
 }
 \examples{
 data(mtcars)

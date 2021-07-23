@@ -4,8 +4,8 @@
 #' @description Compute various measures of internal consistencies
 #'    for tests or item-scales of questionnaires.
 #'
-#' @param x Depending on the function, \code{x} may be a \code{matrix} as
-#'    returned by the \code{cor()}-function, or a data frame
+#' @param x Depending on the function, `x` may be a `matrix` as
+#'    returned by the `cor()`-function, or a data frame
 #'    with items (e.g. from a test or questionnaire).
 #'
 #' @return A data frame with three columns: The name(s) of the item(s), the item
@@ -15,7 +15,7 @@
 #'    range between 0.2 and 0.8. Lower values are a signal for
 #'    more difficult items, while higher values close to one
 #'    are a sign for easier items. The ideal value for item difficulty
-#'    is \code{p + (1 - p) / 2}, where \code{p = 1 / max(x)}. In most
+#'    is `p + (1 - p) / 2`, where `p = 1 / max(x)`. In most
 #'    cases, the ideal item difficulty lies between 0.5 and 0.8.
 #'
 #' @examples

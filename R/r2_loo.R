@@ -6,10 +6,10 @@
 #' @param model A Bayesian regression model.
 #' @inheritParams model_performance.lm
 #'
-#' @return The LOO-adjusted R2 for \code{model}, as numeric value.
+#' @return The LOO-adjusted R2 for `model`, as numeric value.
 #'
-#' @details Unlike \code{\link{r2_bayes}}, which returns an "unadjusted" R2 value,
-#'   \code{r2_loo()} calculates a LOO-adjusted R2, which comes conceptionally
+#' @details Unlike [r2_bayes()], which returns an "unadjusted" R2 value,
+#'   `r2_loo()` calculates a LOO-adjusted R2, which comes conceptionally
 #'   closer to an "adjusted" R2 measure.
 #'
 #' @examples

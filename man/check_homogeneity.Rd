@@ -24,7 +24,7 @@ model response is normal distributed, else Fligner-Killeen test is used.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value <
-  0.05 indicates a significant difference in the variance between the groups.
+0.05 indicates a significant difference in the variance between the groups.
 }
 \description{
 Check model for homogeneity of variances between groups described

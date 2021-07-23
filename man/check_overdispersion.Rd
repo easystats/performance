@@ -14,17 +14,17 @@ or \code{glm.nb} (package \pkg{MASS}).}
 }
 \value{
 A list with results from the overdispersion test, like chi-squared
-  statistics, p-value or dispersion ratio.
+statistics, p-value or dispersion ratio.
 }
 \description{
 \code{check_overdispersion()} checks generalized linear (mixed)
-  models for overdispersion.
+models for overdispersion.
 }
 \details{
 Overdispersion occurs when the observed variance is higher than the
-  variance of a theoretical model. For Poisson models, variance increases
-  with the mean and, therefore, variance usually (roughly) equals the mean
-  value. If the variance is much higher, the data are "overdispersed".
+variance of a theoretical model. For Poisson models, variance increases
+with the mean and, therefore, variance usually (roughly) equals the mean
+value. If the variance is much higher, the data are "overdispersed".
 
 \subsection{Interpretation of the Dispersion Ratio}{
 If the dispersion ratio is close to one, a Poisson model fits well to the
@@ -70,10 +70,10 @@ if (require("glmmTMB")) {
 }
 \references{
 \itemize{
- \item Bolker B et al. (2017):
- \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ.}
- \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
- multilevel/hierarchical models. Cambridge; New York: Cambridge University
- Press.
- }
+\item Bolker B et al. (2017):
+\href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ.}
+\item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+multilevel/hierarchical models. Cambridge; New York: Cambridge University
+Press.
+}
 }

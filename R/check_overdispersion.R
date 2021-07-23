@@ -1,11 +1,11 @@
 #' @title Check overdispersion of GL(M)M's
 #' @name check_overdispersion
 #'
-#' @description \code{check_overdispersion()} checks generalized linear (mixed)
+#' @description `check_overdispersion()` checks generalized linear (mixed)
 #'   models for overdispersion.
 #'
-#' @param x Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
-#'    or \code{glm.nb} (package \pkg{MASS}).
+#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`,
+#'    or `glm.nb` (package \pkg{MASS}).
 #' @param ... Currently not used.
 #'
 #' @return A list with results from the overdispersion test, like chi-squared
@@ -29,13 +29,13 @@
 #' }
 #'
 #' \subsection{Overdispersion in Mixed Models}{
-#' For \code{merMod}- and \code{glmmTMB}-objects, \code{check_overdispersion()}
+#' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
 #' is based on the code in the
-#' \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
-#' section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
-#' function only returns an \emph{approximate} estimate of an overdispersion
+#' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
+#' section *How can I deal with overdispersion in GLMMs?*. Note that this
+#' function only returns an *approximate* estimate of an overdispersion
 #' parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-#' with \code{glmmTMB}).
+#' with `glmmTMB`).
 #' }
 #'
 #' \subsection{How to fix Overdispersion}{
@@ -46,7 +46,7 @@
 #'
 #' @references \itemize{
 #'  \item Bolker B et al. (2017):
-#'  \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ.}
+#'  [GLMM FAQ.](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html)
 #'  \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.

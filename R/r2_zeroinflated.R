@@ -10,11 +10,11 @@
 #'   abbreviated.
 #'
 #' @return For the default-method, a list with the R2 and adjusted R2 values.
-#'   For \code{method = "correlation"}, a named numeric vector with the
+#'   For `method = "correlation"`, a named numeric vector with the
 #'   correlation-based R2 value.
 #'
 #' @details The default-method calculates an R2 value based on the residual
-#'   variance divided by the total variance. For \code{method = "correlation"},
+#'   variance divided by the total variance. For `method = "correlation"`,
 #'   R2 is a correlation-based measure, which is rather crude. It simply computes
 #'   the squared correlation between the model's actual and predicted response.
 #'

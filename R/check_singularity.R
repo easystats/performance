@@ -5,11 +5,11 @@
 #'
 #' @param x A mixed model.
 #' @param tolerance Indicates up to which value the convergence result is
-#'    accepted. The larger \code{tolerance} is, the stricter the test
+#'    accepted. The larger `tolerance` is, the stricter the test
 #'    will be.
 #' @param ... Currently not used.
 #'
-#' @return \code{TRUE} if the model fit is singular.
+#' @return `TRUE` if the model fit is singular.
 #'
 #' @details If a model is "singular", this means that some dimensions of the
 #'   variance-covariance matrix have been estimated as exactly zero. This
@@ -58,7 +58,7 @@
 #'   I error and power in linear mixed models. Journal of Memory and Language,
 #'   94:305-315, 2017.
 #'
-#'   \item lme4 Reference Manual, \url{https://cran.r-project.org/package=lme4}
+#'   \item lme4 Reference Manual, <https://cran.r-project.org/package=lme4>
 #'   }
 #'
 #' @examples

@@ -7,15 +7,15 @@
 #' @param ... Currently not used.
 #' @inheritParams model_performance.lm
 #'
-#' @return Numeric, the log loss of \code{model}.
+#' @return Numeric, the log loss of `model`.
 #'
 #' @details Logistic regression models predict the probability of an outcome of
-#'   being a "success" or "failure" (or 1 and 0 etc.). \code{performance_logloss()} evaluates
+#'   being a "success" or "failure" (or 1 and 0 etc.). `performance_logloss()` evaluates
 #'   how good or bad the predicted probabilities are. High values indicate
 #'   bad predictions, while low values indicate good predictions. The lower
 #'   the log-loss, the better the model predicts the outcome.
 #'
-#' @seealso \code{\link[=performance_score]{performance_score()}}
+#' @seealso [`performance_score()`][performance_score]
 #'
 #' @examples
 #' data(mtcars)

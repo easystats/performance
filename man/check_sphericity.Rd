@@ -13,7 +13,7 @@ check_sphericity(x, ...)
 }
 \value{
 Invisibly returns the p-values of the test statistics. A p-value <
-  0.05 indicates a violation of sphericity.
+0.05 indicates a violation of sphericity.
 }
 \description{
 Check model for violation of sphericity

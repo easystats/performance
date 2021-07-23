@@ -21,18 +21,18 @@ Numeric, the root mean squared error.
 }
 \description{
 Compute root mean squared error for (mixed effects) models,
-  including Bayesian regression models.
+including Bayesian regression models.
 }
 \details{
 The RMSE is the square root of the variance of the residuals and indicates
-  the absolute fit of the model to the data (difference between observed data
-  to model's predicted values). It can be interpreted as the standard
-  deviation of the unexplained variance, and is in the same units as the
-  response variable. Lower values indicate better model fit.
-  \cr \cr
-  The normalized RMSE is the proportion of the RMSE related to the
-  range of the response variable. Hence, lower values indicate
-  less residual variance.
+the absolute fit of the model to the data (difference between observed data
+to model's predicted values). It can be interpreted as the standard
+deviation of the unexplained variance, and is in the same units as the
+response variable. Lower values indicate better model fit.
+\cr \cr
+The normalized RMSE is the proportion of the RMSE related to the
+range of the response variable. Hence, lower values indicate
+less residual variance.
 }
 \examples{
 if (require("nlme")) {

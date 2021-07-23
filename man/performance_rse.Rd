@@ -17,7 +17,7 @@ Compute residual standard error of linear models.
 }
 \details{
 The residual standard error is the square root of the residual
-  sum of squares divided by the residual degrees of freedom.
+sum of squares divided by the residual degrees of freedom.
 }
 \examples{
 data(mtcars)

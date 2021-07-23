@@ -3,7 +3,7 @@
 #'
 #' @description Calculates McFadden's pseudo R2.
 #'
-#' @param model Generalized linear or multinomial logit (\code{mlogit}) model.
+#' @param model Generalized linear or multinomial logit (`mlogit`) model.
 #' @param ... Currently not used.
 #'
 #' @return For most models, a list with McFadden's R2 and adjusted McFadden's

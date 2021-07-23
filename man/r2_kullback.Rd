@@ -17,7 +17,7 @@ A named vector with the R2 value.
 }
 \description{
 Calculates the Kullback-Leibler-divergence-based
-  R2 for generalized linear models.
+R2 for generalized linear models.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

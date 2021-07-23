@@ -23,8 +23,7 @@ distribution from a model-family. Currently, following distributions are
 trained (i.e. results of \code{check_distribution()} may be one of the
 following): \code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"},
 \code{"binomial"}, \code{"chi"}, \code{"exponential"}, \code{"F"},
-\code{"gamma"}, \code{"lognormal"}, \code{"normal"}, \code{"negative
-binomial"}, \code{"negative binomial (zero-inflated)"}, \code{"pareto"},
+\code{"gamma"}, \code{"lognormal"}, \code{"normal"}, \code{"negative binomial"}, \code{"negative binomial (zero-inflated)"}, \code{"pareto"},
 \code{"poisson"}, \code{"poisson (zero-inflated)"}, \code{"uniform"} and
 \code{"weibull"}.
 \cr \cr
@@ -37,13 +36,13 @@ distributions, however, only if the probability is greater than zero.
 }
 \note{
 This function is somewhat experimental and might be improved in future
-  releases. The final decision on the model-family should also be based on
-  theoretical aspects and other information about the data and the model.
-  \cr \cr
-  There is also a
-  \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-  implemented in the
-  \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+releases. The final decision on the model-family should also be based on
+theoretical aspects and other information about the data and the model.
+\cr \cr
+There is also a
+\href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the
+\href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 if (require("lme4") && require("parameters") && require("see") && require("patchwork")) {

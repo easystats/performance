@@ -17,7 +17,7 @@
 #' should be reconsidered. Since it is difficult to exactly predict the correct
 #' model family, consider this function as somewhat experimental.
 #'
-#' @param model Typically, a model (that should response to \code{residuals()}).
+#' @param model Typically, a model (that should response to `residuals()`).
 #'   May also be a numeric vector.
 #'
 #' @note This function is somewhat experimental and might be improved in future
@@ -25,7 +25,7 @@
 #'   theoretical aspects and other information about the data and the model.
 #'   \cr \cr
 #'   There is also a
-#'   \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+#'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 #'   implemented in the
 #'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
@@ -33,19 +33,19 @@
 #'
 #' This function uses an internal random forest model to classify the
 #' distribution from a model-family. Currently, following distributions are
-#' trained (i.e. results of \code{check_distribution()} may be one of the
-#' following): \code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"},
-#' \code{"binomial"}, \code{"chi"}, \code{"exponential"}, \code{"F"},
-#' \code{"gamma"}, \code{"lognormal"}, \code{"normal"}, \code{"negative
-#' binomial"}, \code{"negative binomial (zero-inflated)"}, \code{"pareto"},
-#' \code{"poisson"}, \code{"poisson (zero-inflated)"}, \code{"uniform"} and
-#' \code{"weibull"}.
+#' trained (i.e. results of `check_distribution()` may be one of the
+#' following): `"bernoulli"`, `"beta"`, `"beta-binomial"`,
+#' `"binomial"`, `"chi"`, `"exponential"`, `"F"`,
+#' `"gamma"`, `"lognormal"`, `"normal"`, `"negative
+#' binomial"`, `"negative binomial (zero-inflated)"`, `"pareto"`,
+#' `"poisson"`, `"poisson (zero-inflated)"`, `"uniform"` and
+#' `"weibull"`.
 #' \cr \cr
 #' Note the similarity between certain distributions according to shape, skewness,
 #' etc. Thus, the predicted distribution may not be perfectly representing the
 #' distributional family of the underlying fitted model, or the response value.
 #' \cr \cr
-#' There is a \code{plot()} method, which shows the probabilities of all predicted
+#' There is a `plot()` method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
 #' @examples

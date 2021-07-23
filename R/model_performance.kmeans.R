@@ -1,6 +1,6 @@
 #' Model summary for k-means clustering
 #'
-#' @param model Object of type \code{kmeans}.
+#' @param model Object of type `kmeans`.
 #' @inheritParams model_performance.lm
 #'
 #' @examples

@@ -17,13 +17,13 @@ scales.}
 }
 \value{
 A data frame with the corrected item-total correlations (\emph{item
-     discrimination}, column \code{item_discrimination}) and Cronbach's Alpha
-     (if item deleted, column \code{alpha_if_deleted}) for each item
-     of the scale, or \code{NULL} if data frame had too less columns.
+discrimination}, column \code{item_discrimination}) and Cronbach's Alpha
+(if item deleted, column \code{alpha_if_deleted}) for each item
+of the scale, or \code{NULL} if data frame had too less columns.
 }
 \description{
 Compute various measures of internal consistencies
-   for tests or item-scales of questionnaires.
+for tests or item-scales of questionnaires.
 }
 \details{
 This function calculates the item discriminations (corrected item-total

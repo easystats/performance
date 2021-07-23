@@ -12,12 +12,12 @@ check_itemscale(x)
 }
 \value{
 A list of data frames, with related measures of internal
-  consistencies of each subscale.
+consistencies of each subscale.
 }
 \description{
 Compute various measures of internal consistencies
-  applied to (sub)scales, which items were extracted using
-  \code{parameters::principal_components()}.
+applied to (sub)scales, which items were extracted using
+\code{parameters::principal_components()}.
 }
 \details{
 \code{check_itemscale()} calculates various measures of internal
@@ -30,19 +30,19 @@ and calculates the above mentioned measures.
 }
 \note{
 \itemize{
-  \item \emph{Item difficulty} should range between 0.2 and 0.8. Ideal value
-  is \code{p+(1-p)/2} (which mostly is between 0.5 and 0.8). See
-  \code{\link{item_difficulty}} for details.
+\item \emph{Item difficulty} should range between 0.2 and 0.8. Ideal value
+is \code{p+(1-p)/2} (which mostly is between 0.5 and 0.8). See
+\code{\link[=item_difficulty]{item_difficulty()}} for details.
 
-  \item For \emph{item discrimination}, acceptable values are 0.20 or higher;
-  the closer to 1.00 the better. See \code{\link{item_reliability}} for more
-  details.
+\item For \emph{item discrimination}, acceptable values are 0.20 or higher;
+the closer to 1.00 the better. See \code{\link[=item_reliability]{item_reliability()}} for more
+details.
 
-  \item In case the total \emph{Cronbach's alpha} value is below the
-  acceptable cut-off of 0.7 (mostly if an index has few items), the
-  \emph{mean inter-item-correlation} is an alternative measure to indicate
-  acceptability. Satisfactory range lies between 0.2 and 0.4. See also
-  \code{\link{item_intercor}}.
+\item In case the total \emph{Cronbach's alpha} value is below the
+acceptable cut-off of 0.7 (mostly if an index has few items), the
+\emph{mean inter-item-correlation} is an alternative measure to indicate
+acceptability. Satisfactory range lies between 0.2 and 0.4. See also
+\code{\link[=item_intercor]{item_intercor()}}.
 }
 }
 \examples{
@@ -59,11 +59,11 @@ if (require("parameters") && require("psych")) {
 }
 \references{
 \itemize{
-  \item Briggs SR, Cheek JM (1986) The role of factor analysis in the
-  development and evaluation of personality scales. Journal of Personality,
-  54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x
+\item Briggs SR, Cheek JM (1986) The role of factor analysis in the
+development and evaluation of personality scales. Journal of Personality,
+54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x
 
-  \item Trochim WMK (2008) Types of Reliability.
-  (\href{https://conjointly.com/kb/types-of-reliability/}{web})
+\item Trochim WMK (2008) Types of Reliability.
+(\href{https://conjointly.com/kb/types-of-reliability/}{web})
 }
 }

@@ -16,16 +16,16 @@ check_heteroskedasticity(x, ...)
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value <
-  0.05 indicates a non-constant variance (heteroskedasticity).
+0.05 indicates a non-constant variance (heteroskedasticity).
 }
 \description{
 Significance testing for linear regression models assumes that
-  the model errors (or residuals) have constant variance. If this assumption
-  is violated the p-values from the model are no longer reliable.
+the model errors (or residuals) have constant variance. If this assumption
+is violated the p-values from the model are no longer reliable.
 }
 \details{
 This test of the hypothesis of (non-)constant error is also called
-  \emph{Breusch-Pagan test} (\cite{1979}).
+\emph{Breusch-Pagan test} (\cite{1979}).
 }
 \note{
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.

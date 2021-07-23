@@ -15,11 +15,11 @@
 #' @details McKelvey & Zavoinas R2 is based on the explained variance,
 #'   where the variance of the predicted response is divided by the sum
 #'   of the variance of the predicted response and residual variance.
-#'   For binomial models, the residual variance is either \code{pi^2/3}
+#'   For binomial models, the residual variance is either `pi^2/3`
 #'   for logit-link and 1 for probit-link. For poisson-models, the
 #'   residual variance is based on log-normal approximation, similar to
-#'   the \emph{distribution-specific variance} as described in
-#'   \code{?insight::get_variance}.
+#'   the *distribution-specific variance* as described in
+#'   `?insight::get_variance`.
 #'
 #'
 #' @examples

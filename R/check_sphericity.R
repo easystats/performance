@@ -4,7 +4,7 @@
 #' @description Check model for violation of sphericity
 #'
 #' @param x A model object.
-#' @param ... Arguments passed to \code{car::Anova}.
+#' @param ... Arguments passed to `car::Anova`.
 #'
 #' @return Invisibly returns the p-values of the test statistics. A p-value <
 #'   0.05 indicates a violation of sphericity.

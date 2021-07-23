@@ -12,7 +12,7 @@
 #'   residuals, i.e. the variation in the outcome the model doesn't explain.
 #'   Lower values (closer to zero) indicate better fit.
 #'
-#' @return Numeric, the mean square error of \code{model}.
+#' @return Numeric, the mean square error of `model`.
 #'
 #' @examples
 #' data(mtcars)

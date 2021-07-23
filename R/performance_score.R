@@ -10,22 +10,22 @@
 #' @return A list with three elements, the logarithmic, quadratic/Brier and spherical score.
 #'
 #' @details Proper scoring rules can be used to evaluate the quality of model
-#' predictions and model fit. \code{performance_score()} calculates the logarithmic,
+#' predictions and model fit. `performance_score()` calculates the logarithmic,
 #' quadratic/Brier and spherical scoring rules. The spherical rule takes values
-#' in the interval \code{[0, 1]}, with values closer to 1 indicating a more
-#' accurate model, and the logarithmic rule in the interval \code{[-Inf, 0]},
+#' in the interval `[0, 1]`, with values closer to 1 indicating a more
+#' accurate model, and the logarithmic rule in the interval `[-Inf, 0]`,
 #' with values closer to 0 indicating a more accurate model.
 #' \cr \cr
-#' For \code{stan_lmer()} and \code{stan_glmer()} models, the predicted values
-#' are based on \code{posterior_predict()}, instead of \code{predict()}. Thus,
+#' For `stan_lmer()` and `stan_glmer()` models, the predicted values
+#' are based on `posterior_predict()`, instead of `predict()`. Thus,
 #' results may differ more than expected from their non-Bayesian counterparts
-#' in \strong{lme4}.
+#' in **lme4**.
 #'
 #' @references Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 #'
-#' @note Code is partially based on \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
+#' @note Code is partially based on [GLMMadaptive::scoring_rules()](https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html).
 #'
-#' @seealso \code{\link[=performance_logloss]{performance_logloss()}}
+#' @seealso [`performance_logloss()`][performance_logloss]
 #'
 #' @examples
 #' ## Dobson (1990) Page 93: Randomized Controlled Trial :

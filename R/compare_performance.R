@@ -1,25 +1,25 @@
 #' @title Compare performance of different models
 #' @name compare_performance
 #'
-#' @description \code{compare_performance()} computes indices of model
+#' @description `compare_performance()` computes indices of model
 #'   performance for different models at once and hence allows comparison of
 #'   indices across models.
 #'
 #' @param ... Multiple model objects (also of different classes).
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of
+#' @param metrics Can be `"all"`, `"common"` or a character vector of
 #'   metrics to be computed. See related
-#'   \code{\link[=model_performance]{documentation}} of object's class for
+#'   [`documentation()`][model_performance] of object's class for
 #'   details.
-#' @param rank Logical, if \code{TRUE}, models are ranked according to 'best'
+#' @param rank Logical, if `TRUE`, models are ranked according to 'best'
 #'   overall model performance. See 'Details'.
 #'
 #' @return A data frame (with one row per model) and one column per "index" (see
-#'   \code{metrics}).
+#'   `metrics`).
 #'
-#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @details \subsection{Ranking Models}{
-#'   When \code{rank = TRUE}, a new column \code{Performance_Score} is returned.
+#'   When `rank = TRUE`, a new column `Performance_Score` is returned.
 #'   This score ranges from 0\% to 100\%, higher values indicating better model
 #'   performance. Note that all score value do not necessarily sum up to 100\%.
 #'   Rather, calculation is based on normalizing all indices (i.e. rescaling
@@ -30,14 +30,14 @@
 #'   In particular when models are of different types (e.g. mixed models,
 #'   classical linear models, logistic regression, ...), not all indices will be
 #'   computed for each model. In case where an index can't be calculated for a
-#'   specific model type, this model gets an \code{NA} value. All indices that
-#'   have any \code{NA}s are excluded from calculating the performance score.
+#'   specific model type, this model gets an `NA` value. All indices that
+#'   have any `NA`s are excluded from calculating the performance score.
 #'   \cr \cr
-#'   There is a \code{plot()}-method for \code{compare_performance()},
+#'   There is a `plot()`-method for `compare_performance()`,
 #'   which creates a "spiderweb" plot, where the different indices are
 #'   normalized and larger values indicate better model performance.
 #'   Hence, points closer to the center indicate worse fit indices
-#'   (see \href{https://easystats.github.io/see/articles/performance.html}{online-documentation}
+#'   (see [online-documentation](https://easystats.github.io/see/articles/performance.html)
 #'   for more details).
 #'   }
 #'

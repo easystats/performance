@@ -34,7 +34,7 @@ single plots for each diagnostic are returned.}
 
 \item{check}{Character vector, indicating which checks for should be performed
 and plotted. May be one or more of
-\code{"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"}.
+\verb{"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"}.
 \code{"reqq"} is a QQ-plot for random effects and only available for mixed
 models.
 \code{"ncv"} is an alias for \code{"linearity"}, and checks for non-constant
@@ -65,10 +65,10 @@ multicollinearity).
 }
 \note{
 This function just prepares the data for plotting. To create the plots,
-  \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
-  all possible warnings. In case you observe suspicious plots, please refer
-  to the dedicated functions (like \code{check_collinearity()},
-  \code{check_normality()} etc.) to get informative messages and warnings.
+\CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+all possible warnings. In case you observe suspicious plots, please refer
+to the dedicated functions (like \code{check_collinearity()},
+\code{check_normality()} etc.) to get informative messages and warnings.
 }
 \section{Linearity Assumption}{
 
@@ -79,8 +79,7 @@ non-constant variance); hence, the alias \code{"ncv"} for this plot.
 plots are helpful to check model assumptions, they do not necessarily
 indicate so-called "lack of fit", e.g. missed non-linear relationships or
 interactions. Thus, it is always recommended to also look at
-\href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect
-plots, including partial residuals}.
+\href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect plots, including partial residuals}.
 }
 
 \section{Residuals for (Generalized) Linear Models}{
