@@ -57,6 +57,7 @@ check_normality.default <- function(x, ...) {
   # check for normality of residuals
   p.val <- .check_normality(stats::rstandard(x), x)
 
+  attr(p.val, "data") <- x
   attr(p.val, "object_name") <- .safe_deparse(substitute(x))
   attr(p.val, "effects") <- "fixed"
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
@@ -120,6 +121,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
     p.val <- .check_normality(stats::rstudent(x), x)
   }
 
+  attr(p.val, "data") <- x
   attr(p.val, "object_name") <- .safe_deparse(substitute(x))
   attr(p.val, "effects") <- effects
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
@@ -141,6 +143,7 @@ check_normality.afex_aov <- function(x, ...) {
   r <- suppressMessages(stats::residuals(x, append = FALSE))
   p.val <- .check_normality(r, x)
 
+  attr(p.val, "data") <- x
   attr(p.val, "object_name") <- .safe_deparse(substitute(x))
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
