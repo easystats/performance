@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Difficulty of Questionnaire Items — item_difficulty" />
 <meta property="og:description" content="Compute various measures of internal consistencies
-   for tests or item-scales of questionnaires." />
+for tests or item-scales of questionnaires." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -141,7 +141,7 @@
 
     <div class="ref-description">
     <p>Compute various measures of internal consistencies
-   for tests or item-scales of questionnaires.</p>
+for tests or item-scales of questionnaires.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>item_difficulty</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></code></pre></div>
@@ -160,15 +160,15 @@ with items (e.g. from a test or questionnaire).</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with three columns: The name(s) of the item(s), the item
-     difficulties for each item, and the ideal item difficulty.</p>
+difficulties for each item, and the ideal item difficulty.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function calculates the item difficulty, which should
-   range between 0.2 and 0.8. Lower values are a signal for
-   more difficult items, while higher values close to one
-   are a sign for easier items. The ideal value for item difficulty
-   is <code>p + (1 - p) / 2</code>, where <code>p = 1 / max(x)</code>. In most
-   cases, the ideal item difficulty lies between 0.5 and 0.8.</p>
+range between 0.2 and 0.8. Lower values are a signal for
+more difficult items, while higher values close to one
+are a sign for easier items. The ideal value for item difficulty
+is <code>p + (1 - p) / 2</code>, where <code>p = 1 / max(x)</code>. In most
+cases, the ideal item difficulty lies between 0.5 and 0.8.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span></span>

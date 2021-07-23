@@ -48,15 +48,15 @@
 
 <meta property="og:title" content="Outliers detection (check for influential observations) — check_outliers" />
 <meta property="og:description" content="Checks for and locates influential observations (i.e.,
-  &quot;outliers&quot;) via several distance and/or clustering methods. If several
-  methods are selected, the returned &quot;Outlier&quot; vector will be a composite
-  outlier score, made of the average of the binary (0 or 1) results of each
-  method. It represents the probability of each observation of being
-  classified as an outlier by at least one method. The decision rule used by
-  default is to classify as outliers observations which composite outlier
-  score is superior or equal to 0.5 (i.e., that were classified as outliers
-  by at least half of the methods). See the Details section below
-  for a description of the methods." />
+&quot;outliers&quot;) via several distance and/or clustering methods. If several
+methods are selected, the returned &quot;Outlier&quot; vector will be a composite
+outlier score, made of the average of the binary (0 or 1) results of each
+method. It represents the probability of each observation of being
+classified as an outlier by at least one method. The decision rule used by
+default is to classify as outliers observations which composite outlier
+score is superior or equal to 0.5 (i.e., that were classified as outliers
+by at least half of the methods). See the Details section below
+for a description of the methods." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -149,15 +149,15 @@
 
     <div class="ref-description">
     <p>Checks for and locates influential observations (i.e.,
-  "outliers") via several distance and/or clustering methods. If several
-  methods are selected, the returned "Outlier" vector will be a composite
-  outlier score, made of the average of the binary (0 or 1) results of each
-  method. It represents the probability of each observation of being
-  classified as an outlier by at least one method. The decision rule used by
-  default is to classify as outliers observations which composite outlier
-  score is superior or equal to 0.5 (i.e., that were classified as outliers
-  by at least half of the methods). See the <strong>Details</strong> section below
-  for a description of the methods.</p>
+"outliers") via several distance and/or clustering methods. If several
+methods are selected, the returned "Outlier" vector will be a composite
+outlier score, made of the average of the binary (0 or 1) results of each
+method. It represents the probability of each observation of being
+classified as an outlier by at least one method. The decision rule used by
+default is to classify as outliers observations which composite outlier
+score is superior or equal to 0.5 (i.e., that were classified as outliers
+by at least half of the methods). See the <strong>Details</strong> section below
+for a description of the methods.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>check_outliers</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -202,18 +202,18 @@ for any of the method run.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A logical vector of the detected outliers with a nice printing
-  method: a check (message) on whether outliers were detected or not. The
-  information on the distance measure and whether or not an observation is
-  considered as outlier can be recovered with the <code>as.data.frame</code>
-  function.</p>
+method: a check (message) on whether outliers were detected or not. The
+information on the distance measure and whether or not an observation is
+considered as outlier can be recovered with the <code>as.data.frame</code>
+function.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Outliers can be defined as particularly influential observations.
-  Most methods rely on the computation of some distance metric, and the
-  observations greater than a certain threshold are considered outliers.
-  Importantly, outliers detection methods are meant to provide information to
-  consider for the researcher, rather than to be an automatized procedure
-  which mindless application is a substitute for thinking.</p>
+Most methods rely on the computation of some distance metric, and the
+observations greater than a certain threshold are considered outliers.
+Importantly, outliers detection methods are meant to provide information to
+consider for the researcher, rather than to be an automatized procedure
+which mindless application is a substitute for thinking.</p>
 <p>An <strong>example sentence</strong> for reporting the usage of the composite method
 could be:</p>
 <p><em>"Based on a composite outlier score (see the 'check_outliers' function
@@ -229,16 +229,16 @@ that were classified as outliers by at least half of the methods used."</em></p>
 
 <ul>
 <li><p><strong>Cook's Distance</strong>:
- Among outlier detection methods, Cook's distance and leverage are less
- common than the basic Mahalanobis distance, but still used. Cook's distance
- estimates the variations in regression coefficients after removing each
- observation, one by one (Cook, 1977). Since Cook's distance is in the metric
- of an F distribution with p and n-p degrees of freedom, the median point of
- the quantile distribution can be used as a cut-off (Bollen, 1985). A common
- approximation or heuristic is to use 4 divided by the numbers of
- observations, which usually corresponds to a lower threshold (i.e., more
- outliers are detected). This only works for Frequentist models. For Bayesian
- models, see <code>pareto</code>.</p></li>
+Among outlier detection methods, Cook's distance and leverage are less
+common than the basic Mahalanobis distance, but still used. Cook's distance
+estimates the variations in regression coefficients after removing each
+observation, one by one (Cook, 1977). Since Cook's distance is in the metric
+of an F distribution with p and n-p degrees of freedom, the median point of
+the quantile distribution can be used as a cut-off (Bollen, 1985). A common
+approximation or heuristic is to use 4 divided by the numbers of
+observations, which usually corresponds to a lower threshold (i.e., more
+outliers are detected). This only works for Frequentist models. For Bayesian
+models, see <code>pareto</code>.</p></li>
 <li><p><strong>Pareto</strong>:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
@@ -248,47 +248,44 @@ package observed good performance for values of k up to 0.7 (the default
 threshold used by <code>performance</code>).</p></li>
 </ul>
 
-
 <h3 class='hasAnchor' id='univariate-methods'><a class='anchor' aria-hidden='true' href='#univariate-methods'></a>Univariate methods</h3>
 
 <ul>
 <li><p><strong>Z-scores</strong> <code>("zscore", "zscore_robust")</code>:
- The Z-score, or standard score, is a way of describing a data point as
- deviance from a central value, in terms of standard deviations from the mean
- (<code>"zscore"</code>) or, as it is here the case (<code>"zscore_robust"</code>) by
- default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from
- the median (which are robust measures of dispersion and centrality). The
- default threshold to classify outliers is 1.959 (<code>threshold =
- list("zscore" = 1.959)</code>), corresponding to the 2.5% (<code>qnorm(0.975)</code>)
- most extreme observations (assuming the data is normally distributed).
- Importantly, the Z-score method is univariate: it is computed column by
- column. If a dataframe is passed, the Z-score is calculated for each
- variable separately, and the maximum (absolute) Z-score is kept for each
- observations. Thus, all observations that are extreme on at least one
- variable might be detected as outliers. Thus, this method is not suited for
- high dimensional data (with many columns), returning too liberal results
- (detecting many outliers).</p></li>
+The Z-score, or standard score, is a way of describing a data point as
+deviance from a central value, in terms of standard deviations from the mean
+(<code>"zscore"</code>) or, as it is here the case (<code>"zscore_robust"</code>) by
+default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from
+the median (which are robust measures of dispersion and centrality). The
+default threshold to classify outliers is 1.959 (<code>threshold = list("zscore" = 1.959)</code>), corresponding to the 2.5\<!-- % (\code{qnorm(0.975)}) -->
+most extreme observations (assuming the data is normally distributed).
+Importantly, the Z-score method is univariate: it is computed column by
+column. If a dataframe is passed, the Z-score is calculated for each
+variable separately, and the maximum (absolute) Z-score is kept for each
+observations. Thus, all observations that are extreme on at least one
+variable might be detected as outliers. Thus, this method is not suited for
+high dimensional data (with many columns), returning too liberal results
+(detecting many outliers).</p></li>
 <li><p><strong>IQR</strong> <code>("iqr")</code>:
- Using the IQR (interquartile range) is a robust method developed by John
- Tukey, which often appears in box-and-whisker plots (e.g., in
- <code>geom_boxplot</code>). The interquartile range is the range between the first
- and the third quartiles. Tukey considered as outliers any data point that
- fell outside of either 1.5 times (the default threshold) the IQR below the
- first or above the third quartile. Similar to the Z-score method, this is a
- univariate method for outliers detection, returning outliers detected for at
- least one column, and might thus not be suited to high dimensional data.</p></li>
+Using the IQR (interquartile range) is a robust method developed by John
+Tukey, which often appears in box-and-whisker plots (e.g., in
+<code>geom_boxplot</code>). The interquartile range is the range between the first
+and the third quartiles. Tukey considered as outliers any data point that
+fell outside of either 1.5 times (the default threshold) the IQR below the
+first or above the third quartile. Similar to the Z-score method, this is a
+univariate method for outliers detection, returning outliers detected for at
+least one column, and might thus not be suited to high dimensional data.</p></li>
 <li><p><strong>CI</strong> <code>("ci", "eti", "hdi", "bci")</code>:
- Another univariate method is to compute, for each variable, some sort of
- "confidence" interval and consider as outliers values lying beyond the edges
- of that interval. By default, <code>"ci"</code> computes the Equal-Tailed Interval
- (<code>"eti"</code>), but other types of intervals are available, such as Highest
- Density Interval (<code>"hdi"</code>) or the Bias Corrected and Accelerated
- Interval (<code>"bci"</code>). The default threshold is <code>0.95</code>, considering
- as outliers all observations that are outside the 95% CI on any of the
- variable. See <code><a href='https://easystats.github.io/bayestestR/reference/ci.html'>bayestestR::ci()</a></code> for more details
- about the intervals.</p></li>
+Another univariate method is to compute, for each variable, some sort of
+"confidence" interval and consider as outliers values lying beyond the edges
+of that interval. By default, <code>"ci"</code> computes the Equal-Tailed Interval
+(<code>"eti"</code>), but other types of intervals are available, such as Highest
+Density Interval (<code>"hdi"</code>) or the Bias Corrected and Accelerated
+Interval (<code>"bci"</code>). The default threshold is <code>0.95</code>, considering
+as outliers all observations that are outside the 95\<!-- % CI on any of the -->
+variable. See <code><a href='https://easystats.github.io/bayestestR/reference/ci.html'>bayestestR::ci()</a></code> for more details
+about the intervals.</p></li>
 </ul>
-
 
 <h3 class='hasAnchor' id='multivariate-methods'><a class='anchor' aria-hidden='true' href='#multivariate-methods'></a>Multivariate methods</h3>
 
@@ -302,7 +299,7 @@ Mahalanobis distance. However, as the Mahalanobis distance can be
 approximated by a Chi squared distribution (Rousseeuw &amp; Van Zomeren, 1990),
 we can use the alpha quantile of the chi-square distribution with k degrees
 of freedom (k being the number of columns). By default, the alpha threshold
-is set to 0.025 (corresponding to the 2.5% most extreme observations;
+is set to 0.025 (corresponding to the 2.5\<!-- % most extreme observations; -->
 Cabana, 2019). This criterion is a natural extension of the median plus or
 minus a coefficient times the MAD method (Leys et al., 2013).</p></li>
 <li><p><strong>Robust Mahalanobis Distance</strong>:
@@ -316,44 +313,44 @@ Mahalanobis Distance is not a robust way to determine outliers, as it uses
 the means and covariances of all the data – including the outliers – to
 determine individual difference scores. Minimum Covariance Determinant
 calculates the mean and covariance matrix based on the most central subset of
-the data (by default, 66%), before computing the Mahalanobis Distance. This
+the data (by default, 66\<!-- %), before computing the Mahalanobis Distance. This -->
 is deemed to be a more robust method of identifying and removing outliers
 than regular Mahalanobis distance.</p></li>
 <li><p><strong>Invariant Coordinate Selection (ICS)</strong>:
- The outlier are detected using ICS, which by default uses an alpha threshold
- of 0.025 (corresponding to the 2.5% most extreme observations) as a cut-off
- value for outliers classification. Refer to the help-file of
- <code><a href='https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html'>ICSOutlier::ics.outlier()</a></code> to get more details about this procedure.
- Note that <code>method = "ics"</code> requires both <span class="pkg">ICS</span> and <span class="pkg">ICSOutlier</span>
- to be installed, and that it takes some time to compute the results.</p></li>
+The outlier are detected using ICS, which by default uses an alpha threshold
+of 0.025 (corresponding to the 2.5\<!-- % most extreme observations) as a cut-off -->
+value for outliers classification. Refer to the help-file of
+<code><a href='https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html'>ICSOutlier::ics.outlier()</a></code> to get more details about this procedure.
+Note that <code>method = "ics"</code> requires both <span class="pkg">ICS</span> and <span class="pkg">ICSOutlier</span>
+to be installed, and that it takes some time to compute the results.</p></li>
 <li><p><strong>OPTICS</strong>:
- The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
- (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised
- clustering technique that can be used for outliers detection). The threshold
- argument is passed as <code>minPts</code>, which corresponds to the minimum size
- of a cluster. By default, this size is set at 2 times the number of columns
- (Sander et al., 1998). Compared to the others techniques, that will always
- detect several outliers (as these are usually defined as a percentage of
- extreme values), this algorithm functions in a different manner and won't
- always detect outliers. Note that <code>method = "optics"</code> requires the
- <span class="pkg">dbscan</span> package to be installed, and that it takes some time to compute
- the results.</p></li>
+The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
+(Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised
+clustering technique that can be used for outliers detection). The threshold
+argument is passed as <code>minPts</code>, which corresponds to the minimum size
+of a cluster. By default, this size is set at 2 times the number of columns
+(Sander et al., 1998). Compared to the others techniques, that will always
+detect several outliers (as these are usually defined as a percentage of
+extreme values), this algorithm functions in a different manner and won't
+always detect outliers. Note that <code>method = "optics"</code> requires the
+<span class="pkg">dbscan</span> package to be installed, and that it takes some time to compute
+the results.</p></li>
 <li><p><strong>Isolation Forest</strong>:
- The outliers are detected using the anomaly score of an isolation forest (a
- class of random forest). The default threshold of 0.025 will classify as
- outliers the observations located at <code>qnorm(1-0.025) * MAD)</code> (a robust
- equivalent of SD) of the median (roughly corresponding to the 2.5% most
- extreme observations). Requires the <span class="pkg">solitude</span> package.</p></li>
+The outliers are detected using the anomaly score of an isolation forest (a
+class of random forest). The default threshold of 0.025 will classify as
+outliers the observations located at <code>qnorm(1-0.025) * MAD)</code> (a robust
+equivalent of SD) of the median (roughly corresponding to the 2.5\<!-- % most -->
+extreme observations). Requires the <span class="pkg">solitude</span> package.</p></li>
 <li><p><strong>Local Outlier Factor</strong>:
- Based on a K nearest neighbours algorithm, LOF compares the local density of
- an point to the local densities of its neighbors instead of computing a
- distance from the center (Breunig et al., 2000). Points that have a
- substantially lower density than their neighbors are considered outliers. A
- LOF score of approximately 1 indicates that density around the point is
- comparable to its neighbors. Scores significantly larger than 1 indicate
- outliers. The default threshold of 0.025 will classify as outliers the
- observations located at <code>qnorm(1-0.025) * SD)</code> of the log-transformed
- LOF distance. Requires the <span class="pkg">dbscan</span> package.</p></li>
+Based on a K nearest neighbours algorithm, LOF compares the local density of
+an point to the local densities of its neighbors instead of computing a
+distance from the center (Breunig et al., 2000). Points that have a
+substantially lower density than their neighbors are considered outliers. A
+LOF score of approximately 1 indicates that density around the point is
+comparable to its neighbors. Scores significantly larger than 1 indicate
+outliers. The default threshold of 0.025 will classify as outliers the
+observations located at <code>qnorm(1-0.025) * SD)</code> of the log-transformed
+LOF distance. Requires the <span class="pkg">dbscan</span> package.</p></li>
 </ul>
 
 <h3 class='hasAnchor' id='threshold-specification'><a class='anchor' aria-hidden='true' href='#threshold-specification'></a>Threshold specification</h3>
@@ -378,11 +375,11 @@ than regular Mahalanobis distance.</p></li>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>There is also a
-  <a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a>
-  implemented in the
-  <a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>. <strong>Please
-  note</strong> that the range of the distance-values along the y-axis is re-scaled
-  to range from 0 to 1.</p>
+<a href='https://easystats.github.io/see/articles/performance.html'><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method</a>
+implemented in the
+<a href='https://easystats.github.io/see/'><span class="pkg">see</span>-package</a>. <strong>Please
+note</strong> that the range of the distance-values along the y-axis is re-scaled
+to range from 0 to 1.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     

@@ -48,10 +48,10 @@
 
 <meta property="og:title" content="Check for multicollinearity of model terms — check_collinearity" />
 <meta property="og:description" content="check_collinearity() checks regression models for
-  multicollinearity by calculating the variance inflation factor (VIF).
-  multicollinearity() is an alias for check_collinearity().
-  (When printed, VIF are also translated to Tolerance values, where
-  tolerance = 1/vif.)" />
+multicollinearity by calculating the variance inflation factor (VIF).
+multicollinearity() is an alias for check_collinearity().
+(When printed, VIF are also translated to Tolerance values, where
+tolerance = 1/vif.)" />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -144,10 +144,10 @@
 
     <div class="ref-description">
     <p><code>check_collinearity()</code> checks regression models for
-  multicollinearity by calculating the variance inflation factor (VIF).
-  <code>multicollinearity()</code> is an alias for <code>check_collinearity()</code>.
-  (When printed, VIF are also translated to Tolerance values, where
-  <code>tolerance = 1/vif</code>.)</p>
+multicollinearity by calculating the variance inflation factor (VIF).
+<code>multicollinearity()</code> is an alias for <code>check_collinearity()</code>.
+(When printed, VIF are also translated to Tolerance values, where
+<code>tolerance = 1/vif</code>.)</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>check_collinearity</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -197,50 +197,50 @@ Following model-classes are currently supported: <code>hurdle</code>,
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with three columns: The name of the model term, the
-  variance inflation factor and the factor by which the standard error
-  is increased due to possible correlation with other terms.</p>
+variance inflation factor and the factor by which the standard error
+is increased due to possible correlation with other terms.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
 <h3 class='hasAnchor' id='multicollinearity'><a class='anchor' aria-hidden='true' href='#multicollinearity'></a>Multicollinearity</h3>
 <p>Multicollinearity should not be confused with a raw strong correlation
-  between predictors. What matters is the association between one or more
-  predictor variables, <em>conditional on the other variables in the
-  model</em>. In a nutshell, multicollinearity means that once you know the
-  effect of one predictor, the value of knowing the other predictor is rather
-  low. Thus, one of the predictors doesn't help much in terms of better
-  understanding the model or predicting the outcome. As a consequence, if
-  multicollinearity is a problem, the model seems to suggest that the
-  predictors in question don't seems to be reliably associated with the
-  outcome (low estimates, high standard errors), although these predictors
-  actually are strongly associated with the outcome, i.e. indeed might have
-  strong effect (<cite>McElreath 2020, chapter 6.1</cite>).
-  <br /> <br />
-  Multicollinearity might arise when a third, unobserved variable has a causal
-  effect on each of the two predictors that are associated with the outcome.
-  In such cases, the actual relationship that matters would be the association
-  between the unobserved variable and the outcome.
-  <br /> <br />
-  Remember: &#8220;Pairwise correlations are not the problem. It is the
-  conditional associations - not correlations - that matter.&#8221;
-  (<cite>McElreath 2020, p. 169</cite>)</p>
+between predictors. What matters is the association between one or more
+predictor variables, <em>conditional on the other variables in the
+model</em>. In a nutshell, multicollinearity means that once you know the
+effect of one predictor, the value of knowing the other predictor is rather
+low. Thus, one of the predictors doesn't help much in terms of better
+understanding the model or predicting the outcome. As a consequence, if
+multicollinearity is a problem, the model seems to suggest that the
+predictors in question don't seems to be reliably associated with the
+outcome (low estimates, high standard errors), although these predictors
+actually are strongly associated with the outcome, i.e. indeed might have
+strong effect (<cite>McElreath 2020, chapter 6.1</cite>).
+<br /> <br />
+Multicollinearity might arise when a third, unobserved variable has a causal
+effect on each of the two predictors that are associated with the outcome.
+In such cases, the actual relationship that matters would be the association
+between the unobserved variable and the outcome.
+<br /> <br />
+Remember: &#8220;Pairwise correlations are not the problem. It is the
+conditional associations - not correlations - that matter.&#8221;
+(<cite>McElreath 2020, p. 169</cite>)</p>
 
 <h3 class='hasAnchor' id='interpretation-of-the-variance-inflation-factor'><a class='anchor' aria-hidden='true' href='#interpretation-of-the-variance-inflation-factor'></a>Interpretation of the Variance Inflation Factor</h3>
 <p>The variance inflation factor is a measure to analyze the magnitude of
-  multicollinearity of model terms. A VIF less than 5 indicates a low
-  correlation of that predictor with other predictors. A value between 5 and
-  10 indicates a moderate correlation, while VIF values larger than 10 are a
-  sign for high, not tolerable correlation of model predictors (<cite>James
-  et al. 2013</cite>). The <em>Increased SE</em> column in the output indicates how
-  much larger the standard error is due to the association with other
-  predictors conditional on the remaining variables in the model.</p>
+multicollinearity of model terms. A VIF less than 5 indicates a low
+correlation of that predictor with other predictors. A value between 5 and
+10 indicates a moderate correlation, while VIF values larger than 10 are a
+sign for high, not tolerable correlation of model predictors (<cite>James
+et al. 2013</cite>). The <em>Increased SE</em> column in the output indicates how
+much larger the standard error is due to the association with other
+predictors conditional on the remaining variables in the model.</p>
 
 <h3 class='hasAnchor' id='multicollinearity-and-interaction-terms'><a class='anchor' aria-hidden='true' href='#multicollinearity-and-interaction-terms'></a>Multicollinearity and Interaction Terms</h3>
 <p>If interaction terms are included in a model, high VIF values are expected.
-  This portion of multicollinearity among the component terms of an
-  interaction is also called "inessential ill-conditioning", which leads to
-  inflated VIF values that are typically seen for models with interaction
-  terms <cite>(Francoeur 2013)</cite>.</p>
+This portion of multicollinearity among the component terms of an
+interaction is also called "inessential ill-conditioning", which leads to
+inflated VIF values that are typically seen for models with interaction
+terms <cite>(Francoeur 2013)</cite>.</p>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
@@ -250,15 +250,15 @@ Following model-classes are currently supported: <code>hurdle</code>,
     
 <ul>
 <li><p>Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
-  Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-  Clusters. Open Journal of Statistics, 03(06), 24–44.</p></li>
+Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+Clusters. Open Journal of Statistics, 03(06), 24–44.</p></li>
 <li><p>James, G., Witten, D., Hastie, T., &amp; Tibshirani, R. (eds.). (2013).
-  An introduction to statistical learning: with applications in R. New York:
-  Springer.</p></li>
+An introduction to statistical learning: with applications in R. New York:
+Springer.</p></li>
 <li><p>McElreath, R. (2020). Statistical rethinking: A Bayesian course with
-  examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
+examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <li><p>Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-  <a href='https://janhove.github.io/analysis/2019/09/11/collinearity'>webpage</a></p></li>
+<a href='https://janhove.github.io/analysis/2019/09/11/collinearity'>webpage</a></p></li>
 </ul>
 
 

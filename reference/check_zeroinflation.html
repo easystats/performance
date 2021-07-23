@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Check for zero-inflation in count models — check_zeroinflation" />
 <meta property="og:description" content="check_zeroinflation() checks whether count models are
-  over- or underfitting zeros in the outcome." />
+over- or underfitting zeros in the outcome." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -141,7 +141,7 @@
 
     <div class="ref-description">
     <p><code>check_zeroinflation()</code> checks whether count models are
-  over- or underfitting zeros in the outcome.</p>
+over- or underfitting zeros in the outcome.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>check_zeroinflation</span><span class='op'>(</span><span class='va'>x</span>, tolerance <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span></code></pre></div>
@@ -166,13 +166,13 @@ beyond or below this threshold would indicate over- or underfitting.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with information about the amount of predicted and observed
-   zeros in the outcome, as well as the ratio between these two values.</p>
+zeros in the outcome, as well as the ratio between these two values.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>If the amount of observed zeros is larger than the amount of
-  predicted zeros, the model is underfitting zeros, which indicates a
-  zero-inflation in the data. In such cases, it is recommended to use
-  negative binomial or zero-inflated models.</p>
+predicted zeros, the model is underfitting zeros, which indicates a
+zero-inflation in the data. In such cases, it is recommended to use
+negative binomial or zero-inflated models.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/glmmTMB/glmmTMB'>"glmmTMB"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>

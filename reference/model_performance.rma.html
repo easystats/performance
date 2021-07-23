@@ -157,8 +157,7 @@ metafor package." />
     <tr>
       <th>metrics</th>
       <td><p>Can be <code>"all"</code> or a character vector of metrics to be
-computed (some of <code>c("AIC", "BIC", "I2", "H2", "TAU2", "R2",
-"CochransQ", "QE", "Omnibus", "QM")</code>).</p></td>
+computed (some of <code>c("AIC", "BIC", "I2", "H2", "TAU2", "R2", "CochransQ", "QE", "Omnibus", "QM")</code>).</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -173,7 +172,7 @@ computed (some of <code>c("AIC", "BIC", "I2", "H2", "TAU2", "R2",
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame (with one row) and one column per "index" (see
-  <code>metrics</code>).</p>
+<code>metrics</code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
@@ -181,27 +180,27 @@ computed (some of <code>c("AIC", "BIC", "I2", "H2", "TAU2", "R2",
 
 <ul>
 <li><p><strong>AIC</strong> Akaike's Information Criterion, see
-  <code><a href='https://rdrr.io/r/stats/AIC.html'>?stats::AIC</a></code></p></li>
+<code><a href='https://rdrr.io/r/stats/AIC.html'>?stats::AIC</a></code></p></li>
 <li><p><strong>BIC</strong> Bayesian Information Criterion, see
-  <code><a href='https://rdrr.io/r/stats/AIC.html'>?stats::BIC</a></code></p></li>
+<code><a href='https://rdrr.io/r/stats/AIC.html'>?stats::BIC</a></code></p></li>
 <li><p><strong>I2</strong>: For a random effects model, <code>I2</code> estimates (in
-   percent) how much of the total variability in the effect size estimates
-   can be attributed to heterogeneity among the true effects. For a
-   mixed-effects model, <code>I2</code> estimates how much of the unaccounted
-   variability can be attributed to residual heterogeneity.</p></li>
+percent) how much of the total variability in the effect size estimates
+can be attributed to heterogeneity among the true effects. For a
+mixed-effects model, <code>I2</code> estimates how much of the unaccounted
+variability can be attributed to residual heterogeneity.</p></li>
 <li><p><strong>H2</strong>: For a random-effects model, <code>H2</code> estimates the
-   ratio of the total amount of variability in the effect size estimates to
-   the amount of sampling variability. For a mixed-effects model, <code>H2</code>
-   estimates the ratio of the unaccounted variability in the effect size
-   estimates to the amount of sampling variability.</p></li>
+ratio of the total amount of variability in the effect size estimates to
+the amount of sampling variability. For a mixed-effects model, <code>H2</code>
+estimates the ratio of the unaccounted variability in the effect size
+estimates to the amount of sampling variability.</p></li>
 <li><p><strong>TAU2</strong>: The amount of (residual) heterogeneity in the random
-   or mixed effects model.</p></li>
+or mixed effects model.</p></li>
 <li><p><strong>CochransQ (QE)</strong>: Test for (residual) Heterogeneity. Without
-   moderators in the model, this is simply Cochran's Q-test.</p></li>
+moderators in the model, this is simply Cochran's Q-test.</p></li>
 <li><p><strong>Omnibus (QM)</strong>: Omnibus test of parameters.</p></li>
 <li><p><strong>R2</strong>: Pseudo-R2-statistic, which indicates the amount of
-   heterogeneity accounted for by the moderators included in a fixed-effects
-   model.</p></li>
+heterogeneity accounted for by the moderators included in a fixed-effects
+model.</p></li>
 </ul><p>See the documentation for <code><a href='https://wviechtb.github.io/metafor/reference/fitstats.html'>?metafor::fitstats</a></code>.</p>
 
 

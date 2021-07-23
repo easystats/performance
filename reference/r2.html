@@ -48,8 +48,8 @@
 
 <meta property="og:title" content="Compute the model's R2 — r2" />
 <meta property="og:description" content="Calculate the R2, also known as the coefficient of
-  determination, value for different model objects. Depending on the model,
-  R2, pseudo-R2, or marginal / adjusted R2 values are returned." />
+determination, value for different model objects. Depending on the model,
+R2, pseudo-R2, or marginal / adjusted R2 values are returned." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -142,8 +142,8 @@
 
     <div class="ref-description">
     <p>Calculate the R2, also known as the coefficient of
-  determination, value for different model objects. Depending on the model,
-  R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
+determination, value for different model objects. Depending on the model,
+R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -169,15 +169,15 @@ whether to compute random effect variances for the conditional r-squared
 or not. Indicates up to which value the convergence result is accepted. When
 <code><a href='r2_nakagawa.html'>r2_nakagawa()</a></code> returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is <code>NA</code>),
-decrease the tolerance-level. See also <code><a href='check_singularity.html'>check_singularity</a></code>.</p></td>
+decrease the tolerance-level. See also <code><a href='check_singularity.html'>check_singularity()</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Returns a list containing values related to the most appropriate R2
-  for the given model (or <code>NULL</code> if no R2 could be extracted). See the
-  list below:</p><ul>
+for the given model (or <code>NULL</code> if no R2 could be extracted). See the
+list below:</p><ul>
 <li><p>Logistic models: <a href='r2_tjur.html'>Tjur's R2</a></p></li>
 <li><p>General linear models: <a href='r2_nagelkerke.html'>Nagelkerke's R2</a></p></li>
 <li><p>Multinomial Logit: <a href='r2_mcfadden.html'>McFadden's R2</a></p></li>
@@ -189,14 +189,14 @@ decrease the tolerance-level. See also <code><a href='check_singularity.html'>ch
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>If there is no <code>r2()</code>-method defined for the given model class,
-  <code>r2()</code> tries to return a "generic r2 value, calculated as following:
-  <code>1-sum((y-y_hat)^2)/sum((y-y_bar)^2))</code></p>
+<code>r2()</code> tries to return a "generic r2 value, calculated as following:
+<code>1-sum((y-y_hat)^2)/sum((y-y_bar)^2))</code></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='r2_bayes.html'>r2_bayes</a></code>, <code><a href='r2_coxsnell.html'>r2_coxsnell</a></code>, <code><a href='r2_kullback.html'>r2_kullback</a></code>,
-  <code><a href='r2_loo.html'>r2_loo</a></code>, <code><a href='r2_mcfadden.html'>r2_mcfadden</a></code>, <code><a href='r2_nagelkerke.html'>r2_nagelkerke</a></code>,
-  <code><a href='r2_nakagawa.html'>r2_nakagawa</a></code>, <code><a href='r2_tjur.html'>r2_tjur</a></code>, <code><a href='r2_xu.html'>r2_xu</a></code> and
-  <code><a href='r2_zeroinflated.html'>r2_zeroinflated</a></code>.</p></div>
+    <div class='dont-index'><p><code><a href='r2_bayes.html'>r2_bayes()</a></code>, <code><a href='r2_coxsnell.html'>r2_coxsnell()</a></code>, <code><a href='r2_kullback.html'>r2_kullback()</a></code>,
+<code><a href='r2_loo.html'>r2_loo()</a></code>, <code><a href='r2_mcfadden.html'>r2_mcfadden()</a></code>, <code><a href='r2_nagelkerke.html'>r2_nagelkerke()</a></code>,
+<code><a href='r2_nakagawa.html'>r2_nakagawa()</a></code>, <code><a href='r2_tjur.html'>r2_tjur()</a></code>, <code><a href='r2_xu.html'>r2_xu()</a></code> and
+<code><a href='r2_zeroinflated.html'>r2_zeroinflated()</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span></span>

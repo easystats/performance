@@ -48,8 +48,8 @@
 
 <meta property="og:title" content="Compare performance of different models — compare_performance" />
 <meta property="og:description" content="compare_performance() computes indices of model
-  performance for different models at once and hence allows comparison of
-  indices across models." />
+performance for different models at once and hence allows comparison of
+indices across models." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -142,8 +142,8 @@
 
     <div class="ref-description">
     <p><code>compare_performance()</code> computes indices of model
-  performance for different models at once and hence allows comparison of
-  indices across models.</p>
+performance for different models at once and hence allows comparison of
+indices across models.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>...</span>, metrics <span class='op'>=</span> <span class='st'>"all"</span>, rank <span class='op'>=</span> <span class='cn'>FALSE</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></code></pre></div>
@@ -159,7 +159,7 @@
       <th>metrics</th>
       <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
 metrics to be computed. See related
-<code><a href='model_performance.html'>documentation</a></code> of object's class for
+<code><a href='model_performance.html'>documentation()</a></code> of object's class for
 details.</p></td>
     </tr>
     <tr>
@@ -176,31 +176,31 @@ overall model performance. See 'Details'.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame (with one row per model) and one column per "index" (see
-  <code>metrics</code>).</p>
+<code>metrics</code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
 <h3 class='hasAnchor' id='ranking-models'><a class='anchor' aria-hidden='true' href='#ranking-models'></a>Ranking Models</h3>
 <p>When <code>rank = TRUE</code>, a new column <code>Performance_Score</code> is returned.
-  This score ranges from 0% to 100%, higher values indicating better model
-  performance. Note that all score value do not necessarily sum up to 100%.
-  Rather, calculation is based on normalizing all indices (i.e. rescaling
-  them to a range from 0 to 1), and taking the mean value of all indices for
-  each model. This is a rather quick heuristic, but might be helpful as
-  exploratory index.
-  <br /> <br />
-  In particular when models are of different types (e.g. mixed models,
-  classical linear models, logistic regression, ...), not all indices will be
-  computed for each model. In case where an index can't be calculated for a
-  specific model type, this model gets an <code>NA</code> value. All indices that
-  have any <code>NA</code>s are excluded from calculating the performance score.
-  <br /> <br />
-  There is a <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method for <code>compare_performance()</code>,
-  which creates a "spiderweb" plot, where the different indices are
-  normalized and larger values indicate better model performance.
-  Hence, points closer to the center indicate worse fit indices
-  (see <a href='https://easystats.github.io/see/articles/performance.html'>online-documentation</a>
-  for more details).</p>
+This score ranges from 0\<!-- % to 100\\%, higher values indicating better model -->
+performance. Note that all score value do not necessarily sum up to 100\<!-- %. -->
+Rather, calculation is based on normalizing all indices (i.e. rescaling
+them to a range from 0 to 1), and taking the mean value of all indices for
+each model. This is a rather quick heuristic, but might be helpful as
+exploratory index.
+<br /> <br />
+In particular when models are of different types (e.g. mixed models,
+classical linear models, logistic regression, ...), not all indices will be
+computed for each model. In case where an index can't be calculated for a
+specific model type, this model gets an <code>NA</code> value. All indices that
+have any <code>NA</code>s are excluded from calculating the performance score.
+<br /> <br />
+There is a <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>-method for <code>compare_performance()</code>,
+which creates a "spiderweb" plot, where the different indices are
+normalized and larger values indicate better model performance.
+Hence, points closer to the center indicate worse fit indices
+(see <a href='https://easystats.github.io/see/articles/performance.html'>online-documentation</a>
+for more details).</p>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 

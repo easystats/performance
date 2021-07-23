@@ -157,10 +157,7 @@ lavaan package." />
     <tr>
       <th>metrics</th>
       <td><p>Can be <code>"all"</code> or a character vector of metrics to be
-computed (some of <code>c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline",
-"Baseline_DoF", "Baseline_p", "CFI", "TLI", "NNFI", "RFI", "NFI", "PNFI",
-"IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted", "RMSEA",
-"SMRM")</code>).</p></td>
+computed (some of <code>c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline", "Baseline_DoF", "Baseline_p", "CFI", "TLI", "NNFI", "RFI", "NFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted", "RMSEA", "SMRM")</code>).</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -175,7 +172,7 @@ computed (some of <code>c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline",
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame (with one row) and one column per "index" (see
-  <code>metrics</code>).</p>
+<code>metrics</code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     
@@ -183,40 +180,40 @@ computed (some of <code>c("Chisq", "Chisq_DoF", "Chisq_p", "Baseline",
 
 <ul>
 <li><p><strong>Chisq</strong>: The model Chi-squared assesses overall fit and the
-   discrepancy between the sample and fitted covariance matrices. Its p-value
-   should be &gt; .05 (i.e., the hypothesis of a perfect fit cannot be
-   rejected). However, it is quite sensitive to sample size.</p></li>
+discrepancy between the sample and fitted covariance matrices. Its p-value
+should be &gt; .05 (i.e., the hypothesis of a perfect fit cannot be
+rejected). However, it is quite sensitive to sample size.</p></li>
 <li><p><strong>GFI/AGFI</strong>: The (Adjusted) Goodness of Fit is the proportion
-   of variance accounted for by the estimated population covariance.
-   Analogous to R2. The GFI and the AGFI should be &gt; .95 and &gt; .90,
-   respectively.</p></li>
+of variance accounted for by the estimated population covariance.
+Analogous to R2. The GFI and the AGFI should be &gt; .95 and &gt; .90,
+respectively.</p></li>
 <li><p><strong>NFI/NNFI/TLI</strong>: The (Non) Normed Fit Index. An NFI of 0.95,
-   indicates the model of interest improves the fit by 95% relative to the
-   null model. The NNFI (also called the Tucker Lewis index; TLI) is
-   preferable for smaller samples. They should be &gt; .90 (Byrne, 1994) or &gt;
-   .95 (Schumacker &amp; Lomax, 2004).</p></li>
+indicates the model of interest improves the fit by 95\<!-- % relative to the -->
+null model. The NNFI (also called the Tucker Lewis index; TLI) is
+preferable for smaller samples. They should be &gt; .90 (Byrne, 1994) or &gt;
+.95 (Schumacker &amp; Lomax, 2004).</p></li>
 <li><p><strong>CFI</strong>: The Comparative Fit Index is a revised form of NFI.
-   Not very sensitive to sample size (Fan, Thompson, &amp; Wang, 1999). Compares
-   the fit of a target model to the fit of an independent, or null, model. It
-   should be &gt; .90.</p></li>
+Not very sensitive to sample size (Fan, Thompson, &amp; Wang, 1999). Compares
+the fit of a target model to the fit of an independent, or null, model. It
+should be &gt; .90.</p></li>
 <li><p><strong>RMSEA</strong>: The Root Mean Square Error of Approximation is a
-   parsimony-adjusted index. Values closer to 0 represent a good fit. It
-   should be &lt; .08 or &lt; .05. The p-value printed with it tests the hypothesis
-   that RMSEA is less than or equal to .05 (a cutoff sometimes used for good
-   fit), and thus should be not significant.</p></li>
+parsimony-adjusted index. Values closer to 0 represent a good fit. It
+should be &lt; .08 or &lt; .05. The p-value printed with it tests the hypothesis
+that RMSEA is less than or equal to .05 (a cutoff sometimes used for good
+fit), and thus should be not significant.</p></li>
 <li><p><strong>RMR/SRMR</strong>: the (Standardized) Root Mean Square Residual
-   represents the square-root of the difference between the residuals of the
-   sample covariance matrix and the hypothesized model. As the RMR can be
-   sometimes hard to interpret, better to use SRMR. Should be &lt; .08.</p></li>
+represents the square-root of the difference between the residuals of the
+sample covariance matrix and the hypothesized model. As the RMR can be
+sometimes hard to interpret, better to use SRMR. Should be &lt; .08.</p></li>
 <li><p><strong>RFI</strong>: the Relative Fit Index, also known as RHO1, is not
-   guaranteed to vary from 0 to 1. However, RFI close to 1 indicates a good
-   fit.</p></li>
+guaranteed to vary from 0 to 1. However, RFI close to 1 indicates a good
+fit.</p></li>
 <li><p><strong>IFI</strong>: the Incremental Fit Index (IFI) adjusts the Normed Fit
-   Index (NFI) for sample size and degrees of freedom (Bollen's, 1989). Over
-   0.90 is a good fit, but the index can exceed 1.</p></li>
+Index (NFI) for sample size and degrees of freedom (Bollen's, 1989). Over
+0.90 is a good fit, but the index can exceed 1.</p></li>
 <li><p><strong>PNFI</strong>: the Parsimony-Adjusted Measures Index. There is no
-   commonly agreed-upon cutoff value for an acceptable model for this index.
-   Should be &gt; 0.50.</p></li>
+commonly agreed-upon cutoff value for an acceptable model for this index.
+Should be &gt; 0.50.</p></li>
 </ul>
 
 <p>See the documentation for <code><a href='https://rdrr.io/pkg/lavaan/man/fitMeasures.html'>?lavaan::fitmeasures</a></code>.</p>
@@ -231,17 +228,17 @@ and the <strong>SRMR</strong>.</p>
     
 <ul>
 <li><p>Byrne, B. M. (1994). Structural equation modeling with EQS and
-  EQS/Windows. Thousand Oaks, CA: Sage Publications.</p></li>
+EQS/Windows. Thousand Oaks, CA: Sage Publications.</p></li>
 <li><p>Tucker, L. R., \&amp; Lewis, C. (1973). The reliability coefficient for
-  maximum likelihood factor analysis. Psychometrika, 38, 1-10.</p></li>
+maximum likelihood factor analysis. Psychometrika, 38, 1-10.</p></li>
 <li><p>Schumacker, R. E., \&amp; Lomax, R. G. (2004). A beginner's guide to
-  structural equation modeling, Second edition. Mahwah, NJ: Lawrence Erlbaum
-  Associates.</p></li>
+structural equation modeling, Second edition. Mahwah, NJ: Lawrence Erlbaum
+Associates.</p></li>
 <li><p>Fan, X., B. Thompson, \&amp; L. Wang (1999). Effects of sample size,
-  estimation method, and model specification on structural equation modeling
-  fit indexes. Structural Equation Modeling, 6, 56-83.</p></li>
+estimation method, and model specification on structural equation modeling
+fit indexes. Structural Equation Modeling, 6, 56-83.</p></li>
 <li><p>Kline, R. B. (2015). Principles and practice of structural equation
-  modeling. Guilford publications.</p></li>
+modeling. Guilford publications.</p></li>
 </ul>
 
 

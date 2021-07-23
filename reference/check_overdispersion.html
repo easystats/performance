@@ -48,7 +48,7 @@
 
 <meta property="og:title" content="Check overdispersion of GL(M)M's — check_overdispersion" />
 <meta property="og:description" content="check_overdispersion() checks generalized linear (mixed)
-  models for overdispersion." />
+models for overdispersion." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -141,7 +141,7 @@
 
     <div class="ref-description">
     <p><code>check_overdispersion()</code> checks generalized linear (mixed)
-  models for overdispersion.</p>
+models for overdispersion.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>check_overdispersion</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
@@ -163,13 +163,13 @@ or <code>glm.nb</code> (package <span class="pkg">MASS</span>).</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with results from the overdispersion test, like chi-squared
-  statistics, p-value or dispersion ratio.</p>
+statistics, p-value or dispersion ratio.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Overdispersion occurs when the observed variance is higher than the
-  variance of a theoretical model. For Poisson models, variance increases
-  with the mean and, therefore, variance usually (roughly) equals the mean
-  value. If the variance is much higher, the data are "overdispersed".</p>
+variance of a theoretical model. For Poisson models, variance increases
+with the mean and, therefore, variance usually (roughly) equals the mean
+value. If the variance is much higher, the data are "overdispersed".</p>
 <h3 class='hasAnchor' id='interpretation-of-the-dispersion-ratio'><a class='anchor' aria-hidden='true' href='#interpretation-of-the-dispersion-ratio'></a>Interpretation of the Dispersion Ratio</h3>
 <p>If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
@@ -199,10 +199,10 @@ negative binomial, see <cite>Gelman and Hill (2007), pages 115-116</cite>).</p>
     
 <ul>
 <li><p>Bolker B et al. (2017):
- <a href='http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html'>GLMM FAQ.</a></p></li>
+<a href='http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html'>GLMM FAQ.</a></p></li>
 <li><p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and
- multilevel/hierarchical models. Cambridge; New York: Cambridge University
- Press.</p></li>
+multilevel/hierarchical models. Cambridge; New York: Cambridge University
+Press.</p></li>
 </ul>
 
 

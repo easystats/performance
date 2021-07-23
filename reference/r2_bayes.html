@@ -48,9 +48,9 @@
 
 <meta property="og:title" content="Bayesian R2 — r2_bayes" />
 <meta property="og:description" content="Compute R2 for Bayesian models. For mixed models (including a
-  random part), it additionally computes the R2 related to the fixed effects
-  only (marginal R2). While r2_bayes() returns a single R2 value,
-  r2_posterior() returns a posterior sample of Bayesian R2 values." />
+random part), it additionally computes the R2 related to the fixed effects
+only (marginal R2). While r2_bayes() returns a single R2 value,
+r2_posterior() returns a posterior sample of Bayesian R2 values." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -143,9 +143,9 @@
 
     <div class="ref-description">
     <p>Compute R2 for Bayesian models. For mixed models (including a
-  random part), it additionally computes the R2 related to the fixed effects
-  only (marginal R2). While <code>r2_bayes()</code> returns a single R2 value,
-  <code>r2_posterior()</code> returns a posterior sample of Bayesian R2 values.</p>
+random part), it additionally computes the R2 related to the fixed effects
+only (marginal R2). While <code>r2_bayes()</code> returns a single R2 value,
+<code>r2_posterior()</code> returns a posterior sample of Bayesian R2 values.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>r2_bayes</span><span class='op'>(</span><span class='va'>model</span>, robust <span class='op'>=</span> <span class='cn'>TRUE</span>, ci <span class='op'>=</span> <span class='fl'>0.89</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -200,20 +200,20 @@ estimated.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A list with the Bayesian R2 value. For mixed models, a list with the
-  Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
-  and credible intervals for the R2 values are saved as attributes.</p>
+Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
+and credible intervals for the R2 values are saved as attributes.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>r2_bayes()</code> returns an "unadjusted" R2 value. See
-  <code><a href='r2_loo.html'>r2_loo</a></code> to calculate a LOO-adjusted R2, which comes
-  conceptually closer to an adjusted R2 measure.
-  <br /> <br />
-  For mixed models, the conditional and marginal R2 are returned. The marginal
-  R2 considers only the variance of the fixed effects, while the conditional
-  R2 takes both the fixed and random effects into account.
-  <br /> <br />
-  <code>r2_posterior()</code> is the actual workhorse for <code>r2_bayes()</code> and
-  returns a posterior sample of Bayesian R2 values.</p>
+<code><a href='r2_loo.html'>r2_loo()</a></code> to calculate a LOO-adjusted R2, which comes
+conceptually closer to an adjusted R2 measure.
+<br /> <br />
+For mixed models, the conditional and marginal R2 are returned. The marginal
+R2 considers only the variance of the fixed effects, while the conditional
+R2 takes both the fixed and random effects into account.
+<br /> <br />
+<code>r2_posterior()</code> is the actual workhorse for <code>r2_bayes()</code> and
+returns a posterior sample of Bayesian R2 values.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gelman, A., Goodrich, B., Gabry, J., &amp; Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. doi: <a href='https://doi.org/10.1080/00031305.2018.1549100'>10.1080/00031305.2018.1549100</a></p>
