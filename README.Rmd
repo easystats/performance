@@ -50,17 +50,17 @@ The primary goal of the **performance** package is to fill this gap and to provi
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
 [![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 
-Run the following to install the stable release of **performance** from CRAN:
+The *performance* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
+
+Type | Source | Command
+---|---|---
+Release | CRAN | `install.packages("performance")`
+Development | R-universe | `install.packages("performance", repos = "https://easystats.r-universe.dev")`
+
+Once you have downloaded the package, you can then load it using:
 
 ```{r, eval=FALSE}
-install.packages("performance")
-```
-
-Or this one to install the latest development version:
-
-```{r, eval=FALSE}
-install.packages("remotes")
-remotes::install_github("easystats/performance")
+library("performance")
 ```
 
 ## Citation

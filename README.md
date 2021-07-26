@@ -27,18 +27,18 @@ zero-inflation, convergence or singularity.
 [![R
 check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 
-Run the following to install the stable release of **performance** from
-CRAN:
+The *performance* package is available on CRAN, while its latest
+development version is available on R-universe (from *rOpenSci*).
+
+| Type        | Source     | Command                                                                       |
+|-------------|------------|-------------------------------------------------------------------------------|
+| Release     | CRAN       | `install.packages("performance")`                                             |
+| Development | R-universe | `install.packages("performance", repos = "https://easystats.r-universe.dev")` |
+
+Once you have downloaded the package, you can then load it using:
 
 ``` r
-install.packages("performance")
-```
-
-Or this one to install the latest development version:
-
-``` r
-install.packages("remotes")
-remotes::install_github("easystats/performance")
+library("performance")
 ```
 
 ## Citation
@@ -140,8 +140,8 @@ model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cor
 r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
-#>   Conditional R2: 0.953 (89% CI [0.945, 0.962])
-#>      Marginal R2: 0.825 (89% CI [0.746, 0.888])
+#>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
+#>      Marginal R2: 0.824 (89% CI [0.747, 0.890])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -298,7 +298,7 @@ model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 check_model(model)
 ```
 
-<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
 
 ### Model performance summaries
 
@@ -393,7 +393,7 @@ installed).
 plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
-<img src="man/figures/unnamed-chunk-21-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-20-1.png" width="100%" />
 
 ### Testing models
 
