@@ -63,3 +63,11 @@ plot.compare_performance <- function(x, ...) {
   insight::check_if_installed("see", "for model comparison plots")
   NextMethod()
 }
+
+
+#' @export
+plot.check_model <- function(x, ...) {
+  insight::check_if_installed("see", "for model diagnositic plots")
+  NextMethod()
+}
+

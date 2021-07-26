@@ -39,8 +39,7 @@ print.check_outliers <- function(x, ...) {
 
 #' @export
 print.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "to plot model assumptions")
-
+  insight::check_if_installed("see", "for model diagnositic plots")
   NextMethod()
 }
 
