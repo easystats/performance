@@ -120,6 +120,26 @@ r2.summary.lm <- function(model, ...) {
 
 
 #' @export
+r2.systemfit <- function(model, ...) {
+  out <- lapply(summary(model)$eq, function(model_summary) {
+    s <- list(
+      R2 = model_summary$r.squared,
+      R2_adjusted = model_summary$adj.r.squared
+    )
+
+    names(s$R2) <- "R2"
+    names(s$R2_adjusted) <- "adjusted R2"
+
+    s
+  })
+
+  names(out) <- names(insight::find_formula(model))
+  out
+}
+
+
+
+#' @export
 r2.ols <- function(model, ...) {
   out <- list(R2 = model$stats["R2"])
   names(out$R2) <- "R2"

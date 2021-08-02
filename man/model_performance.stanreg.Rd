@@ -29,7 +29,9 @@ WAIC, R2 and RMSE.}
 
 \item{average}{Compute model-averaged index? See \code{\link[bayestestR:weighted_posteriors]{bayestestR::weighted_posteriors()}}.}
 
-\item{prior_odds}{Optional vector of prior odds for the models compared to the first model (or the denominator, for \code{BFBayesFactor} objects). For \code{data.frame}s, this will be used as the basis of weighting.}
+\item{prior_odds}{Optional vector of prior odds for the models compared to
+the first model (or the denominator, for \code{BFBayesFactor} objects). For
+\code{data.frame}s, this will be used as the basis of weighting.}
 }
 \value{
 A data frame (with one row) and one column per "index" (see

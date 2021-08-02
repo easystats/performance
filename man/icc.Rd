@@ -19,7 +19,7 @@ See 'Details'.}
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
-stricter the test will be. See \code{\link[performance:check_singularity]{check_singularity()}}.}
+stricter the test will be. See \code{\link[performance:check_singularity]{performance::check_singularity()}}.}
 
 \item{re_formula}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
