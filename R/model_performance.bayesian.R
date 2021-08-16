@@ -2,26 +2,49 @@
 #'
 #' Compute indices of model performance for (general) linear models.
 #'
-#' @param model Object of class \code{stanreg} or \code{brmsfit}.
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("LOOIC", "WAIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute LOOIC, WAIC, R2 and RMSE.
+#' @param model Object of class `stanreg` or `brmsfit`.
+#' @param metrics Can be `"all"`, `"common"` or a character vector of
+#'   metrics to be computed (some of `c("LOOIC", "WAIC", "R2", "R2_adj",
+#'   "RMSE", "SIGMA", "LOGLOSS", "SCORE")`). `"common"` will compute LOOIC,
+#'   WAIC, R2 and RMSE.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams model_performance.lm
 #'
-#' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
+#' @return A data frame (with one row) and one column per "index" (see
+#'   `metrics`).
 #'
-#' @details Depending on \code{model}, following indices are computed:
+#' @details Depending on `model`, following indices are computed:
 #' \itemize{
-#'   \item{\strong{ELPD}} {expected log predictive density, see \code{\link{looic}}}
-#'   \item{\strong{LOOIC}} {leave-one-out cross-validation (LOO) information criterion, see \code{\link{looic}}}
-#'   \item{\strong{WAIC}} {widely applicable information criterion, see \code{?loo::waic}}
-#'   \item{\strong{R2}} {r-squared value, see \code{\link{r2_bayes}}}
-#'   \item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see \code{\link{r2_loo}}}
-#'   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
-#'   \item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight:get_sigma]{get_sigma()}}}
-#'   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
-#'   \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
-#'   \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
-#'   \item{\strong{PCP}} {percentage of correct predictions, see \code{\link{performance_pcp}}}
+#'   \item{**ELPD**} {expected log predictive density. Larger ELPD values
+#'   mean better fit. See [looic()].}
+#'
+#'   \item{**LOOIC**} {leave-one-out cross-validation (LOO) information
+#'   criterion. Lower LOOIC values mean better fit. See [looic()].}
+#'
+#'   \item{**WAIC**} {widely applicable information criterion. Lower WAIC
+#'   values mean better fit. See `?loo::waic`.}
+#'
+#'   \item{**R2**} {r-squared value, see [r2_bayes()].}
+#'
+#'   \item{**R2_LOO_adjusted**} {adjusted r-squared, see
+#'   [r2_loo()].}
+#'
+#'   \item{**RMSE**} {root mean squared error, see
+#'   [performance_rmse()].}
+#'
+#'   \item{**SIGMA**} {residual standard deviation, see
+#'   [insight::get_sigma()].}
+#'
+#'   \item{**LOGLOSS**} {Log-loss, see [performance_logloss()].}
+#'
+#'   \item{**SCORE_LOG**} {score of logarithmic proper scoring rule, see
+#'   [performance_score()].}
+#'
+#'   \item{**SCORE_SPHERICAL**} {score of spherical proper scoring rule,
+#'   see [performance_score()].}
+#'
+#'   \item{**PCP**} {percentage of correct predictions, see
+#'   [performance_pcp()].}
 #' }
 #'
 #' @examples
@@ -49,8 +72,10 @@
 #'   model_performance(model, average = TRUE)
 #' }
 #' }
-#' @seealso \link{r2_bayes}
-#' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, The American Statistician, 1-6.
+#' @seealso [r2_bayes]
+#' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018).
+#'   R-squared for Bayesian regression models. The American Statistician, The
+#'   American Statistician, 1-6.
 #'
 #' @export
 model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ...) {
@@ -70,14 +95,15 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
 
   algorithm <- insight::find_algorithm(model)
+
   if (algorithm$algorithm != "sampling") {
-    if (verbose) warning("`model_performance()` only possible for models fit using the 'sampling' algorithm.", call. = FALSE)
+    if (verbose) {
+      warning(insight::format_message("`model_performance()` only possible for models fit using the 'sampling' algorithm."), call. = FALSE)
+    }
     return(NULL)
   }
 
-  if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` required for this function to work. Please install it.")
-  }
+  insight::check_if_installed("loo")
 
   mi <- insight::model_info(model)
 
@@ -199,13 +225,17 @@ model_performance.stanmvreg <- model_performance.stanreg
 #' @export
 #' @inheritParams r2_bayes
 #' @rdname model_performance.stanreg
-model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TRUE,
-                                            average = FALSE, prior_odds = NULL, ...) {
+model_performance.BFBayesFactor <- function(model,
+                                            metrics = "all",
+                                            verbose = TRUE,
+                                            average = FALSE,
+                                            prior_odds = NULL,
+                                            ...) {
   if (all(metrics == "all")) {
     metrics <- c("R2", "SIGMA")
   }
 
-  mi <- insight::model_info(model)
+  mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.", call. = FALSE)
     return(NULL)
@@ -242,9 +272,6 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
 
 
 
-
-
-
 # helper -------------------
 
 
@@ -260,11 +287,13 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
 
 
 .get_sigma_bfbayesfactor_model_average <- function(model, prior_odds = NULL) {
-  if (!requireNamespace("BayesFactor", quietly = TRUE)) {
-    stop("Package `BayesFactor` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("BayesFactor")
 
   BFMods <- bayestestR::bayesfactor_models(model, verbose = FALSE)
+
+  if (!is.null(BFMods$log_BF)) {
+    BFMods$BF <- exp(BFMods$log_BF)
+  }
 
   # extract parameters
   intercept_only <- which(BFMods$Model == "1")
@@ -290,6 +319,7 @@ model_performance.BFBayesFactor <- function(model, metrics = "all", verbose = TR
   } else {
     prior_odds <- rep(1, nrow(BFMods))
   }
+
   posterior_odds <- prior_odds * BFMods$BF
   posterior_odds <- posterior_odds[-1] / posterior_odds[1]
 

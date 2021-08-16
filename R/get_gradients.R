@@ -17,15 +17,14 @@
 
 
 .get_gradients.default <- function(x, ...) {
-  if (!requireNamespace("sandwich", quietly = TRUE)) {
-    stop("Package 'sandwich' required. Please install it by running `install.packages('sandwich')`.")
-  }
+  insight::check_if_installed("sandwich")
+
   sandwich::estfun(x, ...)
 }
 
 
 # .get_gradients.lm <- function(x, ...) {
-#   insight::get_residuals(x) * insight::get_weights(x, null_as_ones = TRUE) * model.matrix(x)
+#   insight::get_residuals(x) * insight::get_weights(x, null_as_ones = TRUE) * insight::get_modelmatrix(x)
 # }
 #
 # .get_gradients.lmer <- .get_gradients.lm
@@ -40,13 +39,13 @@
 #   } else{
 #     dispersion <- sum(w^2, na.rm = TRUE)/sum(weights(x, "working"), na.rm = TRUE)
 #   }
-#   rez <- w * stats::model.matrix(x) / dispersion
+#   rez <- w * insight::get_modelmatrix(x) / dispersion
 #   rez
 # }
 #
 # .get_gradients.glmer <- function(x, ...) {
 #   w <- as.vector(insight::get_residuals(x, "working")) * insight::get_weights(x, "working")
-#   w * stats::model.matrix(x) / insight::get_auxiliary(x, type = "dispersion")
+#   w * insight::get_modelmatrix(x) / insight::get_auxiliary(x, type = "dispersion")
 # }
 
 

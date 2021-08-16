@@ -44,4 +44,54 @@ if (require("testthat") && require("performance") && require("glmmTMB")) {
       tolerance = 1e-3
     )
   })
+
+  if (require("afex") && utils::packageVersion("afex") >= package_version("1.0.0")) {
+    test_that("check_collinearity | afex", {
+      data(obk.long, package = "afex")
+
+      obk.long$treatment <- as.character(obk.long$treatment)
+      suppressWarnings(suppressMessages({
+        aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+          data = obk.long
+        )
+
+        aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
+          data = obk.long
+        )
+
+        aB <- afex::aov_car(value ~ treatment * gender + Error(id),
+          data = obk.long
+        )
+      }))
+
+      expect_error(check_collinearity(aM))
+      expect_error(check_collinearity(aW))
+      expect_error(check_collinearity(aB))
+
+      suppressWarnings(suppressMessages({
+        aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
+          include_aov = TRUE,
+          data = obk.long
+        )
+
+        aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
+          include_aov = TRUE,
+          data = obk.long
+        )
+
+        aB <- afex::aov_car(value ~ treatment * gender + Error(id),
+          include_aov = TRUE,
+          data = obk.long
+        )
+      }))
+
+      expect_message(ccoM <- check_collinearity(aM))
+      expect_message(ccoW <- check_collinearity(aW))
+      expect_message(ccoB <- check_collinearity(aB))
+
+      expect_equal(nrow(ccoM), 15)
+      expect_equal(nrow(ccoW), 3)
+      expect_equal(nrow(ccoB), 3)
+    })
+  }
 }

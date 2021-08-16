@@ -7,7 +7,13 @@
 #'
 #' @return The R2 value.
 #'
-#' @details Efron's R2 is calculated by taking the sum of the squared model residuals, divided by the total variability in the dependent variable. This R2 equals the squared correlation between the predicted values and actual values, however, note that model residuals from generalized linear models are not generally comparable to those of OLS.
+#' @details
+#'
+#' Efron's R2 is calculated by taking the sum of the squared model residuals,
+#' divided by the total variability in the dependent variable. This R2 equals
+#' the squared correlation between the predicted values and actual values,
+#' however, note that model residuals from generalized linear models are not
+#' generally comparable to those of OLS.
 #'
 #' @references
 #' \itemize{
@@ -36,6 +42,6 @@ r2_efron.default <- function(model) {
 
 .r2_efron <- function(model) {
   y_hat <- stats::predict(model, type = "response")
-  y <- .factor_to_numeric(insight::get_response(model), lowest = 0)
+  y <- .factor_to_numeric(insight::get_response(model, verbose = FALSE), lowest = 0)
   (1 - (sum((y - y_hat)^2)) / (sum((y - mean(y))^2)))
 }

@@ -18,9 +18,9 @@ The LOO-adjusted R2 for \code{model}, as numeric value.
 Compute LOO-adjusted R2.
 }
 \details{
-Unlike \code{\link{r2_bayes}}, which returns an "unadjusted" R2 value,
-  \code{r2_loo()} calculates a LOO-adjusted R2, which comes conceptionally
-  closer to an "adjusted" R2 measure.
+Unlike \code{\link[=r2_bayes]{r2_bayes()}}, which returns an "unadjusted" R2 value,
+\code{r2_loo()} calculates a LOO-adjusted R2, which comes conceptionally
+closer to an "adjusted" R2 measure.
 }
 \examples{
 if (require("rstanarm")) {

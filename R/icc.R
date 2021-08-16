@@ -1,22 +1,22 @@
 #' Intraclass Correlation Coefficient (ICC)
 #'
 #' This function calculates the intraclass-correlation coefficient (ICC) -
-#' sometimes also called \emph{variance partition coefficient} (VPC) - for mixed
+#' sometimes also called *variance partition coefficient* (VPC) - for mixed
 #' effects models. The ICC can be calculated for all models supported by
-#' \code{insight::get_variance()}. For models fitted with the
-#' \strong{brms}-package, \code{icc()} might fail due to the large variety of
-#' models and families supported by the \strong{brms}-package. In such cases, an
-#' alternative to the ICC is the \code{variance_decomposition()}, which is based
+#' `insight::get_variance()`. For models fitted with the
+#' **brms**-package, `icc()` might fail due to the large variety of
+#' models and families supported by the **brms**-package. In such cases, an
+#' alternative to the ICC is the `variance_decomposition()`, which is based
 #' on the posterior predictive distribution (see 'Details').
 #'
 #' @param model A (Bayesian) mixed effects model.
 #' @param re_formula Formula containing group-level effects to be considered in
-#'   the prediction. If \code{NULL} (default), include all group-level effects.
+#'   the prediction. If `NULL` (default), include all group-level effects.
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the variance decomposition for this group-level. See 'Details'
-#'   and \code{?brms::posterior_predict}.
+#'   and `?brms::posterior_predict`.
 #' @param ci Credible interval level.
-#' @param by_group Logical, if \code{TRUE}, \code{icc()} returns the variance
+#' @param by_group Logical, if `TRUE`, `icc()` returns the variance
 #'   components for each random-effects level (if there are multiple levels).
 #'   See 'Details'.
 #'
@@ -24,7 +24,7 @@
 #' @inheritParams insight::get_variance
 #'
 #' @return A list with two values, the adjusted and conditional ICC. For
-#' \code{variance_decomposition()}, a list with two values, the decomposed
+#' `variance_decomposition()`, a list with two values, the decomposed
 #' ICC as well as the credible intervals for this ICC.
 #'
 #' @references \itemize{
@@ -64,17 +64,17 @@
 #'  residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
 #'  }
 #'  \subsection{Adjusted and conditional ICC}{
-#'  \code{icc()} calculates an adjusted and conditional ICC, which both take all
-#'  sources of uncertainty (i.e. of \emph{all random effects}) into account.
-#'  While the \emph{adjusted ICC} only relates to the random effects, the
-#'  \emph{conditional ICC} also takes the fixed effects variances into account
-#'  (see \cite{Nakagawa et al. 2017}). Typically, the \emph{adjusted} ICC is of
-#'  interest when the analysis of random effects is of interest. \code{icc()}
+#'  `icc()` calculates an adjusted and conditional ICC, which both take all
+#'  sources of uncertainty (i.e. of *all random effects*) into account.
+#'  While the *adjusted ICC* only relates to the random effects, the
+#'  *conditional ICC* also takes the fixed effects variances into account
+#'  (see \cite{Nakagawa et al. 2017}). Typically, the *adjusted* ICC is of
+#'  interest when the analysis of random effects is of interest. `icc()`
 #'  returns a meaningful ICC also for more complex random effects structures,
 #'  like models with random slopes or nested design (more than two levels) and
 #'  is applicable for models with other distributions than Gaussian. For more
 #'  details on the computation of the variances, see
-#'  \code{?insight::get_variance}.
+#'  `?insight::get_variance`.
 #'  }
 #'  \subsection{ICC for unconditional and conditional models}{
 #'  Usually, the ICC is calculated for the null model ("unconditional model").
@@ -86,30 +86,30 @@
 #'  }
 #'  \subsection{ICC for specific group-levels}{
 #'  The proportion of variance for specific levels related to the overall model
-#'  can be computed by setting \code{by_group = TRUE}. The reported ICC is
+#'  can be computed by setting `by_group = TRUE`. The reported ICC is
 #'  the variance for each (random effect) group compared to the total
 #'  variance of the model. For mixed models with a simple random intercept,
 #'  this is identical to the classical (adjusted) ICC.
 #'  }
 #'  \subsection{Variance decomposition for brms-models}{
-#'  If \code{model} is of class \code{brmsfit}, \code{icc()} might fail due to
-#'  the large variety of models and families supported by the \strong{brms}
-#'  package. In such cases, \code{variance_decomposition()} is an alternative
+#'  If `model` is of class `brmsfit`, `icc()` might fail due to
+#'  the large variety of models and families supported by the **brms**
+#'  package. In such cases, `variance_decomposition()` is an alternative
 #'  ICC measure. The function calculates a variance decomposition based on the
 #'  posterior predictive distribution. In this case, first, the draws from the
-#'  posterior predictive distribution \emph{not conditioned} on group-level
-#'  terms (\code{posterior_predict(..., re_formula = NA)}) are calculated as
-#'  well as draws from this distribution \emph{conditioned} on \emph{all random
-#'  effects} (by default, unless specified else in \code{re_formula}) are taken.
+#'  posterior predictive distribution *not conditioned* on group-level
+#'  terms (`posterior_predict(..., re_formula = NA)`) are calculated as
+#'  well as draws from this distribution *conditioned* on *all random
+#'  effects* (by default, unless specified else in `re_formula`) are taken.
 #'  Then, second, the variances for each of these draws are calculated. The
 #'  "ICC" is then the ratio between these two variances. This is the recommended
 #'  way to analyse random-effect-variances for non-Gaussian models. It is then
 #'  possible to compare variances across models, also by specifying different
-#'  group-level terms via the \code{re_formula}-argument.
+#'  group-level terms via the `re_formula`-argument.
 #'  \cr \cr
 #'  Sometimes, when the variance of the posterior predictive distribution is
 #'  very large, the variance ratio in the output makes no sense, e.g. because
-#'  it is negative. In such cases, it might help to use \code{robust = TRUE}.
+#'  it is negative. In such cases, it might help to use `robust = TRUE`.
 #'  }
 #'
 #' @examples
@@ -194,7 +194,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
   if (isTRUE(by_group)) {
     # with random slopes, icc is inaccurate
     if (!is.null(insight::find_random_slopes(model))) {
-      warning("Model contains random slopes. Cannot compute accurate ICCs by group factors.", call. = FALSE)
+      warning(insight::format_message("Model contains random slopes. Cannot compute accurate ICCs by group factors."), call. = FALSE)
     }
 
     # icc per group factor with reference to overall model
@@ -237,7 +237,21 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
 
 
 
-#' @param ... Arguments passed down to \code{brms::posterior_predict()}.
+#' @export
+as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
+  data.frame(
+    ICC_adjusted = x$ICC_adjusted,
+    ICC_conditional = x$ICC_conditional,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    optional = optional,
+    ...
+  )
+}
+
+
+
+#' @param ... Arguments passed down to `brms::posterior_predict()`.
 #' @inheritParams icc
 #' @rdname icc
 #' @export
@@ -265,10 +279,7 @@ variance_decomposition <- function(model,
     return(NULL)
   }
 
-
-  if (!requireNamespace("brms", quietly = TRUE)) {
-    stop("Package `brms` needed for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("brms")
 
   PPD <- brms::posterior_predict(model, re_formula = re_formula, summary = FALSE, ...)
   var_total <- apply(PPD, MARGIN = 1, FUN = stats::var)

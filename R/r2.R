@@ -14,24 +14,25 @@
 #' @inheritParams r2_nakagawa
 #'
 #' @return Returns a list containing values related to the most appropriate R2
-#'   for the given model. See the list below:
+#'   for the given model (or `NULL` if no R2 could be extracted). See the
+#'   list below:
 #' \itemize{
-#'   \item Logistic models: \link[=r2_tjur]{Tjur's R2}
-#'   \item General linear models: \link[=r2_nagelkerke]{Nagelkerke's R2}
-#'   \item Multinomial Logit: \link[=r2_mcfadden]{McFadden's R2}
-#'   \item Models with zero-inflation: \link[=r2_zeroinflated]{R2 for zero-inflated models}
-#'   \item Mixed models: \link[=r2_nakagawa]{Nakagawa's R2}
-#'   \item Bayesian models: \link[=r2_bayes]{R2 bayes}
+#'   \item Logistic models: [Tjur's R2][r2_tjur]
+#'   \item General linear models: [Nagelkerke's R2][r2_nagelkerke]
+#'   \item Multinomial Logit: [McFadden's R2][r2_mcfadden]
+#'   \item Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
+#'   \item Mixed models: [Nakagawa's R2][r2_nakagawa]
+#'   \item Bayesian models: [R2 bayes][r2_bayes]
 #' }
 #'
-#' @note If there is no \code{r2()}-method defined for the given model class,
-#'   \code{r2()} tries to return a "generic r2 value, calculated as following:
-#'   \code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
+#' @note If there is no `r2()`-method defined for the given model class,
+#'   `r2()` tries to return a "generic r2 value, calculated as following:
+#'   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
 #'
-#' @seealso \code{\link{r2_bayes}}, \code{\link{r2_coxsnell}}, \code{\link{r2_kullback}},
-#'   \code{\link{r2_loo}}, \code{\link{r2_mcfadden}}, \code{\link{r2_nagelkerke}},
-#'   \code{\link{r2_nakagawa}}, \code{\link{r2_tjur}}, \code{\link{r2_xu}} and
-#'   \code{\link{r2_zeroinflated}}.
+#' @seealso [r2_bayes()], [r2_coxsnell()], [r2_kullback()],
+#'   [r2_loo()], [r2_mcfadden()], [r2_nagelkerke()],
+#'   [r2_nakagawa()], [r2_tjur()], [r2_xu()] and
+#'   [r2_zeroinflated()].
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
@@ -63,9 +64,9 @@ r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRU
   out <- tryCatch(
     {
       if (insight::model_info(model)$is_binomial) {
-        resp <- .recode_to_zero(insight::get_response(model))
+        resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
-        resp <- .factor_to_numeric(insight::get_response(model))
+        resp <- .factor_to_numeric(insight::get_response(model, verbose = FALSE))
       }
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, verbose = FALSE)
@@ -76,15 +77,13 @@ r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRU
     }
   )
 
-  if (is.na(NULL) && isTRUE(verbose)) {
+  if (is.null(out) && isTRUE(verbose)) {
     insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
   }
 
   if (!is.null(out)) {
     names(out$R2) <- "R2"
     class(out) <- c("r2_generic", class(out))
-  } else {
-    out <- NA
   }
 
   out
@@ -131,6 +130,26 @@ r2.summary.lm <- function(model, ...) {
 
 
 #' @export
+r2.systemfit <- function(model, ...) {
+  out <- lapply(summary(model)$eq, function(model_summary) {
+    s <- list(
+      R2 = model_summary$r.squared,
+      R2_adjusted = model_summary$adj.r.squared
+    )
+
+    names(s$R2) <- "R2"
+    names(s$R2_adjusted) <- "adjusted R2"
+
+    s
+  })
+
+  names(out) <- names(insight::find_formula(model))
+  out
+}
+
+
+
+#' @export
 r2.ols <- function(model, ...) {
   out <- list(R2 = model$stats["R2"])
   names(out$R2) <- "R2"
@@ -149,7 +168,7 @@ r2.cph <- r2.ols
 
 #' @export
 r2.mhurdle <- function(model, ...) {
-  resp <- insight::get_response(model)
+  resp <- insight::get_response(model, verbose = FALSE)
   mean_resp <- mean(resp, na.rm = TRUE)
   ftd <- model$fitted.values[, "pos", drop = TRUE] * (1 - model$fitted.values[, "zero", drop = TRUE])
   n <- length(resp)
@@ -213,16 +232,21 @@ r2.mlm <- function(model, ...) {
 
 
 #' @export
-r2.glm <- function(model, ...) {
+r2.glm <- function(model, verbose = TRUE, ...) {
   info <- insight::model_info(model)
 
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
-  } else if (info$is_logit) {
+  } else if (info$is_logit && info$is_bernoulli) {
     out <- list("R2_Tjur" = r2_tjur(model))
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
+  } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+    if (verbose) {
+      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
+    }
+    out <- NULL
   } else {
     out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
@@ -523,9 +547,7 @@ r2.feis <- function(model, ...) {
 
 #' @export
 r2.fixest <- function(model, ...) {
-  if (!requireNamespace("fixest", quietly = TRUE)) {
-    stop("Package 'fixest' needed to calculate R2. Please install it.")
-  }
+  insight::check_if_installed("fixest")
 
   r2 <- fixest::r2(model)
 
@@ -688,6 +710,23 @@ r2.plm <- function(model, ...) {
   )
 
   attr(out, "model_type") <- "Panel Data"
+  structure(class = "r2_generic", out)
+}
+
+
+
+#' @export
+r2.selection <- function(model, ...) {
+  model_summary <- summary(model)
+  if (is.null(model_summary$rSquared)) {
+    return(NULL)
+  }
+  out <- list(
+    "R2" = c(`R2` = model_summary$rSquared$R2),
+    "R2_adjusted" = c(`adjusted R2` = model_summary$rSquared$R2adj)
+  )
+
+  attr(out, "model_type") <- "Tobit 2"
   structure(class = "r2_generic", out)
 }
 

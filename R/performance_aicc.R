@@ -2,9 +2,9 @@
 #' @name performance_aicc
 #'
 #' @description Compute the AIC or the second-order Akaike's information criterion (AICc).
-#' \code{performance_aic()} is a small wrapper that returns the AIC. It is
+#' `performance_aic()` is a small wrapper that returns the AIC. It is
 #' a generic function that also works for some models that don't have a AIC method
-#' (like Tweedie models). \code{performance_aicc()} returns the second-order (or "small sample") AIC that incorporates a correction for small sample sizes.
+#' (like Tweedie models). `performance_aicc()` returns the second-order (or "small sample") AIC that incorporates a correction for small sample sizes.
 #'
 #' @param x A model object.
 #' @param ... Currently not used.
@@ -32,10 +32,7 @@ performance_aic <- function(x, ...) {
 }
 
 
-
-
 # default -------------------------------------------------
-
 
 #' @export
 performance_aic.default <- function(x, ...) {
@@ -48,10 +45,7 @@ performance_aic.default <- function(x, ...) {
   }
 
   if (info$family == "Tweedie") {
-    if (!requireNamespace("tweedie", quietly = TRUE)) {
-      warning("Package 'tweedie' required for this function work. Please install it.", call. = FALSE)
-      return(NULL)
-    }
+    insight::check_if_installed("tweedie")
     aic <- suppressMessages(tweedie::AICtweedie(x))
   } else {
     aic <- tryCatch(
@@ -79,29 +73,17 @@ performance_aic.default <- function(x, ...) {
 }
 
 
-
-
-
-
 # VGAM models ------------------------------------
 
 
 #' @export
 performance_aic.vgam <- function(x, ...) {
-  if (!requireNamespace("VGAM", quietly = TRUE)) {
-    warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
-    return(NULL)
-  }
+  insight::check_if_installed("VGAM")
   VGAM::AIC(x)
 }
 
 #' @export
 performance_aic.vglm <- performance_aic.vgam
-
-
-
-
-
 
 
 
@@ -156,9 +138,6 @@ performance_aic.betaor <- performance_aic.logitor
 performance_aic.betamfx <- performance_aic.logitor
 
 
-
-
-
 # Other models --------------------------------------
 
 #' @export
@@ -166,24 +145,12 @@ performance_aic.bayesx <- function(x, ...) {
   stats::AIC(x)[["AIC"]]
 }
 
-
-
-
-
-
 # methods ------------------------------------------
-
 
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
   -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
 }
-
-
-
-
-
-
 
 
 # AICc ------------------------------------------
@@ -214,10 +181,7 @@ performance_aicc.Arima <- performance_aicc.bife
 
 #' @export
 performance_aicc.vglm <- function(x, ...) {
-  if (!requireNamespace("VGAM", quietly = TRUE)) {
-    warning("Package 'VGAM' required for this function work. Please install it.", call. = FALSE)
-    return(NULL)
-  }
+  insight::check_if_installed("VGAM")
   VGAM::AICc(x)
 }
 

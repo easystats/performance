@@ -1,14 +1,14 @@
 #' @title Check for zero-inflation in count models
 #' @name check_zeroinflation
 #'
-#' @description \code{check_zeroinflation()} checks whether count models are
+#' @description `check_zeroinflation()` checks whether count models are
 #'   over- or underfitting zeros in the outcome.
 #'
-#' @param x Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
-#'    or \code{glm.nb} (package \pkg{MASS}).
+#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`,
+#'    or `glm.nb` (package \pkg{MASS}).
 #' @param tolerance The tolerance for the ratio of observed and predicted
 #'    zeros to considered as over- or underfitting zeros. A ratio
-#'    between 1 +/- \code{tolerance} is considered as OK, while a ratio
+#'    between 1 +/- `tolerance` is considered as OK, while a ratio
 #'    beyond or below this threshold would indicate over- or underfitting.
 #'
 #' @return A list with information about the amount of predicted and observed
@@ -34,7 +34,7 @@ check_zeroinflation <- function(x, tolerance = .05) {
   }
 
   # get actual zero of response
-  obs.zero <- sum(insight::get_response(x) == 0)
+  obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0)
 
   if (obs.zero == 0) {
     insight::print_color("Model has no observed zeros in the response variable.\n", "red")

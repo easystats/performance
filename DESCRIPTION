@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.7.1
+Version: 0.7.3.1
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -28,11 +28,21 @@ Authors@R:
              role = c("aut", "ctb"),
              email = "philip.waggoner@gmail.com",
              comment = c(ORCID = "0000-0002-7825-7573")),
+      person(given = "Brenton M.",
+             family = "Wiernik",
+             role = c("aut", "ctb"),
+             email = "brenton@wiernik.org",
+             comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
       person(given = "Vincent",
              family = "Arel-Bundock", 
              email = "vincent.arel-bundock@umontreal.ca", 
              role = "ctb",
-             comment = c(ORCID = "0000-0003-2042-7063")))
+             comment = c(ORCID = "0000-0003-2042-7063")),
+      person(given = "Martin",
+             family = "Jullum",   
+             role = "rev"),
+      person(given = "gjo11",   
+             role = "rev"))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's 'base' or 'stats' packages.
@@ -49,12 +59,14 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.4)
 Imports:
-    bayestestR (>= 0.8.2),
-    insight (>= 0.13.2),
+    bayestestR (>= 0.9.0),
+    insight (>= 0.14.0),
+    datawizard (>= 0.2.0),
     stats,
     utils
 Suggests:
     AER,
+    afex,
     BayesFactor,
     betareg,
     bigutilsr,
@@ -64,12 +76,12 @@ Suggests:
     correlation,
     cplm,
     dbscan,
+    dplyr,
     fixest,
     forecast,
     gamm4,
     ggplot2,
     glmmTMB,
-    gridExtra,
     ICS,
     ICSOutlier,
     ISLR,
@@ -80,14 +92,17 @@ Suggests:
     magrittr,
     MASS,
     Matrix,
+    mclust,
     metafor,
     mgcv,
     mlogit,
+    multimode,
     nlme,
     nonnest2,
     ordinal,
     parallel,
     parameters,
+    patchwork,
     pscl,
     psych,
     randomForest,
@@ -102,8 +117,10 @@ Suggests:
     testthat,
     tweedie,
     VGAM
+Remotes:
+    easystats/datawizard
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.1
-Remotes: easystats/insight
+RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)

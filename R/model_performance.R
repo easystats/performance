@@ -3,22 +3,22 @@
 #'
 #' @description See the documentation for your object's class:
 #' \itemize{
-#'   \item \link[=model_performance.lm]{Frequentist Regressions}
-#'   \item \link[=model_performance.ivreg]{Instrumental Variables Regressions}
-#'   \item \link[=model_performance.merMod]{Mixed models}
-#'   \item \link[=model_performance.stanreg]{Bayesian models}
-#'   \item \link[=model_performance.lavaan]{CFA / SEM lavaan models}
-#'   \item \link[=model_performance.rma]{Meta-analysis models}
+#'   \item [Frequentist Regressions][model_performance.lm]
+#'   \item [Instrumental Variables Regressions][model_performance.ivreg]
+#'   \item [Mixed models][model_performance.merMod]
+#'   \item [Bayesian models][model_performance.stanreg]
+#'   \item [CFA / SEM lavaan models][model_performance.lavaan]
+#'   \item [Meta-analysis models][model_performance.rma]
 #' }
 #'
-#' @seealso \code{\link[=compare_performance]{compare_performance()}} to compare performance of many different models.
+#' @seealso [`compare_performance()`][compare_performance] to compare performance of many different models.
 #'
 #' @param model Statistical model.
 #' @param ... Arguments passed to or from other methods, resp. for
-#'   \code{compare_performance()}, one or multiple model objects (also of
+#'   `compare_performance()`, one or multiple model objects (also of
 #'   different classes).
 #'
-#' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
+#' @return A data frame (with one row) and one column per "index" (see `metrics`).
 #'
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)

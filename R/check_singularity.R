@@ -5,46 +5,60 @@
 #'
 #' @param x A mixed model.
 #' @param tolerance Indicates up to which value the convergence result is
-#'    accepted. The larger \code{tolerance} is, the stricter the test
+#'    accepted. The larger `tolerance` is, the stricter the test
 #'    will be.
 #' @param ... Currently not used.
 #'
-#' @return \code{TRUE} if the model fit is singular.
+#' @return `TRUE` if the model fit is singular.
 #'
 #' @details If a model is "singular", this means that some dimensions of the
 #'   variance-covariance matrix have been estimated as exactly zero. This
 #'   often occurs for mixed models with complex random effects structures.
 #'   \cr \cr
-#'   \dQuote{While singular models are statistically well defined (it is theoretically
-#'   sensible for the true maximum likelihood estimate to correspond to a
-#'   singular fit), there are real concerns that (1) singular fits correspond
-#'   to overfitted models that may have poor power; (2) chances of numerical
-#'   problems and mis-convergence are higher for singular models (e.g. it
-#'   may be computationally difficult to compute profile confidence intervals
-#'   for such models); (3) standard inferential procedures such as Wald
-#'   statistics and likelihood ratio tests may be inappropriate.}
+#'   \dQuote{While singular models are statistically well defined (it is
+#'   theoretically sensible for the true maximum likelihood estimate to
+#'   correspond to a singular fit), there are real concerns that (1) singular
+#'   fits correspond to overfitted models that may have poor power; (2) chances
+#'   of numerical problems and mis-convergence are higher for singular models
+#'   (e.g. it may be computationally difficult to compute profile confidence
+#'   intervals for such models); (3) standard inferential procedures such as
+#'   Wald statistics and likelihood ratio tests may be inappropriate.}
 #'   (\cite{lme4 Reference Manual})
 #'   \cr \cr
 #'   There is no gold-standard about how to deal with singularity and which
 #'   random-effects specification to choose. Beside using fully Bayesian methods
 #'   (with informative priors), proposals in a frequentist framework are:
 #'   \itemize{
-#'   \item avoid fitting overly complex models, such that the variance-covariance matrices can be estimated precisely enough (\cite{Matuschek et al. 2017})
-#'   \item use some form of model selection to choose a model that balances predictive accuracy and overfitting/type I error (\cite{Bates et al. 2015}, \cite{Matuschek et al. 2017})
-#'   \item \dQuote{keep it maximal}, i.e. fit the most complex model consistent with the experimental design, removing only terms required to allow a non-singular fit (\cite{Barr et al. 2013})
+#'   \item avoid fitting overly complex models, such that the
+#'   variance-covariance matrices can be estimated precisely enough
+#'   (\cite{Matuschek et al. 2017})
+#'   \item use some form of model selection to choose a model that balances
+#'   predictive accuracy and overfitting/type I error (\cite{Bates et al. 2015},
+#'   \cite{Matuschek et al. 2017})
+#'   \item \dQuote{keep it maximal}, i.e. fit the most complex model consistent
+#'   with the experimental design, removing only terms required to allow a
+#'   non-singular fit (\cite{Barr et al. 2013})
 #'   }
 #'   Note the different meaning between singularity and convergence: singularity
 #'   indicates an issue with the "true" best estimate, i.e. whether the maximum
-#'   likelihood estimation for the variance-covariance matrix of the random effects
-#'   is positive definite or only semi-definite. Convergence is a question of
-#'   whether we can assume that the numerical optimization has worked correctly
-#'   or not.
+#'   likelihood estimation for the variance-covariance matrix of the random
+#'   effects is positive definite or only semi-definite. Convergence is a
+#'   question of whether we can assume that the numerical optimization has
+#'   worked correctly or not.
 #'
 #' @references \itemize{
-#'   \item Bates D, Kliegl R, Vasishth S, Baayen H. Parsimonious Mixed Models. arXiv:1506.04967, June 2015.
-#'   \item Barr DJ, Levy R, Scheepers C, Tily HJ. Random effects structure for confirmatory hypothesis testing: Keep it maximal. Journal of Memory and Language, 68(3):255-278, April 2013.
-#'   \item Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. Balancing type I error and power in linear mixed models. Journal of Memory and Language, 94:305-315, 2017.
-#'   \item lme4 Reference Manual, \url{https://cran.r-project.org/package=lme4}
+#'   \item Bates D, Kliegl R, Vasishth S, Baayen H. Parsimonious Mixed Models.
+#'   arXiv:1506.04967, June 2015.
+#'
+#'   \item Barr DJ, Levy R, Scheepers C, Tily HJ. Random effects structure for
+#'   confirmatory hypothesis testing: Keep it maximal. Journal of Memory and
+#'   Language, 68(3):255-278, April 2013.
+#'
+#'   \item Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. Balancing type
+#'   I error and power in linear mixed models. Journal of Memory and Language,
+#'   94:305-315, 2017.
+#'
+#'   \item lme4 Reference Manual, <https://cran.r-project.org/package=lme4>
 #'   }
 #'
 #' @examples
@@ -67,6 +81,7 @@
 #'   check_singularity(model)
 #' }
 #' @export
+
 check_singularity <- function(x, tolerance = 1e-5, ...) {
   UseMethod("check_singularity")
 }
@@ -75,9 +90,7 @@ check_singularity <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("lme4")
 
   theta <- lme4::getME(x, "theta")
   # diagonal elements are identifiable because they are fitted
@@ -93,9 +106,7 @@ check_singularity.rlmerMod <- check_singularity.merMod
 
 #' @export
 check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("lme4")
 
   vc <- .collapse_cond(lme4::VarCorr(x))
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
@@ -108,9 +119,7 @@ check_singularity.glmmadmb <- check_singularity.glmmTMB
 
 #' @export
 check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("ordinal", quietly = TRUE)) {
-    stop("Package `ordinal` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("ordinal")
 
   vc <- ordinal::VarCorr(x)
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
@@ -120,10 +129,7 @@ check_singularity.clmm <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.cpglmm <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("cplm", quietly = TRUE)) {
-    stop("Package `cplm` needed for this function to work. Please install it.")
-  }
-
+  insight::check_if_installed("cplm")
   vc <- cplm::VarCorr(x)
   any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
 }
@@ -139,9 +145,7 @@ check_singularity.MixMod <- function(x, tolerance = 1e-5, ...) {
 
 #' @export
 check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
-  if (!requireNamespace("nlme", quietly = TRUE)) {
-    stop("Package `nlme` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("nlme")
 
   any(abs(stats::na.omit(as.numeric(diag(nlme::getVarCov(x)))) < tolerance))
 }
@@ -152,10 +156,6 @@ check_singularity.lme <- function(x, tolerance = 1e-5, ...) {
 check_singularity.default <- function(x, ...) {
   FALSE
 }
-
-
-
-
 
 
 .collapse_cond <- function(x) {

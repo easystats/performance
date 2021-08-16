@@ -1,19 +1,22 @@
 #' @title Visual check of model assumptions
 #' @name check_model
 #'
-#' @description Visual check of model various assumptions (normality of residuals,
-#' normality of random effects, linear relationship, homogeneity of variance,
+#' @description
+#'
+#' Visual check of model various assumptions (normality of residuals, normality
+#' of random effects, linear relationship, homogeneity of variance,
 #' multicollinearity).
 #'
 #' @param x A model object.
 #' @param dot_size,line_size Size of line and dot-geoms.
-#' @param panel Logical, if \code{TRUE}, plots are arranged as panels; else,
+#' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
 #'   and plotted. May be one or more of
-#'   \code{"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"}.
-#'   \code{"reqq"} is a QQ-plot for random effects and only available for mixed models.
-#'   \code{"ncv"} is an alias for \code{"linearity"}, and checks for non-constant
+#'   `"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"`.
+#'   `"reqq"` is a QQ-plot for random effects and only available for mixed
+#'   models.
+#'   `"ncv"` is an alias for `"linearity"`, and checks for non-constant
 #'   variance, i.e. for heteroscedasticity, as well as the linear relationship.
 #'   By default, all possible checks are performed and plotted.
 #' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
@@ -22,35 +25,37 @@
 #'   length 3. First color is usually used for reference lines, second color
 #'   for dots, and third color for outliers or extreme values.
 #' @param theme String, indicating the name of the plot-theme. Must be in the
-#'   format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).
+#'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
 #' @param detrend Should QQ/PP plots be detrended?
+#' @param verbose Toggle off warnings.
 #' @param ... Currently not used.
 #'
 #' @return The data frame that is used for plotting.
 #'
 #' @note This function just prepares the data for plotting. To create the plots,
-#' \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
-#' all possible warnings. In case you observe suspicious plots, please refer to
-#' the dedicated functions (like \code{check_collinearity()}, \code{check_normality()}
-#' etc.) to get informative messages and warnings.
+#'   \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+#'   all possible warnings. In case you observe suspicious plots, please refer
+#'   to the dedicated functions (like `check_collinearity()`,
+#'   `check_normality()` etc.) to get informative messages and warnings.
 #'
 #' @section Linearity Assumption:
-#' The plot \strong{Linearity} checks the assumption of linear
-#' relationship. However, the spread of dots also indicate possible
-#' heteroscedasticity (i.e. non-constant variance); hence, the alias \code{"ncv"}
-#' for this plot. \strong{Some caution is needed} when interpreting these plots.
-#' Although these plots are helpful to check model assumptions, they do not
-#' necessarily indicate so-called "lack of fit", e.g. missed non-linear
-#' relationships or interactions. Thus, it is always recommended to also look
-#' at \href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect plots, including partial residuals}.
+#' The plot **Linearity** checks the assumption of linear relationship.
+#' However, the spread of dots also indicate possible heteroscedasticity (i.e.
+#' non-constant variance); hence, the alias `"ncv"` for this plot.
+#' **Some caution is needed** when interpreting these plots. Although these
+#' plots are helpful to check model assumptions, they do not necessarily
+#' indicate so-called "lack of fit", e.g. missed non-linear relationships or
+#' interactions. Thus, it is always recommended to also look at
+#' [effect
+#' plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
 #'
 #' @section Residuals for (Generalized) Linear Models:
 #' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
 #' variance use standardized Pearson's residuals for generalized linear models,
 #' and standardized residuals for linear models. The plots for the normality of
 #' residuals (with overlayed normal curve) and for the linearity assumption use
-#' the default residuals for \code{lm} and \code{glm} (which are deviance
-#' residuals for \code{glm}).
+#' the default residuals for `lm` and `glm` (which are deviance
+#' residuals for `glm`).
 #'
 #' @examples
 #' \dontrun{
@@ -75,8 +80,25 @@ check_model <- function(x, ...) {
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", alpha = .2, dot_alpha = .8, colors = c("#3aaf85", "#1b6ca8", "#cd201f"), theme = "see::theme_lucid", detrend = FALSE, ...) {
-  minfo <- insight::model_info(x)
+check_model.default <- function(x,
+                                dot_size = 2,
+                                line_size = .8,
+                                panel = TRUE,
+                                check = "all",
+                                alpha = .2,
+                                dot_alpha = .8,
+                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+                                theme = "see::theme_lucid",
+                                detrend = FALSE,
+                                verbose = TRUE,
+                                ...) {
+
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(x)
+  }
+
+  minfo <- insight::model_info(x, verbose = FALSE)
 
   if (minfo$is_bayesian) {
     ca <- suppressWarnings(.check_assumptions_stan(x))
@@ -103,8 +125,24 @@ check_model.default <- function(x, dot_size = 2, line_size = .8, panel = TRUE, c
 
 
 #' @export
-check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE, check = "all", alpha = .2, detrend = FALSE, ...) {
-  check_model(x$fit, dot_size = dot_size, line_size = line_size, panel = panel, check = check, alpha = alpha, detrend = detrend, ...)
+check_model.model_fit <- function(x,
+                                  dot_size = 2,
+                                  line_size = .8,
+                                  panel = TRUE,
+                                  check = "all",
+                                  alpha = .2,
+                                  detrend = FALSE,
+                                  ...) {
+  check_model(
+    x$fit,
+    dot_size = dot_size,
+    line_size = line_size,
+    panel = panel,
+    check = check,
+    alpha = alpha,
+    detrend = detrend,
+    ...
+  )
 }
 
 
@@ -126,7 +164,7 @@ check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE,
   } else {
     threshold <- NULL
   }
-  dat$INFLUENTIAL <- .diag_influential_obs(model, threshold = threshold)
+  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
 
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -149,7 +187,7 @@ check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE,
   } else {
     threshold <- NULL
   }
-  dat$INFLUENTIAL <- .diag_influential_obs(model, threshold = threshold)
+  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
 
   dat <- .compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -193,7 +231,13 @@ check_model.model_fit <- function(x, dot_size = 2, line_size = .8, panel = TRUE,
     # get samples from posterior and prior
 
     prior <- suppressWarnings(
-      stats::update(model, prior_PD = TRUE, refresh = -1, iter = 2000, chains = 2)
+      stats::update(
+        model,
+        prior_PD = TRUE,
+        refresh = -1,
+        iter = 2000,
+        chains = 2
+      )
     )
 
     d1 <- as.data.frame(model)

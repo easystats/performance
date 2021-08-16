@@ -18,34 +18,35 @@ Default is \code{"Herron"}. May be abbreviated.}
 }
 \value{
 A list with several elements: the percentage of correct predictions
-  of the full and the null model, their confidence intervals, as well as the
-  chi-squared and p-value from the Likelihood-Ratio-Test between the full and
-  null model.
+of the full and the null model, their confidence intervals, as well as the
+chi-squared and p-value from the Likelihood-Ratio-Test between the full and
+null model.
 }
 \description{
 Percentage of correct predictions (PCP) for models
-  with binary outcome.
+with binary outcome.
 }
 \details{
 \code{method = "Gelman-Hill"} (or \code{"gelman_hill"}) computes the
-  PCP based on the proposal from \cite{Gelman and Hill 2017, 99}, which is
-  defined as the proportion of cases for which the deterministic prediction
-  is wrong, i.e. the proportion where the predicted probability is above 0.5,
-  although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
-  \cr \cr
-  \code{method = "Herron"} (or \code{"herron"}) computes a modified version
-  of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
-  where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
-  by the number of observations. This approach is said to be more accurate.
-  \cr \cr
-  The PCP ranges from 0 to 1, where values closer to 1 mean that the model
-  predicts the outcome better than models with an PCP closer to 0. In general,
-  the PCP should be above 0.5 (i.e. 50\%), the closer to one, the better.
-  Furthermore, the PCP of the full model should be considerably above
-  the null model's PCP.
-  \cr \cr
-  The likelihood-ratio test indicates whether the model has a significantly
-  better fit than the null-model (in such cases, p < 0.05).
+PCP based on the proposal from \cite{Gelman and Hill 2017, 99}, which is
+defined as the proportion of cases for which the deterministic prediction
+is wrong, i.e. the proportion where the predicted probability is above 0.5,
+although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
+\cr \cr
+\code{method = "Herron"} (or \code{"herron"}) computes a modified version
+of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted
+probabilities, where y=1, plus the sum of 1 - predicted probabilities,
+where y=0, divided by the number of observations. This approach is said to
+be more accurate.
+\cr \cr
+The PCP ranges from 0 to 1, where values closer to 1 mean that the model
+predicts the outcome better than models with an PCP closer to 0. In general,
+the PCP should be above 0.5 (i.e. 50\\%), the closer to one, the better.
+Furthermore, the PCP of the full model should be considerably above
+the null model's PCP.
+\cr \cr
+The likelihood-ratio test indicates whether the model has a significantly
+better fit than the null-model (in such cases, p < 0.05).
 }
 \examples{
 data(mtcars)
@@ -55,7 +56,11 @@ performance_pcp(m, method = "Gelman-Hill")
 }
 \references{
 \itemize{
-  \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
-  \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
+\item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
+Variable Models. Political Analysis, 8, 83–98.
+
+\item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+multilevel/hierarchical models. Cambridge; New York: Cambridge University
+Press, 99.
 }
 }

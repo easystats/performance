@@ -3,25 +3,29 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
+#' @param metrics Can be `"all"`, `"common"` or a character vector of
+#'   metrics to be computed (some of `c("AIC", "AICc", "BIC", "R2",
+#'   "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")`). `"common"`
+#'   will compute AIC, BIC, R2 and RMSE.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
-#' @return A data frame (with one row) and one column per "index" (see \code{metrics}).
+#' @return
+#' A data frame (with one row) and one column per "index" (see `metrics`).
 #'
-#' @details Depending on \code{model}, following indices are computed:
+#' @details Depending on `model`, following indices are computed:
 #' \itemize{
-#'   \item{\strong{AIC}} {Akaike's Information Criterion, see \code{?stats::AIC}}
-#'   \item{\strong{AICc}} {Second-order (or small sample) AIC with a correction for small sample sizes}
-#'   \item{\strong{BIC}} {Bayesian Information Criterion, see \code{?stats::BIC}}
-#'   \item{\strong{R2}} {r-squared value, see \code{\link{r2}}}
-#'   \item{\strong{R2_adj}} {adjusted r-squared, see \code{\link{r2}}}
-#'   \item{\strong{RMSE}} {root mean squared error, see \code{\link{performance_rmse}}}
-#'   \item{\strong{SIGMA}} {residual standard deviation, see \code{\link[insight:get_sigma]{get_sigma()}}}
-#'   \item{\strong{LOGLOSS}} {Log-loss, see \code{\link{performance_logloss}}}
-#'   \item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see \code{\link{performance_score}}}
-#'   \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link{performance_score}}}
-#'   \item{\strong{PCP}} {percentage of correct predictions, see \code{\link{performance_pcp}}}
+#'   \item{**AIC**} {Akaike's Information Criterion, see `?stats::AIC`}
+#'   \item{**AICc**} {Second-order (or small sample) AIC with a correction for small sample sizes}
+#'   \item{**BIC**} {Bayesian Information Criterion, see `?stats::BIC`}
+#'   \item{**R2**} {r-squared value, see [r2()]}
+#'   \item{**R2_adj**} {adjusted r-squared, see [r2()]}
+#'   \item{**RMSE**} {root mean squared error, see [performance_rmse()]}
+#'   \item{**SIGMA**} {residual standard deviation, see [insight::get_sigma()]}
+#'   \item{**LOGLOSS**} {Log-loss, see [performance_logloss()]}
+#'   \item{**SCORE_LOG**} {score of logarithmic proper scoring rule, see [performance_score()]}
+#'   \item{**SCORE_SPHERICAL**} {score of spherical proper scoring rule, see [performance_score()]}
+#'   \item{**PCP**} {percentage of correct predictions, see [performance_pcp()]}
 #' }
 #'
 #' @examples
@@ -42,7 +46,12 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
 
-  info <- suppressWarnings(insight::model_info(model))
+  # check model formula
+  if (verbose) {
+    insight::formula_ok(model)
+  }
+
+  info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
 
   ## TODO remove is.list() once insight 0.8.3 is on CRAN
   if (is.null(info) || !is.list(info)) {

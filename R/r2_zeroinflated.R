@@ -1,17 +1,20 @@
 #' @title R2 for models with zero-inflation
 #' @name r2_zeroinflated
 #'
-#' @description Calculates R2 for models with zero-inflation component, including mixed effects models.
+#' @description
+#' Calculates R2 for models with zero-inflation component, including mixed
+#' effects models.
 #'
 #' @param model A model.
-#' @param method Indicates the method to calculate R2. See 'Details'. May be abbreviated.
+#' @param method Indicates the method to calculate R2. See 'Details'. May be
+#'   abbreviated.
 #'
 #' @return For the default-method, a list with the R2 and adjusted R2 values.
-#'   For \code{method = "correlation"}, a named numeric vector with the
+#'   For `method = "correlation"`, a named numeric vector with the
 #'   correlation-based R2 value.
 #'
 #' @details The default-method calculates an R2 value based on the residual
-#'   variance divided by the total variance. For \code{method = "correlation"},
+#'   variance divided by the total variance. For `method = "correlation"`,
 #'   R2 is a correlation-based measure, which is rather crude. It simply computes
 #'   the squared correlation between the model's actual and predicted response.
 #'
@@ -31,7 +34,7 @@
 r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   method <- match.arg(method)
 
-  mi <- insight::model_info(model)
+  mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_zero_inflated) {
     warning("Model has no zero-inflation component.")
   }
@@ -45,7 +48,10 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
 
 
 .r2_zi_correlation <- function(model) {
-  r2_zi <- stats::cor(insight::get_response(model), stats::predict(model, type = "response"))^2
+  r2_zi <- stats::cor(
+    insight::get_response(model, verbose = FALSE),
+    stats::predict(model, type = "response")
+  )^2
   names(r2_zi) <- "R2 for ZI-models"
   r2_zi
 }
@@ -55,7 +61,7 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   n <- insight::n_obs(model)
   k <- length(insight::find_parameters(model)[["conditional"]])
 
-  y <- insight::get_response(model)
+  y <- insight::get_response(model, verbose = FALSE)
   # pred <- stats::predict(model, type = "response")
 
   var_fixed <- sum((stats::fitted(model) - mean(y))^2)

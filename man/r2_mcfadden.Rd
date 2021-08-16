@@ -4,14 +4,16 @@
 \alias{r2_mcfadden}
 \title{McFadden's R2}
 \usage{
-r2_mcfadden(model)
+r2_mcfadden(model, ...)
 }
 \arguments{
 \item{model}{Generalized linear or multinomial logit (\code{mlogit}) model.}
+
+\item{...}{Currently not used.}
 }
 \value{
 For most models, a list with McFadden's R2 and adjusted McFadden's
-  R2 value. For some models, only McFadden's R2 is available.
+R2 value. For some models, only McFadden's R2 is available.
 }
 \description{
 Calculates McFadden's pseudo R2.
@@ -27,7 +29,10 @@ if (require("mlogit")) {
 }
 \references{
 \itemize{
-  \item McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
-  \item McFadden, D. (1973). Conditional logit analysis of qualitative choice behavior.
+\item McFadden, D. (1987). Regression-based specification tests for the
+multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
+
+\item McFadden, D. (1973). Conditional logit analysis of qualitative choice
+behavior.
 }
 }

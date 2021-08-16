@@ -18,7 +18,7 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
 
   if (!insight::is_model(model) || !insight::is_model_supported(model)) {
     if (isTRUE(verbose)) {
-      warning(paste0("Objects of class '", class(model)[1], "' are no valid model objects."), call. = FALSE)
+      warning(paste0("Objects of class '", class(model)[1], "' are not supported model objects."), call. = FALSE)
     }
     return(NULL)
   }
@@ -35,7 +35,9 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
   if (length(bad_metrics)) {
     if (verbose) {
       warning(paste0("Following elements are no valid metric: ",
-                     metrics[bad_metrics], collapse = ", "))
+        metrics[bad_metrics],
+        collapse = ", "
+      ))
     }
     metrics <- metrics[-bad_metrics]
   }

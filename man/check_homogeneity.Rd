@@ -2,9 +2,12 @@
 % Please edit documentation in R/check_homogeneity.R
 \name{check_homogeneity}
 \alias{check_homogeneity}
+\alias{check_homogeneity.afex_aov}
 \title{Check model for homogeneity of variances}
 \usage{
 check_homogeneity(x, method = c("bartlett", "fligner", "levene", "auto"), ...)
+
+\method{check_homogeneity}{afex_aov}(x, method = "levene", ...)
 }
 \arguments{
 \item{x}{A linear model or an ANOVA object.}
@@ -21,7 +24,7 @@ model response is normal distributed, else Fligner-Killeen test is used.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value <
-  0.05 indicates a significant difference in the variance between the groups.
+0.05 indicates a significant difference in the variance between the groups.
 }
 \description{
 Check model for homogeneity of variances between groups described
@@ -31,7 +34,7 @@ by independent variables in a model.
 There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-model <- lm(len ~ supp + dose, data = ToothGrowth)
+model <<- lm(len ~ supp + dose, data = ToothGrowth)
 check_homogeneity(model)
 
 # plot results

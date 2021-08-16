@@ -1,11 +1,11 @@
 #' @title Check overdispersion of GL(M)M's
 #' @name check_overdispersion
 #'
-#' @description \code{check_overdispersion()} checks generalized linear (mixed)
+#' @description `check_overdispersion()` checks generalized linear (mixed)
 #'   models for overdispersion.
 #'
-#' @param x Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
-#'    or \code{glm.nb} (package \pkg{MASS}).
+#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`,
+#'    or `glm.nb` (package \pkg{MASS}).
 #' @param ... Currently not used.
 #'
 #' @return A list with results from the overdispersion test, like chi-squared
@@ -29,13 +29,13 @@
 #' }
 #'
 #' \subsection{Overdispersion in Mixed Models}{
-#' For \code{merMod}- and \code{glmmTMB}-objects, \code{check_overdispersion()}
+#' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
 #' is based on the code in the
-#' \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
-#' section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
-#' function only returns an \emph{approximate} estimate of an overdispersion
+#' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
+#' section *How can I deal with overdispersion in GLMMs?*. Note that this
+#' function only returns an *approximate* estimate of an overdispersion
 #' parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-#' with \code{glmmTMB}).
+#' with `glmmTMB`).
 #' }
 #'
 #' \subsection{How to fix Overdispersion}{
@@ -46,7 +46,7 @@
 #'
 #' @references \itemize{
 #'  \item Bolker B et al. (2017):
-#'  \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ.}
+#'  [GLMM FAQ.](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html)
 #'  \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
@@ -85,9 +85,18 @@ check_overdispersion.default <- function(x, ...) {
 #' @export
 check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
-  model_info <- insight::model_info(x)
-  if (!model_info$is_poisson) {
-    stop("Model must be from Poisson-family.", call. = FALSE)
+  info <- insight::model_info(x)
+  if (!info$is_poisson && !info$is_binomial) {
+    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+  }
+
+  # check for Bernoulli
+  if (info$is_bernoulli) {
+    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
+  }
+
+  if (info$is_binomial) {
+    return(check_overdispersion.merMod(x, ...))
   }
 
   yhat <- stats::fitted(x)
@@ -95,7 +104,7 @@ check_overdispersion.glm <- function(x, ...) {
   n <- stats::nobs(x)
   k <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
 
-  zi <- (insight::get_response(x) - yhat) / sqrt(yhat)
+  zi <- (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
   chisq <- sum(zi^2)
   ratio <- chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
@@ -118,8 +127,6 @@ check_overdispersion.fixest <- check_overdispersion.glm
 check_overdispersion.glmx <- check_overdispersion.glm
 
 
-
-
 # mfx models ------------------------------
 
 #' @export
@@ -140,17 +147,20 @@ check_overdispersion.negbinmfx <- check_overdispersion.poissonmfx
 check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 
 
-
-
-
 # Overdispersion for mixed models ---------------------------
 
 
 #' @export
 check_overdispersion.merMod <- function(x, ...) {
-  # check if we have poisson
-  if (!insight::model_info(x)$is_poisson) {
-    stop("Model must be from Poisson-family.", call. = FALSE)
+  # check if we have poisson or binomial
+  info <- insight::model_info(x)
+  if (!info$is_poisson && !info$is_binomial) {
+    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+  }
+
+  # check for Bernoulli
+  if (info$is_bernoulli) {
+    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
   }
 
   rdf <- stats::df.residual(x)

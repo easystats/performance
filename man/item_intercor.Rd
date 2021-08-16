@@ -19,23 +19,23 @@ The mean inter-item-correlation value for \code{x}.
 }
 \description{
 Compute various measures of internal consistencies
-   for tests or item-scales of questionnaires.
+for tests or item-scales of questionnaires.
 }
 \details{
 This function calculates a mean inter-item-correlation, i.e.
-   a correlation matrix of \code{x} will be computed (unless
-   \code{x} is already a matrix as returned by the \code{cor()}-function)
-   and the mean of the sum of all item's correlation values is returned.
-   Requires either a data frame or a computed \code{cor()}-object.
-   \cr \cr
-   \dQuote{Ideally, the average inter-item correlation for a set of
-   items should be between .20 and .40, suggesting that while the
-   items are reasonably homogenous, they do contain sufficiently
-   unique variance so as to not be isomorphic with each other.
-   When values are lower than .20, then the items may not be
-   representative of the same content domain. If values are higher than
-   .40, the items may be only capturing a small bandwidth of the construct.}
-   \cite{(Piedmont 2014)}
+a correlation matrix of \code{x} will be computed (unless
+\code{x} is already a matrix as returned by the \code{cor()}-function)
+and the mean of the sum of all item's correlation values is returned.
+Requires either a data frame or a computed \code{cor()}-object.
+\cr \cr
+\dQuote{Ideally, the average inter-item correlation for a set of
+items should be between .20 and .40, suggesting that while the
+items are reasonably homogenous, they do contain sufficiently
+unique variance so as to not be isomorphic with each other.
+When values are lower than .20, then the items may not be
+representative of the same content domain. If values are higher than
+.40, the items may be only capturing a small bandwidth of the construct.}
+\cite{(Piedmont 2014)}
 }
 \examples{
 data(mtcars)
@@ -43,5 +43,7 @@ x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 item_intercor(x)
 }
 \references{
-Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds) Encyclopedia of Quality of Life and Well-Being Research. Dordrecht: Springer, 3303-3304. \doi{10.1007/978-94-007-0753-5_1493}
+Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds)
+Encyclopedia of Quality of Life and Well-Being Research. Dordrecht: Springer,
+3303-3304. \doi{10.1007/978-94-007-0753-5_1493}
 }

@@ -12,7 +12,7 @@
 #'   residuals, i.e. the variation in the outcome the model doesn't explain.
 #'   Lower values (closer to zero) indicate better fit.
 #'
-#' @return Numeric, the mean square error of \code{model}.
+#' @return Numeric, the mean square error of `model`.
 #'
 #' @examples
 #' data(mtcars)
@@ -43,9 +43,9 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
   if (is.null(res)) {
     res <- tryCatch(
       {
-        def_res <- insight::get_residuals(model, verbose = verbose, ...)
+        def_res <- insight::get_residuals(model, verbose = FALSE, ...)
         if (verbose) {
-          warning("Response residuals not available to calculate mean square error. (R)MSE is probably not reliable.", call. = FALSE)
+          warning(insight::format_message("Response residuals not available to calculate mean square error. (R)MSE is probably not reliable."), call. = FALSE)
         }
         def_res
       },
@@ -62,7 +62,7 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
   # for multivariate response models...
   if (is.data.frame(res)) {
     if (verbose) {
-      warning("Multiple response variables detected. Cannot reliably compute (R)MSE.", call. = FALSE)
+      warning(insight::format_message("Multiple response variables detected. Cannot reliably compute (R)MSE."), call. = FALSE)
     }
     return(NA)
   }

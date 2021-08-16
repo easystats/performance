@@ -1,11 +1,11 @@
 
 # performance <img src='man/figures/logo.png' align="right" height="139" />
 
-[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/performance/blob/master/inst/CITATION)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03139/status.svg)](https://doi.org/10.21105/joss.03139)
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
 
-***Test if your model is a good model\!***
+***Test if your model is a good model!***
 
 A crucial aspect when building regression models is to evaluate the
 quality of modelfit. It is important to investigate how well models fit
@@ -27,18 +27,18 @@ zero-inflation, convergence or singularity.
 [![R
 check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 
-Run the following to install the stable release of **performance** from
-CRAN:
+The *performance* package is available on CRAN, while its latest
+development version is available on R-universe (from *rOpenSci*).
+
+| Type        | Source     | Command                                                                       |
+|-------------|------------|-------------------------------------------------------------------------------|
+| Release     | CRAN       | `install.packages("performance")`                                             |
+| Development | R-universe | `install.packages("performance", repos = "https://easystats.r-universe.dev")` |
+
+Once you have downloaded the package, you can then load it using:
 
 ``` r
-install.packages("performance")
-```
-
-Or this one to install the latest development version:
-
-``` r
-install.packages("remotes")
-remotes::install_github("easystats/performance")
+library("performance")
 ```
 
 ## Citation
@@ -50,22 +50,23 @@ To cite performance in publications use:
 ``` r
 citation("performance")
 #> 
-#>   Lüdecke et al., (2021). Assessment, Testing and
-#>   Comparison of Statistical Models using R. Journal
-#>   of Open Source Software, 6(59), 3112.
-#>   https://doi.org/10.31234/osf.io/vtq8f
+#>   Lüdecke et al., (2021). performance: An R Package
+#>   for Assessment, Comparison and Testing of
+#>   Statistical Models. Journal of Open Source
+#>   Software, 6(60), 3139.
+#>   https://doi.org/10.21105/joss.03139
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Article{,
-#>     title = {Assessment, Testing and Comparison of Statistical Models using R},
+#>     title = {{performance}: An {R} Package for Assessment, Comparison and Testing of Statistical Models},
 #>     author = {Daniel Lüdecke and Mattan S. Ben-Shachar and Indrajeet Patil and Philip Waggoner and Dominique Makowski},
 #>     year = {2021},
 #>     journal = {Journal of Open Source Software},
 #>     volume = {6},
-#>     number = {59},
-#>     pages = {3112},
-#>     doi = {10.31234/osf.io/vtq8f},
+#>     number = {60},
+#>     pages = {3139},
+#>     doi = {10.21105/joss.03139},
 #>   }
 ```
 
@@ -140,7 +141,7 @@ r2(model)
 #> # Bayesian R2 with Standard Error
 #> 
 #>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
-#>      Marginal R2: 0.825 (89% CI [0.749, 0.889])
+#>      Marginal R2: 0.824 (89% CI [0.747, 0.890])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -297,7 +298,7 @@ model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 check_model(model)
 ```
 
-<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
 
 ### Model performance summaries
 
@@ -392,7 +393,7 @@ installed).
 plot(compare_performance(m1, m2, m4, rank = TRUE))
 ```
 
-<img src="man/figures/unnamed-chunk-21-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-20-1.png" width="100%" />
 
 ### Testing models
 
@@ -422,12 +423,12 @@ compare_performance(lm1, lm2, lm3, lm4)
 test_bf(lm1, lm2, lm3, lm4)
 #> Bayes Factors for Model Comparison
 #> 
-#>     Model                                                  BF
-#> [2] Species + Petal.Length                             > 1000
-#> [3] Species * Sepal.Width                              > 1000
-#> [4] Species * Sepal.Width + Petal.Length + Petal.Width > 1000
+#>       Model                                                    BF
+#> [lm2] Species + Petal.Length                             3.45e+26
+#> [lm3] Species * Sepal.Width                              4.69e+07
+#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.58e+29
 #> 
-#> * Against Denominator: [1] Species
+#> * Against Denominator: [lm1] Species
 #> *   Bayes Factor Type: BIC approximation
 ```
 
@@ -449,9 +450,9 @@ Please follow contributing guidelines mentioned here:
 
 ## References
 
-<div id="refs" class="references hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-<div id="ref-gelman_data_2007">
+<div id="ref-gelman_data_2007" class="csl-entry">
 
 Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
 and Multilevel/Hierarchical Models*. Analytical Methods for Social
@@ -459,14 +460,14 @@ Research. Cambridge ; New York: Cambridge University Press.
 
 </div>
 
-<div id="ref-hox_multilevel_2010">
+<div id="ref-hox_multilevel_2010" class="csl-entry">
 
 Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
 ed. Quantitative Methodology Series. New York: Routledge.
 
 </div>
 
-<div id="ref-johnson_extension_2014">
+<div id="ref-johnson_extension_2014" class="csl-entry">
 
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
@@ -475,12 +476,12 @@ Ecology and Evolution* 5 (9): 944–46.
 
 </div>
 
-<div id="ref-nakagawa_coefficient_2017">
+<div id="ref-nakagawa_coefficient_2017" class="csl-entry">
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
-Expanded.” *Journal of the Royal Society Interface* 14 (134): 20170213.
+Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
 <https://doi.org/10.1098/rsif.2017.0213>.
 
 </div>

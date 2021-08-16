@@ -1,8 +1,43 @@
+# performance 0.7.3.1
+
+* Two new functions: `check_multimodal()` and `check_heterogeneity_bias()`.
+
+# performance 0.7.3
+
+## Changes to functions
+
+* `check_outliers()` has new `ci` (or `hdi`, `eti`) method to filter based on
+  Confidence/Credible intervals.
+
+* `compare_performance()` now also accepts a list of model objects.
+
+* `performance_roc()` now also works for binomial models from other classes 
+  than *glm*.
+
+* Several functions, like `icc()` or `r2_nakagawa()`, now have an 
+  `as.data.frame()` method.
+
+* `check_collinearity()` now correctly handles objects from forthcoming *afex* 
+  update.
+
 # performance 0.7.2
 
 ## New functions
 
 * `performance_mae()` to calculate the mean absolute error.
+
+## Bug fixes
+
+* Fixed issue with `"data length differs from size of matrix"` warnings in
+  examples in forthcoming R 4.2.
+
+* Fixed issue in `check_normality()` for models with sample size larger than
+  5.000 observations.
+
+* Fixed issue in `check_model()` for *glmmTMB* models.
+
+* Fixed issue in `check_collinearity()` for *glmmTMB* models with zero-inflation,
+  where the zero-inflated model was an intercept-only model.
 
 # performance 0.7.1
 

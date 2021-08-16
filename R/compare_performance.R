@@ -1,36 +1,43 @@
 #' @title Compare performance of different models
 #' @name compare_performance
 #'
-#' @description \code{compare_performance()} computes indices of model performance for
-#' different models at once and hence allows comparison of indices across models.
+#' @description `compare_performance()` computes indices of model
+#'   performance for different models at once and hence allows comparison of
+#'   indices across models.
 #'
 #' @param ... Multiple model objects (also of different classes).
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed. See related \code{\link[=model_performance]{documentation}} of object's class for details.
-#' @param rank Logical, if \code{TRUE}, models are ranked according to 'best' overall model performance. See 'Details'.
+#' @param metrics Can be `"all"`, `"common"` or a character vector of
+#'   metrics to be computed. See related
+#'   [`documentation()`][model_performance] of object's class for
+#'   details.
+#' @param rank Logical, if `TRUE`, models are ranked according to 'best'
+#'   overall model performance. See 'Details'.
 #'
-#' @return A data frame (with one row per model) and one column per "index" (see \code{metrics}).
+#' @return A data frame (with one row per model) and one column per "index" (see
+#'   `metrics`).
 #'
-#' @note There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @details \subsection{Ranking Models}{
-#'   When \code{rank = TRUE}, a new column \code{Performance_Score} is returned. This
-#'   score ranges from 0\% to 100\%, higher values indicating better model performance.
-#'   Note that all score value do not necessarily sum up to 100\%. Rather,
-#'   calculation is based on normalizing all indices (i.e. rescaling them to a
-#'   range from 0 to 1), and taking the mean value of all indices for each model.
-#'   This is a rather quick heuristic, but might be helpful as exploratory index.
+#'   When `rank = TRUE`, a new column `Performance_Score` is returned.
+#'   This score ranges from 0\% to 100\%, higher values indicating better model
+#'   performance. Note that all score value do not necessarily sum up to 100\%.
+#'   Rather, calculation is based on normalizing all indices (i.e. rescaling
+#'   them to a range from 0 to 1), and taking the mean value of all indices for
+#'   each model. This is a rather quick heuristic, but might be helpful as
+#'   exploratory index.
 #'   \cr \cr
-#'   In particular when models are of different types (e.g. mixed models, classical
-#'   linear models, logistic regression, ...), not all indices will be computed
-#'   for each model. In case where an index can't be calculated for a specific
-#'   model type, this model gets an \code{NA} value. All indices that have any
-#'   \code{NA}s are excluded from calculating the performance score.
+#'   In particular when models are of different types (e.g. mixed models,
+#'   classical linear models, logistic regression, ...), not all indices will be
+#'   computed for each model. In case where an index can't be calculated for a
+#'   specific model type, this model gets an `NA` value. All indices that
+#'   have any `NA`s are excluded from calculating the performance score.
 #'   \cr \cr
-#'   There is a \code{plot()}-method for \code{compare_performance()},
+#'   There is a `plot()`-method for `compare_performance()`,
 #'   which creates a "spiderweb" plot, where the different indices are
 #'   normalized and larger values indicate better model performance.
 #'   Hence, points closer to the center indicate worse fit indices
-#'   (see \href{https://easystats.github.io/see/articles/performance.html}{online-documentation}
+#'   (see [online-documentation](https://easystats.github.io/see/articles/performance.html)
 #'   for more details).
 #'   }
 #'
@@ -51,8 +58,39 @@
 #' @inheritParams model_performance.lm
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
+  # objects <- list(...)
+  # object_names <- match.call(expand.dots = FALSE)$`...`
   objects <- list(...)
-  object_names <- match.call(expand.dots = FALSE)$`...`
+
+  if (length(objects) == 1) {
+    if (insight::is_model(objects[[1]])) {
+      modellist <- FALSE
+    } else {
+      objects <- objects[[1]]
+      modellist <- TRUE
+    }
+  } else {
+    modellist <- FALSE
+  }
+
+  if (isTRUE(modellist)) {
+    object_names <- names(objects)
+    if (length(object_names) == 0) {
+      object_names <- paste("Model", seq_along(objects), sep = " ")
+      names(objects) <- object_names
+    }
+  } else {
+    object_names <- match.call(expand.dots = FALSE)$`...`
+    if (length(names(object_names)) > 0) {
+      object_names <- names(object_names)
+    } else if (any(sapply(object_names, is.call))) {
+      object_names <- paste("Model", seq_along(objects), sep = " ")
+    } else {
+      object_names <- sapply(object_names, as.character)
+      names(objects) <- object_names
+    }
+  }
+
 
   supported_models <- sapply(objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
 
@@ -73,7 +111,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   # check if all models were fit from same data
   resps <- lapply(objects, insight::get_response)
   if (!all(sapply(resps[-1], function(x) identical(x, resps[[1]]))) && verbose) {
-    warning("When comparing models, please note that probably not all models were fit from same data.", call. = FALSE)
+    warning(insight::format_message("When comparing models, please note that probably not all models were fit from same data."), call. = FALSE)
   }
 
   # create "ranking" of models
@@ -100,7 +138,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
   if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
-    warning("Models are not of same type. Comparison of indices might be not meaningful.", call. = FALSE)
+    warning(insight::format_message("Models are not of same type. Comparison of indices might be not meaningful."), call. = FALSE)
   }
 
   # set reference for Bayes factors to 1
@@ -123,7 +161,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   # don't rank with BF when there is also BIC (same information)
   if ("BF" %in% colnames(out) && "BIC" %in% colnames(out)) {
     if (isTRUE(verbose)) {
-      message("Bayes factor is based on BIC approximation, thus BF and BIC hold the same information. Ignoring BF for performance-score.")
+      message(insight::format_message("Bayes factor is based on BIC approximation, thus BF and BIC hold the same information. Ignoring BF for performance-score."))
     }
     out$BF <- NULL
   }
@@ -138,10 +176,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   # any indices with NA?
   missing_indices <- sapply(out, anyNA)
   if (any(missing_indices) && isTRUE(verbose)) {
-    warning(sprintf(
+    warning(insight::format_message(sprintf(
       "Following indices with missing values are not used for ranking: %s",
       paste0(colnames(out)[missing_indices], collapse = ", ")
-    ), call. = FALSE)
+    )), call. = FALSE)
   }
 
   # create rank-index, only for complete indices

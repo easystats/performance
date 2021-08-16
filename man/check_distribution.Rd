@@ -20,12 +20,12 @@ model family, consider this function as somewhat experimental.
 \details{
 This function uses an internal random forest model to classify the
 distribution from a model-family. Currently, following distributions are
-trained (i.e. results of \code{check_distribution()} may be one of the following):
-\code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"}, \code{"binomial"},
-\code{"chi"}, \code{"exponential"}, \code{"F"}, \code{"gamma"}, \code{"lognormal"},
-\code{"normal"}, \code{"negative binomial"}, \code{"negative binomial (zero-inflated)"},
-\code{"pareto"}, \code{"poisson"}, \code{"poisson (zero-inflated)"},
-\code{"uniform"} and \code{"weibull"}.
+trained (i.e. results of \code{check_distribution()} may be one of the
+following): \code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"},
+\code{"binomial"}, \code{"chi"}, \code{"exponential"}, \code{"F"},
+\code{"gamma"}, \code{"lognormal"}, \code{"normal"}, \code{"negative binomial"}, \code{"negative binomial (zero-inflated)"}, \code{"pareto"},
+\code{"poisson"}, \code{"poisson (zero-inflated)"}, \code{"uniform"} and
+\code{"weibull"}.
 \cr \cr
 Note the similarity between certain distributions according to shape, skewness,
 etc. Thus, the predicted distribution may not be perfectly representing the
@@ -35,17 +35,20 @@ There is a \code{plot()} method, which shows the probabilities of all predicted
 distributions, however, only if the probability is greater than zero.
 }
 \note{
-This function is somewhat experimental and might be improved in future releases.
-  The final decision on the model-family should also be based on theoretical
-  aspects and other information about the data and the model.
-  \cr \cr
-  There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+This function is somewhat experimental and might be improved in future
+releases. The final decision on the model-family should also be based on
+theoretical aspects and other information about the data and the model.
+\cr \cr
+There is also a
+\href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the
+\href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-if (require("lme4") && require("parameters") && require("gridExtra")) {
+if (require("lme4") && require("parameters") && require("see") && require("patchwork")) {
   data(sleepstudy)
 
-  model <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+  model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
   check_distribution(model)
   plot(check_distribution(model))
 }

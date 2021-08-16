@@ -10,22 +10,22 @@
 #' @return A list with three elements, the logarithmic, quadratic/Brier and spherical score.
 #'
 #' @details Proper scoring rules can be used to evaluate the quality of model
-#' predictions and model fit. \code{performance_score()} calculates the logarithmic,
+#' predictions and model fit. `performance_score()` calculates the logarithmic,
 #' quadratic/Brier and spherical scoring rules. The spherical rule takes values
-#' in the interval \code{[0, 1]}, with values closer to 1 indicating a more
-#' accurate model, and the logarithmic rule in the interval \code{[-Inf, 0]},
+#' in the interval `[0, 1]`, with values closer to 1 indicating a more
+#' accurate model, and the logarithmic rule in the interval `[-Inf, 0]`,
 #' with values closer to 0 indicating a more accurate model.
 #' \cr \cr
-#' For \code{stan_lmer()} and \code{stan_glmer()} models, the predicted values
-#' are based on \code{posterior_predict()}, instead of \code{predict()}. Thus,
+#' For `stan_lmer()` and `stan_glmer()` models, the predicted values
+#' are based on `posterior_predict()`, instead of `predict()`. Thus,
 #' results may differ more than expected from their non-Bayesian counterparts
-#' in \strong{lme4}.
+#' in **lme4**.
 #'
 #' @references Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 #'
-#' @note Code is partially based on \href{https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html}{GLMMadaptive::scoring_rules()}.
+#' @note Code is partially based on [GLMMadaptive::scoring_rules()](https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html).
 #'
-#' @seealso \code{\link[=performance_logloss]{performance_logloss()}}
+#' @seealso [`performance_logloss()`][performance_logloss]
 #'
 #' @examples
 #' ## Dobson (1990) Page 93: Randomized Controlled Trial :
@@ -55,14 +55,14 @@ performance_score <- function(model, verbose = TRUE) {
     model <- model$fit
   }
 
-  minfo <- insight::model_info(model)
+  minfo <- insight::model_info(model, verbose = verbose)
 
   if (minfo$is_ordinal || minfo$is_multinomial) {
     if (verbose) insight::print_color("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.\n", "red")
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
 
-  resp <- insight::get_response(model)
+  resp <- insight::get_response(model, verbose = verbose)
 
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
     if (verbose) insight::print_color("Can't calculate proper scoring rules for models without integer response values.\n", "red")
@@ -135,9 +135,7 @@ performance_score <- function(model, verbose = TRUE) {
     model$phis
   } else if (inherits(model, "glmmTMB")) {
     if (minfo$is_zero_inflated) {
-      if (!requireNamespace("glmmTMB")) {
-        stop("Package 'glmmTMB' required for this function work. Please install it.")
-      }
+      insight::check_if_installed("glmmTMB")
       glmmTMB::getME(model, "theta")
     } else {
       sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
@@ -174,9 +172,7 @@ performance_score <- function(model, verbose = TRUE) {
       } else if (inherits(model, c("clm", "clm2", "clmm"))) {
         pred <- stats::predict(model)
       } else if (all(inherits(model, c("stanreg", "lmerMod"), which = TRUE)) > 0) {
-        if (!requireNamespace("rstanarm", quietly = TRUE)) {
-          stop("Package `rstanarm` required for this function to work. Please install it.")
-        }
+        insight::check_if_installed("rstanarm")
         pred <- colMeans(rstanarm::posterior_predict(model))
       } else {
         pred <- stats::predict(model, type = "response")
@@ -188,4 +184,17 @@ performance_score <- function(model, verbose = TRUE) {
   )
 
   list(pred = pred, pred_zi = pred_zi)
+}
+
+
+#' @export
+as.data.frame.performance_score <- function(x, row.names = NULL, ...) {
+  data.frame(
+    logarithmic = x$logarithmic,
+    quadratic = x$quadratic,
+    spherical = x$spherical,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
+  )
 }

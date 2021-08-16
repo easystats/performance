@@ -7,7 +7,7 @@
 #' @param model Model with binary outcome.
 #' @param ci The level of the confidence interval.
 #' @param method Name of the method to calculate the PCP (see 'Details').
-#'   Default is \code{"Herron"}. May be abbreviated.
+#'   Default is `"Herron"`. May be abbreviated.
 #' @inheritParams model_performance.lm
 #'
 #' @return A list with several elements: the percentage of correct predictions
@@ -15,16 +15,17 @@
 #'   chi-squared and p-value from the Likelihood-Ratio-Test between the full and
 #'   null model.
 #'
-#' @details \code{method = "Gelman-Hill"} (or \code{"gelman_hill"}) computes the
+#' @details `method = "Gelman-Hill"` (or `"gelman_hill"`) computes the
 #'   PCP based on the proposal from \cite{Gelman and Hill 2017, 99}, which is
 #'   defined as the proportion of cases for which the deterministic prediction
 #'   is wrong, i.e. the proportion where the predicted probability is above 0.5,
 #'   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
 #'   \cr \cr
-#'   \code{method = "Herron"} (or \code{"herron"}) computes a modified version
-#'   of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted probabilities,
-#'   where y=1, plus the sum of 1 - predicted probabilities, where y=0, divided
-#'   by the number of observations. This approach is said to be more accurate.
+#'   `method = "Herron"` (or `"herron"`) computes a modified version
+#'   of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted
+#'   probabilities, where y=1, plus the sum of 1 - predicted probabilities,
+#'   where y=0, divided by the number of observations. This approach is said to
+#'   be more accurate.
 #'   \cr \cr
 #'   The PCP ranges from 0 to 1, where values closer to 1 mean that the model
 #'   predicts the outcome better than models with an PCP closer to 0. In general,
@@ -37,8 +38,12 @@
 #'
 #'
 #' @references \itemize{
-#'   \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent Variable Models. Political Analysis, 8, 83–98.
-#'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press, 99
+#'   \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
+#'   Variable Models. Political Analysis, 8, 83–98.
+#'
+#'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#'   multilevel/hierarchical models. Cambridge; New York: Cambridge University
+#'   Press, 99.
 #' }
 #'
 #' @examples
@@ -47,20 +52,23 @@
 #' performance_pcp(m)
 #' performance_pcp(m, method = "Gelman-Hill")
 #' @export
-performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE) {
+performance_pcp <- function(model,
+                            ci = 0.95,
+                            method = "Herron",
+                            verbose = TRUE) {
   # fix special cases
   if (inherits(model, c("model_fit", "logitor", "logitmfx", "probitmfx"))) {
     model <- model$fit
   }
 
   method <- match.arg(method, choices = c("Herron", "Gelman-Hill", "herron", "gelman_hill"))
-  mi <- insight::model_info(model)
+  mi <- insight::model_info(model, verbose = verbose)
 
   if (!mi$is_binomial) {
     stop("`performance_pcp()` only works for models with binary outcome.")
   }
 
-  resp <- insight::get_response(model)
+  resp <- insight::get_response(model, verbose = verbose)
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
     if (verbose) insight::print_color("`performance_pcp()` only works for models with binary response values.\n", "red")
     return(NULL)
@@ -69,21 +77,21 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
   m0 <- suppressWarnings(stats::glm(
     formula = stats::as.formula(sprintf("%s ~ 1", insight::find_response(model))),
     family = stats::binomial(link = "logit"),
-    data = insight::get_data(model),
+    data = insight::get_data(model, verbose = verbose),
     weights = stats::weights(model)
   ))
 
   if (method %in% c("Herron", "herron")) {
-    .pcp_herron(model, m0, ci)
+    .pcp_herron(model, m0, ci, verbose = verbose)
   } else {
-    .pcp_gelman_hill(model, m0, ci)
+    .pcp_gelman_hill(model, m0, ci, verbose = verbose)
   }
 }
 
 
-.pcp_herron <- function(model, m0, ci) {
-  y_full <- .recode_to_zero(insight::get_response(model))
-  y_null <- .recode_to_zero(insight::get_response(m0))
+.pcp_herron <- function(model, m0, ci, verbose = TRUE) {
+  y_full <- .recode_to_zero(insight::get_response(model, verbose = verbose))
+  y_null <- .recode_to_zero(insight::get_response(m0, verbose = verbose))
 
   n_full <- suppressWarnings(insight::n_obs(model))
   n_null <- suppressWarnings(insight::n_obs(m0))
@@ -100,7 +108,7 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
     lower.tail = TRUE
   )
 
-  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model) - insight::get_loglikelihood(m0))
+  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model, verbose = verbose) - insight::get_loglikelihood(m0, verbose = verbose))
 
   structure(
     class = "performance_pcp",
@@ -112,15 +120,16 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
       null_ci_low = pcp_null - stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       null_ci_high = pcp_null + stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       lrt_chisq = as.vector(lrt.chisq),
+      lrt_df_error = model$df.null - model$df.residual,
       lrt_p = lrt.p
     )
   )
 }
 
 
-.pcp_gelman_hill <- function(model, m0, ci) {
-  y_full <- .recode_to_zero(insight::get_response(model))
-  y_null <- .recode_to_zero(insight::get_response(m0))
+.pcp_gelman_hill <- function(model, m0, ci, verbose = TRUE) {
+  y_full <- .recode_to_zero(insight::get_response(model, verbose = verbose))
+  y_null <- .recode_to_zero(insight::get_response(m0, verbose = verbose))
 
   n_full <- suppressWarnings(insight::n_obs(model))
   n_null <- suppressWarnings(insight::n_obs(m0))
@@ -137,7 +146,7 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
     lower.tail = TRUE
   )
 
-  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model) - insight::get_loglikelihood(m0))
+  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model, verbose = verbose) - insight::get_loglikelihood(m0, verbose = verbose))
 
   structure(
     class = "performance_pcp",
@@ -149,7 +158,24 @@ performance_pcp <- function(model, ci = 0.95, method = "Herron", verbose = TRUE)
       null_ci_low = pcp_null - stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       null_ci_high = pcp_null + stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
       lrt_chisq = as.vector(lrt.chisq),
+      lrt_df_error = model$df.null - model$df.residual,
       lrt_p = lrt.p
     )
+  )
+}
+
+#' @export
+as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
+  data.frame(
+    "Model" = c("full", "null"),
+    "Estimate" =  c(x$pcp_model, x$pcp_m0),
+    "CI_low" = c(x$model_ci_low, x$null_ci_low),
+    "CI_high" = c(x$model_ci_high, x$null_ci_high),
+    "Chisq" = c(NA, x$lrt_chisq),
+    "df_error" = c(NA, x$lrt_df_error),
+    "p" = c(NA, x$lrt_p),
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
   )
 }

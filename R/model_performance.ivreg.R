@@ -1,7 +1,10 @@
 #' Performance of instrumental variable regression models
 #'
 #' @inheritParams model_performance.lm
-#' @param metrics Can be \code{"all"}, \code{"common"} or a character vector of metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")}). \code{"common"} will compute AIC, BIC, R2 and RMSE.
+#' @param metrics Can be `"all"`, `"common"` or a character vector of
+#'   metrics to be computed (some of `c("AIC", "AICc", "BIC", "R2", "RMSE",
+#'   "SIGMA", "Sargan", "Wu_Hausman")`). `"common"` will compute AIC, BIC,
+#'   R2 and RMSE.
 #' @export
 model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...) {
   all_metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")

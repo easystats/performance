@@ -5,14 +5,18 @@
 #'   R2 for generalized linear models.
 #'
 #' @param model A generalized linear model.
-#' @param adjust Logical, if \code{TRUE} (the default), the adjusted R2 value is returned.
+#' @param adjust Logical, if `TRUE` (the default), the adjusted R2 value is
+#'   returned.
 #'
 #' @return A named vector with the R2 value.
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_kullback(model)
-#' @references Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness of fit for some common nonlinear regression models. Journal of Econometrics, 77: 329-342.
+#' @references
+#' Cameron, A. C. and Windmeijer, A. G. (1997) An R-squared measure of goodness
+#' of fit for some common nonlinear regression models. Journal of Econometrics,
+#' 77: 329-342.
 #'
 #' @export
 r2_kullback <- function(model, adjust = TRUE) {

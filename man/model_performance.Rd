@@ -22,12 +22,12 @@ A data frame (with one row) and one column per "index" (see \code{metrics}).
 \description{
 See the documentation for your object's class:
 \itemize{
-  \item \link[=model_performance.lm]{Frequentist Regressions}
-  \item \link[=model_performance.ivreg]{Instrumental Variables Regressions}
-  \item \link[=model_performance.merMod]{Mixed models}
-  \item \link[=model_performance.stanreg]{Bayesian models}
-  \item \link[=model_performance.lavaan]{CFA / SEM lavaan models}
-  \item \link[=model_performance.rma]{Meta-analysis models}
+\item \link[=model_performance.lm]{Frequentist Regressions}
+\item \link[=model_performance.ivreg]{Instrumental Variables Regressions}
+\item \link[=model_performance.merMod]{Mixed models}
+\item \link[=model_performance.stanreg]{Bayesian models}
+\item \link[=model_performance.lavaan]{CFA / SEM lavaan models}
+\item \link[=model_performance.rma]{Meta-analysis models}
 }
 }
 \examples{

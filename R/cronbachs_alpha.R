@@ -6,9 +6,9 @@
 #'
 #' @param x A matrix or a data frame.
 #'
-#' @return The Cronbach's Alpha value for \code{x}.
+#' @return The Cronbach's Alpha value for `x`.
 #'
-#' @details The Cronbach's Alpha value for \code{x}. A value closer to 1
+#' @details The Cronbach's Alpha value for `x`. A value closer to 1
 #'    indicates greater internal consistency, where usually following
 #'    rule of thumb is applied to interpret the results:
 #'    \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,

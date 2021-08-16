@@ -3,26 +3,28 @@
 #'
 #' @description Check model quality of logistic regression models.
 #'
-#' @param model A \code{glm}-object with binomial-family.
+#' @param model A `glm`-object with binomial-family.
 #' @param n_bins Numeric, the number of bins to divide the data.
 #'
-#' @return An object of class \code{hoslem_test} with following values: \code{chisq},
-#'   the Hosmer-Lemeshow chi-squared statistic; \code{df}, degrees of freedom
-#'   and \code{p.value} the p-value for the goodness-of-fit test.
+#' @return An object of class `hoslem_test` with following values:
+#'   `chisq`, the Hosmer-Lemeshow chi-squared statistic; `df`, degrees
+#'   of freedom and `p.value` the p-value for the goodness-of-fit test.
 #'
-#' @details A well-fitting model shows \emph{no} significant difference between
+#' @details A well-fitting model shows *no* significant difference between
 #'   the model and the observed data, i.e. the reported p-value should be
 #'   greater than 0.05.
 #'
-#' @references Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken, NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}
+#' @references
+#' Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
+#' NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_hosmer(model)
 #' @export
 performance_hosmer <- function(model, n_bins = 10) {
-  if (inherits(model, "merMod") && !requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package `lme4` needed for this function to work. Please install it.", call. = FALSE)
+  if (inherits(model, "merMod")) {
+    insight::check_if_installed("lme4")
   }
 
   # check for valid object class

@@ -3,16 +3,16 @@
 #'
 #' @description Check model quality of binomial logistic regression models.
 #'
-#' @param model A \code{glm}-object with \emph{binomial}-family.
-#' @param term Name of independent variable from \code{x}. If not \code{NULL},
-#'   average residuals for the categories of \code{term} are plotted; else,
+#' @param model A `glm`-object with *binomial*-family.
+#' @param term Name of independent variable from `x`. If not `NULL`,
+#'   average residuals for the categories of `term` are plotted; else,
 #'   average residuals for the estimated probabilities of the response are
 #'   plotted.
 #' @param n_bins Numeric, the number of bins to divide the data. If
-#'   \code{n_bins = NULL}, the square root of the number of observations is
+#'   `n_bins = NULL`, the square root of the number of observations is
 #'   taken.
-#' @param ... Further argument like \code{size} (for point-size) or
-#'   \code{color} (for point-colors).
+#' @param ... Further argument like `size` (for point-size) or
+#'   `color` (for point-colors).
 #'
 #' @return A data frame representing the data that is mapped in the accompanying
 #'   plot. In case all residuals are inside the error bounds, points are black.
@@ -27,18 +27,18 @@
 #'   \cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
 #'   expect about 95\% of the residuals to fall inside the error bounds.
 #'   \cr \cr
-#'   If \code{term} is not \code{NULL}, one can compare the residuals in
+#'   If `term` is not `NULL`, one can compare the residuals in
 #'   relation to a specific model predictor. This may be helpful to check if a
 #'   term would fit better when transformed, e.g. a rising and falling pattern
 #'   of residuals along the x-axis is a signal to consider taking the logarithm
 #'   of the predictor (cf. Gelman and Hill 2007, pp. 97-98).
 #'
-#' @note Since \code{binned_residuals()} returns a data frame, the default
-#'   action for the result is \emph{printing}. However, the `print()`-method for
-#'   \code{binned_residuals()} actually creates a plot. For further
+#' @note Since `binned_residuals()` returns a data frame, the default
+#'   action for the result is *printing*. However, the `print()`-method for
+#'   `binned_residuals()` actually creates a plot. For further
 #'   modifications of the plot, use `print()` and add ggplot-layers to the
-#'   return values, e.g. \code{plot(binned_residuals(model)) +
-#'   see::scale_color_pizza()}.
+#'   return values, e.g. `print(binned_residuals(model)) +
+#'   see::scale_color_pizza()`.
 #'
 #' @references
 #' Gelman, A., & Hill, J. (2007). Data analysis using regression and
@@ -67,7 +67,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
     pred <- mf[[term]]
   }
 
-  y <- .recode_to_zero(insight::get_response(model)) - fv
+  y <- .recode_to_zero(insight::get_response(model, verbose = FALSE)) - fv
 
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 

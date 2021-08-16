@@ -9,6 +9,8 @@ authors:
     href: https://github.com/mattansb
   Indrajeet Patil:
     href: https://sites.google.com/site/indrajeetspatilmorality/
+  Brenton M. Wiernik:
+    href: https://wiernik.org/
 
 template:
   params:
@@ -35,6 +37,7 @@ reference:
   - check_convergence
   - check_distribution
   - check_heteroscedasticity
+  - check_sphericity
   - check_homogeneity
   - check_normality
   - check_outliers
@@ -42,6 +45,11 @@ reference:
   - check_singularity
   - check_zeroinflation
   - pp_check
+
+- title: "Check Data Properties"
+  contents:
+  - check_heterogeneity_bias
+  - check_multimodal
 
 - title: "Check Model Performance or Quality"
   contents:

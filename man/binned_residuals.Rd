@@ -23,35 +23,34 @@ taken.}
 }
 \value{
 A data frame representing the data that is mapped in the accompanying
-  plot. In case all residuals are inside the error bounds, points are black.
-  If some of the residuals are outside the error bounds (indicated by the
-  grey-shaded area), blue points indicate residuals that are OK, while red
-  points indicate model under- or over-fitting for the relevant range of
-  estimated probabilities.
+plot. In case all residuals are inside the error bounds, points are black.
+If some of the residuals are outside the error bounds (indicated by the
+grey-shaded area), blue points indicate residuals that are OK, while red
+points indicate model under- or over-fitting for the relevant range of
+estimated probabilities.
 }
 \description{
 Check model quality of binomial logistic regression models.
 }
 \details{
 Binned residual plots are achieved by \dQuote{dividing the data into
-  categories (bins) based on their fitted values, and then plotting
-  the average residual versus the average fitted value for each bin.}
-  \cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
-  expect about 95\% of the residuals to fall inside the error bounds.
-  \cr \cr
-  If \code{term} is not \code{NULL}, one can compare the residuals in
-  relation to a specific model predictor. This may be helpful to check if a
-  term would fit better when transformed, e.g. a rising and falling pattern
-  of residuals along the x-axis is a signal to consider taking the logarithm
-  of the predictor (cf. Gelman and Hill 2007, pp. 97-98).
+categories (bins) based on their fitted values, and then plotting
+the average residual versus the average fitted value for each bin.}
+\cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
+expect about 95\\% of the residuals to fall inside the error bounds.
+\cr \cr
+If \code{term} is not \code{NULL}, one can compare the residuals in
+relation to a specific model predictor. This may be helpful to check if a
+term would fit better when transformed, e.g. a rising and falling pattern
+of residuals along the x-axis is a signal to consider taking the logarithm
+of the predictor (cf. Gelman and Hill 2007, pp. 97-98).
 }
 \note{
 Since \code{binned_residuals()} returns a data frame, the default
-  action for the result is \emph{printing}. However, the `print()`-method for
-  \code{binned_residuals()} actually creates a plot. For further
-  modifications of the plot, use `print()` and add ggplot-layers to the
-  return values, e.g. \code{plot(binned_residuals(model)) +
-  see::scale_color_pizza()}.
+action for the result is \emph{printing}. However, the \code{print()}-method for
+\code{binned_residuals()} actually creates a plot. For further
+modifications of the plot, use \code{print()} and add ggplot-layers to the
+return values, e.g. \code{print(binned_residuals(model)) + see::scale_color_pizza()}.
 }
 \examples{
 if (require("see")) {

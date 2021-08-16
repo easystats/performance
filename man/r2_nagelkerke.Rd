@@ -4,11 +4,13 @@
 \alias{r2_nagelkerke}
 \title{Nagelkerke's R2}
 \usage{
-r2_nagelkerke(model)
+r2_nagelkerke(model, ...)
 }
 \arguments{
 \item{model}{A generalized linear model, including cumulative links resp.
 multinomial models.}
+
+\item{...}{Currently not used.}
 }
 \value{
 A named vector with the R2 value.

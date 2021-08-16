@@ -2,7 +2,9 @@
 #' @name looic
 #'
 #' @description Compute LOOIC (leave-one-out cross-validation (LOO) information
-#'   criterion) and ELPD (expected log predictive density) for Bayesian regressions.
+#'   criterion) and ELPD (expected log predictive density) for Bayesian
+#'   regressions. For LOOIC and ELPD, smaller and larger values are respectively
+#'   indicative of a better fit.
 #'
 #' @param model A Bayesian regression model.
 #' @inheritParams model_performance.lm
@@ -16,15 +18,13 @@
 #' }
 #' @export
 looic <- function(model, verbose = TRUE) {
-  if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` needed for this function to work. Please install it.")
-  }
+  insight::check_if_installed("loo")
 
   algorithm <- insight::find_algorithm(model)
 
   if (algorithm$algorithm != "sampling") {
     if (verbose) {
-      warning("`looic()` only available for models fit using the 'sampling' algorithm.", call. = FALSE)
+      warning(insight::format_message("`looic()` only available for models fit using the 'sampling' algorithm."), call. = FALSE)
     }
     return(NA)
   }
@@ -55,8 +55,19 @@ looic <- function(model, verbose = TRUE) {
 
   # Leave p_loo as I am not sure it is an index of performance
 
-  structure(
-    class = "looic",
-    out
+  structure(class = "looic", out)
+}
+
+
+#' @export
+as.data.frame.looic <- function(x, row.names = NULL, ...) {
+  data.frame(
+    ELPD = x$ELPD,
+    ELPD_SE = x$ELPD_SE,
+    LOOIC = x$LOOIC,
+    LOOIC_SE = x$LOOIC_SE,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
   )
 }

@@ -103,9 +103,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 # ref$p_omega == rez$p_Omega2
 # ref$LRTstat == rez$LRTstat
 .test_vuong_pairs <- function(object1, object2, nested = FALSE, adj = "none") {
-  if (!requireNamespace("CompQuadForm", quietly = TRUE)) {
-    stop("Package 'CompQuadForm' required. Please install it by running `install.packages('CompQuadForm')`.")
-  }
+  insight::check_if_installed("CompQuadForm")
 
   # If nested==TRUE, find the full model and reverse if necessary
   if (nested) {
@@ -247,15 +245,14 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 
   # Get A (Eq 2.1)
   if (inherits(model, "lavaan")) {
-    if (!requireNamespace("lavaan", quietly = TRUE)) {
-      stop("Package 'lavaan' required. Please install it by running `install.packages('lavaan')`.")
-    }
+    insight::check_if_installed("lavaan")
+
     covmat <- lavaan::vcov(model) # model@vcov$vcov
     duplicates <- duplicated(colnames(covmat))
     covmat <- n * covmat[!duplicates, !duplicates]
     scaling <- 1
   } else {
-    scaling <- insight::get_sigma(model)^2
+    scaling <- insight::get_sigma(model, ci = NULL, verbose = FALSE)^2
     if (is.null(scaling) || is.na(scaling)) scaling <- 1
     covmat <- n * insight::get_varcov(model, component = "conditional")
   }

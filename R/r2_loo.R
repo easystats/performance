@@ -6,10 +6,10 @@
 #' @param model A Bayesian regression model.
 #' @inheritParams model_performance.lm
 #'
-#' @return The LOO-adjusted R2 for \code{model}, as numeric value.
+#' @return The LOO-adjusted R2 for `model`, as numeric value.
 #'
-#' @details Unlike \code{\link{r2_bayes}}, which returns an "unadjusted" R2 value,
-#'   \code{r2_loo()} calculates a LOO-adjusted R2, which comes conceptionally
+#' @details Unlike [r2_bayes()], which returns an "unadjusted" R2 value,
+#'   `r2_loo()` calculates a LOO-adjusted R2, which comes conceptionally
 #'   closer to an "adjusted" R2 measure.
 #'
 #' @examples
@@ -26,15 +26,10 @@ r2_loo <- function(model, verbose = TRUE) {
     }
   }
 
-  if (!requireNamespace("rstantools", quietly = TRUE)) {
-    stop("Package `rstantools` needed for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("rstantools")
+  insight::check_if_installed("loo")
 
-  if (!requireNamespace("loo", quietly = TRUE)) {
-    stop("Package `loo` needed for this function to work. Please install it.", call. = FALSE)
-  }
-
-  y <- insight::get_response(model)
+  y <- insight::get_response(model, verbose = FALSE)
   ypred <- rstantools::posterior_linpred(model)
 
 

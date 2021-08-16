@@ -1,26 +1,41 @@
-library(testthat)
-library(performance)
+if (require("testthat")) {
+  library(performance)
 
-if (length(strsplit(packageDescription("performance")$Version, "\\.")[[1]]) > 3) {
-  Sys.setenv("RunAllperformanceTests" = "yes")
-} else {
-  Sys.setenv("RunAllperformanceTests" = "no")
-}
+  if (length(strsplit(packageDescription("performance")$Version, "\\.")[[1]]) > 3) {
+    Sys.setenv("RunAllperformanceTests" = "yes")
+  } else {
+    Sys.setenv("RunAllperformanceTests" = "no")
+  }
 
-osx <- tryCatch(
-  {
-    si <- Sys.info()
-    if (!is.null(si["sysname"])) {
-      si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-    } else {
+  si <- Sys.info()
+
+  osx <- tryCatch(
+    {
+      if (!is.null(si["sysname"])) {
+        si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+      } else {
+        FALSE
+      }
+    },
+    error = function(e) {
       FALSE
     }
-  },
-  error = function(e) {
-    FALSE
-  }
-)
+  )
 
-if (!osx) {
-  test_check("performance")
+  solaris <- tryCatch(
+    {
+      if (!is.null(si["sysname"])) {
+        grepl("SunOS", si["sysname"], ignore.case = TRUE)
+      } else {
+        FALSE
+      }
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
+
+  if (!osx && !solaris) {
+    test_check("performance")
+  }
 }

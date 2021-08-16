@@ -5,17 +5,17 @@
 #'
 #' @param object A statistical model.
 #' @param iterations The number of draws to simulate/bootstrap.
-#' @param check_range Logical, if \code{TRUE}, includes a plot with the minimum
+#' @param check_range Logical, if `TRUE`, includes a plot with the minimum
 #'   value of the original response against the minimum values of the replicated
 #'   responses, and the same for the maximum value. This plot helps judging whether
 #'   the variation in the original data is captured by the model or not
-#'   (\cite{Gelman et al. 2020, pp.163}). The minimum and maximum values of \code{y} should
-#'   be inside the range of the related minimum and maximum values of \code{yrep}.
+#'   (\cite{Gelman et al. 2020, pp.163}). The minimum and maximum values of `y` should
+#'   be inside the range of the related minimum and maximum values of `yrep`.
 #' @param re_formula Formula containing group-level effects (random effects) to
-#'   be considered in the simulated data. If \code{NULL} (default), condition
-#'   on all random effects. If \code{NA} or \code{~0}, condition on no random
-#'   effects. See \code{simulate()} in \strong{lme4}.
-#' @param ... Passed down to \code{simulate()}.
+#'   be considered in the simulated data. If `NULL` (default), condition
+#'   on all random effects. If `NA` or `~0`, condition on no random
+#'   effects. See `simulate()` in **lme4**.
+#' @param ... Passed down to `simulate()`.
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'
@@ -33,15 +33,15 @@
 #'   similar to the observed outcome than the model in the left panel (a). Thus,
 #'   model (b) is likely to be preferred over model (a).
 #'
-#' @note The default-method, \code{pp_check.default()} is in package \pkg{bayesplot}.
-#' Thus, \pkg{performance} adds \code{pp_check()}-methods for different classes and
-#' packages (like \code{lm}, \code{merMod}, \code{glmmTMB}, ...). However, since
-#' it might be that not all model objects that have a \code{simulate()} function
+#' @note The default-method, `pp_check.default()` is in package \pkg{bayesplot}.
+#' Thus, \pkg{performance} adds `pp_check()`-methods for different classes and
+#' packages (like `lm`, `merMod`, `glmmTMB`, ...). However, since
+#' it might be that not all model objects that have a `simulate()` function
 #' are covered, and those objects probably can't be passed down to the default-method,
-#' there is also a "generic" \code{posterior_predictive_check()} function (and
-#' its alias \code{check_posterior_predictions()}), which just calls
-#' \code{pp_check.lm()}. Thus, every model object that has a \code{simulate()}-method
-#' should work with \code{posterior_predictive_check()}.
+#' there is also a "generic" `posterior_predictive_check()` function (and
+#' its alias `check_posterior_predictions()`), which just calls
+#' `pp_check.lm()`. Thus, every model object that has a `simulate()`-method
+#' should work with `posterior_predictive_check()`.
 #'
 #' @references \itemize{
 #'   \item Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019). Visualization in Bayesian workflow. Journal of the Royal Statistical Society: Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378
@@ -138,13 +138,13 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
 
   if (min(replicated) > min(original)) {
     if (verbose) {
-      warning("Minimum value of original data is not included in the replicated data. Model may not capture the variation of the data.", call. = FALSE)
+      warning(insight::format_message("Minimum value of original data is not included in the replicated data. Model may not capture the variation of the data."), call. = FALSE)
     }
   }
 
   if (max(replicated) < max(original)) {
     if (verbose) {
-      warning("Maximum value of original data is not included in the replicated data. Model may not capture the variation of the data.", call. = FALSE)
+      warning(insight::format_message("Maximum value of original data is not included in the replicated data. Model may not capture the variation of the data."), call. = FALSE)
     }
   }
 
@@ -157,8 +157,7 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
 
 #' @export
 plot.performance_pp_check <- function(x, ...) {
-  if (!requireNamespace("see", quietly = TRUE)) {
-    stop("Package 'see' required to plot posterior predictive checks. Please install it.")
-  }
+  insight::check_if_installed("see", "to plot posterior predictive checks")
+
   NextMethod()
 }

@@ -16,7 +16,11 @@ The R2 value.
 Calculates Efron's pseudo R2.
 }
 \details{
-Efron's R2 is calculated by taking the sum of the squared model residuals, divided by the total variability in the dependent variable. This R2 equals the squared correlation between the predicted values and actual values, however, note that model residuals from generalized linear models are not generally comparable to those of OLS.
+Efron's R2 is calculated by taking the sum of the squared model residuals,
+divided by the total variability in the dependent variable. This R2 equals
+the squared correlation between the predicted values and actual values,
+however, note that model residuals from generalized linear models are not
+generally comparable to those of OLS.
 }
 \examples{
 ## Dobson (1990) Page 93: Randomized Controlled Trial:
@@ -29,6 +33,6 @@ r2_efron(model)
 }
 \references{
 \itemize{
-  \item Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of residual variation. Journal of the American Statistical Association, 73, 113-121.
+\item Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of residual variation. Journal of the American Statistical Association, 73, 113-121.
 }
 }

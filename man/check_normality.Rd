@@ -15,8 +15,8 @@ check_normality(x, ...)
 \item{...}{Currently not used.}
 
 \item{effects}{Should normality for residuals (\code{"fixed"}) or random
-effects (\code{"random"}) be tested? Only applies to mixed models. May
-be abbreviated.}
+effects (\code{"random"}) be tested? Only applies to mixed-effects models.
+May be abbreviated.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value
@@ -33,14 +33,14 @@ yields significant results for the distribution of residuals and visual
 inspection (e.g. Q-Q plots) are preferable.
 }
 \note{
-For mixed models, studentized residuals are used for the test,
-  \emph{not} the standardized residuals. There is also a
-  \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-  implemented in the
-  \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+For mixed-effects models, studentized residuals, and \emph{not}
+standardized residuals, are used for the test. There is also a
+\href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the
+\href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
 
 # plot results

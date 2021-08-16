@@ -60,9 +60,7 @@
     return(NULL)
   }
 
-  if (!requireNamespace("lme4", quietly = TRUE)) {
-    stop("Package 'lme4' required for this function to work. Please install it.", call. = FALSE)
-  }
+  insight::check_if_installed("lme4")
 
   tryCatch(
     {
@@ -183,6 +181,7 @@
   attr(plot_data, "n_params") <- n_params
   plot_data
 }
+
 
 
 

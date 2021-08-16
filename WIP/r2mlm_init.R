@@ -16,9 +16,9 @@ r2mlm_init <- function(model) {
 
   # Step 2) Pull all variable names from the formula
   all_variables <- all.vars(formula(model))
-  if(inherits(model, "merMod")) {
+  if (inherits(model, "merMod")) {
     cluster_variable <- all_variables[length(all_variables)] # pull cluster, we'll need it later
-  } else if(inherit(model, "lme")) {
+  } else if (inherit(model, "lme")) {
     cluster_variable <- nlme::getGroups(model) %>% attr("label") # in nlme, formula(model) doesn't return grouping var, but we'll need that later on, so let's grab it here
   }
 
@@ -41,11 +41,9 @@ r2mlm_init <- function(model) {
   # b) If any of those variables is non-numeric, then throw an error
 
   for (variable in outcome_and_predictors) {
-
     if (!(class(data[[variable]]) == "integer") && !(class(data[[variable]]) == "numeric")) {
       stop("Your data must be numeric. Only the cluster variable can be a factor.")
     }
-
   }
 
   # Step 4) Fill l1 and l2 vectors
@@ -96,23 +94,23 @@ r2mlm_init <- function(model) {
   # Step 8) pull gamma values (fixed slopes)
   # 8a) gamma_w, fixed slopes for L1 variables (from l1_vars list)
   gammaw <- c()
-  i = 1
+  i <- 1
   for (variable in l1_vars) {
     gammaw[i] <- fixef(model)[variable]
-    i = i + 1
+    i <- i + 1
   }
 
   # 8b) gamma_b, intercept value if hasintercept = TRUE, and fixed slopes for L2 variables (from between list)
   gammab <- c()
   if (has_intercept == TRUE) {
     gammab[1] <- fixef(model)[1]
-    i = 2
+    i <- 2
   } else {
-    i = 1
+    i <- 1
   }
   for (var in l2_vars) {
     gammab[i] <- fixef(model)[var]
-    i = i + 1
+    i <- i + 1
   }
 
   # Step 9) Tau matrix, results from VarCorr(model)
@@ -126,16 +124,16 @@ r2mlm_init <- function(model) {
 
   # Step 11) input everything into r2MLM
 
-  list(data = as.data.frame(data),
-       within_covs = within,
-       between_covs = between,
-       random_covs = random,
-       gamma_w = gammaw,
-       gamma_b = gammab,
-       Tau = tau,
-       sigma2 = sigma2,
-       has_intercept = has_intercept,
-       clustermeancentered = centeredwithincluster)
+  list(
+    data = as.data.frame(data),
+    within_covs = within,
+    between_covs = between,
+    random_covs = random,
+    gamma_w = gammaw,
+    gamma_b = gammab,
+    Tau = tau,
+    sigma2 = sigma2,
+    has_intercept = has_intercept,
+    clustermeancentered = centeredwithincluster
+  )
 }
-
-
