@@ -38,6 +38,12 @@
 #'   to the dedicated functions (like `check_collinearity()`,
 #'   `check_normality()` etc.) to get informative messages and warnings.
 #'
+#' @details For Bayesian models from packages **rstanarm** or **brms**,
+#'   models will be "converted" to their frequentist counterpart, using
+#'   [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
+#'   A more advanced model-check for Bayesian models will be implemented at a
+#'   later stage.
+#'
 #' @section Linearity Assumption:
 #' The plot **Linearity** checks the assumption of linear relationship.
 #' However, the spread of dots also indicate possible heteroscedasticity (i.e.
@@ -124,6 +130,42 @@ check_model.default <- function(x,
 }
 
 
+## TODO for now, convert to freq, see https://github.com/easystats/performance/issues/354
+## need to fix this later
+
+#' @export
+check_model.stanreg <- function(x,
+                                dot_size = 2,
+                                line_size = .8,
+                                panel = TRUE,
+                                check = "all",
+                                alpha = .2,
+                                dot_alpha = .8,
+                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+                                theme = "see::theme_lucid",
+                                detrend = FALSE,
+                                verbose = TRUE,
+                                ...) {
+  check_model(bayestestR::bayesian_as_frequentist(x),
+              dot_size = dot_size,
+              line_size = line_size,
+              panel = panel,
+              check = check,
+              alpha = alpha,
+              dot_alpha = dot_alpha,
+              colors = colors,
+              theme = theme,
+              detrend = detrend,
+              verbose = verbose,
+              ...)
+}
+
+
+
+#' @export
+check_model.brmsfit <- check_model.stanreg
+
+
 #' @export
 check_model.model_fit <- function(x,
                                   dot_size = 2,
@@ -131,7 +173,11 @@ check_model.model_fit <- function(x,
                                   panel = TRUE,
                                   check = "all",
                                   alpha = .2,
+                                  dot_alpha = .8,
+                                  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+                                  theme = "see::theme_lucid",
                                   detrend = FALSE,
+                                  verbose = TRUE,
                                   ...) {
   check_model(
     x$fit,
@@ -140,13 +186,21 @@ check_model.model_fit <- function(x,
     panel = panel,
     check = check,
     alpha = alpha,
+    dot_alpha = dot_alpha,
+    colors = colors,
+    theme = theme,
     detrend = detrend,
+    verbose = verbose,
     ...
   )
 }
 
 
 
+
+
+
+# helper ------------------------
 
 
 .check_assumptions_linear <- function(model, model_info) {
