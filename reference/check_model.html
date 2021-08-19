@@ -224,6 +224,13 @@ format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The data frame that is used for plotting.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>For Bayesian models from packages <strong>rstanarm</strong> or <strong>brms</strong>,
+models will be "converted" to their frequentist counterpart, using
+<a href='https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html'><code><a href='https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html'>bayestestR::bayesian_as_frequentist</a></code></a>.
+A more advanced model-check for Bayesian models will be implemented at a
+later stage.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function just prepares the data for plotting. To create the plots,

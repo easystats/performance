@@ -248,7 +248,7 @@ approximation of the Likelihood Ratio Test. However, it is more applicable
 than the LRT: you can often run a Wald test in situations where no other
 test can be run. Importantly, this test only makes statistical sense if the
 models are nested.<br /> Note: this test is also available in base R through the
-<code><a href='https://rdrr.io/r/stats/anova.html'>anova()</a></code> function. It returns an <code>F-value</code> column
+<code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>anova()</a></code> function. It returns an <code>F-value</code> column
 as a statistic and its associated <code>p-value</code>.</p></li>
 <li><p><strong>Likelihood Ratio Test (LRT)</strong> - <code>test_likelihoodratio()</code>:
 The LRT tests which model is a better (more likely) explanation of the
@@ -261,7 +261,7 @@ the Wald test for small sample sizes (under or about 30) or if the
 parameters are large.<br /> Note: for regression models, this is similar to
 <code>anova(..., test="LRT")</code> (on models) or <code>lmtest::lrtest(...)</code>,
 depending on the <code>estimator</code> argument. For <code>lavaan</code> models (SEM,
-CFA), the function calls <code>lavaan::lavTestLRT()</code>.</p></li>
+CFA), the function calls <code><a href='https://rdrr.io/pkg/lavaan/man/lavTestLRT.html'>lavaan::lavTestLRT()</a></code>.</p></li>
 <li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two
 tests.</p><ul>
@@ -301,11 +301,11 @@ the performance indices of many different models.</p></div>
 <span class='r-in'><span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Petal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |    BF</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> --------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |    lm |      </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |    lm | 0.007</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |    lm | 0.037</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |    BF |   Omega2 | p (Omega2) |   LR | p (LR)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |    lm |       |          |            |      |       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |    lm | 0.007 | 9.54e-04 |      0.935 | 0.15 |  0.919</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |    lm | 0.037 |     0.02 |      0.081 | 3.41 |  0.099</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Models were detected as nested and are compared in sequential order.</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
@@ -346,8 +346,12 @@ the performance indices of many different models.</p></div>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |    lm |  7 |       2 | 3.31 | 0.191</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2, nested=TRUE)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> Package 'CompQuadForm' is required for this function to work.</span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span>   Please install it by running install.packages('CompQuadForm').</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |   Omega2 | p (Omega2) |   LR | p (LR)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |    lm |          |            |      |       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |    lm | 9.54e-04 |      0.935 | 0.15 |  0.919</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |    lm |     0.02 |      0.081 | 3.41 |  0.099</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Models were detected as nested and are compared in sequential order.</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Non-nested Models</span></span>
 <span class='r-in'><span class='co'># -----------------</span></span>
@@ -356,11 +360,11 @@ the performance indices of many different models.</p></div>
 <span class='r-in'><span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |      BF</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |    lm |        </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |    lm |  &gt; 1000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |    lm | &lt; 0.001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |      BF | Omega2 | p (Omega2) |    LR | p (LR)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |    lm |         |        |            |       |       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |    lm |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |    lm | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 | 0.006 </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Each model is compared to m1.</span>
 <span class='r-in'><span class='fu'>test_bf</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Bayes Factors for Model Comparison</span></span>
@@ -372,44 +376,48 @@ the performance indices of many different models.</p></div>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> * Against Denominator: <span style='color: #00BBBB;'>[m1] Petal.Width</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> *   Bayes Factor Type: <span style='color: #00BBBB;'>BIC approximation</span></span>
 <span class='r-in'><span class='fu'>test_vuong</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span> <span class='co'># nonnest2::vuongtest(m1, m2)</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> Package 'CompQuadForm' is required for this function to work.</span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span>   Please install it by running install.packages('CompQuadForm').</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model | Omega2 | p (Omega2) |    LR | p (LR)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |    lm |        |            |       |       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |    lm |   0.19 |     &lt; .001 | -4.57 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |    lm |   0.12 |     &lt; .001 |  2.51 | 0.006 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Each model is compared to m1.</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Tweak the output</span></span>
 <span class='r-in'><span class='co'># ----------------</span></span>
 <span class='r-in'><span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span>, include_formula <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Name |                           Model |      BF</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------------------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |  lm(Sepal.Length ~ Petal.Width) |        </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   | lm(Sepal.Length ~ Petal.Length) |  &gt; 1000</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |      lm(Sepal.Length ~ Species) | &lt; 0.001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name |                           Model |      BF | Omega2 | p (Omega2) |    LR | p (LR)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |  lm(Sepal.Length ~ Petal.Width) |         |        |            |       |       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   | lm(Sepal.Length ~ Petal.Length) |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |      lm(Sepal.Length ~ Species) | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 | 0.006 </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Each model is compared to m1.</span>
 <span class='r-in'></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># SEM / CFA (lavaan objects)</span></span>
 <span class='r-in'><span class='co'># --------------------------</span></span>
 <span class='r-in'><span class='co'># Lavaan Models</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'>"lavaan"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://lavaan.ugent.be'>"lavaan"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'>  <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3</span>
 <span class='r-in'>                 textual =~ x4 + x5 + x6</span>
 <span class='r-in'>                 speed   =~ x7 + x8 + x9</span>
 <span class='r-in'></span>
 <span class='r-in'>                  visual ~~ textual + speed "</span></span>
-<span class='r-in'>  <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'>cfa</span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3</span>
 <span class='r-in'>                 textual =~ x4 + x5 + x6</span>
 <span class='r-in'>                 speed   =~ x7 + x8 + x9</span>
 <span class='r-in'></span>
 <span class='r-in'>                  visual ~~ 0 * textual + speed "</span></span>
-<span class='r-in'>  <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'>cfa</span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='va'>structure</span> <span class='op'>&lt;-</span> <span class='st'>" visual  =~ x1 + x2 + x3</span>
 <span class='r-in'>                 textual =~ x4 + x5 + x6</span>
 <span class='r-in'>                 speed   =~ x7 + x8 + x9</span>
 <span class='r-in'></span>
 <span class='r-in'>                  visual ~~ 0 * textual + 0 * speed "</span></span>
-<span class='r-in'>  <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'>cfa</span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>m3</span> <span class='op'>&lt;-</span> <span class='fu'>lavaan</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/lavaan/man/cfa.html'>cfa</a></span><span class='op'>(</span><span class='va'>structure</span>, data <span class='op'>=</span> <span class='va'>HolzingerSwineford1939</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='fu'>test_likelihoodratio</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
 <span class='r-in'></span>
@@ -423,8 +431,14 @@ the performance indices of many different models.</p></div>
 <span class='r-in'>    <span class='fu'>test_performance</span><span class='op'>(</span><span class='va'>m1</span>, <span class='va'>m2</span>, <span class='va'>m3</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='op'>}</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: lavaan</span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>there is no package called ‘lavaan’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: mgcv</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> This is mgcv 1.8-36. For overview type 'help("mgcv-package")'.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name |   Model |      BF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |      lm |        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   | lmerMod | &lt; 0.001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   |     gam |   0.038</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Each model is compared to m1.</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
