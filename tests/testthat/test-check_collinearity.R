@@ -64,9 +64,13 @@ if (require("testthat") && require("performance") && require("glmmTMB")) {
         )
       }))
 
-      expect_error(check_collinearity(aM))
-      expect_error(check_collinearity(aW))
-      expect_error(check_collinearity(aB))
+      expect_message(ccoM <- check_collinearity(aM))
+      expect_message(ccoW <- check_collinearity(aW))
+      expect_message(ccoB <- check_collinearity(aB), regexp = NA)
+
+      expect_equal(nrow(ccoM), 15)
+      expect_equal(nrow(ccoW), 3)
+      expect_equal(nrow(ccoB), 3)
 
       suppressWarnings(suppressMessages({
         aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
@@ -87,7 +91,7 @@ if (require("testthat") && require("performance") && require("glmmTMB")) {
 
       expect_message(ccoM <- check_collinearity(aM))
       expect_message(ccoW <- check_collinearity(aW))
-      expect_message(ccoB <- check_collinearity(aB))
+      expect_message(ccoB <- check_collinearity(aB), regexp = NA)
 
       expect_equal(nrow(ccoM), 15)
       expect_equal(nrow(ccoW), 3)
