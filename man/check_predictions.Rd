@@ -6,16 +6,32 @@
 \alias{check_posterior_predictions}
 \title{Posterior predictive checks}
 \usage{
-check_predictions(object, ...)
+check_predictions(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  ...
+)
 
-posterior_predictive_check(object, ...)
+posterior_predictive_check(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  ...
+)
 
-check_posterior_predictions(object, ...)
+check_posterior_predictions(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{A statistical model.}
-
-\item{...}{Passed down to \code{simulate()}.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
 
@@ -30,6 +46,8 @@ be inside the range of the related minimum and maximum values of \code{yrep}.}
 be considered in the simulated data. If \code{NULL} (default), condition
 on all random effects. If \code{NA} or \code{~0}, condition on no random
 effects. See \code{simulate()} in \strong{lme4}.}
+
+\item{...}{Passed down to \code{simulate()}.}
 }
 \value{
 A data frame of simulated responses and the original response vector.

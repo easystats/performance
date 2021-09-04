@@ -54,11 +54,11 @@
 #'   check_predictions(model)
 #' }
 #' @export
-check_predictions <- function(object, ...) {
+check_predictions <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
   if (isTRUE(insight::model_info(object, verbose = FALSE))) {
     UseMethod("pp_check")
   } else {
-    pp_check.lm(object,)
+    pp_check.lm(object, iterations = iterations, check_range = check_range, re_formula = re_formula, ...)
   }
 }
 
