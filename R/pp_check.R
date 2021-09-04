@@ -63,7 +63,6 @@ check_predictions <- function(object, iterations = 50, check_range = FALSE, re_f
 }
 
 
-#' @exportS3Method bayesplot::pp_check lm
 pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
   out <- tryCatch(
     {
@@ -84,38 +83,19 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula
   out
 }
 
-#' @exportS3Method bayesplot::pp_check glm
-pp_check.glm <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check merMod
-pp_check.merMod <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check MixMod
-pp_check.MixMod <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check glmmTMB
-pp_check.glmmTMB <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check glm.nb
-pp_check.glm.nb <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check lme
-pp_check.lme <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check negbin
-pp_check.negbin <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check polr
-pp_check.polr <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check wbm
-pp_check.wbm <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check mle2
-pp_check.mle2 <- pp_check.lm
-
-#' @exportS3Method bayesplot::pp_check lm
-pp_check.vlm <- pp_check.lm
+pp_check.glm       <-
+  pp_check.glmmTMB <-
+  pp_check.glm.nb  <-
+  pp_check.lme     <-
+  pp_check.merMod  <-
+  pp_check.MixMod  <-
+  pp_check.mle2    <-
+  pp_check.negbin  <-
+  pp_check.polr    <-
+  pp_check.rma     <-
+  pp_check.vlm     <-
+  pp_check.wbm     <-
+  pp_check.lm
 
 #' @rdname check_predictions
 #' @export
