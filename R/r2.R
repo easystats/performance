@@ -9,7 +9,11 @@
 #' @param ci Confidence Interval (CI) level. Default is \code{NULL}. Confidence
 #'   intervals for R2 can be calculated based on different methods, see
 #'   \code{ci_method}.
-#' @param ci_method to do
+#' @param ci_method Method for constructing the R2 confidence interval.
+#'   Options are \code{"analytical"} for sampling-theory-based frequentist
+#'   intervals and \code{"bootstrap"} for bootstrap intervals. Analytical intervals
+#'   are not available for all models. For Bayesian models, [r2_bayes()] is used.
+#' @param verbose Logical. Should details about R2 and CI methods be given (`TRUE`) or not (`FALSE`)?
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'

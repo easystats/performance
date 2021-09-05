@@ -21,7 +21,12 @@ r2(model, ...)
 intervals for R2 can be calculated based on different methods, see
 \code{ci_method}.}
 
-\item{ci_method}{to do}
+\item{ci_method}{Method for constructing the R2 confidence interval.
+Options are \code{"analytical"} for sampling-theory-based frequentist
+intervals and \code{"bootstrap"} for bootstrap intervals. Analytical intervals
+are not available for all models. For Bayesian models, \code{\link[=r2_bayes]{r2_bayes()}} is used.}
+
+\item{verbose}{Logical. Should details about R2 and CI methods be given (\code{TRUE}) or not (\code{FALSE})?}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
