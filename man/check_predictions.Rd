@@ -74,9 +74,9 @@ model (b) is likely to be preferred over model (a).
 }
 \note{
 Every model object that has a \code{simulate()}-method should work with
-\code{check_predictions()}. If \pkg{bayesplot} (or a package that imports
-\pkg{bayesplot} such as \pkg{rstanarm} or \pkg{brms}) is loaded, \code{pp_check()}
-is also available as an alias for \code{check_predictions()}.
+\code{check_predictions()}. On R 3.6.0 and higher, if \pkg{bayesplot}
+(or a package that imports \pkg{bayesplot} such as \pkg{rstanarm} or \pkg{brms})
+is loaded, \code{pp_check()} is also available as an alias for \code{check_predictions()}.
 }
 \examples{
 library(performance)

@@ -36,9 +36,9 @@
 #'   model (b) is likely to be preferred over model (a).
 #'
 #' @note  Every model object that has a `simulate()`-method should work with
-#'   `check_predictions()`. If \pkg{bayesplot} (or a package that imports
-#'   \pkg{bayesplot} such as \pkg{rstanarm} or \pkg{brms}) is loaded, `pp_check()`
-#'   is also available as an alias for `check_predictions()`.
+#'   `check_predictions()`. On R 3.6.0 and higher, if \pkg{bayesplot}
+#'   (or a package that imports \pkg{bayesplot} such as \pkg{rstanarm} or \pkg{brms})
+#'   is loaded, `pp_check()` is also available as an alias for `check_predictions()`.
 #'
 #' @references \itemize{
 #'   \item Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019). Visualization in Bayesian workflow. Journal of the Royal Statistical Society: Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378
@@ -83,6 +83,20 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula
   out
 }
 
+#' @rawNamespace if (getRversion() >= "3.6.0") {
+#'   S3method(bayesplot::pp_check, lm)
+#'   S3method(bayesplot::pp_check, glm)
+#'   S3method(bayesplot::pp_check, glmmTMB)
+#'   S3method(bayesplot::pp_check, glm.nb)
+#'   S3method(bayesplot::pp_check, merMod)
+#'   S3method(bayesplot::pp_check, MixMod)
+#'   S3method(bayesplot::pp_check, mle2)
+#'   S3method(bayesplot::pp_check, negbin)
+#'   S3method(bayesplot::pp_check, polr)
+#'   S3method(bayesplot::pp_check, rma)
+#'   S3method(bayesplot::pp_check, vlm)
+#'   S3method(bayesplot::pp_check, wbm)
+#' }
 pp_check.glm       <-
   pp_check.glmmTMB <-
   pp_check.glm.nb  <-
