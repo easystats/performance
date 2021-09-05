@@ -184,7 +184,7 @@
 <span class="fu"><a href="../reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; # Bayesian R2 with Standard Error
 &gt; 
-&gt;   Conditional R2: 0.816 (89% CI [0.735, 0.887])</code></pre>
+&gt;   Conditional R2: 0.816 (95% CI [0.704, 0.895])</code></pre>
 <p>As discussed above, for mixed-effects models, there will be two components associated with <span class="math inline">\(R^2\)</span>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># defining a Bayesian mixed-effects model</span>
@@ -193,8 +193,8 @@
 <span class="fu"><a href="../reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; # Bayesian R2 with Standard Error
 &gt; 
-&gt;   Conditional R2: 0.953 (89% CI [0.944, 0.962])
-&gt;      Marginal R2: 0.826 (89% CI [0.747, 0.889])</code></pre>
+&gt;   Conditional R2: 0.953 (95% CI [0.941, 0.963])
+&gt;      Marginal R2: 0.826 (95% CI [0.719, 0.897])</code></pre>
 <p>If you want to know more about these indices, you can check out details and references in the functions that compute them <a href="https://easystats.github.io/performance/reference/index.html#section-r-functions"><strong>here</strong></a>.</p>
 </div>
 <div id="interpretation" class="section level1">
