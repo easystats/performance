@@ -78,7 +78,7 @@
 #' }
 #' @references Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
 #' @export
-r2_bayes <- function(model, robust = TRUE, ci = .89, verbose = TRUE, ...) {
+r2_bayes <- function(model, robust = TRUE, ci = .95, verbose = TRUE, ...) {
   r2_bayesian <- r2_posterior(model, verbose = verbose, ...)
 
   if (is.null(r2_bayesian)) {
