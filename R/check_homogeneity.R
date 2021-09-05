@@ -96,7 +96,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   } else if (p.val < 0.05) {
     insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, p.val), "red")
   } else {
-    insight::print_color(sprintf("OK: There is insufficient evidence to say that the distributions have different variances (%s, p = %.3f).\n", method.string, p.val), "green")
+    insight::print_color(sprintf("OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n", method.string, p.val), "green")
   }
 
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
