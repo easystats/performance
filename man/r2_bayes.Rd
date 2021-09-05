@@ -8,7 +8,7 @@
 \alias{r2_posterior.BFBayesFactor}
 \title{Bayesian R2}
 \usage{
-r2_bayes(model, robust = TRUE, ci = 0.89, verbose = TRUE, ...)
+r2_bayes(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...)
 
 r2_posterior(model, ...)
 

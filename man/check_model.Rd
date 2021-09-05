@@ -63,6 +63,13 @@ Visual check of model various assumptions (normality of residuals, normality
 of random effects, linear relationship, homogeneity of variance,
 multicollinearity).
 }
+\details{
+For Bayesian models from packages \strong{rstanarm} or \strong{brms},
+models will be "converted" to their frequentist counterpart, using
+\href{https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html}{\code{bayestestR::bayesian_as_frequentist}}.
+A more advanced model-check for Bayesian models will be implemented at a
+later stage.
+}
 \note{
 This function just prepares the data for plotting. To create the plots,
 \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
