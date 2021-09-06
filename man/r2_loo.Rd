@@ -2,25 +2,54 @@
 % Please edit documentation in R/r2_loo.R
 \name{r2_loo}
 \alias{r2_loo}
+\alias{r2_loo_posterior}
+\alias{r2_loo_posterior.brmsfit}
+\alias{r2_loo_posterior.stanreg}
 \title{LOO-adjusted R2}
 \usage{
-r2_loo(model, verbose = TRUE)
+r2_loo(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...)
+
+r2_loo_posterior(model, ...)
+
+\method{r2_loo_posterior}{brmsfit}(model, verbose = TRUE, ...)
+
+\method{r2_loo_posterior}{stanreg}(model, verbose = TRUE, ...)
 }
 \arguments{
-\item{model}{A Bayesian regression model.}
+\item{model}{A Bayesian regression model (from \strong{brms},
+\strong{rstanarm}, \strong{BayesFactor}, etc).}
+
+\item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
+calculate the central tendency of the variances.}
+
+\item{ci}{Value or vector of probability of the CI (between 0 and 1) to be
+estimated.}
 
 \item{verbose}{Toggle off warnings.}
+
+\item{...}{Arguments passed to \code{r2_posterior()}.}
 }
 \value{
-The LOO-adjusted R2 for \code{model}, as numeric value.
+A list with the Bayesian R2 value. For mixed models, a list with the
+Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
+and credible intervals for the R2 values are saved as attributes.
+
+A list with the LOO-adjusted R2 value. The standard errors
+and credible intervals for the R2 values are saved as attributes.
 }
 \description{
 Compute LOO-adjusted R2.
 }
 \details{
-Unlike \code{\link[=r2_bayes]{r2_bayes()}}, which returns an "unadjusted" R2 value,
-\code{r2_loo()} calculates a LOO-adjusted R2, which comes conceptionally
-closer to an "adjusted" R2 measure.
+\code{r2_loo()} returns an "adjusted" R2 value computed using a
+leave-one-out-adjusted posterior distribution. This is conceptually similar
+to an adjusted/unbiased R2 estiamte in classical regression modeling. See
+\code{\link[=r2_bayes]{r2_bayes()}} for an "unadjusted" R2.
+\cr \cr
+Mixed models are not currently fully supported.
+\cr \cr
+\code{r2_loo_posterior()} is the actual workhorse for \code{r2_loo()} and
+returns a posterior sample of LOO-adjusted Bayesian R2 values.
 }
 \examples{
 if (require("rstanarm")) {
