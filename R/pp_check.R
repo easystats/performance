@@ -77,7 +77,9 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula
     stop(sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1]), call. = FALSE)
   }
 
-  out$y <- insight::get_response(object)
+  # check for transformed response, and backtransform if necessary
+  out$y <- .backtransform_response(object)
+
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
@@ -161,4 +163,18 @@ plot.performance_pp_check <- function(x, ...) {
   insight::check_if_installed("see", "to plot posterior predictive checks")
 
   NextMethod()
+}
+
+
+
+.backtransform_response <- function(model) {
+  response <- insight::get_response(model)
+  resp_tring <- insight::find_terms(model)$response
+  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
+
+  if (!is.null(resp_tring) && grepl(paste0(pattern, "\\("), resp_tring)) {
+    fun <- gsub(paste0(pattern, "\\((.*)"), "\\1", resp_tring)
+    response <- do.call(fun, args = list(x = response))
+  }
+  response
 }
