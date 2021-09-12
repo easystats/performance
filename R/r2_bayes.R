@@ -174,11 +174,11 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
               summary = FALSE
             ))
           )
-          names(br2$R2_Bayes) <- "Conditional R2"
-          names(br2$R2_Bayes_marginal) <- "Marginal R2"
+          names(br2$R2_Bayes) <- rep("Conditional R2", length(br2$R2_Bayes))
+          names(br2$R2_Bayes_marginal) <- rep("Marginal R2", length(br2$R2_Bayes))
         } else {
           br2 <- list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
-          names(br2$R2_Bayes) <- "R2"
+          names(br2$R2_Bayes) <- rep("R2", length(br2$R2_Bayes))
         }
       }
 

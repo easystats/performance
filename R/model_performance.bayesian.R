@@ -13,7 +13,7 @@
 #' @return A data frame (with one row) and one column per "index" (see
 #'   `metrics`).
 #'
-#' @details Depending on `model`, following indices are computed:
+#' @details Depending on `model`, the following indices are computed:
 #' \itemize{
 #'   \item{**ELPD**} {expected log predictive density. Larger ELPD values
 #'   mean better fit. See [looic()].}
@@ -26,7 +26,7 @@
 #'
 #'   \item{**R2**} {r-squared value, see [r2_bayes()].}
 #'
-#'   \item{**R2_LOO_adjusted**} {adjusted r-squared, see
+#'   \item{**R2_adjusted**} {LOO-adjusted r-squared, see
 #'   [r2_loo()].}
 #'
 #'   \item{**RMSE**} {root mean squared error, see
@@ -139,8 +139,8 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   }
 
   # LOO-R2 ------------------
-  if ("R2_ADJUSTED" %in% metrics && mi$is_linear) {
-    out$R2_adjusted <- tryCatch(
+  if (("R2_ADJUSTED" %in% metrics | "R2_LOO" %in% metrics) && mi$is_linear) {
+    r2_adj <- tryCatch(
       {
         suppressWarnings(r2_loo(model, verbose = verbose))
       },
@@ -148,6 +148,14 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
         NULL
       }
     )
+    if (!is.null(r2_adj)) {
+      attri$r2_loo <- attributes(r2_adj) # save attributes
+
+      # Format to df then to list
+      r2_adj_df <- as.data.frame(t(as.numeric(r2_adj)))
+      names(r2_adj_df) <- gsub("_loo", "_adjusted", names(r2_adj), fixed = TRUE)
+      out <- append(out, as.list(r2_adj_df))
+    }
   }
 
   # RMSE ------------------

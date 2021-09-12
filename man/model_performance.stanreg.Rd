@@ -41,7 +41,7 @@ A data frame (with one row) and one column per "index" (see
 Compute indices of model performance for (general) linear models.
 }
 \details{
-Depending on \code{model}, following indices are computed:
+Depending on \code{model}, the following indices are computed:
 \itemize{
 \item{\strong{ELPD}} {expected log predictive density. Larger ELPD values
 mean better fit. See \code{\link[=looic]{looic()}}.}
@@ -54,7 +54,7 @@ values mean better fit. See \code{?loo::waic}.}
 
 \item{\strong{R2}} {r-squared value, see \code{\link[=r2_bayes]{r2_bayes()}}.}
 
-\item{\strong{R2_LOO_adjusted}} {adjusted r-squared, see
+\item{\strong{R2_adjusted}} {LOO-adjusted r-squared, see
 \code{\link[=r2_loo]{r2_loo()}}.}
 
 \item{\strong{RMSE}} {root mean squared error, see

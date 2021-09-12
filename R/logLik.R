@@ -1,4 +1,4 @@
-#' @export
+#' @exportS3Method logLik ivreg
 logLik.ivreg <- function(object, ...) {
   res <- object$residuals
   p <- object$rank
@@ -29,7 +29,7 @@ logLik.ivreg <- function(object, ...) {
 }
 
 
-#' @export
+#' @exportS3Method logLik plm
 logLik.plm <- function(object, ...) {
   res <- object$residuals
   w <- object$weights
@@ -58,12 +58,12 @@ logLik.plm <- function(object, ...) {
   val
 }
 
-#' @export
+#' @exportS3Method logLik cpglm
 logLik.cpglm <- logLik.plm
 
 
 
-#' @export
+#' @exportS3Method logLik iv_robust
 logLik.iv_robust <- function(object, ...) {
   res <- insight::get_residuals(object)
   p <- object$rank
@@ -96,7 +96,7 @@ logLik.iv_robust <- function(object, ...) {
 
 
 
-#' @export
+#' @exportS3Method logLik svycoxph
 logLik.svycoxph <- function(object, ...) {
   val <- object$ll[2]
   attr(val, "nall") <- insight::n_obs(object)
