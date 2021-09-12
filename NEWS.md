@@ -1,6 +1,21 @@
-# performance 0.7.3.1
+# performance 0.7.4
 
-* Two new functions: `check_multimodal()` and `check_heterogeneity_bias()`.
+## Breaking Changes
+
+* The `ci`-level in `r2()` for Bayesian models now defaults to `0.95`, to be in
+  line with the latest changes in the *bayestestR* package.
+
+## General
+
+* Minor revisions to wording for messages from some of the check-functions.
+
+## New functions
+
+* `check_multimodal()` and `check_heterogeneity_bias()`.
+
+## Bug fixes
+
+* Fixed issues in `check_model()` for Bayesian models.
 
 # performance 0.7.3
 
