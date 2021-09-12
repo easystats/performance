@@ -169,11 +169,11 @@ plot.performance_pp_check <- function(x, ...) {
 
 .backtransform_response <- function(model) {
   response <- insight::get_response(model)
-  resp_tring <- insight::find_terms(model)$response
+  resp_string <- insight::find_terms(model)$response
   pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
 
-  if (!is.null(resp_tring) && grepl(paste0(pattern, "\\("), resp_tring)) {
-    fun <- gsub(paste0(pattern, "\\((.*)"), "\\1", resp_tring)
+  if (!is.null(resp_string) && grepl(paste0(pattern, "\\("), resp_string)) {
+    fun <- gsub(paste0(pattern, "\\((.*)"), "\\1", resp_string)
     response <- do.call(fun, args = list(x = response))
   }
   response
