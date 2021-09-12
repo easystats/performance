@@ -65,62 +65,82 @@ r2_loo_posterior <- function(model, ...) {
 #' @rdname r2_loo
 r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
   insight::check_if_installed("rstantools")
-  insight::check_if_installed("loo")
-
-  y <- insight::get_response(model, verbose = FALSE)
-  ypred <- rstantools::posterior_linpred(model)
-
-
-  # for some weird models, not all response values can be
-  # predicted, resulting in different lengths between y and ypred
-
-  if (length(y) > ncol(ypred)) {
-    tryCatch(
-      {
-        y <- y[as.numeric(attr(ypred, "dimnames")[[2]])]
-      },
-      error = function(x) {
-        NULL
-      }
-    )
-  }
-
-  ll <- rstantools::log_lik(model)
 
   algorithm <- insight::find_algorithm(model)
-  .n_chains <- algorithm$chains
-  .n_samples <- (algorithm$iterations - algorithm$warmup) * algorithm$chains
+  if (algorithm$algorithm != "sampling") {
+    warning(insight::format_message("`r2()` only available for models fit using the 'sampling' algorithm."), call. = FALSE)
+    return(NA)
+  }
 
-  r_eff <- loo::relative_eff(
-    exp(ll),
-    chain_id = rep(1:.n_chains, each = .n_samples / .n_chains)
+  tryCatch(
+    {
+      mi <- insight::model_info(model)
+
+      if (insight::is_multivariate(model)) {
+        res <- insight::find_response(model)
+        if (mi[[1]]$is_mixed) {
+          br2_mv <- list(
+            "R2_loo" = rstantools::loo_R2(
+              model,
+              re.form = NULL,
+              re_formula = NULL,
+              summary = FALSE
+            ),
+            "R2_loo_marginal" = rstantools::loo_R2(
+              model,
+              re.form = NA,
+              re_formula = NA,
+              summary = FALSE
+            )
+          )
+          br2 <- lapply(1:length(res), function(x) {
+            list(
+              "R2_loo" = unname(as.vector(br2_mv$R2_loo[, x])),
+              "R2_loo_marginal" = unname(as.vector(br2_mv$R2_loo_marginal[, x]))
+            )
+          })
+          names(br2) <- res
+        } else {
+          br2_mv <- list("R2_loo" = rstantools::loo_R2(model, summary = FALSE))
+          br2 <- lapply(1:length(res), function(x) {
+            list("R2_loo" = unname(as.vector(br2_mv$R2_loo[, x])))
+          })
+          names(br2) <- res
+        }
+      } else {
+        if (mi$is_mixed) {
+          br2 <- list(
+            "R2_loo" = as.vector(rstantools::loo_R2(
+              model,
+              re.form = NULL,
+              re_formula = NULL,
+              summary = FALSE
+            )),
+            "R2_loo_marginal" = as.vector(rstantools::loo_R2(
+              model,
+              re.form = NA,
+              re_formula = NA,
+              summary = FALSE
+            ))
+          )
+          names(br2$R2_loo) <- rep("Conditional R2_adjusted", length(br2$R2_loo))
+          names(br2$R2_loo_marginal) <- rep("Marginal R2_adjusted", length(br2$R2_loo))
+        } else {
+          br2 <- list("R2_loo" = as.vector(rstantools::loo_R2(model, summary = FALSE)))
+          names(br2$R2_loo) <- rep("R2_adjusted", length(br2$R2_loo))
+        }
+      }
+
+      br2
+    },
+    error = function(e) {
+      if (inherits(e, c("simpleError", "error"))) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
+    }
   )
-
-  psis_object <- loo::psis(log_ratios = -ll, r_eff = r_eff)
-  ypredloo <- loo::E_loo(ypred, psis_object, log_ratios = -ll)$value
-  eloo <- ypredloo - y
-
-  S <- nrow(ypred)
-  N <- ncol(ypred)
-  rng_state_old <- .Random.seed
-  on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
-  set.seed(model$stanfit@stan_args[[1]]$seed)
-  exp_draws <- matrix(stats::rexp(S * N, rate = 1), nrow = S, ncol = N)
-  wts <- exp_draws/rowSums(exp_draws)
-  var_y <- (
-    rowSums(sweep(wts, 2, y^2, FUN = "*")) -
-      rowSums(sweep(wts, 2, y, FUN = "*"))^2
-  ) * (N/(N - 1))
-  var_eloo <- (
-    rowSums(sweep(wts, 2, eloo^2, FUN = "*")) -
-      rowSums(sweep(wts, 2, eloo, FUN = "*")^2)
-  ) * (N/(N - 1))
-  loo_r2 <- 1 - var_eloo/var_y
-  loo_r2[loo_r2 < -1] <- -1
-  loo_r2[loo_r2 > 1] <- 1
-  loo_r2 <- list(R2_loo = loo_r2)
-  names(loo_r2$R2_loo) <- rep("R2", length(loo_r2$R2_loo))
-  return(loo_r2)
 }
 
 #' @export
