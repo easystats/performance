@@ -105,7 +105,7 @@ r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
   rng_state_old <- .Random.seed
   on.exit(assign(".Random.seed", rng_state_old, envir = .GlobalEnv))
   set.seed(model$stanfit@stan_args[[1]]$seed)
-  exp_draws <- matrix(rexp(S * N, rate = 1), nrow = S, ncol = N)
+  exp_draws <- matrix(stats::rexp(S * N, rate = 1), nrow = S, ncol = N)
   wts <- exp_draws/rowSums(exp_draws)
   var_y <- (
     rowSums(sweep(wts, 2, y^2, FUN = "*")) -
