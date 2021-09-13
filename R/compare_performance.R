@@ -120,13 +120,13 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
     dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
     model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
     perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
-    attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[! names(attributes(dat)) %in% c("names", "row.names", "class")])
+    attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
     return(perf_df)
   }, objects, object_names, SIMPLIFY = FALSE)
 
   attri <- lapply(m, function(x) {
     attri <- attributes(x)
-    attri[! names(attri) %in% c("names", "row.names", "class")]
+    attri[!names(attri) %in% c("names", "row.names", "class")]
   })
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 
@@ -138,7 +138,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   }
 
   if ("LOOIC" %in% names(dfs)) {
-    lpd_point <- do.call(cbind, lapply(attri, function(x) x$loo$pointwise[,"elpd_loo"]))
+    lpd_point <- do.call(cbind, lapply(attri, function(x) x$loo$pointwise[, "elpd_loo"]))
     dfs$wt_LOOIC <- as.numeric(loo::stacking_weights(lpd_point))
   }
 
