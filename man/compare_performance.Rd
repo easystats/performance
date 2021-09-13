@@ -29,6 +29,17 @@ performance for different models at once and hence allows comparison of
 indices across models.
 }
 \details{
+\subsection{Model Weights}{
+When information criteria (IC) are requested in \code{metrics} (i.e., any of \code{"all"},
+\code{"common"}, \code{"AIC"}, \code{"AICc"}, \code{"BIC"}, \code{"WAIC"}, or \code{"LOOIC"}), model
+weights based on these criteria are also computed. For all IC except LOOIC,
+weights are computed as \code{w = exp(-0.5 * delta_ic) / sum(exp(-0.5 * delta_ic))},
+where \code{delta_ic} is the difference between the model's IC value and the
+smallest IC value in the model set (Burnham & Anderson, 2002).
+For LOOIC, weights are computed as "stacking weights" using
+\code{\link[loo:loo_model_weights]{loo::stacking_weights()}}.
+}
+
 \subsection{Ranking Models}{
 When \code{rank = TRUE}, a new column \code{Performance_Score} is returned.
 This score ranges from 0\\% to 100\\%, higher values indicating better model
@@ -69,4 +80,9 @@ if (require("lme4")) {
   m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
   compare_performance(m1, m2, m3)
 }
+}
+\references{
+Burnham, K. P., & Anderson, D. R. (2002).
+\emph{Model selection and multimodel inference: A practical information-theoretic approach} (2nd ed.).
+Springer-Verlag. \doi{10.1007/b97636}
 }

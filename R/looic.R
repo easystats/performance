@@ -29,11 +29,9 @@ looic <- function(model, verbose = TRUE) {
     return(NA)
   }
 
-  out <- list()
-
-  loo_df <- tryCatch(
+  res_loo <- tryCatch(
     {
-      as.data.frame(loo::loo(model)$estimates)
+      loo::loo(model)
     },
     error = function(e) {
       if (inherits(e, c("simpleError", "error"))) {
@@ -43,15 +41,19 @@ looic <- function(model, verbose = TRUE) {
       NULL
     }
   )
+  loo_df <- res_loo$estimates
 
   if (is.null(loo_df)) {
     return(NULL)
   }
 
-  out$ELPD <- loo_df[rownames(loo_df) == "elpd_loo", ]$Estimate
-  out$ELPD_SE <- loo_df[rownames(loo_df) == "elpd_loo", ]$SE
-  out$LOOIC <- loo_df[rownames(loo_df) == "looic", ]$Estimate
-  out$LOOIC_SE <- loo_df[rownames(loo_df) == "looic", ]$SE
+  out <- list(
+    ELPD = loo_df["elpd_loo", "Estimate"],
+    ELPD_SE = loo_df["elpd_loo", "SE"],
+    LOOIC = loo_df["looic", "Estimate"],
+    LOOIC_SE = loo_df["looic", "SE"]
+  )
+  attr(out, "loo") <- res_loo[c("pointwise", "diagnostics")]
 
   # Leave p_loo as I am not sure it is an index of performance
 
