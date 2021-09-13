@@ -117,7 +117,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # LOOIC ------------------
   if ("LOOIC" %in% metrics) {
-    out <- append(out, suppressWarnings(looic(model, verbose = verbose)))
+    loo_res <- suppressWarnings(looic(model, verbose = verbose))
+    out <- append(out, loo_res)
+    attri$loo <- attributes(loo_res)$loo # save attributes
   }
 
   # WAIC ------------------
