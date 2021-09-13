@@ -42,9 +42,9 @@ reference:
   - check_normality
   - check_outliers
   - check_overdispersion
+  - check_predictions
   - check_singularity
   - check_zeroinflation
-  - pp_check
 
 - title: "Check Data Properties"
   contents:
