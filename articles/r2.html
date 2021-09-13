@@ -182,7 +182,7 @@
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="fu"><a href="../reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; # Bayesian R2 with Standard Error
+<pre><code>&gt; # Bayesian R2 with Compatibility Interval
 &gt; 
 &gt;   Conditional R2: 0.816 (95% CI [0.704, 0.895])</code></pre>
 <p>As discussed above, for mixed-effects models, there will be two components associated with <span class="math inline">\(R^2\)</span>.</p>
@@ -191,7 +191,7 @@
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_lmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; # Bayesian R2 with Standard Error
+<pre><code>&gt; # Bayesian R2 with Compatibility Interval
 &gt; 
 &gt;   Conditional R2: 0.953 (95% CI [0.941, 0.963])
 &gt;      Marginal R2: 0.826 (95% CI [0.719, 0.897])</code></pre>

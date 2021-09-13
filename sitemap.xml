@@ -73,6 +73,9 @@
     <loc>https://easystats.github.io/performance/reference/check_overdispersion.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/performance/reference/check_predictions.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/performance/reference/check_singularity.html</loc>
   </url>
   <url>
@@ -170,9 +173,6 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/performance_score.html</loc>
-  </url>
-  <url>
-    <loc>https://easystats.github.io/performance/reference/pp_check.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/r2.html</loc>

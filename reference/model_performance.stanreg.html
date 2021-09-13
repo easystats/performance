@@ -194,7 +194,7 @@ the first model (or the denominator, for <code>BFBayesFactor</code> objects). Fo
 <code>metrics</code>).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Depending on <code>model</code>, following indices are computed:</p><ul>
+    <p>Depending on <code>model</code>, the following indices are computed:</p><ul>
 <li><p><strong>ELPD</strong> expected log predictive density. Larger ELPD values
 mean better fit. See <code><a href='looic.html'>looic()</a></code>.</p></li>
 <li><p><strong>LOOIC</strong> leave-one-out cross-validation (LOO) information
@@ -202,7 +202,7 @@ criterion. Lower LOOIC values mean better fit. See <code><a href='looic.html'>lo
 <li><p><strong>WAIC</strong> widely applicable information criterion. Lower WAIC
 values mean better fit. See <code><a href='https://mc-stan.org/loo/reference/waic.html'>?loo::waic</a></code>.</p></li>
 <li><p><strong>R2</strong> r-squared value, see <code><a href='r2_bayes.html'>r2_bayes()</a></code>.</p></li>
-<li><p><strong>R2_LOO_adjusted</strong> adjusted r-squared, see
+<li><p><strong>R2_adjusted</strong> LOO-adjusted r-squared, see
 <code><a href='r2_loo.html'>r2_loo()</a></code>.</p></li>
 <li><p><strong>RMSE</strong> root mean squared error, see
 <code><a href='performance_rmse.html'>performance_rmse()</a></code>.</p></li>

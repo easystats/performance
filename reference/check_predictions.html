@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Posterior predictive checks for frequentist models — pp_check • performance</title>
+<title>Posterior predictive checks — check_predictions • performance</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,15 @@
 
 
 
-<meta property="og:title" content="Posterior predictive checks for frequentist models — pp_check" />
-<meta property="og:description" content="Posterior predictive checks for frequentist models." />
+<meta property="og:title" content="Posterior predictive checks — check_predictions" />
+<meta property="og:description" content="Posterior predictive checks mean &amp;#8220;simulating replicated data
+under the fitted model and then comparing these to the observed data&amp;#8221;
+(Gelman and Hill, 2007, p. 158). Posterior predictive checks
+can be used to &amp;#8220;look for systematic discrepancies between real and
+simulated data&amp;#8221; (Gelman et al. 2014, p. 169).
+performance provides posterior predictive check methods for a variety
+of frequentist models (e.g., lm, merMod, glmmTMB, ...). For Bayesian
+models, the model is passed to bayesplot::pp_check()." />
 <meta property="og:image" content="https://easystats.github.io/performance/logo.png" />
 
 
@@ -133,19 +140,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Posterior predictive checks for frequentist models</h1>
+    <h1>Posterior predictive checks</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/performance/blob/master/R/pp_check.R'><code>R/pp_check.R</code></a></small>
-    <div class="hidden name"><code>pp_check.Rd</code></div>
+    <div class="hidden name"><code>check_predictions.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Posterior predictive checks for frequentist models.</p>
+    <p>Posterior predictive checks mean &#8220;simulating replicated data
+under the fitted model and then comparing these to the observed data&#8221;
+<cite>(Gelman and Hill, 2007, p. 158)</cite>. Posterior predictive checks
+can be used to &#8220;look for systematic discrepancies between real and
+simulated data&#8221; <cite>(Gelman et al. 2014, p. 169)</cite>.</p>
+<p><span class="pkg">performance</span> provides posterior predictive check methods for a variety
+of frequentist models (e.g., <code>lm</code>, <code>merMod</code>, <code>glmmTMB</code>, ...). For Bayesian
+models, the model is passed to <code><a href='https://mc-stan.org/bayesplot/reference/pp_check.html'>bayesplot::pp_check()</a></code>.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>pp_check</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for lm</span>
-<span class='fu'>pp_check</span><span class='op'>(</span><span class='va'>object</span>, iterations <span class='op'>=</span> <span class='fl'>50</span>, check_range <span class='op'>=</span> <span class='cn'>FALSE</span>, re_formula <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>check_predictions</span><span class='op'>(</span>
+  <span class='va'>object</span>,
+  iterations <span class='op'>=</span> <span class='fl'>50</span>,
+  check_range <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  re_formula <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='fu'>posterior_predictive_check</span><span class='op'>(</span>
   <span class='va'>object</span>,
@@ -171,10 +188,6 @@
       <td><p>A statistical model.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Passed down to <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code>.</p></td>
-    </tr>
-    <tr>
       <th>iterations</th>
       <td><p>The number of draws to simulate/bootstrap.</p></td>
     </tr>
@@ -194,6 +207,10 @@ be considered in the simulated data. If <code>NULL</code> (default), condition
 on all random effects. If <code>NA</code> or <code>~0</code>, condition on no random
 effects. See <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code> in <strong>lme4</strong>.</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Passed down to <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -201,14 +218,8 @@ effects. See <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a
     <p>A data frame of simulated responses and the original response vector.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Posterior predictive checks means &#8220;simulating replicated data
-under the fitted model and then comparing these to the observed data&#8221;
-<cite>(Gelman and Hill, 2007, p. 158)</cite>. Posterior predictive checks
-can be used to &#8220;look for systematic discrepancies between real and
-simulated data&#8221; <cite>(Gelman et al. 2014, p. 169)</cite>.
-<br /> <br />
-An example how posterior predictive checks can also be used for model
-comparison is following plot (from <cite>Gabry et al. 2019, Figure 6</cite>):
+    <p>An example how posterior predictive checks can also be used for model
+comparison is Figure 6 from <cite>Gabry et al. 2019, Figure 6</cite>.
 <br />
 <br /> <img src='figures/pp_check.png' width="90%" alt="Posterior Predictive Check" /> <br />
 The model shown in the right panel (b) can simulate new data that are more
@@ -216,15 +227,10 @@ similar to the observed outcome than the model in the left panel (a). Thus,
 model (b) is likely to be preferred over model (a).</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The default-method, <code>pp_check.default()</code> is in package <span class="pkg">bayesplot</span>.
-Thus, <span class="pkg">performance</span> adds <code>pp_check()</code>-methods for different classes and
-packages (like <code>lm</code>, <code>merMod</code>, <code>glmmTMB</code>, ...). However, since
-it might be that not all model objects that have a <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code> function
-are covered, and those objects probably can't be passed down to the default-method,
-there is also a "generic" <code>posterior_predictive_check()</code> function (and
-its alias <code>check_posterior_predictions()</code>), which just calls
-<code>pp_check.lm()</code>. Thus, every model object that has a <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code>-method
-should work with <code>posterior_predictive_check()</code>.</p>
+    <p>Every model object that has a <code><a href='https://rdrr.io/r/stats/simulate.html'>simulate()</a></code>-method should work with
+<code>check_predictions()</code>. On R 3.6.0 and higher, if <span class="pkg">bayesplot</span>
+(or a package that imports <span class="pkg">bayesplot</span> such as <span class="pkg">rstanarm</span> or <span class="pkg">brms</span>)
+is loaded, <code><a href='https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html'>pp_check()</a></code> is also available as an alias for <code>check_predictions()</code>.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     
@@ -238,17 +244,11 @@ should work with <code>posterior_predictive_check()</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/performance/'>performance</a></span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'>  <span class='fu'>pp_check</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>disp</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'>check_predictions</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: ggplot2</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘ggplot2’</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:psych’:</span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span>     %+%, alpha</span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in pp_check.default(model)</span> argument "fun" is missing, with no default</span>
+<span class='r-plt'><img src='check_predictions-1.png' alt='' width='700' height='433' /></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -142,29 +142,62 @@
     <p>Compute LOO-adjusted R2.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>r2_loo</span><span class='op'>(</span><span class='va'>model</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>r2_loo</span><span class='op'>(</span><span class='va'>model</span>, robust <span class='op'>=</span> <span class='cn'>TRUE</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>r2_loo_posterior</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for brmsfit</span>
+<span class='fu'>r2_loo_posterior</span><span class='op'>(</span><span class='va'>model</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for stanreg</span>
+<span class='fu'>r2_loo_posterior</span><span class='op'>(</span><span class='va'>model</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A Bayesian regression model.</p></td>
+      <td><p>A Bayesian regression model (from <strong>brms</strong>,
+<strong>rstanarm</strong>, <strong>BayesFactor</strong>, etc).</p></td>
+    </tr>
+    <tr>
+      <th>robust</th>
+      <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
+calculate the central tendency of the variances.</p></td>
+    </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>Value or vector of probability of the CI (between 0 and 1) to be
+estimated.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
       <td><p>Toggle off warnings.</p></td>
     </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed to <code><a href='r2_bayes.html'>r2_posterior()</a></code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The LOO-adjusted R2 for <code>model</code>, as numeric value.</p>
+    <p>A list with the Bayesian R2 value. For mixed models, a list with the
+Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
+and credible intervals for the R2 values are saved as attributes.</p>
+<p>A list with the LOO-adjusted R2 value. The standard errors
+and credible intervals for the R2 values are saved as attributes.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Unlike <code><a href='r2_bayes.html'>r2_bayes()</a></code>, which returns an "unadjusted" R2 value,
-<code>r2_loo()</code> calculates a LOO-adjusted R2, which comes conceptionally
-closer to an "adjusted" R2 measure.</p>
+    <p><code>r2_loo()</code> returns an "adjusted" R2 value computed using a
+leave-one-out-adjusted posterior distribution. This is conceptually similar
+to an adjusted/unbiased R2 estiamte in classical regression modeling. See
+<code><a href='r2_bayes.html'>r2_bayes()</a></code> for an "unadjusted" R2.
+<br /> <br />
+Mixed models are not currently fully supported.
+<br /> <br />
+<code>r2_loo_posterior()</code> is the actual workhorse for <code>r2_loo()</code> and
+returns a posterior sample of LOO-adjusted Bayesian R2 values.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
@@ -172,8 +205,9 @@ closer to an "adjusted" R2 measure.</p>
 <span class='r-in'>  <span class='fu'>r2_loo</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Some Pareto k diagnostic values are slightly high. See help('pareto-k-diagnostic') for details.</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> LOO-adjusted R2 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>       0.7908119 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># LOO-adjusted R2 with Compatibility Interval</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Conditional R2: 0.799 (95% CI [0.697, 0.884])</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
