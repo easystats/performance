@@ -51,13 +51,16 @@ performance_cv <- function(
   } else if (metrics == "common") {
     metrics <- c("RMSE", "R2")
   }
-  method <- match.arg(method, choices = c("holdout", "k_fold"))
+  if (is.null(data)) {
+    method <- match.arg(method, choices = c("holdout", "k_fold", "loo"))
+  }
   formula <- stats::formula(model)
   resp.name <- insight::find_response(model)
   model_data <- insight::get_data(model, verbose = verbose)
   info <- insight::model_info(model, verbose = verbose)
   if (info$is_linear) {
     if (!is.null(data)) {
+      method <- "holdout"
       stack <- TRUE
       test_resp <- data[, resp.name]
       test_pred <- insight::get_predicted(model, data = data)
