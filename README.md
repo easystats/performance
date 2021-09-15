@@ -138,10 +138,10 @@ library(rstanarm)
 model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 
 r2(model)
-#> # Bayesian R2 with Standard Error
+#> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.953 (89% CI [0.944, 0.962])
-#>      Marginal R2: 0.824 (89% CI [0.747, 0.890])
+#>   Conditional R2: 0.953 (95% CI [0.941, 0.963])
+#>      Marginal R2: 0.824 (95% CI [0.713, 0.896])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -358,12 +358,12 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
-#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#> m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                
-#> m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                
-#> m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                
-#> m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657
+#> Name |   Model |      AIC |    wt_AIC |      BIC |    wt_BIC |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
+#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> m1   |      lm |  156.010 | 8.300e-28 |  161.873 | 3.988e-28 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                
+#> m2   |     glm |   31.298 |     1.000 |   35.695 |     1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                
+#> m3   | lmerMod | 1755.628 |     0.000 | 1774.786 |     0.000 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                
+#> m4   |     glm |   56.761 | 2.956e-06 |   57.747 | 1.627e-05 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657
 ```
 
 #### General index of model performance
@@ -376,12 +376,12 @@ of model performance and sort the models from the best one to the worse.
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Performance-Score
-#> --------------------------------------------------------------------------
-#> m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |           100.00%
-#> m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |            96.21%
-#> m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |            92.46%
-#> m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |             0.00%
+#> Name |   Model |   RMSE |  Sigma |    wt_AIC |    wt_BIC | Performance-Score
+#> ----------------------------------------------------------------------------
+#> m2   |     glm |  0.359 |  0.934 |     1.000 |     1.000 |           100.00%
+#> m4   |     glm |  3.043 |  1.132 | 2.956e-06 | 1.627e-05 |            46.89%
+#> m1   |      lm |  2.444 |  2.568 | 8.300e-28 | 3.988e-28 |            46.09%
+#> m3   | lmerMod | 23.438 | 25.592 |     0.000 |     0.000 |             0.00%
 ```
 
 #### Visualisation of indices of models’ performance
@@ -413,12 +413,12 @@ lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, dat
 compare_performance(lm1, lm2, lm3, lm4)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name | Model |     AIC |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
-#> --------------------------------------------------------------------
-#> lm1  |    lm | 231.452 | 243.494 | 0.619 |     0.614 | 0.510 | 0.515
-#> lm2  |    lm | 106.233 | 121.286 | 0.837 |     0.833 | 0.333 | 0.338
-#> lm3  |    lm | 187.092 | 208.167 | 0.727 |     0.718 | 0.431 | 0.440
-#> lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305
+#> Name | Model |     AIC |    wt_AIC |     BIC |    wt_BIC |    R2 | R2 (adj.) |  RMSE | Sigma
+#> --------------------------------------------------------------------------------------------
+#> lm1  |    lm | 231.452 | 7.101e-34 | 243.494 | 1.318e-30 | 0.619 |     0.614 | 0.510 | 0.515
+#> lm2  |    lm | 106.233 | 1.102e-06 | 121.286 | 4.541e-04 | 0.837 |     0.833 | 0.333 | 0.338
+#> lm3  |    lm | 187.092 | 3.048e-24 | 208.167 | 6.184e-23 | 0.727 |     0.718 | 0.431 | 0.440
+#> lm4  |    lm |  78.797 |     1.000 | 105.892 |     1.000 | 0.871 |     0.865 | 0.296 | 0.305
 
 test_bf(lm1, lm2, lm3, lm4)
 #> Bayes Factors for Model Comparison
