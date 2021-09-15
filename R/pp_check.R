@@ -74,11 +74,20 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula
   )
 
   if (is.null(out)) {
-    stop(sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1]), call. = FALSE)
+    stop(insight::format_message(sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])), call. = FALSE)
   }
 
-  # check for transformed response, and backtransform if necessary
-  out$y <- .backtransform_response(object)
+  # get response data, and response term, to check for transformations
+  response <- insight::get_response(object)
+  resp_string <- insight::find_terms(object)$response
+  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
+
+  # check for transformed response, and backtransform simulations
+  if (!is.null(resp_string) && grepl(paste0(pattern, "\\("), resp_string)) {
+    out <- .backtransform_sims(out, resp_string)
+  }
+
+  out$y <- response
 
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
@@ -167,14 +176,24 @@ plot.performance_pp_check <- function(x, ...) {
 
 
 
-.backtransform_response <- function(model) {
-  response <- insight::get_response(model)
-  resp_string <- insight::find_terms(model)$response
-  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
-
-  if (!is.null(resp_string) && grepl(paste0(pattern, "\\("), resp_string)) {
-    fun <- gsub(paste0(pattern, "\\((.*)"), "\\1", resp_string)
-    response <- do.call(fun, args = list(x = response))
+.backtransform_sims <- function(sims, resp_string) {
+  if (grepl("log(log(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) exp(exp(i)))
+  } else if (grepl("log(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) exp(i))
+  } else if (grepl("log1p(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) expm1(i))
+  } else if (grepl("log10(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) 10^i)
+  } else if (grepl("log2(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) 2^i)
+  } else if (grepl("sqrt(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) i^2)
+  } else if (grepl("exp(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) log(i))
+  } else if (grepl("expm1(", resp_string, fixed = TRUE)) {
+    sims[] <- lapply(sims, function(i) log1p(i))
   }
-  response
+
+  sims
 }
