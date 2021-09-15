@@ -1,7 +1,15 @@
-#' @title Posterior predictive checks for frequentist models
-#' @name pp_check
+#' @title Posterior predictive checks
+#' @name check_predictions
 #'
-#' @description Posterior predictive checks for frequentist models.
+#' @description Posterior predictive checks mean \dQuote{simulating replicated data
+#'   under the fitted model and then comparing these to the observed data}
+#'   \cite{(Gelman and Hill, 2007, p. 158)}. Posterior predictive checks
+#'   can be used to \dQuote{look for systematic discrepancies between real and
+#'   simulated data} \cite{(Gelman et al. 2014, p. 169)}.
+#'
+#'   \pkg{performance} provides posterior predictive check methods for a variety
+#'   of frequentist models (e.g., `lm`, `merMod`, `glmmTMB`, ...). For Bayesian
+#'   models, the model is passed to \code{\link[bayesplot:pp_check]{bayesplot::pp_check()}}.
 #'
 #' @param object A statistical model.
 #' @param iterations The number of draws to simulate/bootstrap.
@@ -19,29 +27,18 @@
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'
-#' @details Posterior predictive checks means \dQuote{simulating replicated data
-#'   under the fitted model and then comparing these to the observed data}
-#'   \cite{(Gelman and Hill, 2007, p. 158)}. Posterior predictive checks
-#'   can be used to \dQuote{look for systematic discrepancies between real and
-#'   simulated data} \cite{(Gelman et al. 2014, p. 169)}.
-#'   \cr \cr
-#'   An example how posterior predictive checks can also be used for model
-#'   comparison is following plot (from \cite{Gabry et al. 2019, Figure 6}):
+#' @details An example how posterior predictive checks can also be used for model
+#'   comparison is Figure 6 from \cite{Gabry et al. 2019, Figure 6}.
 #'   \cr
 #'   \if{html}{\cr \figure{pp_check.png}{options: width="90\%" alt="Posterior Predictive Check"} \cr}
 #'   The model shown in the right panel (b) can simulate new data that are more
 #'   similar to the observed outcome than the model in the left panel (a). Thus,
 #'   model (b) is likely to be preferred over model (a).
 #'
-#' @note The default-method, `pp_check.default()` is in package \pkg{bayesplot}.
-#' Thus, \pkg{performance} adds `pp_check()`-methods for different classes and
-#' packages (like `lm`, `merMod`, `glmmTMB`, ...). However, since
-#' it might be that not all model objects that have a `simulate()` function
-#' are covered, and those objects probably can't be passed down to the default-method,
-#' there is also a "generic" `posterior_predictive_check()` function (and
-#' its alias `check_posterior_predictions()`), which just calls
-#' `pp_check.lm()`. Thus, every model object that has a `simulate()`-method
-#' should work with `posterior_predictive_check()`.
+#' @note  Every model object that has a `simulate()`-method should work with
+#'   `check_predictions()`. On R 3.6.0 and higher, if \pkg{bayesplot}
+#'   (or a package that imports \pkg{bayesplot} such as \pkg{rstanarm} or \pkg{brms})
+#'   is loaded, `pp_check()` is also available as an alias for `check_predictions()`.
 #'
 #' @references \itemize{
 #'   \item Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., & Gelman, A. (2019). Visualization in Bayesian workflow. Journal of the Royal Statistical Society: Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378
@@ -52,18 +49,20 @@
 #'
 #' @examples
 #' library(performance)
-#' model <- lm(Sepal.Length ~ Species * Petal.Width + Petal.Length, data = iris)
-#' if (require("ggplot2") && require("see")) {
-#'   pp_check(model)
+#' model <- lm(mpg ~ disp, data = mtcars)
+#' if (require("see")) {
+#'   check_predictions(model)
 #' }
 #' @export
-pp_check <- function(object, ...) {
-  UseMethod("pp_check")
+check_predictions <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
+  if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian)) {
+    UseMethod("pp_check")
+  } else {
+    pp_check.lm(object, iterations = iterations, check_range = check_range, re_formula = re_formula, ...)
+  }
 }
 
 
-#' @rdname pp_check
-#' @export
 pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
   out <- tryCatch(
     {
@@ -78,52 +77,49 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula
     stop(sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1]), call. = FALSE)
   }
 
-  out$y <- insight::get_response(object)
+  # check for transformed response, and backtransform if necessary
+  out$y <- .backtransform_response(object)
+
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
 
-#' @export
-pp_check.glm <- pp_check.lm
+#' @rawNamespace if (getRversion() >= "3.6.0") {
+#'   S3method(bayesplot::pp_check, lm)
+#'   S3method(bayesplot::pp_check, glm)
+#'   S3method(bayesplot::pp_check, glmmTMB)
+#'   S3method(bayesplot::pp_check, glm.nb)
+#'   S3method(bayesplot::pp_check, merMod)
+#'   S3method(bayesplot::pp_check, MixMod)
+#'   S3method(bayesplot::pp_check, mle2)
+#'   S3method(bayesplot::pp_check, negbin)
+#'   S3method(bayesplot::pp_check, polr)
+#'   S3method(bayesplot::pp_check, rma)
+#'   S3method(bayesplot::pp_check, vlm)
+#'   S3method(bayesplot::pp_check, wbm)
+#' }
+pp_check.glm       <-
+  pp_check.glmmTMB <-
+  pp_check.glm.nb  <-
+  pp_check.lme     <-
+  pp_check.merMod  <-
+  pp_check.MixMod  <-
+  pp_check.mle2    <-
+  pp_check.negbin  <-
+  pp_check.polr    <-
+  pp_check.rma     <-
+  pp_check.vlm     <-
+  pp_check.wbm     <-
+  pp_check.lm
 
+#' @rdname check_predictions
 #' @export
-pp_check.merMod <- pp_check.lm
+posterior_predictive_check <- check_predictions
 
+#' @rdname check_predictions
 #' @export
-pp_check.MixMod <- pp_check.lm
-
-#' @export
-pp_check.glmmTMB <- pp_check.lm
-
-#' @export
-pp_check.glm.nb <- pp_check.lm
-
-#' @export
-pp_check.lme <- pp_check.lm
-
-#' @export
-pp_check.negbin <- pp_check.lm
-
-#' @export
-pp_check.polr <- pp_check.lm
-
-#' @export
-pp_check.wbm <- pp_check.lm
-
-#' @export
-pp_check.mle2 <- pp_check.lm
-
-#' @export
-pp_check.vlm <- pp_check.lm
-
-#' @rdname pp_check
-#' @export
-posterior_predictive_check <- pp_check.lm
-
-#' @rdname pp_check
-#' @export
-check_posterior_predictions <- pp_check.lm
+check_posterior_predictions <- check_predictions
 
 
 
@@ -138,13 +134,20 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
 
   if (min(replicated) > min(original)) {
     if (verbose) {
-      warning(insight::format_message("Minimum value of original data is not included in the replicated data. Model may not capture the variation of the data."), call. = FALSE)
+      insight::print_color(
+        insight::format_message("Warning: Minimum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
+        "red"
+      )
+
     }
   }
 
   if (max(replicated) < max(original)) {
     if (verbose) {
-      warning(insight::format_message("Maximum value of original data is not included in the replicated data. Model may not capture the variation of the data."), call. = FALSE)
+      insight::print_color(
+        insight::format_message("Warning: Maximum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
+        "red"
+      )
     }
   }
 
@@ -160,4 +163,18 @@ plot.performance_pp_check <- function(x, ...) {
   insight::check_if_installed("see", "to plot posterior predictive checks")
 
   NextMethod()
+}
+
+
+
+.backtransform_response <- function(model) {
+  response <- insight::get_response(model)
+  resp_string <- insight::find_terms(model)$response
+  pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
+
+  if (!is.null(resp_string) && grepl(paste0(pattern, "\\("), resp_string)) {
+    fun <- gsub(paste0(pattern, "\\((.*)"), "\\1", resp_string)
+    response <- do.call(fun, args = list(x = response))
+  }
+  response
 }

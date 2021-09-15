@@ -257,7 +257,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
 #' @export
 print.r2_bayes <- function(x, digits = 3, ...) {
-  insight::print_color("# Bayesian R2 with Standard Error\n\n", "blue")
+  insight::print_color("# Bayesian R2 with Compatibility Interval\n\n", "blue")
 
   r2_ci <- insight::format_ci(
     attributes(x)$CI$R2_Bayes$CI_low,
@@ -275,6 +275,35 @@ print.r2_bayes <- function(x, digits = 3, ...) {
       digits = digits
     )
     out <- paste0(c(out, sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_Bayes_marginal, r2_marginal_ci)), collapse = "\n")
+  }
+
+  cat(out)
+  cat("\n")
+  invisible(x)
+}
+
+
+
+#' @export
+print.r2_loo <- function(x, digits = 3, ...) {
+  insight::print_color("# LOO-adjusted R2 with Compatibility Interval\n\n", "blue")
+
+  r2_ci <- insight::format_ci(
+    attributes(x)$CI$R2_loo$CI_low,
+    attributes(x)$CI$R2_loo$CI_high,
+    ci = attributes(x)$CI$R2_loo$CI,
+    digits = digits
+  )
+  out <- sprintf("  Conditional R2: %.*f (%s)", digits, x$R2_loo, r2_ci)
+
+  if ("R2_loo_marginal" %in% names(x)) {
+    r2_marginal_ci <- insight::format_ci(
+      attributes(x)$CI$R2_loo_marginal$CI_low,
+      attributes(x)$CI$R2_loo_marginal$CI_high,
+      ci = attributes(x)$CI$R2_loo_marginal$CI,
+      digits = digits
+    )
+    out <- paste0(c(out, sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_loo_marginal, r2_marginal_ci)), collapse = "\n")
   }
 
   cat(out)

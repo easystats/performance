@@ -18,7 +18,18 @@
 #'
 #' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
-#' @details \subsection{Ranking Models}{
+#' @details \subsection{Model Weights}{
+#'   When information criteria (IC) are requested in `metrics` (i.e., any of `"all"`,
+#'   `"common"`, `"AIC"`, `"AICc"`, `"BIC"`, `"WAIC"`, or `"LOOIC"`), model
+#'   weights based on these criteria are also computed. For all IC except LOOIC,
+#'   weights are computed as `w = exp(-0.5 * delta_ic) / sum(exp(-0.5 * delta_ic))`,
+#'   where `delta_ic` is the difference between the model's IC value and the
+#'   smallest IC value in the model set (Burnham & Anderson, 2002).
+#'   For LOOIC, weights are computed as "stacking weights" using
+#'   [loo::stacking_weights()].
+#' }
+#'
+#' \subsection{Ranking Models}{
 #'   When `rank = TRUE`, a new column `Performance_Score` is returned.
 #'   This score ranges from 0\% to 100\%, higher values indicating better model
 #'   performance. Note that all score value do not necessarily sum up to 100\%.
@@ -39,7 +50,12 @@
 #'   Hence, points closer to the center indicate worse fit indices
 #'   (see [online-documentation](https://easystats.github.io/see/articles/performance.html)
 #'   for more details).
-#'   }
+#' }
+#'
+#' @references
+#' Burnham, K. P., & Anderson, D. R. (2002).
+#' _Model selection and multimodel inference: A practical information-theoretic approach_ (2nd ed.).
+#' Springer-Verlag. \doi{10.1007/b97636}
 #'
 #' @examples
 #' data(iris)
@@ -103,10 +119,28 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   m <- mapply(function(.x, .y) {
     dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
     model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
-    cbind(data.frame(Name = model_name, Model = class(.x)[1], stringsAsFactors = FALSE), dat)
+    perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
+    attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
+    return(perf_df)
   }, objects, object_names, SIMPLIFY = FALSE)
 
+  attri <- lapply(m, function(x) {
+    attri <- attributes(x)
+    attri[!names(attri) %in% c("names", "row.names", "class")]
+  })
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
+
+  if (any(c("AIC", "AICc", "BIC", "WAIC") %in% names(dfs))) {
+    dfs$wt_AIC  <- .ic_weight(dfs$AIC)
+    dfs$wt_AICc <- .ic_weight(dfs$AICc)
+    dfs$wt_BIC  <- .ic_weight(dfs$BIC)
+    dfs$wt_WAIC <- .ic_weight(dfs$WAIC)
+  }
+
+  if ("LOOIC" %in% names(dfs)) {
+    lpd_point <- do.call(cbind, lapply(attri, function(x) x$loo$pointwise[, "elpd_loo"]))
+    dfs$wt_LOOIC <- as.numeric(loo::stacking_weights(lpd_point))
+  }
 
   # check if all models were fit from same data
   resps <- lapply(objects, insight::get_response)
@@ -121,8 +155,38 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
   # Reorder columns
   if (all(c("BIC", "BF") %in% names(dfs))) {
-    idx1 <- grep("BIC", names(dfs))
+    idx1 <- grep("^BIC$", names(dfs))
     idx2 <- grep("BF", names(dfs))
+    last_part <- (idx1 + 1):ncol(dfs)
+    dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
+  }
+  if (all(c("AIC", "wt_AIC") %in% names(dfs))) {
+    idx1 <- grep("^AIC$", names(dfs))
+    idx2 <- grep("wt_AIC", names(dfs))
+    last_part <- (idx1 + 1):ncol(dfs)
+    dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
+  }
+  if (all(c("BIC", "wt_BIC") %in% names(dfs))) {
+    idx1 <- grep("^BIC$", names(dfs))
+    idx2 <- grep("wt_BIC", names(dfs))
+    last_part <- (idx1 + 1):ncol(dfs)
+    dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
+  }
+  if (all(c("AICc", "wt_AICc") %in% names(dfs))) {
+    idx1 <- grep("^AICc$", names(dfs))
+    idx2 <- grep("wt_AICc", names(dfs))
+    last_part <- (idx1 + 1):ncol(dfs)
+    dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
+  }
+  if (all(c("WAIC", "wt_WAIC") %in% names(dfs))) {
+    idx1 <- grep("^WAIC$", names(dfs))
+    idx2 <- grep("wt_WAIC", names(dfs))
+    last_part <- (idx1 + 1):ncol(dfs)
+    dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
+  }
+  if (all(c("LOOIC", "wt_LOOIC") %in% names(dfs))) {
+    idx1 <- grep("^LOOIC$", names(dfs))
+    idx2 <- grep("wt_LOOIC", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
@@ -150,6 +214,23 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   x$p <- NULL
   x$p_LRT <- NULL
 
+  # use weights instead of information criteria
+  x$AIC   <- NULL
+  x$AICc  <- NULL
+  x$BIC   <- NULL
+  x$LOOIC <- NULL
+  x$WAIC  <- NULL
+
+  # remove extra columns from LOO criteria
+  x$ELPD <- NULL
+  x$ELPD_SE <- NULL
+  x$LOOIC_SE <- NULL
+
+  # don't rank with BF when there is also BIC (same information)
+  if ("BF" %in% colnames(x) && "wt_BIC" %in% colnames(x)) {
+    x$BF <- NULL
+  }
+
   out <- x
 
   # normalize indices, for comparison
@@ -158,16 +239,8 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
     i
   })
 
-  # don't rank with BF when there is also BIC (same information)
-  if ("BF" %in% colnames(out) && "BIC" %in% colnames(out)) {
-    if (isTRUE(verbose)) {
-      message(insight::format_message("Bayes factor is based on BIC approximation, thus BF and BIC hold the same information. Ignoring BF for performance-score."))
-    }
-    out$BF <- NULL
-  }
-
   # recode some indices, so higher values = better fit
-  for (i in c("AIC", "AICc", "BIC", "RMSE", "Sigma")) {
+  for (i in c("RMSE", "Sigma")) {
     if (i %in% colnames(out)) {
       out[[i]] <- 1 - out[[i]]
     }
@@ -195,4 +268,14 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
 .normalize_vector <- function(x) {
   as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
+}
+
+.ic_weight <- function(ic) {
+  # ic should be in the deviance metric (-2 * loglik)
+  if (is.null(ic)) return(NULL)
+
+  diffs <- ic - min(ic)
+  f <- exp(-0.5 * diffs)
+  wts <- f / sum(f)
+  return(wts)
 }
