@@ -6,6 +6,7 @@
 \usage{
 performance_cv(
   model,
+  data = NULL,
   method = c("holdout", "k_fold", "loo"),
   metrics = "all",
   prop = 0.3,
@@ -18,9 +19,12 @@ performance_cv(
 \arguments{
 \item{model}{A regression model.}
 
+\item{data}{Optional. A data frame containing the same variables as \code{model}
+that will be used as the cross-validation sample.}
+
 \item{method}{Character string, indicating the cross-validation method to use:
 whether holdout (\code{"holdout"}, aka train-test), k-fold (\code{"k_fold"}), or
-leave-one-out (\code{"loo"}). If \code{data} is suppled}
+leave-one-out (\code{"loo"}). If \code{data} is supplied, this argument is ignored.}
 
 \item{metrics}{Can be "all", "common" or a character vector of metrics to be
 computed (some of c("Deviance", "MSE", "RMSE", "R2")). "common" will
@@ -40,9 +44,6 @@ across each fold (\code{FALSE})?}
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Not used.}
-
-\item{data}{Optional. A data frame containing the same variables as \code{model}
-that will be used as the cross-validation sample.}
 }
 \value{
 A data frame with columns for each metric requested, as well as \code{k}
