@@ -5,17 +5,28 @@
 * The `ci`-level in `r2()` for Bayesian models now defaults to `0.95`, to be in
   line with the latest changes in the *bayestestR* package.
 
+* S3-method dispatch for `pp_check()` was revised, to avoid problems with the
+  _bayesplot_ package, where the generic is located.
+
 ## General
 
 * Minor revisions to wording for messages from some of the check-functions.
 
+* `posterior_predictive_check()` and `check_predictions()` were added as aliases
+  for `pp_check()`.
+
 ## New functions
 
-* `check_multimodal()` and `check_heterogeneity_bias()`.
+* `check_multimodal()` and `check_heterogeneity_bias()`. These functions will
+  be removed from the _parameters_ packages in the future.
 
 ## Bug fixes
 
 * Fixed issues in `check_model()` for Bayesian models.
+
+* Fixed issue in `pp_check()` for models with transformed response variables,
+  so now predictions and observed response values are on the same (transformed)
+  scale.
 
 # performance 0.7.3
 
