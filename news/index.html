@@ -87,7 +87,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">performance</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.4</span>
       </span>
     </div>
 
@@ -142,23 +142,26 @@
 <div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#breaking-changes" class="anchor" aria-hidden="true"></a>Breaking Changes</h2>
-<ul><li>The <code>ci</code>-level in <code><a href="../reference/r2.html">r2()</a></code> for Bayesian models now defaults to <code>0.95</code>, to be in line with the latest changes in the <em>bayestestR</em> package.</li>
+<ul><li><p>The <code>ci</code>-level in <code><a href="../reference/r2.html">r2()</a></code> for Bayesian models now defaults to <code>0.95</code>, to be in line with the latest changes in the <em>bayestestR</em> package.</p></li>
+<li><p>S3-method dispatch for <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code> was revised, to avoid problems with the <em>bayesplot</em> package, where the generic is located.</p></li>
 </ul></div>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
 <a href="#general" class="anchor" aria-hidden="true"></a>General</h2>
-<ul><li>Minor revisions to wording for messages from some of the check-functions.</li>
+<ul><li><p>Minor revisions to wording for messages from some of the check-functions.</p></li>
+<li><p><code><a href="../reference/check_predictions.html">posterior_predictive_check()</a></code> and <code><a href="../reference/check_predictions.html">check_predictions()</a></code> were added as aliases for <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code>.</p></li>
 </ul></div>
 <div id="new-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-functions" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>
-<code><a href="../reference/check_multimodal.html">check_multimodal()</a></code> and <code><a href="../reference/check_heterogeneity_bias.html">check_heterogeneity_bias()</a></code>.</li>
+<code><a href="../reference/check_multimodal.html">check_multimodal()</a></code> and <code><a href="../reference/check_heterogeneity_bias.html">check_heterogeneity_bias()</a></code>. These functions will be removed from the <em>parameters</em> packages in the future.</li>
 </ul></div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
-<ul><li>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for Bayesian models.</li>
+<ul><li><p>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for Bayesian models.</p></li>
+<li><p>Fixed issue in <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code> for models with transformed response variables, so now predictions and observed response values are on the same (transformed) scale.</p></li>
 </ul></div>
 </div>
     <div id="performance-073" class="section level1">
