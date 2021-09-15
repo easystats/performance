@@ -131,15 +131,15 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 
   if (any(c("AIC", "AICc", "BIC", "WAIC") %in% names(dfs))) {
-    dfs$wt_AIC  <- .ic_weight(dfs$AIC)
-    dfs$wt_AICc <- .ic_weight(dfs$AICc)
-    dfs$wt_BIC  <- .ic_weight(dfs$BIC)
-    dfs$wt_WAIC <- .ic_weight(dfs$WAIC)
+    dfs$AIC_wt  <- .ic_weight(dfs$AIC)
+    dfs$AICc_wt <- .ic_weight(dfs$AICc)
+    dfs$BIC_wt  <- .ic_weight(dfs$BIC)
+    dfs$WAIC_wt <- .ic_weight(dfs$WAIC)
   }
 
   if ("LOOIC" %in% names(dfs)) {
     lpd_point <- do.call(cbind, lapply(attri, function(x) x$loo$pointwise[, "elpd_loo"]))
-    dfs$wt_LOOIC <- as.numeric(loo::stacking_weights(lpd_point))
+    dfs$LOOIC_wt <- as.numeric(loo::stacking_weights(lpd_point))
   }
 
   # check if all models were fit from same data
@@ -160,33 +160,33 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
-  if (all(c("AIC", "wt_AIC") %in% names(dfs))) {
+  if (all(c("AIC", "AIC_wt") %in% names(dfs))) {
     idx1 <- grep("^AIC$", names(dfs))
-    idx2 <- grep("wt_AIC", names(dfs))
+    idx2 <- grep("AIC_wt", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
-  if (all(c("BIC", "wt_BIC") %in% names(dfs))) {
+  if (all(c("BIC", "BIC_wt") %in% names(dfs))) {
     idx1 <- grep("^BIC$", names(dfs))
-    idx2 <- grep("wt_BIC", names(dfs))
+    idx2 <- grep("BIC_wt", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
-  if (all(c("AICc", "wt_AICc") %in% names(dfs))) {
+  if (all(c("AICc", "AICc_wt") %in% names(dfs))) {
     idx1 <- grep("^AICc$", names(dfs))
-    idx2 <- grep("wt_AICc", names(dfs))
+    idx2 <- grep("AICc_wt", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
-  if (all(c("WAIC", "wt_WAIC") %in% names(dfs))) {
+  if (all(c("WAIC", "WAIC_wt") %in% names(dfs))) {
     idx1 <- grep("^WAIC$", names(dfs))
-    idx2 <- grep("wt_WAIC", names(dfs))
+    idx2 <- grep("WAIC_wt", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
-  if (all(c("LOOIC", "wt_LOOIC") %in% names(dfs))) {
+  if (all(c("LOOIC", "LOOIC_wt") %in% names(dfs))) {
     idx1 <- grep("^LOOIC$", names(dfs))
-    idx2 <- grep("wt_LOOIC", names(dfs))
+    idx2 <- grep("LOOIC_wt", names(dfs))
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
@@ -227,7 +227,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   x$LOOIC_SE <- NULL
 
   # don't rank with BF when there is also BIC (same information)
-  if ("BF" %in% colnames(x) && "wt_BIC" %in% colnames(x)) {
+  if ("BF" %in% colnames(x) && "BIC_wt" %in% colnames(x)) {
     x$BF <- NULL
   }
 
@@ -276,6 +276,5 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
   diffs <- ic - min(ic)
   f <- exp(-0.5 * diffs)
-  wts <- f / sum(f)
-  return(wts)
+  f / sum(f)
 }
