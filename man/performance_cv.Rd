@@ -10,6 +10,7 @@ performance_cv(
   metrics = "all",
   prop = 0.3,
   k = 5,
+  stack = TRUE,
   verbose = TRUE,
   ...
 )
@@ -30,6 +31,12 @@ out as the test sample?}
 
 \item{k}{If \code{method = "k_fold"}, the number of folds to use.}
 
+\item{stack}{Logical. If \code{method = "k_fold"}, should performance be computed
+by stacking residuals from each holdout fold and calculating each metric on
+the stacked data (\code{TRUE}, default) or should performance be computed by
+calculating metrics within each holdout fold and averaging performance
+across each fold (\code{FALSE})?}
+
 \item{verbose}{Toggle warnings.}
 
 \item{...}{Not used.}
@@ -39,7 +46,9 @@ that will be used as the cross-validation sample.}
 }
 \value{
 A data frame with columns for each metric requested, as well as \code{k}
-if \code{method = "holdout"} and the \code{Method} used for cross-validation.
+if \code{method = "holdout"} and the \code{Method} used for cross-validation. If
+\code{method = "holdout"} and \code{stack = TRUE}, the standard error (standard
+deviation across holdout folds) for each metric is also included.
 }
 \description{
 This function cross-validates regression models in a
