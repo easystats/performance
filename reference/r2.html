@@ -148,6 +148,9 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>...</span><span class='op'>)</span>
 
+<span class='co'># S3 method for default</span>
+<span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, ci <span class='op'>=</span> <span class='cn'>NULL</span>, ci_method <span class='op'>=</span> <span class='st'>"analytical"</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for merMod</span>
 <span class='fu'>r2</span><span class='op'>(</span><span class='va'>model</span>, tolerance <span class='op'>=</span> <span class='fl'>1e-05</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
@@ -161,6 +164,23 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
     <tr>
       <th>...</th>
       <td><p>Arguments passed down to the related r2-methods.</p></td>
+    </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>Confidence Interval (CI) level. Default is <code>NULL</code>. Confidence
+intervals for R2 can be calculated based on different methods, see
+<code>ci_method</code>.</p></td>
+    </tr>
+    <tr>
+      <th>ci_method</th>
+      <td><p>Method for constructing the R2 confidence interval.
+Options are <code>"analytical"</code> for sampling-theory-based frequentist
+intervals and <code>"bootstrap"</code> for bootstrap intervals. Analytical intervals
+are not available for all models. For Bayesian models, <code><a href='r2_bayes.html'>r2_bayes()</a></code> is used.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>Logical. Should details about R2 and CI methods be given (<code>TRUE</code>) or not (<code>FALSE</code>)?</p></td>
     </tr>
     <tr>
       <th>tolerance</th>
