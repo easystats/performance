@@ -6,6 +6,14 @@
 #'   R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
+#' @param ci Confidence Interval (CI) level. Default is \code{NULL}. Confidence
+#'   intervals for R2 can be calculated based on different methods, see
+#'   \code{ci_method}.
+#' @param ci_method Method for constructing the R2 confidence interval.
+#'   Options are \code{"analytical"} for sampling-theory-based frequentist
+#'   intervals and \code{"bootstrap"} for bootstrap intervals. Analytical intervals
+#'   are not available for all models. For Bayesian models, [r2_bayes()] is used.
+#' @param verbose Logical. Should details about R2 and CI methods be given (`TRUE`) or not (`FALSE`)?
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'
@@ -49,8 +57,14 @@ r2 <- function(model, ...) {
 # Default models -----------------------------------------------
 
 
+#' @rdname r2
 #' @export
-r2.default <- function(model, verbose = TRUE, ...) {
+r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRUE, ...) {
+  ci_method <- match.arg(ci_method, choices = c("analytical", "bootstrap"))
+
+  # check input
+  ci <- .check_r2_ci_args(ci, ci_method, "bootstrap", verbose)
+
   out <- tryCatch(
     {
       if (insight::model_info(model)$is_binomial) {
@@ -757,4 +771,22 @@ r2.DirichletRegModel <- function(model, ...) {
   names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
+}
+
+
+
+
+
+# helper -------------------
+
+.check_r2_ci_args <- function(ci = NULL, ci_method = "bootstrap", valid_ci_method = NULL, verbose = TRUE) {
+  if (!is.null(ci) && !is.na(ci)) {
+    if (!is.null(valid_ci_method) && !ci_method %in% valid_ci_method) {
+      if (verbose) {
+        warning(paste0("Method '", ci_method, "' to compute confidence intervals for R2 not supported."), call. = FALSE)
+      }
+      return(NULL)
+    }
+  }
+  ci
 }

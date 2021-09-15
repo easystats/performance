@@ -2,10 +2,13 @@
 % Please edit documentation in R/r2.R
 \name{r2}
 \alias{r2}
+\alias{r2.default}
 \alias{r2.merMod}
 \title{Compute the model's R2}
 \usage{
 r2(model, ...)
+
+\method{r2}{default}(model, ci = NULL, ci_method = "analytical", verbose = TRUE, ...)
 
 \method{r2}{merMod}(model, tolerance = 1e-05, ...)
 }
@@ -13,6 +16,17 @@ r2(model, ...)
 \item{model}{A statistical model.}
 
 \item{...}{Arguments passed down to the related r2-methods.}
+
+\item{ci}{Confidence Interval (CI) level. Default is \code{NULL}. Confidence
+intervals for R2 can be calculated based on different methods, see
+\code{ci_method}.}
+
+\item{ci_method}{Method for constructing the R2 confidence interval.
+Options are \code{"analytical"} for sampling-theory-based frequentist
+intervals and \code{"bootstrap"} for bootstrap intervals. Analytical intervals
+are not available for all models. For Bayesian models, \code{\link[=r2_bayes]{r2_bayes()}} is used.}
+
+\item{verbose}{Logical. Should details about R2 and CI methods be given (\code{TRUE}) or not (\code{FALSE})?}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
