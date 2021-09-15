@@ -341,7 +341,7 @@ lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
           Petal.Length + Petal.Width, data = iris)
 
-compare_performance(lm1, lm2, lm3, lm4)
+test_performance(lm1, lm2, lm3, lm4)
 
 test_bf(lm1, lm2, lm3, lm4)
 ```
