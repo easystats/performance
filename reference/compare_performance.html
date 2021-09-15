@@ -229,19 +229,19 @@ Springer-Verlag. doi: <a href='https://doi.org/10.1007/b97636'>10.1007/b97636</a
 <span class='r-in'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># Comparison of Model Performance Indices</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |     AIC |    AIC_wt |     BIC |    BIC_wt |    R2 | R2 (adj.) |  RMSE | Sigma</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> --------------------------------------------------------------------------------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> lm1  |    lm | 231.452 | 3.649e-28 | 243.494 | 2.797e-27 | 0.619 |     0.614 | 0.510 | 0.515</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> lm2  |    lm | 106.233 |     0.566 | 121.286 |     0.964 | 0.837 |     0.833 | 0.333 | 0.338</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> lm3  |    lm | 106.767 |     0.434 | 127.842 |     0.036 | 0.840 |     0.835 | 0.330 | 0.336</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |     AIC |  AIC_wt |     BIC |  BIC_wt |    R2 | R2 (adj.) |  RMSE | Sigma</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm1  |    lm | 231.452 | &lt; 0.001 | 243.494 | &lt; 0.001 | 0.619 |     0.614 | 0.510 | 0.515</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm2  |    lm | 106.233 |   0.566 | 121.286 |   0.964 | 0.837 |     0.833 | 0.333 | 0.338</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm3  |    lm | 106.767 |   0.434 | 127.842 |   0.036 | 0.840 |     0.835 | 0.330 | 0.336</span>
 <span class='r-in'><span class='fu'>compare_performance</span><span class='op'>(</span><span class='va'>lm1</span>, <span class='va'>lm2</span>, <span class='va'>lm3</span>, rank <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># Comparison of Model Performance Indices</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |    R2 | R2 (adj.) |  RMSE | Sigma |    AIC_wt |    BIC_wt | Performance-Score</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> --------------------------------------------------------------------------------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> lm2  |    lm | 0.837 |     0.833 | 0.333 | 0.338 |     0.566 |     0.964 |            99.10%</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> lm3  |    lm | 0.840 |     0.835 | 0.330 | 0.336 |     0.434 |     0.036 |            80.05%</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> lm1  |    lm | 0.619 |     0.614 | 0.510 | 0.515 | 3.649e-28 | 2.797e-27 |             0.00%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name | Model |    R2 | R2 (adj.) |  RMSE | Sigma |  AIC_wt |  BIC_wt | Performance-Score</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ----------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm2  |    lm | 0.837 |     0.833 | 0.333 | 0.338 |   0.566 |   0.964 |            99.10%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm3  |    lm | 0.840 |     0.835 | 0.330 | 0.336 |   0.434 |   0.036 |            80.05%</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> lm1  |    lm | 0.619 |     0.614 | 0.510 | 0.515 | &lt; 0.001 | &lt; 0.001 |             0.00%</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'>  <span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
@@ -253,11 +253,11 @@ Springer-Verlag. doi: <a href='https://doi.org/10.1007/b97636'>10.1007/b97636</a
 <span class='r-wrn co'><span class='r-pr'>#&gt;</span>   same data.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'># Comparison of Model Performance Indices</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Name |   Model |     AIC |    AIC_wt |     BIC |    BIC_wt |  RMSE | Sigma |    R2 | R2 (adj.) | Tjur's R2 | Log_loss | Score_log | Score_spherical |   PCP | R2 (cond.) | R2 (marg.) |   ICC</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |      lm | 156.010 | 8.300e-28 | 161.873 | 3.989e-28 | 2.444 | 2.568 | 0.830 |     0.819 |           |          |           |                 |       |            |            |      </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |     glm |  31.298 |     1.000 |  35.695 |     1.000 | 0.359 | 0.934 |       |           |     0.478 |    0.395 |   -14.903 |           0.095 | 0.743 |            |            |      </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   | lmerMod |  77.320 | 1.015e-10 |  89.362 | 2.220e-12 | 0.279 | 0.283 |       |           |           |          |           |                 |       |      0.972 |      0.096 | 0.969</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Name |   Model |     AIC |  AIC_wt |     BIC |  BIC_wt |  RMSE | Sigma |    R2 | R2 (adj.) | Tjur's R2 | Log_loss | Score_log | Score_spherical |   PCP | R2 (cond.) | R2 (marg.) |   ICC</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m1   |      lm | 156.010 | &lt; 0.001 | 161.873 | &lt; 0.001 | 2.444 | 2.568 | 0.830 |     0.819 |           |          |           |                 |       |            |            |      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m2   |     glm |  31.298 |   1.000 |  35.695 |   1.000 | 0.359 | 0.934 |       |           |     0.478 |    0.395 |   -14.903 |           0.095 | 0.743 |            |            |      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> m3   | lmerMod |  77.320 | &lt; 0.001 |  89.362 | &lt; 0.001 | 0.279 | 0.283 |       |           |           |          |           |                 |       |      0.972 |      0.096 | 0.969</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
