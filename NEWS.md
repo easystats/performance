@@ -1,4 +1,4 @@
-# performance 0.7.4
+# performance 0.8.0
 
 ## Breaking Changes
 
