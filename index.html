@@ -206,10 +206,10 @@
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
 <span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="co">#&gt; # Bayesian R2 with Standard Error</span>
+<span class="co">#&gt; # Bayesian R2 with Compatibility Interval</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;   Conditional R2: 0.953 (89% CI [0.944, 0.962])</span>
-<span class="co">#&gt;      Marginal R2: 0.824 (89% CI [0.747, 0.890])</span>
+<span class="co">#&gt;   Conditional R2: 0.953 (95% CI [0.941, 0.963])</span>
+<span class="co">#&gt;      Marginal R2: 0.824 (95% CI [0.713, 0.896])</span>
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
@@ -383,12 +383,12 @@
 <span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span><span class="op">)</span>
 <span class="co">#&gt; # Comparison of Model Performance Indices</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span>
-<span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="co">#&gt; m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                </span>
-<span class="co">#&gt; m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                </span>
-<span class="co">#&gt; m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                </span>
-<span class="co">#&gt; m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657</span></code></pre></div>
+<span class="co">#&gt; Name |   Model |      AIC |    wt_AIC |      BIC |    wt_BIC |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span>
+<span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; m1   |      lm |  156.010 | 8.300e-28 |  161.873 | 3.988e-28 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                </span>
+<span class="co">#&gt; m2   |     glm |   31.298 |     1.000 |   35.695 |     1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                </span>
+<span class="co">#&gt; m3   | lmerMod | 1755.628 |     0.000 | 1774.786 |     0.000 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                </span>
+<span class="co">#&gt; m4   |     glm |   56.761 | 2.956e-06 |   57.747 | 1.627e-05 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657</span></code></pre></div>
 <div id="general-index-of-model-performance" class="section level4">
 <h4 class="hasAnchor">
 <a href="#general-index-of-model-performance" class="anchor" aria-hidden="true"></a>General index of model performance</h4>
@@ -397,12 +397,12 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; # Comparison of Model Performance Indices</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Name |   Model |      AIC |      BIC |   RMSE |  Sigma | Performance-Score</span>
-<span class="co">#&gt; --------------------------------------------------------------------------</span>
-<span class="co">#&gt; m2   |     glm |   31.298 |   35.695 |  0.359 |  0.934 |           100.00%</span>
-<span class="co">#&gt; m4   |     glm |   56.761 |   57.747 |  3.043 |  1.132 |            96.21%</span>
-<span class="co">#&gt; m1   |      lm |  156.010 |  161.873 |  2.444 |  2.568 |            92.46%</span>
-<span class="co">#&gt; m3   | lmerMod | 1755.628 | 1774.786 | 23.438 | 25.592 |             0.00%</span></code></pre></div>
+<span class="co">#&gt; Name |   Model |   RMSE |  Sigma |    wt_AIC |    wt_BIC | Performance-Score</span>
+<span class="co">#&gt; ----------------------------------------------------------------------------</span>
+<span class="co">#&gt; m2   |     glm |  0.359 |  0.934 |     1.000 |     1.000 |           100.00%</span>
+<span class="co">#&gt; m4   |     glm |  3.043 |  1.132 | 2.956e-06 | 1.627e-05 |            46.89%</span>
+<span class="co">#&gt; m1   |      lm |  2.444 |  2.568 | 8.300e-28 | 3.988e-28 |            46.09%</span>
+<span class="co">#&gt; m3   | lmerMod | 23.438 | 25.592 |     0.000 |     0.000 |             0.00%</span></code></pre></div>
 </div>
 <div id="visualisation-of-indices-of-models-performance" class="section level4">
 <h4 class="hasAnchor">
@@ -429,12 +429,12 @@
 <span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span>
 <span class="co">#&gt; # Comparison of Model Performance Indices</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Name | Model |     AIC |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma</span>
-<span class="co">#&gt; --------------------------------------------------------------------</span>
-<span class="co">#&gt; lm1  |    lm | 231.452 | 243.494 | 0.619 |     0.614 | 0.510 | 0.515</span>
-<span class="co">#&gt; lm2  |    lm | 106.233 | 121.286 | 0.837 |     0.833 | 0.333 | 0.338</span>
-<span class="co">#&gt; lm3  |    lm | 187.092 | 208.167 | 0.727 |     0.718 | 0.431 | 0.440</span>
-<span class="co">#&gt; lm4  |    lm |  78.797 | 105.892 | 0.871 |     0.865 | 0.296 | 0.305</span>
+<span class="co">#&gt; Name | Model |     AIC |    wt_AIC |     BIC |    wt_BIC |    R2 | R2 (adj.) |  RMSE | Sigma</span>
+<span class="co">#&gt; --------------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; lm1  |    lm | 231.452 | 7.101e-34 | 243.494 | 1.318e-30 | 0.619 |     0.614 | 0.510 | 0.515</span>
+<span class="co">#&gt; lm2  |    lm | 106.233 | 1.102e-06 | 121.286 | 4.541e-04 | 0.837 |     0.833 | 0.333 | 0.338</span>
+<span class="co">#&gt; lm3  |    lm | 187.092 | 3.048e-24 | 208.167 | 6.184e-23 | 0.727 |     0.718 | 0.431 | 0.440</span>
+<span class="co">#&gt; lm4  |    lm |  78.797 |     1.000 | 105.892 |     1.000 | 0.871 |     0.865 | 0.296 | 0.305</span>
 
 <span class="fu"><a href="reference/test_performance.html">test_bf</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span>
 <span class="co">#&gt; Bayes Factors for Model Comparison</span>
