@@ -157,6 +157,12 @@
 <ul><li>
 <code><a href="../reference/check_multimodal.html">check_multimodal()</a></code> and <code><a href="../reference/check_heterogeneity_bias.html">check_heterogeneity_bias()</a></code>. These functions will be removed from the <em>parameters</em> packages in the future.</li>
 </ul></div>
+<div id="new-functions-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-functions-1" class="anchor" aria-hidden="true"></a>New functions</h2>
+<ul><li>
+<code><a href="../reference/r2.html">r2()</a></code> for linear models can now compute confidence intervals, via the <code>ci</code> argument.</li>
+</ul></div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor" aria-hidden="true"></a>Bug fixes</h2>
@@ -180,9 +186,9 @@
     <div id="performance-072" class="section level1">
 <h1 class="page-header" data-toc-text="0.7.2">
 <a href="#performance-072" class="anchor" aria-hidden="true"></a>performance 0.7.2<small> 2021-05-17 </small></h1>
-<div id="new-functions-1" class="section level2">
+<div id="new-functions-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-1" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-2" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>
 <code><a href="../reference/performance_mae.html">performance_mae()</a></code> to calculate the mean absolute error.</li>
 </ul></div>
@@ -329,9 +335,9 @@
 <ul><li>
 <code><a href="../reference/model_performance.html">model_performance()</a></code> now supports <code>margins</code>, <code>gamlss</code>, <code>stanmvreg</code> and <code>semLme</code>.</li>
 </ul></div>
-<div id="new-functions-2" class="section level2">
+<div id="new-functions-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-2" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-3" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li><p><code><a href="../reference/r2_somers.html">r2_somers()</a></code>, to compute Somers’ Dxy rank-correlation as R2-measure for logistic regression models.</p></li>
 <li><p><code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code>, to print output from package-functions into different formats. <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> is an alias for <code>display(format = "markdown")</code>.</p></li>
 </ul></div>
@@ -370,9 +376,9 @@
 <a href="#breaking-changes-2" class="anchor" aria-hidden="true"></a>Breaking changes</h2>
 <ul><li>Column names for <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code> were changed to be in line with the <em>easystats</em> naming convention: <code>LOGLOSS</code> is now <code>Log_loss</code>, <code>SCORE_LOG</code> is <code>Score_log</code> and <code>SCORE_SPHERICAL</code> is now <code>Score_spherical</code>.</li>
 </ul></div>
-<div id="new-functions-3" class="section level2">
+<div id="new-functions-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-3" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-4" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>
 <code><a href="../reference/r2_bayes.html">r2_posterior()</a></code> for Bayesian models to obtain posterior distributions of R-squared.</li>
 </ul></div>
@@ -402,9 +408,9 @@
 <li><p><code><a href="../reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> should now also work with zero-inflated mixed models from <em>glmmTMB</em> and <em>GLMMadpative</em>.</p></li>
 <li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> now returns a logical vector. Original numerical vector is still accessible via <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code>.</p></li>
 </ul></div>
-<div id="new-functions-4" class="section level2">
+<div id="new-functions-5" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-4" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-5" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li>
 <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code> to compute posterior predictive checks for frequentist models.</li>
 </ul></div>
@@ -519,9 +525,9 @@
 <ul><li><p>Removed <code>logLik.felm()</code>, because this method is now implemented in the <em>lfe</em> package.</p></li>
 <li><p>Support for <code>DirichletRegModel</code> models.</p></li>
 </ul></div>
-<div id="new-functions-5" class="section level2">
+<div id="new-functions-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-5" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-6" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li><p><code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> to describe various measures of internal consistencies for scales which were built from several items from a PCA, using <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::principal_components()</a></code>.</p></li>
 <li><p><code><a href="../reference/r2_efron.html">r2_efron()</a></code> to compute Efron’s pseudo R2.</p></li>
 </ul></div>
@@ -539,9 +545,9 @@
 <a href="#general-11" class="anchor" aria-hidden="true"></a>General</h2>
 <ul><li>Support for <code>mixor</code>, <code>cpglm</code> and <code>cpglmm</code> models.</li>
 </ul></div>
-<div id="new-functions-6" class="section level2">
+<div id="new-functions-7" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-functions-6" class="anchor" aria-hidden="true"></a>New functions</h2>
+<a href="#new-functions-7" class="anchor" aria-hidden="true"></a>New functions</h2>
 <ul><li><p><code><a href="../reference/performance_aicc.html">performance_aic()</a></code> as a small wrapper that returns the AIC. It is a generic function that also works for some models that don’t have a AIC method (like Tweedie models).</p></li>
 <li><p><code><a href="../reference/test_performance.html">performance_lrt()</a></code> as a small wrapper around <code><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova()</a></code> to perform a Likelihood-Ratio-Test for model comparison.</p></li>
 </ul></div>
