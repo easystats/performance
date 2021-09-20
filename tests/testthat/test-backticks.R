@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance")) {
+if (requiet("testthat") && requiet("performance")) {
   data(iris)
   iris$`a m` <- iris$Species
   iris$`Sepal Width` <- iris$Sepal.Width

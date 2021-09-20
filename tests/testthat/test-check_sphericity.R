@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance")) {
+if (requiet("testthat") && requiet("performance")) {
   test_that("check_sphericity | afex", {
     skip_if_not_installed("afex")
 

@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("glmmTMB")) {
+if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
   data(Salamanders)
 
   m1 <- glm(count ~ spp + mined, family = poisson, data = Salamanders)

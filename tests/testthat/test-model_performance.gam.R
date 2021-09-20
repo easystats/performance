@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("gamm4") && require("mgcv")) {
+if (requiet("testthat") && requiet("performance") && requiet("gamm4") && requiet("mgcv")) {
   test_that("mgcv::gam", {
     model <- mgcv::gam(mpg ~ s(hp), data = mtcars)
 

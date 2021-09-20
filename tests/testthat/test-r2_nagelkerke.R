@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("MASS")) {
+if (requiet("testthat") && requiet("performance") && requiet("MASS")) {
   test_that("r2_nagelkerke", {
     model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
     expect_equal(r2_nagelkerke(model), c(`Nagelkerke's R2` = 0.589959301837163), tolerance = 1e-3)

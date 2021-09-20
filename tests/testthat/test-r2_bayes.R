@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("BayesFactor") && require("rstantools")) {
+if (requiet("testthat") && requiet("performance") && requiet("BayesFactor") && requiet("rstantools")) {
   test_that("r2_BayesFactor", {
     data(mtcars)
     set.seed(1)

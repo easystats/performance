@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("MASS")) {
+if (requiet("testthat") && requiet("performance") && requiet("MASS")) {
   options(contrasts = c("contr.treatment", "contr.poly"))
   data(housing, package = "MASS")
   model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)

@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance")) {
+if (requiet("testthat") && requiet("performance")) {
   data(iris)
   lm1 <- lm(Sepal.Length ~ Species, data = iris)
   lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
