@@ -1,10 +1,10 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest &&
-  require("testthat") &&
-  require("performance") &&
-  suppressPackageStartupMessages(require("rstanarm", quietly = TRUE)) &&
-  suppressPackageStartupMessages(require("brms", quietly = TRUE))) {
+  requiet("testthat") &&
+  requiet("performance") &&
+  requiet("rstanarm") &&
+  requiet("brms")) {
   test_that("model_performance.stanreg", {
     set.seed(333)
     model <- insight::download_model("stanreg_lm_1")
@@ -52,10 +52,10 @@ if (.runThisTest &&
   })
 }
 
-if (require("testthat") &&
-  require("performance") &&
-  suppressPackageStartupMessages(require("BayesFactor", quietly = TRUE)) &&
-  suppressPackageStartupMessages(require("rstantools"))) {
+if (requiet("testthat") &&
+  requiet("performance") &&
+  requiet("BayesFactor") &&
+  requiet("rstantools")) {
   test_that("model_performance.BFBayesFactor", {
     mod <- ttestBF(mtcars$wt, mu = 3)
     expect_warning(p <- model_performance(mod))

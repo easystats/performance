@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("performance") &&
-  require("lme4")) {
+if (requiet("testthat") &&
+  requiet("performance") &&
+  requiet("lme4")) {
   data(mtcars)
   m <- glmer(vs ~ mpg + (1 | gear), family = "binomial", data = mtcars)
 

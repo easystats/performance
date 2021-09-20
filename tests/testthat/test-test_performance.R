@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("lavaan") &&
-  require("lmtest")) {
+if (requiet("testthat") &&
+  requiet("lavaan") &&
+  requiet("lmtest")) {
   test_that("test_performance - nested", {
 
     # Decreasing

@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("glmmTMB")) {
+if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
   data(Salamanders)
   m1 <- glmmTMB(count ~ spp + mined + (1 | site),
     ziformula = ~spp,
@@ -45,7 +45,7 @@ if (require("testthat") && require("performance") && require("glmmTMB")) {
     )
   })
 
-  if (require("afex") && utils::packageVersion("afex") >= package_version("1.0.0")) {
+  if (requiet("afex") && utils::packageVersion("afex") >= package_version("1.0.0")) {
     test_that("check_collinearity | afex", {
       data(obk.long, package = "afex")
 

@@ -11,7 +11,7 @@ osx <- tryCatch({
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest && !osx) {
-  if (require("testthat") && require("performance") && require("lme4") && require("nlme") && require("insight")) {
+  if (requiet("testthat") && requiet("performance") && requiet("lme4") && requiet("nlme") && requiet("insight")) {
     data(iris)
     m0 <- lm(Sepal.Length ~ Petal.Length, data = iris)
     m1 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)

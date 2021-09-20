@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance")) {
+if (requiet("testthat") && requiet("performance")) {
   test_that("model_performance.kmeans", {
     set.seed(123)
     cl <- kmeans(subset(iris, select = Sepal.Length:Petal.Width), 3)
