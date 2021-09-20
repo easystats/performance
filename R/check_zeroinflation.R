@@ -44,9 +44,20 @@ check_zeroinflation <- function(x, tolerance = .05) {
   # get predictions of outcome
   mu <- stats::fitted(x)
 
+  # get overdispersion parameters
+  if (model_info$is_negbin) {
+    if(is(x, "glmmTMB")){
+      theta <- stats::sigma(x)
+    } else {
+      theta <- x$theta
+    }
+  } else {
+    theta <- NULL
+  }
+
   # get predicted zero-counts
-  if (model_info$is_negbin && !is.null(x$theta)) {
-    pred.zero <- round(sum(stats::dnbinom(x = 0, size = x$theta, mu = mu)))
+  if (!is.null(theta)) {
+    pred.zero <- round(sum(stats::dnbinom(x = 0, size = theta, mu = mu)))
   } else {
     pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
   }
