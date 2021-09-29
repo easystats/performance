@@ -104,7 +104,7 @@ model <- lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
 r2(model)
 ```
 
-Note that `r2` functions only return the $R^2$ values. We would encourage users to instead always use the `compare_performance` function to get a more comprehensive set of indices of model fit. 
+Note that `r2` functions only return the $R^2$ values. We would encourage users to instead always use the `model_performance` function to get a more comprehensive set of indices of model fit. 
 
 ```{r}
 model_performance(model)
