@@ -20,7 +20,7 @@
 * `check_multimodal()` and `check_heterogeneity_bias()`. These functions will
   be removed from the _parameters_ packages in the future.
 
-## New functions
+## Changes to functions
 
 * `r2()` for linear models can now compute confidence intervals, via the `ci`
   argument.
