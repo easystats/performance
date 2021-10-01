@@ -46,7 +46,7 @@ check_zeroinflation <- function(x, tolerance = .05) {
 
   # get overdispersion parameters
   if (model_info$is_negbin) {
-    if(is(x, "glmmTMB")){
+    if (methods::is(x, "glmmTMB")) {
       theta <- stats::sigma(x)
     } else {
       theta <- x$theta
