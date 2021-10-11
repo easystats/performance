@@ -69,6 +69,7 @@ Suggests:
     AER,
     afex,
     BayesFactor,
+    bayesplot,
     betareg,
     bigutilsr,
     brms,
