@@ -66,23 +66,30 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">r2_mcfadden</span><span class="op">(</span><span class="va">model</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
       <td><p>Generalized linear or multinomial logit (<code>mlogit</code>) model.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>For most models, a list with McFadden's R2 and adjusted McFadden's
 R2 value. For some models, only McFadden's R2 is available.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     
 <ul><li><p>McFadden, D. (1987). Regression-based specification tests for the
 multinomial logit model. Journal of econometrics, 34(1-2), 63-82.</p></li>
 <li><p>McFadden, D. (1973). Conditional logit analysis of qualitative choice
 behavior.</p></li>
-</ul><h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+</ul></div>
+
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://cran.r-project.org/package=mlogit">"mlogit"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"Fishing"</span>, package <span class="op">=</span> <span class="st">"mlogit"</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">Fish</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mlogit/man/mlogit-deprecated.html">mlogit.data</a></span><span class="op">(</span><span class="va">Fishing</span>, varying <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">9</span><span class="op">)</span>, shape <span class="op">=</span> <span class="st">"wide"</span>, choice <span class="op">=</span> <span class="st">"mode"</span><span class="op">)</span></span>
@@ -100,6 +107,7 @@ behavior.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> McFadden's R2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       0.17823 </span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

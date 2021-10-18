@@ -87,7 +87,8 @@ multicollinearity by calculating the variance inflation factor (VIF).
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A model object (that should at least respond to <code><a href="https://rdrr.io/r/stats/vcov.html">vcov()</a></code>,
 and if possible, also to <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> - however, it also should
@@ -104,15 +105,19 @@ zero-inflation component (<code>component = "zero_inflated"</code> or
 <code>component = "zi"</code>) or both components (<code>component = "all"</code>).
 Following model-classes are currently supported: <code>hurdle</code>,
 <code>zeroinfl</code>, <code>zerocount</code>, <code>MixMod</code> and <code>glmmTMB</code>.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>A data frame with three columns: The name of the model term, the
 variance inflation factor and the factor by which the standard error
 is increased due to possible correlation with other terms.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     
-<h3 class="hasAnchor" id="multicollinearity"><a class="anchor" aria-hidden="true" href="#multicollinearity"></a>Multicollinearity</h3>
+<div id="multicollinearity">
+<h3>Multicollinearity</h3>
 <p>Multicollinearity should not be confused with a raw strong correlation
 between predictors. What matters is the association between one or more
 predictor variables, <em>conditional on the other variables in the
@@ -134,8 +139,10 @@ between the unobserved variable and the outcome.
 Remember: “Pairwise correlations are not the problem. It is the
 conditional associations - not correlations - that matter.”
 (<cite>McElreath 2020, p. 169</cite>)</p>
+</div>
 
-<h3 class="hasAnchor" id="interpretation-of-the-variance-inflation-factor"><a class="anchor" aria-hidden="true" href="#interpretation-of-the-variance-inflation-factor"></a>Interpretation of the Variance Inflation Factor</h3>
+<div id="interpretation-of-the-variance-inflation-factor">
+<h3>Interpretation of the Variance Inflation Factor</h3>
 <p>The variance inflation factor is a measure to analyze the magnitude of
 multicollinearity of model terms. A VIF less than 5 indicates a low
 correlation of that predictor with other predictors. A value between 5 and
@@ -144,19 +151,24 @@ sign for high, not tolerable correlation of model predictors (<cite>James
 et al. 2013</cite>). The <em>Increased SE</em> column in the output indicates how
 much larger the standard error is due to the association with other
 predictors conditional on the remaining variables in the model.</p>
+</div>
 
-<h3 class="hasAnchor" id="multicollinearity-and-interaction-terms"><a class="anchor" aria-hidden="true" href="#multicollinearity-and-interaction-terms"></a>Multicollinearity and Interaction Terms</h3>
+<div id="multicollinearity-and-interaction-terms">
+<h3>Multicollinearity and Interaction Terms</h3>
 <p>If interaction terms are included in a model, high VIF values are expected.
 This portion of multicollinearity among the component terms of an
 interaction is also called "inessential ill-conditioning", which leads to
 inflated VIF values that are typically seen for models with interaction
 terms <cite>(Francoeur 2013)</cite>.</p>
+</div>
 
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note</h2>
     <p>There is also a <a href="https://easystats.github.io/see/articles/performance.html"><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method</a> implemented in the <a href="https://easystats.github.io/see/"><span class="pkg">see</span>-package</a>.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     
 <ul><li><p>Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
@@ -168,7 +180,10 @@ Springer.</p></li>
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <li><p>Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
 <a href="https://janhove.github.io/analysis/2019/09/11/collinearity">webpage</a></p></li>
-</ul><h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+</ul></div>
+
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">check_collinearity</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for Multicollinearity</span></span>
@@ -192,6 +207,7 @@ examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-plt"><img src="check_collinearity-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

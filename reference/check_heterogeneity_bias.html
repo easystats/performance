@@ -70,7 +70,8 @@ between-effect.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_heterogeneity_bias</span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="cn">NULL</span>, group <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A data frame or a mixed model object.</p></td>
     </tr><tr><th>select</th>
@@ -81,18 +82,23 @@ will be ignored.</p></td>
       <td><p>Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID. If <code>x</code> is a model object, this
 argument will be ignored.</p></td>
-    </tr></table><h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    </tr></table></div>
 
+    <div id="see-also">
+    <h2>See also</h2>
     <div class="dont-index"><p>For further details, read the vignette
 <a href="https://easystats.github.io/datawizard/articles/demean.html">https://easystats.github.io/datawizard/articles/demean.html</a> and also
 see documentation for <code><a href="https://easystats.github.io/datawizard/reference/demean.html">?datawizard::demean</a></code>.</p></div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">iris</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># fake-ID</span></span>
 <span class="r-in"><span class="fu">check_heterogeneity_bias</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Possible heterogeneity bias due to following predictors: <span style="color: #BB0000;">Sepal.Length, Petal.Length</span></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

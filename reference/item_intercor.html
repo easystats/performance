@@ -68,7 +68,8 @@ for tests or item-scales of questionnaires.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">item_intercor</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pearson"</span>, <span class="st">"spearman"</span>, <span class="st">"kendall"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A matrix as returned by the <code><a href="https://rdrr.io/r/stats/cor.html">cor()</a></code>-function,
 or a data frame with items (e.g. from a test or questionnaire).</p></td>
@@ -76,11 +77,14 @@ or a data frame with items (e.g. from a test or questionnaire).</p></td>
       <td><p>Correlation computation method. May be one of
 <code>"spearman"</code> (default), <code>"pearson"</code> or <code>"kendall"</code>.
 You may use initial letter only.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>The mean inter-item-correlation value for <code>x</code>.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>This function calculates a mean inter-item-correlation, i.e.
 a correlation matrix of <code>x</code> will be computed (unless
 <code>x</code> is already a matrix as returned by the <code><a href="https://rdrr.io/r/stats/cor.html">cor()</a></code>-function)
@@ -95,18 +99,22 @@ When values are lower than .20, then the items may not be
 representative of the same content domain. If values are higher than
 .40, the items may be only capturing a small bandwidth of the construct.”
 <cite>(Piedmont 2014)</cite></p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     <p>Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds)
 Encyclopedia of Quality of Life and Well-Being Research. Dordrecht: Springer,
 3303-3304. doi: <a href="https://doi.org/10.1007/978-94-007-0753-5_1493">10.1007/978-94-007-0753-5_1493</a></p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span>, <span class="st">"carb"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-in"><span class="fu">item_intercor</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.294155</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

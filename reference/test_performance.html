@@ -87,7 +87,8 @@ The <code>test_performance()</code> function runs the most relevant and appropri
 
 <span class="fu">test_wald</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>...</th>
       <td><p>Multiple model objects.</p></td>
     </tr><tr><th>text_length</th>
@@ -111,13 +112,17 @@ small samples with Gaussian errors.</p></td>
       <td><p>This only applies when models are non-nested, and determines
 which model should be taken as a reference, against which all the other
 models are tested.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>A data frame containing the relevant indices.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     
-<h3 class="hasAnchor" id="nested-vs-non-nested-models"><a class="anchor" aria-hidden="true" href="#nested-vs-non-nested-models"></a>Nested vs. Non-nested Models</h3>
+<div id="nested-vs-non-nested-models">
+<h3>Nested vs. Non-nested Models</h3>
 <p>Model's "nesting" is an important concept of models comparison. Indeed, many
 tests only make sense when the models are <em>"nested",</em> i.e., when their
 predictors are nested. This means that all the predictors of a model are
@@ -139,7 +144,10 @@ Note that, apart from the nesting, in order for the tests to be valid,
 other requirements have often to be the fulfilled. For instance, outcome
 variables (the response) must be the same. You cannot meaningfully test
 whether apples are significantly different from oranges!</p></li>
-</ul><h3 class="hasAnchor" id="tests-description"><a class="anchor" aria-hidden="true" href="#tests-description"></a>Tests Description</h3>
+</ul></div>
+
+<div id="tests-description">
+<h3>Tests Description</h3>
 
 
 <ul><li><p><strong>Bayes factor for Model Comparison</strong> - <code>test_bf()</code>: If all
@@ -179,19 +187,25 @@ reference model. If the models are nested, then the test works as a robust
 LRT. The code for this function is adapted from the <code>nonnest2</code>
 package, and all credit go to their authors.</p></li>
 </ul></li>
-</ul><h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+</ul></div>
 
+    </div>
+    <div id="references">
+    <h2>References</h2>
     
 <ul><li><p>Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
 non-nested hypotheses. Econometrica, 57, 307-333.</p></li>
 <li><p>Merkle, E. C., You, D., &amp; Preacher, K. (2016). Testing non-nested
 structural equation models. Psychological Methods, 21, 151-163.</p></li>
-</ul><h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
+</ul></div>
+    <div id="see-also">
+    <h2>See also</h2>
     <div class="dont-index"><p><code><a href="compare_performance.html">compare_performance()</a></code> to compare
 the performance indices of many different models.</p></div>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Nested Models</span></span>
 <span class="r-in"><span class="co"># -------------</span></span>
 <span class="r-in"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
@@ -338,6 +352,7 @@ the performance indices of many different models.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> m3   |     gam |   0.038</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each model is compared to m1.</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

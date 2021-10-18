@@ -68,14 +68,18 @@ for tests or item-scales of questionnaires.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">cronbachs_alpha</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A matrix or a data frame.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>The Cronbach's Alpha value for <code>x</code>.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>The Cronbach's Alpha value for <code>x</code>. A value closer to 1
 indicates greater internal consistency, where usually following
 rule of thumb is applied to interpret the results:
@@ -84,17 +88,21 @@ rule of thumb is applied to interpret the results:
 0.6 &lt; α &lt; 0.7 is questionable,
 0.7 &lt; α &lt; 0.8 is acceptable,
 and everything &gt; 0.8 is good or excellent.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     <p>Bland, J. M., \&amp; Altman, D. G. Statistics notes: Cronbach's
 alpha. BMJ 1997;314:572. 10.1136/bmj.314.7080.572</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span>, <span class="st">"carb"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-in"><span class="fu">cronbachs_alpha</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.09463206</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

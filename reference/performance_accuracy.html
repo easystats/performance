@@ -74,7 +74,8 @@ or logistic regression models.</p>
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
       <td><p>A linear or logistic regression model. A mixed-effects model is
 also accepted.</p></td>
@@ -88,14 +89,17 @@ compute the accuracy values.</p></td>
       <td><p>Number of bootstrap-samples.</p></td>
     </tr><tr><th>verbose</th>
       <td><p>Toggle warnings.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>A list with three values: The <code>Accuracy</code> of the model
 predictions, i.e. the proportion of accurately predicted values from the
 model, its standard error, <code>SE</code>, and the <code>Method</code> used to compute
 the accuracy.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>For linear models, the accuracy is the correlation coefficient
 between the actual and the predicted value of the outcome. For
 logistic regression models, the accuracy corresponds to the
@@ -106,8 +110,10 @@ AUC-values, which are either computed with cross-validation
 or non-parametric bootstrapping (see argument <code>method</code>).
 The standard error is the standard deviation of the computed
 correlation resp. AUC-values.</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">performance_accuracy</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Accuracy of Model Predictions</span></span>
@@ -124,6 +130,7 @@ correlation resp. AUC-values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       SE: 19.29%-points</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Method: Area under Curve</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

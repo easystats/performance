@@ -66,7 +66,8 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_singularity</span><span class="op">(</span><span class="va">x</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A mixed model.</p></td>
     </tr><tr><th>tolerance</th>
@@ -75,11 +76,14 @@ accepted. The larger <code>tolerance</code> is, the stricter the test
 will be.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p><code>TRUE</code> if the model fit is singular.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>If a model is "singular", this means that some dimensions of the
 variance-covariance matrix have been estimated as exactly zero. This
 often occurs for mixed models with complex random effects structures.
@@ -111,8 +115,9 @@ likelihood estimation for the variance-covariance matrix of the random
 effects is positive definite or only semi-definite. Convergence is a
 question of whether we can assume that the numerical optimization has
 worked correctly or not.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     
 <ul><li><p>Bates D, Kliegl R, Vasishth S, Baayen H. Parsimonious Mixed Models.
 arXiv:1506.04967, June 2015.</p></li>
@@ -123,7 +128,10 @@ Language, 68(3):255-278, April 2013.</p></li>
 I error and power in linear mixed models. Journal of Memory and Language,
 94:305-315, 2017.</p></li>
 <li><p>lme4 Reference Manual, <a href="https://cran.r-project.org/package=lme4">https://cran.r-project.org/package=lme4</a></p></li>
-</ul><h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+</ul></div>
+
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
@@ -145,6 +153,7 @@ I error and power in linear mixed models. Journal of Memory and Language,
 <span class="r-msg co"><span class="r-pr">#&gt;</span> boundary (singular) fit: see ?isSingular</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

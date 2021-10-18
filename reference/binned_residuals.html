@@ -66,7 +66,8 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">binned_residuals</span><span class="op">(</span><span class="va">model</span>, term <span class="op">=</span> <span class="cn">NULL</span>, n_bins <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
       <td><p>A <code>glm</code>-object with <em>binomial</em>-family.</p></td>
     </tr><tr><th>term</th>
@@ -81,16 +82,19 @@ taken.</p></td>
     </tr><tr><th>...</th>
       <td><p>Further argument like <code>size</code> (for point-size) or
 <code>color</code> (for point-colors).</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>A data frame representing the data that is mapped in the accompanying
 plot. In case all residuals are inside the error bounds, points are black.
 If some of the residuals are outside the error bounds (indicated by the
 grey-shaded area), blue points indicate residuals that are OK, while red
 points indicate model under- or over-fitting for the relevant range of
 estimated probabilities.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>Binned residual plots are achieved by “dividing the data into
 categories (bins) based on their fitted values, and then plotting
 the average residual versus the average fitted value for each bin.”
@@ -102,20 +106,24 @@ relation to a specific model predictor. This may be helpful to check if a
 term would fit better when transformed, e.g. a rising and falling pattern
 of residuals along the x-axis is a signal to consider taking the logarithm
 of the predictor (cf. Gelman and Hill 2007, pp. 97-98).</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note</h2>
     <p>Since <code>binned_residuals()</code> returns a data frame, the default
 action for the result is <em>printing</em>. However, the <code><a href="https://rdrr.io/r/base/print.html">print()</a></code>-method for
 <code>binned_residuals()</code> actually creates a plot. For further
 modifications of the plot, use <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> and add ggplot-layers to the
 return values, e.g. <code>print(binned_residuals(model)) + see::scale_color_pizza()</code>.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     <p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and
 multilevel/hierarchical models. Cambridge; New York: Cambridge University
 Press.</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="co"># creating a model</span></span>
 <span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
@@ -137,6 +145,7 @@ Press.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.71108931  0.28891069 5 0.57299903 0.89141359 0.11199575    no</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.97119262 -0.13785929 6 0.91147360 0.99815623 0.30981245   yes</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

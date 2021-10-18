@@ -68,7 +68,8 @@ test for <code>merMod</code>-objects.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_convergence</span><span class="op">(</span><span class="va">x</span>, tolerance <span class="op">=</span> <span class="fl">0.001</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A <code>merMod</code>-object.</p></td>
     </tr><tr><th>tolerance</th>
@@ -77,26 +78,34 @@ accepted. The smaller <code>tolerance</code> is, the stricter the test
 will be.</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p><code>TRUE</code> if convergence is fine and <code>FALSE</code> if convergence
 is suspicious. Additionally, the convergence value is returned as attribute.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     
-<h3 class="hasAnchor" id="convergence-and-log-likelihood"><a class="anchor" aria-hidden="true" href="#convergence-and-log-likelihood"></a>Convergence and log-likelihood</h3>
+<div id="convergence-and-log-likelihood">
+<h3>Convergence and log-likelihood</h3>
 <p>Convergence problems typically arise when the model hasn't converged
 to a solution where the log-likelihood has a true maximum. This may result
 in unreliable and overly complex (or non-estimable) estimates and standard
 errors.</p>
-<h3 class="hasAnchor" id="inspect-model-convergence"><a class="anchor" aria-hidden="true" href="#inspect-model-convergence"></a>Inspect model convergence</h3>
+</div>
+<div id="inspect-model-convergence">
+<h3>Inspect model convergence</h3>
 <p><strong>lme4</strong> performs a convergence-check (see <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html">?lme4::convergence</a></code>),
 however, as as discussed <a href="https://github.com/lme4/lme4/issues/120">here</a>
 and suggested by one of the lme4-authors in
 <a href="https://github.com/lme4/lme4/issues/120#issuecomment-39920269">this comment</a>,
 this check can be too strict. <code>check_convergence()</code> thus provides an
 alternative convergence test for <code>merMod</code>-objects.</p>
-<h3 class="hasAnchor" id="resolving-convergence-issues"><a class="anchor" aria-hidden="true" href="#resolving-convergence-issues"></a>Resolving convergence issues</h3>
+</div>
+<div id="resolving-convergence-issues">
+<h3>Resolving convergence issues</h3>
 <p>Convergence issues are not easy to diagnose. The help page on
 <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html">?lme4::convergence</a></code> provides most of the current advice about
 how to resolve convergence issues. Another clue might be large parameter
@@ -105,16 +114,21 @@ values, e.g. estimates (on the scale of the linear predictor) larger than
 <a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/">complete separation</a>.
 Complete separation can be addressed by regularization, e.g. penalized
 regression or Bayesian regression with appropriate priors on the fixed effects.</p>
-<h3 class="hasAnchor" id="convergence-versus-singularity"><a class="anchor" aria-hidden="true" href="#convergence-versus-singularity"></a>Convergence versus Singularity</h3>
+</div>
+<div id="convergence-versus-singularity">
+<h3>Convergence versus Singularity</h3>
 <p>Note the different meaning between singularity and convergence: singularity
 indicates an issue with the "true" best estimate, i.e. whether the maximum
 likelihood estimation for the variance-covariance matrix of the random effects
 is positive definite or only semi-definite. Convergence is a question of
 whether we can assume that the numerical optimization has worked correctly
 or not.</p>
+</div>
 
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
@@ -136,6 +150,7 @@ or not.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"gradient")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8.444895e-05</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

@@ -70,16 +70,20 @@ applied to (sub)scales, which items were extracted using
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_itemscale</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>An object of class <code>parameters_pca</code>, as returned by
 <code><a href="https://easystats.github.io/parameters/reference/principal_components.html">parameters::principal_components()</a></code>.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>A list of data frames, with related measures of internal
 consistencies of each subscale.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p><code>check_itemscale()</code> calculates various measures of internal
 consistencies, such as Cronbach's alpha, item difficulty or discrimination
 etc. on subscales which were built from several items. Subscales are
@@ -87,8 +91,9 @@ retrieved from the results of <code><a href="https://easystats.github.io/paramet
 based on how many components were extracted from the PCA,
 <code>check_itemscale()</code> retrieves those variables that belong to a component
 and calculates the above mentioned measures.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
+    </div>
+    <div id="note">
+    <h2>Note</h2>
     
 <ul><li><p><em>Item difficulty</em> should range between 0.2 and 0.8. Ideal value
 is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See
@@ -101,15 +106,19 @@ acceptable cut-off of 0.7 (mostly if an index has few items), the
 <em>mean inter-item-correlation</em> is an alternative measure to indicate
 acceptability. Satisfactory range lies between 0.2 and 0.4. See also
 <code><a href="item_intercor.html">item_intercor()</a></code>.</p></li>
-</ul><h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+</ul></div>
+    <div id="references">
+    <h2>References</h2>
     
 <ul><li><p>Briggs SR, Cheek JM (1986) The role of factor analysis in the
 development and evaluation of personality scales. Journal of Personality,
 54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x</p></li>
 <li><p>Trochim WMK (2008) Types of Reliability.
 (<a href="https://conjointly.com/kb/types-of-reliability/">web</a>)</p></li>
-</ul><h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+</ul></div>
+
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># data generation from '?prcomp', slightly modified</span></span>
 <span class="r-in"><span class="va">C</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/chol.html">chol</a></span><span class="op">(</span><span class="va">S</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/toeplitz.html">toeplitz</a></span><span class="op">(</span><span class="fl">.9</span><span class="op">^</span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">17</span><span class="op">)</span></span>
@@ -159,6 +168,7 @@ development and evaluation of personality scales. Journal of Personality,
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Mean inter-item-correlation = 0.811  Cronbach's alpha = 0.945</span></span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

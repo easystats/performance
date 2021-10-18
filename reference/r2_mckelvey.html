@@ -66,14 +66,18 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">r2_mckelvey</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
       <td><p>Generalized linear model.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>The R2 value.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>McKelvey &amp; Zavoinas R2 is based on the explained variance,
 where the variance of the predicted response is divided by the sum
 of the variance of the predicted response and residual variance.
@@ -82,11 +86,15 @@ for logit-link and 1 for probit-link. For poisson-models, the
 residual variance is based on log-normal approximation, similar to
 the <em>distribution-specific variance</em> as described in
 <code><a href="https://easystats.github.io/insight/reference/get_variance.html">?insight::get_variance</a></code>.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
+    </div>
+    <div id="references">
+    <h2>References</h2>
     
 <ul><li><p>McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.</p></li>
-</ul><h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+</ul></div>
+
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## Dobson (1990) Page 93: Randomized Controlled Trial:</span></span>
 <span class="r-in"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span> <span class="co">#</span></span>
 <span class="r-in"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span></span>
@@ -97,6 +105,7 @@ the <em>distribution-specific variance</em> as described in
 <span class="r-out co"><span class="r-pr">#&gt;</span> McKelvey's R2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     0.3776292 </span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

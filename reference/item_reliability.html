@@ -68,7 +68,8 @@ for tests or item-scales of questionnaires.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">item_reliability</span><span class="op">(</span><span class="va">x</span>, standardize <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <div id="arguments">
+    <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
       <td><p>A matrix or a data frame.</p></td>
     </tr><tr><th>standardize</th>
@@ -77,14 +78,17 @@ standardized. Recommended when the variables have different measures /
 scales.</p></td>
     </tr><tr><th>digits</th>
       <td><p>Amount of digits for returned values.</p></td>
-    </tr></table><h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    </tr></table></div>
 
+    <div id="value">
+    <h2>Value</h2>
     <p>A data frame with the corrected item-total correlations (<em>item
 discrimination</em>, column <code>item_discrimination</code>) and Cronbach's Alpha
 (if item deleted, column <code>alpha_if_deleted</code>) for each item
 of the scale, or <code>NULL</code> if data frame had too less columns.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
+    </div>
+    <div id="details">
+    <h2>Details</h2>
     <p>This function calculates the item discriminations (corrected item-total
 correlations for each item of <code>x</code> with the remaining items) and the
 Cronbach's alpha for each item, if it was deleted from the scale. The
@@ -94,8 +98,10 @@ index between 0.1 and 0.3 is considered as "fair", while an index above 0.3
 ambiguously worded and should be examined. Items with negative indices should
 be examined to determine why a negative value was obtained (e.g. reversed
 answer categories regarding positive and negative poles).</p>
+    </div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <div id="examples">
+    <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span>, <span class="st">"carb"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-in"><span class="fu">item_reliability</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -105,6 +111,7 @@ answer categories regarding positive and negative poles).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 carb            0.058               0.751</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4   hp            0.411               0.881</span>
 </code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
