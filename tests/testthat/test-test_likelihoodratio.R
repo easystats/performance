@@ -1,6 +1,6 @@
-if (require("testthat") &&
-  require("performance") &&
-  require("lavaan")) {
+if (requiet("testthat") &&
+  requiet("performance") &&
+  requiet("lavaan")) {
   test_that("test_likelihoodratio - regression models", {
     m1 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
     m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)

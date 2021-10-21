@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("lme4")) {
+if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
   .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
   if (.runThisTest) {

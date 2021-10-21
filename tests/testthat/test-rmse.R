@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("lme4")) {
+if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
   data(sleepstudy, package = "lme4")
 
   m1.1 <- glm(Reaction ~ Days, data = sleepstudy, family = gaussian())

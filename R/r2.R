@@ -348,9 +348,6 @@ r2.clm2 <- r2.censReg
 r2.coxph <- r2.censReg
 
 #' @export
-r2.multinom <- r2.censReg
-
-#' @export
 r2.mclogit <- r2.censReg
 
 #' @export
@@ -375,6 +372,20 @@ r2.bife <- r2.censReg
 
 
 
+
+
+# McFadden ----------------------
+
+
+#' @export
+r2.multinom <- function(model, ...) {
+  out <- r2_mcfadden(model)
+  class(out) <- c("r2_pseudo", class(out))
+  out
+}
+
+#' @export
+r2.mlogit <- r2.multinom
 
 
 
@@ -669,16 +680,6 @@ r2.lmrob <- function(model, ...) {
 
 #' @export
 r2.complmrob <- r2.lmrob
-
-
-
-#' @export
-r2.mlogit <- function(model, ...) {
-  out <- list("R2_McFadden" = r2_mcfadden(model))
-  names(out$R2_McFadden) <- "McFadden's R2"
-  class(out) <- c("r2_pseudo", class(out))
-  out
-}
 
 
 

@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest) {
-  if (require("testthat") && require("performance") && require("lme4")) {
+  if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
     data(sleepstudy)
     set.seed(123)
     sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

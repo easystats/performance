@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance") && require("lme4")) {
+if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
   data(cbpp)
   data(sleepstudy)
   set.seed(1)

@@ -1,9 +1,9 @@
-if (require("testthat") &&
-  require("performance") &&
-  require("insight") &&
-  require("AER") &&
-  require("ordinal") &&
-  require("betareg")) {
+if (requiet("testthat") &&
+  requiet("performance") &&
+  requiet("insight") &&
+  requiet("AER") &&
+  requiet("ordinal") &&
+  requiet("betareg")) {
   data("Affairs", package = "AER")
   data("GasolineYield")
   data("wine")
@@ -32,7 +32,7 @@ if (require("testthat") &&
 
 ## DirichletReg is currently orphaned
 
-# if (require("testthat") && require("performance") && require("DirichletReg")) {
+# if (requiet("testthat") && requiet("performance") && requiet("DirichletReg")) {
 #   set.seed(123)
 #   data("ArcticLake")
 #

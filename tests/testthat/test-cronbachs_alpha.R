@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance")) {
+if (requiet("testthat") && requiet("performance")) {
   test_that("cronbachs_alpha", {
     data(mtcars)
     x <- mtcars[, c("cyl", "gear", "carb", "hp")]

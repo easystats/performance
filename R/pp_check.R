@@ -55,8 +55,11 @@
 #' }
 #' @export
 check_predictions <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
-  if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian)) {
-    UseMethod("pp_check")
+  if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) && isFALSE(inherits(object, "BFBayesFactor"))) {
+    insight::check_if_installed("bayesplot", "to create posterior prediction plots for Stan models")
+    bayesplot::pp_check(object)
+  } else if (isTRUE(inherits(object, "BFBayesFactor"))) {
+    insight::format_message(stop("Posterior preditive checks not yet supported for BayesFactor models", call. = FALSE))
   } else {
     pp_check.lm(object, iterations = iterations, check_range = check_range, re_formula = re_formula, ...)
   }

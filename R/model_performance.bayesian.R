@@ -135,6 +135,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
       # save attributes
       attri_r2$SE$R2_Bayes <- attributes(r2)$SE$R2_Bayes
       attri_r2$CI$R2_Bayes <- attributes(r2)$CI$R2_Bayes
+      attri_r2$CI$R2_Bayes_marginal <- attributes(r2)$CI$R2_Bayes_marginal
       attri_r2$robust$R2_Bayes <- attributes(r2)$robust
 
       # Format to df then to list
@@ -158,6 +159,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
       # save attributes
       attri_r2$SE$R2_loo <- attributes(r2_adj)$SE$R2_loo
       attri_r2$CI$R2_loo <- attributes(r2_adj)$CI$R2_loo
+      attri_r2$CI$R2_loo_marginal <- attributes(r2)$CI$R2_loo_marginal
       attri_r2$robust$R2_loo <- attributes(r2_adj)$robust
 
       # Format to df then to list
@@ -167,7 +169,10 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     }
   }
 
-  if (length(attri_r2) > 0) attri$r2 <- attri_r2
+  if (length(attri_r2) > 0) {
+    attri$r2 <- attri_r2
+    attri$r2_bayes <- attri_r2
+  }
 
   # RMSE ------------------
   if ("RMSE" %in% metrics && !mi$is_ordinal && !mi$is_multinomial && !mi$is_categorical) {

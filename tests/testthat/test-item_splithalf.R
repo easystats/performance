@@ -1,4 +1,4 @@
-if (require("testthat") && require("performance")) {
+if (requiet("testthat") && requiet("performance")) {
   test_that("item_split_half", {
     data(iris)
     x <- iris[, 1:4]
