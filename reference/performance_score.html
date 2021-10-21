@@ -42,7 +42,7 @@ from a model with binary or count outcome."><meta property="og:image" content="h
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ from a model with binary or count outcome."><meta property="og:image" content="h
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Proper Scoring Rules</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_score.R"><code>R/performance_score.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_score.R" class="external-link"><code>R/performance_score.R</code></a></small>
     <div class="hidden name"><code>performance_score.Rd</code></div>
     </div>
 
@@ -76,6 +76,7 @@ from a model with binary or count outcome.</p>
       <td><p>Toggle off warnings.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A list with three elements, the logarithmic, quadratic/Brier and spherical score.</p>
@@ -89,31 +90,32 @@ in the interval <code>[0, 1]</code>, with values closer to 1 indicating a more
 accurate model, and the logarithmic rule in the interval <code>[-Inf, 0]</code>,
 with values closer to 0 indicating a more accurate model.
 <br><br>
-For <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html">stan_glmer()</a></code> models, the predicted values
-are based on <code><a href="https://mc-stan.org/rstanarm/reference/posterior_predict.stanreg.html">posterior_predict()</a></code>, instead of <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code>. Thus,
+For <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer()</a></code> models, the predicted values
+are based on <code><a href="https://mc-stan.org/rstanarm/reference/posterior_predict.stanreg.html" class="external-link">posterior_predict()</a></code>, instead of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>. Thus,
 results may differ more than expected from their non-Bayesian counterparts
 in <strong>lme4</strong>.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p>Code is partially based on <a href="https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html">GLMMadaptive::scoring_rules()</a>.</p>
+    <p>Code is partially based on <a href="https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html" class="external-link">GLMMadaptive::scoring_rules()</a>.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. doi: <a href="https://doi.org/10.1287/deca.2016.0337">10.1287/deca.2016.0337</a></p>
+    <p>Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. doi: <a href="https://doi.org/10.1287/deca.2016.0337" class="external-link">10.1287/deca.2016.0337</a></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="performance_logloss.html">performance_logloss()</a></code></p></div>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## Dobson (1990) Page 93: Randomized Controlled Trial :</span></span>
-<span class="r-in"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">~</span> <span class="va">outcome</span> <span class="op">+</span> <span class="va">treatment</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html" class="external-link">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html" class="external-link">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">~</span> <span class="va">outcome</span> <span class="op">+</span> <span class="va">treatment</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">performance_score</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Proper Scoring Rules</span></span>
@@ -122,12 +124,12 @@ in <strong>lme4</strong>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   quadratic:  0.2095</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   spherical:  0.3238</span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/glmmTMB/glmmTMB">"glmmTMB"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Salamanders</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html">glmmTMB</a></span><span class="op">(</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/glmmTMB/glmmTMB" class="external-link">"glmmTMB"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Salamanders</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">site</span><span class="op">)</span>,</span>
 <span class="r-in">    zi <span class="op">=</span>  <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>,</span>
-<span class="r-in">    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html">nbinom2</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span class="r-in">    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">nbinom2</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span class="r-in">    data <span class="op">=</span> <span class="va">Salamanders</span></span>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"></span>

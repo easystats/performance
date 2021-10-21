@@ -42,7 +42,7 @@ mixed effects models with complex random effects structures."><meta property="og
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ mixed effects models with complex random effects structures."><meta property="og
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Nakagawa's R2 for mixed models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_nakagawa.R"><code>R/r2_nakagawa.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_nakagawa.R" class="external-link"><code>R/r2_nakagawa.R</code></a></small>
     <div class="hidden name"><code>r2_nakagawa.Rd</code></div>
     </div>
 
@@ -85,6 +85,7 @@ can't be computed (and thus, the conditional r-squared is <code>NA</code>),
 decrease the tolerance-level. See also <code><a href="check_singularity.html">check_singularity()</a></code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A list with the conditional and marginal R2 values.</p>
@@ -93,7 +94,7 @@ decrease the tolerance-level. See also <code><a href="check_singularity.html">ch
     <h2>Details</h2>
     <p>Marginal and conditional r-squared values for mixed models are calculated
 based on <cite>Nakagawa et al. 2017</cite>. For more details on the computation of
-the variances, see <code><a href="https://easystats.github.io/insight/reference/get_variance.html">?insight::get_variance</a></code>.
+the variances, see <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>.
 <br><br>
 The marginal r-squared considers only the variance of the fixed effects,
 while the conditional r-squared takes both the fixed and random effects into
@@ -108,20 +109,21 @@ with random slopes or nested random effects (see <cite>Johnson 2014</cite>).</p>
 (2nd ed). New York: Routledge.</p></li>
 <li><p>Johnson, P. C. D. (2014). Extension of Nakagawa &amp; Schielzeth’s R2 GLMM
 to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946.
-doi: <a href="https://doi.org/10.1111/2041-210X.12225">10.1111/2041-210X.12225</a></p></li>
+doi: <a href="https://doi.org/10.1111/2041-210X.12225" class="external-link">10.1111/2041-210X.12225</a></p></li>
 <li><p>Nakagawa, S., &amp; Schielzeth, H. (2013). A general and simple method for
 obtaining R2 from generalized linear mixed-effects models. Methods in
-Ecology and Evolution, 4(2), 133–142. doi: <a href="https://doi.org/10.1111/j.2041-210x.2012.00261.x">10.1111/j.2041-210x.2012.00261.x</a></p></li>
+Ecology and Evolution, 4(2), 133–142. doi: <a href="https://doi.org/10.1111/j.2041-210x.2012.00261.x" class="external-link">10.1111/j.2041-210x.2012.00261.x</a></p></li>
 <li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The
 coefficient of determination R2 and intra-class correlation coefficient from
 generalized linear mixed-effects models revisited and expanded. Journal of
-The Royal Society Interface, 14(134), 20170213. doi: <a href="https://doi.org/10.1098/rsif.2017.0213">10.1098/rsif.2017.0213</a></p></li>
+The Royal Society Interface, 14(134), 20170213. doi: <a href="https://doi.org/10.1098/rsif.2017.0213" class="external-link">10.1098/rsif.2017.0213</a></p></li>
 </ul></div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">r2_nakagawa</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">r2_nakagawa</span><span class="op">(</span><span class="va">model</span>, by_group <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>

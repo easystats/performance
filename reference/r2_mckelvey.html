@@ -41,7 +41,7 @@
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -56,7 +56,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>McKelvey &amp; Zavoinas R2</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_mckelvey.R"><code>R/r2_mckelvey.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_mckelvey.R" class="external-link"><code>R/r2_mckelvey.R</code></a></small>
     <div class="hidden name"><code>r2_mckelvey.Rd</code></div>
     </div>
 
@@ -72,6 +72,7 @@
       <td><p>Generalized linear model.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>The R2 value.</p>
@@ -85,21 +86,22 @@ For binomial models, the residual variance is either <code>pi^2/3</code>
 for logit-link and 1 for probit-link. For poisson-models, the
 residual variance is based on log-normal approximation, similar to
 the <em>distribution-specific variance</em> as described in
-<code><a href="https://easystats.github.io/insight/reference/get_variance.html">?insight::get_variance</a></code>.</p>
+<code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>.</p>
     </div>
     <div id="references">
     <h2>References</h2>
     
 <ul><li><p>McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.</p></li>
 </ul></div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co">## Dobson (1990) Page 93: Randomized Controlled Trial:</span></span>
-<span class="r-in"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span> <span class="co">#</span></span>
-<span class="r-in"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">~</span> <span class="va">outcome</span> <span class="op">+</span> <span class="va">treatment</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span> <span class="co">#</span></span>
+<span class="r-in"><span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html" class="external-link">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html" class="external-link">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">~</span> <span class="va">outcome</span> <span class="op">+</span> <span class="va">treatment</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">r2_mckelvey</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> McKelvey's R2 </span>

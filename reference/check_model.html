@@ -43,7 +43,7 @@ multicollinearity)."><meta property="og:image" content="https://easystats.github
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -58,7 +58,7 @@ multicollinearity)."><meta property="og:image" content="https://easystats.github
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Visual check of model assumptions</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_model.R"><code>R/check_model.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_model.R" class="external-link"><code>R/check_model.R</code></a></small>
     <div class="hidden name"><code>check_model.Rd</code></div>
     </div>
 
@@ -79,7 +79,7 @@ multicollinearity).</p>
   check <span class="op">=</span> <span class="st">"all"</span>,
   alpha <span class="op">=</span> <span class="fl">0.2</span>,
   dot_alpha <span class="op">=</span> <span class="fl">0.8</span>,
-  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#3aaf85"</span>, <span class="st">"#1b6ca8"</span>, <span class="st">"#cd201f"</span><span class="op">)</span>,
+  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#3aaf85"</span>, <span class="st">"#1b6ca8"</span>, <span class="st">"#cd201f"</span><span class="op">)</span>,
   theme <span class="op">=</span> <span class="st">"see::theme_lucid"</span>,
   detrend <span class="op">=</span> <span class="cn">FALSE</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -122,6 +122,7 @@ format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</
       <td><p>Toggle off warnings.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>The data frame that is used for plotting.</p>
@@ -130,14 +131,14 @@ format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</
     <h2>Details</h2>
     <p>For Bayesian models from packages <strong>rstanarm</strong> or <strong>brms</strong>,
 models will be "converted" to their frequentist counterpart, using
-<a href="https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html"><code><a href="https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html">bayestestR::bayesian_as_frequentist</a></code></a>.
+<a href="https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html" class="external-link"><code><a href="https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html" class="external-link">bayestestR::bayesian_as_frequentist</a></code></a>.
 A more advanced model-check for Bayesian models will be implemented at a
 later stage.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
     <p>This function just prepares the data for plotting. To create the plots,
-<a href="https://CRAN.R-project.org/package=see"><span class="pkg">see</span></a> needs to be installed. Furthermore, this function suppresses
+<a href="https://CRAN.R-project.org/package=see" class="external-link"><span class="pkg">see</span></a> needs to be installed. Furthermore, this function suppresses
 all possible warnings. In case you observe suspicious plots, please refer
 to the dedicated functions (like <code><a href="check_collinearity.html">check_collinearity()</a></code>,
 <code><a href="check_normality.html">check_normality()</a></code> etc.) to get informative messages and warnings.</p>
@@ -153,7 +154,7 @@ non-constant variance); hence, the alias <code>"ncv"</code> for this plot.
 plots are helpful to check model assumptions, they do not necessarily
 indicate so-called "lack of fit", e.g. missed non-linear relationships or
 interactions. Thus, it is always recommended to also look at
-<a href="https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html">effect plots, including partial residuals</a>.</p>
+<a href="https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html" class="external-link">effect plots, including partial residuals</a>.</p>
     </div>
     <div id="residuals-for-generalized-linear-models">
     <h2>Residuals for (Generalized) Linear Models</h2>
@@ -166,20 +167,21 @@ residuals (with overlayed normal curve) and for the linearity assumption use
 the default residuals for <code>lm</code> and <code>glm</code> (which are deviance
 residuals for <code>glm</code>).</p>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">check_model</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">check_model</span><span class="op">(</span><span class="va">m</span>, panel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://mc-stan.org/rstanarm/">"rstanarm"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">gear</span>, data <span class="op">=</span> <span class="va">mtcars</span>, chains <span class="op">=</span> <span class="fl">2</span>, iter <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mc-stan.org/rstanarm/" class="external-link">"rstanarm"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">gear</span>, data <span class="op">=</span> <span class="va">mtcars</span>, chains <span class="op">=</span> <span class="fl">2</span>, iter <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">check_model</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"><span class="op">}</span></span>

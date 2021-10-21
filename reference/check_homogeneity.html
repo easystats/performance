@@ -42,7 +42,7 @@ by independent variables in a model."><meta property="og:image" content="https:/
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ by independent variables in a model."><meta property="og:image" content="https:/
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check model for homogeneity of variances</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_homogeneity.R"><code>R/check_homogeneity.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_homogeneity.R" class="external-link"><code>R/check_homogeneity.R</code></a></small>
     <div class="hidden name"><code>check_homogeneity.Rd</code></div>
     </div>
 
@@ -66,7 +66,7 @@ by independent variables in a model."><meta property="og:image" content="https:/
 by independent variables in a model.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_homogeneity</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"bartlett"</span>, <span class="st">"fligner"</span>, <span class="st">"levene"</span>, <span class="st">"auto"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_homogeneity</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bartlett"</span>, <span class="st">"fligner"</span>, <span class="st">"levene"</span>, <span class="st">"auto"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for afex_aov</span>
 <span class="fu">check_homogeneity</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"levene"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
@@ -84,9 +84,10 @@ Bartlett test (assuming normal distributed samples or groups),
 test), or <code>"auto"</code>. In the latter case, Bartlett test is used if the
 model response is normal distributed, else Fligner-Killeen test is used.</p></td>
     </tr><tr><th>...</th>
-      <td><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html">car::leveneTest()</a></code>.</p></td>
+      <td><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>Invisibly returns the p-value of the test statistics. A p-value &lt;
@@ -94,20 +95,21 @@ model response is normal distributed, else Fligner-Killeen test is used.</p></td
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p>There is also a <a href="https://easystats.github.io/see/articles/performance.html"><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method</a> implemented in the <a href="https://easystats.github.io/see/"><span class="pkg">see</span>-package</a>.</p>
+    <p>There is also a <a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a> implemented in the <a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
+    </div>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">len</span> <span class="op">~</span> <span class="va">supp</span> <span class="op">+</span> <span class="va">dose</span>, data <span class="op">=</span> <span class="va">ToothGrowth</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">len</span> <span class="op">~</span> <span class="va">supp</span> <span class="op">+</span> <span class="va">dose</span>, data <span class="op">=</span> <span class="va">ToothGrowth</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">check_homogeneity</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: There is not clear evidence for different variances across groups (Bartlett Test, p = 0.226).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># plot results</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">check_homogeneity</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: There is not clear evidence for different variances across groups (Bartlett Test, p = 0.226).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

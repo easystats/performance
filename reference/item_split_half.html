@@ -42,7 +42,7 @@ for tests or item-scales of questionnaires."><meta property="og:image" content="
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ for tests or item-scales of questionnaires."><meta property="og:image" content="
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Split-Half Reliability</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/item_split_half.R"><code>R/item_split_half.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/item_split_half.R" class="external-link"><code>R/item_split_half.R</code></a></small>
     <div class="hidden name"><code>item_split_half.Rd</code></div>
     </div>
 
@@ -76,6 +76,7 @@ for tests or item-scales of questionnaires.</p>
       <td><p>Amount of digits for returned values.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A list with two elements: the split-half reliability <code>splithalf</code>
@@ -93,16 +94,17 @@ indicates greater internal consistency.</p>
     <h2>References</h2>
     
 <ul><li><p>Spearman C. 1910. Correlation calculated from faulty data. British
-Journal of Psychology (3): 271-295. doi: <a href="https://doi.org/10.1111/j.2044-8295.1910.tb00206.x">10.1111/j.2044-8295.1910.tb00206.x</a></p></li>
+Journal of Psychology (3): 271-295. doi: <a href="https://doi.org/10.1111/j.2044-8295.1910.tb00206.x" class="external-link">10.1111/j.2044-8295.1910.tb00206.x</a></p></li>
 <li><p>Brown W. 1910. Some experimental results in the correlation of mental
 abilities. British Journal of Psychology (3): 296-322.
-doi: <a href="https://doi.org/10.1111/j.2044-8295.1910.tb00207.x">10.1111/j.2044-8295.1910.tb00207.x</a></p></li>
+doi: <a href="https://doi.org/10.1111/j.2044-8295.1910.tb00207.x" class="external-link">10.1111/j.2044-8295.1910.tb00207.x</a></p></li>
 </ul></div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span>, <span class="st">"carb"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cyl"</span>, <span class="st">"gear"</span>, <span class="st">"carb"</span>, <span class="st">"hp"</span><span class="op">)</span><span class="op">]</span></span>
 <span class="r-in"><span class="fu">item_split_half</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $splithalf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9070215</span>

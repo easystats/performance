@@ -42,7 +42,7 @@ or logistic regression models."><meta property="og:image" content="https://easys
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ or logistic regression models."><meta property="og:image" content="https://easys
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Accuracy of predictions from model fit</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_accuracy.R"><code>R/performance_accuracy.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_accuracy.R" class="external-link"><code>R/performance_accuracy.R</code></a></small>
     <div class="hidden name"><code>performance_accuracy.Rd</code></div>
     </div>
 
@@ -68,7 +68,7 @@ or logistic regression models.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">performance_accuracy</span><span class="op">(</span>
   <span class="va">model</span>,
-  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cv"</span>, <span class="st">"boot"</span><span class="op">)</span>,
+  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cv"</span>, <span class="st">"boot"</span><span class="op">)</span>,
   k <span class="op">=</span> <span class="fl">5</span>,
   n <span class="op">=</span> <span class="fl">1000</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
@@ -91,6 +91,7 @@ compute the accuracy values.</p></td>
       <td><p>Toggle warnings.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A list with three values: The <code>Accuracy</code> of the model
@@ -103,7 +104,7 @@ the accuracy.</p>
     <p>For linear models, the accuracy is the correlation coefficient
 between the actual and the predicted value of the outcome. For
 logistic regression models, the accuracy corresponds to the
-AUC-value, calculated with the <code><a href="https://easystats.github.io/bayestestR/reference/area_under_curve.html">bayestestR::auc()</a></code>-function.
+AUC-value, calculated with the <code><a href="https://easystats.github.io/bayestestR/reference/area_under_curve.html" class="external-link">bayestestR::auc()</a></code>-function.
 <br><br>
 The accuracy is the mean value of multiple correlation resp.
 AUC-values, which are either computed with cross-validation
@@ -111,10 +112,11 @@ or non-parametric bootstrapping (see argument <code>method</code>).
 The standard error is the standard deviation of the computed
 correlation resp. AUC-values.</p>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">performance_accuracy</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Accuracy of Model Predictions</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -122,7 +124,7 @@ correlation resp. AUC-values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       SE: 4.85%-points</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Method: Correlation between observed and predicted</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">performance_accuracy</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Accuracy of Model Predictions</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

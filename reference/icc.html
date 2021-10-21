@@ -48,7 +48,7 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -63,7 +63,7 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Intraclass Correlation Coefficient (ICC)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/icc.R"><code>R/icc.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/icc.R" class="external-link"><code>R/icc.R</code></a></small>
     <div class="hidden name"><code>icc.Rd</code></div>
     </div>
 
@@ -71,7 +71,7 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
     <p>This function calculates the intraclass-correlation coefficient (ICC) -
 sometimes also called <em>variance partition coefficient</em> (VPC) - for mixed
 effects models. The ICC can be calculated for all models supported by
-<code><a href="https://easystats.github.io/insight/reference/get_variance.html">insight::get_variance()</a></code>. For models fitted with the
+<code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">insight::get_variance()</a></code>. For models fitted with the
 <strong>brms</strong>-package, <code>icc()</code> might fail due to the large variety of
 models and families supported by the <strong>brms</strong>-package. In such cases, an
 alternative to the ICC is the <code>variance_decomposition()</code>, which is based
@@ -100,16 +100,17 @@ stricter the test will be. See <code><a href="check_singularity.html">performanc
 the prediction. If <code>NULL</code> (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
 to calculate the variance decomposition for this group-level. See 'Details'
-and <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html">?brms::posterior_predict</a></code>.</p></td>
+and <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">?brms::posterior_predict</a></code>.</p></td>
     </tr><tr><th>robust</th>
       <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
 calculate the central tendency of the variances.</p></td>
     </tr><tr><th>ci</th>
       <td><p>Credible interval level.</p></td>
     </tr><tr><th>...</th>
-      <td><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html">brms::posterior_predict()</a></code>.</p></td>
+      <td><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">brms::posterior_predict()</a></code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A list with two values, the adjusted and conditional ICC. For
@@ -119,8 +120,8 @@ ICC as well as the credible intervals for this ICC.</p>
     <div id="details">
     <h2>Details</h2>
     
-<div id="interpretation">
-<h3>Interpretation</h3>
+<div class="section">
+<h3 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a></h3>
 <p>The ICC can be interpreted as “the proportion of the variance
 explained by the grouping structure in the population”. The grouping
 structure entails that measurements are organized into groups (e.g., test
@@ -134,15 +135,15 @@ correlation between two randomly drawn units that are in the same group”
 <cite>(Hox 2010: 15)</cite>, although this definition might not apply to mixed
 models with more complex random effects structures.</p>
 </div>
-<div id="calculation">
-<h3>Calculation</h3>
+<div class="section">
+<h3 id="calculation">Calculation<a class="anchor" aria-label="anchor" href="#calculation"></a></h3>
 <p>The ICC is calculated by dividing the random effect variance,
 σ<sup>2</sup><sub>i</sub>, by
 the total variance, i.e. the sum of the random effect variance and the
 residual variance, σ<sup>2</sup><sub>ε</sub>.</p>
 </div>
-<div id="adjusted-and-conditional-icc">
-<h3>Adjusted and conditional ICC</h3>
+<div class="section">
+<h3 id="adjusted-and-conditional-icc">Adjusted and conditional ICC<a class="anchor" aria-label="anchor" href="#adjusted-and-conditional-icc"></a></h3>
 <p><code>icc()</code> calculates an adjusted and conditional ICC, which both take all
 sources of uncertainty (i.e. of <em>all random effects</em>) into account.
 While the <em>adjusted ICC</em> only relates to the random effects, the
@@ -153,10 +154,10 @@ returns a meaningful ICC also for more complex random effects structures,
 like models with random slopes or nested design (more than two levels) and
 is applicable for models with other distributions than Gaussian. For more
 details on the computation of the variances, see
-<code><a href="https://easystats.github.io/insight/reference/get_variance.html">?insight::get_variance</a></code>.</p>
+<code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>.</p>
 </div>
-<div id="icc-for-unconditional-and-conditional-models">
-<h3>ICC for unconditional and conditional models</h3>
+<div class="section">
+<h3 id="icc-for-unconditional-and-conditional-models">ICC for unconditional and conditional models<a class="anchor" aria-label="anchor" href="#icc-for-unconditional-and-conditional-models"></a></h3>
 <p>Usually, the ICC is calculated for the null model ("unconditional model").
 However, according to <cite>Raudenbush and Bryk (2002)</cite> or
 <cite>Rabe-Hesketh and Skrondal (2012)</cite> it is also feasible to compute the
@@ -164,16 +165,16 @@ ICC for full models with covariates ("conditional models") and compare how
 much, e.g., a level-2 variable explains the portion of variation in the
 grouping structure (random intercept).</p>
 </div>
-<div id="icc-for-specific-group-levels">
-<h3>ICC for specific group-levels</h3>
+<div class="section">
+<h3 id="icc-for-specific-group-levels">ICC for specific group-levels<a class="anchor" aria-label="anchor" href="#icc-for-specific-group-levels"></a></h3>
 <p>The proportion of variance for specific levels related to the overall model
 can be computed by setting <code>by_group = TRUE</code>. The reported ICC is
 the variance for each (random effect) group compared to the total
 variance of the model. For mixed models with a simple random intercept,
 this is identical to the classical (adjusted) ICC.</p>
 </div>
-<div id="variance-decomposition-for-brms-models">
-<h3>Variance decomposition for brms-models</h3>
+<div class="section">
+<h3 id="variance-decomposition-for-brms-models">Variance decomposition for brms-models<a class="anchor" aria-label="anchor" href="#variance-decomposition-for-brms-models"></a></h3>
 <p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to
 the large variety of models and families supported by the <strong>brms</strong>
 package. In such cases, <code>variance_decomposition()</code> is an alternative
@@ -203,7 +204,7 @@ it is negative. In such cases, it might help to use <code>robust = TRUE</code>.<
 <li><p>Nakagawa, S., Johnson, P. C. D., &amp; Schielzeth, H. (2017). The
 coefficient of determination R2 and intra-class correlation coefficient from
 generalized linear mixed-effects models revisited and expanded. Journal of
-The Royal Society Interface, 14(134), 20170213. doi: <a href="https://doi.org/10.1098/rsif.2017.0213">10.1098/rsif.2017.0213</a></p></li>
+The Royal Society Interface, 14(134), 20170213. doi: <a href="https://doi.org/10.1098/rsif.2017.0213" class="external-link">10.1098/rsif.2017.0213</a></p></li>
 <li><p>Rabe-Hesketh, S., &amp; Skrondal, A. (2012). Multilevel and longitudinal
 modeling using Stata (3rd ed). College Station, Tex: Stata Press
 Publication.</p></li>
@@ -211,11 +212,12 @@ Publication.</p></li>
 applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 Publications.</p></li>
 </ul></div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">icc</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Intraclass Correlation Coefficient</span></span>
@@ -224,17 +226,17 @@ Publications.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional ICC: 0.311</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># ICC for specific group-levels</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">sleepstudy</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size <span class="op">=</span> <span class="fl">180</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">sleepstudy</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size <span class="op">=</span> <span class="fl">180</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">sleepstudy</span><span class="op">$</span><span class="va">subgrp</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span class="r-in">  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">    <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">grp</span> <span class="op">==</span> <span class="va">i</span></span>
 <span class="r-in">    <span class="va">sleepstudy</span><span class="op">$</span><span class="va">subgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">}</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">grp</span> <span class="op">/</span> <span class="va">subgrp</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,</span>
 <span class="r-in">    data <span class="op">=</span> <span class="va">sleepstudy</span></span>
 <span class="r-in">  <span class="op">)</span></span>

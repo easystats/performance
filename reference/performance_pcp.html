@@ -42,7 +42,7 @@ with binary outcome."><meta property="og:image" content="https://easystats.githu
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ with binary outcome."><meta property="og:image" content="https://easystats.githu
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Percentage of Correct Predictions</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_pcp.R"><code>R/performance_pcp.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_pcp.R" class="external-link"><code>R/performance_pcp.R</code></a></small>
     <div class="hidden name"><code>performance_pcp.Rd</code></div>
     </div>
 
@@ -81,6 +81,7 @@ Default is <code>"Herron"</code>. May be abbreviated.</p></td>
       <td><p>Toggle off warnings.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A list with several elements: the percentage of correct predictions
@@ -119,11 +120,12 @@ Variable Models. Political Analysis, 8, 83–98.</p></li>
 multilevel/hierarchical models. Cambridge; New York: Cambridge University
 Press, 99.</p></li>
 </ul></div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">vs</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">vs</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">performance_pcp</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Percentage of Correct Predictions from Logistic Regression Model</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

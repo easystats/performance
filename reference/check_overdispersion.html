@@ -42,7 +42,7 @@ models for overdispersion."><meta property="og:image" content="https://easystats
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ models for overdispersion."><meta property="og:image" content="https://easystats
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check overdispersion of GL(M)M's</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_overdispersion.R"><code>R/check_overdispersion.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_overdispersion.R" class="external-link"><code>R/check_overdispersion.R</code></a></small>
     <div class="hidden name"><code>check_overdispersion.Rd</code></div>
     </div>
 
@@ -77,6 +77,7 @@ or <code>glm.nb</code> (package <span class="pkg">MASS</span>).</p></td>
       <td><p>Currently not used.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A list with results from the overdispersion test, like chi-squared
@@ -88,33 +89,33 @@ statistics, p-value or dispersion ratio.</p>
 variance of a theoretical model. For Poisson models, variance increases
 with the mean and, therefore, variance usually (roughly) equals the mean
 value. If the variance is much higher, the data are "overdispersed".</p>
-<div id="interpretation-of-the-dispersion-ratio">
-<h3>Interpretation of the Dispersion Ratio</h3>
+<div class="section">
+<h3 id="interpretation-of-the-dispersion-ratio">Interpretation of the Dispersion Ratio<a class="anchor" aria-label="anchor" href="#interpretation-of-the-dispersion-ratio"></a></h3>
 <p>If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
 negative binomial model or similar might fit better to the data. A p-value &lt;
 .05 indicates overdispersion.</p>
 </div>
 
-<div id="overdispersion-in-poisson-models">
-<h3>Overdispersion in Poisson Models</h3>
+<div class="section">
+<h3 id="overdispersion-in-poisson-models">Overdispersion in Poisson Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-poisson-models"></a></h3>
 <p>For Poisson models, the overdispersion test is based on the code from
 <cite>Gelman and Hill (2007), page 115</cite>.</p>
 </div>
 
-<div id="overdispersion-in-mixed-models">
-<h3>Overdispersion in Mixed Models</h3>
+<div class="section">
+<h3 id="overdispersion-in-mixed-models">Overdispersion in Mixed Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-mixed-models"></a></h3>
 <p>For <code>merMod</code>- and <code>glmmTMB</code>-objects, <code>check_overdispersion()</code>
 is based on the code in the
-<a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html">GLMM FAQ</a>,
+<a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html" class="external-link">GLMM FAQ</a>,
 section <em>How can I deal with overdispersion in GLMMs?</em>. Note that this
 function only returns an <em>approximate</em> estimate of an overdispersion
 parameter, and is probably inaccurate for zero-inflated mixed models (fitted
 with <code>glmmTMB</code>).</p>
 </div>
 
-<div id="how-to-fix-overdispersion">
-<h3>How to fix Overdispersion</h3>
+<div class="section">
+<h3 id="how-to-fix-overdispersion">How to fix Overdispersion<a class="anchor" aria-label="anchor" href="#how-to-fix-overdispersion"></a></h3>
 <p>Overdispersion can be fixed by either modeling the dispersion parameter, or
 by choosing a different distributional family (like Quasi-Poisson, or
 negative binomial, see <cite>Gelman and Hill (2007), pages 115-116</cite>).</p>
@@ -125,20 +126,21 @@ negative binomial, see <cite>Gelman and Hill (2007), pages 115-116</cite>).</p>
     <h2>References</h2>
     
 <ul><li><p>Bolker B et al. (2017):
-<a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html">GLMM FAQ.</a></p></li>
+<a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html" class="external-link">GLMM FAQ.</a></p></li>
 <li><p>Gelman, A., &amp; Hill, J. (2007). Data analysis using regression and
 multilevel/hierarchical models. Cambridge; New York: Cambridge University
 Press.</p></li>
 </ul></div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/glmmTMB/glmmTMB">"glmmTMB"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Salamanders</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">Salamanders</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/glmmTMB/glmmTMB" class="external-link">"glmmTMB"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Salamanders</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">Salamanders</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">check_overdispersion</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html">glmmTMB</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="va">count</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="va">spp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">site</span><span class="op">)</span>,</span>
 <span class="r-in">    family <span class="op">=</span> <span class="va">poisson</span>,</span>
 <span class="r-in">    data <span class="op">=</span> <span class="va">Salamanders</span></span>

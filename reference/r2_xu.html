@@ -42,7 +42,7 @@ linear mixed models."><meta property="og:image" content="https://easystats.githu
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ linear mixed models."><meta property="og:image" content="https://easystats.githu
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Xu' R2 (Omega-squared)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_xu.R"><code>R/r2_xu.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_xu.R" class="external-link"><code>R/r2_xu.R</code></a></small>
     <div class="hidden name"><code>r2_xu.Rd</code></div>
     </div>
 
@@ -74,6 +74,7 @@ linear mixed models.</p>
       <td><p>A linear (mixed) model.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>The R2 value.</p>
@@ -87,12 +88,13 @@ linear (mixed) effects models, which is originally denoted as
     <div id="references">
     <h2>References</h2>
     <p>Xu, R. (2003). Measuring explained variation in linear mixed effects models.
-Statistics in Medicine, 22(22), 3527–3541. doi: <a href="https://doi.org/10.1002/sim.1572">10.1002/sim.1572</a></p>
+Statistics in Medicine, 22(22), 3527–3541. doi: <a href="https://doi.org/10.1002/sim.1572" class="external-link">10.1002/sim.1572</a></p>
+    </div>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">r2_xu</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Xu's R2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.8367238 </span>

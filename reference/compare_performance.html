@@ -43,7 +43,7 @@ indices across models."><meta property="og:image" content="https://easystats.git
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -58,7 +58,7 @@ indices across models."><meta property="og:image" content="https://easystats.git
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compare performance of different models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/compare_performance.R"><code>R/compare_performance.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/compare_performance.R" class="external-link"><code>R/compare_performance.R</code></a></small>
     <div class="hidden name"><code>compare_performance.Rd</code></div>
     </div>
 
@@ -86,6 +86,7 @@ overall model performance. See 'Details'.</p></td>
       <td><p>Toggle off warnings.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A data frame (with one row per model) and one column per "index" (see
@@ -94,8 +95,8 @@ overall model performance. See 'Details'.</p></td>
     <div id="details">
     <h2>Details</h2>
     
-<div id="model-weights">
-<h3>Model Weights</h3>
+<div class="section">
+<h3 id="model-weights">Model Weights<a class="anchor" aria-label="anchor" href="#model-weights"></a></h3>
 <p>When information criteria (IC) are requested in <code>metrics</code> (i.e., any of <code>"all"</code>,
 <code>"common"</code>, <code>"AIC"</code>, <code>"AICc"</code>, <code>"BIC"</code>, <code>"WAIC"</code>, or <code>"LOOIC"</code>), model
 weights based on these criteria are also computed. For all IC except LOOIC,
@@ -103,11 +104,11 @@ weights are computed as <code>w = exp(-0.5 * delta_ic) / sum(exp(-0.5 * delta_ic
 where <code>delta_ic</code> is the difference between the model's IC value and the
 smallest IC value in the model set (Burnham &amp; Anderson, 2002).
 For LOOIC, weights are computed as "stacking weights" using
-<code><a href="https://mc-stan.org/loo/reference/loo_model_weights.html">loo::stacking_weights()</a></code>.</p>
+<code><a href="https://mc-stan.org/loo/reference/loo_model_weights.html" class="external-link">loo::stacking_weights()</a></code>.</p>
 </div>
 
-<div id="ranking-models">
-<h3>Ranking Models</h3>
+<div class="section">
+<h3 id="ranking-models">Ranking Models<a class="anchor" aria-label="anchor" href="#ranking-models"></a></h3>
 <p>When <code>rank = TRUE</code>, a new column <code>Performance_Score</code> is returned.
 This score ranges from 0\<!-- % to 100\\%, higher values indicating better model -->
 performance. Note that all score value do not necessarily sum up to 100\<!-- %. -->
@@ -122,32 +123,33 @@ computed for each model. In case where an index can't be calculated for a
 specific model type, this model gets an <code>NA</code> value. All indices that
 have any <code>NA</code>s are excluded from calculating the performance score.
 <br><br>
-There is a <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method for <code>compare_performance()</code>,
+There is a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method for <code>compare_performance()</code>,
 which creates a "spiderweb" plot, where the different indices are
 normalized and larger values indicate better model performance.
 Hence, points closer to the center indicate worse fit indices
-(see <a href="https://easystats.github.io/see/articles/performance.html">online-documentation</a>
+(see <a href="https://easystats.github.io/see/articles/performance.html" class="external-link">online-documentation</a>
 for more details).</p>
 </div>
 
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p>There is also a <a href="https://easystats.github.io/see/articles/performance.html"><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method</a> implemented in the <a href="https://easystats.github.io/see/"><span class="pkg">see</span>-package</a>.</p>
+    <p>There is also a <a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a> implemented in the <a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
     </div>
     <div id="references">
     <h2>References</h2>
     <p>Burnham, K. P., &amp; Anderson, D. R. (2002).
 <em>Model selection and multimodel inference: A practical information-theoretic approach</em> (2nd ed.).
-Springer-Verlag. doi: <a href="https://doi.org/10.1007/b97636">10.1007/b97636</a></p>
+Springer-Verlag. doi: <a href="https://doi.org/10.1007/b97636" class="external-link">10.1007/b97636</a></p>
+    </div>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">lm1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">compare_performance</span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Comparison of Model Performance Indices</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -165,10 +167,10 @@ Springer-Verlag. doi: <a href="https://doi.org/10.1007/b97636">10.1007/b97636</a
 <span class="r-out co"><span class="r-pr">#&gt;</span> lm3  |    lm | 0.840 |     0.835 | 0.330 | 0.336 |       0.434 |       0.036 |            80.05%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> lm1  |    lm | 0.619 |     0.614 | 0.510 | 0.515 |     &lt; 0.001 |     &lt; 0.001 |             0.00%</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">compare_performance</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>When comparing models, please note that probably not all models were fit from</span>

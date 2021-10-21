@@ -45,7 +45,7 @@ model family, consider this function as somewhat experimental."><meta property="
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -60,7 +60,7 @@ model family, consider this function as somewhat experimental."><meta property="
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Classify the distribution of a model-family using machine learning</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_distribution.R"><code>R/check_distribution.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_distribution.R" class="external-link"><code>R/check_distribution.R</code></a></small>
     <div class="hidden name"><code>check_distribution.Rd</code></div>
     </div>
 
@@ -77,10 +77,11 @@ model family, consider this function as somewhat experimental.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>Typically, a model (that should response to <code><a href="https://rdrr.io/r/stats/residuals.html">residuals()</a></code>).
+      <td><p>Typically, a model (that should response to <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>).
 May also be a numeric vector.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="details">
     <h2>Details</h2>
     <p>This function uses an internal random forest model to classify the
@@ -96,7 +97,7 @@ Note the similarity between certain distributions according to shape, skewness,
 etc. Thus, the predicted distribution may not be perfectly representing the
 distributional family of the underlying fitted model, or the response value.
 <br><br>
-There is a <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> method, which shows the probabilities of all predicted
+There is a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method, which shows the probabilities of all predicted
 distributions, however, only if the probability is greater than zero.</p>
     </div>
     <div id="note">
@@ -106,39 +107,22 @@ releases. The final decision on the model-family should also be based on
 theoretical aspects and other information about the data and the model.
 <br><br>
 There is also a
-<a href="https://easystats.github.io/see/articles/performance.html"><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method</a>
+<a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
 implemented in the
-<a href="https://easystats.github.io/see/"><span class="pkg">see</span>-package</a>.</p>
+<a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
+    </div>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/parameters/">"parameters"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/">"see"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://patchwork.data-imaginist.com">"patchwork"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/parameters/" class="external-link">"parameters"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://patchwork.data-imaginist.com" class="external-link">"patchwork"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu">check_distribution</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">check_distribution</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">check_distribution</span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: parameters</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 methods overwritten by 'parameters':</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   method                           from      </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.double.parameters_kurtosis    datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.double.parameters_skewness    datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.double.parameters_smoothness  datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.numeric.parameters_kurtosis   datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.numeric.parameters_skewness   datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   as.numeric.parameters_smoothness datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   print.parameters_distribution    datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   print.parameters_kurtosis        datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   print.parameters_skewness        datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   summary.parameters_kurtosis      datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   summary.parameters_skewness      datawizard</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘parameters’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:performance’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     check_multimodal</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: patchwork</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 3 rows containing missing values (geom_segment).</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 3 rows containing missing values (geom_point).</span>

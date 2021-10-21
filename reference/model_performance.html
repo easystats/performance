@@ -49,7 +49,7 @@ Meta-analysis models
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -64,7 +64,7 @@ Meta-analysis models
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Model Performance</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/model_performance.R"><code>R/model_performance.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/model_performance.R" class="external-link"><code>R/model_performance.R</code></a></small>
     <div class="hidden name"><code>model_performance.Rd</code></div>
     </div>
 
@@ -91,6 +91,7 @@ Meta-analysis models
 different classes).</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
@@ -99,10 +100,11 @@ different classes).</p></td>
     <h2>See also</h2>
     <div class="dont-index"><p><code><a href="compare_performance.html">compare_performance()</a></code> to compare performance of many different models.</p></div>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">model_performance</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Indices of model performance</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -110,7 +112,7 @@ different classes).</p></td>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 156.010 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568</span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">model_performance</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Indices of model performance</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

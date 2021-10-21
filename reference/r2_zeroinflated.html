@@ -42,7 +42,7 @@ effects models."><meta property="og:image" content="https://easystats.github.io/
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ effects models."><meta property="og:image" content="https://easystats.github.io/
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>R2 for models with zero-inflation</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_zeroinflated.R"><code>R/r2_zeroinflated.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_zeroinflated.R" class="external-link"><code>R/r2_zeroinflated.R</code></a></small>
     <div class="hidden name"><code>r2_zeroinflated.Rd</code></div>
     </div>
 
@@ -66,7 +66,7 @@ effects models."><meta property="og:image" content="https://easystats.github.io/
 effects models.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">r2_zeroinflated</span><span class="op">(</span><span class="va">model</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"correlation"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">r2_zeroinflated</span><span class="op">(</span><span class="va">model</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"correlation"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 
     <div id="arguments">
     <h2>Arguments</h2>
@@ -77,6 +77,7 @@ effects models.</p>
 abbreviated.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>For the default-method, a list with the R2 and adjusted R2 values.
@@ -90,13 +91,14 @@ variance divided by the total variance. For <code>method = "correlation"</code>,
 R2 is a correlation-based measure, which is rather crude. It simply computes
 the squared correlation between the model's actual and predicted response.</p>
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
     <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="http://github.com/atahk/pscl">"pscl"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">bioChemists</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/zeroinfl.html">zeroinfl</a></span><span class="op">(</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="http://github.com/atahk/pscl" class="external-link">"pscl"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">bioChemists</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pscl/man/zeroinfl.html" class="external-link">zeroinfl</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="va">art</span> <span class="op">~</span> <span class="va">fem</span> <span class="op">+</span> <span class="va">mar</span> <span class="op">+</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">ment</span> <span class="op">|</span> <span class="va">kid5</span> <span class="op">+</span> <span class="va">phd</span>,</span>
 <span class="r-in">    data <span class="op">=</span> <span class="va">bioChemists</span></span>
 <span class="r-in">  <span class="op">)</span></span>

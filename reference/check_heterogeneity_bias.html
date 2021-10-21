@@ -43,7 +43,7 @@ between-effect."><meta property="og:image" content="https://easystats.github.io/
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -58,7 +58,7 @@ between-effect."><meta property="og:image" content="https://easystats.github.io/
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check model predictor for heterogeneity bias</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_heterogeneity_bias.R"><code>R/check_heterogeneity_bias.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_heterogeneity_bias.R" class="external-link"><code>R/check_heterogeneity_bias.R</code></a></small>
     <div class="hidden name"><code>check_heterogeneity_bias.Rd</code></div>
     </div>
 
@@ -84,18 +84,20 @@ indicates the group- or cluster-ID. If <code>x</code> is a model object, this
 argument will be ignored.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>For further details, read the vignette
-<a href="https://easystats.github.io/datawizard/articles/demean.html">https://easystats.github.io/datawizard/articles/demean.html</a> and also
-see documentation for <code><a href="https://easystats.github.io/datawizard/reference/demean.html">?datawizard::demean</a></code>.</p></div>
+<a href="https://easystats.github.io/datawizard/articles/demean.html" class="external-link">https://easystats.github.io/datawizard/articles/demean.html</a> and also
+see documentation for <code><a href="https://easystats.github.io/datawizard/reference/demean.html" class="external-link">?datawizard::demean</a></code>.</p></div>
+    </div>
     </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">iris</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># fake-ID</span></span>
-<span class="r-in"><span class="fu">check_heterogeneity_bias</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">iris</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># fake-ID</span></span>
+<span class="r-in"><span class="fu">check_heterogeneity_bias</span><span class="op">(</span><span class="va">iris</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, group <span class="op">=</span> <span class="st">"ID"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Possible heterogeneity bias due to following predictors: <span style="color: #BB0000;">Sepal.Length, Petal.Length</span></span>
 </code></pre></div>
     </div>

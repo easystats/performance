@@ -42,7 +42,7 @@ test for merMod-objects."><meta property="og:image" content="https://easystats.g
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -57,7 +57,7 @@ test for merMod-objects."><meta property="og:image" content="https://easystats.g
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convergence test for mixed effects models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_convergence.R"><code>R/check_convergence.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_convergence.R" class="external-link"><code>R/check_convergence.R</code></a></small>
     <div class="hidden name"><code>check_convergence.Rd</code></div>
     </div>
 
@@ -80,6 +80,7 @@ will be.</p></td>
       <td><p>Currently not used.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p><code>TRUE</code> if convergence is fine and <code>FALSE</code> if convergence
@@ -88,35 +89,35 @@ is suspicious. Additionally, the convergence value is returned as attribute.</p>
     <div id="details">
     <h2>Details</h2>
     
-<div id="convergence-and-log-likelihood">
-<h3>Convergence and log-likelihood</h3>
+<div class="section">
+<h3 id="convergence-and-log-likelihood">Convergence and log-likelihood<a class="anchor" aria-label="anchor" href="#convergence-and-log-likelihood"></a></h3>
 <p>Convergence problems typically arise when the model hasn't converged
 to a solution where the log-likelihood has a true maximum. This may result
 in unreliable and overly complex (or non-estimable) estimates and standard
 errors.</p>
 </div>
-<div id="inspect-model-convergence">
-<h3>Inspect model convergence</h3>
-<p><strong>lme4</strong> performs a convergence-check (see <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html">?lme4::convergence</a></code>),
-however, as as discussed <a href="https://github.com/lme4/lme4/issues/120">here</a>
+<div class="section">
+<h3 id="inspect-model-convergence">Inspect model convergence<a class="anchor" aria-label="anchor" href="#inspect-model-convergence"></a></h3>
+<p><strong>lme4</strong> performs a convergence-check (see <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code>),
+however, as as discussed <a href="https://github.com/lme4/lme4/issues/120" class="external-link">here</a>
 and suggested by one of the lme4-authors in
-<a href="https://github.com/lme4/lme4/issues/120#issuecomment-39920269">this comment</a>,
+<a href="https://github.com/lme4/lme4/issues/120#issuecomment-39920269" class="external-link">this comment</a>,
 this check can be too strict. <code>check_convergence()</code> thus provides an
 alternative convergence test for <code>merMod</code>-objects.</p>
 </div>
-<div id="resolving-convergence-issues">
-<h3>Resolving convergence issues</h3>
+<div class="section">
+<h3 id="resolving-convergence-issues">Resolving convergence issues<a class="anchor" aria-label="anchor" href="#resolving-convergence-issues"></a></h3>
 <p>Convergence issues are not easy to diagnose. The help page on
-<code><a href="https://rdrr.io/pkg/lme4/man/convergence.html">?lme4::convergence</a></code> provides most of the current advice about
+<code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code> provides most of the current advice about
 how to resolve convergence issues. Another clue might be large parameter
 values, e.g. estimates (on the scale of the linear predictor) larger than
 10 in (non-identity link) generalized linear model <em>might</em> indicate
-<a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/">complete separation</a>.
+<a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/" class="external-link">complete separation</a>.
 Complete separation can be addressed by regularization, e.g. penalized
 regression or Bayesian regression with appropriate priors on the fixed effects.</p>
 </div>
-<div id="convergence-versus-singularity">
-<h3>Convergence versus Singularity</h3>
+<div class="section">
+<h3 id="convergence-versus-singularity">Convergence versus Singularity<a class="anchor" aria-label="anchor" href="#convergence-versus-singularity"></a></h3>
 <p>Note the different meaning between singularity and convergence: singularity
 indicates an issue with the "true" best estimate, i.e. whether the maximum
 likelihood estimation for the variance-covariance matrix of the random effects
@@ -126,19 +127,20 @@ or not.</p>
 </div>
 
     </div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">cbpp</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">cbpp</span><span class="op">$</span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">cbpp</span><span class="op">$</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">cbpp</span><span class="op">$</span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cbpp</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html">glmer</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">incidence</span>, <span class="va">size</span> <span class="op">-</span> <span class="va">incidence</span><span class="op">)</span> <span class="op">~</span> <span class="va">period</span> <span class="op">+</span> <span class="va">x</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">x</span> <span class="op">|</span> <span class="va">herd</span><span class="op">)</span>,</span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span>
+<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">incidence</span>, <span class="va">size</span> <span class="op">-</span> <span class="va">incidence</span><span class="op">)</span> <span class="op">~</span> <span class="va">period</span> <span class="op">+</span> <span class="va">x</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">x</span> <span class="op">|</span> <span class="va">herd</span><span class="op">)</span>,</span>
 <span class="r-in">    data <span class="op">=</span> <span class="va">cbpp</span>,</span>
-<span class="r-in">    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in">    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="fu">check_convergence</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>

@@ -45,7 +45,7 @@ tolerance = 1/vif.)"><meta property="og:image" content="https://easystats.github
   <a href="../articles/r2.html">Explained Variance (R-Squared)</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/easystats/performance/">
+  <a href="https://github.com/easystats/performance/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -60,7 +60,7 @@ tolerance = 1/vif.)"><meta property="og:image" content="https://easystats.github
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check for multicollinearity of model terms</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_collinearity.R"><code>R/check_collinearity.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_collinearity.R" class="external-link"><code>R/check_collinearity.R</code></a></small>
     <div class="hidden name"><code>check_collinearity.Rd</code></div>
     </div>
 
@@ -82,7 +82,7 @@ multicollinearity by calculating the variance inflation factor (VIF).
 <span class="co"># S3 method for glmmTMB</span>
 <span class="fu">check_collinearity</span><span class="op">(</span>
   <span class="va">x</span>,
-  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"count"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,
+  component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"count"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -90,9 +90,9 @@ multicollinearity by calculating the variance inflation factor (VIF).
     <div id="arguments">
     <h2>Arguments</h2>
     <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A model object (that should at least respond to <code><a href="https://rdrr.io/r/stats/vcov.html">vcov()</a></code>,
-and if possible, also to <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> - however, it also should
-work without <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code>).</p></td>
+      <td><p>A model object (that should at least respond to <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>,
+and if possible, also to <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> - however, it also should
+work without <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code>).</p></td>
     </tr><tr><th>...</th>
       <td><p>Currently not used.</p></td>
     </tr><tr><th>verbose</th>
@@ -107,6 +107,7 @@ Following model-classes are currently supported: <code>hurdle</code>,
 <code>zeroinfl</code>, <code>zerocount</code>, <code>MixMod</code> and <code>glmmTMB</code>.</p></td>
     </tr></table></div>
 
+    <div id="ref-sections">
     <div id="value">
     <h2>Value</h2>
     <p>A data frame with three columns: The name of the model term, the
@@ -116,8 +117,8 @@ is increased due to possible correlation with other terms.</p>
     <div id="details">
     <h2>Details</h2>
     
-<div id="multicollinearity">
-<h3>Multicollinearity</h3>
+<div class="section">
+<h3 id="multicollinearity">Multicollinearity<a class="anchor" aria-label="anchor" href="#multicollinearity"></a></h3>
 <p>Multicollinearity should not be confused with a raw strong correlation
 between predictors. What matters is the association between one or more
 predictor variables, <em>conditional on the other variables in the
@@ -141,8 +142,8 @@ conditional associations - not correlations - that matter.”
 (<cite>McElreath 2020, p. 169</cite>)</p>
 </div>
 
-<div id="interpretation-of-the-variance-inflation-factor">
-<h3>Interpretation of the Variance Inflation Factor</h3>
+<div class="section">
+<h3 id="interpretation-of-the-variance-inflation-factor">Interpretation of the Variance Inflation Factor<a class="anchor" aria-label="anchor" href="#interpretation-of-the-variance-inflation-factor"></a></h3>
 <p>The variance inflation factor is a measure to analyze the magnitude of
 multicollinearity of model terms. A VIF less than 5 indicates a low
 correlation of that predictor with other predictors. A value between 5 and
@@ -153,8 +154,8 @@ much larger the standard error is due to the association with other
 predictors conditional on the remaining variables in the model.</p>
 </div>
 
-<div id="multicollinearity-and-interaction-terms">
-<h3>Multicollinearity and Interaction Terms</h3>
+<div class="section">
+<h3 id="multicollinearity-and-interaction-terms">Multicollinearity and Interaction Terms<a class="anchor" aria-label="anchor" href="#multicollinearity-and-interaction-terms"></a></h3>
 <p>If interaction terms are included in a model, high VIF values are expected.
 This portion of multicollinearity among the component terms of an
 interaction is also called "inessential ill-conditioning", which leads to
@@ -165,7 +166,7 @@ terms <cite>(Francoeur 2013)</cite>.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p>There is also a <a href="https://easystats.github.io/see/articles/performance.html"><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>-method</a> implemented in the <a href="https://easystats.github.io/see/"><span class="pkg">see</span>-package</a>.</p>
+    <p>There is also a <a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a> implemented in the <a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -179,12 +180,13 @@ Springer.</p></li>
 <li><p>McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <li><p>Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-<a href="https://janhove.github.io/analysis/2019/09/11/collinearity">webpage</a></p></li>
+<a href="https://janhove.github.io/analysis/2019/09/11/collinearity" class="external-link">webpage</a></p></li>
 </ul></div>
+    </div>
 
     <div id="examples">
     <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">check_collinearity</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for Multicollinearity</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -201,9 +203,9 @@ examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  disp 9.97         3.16      0.10</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># plot results</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">check_collinearity</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-plt"><img src="check_collinearity-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
