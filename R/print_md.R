@@ -1,6 +1,6 @@
 #' @rdname display.performance_model
 #' @export
-print_md.performance_model <- function(x, digits = 2, ...) {
+print_md.performance_model <- function(x, digits = 2, caption = "Indices of model performance", ...) {
   formatted_table <- format(
     x = x,
     digits = digits,
@@ -12,7 +12,7 @@ print_md.performance_model <- function(x, digits = 2, ...) {
     x = formatted_table,
     digits = digits,
     format = "markdown",
-    caption = "Indices of model performance",
+    caption = caption,
     align = "firstleft",
     ...
   )
@@ -20,8 +20,7 @@ print_md.performance_model <- function(x, digits = 2, ...) {
 
 
 #' @export
-print_md.compare_performance <- function(x, digits = 2, ...) {
-  table_caption <- "Comparison of Model Performance Indices"
+print_md.compare_performance <- function(x, digits = 2, caption = "Comparison of Model Performance Indices", ...) {
   formatted_table <- format(x = x, digits = digits, format = "markdown", ...)
 
   if ("Performance_Score" %in% colnames(x)) {
@@ -34,7 +33,7 @@ print_md.compare_performance <- function(x, digits = 2, ...) {
     x = formatted_table,
     digits = digits,
     format = "markdown",
-    caption = table_caption,
+    caption = caption,
     footer = footer,
     align = "firstleft"
   )
@@ -42,8 +41,7 @@ print_md.compare_performance <- function(x, digits = 2, ...) {
 
 
 #' @export
-print_html.compare_performance <- function(x, digits = 2, ...) {
-  table_caption <- "Comparison of Model Performance Indices"
+print_html.compare_performance <- function(x, digits = 2, caption = "Comparison of Model Performance Indices", ...) {
   formatted_table <- format(x = x, digits = digits, format = "html", ...)
 
   if ("Performance_Score" %in% colnames(x)) {
@@ -56,7 +54,7 @@ print_html.compare_performance <- function(x, digits = 2, ...) {
     x = formatted_table,
     digits = digits,
     format = "html",
-    caption = table_caption,
+    caption = caption,
     footer = footer,
     align = "firstleft"
   )
