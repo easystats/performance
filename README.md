@@ -28,6 +28,8 @@ zero-inflation, convergence or singularity.
 ## Installation
 
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
+[![performance status
+badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev)
 [![R
 check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 
@@ -46,8 +48,6 @@ library("performance")
 ```
 
 ## Citation
-
-<!-- TO DO: once accepted, replace psyarxiv doi with joss doi -->
 
 To cite performance in publications use:
 
