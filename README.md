@@ -1,9 +1,6 @@
 
 # performance <img src='man/figures/logo.png' align="right" height="139" />
 
-    ## Warning: package 'performance' was built under R version
-    ## 4.1.1
-
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03139/status.svg)](https://doi.org/10.21105/joss.03139)
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
