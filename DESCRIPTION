@@ -84,6 +84,7 @@ Suggests:
     gamm4,
     ggplot2,
     glmmTMB,
+    httr,
     ICS,
     ICSOutlier,
     ISLR,

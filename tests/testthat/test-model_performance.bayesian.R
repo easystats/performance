@@ -4,6 +4,7 @@ if (.runThisTest &&
   requiet("testthat") &&
   requiet("performance") &&
   requiet("rstanarm") &&
+  requiet("httr") &&
   requiet("brms")) {
   test_that("model_performance.stanreg", {
     set.seed(333)
