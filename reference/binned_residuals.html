@@ -56,7 +56,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Binned residuals for binomial logistic regression</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/binned_residuals.R" class="external-link"><code>R/binned_residuals.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/binned_residuals.R" class="external-link"><code>R/binned_residuals.R</code></a></small>
     <div class="hidden name"><code>binned_residuals.Rd</code></div>
     </div>
 
@@ -66,25 +66,24 @@
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">binned_residuals</span><span class="op">(</span><span class="va">model</span>, term <span class="op">=</span> <span class="cn">NULL</span>, n_bins <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>A <code>glm</code>-object with <em>binomial</em>-family.</p></td>
-    </tr><tr><th>term</th>
-      <td><p>Name of independent variable from <code>x</code>. If not <code>NULL</code>,
+    <dl><dt>model</dt>
+<dd><p>A <code>glm</code>-object with <em>binomial</em>-family.</p></dd>
+<dt>term</dt>
+<dd><p>Name of independent variable from <code>x</code>. If not <code>NULL</code>,
 average residuals for the categories of <code>term</code> are plotted; else,
 average residuals for the estimated probabilities of the response are
-plotted.</p></td>
-    </tr><tr><th>n_bins</th>
-      <td><p>Numeric, the number of bins to divide the data. If
+plotted.</p></dd>
+<dt>n_bins</dt>
+<dd><p>Numeric, the number of bins to divide the data. If
 <code>n_bins = NULL</code>, the square root of the number of observations is
-taken.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Further argument like <code>size</code> (for point-size) or
-<code>color</code> (for point-colors).</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+taken.</p></dd>
+<dt>...</dt>
+<dd><p>Further argument like <code>size</code> (for point-size) or
+<code>color</code> (for point-colors).</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame representing the data that is mapped in the accompanying

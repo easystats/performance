@@ -57,7 +57,7 @@ with binary outcome."><meta property="og:image" content="https://easystats.githu
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Percentage of Correct Predictions</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_pcp.R" class="external-link"><code>R/performance_pcp.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/performance_pcp.R" class="external-link"><code>R/performance_pcp.R</code></a></small>
     <div class="hidden name"><code>performance_pcp.Rd</code></div>
     </div>
 
@@ -68,20 +68,19 @@ with binary outcome.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">performance_pcp</span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, method <span class="op">=</span> <span class="st">"Herron"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>Model with binary outcome.</p></td>
-    </tr><tr><th>ci</th>
-      <td><p>The level of the confidence interval.</p></td>
-    </tr><tr><th>method</th>
-      <td><p>Name of the method to calculate the PCP (see 'Details').
-Default is <code>"Herron"</code>. May be abbreviated.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+    <dl><dt>model</dt>
+<dd><p>Model with binary outcome.</p></dd>
+<dt>ci</dt>
+<dd><p>The level of the confidence interval.</p></dd>
+<dt>method</dt>
+<dd><p>Name of the method to calculate the PCP (see 'Details').
+Default is <code>"Herron"</code>. May be abbreviated.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list with several elements: the percentage of correct predictions

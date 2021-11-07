@@ -57,7 +57,7 @@ over- or underfitting zeros in the outcome."><meta property="og:image" content="
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check for zero-inflation in count models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_zeroinflation.R" class="external-link"><code>R/check_zeroinflation.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_zeroinflation.R" class="external-link"><code>R/check_zeroinflation.R</code></a></small>
     <div class="hidden name"><code>check_zeroinflation.Rd</code></div>
     </div>
 
@@ -68,19 +68,18 @@ over- or underfitting zeros in the outcome.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_zeroinflation</span><span class="op">(</span><span class="va">x</span>, tolerance <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>Fitted model of class <code>merMod</code>, <code>glmmTMB</code>, <code>glm</code>,
-or <code>glm.nb</code> (package <span class="pkg">MASS</span>).</p></td>
-    </tr><tr><th>tolerance</th>
-      <td><p>The tolerance for the ratio of observed and predicted
+    <dl><dt>x</dt>
+<dd><p>Fitted model of class <code>merMod</code>, <code>glmmTMB</code>, <code>glm</code>,
+or <code>glm.nb</code> (package <span class="pkg">MASS</span>).</p></dd>
+<dt>tolerance</dt>
+<dd><p>The tolerance for the ratio of observed and predicted
 zeros to considered as over- or underfitting zeros. A ratio
 between 1 +/- <code>tolerance</code> is considered as OK, while a ratio
-beyond or below this threshold would indicate over- or underfitting.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+beyond or below this threshold would indicate over- or underfitting.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list with information about the amount of predicted and observed

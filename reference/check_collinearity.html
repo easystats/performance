@@ -60,7 +60,7 @@ tolerance = 1/vif.)"><meta property="og:image" content="https://easystats.github
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check for multicollinearity of model terms</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_collinearity.R" class="external-link"><code>R/check_collinearity.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_collinearity.R" class="external-link"><code>R/check_collinearity.R</code></a></small>
     <div class="hidden name"><code>check_collinearity.Rd</code></div>
     </div>
 
@@ -87,27 +87,26 @@ multicollinearity by calculating the variance inflation factor (VIF).
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A model object (that should at least respond to <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>,
+    <dl><dt>x</dt>
+<dd><p>A model object (that should at least respond to <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>,
 and if possible, also to <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> - however, it also should
-work without <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code>).</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle off warnings or messages.</p></td>
-    </tr><tr><th>component</th>
-      <td><p>For models with zero-inflation component, multicollinearity
+work without <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code>).</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle off warnings or messages.</p></dd>
+<dt>component</dt>
+<dd><p>For models with zero-inflation component, multicollinearity
 can be checked for the conditional model (count component,
 <code>component = "conditional"</code> or <code>component = "count"</code>),
 zero-inflation component (<code>component = "zero_inflated"</code> or
 <code>component = "zi"</code>) or both components (<code>component = "all"</code>).
 Following model-classes are currently supported: <code>hurdle</code>,
-<code>zeroinfl</code>, <code>zerocount</code>, <code>MixMod</code> and <code>glmmTMB</code>.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+<code>zeroinfl</code>, <code>zerocount</code>, <code>MixMod</code> and <code>glmmTMB</code>.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame with three columns: The name of the model term, the
@@ -207,7 +206,7 @@ examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">check_collinearity</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
-<span class="r-plt"><img src="check_collinearity-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="check_collinearity-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>

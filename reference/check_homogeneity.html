@@ -57,7 +57,7 @@ by independent variables in a model."><meta property="og:image" content="https:/
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check model for homogeneity of variances</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_homogeneity.R" class="external-link"><code>R/check_homogeneity.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_homogeneity.R" class="external-link"><code>R/check_homogeneity.R</code></a></small>
     <div class="hidden name"><code>check_homogeneity.Rd</code></div>
     </div>
 
@@ -71,23 +71,22 @@ by independent variables in a model.</p>
 <span class="co"># S3 method for afex_aov</span>
 <span class="fu">check_homogeneity</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"levene"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A linear model or an ANOVA object.</p></td>
-    </tr><tr><th>method</th>
-      <td><p>Name of the method (underlying test) that should be performed
+    <dl><dt>x</dt>
+<dd><p>A linear model or an ANOVA object.</p></dd>
+<dt>method</dt>
+<dd><p>Name of the method (underlying test) that should be performed
 to check the homogeneity of variances. May either be <code>"levene"</code> for
 Levene's Test for Homogeneity of Variance, <code>"bartlett"</code> for the
 Bartlett test (assuming normal distributed samples or groups),
 <code>"fligner"</code> for the Fligner-Killeen test (rank-based, non-parametric
 test), or <code>"auto"</code>. In the latter case, Bartlett test is used if the
-model response is normal distributed, else Fligner-Killeen test is used.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+model response is normal distributed, else Fligner-Killeen test is used.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/car/man/leveneTest.html" class="external-link">car::leveneTest()</a></code>.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>Invisibly returns the p-value of the test statistics. A p-value &lt;
@@ -113,7 +112,7 @@ model response is normal distributed, else Fligner-Killeen test is used.</p></td
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: There is not clear evidence for different variances across groups (Bartlett Test, p = 0.226).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt"><img src="check_homogeneity-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="check_homogeneity-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>

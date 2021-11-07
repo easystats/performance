@@ -57,7 +57,7 @@ for tests or item-scales of questionnaires."><meta property="og:image" content="
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Mean Inter-Item-Correlation</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/item_intercor.R" class="external-link"><code>R/item_intercor.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/item_intercor.R" class="external-link"><code>R/item_intercor.R</code></a></small>
     <div class="hidden name"><code>item_intercor.Rd</code></div>
     </div>
 
@@ -68,18 +68,17 @@ for tests or item-scales of questionnaires.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">item_intercor</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pearson"</span>, <span class="st">"spearman"</span>, <span class="st">"kendall"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A matrix as returned by the <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>-function,
-or a data frame with items (e.g. from a test or questionnaire).</p></td>
-    </tr><tr><th>method</th>
-      <td><p>Correlation computation method. May be one of
+    <dl><dt>x</dt>
+<dd><p>A matrix as returned by the <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>-function,
+or a data frame with items (e.g. from a test or questionnaire).</p></dd>
+<dt>method</dt>
+<dd><p>Correlation computation method. May be one of
 <code>"spearman"</code> (default), <code>"pearson"</code> or <code>"kendall"</code>.
-You may use initial letter only.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+You may use initial letter only.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>The mean inter-item-correlation value for <code>x</code>.</p>

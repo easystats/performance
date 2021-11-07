@@ -57,7 +57,7 @@ for tests or item-scales of questionnaires."><meta property="og:image" content="
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Reliability Test for Items or Scales</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/item_reliability.R" class="external-link"><code>R/item_reliability.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/item_reliability.R" class="external-link"><code>R/item_reliability.R</code></a></small>
     <div class="hidden name"><code>item_reliability.Rd</code></div>
     </div>
 
@@ -68,19 +68,18 @@ for tests or item-scales of questionnaires.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">item_reliability</span><span class="op">(</span><span class="va">x</span>, standardize <span class="op">=</span> <span class="cn">FALSE</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A matrix or a data frame.</p></td>
-    </tr><tr><th>standardize</th>
-      <td><p>Logical, if <code>TRUE</code>, the data frame's vectors will be
+    <dl><dt>x</dt>
+<dd><p>A matrix or a data frame.</p></dd>
+<dt>standardize</dt>
+<dd><p>Logical, if <code>TRUE</code>, the data frame's vectors will be
 standardized. Recommended when the variables have different measures /
-scales.</p></td>
-    </tr><tr><th>digits</th>
-      <td><p>Amount of digits for returned values.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+scales.</p></dd>
+<dt>digits</dt>
+<dd><p>Amount of digits for returned values.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame with the corrected item-total correlations (<em>item

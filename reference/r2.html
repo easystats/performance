@@ -58,7 +58,7 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned."><meta property="o
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute the model's R2</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2.R" class="external-link"><code>R/r2.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/r2.R" class="external-link"><code>R/r2.R</code></a></small>
     <div class="hidden name"><code>r2.Rd</code></div>
     </div>
 
@@ -76,33 +76,32 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
 <span class="co"># S3 method for merMod</span>
 <span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>A statistical model.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed down to the related r2-methods.</p></td>
-    </tr><tr><th>ci</th>
-      <td><p>Confidence Interval (CI) level. Default is <code>NULL</code>. Confidence
+    <dl><dt>model</dt>
+<dd><p>A statistical model.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed down to the related r2-methods.</p></dd>
+<dt>ci</dt>
+<dd><p>Confidence Interval (CI) level. Default is <code>NULL</code>. Confidence
 intervals for R2 can be calculated based on different methods, see
-<code>ci_method</code>.</p></td>
-    </tr><tr><th>ci_method</th>
-      <td><p>Method for constructing the R2 confidence interval.
+<code>ci_method</code>.</p></dd>
+<dt>ci_method</dt>
+<dd><p>Method for constructing the R2 confidence interval.
 Options are <code>"analytical"</code> for sampling-theory-based frequentist
 intervals and <code>"bootstrap"</code> for bootstrap intervals. Analytical intervals
-are not available for all models. For Bayesian models, <code><a href="r2_bayes.html">r2_bayes()</a></code> is used.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Logical. Should details about R2 and CI methods be given (<code>TRUE</code>) or not (<code>FALSE</code>)?</p></td>
-    </tr><tr><th>tolerance</th>
-      <td><p>Tolerance for singularity check of random effects, to decide
+are not available for all models. For Bayesian models, <code><a href="r2_bayes.html">r2_bayes()</a></code> is used.</p></dd>
+<dt>verbose</dt>
+<dd><p>Logical. Should details about R2 and CI methods be given (<code>TRUE</code>) or not (<code>FALSE</code>)?</p></dd>
+<dt>tolerance</dt>
+<dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
 or not. Indicates up to which value the convergence result is accepted. When
 <code><a href="r2_nakagawa.html">r2_nakagawa()</a></code> returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is <code>NA</code>),
-decrease the tolerance-level. See also <code><a href="check_singularity.html">check_singularity()</a></code>.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+decrease the tolerance-level. See also <code><a href="check_singularity.html">check_singularity()</a></code>.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>Returns a list containing values related to the most appropriate R2

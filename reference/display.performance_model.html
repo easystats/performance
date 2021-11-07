@@ -57,7 +57,7 @@ print_md() is a alias for display(format = "markdown").'><meta property="og:imag
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Print tables in different output formats</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/display.R" class="external-link"><code>R/display.R</code></a>, <a href="https://github.com/easystats/performance/blob/master/R/print_md.R" class="external-link"><code>R/print_md.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/display.R" class="external-link"><code>R/display.R</code></a>, <a href="https://github.com/easystats/performance/blob/HEAD/R/print_md.R" class="external-link"><code>R/print_md.R</code></a></small>
     <div class="hidden name"><code>display.performance_model.Rd</code></div>
     </div>
 
@@ -72,24 +72,23 @@ print_md() is a alias for display(format = "markdown").'><meta property="og:imag
 <span class="co"># S3 method for performance_model</span>
 <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">2</span>, caption <span class="op">=</span> <span class="st">"Indices of model performance"</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>object, x</th>
-      <td><p>An object returned by <code><a href="model_performance.html">model_performance()</a></code>
+    <dl><dt>object, x</dt>
+<dd><p>An object returned by <code><a href="model_performance.html">model_performance()</a></code>
 or <code><a href="compare_performance.html">compare_performance()</a></code>.
-or its summary.</p></td>
-    </tr><tr><th>format</th>
-      <td><p>String, indicating the output format. Currently, only
-<code>"markdown"</code> is supported.</p></td>
-    </tr><tr><th>digits</th>
-      <td><p>Number of decimal places.</p></td>
-    </tr><tr><th>caption</th>
-      <td><p>Table caption as string. If <code>NULL</code>, no table caption is printed.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+or its summary.</p></dd>
+<dt>format</dt>
+<dd><p>String, indicating the output format. Currently, only
+<code>"markdown"</code> is supported.</p></dd>
+<dt>digits</dt>
+<dd><p>Number of decimal places.</p></dd>
+<dt>caption</dt>
+<dd><p>Table caption as string. If <code>NULL</code>, no table caption is printed.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A character vector. If <code>format = "markdown"</code>, the return value

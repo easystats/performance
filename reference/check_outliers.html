@@ -65,7 +65,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Outliers detection (check for influential observations)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_outliers.R" class="external-link"><code>R/check_outliers.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_outliers.R" class="external-link"><code>R/check_outliers.R</code></a></small>
     <div class="hidden name"><code>check_outliers.Rd</code></div>
     </div>
 
@@ -93,33 +93,31 @@ for a description of the methods.</p>
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">check_outliers</span><span class="op">(</span><span class="va">x</span>, method <span class="op">=</span> <span class="st">"mahalanobis"</span>, threshold <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A model or a data.frame object.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>When <code>method = "ics"</code>, further arguments in <code>...</code> are
-passed down to <code><a href="https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html" class="external-link">ICSOutlier::ics.outlier()</a></code>.</p></td>
-    </tr><tr><th>method</th>
-      <td><p>The outlier detection method(s). Can be "all" or some of
+    <dl><dt>x</dt>
+<dd><p>A model or a data.frame object.</p></dd>
+<dt>...</dt>
+<dd><p>When <code>method = "ics"</code>, further arguments in <code>...</code> are
+passed down to <code><a href="https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html" class="external-link">ICSOutlier::ics.outlier()</a></code>.</p></dd>
+<dt>method</dt>
+<dd><p>The outlier detection method(s). Can be "all" or some of
 c("cook", "pareto", "zscore", "zscore_robust", "iqr", "eti", "hdi", "bci",
-"mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").</p></td>
-    </tr><tr><th>threshold</th>
-      <td><p>A list containing the threshold values for each method (e.g.
+"mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").</p></dd>
+<dt>threshold</dt>
+<dd><p>A list containing the threshold values for each method (e.g.
 <code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is
 considered as outlier. If <code>NULL</code>, default values will be used (see
 'Details'). If a numeric value is given, it will be used as the threshold
-for any of the method run.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+for any of the method run.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A logical vector of the detected outliers with a nice printing
 method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
-considered as outlier can be recovered with the <code>as.data.frame</code>
-function.</p>
+considered as outlier can be recovered with the <code>as.data.frame</code>function.</p>
     </div>
     <div id="details">
     <h2>Details</h2>

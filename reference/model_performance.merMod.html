@@ -56,7 +56,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Performance of Mixed Models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/model_performance.mixed.R" class="external-link"><code>R/model_performance.mixed.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/model_performance.mixed.R" class="external-link"><code>R/model_performance.mixed.R</code></a></small>
     <div class="hidden name"><code>model_performance.merMod.Rd</code></div>
     </div>
 
@@ -67,21 +67,20 @@
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for merMod</span>
 <span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span>, metrics <span class="op">=</span> <span class="st">"all"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>A mixed effects model.</p></td>
-    </tr><tr><th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
+    <dl><dt>model</dt>
+<dd><p>A mixed effects model.</p></dd>
+<dt>metrics</dt>
+<dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
 metrics to be computed (some of <code>c("AIC", "AICc", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")</code>). <code>"common"</code> will compute AIC,
-BIC, R2, ICC and RMSE.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+BIC, R2, ICC and RMSE.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame (with one row) and one column per "index" (see

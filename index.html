@@ -96,6 +96,8 @@
 <div class="section level1">
 <div class="page-header"><h1 id="performance-">performance <img src="reference/figures/logo.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#performance-"></a>
 </h1></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">## Warning: package 'performance' was built under R version</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">## 4.1.1</span></span></code></pre></div>
 
 <p><strong><em>Test if your model is a good model!</em></strong></p>
 <p>A crucial aspect when building regression models is to evaluate the quality of modelfit. It is important to investigate how well models fit to the data and which fit indices to report. Functions to create diagnostic plots or to compute fit measures do exist, however, mostly spread over different packages. There is no unique and consistent approach to assess the model quality for different kind of models.</p>
@@ -130,7 +132,7 @@
 </tbody>
 </table>
 <p>Once you have downloaded the package, you can then load it using:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/performance/">"performance"</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
@@ -138,7 +140,7 @@
 </h2>
 <!-- TO DO: once accepted, replace psyarxiv doi with joss doi -->
 <p>To cite performance in publications use:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"performance"</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   Lüdecke et al., (2021). performance: An R Package</span>
@@ -178,7 +180,7 @@
 </h4>
 <p><strong>performance</strong> has a generic <code><a href="reference/r2.html">r2()</a></code> function, which computes the r-squared for many different models, including mixed effects and Bayesian regression models.</p>
 <p><code><a href="reference/r2.html">r2()</a></code> returns a list containing values related to the “most appropriate” r-squared for the given model.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 <span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; # R2 for Linear Regression</span>
@@ -198,7 +200,7 @@
 <p>The different R-squared measures can also be accessed directly via functions like <code><a href="reference/r2_bayes.html">r2_bayes()</a></code>, <code><a href="reference/r2_coxsnell.html">r2_coxsnell()</a></code> or <code><a href="reference/r2_nagelkerke.html">r2_nagelkerke()</a></code> (see a full list of functions <a href="https://easystats.github.io/performance/reference/index.html#section-r-functions">here</a>).</p>
 <p>For mixed models, the <em>conditional</em> and <em>marginal</em> R-squared are returned. The <em>marginal R-squared</em> considers only the variance of the fixed effects and indicates how much of the model’s variance is explained by the fixed effects part only. The <em>conditional R-squared</em> takes both the fixed and random effects into account and indicates how much of the model’s variance is explained by the “complete” model.</p>
 <p>For frequentist mixed models, <code><a href="reference/r2.html">r2()</a></code> (resp. <code><a href="reference/r2_nakagawa.html">r2_nakagawa()</a></code>) computes the <em>mean</em> random effect variances, thus <code><a href="reference/r2.html">r2()</a></code> is also appropriate for mixed models with more complex random effects structures, like random slopes or nested random effects (Johnson 2014; Nakagawa, Johnson, and Schielzeth 2017).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span>
 
@@ -223,7 +225,7 @@
 </h4>
 <p>Similar to R-squared, the ICC provides information on the explained variance and can be interpreted as “the proportion of the variance explained by the grouping structure in the population” (Hox 2010).</p>
 <p><code><a href="reference/icc.html">icc()</a></code> calculates the ICC for various mixed model objects, including <code>stanreg</code> models.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
 <span class="fu"><a href="reference/icc.html">icc</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
@@ -232,11 +234,11 @@
 <span class="co">#&gt;      Adjusted ICC: 0.722</span>
 <span class="co">#&gt;   Conditional ICC: 0.521</span></code></pre></div>
 <p>…and models of class <code>brmsfit</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms" class="external-link">brms</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/brms/man/brm.html" class="external-link">brm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">cyl</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">|</span> <span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/icc.html">icc</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; # Intraclass Correlation Coefficient</span>
 <span class="co">#&gt; </span>
@@ -251,7 +253,7 @@
 <h4 id="check-for-overdispersion">Check for overdispersion<a class="anchor" aria-label="anchor" href="#check-for-overdispersion"></a>
 </h4>
 <p>Overdispersion occurs when the observed variance in the data is higher than the expected variance from the model assumption (for Poisson, variance roughly equals the mean of an outcome). <code><a href="reference/check_overdispersion.html">check_overdispersion()</a></code> checks if a count model (including mixed models) is overdispersed or not.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/glmmTMB/glmmTMB" class="external-link">glmmTMB</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Salamanders</span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">Salamanders</span><span class="op">)</span>
@@ -268,7 +270,7 @@
 </h4>
 <p>Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount of observed zeros is larger than the amount of predicted zeros, so the model is <em>underfitting</em> zeros. In such cases, it is recommended to use negative binomial or zero-inflated models.</p>
 <p>Use <code><a href="reference/check_zeroinflation.html">check_zeroinflation()</a></code> to check if zero-inflation is present in the fitted model.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">Salamanders</span><span class="op">)</span>
 <span class="fu"><a href="reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">#&gt; # Check for zero-inflation</span>
@@ -282,7 +284,7 @@
 </h4>
 <p>A “singular” model fit means that some dimensions of the variance-covariance matrix have been estimated as exactly zero. This often occurs for mixed models with overly complex random effects structures.</p>
 <p><code><a href="reference/check_singularity.html">check_singularity()</a></code> checks mixed models (of class <code>lme</code>, <code>merMod</code>, <code>glmmTMB</code> or <code>MixMod</code>) for singularity, and returns <code>TRUE</code> if the model fit is singular.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sleepstudy</span><span class="op">)</span>
 
@@ -307,7 +309,7 @@
 </h4>
 <p>Linear models assume constant error variance (homoskedasticity).</p>
 <p>The <code><a href="reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code> functions assess if this assumption has been violated:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span><span class="op">)</span>
 
@@ -318,7 +320,7 @@
 <h4 id="comprehensive-visualization-of-model-checks">Comprehensive visualization of model checks<a class="anchor" aria-label="anchor" href="#comprehensive-visualization-of-model-checks"></a>
 </h4>
 <p><strong>performance</strong> provides many functions to check model assumptions, like <code><a href="reference/check_collinearity.html">check_collinearity()</a></code>, <code><a href="reference/check_normality.html">check_normality()</a></code> or <code><a href="reference/check_heteroscedasticity.html">check_heteroscedasticity()</a></code>. To get a comprehensive check, use <code><a href="reference/check_model.html">check_model()</a></code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># defining a model</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">am</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">vs</span> <span class="op">*</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 
@@ -334,7 +336,7 @@
 <div class="section level4">
 <h4 id="linear-model">Linear model<a class="anchor" aria-label="anchor" href="#linear-model"></a>
 </h4>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 <span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span>
 <span class="co">#&gt; # Indices of model performance</span>
@@ -346,7 +348,7 @@
 <div class="section level4">
 <h4 id="logistic-regression">Logistic regression<a class="anchor" aria-label="anchor" href="#logistic-regression"></a>
 </h4>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>
 <span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span>
 <span class="co">#&gt; # Indices of model performance</span>
@@ -358,7 +360,7 @@
 <div class="section level4">
 <h4 id="linear-mixed-model">Linear mixed model<a class="anchor" aria-label="anchor" href="#linear-mixed-model"></a>
 </h4>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
 <span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
 <span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m3</span><span class="op">)</span>
@@ -373,7 +375,7 @@
 <h3 id="models-comparison">Models comparison<a class="anchor" aria-label="anchor" href="#models-comparison"></a>
 </h3>
 <p>The <code><a href="reference/compare_performance.html">compare_performance()</a></code> function can be used to compare the performance and quality of several models (including models of different types).</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">20</span>, <span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">13</span>, <span class="fl">12</span><span class="op">)</span>
 <span class="va">outcome</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html" class="external-link">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">9</span><span class="op">)</span>
 <span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html" class="external-link">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>
@@ -382,32 +384,32 @@
 <span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span><span class="op">)</span>
 <span class="co">#&gt; # Comparison of Model Performance Indices</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Name |   Model |      AIC | AIC (weighted) |      BIC | BIC (weighted) |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span>
-<span class="co">#&gt; -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="co">#&gt; m1   |      lm |  156.010 |        &lt; 0.001 |  161.873 |        &lt; 0.001 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                </span>
-<span class="co">#&gt; m2   |     glm |   31.298 |          1.000 |   35.695 |          1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                </span>
-<span class="co">#&gt; m3   | lmerMod | 1755.628 |        &lt; 0.001 | 1774.786 |        &lt; 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                </span>
-<span class="co">#&gt; m4   |     glm |   56.761 |        &lt; 0.001 |   57.747 |        &lt; 0.001 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657</span></code></pre></div>
+<span class="co">#&gt; Name |   Model |      AIC | AIC weights |      BIC | BIC weights |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span>
+<span class="co">#&gt; -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; m1   |      lm |  156.010 |     &lt; 0.001 |  161.873 |     &lt; 0.001 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                </span>
+<span class="co">#&gt; m2   |     glm |   31.298 |       1.000 |   35.695 |       1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                </span>
+<span class="co">#&gt; m3   | lmerMod | 1755.628 |     &lt; 0.001 | 1774.786 |     &lt; 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                </span>
+<span class="co">#&gt; m4   |     glm |   56.761 |     &lt; 0.001 |   57.747 |     &lt; 0.001 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657</span></code></pre></div>
 <div class="section level4">
 <h4 id="general-index-of-model-performance">General index of model performance<a class="anchor" aria-label="anchor" href="#general-index-of-model-performance"></a>
 </h4>
 <p>One can also easily compute and a <a href="https://easystats.github.io/performance/reference/compare_performance.html#details"><strong>composite index</strong></a> of model performance and sort the models from the best one to the worse.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; # Comparison of Model Performance Indices</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Name |   Model |   RMSE |  Sigma | AIC (weighted) | BIC (weighted) | Performance-Score</span>
-<span class="co">#&gt; --------------------------------------------------------------------------------------</span>
-<span class="co">#&gt; m2   |     glm |  0.359 |  0.934 |          1.000 |          1.000 |           100.00%</span>
-<span class="co">#&gt; m4   |     glm |  3.043 |  1.132 |        &lt; 0.001 |        &lt; 0.001 |            46.89%</span>
-<span class="co">#&gt; m1   |      lm |  2.444 |  2.568 |        &lt; 0.001 |        &lt; 0.001 |            46.09%</span>
-<span class="co">#&gt; m3   | lmerMod | 23.438 | 25.592 |        &lt; 0.001 |        &lt; 0.001 |             0.00%</span></code></pre></div>
+<span class="co">#&gt; Name |   Model |   RMSE |  Sigma | AIC weights | BIC weights | Performance-Score</span>
+<span class="co">#&gt; --------------------------------------------------------------------------------</span>
+<span class="co">#&gt; m2   |     glm |  0.359 |  0.934 |       1.000 |       1.000 |           100.00%</span>
+<span class="co">#&gt; m4   |     glm |  3.043 |  1.132 |     &lt; 0.001 |     &lt; 0.001 |            46.89%</span>
+<span class="co">#&gt; m1   |      lm |  2.444 |  2.568 |     &lt; 0.001 |     &lt; 0.001 |            46.09%</span>
+<span class="co">#&gt; m3   | lmerMod | 23.438 | 25.592 |     &lt; 0.001 |     &lt; 0.001 |             0.00%</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="visualisation-of-indices-of-models-performance">Visualisation of indices of models’ performance<a class="anchor" aria-label="anchor" href="#visualisation-of-indices-of-models-performance"></a>
 </h4>
 <p>Finally, we provide convenient visualisation (the <code>see</code> package must be installed).</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-20-1.png" width="100%"></p>
 </div>
@@ -416,7 +418,7 @@
 <h3 id="testing-models">Testing models<a class="anchor" aria-label="anchor" href="#testing-models"></a>
 </h3>
 <p><code><a href="reference/test_performance.html">test_performance()</a></code> (and <code>test_bf</code>, its Bayesian sister) carries out the most relevant and appropriate tests based on the input (for instance, whether the models are nested or not).</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
 
@@ -484,12 +486,9 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=performance" class="external-link">https://​cloud.r-project.org/​package=performance</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/easystats/performance/" class="external-link">https://​github.com/​easystats/​performance/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/easystats/performance/issues" class="external-link">https://​github.com/​easystats/​performance/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=performance" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/easystats/performance/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/easystats/performance/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -529,7 +528,7 @@
 <li>Philip Waggoner <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0002-7825-7573" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>
 <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a> <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-9560-6336" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">More on authors...</a></li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
@@ -539,6 +538,7 @@
 <li><a href="https://doi.org/10.21105/joss.03139" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.03139/status.svg" alt="DOI"></a></li>
 <li><a href="https://cran.r-project.org/package=performance" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/performance" alt="downloads"></a></li>
 <li><a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/performance" alt="total"></a></li>
+<li><a href="https://CRAN.R-project.org/package=performance" class="external-link"><img src="https://tinyverse.netlify.com/badge/performance" alt="status"></a></li>
 </ul>
 </div>
 

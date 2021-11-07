@@ -59,7 +59,7 @@ The test_performance() function runs the most relevant and appropriate tests bas
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Test if Models are Different</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/test_bf.R" class="external-link"><code>R/test_bf.R</code></a>, <a href="https://github.com/easystats/performance/blob/master/R/test_likelihoodratio.R" class="external-link"><code>R/test_likelihoodratio.R</code></a>, <a href="https://github.com/easystats/performance/blob/master/R/test_performance.R" class="external-link"><code>R/test_performance.R</code></a>, and 2 more</small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/test_bf.R" class="external-link"><code>R/test_bf.R</code></a>, <a href="https://github.com/easystats/performance/blob/HEAD/R/test_likelihoodratio.R" class="external-link"><code>R/test_likelihoodratio.R</code></a>, <a href="https://github.com/easystats/performance/blob/HEAD/R/test_performance.R" class="external-link"><code>R/test_performance.R</code></a>, and 2 more</small>
     <div class="hidden name"><code>test_performance.Rd</code></div>
     </div>
 
@@ -87,17 +87,18 @@ The <code>test_performance()</code> function runs the most relevant and appropri
 
 <span class="fu">test_wald</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>...</th>
-      <td><p>Multiple model objects.</p></td>
-    </tr><tr><th>text_length</th>
-      <td><p>Numeric, length (number of chars) of output lines.
+    <dl><dt>...</dt>
+<dd><p>Multiple model objects.</p></dd>
+<dt>text_length</dt>
+<dd><p>Numeric, length (number of chars) of output lines.
 <code>test_bf()</code> describes models by their formulas, which can lead to
 overly long lines in the output. <code>text_length</code> fixes the length of
-lines to a specified limit.</p></td>
-    </tr><tr><th>estimator</th>
-      <td><p>Applied when comparing regression models using
+lines to a specified limit.</p></dd>
+<dt>estimator</dt>
+<dd><p>Applied when comparing regression models using
 <code>test_likelihoodratio()</code>. Corresponds to the different estimators for
 the standard deviation of the errors. If <code>estimator="OLS"</code> (default),
 then it uses the same method as <code>anova(..., test="LRT")</code> implemented
@@ -107,14 +108,12 @@ is for instance used by <code>lrtest(...)</code> in package <span class="pkg">lm
 scaling is done by n (the biased ML estimator) and the estimator under the
 null hypothesis. In moderately large samples, the differences should be
 negligible, but it is possible that OLS would perform slightly better in
-small samples with Gaussian errors.</p></td>
-    </tr><tr><th>reference</th>
-      <td><p>This only applies when models are non-nested, and determines
+small samples with Gaussian errors.</p></dd>
+<dt>reference</dt>
+<dd><p>This only applies when models are non-nested, and determines
 which model should be taken as a reference, against which all the other
-models are tested.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+models are tested.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame containing the relevant indices.</p>
@@ -346,7 +345,7 @@ the performance indices of many different models.</p></div>
 <span class="r-in">  <span class="op">}</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mgcv</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> This is mgcv 1.8-36. For overview type 'help("mgcv-package")'.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> This is mgcv 1.8-38. For overview type 'help("mgcv-package")'.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name |   Model |      BF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> m1   |      lm |        </span>

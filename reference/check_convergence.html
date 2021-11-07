@@ -57,7 +57,7 @@ test for merMod-objects."><meta property="og:image" content="https://easystats.g
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convergence test for mixed effects models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_convergence.R" class="external-link"><code>R/check_convergence.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_convergence.R" class="external-link"><code>R/check_convergence.R</code></a></small>
     <div class="hidden name"><code>check_convergence.Rd</code></div>
     </div>
 
@@ -68,19 +68,18 @@ test for <code>merMod</code>-objects.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_convergence</span><span class="op">(</span><span class="va">x</span>, tolerance <span class="op">=</span> <span class="fl">0.001</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A <code>merMod</code>-object.</p></td>
-    </tr><tr><th>tolerance</th>
-      <td><p>Indicates up to which value the convergence result is
+    <dl><dt>x</dt>
+<dd><p>A <code>merMod</code>-object.</p></dd>
+<dt>tolerance</dt>
+<dd><p>Indicates up to which value the convergence result is
 accepted. The smaller <code>tolerance</code> is, the stricter the test
-will be.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+will be.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p><code>TRUE</code> if convergence is fine and <code>FALSE</code> if convergence

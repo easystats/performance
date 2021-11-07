@@ -63,7 +63,7 @@ models, the model is passed to bayesplot::pp_check()."><meta property="og:image"
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Posterior predictive checks</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/pp_check.R" class="external-link"><code>R/pp_check.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/pp_check.R" class="external-link"><code>R/pp_check.R</code></a></small>
     <div class="hidden name"><code>check_predictions.Rd</code></div>
     </div>
 
@@ -102,29 +102,28 @@ models, the model is passed to <code><a href="https://mc-stan.org/bayesplot/refe
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>object</th>
-      <td><p>A statistical model.</p></td>
-    </tr><tr><th>iterations</th>
-      <td><p>The number of draws to simulate/bootstrap.</p></td>
-    </tr><tr><th>check_range</th>
-      <td><p>Logical, if <code>TRUE</code>, includes a plot with the minimum
+    <dl><dt>object</dt>
+<dd><p>A statistical model.</p></dd>
+<dt>iterations</dt>
+<dd><p>The number of draws to simulate/bootstrap.</p></dd>
+<dt>check_range</dt>
+<dd><p>Logical, if <code>TRUE</code>, includes a plot with the minimum
 value of the original response against the minimum values of the replicated
 responses, and the same for the maximum value. This plot helps judging whether
 the variation in the original data is captured by the model or not
 (<cite>Gelman et al. 2020, pp.163</cite>). The minimum and maximum values of <code>y</code> should
-be inside the range of the related minimum and maximum values of <code>yrep</code>.</p></td>
-    </tr><tr><th>re_formula</th>
-      <td><p>Formula containing group-level effects (random effects) to
+be inside the range of the related minimum and maximum values of <code>yrep</code>.</p></dd>
+<dt>re_formula</dt>
+<dd><p>Formula containing group-level effects (random effects) to
 be considered in the simulated data. If <code>NULL</code> (default), condition
 on all random effects. If <code>NA</code> or <code>~0</code>, condition on no random
-effects. See <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code> in <strong>lme4</strong>.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Passed down to <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code>.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+effects. See <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code> in <strong>lme4</strong>.</p></dd>
+<dt>...</dt>
+<dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code>.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame of simulated responses and the original response vector.</p>
@@ -162,7 +161,7 @@ is loaded, <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanre
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="fu">check_predictions</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
-<span class="r-plt"><img src="check_predictions-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="check_predictions-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>

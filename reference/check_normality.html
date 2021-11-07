@@ -56,7 +56,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check model for (non-)normality of residuals.</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_normality.R" class="external-link"><code>R/check_normality.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_normality.R" class="external-link"><code>R/check_normality.R</code></a></small>
     <div class="hidden name"><code>check_normality.Rd</code></div>
     </div>
 
@@ -69,19 +69,18 @@
 <span class="co"># S3 method for merMod</span>
 <span class="fu">check_normality</span><span class="op">(</span><span class="va">x</span>, effects <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"random"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A model object.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr><tr><th>effects</th>
-      <td><p>Should normality for residuals (<code>"fixed"</code>) or random
+    <dl><dt>x</dt>
+<dd><p>A model object.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>effects</dt>
+<dd><p>Should normality for residuals (<code>"fixed"</code>) or random
 effects (<code>"random"</code>) be tested? Only applies to mixed-effects models.
-May be abbreviated.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+May be abbreviated.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>Invisibly returns the p-value of the test statistics. A p-value
@@ -119,7 +118,7 @@ implemented in the
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: residuals appear as normally distributed (p = 0.230).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-plt"><img src="check_normality-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="check_normality-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="co"># QQ-plot</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">check_normality</span><span class="op">(</span><span class="va">m</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"qq"</span><span class="op">)</span></span>

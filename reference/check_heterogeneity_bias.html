@@ -58,7 +58,7 @@ between-effect."><meta property="og:image" content="https://easystats.github.io/
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check model predictor for heterogeneity bias</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_heterogeneity_bias.R" class="external-link"><code>R/check_heterogeneity_bias.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_heterogeneity_bias.R" class="external-link"><code>R/check_heterogeneity_bias.R</code></a></small>
     <div class="hidden name"><code>check_heterogeneity_bias.Rd</code></div>
     </div>
 
@@ -70,21 +70,20 @@ between-effect.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">check_heterogeneity_bias</span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="cn">NULL</span>, group <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A data frame or a mixed model object.</p></td>
-    </tr><tr><th>select</th>
-      <td><p>Character vector (or formula) with names of variables to select
+    <dl><dt>x</dt>
+<dd><p>A data frame or a mixed model object.</p></dd>
+<dt>select</dt>
+<dd><p>Character vector (or formula) with names of variables to select
 that should be checked. If <code>x</code> is a mixed model object, this argument
-will be ignored.</p></td>
-    </tr><tr><th>group</th>
-      <td><p>Character vector (or formula) with the name of the variable that
+will be ignored.</p></dd>
+<dt>group</dt>
+<dd><p>Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID. If <code>x</code> is a model object, this
-argument will be ignored.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+argument will be ignored.</p></dd>
+</dl></div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>For further details, read the vignette

@@ -56,7 +56,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>LOO-adjusted R2</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_loo.R" class="external-link"><code>R/r2_loo.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/r2_loo.R" class="external-link"><code>R/r2_loo.R</code></a></small>
     <div class="hidden name"><code>r2_loo.Rd</code></div>
     </div>
 
@@ -74,30 +74,29 @@
 <span class="co"># S3 method for stanreg</span>
 <span class="fu">r2_loo_posterior</span><span class="op">(</span><span class="va">model</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>A Bayesian regression model (from <strong>brms</strong>,
-<strong>rstanarm</strong>, <strong>BayesFactor</strong>, etc).</p></td>
-    </tr><tr><th>robust</th>
-      <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
-calculate the central tendency of the variances.</p></td>
-    </tr><tr><th>ci</th>
-      <td><p>Value or vector of probability of the CI (between 0 and 1) to be
-estimated.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to <code><a href="r2_bayes.html">r2_posterior()</a></code>.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+    <dl><dt>model</dt>
+<dd><p>A Bayesian regression model (from <strong>brms</strong>,
+<strong>rstanarm</strong>, <strong>BayesFactor</strong>, etc).</p></dd>
+<dt>robust</dt>
+<dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
+calculate the central tendency of the variances.</p></dd>
+<dt>ci</dt>
+<dd><p>Value or vector of probability of the CI (between 0 and 1) to be
+estimated.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to <code><a href="r2_bayes.html">r2_posterior()</a></code>.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list with the Bayesian R2 value. For mixed models, a list with the
 Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
-and credible intervals for the R2 values are saved as attributes.</p>
-<p>A list with the LOO-adjusted R2 value. The standard errors
+and credible intervals for the R2 values are saved as attributes.
+A list with the LOO-adjusted R2 value. The standard errors
 and credible intervals for the R2 values are saved as attributes.</p>
     </div>
     <div id="details">

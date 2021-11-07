@@ -63,7 +63,7 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Intraclass Correlation Coefficient (ICC)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/icc.R" class="external-link"><code>R/icc.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/icc.R" class="external-link"><code>R/icc.R</code></a></small>
     <div class="hidden name"><code>icc.Rd</code></div>
     </div>
 
@@ -82,35 +82,34 @@ on the posterior predictive distribution (see 'Details').</p>
 
 <span class="fu">variance_decomposition</span><span class="op">(</span><span class="va">model</span>, re_formula <span class="op">=</span> <span class="cn">NULL</span>, robust <span class="op">=</span> <span class="cn">TRUE</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>A (Bayesian) mixed effects model.</p></td>
-    </tr><tr><th>by_group</th>
-      <td><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
+    <dl><dt>model</dt>
+<dd><p>A (Bayesian) mixed effects model.</p></dd>
+<dt>by_group</dt>
+<dd><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
 components for each random-effects level (if there are multiple levels).
-See 'Details'.</p></td>
-    </tr><tr><th>tolerance</th>
-      <td><p>Tolerance for singularity check of random effects, to decide
+See 'Details'.</p></dd>
+<dt>tolerance</dt>
+<dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
-stricter the test will be. See <code><a href="check_singularity.html">performance::check_singularity()</a></code>.</p></td>
-    </tr><tr><th>re_formula</th>
-      <td><p>Formula containing group-level effects to be considered in
+stricter the test will be. See <code><a href="check_singularity.html">performance::check_singularity()</a></code>.</p></dd>
+<dt>re_formula</dt>
+<dd><p>Formula containing group-level effects to be considered in
 the prediction. If <code>NULL</code> (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
 to calculate the variance decomposition for this group-level. See 'Details'
-and <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">?brms::posterior_predict</a></code>.</p></td>
-    </tr><tr><th>robust</th>
-      <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
-calculate the central tendency of the variances.</p></td>
-    </tr><tr><th>ci</th>
-      <td><p>Credible interval level.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">brms::posterior_predict()</a></code>.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+and <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">?brms::posterior_predict</a></code>.</p></dd>
+<dt>robust</dt>
+<dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
+calculate the central tendency of the variances.</p></dd>
+<dt>ci</dt>
+<dd><p>Credible interval level.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list with two values, the adjusted and conditional ICC. For

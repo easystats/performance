@@ -58,7 +58,7 @@ multicollinearity)."><meta property="og:image" content="https://easystats.github
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Visual check of model assumptions</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/check_model.R" class="external-link"><code>R/check_model.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_model.R" class="external-link"><code>R/check_model.R</code></a></small>
     <div class="hidden name"><code>check_model.Rd</code></div>
     </div>
 
@@ -86,43 +86,42 @@ multicollinearity).</p>
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A model object.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Currently not used.</p></td>
-    </tr><tr><th>dot_size, line_size</th>
-      <td><p>Size of line and dot-geoms.</p></td>
-    </tr><tr><th>panel</th>
-      <td><p>Logical, if <code>TRUE</code>, plots are arranged as panels; else,
-single plots for each diagnostic are returned.</p></td>
-    </tr><tr><th>check</th>
-      <td><p>Character vector, indicating which checks for should be performed
+    <dl><dt>x</dt>
+<dd><p>A model object.</p></dd>
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+<dt>dot_size, line_size</dt>
+<dd><p>Size of line and dot-geoms.</p></dd>
+<dt>panel</dt>
+<dd><p>Logical, if <code>TRUE</code>, plots are arranged as panels; else,
+single plots for each diagnostic are returned.</p></dd>
+<dt>check</dt>
+<dd><p>Character vector, indicating which checks for should be performed
 and plotted. May be one or more of
 <code>"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"</code>.
 <code>"reqq"</code> is a QQ-plot for random effects and only available for mixed
 models.
 <code>"ncv"</code> is an alias for <code>"linearity"</code>, and checks for non-constant
 variance, i.e. for heteroscedasticity, as well as the linear relationship.
-By default, all possible checks are performed and plotted.</p></td>
-    </tr><tr><th>alpha, dot_alpha</th>
-      <td><p>The alpha level of the confidence bands and dot-geoms.
-Scalar from 0 to 1.</p></td>
-    </tr><tr><th>colors</th>
-      <td><p>Character vector with color codes (hex-format). Must be of
+By default, all possible checks are performed and plotted.</p></dd>
+<dt>alpha, dot_alpha</dt>
+<dd><p>The alpha level of the confidence bands and dot-geoms.
+Scalar from 0 to 1.</p></dd>
+<dt>colors</dt>
+<dd><p>Character vector with color codes (hex-format). Must be of
 length 3. First color is usually used for reference lines, second color
-for dots, and third color for outliers or extreme values.</p></td>
-    </tr><tr><th>theme</th>
-      <td><p>String, indicating the name of the plot-theme. Must be in the
-format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</code>).</p></td>
-    </tr><tr><th>detrend</th>
-      <td><p>Should QQ/PP plots be detrended?</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+for dots, and third color for outliers or extreme values.</p></dd>
+<dt>theme</dt>
+<dd><p>String, indicating the name of the plot-theme. Must be in the
+format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</code>).</p></dd>
+<dt>detrend</dt>
+<dd><p>Should QQ/PP plots be detrended?</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>The data frame that is used for plotting.</p>

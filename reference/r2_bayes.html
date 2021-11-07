@@ -59,7 +59,7 @@ r2_posterior() returns a posterior sample of Bayesian R2 values."><meta property
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Bayesian R2</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/r2_bayes.R" class="external-link"><code>R/r2_bayes.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/r2_bayes.R" class="external-link"><code>R/r2_bayes.R</code></a></small>
     <div class="hidden name"><code>r2_bayes.Rd</code></div>
     </div>
 
@@ -83,30 +83,29 @@ only (marginal R2). While <code>r2_bayes()</code> returns a single R2 value,
 <span class="co"># S3 method for BFBayesFactor</span>
 <span class="fu">r2_posterior</span><span class="op">(</span><span class="va">model</span>, average <span class="op">=</span> <span class="cn">FALSE</span>, prior_odds <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>A Bayesian regression model (from <strong>brms</strong>,
-<strong>rstanarm</strong>, <strong>BayesFactor</strong>, etc).</p></td>
-    </tr><tr><th>robust</th>
-      <td><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
-calculate the central tendency of the variances.</p></td>
-    </tr><tr><th>ci</th>
-      <td><p>Value or vector of probability of the CI (between 0 and 1) to be
-estimated.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>Arguments passed to <code>r2_posterior()</code>.</p></td>
-    </tr><tr><th>average</th>
-      <td><p>Compute model-averaged index? See <code><a href="https://easystats.github.io/bayestestR/reference/weighted_posteriors.html" class="external-link">bayestestR::weighted_posteriors()</a></code>.</p></td>
-    </tr><tr><th>prior_odds</th>
-      <td><p>Optional vector of prior odds for the models compared to
+    <dl><dt>model</dt>
+<dd><p>A Bayesian regression model (from <strong>brms</strong>,
+<strong>rstanarm</strong>, <strong>BayesFactor</strong>, etc).</p></dd>
+<dt>robust</dt>
+<dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
+calculate the central tendency of the variances.</p></dd>
+<dt>ci</dt>
+<dd><p>Value or vector of probability of the CI (between 0 and 1) to be
+estimated.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+<dt>...</dt>
+<dd><p>Arguments passed to <code>r2_posterior()</code>.</p></dd>
+<dt>average</dt>
+<dd><p>Compute model-averaged index? See <code><a href="https://easystats.github.io/bayestestR/reference/weighted_posteriors.html" class="external-link">bayestestR::weighted_posteriors()</a></code>.</p></dd>
+<dt>prior_odds</dt>
+<dd><p>Optional vector of prior odds for the models compared to
 the first model (or the denominator, for <code>BFBayesFactor</code> objects). For
-<code>data.frame</code>s, this will be used as the basis of weighting.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+<code>data.frame</code>s, this will be used as the basis of weighting.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list with the Bayesian R2 value. For mixed models, a list with the

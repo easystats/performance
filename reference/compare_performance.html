@@ -58,7 +58,7 @@ indices across models."><meta property="og:image" content="https://easystats.git
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compare performance of different models</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/compare_performance.R" class="external-link"><code>R/compare_performance.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/compare_performance.R" class="external-link"><code>R/compare_performance.R</code></a></small>
     <div class="hidden name"><code>compare_performance.Rd</code></div>
     </div>
 
@@ -70,23 +70,22 @@ indices across models.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">compare_performance</span><span class="op">(</span><span class="va">...</span>, metrics <span class="op">=</span> <span class="st">"all"</span>, rank <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>...</th>
-      <td><p>Multiple model objects (also of different classes).</p></td>
-    </tr><tr><th>metrics</th>
-      <td><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
+    <dl><dt>...</dt>
+<dd><p>Multiple model objects (also of different classes).</p></dd>
+<dt>metrics</dt>
+<dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
 metrics to be computed. See related
 <code><a href="model_performance.html">documentation()</a></code> of object's class for
-details.</p></td>
-    </tr><tr><th>rank</th>
-      <td><p>Logical, if <code>TRUE</code>, models are ranked according to 'best'
-overall model performance. See 'Details'.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle off warnings.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+details.</p></dd>
+<dt>rank</dt>
+<dd><p>Logical, if <code>TRUE</code>, models are ranked according to 'best'
+overall model performance. See 'Details'.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame (with one row per model) and one column per "index" (see

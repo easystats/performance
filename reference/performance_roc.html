@@ -57,7 +57,7 @@ based on response and predictions of a binomial model."><meta property="og:image
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Simple ROC curve</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_roc.R" class="external-link"><code>R/performance_roc.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/performance_roc.R" class="external-link"><code>R/performance_roc.R</code></a></small>
     <div class="hidden name"><code>performance_roc.Rd</code></div>
     </div>
 
@@ -68,24 +68,23 @@ based on response and predictions of a binomial model.</p>
 
     <div class="ref-usage sourceCode"><pre class="sourceCode r"><code><span class="fu">performance_roc</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, <span class="va">predictions</span>, <span class="va">new_data</span><span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>x</th>
-      <td><p>A numeric vector, representing the outcome (0/1), or a model with
-binomial outcome.</p></td>
-    </tr><tr><th>...</th>
-      <td><p>One or more models with binomial outcome. In this case,
-<code>new_data</code> is ignored.</p></td>
-    </tr><tr><th>predictions</th>
-      <td><p>If <code>x</code> is numeric, a numeric vector of same length
-as <code>x</code>, representing the actual predicted values.</p></td>
-    </tr><tr><th>new_data</th>
-      <td><p>If <code>x</code> is a model, a data frame that is passed to
-<code><a href="https://wviechtb.github.io/metafor/reference/predict.rma.html" class="external-link">predict()</a></code> as <code>newdata</code>-argument. If <code>NULL</code>, the ROC for
-the full model is calculated.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+    <dl><dt>x</dt>
+<dd><p>A numeric vector, representing the outcome (0/1), or a model with
+binomial outcome.</p></dd>
+<dt>...</dt>
+<dd><p>One or more models with binomial outcome. In this case,
+<code>new_data</code> is ignored.</p></dd>
+<dt>predictions</dt>
+<dd><p>If <code>x</code> is numeric, a numeric vector of same length
+as <code>x</code>, representing the actual predicted values.</p></dd>
+<dt>new_data</dt>
+<dd><p>If <code>x</code> is a model, a data frame that is passed to
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> as <code>newdata</code>-argument. If <code>NULL</code>, the ROC for
+the full model is calculated.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A data frame with three columns, the x/y-coordinate pairs for the ROC
@@ -150,7 +149,7 @@ model name.</p>
 <span class="r-in"><span class="co"># if you have `see` package installed, you can also plot comparison of</span></span>
 <span class="r-in"><span class="co"># ROC curves for different models</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">performance_roc</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-plt"><img src="performance_roc-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="performance_roc-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>

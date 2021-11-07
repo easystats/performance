@@ -57,7 +57,7 @@ or logistic regression models."><meta property="og:image" content="https://easys
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Accuracy of predictions from model fit</h1>
-    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/master/R/performance_accuracy.R" class="external-link"><code>R/performance_accuracy.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/performance_accuracy.R" class="external-link"><code>R/performance_accuracy.R</code></a></small>
     <div class="hidden name"><code>performance_accuracy.Rd</code></div>
     </div>
 
@@ -74,24 +74,23 @@ or logistic regression models.</p>
   verbose <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
 
+    <div id="ref-sections">
     <div id="arguments">
     <h2>Arguments</h2>
-    <table class="ref-arguments"><colgroup><col class="name"><col class="desc"></colgroup><tr><th>model</th>
-      <td><p>A linear or logistic regression model. A mixed-effects model is
-also accepted.</p></td>
-    </tr><tr><th>method</th>
-      <td><p>Character string, indicating whether cross-validation
+    <dl><dt>model</dt>
+<dd><p>A linear or logistic regression model. A mixed-effects model is
+also accepted.</p></dd>
+<dt>method</dt>
+<dd><p>Character string, indicating whether cross-validation
 (<code>method = "cv"</code>) or bootstrapping (<code>method = "boot"</code>) is used to
-compute the accuracy values.</p></td>
-    </tr><tr><th>k</th>
-      <td><p>The number of folds for the k-fold cross-validation.</p></td>
-    </tr><tr><th>n</th>
-      <td><p>Number of bootstrap-samples.</p></td>
-    </tr><tr><th>verbose</th>
-      <td><p>Toggle warnings.</p></td>
-    </tr></table></div>
-
-    <div id="ref-sections">
+compute the accuracy values.</p></dd>
+<dt>k</dt>
+<dd><p>The number of folds for the k-fold cross-validation.</p></dd>
+<dt>n</dt>
+<dd><p>Number of bootstrap-samples.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
+</dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A list with three values: The <code>Accuracy</code> of the model
