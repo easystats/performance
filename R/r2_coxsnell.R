@@ -53,7 +53,7 @@ r2_coxsnell <- function(model, ...) {
     n <- suppressWarnings(insight::n_obs(model))
   } else {
     n <- attr(l_full, "nobs")
-    if (is.null(n)) n <- suppressWarnings(insight::n_obs(model))
+    if (is.null(n)) n <- suppressWarnings(insight::n_obs(model, disaggregate = TRUE))
   }
 
   r2_coxsnell <- as.vector(1 - exp(-G2 / n))
@@ -80,7 +80,7 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
     if (is.null(model$deviance)) {
       return(NULL)
     }
-    r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model)))
+    r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)))
     names(r2_coxsnell) <- "Cox & Snell's R2"
     r2_coxsnell
   }

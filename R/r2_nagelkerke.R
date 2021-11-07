@@ -35,7 +35,7 @@ r2_nagelkerke <- function(model, ...) {
     n <- insight::n_obs(model)
   } else {
     n <- attr(L.full, "nobs")
-    if (is.null(n)) n <- insight::n_obs(model)
+    if (is.null(n)) n <- insight::n_obs(model, disaggregate = TRUE)
   }
 
   r2_nagelkerke <- as.vector((1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n)))
@@ -63,7 +63,7 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
     if (is.na(r2cox) || is.null(r2cox)) {
       return(NULL)
     }
-    r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model)))
+    r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
     names(r2_nagelkerke) <- "Nagelkerke's R2"
     r2_nagelkerke
   }

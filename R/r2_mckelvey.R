@@ -44,7 +44,7 @@ r2_mckelvey.default <- function(model) {
 
 .r2_mckelvey <- function(model) {
   faminfo <- insight::model_info(model)
-  n <- insight::n_obs(model)
+  n <- insight::n_obs(model, disaggregate = TRUE)
 
   if (faminfo$is_binomial | faminfo$is_ordinal | faminfo$is_multinomial) {
     dist.variance <- switch(faminfo$link_function,
