@@ -142,6 +142,8 @@ performance_aic.betaor     <- performance_aic.logitor
 
 #' @export
 performance_aic.betamfx    <- performance_aic.logitor
+
+#' @export
 performance_aic.poissonirr <- performance_aic.logitor
 
 #' @export
