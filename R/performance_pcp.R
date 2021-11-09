@@ -37,14 +37,13 @@
 #'   better fit than the null-model (in such cases, p < 0.05).
 #'
 #'
-#' @references \itemize{
-#'   \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
+#' @references
+#' - Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
 #'   Variable Models. Political Analysis, 8, 83–98.
 #'
-#'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#' - Gelman, A., & Hill, J. (2007). Data analysis using regression and
 #'   multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'   Press, 99.
-#' }
 #'
 #' @examples
 #' data(mtcars)

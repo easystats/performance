@@ -63,21 +63,22 @@
   integrals <- mapply(function(i, j, ...) {
     dots <- list(...)
     stats::integrate(.dRsq,
-                     i, j,
-                     R2_pop = dots$R2_pop,
-                     R2_obs = dots$R2_obs,
-                     p = dots$p,
-                     nobs = dots$nobs)
-    },
-    seq(0, 2, by = .25) * nobs,
-    c(seq(.25, 2, by = .25), Inf) * nobs,
-    MoreArgs = list(
-      R2_pop = R2_pop,
-      R2_obs = R2_obs,
-      p = p,
-      nobs = nobs
-    ),
-    SIMPLIFY = TRUE
+      i, j,
+      R2_pop = dots$R2_pop,
+      R2_obs = dots$R2_obs,
+      p = dots$p,
+      nobs = dots$nobs
+    )
+  },
+  seq(0, 2, by = .25) * nobs,
+  c(seq(.25, 2, by = .25), Inf) * nobs,
+  MoreArgs = list(
+    R2_pop = R2_pop,
+    R2_obs = R2_obs,
+    p = p,
+    nobs = nobs
+  ),
+  SIMPLIFY = TRUE
   )
-  sum(unlist(integrals["value",])) - a1
+  sum(unlist(integrals["value", ])) - a1
 }

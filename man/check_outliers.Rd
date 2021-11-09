@@ -151,14 +151,14 @@ minus a coefficient times the MAD method (Leys et al., 2013).
 
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
-Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan \& Kettenring,
+Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan & Kettenring,
 1972). Requires the \pkg{bigutilsr} package. See the
 \code{bigutilsr::dist_ogk()} function.
 
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
 Mahalanobis Distance is not a robust way to determine outliers, as it uses
-the means and covariances of all the data – including the outliers – to
+the means and covariances of all the data - including the outliers - to
 determine individual difference scores. Minimum Covariance Determinant
 calculates the mean and covariance matrix based on the most central subset of
 the data (by default, 66\\%), before computing the Mahalanobis Distance. This
@@ -265,8 +265,8 @@ outliers_info$Outlier # Including the probability of being an outlier
 # And we can be more stringent in our outliers removal process
 filtered_data <- data[outliers_info$Outlier < 0.1, ]
 
-# We can run the function stratified by groups:
-if (require("dplyr")) {
+# We can run the function stratified by groups using `{dplyr}` package:
+if (require("poorman")) {
   iris \%>\%
     group_by(Species) \%>\%
     check_outliers()
@@ -305,24 +305,34 @@ if (require("ICS")) {
 }
 \references{
 \itemize{
-\item Archimbaud, A., Nordhausen, K., \& Ruiz-Gazen, A. (2018). ICS for multivariate outlier detection with application to quality control. Computational Statistics & Data Analysis, 128, 184–199. \doi{10.1016/j.csda.2018.06.011}
-
-\item Gnanadesikan, R., \& Kettenring, J. R. (1972). Robust estimates, residuals, and outlier detection with multiresponse data. Biometrics, 81-124.
-
-\item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An expository treatment of outliers and influential cases. Sociological Methods & Research, 13(4), 510-542.
-
-\item Cabana, E., Lillo, R. E., \& Laniado, H. (2019). Multivariate outlier detection based on a robust Mahalanobis distance with shrinkage estimators. arXiv preprint arXiv:1904.02596.
-
-\item Cook, R. D. (1977). Detection of influential observation in linear regression. Technometrics, 19(1), 15-18.
-
-\item Iglewicz, B., & Hoaglin, D. C. (1993). How to detect and handle outliers (Vol. 16). Asq Press.
-
-\item Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting multivariate outliers: Use a robust variant of Mahalanobis distance. Journal of Experimental Social Psychology, 74, 150-156.
-
-\item Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008, December). Isolation forest. In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422). IEEE.
-
-\item Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., \& Makowski, D. (2021). performance: An R package for assessment, comparison and testing of statistical models. Journal of Open Source Software, 6(60), 3139. \doi{10.21105/joss.03139}
-
-\item Rousseeuw, P. J., \& Van Zomeren, B. C. (1990). Unmasking multivariate outliers and leverage points. Journal of the American Statistical association, 85(411), 633-639.
+\item Archimbaud, A., Nordhausen, K., & Ruiz-Gazen, A. (2018). ICS for
+multivariate outlier detection with application to quality control.
+Computational Statistics & Data Analysis, 128, 184-199.
+\doi{10.1016/j.csda.2018.06.011}
+\item Gnanadesikan, R., & Kettenring, J. R. (1972). Robust estimates, residuals,
+and outlier detection with multiresponse data. Biometrics, 81-124.
+\item Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An
+expository treatment of outliers and influential cases. Sociological Methods
+& Research, 13(4), 510-542.
+\item Cabana, E., Lillo, R. E., & Laniado, H. (2019). Multivariate outlier
+detection based on a robust Mahalanobis distance with shrinkage estimators.
+arXiv preprint arXiv:1904.02596.
+\item Cook, R. D. (1977). Detection of influential observation in linear
+regression. Technometrics, 19(1), 15-18.
+\item Iglewicz, B., & Hoaglin, D. C. (1993). How to detect and handle outliers
+(Vol. 16). Asq Press.
+\item Leys, C., Klein, O., Dominicy, Y., & Ley, C. (2018). Detecting
+multivariate outliers: Use a robust variant of Mahalanobis distance. Journal
+of Experimental Social Psychology, 74, 150-156.
+\item Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008, December). Isolation forest.
+In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
+IEEE.
+\item Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D.
+(2021). performance: An R package for assessment, comparison and testing of
+statistical models. Journal of Open Source Software, 6(60), 3139.
+\doi{10.21105/joss.03139}
+\item Rousseeuw, P. J., & Van Zomeren, B. C. (1990). Unmasking multivariate
+outliers and leverage points. Journal of the American Statistical
+association, 85(411), 633-639.
 }
 }
