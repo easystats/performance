@@ -19,9 +19,10 @@ Numeric, the AIC or AICc value.
 }
 \description{
 Compute the AIC or the second-order Akaike's information criterion (AICc).
-\code{performance_aic()} is a small wrapper that returns the AIC. It is
-a generic function that also works for some models that don't have a AIC method
-(like Tweedie models). \code{performance_aicc()} returns the second-order (or "small sample") AIC that incorporates a correction for small sample sizes.
+\code{performance_aic()} is a small wrapper that returns the AIC. It is a generic
+function that also works for some models that don't have a AIC method (like
+Tweedie models). \code{performance_aicc()} returns the second-order (or "small
+sample") AIC that incorporates a correction for small sample sizes.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -30,7 +31,10 @@ performance_aicc(m)
 }
 \references{
 \itemize{
-\item Akaike, H. (1973) Information theory as an extension of the maximum likelihood principle. In: Second International Symposium on Information Theory, pp. 267–281. Petrov, B.N., Csaki, F., Eds, Akademiai Kiado, Budapest.
-\item Hurvich, C. M., Tsai, C.-L. (1991) Bias of the corrected AIC criterion for underfitted regression and time series models. Biometrika 78, 499–509.
+\item Akaike, H. (1973) Information theory as an extension of the maximum
+likelihood principle. In: Second International Symposium on Information
+Theory, pp. 267-281. Petrov, B.N., Csaki, F., Eds, Akademiai Kiado, Budapest.
+\item Hurvich, C. M., Tsai, C.-L. (1991) Bias of the corrected AIC criterion
+for underfitted regression and time series models. Biometrika 78, 499–509.
 }
 }

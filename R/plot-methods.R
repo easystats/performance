@@ -70,4 +70,3 @@ plot.check_model <- function(x, ...) {
   insight::check_if_installed("see", "for model diagnositic plots")
   NextMethod()
 }
-

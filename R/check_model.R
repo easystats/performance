@@ -147,17 +147,18 @@ check_model.stanreg <- function(x,
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
-              dot_size = dot_size,
-              line_size = line_size,
-              panel = panel,
-              check = check,
-              alpha = alpha,
-              dot_alpha = dot_alpha,
-              colors = colors,
-              theme = theme,
-              detrend = detrend,
-              verbose = verbose,
-              ...)
+    dot_size = dot_size,
+    line_size = line_size,
+    panel = panel,
+    check = check,
+    alpha = alpha,
+    dot_alpha = dot_alpha,
+    colors = colors,
+    theme = theme,
+    detrend = detrend,
+    verbose = verbose,
+    ...
+  )
 }
 
 

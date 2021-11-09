@@ -75,7 +75,7 @@
 #'   \itemize{
 #'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 #'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-#'   Clusters. Open Journal of Statistics, 03(06), 24–44.
+#'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
 #'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013).
 #'   An introduction to statistical learning: with applications in R. New York:

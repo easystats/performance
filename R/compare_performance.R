@@ -131,9 +131,9 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 
   if (any(c("AIC", "AICc", "BIC", "WAIC") %in% names(dfs))) {
-    dfs$AIC_wt  <- .ic_weight(dfs$AIC)
+    dfs$AIC_wt <- .ic_weight(dfs$AIC)
     dfs$AICc_wt <- .ic_weight(dfs$AICc)
-    dfs$BIC_wt  <- .ic_weight(dfs$BIC)
+    dfs$BIC_wt <- .ic_weight(dfs$BIC)
     dfs$WAIC_wt <- .ic_weight(dfs$WAIC)
   }
 
@@ -215,11 +215,11 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   x$p_LRT <- NULL
 
   # use weights instead of information criteria
-  x$AIC   <- NULL
-  x$AICc  <- NULL
-  x$BIC   <- NULL
+  x$AIC <- NULL
+  x$AICc <- NULL
+  x$BIC <- NULL
   x$LOOIC <- NULL
-  x$WAIC  <- NULL
+  x$WAIC <- NULL
 
   # remove extra columns from LOO criteria
   x$ELPD <- NULL
@@ -272,7 +272,9 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
 .ic_weight <- function(ic) {
   # ic should be in the deviance metric (-2 * loglik)
-  if (is.null(ic)) return(NULL)
+  if (is.null(ic)) {
+    return(NULL)
+  }
 
   diffs <- ic - min(ic)
   f <- exp(-0.5 * diffs)

@@ -56,10 +56,17 @@ models are tested.}
 A data frame containing the relevant indices.
 }
 \description{
-Testing whether models are "different" in terms of accuracy or explanatory power is a delicate and often complex
-procedure, with many limitations and prerequisites. Moreover, many tests exist, each coming with its own interpretation, and set of strengths and weaknesses.
+Testing whether models are "different" in terms of accuracy or explanatory
+power is a delicate and often complex procedure, with many limitations and
+prerequisites. Moreover, many tests exist, each coming with its own
+interpretation, and set of strengths and weaknesses.
 \cr \cr
-The \code{test_performance()} function runs the most relevant and appropriate tests based on the type of input (for instance, whether the models are \emph{nested} or not). However, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the \strong{details} section for more information regarding the different tests and their interpretation.
+The \code{test_performance()} function runs the most relevant and appropriate
+tests based on the type of input (for instance, whether the models are
+\emph{nested} or not). However, it still requires the user to understand what the
+tests are and what they do in order to prevent their misinterpretation. See
+the \strong{details} section for more information regarding the different tests
+and their interpretation.
 }
 \details{
 \subsection{Nested vs. Non-nested Models}{

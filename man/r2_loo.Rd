@@ -43,7 +43,7 @@ Compute LOO-adjusted R2.
 \details{
 \code{r2_loo()} returns an "adjusted" R2 value computed using a
 leave-one-out-adjusted posterior distribution. This is conceptually similar
-to an adjusted/unbiased R2 estiamte in classical regression modeling. See
+to an adjusted/unbiased R2 estimate in classical regression modeling. See
 \code{\link[=r2_bayes]{r2_bayes()}} for an "unadjusted" R2.
 \cr \cr
 Mixed models are not currently fully supported.

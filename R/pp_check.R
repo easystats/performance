@@ -54,19 +54,40 @@
 #'   check_predictions(model)
 #' }
 #' @export
-check_predictions <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
-  if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) && isFALSE(inherits(object, "BFBayesFactor"))) {
-    insight::check_if_installed("bayesplot", "to create posterior prediction plots for Stan models")
+check_predictions <- function(object,
+                              iterations = 50,
+                              check_range = FALSE,
+                              re_formula = NULL,
+                              ...) {
+  if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) &&
+    isFALSE(inherits(object, "BFBayesFactor"))) {
+    insight::check_if_installed(
+      "bayesplot",
+      "to create posterior prediction plots for Stan models"
+    )
     bayesplot::pp_check(object)
   } else if (isTRUE(inherits(object, "BFBayesFactor"))) {
-    insight::format_message(stop("Posterior preditive checks not yet supported for BayesFactor models", call. = FALSE))
+    insight::format_message(stop(
+      "Posterior preditive checks not yet supported for BayesFactor models",
+      call. = FALSE
+    ))
   } else {
-    pp_check.lm(object, iterations = iterations, check_range = check_range, re_formula = re_formula, ...)
+    pp_check.lm(
+      object,
+      iterations = iterations,
+      check_range = check_range,
+      re_formula = re_formula,
+      ...
+    )
   }
 }
 
 
-pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula = NULL, ...) {
+pp_check.lm <- function(object,
+                        iterations = 50,
+                        check_range = FALSE,
+                        re_formula = NULL,
+                        ...) {
   out <- tryCatch(
     {
       stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
@@ -111,6 +132,8 @@ pp_check.lm <- function(object, iterations = 50, check_range = FALSE, re_formula
 #'   S3method(bayesplot::pp_check, vlm)
 #'   S3method(bayesplot::pp_check, wbm)
 #' }
+
+# styler: off
 pp_check.glm       <-
   pp_check.glmmTMB <-
   pp_check.glm.nb  <-
@@ -124,6 +147,7 @@ pp_check.glm       <-
   pp_check.vlm     <-
   pp_check.wbm     <-
   pp_check.lm
+# styler: on
 
 #' @rdname check_predictions
 #' @export
@@ -150,7 +174,6 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
         insight::format_message("Warning: Minimum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
         "red"
       )
-
     }
   }
 
