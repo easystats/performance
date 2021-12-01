@@ -12,15 +12,6 @@ authors:
   Brenton M. Wiernik:
     href: https://wiernik.org/
 
-navbar:
-  structure:
-    right: [twitter, github]
-  components:
-    twitter:
-      icon: fa-twitter
-      href: http://twitter.com/easystats4u
-      aria-label: Twitter
-
 
 template:
   bootstrap: 5
@@ -129,6 +120,13 @@ reference:
 
 navbar:
   type: default
+  right:
+  - icon: fa-twitter
+    href: http://twitter.com/easystats4u
+    aria-label: Twitter
+  - icon: fa-github
+    href: https://github.com/easystats/bayestestR/
+    aria-label: GitHub
   left:
   - icon: fa-home fa-lg
     href: index.html
