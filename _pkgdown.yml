@@ -27,51 +27,16 @@ template:
 reference:
 - title: "Comprehensive Summaries"
   contents:
-  - check_model
-  - model_performance
-  - model_performance.lm
-  - model_performance.merMod
-  - model_performance.stanreg
-  - model_performance.lavaan
-  - model_performance.rma
-  - model_performance.ivreg
-  - model_performance.kmeans
+  - starts_with("model_performance")
 
-- title: "Check Model Assumptions or Properties"
+- title: "Check Model Assumptions or Data Properties"
   contents:
   - binned_residuals
-  - check_autocorrelation
-  - check_collinearity
-  - check_convergence
-  - check_distribution
-  - check_heteroscedasticity
-  - check_sphericity
-  - check_homogeneity
-  - check_normality
-  - check_outliers
-  - check_overdispersion
-  - check_predictions
-  - check_singularity
-  - check_zeroinflation
-
-- title: "Check Data Properties"
-  contents:
-  - check_heterogeneity_bias
-  - check_multimodal
+  - starts_with("check_")
 
 - title: "Check Model Performance or Quality"
   contents:
-  - performance_accuracy
-  - performance_aicc
-  - performance_hosmer
-  - performance_logloss
-  - performance_mae
-  - performance_mse
-  - performance_pcp
-  - performance_rmse
-  - performance_roc
-  - performance_rse
-  - performance_score
+  - starts_with("performance_")
   - icc
   - looic
 
@@ -79,35 +44,16 @@ reference:
   contents:
   - check_itemscale
   - cronbachs_alpha
-  - item_difficulty
-  - item_intercor
-  - item_reliability
-  - item_split_half
+  - starts_with("item_")
 
 - title: "Comparing and Testing Models"
   contents:
   - compare_performance
-  - test_performance
-  - test_likelihoodratio
-  - test_vuong
-  - test_wald
+  - starts_with("test_")
 
 - title: "R2 Functions"
   contents:
-  - r2
-  - r2_bayes
-  - r2_coxsnell
-  - r2_efron
-  - r2_kullback
-  - r2_loo
-  - r2_mcfadden
-  - r2_mckelvey
-  - r2_nagelkerke
-  - r2_nakagawa
-  - r2_somers
-  - r2_tjur
-  - r2_xu
-  - r2_zeroinflated
+  - starts_with("r2")
 
 - title: "Table Formatting"
   contents:
