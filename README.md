@@ -136,7 +136,11 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  cores = 4
+)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
@@ -255,12 +259,16 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
+model <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
 
 check_singularity(model)
 #> [1] TRUE
@@ -299,7 +307,7 @@ model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 check_model(model)
 ```
 
-<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" width="60%" />
 
 ### Model performance summaries
 
@@ -409,7 +417,8 @@ data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
-lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width +
+  Petal.Length + Petal.Width, data = iris)
 
 test_performance(lm1, lm2, lm3, lm4)
 #> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)

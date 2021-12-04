@@ -255,7 +255,7 @@ check_heteroscedasticity(model)
 `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To
 get a comprehensive check, use `check_model()`.
 
-```{r, fig.height=9, fig.width=7}
+```{r, fig.height=10, fig.width=8, out.width="60%"}
 # defining a model
 model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 
@@ -335,8 +335,8 @@ data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
-lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
-          Petal.Length + Petal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width +
+  Petal.Length + Petal.Width, data = iris)
 
 test_performance(lm1, lm2, lm3, lm4)
 
