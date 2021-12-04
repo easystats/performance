@@ -16,7 +16,8 @@ test_likelihoodratio <- function(..., estimator = "ML") {
 }
 
 
-# Should we deprecate this name? And print a warning not to use this name anymore and that we will remove it in future versions?
+# TODO: Should we deprecate this name? And print a warning not to use this name
+# anymore and that we will remove it in future versions?
 #' @rdname test_performance
 #' @export
 performance_lrt <- test_likelihoodratio
@@ -99,9 +100,16 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   insight::check_if_installed("lavaan")
 
   # Create data frame with info about model name and class
-  names_types <- data.frame(Model = names(objects), Type = sapply(objects, function(x) class(x)[1]), stringsAsFactors = FALSE)
+  names_types <- data.frame(
+    Model = names(objects),
+    Type = sapply(objects, function(x) class(x)[1]),
+    stringsAsFactors = FALSE
+  )
 
-  out <- as.data.frame(lavaan::lavTestLRT(..., test = "LRT", model.names = names(objects)), stringsAsFactors = FALSE)
+  out <- as.data.frame(
+    lavaan::lavTestLRT(..., test = "LRT", model.names = names(objects)),
+    stringsAsFactors = FALSE
+  )
 
   # Rename columns
   colnames(out)[names(out) == "Df"] <- "df"

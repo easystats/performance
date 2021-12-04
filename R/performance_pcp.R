@@ -68,6 +68,7 @@ performance_pcp <- function(model,
   }
 
   resp <- insight::get_response(model, verbose = verbose)
+
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
     if (verbose) insight::print_color("`performance_pcp()` only works for models with binary response values.\n", "red")
     return(NULL)

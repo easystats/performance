@@ -16,9 +16,10 @@
 #' generally comparable to those of OLS.
 #'
 #' @references
-#' \itemize{
-#'   \item Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of residual variation. Journal of the American Statistical Association, 73, 113-121.
-#' }
+#'
+#' - Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of
+#' residual variation. Journal of the American Statistical Association, 73,
+#' 113-121.
 #'
 #' @examples
 #' ## Dobson (1990) Page 93: Randomized Controlled Trial:

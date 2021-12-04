@@ -38,9 +38,10 @@
 #'   check_multimodal(m)
 #' }
 #' }
-#' @references \itemize{
-#'   \item Ameijeiras-Alonso, J., Crujeiras, R. M., \& Rodríguez-Casal, A. (2019). Mode testing, critical bandwidth and excess mass. Test, 28(3), 900-919.
-#' }
+#' @references
+#' - Ameijeiras-Alonso, J., Crujeiras, R. M., \& Rodríguez-Casal, A. (2019).
+#' Mode testing, critical bandwidth and excess mass. Test, 28(3), 900-919.
+#'
 #' @export
 check_multimodal <- function(x, ...) {
   UseMethod("check_multimodal")

@@ -335,8 +335,7 @@ data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
-lm4 <- lm(Sepal.Length ~ Species * Sepal.Width +
-  Petal.Length + Petal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
 
 test_performance(lm1, lm2, lm3, lm4)
 

@@ -13,10 +13,11 @@
 #'   For `method = "correlation"`, a named numeric vector with the
 #'   correlation-based R2 value.
 #'
-#' @details The default-method calculates an R2 value based on the residual
-#'   variance divided by the total variance. For `method = "correlation"`,
-#'   R2 is a correlation-based measure, which is rather crude. It simply computes
-#'   the squared correlation between the model's actual and predicted response.
+#' @details
+#' The default-method calculates an R2 value based on the residual variance
+#' divided by the total variance. For `method = "correlation"`, R2 is a
+#' correlation-based measure, which is rather crude. It simply computes the
+#' squared correlation between the model's actual and predicted response.
 #'
 #' @examples
 #' \donttest{

@@ -128,10 +128,6 @@ performance_aic.logitmfx   <- performance_aic.logitor
 performance_aic.probitmfx  <- performance_aic.logitor
 
 #' @export
-
-#' @export
-
-#' @export
 performance_aic.negbinirr  <- performance_aic.logitor
 
 #' @export
