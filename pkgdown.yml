@@ -4,7 +4,7 @@ pkgdown_sha: 953a87771f74e405f2e648750b1b74db1806770a
 articles:
   compare: compare.html
   r2: r2.html
-last_built: 2021-12-04T12:29Z
+last_built: 2021-12-04T13:33Z
 urls:
   reference: https://easystats.github.io/performance/reference
   article: https://easystats.github.io/performance/articles
