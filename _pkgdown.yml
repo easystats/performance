@@ -14,15 +14,8 @@ authors:
 
 
 template:
-  bootstrap: 5
-  bslib:
-    primary: "#0054AD"
-  opengraph:
-    image:
-      src: man/figures/card.png
-    twitter:
-      creator: "@easystats4u"
-      card: summary_large_image
+  params:
+    bootswatch: flatly
 
 reference:
 - title: "Comprehensive Summaries"
@@ -71,7 +64,7 @@ navbar:
     href: http://twitter.com/easystats4u
     aria-label: Twitter
   - icon: fa-github
-    href: https://github.com/easystats/bayestestR/
+    href: https://github.com/easystats/performance/
     aria-label: GitHub
   left:
   - icon: fa-home fa-lg
