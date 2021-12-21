@@ -51,10 +51,8 @@ To cite performance in publications use:
 ``` r
 citation("performance")
 #> 
-#>   Lüdecke et al., (2021). performance: An R Package
-#>   for Assessment, Comparison and Testing of
-#>   Statistical Models. Journal of Open Source
-#>   Software, 6(60), 3139.
+#>   Lüdecke et al., (2021). performance: An R Package for Assessment, Comparison and
+#>   Testing of Statistical Models. Journal of Open Source Software, 6(60), 3139.
 #>   https://doi.org/10.21105/joss.03139
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -136,11 +134,7 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(
-  Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  cores = 4
-)
+model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
@@ -259,16 +253,12 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
 
 check_singularity(model)
 #> [1] TRUE
