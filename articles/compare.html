@@ -101,17 +101,17 @@
 
     
     
-<div class="section level1">
-<h1 id="comparing-vs--testing">Comparing vs. Testing<a class="anchor" aria-label="anchor" href="#comparing-vs--testing"></a>
-</h1>
+<div class="section level2">
+<h2 id="comparing-vs--testing">Comparing vs. Testing<a class="anchor" aria-label="anchor" href="#comparing-vs--testing"></a>
+</h2>
 <p>Let’s imagine that we are interested in explaining the variability in the <code>Sepal.Length</code> using 3 different predictors. For that, we can build 3 linear models.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></code></pre></div>
-<div class="section level2">
-<h2 id="comparing-indices-of-model-performance">Comparing Indices of Model Performance<a class="anchor" aria-label="anchor" href="#comparing-indices-of-model-performance"></a>
-</h2>
+<div class="section level3">
+<h3 id="comparing-indices-of-model-performance">Comparing Indices of Model Performance<a class="anchor" aria-label="anchor" href="#comparing-indices-of-model-performance"></a>
+</h3>
 <p>The eponymous function from the package, <a href="https://easystats.github.io/performance/reference/model_performance.html"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span>
@@ -206,9 +206,9 @@
 <p><img src="compare_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 <p>For more, see: <a href="https://easystats.github.io/see/articles/performance.html" class="external-link uri">https://easystats.github.io/see/articles/performance.html</a></p>
 </div>
-<div class="section level2">
-<h2 id="testing-models">Testing Models<a class="anchor" aria-label="anchor" href="#testing-models"></a>
-</h2>
+<div class="section level3">
+<h3 id="testing-models">Testing Models<a class="anchor" aria-label="anchor" href="#testing-models"></a>
+</h3>
 <p>While <strong>comparing</strong> these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.</p>
 <p>This is one of the reason why <strong>tests</strong> are useful, as they facilitate decisions via (infamous) “significance” indices, like <em>p</em>-values (in frequentist framework) or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes Factors</a> (in Bayesian framework).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -258,9 +258,9 @@
 <p>However, these tests also have strong limitations and shortcomings, and cannot be used as the <strong>one criterion to rule them all</strong>!</p>
 <p>You can find more information on how these tests <a href="https://easystats.github.io/performance/reference/test_performance.html"><strong>here</strong></a>.</p>
 </div>
-<div class="section level2">
-<h2 id="experimenting">Experimenting<a class="anchor" aria-label="anchor" href="#experimenting"></a>
-</h2>
+<div class="section level3">
+<h3 id="experimenting">Experimenting<a class="anchor" aria-label="anchor" href="#experimenting"></a>
+</h3>
 <p>Although we have shown here examples only with simple linear models, we will highly encourage you to try these functions out with models of your choosing. For example, these functions work with mixed-effects regression models, Bayesian regression models, etc.</p>
 <p>To demonstrate this, we will run Bayesian versions of linear regression models we just compared:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -376,7 +376,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
       </footer>
