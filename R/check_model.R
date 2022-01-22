@@ -303,19 +303,19 @@ check_model.model_fit <- function(x,
     # this would increase the range of the scale too much
 
     if (.obj_has_name(d1, "(Intercept)")) {
-      d1 <- .remove_column(d1, "(Intercept)")
+      d1 <- datawizard::data_remove(d1, "(Intercept)")
     }
 
     if (.obj_has_name(d2, "(Intercept)")) {
-      d2 <- .remove_column(d2, "(Intercept)")
+      d2 <- datawizard::data_remove(d2, "(Intercept)")
     }
 
     if (.obj_has_name(d1, "sigma")) {
-      d1 <- .remove_column(d1, "sigma")
+      d1 <- datawizard::data_remove(d1, "sigma")
     }
 
     if (.obj_has_name(d2, "sigma")) {
-      d2 <- .remove_column(d2, "sigma")
+      d2 <- datawizard::data_remove(d2, "sigma")
     }
 
     d1 <- d1[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d1), perl = TRUE)]

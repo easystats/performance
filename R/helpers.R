@@ -116,13 +116,6 @@
 }
 
 
-# remove column
-.remove_column <- function(data, variables) {
-  data[, -which(colnames(data) %in% variables), drop = FALSE]
-}
-
-
-
 .remove_backticks_from_parameter_names <- function(x) {
   if (is.data.frame(x)) {
     if ("Parameter" %in% colnames(x)) {
