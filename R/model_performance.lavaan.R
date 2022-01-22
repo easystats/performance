@@ -6,7 +6,7 @@
 #' @param model A \pkg{lavaan} model.
 #' @param metrics Can be `"all"` or a character vector of metrics to be
 #'   computed (some of `c("Chi2", "Chi2_df", "p_Chi2", "Baseline",
-#'   "Baseline_df", "p_Baseline", "GFI", "AGFI", "NFI", "NNFI", "CFI", 
+#'   "Baseline_df", "p_Baseline", "GFI", "AGFI", "NFI", "NNFI", "CFI",
 #'   "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high", "p_RMSEA", "RMR", "SRMR",
 #'   "RFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC",
 #'   "BIC_adjusted")`).
