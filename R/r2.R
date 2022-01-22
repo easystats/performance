@@ -566,14 +566,14 @@ r2.fixest <- function(model, ...) {
 
   r2 <- fixest::r2(model)
 
-  out_normal <- .compact_list(list(
+  out_normal <- datawizard::compact_list(list(
     R2 = r2["r2"],
     R2_adjusted = r2["ar2"],
     R2_within = r2["wr2"],
     R2_within_adjusted = r2["war2"]
   ), remove_na = TRUE)
 
-  out_pseudo <- .compact_list(list(
+  out_pseudo <- datawizard::compact_list(list(
     R2 = r2["pr2"],
     R2_adjusted = r2["apr2"],
     R2_within = r2["wpr2"],

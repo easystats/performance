@@ -87,7 +87,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     }
   )
 
-  if (.is_empty_object(s)) {
+  if (datawizard::is_empty_object(s)) {
     s <- insight::get_variance_residual(x, verbose = FALSE)
   }
 
@@ -106,7 +106,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     }
   )
 
-  if (.is_empty_object(pr) && inherits(x, c("glmmTMB", "MixMod"))) {
+  if (datawizard::is_empty_object(pr) && inherits(x, c("glmmTMB", "MixMod"))) {
     faminfo <- insight::model_info(x)
     if (faminfo$is_zero_inflated) {
       if (faminfo$is_negbin) {

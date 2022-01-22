@@ -32,26 +32,6 @@
 
 
 
-# is string empty?
-.is_empty_object <- function(x) {
-  if (is.list(x)) {
-    x <- tryCatch(
-      {
-        .compact_list(x)
-      },
-      error = function(x) {
-        x
-      }
-    )
-  }
-  # this is an ugly fix because of ugly tibbles
-  if (inherits(x, c("tbl_df", "tbl"))) x <- as.data.frame(x)
-  x <- suppressWarnings(x[!is.na(x)])
-  length(x) == 0 || is.null(x)
-}
-
-
-
 
 # has object an element with given name?
 .obj_has_name <- function(x, name) {
@@ -134,21 +114,6 @@
 
   out
 }
-
-
-
-
-# remove NULL elements from lists
-.compact_list <- function(x, remove_na = FALSE) {
-  if (remove_na) {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (length(i) == 1 & is.na(i)) || any(i == "NULL", na.rm = TRUE))]
-  } else {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL", na.rm = TRUE))]
-  }
-}
-
-
-
 
 
 # remove column
