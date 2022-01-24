@@ -15,7 +15,8 @@ authors:
 
 template:
   bootstrap: 5
-  bootswatch: superhero
+  bslib:
+    primary: "#0054AD"
   opengraph:
     image:
       src: man/figures/card.png
