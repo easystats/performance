@@ -15,7 +15,7 @@ authors:
 
 template:
   bootstrap: 5
-  bootswatch: Superhero
+  bootswatch: superhero
   opengraph:
     image:
       src: man/figures/card.png
