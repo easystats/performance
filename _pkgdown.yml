@@ -14,8 +14,14 @@ authors:
 
 
 template:
-  params:
-    bootswatch: flatly
+  bootstrap: 5
+  bootswatch: Superhero
+  opengraph:
+    image:
+      src: man/figures/card.png
+    twitter:
+      creator: "@easystats4u"
+      card: summary_large_image
 
 reference:
 - title: "Comprehensive Summaries"
