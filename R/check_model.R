@@ -221,7 +221,7 @@ check_model.model_fit <- function(x,
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
 
-  dat <- .compact_list(dat)
+  dat <- datawizard::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
@@ -244,7 +244,7 @@ check_model.model_fit <- function(x,
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
 
-  dat <- .compact_list(dat)
+  dat <- datawizard::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }

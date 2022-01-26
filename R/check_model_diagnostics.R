@@ -1,5 +1,5 @@
 .diag_vif <- function(model) {
-  dat <- .compact_list(check_collinearity(model))
+  dat <- datawizard::compact_list(check_collinearity(model))
   if (is.null(dat)) {
     return(NULL)
   }

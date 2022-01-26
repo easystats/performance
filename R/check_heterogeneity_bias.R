@@ -59,7 +59,7 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
     }
   }, as.character(combinations[[1]]), as.character(combinations[[2]]), SIMPLIFY = FALSE)
 
-  out <- unname(unlist(.compact_list(result)))
+  out <- unname(unlist(datawizard::compact_list(result)))
 
   if (is.null(out)) {
     message("No predictor found that could cause heterogeneity bias.")

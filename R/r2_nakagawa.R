@@ -115,7 +115,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
     out
   } else {
     # Calculate R2 values
-    if (.is_empty_object(vars$var.random) || is.na(vars$var.random)) {
+    if (datawizard::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
       # if no random effect variance, return simple R2
       insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red")
       r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.residual)
