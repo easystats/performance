@@ -1,19 +1,6 @@
 # trim leading / trailing whitespaces
 .trim <- function(x) gsub("^\\s+|\\s+$", "", x)
 
-.remove_backticks_from_parameter_names <- function(x) {
-  if (is.data.frame(x)) {
-    if ("Parameter" %in% colnames(x)) {
-      x$Parameter <- gsub("`", "", x$Parameter, fixed = TRUE)
-    }
-    if ("Term" %in% colnames(x)) {
-      x$Term <- gsub("`", "", x$Term, fixed = TRUE)
-    }
-  }
-
-  x
-}
-
 
 .get_BIC <- function(x) {
   if (inherits(x, c("vgam", "vglm"))) {
