@@ -29,16 +29,6 @@
 }
 
 
-
-
-# has object an element with given name?
-.obj_has_name <- function(x, name) {
-  name %in% names(x)
-}
-
-
-
-
 .std <- function(x) {
   if (!is.numeric(x)) {
     return(x)
