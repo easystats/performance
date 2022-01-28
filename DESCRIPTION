@@ -61,7 +61,7 @@ Depends:
 Imports:
     bayestestR (>= 0.11.5),
     insight (>= 0.14.5),
-    datawizard (>= 0.2.2.9000),
+    datawizard (>= 0.2.3),
     methods,
     stats,
     utils
@@ -121,7 +121,7 @@ Suggests:
     tweedie,
     VGAM
 Remotes:
-    easystats/datawizard
+    easystats/insight
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.2

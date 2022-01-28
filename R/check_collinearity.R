@@ -359,7 +359,7 @@ check_collinearity.zerocount <- function(x,
 
   structure(
     class = c("check_collinearity", "see_check_collinearity", "data.frame"),
-    .remove_backticks_from_parameter_names(
+    insight::text_remove_backticks(
       data.frame(
         Term = terms,
         VIF = result,
@@ -367,7 +367,7 @@ check_collinearity.zerocount <- function(x,
         stringsAsFactors = FALSE
       )
     ),
-    data = .remove_backticks_from_parameter_names(
+    data = insight::text_remove_backticks(
       data.frame(
         Term = terms,
         VIF = result,
