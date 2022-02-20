@@ -78,6 +78,7 @@ Suggests:
     correlation,
     cplm,
     dbscan,
+    domir,
     fixest,
     forecast,
     gamm4,
