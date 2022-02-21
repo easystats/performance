@@ -86,14 +86,15 @@ usually compared \emph{sequentially}: m2 is tested against m1, m3 against m2,
 m4 against m3, etc.
 \cr\cr
 Two models are considered as \emph{"non-nested"} if their predictors are
-different. For instance, \code{model1 (y ~ x1 + x2)} and `model2 (y ~ x3
-\itemize{
-\item x4)\verb{. In the case of non-nested models, all models are usually compared against the same *reference* model (by default, the first of the list). \\cr\\cr Nesting is detected via the }insight::is_nested_models()` function.
+different. For instance, \code{model1 (y ~ x1 + x2)} and \code{model2 (y ~ x3 + x4)}.
+In the case of non-nested models, all models are usually compared
+against the same \emph{reference} model (by default, the first of the list).
+\cr\cr
+Nesting is detected via the \code{insight::is_nested_models()} function.
 Note that, apart from the nesting, in order for the tests to be valid,
 other requirements have often to be the fulfilled. For instance, outcome
 variables (the response) must be the same. You cannot meaningfully test
 whether apples are significantly different from oranges!
-}
 }
 
 \subsection{Tests Description}{
@@ -110,7 +111,9 @@ not). Check out
 approximation of the Likelihood Ratio Test. However, it is more applicable
 than the LRT: you can often run a Wald test in situations where no other
 test can be run. Importantly, this test only makes statistical sense if the
-models are nested.\cr Note: this test is also available in base R through the
+models are nested.
+\cr
+Note: this test is also available in base R through the
 \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
 as a statistic and its associated \code{p-value}.
 
