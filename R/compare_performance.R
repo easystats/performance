@@ -131,10 +131,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 
   if (any(c("AIC", "AICc", "BIC", "WAIC") %in% names(dfs))) {
-    dfs$AIC_wt <- .ic_weight(dfs$AIC)
-    dfs$AICc_wt <- .ic_weight(dfs$AICc)
-    dfs$BIC_wt <- .ic_weight(dfs$BIC)
-    dfs$WAIC_wt <- .ic_weight(dfs$WAIC)
+    dfs$AIC_wt <- .ic_weight(dfs[["AIC"]])
+    dfs$AICc_wt <- .ic_weight(dfs[["AICc"]])
+    dfs$BIC_wt <- .ic_weight(dfs[["BIC"]])
+    dfs$WAIC_wt <- .ic_weight(dfs[["WAIC"]])
   }
 
   if ("LOOIC" %in% names(dfs)) {
