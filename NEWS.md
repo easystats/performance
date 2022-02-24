@@ -1,3 +1,10 @@
+# performance 0.8.1
+
+## Bug fixes
+
+* `model_performance()` for models from *lme4* did not report AICc when
+  requested.
+
 # performance 0.8.0
 
 ## Breaking Changes
