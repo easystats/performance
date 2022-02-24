@@ -15,12 +15,13 @@ if (requiet("testthat") && requiet("insight") && requiet("performance") && requi
 
 
     test_that("model_performance.merMod AICc", {
-      m1 <- lmer(mpg ~ disp + am + (1|cyl), data = mtcars)
+      m1 <- lmer(mpg ~ disp + am + (1 | cyl), data = mtcars)
       m2 <- lm(mpg ~ hp + vs, data = mtcars)
 
       expect_equal(compare_performance(m1, m2, metrics = "AICc")$AICc,
-                   c(177.52804, 182.88598),
-                   tolerance = 1e-3)
+        c(177.52804, 182.88598),
+        tolerance = 1e-3
+      )
       expect_equal(model_performance(m1, metrics = "AICc")$AICc, 177.52804, tolerance = 1e-3)
       expect_equal(performance_aicc(m1), 177.52804, tolerance = 1e-3)
     })
