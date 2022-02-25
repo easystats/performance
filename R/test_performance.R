@@ -236,10 +236,14 @@ test_performance.ListNestedRegressions <- function(objects,
     }
   )
 
-  # Vuong
+  # Vuong, or LRT
   tryCatch(
     {
-      rez <- test_vuong(objects)
+      if (isTRUE(insight::check_if_installed("CompQuadForm", quietly = TRUE))) {
+        rez <- test_vuong(objects)
+      } else {
+        rez <- test_lrt(objects)
+      }
       rez$Model <- NULL
       out <- merge(out, rez, sort = FALSE)
     },
@@ -276,10 +280,14 @@ test_performance.ListNonNestedRegressions <- function(objects,
     }
   )
 
-  # Vuong
+  # Vuong, or Wald - we have non-nested models, so no LRT here
   tryCatch(
     {
-      rez <- test_vuong(objects, reference = reference)
+      if (isTRUE(insight::check_if_installed("CompQuadForm", quietly = TRUE))) {
+        rez <- test_vuong(objects, reference = reference)
+      } else {
+        rez <- test_wald(objects)
+      }
       rez$Model <- NULL
       out <- merge(out, rez, sort = FALSE)
     },
