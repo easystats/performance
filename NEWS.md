@@ -16,6 +16,9 @@
 
 * `check_zeroinflation()` now also works for `lme4::glmer.nb()` models.
 
+* `test_performance()` now calls `test_lrt()` or `test_wald()` instead of
+  `test_vuong()` when package *CompQuadForm* is missing.
+
 ## Bug fixes
 
 * `model_performance()` for models from *lme4* did not report AICc when
