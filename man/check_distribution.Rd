@@ -46,7 +46,7 @@ implemented in the
 }
 \examples{
 if (require("lme4") && require("parameters") &&
-    require("see") && require("patchwork") && require("randomForest")) {
+  require("see") && require("patchwork") && require("randomForest")) {
   data(sleepstudy)
 
   model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
