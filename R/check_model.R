@@ -220,6 +220,7 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
 
   dat <- datawizard::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -243,6 +244,7 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
   if (isTRUE(model_info$is_binomial)) {
     dat$BINNED_RESID <- binned_residuals(model)
   }
