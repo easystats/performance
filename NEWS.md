@@ -11,6 +11,9 @@
   - For binomial models, the constant variance plot was omitted, and a binned
     residuals plot included.
 
+  - The density-plot that showed normality of residuals was replaced by the
+    posterior predictive check plot.
+
 ## Bug fixes
 
 * `model_performance()` for models from *lme4* did not report AICc when
