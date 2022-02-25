@@ -25,7 +25,7 @@
 #'   categories (bins) based on their fitted values, and then plotting
 #'   the average residual versus the average fitted value for each bin.}
 #'   \cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
-#'   expect about 95\% of the residuals to fall inside the error bounds.
+#'   expect about 95% of the residuals to fall inside the error bounds.
 #'   \cr \cr
 #'   If `term` is not `NULL`, one can compare the residuals in
 #'   relation to a specific model predictor. This may be helpful to check if a
