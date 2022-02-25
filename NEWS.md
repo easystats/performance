@@ -1,5 +1,16 @@
 # performance 0.8.1
 
+## Changes to functions
+
+* The `print()` method for `binned_residuals()` now prints a short summary of
+  the results (and no longer generates a plot). A `plot()` method was added
+  to generate plots.
+  
+* The `plot()` output for `check_model()` was revised:
+
+  - For binomial models, the constant variance plot was omitted, and a binned
+    residuals plot included.
+
 ## Bug fixes
 
 * `model_performance()` for models from *lme4* did not report AICc when
