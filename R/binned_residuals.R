@@ -33,12 +33,9 @@
 #'   of residuals along the x-axis is a signal to consider taking the logarithm
 #'   of the predictor (cf. Gelman and Hill 2007, pp. 97-98).
 #'
-#' @note Since `binned_residuals()` returns a data frame, the default
-#'   action for the result is *printing*. However, the `print()`-method for
-#'   `binned_residuals()` actually creates a plot. For further
-#'   modifications of the plot, use `print()` and add ggplot-layers to the
-#'   return values, e.g. `print(binned_residuals(model)) +
-#'   see::scale_color_pizza()`.
+#' @note `binned_residuals()` returns a data frame, however, the `print()`
+#'   method only returns a short summary of the result. The data frame itself
+#'   is used for plotting. The `plot()` method, in turn, creates a ggplot-object.
 #'
 #' @references
 #' Gelman, A., & Hill, J. (2007). Data analysis using regression and
@@ -103,19 +100,12 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
 
   resid_ok <- sum(d$group == "yes") / length(d$group)
 
-  if (resid_ok < .8) {
-    insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
-  } else if (resid_ok < .95) {
-    insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
-  } else {
-    insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
-  }
-
   add.args <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
   size <- if ("size" %in% names(add.args)) add.args[["size"]] else 2
   color <- if ("color" %in% names(add.args)) add.args[["color"]] else c("#d11141", "#00aedb")
 
   class(d) <- c("binned_residuals", "see_binned_residuals", class(d))
+  attr(d, "resid_ok") <- resid_ok
   attr(d, "resp_var") <- insight::find_response(model)
   attr(d, "term") <- term
   attr(d, "geom_size") <- size

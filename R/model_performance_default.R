@@ -28,7 +28,6 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
 
 
 
-
 .check_bad_metrics <- function(metrics, all_metrics, verbose = TRUE) {
   # check for valid input
   bad_metrics <- which(!metrics %in% all_metrics)
@@ -44,5 +43,3 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
   metrics
 }
 
-
-# default methods -----------------------
