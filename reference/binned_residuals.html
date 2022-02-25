@@ -114,11 +114,9 @@ of the predictor (cf. Gelman and Hill 2007, pp. 97-98).</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Since <code>binned_residuals()</code> returns a data frame, the default
-action for the result is <em>printing</em>. However, the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>-method for
-<code>binned_residuals()</code> actually creates a plot. For further
-modifications of the plot, use <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and add ggplot-layers to the
-return values, e.g. <code>print(binned_residuals(model)) + see::scale_color_pizza()</code>.</p>
+    <p><code>binned_residuals()</code> returns a data frame, however, the <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>
+method only returns a short summary of the result. The data frame itself
+is used for plotting. The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method, in turn, creates a ggplot-object.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -140,8 +138,6 @@ Press.</p>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: see</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Warning: Probably bad model fit. Only about 50% of the residuals are inside the error bounds.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         xbar        ybar n       x.lo       x.hi         se group</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.03786483 -0.03786483 5 0.01744776 0.06917366 0.01937882    no</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.09514191 -0.09514191 5 0.07087498 0.15160143 0.02873921    no</span>
