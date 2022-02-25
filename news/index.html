@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,14 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.1" id="performance-081">performance 0.8.1<a class="anchor" aria-label="anchor" href="#performance-081"></a></h2>
+<div class="section level3">
+<h3 id="changes-to-functions-0-8-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-8-1"></a></h3>
+<ul><li><p>The <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method for <code><a href="../reference/binned_residuals.html">binned_residuals()</a></code> now prints a short summary of the results (and no longer generates a plot). A <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method was added to generate plots.</p></li>
+<li>
+<p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> output for <code><a href="../reference/check_model.html">check_model()</a></code> was revised:</p>
+<ul><li>For binomial models, the constant variance plot was omitted, and a binned residuals plot included.</li>
+</ul></li>
+</ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-8-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-8-1"></a></h3>
 <ul><li>
