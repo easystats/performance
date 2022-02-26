@@ -202,14 +202,18 @@ as a statistic and its associated <code>p-value</code>.</p></li>
 The LRT tests which model is a better (more likely) explanation of the
 data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if
 not equivalent) to the Wald test and, similarly, only makes sense for
-nested models. However, Maximum likelihood tests make stronger assumptions
+nested models. However, maximum likelihood tests make stronger assumptions
 than method of moments tests like the F-test, and in turn are more
 efficient. Agresti (1990) suggests that you should use the LRT instead of
 the Wald test for small sample sizes (under or about 30) or if the
-parameters are large.<br> Note: for regression models, this is similar to
+parameters are large. <br> Note: for regression models, this is similar to
 <code>anova(..., test="LRT")</code> (on models) or <code>lmtest::lrtest(...)</code>,
 depending on the <code>estimator</code> argument. For <code>lavaan</code> models (SEM,
-CFA), the function calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">lavaan::lavTestLRT()</a></code>.</p></li>
+CFA), the function calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">lavaan::lavTestLRT()</a></code>. <br> For models with
+log-transformed response variables, <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> returns a wrong log-likelihood.
+However, <code>test_likelihoodratio()</code> calls <code><a href="https://easystats.github.io/insight/reference/get_loglikelihood.html" class="external-link">insight::get_loglikelihood()</a></code> with
+<code>check_response=TRUE</code>, which returns a corrected log-likelihood value
+particularly for models with log-transformed response variables.</p></li>
 <li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two
 tests.</p><ul><li><p>The <strong>Test of Distinguishability</strong> (the <code>Omega2</code> column and
