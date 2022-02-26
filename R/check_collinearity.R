@@ -280,7 +280,7 @@ check_collinearity.zerocount <- function(x,
   assign <- .term_assignments(x, component, verbose = verbose)
 
   # any assignment found?
-  if (is.null(assign)) {
+  if (is.null(assign) || all(is.na(assign))) {
     if (verbose) {
       warning(insight::format_message(sprintf("Could not extract model terms for the %s component of the model.", component), call. = FALSE))
     }
@@ -442,8 +442,14 @@ check_collinearity.zerocount <- function(x,
     }
   }))
 
+  if (insight::is_gam_model(x)) {
+    model_params <- as.vector(unlist(unlist(insight::find_parameters(x)[c(component, "smooth_terms")])))
+  } else {
+    model_params <- insight::find_parameters(x)[[component]]
+  }
+
   as.numeric(names(parms)[match(
-    insight::clean_names(insight::find_parameters(x)[[component]]),
+    insight::clean_names(model_params),
     parms
   )])
 }

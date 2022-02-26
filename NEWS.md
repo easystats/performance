@@ -22,6 +22,8 @@
 * `test_performance()` now calls `test_lrt()` or `test_wald()` instead of
   `test_vuong()` when package *CompQuadForm* is missing.
 
+* `check_collinearity()` better supports GAM models.
+
 ## Bug fixes
 
 * `model_performance()` for models from *lme4* did not report AICc when

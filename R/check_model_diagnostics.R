@@ -18,7 +18,7 @@
 
 
 .diag_qq <- function(model) {
-  if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB"))) {
+  if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB", "gam"))) {
     res_ <- sort(stats::residuals(model), na.last = NA)
   } else if (inherits(model, "glm")) {
     res_ <- sort(stats::rstandard(model, type = "pearson"), na.last = NA)
@@ -213,6 +213,8 @@
     {
       if (inherits(model, "merMod")) {
         stats::residuals(model, scaled = TRUE)
+      } else if (inherits(model, "gam")) {
+        stats::residuals(model, type = "scaled.pearson")
       } else if (inherits(model, c("glmmTMB", "MixMod"))) {
         sigma <- if (faminfo$is_mixed) {
           sqrt(insight::get_variance_residual(model))
