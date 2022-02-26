@@ -503,10 +503,26 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 #' @export
 print.binned_residuals <- function(x, ...) {
-  insight::check_if_installed("see", "to plot binned residuals")
+  resid_ok <- attributes(x)$resid_ok
 
+  if (!is.null(resid_ok)) {
+    if (resid_ok < .8) {
+      insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
+    } else if (resid_ok < .95) {
+      insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
+    } else {
+      insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
+    }
+  }
+}
+
+
+#' @export
+plot.binned_residuals <- function(x, ...) {
+  insight::check_if_installed("see", "to plot binned residuals")
   NextMethod()
 }
+
 
 
 

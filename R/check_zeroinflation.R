@@ -48,6 +48,8 @@ check_zeroinflation <- function(x, tolerance = .05) {
   if (model_info$is_negbin) {
     if (methods::is(x, "glmmTMB")) {
       theta <- stats::sigma(x)
+    } else if (methods::is(x, "glmerMod")) {
+      theta <- environment(x@resp$family$aic)[[".Theta"]]
     } else {
       theta <- x$theta
     }

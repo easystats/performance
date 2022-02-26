@@ -61,7 +61,14 @@ model_performance.merMod <- function(model,
   }
 
   if ("AICC" %in% toupper(metrics)) {
-    out$AIC <- performance_aic(model)
+    out$AICc <- tryCatch(
+      {
+        performance_aicc(model)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
   }
 
   if ("BIC" %in% toupper(metrics)) {

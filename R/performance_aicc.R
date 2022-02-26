@@ -4,15 +4,21 @@
 #' @description
 #'
 #' Compute the AIC or the second-order Akaike's information criterion (AICc).
-#' `performance_aic()` is a small wrapper that returns the AIC. It is a generic
-#' function that also works for some models that don't have a AIC method (like
-#' Tweedie models). `performance_aicc()` returns the second-order (or "small
-#' sample") AIC that incorporates a correction for small sample sizes.
+#' `performance_aic()` is a small wrapper that returns the AIC, however, for
+#' models with a transformed response variable, `performance_aic()` returns the
+#' corrected AIC value (see 'Examples'). It is a generic function that also
+#' works for some models that don't have a AIC method (like Tweedie models).
+#' `performance_aicc()` returns the second-order (or "small sample") AIC that
+#' incorporates a correction for small sample sizes.
 #'
 #' @param x A model object.
+#' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
 #' @return Numeric, the AIC or AICc value.
+#'
+#' @details `performance_aic()` correctly detects transformed response and,
+#' unlike `stats::AIC()`, returns the corrected AIC value.
 #'
 #' @references
 #' - Akaike, H. (1973) Information theory as an extension of the maximum
@@ -26,6 +32,18 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' AIC(m)
 #' performance_aicc(m)
+#'
+#' # correct AIC for models with transformed response variable
+#' data("mtcars")
+#' mtcars$mpg <- floor(mtcars$mpg)
+#' model <- lm(log(mpg) ~ factor(cyl), mtcars)
+#'
+#' # wrong AIC, not corrected for log-transformation
+#' AIC(model)
+#'
+#' # performance_aic() correctly detects transformed response and
+#' # returns corrected AIC
+#' performance_aic(model)
 #' @export
 performance_aicc <- function(x, ...) {
   UseMethod("performance_aicc")
@@ -40,38 +58,36 @@ performance_aic <- function(x, ...) {
 
 # default -------------------------------------------------
 
+#' @rdname performance_aicc
 #' @export
-performance_aic.default <- function(x, ...) {
+performance_aic.default <- function(x, verbose = TRUE, ...) {
   info <- suppressWarnings(insight::model_info(x))
   aic <- NULL
 
-  ## TODO remove is.list() once insight 0.8.3 is on CRAN
-  if (is.null(info) || !is.list(info)) {
-    info <- list(family = "unknown")
+  # check if we have transformed response, and if so, adjust LogLik
+  response_transform <- insight::find_transformation(x)
+
+  if (!is.null(response_transform) && !identical(response_transform, "identity")) {
+    aic <- tryCatch(.aic_transformed_response(x, response_transform, ...), error = function(e) NULL)
+    if (is.null(aic) && isTRUE(verbose)) {
+      warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
+    }
   }
 
-  if (info$family == "Tweedie") {
-    insight::check_if_installed("tweedie")
-    aic <- suppressMessages(tweedie::AICtweedie(x))
-  } else {
-    aic <- tryCatch(
-      {
-        stats::AIC(x)
-      },
-      error = function(e) {
-        NULL
+  if (is.null(aic)) {
+    # special handling for tweedie
+    if (info$family == "Tweedie") {
+      insight::check_if_installed("tweedie")
+      aic <- suppressMessages(tweedie::AICtweedie(x))
+    } else {
+      # all other models...
+      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
+      if (is.null(aic)) {
+        aic <- tryCatch(
+          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model"),
+          error = function(e) NULL
+        )
       }
-    )
-
-    if (is.null(aic)) {
-      aic <- tryCatch(
-        {
-          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model")
-        },
-        error = function(e) {
-          NULL
-        }
-      )
     }
   }
 
@@ -200,4 +216,41 @@ performance_aicc.vglm <- function(x, ...) {
 #' @export
 performance_aicc.rma <- function(x, ...) {
   stats::AIC(x, correct = TRUE)
+}
+
+
+
+
+# jacobian / derivate for log models and other transformations ----------------
+
+.aic_transformed_response <- function(x, response_transform, ...) {
+
+  # initialize
+  aic <- NULL
+
+  if (response_transform == "log") {
+    # loglik-transformation. first try, we use dlnorm()
+    aic <- tryCatch(
+      {
+        ll <- insight::get_loglikelihood(x)
+        ll[1] <- sum(stats::dlnorm(
+          x = insight::get_response(x),
+          meanlog = stats::fitted(x),
+          sdlog = insight::get_sigma(x, ci = NULL, verbose = FALSE),
+          log = TRUE
+        ))
+        stats::AIC(ll)
+      },
+      error = function(e) {
+        NULL
+      }
+    )
+
+    # if this does not work for some reason, use slightly less accurate approach
+    if (is.null(aic)) {
+      aic <- stats::AIC(x) + 2 * sum(log(insight::get_response(x)))
+    }
+  }
+
+  aic
 }
