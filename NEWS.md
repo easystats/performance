@@ -14,6 +14,9 @@
   - The density-plot that showed normality of residuals was replaced by the
     posterior predictive check plot.
 
+* `performance_aic()` now corrects the AIC value for models with transformed
+  response variables.
+
 * `check_zeroinflation()` now also works for `lme4::glmer.nb()` models.
 
 * `test_performance()` now calls `test_lrt()` or `test_wald()` instead of
