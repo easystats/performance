@@ -7,22 +7,65 @@
 dominance_analysis(model, ...)
 }
 \arguments{
-\item{model}{An \code{insight}- and \code{performance::r2}-supported model.}
+\item{model}{An \code{{insight}}- and \code{performance::r2}-supported model object
+of specific classes.  See caveats section.}
 
-\item{...}{Arguments passed to \code{domir::domin} function.}
+\item{...}{Not used at current.}
 }
 \value{
-Object of class \code{dominance_analysis}.
+Object of class "dominance_analysis".
+
+An object of class "dominance_analysis" is a list composed of the
+following elements:
+\describe{
+\item{\code{General_Dominance}}{Vector of general dominance statistics.}
+\item{\code{Standardized}}{Vector of general dominance statistics normalized
+to sum to 1.}
+\item{\code{Ranks}}{Vector of ranks applied to the general dominance
+statistics.}
+\item{\code{Conditional_Dominance}}{Matrix of conditional dominance
+statistics.  Each row represents a term; each column represents an
+order of terms.}
+\item{\code{Complete_Dominance}}{Logical matrix of complete dominance
+designations. The term represented in each row indicates dominance
+status; the terms represented in each columns indicates dominated-by
+status.}
+\item{\code{Fit_Statistic_Overall}}{Value of fit statistic returned by the \code{r2}
+method for the model.}
+}
 }
 \description{
-Computes Dominance Statistics and Designations
+Computes Dominance Analysis Statistics and Designations
 }
 \details{
-Dominance analysis discussion here...
+Computes several decompositions of the model's R2 and returns
+three different designations from which predictor relative importance
+determinations can be obtained.
 }
-\examples{
+\section{Caveats}{
 
-  model <- glm(vs ~ cyl + carb + mpg, data = datasets::mtcars)
+
+The input model is parsed using \code{insight::find_predictors}.
+As such, it does not yet support interactions, transformations, or offsets
+applied in the R formula and will fail with an error when these elements
+are uncovered in the submitted model.
+
+The model submitted must accept a formula as a \code{formula}
+argument.  In addition, the model object must accept the data on which
+the model is estimated as a \code{data} argument.  Hence, formulas submitted
+using object references #' (i.e., \code{lm(mtcars$mpg ~ mtcars$vs)}) and
+functions that accept data as a non-\code{data} argument
+(e.g., \code{survey::svyglm}) will fail.
+
+Models that return \code{TRUE} for the \code{insight::model_info}
+function's values "is_bayesian", "is_mixed", "is_gam",
+is_multivariate", "is_zero_inflated",
+or "is_hurdle" are not supported at current.
+}
+
+\examples{
+  model <- glm(vs ~ cyl + carb + mpg, data = datasets::mtcars,
+           family = binomial())
 
   r2(model)
 
@@ -52,4 +95,10 @@ Structural Equation Modeling, 4(2), 1-20. doi:10.47263/JASEM.4(2)02
 using dominance analysis: domin and domme. Stata Journal 21(2),
 510-538. doi:10.1177/1536867X211025837
 }
+}
+\seealso{
+\code{\link[=domin]{domin()}}
+}
+\author{
+Joseph Luchman
 }
