@@ -83,14 +83,18 @@
 #'   The LRT tests which model is a better (more likely) explanation of the
 #'   data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if
 #'   not equivalent) to the Wald test and, similarly, only makes sense for
-#'   nested models. However, Maximum likelihood tests make stronger assumptions
+#'   nested models. However, maximum likelihood tests make stronger assumptions
 #'   than method of moments tests like the F-test, and in turn are more
 #'   efficient. Agresti (1990) suggests that you should use the LRT instead of
 #'   the Wald test for small sample sizes (under or about 30) or if the
-#'   parameters are large.\cr Note: for regression models, this is similar to
+#'   parameters are large. \cr Note: for regression models, this is similar to
 #'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`,
 #'   depending on the `estimator` argument. For `lavaan` models (SEM,
-#'   CFA), the function calls `lavaan::lavTestLRT()`.
+#'   CFA), the function calls `lavaan::lavTestLRT()`. \cr For models with
+#'   log-transformed response variables, `logLik()` returns a wrong log-likelihood.
+#'   However, `test_likelihoodratio()` calls `insight::get_loglikelihood()` with
+#'   `check_response=TRUE`, which returns a corrected log-likelihood value
+#'   particularly for models with log-transformed response variables.
 #'
 #'   \item **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
