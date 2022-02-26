@@ -24,15 +24,33 @@ Numeric, the AIC or AICc value.
 }
 \description{
 Compute the AIC or the second-order Akaike's information criterion (AICc).
-\code{performance_aic()} is a small wrapper that returns the AIC. It is a generic
-function that also works for some models that don't have a AIC method (like
-Tweedie models). \code{performance_aicc()} returns the second-order (or "small
-sample") AIC that incorporates a correction for small sample sizes.
+\code{performance_aic()} is a small wrapper that returns the AIC, however, for
+models with a transformed response variable, \code{performance_aic()} returns the
+corrected AIC value (see 'Examples'). It is a generic function that also
+works for some models that don't have a AIC method (like Tweedie models).
+\code{performance_aicc()} returns the second-order (or "small sample") AIC that
+incorporates a correction for small sample sizes.
+}
+\details{
+\code{performance_aic()} correctly detects transformed response and,
+unlike \code{stats::AIC()}, returns the corrected AIC value.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 AIC(m)
 performance_aicc(m)
+
+# correct AIC for models with transformed response variable
+data("mtcars")
+mtcars$mpg <- floor(mtcars$mpg)
+model <- lm(log(mpg) ~ factor(cyl), mtcars)
+
+# wrong AIC, not corrected for log-transformation
+AIC(model)
+
+# performance_aic() correctly detects transformed response and
+# returns corrected AIC
+performance_aic(model)
 }
 \references{
 \itemize{

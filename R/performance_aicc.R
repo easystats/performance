@@ -4,16 +4,21 @@
 #' @description
 #'
 #' Compute the AIC or the second-order Akaike's information criterion (AICc).
-#' `performance_aic()` is a small wrapper that returns the AIC. It is a generic
-#' function that also works for some models that don't have a AIC method (like
-#' Tweedie models). `performance_aicc()` returns the second-order (or "small
-#' sample") AIC that incorporates a correction for small sample sizes.
+#' `performance_aic()` is a small wrapper that returns the AIC, however, for
+#' models with a transformed response variable, `performance_aic()` returns the
+#' corrected AIC value (see 'Examples'). It is a generic function that also
+#' works for some models that don't have a AIC method (like Tweedie models).
+#' `performance_aicc()` returns the second-order (or "small sample") AIC that
+#' incorporates a correction for small sample sizes.
 #'
 #' @param x A model object.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
 #' @return Numeric, the AIC or AICc value.
+#'
+#' @details `performance_aic()` correctly detects transformed response and,
+#' unlike `stats::AIC()`, returns the corrected AIC value.
 #'
 #' @references
 #' - Akaike, H. (1973) Information theory as an extension of the maximum
@@ -27,6 +32,18 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' AIC(m)
 #' performance_aicc(m)
+#'
+#' # correct AIC for models with transformed response variable
+#' data("mtcars")
+#' mtcars$mpg <- floor(mtcars$mpg)
+#' model <- lm(log(mpg) ~ factor(cyl), mtcars)
+#'
+#' # wrong AIC, not corrected for log-transformation
+#' AIC(model)
+#'
+#' # performance_aic() correctly detects transformed response and
+#' # returns corrected AIC
+#' performance_aic(model)
 #' @export
 performance_aicc <- function(x, ...) {
   UseMethod("performance_aicc")
