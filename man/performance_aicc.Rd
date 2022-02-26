@@ -3,16 +3,21 @@
 \name{performance_aicc}
 \alias{performance_aicc}
 \alias{performance_aic}
+\alias{performance_aic.default}
 \title{Compute the AIC or second-order AIC}
 \usage{
 performance_aicc(x, ...)
 
 performance_aic(x, ...)
+
+\method{performance_aic}{default}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 Numeric, the AIC or AICc value.
