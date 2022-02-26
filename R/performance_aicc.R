@@ -186,7 +186,7 @@ AIC.bife <- function(object, ..., k = 2) {
 #' @export
 performance_aicc.default <- function(x, ...) {
   n <- suppressWarnings(insight::n_obs(x))
-  ll <- insight::get_loglikelihood(x)
+  ll <- insight::get_loglikelihood(x, check_response = TRUE, verbose = TRUE)
   k <- attr(ll, "df")
 
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))

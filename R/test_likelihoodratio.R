@@ -68,7 +68,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
   # lmtest::lrtest()
   if (tolower(estimator) %in% c("ml", "mle")) {
-    lls <- sapply(objects, insight::get_loglikelihood)
+    lls <- sapply(objects, insight::get_loglikelihood, check_response = TRUE)
     chi2 <- abs(c(NA, -2 * diff(lls)))
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
