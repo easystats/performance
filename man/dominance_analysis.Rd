@@ -8,7 +8,7 @@ dominance_analysis(model, ...)
 }
 \arguments{
 \item{model}{An \code{{insight}}- and \code{performance::r2}-supported model object
-of specific classes.  See caveats section.}
+of specific classes.  See Notes section.}
 
 \item{...}{Not used at current.}
 }
@@ -18,19 +18,21 @@ Object of class "dominance_analysis".
 An object of class "dominance_analysis" is a list composed of the
 following elements:
 \describe{
-\item{\code{General_Dominance}}{Vector of general dominance statistics.}
-\item{\code{Standardized}}{Vector of general dominance statistics normalized
+\item{\code{general_dominance}}{Vector of general dominance statistics.}
+\item{\code{standardized}}{Vector of general dominance statistics normalized
 to sum to 1.}
-\item{\code{Ranks}}{Vector of ranks applied to the general dominance
+\item{\code{ranks}}{Vector of ranks applied to the general dominance
 statistics.}
-\item{\code{Conditional_Dominance}}{Matrix of conditional dominance
-statistics.  Each row represents a term; each column represents an
-order of terms.}
-\item{\code{Complete_Dominance}}{Logical matrix of complete dominance
-designations. The term represented in each row indicates dominance
-status; the terms represented in each columns indicates dominated-by
-status.}
-\item{\code{Fit_Statistic_Overall}}{Value of fit statistic returned by the \code{r2}
+\item{\code{conditional_dominance}}{Matrix of conditional dominance
+statistics.  Each row represents a predictor; each column represents an
+the average increment to R2 with a specific number of predictors in
+the model.}
+\item{\code{complete_dominance}}{Logical matrix of complete dominance
+designations. The predictors represented in each column are
+cross-referenced with predictors in each row.  Whether the predictor
+in each row dominates the predictor in each column is represented in the
+logical value in the matrix.}
+\item{\code{model_R2}}{Value of R2 value returned by the \code{r2}
 method for the model.}
 }
 }
@@ -42,25 +44,27 @@ Computes several decompositions of the model's R2 and returns
 three different designations from which predictor relative importance
 determinations can be obtained.
 }
-\section{Caveats}{
+\section{Notes}{
 
 
-The input model is parsed using \code{insight::find_predictors}.
-As such, it does not yet support interactions, transformations, or offsets
-applied in the R formula and will fail with an error when these elements
-are uncovered in the submitted model.
+The input model is parsed using \code{insight::find_predictors} and does not
+yet support interactions, transformations, or offsets applied in the
+R formula and will fail with an error when detected.
 
 The model submitted must accept a formula as a \code{formula}
 argument.  In addition, the model object must accept the data on which
-the model is estimated as a \code{data} argument.  Hence, formulas submitted
-using object references #' (i.e., \code{lm(mtcars$mpg ~ mtcars$vs)}) and
+the model is estimated as a \code{data} argument.  Formulas submitted
+using object references (i.e., \code{lm(mtcars$mpg ~ mtcars$vs)}) and
 functions that accept data as a non-\code{data} argument
-(e.g., \code{survey::svyglm}) will fail.
+(e.g., \code{survey::svyglm} uses \code{design}) will fail.
 
 Models that return \code{TRUE} for the \code{insight::model_info}
 function's values "is_bayesian", "is_mixed", "is_gam",
 is_multivariate", "is_zero_inflated",
 or "is_hurdle" are not supported at current.
+
+When \code{performance::r2} returns multiple values, only the first is used
+by default.
 }
 
 \examples{

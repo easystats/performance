@@ -4,7 +4,7 @@
 #' @description Computes Dominance Analysis Statistics and Designations
 #'
 #' @param model An `{insight}`- and `performance::r2`-supported model object
-#' of specific classes.  See caveats section.
+#' of specific classes.  See Notes section.
 #' @param ...  Not used at current.
 #'
 #' @return Object of class "dominance_analysis".
@@ -12,27 +12,29 @@
 #' An object of class "dominance_analysis" is a list composed of the
 #' following elements:
 #' \describe{
-#'  \item{`General_Dominance`}{Vector of general dominance statistics.}
-#'  \item{`Standardized`}{Vector of general dominance statistics normalized
+#'  \item{`general_dominance`}{Vector of general dominance statistics.}
+#'  \item{`standardized`}{Vector of general dominance statistics normalized
 #'  to sum to 1.}
-#'  \item{`Ranks`}{Vector of ranks applied to the general dominance
+#'  \item{`ranks`}{Vector of ranks applied to the general dominance
 #'  statistics.}
-#'  \item{`Conditional_Dominance`}{Matrix of conditional dominance
-#'  statistics.  Each row represents a term; each column represents an
-#'  order of terms.}
-#'  \item{`Complete_Dominance`}{Logical matrix of complete dominance
-#'  designations. The term represented in each row indicates dominance
-#'  status; the terms represented in each columns indicates dominated-by
-#'  status.}
-#'  \item{`Fit_Statistic_Overall`}{Value of fit statistic returned by the `r2`
+#'  \item{`conditional_dominance`}{Matrix of conditional dominance
+#'  statistics.  Each row represents a predictor; each column represents an
+#'  the average increment to R2 with a specific number of predictors in
+#'  the model.}
+#'  \item{`complete_dominance`}{Logical matrix of complete dominance
+#'  designations. The predictors represented in each column are
+#'  cross-referenced with predictors in each row.  Whether the predictor
+#'  in each row dominates the predictor in each column is represented in the
+#'  logical value in the matrix.}
+#'  \item{`model_R2`}{Value of R2 value returned by the `r2`
 #'  method for the model.}
 #' }
 #'
-#' @details Computes several decompositions of the model's R2 and returns
-#' three different designations from which predictor relative importance
+#' @details Computes two decompositions of the model's R2 and returns
+#' a matrix of designations from which predictor relative importance
 #' determinations can be obtained.
 #'
-#' @section Caveats:
+#' @section Notes:
 #'
 #' The input model is parsed using `insight::find_predictors` and does not
 #' yet support interactions, transformations, or offsets applied in the
@@ -49,6 +51,9 @@
 #' function's values "is_bayesian", "is_mixed", "is_gam",
 #' is_multivariate", "is_zero_inflated",
 #' or "is_hurdle" are not supported at current.
+#'
+#' When `performance::r2` returns multiple values, only the first is used
+#' by default.
 #'
 #' @references
 #' \itemize{
@@ -129,6 +134,10 @@ dominance_analysis <- function(model, ...) {
   capture.output(da_res <- do.call(domir::domin, args2domin))
 
   da_res <- da_res[which(names(da_res) %in% c("Fit_Statistic_Overall", "General_Dominance", "Conditional_Dominance", "Complete_Dominance", "Standardized", "Ranks"))]
+
+  names(da_res)<- c("general_dominance", "standardized", "ranks", "conditional_dominance", "complete_dominance", "model_R2")
+
+  dimnames(da_res$complete_dominance) <- list(colnames(da_res$complete_dominance), names(da_res$general_dominance))
 
   class(da_res) <- c("dominance_analysis", "domin", "list")
 
