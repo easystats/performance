@@ -48,7 +48,7 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
   } else if (inherits(objects, "ListLavaan")) {
     test_likelihoodratio_ListLavaan(..., objects = objects) # Because lavaanLRT requires the ellipsis
   } else {
-    stop("The models are not nested models, which is a prerequisite for `test_likelihoodratio()`. See the 'Details' section.")
+    stop(insight::format_message("The models are not nested models, which is a prerequisite for `test_likelihoodratio()`. See the 'Details' section."), call. = FALSE)
   }
 }
 

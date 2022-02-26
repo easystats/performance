@@ -17,14 +17,14 @@ test_bf.default <- function(..., text_length = NULL) {
   .test_performance_checks(objects, multiple = FALSE)
 
   if (length(objects) == 1 && isTRUE(insight::is_model(objects))) {
-    stop("'test_bf()' is designed to compare multiple models together. For a single model, you might want to run bayestestR::bf_parameters() instead.", call. = FALSE)
+    stop(insight::format_message("'test_bf()' is designed to compare multiple models together. For a single model, you might want to run bayestestR::bf_parameters() instead."), call. = FALSE)
   }
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_bf(objects, text_length = text_length)
   } else {
-    stop("The models cannot be compared for some reason :/")
+    stop("The models cannot be compared for some reason :/", call. = FALSE)
   }
 }
 

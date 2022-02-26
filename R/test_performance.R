@@ -47,8 +47,8 @@
 #' m4 against m3, etc.
 #' \cr\cr
 #' Two models are considered as *"non-nested"* if their predictors are
-#' different. For instance, `model1 (y ~ x1 + x2)` and `model2 (y ~ x3
-#' + x4)`. In the case of non-nested models, all models are usually compared
+#' different. For instance, `model1 (y ~ x1 + x2)` and `model2 (y ~ x3 + x4)`.
+#' In the case of non-nested models, all models are usually compared
 #' against the same *reference* model (by default, the first of the list).
 #' \cr\cr
 #' Nesting is detected via the `insight::is_nested_models()` function.
@@ -73,7 +73,9 @@
 #'   approximation of the Likelihood Ratio Test. However, it is more applicable
 #'   than the LRT: you can often run a Wald test in situations where no other
 #'   test can be run. Importantly, this test only makes statistical sense if the
-#'   models are nested.\cr Note: this test is also available in base R through the
+#'   models are nested.
+#'   \cr
+#'   Note: this test is also available in base R through the
 #'   [`anova()`][anova] function. It returns an `F-value` column
 #'   as a statistic and its associated `p-value`.
 #'
@@ -206,7 +208,7 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_performance(objects, reference = reference, include_formula = include_formula)
   } else {
-    stop("The models cannot be compared for some reason :/")
+    stop("The models cannot be compared for some reason :/", call. = FALSE)
   }
 }
 
@@ -234,10 +236,14 @@ test_performance.ListNestedRegressions <- function(objects,
     }
   )
 
-  # Vuong
+  # Vuong, or LRT
   tryCatch(
     {
-      rez <- test_vuong(objects)
+      if (isTRUE(insight::check_if_installed("CompQuadForm", quietly = TRUE))) {
+        rez <- test_vuong(objects)
+      } else {
+        rez <- test_lrt(objects)
+      }
       rez$Model <- NULL
       out <- merge(out, rez, sort = FALSE)
     },
@@ -274,10 +280,14 @@ test_performance.ListNonNestedRegressions <- function(objects,
     }
   )
 
-  # Vuong
+  # Vuong, or Wald - we have non-nested models, so no LRT here
   tryCatch(
     {
-      rez <- test_vuong(objects, reference = reference)
+      if (isTRUE(insight::check_if_installed("CompQuadForm", quietly = TRUE))) {
+        rez <- test_vuong(objects, reference = reference)
+      } else {
+        rez <- test_wald(objects)
+      }
       rez$Model <- NULL
       out <- merge(out, rez, sort = FALSE)
     },

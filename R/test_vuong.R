@@ -19,7 +19,7 @@ test_vuong.default <- function(..., reference = 1) {
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_vuong(objects, reference = reference)
   } else {
-    stop("The models cannot be compared for some reason :/")
+    stop("The models cannot be compared for some reason :/", call. = FALSE)
   }
 }
 

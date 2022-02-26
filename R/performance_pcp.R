@@ -64,7 +64,7 @@ performance_pcp <- function(model,
   mi <- insight::model_info(model, verbose = verbose)
 
   if (!mi$is_binomial) {
-    stop("`performance_pcp()` only works for models with binary outcome.")
+    stop("`performance_pcp()` only works for models with binary outcome.", call. = FALSE)
   }
 
   resp <- insight::get_response(model, verbose = verbose)

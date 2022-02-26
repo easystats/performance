@@ -49,7 +49,8 @@
 #' distributions, however, only if the probability is greater than zero.
 #'
 #' @examples
-#' if (require("lme4") && require("parameters") && require("see") && require("patchwork")) {
+#' if (require("lme4") && require("parameters") &&
+#'   require("see") && require("patchwork") && require("randomForest")) {
 #'   data(sleepstudy)
 #'
 #'   model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)

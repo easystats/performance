@@ -387,7 +387,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
     thresholds <- .check_outliers_thresholds(data)
     thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
   } else {
-    stop("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).")
+    stop(insight::format_message("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."), call. = FALSE)
   }
 
 
@@ -464,7 +464,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
   } else {
-    stop("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).")
+    stop(insight::format_message("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."), call. = FALSE)
   }
 
   out <- list()

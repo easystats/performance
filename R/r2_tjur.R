@@ -20,7 +20,7 @@
 r2_tjur <- function(model) {
   # check for valid object class
   if (!insight::model_info(model, verbose = FALSE)$is_binomial) {
-    stop("`model` must be binomial.")
+    stop("`model` must be binomial.", call. = FALSE)
   }
 
   y <- .recode_to_zero(insight::get_response(model, verbose = FALSE))

@@ -109,16 +109,14 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
 #' @rdname check_homogeneity
 #' @export
 check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
-  if (!requireNamespace("car")) {
-    stop("car required for this function to work.")
-  }
+  insight::check_if_installed("car")
 
   if (tolower(method) != "levene") {
     message("Only Levene's test for homogeneity supported for afex_aov")
   }
 
   if (length(attr(x, "between")) == 0) {
-    stop("Levene test is only aplicable to ANOVAs with between-subjects factors.")
+    stop("Levene test is only aplicable to ANOVAs with between-subjects factors.", call. = FALSE)
   }
 
   data <- x$data$long # Use this to also get id column

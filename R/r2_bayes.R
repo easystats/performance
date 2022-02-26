@@ -247,9 +247,9 @@ r2_posterior.BFBayesFactor <- function(model,
   if ((length(colnames(params)) != length(colnames(mm))) ||
     !all(colnames(params) == colnames(mm))) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
-      stop("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher.", call. = FALSE)
+      stop(insight::format_message("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher."), call. = FALSE)
     }
-    stop("Woops, you seem to have stumbled on some weird edge case. Please file an issue at https://github.com/easystats/performance/issues", call. = FALSE)
+    stop(insight::format_message("Woops, you seem to have stumbled on some weird edge case. Please file an issue at https://github.com/easystats/performance/issues"), call. = FALSE)
   }
 
   # Compute R2!
