@@ -208,6 +208,9 @@ performance_aicc.rma <- function(x, ...) {
 
 .aic_transformed_response <- function(x, response_transform, ...) {
 
+  # initialize
+  aic <- NULL
+
   if (response_transform == "log") {
     # loglik-transformation. first try, we use dlnorm()
     aic <- tryCatch(
