@@ -22,6 +22,9 @@
 * `test_performance()` now calls `test_lrt()` or `test_wald()` instead of
   `test_vuong()` when package *CompQuadForm* is missing.
 
+* `test_performance()` and `test_lrt()` now compute the corrected log-likelihood
+  when models with log-transformed response variable are passed to the functions.
+
 * `check_collinearity()` better supports GAM models.
 
 ## Bug fixes
