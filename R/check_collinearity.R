@@ -116,6 +116,7 @@ check_collinearity.default <- function(x, verbose = TRUE, ...) {
   .check_collinearity(x, component = "conditional", verbose = verbose)
 }
 
+
 #' @export
 check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   if (length(attr(x, "within")) == 0L) {
