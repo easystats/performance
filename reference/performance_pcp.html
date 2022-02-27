@@ -131,29 +131,11 @@ Press, 99.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">vs</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, family <span class="op">=</span> <span class="va">binomial</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">performance_pcp</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Percentage of Correct Predictions from Logistic Regression Model</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Full model: 83.75% [70.96% - 96.53%]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Null model: 50.78% [33.46% - 68.10%]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chi-squared: 27.751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   df:  2.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   p-value:  0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No random effects found in model.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (!all_levels_found) {    include_random &lt;- FALSE    if (isTRUE(verbose)) {        warning(format_message("`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",             "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",             "Setting `include_random = FALSE` now."), call. = FALSE)    }}:</span> argument is of length zero</span>
 <span class="r-in"><span class="fu">performance_pcp</span><span class="op">(</span><span class="va">m</span>, method <span class="op">=</span> <span class="st">"Gelman-Hill"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Percentage of Correct Predictions from Logistic Regression Model</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Full model: 87.50% [76.04% - 98.96%]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Null model: 56.25% [39.06% - 73.44%]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Chi-squared: 27.751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   df:  2.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   p-value:  0.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>No random effects found in model.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (!all_levels_found) {    include_random &lt;- FALSE    if (isTRUE(verbose)) {        warning(format_message("`include_random` was set to `TRUE`, but grouping factor(s) in 'data' has new levels not in the original data.",             "Either use `allow.new.levels=TRUE`, or make sure to include only valid values for grouping factor(s).",             "Setting `include_random = FALSE` now."), call. = FALSE)    }}:</span> argument is of length zero</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

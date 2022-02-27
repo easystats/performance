@@ -67,7 +67,7 @@ tolerance = 1/vif.)"><meta property="og:image" content="https://easystats.github
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Check for multicollinearity of model terms</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_collinearity.R" class="external-link"><code>R/check_collinearity.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/check_collinearity.R" class="external-link"><code>R/check_collinearity.R</code></a>, <a href="https://github.com/easystats/performance/blob/HEAD/R/check_concurvity.R" class="external-link"><code>R/check_concurvity.R</code></a></small>
       <div class="d-none name"><code>check_collinearity.Rd</code></div>
     </div>
 
@@ -94,7 +94,9 @@ multicollinearity by calculating the variance inflation factor (VIF).
   component <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"conditional"</span>, <span class="st">"count"</span>, <span class="st">"zi"</span>, <span class="st">"zero_inflated"</span><span class="op">)</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+
+<span class="fu">check_concurvity</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
