@@ -17,7 +17,7 @@ check_concurvity.gam <- function(x, ...) {
   data.frame(
     Term = smooth_terms,
     VIF = as.vector(1 / (1 - as.numeric(out[1, ]))),
-    VIF_proportion = as.vector(1 / (1 - as.numeric(out[3, ]))),
+    VIF_proportion = as.vector(as.numeric(out[3, ])),
     stringsAsFactors = FALSE
   )
 }
