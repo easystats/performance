@@ -639,7 +639,7 @@ print.check_collinearity <- function(x, ...) {
 
 
 #' @export
-print.check_concurvity <- function(x) {
+print.check_concurvity <- function(x, ...) {
   vifs <- x$VIF
 
   x$VIF <- sprintf("%.2f", x$VIF)
