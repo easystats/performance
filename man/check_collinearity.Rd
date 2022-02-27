@@ -41,7 +41,7 @@ Following model-classes are currently supported: \code{hurdle},
 \code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.}
 }
 \value{
-A data frame with three columns: The name of the model term, the
+A data frame with four columns: The name of the model term, the
 variance inflation factor and the factor by which the standard error
 is increased due to possible correlation with other terms.
 }
@@ -49,8 +49,10 @@ is increased due to possible correlation with other terms.
 \code{check_collinearity()} checks regression models for
 multicollinearity by calculating the variance inflation factor (VIF).
 \code{multicollinearity()} is an alias for \code{check_collinearity()}.
-(When printed, VIF are also translated to Tolerance values, where
-\code{tolerance = 1/vif}.)
+(When printed, VIF are also translated to tolerance values, where
+\code{tolerance = 1/vif}.) \code{check_concurvity()} is a wrapper around
+\code{mgcv::concurvity()}, and can be considered as a collinearity check
+for smooth terms in GAMs.
 }
 \details{
 \subsection{Multicollinearity}{
@@ -94,6 +96,20 @@ This portion of multicollinearity among the component terms of an
 interaction is also called "inessential ill-conditioning", which leads to
 inflated VIF values that are typically seen for models with interaction
 terms \cite{(Francoeur 2013)}.
+}
+
+\subsection{Concurvity for Smooth Terms in Generalized Additive Models}{
+\code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be
+considered as a collinearity check for smooth terms in GAMs.
+\dQuote{Concurvity occurs when some smooth term in a model could be
+approximated by one or more of the other smooth terms in the model.} (see
+\code{?mgcv::concurvity}). \code{check_concurvity()} returns a column named \emph{VIF},
+which is the "worst" measure. While \code{mgcv::concurvity()} range between
+0 and 1, the \emph{VIF} value is \code{1 / (1 - worst)}, to make interpretation
+comparable to classical VIF values, i.e. 1 indicates no problems, while
+higher values indicate increasing lack of identifiability. The \emph{VIF proportion}
+column equals the "estimate" column from \code{mgcv::concurvity()}, ranging
+from 0 (no problem) to 1 (total lack of identifiability).
 }
 }
 \note{

@@ -639,6 +639,39 @@ print.check_collinearity <- function(x, ...) {
 
 
 #' @export
+print.check_concurvity <- function(x) {
+  vifs <- x$VIF
+
+  x$VIF <- sprintf("%.2f", x$VIF)
+  x$VIF_proportion <- sprintf("%.2f", x$VIF_proportion)
+
+  colnames(x)[3] <- "VIF %"
+
+  low_corr <- which(vifs < 5)
+  if (length(low_corr)) {
+    cat("\n")
+    insight::print_color("Low Concurvity\n\n", "green")
+    print.data.frame(x[low_corr, ], row.names = FALSE)
+  }
+
+  mid_corr <- which(vifs >= 5 & vifs < 10)
+  if (length(mid_corr)) {
+    cat("\n")
+    insight::print_color("Moderate Concurvity\n\n", "yellow")
+    print.data.frame(x[mid_corr, ], row.names = FALSE)
+  }
+
+  high_corr <- which(vifs >= 10)
+  if (length(high_corr)) {
+    cat("\n")
+    insight::print_color("High Concurvity\n\n", "red")
+    print.data.frame(x[high_corr, ], row.names = FALSE)
+  }
+}
+
+
+
+#' @export
 print.test_likelihoodratio <- function(x, digits = 2, ...) {
 
   # Footer

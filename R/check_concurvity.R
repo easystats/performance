@@ -8,16 +8,19 @@ check_concurvity <- function(x, ...) {
 #' @export
 check_concurvity.gam <- function(x, ...) {
   insight::check_if_installed("mgcv")
-  out <- as.data.frame(mgcv::concurvity(x))
+  conc <- as.data.frame(mgcv::concurvity(x))
 
   # only smooth terms
-  smooth_terms <- colnames(out)[grepl("s\\((.*)\\)", colnames(out))]
-  out <- out[smooth_terms]
+  smooth_terms <- colnames(conc)[grepl("s\\((.*)\\)", colnames(conc))]
+  conc <- conc[smooth_terms]
 
-  data.frame(
+  out <- data.frame(
     Term = smooth_terms,
-    VIF = as.vector(1 / (1 - as.numeric(out[1, ]))),
-    VIF_proportion = as.vector(as.numeric(out[3, ])),
+    VIF = as.vector(1 / (1 - as.numeric(conc[1, ])))^2,
+    VIF_proportion = as.vector(as.numeric(conc[3, ])),
     stringsAsFactors = FALSE
   )
+
+  class(out) <- c("check_concurvity", "see_check_concurvity", class(out))
+  out
 }

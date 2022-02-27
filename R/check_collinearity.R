@@ -3,11 +3,13 @@
 #'
 #' @description
 #'
-#' `check_collinearity()` checks regression models for
-#'   multicollinearity by calculating the variance inflation factor (VIF).
-#'   `multicollinearity()` is an alias for `check_collinearity()`.
-#'   (When printed, VIF are also translated to Tolerance values, where
-#'   `tolerance = 1/vif`.)
+#'  `check_collinearity()` checks regression models for
+#'  multicollinearity by calculating the variance inflation factor (VIF).
+#'  `multicollinearity()` is an alias for `check_collinearity()`.
+#'  (When printed, VIF are also translated to tolerance values, where
+#'  `tolerance = 1/vif`.) `check_concurvity()` is a wrapper around
+#'  `mgcv::concurvity()`, and can be considered as a collinearity check
+#'  for smooth terms in GAMs.
 #'
 #' @param x A model object (that should at least respond to `vcov()`,
 #'  and if possible, also to `model.matrix()` - however, it also should
@@ -22,7 +24,7 @@
 #' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
-#' @return A data frame with three columns: The name of the model term, the
+#' @return A data frame with four columns: The name of the model term, the
 #'   variance inflation factor and the factor by which the standard error
 #'   is increased due to possible correlation with other terms.
 #'
@@ -69,6 +71,20 @@
 #'   interaction is also called "inessential ill-conditioning", which leads to
 #'   inflated VIF values that are typically seen for models with interaction
 #'   terms \cite{(Francoeur 2013)}.
+#' }
+#'
+#' \subsection{Concurvity for Smooth Terms in Generalized Additive Models}{
+#'   `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#'   considered as a collinearity check for smooth terms in GAMs.
+#'   \dQuote{Concurvity occurs when some smooth term in a model could be
+#'   approximated by one or more of the other smooth terms in the model.} (see
+#'   `?mgcv::concurvity`). `check_concurvity()` returns a column named _VIF_,
+#'   which is the "worst" measure. While `mgcv::concurvity()` range between
+#'   0 and 1, the _VIF_ value is `1 / (1 - worst)`, to make interpretation
+#'   comparable to classical VIF values, i.e. 1 indicates no problems, while
+#'   higher values indicate increasing lack of identifiability. The _VIF proportion_
+#'   column equals the "estimate" column from `mgcv::concurvity()`, ranging
+#'   from 0 (no problem) to 1 (total lack of identifiability).
 #' }
 #'
 #' @references
