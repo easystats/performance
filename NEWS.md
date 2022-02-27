@@ -32,6 +32,8 @@
 * `model_performance()` for models from *lme4* did not report AICc when
   requested.
 
+* `r2_nakagawa()` messed up order of group levels when `by_group` was `TRUE`.
+
 # performance 0.8.0
 
 ## Breaking Changes
