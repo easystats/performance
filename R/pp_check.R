@@ -59,18 +59,22 @@ check_predictions <- function(object,
                               check_range = FALSE,
                               re_formula = NULL,
                               ...) {
+  UseMethod("check_predictions")
+}
+
+#' @export
+check_predictions.default <- function(object,
+                                      iterations = 50,
+                                      check_range = FALSE,
+                                      re_formula = NULL,
+                                      ...) {
   if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) &&
-    isFALSE(inherits(object, "BFBayesFactor"))) {
+      isFALSE(inherits(object, "BFBayesFactor"))) {
     insight::check_if_installed(
       "bayesplot",
       "to create posterior prediction plots for Stan models"
     )
     bayesplot::pp_check(object)
-  } else if (isTRUE(inherits(object, "BFBayesFactor"))) {
-    insight::format_message(stop(
-      "Posterior preditive checks not yet supported for BayesFactor models",
-      call. = FALSE
-    ))
   } else {
     pp_check.lm(
       object,
@@ -81,6 +85,42 @@ check_predictions <- function(object,
     )
   }
 }
+
+#' @export
+check_predictions.BFBayesFactor <- function(object,
+                                            iterations = 50,
+                                            check_range = FALSE,
+                                            re_formula = NULL,
+                                            ...) {
+  if (!is.null(re_formula)) warning("Ignoring 're_formula' argument.")
+
+  params <- insight::get_parameters(object, unreduce = FALSE)
+  params <- params[sample(nrow(params), iterations), ]
+
+  # remove sig and g cols
+  params2 <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
+
+  mm <- BayesFactor::model.matrix(object[1])
+  colnames(mm)[1] <- "mu"
+
+  y <- insight::get_response(object, verbose = FALSE)
+  yy <- as.matrix(params2) %*% t(mm)
+  sigmay <- sqrt(params[, grepl(pattern = "^sig2$", colnames(params))])
+
+  yrep <- apply(yy, 2, function(mu) rnorm(length(mu), mu, sigmay))
+
+  out <- as.data.frame(t(yrep))
+  colnames(out) <- paste0("sim_", seq(ncol(out)))
+  out$y <- y
+
+  attr(out, "check_range") <- check_range
+  class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
+  out
+}
+
+
+
+pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
 
 
 pp_check.lm <- function(object,
@@ -131,6 +171,7 @@ pp_check.lm <- function(object,
 #'   S3method(bayesplot::pp_check, rma)
 #'   S3method(bayesplot::pp_check, vlm)
 #'   S3method(bayesplot::pp_check, wbm)
+#'   S3method(bayesplot::pp_check, BFBayesFactor)
 #' }
 
 # styler: off
