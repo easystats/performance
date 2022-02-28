@@ -115,7 +115,7 @@ performance_aic.vglm <- performance_aic.vgam
 
 #' @export
 performance_aic.svyglm <- function(x, ...) {
-  tryCatch(
+  aic <- tryCatch(
     {
       stats::AIC(x)[["AIC"]]
     },
@@ -123,6 +123,7 @@ performance_aic.svyglm <- function(x, ...) {
       NULL
     }
   )
+  .adjust_aic_jacobian(aic)
 }
 
 #' @export
@@ -191,7 +192,8 @@ performance_aicc.default <- function(x, ...) {
   ll <- insight::get_loglikelihood(x, check_response = TRUE, verbose = TRUE)
   k <- attr(ll, "df")
 
-  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+  aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+  .adjust_aic_jacobian(aicc)
 }
 
 
@@ -224,6 +226,19 @@ performance_aicc.rma <- function(x, ...) {
 
 
 # jacobian / derivate for log models and other transformations ----------------
+
+
+.adjust_ic_jacobian <- function(model, ic) {
+  response_transform <- insight::find_transformation(model)
+  if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
+    adjustment <- tryCatch(.loglik_adjust_jacobian(model), error = function(e) NULL)
+    if (!is.null(adjustment)) {
+      ic <- ic - 2 * adjustment
+    }
+  }
+  ic
+}
+
 
 .aic_transformed_response <- function(x, response_transform, aic = NULL, ...) {
   if (response_transform == "log") {

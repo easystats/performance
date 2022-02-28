@@ -18,16 +18,7 @@
       }
     )
   }
-
-  response_transform <- insight::find_transformation(x)
-  if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-    adjustment <- tryCatch(.loglik_adjust_jacobian(x), error = function(e) NULL)
-    if (!is.null(adjustment)) {
-      out <- out - 2 * adjustment
-    }
-  }
-
-  out
+  .adjust_ic_jacobian(x, out)
 }
 
 
