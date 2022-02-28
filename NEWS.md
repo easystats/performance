@@ -1,5 +1,10 @@
 # performance 0.8.1
 
+## New functions
+
+* `check_concurvity()`, which returns GAM concurvity measures (comparable
+  to collinearity checks).
+
 ## Changes to functions
 
 ### Check functions
