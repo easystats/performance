@@ -600,6 +600,17 @@ check_outliers.grouped_df <- function(x, method = "mahalanobis", threshold = NUL
   out
 }
 
+#' @export
+check_outliers.BFBayesFactor <- function(x, ..) {
+  if (!insight::is_model(x)) {
+    stop("Collinearity only applicable to regression models.")
+  }
+
+  d <- insight::get_predictors(x)
+  d[[insight::find_response(x)]] <- insight::get_response(x)
+
+  check_outliers(d, ...)
+}
 
 # Methods -----------------------------------------------------------------
 
