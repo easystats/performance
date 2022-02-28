@@ -601,7 +601,7 @@ check_outliers.grouped_df <- function(x, method = "mahalanobis", threshold = NUL
 }
 
 #' @export
-check_outliers.BFBayesFactor <- function(x, ..) {
+check_outliers.BFBayesFactor <- function(x, ...) {
   if (!insight::is_model(x)) {
     stop("Collinearity only applicable to regression models.")
   }
