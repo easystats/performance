@@ -83,7 +83,7 @@ performance_aic.default <- function(x, verbose = TRUE, ...) {
   response_transform <- insight::find_transformation(x)
 
   if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-    aic_corrected <- tryCatch(.aic_transformed_response(x, response_transform, aic, ...), error = function(e) NULL)
+    aic_corrected <- tryCatch(.adjust_aic(x, response_transform, aic, ...), error = function(e) NULL)
     if (is.null(aic_corrected)) {
       if (isTRUE(verbose)) {
         warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
@@ -123,7 +123,7 @@ performance_aic.svyglm <- function(x, ...) {
       NULL
     }
   )
-  .adjust_aic_jacobian(aic)
+  .adjust_ic_jacobian(aic)
 }
 
 #' @export
@@ -172,14 +172,16 @@ performance_aic.poissonmfx <- performance_aic.logitor
 
 #' @export
 performance_aic.bayesx <- function(x, ...) {
-  stats::AIC(x)[["AIC"]]
+  out <- stats::AIC(x)[["AIC"]]
+  .adjust_ic_jacobian(out)
 }
 
 # methods ------------------------------------------
 
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
-  -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
+  out <- -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
+  .adjust_ic_jacobian(out)
 }
 
 
@@ -193,7 +195,7 @@ performance_aicc.default <- function(x, ...) {
   k <- attr(ll, "df")
 
   aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
-  .adjust_aic_jacobian(aicc)
+  .adjust_ic_jacobian(aicc)
 }
 
 
@@ -203,7 +205,8 @@ performance_aicc.bife <- function(x, ...) {
   ll <- insight::get_loglikelihood(x)
   nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
   k <- n - nparam
-  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+  aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+  .adjust_ic_jacobian(aicc)
 }
 
 #' @export
@@ -231,7 +234,7 @@ performance_aicc.rma <- function(x, ...) {
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
   if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
-    adjustment <- tryCatch(.loglik_adjust_jacobian(model), error = function(e) NULL)
+    adjustment <- tryCatch(.adjust_loglik_jacobian(model), error = function(e) NULL)
     if (!is.null(adjustment)) {
       ic <- ic - 2 * adjustment
     }
@@ -240,17 +243,17 @@ performance_aicc.rma <- function(x, ...) {
 }
 
 
-.aic_transformed_response <- function(x, response_transform, aic = NULL, ...) {
+.adjust_aic <- function(x, response_transform, aic = NULL, ...) {
   if (response_transform == "log") {
-    aic <- .aic_adjust_dlnorm(x)
+    aic <- .adjust_aic_dlnorm(x)
   } else {
-    aic <- aic - 2 * .loglik_adjust_jacobian(x)
+    aic <- aic - 2 * .adjust_loglik_jacobian(x)
   }
   aic
 }
 
 
-.aic_adjust_dlnorm <- function(model) {
+.adjust_aic_dlnorm <- function(model) {
   # loglik-transformation. first try, we use dlnorm()
   aic <- tryCatch(
     {
@@ -277,7 +280,7 @@ performance_aicc.rma <- function(x, ...) {
 }
 
 
-.loglik_adjust_jacobian <- function(model) {
+.adjust_loglik_jacobian <- function(model) {
   trans <- insight::get_transformation(model)$transformation
   sum(log(
     diag(attr(with(
