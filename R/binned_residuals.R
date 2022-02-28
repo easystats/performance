@@ -94,6 +94,10 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   d <- do.call(rbind, d)
   d <- d[stats::complete.cases(d), ]
 
+  # CIs
+  d$CI_low <- d$ybar - stats::qnorm(.975) * d$se
+  d$CI_high <- d$ybar + stats::qnorm(.975) * d$se
+
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"
   d$group[gr] <- "no"
