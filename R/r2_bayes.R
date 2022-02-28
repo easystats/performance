@@ -233,41 +233,16 @@ r2_posterior.BFBayesFactor <- function(model,
   insight::check_if_installed("rstantools")
   insight::check_if_installed("BayesFactor")
 
-  # Estimates
-  params <- insight::get_parameters(model, unreduce = FALSE)
-
-  # remove sig and g cols
-  params <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
-
-  # Model Matrix
-  mm <- BayesFactor::model.matrix(model[1])
-  colnames(mm)[1] <- "mu"
-
-  # match?
-  if ((length(colnames(params)) != length(colnames(mm))) ||
-    !all(colnames(params) == colnames(mm))) {
-    if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
-      stop(insight::format_message("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher."), call. = FALSE)
-    }
-    stop(insight::format_message("Woops, you seem to have stumbled on some weird edge case. Please file an issue at https://github.com/easystats/performance/issues"), call. = FALSE)
-  }
+  everything_we_need <- .get_bfbf_predictions(model)
 
   # Compute R2!
-  y <- insight::get_response(model, verbose = FALSE)
-  yy <- as.matrix(params) %*% t(mm)
-  r2s <- rstantools::bayes_R2(yy, y = y)
-  r2_bayesian <- data.frame(R2_Bayes = r2s)
+  y <- everything_we_need[["y"]]
+  yy <- everything_we_need[["y_pred"]]
+  r2_bayesian <- data.frame(R2_Bayes = rstantools::bayes_R2(yy, y = y))
 
-  rand <- insight::find_predictors(model[1], effects = "random", flatten = TRUE, verbose = FALSE)
-
-  if (!is.null(rand)) {
-    idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params))
-    idx <- apply(idx, 1, any)
-    params[idx] <- 0
-
-    yy <- as.matrix(params) %*% t(mm)
-    r2s_marginal <- rstantools::bayes_R2(yy, y = y)
-    r2_bayesian$R2_Bayes_marginal <- r2s_marginal
+  if ("y_pred_marginal" %in% names(everything_we_need)) {
+    yy <- everything_we_need[["y_pred_marginal"]]
+    r2_bayesian$R2_Bayes_marginal <- rstantools::bayes_R2(yy, y = y)
   }
 
   r2_bayesian
@@ -359,3 +334,50 @@ as.data.frame.r2_bayes <- function(x, ...) {
 
   out
 }
+
+
+
+# Utils -------------------------------------------------------------------
+
+.get_bfbf_predictions <- function(model, iterations = 4000) {
+  insight::check_if_installed("BayesFactor")
+
+  # Estimates
+  params <- insight::get_parameters(model, unreduce = FALSE, iterations = iterations)
+
+  # remove sig and g cols
+  params_theta <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
+  params_sigma <- sqrt(params[, grepl(pattern = "^sig2$", colnames(params))])
+
+  # Model Matrix
+  mm <- BayesFactor::model.matrix(model[1])
+  colnames(mm)[1] <- "mu"
+
+  # match?
+  if ((length(colnames(params_theta)) != length(colnames(mm))) ||
+      !all(colnames(params_theta) == colnames(mm))) {
+    if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
+      stop(insight::format_message("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher."), call. = FALSE)
+    }
+    stop(insight::format_message("Woops, you seem to have stumbled on some weird edge case. Please file an issue at https://github.com/easystats/performance/issues"), call. = FALSE)
+  }
+
+  out <- list(
+    y = insight::get_response(model, verbose = FALSE),
+    y_pred = (as.matrix(params_theta) %*% t(mm))
+  )
+
+  rand <- insight::find_predictors(model[1], effects = "random", flatten = TRUE, verbose = FALSE)
+  if (!is.null(rand)) {
+    idx <- sapply(paste0("\\b", rand, "\\b"), grepl, x = colnames(params_theta))
+    idx <- apply(idx, 1, any)
+    params_theta[idx] <- 0
+
+    out[["y_pred_marginal"]] <- (as.matrix(params_theta) %*% t(mm))
+  }
+
+  out[["sigma"]] <- params_sigma
+  out
+}
+
+

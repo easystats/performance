@@ -92,27 +92,23 @@ check_predictions.BFBayesFactor <- function(object,
                                             check_range = FALSE,
                                             re_formula = NULL,
                                             ...) {
-  if (!is.null(re_formula)) warning("Ignoring 're_formula' argument.")
+  everything_we_need <- .get_bfbf_predictions(object, iterations = iterations)
 
-  params <- insight::get_parameters(object, unreduce = FALSE)
-  params <- params[sample(nrow(params), iterations), ]
+  y <- everything_we_need[["y"]]
+  sig <- everything_we_need[["sigma"]]
+  if (isTRUE(is.na(re_formula))) {
+    yy <- everything_we_need[["y_pred_marginal"]]
+  } else {
+    if (!is.null(re_formula)) warning("re_formula can only be NULL or NA", call. = FALSE)
+    yy <- everything_we_need[["y_pred"]]
+  }
 
-  # remove sig and g cols
-  params2 <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
+  yrep <- apply(yy, 2, function(mu) rnorm(length(mu), mu, sig))
+  yrep <- t(yrep)
 
-  mm <- BayesFactor::model.matrix(object[1])
-  colnames(mm)[1] <- "mu"
-
-  y <- insight::get_response(object, verbose = FALSE)
-  yy <- as.matrix(params2) %*% t(mm)
-  sigmay <- sqrt(params[, grepl(pattern = "^sig2$", colnames(params))])
-
-  yrep <- apply(yy, 2, function(mu) rnorm(length(mu), mu, sigmay))
-
-  out <- as.data.frame(t(yrep))
+  out <- as.data.frame(yrep)
   colnames(out) <- paste0("sim_", seq(ncol(out)))
   out$y <- y
-
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
