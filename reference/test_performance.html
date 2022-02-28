@@ -30,7 +30,7 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -213,7 +213,8 @@ CFA), the function calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLR
 log-transformed response variables, <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> returns a wrong log-likelihood.
 However, <code>test_likelihoodratio()</code> calls <code><a href="https://easystats.github.io/insight/reference/get_loglikelihood.html" class="external-link">insight::get_loglikelihood()</a></code> with
 <code>check_response=TRUE</code>, which returns a corrected log-likelihood value
-particularly for models with log-transformed response variables.</p></li>
+for models with transformed response variables (like log- or
+sqrt-transformation).</p></li>
 <li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two
 tests.</p><ul><li><p>The <strong>Test of Distinguishability</strong> (the <code>Omega2</code> column and
