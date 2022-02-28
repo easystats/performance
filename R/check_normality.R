@@ -150,6 +150,8 @@ check_normality.afex_aov <- function(x, ...) {
   invisible(p.val)
 }
 
+#' @export
+check_normality.BFBayesFactor <- check_normality.afex_aov
 
 
 # helper ---------------------

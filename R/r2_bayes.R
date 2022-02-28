@@ -380,4 +380,14 @@ as.data.frame.r2_bayes <- function(x, ...) {
   out
 }
 
+#' @export
+residuals.BFBayesFactor <- function(object, ...) {
+  everything_we_need <- .get_bfbf_predictions(object)
 
+  everything_we_need[["y"]] - apply(everything_we_need[["y_pred"]], 2, mean)
+}
+
+#' @export
+fitted.BFBayesFactor <- function(object, ...) {
+  .get_bfbf_predictions(object)[["y_pred"]]
+}
