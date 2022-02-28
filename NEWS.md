@@ -1,3 +1,9 @@
+# performance 0.8.0.6
+
+## Changes to functions
+
+- * `check_collinearity()` now supports (mixed) regression models from `BayesFactor`.
+
 # performance 0.8.1
 
 ## Changes to functions

@@ -161,6 +161,16 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   )))
 }
 
+#' @export
+check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
+  if (!insight::is_model(x)) {
+    stop("Collinearity only applicable to regression models.")
+  }
+
+  f <- insight::find_formula(x)[[1]]
+  d <- insight::get_data(x)
+  check_collinearity(stats::lm(f, d))
+}
 
 # mfx models -------------------------------
 
