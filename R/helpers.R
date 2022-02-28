@@ -5,11 +5,11 @@
 .get_BIC <- function(x) {
   if (inherits(x, c("vgam", "vglm"))) {
     insight::check_if_installed("VGAM")
-    VGAM::BIC(x)
+    out <- VGAM::BIC(x)
   } else if (inherits(x, "bayesx")) {
-    stats::BIC(x)[["BIC"]]
+    out <- stats::BIC(x)[["BIC"]]
   } else {
-    tryCatch(
+    out <- tryCatch(
       {
         stats::BIC(x)
       },
@@ -18,6 +18,16 @@
       }
     )
   }
+
+  response_transform <- insight::find_transformation(x)
+  if (!is.null(response_transform) && !identical(response_transform, "identity")) {
+    adjustment <- tryCatch(.loglik_adjust_jacobian(x), error = function(e) NULL)
+    if (!is.null(adjustment)) {
+      out <- out - 2 * adjustment
+    }
+  }
+
+  out
 }
 
 
