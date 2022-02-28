@@ -2,8 +2,32 @@
 
 ## Changes to functions
 
+### Check functions
+
 * `check_predictions()`, `check_collinearity()` and `check_outliers()` now
   support (mixed) regression models from `BayesFactor`.
+
+* `check_zeroinflation()` now also works for `lme4::glmer.nb()` models.
+
+* `check_collinearity()` better supports GAM models.
+
+### Test functions
+
+* `test_performance()` now calls `test_lrt()` or `test_wald()` instead of
+  `test_vuong()` when package *CompQuadForm* is missing.
+
+* `test_performance()` and `test_lrt()` now compute the corrected log-likelihood
+  when models with transformed response variables (such as log- or 
+  sqrt-transformations) are passed to the functions.
+
+### Model performance functions
+
+* `performance_aic()` now corrects the AIC value for models with transformed
+  response variables. This also means that comparing models using 
+  `compare_performance()` allows comparisons of AIC values for models with and
+  without transformed response variables.
+
+### Plotting and printing
 
 * The `print()` method for `binned_residuals()` now prints a short summary of
   the results (and no longer generates a plot). A `plot()` method was added
@@ -16,21 +40,6 @@
 
   - The density-plot that showed normality of residuals was replaced by the
     posterior predictive check plot.
-
-* `performance_aic()` now corrects the AIC value for models with transformed
-  response variables. This also means that comparing models using 
-  `compare_performance()` allows comparisons of AIC values for models with and
-  without transformed response variables.
-
-* `check_zeroinflation()` now also works for `lme4::glmer.nb()` models.
-
-* `test_performance()` now calls `test_lrt()` or `test_wald()` instead of
-  `test_vuong()` when package *CompQuadForm* is missing.
-
-* `test_performance()` and `test_lrt()` now compute the corrected log-likelihood
-  when models with log-transformed response variable are passed to the functions.
-
-* `check_collinearity()` better supports GAM models.
 
 ## Bug fixes
 
