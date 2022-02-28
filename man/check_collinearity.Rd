@@ -105,7 +105,7 @@ considered as a collinearity check for smooth terms in GAMs.
 approximated by one or more of the other smooth terms in the model.} (see
 \code{?mgcv::concurvity}). \code{check_concurvity()} returns a column named \emph{VIF},
 which is the "worst" measure. While \code{mgcv::concurvity()} range between
-0 and 1, the \emph{VIF} value is \code{(1 / (1 - worst))^2}, to make interpretation
+0 and 1, the \emph{VIF} value is \code{1 / (1 - worst)}, to make interpretation
 comparable to classical VIF values, i.e. \code{1} indicates no problems, while
 higher values indicate increasing lack of identifiability. The \emph{VIF proportion}
 column equals the "estimate" column from \code{mgcv::concurvity()}, ranging
