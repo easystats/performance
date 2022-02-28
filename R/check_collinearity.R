@@ -80,7 +80,7 @@
 #'   approximated by one or more of the other smooth terms in the model.} (see
 #'   `?mgcv::concurvity`). `check_concurvity()` returns a column named _VIF_,
 #'   which is the "worst" measure. While `mgcv::concurvity()` range between
-#'   0 and 1, the _VIF_ value is `(1 / (1 - worst))^2`, to make interpretation
+#'   0 and 1, the _VIF_ value is `1 / (1 - worst)`, to make interpretation
 #'   comparable to classical VIF values, i.e. `1` indicates no problems, while
 #'   higher values indicate increasing lack of identifiability. The _VIF proportion_
 #'   column equals the "estimate" column from `mgcv::concurvity()`, ranging

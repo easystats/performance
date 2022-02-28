@@ -12,11 +12,10 @@ check_concurvity.gam <- function(x, ...) {
 
   # only smooth terms
   smooth_terms <- colnames(conc)[grepl("s\\((.*)\\)", colnames(conc))]
-  conc <- conc[smooth_terms]
 
   out <- data.frame(
-    Term = smooth_terms,
-    VIF = as.vector(1 / (1 - as.numeric(conc[1, ])))^2,
+    Term = c("Parametric", smooth_terms),
+    VIF = as.vector(1 / (1 - as.numeric(conc[1, ]))),
     VIF_proportion = as.vector(as.numeric(conc[3, ])),
     stringsAsFactors = FALSE
   )
