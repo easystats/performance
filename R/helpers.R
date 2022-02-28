@@ -9,14 +9,7 @@
   } else if (inherits(x, "bayesx")) {
     out <- stats::BIC(x)[["BIC"]]
   } else {
-    out <- tryCatch(
-      {
-        stats::BIC(x)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    out <- tryCatch(stats::BIC(x), error = function(e) NULL)
   }
   .adjust_ic_jacobian(x, out)
 }

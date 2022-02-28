@@ -115,15 +115,8 @@ performance_aic.vglm <- performance_aic.vgam
 
 #' @export
 performance_aic.svyglm <- function(x, ...) {
-  aic <- tryCatch(
-    {
-      stats::AIC(x)[["AIC"]]
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-  .adjust_ic_jacobian(aic)
+  aic <- tryCatch(stats::AIC(x)[["AIC"]], error = function(e) NULL)
+  .adjust_ic_jacobian(x, aic)
 }
 
 #' @export
@@ -173,7 +166,7 @@ performance_aic.poissonmfx <- performance_aic.logitor
 #' @export
 performance_aic.bayesx <- function(x, ...) {
   out <- stats::AIC(x)[["AIC"]]
-  .adjust_ic_jacobian(out)
+  .adjust_ic_jacobian(x, out)
 }
 
 # methods ------------------------------------------
@@ -181,7 +174,7 @@ performance_aic.bayesx <- function(x, ...) {
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
   out <- -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
-  .adjust_ic_jacobian(out)
+  .adjust_ic_jacobian(object, out)
 }
 
 
@@ -195,7 +188,7 @@ performance_aicc.default <- function(x, ...) {
   k <- attr(ll, "df")
 
   aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
-  .adjust_ic_jacobian(aicc)
+  .adjust_ic_jacobian(x, aicc)
 }
 
 
@@ -205,8 +198,9 @@ performance_aicc.bife <- function(x, ...) {
   ll <- insight::get_loglikelihood(x)
   nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
   k <- n - nparam
+
   aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
-  .adjust_ic_jacobian(aicc)
+  .adjust_ic_jacobian(x, aicc)
 }
 
 #' @export
@@ -231,6 +225,7 @@ performance_aicc.rma <- function(x, ...) {
 # jacobian / derivate for log models and other transformations ----------------
 
 
+# this function adjusts any IC for models with transformed response variables
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
   if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
@@ -243,6 +238,7 @@ performance_aicc.rma <- function(x, ...) {
 }
 
 
+# this function adjusts the AIC, either dlnorm for log, or Jacobian for other transformations
 .adjust_aic <- function(x, response_transform, aic = NULL, ...) {
   if (response_transform == "log") {
     aic <- .adjust_aic_dlnorm(x)
@@ -253,6 +249,7 @@ performance_aicc.rma <- function(x, ...) {
 }
 
 
+# this function adjusts the AIC, based on dlnorm() log-likelihood adjustment
 .adjust_aic_dlnorm <- function(model) {
   # loglik-transformation. first try, we use dlnorm()
   aic <- tryCatch(
@@ -280,6 +277,7 @@ performance_aicc.rma <- function(x, ...) {
 }
 
 
+# this function just adjusts the log-likelihood of a model
 .adjust_loglik_jacobian <- function(model) {
   trans <- insight::get_transformation(model)$transformation
   sum(log(
