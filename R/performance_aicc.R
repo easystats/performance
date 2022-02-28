@@ -62,32 +62,35 @@ performance_aic <- function(x, ...) {
 #' @export
 performance_aic.default <- function(x, verbose = TRUE, ...) {
   info <- suppressWarnings(insight::model_info(x))
+
   aic <- NULL
+
+  # special handling for tweedie
+  if (info$family == "Tweedie") {
+    insight::check_if_installed("tweedie")
+    aic <- suppressMessages(tweedie::AICtweedie(x))
+  } else {
+    # all other models...
+    aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
+    if (is.null(aic)) {
+      aic <- tryCatch(
+        -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model"),
+        error = function(e) NULL
+      )
+    }
+  }
 
   # check if we have transformed response, and if so, adjust LogLik
   response_transform <- insight::find_transformation(x)
 
   if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-    aic <- tryCatch(.aic_transformed_response(x, response_transform, ...), error = function(e) NULL)
-    if (is.null(aic) && isTRUE(verbose)) {
-      warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
-    }
-  }
-
-  if (is.null(aic)) {
-    # special handling for tweedie
-    if (info$family == "Tweedie") {
-      insight::check_if_installed("tweedie")
-      aic <- suppressMessages(tweedie::AICtweedie(x))
-    } else {
-      # all other models...
-      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
-      if (is.null(aic)) {
-        aic <- tryCatch(
-          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model"),
-          error = function(e) NULL
-        )
+    aic_corrected <- tryCatch(.aic_transformed_response(x, response_transform, aic, ...), error = function(e) NULL)
+    if (is.null(aic_corrected)) {
+      if (isTRUE(verbose)) {
+        warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
       }
+    } else {
+      aic <- aic_corrected
     }
   }
 
@@ -223,10 +226,7 @@ performance_aicc.rma <- function(x, ...) {
 
 # jacobian / derivate for log models and other transformations ----------------
 
-.aic_transformed_response <- function(x, response_transform, ...) {
-
-  # initialize
-  aic <- NULL
+.aic_transformed_response <- function(x, response_transform, aic = NULL, ...) {
 
   if (response_transform == "log") {
     # loglik-transformation. first try, we use dlnorm()
@@ -250,7 +250,26 @@ performance_aicc.rma <- function(x, ...) {
     if (is.null(aic)) {
       aic <- stats::AIC(x) + 2 * sum(log(insight::get_response(x)))
     }
+  } else {
+    aic <- .ic_jacobian_adjustment(x, aic)
   }
 
   aic
+}
+
+
+.ic_jacobian_adjustment <- function(model, aic) {
+  trans <- insight::get_transformation(model)$transformation
+  adjust <- sum(log(
+    diag(attr(with(
+      insight::get_data(model),
+      stats::numericDeriv(
+        expr = quote(trans(
+          get(insight::find_response(model))
+        )),
+        theta = insight::find_response(model)
+      )
+    ), "gradient"))
+  ))
+  aic - 2 * adjust
 }

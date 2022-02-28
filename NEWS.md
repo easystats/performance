@@ -1,13 +1,9 @@
-# performance 0.8.0.6
+# performance 0.8.1
 
 ## Changes to functions
 
 * `check_predictions()`, `check_collinearity()` and `check_outliers()` now
-support (mixed) regression models from `BayesFactor`.
-
-# performance 0.8.1
-
-## Changes to functions
+  support (mixed) regression models from `BayesFactor`.
 
 * The `print()` method for `binned_residuals()` now prints a short summary of
   the results (and no longer generates a plot). A `plot()` method was added
@@ -22,7 +18,9 @@ support (mixed) regression models from `BayesFactor`.
     posterior predictive check plot.
 
 * `performance_aic()` now corrects the AIC value for models with transformed
-  response variables.
+  response variables. This also means that comparing models using 
+  `compare_performance()` allows comparisons of AIC values for models with and
+  without transformed response variables.
 
 * `check_zeroinflation()` now also works for `lme4::glmer.nb()` models.
 
