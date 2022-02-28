@@ -94,7 +94,8 @@
 #'   log-transformed response variables, `logLik()` returns a wrong log-likelihood.
 #'   However, `test_likelihoodratio()` calls `insight::get_loglikelihood()` with
 #'   `check_response=TRUE`, which returns a corrected log-likelihood value
-#'   particularly for models with log-transformed response variables.
+#'   for models with transformed response variables (like log- or
+#'   sqrt-transformation).
 #'
 #'   \item **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
