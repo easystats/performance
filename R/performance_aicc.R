@@ -62,7 +62,6 @@ performance_aic <- function(x, ...) {
 #' @export
 performance_aic.default <- function(x, verbose = TRUE, ...) {
   info <- suppressWarnings(insight::model_info(x))
-
   aic <- NULL
 
   # special handling for tweedie
@@ -227,40 +226,45 @@ performance_aicc.rma <- function(x, ...) {
 # jacobian / derivate for log models and other transformations ----------------
 
 .aic_transformed_response <- function(x, response_transform, aic = NULL, ...) {
-
   if (response_transform == "log") {
-    # loglik-transformation. first try, we use dlnorm()
-    aic <- tryCatch(
-      {
-        ll <- insight::get_loglikelihood(x)
-        ll[1] <- sum(stats::dlnorm(
-          x = insight::get_response(x),
-          meanlog = stats::fitted(x),
-          sdlog = insight::get_sigma(x, ci = NULL, verbose = FALSE),
-          log = TRUE
-        ))
-        stats::AIC(ll)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-
-    # if this does not work for some reason, use slightly less accurate approach
-    if (is.null(aic)) {
-      aic <- stats::AIC(x) + 2 * sum(log(insight::get_response(x)))
-    }
+    aic <- .aic_adjust_dlnorm(x)
   } else {
-    aic <- .ic_jacobian_adjustment(x, aic)
+    aic <- aic - 2 * .loglik_adjust_jacobian(x)
+  }
+  aic
+}
+
+
+.aic_adjust_dlnorm <- function(model) {
+  # loglik-transformation. first try, we use dlnorm()
+  aic <- tryCatch(
+    {
+      ll <- insight::get_loglikelihood(model)
+      ll[1] <- sum(stats::dlnorm(
+        x = insight::get_response(model),
+        meanlog = stats::fitted(model),
+        sdlog = insight::get_sigma(model, ci = NULL, verbose = FALSE),
+        log = TRUE
+      ))
+      stats::AIC(ll)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  # if this does not work for some reason, use slightly less accurate approach
+  if (is.null(aic)) {
+    aic <- stats::AIC(model) + 2 * sum(log(insight::get_response(model)))
   }
 
   aic
 }
 
 
-.ic_jacobian_adjustment <- function(model, aic) {
+.loglik_adjust_jacobian <- function(model) {
   trans <- insight::get_transformation(model)$transformation
-  adjust <- sum(log(
+  sum(log(
     diag(attr(with(
       insight::get_data(model),
       stats::numericDeriv(
@@ -271,5 +275,4 @@ performance_aicc.rma <- function(x, ...) {
       )
     ), "gradient"))
   ))
-  aic - 2 * adjust
 }
