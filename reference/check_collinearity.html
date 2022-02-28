@@ -187,7 +187,7 @@ considered as a collinearity check for smooth terms in GAMs.
 approximated by one or more of the other smooth terms in the model.” (see
 <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">?mgcv::concurvity</a></code>). <code>check_concurvity()</code> returns a column named <em>VIF</em>,
 which is the "worst" measure. While <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code> range between
-0 and 1, the <em>VIF</em> value is <code>(1 / (1 - worst))^2</code>, to make interpretation
+0 and 1, the <em>VIF</em> value is <code>1 / (1 - worst)</code>, to make interpretation
 comparable to classical VIF values, i.e. <code>1</code> indicates no problems, while
 higher values indicate increasing lack of identifiability. The <em>VIF proportion</em>
 column equals the "estimate" column from <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code>, ranging
