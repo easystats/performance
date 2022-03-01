@@ -150,6 +150,7 @@ pp_check.lm <- function(object,
   out$y <- response
 
   attr(out, "check_range") <- check_range
+  attr(out, "response_name") <- resp_string
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
@@ -205,20 +206,34 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
   original <- x$y
   replicated <- x[which(names(x) != "y")]
 
-  if (min(replicated) > min(original)) {
-    if (verbose) {
-      insight::print_color(
-        insight::format_message("Warning: Minimum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
-        "red"
-      )
-    }
-  }
+  if (isTRUE(verbose)) {
+    if (is.numeric(original)) {
+      if (min(replicated) > min(original)) {
+        insight::print_color(
+          insight::format_message("Warning: Minimum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
+          "red"
+        )
+      }
 
-  if (max(replicated) < max(original)) {
-    if (verbose) {
-      insight::print_color(
-        insight::format_message("Warning: Maximum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
-        "red"
+      if (max(replicated) < max(original)) {
+        insight::print_color(
+          insight::format_message("Warning: Maximum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
+          "red"
+        )
+      }
+    } else {
+      sapply(
+        unique(original),
+        function(i) {
+          if (! i %in% replicated) {
+            insight::print_color(
+              insight::format_message(
+                paste0("Warning: Level '", i, "' from original data is not included in the replicated data."), "Model may not capture the variation of the data."),
+              "red"
+            )
+          }
+        }
+
       )
     }
   }
