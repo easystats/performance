@@ -108,12 +108,20 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   add.args <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
   size <- if ("size" %in% names(add.args)) add.args[["size"]] else 2
   color <- if ("color" %in% names(add.args)) add.args[["color"]] else c("#d11141", "#00aedb")
+  linesize <- if ("size_line" %in% names(add.args)) {
+    add.args[["size_line"]]
+  } else if ("linesize" %in% names(add.args)) {
+    add.args[["linesize"]]
+  } else {
+    .9
+  }
 
   class(d) <- c("binned_residuals", "see_binned_residuals", class(d))
   attr(d, "resid_ok") <- resid_ok
   attr(d, "resp_var") <- insight::find_response(model)
   attr(d, "term") <- term
   attr(d, "geom_size") <- size
+  attr(d, "line_size") <- linesize
   attr(d, "geom_color") <- color
 
   d
