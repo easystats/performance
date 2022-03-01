@@ -73,7 +73,13 @@ metafor package."><meta property="og:image" content="https://easystats.github.io
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for rma</span>
-<span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span>, metrics <span class="op">=</span> <span class="st">"all"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span>
+  <span class="va">model</span>,
+  metrics <span class="op">=</span> <span class="st">"all"</span>,
+  estimator <span class="op">=</span> <span class="st">"ML"</span>,
+  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -83,6 +89,12 @@ metafor package."><meta property="og:image" content="https://easystats.github.io
 <dt>metrics</dt>
 <dd><p>Can be <code>"all"</code> or a character vector of metrics to be
 computed (some of <code>c("AIC", "BIC", "I2", "H2", "TAU2", "R2", "CochransQ", "QE", "Omnibus", "QM")</code>).</p></dd>
+<dt>estimator</dt>
+<dd><p>Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If <code>estimator = "ML"</code>
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using <code>AIC(logLik())</code>. Setting it to <code>"REML"</code> will give
+the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle off warnings.</p></dd>
 <dt>...</dt>
