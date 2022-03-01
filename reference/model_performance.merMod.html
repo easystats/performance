@@ -70,7 +70,13 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for merMod</span>
-<span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span>, metrics <span class="op">=</span> <span class="st">"all"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span>
+  <span class="va">model</span>,
+  metrics <span class="op">=</span> <span class="st">"all"</span>,
+  estimator <span class="op">=</span> <span class="st">"ML"</span>,
+  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -81,6 +87,12 @@
 <dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
 metrics to be computed (some of <code>c("AIC", "AICc", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")</code>). <code>"common"</code> will compute AIC,
 BIC, R2, ICC and RMSE.</p></dd>
+<dt>estimator</dt>
+<dd><p>Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If <code>estimator = "ML"</code>
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using <code>AIC(logLik())</code>. Setting it to <code>"REML"</code> will give
+the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle off warnings.</p></dd>
 <dt>...</dt>
@@ -93,12 +105,29 @@ BIC, R2, ICC and RMSE.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This method returns the <em>adjusted ICC</em> only, as this is typically of
+    
+<div class="section">
+<h3 id="intraclass-correlation-coefficient-icc-">Intraclass Correlation Coefficient (ICC)<a class="anchor" aria-label="anchor" href="#intraclass-correlation-coefficient-icc-"></a></h3>
+<p>This method returns the <em>adjusted ICC</em> only, as this is typically of
 interest when judging the variance attributed to the random effects part of
-the model (see also <code><a href="icc.html">icc()</a></code>).
-<br><br>
-Furthermore, see 'Details' in <code><a href="model_performance.lm.html">model_performance.lm()</a></code> for
-more details on returned indices.</p>
+the model (see also <code><a href="icc.html">icc()</a></code>).</p>
+</div>
+<div class="section">
+<h3 id="reml-versus-ml-estimator">REML versus ML estimator<a class="anchor" aria-label="anchor" href="#reml-versus-ml-estimator"></a></h3>
+<p>By default, <code>estimator = "ML"</code>, which means that values from information
+criteria (AIC, AICc) for specific model classes (like models from <em>lme4</em>)
+are based on the ML-estimator, while the default behaviour of <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code> for
+such classes is setting <code>REML = TRUE</code>. This default is intentional, because
+comparing information criteria based on REML fits is not valid. Set
+<code>estimator = "REML"</code> explicitly return the same (AIC/...) values as from the
+defaults in <code>AIC.merMod()</code>.</p>
+</div>
+<div class="section">
+<h3 id="other-performance-indices">Other performance indices<a class="anchor" aria-label="anchor" href="#other-performance-indices"></a></h3>
+<p>Furthermore, see 'Details' in <code><a href="model_performance.lm.html">model_performance.lm()</a></code> for more details
+on returned indices.</p>
+</div>
+
     </div>
 
     <div class="section level2">
