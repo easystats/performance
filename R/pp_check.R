@@ -103,7 +103,7 @@ check_predictions.BFBayesFactor <- function(object,
     yy <- everything_we_need[["y_pred"]]
   }
 
-  yrep <- apply(yy, 2, function(mu) rnorm(length(mu), mu, sig))
+  yrep <- apply(yy, 2, function(mu) stats::rnorm(length(mu), mu, sig))
   yrep <- t(yrep)
 
   out <- as.data.frame(yrep)
