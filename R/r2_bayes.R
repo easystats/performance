@@ -389,5 +389,5 @@ residuals.BFBayesFactor <- function(object, ...) {
 
 #' @export
 fitted.BFBayesFactor <- function(object, ...) {
-  .get_bfbf_predictions(object)[["y_pred"]]
+  apply(.get_bfbf_predictions(object)[["y_pred"]], 2, mean)
 }

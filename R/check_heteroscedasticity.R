@@ -77,6 +77,10 @@ check_heteroscedasticity.default <- function(x, ...) {
 
 
 .sigma <- function(x) {
+  UseMethod(".sigma")
+}
+
+.sigma.default <- function(x) {
   s <- tryCatch(
     {
       estimates <- insight::get_parameters(x)$Estimate
@@ -92,6 +96,10 @@ check_heteroscedasticity.default <- function(x, ...) {
   }
 
   s
+}
+
+.sigma.BFBayesFactor <- function(x) {
+  mean(.get_bfbf_predictions(x)[["sigma"]])
 }
 
 
