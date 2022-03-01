@@ -92,7 +92,7 @@ incorporates a correction for small sample sizes.</p>
 <span class="fu">performance_aic</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for default</span>
-<span class="fu">performance_aic</span><span class="op">(</span><span class="va">x</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">performance_aic</span><span class="op">(</span><span class="va">x</span>, estimator <span class="op">=</span> <span class="st">"ML"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,6 +101,12 @@ incorporates a correction for small sample sizes.</p>
 <dd><p>A model object.</p></dd>
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
+<dt>estimator</dt>
+<dd><p>Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If <code>estimator = "ML"</code>
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using <code>AIC(logLik())</code>. Setting it to <code>"REML"</code> will give
+the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
 </dl></div>
