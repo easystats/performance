@@ -106,14 +106,16 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   resid_ok <- sum(d$group == "yes") / length(d$group)
 
   add.args <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
-  size <- if ("size" %in% names(add.args)) add.args[["size"]] else 2
+  size <- if ("size" %in% names(add.args)) add.args[["size"]] else 2.2
   color <- if ("color" %in% names(add.args)) add.args[["color"]] else c("#d11141", "#00aedb")
   linesize <- if ("size_line" %in% names(add.args)) {
     add.args[["size_line"]]
   } else if ("linesize" %in% names(add.args)) {
     add.args[["linesize"]]
+  } else if ("line_size" %in% names(add.args)) {
+    add.args[["line_size"]]
   } else {
-    .9
+    .8
   }
 
   class(d) <- c("binned_residuals", "see_binned_residuals", class(d))
