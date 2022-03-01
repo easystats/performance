@@ -62,37 +62,17 @@ performance_aic <- function(x, ...) {
 #' @export
 performance_aic.default <- function(x, verbose = TRUE, ...) {
   info <- suppressWarnings(insight::model_info(x))
-  aic <- NULL
-
   # special handling for tweedie
   if (info$family == "Tweedie") {
     insight::check_if_installed("tweedie")
     aic <- suppressMessages(tweedie::AICtweedie(x))
   } else {
     # all other models...
-    aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
-    if (is.null(aic)) {
-      aic <- tryCatch(
-        -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model"),
-        error = function(e) NULL
-      )
-    }
+    aic <- tryCatch(
+      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, verbose = verbose)),
+      error = function(e) NULL
+    )
   }
-
-  # check if we have transformed response, and if so, adjust LogLik
-  response_transform <- insight::find_transformation(x)
-
-  if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-    aic_corrected <- tryCatch(.adjust_aic(x, response_transform, aic, ...), error = function(e) NULL)
-    if (is.null(aic_corrected)) {
-      if (isTRUE(verbose)) {
-        warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
-      }
-    } else {
-      aic <- aic_corrected
-    }
-  }
-
   aic
 }
 
