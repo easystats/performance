@@ -119,7 +119,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span> <span class="co"># for pipe operator</span>
 
 <span class="co"># we will use `print_md` function to display a well-formatted table</span>
-<span class="fu"><a href="../reference/model_performance.html">performance</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="fu"><a href="../reference/model_performance.html">performance</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Indices of model performance</caption>
@@ -142,7 +142,7 @@
 </table>
 <p>But for multiple models, one can obtain a useful table to compare these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html"><code>compare_performance()</code></a> function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Comparison of Model Performance Indices</caption>
@@ -212,7 +212,7 @@
 <p>While <strong>comparing</strong> these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.</p>
 <p>This is one of the reason why <strong>tests</strong> are useful, as they facilitate decisions via (infamous) “significance” indices, like <em>p</em>-values (in frequentist framework) or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes Factors</a> (in Bayesian framework).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -270,7 +270,7 @@
 <span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 
-<span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span>
+<span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <caption>Comparison of Model Performance Indices</caption>
