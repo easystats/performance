@@ -173,8 +173,7 @@ performance_aic.bayesx <- function(x, ...) {
 
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
-  out <- -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
-  .adjust_ic_jacobian(object, out)
+  -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
 }
 
 
