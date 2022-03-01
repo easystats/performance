@@ -222,15 +222,22 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
         )
       }
     } else {
+      missing_levs <- setdiff(original, unlist(replicated))
+      if (length(missing_levs)) {
+        insight::print_color(
+          insight::format_message(
+            paste0("Warning: Level",
+                   ifelse(length(missing_levs) == 1, " ", "s "),
+                   paste0("'", missing_levs, "'", collapse = ", "),
+                   " from original data is not included in the replicated data."), "Model may not capture the variation of the data."),
+          "red"
+        )
+      }
       sapply(
         unique(original),
         function(i) {
           if (! i %in% replicated) {
-            insight::print_color(
-              insight::format_message(
-                paste0("Warning: Level '", i, "' from original data is not included in the replicated data."), "Model may not capture the variation of the data."),
-              "red"
-            )
+
           }
         }
 
