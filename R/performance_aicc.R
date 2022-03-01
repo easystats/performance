@@ -220,7 +220,7 @@ performance_aicc.rma <- function(x, ...) {
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
   if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
-    adjustment <- tryCatch(.adjust_loglik_jacobian(model), error = function(e) NULL)
+    adjustment <- tryCatch(.ll_jacobian_adjustment(model, insight::get_weights(model, na_rm = TRUE)), error = function(e) NULL)
     if (!is.null(adjustment)) {
       ic <- ic - 2 * adjustment
     }
@@ -229,57 +229,34 @@ performance_aicc.rma <- function(x, ...) {
 }
 
 
-# this function adjusts the AIC, either dlnorm for log, or Jacobian for other transformations
-.adjust_aic <- function(x, response_transform, aic = NULL, ...) {
-  if (response_transform == "log") {
-    aic <- .adjust_aic_dlnorm(x)
-  } else {
-    aic <- aic - 2 * .adjust_loglik_jacobian(x)
-  }
-  aic
-}
-
-
-# this function adjusts the AIC, based on dlnorm() log-likelihood adjustment
-.adjust_aic_dlnorm <- function(model) {
-  # loglik-transformation. first try, we use dlnorm()
-  aic <- tryCatch(
+# this function calculates the adjustment for the log-likelihood of a model
+# with transformed response
+.ll_jacobian_adjustment <- function(model, weights = NULL) {
+  tryCatch(
     {
-      ll <- insight::get_loglikelihood(model)
-      ll[1] <- sum(stats::dlnorm(
-        x = insight::get_response(model),
-        meanlog = stats::fitted(model),
-        sdlog = insight::get_sigma(model, ci = NULL, verbose = FALSE),
-        log = TRUE
-      ))
-      stats::AIC(ll)
+      trans <- insight::get_transformation(model)$transformation
+      .weighted_sum(log(
+        diag(attr(with(
+          insight::get_data(model),
+          stats::numericDeriv(
+            expr = quote(trans(
+              get(insight::find_response(model))
+            )),
+            theta = insight::find_response(model)
+          )
+        ), "gradient"))
+      ), weights)
     },
     error = function(e) {
       NULL
     }
   )
-
-  # if this does not work for some reason, use slightly less accurate approach
-  if (is.null(aic)) {
-    aic <- stats::AIC(model) + 2 * sum(log(insight::get_response(model)))
-  }
-
-  aic
 }
 
-
-# this function just adjusts the log-likelihood of a model
-.adjust_loglik_jacobian <- function(model) {
-  trans <- insight::get_transformation(model)$transformation
-  sum(log(
-    diag(attr(with(
-      insight::get_data(model),
-      stats::numericDeriv(
-        expr = quote(trans(
-          get(insight::find_response(model))
-        )),
-        theta = insight::find_response(model)
-      )
-    ), "gradient"))
-  ))
+.weighted_sum <- function(x, w = NULL, ...) {
+  if (is.null(w)) {
+    mean(x) * length(x)
+  } else {
+    stats::weighted.mean(x, w) * length(x)
+  }
 }

@@ -4,13 +4,25 @@
 \alias{model_performance.rma}
 \title{Performance of Meta-Analysis Models}
 \usage{
-\method{model_performance}{rma}(model, metrics = "all", verbose = TRUE, ...)
+\method{model_performance}{rma}(
+  model,
+  metrics = "all",
+  estimator = "ML",
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A \code{rma} object as returned by \code{metafor::rma()}.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be
 computed (some of \code{c("AIC", "BIC", "I2", "H2", "TAU2", "R2", "CochransQ", "QE", "Omnibus", "QM")}).}
+
+\item{estimator}{Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If \code{estimator = "ML"}
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
+the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 
 \item{verbose}{Toggle off warnings.}
 
