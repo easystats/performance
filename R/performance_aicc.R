@@ -12,6 +12,11 @@
 #' incorporates a correction for small sample sizes.
 #'
 #' @param x A model object.
+#' @param estimator Only for linear models. Corresponds to the different
+#'   estimators for the standard deviation of the errors. If `estimator = "ML"`
+#'   (default), the scaling is done by n (the biased ML estimator), which is
+#'   then equivalent to using `AIC(logLik())`. Setting it to `"REML"` will give
+#'   the same results as `AIC(logLik(..., REML = TRUE))`.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
@@ -60,8 +65,13 @@ performance_aic <- function(x, ...) {
 
 #' @rdname performance_aicc
 #' @export
-performance_aic.default <- function(x, verbose = TRUE, ...) {
+performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
   info <- suppressWarnings(insight::model_info(x))
+
+  # check ML estimator
+  REML <- identical(estimator, "REML")
+  if (isTRUE(list(...)$REML)) REML <- TRUE
+
   # special handling for tweedie
   if (info$family == "Tweedie") {
     insight::check_if_installed("tweedie")
@@ -69,7 +79,7 @@ performance_aic.default <- function(x, verbose = TRUE, ...) {
   } else {
     # all other models...
     aic <- tryCatch(
-      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, verbose = verbose)),
+      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
       error = function(e) NULL
     )
   }
@@ -161,9 +171,13 @@ AIC.bife <- function(object, ..., k = 2) {
 
 
 #' @export
-performance_aicc.default <- function(x, ...) {
+performance_aicc.default <- function(x, estimator = "ML", ...) {
+  # check ML estimator
+  REML <- identical(estimator, "REML")
+  if (isTRUE(list(...)$REML)) REML <- TRUE
+
   n <- suppressWarnings(insight::n_obs(x))
-  ll <- insight::get_loglikelihood(x, check_response = TRUE, verbose = TRUE)
+  ll <- insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = TRUE)
   k <- attr(ll, "df")
 
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
