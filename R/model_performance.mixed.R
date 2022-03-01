@@ -9,17 +9,30 @@
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams r2_nakagawa
 #' @inheritParams model_performance.lm
+#' @inheritParams performance_aicc
 #'
 #' @return A data frame (with one row) and one column per "index" (see
 #'   `metrics`).
 #'
 #' @details
-#'  This method returns the *adjusted ICC* only, as this is typically of
-#'  interest when judging the variance attributed to the random effects part of
-#'  the model (see also [icc()]).
-#'   \cr \cr
-#'   Furthermore, see 'Details' in [model_performance.lm()] for
-#'   more details on returned indices.
+#' \subsection{Intraclass Correlation Coefficient (ICC)}{
+#'   This method returns the *adjusted ICC* only, as this is typically of
+#'   interest when judging the variance attributed to the random effects part of
+#'   the model (see also [icc()]).
+#' }
+#' \subsection{REML versus ML estimator}{
+#'   By default, `estimator = "ML"`, which means that values from information
+#'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
+#'   are based on the ML-estimator, while the default behaviour of `AIC()` for
+#'   such classes is setting `REML = TRUE`. This default is intentional, because
+#'   comparing information criteria based on REML fits is not valid. Set
+#'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
+#'   defaults in `AIC.merMod()`.
+#' }
+#' \subsection{Other performance indices}{
+#'   Furthermore, see 'Details' in [model_performance.lm()] for more details
+#'   on returned indices.
+#' }
 #'
 #' @examples
 #' if (require("lme4")) {
@@ -29,6 +42,7 @@
 #' @export
 model_performance.merMod <- function(model,
                                      metrics = "all",
+                                     estimator = "ML",
                                      verbose = TRUE,
                                      ...) {
   if (any(tolower(metrics) == "log_loss")) {
@@ -57,13 +71,13 @@ model_performance.merMod <- function(model,
   out <- list()
 
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- performance_aic(model)
+    out$AIC <- performance_aic(model, estimator = estimator)
   }
 
   if ("AICC" %in% toupper(metrics)) {
     out$AICc <- tryCatch(
       {
-        performance_aicc(model)
+        performance_aicc(model, estimator = estimator)
       },
       error = function(e) {
         NULL

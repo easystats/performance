@@ -12,6 +12,7 @@
 #'   details.
 #' @param rank Logical, if `TRUE`, models are ranked according to 'best'
 #'   overall model performance. See 'Details'.
+#' @inheritParams performance_aic
 #'
 #' @return A data frame (with one row per model) and one column per "index" (see
 #'   `metrics`).
@@ -52,6 +53,16 @@
 #'   for more details).
 #' }
 #'
+#' \subsection{REML versus ML estimator}{
+#'   By default, `estimator = "ML"`, which means that values from information
+#'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
+#'   are based on the ML-estimator, while the default behaviour of `AIC()` for
+#'   such classes is setting `REML = TRUE`. This default is intentional, because
+#'   comparing information criteria based on REML fits is not valid. Set
+#'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
+#'   defaults in `AIC.merMod()`.
+#' }
+#'
 #' @references
 #' Burnham, K. P., & Anderson, D. R. (2002).
 #' _Model selection and multimodel inference: A practical information-theoretic approach_ (2nd ed.).
@@ -73,7 +84,7 @@
 #' }
 #' @inheritParams model_performance.lm
 #' @export
-compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
+compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
   # objects <- list(...)
   # object_names <- match.call(expand.dots = FALSE)$`...`
   objects <- list(...)
@@ -117,7 +128,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   }
 
   m <- mapply(function(.x, .y) {
-    dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
+    dat <- model_performance(.x, metrics = metrics, estimator = estimator, verbose = FALSE)
     model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
     perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
     attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])

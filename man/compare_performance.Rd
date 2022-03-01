@@ -4,7 +4,13 @@
 \alias{compare_performance}
 \title{Compare performance of different models}
 \usage{
-compare_performance(..., metrics = "all", rank = FALSE, verbose = TRUE)
+compare_performance(
+  ...,
+  metrics = "all",
+  rank = FALSE,
+  estimator = "ML",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{...}{Multiple model objects (also of different classes).}
@@ -17,7 +23,13 @@ details.}
 \item{rank}{Logical, if \code{TRUE}, models are ranked according to 'best'
 overall model performance. See 'Details'.}
 
-\item{verbose}{Toggle off warnings.}
+\item{estimator}{Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If \code{estimator = "ML"}
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
+the same results as \code{AIC(logLik(..., REML = TRUE))}.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A data frame (with one row per model) and one column per "index" (see
@@ -61,6 +73,16 @@ normalized and larger values indicate better model performance.
 Hence, points closer to the center indicate worse fit indices
 (see \href{https://easystats.github.io/see/articles/performance.html}{online-documentation}
 for more details).
+}
+
+\subsection{REML versus ML estimator}{
+By default, \code{estimator = "ML"}, which means that values from information
+criteria (AIC, AICc) for specific model classes (like models from \emph{lme4})
+are based on the ML-estimator, while the default behaviour of \code{AIC()} for
+such classes is setting \code{REML = TRUE}. This default is intentional, because
+comparing information criteria based on REML fits is not valid. Set
+\code{estimator = "REML"} explicitly return the same (AIC/...) values as from the
+defaults in \code{AIC.merMod()}.
 }
 }
 \note{
