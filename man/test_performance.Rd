@@ -132,7 +132,8 @@ CFA), the function calls \code{lavaan::lavTestLRT()}. \cr For models with
 log-transformed response variables, \code{logLik()} returns a wrong log-likelihood.
 However, \code{test_likelihoodratio()} calls \code{insight::get_loglikelihood()} with
 \code{check_response=TRUE}, which returns a corrected log-likelihood value
-particularly for models with log-transformed response variables.
+for models with transformed response variables (like log- or
+sqrt-transformation).
 
 \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two

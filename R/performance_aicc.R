@@ -64,30 +64,32 @@ performance_aic.default <- function(x, verbose = TRUE, ...) {
   info <- suppressWarnings(insight::model_info(x))
   aic <- NULL
 
+  # special handling for tweedie
+  if (info$family == "Tweedie") {
+    insight::check_if_installed("tweedie")
+    aic <- suppressMessages(tweedie::AICtweedie(x))
+  } else {
+    # all other models...
+    aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
+    if (is.null(aic)) {
+      aic <- tryCatch(
+        -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model"),
+        error = function(e) NULL
+      )
+    }
+  }
+
   # check if we have transformed response, and if so, adjust LogLik
   response_transform <- insight::find_transformation(x)
 
   if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-    aic <- tryCatch(.aic_transformed_response(x, response_transform, ...), error = function(e) NULL)
-    if (is.null(aic) && isTRUE(verbose)) {
-      warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
-    }
-  }
-
-  if (is.null(aic)) {
-    # special handling for tweedie
-    if (info$family == "Tweedie") {
-      insight::check_if_installed("tweedie")
-      aic <- suppressMessages(tweedie::AICtweedie(x))
-    } else {
-      # all other models...
-      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
-      if (is.null(aic)) {
-        aic <- tryCatch(
-          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model"),
-          error = function(e) NULL
-        )
+    aic_corrected <- tryCatch(.adjust_aic(x, response_transform, aic, ...), error = function(e) NULL)
+    if (is.null(aic_corrected)) {
+      if (isTRUE(verbose)) {
+        warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
       }
+    } else {
+      aic <- aic_corrected
     }
   }
 
@@ -113,14 +115,8 @@ performance_aic.vglm <- performance_aic.vgam
 
 #' @export
 performance_aic.svyglm <- function(x, ...) {
-  tryCatch(
-    {
-      stats::AIC(x)[["AIC"]]
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  aic <- tryCatch(stats::AIC(x)[["AIC"]], error = function(e) NULL)
+  .adjust_ic_jacobian(x, aic)
 }
 
 #' @export
@@ -169,14 +165,16 @@ performance_aic.poissonmfx <- performance_aic.logitor
 
 #' @export
 performance_aic.bayesx <- function(x, ...) {
-  stats::AIC(x)[["AIC"]]
+  out <- stats::AIC(x)[["AIC"]]
+  .adjust_ic_jacobian(x, out)
 }
 
 # methods ------------------------------------------
 
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
-  -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
+  out <- -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
+  .adjust_ic_jacobian(object, out)
 }
 
 
@@ -189,7 +187,8 @@ performance_aicc.default <- function(x, ...) {
   ll <- insight::get_loglikelihood(x, check_response = TRUE, verbose = TRUE)
   k <- attr(ll, "df")
 
-  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+  aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+  .adjust_ic_jacobian(x, aicc)
 }
 
 
@@ -199,7 +198,9 @@ performance_aicc.bife <- function(x, ...) {
   ll <- insight::get_loglikelihood(x)
   nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
   k <- n - nparam
-  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+
+  aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+  .adjust_ic_jacobian(x, aicc)
 }
 
 #' @export
@@ -223,34 +224,71 @@ performance_aicc.rma <- function(x, ...) {
 
 # jacobian / derivate for log models and other transformations ----------------
 
-.aic_transformed_response <- function(x, response_transform, ...) {
 
-  # initialize
-  aic <- NULL
-
-  if (response_transform == "log") {
-    # loglik-transformation. first try, we use dlnorm()
-    aic <- tryCatch(
-      {
-        ll <- insight::get_loglikelihood(x)
-        ll[1] <- sum(stats::dlnorm(
-          x = insight::get_response(x),
-          meanlog = stats::fitted(x),
-          sdlog = insight::get_sigma(x, ci = NULL, verbose = FALSE),
-          log = TRUE
-        ))
-        stats::AIC(ll)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-
-    # if this does not work for some reason, use slightly less accurate approach
-    if (is.null(aic)) {
-      aic <- stats::AIC(x) + 2 * sum(log(insight::get_response(x)))
+# this function adjusts any IC for models with transformed response variables
+.adjust_ic_jacobian <- function(model, ic) {
+  response_transform <- insight::find_transformation(model)
+  if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
+    adjustment <- tryCatch(.adjust_loglik_jacobian(model), error = function(e) NULL)
+    if (!is.null(adjustment)) {
+      ic <- ic - 2 * adjustment
     }
+  }
+  ic
+}
+
+
+# this function adjusts the AIC, either dlnorm for log, or Jacobian for other transformations
+.adjust_aic <- function(x, response_transform, aic = NULL, ...) {
+  if (response_transform == "log") {
+    aic <- .adjust_aic_dlnorm(x)
+  } else {
+    aic <- aic - 2 * .adjust_loglik_jacobian(x)
+  }
+  aic
+}
+
+
+# this function adjusts the AIC, based on dlnorm() log-likelihood adjustment
+.adjust_aic_dlnorm <- function(model) {
+  # loglik-transformation. first try, we use dlnorm()
+  aic <- tryCatch(
+    {
+      ll <- insight::get_loglikelihood(model)
+      ll[1] <- sum(stats::dlnorm(
+        x = insight::get_response(model),
+        meanlog = stats::fitted(model),
+        sdlog = insight::get_sigma(model, ci = NULL, verbose = FALSE),
+        log = TRUE
+      ))
+      stats::AIC(ll)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  # if this does not work for some reason, use slightly less accurate approach
+  if (is.null(aic)) {
+    aic <- stats::AIC(model) + 2 * sum(log(insight::get_response(model)))
   }
 
   aic
+}
+
+
+# this function just adjusts the log-likelihood of a model
+.adjust_loglik_jacobian <- function(model) {
+  trans <- insight::get_transformation(model)$transformation
+  sum(log(
+    diag(attr(with(
+      insight::get_data(model),
+      stats::numericDeriv(
+        expr = quote(trans(
+          get(insight::find_response(model))
+        )),
+        theta = insight::find_response(model)
+      )
+    ), "gradient"))
+  ))
 }

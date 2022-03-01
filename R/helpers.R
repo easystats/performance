@@ -5,19 +5,13 @@
 .get_BIC <- function(x) {
   if (inherits(x, c("vgam", "vglm"))) {
     insight::check_if_installed("VGAM")
-    VGAM::BIC(x)
+    out <- VGAM::BIC(x)
   } else if (inherits(x, "bayesx")) {
-    stats::BIC(x)[["BIC"]]
+    out <- stats::BIC(x)[["BIC"]]
   } else {
-    tryCatch(
-      {
-        stats::BIC(x)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    out <- tryCatch(stats::BIC(x), error = function(e) NULL)
   }
+  .adjust_ic_jacobian(x, out)
 }
 
 
