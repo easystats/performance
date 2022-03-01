@@ -60,7 +60,7 @@ Depends:
     R (>= 3.4)
 Imports:
     bayestestR (>= 0.11.5),
-    insight (>= 0.15.0),
+    insight (>= 0.16.0.4),
     datawizard (>= 0.2.3),
     methods,
     stats,
@@ -120,6 +120,8 @@ Suggests:
     testthat,
     tweedie,
     VGAM
+Remotes:
+    easystats/insight
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.2

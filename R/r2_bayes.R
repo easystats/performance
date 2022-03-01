@@ -350,7 +350,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
   params_sigma <- sqrt(params[, grepl(pattern = "^sig2$", colnames(params))])
 
   # Model Matrix
-  mm <- BayesFactor::model.matrix(model[1])
+  mm <- insight::get_modelmatrix(model[1])
   colnames(mm)[1] <- "mu"
 
   # match?
