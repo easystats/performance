@@ -12,7 +12,7 @@ if (requiet("testthat") && requiet("performance")) {
   })
 
   test_that("performance_aic for log-model works", {
-    expect_equal(performance_aic(model_lnorm), 168.3652, tolerance = 1e-2)
+    expect_equal(performance_aic(model_lnorm), 168.2152, tolerance = 1e-2)
   })
 
   m1 <- lm(disp ~ hp, data = mtcars)
@@ -20,6 +20,6 @@ if (requiet("testthat") && requiet("performance")) {
 
   test_that("performance_aic Jacobian", {
     expect_equal(performance_aic(m1), 372.8247, tolerance = 1e-2)
-    expect_equal(performance_aic(m2), 367.12394, tolerance = 1e-2)
+    expect_equal(performance_aic(m2), 367.1239, tolerance = 1e-2)
   })
 }
