@@ -18,8 +18,7 @@ plotted.}
 \code{n_bins = NULL}, the square root of the number of observations is
 taken.}
 
-\item{...}{Further argument like \code{size} (for point-size) or
-\code{color} (for point-colors).}
+\item{...}{Currently not used.}
 }
 \value{
 A data frame representing the data that is mapped in the accompanying
@@ -51,15 +50,16 @@ method only returns a short summary of the result. The data frame itself
 is used for plotting. The \code{plot()} method, in turn, creates a ggplot-object.
 }
 \examples{
+model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+result <- binned_residuals(model)
+result
+
+# look at the data frame
+as.data.frame(result)
+
+# plot
 if (require("see")) {
-  # creating a model
-  model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-
-  # this will automatically plot the results
-  (result <- binned_residuals(model))
-
-  # if you assign results to an object, you can also look at the dataframe
-  as.data.frame(result)
+  plot(result)
 }
 }
 \references{

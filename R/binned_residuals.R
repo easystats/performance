@@ -11,8 +11,7 @@
 #' @param n_bins Numeric, the number of bins to divide the data. If
 #'   `n_bins = NULL`, the square root of the number of observations is
 #'   taken.
-#' @param ... Further argument like `size` (for point-size) or
-#'   `color` (for point-colors).
+#' @param ... Currently not used.
 #'
 #' @return A data frame representing the data that is mapped in the accompanying
 #'   plot. In case all residuals are inside the error bounds, points are black.
@@ -43,15 +42,16 @@
 #' Press.
 #'
 #' @examples
+#' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' result <- binned_residuals(model)
+#' result
+#'
+#' # look at the data frame
+#' as.data.frame(result)
+#'
+#' # plot
 #' if (require("see")) {
-#'   # creating a model
-#'   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#'
-#'   # this will automatically plot the results
-#'   (result <- binned_residuals(model))
-#'
-#'   # if you assign results to an object, you can also look at the dataframe
-#'   as.data.frame(result)
+#'   plot(result)
 #' }
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
@@ -105,26 +105,10 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
 
   resid_ok <- sum(d$group == "yes") / length(d$group)
 
-  add.args <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
-  size <- if ("size" %in% names(add.args)) add.args[["size"]] else 2.2
-  color <- if ("color" %in% names(add.args)) add.args[["color"]] else c("#d11141", "#00aedb")
-  linesize <- if ("size_line" %in% names(add.args)) {
-    add.args[["size_line"]]
-  } else if ("linesize" %in% names(add.args)) {
-    add.args[["linesize"]]
-  } else if ("line_size" %in% names(add.args)) {
-    add.args[["line_size"]]
-  } else {
-    .8
-  }
-
   class(d) <- c("binned_residuals", "see_binned_residuals", class(d))
   attr(d, "resid_ok") <- resid_ok
   attr(d, "resp_var") <- insight::find_response(model)
   attr(d, "term") <- term
-  attr(d, "geom_size") <- size
-  attr(d, "line_size") <- linesize
-  attr(d, "geom_color") <- color
 
   d
 }
