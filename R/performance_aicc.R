@@ -186,20 +186,18 @@ performance_aicc.default <- function(x, ...) {
   ll <- insight::get_loglikelihood(x, check_response = TRUE, verbose = TRUE)
   k <- attr(ll, "df")
 
-  aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
-  .adjust_ic_jacobian(x, aicc)
+  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
 }
 
 
 #' @export
 performance_aicc.bife <- function(x, ...) {
   n <- suppressWarnings(insight::n_obs(x))
-  ll <- insight::get_loglikelihood(x)
+  ll <- insight::get_loglikelihood(x, check_response = TRUE)
   nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
   k <- n - nparam
 
-  aicc <- -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
-  .adjust_ic_jacobian(x, aicc)
+  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
 }
 
 #' @export
