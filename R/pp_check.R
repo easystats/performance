@@ -233,15 +233,6 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
           "red"
         )
       }
-      sapply(
-        unique(original),
-        function(i) {
-          if (! i %in% replicated) {
-
-          }
-        }
-
-      )
     }
   }
 
