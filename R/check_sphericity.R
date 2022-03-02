@@ -66,6 +66,12 @@ check_sphericity.Anova.mlm <- function(x, ...) {
   test <- S$sphericity.tests
 
   p.val <- test[, 2]
+
+  # sanity check
+  if (is.null(p.val)) {
+    p.val <- 1
+  }
+
   class(p.val) <- c("check_sphericity", "see_check_sphericity", class(p.val))
   p.val
 }
