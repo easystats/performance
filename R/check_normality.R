@@ -9,8 +9,8 @@
 #'   May be abbreviated.
 #' @param ... Currently not used.
 #'
-#' @return Invisibly returns the p-value of the test statistics. A p-value
-#' < 0.05 indicates a significant deviation from normal distribution
+#' @return The p-value of the test statistics. A p-value < 0.05 indicates a
+#'   significant deviation from normal distribution.
 #'
 #' @note For mixed-effects models, studentized residuals, and *not*
 #'   standardized residuals, are used for the test. There is also a
@@ -18,11 +18,11 @@
 #'    implemented in the
 #'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
-#' @details `check_normality()` calls `stats::shapiro.test`
-#' and checks the standardized residuals (or Studentized residuals for mixed
-#' models) for normal distribution. Note that this formal test almost always
-#' yields significant results for the distribution of residuals and visual
-#' inspection (e.g. Q-Q plots) are preferable.
+#' @details `check_normality()` calls `stats::shapiro.test` and checks the
+#' standardized residuals (or Studentized residuals for mixed models) for
+#' normal distribution. Note that this formal test almost always yields
+#' significant results for the distribution of residuals and visual inspection
+#' (e.g. Q-Q plots) are preferable.
 #'
 #' @examples
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
