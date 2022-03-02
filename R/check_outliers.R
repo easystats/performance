@@ -330,6 +330,7 @@ check_outliers <- function(x, ...) {
 
 
 
+# default ---------------------
 
 #' @rdname check_outliers
 #' @export
@@ -430,8 +431,39 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
 
 
 
+# Methods -----------------------------------------------------------------
+
+#' @export
+as.data.frame.check_outliers <- function(x, ...) {
+  attributes(x)$data
+}
+
+#' @export
+as.numeric.check_outliers <- function(x, ...) {
+  attributes(x)$data$Outlier
+}
+
+#' @export
+print.check_outliers <- function(x, ...) {
+  outliers <- which(x)
+  if (length(outliers) >= 1) {
+    o <- paste0(" (cases ", paste0(outliers, collapse = ", "), ")")
+    insight::print_color(sprintf("Warning: %i outliers detected%s.\n", length(outliers), o), "red")
+  } else {
+    insight::print_color("OK: No outliers detected.\n", "green")
+  }
+  invisible(x)
+}
+
+#' @export
+plot.check_outliers <- function(x, ...) {
+  insight::check_if_installed("see", "to plot outliers")
+  NextMethod()
+}
 
 
+
+# other classes -------------------------
 
 #' @rdname check_outliers
 #' @export
@@ -566,7 +598,6 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
 
 
 
-
 #' @export
 check_outliers.grouped_df <- function(x, method = "mahalanobis", threshold = NULL, ...) {
   info <- attributes(x)
@@ -600,6 +631,8 @@ check_outliers.grouped_df <- function(x, method = "mahalanobis", threshold = NUL
   out
 }
 
+
+
 #' @export
 check_outliers.BFBayesFactor <- function(x, ...) {
   if (!insight::is_model(x)) {
@@ -612,24 +645,10 @@ check_outliers.BFBayesFactor <- function(x, ...) {
   check_outliers(d, ...)
 }
 
-# Methods -----------------------------------------------------------------
-
-
-#' @export
-as.data.frame.check_outliers <- function(x, ...) {
-  attributes(x)$data
-}
-
-#' @export
-as.numeric.check_outliers <- function(x, ...) {
-  attributes(x)$data$Outlier
-}
 
 
 
 # Thresholds --------------------------------------------------------------
-
-
 
 .check_outliers_thresholds <- function(x) {
   suppressWarnings(.check_outliers_thresholds_nowarn(x))
@@ -666,9 +685,8 @@ as.numeric.check_outliers <- function(x, ...) {
 }
 
 
-# Methods -----------------------------------------------------------------
 
-
+# utilities --------------------
 
 .check_outliers_zscore <- function(x,
                                    threshold = stats::qnorm(p = 1 - 0.025),
@@ -762,7 +780,6 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
-
 .check_outliers_cook <- function(x, threshold = NULL) {
   # Compute
   d <- unname(stats::cooks.distance(x))
@@ -778,7 +795,6 @@ as.numeric.check_outliers <- function(x, ...) {
     "threshold_cook" = threshold
   )
 }
-
 
 
 
@@ -803,7 +819,6 @@ as.numeric.check_outliers <- function(x, ...) {
 
 
 
-
 .check_outliers_mahalanobis <- function(x, threshold = NULL, ...) {
   out <- data.frame(Obs = 1:nrow(x))
 
@@ -819,6 +834,7 @@ as.numeric.check_outliers <- function(x, ...) {
     "threshold_mahalanobis" = threshold
   )
 }
+
 
 
 # Bigutils not yet fully available on CRAN
@@ -860,7 +876,6 @@ as.numeric.check_outliers <- function(x, ...) {
     "threshold_mcd" = threshold
   )
 }
-
 
 
 
@@ -909,7 +924,6 @@ as.numeric.check_outliers <- function(x, ...) {
     "threshold_ICS" = threshold
   )
 }
-
 
 
 
@@ -1008,24 +1022,20 @@ as.numeric.check_outliers <- function(x, ...) {
 }
 
 
+
 # Non-supported model classes ---------------------------------------
 
 #' @export
 check_outliers.glmmTMB <- function(x, ...) {
+  message(paste0("`check_outliers()` does not yet support models of class ", class(x)[1], "."))
   NULL
 }
 
 #' @export
-check_outliers.lme <- function(x, ...) {
-  NULL
-}
+check_outliers.lme <- check_outliers.glmmTMB
 
 #' @export
-check_outliers.lmrob <- function(x, ...) {
-  NULL
-}
+check_outliers.lmrob <- check_outliers.glmmTMB
 
 #' @export
-check_outliers.glmrob <- function(x, ...) {
-  NULL
-}
+check_outliers.glmrob <- check_outliers.glmmTMB

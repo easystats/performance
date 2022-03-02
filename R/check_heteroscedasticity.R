@@ -8,8 +8,8 @@
 #' @param x A model object.
 #' @param ... Currently not used.
 #'
-#' @return Invisibly returns the p-value of the test statistics. A p-value <
-#'   0.05 indicates a non-constant variance (heteroskedasticity).
+#' @return The p-value of the test statistics. A p-value < 0.05 indicates a
+#'   non-constant variance (heteroskedasticity).
 #'
 #' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
@@ -38,6 +38,8 @@ check_heteroscedasticity <- function(x, ...) {
 check_heteroskedasticity <- check_heteroscedasticity
 
 
+# default ---------------------
+
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
   # only for linear models
@@ -63,18 +65,36 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   p.val <- stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
 
-  if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(p.val)), "red")
-  } else {
-    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(p.val)), "green")
-  }
-
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
 
-  invisible(p.val)
+  p.val
 }
 
+
+
+# methods -----------------------
+
+#' @export
+print.check_heteroscedasticity <- function(x, ...) {
+  if (x < 0.05) {
+    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(x)), "red")
+  } else {
+    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(x)), "green")
+  }
+  invisible(x)
+}
+
+
+#' @export
+plot.check_heteroscedasticity <- function(x, ...) {
+  insight::check_if_installed("see", "for residual plots")
+  NextMethod()
+}
+
+
+
+# utilities -----------------------
 
 .sigma <- function(x) {
   UseMethod(".sigma")
@@ -130,7 +150,6 @@ check_heteroscedasticity.default <- function(x, ...) {
 
 
 
-
 .resid_zinb <- function(model, faminfo) {
   if (inherits(model, "glmmTMB")) {
     v <- stats::family(model)$variance
@@ -164,7 +183,6 @@ check_heteroscedasticity.default <- function(x, ...) {
   # pearson residuals
   (insight::get_response(model, verbose = FALSE) - pred) / sqrt(pvar)
 }
-
 
 
 

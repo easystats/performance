@@ -126,12 +126,79 @@ check_collinearity <- function(x, ...) {
 multicollinearity <- check_collinearity
 
 
+
+# default ------------------------------
+
 #' @rdname check_collinearity
 #' @export
 check_collinearity.default <- function(x, verbose = TRUE, ...) {
   .check_collinearity(x, component = "conditional", verbose = verbose)
 }
 
+
+
+# methods -------------------------------------------
+
+#' @export
+print.check_collinearity <- function(x, ...) {
+  insight::print_color("# Check for Multicollinearity\n", "blue")
+
+  if ("Component" %in% colnames(x)) {
+    comp <- split(x, x$Component)
+    for (i in 1:length(comp)) {
+      cat(paste0("\n* ", comp[[i]]$Component[1], " component:\n"))
+      .print_collinearity(comp[[i]][, 1:3])
+    }
+  } else {
+    .print_collinearity(x)
+  }
+
+  invisible(x)
+}
+
+
+#' @export
+plot.check_collinearity <- function(x, ...) {
+  insight::check_if_installed("see", "to plot collinearity-check")
+  NextMethod()
+}
+
+
+.print_collinearity <- function(x) {
+  vifs <- x$VIF
+  x$Tolerance <- 1 / x$VIF
+
+  x$VIF <- sprintf("%.2f", x$VIF)
+  x$SE_factor <- sprintf("%.2f", x$SE_factor)
+  x$Tolerance <- sprintf("%.2f", x$Tolerance)
+
+  colnames(x)[3] <- "Increased SE"
+
+  low_corr <- which(vifs < 5)
+  if (length(low_corr)) {
+    cat("\n")
+    insight::print_color("Low Correlation\n\n", "green")
+    print.data.frame(x[low_corr, ], row.names = FALSE)
+  }
+
+  mid_corr <- which(vifs >= 5 & vifs < 10)
+  if (length(mid_corr)) {
+    cat("\n")
+    insight::print_color("Moderate Correlation\n\n", "yellow")
+    print.data.frame(x[mid_corr, ], row.names = FALSE)
+  }
+
+  high_corr <- which(vifs >= 10)
+  if (length(high_corr)) {
+    cat("\n")
+    insight::print_color("High Correlation\n\n", "red")
+    print.data.frame(x[high_corr, ], row.names = FALSE)
+  }
+}
+
+
+
+# other classes ----------------------------------
 
 #' @export
 check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
@@ -205,10 +272,7 @@ check_collinearity.betamfx <- check_collinearity.logitor
 
 
 
-
-
 # zi-models -------------------------------------
-
 
 #' @rdname check_collinearity
 #' @export
@@ -221,7 +285,6 @@ check_collinearity.glmmTMB <- function(x,
 }
 
 
-
 #' @export
 check_collinearity.MixMod <- function(x,
                                       component = c("all", "conditional", "count", "zi", "zero_inflated"),
@@ -230,7 +293,6 @@ check_collinearity.MixMod <- function(x,
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
-
 
 
 #' @export
@@ -243,7 +305,6 @@ check_collinearity.hurdle <- function(x,
 }
 
 
-
 #' @export
 check_collinearity.zeroinfl <- function(x,
                                         component = c("all", "conditional", "count", "zi", "zero_inflated"),
@@ -252,7 +313,6 @@ check_collinearity.zeroinfl <- function(x,
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
-
 
 
 #' @export
@@ -265,6 +325,8 @@ check_collinearity.zerocount <- function(x,
 }
 
 
+
+# utilities ---------------------------------
 
 .check_collinearity_zi_model <- function(x, component, verbose = TRUE) {
   if (component == "count") component <- "conditional"
@@ -298,7 +360,6 @@ check_collinearity.zerocount <- function(x,
     .check_collinearity(x, component, verbose = verbose)
   }
 }
-
 
 
 
@@ -410,7 +471,6 @@ check_collinearity.zerocount <- function(x,
 
 
 
-
 .term_assignments <- function(x, component, verbose = TRUE) {
   tryCatch(
     {
@@ -444,7 +504,6 @@ check_collinearity.zerocount <- function(x,
     }
   )
 }
-
 
 
 

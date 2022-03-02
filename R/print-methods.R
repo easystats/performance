@@ -24,62 +24,11 @@ print.performance_model <- function(x, digits = 3, ...) {
 
 
 #' @export
-print.check_outliers <- function(x, ...) {
-  outliers <- which(x)
-  if (length(outliers) >= 1) {
-    o <- paste0(" (cases ", paste0(outliers, collapse = ", "), ")")
-    insight::print_color(sprintf("Warning: %i outliers detected%s.\n", length(outliers), o), "red")
-  } else {
-    insight::print_color("OK: No outliers detected.\n", "green")
-  }
-  invisible(x)
-}
-
-
-
-#' @export
 print.check_model <- function(x, ...) {
   insight::check_if_installed("see", "for model diagnositic plots")
   NextMethod()
 }
 
-
-#' @export
-print.check_distribution <- function(x, ...) {
-  insight::print_color("# Distribution of Model Family\n\n", "blue")
-
-  x1 <- x[order(x$p_Residuals, decreasing = TRUE)[1:3], c(1, 2)]
-  x1 <- x1[x1$p_Residuals > 0, ]
-  x1$p_Residuals <- sprintf("%g%%", round(100 * x1$p_Residuals))
-  colnames(x1) <- c("Distribution", "Probability")
-
-  insight::print_color("Predicted Distribution of Residuals\n\n", "red")
-  print.data.frame(x1, row.names = FALSE, ...)
-
-  x2 <- x[order(x$p_Response, decreasing = TRUE)[1:3], c(1, 3)]
-  x2 <- x2[x2$p_Response > 0, ]
-  x2$p_Response <- sprintf("%g%%", round(100 * x2$p_Response))
-  colnames(x2) <- c("Distribution", "Probability")
-
-  insight::print_color("\nPredicted Distribution of Response\n\n", "red")
-  print.data.frame(x2, row.names = FALSE, ...)
-  invisible(x)
-}
-
-
-
-#' @export
-print.check_distribution_numeric <- function(x, ...) {
-  insight::print_color("# Predicted Distribution of Vector\n\n", "blue")
-
-  x1 <- x[order(x$p_Vector, decreasing = TRUE)[1:3], c(1, 2)]
-  x1 <- x1[x1$p_Vector > 0, ]
-  x1$p_Vector <- sprintf("%g%%", round(100 * x1$p_Vector))
-  colnames(x1) <- c("Distribution", "Probability")
-
-  print.data.frame(x1, row.names = FALSE, ...)
-  invisible(x)
-}
 
 
 
@@ -349,62 +298,6 @@ print.r2_nakagawa_by_group <- function(x, digits = 3, ...) {
 }
 
 
-
-#' @export
-print.check_zi <- function(x, ...) {
-  insight::print_color("# Check for zero-inflation\n\n", "blue")
-  cat(sprintf("   Observed zeros: %i\n", x$observed.zeros))
-  cat(sprintf("  Predicted zeros: %i\n", x$predicted.zeros))
-  cat(sprintf("            Ratio: %.2f\n\n", x$ratio))
-
-  lower <- 1 - x$tolerance
-  upper <- 1 + x$tolerance
-
-  if (x$ratio < lower) {
-    message("Model is underfitting zeros (probable zero-inflation).")
-  } else if (x$ratio > upper) {
-    message("Model is overfitting zeros.")
-  } else {
-    message(insight::format_message("Model seems ok, ratio of observed and predicted zeros is within the tolerance range."))
-  }
-
-  invisible(x)
-}
-
-
-
-#' @export
-print.check_overdisp <- function(x, digits = 3, ...) {
-  orig_x <- x
-
-  x$dispersion_ratio <- sprintf("%.*f", digits, x$dispersion_ratio)
-  x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
-
-  x$p_value <- pval <- round(x$p_value, digits = digits)
-  if (x$p_value < .001) x$p_value <- "< 0.001"
-
-  maxlen <- max(
-    nchar(x$dispersion_ratio),
-    nchar(x$chisq_statistic),
-    nchar(x$p_value)
-  )
-
-  insight::print_color("# Overdispersion test\n\n", "blue")
-  cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
-  cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
-  cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
-
-  if (pval > 0.05) {
-    message("No overdispersion detected.")
-  } else {
-    message("Overdispersion detected.")
-  }
-
-  invisible(orig_x)
-}
-
-
-
 #' @export
 print.icc_decomposed <- function(x, digits = 2, ...) {
   # print model information
@@ -502,31 +395,6 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 
 #' @export
-print.binned_residuals <- function(x, ...) {
-  resid_ok <- attributes(x)$resid_ok
-
-  if (!is.null(resid_ok)) {
-    if (resid_ok < .8) {
-      insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
-    } else if (resid_ok < .95) {
-      insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
-    } else {
-      insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
-    }
-  }
-}
-
-
-#' @export
-plot.binned_residuals <- function(x, ...) {
-  insight::check_if_installed("see", "to plot binned residuals")
-  NextMethod()
-}
-
-
-
-
-#' @export
 print.performance_hosmer <- function(x, ...) {
   insight::print_color("# Hosmer-Lemeshow Goodness-of-Fit Test\n\n", "blue")
 
@@ -583,57 +451,6 @@ print.performance_score <- function(x, ...) {
   cat(sprintf("  spherical: %s\n", results[3]))
 
   invisible(x)
-}
-
-
-#' @export
-print.check_collinearity <- function(x, ...) {
-  insight::print_color("# Check for Multicollinearity\n", "blue")
-
-  if ("Component" %in% colnames(x)) {
-    comp <- split(x, x$Component)
-    for (i in 1:length(comp)) {
-      cat(paste0("\n* ", comp[[i]]$Component[1], " component:\n"))
-      .print_collinearity(comp[[i]][, 1:3])
-    }
-  } else {
-    .print_collinearity(x)
-  }
-
-  invisible(x)
-}
-
-
-.print_collinearity <- function(x) {
-  vifs <- x$VIF
-  x$Tolerance <- 1 / x$VIF
-
-  x$VIF <- sprintf("%.2f", x$VIF)
-  x$SE_factor <- sprintf("%.2f", x$SE_factor)
-  x$Tolerance <- sprintf("%.2f", x$Tolerance)
-
-  colnames(x)[3] <- "Increased SE"
-
-  low_corr <- which(vifs < 5)
-  if (length(low_corr)) {
-    cat("\n")
-    insight::print_color("Low Correlation\n\n", "green")
-    print.data.frame(x[low_corr, ], row.names = FALSE)
-  }
-
-  mid_corr <- which(vifs >= 5 & vifs < 10)
-  if (length(mid_corr)) {
-    cat("\n")
-    insight::print_color("Moderate Correlation\n\n", "yellow")
-    print.data.frame(x[mid_corr, ], row.names = FALSE)
-  }
-
-  high_corr <- which(vifs >= 10)
-  if (length(high_corr)) {
-    cat("\n")
-    insight::print_color("High Correlation\n\n", "red")
-    print.data.frame(x[high_corr, ], row.names = FALSE)
-  }
 }
 
 
