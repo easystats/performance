@@ -66,6 +66,31 @@ plot.test_likelihoodratio <- function(x, ...) {
 }
 
 
+#' @export
+print.test_likelihoodratio <- function(x, digits = 2, ...) {
+
+  # Footer
+  if ("LogLik" %in% names(x)) {
+    best <- which.max(x$LogLik)
+    footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
+  } else {
+    footer <- NULL
+  }
+
+  # value formatting
+  x$p <- insight::format_p(x$p, name = NULL)
+
+  cat(insight::export_table(
+    x,
+    digits = digits,
+    caption = c("# Likelihood-Ratio-Test (LRT) for Model Comparison", "blue"),
+    footer = footer
+  ))
+
+  invisible(x)
+}
+
+
 
 # other classes ---------------------------
 

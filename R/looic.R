@@ -61,6 +61,9 @@ looic <- function(model, verbose = TRUE) {
 }
 
 
+
+# methods --------------------------
+
 #' @export
 as.data.frame.looic <- function(x, row.names = NULL, ...) {
   data.frame(
@@ -72,4 +75,21 @@ as.data.frame.looic <- function(x, row.names = NULL, ...) {
     row.names = row.names,
     ...
   )
+}
+
+
+#' @export
+print.looic <- function(x, digits = 2, ...) {
+  insight::print_color("# LOOIC and ELPD with Standard Error\n\n", "blue")
+
+  out <- paste0(c(
+    sprintf("  LOOIC: %.*f [%.*f]", digits, x$LOOIC, digits, x$LOOIC_SE),
+    sprintf("   ELPD: %.*f [%.*f]", digits, x$ELPD, digits, x$ELPD_SE)
+  ),
+  collapse = "\n"
+  )
+
+  cat(out)
+  cat("\n")
+  invisible(x)
 }
