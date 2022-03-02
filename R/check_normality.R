@@ -46,6 +46,9 @@ check_normality <- function(x, ...) {
 }
 
 
+
+# default -------------------------
+
 #' @export
 check_normality.default <- function(x, ...) {
   # valid model?
@@ -67,7 +70,31 @@ check_normality.default <- function(x, ...) {
 
 
 
+# methods ----------------------
 
+#' @export
+plot.check_normality <- function(x, ...) {
+  insight::check_if_installed("see", "for residual plots")
+  NextMethod()
+}
+
+
+#' @export
+print.check_normality <- function(x, ...) {
+  pstring <- insight::format_p(x)
+  type <- attributes(x)$type
+
+  if (x < 0.05) {
+    insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")
+  } else {
+    insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type, pstring), "green")
+  }
+  invisible(x)
+}
+
+
+
+# other classes --------------------
 
 # mixed models ---------------------
 
@@ -150,12 +177,13 @@ check_normality.afex_aov <- function(x, ...) {
   invisible(p.val)
 }
 
+
 #' @export
 check_normality.BFBayesFactor <- check_normality.afex_aov
 
 
-# helper ---------------------
 
+# helper ---------------------
 
 .check_normality <- function(x, model, type = "residuals") {
   ts <- tryCatch(
@@ -176,15 +204,8 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
     return(NULL)
   }
 
-  # format p-value
-  p.val <- ts$p.value
-  pstring <- insight::format_p(p.val)
+  out <- ts$p.value
+  attr(out, "type") <- type
 
-  if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")
-  } else {
-    insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type, pstring), "green")
-  }
-
-  p.val
+  out
 }

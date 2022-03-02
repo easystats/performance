@@ -128,7 +128,6 @@ print.check_distribution <- function(x, ...) {
 }
 
 
-
 #' @export
 print.check_distribution_numeric <- function(x, ...) {
   insight::print_color("# Predicted Distribution of Vector\n\n", "blue")
@@ -140,6 +139,20 @@ print.check_distribution_numeric <- function(x, ...) {
 
   print.data.frame(x1, row.names = FALSE, ...)
   invisible(x)
+}
+
+
+#' @export
+plot.check_distribution <- function(x, ...) {
+  insight::check_if_installed("see", "to plot predicted distributions")
+  NextMethod()
+}
+
+
+#' @export
+plot.check_distribution_numeric <- function(x, ...) {
+  insight::check_if_installed("see", "to plot predicted distributions")
+  NextMethod()
 }
 
 

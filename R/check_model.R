@@ -83,6 +83,9 @@ check_model <- function(x, ...) {
 }
 
 
+
+# default ----------------------------
+
 #' @rdname check_model
 #' @export
 check_model.default <- function(x,
@@ -130,6 +133,24 @@ check_model.default <- function(x,
 }
 
 
+# methods ----------------------------------
+
+#' @export
+print.check_model <- function(x, ...) {
+  insight::check_if_installed("see", "for model diagnositic plots")
+  NextMethod()
+}
+
+#' @export
+plot.check_model <- function(x, ...) {
+  insight::check_if_installed("see", "for model diagnositic plots")
+  NextMethod()
+}
+
+
+
+# other classes ---------------------------
+
 ## TODO for now, convert to freq, see https://github.com/easystats/performance/issues/354
 ## need to fix this later
 
@@ -160,7 +181,6 @@ check_model.stanreg <- function(x,
     ...
   )
 }
-
 
 
 #' @export
@@ -198,11 +218,7 @@ check_model.model_fit <- function(x,
 
 
 
-
-
-
 # helper ------------------------
-
 
 .check_assumptions_linear <- function(model, model_info) {
   dat <- list()
@@ -229,7 +245,6 @@ check_model.model_fit <- function(x,
 
 
 
-
 .check_assumptions_glm <- function(model, model_info) {
   dat <- list()
 
@@ -253,7 +268,6 @@ check_model.model_fit <- function(x,
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
-
 
 
 

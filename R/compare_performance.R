@@ -209,6 +209,33 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 
 
 
+# methods ----------------------------
+
+#' @export
+print.compare_performance <- function(x, digits = 3, ...) {
+  table_caption <- c("# Comparison of Model Performance Indices", "blue")
+  formatted_table <- format(x = x, digits = digits, format = "text", ...)
+
+  if ("Performance_Score" %in% colnames(formatted_table)) {
+    footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+  } else {
+    footer <- NULL
+  }
+
+  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))
+  invisible(x)
+}
+
+
+#' @export
+plot.compare_performance <- function(x, ...) {
+  insight::check_if_installed("see", "for model comparison plots")
+  NextMethod()
+}
+
+
+
+# utilities ------------------------------
 
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
@@ -277,9 +304,11 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   x
 }
 
+
 .normalize_vector <- function(x) {
   as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 }
+
 
 .ic_weight <- function(ic) {
   # ic should be in the deviance metric (-2 * loglik)

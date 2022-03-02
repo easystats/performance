@@ -1,33 +1,3 @@
-#' @export
-print.compare_performance <- function(x, digits = 3, ...) {
-  table_caption <- c("# Comparison of Model Performance Indices", "blue")
-  formatted_table <- format(x = x, digits = digits, format = "text", ...)
-
-  if ("Performance_Score" %in% colnames(formatted_table)) {
-    footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
-  } else {
-    footer <- NULL
-  }
-
-  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))
-  invisible(x)
-}
-
-
-
-#' @export
-print.performance_model <- function(x, digits = 3, ...) {
-  formatted_table <- format(x = x, digits = digits, format = "text", ...)
-  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = c("# Indices of model performance", "blue"), ...))
-  invisible(x)
-}
-
-
-#' @export
-print.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "for model diagnositic plots")
-  NextMethod()
-}
 
 
 
