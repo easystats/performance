@@ -199,6 +199,9 @@ test_performance <- function(..., reference = 1) {
 }
 
 
+
+# default --------------------------------
+
 #' @export
 test_performance.default <- function(..., reference = 1, include_formula = FALSE) {
 
@@ -219,6 +222,68 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
 
 
+# methods ------------------------------
+
+#' @export
+plot.test_performance <- function(x, ...) {
+  warning(insight::format_message("There is currently no plot() method for test-functions.",
+                                  "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."), call. = FALSE)
+}
+
+
+#' @export
+format.test_performance <- function(x, digits = 2, ...) {
+
+  # Format cols and names
+  out <- insight::format_table(x, digits = digits, ...)
+
+  if (isTRUE(attributes(x)$is_nested)) {
+    footer <- paste0(
+      "Models were detected as nested and are compared in sequential order.\n"
+    )
+  } else {
+    footer <- paste0(
+      "Each model is compared to ",
+      x$Name[attributes(x)$reference],
+      ".\n"
+    )
+  }
+  attr(out, "table_footer") <- footer
+  out
+}
+
+
+#' @export
+print.test_performance <- function(x, digits = 2, ...) {
+  out <- insight::export_table(format(x, digits = digits, ...), ...)
+  cat(out)
+}
+
+
+#' @export
+print_md.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "markdown", ...)
+}
+
+
+#' @export
+print_html.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
+}
+
+
+#' @export
+display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
+  if (format == "markdown") {
+    print_md(x = object, digits = digits, ...)
+  } else {
+    print_html(x = object, digits = digits, ...)
+  }
+}
+
+
+
+# other classes -----------------------------------
 
 #' @export
 test_performance.ListNestedRegressions <- function(objects,
@@ -321,55 +386,6 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
 # Helpers -----------------------------------------------------------------
 
-#' @export
-format.test_performance <- function(x, digits = 2, ...) {
-
-  # Format cols and names
-  out <- insight::format_table(x, digits = digits, ...)
-
-  if (isTRUE(attributes(x)$is_nested)) {
-    footer <- paste0(
-      "Models were detected as nested and are compared in sequential order.\n"
-    )
-  } else {
-    footer <- paste0(
-      "Each model is compared to ",
-      x$Name[attributes(x)$reference],
-      ".\n"
-    )
-  }
-  attr(out, "table_footer") <- footer
-  out
-}
-
-
-
-#' @export
-print.test_performance <- function(x, digits = 2, ...) {
-  out <- insight::export_table(format(x, digits = digits, ...), ...)
-  cat(out)
-}
-
-#' @export
-print_md.test_performance <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "markdown", ...)
-}
-
-#' @export
-print_html.test_performance <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
-}
-
-#' @export
-display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
-  if (format == "markdown") {
-    print_md(x = object, digits = digits, ...)
-  } else {
-    print_html(x = object, digits = digits, ...)
-  }
-}
-
-
 
 .test_performance_init <- function(objects, include_formula = FALSE) {
   names <- insight::model_name(objects, include_formula = include_formula)
@@ -381,8 +397,6 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
   row.names(out) <- NULL
   out
 }
-
-
 
 
 

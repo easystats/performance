@@ -74,6 +74,18 @@ performance_roc <- function(x, ..., predictions, new_data) {
 
 
 
+# methods -----------------------------
+
+#' @export
+plot.performance_roc <- function(x, ...) {
+  insight::check_if_installed("see", "to plot ROC-curves")
+  NextMethod()
+}
+
+
+
+# utilities ---------------------------
+
 .performance_roc_numeric <- function(x, predictions) {
   if (length(x) != length(predictions)) {
     stop("'x' and ' predictions' must be of same length.", call. = FALSE)

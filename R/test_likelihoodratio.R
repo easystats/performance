@@ -29,6 +29,9 @@ performance_lrt <- test_likelihoodratio
 test_lrt <- test_likelihoodratio
 
 
+
+# default --------------------
+
 #' @export
 test_likelihoodratio.default <- function(..., estimator = "ML") {
 
@@ -53,6 +56,18 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
 }
 
 
+
+# methods ------------------------------
+
+#' @export
+plot.test_likelihoodratio <- function(x, ...) {
+  warning(insight::format_message("There is currently no plot() method for test-functions.",
+                                  "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."), call. = FALSE)
+}
+
+
+
+# other classes ---------------------------
 
 #' @export
 test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
@@ -92,8 +107,6 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
 }
-
-
 
 
 test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
