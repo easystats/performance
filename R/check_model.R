@@ -321,19 +321,19 @@ check_model.model_fit <- function(x,
     # remove intercept from output for ridgeline plot.
     # this would increase the range of the scale too much
 
-    if (.obj_has_name(d1, "(Intercept)")) {
+    if (datawizard::object_has_names(d1, "(Intercept)")) {
       d1 <- datawizard::data_remove(d1, "(Intercept)")
     }
 
-    if (.obj_has_name(d2, "(Intercept)")) {
+    if (datawizard::object_has_names(d2, "(Intercept)")) {
       d2 <- datawizard::data_remove(d2, "(Intercept)")
     }
 
-    if (.obj_has_name(d1, "sigma")) {
+    if (datawizard::object_has_names(d1, "sigma")) {
       d1 <- datawizard::data_remove(d1, "sigma")
     }
 
-    if (.obj_has_name(d2, "sigma")) {
+    if (datawizard::object_has_names(d2, "sigma")) {
       d2 <- datawizard::data_remove(d2, "sigma")
     }
 
