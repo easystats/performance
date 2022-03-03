@@ -21,6 +21,8 @@ if (requiet("testthat") && requiet("performance")) {
       colnames(compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)),
       c("Name", "Model", "AIC", "AIC_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
     )
+
+    expect_silent(compare_performance(lm1, lm2, estimator = "REML"))
   })
 
   if (requiet("lme4")) {
