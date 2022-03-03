@@ -49,7 +49,8 @@
 #' distributions, however, only if the probability is greater than zero.
 #'
 #' @examples
-#' if (require("lme4") && require("parameters") && require("see") && require("patchwork")) {
+#' if (require("lme4") && require("parameters") &&
+#'   require("see") && require("patchwork") && require("randomForest")) {
 #'   data(sleepstudy)
 #'
 #'   model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
@@ -61,26 +62,9 @@ check_distribution <- function(model) {
   UseMethod("check_distribution")
 }
 
-#' @export
-check_distribution.numeric <- function(model) {
-  insight::check_if_installed("randomForest")
 
-  dat <- .extract_features(model)
-  dist <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
 
-  out <- data.frame(
-    Distribution = rownames(dist),
-    p_Vector = dist[[1]],
-    stringsAsFactors = FALSE,
-    row.names = NULL
-  )
-
-  class(out) <- unique(c("check_distribution_numeric", "see_check_distribution_numeric", class(out)))
-  attr(out, "data") <- model
-
-  out
-}
-
+# default -----------------------------
 
 #' @export
 check_distribution.default <- function(model) {
@@ -119,6 +103,86 @@ check_distribution.default <- function(model) {
 
 
 
+# methods --------------------------
+
+#' @export
+print.check_distribution <- function(x, ...) {
+  insight::print_color("# Distribution of Model Family\n\n", "blue")
+
+  x1 <- x[order(x$p_Residuals, decreasing = TRUE)[1:3], c(1, 2)]
+  x1 <- x1[x1$p_Residuals > 0, ]
+  x1$p_Residuals <- sprintf("%g%%", round(100 * x1$p_Residuals))
+  colnames(x1) <- c("Distribution", "Probability")
+
+  insight::print_color("Predicted Distribution of Residuals\n\n", "red")
+  print.data.frame(x1, row.names = FALSE, ...)
+
+  x2 <- x[order(x$p_Response, decreasing = TRUE)[1:3], c(1, 3)]
+  x2 <- x2[x2$p_Response > 0, ]
+  x2$p_Response <- sprintf("%g%%", round(100 * x2$p_Response))
+  colnames(x2) <- c("Distribution", "Probability")
+
+  insight::print_color("\nPredicted Distribution of Response\n\n", "red")
+  print.data.frame(x2, row.names = FALSE, ...)
+  invisible(x)
+}
+
+
+#' @export
+print.check_distribution_numeric <- function(x, ...) {
+  insight::print_color("# Predicted Distribution of Vector\n\n", "blue")
+
+  x1 <- x[order(x$p_Vector, decreasing = TRUE)[1:3], c(1, 2)]
+  x1 <- x1[x1$p_Vector > 0, ]
+  x1$p_Vector <- sprintf("%g%%", round(100 * x1$p_Vector))
+  colnames(x1) <- c("Distribution", "Probability")
+
+  print.data.frame(x1, row.names = FALSE, ...)
+  invisible(x)
+}
+
+
+#' @export
+plot.check_distribution <- function(x, ...) {
+  insight::check_if_installed("see", "to plot predicted distributions")
+  NextMethod()
+}
+
+
+#' @export
+plot.check_distribution_numeric <- function(x, ...) {
+  insight::check_if_installed("see", "to plot predicted distributions")
+  NextMethod()
+}
+
+
+
+# other classes -------------------
+
+#' @export
+check_distribution.numeric <- function(model) {
+  insight::check_if_installed("randomForest")
+
+  dat <- .extract_features(model)
+  dist <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
+
+  out <- data.frame(
+    Distribution = rownames(dist),
+    p_Vector = dist[[1]],
+    stringsAsFactors = FALSE,
+    row.names = NULL
+  )
+
+  class(out) <- unique(c("check_distribution_numeric", "see_check_distribution_numeric", class(out)))
+  attr(out, "data") <- model
+
+  out
+}
+
+
+
+# utilities -----------------------------
+
 .extract_features <- function(x) {
   data.frame(
     "SD" = stats::sd(x),
@@ -140,6 +204,7 @@ check_distribution.default <- function(model) {
     "Integer" = all(.is_integer(x))
   )
 }
+
 
 
 .is_integer <- function(x) {

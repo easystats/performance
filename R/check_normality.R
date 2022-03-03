@@ -9,8 +9,8 @@
 #'   May be abbreviated.
 #' @param ... Currently not used.
 #'
-#' @return Invisibly returns the p-value of the test statistics. A p-value
-#' < 0.05 indicates a significant deviation from normal distribution
+#' @return The p-value of the test statistics. A p-value < 0.05 indicates a
+#'   significant deviation from normal distribution.
 #'
 #' @note For mixed-effects models, studentized residuals, and *not*
 #'   standardized residuals, are used for the test. There is also a
@@ -18,11 +18,11 @@
 #'    implemented in the
 #'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
-#' @details `check_normality()` calls `stats::shapiro.test`
-#' and checks the standardized residuals (or Studentized residuals for mixed
-#' models) for normal distribution. Note that this formal test almost always
-#' yields significant results for the distribution of residuals and visual
-#' inspection (e.g. Q-Q plots) are preferable.
+#' @details `check_normality()` calls `stats::shapiro.test` and checks the
+#' standardized residuals (or Studentized residuals for mixed models) for
+#' normal distribution. Note that this formal test almost always yields
+#' significant results for the distribution of residuals and visual inspection
+#' (e.g. Q-Q plots) are preferable.
 #'
 #' @examples
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -46,6 +46,9 @@ check_normality <- function(x, ...) {
 }
 
 
+
+# default -------------------------
+
 #' @export
 check_normality.default <- function(x, ...) {
   # valid model?
@@ -67,7 +70,31 @@ check_normality.default <- function(x, ...) {
 
 
 
+# methods ----------------------
 
+#' @export
+plot.check_normality <- function(x, ...) {
+  insight::check_if_installed("see", "for residual plots")
+  NextMethod()
+}
+
+
+#' @export
+print.check_normality <- function(x, ...) {
+  pstring <- insight::format_p(x)
+  type <- attributes(x)$type
+
+  if (x < 0.05) {
+    insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")
+  } else {
+    insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type, pstring), "green")
+  }
+  invisible(x)
+}
+
+
+
+# other classes --------------------
 
 # mixed models ---------------------
 
@@ -151,9 +178,12 @@ check_normality.afex_aov <- function(x, ...) {
 }
 
 
+#' @export
+check_normality.BFBayesFactor <- check_normality.afex_aov
+
+
 
 # helper ---------------------
-
 
 .check_normality <- function(x, model, type = "residuals") {
   ts <- tryCatch(
@@ -174,15 +204,8 @@ check_normality.afex_aov <- function(x, ...) {
     return(NULL)
   }
 
-  # format p-value
-  p.val <- ts$p.value
-  pstring <- insight::format_p(p.val)
+  out <- ts$p.value
+  attr(out, "type") <- type
 
-  if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")
-  } else {
-    insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type, pstring), "green")
-  }
-
-  p.val
+  out
 }

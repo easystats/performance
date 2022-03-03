@@ -52,8 +52,7 @@
 #' plots are helpful to check model assumptions, they do not necessarily
 #' indicate so-called "lack of fit", e.g. missed non-linear relationships or
 #' interactions. Thus, it is always recommended to also look at
-#' [effect
-#' plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
+#' [effect plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
 #'
 #' @section Residuals for (Generalized) Linear Models:
 #' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
@@ -83,6 +82,9 @@ check_model <- function(x, ...) {
   UseMethod("check_model")
 }
 
+
+
+# default ----------------------------
 
 #' @rdname check_model
 #' @export
@@ -126,9 +128,28 @@ check_model.default <- function(x,
   attr(ca, "detrend") <- detrend
   attr(ca, "colors") <- colors
   attr(ca, "theme") <- theme
+  attr(ca, "model_info") <- minfo
   ca
 }
 
+
+# methods ----------------------------------
+
+#' @export
+print.check_model <- function(x, ...) {
+  insight::check_if_installed("see", "for model diagnositic plots")
+  NextMethod()
+}
+
+#' @export
+plot.check_model <- function(x, ...) {
+  insight::check_if_installed("see", "for model diagnositic plots")
+  NextMethod()
+}
+
+
+
+# other classes ---------------------------
 
 ## TODO for now, convert to freq, see https://github.com/easystats/performance/issues/354
 ## need to fix this later
@@ -160,7 +181,6 @@ check_model.stanreg <- function(x,
     ...
   )
 }
-
 
 
 #' @export
@@ -198,11 +218,7 @@ check_model.model_fit <- function(x,
 
 
 
-
-
-
 # helper ------------------------
-
 
 .check_assumptions_linear <- function(model, model_info) {
   dat <- list()
@@ -220,12 +236,12 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
 
   dat <- datawizard::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
-
 
 
 
@@ -243,12 +259,15 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
+  if (isTRUE(model_info$is_binomial)) {
+    dat$BINNED_RESID <- binned_residuals(model)
+  }
 
   dat <- datawizard::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
-
 
 
 
@@ -266,7 +285,7 @@ check_model.model_fit <- function(x,
     d2 <- brms::prior_samples(model)
 
     if (is.null(d2)) {
-      stop("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model.", call. = FALSE)
+      stop(insight::format_message("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."), call. = FALSE)
     }
 
     d1 <- brms::posterior_samples(model)

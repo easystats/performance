@@ -11,8 +11,7 @@
 #' @param n_bins Numeric, the number of bins to divide the data. If
 #'   `n_bins = NULL`, the square root of the number of observations is
 #'   taken.
-#' @param ... Further argument like `size` (for point-size) or
-#'   `color` (for point-colors).
+#' @param ... Currently not used.
 #'
 #' @return A data frame representing the data that is mapped in the accompanying
 #'   plot. In case all residuals are inside the error bounds, points are black.
@@ -25,7 +24,7 @@
 #'   categories (bins) based on their fitted values, and then plotting
 #'   the average residual versus the average fitted value for each bin.}
 #'   \cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
-#'   expect about 95\% of the residuals to fall inside the error bounds.
+#'   expect about 95% of the residuals to fall inside the error bounds.
 #'   \cr \cr
 #'   If `term` is not `NULL`, one can compare the residuals in
 #'   relation to a specific model predictor. This may be helpful to check if a
@@ -33,12 +32,9 @@
 #'   of residuals along the x-axis is a signal to consider taking the logarithm
 #'   of the predictor (cf. Gelman and Hill 2007, pp. 97-98).
 #'
-#' @note Since `binned_residuals()` returns a data frame, the default
-#'   action for the result is *printing*. However, the `print()`-method for
-#'   `binned_residuals()` actually creates a plot. For further
-#'   modifications of the plot, use `print()` and add ggplot-layers to the
-#'   return values, e.g. `print(binned_residuals(model)) +
-#'   see::scale_color_pizza()`.
+#' @note `binned_residuals()` returns a data frame, however, the `print()`
+#'   method only returns a short summary of the result. The data frame itself
+#'   is used for plotting. The `plot()` method, in turn, creates a ggplot-object.
 #'
 #' @references
 #' Gelman, A., & Hill, J. (2007). Data analysis using regression and
@@ -46,15 +42,16 @@
 #' Press.
 #'
 #' @examples
-#' if (require("see")) {
-#'   # creating a model
-#'   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' result <- binned_residuals(model)
+#' result
 #'
-#'   # this will automatically plot the results
-#'   (result <- binned_residuals(model))
+#' # look at the data frame
+#' as.data.frame(result)
 #'
-#'   # if you assign results to an object, you can also look at the dataframe
-#'   as.data.frame(result)
+#' # plot
+#' if (require("see") && getRversion() >= "3.6.0") {
+#'   plot(result)
 #' }
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
@@ -90,12 +87,17 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
       n = n,
       x.lo = model.range[1],
       x.hi = model.range[2],
-      se = 2 * sdev / sqrt(n)
+      se = stats::qnorm(.975) * sdev / sqrt(n),
+      ci_range = sdev / sqrt(n)
     )
   }))
 
   d <- do.call(rbind, d)
   d <- d[stats::complete.cases(d), ]
+
+  # CIs
+  d$CI_low <- d$ybar - stats::qnorm(.975) * d$ci_range
+  d$CI_high <- d$ybar + stats::qnorm(.975) * d$ci_range
 
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"
@@ -103,23 +105,36 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
 
   resid_ok <- sum(d$group == "yes") / length(d$group)
 
-  if (resid_ok < .8) {
-    insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
-  } else if (resid_ok < .95) {
-    insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
-  } else {
-    insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
-  }
-
-  add.args <- lapply(match.call(expand.dots = FALSE)$`...`, function(x) x)
-  size <- if ("size" %in% names(add.args)) add.args[["size"]] else 2
-  color <- if ("color" %in% names(add.args)) add.args[["color"]] else c("#d11141", "#00aedb")
-
   class(d) <- c("binned_residuals", "see_binned_residuals", class(d))
+  attr(d, "resid_ok") <- resid_ok
   attr(d, "resp_var") <- insight::find_response(model)
   attr(d, "term") <- term
-  attr(d, "geom_size") <- size
-  attr(d, "geom_color") <- color
 
   d
+}
+
+
+
+# methods -----------------------------
+
+#' @export
+print.binned_residuals <- function(x, ...) {
+  resid_ok <- attributes(x)$resid_ok
+
+  if (!is.null(resid_ok)) {
+    if (resid_ok < .8) {
+      insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
+    } else if (resid_ok < .95) {
+      insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
+    } else {
+      insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
+    }
+  }
+}
+
+
+#' @export
+plot.binned_residuals <- function(x, ...) {
+  insight::check_if_installed("see", "to plot binned residuals")
+  NextMethod()
 }

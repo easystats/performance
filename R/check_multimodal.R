@@ -86,7 +86,7 @@ check_multimodal.data.frame <- function(x, ...) {
   }
 
 
-  attr(rez, "text") <- text
+  attr(rez, "text") <- insight::format_message(text)
   attr(rez, "color") <- color
   attr(rez, "title") <- "Is the data multimodal?"
   class(rez) <- c("easystats_check", class(rez))
@@ -123,7 +123,7 @@ check_multimodal.numeric <- function(x, ...) {
     color <- "yellow"
   }
 
-  attr(rez, "text") <- text
+  attr(rez, "text") <- insight::format_message(text)
   attr(rez, "color") <- color
   attr(rez, "title") <- "Is the variable multimodal?"
   class(rez) <- c("easystats_check", class(rez))

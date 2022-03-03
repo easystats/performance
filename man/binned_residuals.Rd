@@ -18,8 +18,7 @@ plotted.}
 \code{n_bins = NULL}, the square root of the number of observations is
 taken.}
 
-\item{...}{Further argument like \code{size} (for point-size) or
-\code{color} (for point-colors).}
+\item{...}{Currently not used.}
 }
 \value{
 A data frame representing the data that is mapped in the accompanying
@@ -37,7 +36,7 @@ Binned residual plots are achieved by \dQuote{dividing the data into
 categories (bins) based on their fitted values, and then plotting
 the average residual versus the average fitted value for each bin.}
 \cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
-expect about 95\\% of the residuals to fall inside the error bounds.
+expect about 95\% of the residuals to fall inside the error bounds.
 \cr \cr
 If \code{term} is not \code{NULL}, one can compare the residuals in
 relation to a specific model predictor. This may be helpful to check if a
@@ -46,22 +45,21 @@ of residuals along the x-axis is a signal to consider taking the logarithm
 of the predictor (cf. Gelman and Hill 2007, pp. 97-98).
 }
 \note{
-Since \code{binned_residuals()} returns a data frame, the default
-action for the result is \emph{printing}. However, the \code{print()}-method for
-\code{binned_residuals()} actually creates a plot. For further
-modifications of the plot, use \code{print()} and add ggplot-layers to the
-return values, e.g. \code{print(binned_residuals(model)) + see::scale_color_pizza()}.
+\code{binned_residuals()} returns a data frame, however, the \code{print()}
+method only returns a short summary of the result. The data frame itself
+is used for plotting. The \code{plot()} method, in turn, creates a ggplot-object.
 }
 \examples{
-if (require("see")) {
-  # creating a model
-  model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+result <- binned_residuals(model)
+result
 
-  # this will automatically plot the results
-  (result <- binned_residuals(model))
+# look at the data frame
+as.data.frame(result)
 
-  # if you assign results to an object, you can also look at the dataframe
-  as.data.frame(result)
+# plot
+if (require("see") && getRversion() >= "3.6.0") {
+  plot(result)
 }
 }
 \references{

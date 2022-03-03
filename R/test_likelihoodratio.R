@@ -29,6 +29,9 @@ performance_lrt <- test_likelihoodratio
 test_lrt <- test_likelihoodratio
 
 
+
+# default --------------------
+
 #' @export
 test_likelihoodratio.default <- function(..., estimator = "ML") {
 
@@ -48,11 +51,48 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
   } else if (inherits(objects, "ListLavaan")) {
     test_likelihoodratio_ListLavaan(..., objects = objects) # Because lavaanLRT requires the ellipsis
   } else {
-    stop("The models are not nested models, which is a prerequisite for `test_likelihoodratio()`. See the 'Details' section.")
+    stop(insight::format_message("The models are not nested models, which is a prerequisite for `test_likelihoodratio()`. See the 'Details' section."), call. = FALSE)
   }
 }
 
 
+
+# methods ------------------------------
+
+#' @export
+plot.test_likelihoodratio <- function(x, ...) {
+  warning(insight::format_message("There is currently no plot() method for test-functions.",
+                                  "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."), call. = FALSE)
+}
+
+
+#' @export
+print.test_likelihoodratio <- function(x, digits = 2, ...) {
+
+  # Footer
+  if ("LogLik" %in% names(x)) {
+    best <- which.max(x$LogLik)
+    footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
+  } else {
+    footer <- NULL
+  }
+
+  # value formatting
+  x$p <- insight::format_p(x$p, name = NULL)
+
+  cat(insight::export_table(
+    x,
+    digits = digits,
+    caption = c("# Likelihood-Ratio-Test (LRT) for Model Comparison", "blue"),
+    footer = footer
+  ))
+
+  invisible(x)
+}
+
+
+
+# other classes ---------------------------
 
 #' @export
 test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
@@ -68,7 +108,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
   # lmtest::lrtest()
   if (tolower(estimator) %in% c("ml", "mle")) {
-    lls <- sapply(objects, insight::get_loglikelihood)
+    lls <- sapply(objects, insight::get_loglikelihood, REML = FALSE, check_response = TRUE)
     chi2 <- abs(c(NA, -2 * diff(lls)))
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
@@ -92,8 +132,6 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
 }
-
-
 
 
 test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {

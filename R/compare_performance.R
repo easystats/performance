@@ -12,6 +12,7 @@
 #'   details.
 #' @param rank Logical, if `TRUE`, models are ranked according to 'best'
 #'   overall model performance. See 'Details'.
+#' @inheritParams performance_aic
 #'
 #' @return A data frame (with one row per model) and one column per "index" (see
 #'   `metrics`).
@@ -52,6 +53,16 @@
 #'   for more details).
 #' }
 #'
+#' \subsection{REML versus ML estimator}{
+#'   By default, `estimator = "ML"`, which means that values from information
+#'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
+#'   are based on the ML-estimator, while the default behaviour of `AIC()` for
+#'   such classes is setting `REML = TRUE`. This default is intentional, because
+#'   comparing information criteria based on REML fits is not valid. Set
+#'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
+#'   defaults in `AIC.merMod()`.
+#' }
+#'
 #' @references
 #' Burnham, K. P., & Anderson, D. R. (2002).
 #' _Model selection and multimodel inference: A practical information-theoretic approach_ (2nd ed.).
@@ -73,7 +84,7 @@
 #' }
 #' @inheritParams model_performance.lm
 #' @export
-compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
+compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
   # objects <- list(...)
   # object_names <- match.call(expand.dots = FALSE)$`...`
   objects <- list(...)
@@ -117,7 +128,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   }
 
   m <- mapply(function(.x, .y) {
-    dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
+    dat <- model_performance(.x, metrics = metrics, estimator = estimator, verbose = FALSE)
     model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
     perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
     attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
@@ -131,10 +142,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 
   if (any(c("AIC", "AICc", "BIC", "WAIC") %in% names(dfs))) {
-    dfs$AIC_wt <- .ic_weight(dfs$AIC)
-    dfs$AICc_wt <- .ic_weight(dfs$AICc)
-    dfs$BIC_wt <- .ic_weight(dfs$BIC)
-    dfs$WAIC_wt <- .ic_weight(dfs$WAIC)
+    dfs$AIC_wt <- .ic_weight(dfs[["AIC"]])
+    dfs$AICc_wt <- .ic_weight(dfs[["AICc"]])
+    dfs$BIC_wt <- .ic_weight(dfs[["BIC"]])
+    dfs$WAIC_wt <- .ic_weight(dfs[["WAIC"]])
   }
 
   if ("LOOIC" %in% names(dfs)) {
@@ -198,6 +209,33 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
 
 
+# methods ----------------------------
+
+#' @export
+print.compare_performance <- function(x, digits = 3, ...) {
+  table_caption <- c("# Comparison of Model Performance Indices", "blue")
+  formatted_table <- format(x = x, digits = digits, format = "text", ...)
+
+  if ("Performance_Score" %in% colnames(formatted_table)) {
+    footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+  } else {
+    footer <- NULL
+  }
+
+  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))
+  invisible(x)
+}
+
+
+#' @export
+plot.compare_performance <- function(x, ...) {
+  insight::check_if_installed("see", "for model comparison plots")
+  NextMethod()
+}
+
+
+
+# utilities ------------------------------
 
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
@@ -266,9 +304,11 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   x
 }
 
+
 .normalize_vector <- function(x) {
   as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 }
+
 
 .ic_weight <- function(ic) {
   # ic should be in the deviance metric (-2 * loglik)

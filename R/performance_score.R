@@ -130,6 +130,46 @@ performance_score <- function(model, verbose = TRUE) {
 
 
 
+# methods -----------------------------------
+
+#' @export
+as.data.frame.performance_score <- function(x, row.names = NULL, ...) {
+  data.frame(
+    logarithmic = x$logarithmic,
+    quadratic = x$quadratic,
+    spherical = x$spherical,
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
+  )
+}
+
+
+#' @export
+print.performance_score <- function(x, ...) {
+  # headline
+  insight::print_color("# Proper Scoring Rules\n\n", "blue")
+
+  results <- format(
+    c(
+      sprintf("%.4f", x$logarithmic),
+      sprintf("%.4f", x$quadratic),
+      sprintf("%.4f", x$spherical)
+    ),
+    justify = "right"
+  )
+
+  cat(sprintf("logarithmic: %s\n", results[1]))
+  cat(sprintf("  quadratic: %s\n", results[2]))
+  cat(sprintf("  spherical: %s\n", results[3]))
+
+  invisible(x)
+}
+
+
+
+# utilities ---------------------------------
+
 .dispersion_parameter <- function(model, minfo) {
   if (inherits(model, "MixMod")) {
     model$phis
@@ -184,17 +224,4 @@ performance_score <- function(model, verbose = TRUE) {
   )
 
   list(pred = pred, pred_zi = pred_zi)
-}
-
-
-#' @export
-as.data.frame.performance_score <- function(x, row.names = NULL, ...) {
-  data.frame(
-    logarithmic = x$logarithmic,
-    quadratic = x$quadratic,
-    spherical = x$spherical,
-    stringsAsFactors = FALSE,
-    row.names = row.names,
-    ...
-  )
 }

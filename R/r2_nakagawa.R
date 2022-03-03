@@ -102,7 +102,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
     group_names <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)
 
     # compute r2 by level
-    r2_random <- 1 - (vars$var.intercept / vars_null$var.intercept)
+    r2_random <- 1 - (vars$var.intercept[group_names] / vars_null$var.intercept[group_names])
     r2_fixed <- 1 - (vars$var.residual / vars_null$var.residual)
 
     out <- data.frame(
