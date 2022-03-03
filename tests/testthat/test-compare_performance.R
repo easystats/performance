@@ -22,4 +22,14 @@ if (requiet("testthat") && requiet("performance")) {
       c("Name", "Model", "AIC", "AIC_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
     )
   })
+
+  if (requiet("lme4")) {
+    m1 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+    m2 <- lmer(Petal.Length ~ Sepal.Length + Sepal.Width + (1 | Species), data = iris)
+
+    test_that("compare_performance, REML fit", {
+      expect_silent(compare_performance(m1, m2))
+      expect_warning(compare_performance(m1, m2, estimator = "REML"))
+    })
+  }
 }

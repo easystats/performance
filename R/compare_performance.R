@@ -202,6 +202,16 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
 
+  # for REML fits, warn user
+  if (isTRUE(verbose) && identical(estimator, "REML") && any(grepl("(AIC|BIC)", names(dfs)))) {
+    if (any(sapply(objects, insight::is_mixed_model))) {
+      warning(insight::format_message(
+        "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
+        "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
+      ), call. = FALSE)
+    }
+  }
+
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
   class(dfs) <- c("compare_performance", "see_compare_performance", class(dfs))
   dfs
