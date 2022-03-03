@@ -39,9 +39,9 @@ Authors@R:
              role = "ctb",
              comment = c(ORCID = "0000-0003-2042-7063")),
       person(given = "Martin",
-             family = "Jullum",   
+             family = "Jullum",
              role = "rev"),
-      person(given = "gjo11",   
+      person(given = "gjo11",
              role = "rev"))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
