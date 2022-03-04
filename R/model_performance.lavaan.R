@@ -148,3 +148,48 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   class(out) <- c("performance_lavaan", "performance_model", class(out))
   out
 }
+
+
+
+#' @export
+model_performance.blavaan <- function(model, metrics = "all", verbose = TRUE, ...) {
+  insight::check_if_installed(c("lavaan", "blavaan"))
+
+
+  if (isTRUE(verbose)) {
+    measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
+    fitind <- summary(blavaan::blavFitIndices(model))
+  } else {
+    measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(model, ...)))))
+    fitind <- suppressWarnings(summary(blavaan::blavFitIndices(model)))
+  }
+
+  row.names(measures) <- NULL
+
+  out <- data.frame(
+    "BRMSEA" = fitind[1, "EAP"],
+    "SD_BRMSEA" = fitind[1, "SD"],
+    "BGammaHat" = fitind[2, "EAP"],
+    "SD_BGammaHat" = fitind[2, "SD"],
+    "Adj_BGammaHat" = fitind[3, "EAP"],
+    "SD_Adj_BGammaHat" = fitind[3, "SD"],
+    "Loglikelihood" = measures$logl,
+    "BIC" = measures$bic,
+    "DIC" = measures$dic,
+    "p_DIC" = measures$p_dic,
+    "WAIC" = measures$waic,
+    "SE_WAIC" = measures$se_waic,
+    "p_WAIC" = measures$p_waic,
+    "LOOIC" = measures$looic,
+    "SE_LOOIC" = measures$se_loo,
+    "p_LOOIC" = measures$p_loo
+  )
+
+  if (all(metrics == "all")) {
+    metrics <- names(out)
+  }
+  out <- out[, metrics]
+
+  class(out) <- c("performance_lavaan", "performance_model", class(out))
+  out
+}
