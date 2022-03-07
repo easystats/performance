@@ -718,7 +718,7 @@ print.dominance_analysis <- function(x, digits = 3, ...) {
 
   Display_cpt <- as.data.frame(x$complete_dominance)
 
-  rownames(Display_cpt) <- gsub("Dmnated_", "Dominated by: ", rownames(Display_cpt))
+  colnames(Display_cpt) <- gsub("Dmnated_", "Dominated by: ", colnames(Display_cpt))
 
   cat("\nComplete Dominance Designations\n")
 

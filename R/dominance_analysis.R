@@ -22,9 +22,9 @@
 #'  the average increment to R2 with a specific number of predictors in
 #'  the model.}
 #'  \item{`complete_dominance`}{Logical matrix of complete dominance
-#'  designations. The predictors represented in each column are
-#'  cross-referenced with predictors in each row.  Whether the predictor
-#'  in each row dominates the predictor in each column is represented in the
+#'  designations. The predictors represented in each row are
+#'  cross-referenced with predictors in each column.  Whether the predictor
+#'  in each column dominates the predictor in each row is represented in the
 #'  logical value in the matrix.}
 #'  \item{`model_R2`}{Value of R2 value returned by the `r2`
 #'  method for the model.}
@@ -40,7 +40,7 @@
 #' yet support interactions, transformations, or offsets applied in the
 #' R formula and will fail with an error when detected.
 #'
-#' The model submitted must accept a formula as a `formula`
+#' The model submitted must accept an formula object as a `formula`
 #' argument.  In addition, the model object must accept the data on which
 #' the model is estimated as a `data` argument.  Formulas submitted
 #' using object references (i.e., `lm(mtcars$mpg ~ mtcars$vs)`) and
@@ -79,17 +79,20 @@
 #'   510-538. doi:10.1177/1536867X211025837
 #' }
 #'
-#' @seealso [domin()]
+#' @seealso [domir::domin()]
 #'
 #' @author Joseph Luchman
 #'
 #' @examples
+#' if (require("domir")) {
 #'   model <- glm(vs ~ cyl + carb + mpg, data = datasets::mtcars,
 #'            family = binomial())
 #'
 #'   r2(model)
 #'
 #'   dominance_analysis(model)
+#'
+#'}
 #'
 #' @export
 
@@ -100,7 +103,7 @@ dominance_analysis <- function(model, ...) {
 
   if (!insight::is_regression_model(model)) stop(paste(deparse(substitute(model)), "is not a supported insight model.\nYou may be able to dominance analyze this model using the domir package."))
 
-  if (!any(methods(class = class(model)[[1]])==paste0("r2.", class(model)[[1]]))) stop(paste(deparse(substitute(model)), "does not have a pefromance-supported r2 method.\nYou may be able to dominance analyze this model using the domir package."))
+  if (!any(utils::methods(class = class(model)[[1]])==paste0("r2.", class(model)[[1]]))) stop(paste(deparse(substitute(model)), "does not have a pefromance-supported r2 method.\nYou may be able to dominance analyze this model using the domir package."))
 
   model_info <- insight::model_info(model)
   if (any(unlist(model_info[c("is_bayesian", "is_mixed", "is_gam", "is_multivariate", "is_zero_inflated", "is_hurdle")])))
@@ -116,9 +119,9 @@ dominance_analysis <- function(model, ...) {
   ivs <- insight::find_predictors(model, flatten = TRUE)
   dv <- insight::find_response(model)
   reg <- insight::model_name(model)
-  fml <- stats::reformulate(ivs, response = dv, intercept = has_intercept(model))
+  fml <- stats::reformulate(ivs, response = dv, intercept = insight::has_intercept(model))
   data <- insight::get_data(model)
-  args <- as.list(str2lang(deparse(insight::get_call(model)))) # extract all arguments from call
+  args <- as.list(str2lang(deparse1(insight::get_call(model), collapse = ""))) # extract all arguments from call
   loc <- which(!(names(args) %in% c("formula", "data"))) # find formula and data arguments <- must ensure these are always there - will not for {survey} -- todo: is there better way to capture "extra" arguments?
   args <- args[loc] # remove formula and data arguments
   args <- args[-1] # remove function name
@@ -131,13 +134,15 @@ dominance_analysis <- function(model, ...) {
                     data = data), args)
 
   # Implement DA
-  capture.output(da_res <- do.call(domir::domin, args2domin))
+  utils::capture.output(da_res <- do.call(domir::domin, args2domin))
 
   da_res <- da_res[which(names(da_res) %in% c("Fit_Statistic_Overall", "General_Dominance", "Conditional_Dominance", "Complete_Dominance", "Standardized", "Ranks"))]
 
   names(da_res)<- c("general_dominance", "standardized", "ranks", "conditional_dominance", "complete_dominance", "model_R2")
 
   dimnames(da_res$complete_dominance) <- list(colnames(da_res$complete_dominance), names(da_res$general_dominance))
+
+  da_res$complete_dominance <- t(da_res$complete_dominance)
 
   class(da_res) <- c("dominance_analysis", "domin", "list")
 

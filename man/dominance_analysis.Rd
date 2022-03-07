@@ -28,9 +28,9 @@ statistics.  Each row represents a predictor; each column represents an
 the average increment to R2 with a specific number of predictors in
 the model.}
 \item{\code{complete_dominance}}{Logical matrix of complete dominance
-designations. The predictors represented in each column are
-cross-referenced with predictors in each row.  Whether the predictor
-in each row dominates the predictor in each column is represented in the
+designations. The predictors represented in each row are
+cross-referenced with predictors in each column.  Whether the predictor
+in each column dominates the predictor in each row is represented in the
 logical value in the matrix.}
 \item{\code{model_R2}}{Value of R2 value returned by the \code{r2}
 method for the model.}
@@ -40,8 +40,8 @@ method for the model.}
 Computes Dominance Analysis Statistics and Designations
 }
 \details{
-Computes several decompositions of the model's R2 and returns
-three different designations from which predictor relative importance
+Computes two decompositions of the model's R2 and returns
+a matrix of designations from which predictor relative importance
 determinations can be obtained.
 }
 \section{Notes}{
@@ -51,7 +51,7 @@ The input model is parsed using \code{insight::find_predictors} and does not
 yet support interactions, transformations, or offsets applied in the
 R formula and will fail with an error when detected.
 
-The model submitted must accept a formula as a \code{formula}
+The model submitted must accept an formula object as a \code{formula}
 argument.  In addition, the model object must accept the data on which
 the model is estimated as a \code{data} argument.  Formulas submitted
 using object references (i.e., \code{lm(mtcars$mpg ~ mtcars$vs)}) and
@@ -68,12 +68,15 @@ by default.
 }
 
 \examples{
+if (require("domir")) {
   model <- glm(vs ~ cyl + carb + mpg, data = datasets::mtcars,
            family = binomial())
 
   r2(model)
 
   dominance_analysis(model)
+
+}
 
 }
 \references{
@@ -101,7 +104,7 @@ using dominance analysis: domin and domme. Stata Journal 21(2),
 }
 }
 \seealso{
-\code{\link[=domin]{domin()}}
+\code{\link[domir:domin]{domir::domin()}}
 }
 \author{
 Joseph Luchman
