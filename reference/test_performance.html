@@ -9,7 +9,7 @@ tests based on the type of input (for instance, whether the models are
 nested or not). However, it still requires the user to understand what the
 tests are and what they do in order to prevent their misinterpretation. See
 the details section for more information regarding the different tests
-and their interpretation.'><title>Test if Models are Different — test_bf • performance</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Test if Models are Different — test_bf"><meta property="og:description" content='Testing whether models are "different" in terms of accuracy or explanatory
+and their interpretation.'><title>Test if models are different — test_bf • performance</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Test if models are different — test_bf"><meta property="og:description" content='Testing whether models are "different" in terms of accuracy or explanatory
 power is a delicate and often complex procedure, with many limitations and
 prerequisites. Moreover, many tests exist, each coming with its own
 interpretation, and set of strengths and weaknesses.
@@ -78,7 +78,7 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Test if Models are Different</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Test if models are different</h1>
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/test_bf.R" class="external-link"><code>R/test_bf.R</code></a>, <a href="https://github.com/easystats/performance/blob/HEAD/R/test_likelihoodratio.R" class="external-link"><code>R/test_likelihoodratio.R</code></a>, <a href="https://github.com/easystats/performance/blob/HEAD/R/test_performance.R" class="external-link"><code>R/test_performance.R</code></a>, and 2 more</small>
       <div class="d-none name"><code>test_performance.Rd</code></div>
     </div>
@@ -186,9 +186,10 @@ criteria (AIC, AICc) for specific model classes (like models from <em>lme4</em>)
 are based on the ML-estimator, while the default behaviour of <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code> for
 such classes is setting <code>REML = TRUE</code>. This default is intentional, because
 comparing information criteria based on REML fits is usually not valid
-(it might be useful if all models share the same fixed effects). Set
-<code>estimator = "REML"</code> explicitly return the same (AIC/...) values as from the
-defaults in <code>AIC.merMod()</code>.</p>
+(it might be useful, though, if all models share the same fixed effects -
+however, this is usually not the case for nested models, which is a
+prerequisite for the LRT). Set <code>estimator = "REML"</code> explicitly return the
+same (AIC/...) values as from the defaults in <code>AIC.merMod()</code>.</p>
 </div>
 
 <div class="section">
@@ -200,15 +201,14 @@ models were fit from the same data, the returned <code>BF</code> shows the Bayes
 Factor (see <code><a href="https://easystats.github.io/bayestestR/reference/bayesfactor_models.html" class="external-link">bayestestR::bayesfactor_models()</a></code>) for each model against
 the reference model (which depends on whether the models are nested or
 not). Check out
-<a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models" class="external-link">this vignette</a> for more details.</p></li>
+<a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models" class="external-link">this vignette</a>
+for more details.</p></li>
 <li><p><strong>Wald's F-Test</strong> - <code>test_wald()</code>: The Wald test is a rough
 approximation of the Likelihood Ratio Test. However, it is more applicable
 than the LRT: you can often run a Wald test in situations where no other
 test can be run. Importantly, this test only makes statistical sense if the
-models are nested.
-<br>
-Note: this test is also available in base R through the
-<code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">anova()</a></code> function. It returns an <code>F-value</code> column
+models are nested. <br><br> Note: this test is also available in base R
+through the <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">anova()</a></code> function. It returns an <code>F-value</code> column
 as a statistic and its associated <code>p-value</code>.</p></li>
 <li><p><strong>Likelihood Ratio Test (LRT)</strong> - <code>test_likelihoodratio()</code>:
 The LRT tests which model is a better (more likely) explanation of the
@@ -218,15 +218,17 @@ nested models. However, maximum likelihood tests make stronger assumptions
 than method of moments tests like the F-test, and in turn are more
 efficient. Agresti (1990) suggests that you should use the LRT instead of
 the Wald test for small sample sizes (under or about 30) or if the
-parameters are large. <br> Note: for regression models, this is similar to
-<code>anova(..., test="LRT")</code> (on models) or <code>lmtest::lrtest(...)</code>,
-depending on the <code>estimator</code> argument. For <code>lavaan</code> models (SEM,
-CFA), the function calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">lavaan::lavTestLRT()</a></code>. <br> For models with
-log-transformed response variables, <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> returns a wrong log-likelihood.
-However, <code>test_likelihoodratio()</code> calls <code><a href="https://easystats.github.io/insight/reference/get_loglikelihood.html" class="external-link">insight::get_loglikelihood()</a></code> with
+parameters are large. <br><br> Note: for regression models, this is similar to
+<code>anova(..., test="LRT")</code> (on models) or <code>lmtest::lrtest(...)</code>, depending
+on the <code>estimator</code> argument. For <code>lavaan</code> models (SEM, CFA), the function
+calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">lavaan::lavTestLRT()</a></code>. <br><br> For models with log-transformed
+response variables, <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> returns a wrong log-likelihood. However,
+<code>test_likelihoodratio()</code> calls <code><a href="https://easystats.github.io/insight/reference/get_loglikelihood.html" class="external-link">insight::get_loglikelihood()</a></code> with
 <code>check_response=TRUE</code>, which returns a corrected log-likelihood value
 for models with transformed response variables (like log- or
-sqrt-transformation).</p></li>
+sqrt-transformation). Furthermore, since the LRT only accepts nested
+models (i.e. models that differ in their fixed effects), the computed
+log-likelihood is always based on the ML estimator, not on the REML fits.</p></li>
 <li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two
 tests.</p><ul><li><p>The <strong>Test of Distinguishability</strong> (the <code>Omega2</code> column and
