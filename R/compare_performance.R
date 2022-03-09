@@ -89,6 +89,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   # object_names <- match.call(expand.dots = FALSE)$`...`
   objects <- list(...)
 
+  # check if dots are multiple model objects, or a list of model objects
   if (length(objects) == 1) {
     if (insight::is_model(objects[[1]])) {
       modellist <- FALSE
@@ -100,6 +101,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     modellist <- FALSE
   }
 
+  # set proper names for model objects, so users can identify their models
   if (isTRUE(modellist)) {
     object_names <- names(objects)
     if (length(object_names) == 0) {
@@ -118,7 +120,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     }
   }
 
-
+  # drop unsupport models
   supported_models <- sapply(objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
 
   if (!all(supported_models)) {
@@ -127,6 +129,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     object_names <- object_names[supported_models]
   }
 
+  # information about nesting
+  model_infos <- insight::ellipsis_info(objects)
+
+  # iterate over all models, i.e. model-performance for each model
   m <- mapply(function(.x, .y) {
     dat <- model_performance(.x, metrics = metrics, estimator = estimator, verbose = FALSE)
     model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
@@ -154,8 +160,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # check if all models were fit from same data
-  resps <- lapply(objects, insight::get_response)
-  if (!all(sapply(resps[-1], function(x) identical(x, resps[[1]]))) && verbose) {
+  if (!isTRUE(attributes(model_infos)$same_response) && verbose) {
     warning(insight::format_message("When comparing models, please note that probably not all models were fit from same data."), call. = FALSE)
   }
 
@@ -204,7 +209,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 
   # for REML fits, warn user
   if (isTRUE(verbose) && identical(estimator, "REML") && any(grepl("(AIC|BIC)", names(dfs)))) {
-    if (any(sapply(objects, insight::is_mixed_model))) {
+    if (any(sapply(objects, insight::is_mixed_model)) && !isTRUE(attributes(model_infos)$same_fixef)) {
       warning(insight::format_message(
         "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
         "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
