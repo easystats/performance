@@ -85,8 +85,7 @@
 #' @inheritParams model_performance.lm
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
-  # objects <- list(...)
-  # object_names <- match.call(expand.dots = FALSE)$`...`
+  # process input
   objects <- list(...)
 
   # check if dots are multiple model objects, or a list of model objects
@@ -130,7 +129,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # information about nesting
-  model_infos <- insight::ellipsis_info(objects)
+  model_infos <- insight::ellipsis_info(objects, verbose = FALSE)
 
   # iterate over all models, i.e. model-performance for each model
   m <- mapply(function(.x, .y) {
@@ -208,13 +207,19 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # for REML fits, warn user
-  if (isTRUE(verbose) && identical(estimator, "REML") && any(grepl("(AIC|BIC)", names(dfs)))) {
-    if (any(sapply(objects, insight::is_mixed_model)) && !isTRUE(attributes(model_infos)$same_fixef)) {
+  if (isTRUE(verbose) &&
+      # only warn for REML fit
+      identical(estimator, "REML") &&
+      # only for IC comparison
+      any(grepl("(AIC|BIC)", names(dfs))) &&
+      # only when mixed models are involved, others probably don't have problems with REML fit
+      any(sapply(objects, insight::is_mixed_model)) &&
+      # only if not all models have same fixed effects (else, REML is ok)
+      !isTRUE(attributes(model_infos)$same_fixef)) {
       warning(insight::format_message(
         "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
         "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
       ), call. = FALSE)
-    }
   }
 
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
