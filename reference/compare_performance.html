@@ -155,7 +155,8 @@ for more details).</p>
 criteria (AIC, AICc) for specific model classes (like models from <em>lme4</em>)
 are based on the ML-estimator, while the default behaviour of <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code> for
 such classes is setting <code>REML = TRUE</code>. This default is intentional, because
-comparing information criteria based on REML fits is not valid. Set
+comparing information criteria based on REML fits is usually not valid
+(it might be useful if all models share the same fixed effects). Set
 <code>estimator = "REML"</code> explicitly return the same (AIC/...) values as from the
 defaults in <code>AIC.merMod()</code>.</p>
 </div>
