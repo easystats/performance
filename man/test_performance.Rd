@@ -97,6 +97,17 @@ variables (the response) must be the same. You cannot meaningfully test
 whether apples are significantly different from oranges!
 }
 
+\subsection{REML versus ML estimator}{
+By default, \code{estimator = "ML"}, which means that values from information
+criteria (AIC, AICc) for specific model classes (like models from \emph{lme4})
+are based on the ML-estimator, while the default behaviour of \code{AIC()} for
+such classes is setting \code{REML = TRUE}. This default is intentional, because
+comparing information criteria based on REML fits is usually not valid
+(it might be useful if all models share the same fixed effects). Set
+\code{estimator = "REML"} explicitly return the same (AIC/...) values as from the
+defaults in \code{AIC.merMod()}.
+}
+
 \subsection{Tests Description}{
 
 \itemize{

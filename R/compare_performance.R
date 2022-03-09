@@ -58,7 +58,8 @@
 #'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
 #'   are based on the ML-estimator, while the default behaviour of `AIC()` for
 #'   such classes is setting `REML = TRUE`. This default is intentional, because
-#'   comparing information criteria based on REML fits is not valid. Set
+#'   comparing information criteria based on REML fits is usually not valid
+#'   (it might be useful if all models share the same fixed effects). Set
 #'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
 #'   defaults in `AIC.merMod()`.
 #' }

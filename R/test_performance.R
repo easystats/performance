@@ -58,6 +58,17 @@
 #' whether apples are significantly different from oranges!
 #' }
 #'
+#' \subsection{REML versus ML estimator}{
+#'   By default, `estimator = "ML"`, which means that values from information
+#'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
+#'   are based on the ML-estimator, while the default behaviour of `AIC()` for
+#'   such classes is setting `REML = TRUE`. This default is intentional, because
+#'   comparing information criteria based on REML fits is usually not valid
+#'   (it might be useful if all models share the same fixed effects). Set
+#'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
+#'   defaults in `AIC.merMod()`.
+#' }
+#'
 #' \subsection{Tests Description}{
 #'
 #' \itemize{
@@ -437,7 +448,7 @@ test_performance.ListNonNestedRegressions <- function(objects,
       # or if length of names doesn't match number of models
       length(object_names) != length(objects) ||
       # or if names are "..1", "..2" pattern
-      grepl("\\.\\.\\d", object_names)) {
+      all(grepl("\\.\\.\\d", object_names))) {
     names(objects) <- dot_names
   }
   objects
