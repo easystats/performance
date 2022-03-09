@@ -32,7 +32,7 @@ the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 \item{verbose}{Toggle warnings.}
 }
 \value{
-A data frame (with one row per model) and one column per "index" (see
+A data frame with one row per model and one column per "index" (see
 \code{metrics}).
 }
 \description{
@@ -81,9 +81,10 @@ criteria (AIC, AICc) for specific model classes (like models from \emph{lme4})
 are based on the ML-estimator, while the default behaviour of \code{AIC()} for
 such classes is setting \code{REML = TRUE}. This default is intentional, because
 comparing information criteria based on REML fits is usually not valid
-(it might be useful if all models share the same fixed effects). Set
-\code{estimator = "REML"} explicitly return the same (AIC/...) values as from the
-defaults in \code{AIC.merMod()}.
+(it might be useful, though, if all models share the same fixed effects -
+however, this is usually not the case for nested models, which is a
+prerequisite for the LRT). Set \code{estimator = "REML"} explicitly return the
+same (AIC/...) values as from the defaults in \code{AIC.merMod()}.
 }
 }
 \note{

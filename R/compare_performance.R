@@ -14,7 +14,7 @@
 #'   overall model performance. See 'Details'.
 #' @inheritParams performance_aic
 #'
-#' @return A data frame (with one row per model) and one column per "index" (see
+#' @return A data frame with one row per model and one column per "index" (see
 #'   `metrics`).
 #'
 #' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
@@ -59,9 +59,10 @@
 #'   are based on the ML-estimator, while the default behaviour of `AIC()` for
 #'   such classes is setting `REML = TRUE`. This default is intentional, because
 #'   comparing information criteria based on REML fits is usually not valid
-#'   (it might be useful if all models share the same fixed effects). Set
-#'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
-#'   defaults in `AIC.merMod()`.
+#'   (it might be useful, though, if all models share the same fixed effects -
+#'   however, this is usually not the case for nested models, which is a
+#'   prerequisite for the LRT). Set `estimator = "REML"` explicitly return the
+#'   same (AIC/...) values as from the defaults in `AIC.merMod()`.
 #' }
 #'
 #' @references

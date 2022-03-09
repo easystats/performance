@@ -10,7 +10,7 @@
 \alias{test_performance}
 \alias{test_vuong}
 \alias{test_wald}
-\title{Test if Models are Different}
+\title{Test if models are different}
 \usage{
 test_bf(...)
 
@@ -103,9 +103,10 @@ criteria (AIC, AICc) for specific model classes (like models from \emph{lme4})
 are based on the ML-estimator, while the default behaviour of \code{AIC()} for
 such classes is setting \code{REML = TRUE}. This default is intentional, because
 comparing information criteria based on REML fits is usually not valid
-(it might be useful if all models share the same fixed effects). Set
-\code{estimator = "REML"} explicitly return the same (AIC/...) values as from the
-defaults in \code{AIC.merMod()}.
+(it might be useful, though, if all models share the same fixed effects -
+however, this is usually not the case for nested models, which is a
+prerequisite for the LRT). Set \code{estimator = "REML"} explicitly return the
+same (AIC/...) values as from the defaults in \code{AIC.merMod()}.
 }
 
 \subsection{Tests Description}{
@@ -116,16 +117,15 @@ models were fit from the same data, the returned \code{BF} shows the Bayes
 Factor (see \code{bayestestR::bayesfactor_models()}) for each model against
 the reference model (which depends on whether the models are nested or
 not). Check out
-\href{https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models}{this vignette} for more details.
+\href{https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models}{this vignette}
+for more details.
 
 \item \strong{Wald's F-Test} - \code{test_wald()}: The Wald test is a rough
 approximation of the Likelihood Ratio Test. However, it is more applicable
 than the LRT: you can often run a Wald test in situations where no other
 test can be run. Importantly, this test only makes statistical sense if the
-models are nested.
-\cr
-Note: this test is also available in base R through the
-\code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
+models are nested. \cr \cr Note: this test is also available in base R
+through the \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
 as a statistic and its associated \code{p-value}.
 
 \item \strong{Likelihood Ratio Test (LRT)} - \code{test_likelihoodratio()}:
@@ -136,15 +136,17 @@ nested models. However, maximum likelihood tests make stronger assumptions
 than method of moments tests like the F-test, and in turn are more
 efficient. Agresti (1990) suggests that you should use the LRT instead of
 the Wald test for small sample sizes (under or about 30) or if the
-parameters are large. \cr Note: for regression models, this is similar to
-\code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)},
-depending on the \code{estimator} argument. For \code{lavaan} models (SEM,
-CFA), the function calls \code{lavaan::lavTestLRT()}. \cr For models with
-log-transformed response variables, \code{logLik()} returns a wrong log-likelihood.
-However, \code{test_likelihoodratio()} calls \code{insight::get_loglikelihood()} with
+parameters are large. \cr \cr Note: for regression models, this is similar to
+\code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)}, depending
+on the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the function
+calls \code{lavaan::lavTestLRT()}. \cr \cr For models with log-transformed
+response variables, \code{logLik()} returns a wrong log-likelihood. However,
+\code{test_likelihoodratio()} calls \code{insight::get_loglikelihood()} with
 \code{check_response=TRUE}, which returns a corrected log-likelihood value
 for models with transformed response variables (like log- or
-sqrt-transformation).
+sqrt-transformation). Furthermore, since the LRT only accepts nested
+models (i.e. models that differ in their fixed effects), the computed
+log-likelihood is always based on the ML estimator, not on the REML fits.
 
 \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two

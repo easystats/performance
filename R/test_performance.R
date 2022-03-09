@@ -1,4 +1,4 @@
-#' @title Test if Models are Different
+#' @title Test if models are different
 #'
 #' @description
 #'
@@ -64,9 +64,10 @@
 #'   are based on the ML-estimator, while the default behaviour of `AIC()` for
 #'   such classes is setting `REML = TRUE`. This default is intentional, because
 #'   comparing information criteria based on REML fits is usually not valid
-#'   (it might be useful if all models share the same fixed effects). Set
-#'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
-#'   defaults in `AIC.merMod()`.
+#'   (it might be useful, though, if all models share the same fixed effects -
+#'   however, this is usually not the case for nested models, which is a
+#'   prerequisite for the LRT). Set `estimator = "REML"` explicitly return the
+#'   same (AIC/...) values as from the defaults in `AIC.merMod()`.
 #' }
 #'
 #' \subsection{Tests Description}{
@@ -77,17 +78,15 @@
 #'   Factor (see `bayestestR::bayesfactor_models()`) for each model against
 #'   the reference model (which depends on whether the models are nested or
 #'   not). Check out
-#'   [this
-#'   vignette](https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models) for more details.
+#'   [this vignette](https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models)
+#'   for more details.
 #'
 #'   \item **Wald's F-Test** - `test_wald()`: The Wald test is a rough
 #'   approximation of the Likelihood Ratio Test. However, it is more applicable
 #'   than the LRT: you can often run a Wald test in situations where no other
 #'   test can be run. Importantly, this test only makes statistical sense if the
-#'   models are nested.
-#'   \cr
-#'   Note: this test is also available in base R through the
-#'   [`anova()`][anova] function. It returns an `F-value` column
+#'   models are nested. \cr \cr Note: this test is also available in base R
+#'   through the [`anova()`][anova] function. It returns an `F-value` column
 #'   as a statistic and its associated `p-value`.
 #'
 #'   \item **Likelihood Ratio Test (LRT)** - `test_likelihoodratio()`:
@@ -98,15 +97,17 @@
 #'   than method of moments tests like the F-test, and in turn are more
 #'   efficient. Agresti (1990) suggests that you should use the LRT instead of
 #'   the Wald test for small sample sizes (under or about 30) or if the
-#'   parameters are large. \cr Note: for regression models, this is similar to
-#'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`,
-#'   depending on the `estimator` argument. For `lavaan` models (SEM,
-#'   CFA), the function calls `lavaan::lavTestLRT()`. \cr For models with
-#'   log-transformed response variables, `logLik()` returns a wrong log-likelihood.
-#'   However, `test_likelihoodratio()` calls `insight::get_loglikelihood()` with
+#'   parameters are large. \cr \cr Note: for regression models, this is similar to
+#'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`, depending
+#'   on the `estimator` argument. For `lavaan` models (SEM, CFA), the function
+#'   calls `lavaan::lavTestLRT()`. \cr \cr For models with log-transformed
+#'   response variables, `logLik()` returns a wrong log-likelihood. However,
+#'   `test_likelihoodratio()` calls `insight::get_loglikelihood()` with
 #'   `check_response=TRUE`, which returns a corrected log-likelihood value
 #'   for models with transformed response variables (like log- or
-#'   sqrt-transformation).
+#'   sqrt-transformation). Furthermore, since the LRT only accepts nested
+#'   models (i.e. models that differ in their fixed effects), the computed
+#'   log-likelihood is always based on the ML estimator, not on the REML fits.
 #'
 #'   \item **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
