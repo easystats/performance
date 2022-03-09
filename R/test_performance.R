@@ -207,10 +207,12 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
-  names(objects) <- match.call(expand.dots = FALSE)$`...`
 
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
+
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
@@ -422,5 +424,21 @@ test_performance.ListNonNestedRegressions <- function(objects,
     }
   }
 
+  objects
+}
+
+
+
+.check_objectnames <- function(objects, dot_names) {
+  # Replace with names from the global environment, if these are not yet properly set
+  object_names <- insight::compact_character(names(objects))
+  # check if we have any names at all
+  if (is.null(object_names) ||
+      # or if length of names doesn't match number of models
+      length(object_names) != length(objects) ||
+      # or if names are "..1", "..2" pattern
+      grepl("\\.\\.\\d", object_names)) {
+    names(objects) <- dot_names
+  }
   objects
 }

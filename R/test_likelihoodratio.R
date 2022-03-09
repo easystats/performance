@@ -41,9 +41,8 @@ test_likelihoodratio.default <- function(..., estimator = "ML") {
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
 
-  # Replace with names from the global environment
-  object_names <- match.call(expand.dots = FALSE)$`...`
-  names(objects) <- object_names
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, "ListNestedRegressions")) {

@@ -86,50 +86,20 @@
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
   # process input
-  objects <- list(...)
+  objects <- insight::ellipsis_info(..., only_models = TRUE)
 
-  # check if dots are multiple model objects, or a list of model objects
-  if (length(objects) == 1) {
-    if (insight::is_model(objects[[1]])) {
-      modellist <- FALSE
-    } else {
-      objects <- objects[[1]]
-      modellist <- TRUE
-    }
-  } else {
-    modellist <- FALSE
-  }
-
-  # set proper names for model objects, so users can identify their models
-  if (isTRUE(modellist)) {
-    object_names <- names(objects)
-    if (length(object_names) == 0) {
-      object_names <- paste("Model", seq_along(objects), sep = " ")
-      names(objects) <- object_names
-    }
-  } else {
-    object_names <- match.call(expand.dots = FALSE)$`...`
-    if (length(names(object_names)) > 0) {
-      object_names <- names(object_names)
-    } else if (any(sapply(object_names, is.call))) {
-      object_names <- paste("Model", seq_along(objects), sep = " ")
-    } else {
-      object_names <- sapply(object_names, as.character)
-      names(objects) <- object_names
-    }
-  }
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
   # drop unsupport models
   supported_models <- sapply(objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
+  object_names <- names(objects)
 
   if (!all(supported_models)) {
     warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
     objects <- objects[supported_models]
     object_names <- object_names[supported_models]
   }
-
-  # information about nesting
-  model_infos <- insight::ellipsis_info(objects, verbose = FALSE)
 
   # iterate over all models, i.e. model-performance for each model
   m <- mapply(function(.x, .y) {
@@ -159,7 +129,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # check if all models were fit from same data
-  if (!isTRUE(attributes(model_infos)$same_response) && verbose) {
+  if (!isTRUE(attributes(objects)$same_response) && verbose) {
     warning(insight::format_message("When comparing models, please note that probably not all models were fit from same data."), call. = FALSE)
   }
 
@@ -215,7 +185,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
       # only when mixed models are involved, others probably don't have problems with REML fit
       any(sapply(objects, insight::is_mixed_model)) &&
       # only if not all models have same fixed effects (else, REML is ok)
-      !isTRUE(attributes(model_infos)$same_fixef)) {
+      !isTRUE(attributes(objects)$same_fixef)) {
       warning(insight::format_message(
         "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
         "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."

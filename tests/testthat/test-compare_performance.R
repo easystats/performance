@@ -26,6 +26,10 @@ if (requiet("testthat") && requiet("performance")) {
     out <- compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)
     expect_equal(out$Name, c("lm1", "lm2", "lm3", "lm4"))
 
+    models <- list(Interaction = lm3, NoInteraction = lm2, SingleTerm = lm1)
+    rez <- compare_performance(models)
+    expect_equal(rez$Name, c("Interaction", "NoInteraction", "SingleTerm"), ignore_attr = TRUE)
+
     out <- compare_performance(list(lm1, lm2, lm3, lm4), verbose = FALSE)
     expect_equal(
       colnames(out),
