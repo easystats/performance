@@ -445,11 +445,13 @@ test_performance.ListNonNestedRegressions <- function(objects,
   # Replace with names from the global environment, if these are not yet properly set
   object_names <- insight::compact_character(names(objects))
   # check if we have any names at all
-  if (is.null(object_names) ||
+  if ((is.null(object_names) ||
       # or if length of names doesn't match number of models
       length(object_names) != length(objects) ||
       # or if names are "..1", "..2" pattern
-      all(grepl("\\.\\.\\d", object_names))) {
+      all(grepl("\\.\\.\\d", object_names))) &&
+      # and length of dot-names must match length of objects
+      length(objects) == length(dot_names)) {
     names(objects) <- dot_names
   }
   objects
