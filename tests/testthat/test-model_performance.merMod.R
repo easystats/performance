@@ -22,11 +22,11 @@ if (requiet("testthat") && requiet("insight") && requiet("performance") && requi
       m2 <- lm(mpg ~ hp + vs, data = mtcars)
 
       # REML
-      expect_equal(
+      expect_warning(expect_equal(
         compare_performance(m1, m2, metrics = "AICc", estimator = "REML")$AICc,
         c(177.52804, 182.88598),
         tolerance = 1e-3
-      )
+      ))
       expect_equal(model_performance(m1, metrics = "AICc", estimator = "REML")$AICc, 177.52804, tolerance = 1e-3)
       expect_equal(performance_aicc(m1, estimator = "REML"), 177.52804, tolerance = 1e-3)
 
