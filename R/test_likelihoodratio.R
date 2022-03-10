@@ -110,23 +110,24 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
   # lmtest::lrtest()
   if (tolower(estimator) %in% c("ml", "mle")) {
-    lls <- sapply(objects, insight::get_loglikelihood, REML = FALSE, check_response = TRUE)
-    chi2 <- abs(c(NA, -2 * diff(lls)))
-    p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
-
-    out <- data.frame(
-      df = dfs,
-      df_diff = dfs_diff,
-      Chi2 = chi2,
-      p = p,
-      stringsAsFactors = FALSE
-    )
-
-    out <- cbind(.test_performance_init(objects), out)
+    REML <- FALSE
   } else {
-    out <- .test_wald(objects, test = "LRT")
-    out$df <- dfs # Replace residual df with model's df
+    REML <- TRUE
   }
+
+  lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
+  chi2 <- abs(c(NA, -2 * diff(lls)))
+  p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
+
+  out <- data.frame(
+    df = dfs,
+    df_diff = dfs_diff,
+    Chi2 = chi2,
+    p = p,
+    stringsAsFactors = FALSE
+  )
+
+  out <- cbind(.test_performance_init(objects), out)
 
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
