@@ -54,6 +54,7 @@ reference:
 - title: "R2 Functions"
   contents:
   - starts_with("r2")
+  - dominance_analysis
 
 - title: "Table Formatting"
   contents:
