@@ -68,7 +68,6 @@ Imports:
 Suggests:
     AER,
     afex,
-    backports,
     BayesFactor,
     bayesplot,
     betareg,

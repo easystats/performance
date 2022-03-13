@@ -101,15 +101,6 @@ dominance_analysis <- function(model, ...) {
   # Exit Conditions
   if (!requireNamespace("domir", quietly = TRUE)) stop("package domir is required.")
 
-  if (as.numeric(R.version$major) < 4 && !requireNamespace("backports", quietly = TRUE)) stop("package backports is required.")
-
-  if (as.numeric(R.version$major) < 4) {.onLoad <- function(libname, pkgname) {
-    backports::import(pkgname, "deparse1")
-    if (as.numeric(R.version$major) < 3 && as.numeric(R.version$minor) < 6) {
-      backports::import(pkgname, "str2lang")
-    }
-  }}
-
   if (!insight::is_regression_model(model)) stop(paste(deparse(substitute(model)), "is not a supported insight model.\nYou may be able to dominance analyze this model using the domir package."))
 
   if (!any(utils::methods(class = class(model)[[1]])==paste0("r2.", class(model)[[1]]))) stop(paste(deparse(substitute(model)), "does not have a pefromance-supported r2 method.\nYou may be able to dominance analyze this model using the domir package."))
@@ -130,7 +121,7 @@ dominance_analysis <- function(model, ...) {
   reg <- insight::model_name(model)
   fml <- stats::reformulate(ivs, response = dv, intercept = insight::has_intercept(model))
   data <- insight::get_data(model)
-  args <- as.list(str2lang(deparse1(insight::get_call(model), collapse = ""))) # extract all arguments from call
+  args <- as.list(insight::get_call(model), collapse = "") # extract all arguments from call
   loc <- which(!(names(args) %in% c("formula", "data"))) # find formula and data arguments <- must ensure these are always there - will not for {survey} -- todo: is there better way to capture "extra" arguments?
   args <- args[loc] # remove formula and data arguments
   args <- args[-1] # remove function name

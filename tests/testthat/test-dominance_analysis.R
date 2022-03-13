@@ -1,0 +1,23 @@
+if (requiet("testthat") && requiet("performance") && requiet("domir")) {
+  data(mtcars)
+  DA_test_model <- lm(mpg ~ vs + cyl + carb, data = mtcars)
+  DA_performance <- dominance_analysis(DA_test_model)
+  DA_domir <- domin(mpg ~ vs + cyl + carb, lm, list(performance::r2, "R2"), data = mtcars)
+
+  test_that("dominance_analysis$general_dominance", {
+    expect_equal(DA_domir$General_Dominance,DA_performance$general_dominance)
+  })
+
+  test_that("dominance_analysis$conditional_dominance", {
+    expect_equal(DA_domir$Conditional_Dominance,DA_performance$conditional_dominance)
+  })
+
+  DA_perf_cpt <- t(DA_performance$complete_dominance)
+  dimnames(DA_perf_cpt) <-
+    list(paste0("Dmnates_", rownames(DA_performance$complete_dominance)),
+         colnames(DA_performance$complete_dominance))
+
+  test_that("dominance_analysis$complete_dominance", {
+    expect_equal(DA_domir$Complete_Dominance,DA_perf_cpt)
+  })
+}
