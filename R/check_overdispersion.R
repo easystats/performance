@@ -123,7 +123,7 @@ check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
   info <- insight::model_info(x)
   if (!info$is_poisson && !info$is_binomial) {
-    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson or binomial families."), call. = FALSE)
+    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
   # check for Bernoulli
@@ -190,7 +190,7 @@ check_overdispersion.merMod <- function(x, ...) {
   # check if we have poisson or binomial
   info <- insight::model_info(x)
   if (!info$is_poisson && !info$is_binomial) {
-    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson or binomial families."), call. = FALSE)
+    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
   # check for Bernoulli
