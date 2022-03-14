@@ -127,6 +127,13 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     stringsAsFactors = FALSE
   )
 
+  # else, if REML = TRUE, for some(?) models we could also do - however,
+  # this currently gives different results for mixed models, so we skip
+  # this for now...
+
+  # out <- .test_wald(objects, test = "LRT")
+  # out$df <- dfs # Replace residual df with model's df
+
   out <- cbind(.test_performance_init(objects), out)
 
 
