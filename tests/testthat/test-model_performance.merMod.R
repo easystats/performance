@@ -4,7 +4,7 @@ if (requiet("testthat") && requiet("insight") && requiet("performance") && requi
   if (.runThisTest) {
     test_that("model_performance.merMod", {
       model <- insight::download_model("lmerMod_1")
-      expect_equal(model_performance(model)$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
+      expect_equal(model_performance(model, estimator = "ML")$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
       expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
 
       model <- insight::download_model("merMod_1")
