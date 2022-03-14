@@ -92,6 +92,7 @@ if (requiet("testthat") &&
       t2 <- test_lrt(m1, m2, m3)
       expect_equal(t1$`Pr(>Chi)`, t2$p, tolerance = 1e-3)
       expect_equal(t1$Deviance, t2$Chi2, tolerance = 1e-3)
+      expect_equal(attributes(t2)$estimator, "ml")
     })
 
     m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -102,6 +103,7 @@ if (requiet("testthat") &&
       t1 <- anova(m1, m2, m3, test = "LRT")
       t2 <- test_lrt(m1, m2, m3)
       expect_equal(t1$`Pr(>Chi)`, t2$p, tolerance = 1e-3)
+      expect_equal(attributes(t2)$estimator, "ols")
     })
   }
 }
