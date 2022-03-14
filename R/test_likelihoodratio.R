@@ -107,18 +107,14 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   }
 
   dfs_diff <- c(NA, diff(dfs))
+  REML <- tolower(estimator) == "reml"
 
-  # lmtest::lrtest()
-  if (tolower(estimator) %in% c("ml", "mle")) {
-    REML <- FALSE
-  } else {
-    REML <- TRUE
-  }
-
+  # default anova(test="LRT")
   if (tolower(estimator) == "ols") {
     out <- .test_wald(objects, test = "LRT")
     out$df <- dfs # Replace residual df with model's df
   } else {
+    # lmtest::lrtest()
     lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
     chi2 <- abs(c(NA, -2 * diff(lls)))
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
