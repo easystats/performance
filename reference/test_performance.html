@@ -129,15 +129,18 @@ lines to a specified limit.</p></dd>
 <dt>estimator</dt>
 <dd><p>Applied when comparing regression models using
 <code>test_likelihoodratio()</code>. Corresponds to the different estimators for
-the standard deviation of the errors. If <code>estimator="OLS"</code> (default),
-then it uses the same method as <code>anova(..., test="LRT")</code> implemented
-in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this
-estimator under the alternative hypothesis. If <code>estimator="ML"</code>, which
-is for instance used by <code>lrtest(...)</code> in package <span class="pkg">lmtest</span>, the
-scaling is done by n (the biased ML estimator) and the estimator under the
-null hypothesis. In moderately large samples, the differences should be
-negligible, but it is possible that OLS would perform slightly better in
-small samples with Gaussian errors.</p></dd>
+the standard deviation of the errors. If <code>estimator="OLS"</code>, then it uses
+the same method as <code>anova(..., test="LRT")</code> implemented in base R, i.e.,
+scaling by n-k (the unbiased OLS estimator) and using this estimator under
+the alternative hypothesis. If <code>estimator="ML"</code>, which is for instance used
+by <code>lrtest(...)</code> in package <span class="pkg">lmtest</span>, the scaling is done by n (the
+biased ML estimator) and the estimator under the null hypothesis. In
+moderately large samples, the differences should be negligible, but it
+is possible that OLS would perform slightly better in small samples with
+Gaussian errors. For <code>estimator="REML"</code>, the LRT is based on the REML-fit
+log-likelihoods of the models. The default for classical linear models
+is <code>estimator="OLS"</code>, and for all other models (or a mixture of different
+model objects) <code>estimator="ML"</code>.</p></dd>
 <dt>reference</dt>
 <dd><p>This only applies when models are non-nested, and determines
 which model should be taken as a reference, against which all the other
@@ -293,7 +296,7 @@ the performance indices of many different models.</p></div>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Equivalent to lmtest::lrtest(m1, m2, m3)</span></span>
 <span class="r-in"><span class="fu">test_likelihoodratio</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, estimator <span class="op">=</span> <span class="st">"ML"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test (LRT) for Model Comparison</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model | df | df_diff | Chi2 |     p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------</span>
@@ -303,7 +306,7 @@ the performance indices of many different models.</p></div>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Equivalent to anova(m1, m2, m3, test='LRT')</span></span>
 <span class="r-in"><span class="fu">test_likelihoodratio</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, estimator <span class="op">=</span> <span class="st">"OLS"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test (LRT) for Model Comparison</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test (LRT) for Model Comparison (OLS-estimator)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model | df | df_diff | Chi2 |     p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------</span>
