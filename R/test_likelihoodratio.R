@@ -44,9 +44,14 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
 
-  # different default when mixed model is included
-  if (missing(estimator) && (any(sapply(objects, insight::is_mixed_model)) || !all(attributes(objects)$is_linear))) {
-    estimator = "ML"
+  # different default when mixed model or glm is included
+  if (missing(estimator)) {
+    mixed_models <- sapply(objects, insight::is_mixed_model)
+    if (all(mixed_models) && all(sapply(objects, .is_lmer_reml)) && isTRUE(attributes(objects)$same_fixef)) {
+      estimator <- "REML"
+    } else if (any(mixed_models) || !all(attributes(objects)$is_linear)) {
+      estimator <- "ML"
+    }
   }
 
   # ensure proper object names
@@ -90,10 +95,16 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
   # value formatting
   x$p <- insight::format_p(x$p, name = NULL)
 
+  if (is.null(attributes(x)$estimator)) {
+    estimator_string <- ""
+  } else {
+    estimator_string <- sprintf(" (%s-estimator)", toupper(attributes(x)$estimator))
+  }
+
   cat(insight::export_table(
     x,
     digits = digits,
-    caption = c("# Likelihood-Ratio-Test (LRT) for Model Comparison", "blue"),
+    caption = c(paste0("# Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string), "blue"),
     footer = footer
   ))
 
@@ -135,9 +146,9 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
       p = p,
       stringsAsFactors = FALSE
     )
-  }
 
-  out <- cbind(.test_performance_init(objects), out)
+    out <- cbind(.test_performance_init(objects), out)
+  }
 
   # for REML fits, warn user
   if (isTRUE(REML) &&
@@ -152,6 +163,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
   attr(out, "is_nested_decreasing") <- attributes(objects)$is_nested_decreasing
+  attr(out, "estimator") <- tolower(estimator)
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
 }
@@ -184,4 +196,13 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
 
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
+}
+
+
+# helper ----------------------
+
+.is_lmer_reml <- function(x) {
+  tryCatch(inherits(x, "lmerMod") && as.logical(x@devcomp$dims[["REML"]]),
+           error = function(e) FALSE)
+
 }
