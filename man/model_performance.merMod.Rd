@@ -7,7 +7,7 @@
 \method{model_performance}{merMod}(
   model,
   metrics = "all",
-  estimator = "ML",
+  estimator = "REML",
   verbose = TRUE,
   ...
 )
@@ -43,13 +43,14 @@ interest when judging the variance attributed to the random effects part of
 the model (see also \code{\link[=icc]{icc()}}).
 }
 \subsection{REML versus ML estimator}{
-By default, \code{estimator = "ML"}, which means that values from information
-criteria (AIC, AICc) for specific model classes (like models from \emph{lme4})
-are based on the ML-estimator, while the default behaviour of \code{AIC()} for
-such classes is setting \code{REML = TRUE}. This default is intentional, because
-comparing information criteria based on REML fits is not valid. Set
-\code{estimator = "REML"} explicitly return the same (AIC/...) values as from the
-defaults in \code{AIC.merMod()}.
+The default behaviour of \code{model_performance()} when computing AIC or BIC of
+linear mixed model from package \strong{lme4} is the same as for \code{AIC()} or
+\code{BIC()} (i.e. \code{estimator = "REML"}). However, for model comparison using
+\code{compare_performance()} sets \code{estimator = "ML"} by default, because
+\emph{comparing} information criteria based on REML fits is usually not valid
+(unless all models have the same fixed effects). Thus, make sure to set
+the correct estimator-value when looking at fit-indices or comparing model
+fits.
 }
 \subsection{Other performance indices}{
 Furthermore, see 'Details' in \code{\link[=model_performance.lm]{model_performance.lm()}} for more details

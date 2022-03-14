@@ -4,7 +4,7 @@ if (requiet("testthat") && requiet("insight") && requiet("performance") && requi
   if (.runThisTest) {
     test_that("model_performance.merMod", {
       model <- insight::download_model("lmerMod_1")
-      expect_equal(model_performance(model)$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
+      expect_equal(model_performance(model, estimator = "ML")$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
       expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
 
       model <- insight::download_model("merMod_1")
@@ -36,8 +36,12 @@ if (requiet("testthat") && requiet("insight") && requiet("performance") && requi
         c(174.5701, 182.88598),
         tolerance = 1e-3
       )
-      expect_equal(model_performance(m1, metrics = "AICc")$AICc, 174.5701, tolerance = 1e-3)
-      expect_equal(performance_aicc(m1), 174.5701, tolerance = 1e-3)
+      # default model_performance is REML
+      expect_equal(model_performance(m1, metrics = "AICc")$AICc, 177.52804, tolerance = 1e-3)
+      expect_equal(model_performance(m1, metrics = "AICc", estimator = "ML")$AICc, 174.5701, tolerance = 1e-3)
+      # default performance_aic is REML
+      expect_equal(performance_aicc(m1), 177.52804, tolerance = 1e-3)
+      expect_equal(performance_aicc(m1, estimator = "ML"), 174.5701, tolerance = 1e-3)
     })
   }
 }

@@ -54,15 +54,15 @@
 #' }
 #'
 #' \subsection{REML versus ML estimator}{
-#'   By default, `estimator = "ML"`, which means that values from information
-#'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
-#'   are based on the ML-estimator, while the default behaviour of `AIC()` for
-#'   such classes is setting `REML = TRUE`. This default is intentional, because
-#'   comparing information criteria based on REML fits is usually not valid
-#'   (it might be useful, though, if all models share the same fixed effects -
-#'   however, this is usually not the case for nested models, which is a
-#'   prerequisite for the LRT). Set `estimator = "REML"` explicitly return the
-#'   same (AIC/...) values as from the defaults in `AIC.merMod()`.
+#' By default, `estimator = "ML"`, which means that values from information
+#' criteria (AIC, AICc, BIC) for specific model classes (like models from *lme4*)
+#' are based on the ML-estimator, while the default behaviour of `AIC()` for
+#' such classes is setting `REML = TRUE`. This default is intentional, because
+#' comparing information criteria based on REML fits is usually not valid
+#' (it might be useful, though, if all models share the same fixed effects -
+#' however, this is usually not the case for nested models, which is a
+#' prerequisite for the LRT). Set `estimator = "REML"` explicitly return the
+#' same (AIC/...) values as from the defaults in `AIC.merMod()`.
 #' }
 #'
 #' @references
