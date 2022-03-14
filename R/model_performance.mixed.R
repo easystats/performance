@@ -21,13 +21,14 @@
 #'   the model (see also [icc()]).
 #' }
 #' \subsection{REML versus ML estimator}{
-#'   By default, `estimator = "ML"`, which means that values from information
-#'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
-#'   are based on the ML-estimator, while the default behaviour of `AIC()` for
-#'   such classes is setting `REML = TRUE`. This default is intentional, because
-#'   comparing information criteria based on REML fits is not valid. Set
-#'   `estimator = "REML"` explicitly return the same (AIC/...) values as from the
-#'   defaults in `AIC.merMod()`.
+#' The default behaviour of `model_performance()` when computing AIC or BIC of
+#' linear mixed model from package **lme4** is the same as for `AIC()` or
+#' `BIC()` (i.e. `estimator = "REML"`). However, for model comparison using
+#' `compare_performance()` sets `estimator = "ML"` by default, because
+#' *comparing* information criteria based on REML fits is usually not valid
+#' (unless all models have the same fixed effects). Thus, make sure to set
+#' the correct estimator-value when looking at fit-indices or comparing model
+#' fits.
 #' }
 #' \subsection{Other performance indices}{
 #'   Furthermore, see 'Details' in [model_performance.lm()] for more details
@@ -86,7 +87,7 @@ model_performance.merMod <- function(model,
   }
 
   if ("BIC" %in% toupper(metrics)) {
-    out$BIC <- .get_BIC(model)
+    out$BIC <- .get_BIC(model, estimator = estimator)
   }
 
   if ("R2" %in% toupper(metrics)) {

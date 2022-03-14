@@ -77,7 +77,7 @@ for more details).
 
 \subsection{REML versus ML estimator}{
 By default, \code{estimator = "ML"}, which means that values from information
-criteria (AIC, AICc) for specific model classes (like models from \emph{lme4})
+criteria (AIC, AICc, BIC) for specific model classes (like models from \emph{lme4})
 are based on the ML-estimator, while the default behaviour of \code{AIC()} for
 such classes is setting \code{REML = TRUE}. This default is intentional, because
 comparing information criteria based on REML fits is usually not valid
