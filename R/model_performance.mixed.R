@@ -42,7 +42,7 @@
 #' @export
 model_performance.merMod <- function(model,
                                      metrics = "all",
-                                     estimator = "ML",
+                                     estimator = "REML",
                                      verbose = TRUE,
                                      ...) {
   if (any(tolower(metrics) == "log_loss")) {
