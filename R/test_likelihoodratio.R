@@ -138,9 +138,9 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   }
 
   out <- cbind(.test_performance_init(objects), out)
-  
+
   # for REML fits, warn user
-  if (identical(estimator, "REML") &&
+  if (isTRUE(REML) &&
       # only when mixed models are involved, others probably don't have problems with REML fit
       any(sapply(objects, insight::is_mixed_model)) &&
       # only if not all models have same fixed effects (else, REML is ok)
