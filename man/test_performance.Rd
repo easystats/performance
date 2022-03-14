@@ -5,6 +5,7 @@
 \alias{test_bf}
 \alias{test_bf.default}
 \alias{test_likelihoodratio}
+\alias{performance_lrt}
 \alias{test_lrt}
 \alias{test_performance}
 \alias{test_vuong}
@@ -16,6 +17,8 @@ test_bf(...)
 \method{test_bf}{default}(..., text_length = NULL)
 
 test_likelihoodratio(..., estimator = "ML")
+
+performance_lrt(...)
 
 test_lrt(..., estimator = "ML")
 
@@ -35,18 +38,9 @@ lines to a specified limit.}
 
 \item{estimator}{Applied when comparing regression models using
 \code{test_likelihoodratio()}. Corresponds to the different estimators for
-the standard deviation of the errors. If \code{estimator="OLS"}, then it uses
-the same method as \code{anova(..., test="LRT")} implemented in base R, i.e.,
-scaling by n-k (the unbiased OLS estimator) and using this estimator under
-the alternative hypothesis. If \code{estimator="ML"}, which is for instance used
-by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the
-biased ML estimator) and the estimator under the null hypothesis. In
-moderately large samples, the differences should be negligible, but it
-is possible that OLS would perform slightly better in small samples with
-Gaussian errors. For \code{estimator="REML"}, the LRT is based on the REML-fit
-log-likelihoods of the models. The default for classical linear models
-is \code{estimator="OLS"}, and for all other models (or a mixture of different
-model objects) \code{estimator="ML"}.}
+the standard deviation of the errors. Defaults to \code{"OLS"} for linear models,
+\code{"ML"} for all other models (including mixed models), or \code{"REML"} for
+linear mixed models when these have the same fixed effects. See 'Details'.}
 
 \item{reference}{This only applies when models are non-nested, and determines
 which model should be taken as a reference, against which all the other
@@ -97,16 +91,33 @@ variables (the response) must be the same. You cannot meaningfully test
 whether apples are significantly different from oranges!
 }
 
+\subsection{Estimator of the standard deviation}{
+The estimator is relevant when comparing regression models using
+\code{test_likelihoodratio()}. If \code{estimator = "OLS"}, then it uses the same
+method as \code{anova(..., test = "LRT")} implemented in base R, i.e., scaling
+by n-k (the unbiased OLS estimator) and using this estimator under the
+alternative hypothesis. If \code{estimator = "ML"}, which is for instance used
+by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the
+biased ML estimator) and the estimator under the null hypothesis. In
+moderately large samples, the differences should be negligible, but it
+is possible that OLS would perform slightly better in small samples with
+Gaussian errors. For \code{estimator = "REML"}, the LRT is based on the REML-fit
+log-likelihoods of the models. Note that not all types of estimators are
+available for all model classes.
+}
+
 \subsection{REML versus ML estimator}{
-By default, \code{estimator = "ML"}, which means that values from information
-criteria (AIC, AICc) for specific model classes (like models from \emph{lme4})
-are based on the ML-estimator, while the default behaviour of \code{AIC()} for
-such classes is setting \code{REML = TRUE}. This default is intentional, because
-comparing information criteria based on REML fits is usually not valid
-(it might be useful, though, if all models share the same fixed effects -
-however, this is usually not the case for nested models, which is a
-prerequisite for the LRT). Set \code{estimator = "REML"} explicitly return the
-same (AIC/...) values as from the defaults in \code{AIC.merMod()}.
+When \code{estimator = "ML"}, which is the default for linear mixed models (unless
+they share the same fixed effects), values from information criteria (AIC,
+AICc) are based on the ML-estimator, while the default behaviour of \code{AIC()}
+may be different (in particular for linear mixed models from \strong{lme4}, which
+sets \code{REML = TRUE}). This default in \code{test_likelihoodratio()} intentional,
+because comparing information criteria based on REML fits requires the same
+fixed effects for all models, which is often not the case. Thus, while
+\code{anova.merMod()} automatically refits all models to REML when performing a
+LRT, \code{test_likelihoodratio()} checks if a comparison based on REML fits is
+indeed valid, and if so, uses REML as default (else, ML is the default).
+Set the \code{estimator} argument explicitely to override the default behaviour.
 }
 
 \subsection{Tests Description}{

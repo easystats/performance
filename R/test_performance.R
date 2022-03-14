@@ -58,16 +58,33 @@
 #' whether apples are significantly different from oranges!
 #' }
 #'
+#' \subsection{Estimator of the standard deviation}{
+#' The estimator is relevant when comparing regression models using
+#' `test_likelihoodratio()`. If `estimator = "OLS"`, then it uses the same
+#' method as `anova(..., test = "LRT")` implemented in base R, i.e., scaling
+#' by n-k (the unbiased OLS estimator) and using this estimator under the
+#' alternative hypothesis. If `estimator = "ML"`, which is for instance used
+#' by `lrtest(...)` in package \pkg{lmtest}, the scaling is done by n (the
+#' biased ML estimator) and the estimator under the null hypothesis. In
+#' moderately large samples, the differences should be negligible, but it
+#' is possible that OLS would perform slightly better in small samples with
+#' Gaussian errors. For `estimator = "REML"`, the LRT is based on the REML-fit
+#' log-likelihoods of the models. Note that not all types of estimators are
+#' available for all model classes.
+#' }
+#'
 #' \subsection{REML versus ML estimator}{
-#'   By default, `estimator = "ML"`, which means that values from information
-#'   criteria (AIC, AICc) for specific model classes (like models from *lme4*)
-#'   are based on the ML-estimator, while the default behaviour of `AIC()` for
-#'   such classes is setting `REML = TRUE`. This default is intentional, because
-#'   comparing information criteria based on REML fits is usually not valid
-#'   (it might be useful, though, if all models share the same fixed effects -
-#'   however, this is usually not the case for nested models, which is a
-#'   prerequisite for the LRT). Set `estimator = "REML"` explicitly return the
-#'   same (AIC/...) values as from the defaults in `AIC.merMod()`.
+#' When `estimator = "ML"`, which is the default for linear mixed models (unless
+#' they share the same fixed effects), values from information criteria (AIC,
+#' AICc) are based on the ML-estimator, while the default behaviour of `AIC()`
+#' may be different (in particular for linear mixed models from **lme4**, which
+#' sets `REML = TRUE`). This default in `test_likelihoodratio()` intentional,
+#' because comparing information criteria based on REML fits requires the same
+#' fixed effects for all models, which is often not the case. Thus, while
+#' `anova.merMod()` automatically refits all models to REML when performing a
+#' LRT, `test_likelihoodratio()` checks if a comparison based on REML fits is
+#' indeed valid, and if so, uses REML as default (else, ML is the default).
+#' Set the `estimator` argument explicitely to override the default behaviour.
 #' }
 #'
 #' \subsection{Tests Description}{
