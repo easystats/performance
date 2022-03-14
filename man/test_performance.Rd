@@ -38,15 +38,18 @@ lines to a specified limit.}
 
 \item{estimator}{Applied when comparing regression models using
 \code{test_likelihoodratio()}. Corresponds to the different estimators for
-the standard deviation of the errors. If \code{estimator="OLS"} (default),
-then it uses the same method as \code{anova(..., test="LRT")} implemented
-in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this
-estimator under the alternative hypothesis. If \code{estimator="ML"}, which
-is for instance used by \code{lrtest(...)} in package \pkg{lmtest}, the
-scaling is done by n (the biased ML estimator) and the estimator under the
-null hypothesis. In moderately large samples, the differences should be
-negligible, but it is possible that OLS would perform slightly better in
-small samples with Gaussian errors.}
+the standard deviation of the errors. If \code{estimator="OLS"}, then it uses
+the same method as \code{anova(..., test="LRT")} implemented in base R, i.e.,
+scaling by n-k (the unbiased OLS estimator) and using this estimator under
+the alternative hypothesis. If \code{estimator="ML"}, which is for instance used
+by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the
+biased ML estimator) and the estimator under the null hypothesis. In
+moderately large samples, the differences should be negligible, but it
+is possible that OLS would perform slightly better in small samples with
+Gaussian errors. For \code{estimator="REML"}, the LRT is based on the REML-fit
+log-likelihoods of the models. The default for classical linear models
+is \code{estimator="OLS"}, and for all other models (or a mixture of different
+model objects) \code{estimator="ML"}.}
 
 \item{reference}{This only applies when models are non-nested, and determines
 which model should be taken as a reference, against which all the other

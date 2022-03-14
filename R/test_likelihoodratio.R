@@ -1,15 +1,18 @@
 #' @rdname test_performance
 #' @param estimator Applied when comparing regression models using
 #'   `test_likelihoodratio()`. Corresponds to the different estimators for
-#'   the standard deviation of the errors. If `estimator="OLS"` (default),
-#'   then it uses the same method as `anova(..., test="LRT")` implemented
-#'   in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this
-#'   estimator under the alternative hypothesis. If `estimator="ML"`, which
-#'   is for instance used by `lrtest(...)` in package \pkg{lmtest}, the
-#'   scaling is done by n (the biased ML estimator) and the estimator under the
-#'   null hypothesis. In moderately large samples, the differences should be
-#'   negligible, but it is possible that OLS would perform slightly better in
-#'   small samples with Gaussian errors.
+#'   the standard deviation of the errors. If `estimator="OLS"`, then it uses
+#'   the same method as `anova(..., test="LRT")` implemented in base R, i.e.,
+#'   scaling by n-k (the unbiased OLS estimator) and using this estimator under
+#'   the alternative hypothesis. If `estimator="ML"`, which is for instance used
+#'   by `lrtest(...)` in package \pkg{lmtest}, the scaling is done by n (the
+#'   biased ML estimator) and the estimator under the null hypothesis. In
+#'   moderately large samples, the differences should be negligible, but it
+#'   is possible that OLS would perform slightly better in small samples with
+#'   Gaussian errors. For `estimator="REML"`, the LRT is based on the REML-fit
+#'   log-likelihoods of the models. The default for classical linear models
+#'   is `estimator="OLS"`, and for all other models (or a mixture of different
+#'   model objects) `estimator="ML"`.
 #' @export
 test_likelihoodratio <- function(..., estimator = "ML") {
   UseMethod("test_likelihoodratio")
@@ -33,13 +36,23 @@ test_lrt <- test_likelihoodratio
 # default --------------------
 
 #' @export
-test_likelihoodratio.default <- function(..., estimator = "ML") {
+test_likelihoodratio.default <- function(..., estimator = "OLS") {
 
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
+
+  # different default when mixed model or glm is included
+  if (missing(estimator)) {
+    mixed_models <- sapply(objects, insight::is_mixed_model)
+    if (all(mixed_models) && all(sapply(objects, .is_lmer_reml)) && isTRUE(attributes(objects)$same_fixef)) {
+      estimator <- "REML"
+    } else if (any(mixed_models) || !all(attributes(objects)$is_linear)) {
+      estimator <- "ML"
+    }
+  }
 
   # ensure proper object names
   objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
@@ -82,10 +95,16 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
   # value formatting
   x$p <- insight::format_p(x$p, name = NULL)
 
+  if (is.null(attributes(x)$estimator)) {
+    estimator_string <- ""
+  } else {
+    estimator_string <- sprintf(" (%s-estimator)", toupper(attributes(x)$estimator))
+  }
+
   cat(insight::export_table(
     x,
     digits = digits,
-    caption = c("# Likelihood-Ratio-Test (LRT) for Model Comparison", "blue"),
+    caption = c(paste0("# Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string), "blue"),
     footer = footer
   ))
 
@@ -108,10 +127,15 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   }
 
   dfs_diff <- c(NA, diff(dfs))
+  REML <- tolower(estimator) == "reml"
 
-  # lmtest::lrtest()
-  if (tolower(estimator) %in% c("ml", "mle")) {
-    lls <- sapply(objects, insight::get_loglikelihood, REML = FALSE, check_response = TRUE)
+  # default anova(test="LRT")
+  if (tolower(estimator) == "ols") {
+    out <- .test_wald(objects, test = "LRT")
+    out$df <- dfs # Replace residual df with model's df
+  } else {
+    # lmtest::lrtest()
+    lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
     chi2 <- abs(c(NA, -2 * diff(lls)))
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
@@ -124,13 +148,10 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     )
 
     out <- cbind(.test_performance_init(objects), out)
-  } else {
-    out <- .test_wald(objects, test = "LRT")
-    out$df <- dfs # Replace residual df with model's df
   }
 
   # for REML fits, warn user
-  if (identical(estimator, "REML") &&
+  if (isTRUE(REML) &&
       # only when mixed models are involved, others probably don't have problems with REML fit
       any(sapply(objects, insight::is_mixed_model)) &&
       # only if not all models have same fixed effects (else, REML is ok)
@@ -142,6 +163,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
   attr(out, "is_nested_decreasing") <- attributes(objects)$is_nested_decreasing
+  attr(out, "estimator") <- tolower(estimator)
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
 }
@@ -174,4 +196,13 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
 
   class(out) <- c("test_likelihoodratio", "see_test_likelihoodratio", "data.frame")
   out
+}
+
+
+# helper ----------------------
+
+.is_lmer_reml <- function(x) {
+  tryCatch(inherits(x, "lmerMod") && as.logical(x@devcomp$dims[["REML"]]),
+           error = function(e) FALSE)
+
 }
