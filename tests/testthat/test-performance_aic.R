@@ -22,4 +22,14 @@ if (requiet("testthat") && requiet("performance")) {
     expect_equal(performance_aic(m1), 372.8247, tolerance = 1e-2)
     expect_equal(performance_aic(m2), 367.1239, tolerance = 1e-2)
   })
+
+  if (requiet("lme4")) {
+    data(iris)
+    m1 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+
+    test_that("performance_aic lme4 default", {
+      expect_equal(performance_aic(m1), AIC(m1), tolerance = 1e-2)
+      expect_equal(performance_aic(m1, estimator = "ML"), 125.0043, tolerance = 1e-2)
+    })
+  }
 }

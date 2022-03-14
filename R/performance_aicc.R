@@ -87,6 +87,21 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
 }
 
 
+# mixed models ------------------------------------
+
+
+#' @export
+performance_aic.lmerMod <- function(x, estimator = "REML", verbose = TRUE, ...) {
+  REML <- identical(estimator, "REML")
+  if (isFALSE(list(...)$REML)) REML <- FALSE
+
+  tryCatch(
+    stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
+    error = function(e) NULL
+  )
+}
+
+
 # VGAM models ------------------------------------
 
 
@@ -175,6 +190,19 @@ performance_aicc.default <- function(x, estimator = "ML", ...) {
   # check ML estimator
   REML <- identical(estimator, "REML")
   if (isTRUE(list(...)$REML)) REML <- TRUE
+
+  n <- suppressWarnings(insight::n_obs(x))
+  ll <- insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = TRUE)
+  k <- attr(ll, "df")
+
+  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+}
+
+
+#' @export
+performance_aicc.lmerMod <- function(x, estimator = "REML", ...) {
+  REML <- identical(estimator, "REML")
+  if (isFALSE(list(...)$REML)) REML <- FALSE
 
   n <- suppressWarnings(insight::n_obs(x))
   ll <- insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = TRUE)
