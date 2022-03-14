@@ -9,7 +9,10 @@
 #'   biased ML estimator) and the estimator under the null hypothesis. In
 #'   moderately large samples, the differences should be negligible, but it
 #'   is possible that OLS would perform slightly better in small samples with
-#'   Gaussian errors.
+#'   Gaussian errors. For `estimator="REML"`, the LRT is based on the REML-fit
+#'   log-likelihoods of the models. The default for classical linear models
+#'   is `estimator="OLS"`, and for all other models (or a mixture of different
+#'   model objects) `estimator="ML"`.
 #' @export
 test_likelihoodratio <- function(..., estimator = "ML") {
   UseMethod("test_likelihoodratio")
@@ -33,13 +36,18 @@ test_lrt <- test_likelihoodratio
 # default --------------------
 
 #' @export
-test_likelihoodratio.default <- function(..., estimator = "ML") {
+test_likelihoodratio.default <- function(..., estimator = "OLS") {
 
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
+
+  # different default when mixed model is included
+  if (missing(estimator) && (any(sapply(objects, insight::is_mixed_model)) || !all(attributes(objects)$is_linear))) {
+    estimator = "ML"
+  }
 
   # ensure proper object names
   objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
