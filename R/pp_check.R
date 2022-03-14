@@ -50,7 +50,7 @@
 #' @examples
 #' library(performance)
 #' model <- lm(mpg ~ disp, data = mtcars)
-#' if (require("see")) {
+#' if (require("see") && getRversion() >= "3.5.0") {
 #'   check_predictions(model)
 #' }
 #' @export

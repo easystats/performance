@@ -81,7 +81,7 @@ is loaded, \code{pp_check()} is also available as an alias for \code{check_predi
 \examples{
 library(performance)
 model <- lm(mpg ~ disp, data = mtcars)
-if (require("see")) {
+if (require("see") && getRversion() >= "3.5.0") {
   check_predictions(model)
 }
 }
