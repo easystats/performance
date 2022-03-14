@@ -64,9 +64,13 @@ if (requiet("testthat") &&
 
     test_that("test_likelihoodratio - lme4 ML", {
       t1 <- test_lrt(m1, m2, m3)
+      t2 <- anova(m1, m2, m3)
       expect_equal(attributes(t1)$estimator, "ml")
       expect_equal(t1$Chi2, c(NA, 85.26365, 0.84141), tolerance = 1e-3)
       expect_equal(t1$p, c(NA, 0, 0.35899), tolerance = 1e-3)
+      # close, but not the same
+      expect_equal(t1$p, t2$`Pr(>Chisq)`, tolerance = 1e-1)
+      expect_equal(t1$Chi2, t2$Chisq, tolerance = 1e-1)
     })
 
     test_that("test_likelihoodratio - lme4 OLS", {
