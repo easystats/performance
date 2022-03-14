@@ -73,7 +73,7 @@
 <span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span>
   <span class="va">model</span>,
   metrics <span class="op">=</span> <span class="st">"all"</span>,
-  estimator <span class="op">=</span> <span class="st">"ML"</span>,
+  estimator <span class="op">=</span> <span class="st">"REML"</span>,
   verbose <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
@@ -114,13 +114,14 @@ the model (see also <code><a href="icc.html">icc()</a></code>).</p>
 </div>
 <div class="section">
 <h3 id="reml-versus-ml-estimator">REML versus ML estimator<a class="anchor" aria-label="anchor" href="#reml-versus-ml-estimator"></a></h3>
-<p>By default, <code>estimator = "ML"</code>, which means that values from information
-criteria (AIC, AICc) for specific model classes (like models from <em>lme4</em>)
-are based on the ML-estimator, while the default behaviour of <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code> for
-such classes is setting <code>REML = TRUE</code>. This default is intentional, because
-comparing information criteria based on REML fits is not valid. Set
-<code>estimator = "REML"</code> explicitly return the same (AIC/...) values as from the
-defaults in <code>AIC.merMod()</code>.</p>
+<p>The default behaviour of <code><a href="model_performance.html">model_performance()</a></code> when computing AIC or BIC of
+linear mixed model from package <strong>lme4</strong> is the same as for <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code> or
+<code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC()</a></code> (i.e. <code>estimator = "REML"</code>). However, for model comparison using
+<code><a href="compare_performance.html">compare_performance()</a></code> sets <code>estimator = "ML"</code> by default, because
+<em>comparing</em> information criteria based on REML fits is usually not valid
+(unless all models have the same fixed effects). Thus, make sure to set
+the correct estimator-value when looking at fit-indices or comparing model
+fits.</p>
 </div>
 <div class="section">
 <h3 id="other-performance-indices">Other performance indices<a class="anchor" aria-label="anchor" href="#other-performance-indices"></a></h3>
@@ -140,7 +141,7 @@ on returned indices.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AIC    |   AICc |    BIC | R2 (cond.) | R2 (marg.) |   ICC |  RMSE | Sigma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74.621 | 74.897 | 89.362 |      0.972 |      0.096 | 0.969 | 0.279 | 0.283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77.320 | 77.595 | 89.362 |      0.972 |      0.096 | 0.969 | 0.279 | 0.283</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

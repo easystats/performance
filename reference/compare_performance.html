@@ -152,7 +152,7 @@ for more details).</p>
 <div class="section">
 <h3 id="reml-versus-ml-estimator">REML versus ML estimator<a class="anchor" aria-label="anchor" href="#reml-versus-ml-estimator"></a></h3>
 <p>By default, <code>estimator = "ML"</code>, which means that values from information
-criteria (AIC, AICc) for specific model classes (like models from <em>lme4</em>)
+criteria (AIC, AICc, BIC) for specific model classes (like models from <em>lme4</em>)
 are based on the ML-estimator, while the default behaviour of <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code> for
 such classes is setting <code>REML = TRUE</code>. This default is intentional, because
 comparing information criteria based on REML fits is usually not valid
@@ -211,7 +211,7 @@ Springer-Verlag. doi: <a href="https://doi.org/10.1007/b97636" class="external-l
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> m1   |      lm | 156.010 |     &lt; 0.001 | 161.873 |     &lt; 0.001 | 2.444 | 2.568 | 0.830 |     0.819 |           |          |           |                 |       |        |              |            |            |      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> m2   |     glm |  31.298 |       1.000 |  35.695 |       1.000 | 0.359 | 0.934 |       |           |     0.478 |    0.395 |   -14.903 |           0.095 | 0.743 |        |              |            |            |      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m3   | lmerMod |  74.621 |     &lt; 0.001 |  89.362 |     &lt; 0.001 | 0.279 | 0.283 |       |           |           |          |           |                 |       | 74.897 |              |      0.972 |      0.096 | 0.969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m3   | lmerMod |  74.621 |     &lt; 0.001 |  86.663 |     &lt; 0.001 | 0.279 | 0.283 |       |           |           |          |           |                 |       | 74.897 |              |      0.972 |      0.096 | 0.969</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
