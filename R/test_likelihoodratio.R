@@ -1,15 +1,15 @@
 #' @rdname test_performance
 #' @param estimator Applied when comparing regression models using
 #'   `test_likelihoodratio()`. Corresponds to the different estimators for
-#'   the standard deviation of the errors. If `estimator="OLS"` (default),
-#'   then it uses the same method as `anova(..., test="LRT")` implemented
-#'   in base R, i.e., scaling by n-k (the unbiased OLS estimator) and using this
-#'   estimator under the alternative hypothesis. If `estimator="ML"`, which
-#'   is for instance used by `lrtest(...)` in package \pkg{lmtest}, the
-#'   scaling is done by n (the biased ML estimator) and the estimator under the
-#'   null hypothesis. In moderately large samples, the differences should be
-#'   negligible, but it is possible that OLS would perform slightly better in
-#'   small samples with Gaussian errors.
+#'   the standard deviation of the errors. If `estimator="OLS"`, then it uses
+#'   the same method as `anova(..., test="LRT")` implemented in base R, i.e.,
+#'   scaling by n-k (the unbiased OLS estimator) and using this estimator under
+#'   the alternative hypothesis. If `estimator="ML"`, which is for instance used
+#'   by `lrtest(...)` in package \pkg{lmtest}, the scaling is done by n (the
+#'   biased ML estimator) and the estimator under the null hypothesis. In
+#'   moderately large samples, the differences should be negligible, but it
+#'   is possible that OLS would perform slightly better in small samples with
+#'   Gaussian errors.
 #' @export
 test_likelihoodratio <- function(..., estimator = "ML") {
   UseMethod("test_likelihoodratio")
@@ -115,27 +115,24 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     REML <- TRUE
   }
 
-  lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
-  chi2 <- abs(c(NA, -2 * diff(lls)))
-  p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
+  if (tolower(estimator) == "ols") {
+    out <- .test_wald(objects, test = "LRT")
+    out$df <- dfs # Replace residual df with model's df
+  } else {
+    lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
+    chi2 <- abs(c(NA, -2 * diff(lls)))
+    p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
-  out <- data.frame(
-    df = dfs,
-    df_diff = dfs_diff,
-    Chi2 = chi2,
-    p = p,
-    stringsAsFactors = FALSE
-  )
-
-  # else, if REML = TRUE, for some(?) models we could also do - however,
-  # this currently gives different results for mixed models, so we skip
-  # this for now...
-
-  # out <- .test_wald(objects, test = "LRT")
-  # out$df <- dfs # Replace residual df with model's df
+    out <- data.frame(
+      df = dfs,
+      df_diff = dfs_diff,
+      Chi2 = chi2,
+      p = p,
+      stringsAsFactors = FALSE
+    )
+  }
 
   out <- cbind(.test_performance_init(objects), out)
-
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
   attr(out, "is_nested_decreasing") <- attributes(objects)$is_nested_decreasing
