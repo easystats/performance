@@ -107,6 +107,7 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
 #' @export
 test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
   dfs <- sapply(objects, insight::get_df, type = "model")
+  same_fixef <- attributes(objects)$same_fixef
 
   # sort by df
   if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
@@ -137,6 +138,17 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   }
 
   out <- cbind(.test_performance_init(objects), out)
+  
+  # for REML fits, warn user
+  if (identical(estimator, "REML") &&
+      # only when mixed models are involved, others probably don't have problems with REML fit
+      any(sapply(objects, insight::is_mixed_model)) &&
+      # only if not all models have same fixed effects (else, REML is ok)
+      !isTRUE(same_fixef)) {
+    warning(insight::format_message(
+      "The Likelihood-Ratio-Test is probably inaccurate when comparing REML-fit models with different fixed effects."
+    ), call. = FALSE)
+  }
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
   attr(out, "is_nested_decreasing") <- attributes(objects)$is_nested_decreasing

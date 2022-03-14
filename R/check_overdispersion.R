@@ -123,12 +123,12 @@ check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
   info <- insight::model_info(x)
   if (!info$is_poisson && !info$is_binomial) {
-    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
+    stop("Overdispersion checks cannot be used for Bernoulli models.", call. = FALSE)
   }
 
   if (info$is_binomial) {
@@ -190,12 +190,12 @@ check_overdispersion.merMod <- function(x, ...) {
   # check if we have poisson or binomial
   info <- insight::model_info(x)
   if (!info$is_poisson && !info$is_binomial) {
-    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
+    stop("Overdispersion checks cannot be used for Bernoulli models.", call. = FALSE)
   }
 
   rdf <- stats::df.residual(x)
