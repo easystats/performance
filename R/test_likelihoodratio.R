@@ -19,11 +19,13 @@ test_likelihoodratio <- function(..., estimator = "ML") {
 }
 
 
-# TODO: Should we deprecate this name? And print a warning not to use this name
-# anymore and that we will remove it in future versions?
-#' @rdname test_performance
 #' @export
-performance_lrt <- test_likelihoodratio
+performance_lrt <- function(...) {
+  ## TODO remove deprecated
+  message(insight::format_message("This function name is deprecated.",
+                                  "Please use 'test_lrt()' instead."))
+  test_likelihoodratio(...)
+}
 
 
 # Short name for test_likelihoodratio using the test_* naming convention
