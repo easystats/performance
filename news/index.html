@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,32 +63,32 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.8.1" id="performance-081">performance 0.8.1<a class="anchor" aria-label="anchor" href="#performance-081"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.0" id="performance-090">performance 0.9.0<a class="anchor" aria-label="anchor" href="#performance-090"></a></h2>
 <div class="section level3">
-<h3 id="new-functions-0-8-1">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-8-1"></a></h3>
+<h3 id="new-functions-0-9-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-9-0"></a></h3>
 <ul><li>
 <code><a href="../reference/check_collinearity.html">check_concurvity()</a></code>, which returns GAM concurvity measures (comparable to collinearity checks).</li>
 </ul></div>
 <div class="section level3">
-<h3 id="changes-to-functions-0-8-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-8-1"></a></h3>
+<h3 id="changes-to-functions-0-9-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9-0"></a></h3>
 <div class="section level4">
-<h4 id="check-functions-0-8-1">Check functions<a class="anchor" aria-label="anchor" href="#check-functions-0-8-1"></a></h4>
+<h4 id="check-functions-0-9-0">Check functions<a class="anchor" aria-label="anchor" href="#check-functions-0-9-0"></a></h4>
 <ul><li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code>, <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> and <code><a href="../reference/check_outliers.html">check_outliers()</a></code> now support (mixed) regression models from <code>BayesFactor</code>.</p></li>
 <li><p><code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> now also works for <code><a href="https://rdrr.io/pkg/lme4/man/glmer.nb.html" class="external-link">lme4::glmer.nb()</a></code> models.</p></li>
 <li><p><code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> better supports GAM models.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="test-functions-0-8-1">Test functions<a class="anchor" aria-label="anchor" href="#test-functions-0-8-1"></a></h4>
+<h4 id="test-functions-0-9-0">Test functions<a class="anchor" aria-label="anchor" href="#test-functions-0-9-0"></a></h4>
 <ul><li><p><code><a href="../reference/test_performance.html">test_performance()</a></code> now calls <code><a href="../reference/test_performance.html">test_lrt()</a></code> or <code><a href="../reference/test_performance.html">test_wald()</a></code> instead of <code><a href="../reference/test_performance.html">test_vuong()</a></code> when package <em>CompQuadForm</em> is missing.</p></li>
 <li><p><code><a href="../reference/test_performance.html">test_performance()</a></code> and <code><a href="../reference/test_performance.html">test_lrt()</a></code> now compute the corrected log-likelihood when models with transformed response variables (such as log- or sqrt-transformations) are passed to the functions.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="model-performance-functions-0-8-1">Model performance functions<a class="anchor" aria-label="anchor" href="#model-performance-functions-0-8-1"></a></h4>
+<h4 id="model-performance-functions-0-9-0">Model performance functions<a class="anchor" aria-label="anchor" href="#model-performance-functions-0-9-0"></a></h4>
 <ul><li><p><code><a href="../reference/performance_aicc.html">performance_aic()</a></code> now corrects the AIC value for models with transformed response variables. This also means that comparing models using <code><a href="../reference/compare_performance.html">compare_performance()</a></code> allows comparisons of AIC values for models with and without transformed response variables.</p></li>
 <li><p>Also, <code><a href="../reference/model_performance.html">model_performance()</a></code> now corrects both AIC and BIC values for models with transformed response variables.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="plotting-and-printing-0-8-1">Plotting and printing<a class="anchor" aria-label="anchor" href="#plotting-and-printing-0-8-1"></a></h4>
+<h4 id="plotting-and-printing-0-9-0">Plotting and printing<a class="anchor" aria-label="anchor" href="#plotting-and-printing-0-9-0"></a></h4>
 <ul><li><p>The <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> method for <code><a href="../reference/binned_residuals.html">binned_residuals()</a></code> now prints a short summary of the results (and no longer generates a plot). A <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method was added to generate plots.</p></li>
 <li>
 <p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> output for <code><a href="../reference/check_model.html">check_model()</a></code> was revised:</p>
@@ -98,7 +98,7 @@
 </ul></div>
 </div>
 <div class="section level3">
-<h3 id="bug-fixes-0-8-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-8-1"></a></h3>
+<h3 id="bug-fixes-0-9-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-0"></a></h3>
 <ul><li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> for models from <em>lme4</em> did not report AICc when requested.</p></li>
 <li><p><code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> messed up order of group levels when <code>by_group</code> was <code>TRUE</code>.</p></li>
 </ul></div>
