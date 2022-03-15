@@ -49,8 +49,8 @@ performance_roc <- function(x, ..., predictions, new_data) {
   dots <- list(...)
 
   object_names <- c(
-    .safe_deparse(substitute(x)),
-    sapply(match.call(expand.dots = FALSE)$`...`, .safe_deparse)
+    insight::safe_deparse(substitute(x)),
+    sapply(match.call(expand.dots = FALSE)$`...`, insight::safe_deparse)
   )
 
   if (insight::is_model(x)) {
