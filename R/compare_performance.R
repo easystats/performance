@@ -106,7 +106,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   # iterate over all models, i.e. model-performance for each model
   m <- mapply(function(.x, .y) {
     dat <- model_performance(.x, metrics = metrics, estimator = estimator, verbose = FALSE)
-    model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
+    model_name <- gsub("\"", "", insight::safe_deparse(.y), fixed = TRUE)
     perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
     attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
     return(perf_df)

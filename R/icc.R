@@ -360,7 +360,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   if (is.null(reform)) {
     reform <- "all random effects"
   } else {
-    reform <- .safe_deparse(reform)
+    reform <- insight::safe_deparse(reform)
   }
 
   cat(sprintf("Conditioned on: %s\n\n", reform))

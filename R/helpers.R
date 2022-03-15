@@ -1,7 +1,3 @@
-# trim leading / trailing whitespaces
-.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
-
-
 .get_BIC <- function(x, estimator = "ML") {
   # check ML estimator
   if (missing(estimator) && inherits(x, "lmerMod")) {
@@ -22,14 +18,6 @@
     )
   }
   .adjust_ic_jacobian(x, out)
-}
-
-
-
-
-# safe deparse, works for very long strings
-.safe_deparse <- function(string) {
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = "")
 }
 
 
