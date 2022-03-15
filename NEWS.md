@@ -1,4 +1,4 @@
-# performance 0.8.1
+# performance 0.9.0
 
 ## New functions
 

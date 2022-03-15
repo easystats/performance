@@ -134,11 +134,7 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(
-  Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  cores = 4
-)
+model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
@@ -257,16 +253,12 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
 
 check_singularity(model)
 #> [1] TRUE
@@ -347,7 +339,7 @@ model_performance(m3)
 #> 
 #> AIC      |     AICc |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma
 #> ----------------------------------------------------------------------------------
-#> 1763.986 | 1764.471 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
+#> 1755.628 | 1756.114 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
 ```
 
 ### Models comparison
@@ -369,7 +361,7 @@ compare_performance(m1, m2, m3, m4)
 #> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #> m1   |      lm |  156.010 |     < 0.001 |  161.873 |     < 0.001 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                
 #> m2   |     glm |   31.298 |       1.000 |   35.695 |       1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |          |              |            |            |       |                
-#> m3   | lmerMod | 1763.986 |     < 0.001 | 1774.786 |     < 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                
+#> m3   | lmerMod | 1763.986 |     < 0.001 | 1783.144 |     < 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                
 #> m4   |     glm |   56.761 |     < 0.001 |   57.747 |     < 0.001 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657
 ```
 
