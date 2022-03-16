@@ -218,7 +218,7 @@ check_model.model_fit <- function(x,
 
 
 
-# helper ------------------------
+# compile plots for checks of linear models  ------------------------
 
 .check_assumptions_linear <- function(model, model_info) {
   dat <- list()
@@ -245,6 +245,8 @@ check_model.model_fit <- function(x,
 
 
 
+# compile plots for checks of generalized linear models  ------------------------
+
 .check_assumptions_glm <- function(model, model_info) {
   dat <- list()
 
@@ -263,6 +265,9 @@ check_model.model_fit <- function(x,
   if (isTRUE(model_info$is_binomial)) {
     dat$BINNED_RESID <- binned_residuals(model)
   }
+  if (isTRUE(model_info$is_count)) {
+    dat$OVERDISPERION <- .diag_overdispersion(model)
+  }
 
   dat <- datawizard::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -270,6 +275,8 @@ check_model.model_fit <- function(x,
 }
 
 
+
+# compile plots for checks of Bayesian models  ------------------------
 
 .check_assumptions_stan <- function(model) {
   if (inherits(model, "brmsfit")) {

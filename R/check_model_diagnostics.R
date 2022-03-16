@@ -1,3 +1,5 @@
+# prepare data for VIF plot ----------------------------------
+
 .diag_vif <- function(model) {
   dat <- datawizard::compact_list(check_collinearity(model))
   if (is.null(dat)) {
@@ -16,6 +18,9 @@
   }
 }
 
+
+
+# prepare data for QQ plot ----------------------------------
 
 .diag_qq <- function(model) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB", "gam"))) {
@@ -53,6 +58,8 @@
 }
 
 
+
+# prepare data for random effects QQ plot ----------------------------------
 
 .diag_reqq <- function(model, level = .95, model_info) {
   # check if we have mixed model
@@ -117,6 +124,7 @@
 
 
 
+# prepare data for normality of residuals plot ----------------------------------
 
 .diag_norm <- function(model) {
   r <- try(stats::residuals(model), silent = TRUE)
@@ -132,6 +140,8 @@
 }
 
 
+
+# prepare data for influential obs plot ----------------------------------
 
 .diag_influential_obs <- function(model, threshold = NULL) {
   s <- summary(model)
@@ -184,6 +194,7 @@
 
 
 
+# prepare data for non-constant variance plot ----------------------------------
 
 .diag_ncv <- function(model) {
   ncv <- tryCatch(
@@ -206,6 +217,9 @@
   ncv
 }
 
+
+
+# prepare data for homogeneity of variance plot ----------------------------------
 
 .diag_homogeneity <- function(model) {
   faminfo <- insight::model_info(model)
@@ -245,6 +259,48 @@
 }
 
 
+
+# prepare data for homogeneity of variance plot ----------------------------------
+
+.diag_overdispersion <- function(model) {
+  faminfo <- insight::model_info(model)
+
+  # data for poisson models
+  if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
+    d <- as.data.frame(insight::get_predicted(model, predict = "expectation", ci = NA))
+    d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
+    d$Res2 <- d$Residuals^2
+    d$V <- d$Predicted
+  }
+
+  # data for negative binomial models
+  if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
+    d <- as.data.frame(insight::get_predicted(model, predict = "expectation", ci = NA))
+    d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
+    d$Res2 <- d$Residuals^2
+    d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+  }
+
+  # data for zero-inflated poisson models
+  if (faminfo$is_poisson && faminfo$is_zero_inflated) {
+    d <- as.data.frame(insight::get_predicted(model, predict = "expectation", ci = NA))
+    d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
+    d$Res2 <- d$Residuals^2
+    if (inherits(model, "glmmTMB")) {
+      ptype <- "zprob"
+    } else {
+      ptype <- "zero"
+    }
+    d$Prob <- stats::predict(model, type = ptype)
+    d$V <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
+  }
+
+  d
+}
+
+
+
+# helpers ----------------------------------
 
 .sigma_glmmTMB_nonmixed <- function(model, faminfo) {
   if (!is.na(match(faminfo$family, c("binomial", "poisson", "truncated_poisson")))) {
