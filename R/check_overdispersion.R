@@ -85,6 +85,30 @@ check_overdispersion.default <- function(x, ...) {
 # Methods -----------------------------
 
 #' @export
+plot.check_overdisp <- function(x, ...) {
+  insight::check_if_installed("see", "for overdispersion plots")
+
+  obj_name <- attr(x, "object_name", exact = TRUE)
+  model <- NULL
+
+  if (!is.null(obj_name)) {
+    model <- tryCatch(get(obj_name, envir = parent.frame()),
+                      error = function(e) NULL)
+
+    if (is.null(model)) {
+      # second try, global env
+      model <- tryCatch(get(obj_name, envir = globalenv()),
+                        error = function(e) NULL)
+    }
+  }
+
+  if (!is.null(model)) {
+    x$data <- .diag_overdispersion(model)
+    plot.see_check_overdisp(x)
+  }
+}
+
+#' @export
 print.check_overdisp <- function(x, digits = 3, ...) {
   orig_x <- x
 
@@ -145,15 +169,17 @@ check_overdispersion.glm <- function(x, ...) {
   ratio <- chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
 
-  structure(
-    class = "check_overdisp",
-    list(
-      chisq_statistic = chisq,
-      dispersion_ratio = ratio,
-      residual_df = n - k,
-      p_value = p.value
-    )
+  out <- list(
+    chisq_statistic = chisq,
+    dispersion_ratio = ratio,
+    residual_df = n - k,
+    p_value = p.value
   )
+
+  class(out) <- c("check_overdisp", "see_check_overdisp")
+  attr(out, "object_name") <- insight::safe_deparse(substitute(x))
+
+  out
 }
 
 #' @export
@@ -204,15 +230,17 @@ check_overdispersion.merMod <- function(x, ...) {
   prat <- Pearson.chisq / rdf
   pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
 
-  structure(
-    class = "check_overdisp",
-    list(
-      chisq_statistic = Pearson.chisq,
-      dispersion_ratio = prat,
-      residual_df = rdf,
-      p_value = pval
-    )
+  out <- list(
+    chisq_statistic = Pearson.chisq,
+    dispersion_ratio = prat,
+    residual_df = rdf,
+    p_value = pval
   )
+
+  class(out) <- c("check_overdisp", "see_check_overdisp")
+  attr(out, "object_name") <- insight::safe_deparse(substitute(x))
+
+  out
 }
 
 #' @export
