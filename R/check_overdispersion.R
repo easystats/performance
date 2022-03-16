@@ -84,31 +84,6 @@ check_overdispersion.default <- function(x, ...) {
 
 # Methods -----------------------------
 
-## TODO enable after see 0.7.0 is on CRAN
-
-# plot.check_overdisp <- function(x, ...) {
-#   insight::check_if_installed("see", "for overdispersion plots", minimum_version = "0.7.0")
-#   obj_name <- attr(x, "object_name", exact = TRUE)
-#   model <- NULL
-#
-#   if (!is.null(obj_name)) {
-#     model <- tryCatch(get(obj_name, envir = parent.frame()),
-#                       error = function(e) NULL)
-#
-#     if (is.null(model)) {
-#       # second try, global env
-#       model <- tryCatch(get(obj_name, envir = globalenv()),
-#                         error = function(e) NULL)
-#     }
-#   }
-#
-#   if (!is.null(model)) {
-#     x <- .diag_overdispersion(model)
-#     see::plot.see_check_overdisp(x, ...)
-#   }
-# }
-
-
 #' @export
 print.check_overdisp <- function(x, digits = 3, ...) {
   orig_x <- x
@@ -144,7 +119,7 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 # Overdispersion for classical models -----------------------------
 
 #' @export
-check_overdispersion.glm <- function(x, ...) {
+check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   # check if we have poisson
   info <- insight::model_info(x)
   if (!info$is_count && !info$is_binomial) {
@@ -157,7 +132,7 @@ check_overdispersion.glm <- function(x, ...) {
   }
 
   if (info$is_binomial) {
-    return(check_overdispersion.merMod(x, ...))
+    return(check_overdispersion.merMod(x, verbose = verbose, ...))
   }
 
   yhat <- stats::fitted(x)
@@ -213,7 +188,7 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 # Overdispersion for mixed models ---------------------------
 
 #' @export
-check_overdispersion.merMod <- function(x, ...) {
+check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   # check if we have poisson or binomial
   info <- insight::model_info(x)
   if (!info$is_count && !info$is_binomial) {
@@ -226,10 +201,23 @@ check_overdispersion.merMod <- function(x, ...) {
   }
 
   rdf <- stats::df.residual(x)
-  rp <- stats::residuals(x, type = "pearson")
-  Pearson.chisq <- sum(rp^2)
-  prat <- Pearson.chisq / rdf
-  pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
+  rp <- tryCatch(stats::residuals(x, type = "pearson"), error = function(e) NULL)
+  if (is.null(rp)) {
+    Pearson.chisq <- NA
+    prat <- NA
+    pval <- NA
+    rp <- NA
+    if (isTRUE(verbose)) {
+      warning(insight::format_message(
+        "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion.",
+        "Only the visual inspection using 'plot(check_overdispersion(model))' is possible."
+      ), call. = FALSE)
+    }
+  } else {
+    Pearson.chisq <- sum(rp^2)
+    prat <- Pearson.chisq / rdf
+    pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
+  }
 
   out <- list(
     chisq_statistic = Pearson.chisq,
