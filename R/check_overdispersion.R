@@ -147,7 +147,7 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 check_overdispersion.glm <- function(x, ...) {
   # check if we have poisson
   info <- insight::model_info(x)
-  if (!info$is_poisson && !info$is_binomial) {
+  if (!info$is_count && !info$is_binomial) {
     stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
@@ -216,7 +216,7 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 check_overdispersion.merMod <- function(x, ...) {
   # check if we have poisson or binomial
   info <- insight::model_info(x)
-  if (!info$is_poisson && !info$is_binomial) {
+  if (!info$is_count && !info$is_binomial) {
     stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
