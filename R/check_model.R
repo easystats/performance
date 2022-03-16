@@ -266,7 +266,7 @@ check_model.model_fit <- function(x,
     dat$BINNED_RESID <- binned_residuals(model)
   }
   if (isTRUE(model_info$is_count)) {
-    dat$OVERDISPERION <- .diag_overdispersion(model)
+    dat$OVERDISPERSION <- .diag_overdispersion(model)
   }
 
   dat <- datawizard::compact_list(dat)
