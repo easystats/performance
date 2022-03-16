@@ -104,7 +104,7 @@ plot.check_overdisp <- function(x, ...) {
 
   if (!is.null(model)) {
     x$data <- .diag_overdispersion(model)
-    plot.see_check_overdisp(x)
+    NextMethod()
   }
 }
 
