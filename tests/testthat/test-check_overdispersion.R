@@ -19,7 +19,8 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
           residual_df = 636L,
           p_value = 3.26607509162498e-122
         ),
-        class = "check_overdisp"
+        class = c("check_overdisp", "see_check_overdisp"),
+        object_name = "m1"
       ),
       tolerance = 1e-3
     )
@@ -35,7 +36,8 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
           residual_df = 635L,
           p_value = 8.41489530177729e-69
         ),
-        class = "check_overdisp"
+        class = c("check_overdisp", "see_check_overdisp"),
+        object_name = "m2"
       ),
       tolerance = 1e-3
     )
