@@ -87,25 +87,7 @@ check_overdispersion.default <- function(x, ...) {
 #' @export
 plot.check_overdisp <- function(x, ...) {
   insight::check_if_installed("see", "for overdispersion plots")
-
-  obj_name <- attr(x, "object_name", exact = TRUE)
-  model <- NULL
-
-  if (!is.null(obj_name)) {
-    model <- tryCatch(get(obj_name, envir = parent.frame()),
-                      error = function(e) NULL)
-
-    if (is.null(model)) {
-      # second try, global env
-      model <- tryCatch(get(obj_name, envir = globalenv()),
-                        error = function(e) NULL)
-    }
-  }
-
-  if (!is.null(model)) {
-    x$data <- .diag_overdispersion(model)
-    NextMethod()
-  }
+  NextMethod()
 }
 
 #' @export
