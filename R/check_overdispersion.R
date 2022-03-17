@@ -223,7 +223,7 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   }
 
   rdf <- stats::df.residual(x)
-  rp <- tryCatch(stats::residuals(x, type = "pearson"), error = function(e) NULL)
+  rp <- tryCatch(.pearson_residuals(x), error = function(e) NULL)
   if (is.null(rp)) {
     Pearson.chisq <- NA
     prat <- NA
