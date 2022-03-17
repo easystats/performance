@@ -130,7 +130,8 @@ plot.check_heteroscedasticity <- function(x, ...) {
       stats::residuals(x, type = "pearson")
     },
     error = function(e) {
-      NULL
+      yhat <- stats::fitted(x)
+      (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
     }
   )
 
