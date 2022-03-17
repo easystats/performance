@@ -129,6 +129,7 @@ check_model.default <- function(x,
   attr(ca, "colors") <- colors
   attr(ca, "theme") <- theme
   attr(ca, "model_info") <- minfo
+  attr(ca, "overdisp_type") <- list(...)$plot_type
   ca
 }
 
