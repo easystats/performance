@@ -271,7 +271,7 @@
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     d$V <- d$Predicted
-    d$StdRes <- .pearson_residuals(model)
+    d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
   # data for negative binomial models
@@ -280,7 +280,7 @@
     d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
     d$Res2 <- d$Residuals^2
     d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
-    d$StdRes <- .pearson_residuals(model)
+    d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
   # data for zero-inflated poisson models
@@ -295,7 +295,7 @@
     }
     d$Prob <- stats::predict(model, type = ptype)
     d$V <- d$Predicted * (1 - d$Prob) * (1 + d$Predicted * d$Prob)
-    d$StdRes <- .resid_zip(model)
+    d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
   # data for zero-inflated negative binomial models
@@ -311,7 +311,7 @@
     d$Prob <- stats::predict(model, type = ptype)
     d$Disp <- insight::get_sigma(model)
     d$V <- d$Predicted * (1 + d$Predicted / d$Disp) * (1 - d$Prob) * (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob)
-    d$StdRes <- .resid_zinb(model)
+    d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
   # data for zero-inflated negative binomial models with dispersion
@@ -327,7 +327,7 @@
     d$Prob <- stats::predict(model, type = ptype)
     d$Disp <- stats::predict(model, type = "disp")
     d$V <- d$Predicted * (1 + d$Predicted / d$Disp) * (1 - d$Prob) * (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob)
-    d$StdRes <- .resid_zinb(model)
+    d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
   d

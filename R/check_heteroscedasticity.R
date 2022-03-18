@@ -53,7 +53,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     return(NULL)
   }
 
-  r <- .pearson_residuals(x)
+  r <- insight::get_residuals(x, type = "pearson")
   S.sq <- insight::get_df(x, type = "residual") * .sigma(x)^2 / sum(!is.na(r))
 
   .U <- (r^2) / S.sq
@@ -121,89 +121,4 @@ plot.check_heteroscedasticity <- function(x, ...) {
 .sigma.BFBayesFactor <- function(x) {
   mean(.get_bfbf_predictions(x)[["sigma"]])
 }
-
-
-
-.pearson_residuals <- function(x) {
-  pr <- tryCatch(
-    {
-      stats::residuals(x, type = "pearson")
-    },
-    error = function(e) {
-      yhat <- stats::fitted(x)
-      (insight::get_response(x, verbose = FALSE) - yhat) / sqrt(yhat)
-    }
-  )
-
-  if (datawizard::is_empty_object(pr) && inherits(x, c("glmmTMB", "MixMod"))) {
-    faminfo <- insight::model_info(x)
-    if (faminfo$is_zero_inflated) {
-      if (faminfo$is_negbin) {
-        pr <- .resid_zinb(x, faminfo)
-      } else {
-        pr <- .resid_zip(x, faminfo)
-      }
-    }
-  }
-
-  pr
-}
-
-
-
-.resid_zinb <- function(model, faminfo) {
-  if (inherits(model, "glmmTMB")) {
-    v <- stats::family(model)$variance
-    # zi probability
-    p <- stats::predict(model, type = "zprob")
-    # mean of conditional distribution
-    mu <- stats::predict(model, type = "conditional")
-    # sigma
-    betad <- model$fit$par["betad"]
-    k <- switch(faminfo$family,
-      gaussian = exp(0.5 * betad),
-      Gamma = exp(-0.5 * betad),
-      exp(betad)
-    )
-    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
-    pred <- stats::predict(model, type = "response") ## (1 - p) * mu
-  } else if (inherits(model, "MixMod")) {
-    sig <- insight::get_variance_distribution(model, verbose = FALSE)
-    p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(model, type_pred = "link", type = "mean_subject")
-    v <- mu * (1 + sig)
-    k <- sig
-    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
-    pred <- stats::predict(model, type_pred = "response", type = "mean_subject")
-  } else {
-    sig <- insight::get_variance_distribution(model, verbose = FALSE)
-    pvar <- mu * (1 + sig)
-    pred <- stats::predict(model, type = "response")
-  }
-
-  # pearson residuals
-  (insight::get_response(model, verbose = FALSE) - pred) / sqrt(pvar)
-}
-
-
-
-.resid_zip <- function(model, faminfo) {
-  if (inherits(model, "glmmTMB")) {
-    p <- stats::predict(model, type = "zprob")
-    mu <- stats::predict(model, type = "conditional")
-    pvar <- (1 - p) * (mu + p * mu^2)
-    pred <- stats::predict(model, type = "response") ## (1 - p) * mu
-  } else if (inherits(model, "MixMod")) {
-    p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(model, type = "mean_subject")
-    pvar <- (1 - p) * (mu + p * mu^2)
-    pred <- stats::predict(model, type_pred = "response", type = "mean_subject")
-  } else {
-    sig <- insight::get_variance_distribution(model, verbose = FALSE)
-    pvar <- mu * (1 + sig)
-    pred <- stats::predict(model, type = "response")
-  }
-
-  # pearson residuals
-  (insight::get_response(model) - pred) / sqrt(pvar)
-}
+.p
