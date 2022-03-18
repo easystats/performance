@@ -57,7 +57,7 @@ check_smooth <- function(x, iterations = 400, ...) {
     # Check if any factor
     for (j in 1:nc) if (is.factor(dat[[j]])) ok <- FALSE
     if (!ok) {
-      p.val[k] <- v.obs[k] <- NA # can't do this test with summation convention/factors
+      p.val[s] <- v.obs[s] <- NA # can't do this test with summation convention/factors
       next # Skip iteration
     }
 
@@ -76,7 +76,7 @@ check_smooth <- function(x, iterations = 400, ...) {
       # If tensor product (have to consider scaling)
       if (!is.null(x$smooth[[s]]$margin)) {
         # get the scale factors...
-        beta <- coef(x)[idx]
+        beta <- stats::coef(x)[idx]
         f0 <- mgcv::PredictMat(x$smooth[[s]], dat) %*% beta
         gr.f <- rep(0, ncol(dat))
         for (i in 1:nc) {
@@ -124,6 +124,7 @@ check_smooth <- function(x, iterations = 400, ...) {
 #' @keywords internal
 mgcv_ExtractData <- function(object, data, knots) {
 
+  insight::check_if_installed("mgcv")
 
   # https://github.com/cran/mgcv/blob/c263c882daf8b2ed55e6e3d1fb712cf20d79a710/R/smooth.r#L318
   get.var <- function(txt, data, vecMat = TRUE)
@@ -176,7 +177,7 @@ mgcv_ExtractData <- function(object, data, knots) {
     n <- length(dat[[1]])
     X <- matrix(unlist(dat), n, m)
     if (is.numeric(X)) {
-      X <- uniquecombs(X)
+      X <- mgcv::uniquecombs(X)
       if (nrow(X) < n * .9) { ## worth the hassle
         for (i in 1:m) dat[[i]] <- X[, i] ## return only unique rows
         attr(dat, "index") <- attr(X, "index") ## index[i] is row of dat[[i]] containing original row i
@@ -198,6 +199,9 @@ mgcv_ExtractData <- function(object, data, knots) {
 # https://github.com/cran/mgcv/blob/2db5036f529dff6ec8a4a4ba0d2df1804a4d2668/R/sparse.r#L129
 #' @keywords internal
 mgcv_nearest <- function(k, X, gt.zero = FALSE, get.a = FALSE) {
+
+  insight::check_if_installed("mgcv")
+
   ## The rows of X contain coordinates of points.
   ## For each point, this routine finds its k nearest
   ## neighbours, returning a list of 2, n by k matrices:
@@ -211,7 +215,7 @@ mgcv_nearest <- function(k, X, gt.zero = FALSE, get.a = FALSE) {
   ## than zero...
 
   if (gt.zero) {
-    Xu <- uniquecombs(X)
+    Xu <- mgcv::uniquecombs(X)
     ind <- attr(Xu, "index") ## Xu[ind,] == X
   } else {
     Xu <- X

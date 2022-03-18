@@ -18,10 +18,18 @@ if (requiet("testthat") && requiet("performance") && requiet("mgcv") && requiet(
     # Deterministic
     expect_equal(max(rez1$EDF_max - c1$`k'`), 0, tolerance = 0)
     expect_equal(max(rez1$EDF - c1$edf), 0, tolerance = 0)
+    expect_equal(max(rez2$EDF_max - c2$`k'`), 0, tolerance = 0)
+    expect_equal(max(rez2$EDF - c2$edf), 0, tolerance = 0)
+    expect_equal(max(rez3$EDF_max - c3$`k'`), 0, tolerance = 0)
+    expect_equal(max(rez3$EDF - c3$edf), 0, tolerance = 0)
 
     # Random
     expect_equal(max(rez1$k - c1$`k-index`), 0, tolerance = 0.1)
     expect_equal(max(rez1$p - c1$`p-value`), 0, tolerance = 0.1)
+    expect_equal(max(rez2$k - c2$`k-index`), 0, tolerance = 0.1)
+    expect_equal(max(rez2$p - c2$`p-value`), 0, tolerance = 0.1)
+    expect_equal(max(rez3$k - c3$`k-index`), 0, tolerance = 0.1)
+    expect_equal(max(rez3$p - c3$`p-value`), 0, tolerance = 0.1)
   })
 
   test_that("check_smooth | brms", {
