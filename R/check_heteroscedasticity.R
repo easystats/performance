@@ -121,4 +121,3 @@ plot.check_heteroscedasticity <- function(x, ...) {
 .sigma.BFBayesFactor <- function(x) {
   mean(.get_bfbf_predictions(x)[["sigma"]])
 }
-.p
