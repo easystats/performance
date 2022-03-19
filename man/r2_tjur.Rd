@@ -4,10 +4,12 @@
 \alias{r2_tjur}
 \title{Tjur's R2 - coefficient of determination (D)}
 \usage{
-r2_tjur(model)
+r2_tjur(model, ...)
 }
 \arguments{
 \item{model}{Binomial Model.}
+
+\item{...}{Arguments from other functions, usually only used internally.}
 }
 \value{
 A named vector with the R2 value.

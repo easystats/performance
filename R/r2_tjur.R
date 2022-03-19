@@ -8,6 +8,7 @@
 #'   can be read like any other (pseudo-)R2 value.
 #'
 #' @param model Binomial Model.
+#' @param ... Arguments from other functions, usually only used internally.
 #'
 #' @return A named vector with the R2 value.
 #'
@@ -17,9 +18,13 @@
 #' @references Tjur, T. (2009). Coefficients of determination in logistic regression models - A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
 #'
 #' @export
-r2_tjur <- function(model) {
+r2_tjur <- function(model, ...) {
+  if (is.null(info <- list(...)$model_info)) {
+    info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
+
   # check for valid object class
-  if (!insight::model_info(model, verbose = FALSE)$is_binomial) {
+  if (!info$is_binomial) {
     stop("`model` must be binomial.", call. = FALSE)
   }
 

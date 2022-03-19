@@ -248,7 +248,7 @@ r2.glm <- function(model, verbose = TRUE, ...) {
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
   } else if (info$is_logit && info$is_bernoulli) {
-    out <- list("R2_Tjur" = r2_tjur(model))
+    out <- list("R2_Tjur" = r2_tjur(model, ...))
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
@@ -258,7 +258,7 @@ r2.glm <- function(model, verbose = TRUE, ...) {
     }
     out <- NULL
   } else {
-    out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+    out <- list("R2_Nagelkerke" = r2_nagelkerke(model, ...))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
     attr(out, "model_type") <- "Generalized Linear"
     class(out) <- c("r2_pseudo", class(out))
