@@ -5,6 +5,7 @@
 #'   from a model with binary or count outcome.
 #'
 #' @param model Model with binary or count outcome.
+#' @param ... Arguments from other functions, usually only used internally.
 #' @inheritParams model_performance.lm
 #'
 #' @return A list with three elements, the logarithmic, quadratic/Brier and spherical score.
@@ -49,13 +50,15 @@
 #' }
 #' }
 #' @export
-performance_score <- function(model, verbose = TRUE) {
+performance_score <- function(model, verbose = TRUE, ...) {
   # check special case
   if (inherits(model, c("logitor", "logitmfx", "probitmfx", "negbinirr", "negbinmfx", "poissonirr", "poissonmfx"))) {
     model <- model$fit
   }
 
-  minfo <- insight::model_info(model, verbose = verbose)
+  if (is.null(minfo <- list(...)$model_info)) {
+    minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
 
   if (minfo$is_ordinal || minfo$is_multinomial) {
     if (verbose) insight::print_color("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.\n", "red")

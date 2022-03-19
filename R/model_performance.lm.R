@@ -65,7 +65,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if ("AIC" %in% toupper(metrics)) {
     out$AIC <- tryCatch(
       {
-        performance_aic(model)
+        performance_aic(model, model_info = info)
       },
       error = function(e) {
         NULL
@@ -101,7 +101,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(c("R2", "R2_ADJ") %in% toupper(metrics))) {
     R2 <- tryCatch(
       {
-        r2(model, verbose = verbose)
+        r2(model, verbose = verbose, model_info = info)
       },
       error = function(e) {
         NULL

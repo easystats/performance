@@ -66,7 +66,9 @@ performance_aic <- function(x, ...) {
 #' @rdname performance_aicc
 #' @export
 performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
-  info <- suppressWarnings(insight::model_info(x))
+  if (is.null(info <- list(...)$model_info)) {
+    info <- suppressWarnings(insight::model_info(x, verbose = FALSE))
+  }
 
   # check ML estimator
   REML <- identical(estimator, "REML")

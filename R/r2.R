@@ -62,12 +62,16 @@ r2 <- function(model, ...) {
 r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRUE, ...) {
   ci_method <- match.arg(ci_method, choices = c("analytical", "bootstrap"))
 
+  if (is.null(minfo <- list(...)$model_info)) {
+    minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
+
   # check input
   ci <- .check_r2_ci_args(ci, ci_method, "bootstrap", verbose)
 
   out <- tryCatch(
     {
-      if (insight::model_info(model)$is_binomial) {
+      if (minfo$is_binomial) {
         resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
         resp <- .factor_to_numeric(insight::get_response(model, verbose = FALSE))
@@ -237,7 +241,9 @@ r2.mlm <- function(model, ...) {
 
 #' @export
 r2.glm <- function(model, verbose = TRUE, ...) {
-  info <- insight::model_info(model)
+  if (is.null(info <- list(...)$model_info)) {
+    info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
 
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
