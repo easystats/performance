@@ -1,7 +1,7 @@
 # prepare data for VIF plot ----------------------------------
 
 .diag_vif <- function(model) {
-  dat <- datawizard::compact_list(check_collinearity(model))
+  dat <- insight::compact_list(check_collinearity(model))
   if (is.null(dat)) {
     return(NULL)
   }

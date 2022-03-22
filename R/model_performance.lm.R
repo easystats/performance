@@ -191,7 +191,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
 
-  out <- as.data.frame(datawizard::compact_list(out, remove_na = TRUE))
+  out <- as.data.frame(insight::compact_list(out, remove_na = TRUE))
 
   # check if model was actually supported...
   if (nrow(out) == 0 || ncol(out) == 0) {

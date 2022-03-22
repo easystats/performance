@@ -111,7 +111,7 @@ plot.check_heteroscedasticity <- function(x, ...) {
     }
   )
 
-  if (datawizard::is_empty_object(s)) {
+  if (insight::is_empty_object(s)) {
     s <- insight::get_variance_residual(x, verbose = FALSE)
   }
 

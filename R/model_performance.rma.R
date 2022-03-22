@@ -114,7 +114,7 @@ model_performance.rma <- function(model, metrics = "all", estimator = "ML", verb
     }
   }
 
-  out <- as.data.frame(datawizard::compact_list(out))
+  out <- as.data.frame(insight::compact_list(out))
   row.names(out) <- NULL
   class(out) <- c("performance_model", class(out))
 
