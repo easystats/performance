@@ -86,7 +86,6 @@ jobs:
         env:
           _R_CHECK_CRAN_INCOMING_: false
           _R_CHECK_FORCE_SUGGESTS_: false
-          _R_CHECK_DEPENDS_ONLY_: true
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
