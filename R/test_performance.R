@@ -160,17 +160,19 @@
 #' # Equivalent to anova(m1, m2, m3, test='LRT')
 #' test_likelihoodratio(m1, m2, m3, estimator = "OLS")
 #'
-#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
+#' if (require("CompQuadForm")) {
+#'   test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
 #'
-#' # Non-nested Models
-#' # -----------------
-#' m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-#' m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
-#' m3 <- lm(Sepal.Length ~ Species, data = iris)
+#'   # Non-nested Models
+#'   # -----------------
+#'   m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+#'   m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+#'   m3 <- lm(Sepal.Length ~ Species, data = iris)
 #'
-#' test_performance(m1, m2, m3)
-#' test_bf(m1, m2, m3)
-#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
+#'   test_performance(m1, m2, m3)
+#'   test_bf(m1, m2, m3)
+#'   test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
+#' }
 #'
 #' # Tweak the output
 #' # ----------------
