@@ -54,12 +54,12 @@ Testing whether models are "different" in terms of accuracy or explanatory
 power is a delicate and often complex procedure, with many limitations and
 prerequisites. Moreover, many tests exist, each coming with its own
 interpretation, and set of strengths and weaknesses.
-\cr \cr
+
 The \code{test_performance()} function runs the most relevant and appropriate
 tests based on the type of input (for instance, whether the models are
 \emph{nested} or not). However, it still requires the user to understand what the
 tests are and what they do in order to prevent their misinterpretation. See
-the \strong{details} section for more information regarding the different tests
+the \emph{Details} section for more information regarding the different tests
 and their interpretation.
 }
 \details{
@@ -78,12 +78,12 @@ whether a more parsimonious model, or whether adding a predictor, results in
 a significant difference in the model's performance. In this case, models are
 usually compared \emph{sequentially}: m2 is tested against m1, m3 against m2,
 m4 against m3, etc.
-\cr\cr
+
 Two models are considered as \emph{"non-nested"} if their predictors are
 different. For instance, \code{model1 (y ~ x1 + x2)} and \code{model2 (y ~ x3 + x4)}.
 In the case of non-nested models, all models are usually compared
 against the same \emph{reference} model (by default, the first of the list).
-\cr\cr
+
 Nesting is detected via the \code{insight::is_nested_models()} function.
 Note that, apart from the nesting, in order for the tests to be valid,
 other requirements have often to be the fulfilled. For instance, outcome
@@ -97,7 +97,7 @@ The estimator is relevant when comparing regression models using
 method as \code{anova(..., test = "LRT")} implemented in base R, i.e., scaling
 by n-k (the unbiased OLS estimator) and using this estimator under the
 alternative hypothesis. If \code{estimator = "ML"}, which is for instance used
-by \code{lrtest(...)} in package \pkg{lmtest}, the scaling is done by n (the
+by \code{lrtest(...)} in package \strong{lmtest}, the scaling is done by n (the
 biased ML estimator) and the estimator under the null hypothesis. In
 moderately large samples, the differences should be negligible, but it
 is possible that OLS would perform slightly better in small samples with
@@ -121,7 +121,6 @@ Set the \code{estimator} argument explicitely to override the default behaviour.
 }
 
 \subsection{Tests Description}{
-
 \itemize{
 \item \strong{Bayes factor for Model Comparison} - \code{test_bf()}: If all
 models were fit from the same data, the returned \code{BF} shows the Bayes
@@ -130,15 +129,15 @@ the reference model (which depends on whether the models are nested or
 not). Check out
 \href{https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models}{this vignette}
 for more details.
-
 \item \strong{Wald's F-Test} - \code{test_wald()}: The Wald test is a rough
 approximation of the Likelihood Ratio Test. However, it is more applicable
 than the LRT: you can often run a Wald test in situations where no other
 test can be run. Importantly, this test only makes statistical sense if the
-models are nested. \cr \cr Note: this test is also available in base R
-through the \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
-as a statistic and its associated \code{p-value}.
+models are nested.
 
+Note: this test is also available in base R
+through the \code{\link[=anova]{anova()}} function. It returns an \code{F-value} column
+as a statistic and its associated p-value.
 \item \strong{Likelihood Ratio Test (LRT)} - \code{test_likelihoodratio()}:
 The LRT tests which model is a better (more likely) explanation of the
 data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if
@@ -147,10 +146,14 @@ nested models. However, maximum likelihood tests make stronger assumptions
 than method of moments tests like the F-test, and in turn are more
 efficient. Agresti (1990) suggests that you should use the LRT instead of
 the Wald test for small sample sizes (under or about 30) or if the
-parameters are large. \cr \cr Note: for regression models, this is similar to
+parameters are large.
+
+Note: for regression models, this is similar to
 \code{anova(..., test="LRT")} (on models) or \code{lmtest::lrtest(...)}, depending
-on the \code{estimator} argument. For \code{lavaan} models (SEM, CFA), the function
-calls \code{lavaan::lavTestLRT()}. \cr \cr For models with log-transformed
+on the \code{estimator} argument. For \strong{lavaan} models (SEM, CFA), the function
+calls \code{lavaan::lavTestLRT()}.
+
+For models with log-transformed
 response variables, \code{logLik()} returns a wrong log-likelihood. However,
 \code{test_likelihoodratio()} calls \code{insight::get_loglikelihood()} with
 \code{check_response=TRUE}, which returns a corrected log-likelihood value
@@ -158,7 +161,6 @@ for models with transformed response variables (like log- or
 sqrt-transformation). Furthermore, since the LRT only accepts nested
 models (i.e. models that differ in their fixed effects), the computed
 log-likelihood is always based on the ML estimator, not on the REML fits.
-
 \item \strong{Vuong's Test} - \code{test_vuong()}: Vuong's (1989) test can
 be used both for nested and non-nested models, and actually consists of two
 tests.
@@ -170,8 +172,9 @@ significant, it means the models are distinguishable.
 \item The \strong{Robust Likelihood Test} (the \code{LR} column and its
 associated p-value) indicates whether each model fits better than the
 reference model. If the models are nested, then the test works as a robust
-LRT. The code for this function is adapted from the \code{nonnest2}
-package, and all credit go to their authors.}
+LRT. The code for this function is adapted from the \strong{nonnest2}
+package, and all credit go to their authors.
+}
 }
 }
 }

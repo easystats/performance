@@ -4,9 +4,9 @@
 #'
 #' @param model A model.
 #' @param metrics Can be `"all"`, `"common"` or a character vector of
-#'   metrics to be computed (some of `c("AIC", "AICc", "BIC", "R2",
-#'   "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")`). `"common"`
-#'   will compute AIC, BIC, R2 and RMSE.
+#'   metrics to be computed (one or more of `"AIC"`, `"AICc"`, `"BIC"`, `"R2"`,
+#'   `"R2_adj"`, `"RMSE"`, `"SIGMA"`, `"LOGLOSS"`, `"PCP"`, `"SCORE"`).
+#'   `"common"` will compute AIC, BIC, R2 and RMSE.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'

@@ -1,17 +1,16 @@
 #' @title Test if models are different
 #'
 #' @description
-#'
 #' Testing whether models are "different" in terms of accuracy or explanatory
 #' power is a delicate and often complex procedure, with many limitations and
 #' prerequisites. Moreover, many tests exist, each coming with its own
 #' interpretation, and set of strengths and weaknesses.
-#' \cr \cr
+#'
 #' The `test_performance()` function runs the most relevant and appropriate
 #' tests based on the type of input (for instance, whether the models are
 #' *nested* or not). However, it still requires the user to understand what the
 #' tests are and what they do in order to prevent their misinterpretation. See
-#' the **details** section for more information regarding the different tests
+#' the *Details* section for more information regarding the different tests
 #' and their interpretation.
 #'
 #' @param ... Multiple model objects.
@@ -45,12 +44,12 @@
 #' a significant difference in the model's performance. In this case, models are
 #' usually compared *sequentially*: m2 is tested against m1, m3 against m2,
 #' m4 against m3, etc.
-#' \cr\cr
+#'
 #' Two models are considered as *"non-nested"* if their predictors are
 #' different. For instance, `model1 (y ~ x1 + x2)` and `model2 (y ~ x3 + x4)`.
 #' In the case of non-nested models, all models are usually compared
 #' against the same *reference* model (by default, the first of the list).
-#' \cr\cr
+#'
 #' Nesting is detected via the `insight::is_nested_models()` function.
 #' Note that, apart from the nesting, in order for the tests to be valid,
 #' other requirements have often to be the fulfilled. For instance, outcome
@@ -64,7 +63,7 @@
 #' method as `anova(..., test = "LRT")` implemented in base R, i.e., scaling
 #' by n-k (the unbiased OLS estimator) and using this estimator under the
 #' alternative hypothesis. If `estimator = "ML"`, which is for instance used
-#' by `lrtest(...)` in package \pkg{lmtest}, the scaling is done by n (the
+#' by `lrtest(...)` in package **lmtest**, the scaling is done by n (the
 #' biased ML estimator) and the estimator under the null hypothesis. In
 #' moderately large samples, the differences should be negligible, but it
 #' is possible that OLS would perform slightly better in small samples with
@@ -89,8 +88,7 @@
 #'
 #' \subsection{Tests Description}{
 #'
-#' \itemize{
-#'   \item **Bayes factor for Model Comparison** - `test_bf()`: If all
+#' - **Bayes factor for Model Comparison** - `test_bf()`: If all
 #'   models were fit from the same data, the returned `BF` shows the Bayes
 #'   Factor (see `bayestestR::bayesfactor_models()`) for each model against
 #'   the reference model (which depends on whether the models are nested or
@@ -98,15 +96,17 @@
 #'   [this vignette](https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models)
 #'   for more details.
 #'
-#'   \item **Wald's F-Test** - `test_wald()`: The Wald test is a rough
+#' - **Wald's F-Test** - `test_wald()`: The Wald test is a rough
 #'   approximation of the Likelihood Ratio Test. However, it is more applicable
 #'   than the LRT: you can often run a Wald test in situations where no other
 #'   test can be run. Importantly, this test only makes statistical sense if the
-#'   models are nested. \cr \cr Note: this test is also available in base R
-#'   through the [`anova()`][anova] function. It returns an `F-value` column
-#'   as a statistic and its associated `p-value`.
+#'   models are nested.
 #'
-#'   \item **Likelihood Ratio Test (LRT)** - `test_likelihoodratio()`:
+#'   Note: this test is also available in base R
+#'   through the [`anova()`][anova] function. It returns an `F-value` column
+#'   as a statistic and its associated p-value.
+#'
+#' - **Likelihood Ratio Test (LRT)** - `test_likelihoodratio()`:
 #'   The LRT tests which model is a better (more likely) explanation of the
 #'   data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if
 #'   not equivalent) to the Wald test and, similarly, only makes sense for
@@ -114,10 +114,14 @@
 #'   than method of moments tests like the F-test, and in turn are more
 #'   efficient. Agresti (1990) suggests that you should use the LRT instead of
 #'   the Wald test for small sample sizes (under or about 30) or if the
-#'   parameters are large. \cr \cr Note: for regression models, this is similar to
+#'   parameters are large.
+#'
+#'   Note: for regression models, this is similar to
 #'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`, depending
-#'   on the `estimator` argument. For `lavaan` models (SEM, CFA), the function
-#'   calls `lavaan::lavTestLRT()`. \cr \cr For models with log-transformed
+#'   on the `estimator` argument. For **lavaan** models (SEM, CFA), the function
+#'   calls `lavaan::lavTestLRT()`.
+#'
+#'   For models with log-transformed
 #'   response variables, `logLik()` returns a wrong log-likelihood. However,
 #'   `test_likelihoodratio()` calls `insight::get_loglikelihood()` with
 #'   `check_response=TRUE`, which returns a corrected log-likelihood value
@@ -126,20 +130,20 @@
 #'   models (i.e. models that differ in their fixed effects), the computed
 #'   log-likelihood is always based on the ML estimator, not on the REML fits.
 #'
-#'   \item **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
+#' - **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
 #'   tests.
-#'   \itemize{
-#'   \item The **Test of Distinguishability** (the `Omega2` column and
-#'   its associated p-value) indicates whether or not the models can possibly be
-#'   distinguished on the basis of the observed data. If its p-value is
-#'   significant, it means the models are distinguishable.
-#'   \item The **Robust Likelihood Test** (the `LR` column and its
-#'   associated p-value) indicates whether each model fits better than the
-#'   reference model. If the models are nested, then the test works as a robust
-#'   LRT. The code for this function is adapted from the `nonnest2`
-#'   package, and all credit go to their authors.}
-#' }
+#'
+#'   - The **Test of Distinguishability** (the `Omega2` column and
+#'     its associated p-value) indicates whether or not the models can possibly be
+#'     distinguished on the basis of the observed data. If its p-value is
+#'     significant, it means the models are distinguishable.
+#'
+#'   - The **Robust Likelihood Test** (the `LR` column and its
+#'     associated p-value) indicates whether each model fits better than the
+#'     reference model. If the models are nested, then the test works as a robust
+#'     LRT. The code for this function is adapted from the **nonnest2**
+#'     package, and all credit go to their authors.
 #' }
 #'
 #' @examples
