@@ -72,7 +72,7 @@ statistic and designation computations has only been tested to R version
 }
 
 \examples{
-if (require("domir")) {
+if (require("domir") && (R.version$major > 3 | (R.version$major == 3 && R.version$minor >= 5))) {
   model <- glm(vs ~ cyl + carb + mpg, data = datasets::mtcars,
            family = binomial())
 
