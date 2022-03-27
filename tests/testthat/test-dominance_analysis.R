@@ -1,4 +1,5 @@
-if (requiet("testthat") && requiet("performance") && requiet("domir")) {
+if (requiet("testthat") && requiet("performance") && requiet("domir") &&
+    (R.version$major > 3 | (R.version$major == 3 && R.version$minor >= 5))) {
   data(mtcars)
   DA_test_model <- lm(mpg ~ vs + cyl + carb, data = mtcars)
   DA_performance <- dominance_analysis(DA_test_model)

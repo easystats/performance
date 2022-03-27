@@ -47,9 +47,9 @@ determinations can be obtained.
 \section{Notes}{
 
 
-The input model is parsed using \code{insight::find_predictors} and does not
+The input model is parsed using \code{insight::find_predictors}, does not
 yet support interactions, transformations, or offsets applied in the
-R formula and will fail with an error when detected.
+R formula, and will fail with an error if any such terms are detected.
 
 The model submitted must accept an formula object as a \code{formula}
 argument.  In addition, the model object must accept the data on which
@@ -65,6 +65,10 @@ or "is_hurdle" are not supported at current.
 
 When \code{performance::r2} returns multiple values, only the first is used
 by default.
+
+The underlying \code{domir::domin} function that implements the dominance
+statistic and designation computations has only been tested to R version
+3.5 and will fail with an error if called in R versions < 3.5.
 }
 
 \examples{

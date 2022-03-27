@@ -36,9 +36,9 @@
 #'
 #' @section Notes:
 #'
-#' The input model is parsed using `insight::find_predictors` and does not
+#' The input model is parsed using `insight::find_predictors`, does not
 #' yet support interactions, transformations, or offsets applied in the
-#' R formula and will fail with an error when detected.
+#' R formula, and will fail with an error if any such terms are detected.
 #'
 #' The model submitted must accept an formula object as a `formula`
 #' argument.  In addition, the model object must accept the data on which
@@ -54,6 +54,10 @@
 #'
 #' When `performance::r2` returns multiple values, only the first is used
 #' by default.
+#'
+#' The underlying `domir::domin` function that implements the dominance
+#' statistic and designation computations has only been tested to R version
+#' 3.5 and will fail with an error if called in R versions < 3.5.
 #'
 #' @references
 #' \itemize{
@@ -114,6 +118,8 @@ dominance_analysis <- function(model, ...) {
   if (!all(insight::find_predictors(model)$conditional %in% attr(stats::terms(insight::find_formula(model)$conditional), "term.labels"))) stop("predictors do not match terms.\nThis usually occurs when there are in-formula predictor transformations such as log(x) or I(x+z).")
 
   if (!is.null(insight::find_offset(model))) stop("offsets in the model formula are not allowed.")
+
+  if (!(R.version$major > 3 | (R.version$major == 3 && R.version$minor >= 5))) stop("R versions < 3.5 not supported")
 
   # Collect components for arguments
   ivs <- insight::find_predictors(model, flatten = TRUE)
