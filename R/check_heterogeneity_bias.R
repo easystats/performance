@@ -14,7 +14,7 @@
 #'
 #' @seealso
 #' For further details, read the vignette
-#' <https://easystats.github.io/datawizard/articles/demean.html> and also
+#' <https://easystats.github.io/parameters/articles/demean.html> and also
 #' see documentation for `?datawizard::demean`.
 #'
 #' @examples
