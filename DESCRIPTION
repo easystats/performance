@@ -60,7 +60,7 @@ Depends:
     R (>= 3.4)
 Imports:
     bayestestR (>= 0.11.5),
-    insight (>= 0.16.0.4),
+    insight (>= 0.17.0),
     datawizard (>= 0.3.0),
     methods,
     stats,
@@ -126,4 +126,3 @@ Language: en-US
 RoxygenNote: 7.1.2
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
-Remotes: easystats/insight, easystats/see
