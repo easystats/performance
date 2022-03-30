@@ -4,12 +4,14 @@
 \alias{performance_score}
 \title{Proper Scoring Rules}
 \usage{
-performance_score(model, verbose = TRUE)
+performance_score(model, verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{Model with binary or count outcome.}
 
 \item{verbose}{Toggle off warnings.}
+
+\item{...}{Arguments from other functions, usually only used internally.}
 }
 \value{
 A list with three elements, the logarithmic, quadratic/Brier and spherical score.

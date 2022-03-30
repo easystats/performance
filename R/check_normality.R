@@ -65,7 +65,7 @@ check_normality.default <- function(x, ...) {
   attr(p.val, "effects") <- "fixed"
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
-  invisible(p.val)
+  p.val
 }
 
 
@@ -153,7 +153,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   attr(p.val, "effects") <- effects
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
-  invisible(p.val)
+  p.val
 }
 
 

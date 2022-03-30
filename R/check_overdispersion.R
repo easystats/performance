@@ -226,8 +226,8 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   }
 
   rdf <- stats::df.residual(x)
-  rp <- tryCatch(.pearson_residuals(x), error = function(e) NULL)
-  if (is.null(rp)) {
+  rp <- insight::get_residuals(x, type = "pearson")
+  if (insight::is_empty_object(rp)) {
     Pearson.chisq <- NA
     prat <- NA
     pval <- NA

@@ -15,32 +15,29 @@ r2_coxsnell(model, ...)
 A named vector with the R2 value.
 }
 \description{
-Calculates the pseudo-R2 value based on the proposal from \cite{Cox & Snell
-(1989)}.
+Calculates the pseudo-R2 value based on the proposal from \emph{Cox & Snell (1989)}.
 }
 \details{
-This index was proposed by \cite{Cox & Snell (1989, pp. 208-9)} and,
-apparently independently, by \cite{Magee (1990)}; but had been suggested
-earlier for binary response models by \cite{Maddala (1983)}. However, this
+This index was proposed by \emph{Cox & Snell (1989, pp. 208-9)} and,
+apparently independently, by \emph{Magee (1990)}; but had been suggested
+earlier for binary response models by \emph{Maddala (1983)}. However, this
 index achieves a maximum of less than 1 for discrete models (i.e. models
 whose likelihood is a product of probabilities) which have a maximum of 1,
-instead of densities, which can become infinite \cite{(Nagelkerke, 1991)}.
+instead of densities, which can become infinite \emph{(Nagelkerke, 1991)}.
 }
 \examples{
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_coxsnell(model)
+
 }
 \references{
 \itemize{
 \item Cox, D. R., Snell, E. J. (1989). Analysis of binary data (Vol. 32).
 Monographs on Statistics and Applied Probability.
-
 \item Magee, L. (1990). R 2 measures based on Wald and likelihood ratio
 joint significance tests. The American Statistician, 44(3), 250-253.
-
 \item Maddala, G. S. (1986). Limited-dependent and qualitative variables in
 econometrics (No. 3). Cambridge university press.
-
 \item Nagelkerke, N. J. (1991). A note on a general definition of the
 coefficient of determination. Biometrika, 78(3), 691-692.
 }

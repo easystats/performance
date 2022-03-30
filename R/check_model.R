@@ -12,13 +12,14 @@
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
-#'   and plotted. May be one or more of
-#'   `"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"`.
-#'   `"reqq"` is a QQ-plot for random effects and only available for mixed
-#'   models.
-#'   `"ncv"` is an alias for `"linearity"`, and checks for non-constant
-#'   variance, i.e. for heteroscedasticity, as well as the linear relationship.
-#'   By default, all possible checks are performed and plotted.
+#'   and plotted. May be one or more of `"all"`, `"vif"`, `"qq"`, `"normality"`,
+#'   `"linearity"`, `"ncv"`, `"homogeneity"`, `"outliers"`, `"reqq"`, `"pp_check"`,
+#'   `"binned_residuals"` or `"overdispersion"`, Not that not all check apply
+#'   to all type of models (see 'Details'). `"reqq"` is a QQ-plot for random
+#'   effects and only available for mixed models. `"ncv"` is an alias for
+#'   `"linearity"`, and checks for non-constant variance, i.e. for
+#'   heteroscedasticity, as well as the linear relationship. By default, all
+#'   possible checks are performed and plotted.
 #' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
 #'   Scalar from 0 to 1.
 #' @param colors Character vector with color codes (hex-format). Must be of
@@ -239,7 +240,7 @@ check_model.model_fit <- function(x,
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
 
-  dat <- datawizard::compact_list(dat)
+  dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
@@ -270,7 +271,7 @@ check_model.model_fit <- function(x,
     dat$OVERDISPERSION <- .diag_overdispersion(model)
   }
 
-  dat <- datawizard::compact_list(dat)
+  dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
@@ -329,19 +330,19 @@ check_model.model_fit <- function(x,
     # remove intercept from output for ridgeline plot.
     # this would increase the range of the scale too much
 
-    if (datawizard::object_has_names(d1, "(Intercept)")) {
+    if (insight::object_has_names(d1, "(Intercept)")) {
       d1 <- datawizard::data_remove(d1, "(Intercept)")
     }
 
-    if (datawizard::object_has_names(d2, "(Intercept)")) {
+    if (insight::object_has_names(d2, "(Intercept)")) {
       d2 <- datawizard::data_remove(d2, "(Intercept)")
     }
 
-    if (datawizard::object_has_names(d1, "sigma")) {
+    if (insight::object_has_names(d1, "sigma")) {
       d1 <- datawizard::data_remove(d1, "sigma")
     }
 
-    if (datawizard::object_has_names(d2, "sigma")) {
+    if (insight::object_has_names(d2, "sigma")) {
       d2 <- datawizard::data_remove(d2, "sigma")
     }
 
