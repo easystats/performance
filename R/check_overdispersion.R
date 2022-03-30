@@ -85,6 +85,31 @@ check_overdispersion.default <- function(x, ...) {
 # Methods -----------------------------
 
 #' @export
+plot.check_overdisp <- function(x, ...) {
+  insight::check_if_installed("see", "for overdispersion plots")
+  obj_name <- attr(x, "object_name", exact = TRUE)
+  model <- NULL
+
+  if (!is.null(obj_name)) {
+    model <- tryCatch(get(obj_name, envir = parent.frame()),
+                      error = function(e) NULL)
+    if (is.null(model)) {
+      # second try, global env
+      model <- tryCatch(get(obj_name, envir = globalenv()),
+                        error = function(e) NULL)
+    }
+  }
+  if (!is.null(model)) {
+    x <- .diag_overdispersion(model)
+    class(x) <- c("see_check_overdisp", "data.frame")
+    attr(x, "colors") <- list(...)$colors
+    attr(x, "line_size") <- list(...)$size_line
+    attr(x, "overdisp_type") <- list(...)$plot_type
+    plot(x, ...)
+  }
+}
+
+#' @export
 print.check_overdisp <- function(x, digits = 3, ...) {
   orig_x <- x
 
