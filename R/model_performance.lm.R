@@ -244,6 +244,9 @@ model_performance.felm <- model_performance.lm
 model_performance.iv_robust <- model_performance.lm
 
 #' @export
+model_performance.lm_robust <- model_performance.lm
+
+#' @export
 model_performance.multinom <- model_performance.lm
 
 #' @export

@@ -1,3 +1,9 @@
+# performance 0.9.1
+
+## Changes to functions
+
+* `check_overdispersion()` gets a `plot()` method.
+
 # performance 0.9.0
 
 ## New functions
