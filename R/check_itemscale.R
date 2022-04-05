@@ -100,3 +100,30 @@ check_itemscale <- function(x) {
   class(out) <- unique(c("check_itemscale", class(out)))
   out
 }
+
+
+
+# methods -------------------------------------
+
+#' @export
+print.check_itemscale <- function(x, digits = 2, ...) {
+  insight::print_color("# Description of (Sub-)Scales", "blue")
+
+  cat(insight::export_table(
+    lapply(1:length(x), function(i) {
+      out <- x[[i]]
+      attr(out, "table_caption") <- c(sprintf("\nComponent %i", i), "red")
+      attr(out, "table_footer") <- c(sprintf(
+        "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+        attributes(out)$item_intercorrelation,
+        attributes(out)$cronbachs_alpha
+      ), "yellow")
+
+      out
+    }),
+    digits = digits,
+    format = "text",
+    missing = "<NA>",
+    zap_small = TRUE
+  ))
+}

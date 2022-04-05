@@ -12,6 +12,11 @@
 #' incorporates a correction for small sample sizes.
 #'
 #' @param x A model object.
+#' @param estimator Only for linear models. Corresponds to the different
+#'   estimators for the standard deviation of the errors. If `estimator = "ML"`
+#'   (default), the scaling is done by n (the biased ML estimator), which is
+#'   then equivalent to using `AIC(logLik())`. Setting it to `"REML"` will give
+#'   the same results as `AIC(logLik(..., REML = TRUE))`.
 #' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
@@ -60,38 +65,42 @@ performance_aic <- function(x, ...) {
 
 #' @rdname performance_aicc
 #' @export
-performance_aic.default <- function(x, verbose = TRUE, ...) {
-  info <- suppressWarnings(insight::model_info(x))
-  aic <- NULL
-
-  # check if we have transformed response, and if so, adjust LogLik
-  response_transform <- insight::find_transformation(x)
-
-  if (!is.null(response_transform) && !identical(response_transform, "identity")) {
-    aic <- tryCatch(.aic_transformed_response(x, response_transform, ...), error = function(e) NULL)
-    if (is.null(aic) && isTRUE(verbose)) {
-      warning(insight::format_message("Could not compute AIC for models with transformed response. AIC value is probably inaccurate."), call. = FALSE)
-    }
+performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
+  if (is.null(info <- list(...)$model_info)) {
+    info <- suppressWarnings(insight::model_info(x, verbose = FALSE))
   }
 
-  if (is.null(aic)) {
-    # special handling for tweedie
-    if (info$family == "Tweedie") {
-      insight::check_if_installed("tweedie")
-      aic <- suppressMessages(tweedie::AICtweedie(x))
-    } else {
-      # all other models...
-      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
-      if (is.null(aic)) {
-        aic <- tryCatch(
-          -2 * as.numeric(insight::get_loglikelihood(x)) + 2 * insight::get_df(x, type = "model"),
-          error = function(e) NULL
-        )
-      }
-    }
-  }
+  # check ML estimator
+  REML <- identical(estimator, "REML")
+  if (isTRUE(list(...)$REML)) REML <- TRUE
 
+  # special handling for tweedie
+  if (info$family == "Tweedie") {
+    insight::check_if_installed("tweedie")
+    aic <- suppressMessages(tweedie::AICtweedie(x))
+  } else {
+    # all other models...
+    aic <- tryCatch(
+      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
+      error = function(e) NULL
+    )
+  }
   aic
+}
+
+
+# mixed models ------------------------------------
+
+
+#' @export
+performance_aic.lmerMod <- function(x, estimator = "REML", verbose = TRUE, ...) {
+  REML <- identical(estimator, "REML")
+  if (isFALSE(list(...)$REML)) REML <- FALSE
+
+  tryCatch(
+    stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
+    error = function(e) NULL
+  )
 }
 
 
@@ -113,14 +122,8 @@ performance_aic.vglm <- performance_aic.vgam
 
 #' @export
 performance_aic.svyglm <- function(x, ...) {
-  tryCatch(
-    {
-      stats::AIC(x)[["AIC"]]
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  aic <- tryCatch(stats::AIC(x)[["AIC"]], error = function(e) NULL)
+  .adjust_ic_jacobian(x, aic)
 }
 
 #' @export
@@ -169,7 +172,8 @@ performance_aic.poissonmfx <- performance_aic.logitor
 
 #' @export
 performance_aic.bayesx <- function(x, ...) {
-  stats::AIC(x)[["AIC"]]
+  out <- stats::AIC(x)[["AIC"]]
+  .adjust_ic_jacobian(x, out)
 }
 
 # methods ------------------------------------------
@@ -184,9 +188,26 @@ AIC.bife <- function(object, ..., k = 2) {
 
 
 #' @export
-performance_aicc.default <- function(x, ...) {
+performance_aicc.default <- function(x, estimator = "ML", ...) {
+  # check ML estimator
+  REML <- identical(estimator, "REML")
+  if (isTRUE(list(...)$REML)) REML <- TRUE
+
   n <- suppressWarnings(insight::n_obs(x))
-  ll <- insight::get_loglikelihood(x)
+  ll <- insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = TRUE)
+  k <- attr(ll, "df")
+
+  -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
+}
+
+
+#' @export
+performance_aicc.lmerMod <- function(x, estimator = "REML", ...) {
+  REML <- identical(estimator, "REML")
+  if (isFALSE(list(...)$REML)) REML <- FALSE
+
+  n <- suppressWarnings(insight::n_obs(x))
+  ll <- insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = TRUE)
   k <- attr(ll, "df")
 
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
@@ -196,9 +217,10 @@ performance_aicc.default <- function(x, ...) {
 #' @export
 performance_aicc.bife <- function(x, ...) {
   n <- suppressWarnings(insight::n_obs(x))
-  ll <- insight::get_loglikelihood(x)
+  ll <- insight::get_loglikelihood(x, check_response = TRUE)
   nparam <- length(insight::find_parameters(x, effects = "fixed", flatten = TRUE))
   k <- n - nparam
+
   -2 * as.vector(ll) + 2 * k * (n / (n - k - 1))
 }
 
@@ -223,34 +245,48 @@ performance_aicc.rma <- function(x, ...) {
 
 # jacobian / derivate for log models and other transformations ----------------
 
-.aic_transformed_response <- function(x, response_transform, ...) {
 
-  # initialize
-  aic <- NULL
-
-  if (response_transform == "log") {
-    # loglik-transformation. first try, we use dlnorm()
-    aic <- tryCatch(
-      {
-        ll <- insight::get_loglikelihood(x)
-        ll[1] <- sum(stats::dlnorm(
-          x = insight::get_response(x),
-          meanlog = stats::fitted(x),
-          sdlog = insight::get_sigma(x, ci = NULL, verbose = FALSE),
-          log = TRUE
-        ))
-        stats::AIC(ll)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
-
-    # if this does not work for some reason, use slightly less accurate approach
-    if (is.null(aic)) {
-      aic <- stats::AIC(x) + 2 * sum(log(insight::get_response(x)))
+# this function adjusts any IC for models with transformed response variables
+.adjust_ic_jacobian <- function(model, ic) {
+  response_transform <- insight::find_transformation(model)
+  if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
+    adjustment <- tryCatch(.ll_jacobian_adjustment(model, insight::get_weights(model, na_rm = TRUE)), error = function(e) NULL)
+    if (!is.null(adjustment)) {
+      ic <- ic - 2 * adjustment
     }
   }
+  ic
+}
 
-  aic
+
+# this function calculates the adjustment for the log-likelihood of a model
+# with transformed response
+.ll_jacobian_adjustment <- function(model, weights = NULL) {
+  tryCatch(
+    {
+      trans <- insight::get_transformation(model)$transformation
+      .weighted_sum(log(
+        diag(attr(with(
+          insight::get_data(model),
+          stats::numericDeriv(
+            expr = quote(trans(
+              get(insight::find_response(model))
+            )),
+            theta = insight::find_response(model)
+          )
+        ), "gradient"))
+      ), weights)
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+}
+
+.weighted_sum <- function(x, w = NULL, ...) {
+  if (is.null(w)) {
+    mean(x) * length(x)
+  } else {
+    stats::weighted.mean(x, w) * length(x)
+  }
 }

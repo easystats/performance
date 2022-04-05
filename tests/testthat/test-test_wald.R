@@ -13,6 +13,10 @@ if (requiet("testthat") &&
     expect_equal(rez$`F`, ref$`F`)
     expect_equal(rez$p, ref$`Pr(>F)`)
 
+    # setting test = "LRT" is not expected, but should at least not fail
+    expect_warning(rez <- test_wald(m1, m2, test = "LRT"))
+    expect_equal(rez$Name, c("..1", "..2"))
+
     # Reversed
     m3 <- m1
     m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)

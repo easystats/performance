@@ -19,18 +19,18 @@ effects (\code{"random"}) be tested? Only applies to mixed-effects models.
 May be abbreviated.}
 }
 \value{
-Invisibly returns the p-value of the test statistics. A p-value
-< 0.05 indicates a significant deviation from normal distribution
+The p-value of the test statistics. A p-value < 0.05 indicates a
+significant deviation from normal distribution.
 }
 \description{
 Check model for (non-)normality of residuals.
 }
 \details{
-\code{check_normality()} calls \code{stats::shapiro.test}
-and checks the standardized residuals (or Studentized residuals for mixed
-models) for normal distribution. Note that this formal test almost always
-yields significant results for the distribution of residuals and visual
-inspection (e.g. Q-Q plots) are preferable.
+\code{check_normality()} calls \code{stats::shapiro.test} and checks the
+standardized residuals (or Studentized residuals for mixed models) for
+normal distribution. Note that this formal test almost always yields
+significant results for the distribution of residuals and visual inspection
+(e.g. Q-Q plots) are preferable.
 }
 \note{
 For mixed-effects models, studentized residuals, and \emph{not}

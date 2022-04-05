@@ -4,9 +4,9 @@
 #'
 #' @param model A model.
 #' @param metrics Can be `"all"`, `"common"` or a character vector of
-#'   metrics to be computed (some of `c("AIC", "AICc", "BIC", "R2",
-#'   "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")`). `"common"`
-#'   will compute AIC, BIC, R2 and RMSE.
+#'   metrics to be computed (one or more of `"AIC"`, `"AICc"`, `"BIC"`, `"R2"`,
+#'   `"R2_adj"`, `"RMSE"`, `"SIGMA"`, `"LOGLOSS"`, `"PCP"`, `"SCORE"`).
+#'   `"common"` will compute AIC, BIC, R2 and RMSE.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -65,7 +65,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if ("AIC" %in% toupper(metrics)) {
     out$AIC <- tryCatch(
       {
-        performance_aic(model)
+        performance_aic(model, model_info = info)
       },
       error = function(e) {
         NULL
@@ -101,7 +101,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(c("R2", "R2_ADJ") %in% toupper(metrics))) {
     R2 <- tryCatch(
       {
-        r2(model, verbose = verbose)
+        r2(model, verbose = verbose, model_info = info)
       },
       error = function(e) {
         NULL
@@ -191,7 +191,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
 
-  out <- as.data.frame(datawizard::compact_list(out, remove_na = TRUE))
+  out <- as.data.frame(insight::compact_list(out, remove_na = TRUE))
 
   # check if model was actually supported...
   if (nrow(out) == 0 || ncol(out) == 0) {
@@ -242,6 +242,9 @@ model_performance.felm <- model_performance.lm
 
 #' @export
 model_performance.iv_robust <- model_performance.lm
+
+#' @export
+model_performance.lm_robust <- model_performance.lm
 
 #' @export
 model_performance.multinom <- model_performance.lm

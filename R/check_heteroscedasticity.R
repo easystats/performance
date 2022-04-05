@@ -8,8 +8,8 @@
 #' @param x A model object.
 #' @param ... Currently not used.
 #'
-#' @return Invisibly returns the p-value of the test statistics. A p-value <
-#'   0.05 indicates a non-constant variance (heteroskedasticity).
+#' @return The p-value of the test statistics. A p-value < 0.05 indicates a
+#'   non-constant variance (heteroskedasticity).
 #'
 #' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
@@ -38,6 +38,8 @@ check_heteroscedasticity <- function(x, ...) {
 check_heteroskedasticity <- check_heteroscedasticity
 
 
+# default ---------------------
+
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
   # only for linear models
@@ -51,7 +53,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     return(NULL)
   }
 
-  r <- .pearson_residuals(x)
+  r <- insight::get_residuals(x, type = "pearson")
   S.sq <- insight::get_df(x, type = "residual") * .sigma(x)^2 / sum(!is.na(r))
 
   .U <- (r^2) / S.sq
@@ -63,20 +65,42 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   p.val <- stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
 
-  if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(p.val)), "red")
-  } else {
-    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(p.val)), "green")
-  }
-
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
 
-  invisible(p.val)
+  p.val
 }
 
 
+
+# methods -----------------------
+
+#' @export
+print.check_heteroscedasticity <- function(x, ...) {
+  if (x < 0.05) {
+    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(x)), "red")
+  } else {
+    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(x)), "green")
+  }
+  invisible(x)
+}
+
+
+#' @export
+plot.check_heteroscedasticity <- function(x, ...) {
+  insight::check_if_installed("see", "for residual plots")
+  NextMethod()
+}
+
+
+
+# utilities -----------------------
+
 .sigma <- function(x) {
+  UseMethod(".sigma")
+}
+
+.sigma.default <- function(x) {
   s <- tryCatch(
     {
       estimates <- insight::get_parameters(x)$Estimate
@@ -87,96 +111,13 @@ check_heteroscedasticity.default <- function(x, ...) {
     }
   )
 
-  if (datawizard::is_empty_object(s)) {
+  if (insight::is_empty_object(s)) {
     s <- insight::get_variance_residual(x, verbose = FALSE)
   }
 
   s
 }
 
-
-
-.pearson_residuals <- function(x) {
-  pr <- tryCatch(
-    {
-      stats::residuals(x, type = "pearson")
-    },
-    error = function(e) {
-      NULL
-    }
-  )
-
-  if (datawizard::is_empty_object(pr) && inherits(x, c("glmmTMB", "MixMod"))) {
-    faminfo <- insight::model_info(x)
-    if (faminfo$is_zero_inflated) {
-      if (faminfo$is_negbin) {
-        pr <- .resid_zinb(x, faminfo)
-      } else {
-        pr <- .resid_zip(x, faminfo)
-      }
-    }
-  }
-
-  pr
-}
-
-
-
-
-.resid_zinb <- function(model, faminfo) {
-  if (inherits(model, "glmmTMB")) {
-    v <- stats::family(model)$variance
-    # zi probability
-    p <- stats::predict(model, type = "zprob")
-    # mean of conditional distribution
-    mu <- stats::predict(model, type = "conditional")
-    # sigma
-    betad <- model$fit$par["betad"]
-    k <- switch(faminfo$family,
-      gaussian = exp(0.5 * betad),
-      Gamma = exp(-0.5 * betad),
-      exp(betad)
-    )
-    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
-    pred <- stats::predict(model, type = "response") ## (1 - p) * mu
-  } else if (inherits(model, "MixMod")) {
-    sig <- insight::get_variance_distribution(model, verbose = FALSE)
-    p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(model, type_pred = "link", type = "mean_subject")
-    v <- mu * (1 + sig)
-    k <- sig
-    pvar <- (1 - p) * v(mu, k) + mu^2 * (p^2 + p)
-    pred <- stats::predict(model, type_pred = "response", type = "mean_subject")
-  } else {
-    sig <- insight::get_variance_distribution(model, verbose = FALSE)
-    pvar <- mu * (1 + sig)
-    pred <- stats::predict(model, type = "response")
-  }
-
-  # pearson residuals
-  (insight::get_response(model, verbose = FALSE) - pred) / sqrt(pvar)
-}
-
-
-
-
-.resid_zip <- function(model, faminfo) {
-  if (inherits(model, "glmmTMB")) {
-    p <- stats::predict(model, type = "zprob")
-    mu <- stats::predict(model, type = "conditional")
-    pvar <- (1 - p) * (mu + p * mu^2)
-    pred <- stats::predict(model, type = "response") ## (1 - p) * mu
-  } else if (inherits(model, "MixMod")) {
-    p <- stats::plogis(stats::predict(model, type_pred = "link", type = "zero_part"))
-    mu <- stats::predict(model, type = "mean_subject")
-    pvar <- (1 - p) * (mu + p * mu^2)
-    pred <- stats::predict(model, type_pred = "response", type = "mean_subject")
-  } else {
-    sig <- insight::get_variance_distribution(model, verbose = FALSE)
-    pvar <- mu * (1 + sig)
-    pred <- stats::predict(model, type = "response")
-  }
-
-  # pearson residuals
-  (insight::get_response(model) - pred) / sqrt(pvar)
+.sigma.BFBayesFactor <- function(x) {
+  mean(.get_bfbf_predictions(x)[["sigma"]])
 }

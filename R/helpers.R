@@ -1,42 +1,24 @@
-# trim leading / trailing whitespaces
-.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
+.get_BIC <- function(x, estimator = "ML") {
+  # check ML estimator
+  if (missing(estimator) && inherits(x, "lmerMod")) {
+    estimator <- "REML"
+  }
+  REML <- identical(estimator, "REML")
 
-
-.get_BIC <- function(x) {
   if (inherits(x, c("vgam", "vglm"))) {
     insight::check_if_installed("VGAM")
-    VGAM::BIC(x)
+    out <- VGAM::BIC(x)
   } else if (inherits(x, "bayesx")) {
-    stats::BIC(x)[["BIC"]]
+    out <- stats::BIC(x)[["BIC"]]
+
   } else {
-    tryCatch(
-      {
-        stats::BIC(x)
-      },
-      error = function(e) {
-        NULL
-      }
+    out <- tryCatch(
+      stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE)),
+      error = function(e) NULL
     )
   }
+  .adjust_ic_jacobian(x, out)
 }
-
-
-
-
-# safe deparse, works for very long strings
-.safe_deparse <- function(string) {
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = "")
-}
-
-
-
-
-# has object an element with given name?
-.obj_has_name <- function(x, name) {
-  name %in% names(x)
-}
-
-
 
 
 .std <- function(x) {

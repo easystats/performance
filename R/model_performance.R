@@ -35,3 +35,14 @@ model_performance <- function(model, ...) {
 #' @rdname model_performance
 #' @export
 performance <- model_performance
+
+
+
+# methods --------------------------------
+
+#' @export
+print.performance_model <- function(x, digits = 3, ...) {
+  formatted_table <- format(x = x, digits = digits, format = "text", ...)
+  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = c("# Indices of model performance", "blue"), ...))
+  invisible(x)
+}

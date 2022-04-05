@@ -23,10 +23,42 @@ check_sphericity <- function(x, ...) {
   UseMethod("check_sphericity")
 }
 
+
+
+# default --------------------------
+
 #' @export
 check_sphericity.default <- function(x, ...) {
   stop("Test not supported yet for object of class ", class(x)[1])
 }
+
+
+
+# methods ------------------------------
+
+#' @export
+plot.check_sphericity <- function(x, ...) {
+  warning(insight::format_message("There is currently no plot() method for `check_sphericity()`."), call. = FALSE)
+}
+
+
+#' @export
+print.check_sphericity <- function(x, ...) {
+  if (any(x < .05)) {
+    pp <- x[x < .05]
+    pp <- paste0("\n - ", names(pp), " (", insight::format_p(pp), ")", collapse = "")
+    insight::print_color(sprintf("Warning: Sphericity violated for: %s.\n", pp), "red")
+  } else {
+    pp <- insight::format_p(min(x))
+    pp <- sub("=", ">", pp)
+    insight::print_color(sprintf("OK: Data seems to be spherical (%s).\n", pp), "green")
+  }
+  invisible(x)
+}
+
+
+
+# other classes ------------------
 
 #' @export
 check_sphericity.Anova.mlm <- function(x, ...) {
@@ -34,17 +66,16 @@ check_sphericity.Anova.mlm <- function(x, ...) {
   test <- S$sphericity.tests
 
   p.val <- test[, 2]
-  if (any(p.val < .05)) {
-    pp <- p.val[p.val < .05]
-    pp <- paste0("\n - ", names(pp), " (", insight::format_p(pp), ")", collapse = "")
-    insight::print_color(sprintf("Warning: Sphericity violated for: %s.\n", pp), "red")
-  } else {
-    pp <- insight::format_p(min(p.val))
-    pp <- sub("=", ">", pp)
-    insight::print_color(sprintf("OK: Data seems to be spherical (%s).\n", pp), "green")
+
+  # sanity check
+  if (is.null(p.val)) {
+    p.val <- 1
   }
-  invisible(p.val)
+
+  class(p.val) <- c("check_sphericity", "see_check_sphericity", class(p.val))
+  p.val
 }
+
 
 #' @export
 check_sphericity.afex_aov <- function(x, ...) {

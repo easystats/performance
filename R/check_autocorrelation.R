@@ -40,14 +40,33 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   p <- (sum(dw < DW[1, ])) / nsim
   p.val <- 2 * (min(p, 1 - p))
 
-  if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Autocorrelated residuals detected (%s).", insight::format_p(p.val)), "red")
-  } else {
-    insight::print_color(sprintf("OK: Residuals appear to be independent and not autocorrelated (%s).", insight::format_p(p.val)), "green")
-  }
-
-  invisible(p.val)
+  class(p.val) <- c("check_autocorrelation", "see_check_autocorrelation", class(p.val))
+  p.val
 }
+
+
+
+# methods ------------------------------
+
+#' @export
+plot.check_autocorrelation <- function(x, ...) {
+  warning(insight::format_message("There is currently no plot() method for `check_autocorrelation()`."), call. = FALSE)
+}
+
+
+#' @export
+print.check_autocorrelation <- function(x, ...) {
+  if (x < 0.05) {
+    insight::print_color(sprintf("Warning: Autocorrelated residuals detected (%s).", insight::format_p(x)), "red")
+  } else {
+    insight::print_color(sprintf("OK: Residuals appear to be independent and not autocorrelated (%s).", insight::format_p(x)), "green")
+  }
+  invisible(x)
+}
+
+
+
+# utilities -------------------------------
 
 .durbWats <- function(.residuals) {
   n <- length(.residuals)

@@ -9,6 +9,7 @@
 #'   "CochransQ", "QE", "Omnibus", "QM")`).
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams model_performance.lm
+#' @inheritParams model_performance.merMod
 #'
 #' @return A data frame (with one row) and one column per "index" (see
 #'   `metrics`).
@@ -56,7 +57,7 @@
 #'   model_performance(model)
 #' }
 #' @export
-model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
+model_performance.rma <- function(model, metrics = "all", estimator = "ML", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
     metrics <- c("AIC", "BIC", "I2", "H2", "TAU2", "COCHRANSQ", "OMNIBUS", "R2")
   } else if (all(metrics == "common")) {
@@ -68,7 +69,7 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
   s <- summary(model)
 
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- performance_aic(model)
+    out$AIC <- performance_aic(model, estimator = estimator)
   }
 
   if ("BIC" %in% toupper(metrics)) {
@@ -113,7 +114,7 @@ model_performance.rma <- function(model, metrics = "all", verbose = TRUE, ...) {
     }
   }
 
-  out <- as.data.frame(datawizard::compact_list(out))
+  out <- as.data.frame(insight::compact_list(out))
   row.names(out) <- NULL
   class(out) <- c("performance_model", class(out))
 

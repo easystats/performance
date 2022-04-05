@@ -9,17 +9,31 @@
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams r2_nakagawa
 #' @inheritParams model_performance.lm
+#' @inheritParams performance_aicc
 #'
 #' @return A data frame (with one row) and one column per "index" (see
 #'   `metrics`).
 #'
 #' @details
-#'  This method returns the *adjusted ICC* only, as this is typically of
-#'  interest when judging the variance attributed to the random effects part of
-#'  the model (see also [icc()]).
-#'   \cr \cr
-#'   Furthermore, see 'Details' in [model_performance.lm()] for
-#'   more details on returned indices.
+#' \subsection{Intraclass Correlation Coefficient (ICC)}{
+#'   This method returns the *adjusted ICC* only, as this is typically of
+#'   interest when judging the variance attributed to the random effects part of
+#'   the model (see also [icc()]).
+#' }
+#' \subsection{REML versus ML estimator}{
+#' The default behaviour of `model_performance()` when computing AIC or BIC of
+#' linear mixed model from package **lme4** is the same as for `AIC()` or
+#' `BIC()` (i.e. `estimator = "REML"`). However, for model comparison using
+#' `compare_performance()` sets `estimator = "ML"` by default, because
+#' *comparing* information criteria based on REML fits is usually not valid
+#' (unless all models have the same fixed effects). Thus, make sure to set
+#' the correct estimator-value when looking at fit-indices or comparing model
+#' fits.
+#' }
+#' \subsection{Other performance indices}{
+#'   Furthermore, see 'Details' in [model_performance.lm()] for more details
+#'   on returned indices.
+#' }
 #'
 #' @examples
 #' if (require("lme4")) {
@@ -29,6 +43,7 @@
 #' @export
 model_performance.merMod <- function(model,
                                      metrics = "all",
+                                     estimator = "REML",
                                      verbose = TRUE,
                                      ...) {
   if (any(tolower(metrics) == "log_loss")) {
@@ -57,13 +72,13 @@ model_performance.merMod <- function(model,
   out <- list()
 
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- performance_aic(model)
+    out$AIC <- performance_aic(model, estimator = estimator)
   }
 
   if ("AICC" %in% toupper(metrics)) {
     out$AICc <- tryCatch(
       {
-        performance_aicc(model)
+        performance_aicc(model, estimator = estimator)
       },
       error = function(e) {
         NULL
@@ -72,7 +87,7 @@ model_performance.merMod <- function(model,
   }
 
   if ("BIC" %in% toupper(metrics)) {
-    out$BIC <- .get_BIC(model)
+    out$BIC <- .get_BIC(model, estimator = estimator)
   }
 
   if ("R2" %in% toupper(metrics)) {

@@ -10,10 +10,12 @@ test_wald.default <- function(...) {
 
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
-  names(objects) <- match.call(expand.dots = FALSE)$`...`
 
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
+
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {

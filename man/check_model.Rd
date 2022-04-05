@@ -33,13 +33,14 @@ check_model(x, ...)
 single plots for each diagnostic are returned.}
 
 \item{check}{Character vector, indicating which checks for should be performed
-and plotted. May be one or more of
-\verb{"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"}.
-\code{"reqq"} is a QQ-plot for random effects and only available for mixed
-models.
-\code{"ncv"} is an alias for \code{"linearity"}, and checks for non-constant
-variance, i.e. for heteroscedasticity, as well as the linear relationship.
-By default, all possible checks are performed and plotted.}
+and plotted. May be one or more of \code{"all"}, \code{"vif"}, \code{"qq"}, \code{"normality"},
+\code{"linearity"}, \code{"ncv"}, \code{"homogeneity"}, \code{"outliers"}, \code{"reqq"}, \code{"pp_check"},
+\code{"binned_residuals"} or \code{"overdispersion"}, Not that not all check apply
+to all type of models (see 'Details'). \code{"reqq"} is a QQ-plot for random
+effects and only available for mixed models. \code{"ncv"} is an alias for
+\code{"linearity"}, and checks for non-constant variance, i.e. for
+heteroscedasticity, as well as the linear relationship. By default, all
+possible checks are performed and plotted.}
 
 \item{alpha, dot_alpha}{The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.}

@@ -10,12 +10,18 @@ performance_aicc(x, ...)
 
 performance_aic(x, ...)
 
-\method{performance_aic}{default}(x, verbose = TRUE, ...)
+\method{performance_aic}{default}(x, estimator = "ML", verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object.}
 
 \item{...}{Currently not used.}
+
+\item{estimator}{Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If \code{estimator = "ML"}
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
+the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 
 \item{verbose}{Toggle warnings.}
 }

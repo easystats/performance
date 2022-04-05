@@ -4,7 +4,13 @@
 \alias{model_performance.merMod}
 \title{Performance of Mixed Models}
 \usage{
-\method{model_performance}{merMod}(model, metrics = "all", verbose = TRUE, ...)
+\method{model_performance}{merMod}(
+  model,
+  metrics = "all",
+  estimator = "REML",
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A mixed effects model.}
@@ -12,6 +18,12 @@
 \item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of
 metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")}). \code{"common"} will compute AIC,
 BIC, R2, ICC and RMSE.}
+
+\item{estimator}{Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If \code{estimator = "ML"}
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
+the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 
 \item{verbose}{Toggle off warnings.}
 
@@ -25,12 +37,25 @@ A data frame (with one row) and one column per "index" (see
 Compute indices of model performance for mixed models.
 }
 \details{
+\subsection{Intraclass Correlation Coefficient (ICC)}{
 This method returns the \emph{adjusted ICC} only, as this is typically of
 interest when judging the variance attributed to the random effects part of
 the model (see also \code{\link[=icc]{icc()}}).
-\cr \cr
-Furthermore, see 'Details' in \code{\link[=model_performance.lm]{model_performance.lm()}} for
-more details on returned indices.
+}
+\subsection{REML versus ML estimator}{
+The default behaviour of \code{model_performance()} when computing AIC or BIC of
+linear mixed model from package \strong{lme4} is the same as for \code{AIC()} or
+\code{BIC()} (i.e. \code{estimator = "REML"}). However, for model comparison using
+\code{compare_performance()} sets \code{estimator = "ML"} by default, because
+\emph{comparing} information criteria based on REML fits is usually not valid
+(unless all models have the same fixed effects). Thus, make sure to set
+the correct estimator-value when looking at fit-indices or comparing model
+fits.
+}
+\subsection{Other performance indices}{
+Furthermore, see 'Details' in \code{\link[=model_performance.lm]{model_performance.lm()}} for more details
+on returned indices.
+}
 }
 \examples{
 if (require("lme4")) {

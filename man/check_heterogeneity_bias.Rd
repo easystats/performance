@@ -29,6 +29,6 @@ check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), group
 }
 \seealso{
 For further details, read the vignette
-\url{https://easystats.github.io/datawizard/articles/demean.html} and also
+\url{https://easystats.github.io/parameters/articles/demean.html} and also
 see documentation for \code{?datawizard::demean}.
 }

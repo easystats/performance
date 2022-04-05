@@ -188,17 +188,7 @@ performance_accuracy <- function(model,
 }
 
 
-.crossv_kfold <- function(model_data, k = 5) {
-  n <- nrow(model_data)
-  folds <- sample(rep(1:k, length.out = n))
-  idx <- seq_len(n)
-  fold_idx <- split(idx, folds)
-  fold <- function(test) {
-    list(train = setdiff(idx, test), test = test)
-  }
-  lapply(fold_idx, fold)
-}
-
+# methods --------------------------
 
 #' @export
 as.data.frame.performance_accuracy <- function(x, row.names = NULL, ...) {
@@ -210,4 +200,33 @@ as.data.frame.performance_accuracy <- function(x, row.names = NULL, ...) {
     row.names = row.names,
     ...
   )
+}
+
+
+#' @export
+print.performance_accuracy <- function(x, ...) {
+  # headline
+  insight::print_color("# Accuracy of Model Predictions\n\n", "blue")
+
+  # statistics
+  cat(sprintf("Accuracy: %.2f%%\n", 100 * x$Accuracy))
+  cat(sprintf("      SE: %.2f%%-points\n", 100 * x$SE))
+  cat(sprintf("  Method: %s\n", x$Method))
+
+  invisible(x)
+}
+
+
+
+# utilities ------------------------
+
+.crossv_kfold <- function(model_data, k = 5) {
+  n <- nrow(model_data)
+  folds <- sample(rep(1:k, length.out = n))
+  idx <- seq_len(n)
+  fold_idx <- split(idx, folds)
+  fold <- function(test) {
+    list(train = setdiff(idx, test), test = test)
+  }
+  lapply(fold_idx, fold)
 }

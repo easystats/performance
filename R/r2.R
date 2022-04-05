@@ -62,12 +62,16 @@ r2 <- function(model, ...) {
 r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRUE, ...) {
   ci_method <- match.arg(ci_method, choices = c("analytical", "bootstrap"))
 
+  if (is.null(minfo <- list(...)$model_info)) {
+    minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
+
   # check input
   ci <- .check_r2_ci_args(ci, ci_method, "bootstrap", verbose)
 
   out <- tryCatch(
     {
-      if (insight::model_info(model)$is_binomial) {
+      if (minfo$is_binomial) {
         resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
         resp <- .factor_to_numeric(insight::get_response(model, verbose = FALSE))
@@ -237,12 +241,14 @@ r2.mlm <- function(model, ...) {
 
 #' @export
 r2.glm <- function(model, verbose = TRUE, ...) {
-  info <- insight::model_info(model)
+  if (is.null(info <- list(...)$model_info)) {
+    info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
 
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
   } else if (info$is_logit && info$is_bernoulli) {
-    out <- list("R2_Tjur" = r2_tjur(model))
+    out <- list("R2_Tjur" = r2_tjur(model, ...))
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
@@ -252,7 +258,7 @@ r2.glm <- function(model, verbose = TRUE, ...) {
     }
     out <- NULL
   } else {
-    out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+    out <- list("R2_Nagelkerke" = r2_nagelkerke(model, ...))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
     attr(out, "model_type") <- "Generalized Linear"
     class(out) <- c("r2_pseudo", class(out))
@@ -566,14 +572,14 @@ r2.fixest <- function(model, ...) {
 
   r2 <- fixest::r2(model)
 
-  out_normal <- datawizard::compact_list(list(
+  out_normal <- insight::compact_list(list(
     R2 = r2["r2"],
     R2_adjusted = r2["ar2"],
     R2_within = r2["wr2"],
     R2_within_adjusted = r2["war2"]
   ), remove_na = TRUE)
 
-  out_pseudo <- datawizard::compact_list(list(
+  out_pseudo <- insight::compact_list(list(
     R2 = r2["pr2"],
     R2_adjusted = r2["apr2"],
     R2_within = r2["wpr2"],
