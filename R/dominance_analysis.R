@@ -87,14 +87,13 @@
 #' @author Joseph Luchman
 #'
 #' @examples
-#' if (require("domir")) {
-#'   model <- glm(vs ~ cyl + carb + mpg, data = datasets::mtcars,
-#'            family = binomial())
+#' if (getRversion() >= "3.5.0" && require("domir")) {
+#'   data(mtcars)
+#'   model <- glm(vs ~ cyl + carb + mpg, data = mtcars, family = binomial())
 #'
 #'   r2(model)
 #'   dominance_analysis(model)
 #'}
-#'
 #' @export
 dominance_analysis <- function(model, ...) {
 
