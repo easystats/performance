@@ -7,8 +7,7 @@
 dominance_analysis(model, ...)
 }
 \arguments{
-\item{model}{An \code{{insight}}- and \code{performance::r2}-supported model object
-of specific classes.  See Notes section.}
+\item{model}{A model object supported by \code{performance::r2()}. See Notes section.}
 
 \item{...}{Not used at current.}
 }
@@ -47,7 +46,7 @@ determinations can be obtained.
 \section{Notes}{
 
 
-The input model is parsed using \code{insight::find_predictors}, does not
+The input model is parsed using \code{insight::find_predictors()}, does not
 yet support interactions, transformations, or offsets applied in the
 R formula, and will fail with an error if any such terms are detected.
 
@@ -56,30 +55,28 @@ argument.  In addition, the model object must accept the data on which
 the model is estimated as a \code{data} argument.  Formulas submitted
 using object references (i.e., \code{lm(mtcars$mpg ~ mtcars$vs)}) and
 functions that accept data as a non-\code{data} argument
-(e.g., \code{survey::svyglm} uses \code{design}) will fail.
+(e.g., \code{survey::svyglm()} uses \code{design}) will fail.
 
-Models that return \code{TRUE} for the \code{insight::model_info}
+Models that return \code{TRUE} for the \code{insight::model_info()}
 function's values "is_bayesian", "is_mixed", "is_gam",
 is_multivariate", "is_zero_inflated",
 or "is_hurdle" are not supported at current.
 
-When \code{performance::r2} returns multiple values, only the first is used
+When \code{performance::r2()} returns multiple values, only the first is used
 by default.
 
-The underlying \code{domir::domin} function that implements the dominance
+The underlying \code{domir::domin()} function that implements the dominance
 statistic and designation computations has only been tested to R version
 3.5 and will fail with an error if called in R versions < 3.5.
 }
 
 \examples{
-if (require("domir") && (R.version$major > 3 | (R.version$major == 3 && R.version$minor >= 5))) {
+if (require("domir")) {
   model <- glm(vs ~ cyl + carb + mpg, data = datasets::mtcars,
            family = binomial())
 
   r2(model)
-
   dominance_analysis(model)
-
 }
 
 }
