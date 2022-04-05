@@ -174,3 +174,48 @@ dominance_analysis <- function(model, ...) {
   class(da_res) <- c("dominance_analysis", "domin", "list")
   da_res
 }
+
+
+
+
+# methods ------------------------------
+
+
+#' @export
+print.dominance_analysis <- function(x, digits = 3, ...) {
+  insight::print_color("# Dominance Analysis Results", "blue")
+  cat("\n\n")
+
+  cat("Model R2 Value:", sprintf("%.*f", digits, x$model_R2), "\n\n")
+
+  cat("General Dominance Statistics\n")
+
+  Display_gnr <-
+    data.frame(`General Dominance` = x[["general_dominance"]],
+               `Standardized` = x[["standardized"]],
+               `Ranks` = as.character(x[["ranks"]]), check.names = FALSE,
+               row.names = names(x[["general_dominance"]]),
+               stringsAsFactors = FALSE)
+
+  print(insight::format_table(Display_gnr,
+                              digits = digits))
+
+  Display_cdl <- as.data.frame(x$conditional_dominance)
+
+  names(Display_cdl) <- gsub("IVs_", "Preds: ", names(Display_cdl))
+
+  cat("\nConditional Dominance Statistics\n")
+
+  print(insight::format_table(Display_cdl,
+                              digits = digits))
+
+  Display_cpt <- as.data.frame(x$complete_dominance)
+
+  colnames(Display_cpt) <- gsub("Dmnated_", "Dominated by: ", colnames(Display_cpt))
+
+  cat("\nComplete Dominance Designations\n")
+
+  print(insight::format_table(Display_cpt))
+
+  invisible(x)
+}
