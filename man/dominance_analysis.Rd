@@ -7,14 +7,14 @@
 dominance_analysis(model, ...)
 }
 \arguments{
-\item{model}{A model object supported by \code{performance::r2()}. See Notes section.}
+\item{model}{A model object supported by \code{performance::r2()}. See 'Details'.}
 
 \item{...}{Not used at current.}
 }
 \value{
-Object of class "dominance_analysis".
+Object of class \code{"dominance_analysis"}.
 
-An object of class "dominance_analysis" is a list composed of the
+An object of class \code{"dominance_analysis"} is a list composed of the
 following elements:
 \describe{
 \item{\code{general_dominance}}{Vector of general dominance statistics.}
@@ -31,8 +31,8 @@ designations. The predictors represented in each row are
 cross-referenced with predictors in each column.  Whether the predictor
 in each column dominates the predictor in each row is represented in the
 logical value in the matrix.}
-\item{\code{model_R2}}{Value of R2 value returned by the \code{r2}
-method for the model.}
+\item{\code{model_R2}}{Value of R2 value returned by the \code{r2()} method for
+the model.}
 }
 }
 \description{
@@ -42,9 +42,6 @@ Computes Dominance Analysis Statistics and Designations
 Computes two decompositions of the model's R2 and returns
 a matrix of designations from which predictor relative importance
 determinations can be obtained.
-}
-\section{Notes}{
-
 
 The input model is parsed using \code{insight::find_predictors()}, does not
 yet support interactions, transformations, or offsets applied in the
@@ -69,7 +66,6 @@ The underlying \code{domir::domin()} function that implements the dominance
 statistic and designation computations has only been tested to R version
 3.5 and will fail with an error if called in R versions < 3.5.
 }
-
 \examples{
 if (getRversion() >= "3.5.0" && require("domir")) {
   data(mtcars)
@@ -84,20 +80,16 @@ if (getRversion() >= "3.5.0" && require("domir")) {
 \item Azen, R., & Budescu, D. V. (2003). The dominance analysis approach
 for comparing predictors in multiple regression. Psychological Methods,
 8(2), 129-148. doi:10.1037/1082-989X.8.2.129
-
 \item Budescu, D. V. (1993). Dominance analysis: A new approach to the
 problem of relative importance of predictors in multiple regression.
 Psychological Bulletin, 114(3), 542-551. doi:10.1037/0033-2909.114.3.542
-
 \item Groemping, U. (2007). Estimators of relative importance in linear
 regression based on variance decomposition. The American Statistician,
 61(2), 139-147. doi:10.1198/000313007X188252
-
 \item Luchman, J. N., Lei, X., & Kaplan, S. A. (2020). Relative
 Importance Analysis With Multivariate Models: Shifting the Focus from
 Independent Variables to Parameter Estimates. Journal of Applied
 Structural Equation Modeling, 4(2), 1-20. doi:10.47263/JASEM.4(2)02
-
 \item Luchman, J. N. (2021). Determining relative importance in Stata
 using dominance analysis: domin and domme. Stata Journal 21(2),
 510-538. doi:10.1177/1536867X211025837

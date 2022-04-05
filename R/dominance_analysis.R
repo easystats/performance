@@ -3,12 +3,12 @@
 #'
 #' @description Computes Dominance Analysis Statistics and Designations
 #'
-#' @param model A model object supported by `performance::r2()`. See Notes section.
+#' @param model A model object supported by `performance::r2()`. See 'Details'.
 #' @param ...  Not used at current.
 #'
-#' @return Object of class "dominance_analysis".
+#' @return Object of class `"dominance_analysis"`.
 #'
-#' An object of class "dominance_analysis" is a list composed of the
+#' An object of class `"dominance_analysis"` is a list composed of the
 #' following elements:
 #' \describe{
 #'  \item{`general_dominance`}{Vector of general dominance statistics.}
@@ -25,15 +25,13 @@
 #'  cross-referenced with predictors in each column.  Whether the predictor
 #'  in each column dominates the predictor in each row is represented in the
 #'  logical value in the matrix.}
-#'  \item{`model_R2`}{Value of R2 value returned by the `r2`
-#'  method for the model.}
+#'  \item{`model_R2`}{Value of R2 value returned by the `r2()` method for
+#'  the model.}
 #' }
 #'
 #' @details Computes two decompositions of the model's R2 and returns
 #' a matrix of designations from which predictor relative importance
 #' determinations can be obtained.
-#'
-#' @section Notes:
 #'
 #' The input model is parsed using `insight::find_predictors()`, does not
 #' yet support interactions, transformations, or offsets applied in the
@@ -59,28 +57,26 @@
 #' 3.5 and will fail with an error if called in R versions < 3.5.
 #'
 #' @references
-#' \itemize{
-#'   \item Azen, R., & Budescu, D. V. (2003). The dominance analysis approach
+#' - Azen, R., & Budescu, D. V. (2003). The dominance analysis approach
 #'   for comparing predictors in multiple regression. Psychological Methods,
 #'   8(2), 129-148. doi:10.1037/1082-989X.8.2.129
 #'
-#'   \item Budescu, D. V. (1993). Dominance analysis: A new approach to the
+#' - Budescu, D. V. (1993). Dominance analysis: A new approach to the
 #'   problem of relative importance of predictors in multiple regression.
 #'   Psychological Bulletin, 114(3), 542-551. doi:10.1037/0033-2909.114.3.542
 #'
-#'   \item Groemping, U. (2007). Estimators of relative importance in linear
+#' - Groemping, U. (2007). Estimators of relative importance in linear
 #'   regression based on variance decomposition. The American Statistician,
 #'   61(2), 139-147. doi:10.1198/000313007X188252
 #'
-#'   \item Luchman, J. N., Lei, X., & Kaplan, S. A. (2020). Relative
+#' - Luchman, J. N., Lei, X., & Kaplan, S. A. (2020). Relative
 #'   Importance Analysis With Multivariate Models: Shifting the Focus from
 #'   Independent Variables to Parameter Estimates. Journal of Applied
 #'   Structural Equation Modeling, 4(2), 1-20. doi:10.47263/JASEM.4(2)02
 #'
-#'   \item Luchman, J. N. (2021). Determining relative importance in Stata
+#' - Luchman, J. N. (2021). Determining relative importance in Stata
 #'   using dominance analysis: domin and domme. Stata Journal 21(2),
 #'   510-538. doi:10.1177/1536867X211025837
-#' }
 #'
 #' @seealso [domir::domin()]
 #'
@@ -152,8 +148,7 @@ dominance_analysis <- function(model, ...) {
   args <- args[loc] # remove formula and data arguments
   args <- args[-1] # remove function name
   r2_wrap <- function(model, ...) { # internal wrapper to ensure r2 values conform to domin
-    fitstat <- list(fitstat = performance::r2(model, ...)[[1]]) # todo: must deal with multiple returned values
-    return(fitstat)
+    list(fitstat = performance::r2(model, ...)[[1]]) # todo: must deal with multiple returned values
   }
 
   args2domin <- append(list(formula_overall = fml, reg = reg, fitstat = list(r2_wrap, "fitstat"),
@@ -163,10 +158,12 @@ dominance_analysis <- function(model, ...) {
   utils::capture.output(da_res <- do.call(domir::domin, args2domin))
 
   da_res <- da_res[which(names(da_res) %in% c("Fit_Statistic_Overall", "General_Dominance", "Conditional_Dominance", "Complete_Dominance", "Standardized", "Ranks"))]
-
   names(da_res) <- c("general_dominance", "standardized", "ranks", "conditional_dominance", "complete_dominance", "model_R2")
 
-  dimnames(da_res$complete_dominance) <- list(colnames(da_res$complete_dominance), names(da_res$general_dominance))
+  dimnames(da_res$complete_dominance) <- list(
+    colnames(da_res$complete_dominance),
+    names(da_res$general_dominance)
+  )
 
   da_res$complete_dominance <- t(da_res$complete_dominance)
 
