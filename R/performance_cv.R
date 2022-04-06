@@ -57,7 +57,9 @@ performance_cv <- function(
   if (is.null(data)) {
     method <- match.arg(method, choices = c("holdout", "k_fold", "loo"))
   }
-  formula <- stats::formula(model)
+  if (!is.null(data) && inherits(model, "BFBayesFactor")) {
+    stop("Models of class 'BFBayesFactor' not yet supported.", call. = FALSE)
+  }
   resp.name <- insight::find_response(model)
   model_data <- insight::get_data(model, verbose = verbose)
   info <- insight::model_info(model, verbose = verbose)
@@ -74,7 +76,7 @@ performance_cv <- function(
       test_resp <- model_data[-train_i, resp.name]
       test_pred <- insight::get_predicted(model_upd, data = model_data[-train_i, ])
       test_resd <- test_resp - test_pred
-    } else if (method == "loo") {
+    } else if (method == "loo" && !info$is_bayesian) {
       model_response <- insight::get_response(model)
       MSE <- mean(insight::get_residuals(model, weighted = TRUE)^2 /
                     (1 - stats::hatvalues(model))^2)
@@ -83,11 +85,17 @@ performance_cv <- function(
       R2 <- 1 - MSE / (mean(model_response^2, na.rm = TRUE) - mean(model_response, na.rm = TRUE)^2)
       out <- data.frame(MSE = MSE, RMSE = RMSE, R2 = R2)
     } else {
-      # Manual method for LOO, use this for non-linear models
-      # if (method == "loo") {
-      #   stack <- TRUE
-      #   k <- nrow(model_data)
-      # }
+      # Manual method for LOO, use this for non-linear and Bayesian models
+      if (method == "loo") {
+        if (info$is_bayesian) {
+          message(insight::format_message(
+            "Simple LOO cross-validation can be very slow for MCMC models.",
+            "Try loo::loo() instead."
+          ))
+        }
+        stack <- TRUE
+        k <- nrow(model_data)
+      }
       if (k > nrow(model_data)) {
         message(insight::color_text(insight::format_message(
           "Requested number of folds (k) larger than the sample size.",
