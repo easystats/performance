@@ -23,5 +23,6 @@ model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2_nagelkerke(model)
 }
 \references{
-Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
+Nagelkerke, N. J. (1991). A note on a general definition of the coefficient
+of determination. Biometrika, 78(3), 691-692.
 }

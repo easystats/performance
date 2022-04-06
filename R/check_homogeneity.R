@@ -33,6 +33,9 @@ check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "au
 }
 
 
+
+# default -------------------------
+
 #' @export
 check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
   method <- match.arg(method)
@@ -90,35 +93,53 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
     "levene" = "Levene's Test"
   )
 
-  if (is.na(p.val)) {
-    warning(paste0("Could not perform ", method.string, "."), call. = FALSE)
-    invisible(NULL)
-  } else if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, p.val), "red")
-  } else {
-    insight::print_color(sprintf("OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n", method.string, p.val), "green")
-  }
-
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(p.val, "method") <- method.string
   class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))
 
-  invisible(p.val)
+  p.val
 }
+
+
+
+# methods -----------------------
+
+#' @export
+print.check_homogeneity <- function(x, ...) {
+  method.string <- attributes(x)$method
+  if (is.na(x)) {
+    warning(paste0("Could not perform ", method.string, "."), call. = FALSE)
+    invisible(NULL)
+  } else if (x < 0.05) {
+    insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, x), "red")
+  } else {
+    insight::print_color(sprintf("OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n", method.string, x), "green")
+  }
+  invisible(x)
+}
+
+
+#' @export
+plot.check_homogeneity <- function(x, ...) {
+  insight::check_if_installed("see", "for homogeneity plots")
+  NextMethod()
+}
+
+
+
+# other classes -----------------------------
 
 #' @rdname check_homogeneity
 #' @export
 check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
-  if (!requireNamespace("car")) {
-    stop("car required for this function to work.")
-  }
+  insight::check_if_installed("car")
 
   if (tolower(method) != "levene") {
     message("Only Levene's test for homogeneity supported for afex_aov")
   }
 
   if (length(attr(x, "between")) == 0) {
-    stop("Levene test is only aplicable to ANOVAs with between-subjects factors.")
+    stop("Levene test is only aplicable to ANOVAs with between-subjects factors.", call. = FALSE)
   }
 
   data <- x$data$long # Use this to also get id column
@@ -143,20 +164,9 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
 
   p.val <- test[1, "Pr(>F)"]
 
-  method.string <- "Levene's Test"
-
-  if (is.na(p.val)) {
-    warning(paste0("Could not perform ", method.string, "."), call. = FALSE)
-    invisible(NULL)
-  } else if (p.val < 0.05) {
-    insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, p.val), "red")
-  } else {
-    insight::print_color(sprintf("OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n", method.string, p.val), "green")
-  }
-
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
-  attr(p.val, "method") <- method.string
+  attr(p.val, "method") <- "Levene's Test"
   class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))
 
-  invisible(p.val)
+  p.val
 }

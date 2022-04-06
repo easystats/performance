@@ -12,7 +12,9 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_nagelkerke(model)
-#' @references Nagelkerke, N. J. (1991). A note on a general definition of the coefficient of determination. Biometrika, 78(3), 691-692.
+#' @references
+#' Nagelkerke, N. J. (1991). A note on a general definition of the coefficient
+#' of determination. Biometrika, 78(3), 691-692.
 #'
 #' @export
 r2_nagelkerke <- function(model, ...) {
@@ -35,7 +37,7 @@ r2_nagelkerke <- function(model, ...) {
     n <- insight::n_obs(model)
   } else {
     n <- attr(L.full, "nobs")
-    if (is.null(n)) n <- insight::n_obs(model)
+    if (is.null(n)) n <- insight::n_obs(model, disaggregate = TRUE)
   }
 
   r2_nagelkerke <- as.vector((1 - exp((D.full - D.base) / n)) / (1 - exp(-D.base / n)))
@@ -52,7 +54,9 @@ r2_nagelkerke <- function(model, ...) {
 
 #' @export
 r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
-  info <- insight::model_info(model)
+  if (is.null(info <- list(...)$model_info)) {
+    info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
@@ -63,7 +67,7 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
     if (is.na(r2cox) || is.null(r2cox)) {
       return(NULL)
     }
-    r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model)))
+    r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
     names(r2_nagelkerke) <- "Nagelkerke's R2"
     r2_nagelkerke
   }

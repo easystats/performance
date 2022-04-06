@@ -12,8 +12,9 @@
 #'   details.
 #' @param rank Logical, if `TRUE`, models are ranked according to 'best'
 #'   overall model performance. See 'Details'.
+#' @inheritParams performance_aic
 #'
-#' @return A data frame (with one row per model) and one column per "index" (see
+#' @return A data frame with one row per model and one column per "index" (see
 #'   `metrics`).
 #'
 #' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
@@ -52,6 +53,18 @@
 #'   for more details).
 #' }
 #'
+#' \subsection{REML versus ML estimator}{
+#' By default, `estimator = "ML"`, which means that values from information
+#' criteria (AIC, AICc, BIC) for specific model classes (like models from *lme4*)
+#' are based on the ML-estimator, while the default behaviour of `AIC()` for
+#' such classes is setting `REML = TRUE`. This default is intentional, because
+#' comparing information criteria based on REML fits is usually not valid
+#' (it might be useful, though, if all models share the same fixed effects -
+#' however, this is usually not the case for nested models, which is a
+#' prerequisite for the LRT). Set `estimator = "REML"` explicitly return the
+#' same (AIC/...) values as from the defaults in `AIC.merMod()`.
+#' }
+#'
 #' @references
 #' Burnham, K. P., & Anderson, D. R. (2002).
 #' _Model selection and multimodel inference: A practical information-theoretic approach_ (2nd ed.).
@@ -73,42 +86,16 @@
 #' }
 #' @inheritParams model_performance.lm
 #' @export
-compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TRUE) {
-  # objects <- list(...)
-  # object_names <- match.call(expand.dots = FALSE)$`...`
-  objects <- list(...)
+compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
+  # process input
+  objects <- insight::ellipsis_info(..., only_models = TRUE)
 
-  if (length(objects) == 1) {
-    if (insight::is_model(objects[[1]])) {
-      modellist <- FALSE
-    } else {
-      objects <- objects[[1]]
-      modellist <- TRUE
-    }
-  } else {
-    modellist <- FALSE
-  }
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
-  if (isTRUE(modellist)) {
-    object_names <- names(objects)
-    if (length(object_names) == 0) {
-      object_names <- paste("Model", seq_along(objects), sep = " ")
-      names(objects) <- object_names
-    }
-  } else {
-    object_names <- match.call(expand.dots = FALSE)$`...`
-    if (length(names(object_names)) > 0) {
-      object_names <- names(object_names)
-    } else if (any(sapply(object_names, is.call))) {
-      object_names <- paste("Model", seq_along(objects), sep = " ")
-    } else {
-      object_names <- sapply(object_names, as.character)
-      names(objects) <- object_names
-    }
-  }
-
-
+  # drop unsupport models
   supported_models <- sapply(objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
+  object_names <- names(objects)
 
   if (!all(supported_models)) {
     warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
@@ -116,9 +103,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
     object_names <- object_names[supported_models]
   }
 
+  # iterate over all models, i.e. model-performance for each model
   m <- mapply(function(.x, .y) {
-    dat <- model_performance(.x, metrics = metrics, verbose = FALSE)
-    model_name <- gsub("\"", "", .safe_deparse(.y), fixed = TRUE)
+    dat <- model_performance(.x, metrics = metrics, estimator = estimator, verbose = FALSE)
+    model_name <- gsub("\"", "", insight::safe_deparse(.y), fixed = TRUE)
     perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
     attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
     return(perf_df)
@@ -131,10 +119,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   dfs <- Reduce(function(x, y) merge(x, y, all = TRUE, sort = FALSE), m)
 
   if (any(c("AIC", "AICc", "BIC", "WAIC") %in% names(dfs))) {
-    dfs$AIC_wt  <- .ic_weight(dfs$AIC)
-    dfs$AICc_wt <- .ic_weight(dfs$AICc)
-    dfs$BIC_wt  <- .ic_weight(dfs$BIC)
-    dfs$WAIC_wt <- .ic_weight(dfs$WAIC)
+    dfs$AIC_wt <- .ic_weight(dfs[["AIC"]])
+    dfs$AICc_wt <- .ic_weight(dfs[["AICc"]])
+    dfs$BIC_wt <- .ic_weight(dfs[["BIC"]])
+    dfs$WAIC_wt <- .ic_weight(dfs[["WAIC"]])
   }
 
   if ("LOOIC" %in% names(dfs)) {
@@ -143,8 +131,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   }
 
   # check if all models were fit from same data
-  resps <- lapply(objects, insight::get_response)
-  if (!all(sapply(resps[-1], function(x) identical(x, resps[[1]]))) && verbose) {
+  if (!isTRUE(attributes(objects)$same_response) && verbose) {
     warning(insight::format_message("When comparing models, please note that probably not all models were fit from same data."), call. = FALSE)
   }
 
@@ -191,6 +178,22 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
 
+  # for REML fits, warn user
+  if (isTRUE(verbose) &&
+      # only warn for REML fit
+      identical(estimator, "REML") &&
+      # only for IC comparison
+      any(grepl("(AIC|BIC)", names(dfs))) &&
+      # only when mixed models are involved, others probably don't have problems with REML fit
+      any(sapply(objects, insight::is_mixed_model)) &&
+      # only if not all models have same fixed effects (else, REML is ok)
+      !isTRUE(attributes(objects)$same_fixef)) {
+      warning(insight::format_message(
+        "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
+        "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
+      ), call. = FALSE)
+  }
+
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
   class(dfs) <- c("compare_performance", "see_compare_performance", class(dfs))
   dfs
@@ -198,6 +201,33 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
 
 
 
+# methods ----------------------------
+
+#' @export
+print.compare_performance <- function(x, digits = 3, ...) {
+  table_caption <- c("# Comparison of Model Performance Indices", "blue")
+  formatted_table <- format(x = x, digits = digits, format = "text", ...)
+
+  if ("Performance_Score" %in% colnames(formatted_table)) {
+    footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+  } else {
+    footer <- NULL
+  }
+
+  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))
+  invisible(x)
+}
+
+
+#' @export
+plot.compare_performance <- function(x, ...) {
+  insight::check_if_installed("see", "for model comparison plots")
+  NextMethod()
+}
+
+
+
+# utilities ------------------------------
 
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
@@ -215,11 +245,11 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   x$p_LRT <- NULL
 
   # use weights instead of information criteria
-  x$AIC   <- NULL
-  x$AICc  <- NULL
-  x$BIC   <- NULL
+  x$AIC <- NULL
+  x$AICc <- NULL
+  x$BIC <- NULL
   x$LOOIC <- NULL
-  x$WAIC  <- NULL
+  x$WAIC <- NULL
 
   # remove extra columns from LOO criteria
   x$ELPD <- NULL
@@ -266,13 +296,17 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, verbose = TR
   x
 }
 
+
 .normalize_vector <- function(x) {
   as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 }
 
+
 .ic_weight <- function(ic) {
   # ic should be in the deviance metric (-2 * loglik)
-  if (is.null(ic)) return(NULL)
+  if (is.null(ic)) {
+    return(NULL)
+  }
 
   diffs <- ic - min(ic)
   f <- exp(-0.5 * diffs)

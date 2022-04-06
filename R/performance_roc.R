@@ -49,8 +49,8 @@ performance_roc <- function(x, ..., predictions, new_data) {
   dots <- list(...)
 
   object_names <- c(
-    .safe_deparse(substitute(x)),
-    sapply(match.call(expand.dots = FALSE)$`...`, .safe_deparse)
+    insight::safe_deparse(substitute(x)),
+    sapply(match.call(expand.dots = FALSE)$`...`, insight::safe_deparse)
   )
 
   if (insight::is_model(x)) {
@@ -73,6 +73,41 @@ performance_roc <- function(x, ..., predictions, new_data) {
 }
 
 
+
+# methods -----------------------------
+
+#' @export
+plot.performance_roc <- function(x, ...) {
+  insight::check_if_installed("see", "to plot ROC-curves")
+  NextMethod()
+}
+
+
+#' @export
+print.performance_roc <- function(x, ...) {
+  if (length(unique(x$Model)) == 1) {
+    cat(sprintf("AUC: %.2f%%\n", 100 * bayestestR::area_under_curve(x$Specificity, x$Sensitivity)))
+  } else {
+    insight::print_color("# Area under Curve\n\n", "blue")
+
+    dat <- split(x, f = x$Model)
+    max_space <- max(nchar(x$Model))
+
+    for (i in 1:length(dat)) {
+      cat(sprintf(
+        "  %*s: %.2f%%\n",
+        max_space,
+        names(dat)[i],
+        100 * bayestestR::area_under_curve(dat[[i]]$Specificity, dat[[i]]$Sensitivity)
+      ))
+    }
+  }
+  invisible(x)
+}
+
+
+
+# utilities ---------------------------
 
 .performance_roc_numeric <- function(x, predictions) {
   if (length(x) != length(predictions)) {

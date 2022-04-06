@@ -10,16 +10,18 @@ test_wald.default <- function(...) {
 
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
-  names(objects) <- match.call(expand.dots = FALSE)$`...`
 
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
+
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_wald(objects)
   } else {
-    stop("The models cannot be compared for some reason :/")
+    stop("The models cannot be compared for some reason :/", call. = FALSE)
   }
 }
 
@@ -37,7 +39,7 @@ test_wald.ListNestedRegressions <- function(objects, ...) {
 
 #' @export
 test_wald.ListNonNestedRegressions <- function(objects, ...) {
-  stop("Wald tests cannot be run on non-nested models. Try `test_vuong()`.")
+  stop("Wald tests cannot be run on non-nested models. Try `test_vuong()`.", call. = FALSE)
 }
 
 # Helpers --------------------------

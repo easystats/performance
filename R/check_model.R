@@ -12,13 +12,14 @@
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
-#'   and plotted. May be one or more of
-#'   `"all", "vif", "qq", "normality", "linearity", "ncv", "homogeneity", "outliers", "reqq"`.
-#'   `"reqq"` is a QQ-plot for random effects and only available for mixed
-#'   models.
-#'   `"ncv"` is an alias for `"linearity"`, and checks for non-constant
-#'   variance, i.e. for heteroscedasticity, as well as the linear relationship.
-#'   By default, all possible checks are performed and plotted.
+#'   and plotted. May be one or more of `"all"`, `"vif"`, `"qq"`, `"normality"`,
+#'   `"linearity"`, `"ncv"`, `"homogeneity"`, `"outliers"`, `"reqq"`, `"pp_check"`,
+#'   `"binned_residuals"` or `"overdispersion"`, Not that not all check apply
+#'   to all type of models (see 'Details'). `"reqq"` is a QQ-plot for random
+#'   effects and only available for mixed models. `"ncv"` is an alias for
+#'   `"linearity"`, and checks for non-constant variance, i.e. for
+#'   heteroscedasticity, as well as the linear relationship. By default, all
+#'   possible checks are performed and plotted.
 #' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
 #'   Scalar from 0 to 1.
 #' @param colors Character vector with color codes (hex-format). Must be of
@@ -52,8 +53,7 @@
 #' plots are helpful to check model assumptions, they do not necessarily
 #' indicate so-called "lack of fit", e.g. missed non-linear relationships or
 #' interactions. Thus, it is always recommended to also look at
-#' [effect
-#' plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
+#' [effect plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
 #'
 #' @section Residuals for (Generalized) Linear Models:
 #' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
@@ -83,6 +83,9 @@ check_model <- function(x, ...) {
   UseMethod("check_model")
 }
 
+
+
+# default ----------------------------
 
 #' @rdname check_model
 #' @export
@@ -126,9 +129,29 @@ check_model.default <- function(x,
   attr(ca, "detrend") <- detrend
   attr(ca, "colors") <- colors
   attr(ca, "theme") <- theme
+  attr(ca, "model_info") <- minfo
+  attr(ca, "overdisp_type") <- list(...)$plot_type
   ca
 }
 
+
+# methods ----------------------------------
+
+#' @export
+print.check_model <- function(x, ...) {
+  insight::check_if_installed("see", "for model diagnositic plots")
+  NextMethod()
+}
+
+#' @export
+plot.check_model <- function(x, ...) {
+  insight::check_if_installed("see", "for model diagnositic plots")
+  NextMethod()
+}
+
+
+
+# other classes ---------------------------
 
 ## TODO for now, convert to freq, see https://github.com/easystats/performance/issues/354
 ## need to fix this later
@@ -147,19 +170,19 @@ check_model.stanreg <- function(x,
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
-              dot_size = dot_size,
-              line_size = line_size,
-              panel = panel,
-              check = check,
-              alpha = alpha,
-              dot_alpha = dot_alpha,
-              colors = colors,
-              theme = theme,
-              detrend = detrend,
-              verbose = verbose,
-              ...)
+    dot_size = dot_size,
+    line_size = line_size,
+    panel = panel,
+    check = check,
+    alpha = alpha,
+    dot_alpha = dot_alpha,
+    colors = colors,
+    theme = theme,
+    detrend = detrend,
+    verbose = verbose,
+    ...
+  )
 }
-
 
 
 #' @export
@@ -197,11 +220,7 @@ check_model.model_fit <- function(x,
 
 
 
-
-
-
-# helper ------------------------
-
+# compile plots for checks of linear models  ------------------------
 
 .check_assumptions_linear <- function(model, model_info) {
   dat <- list()
@@ -219,14 +238,16 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
 
-  dat <- .compact_list(dat)
+  dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
 
 
 
+# compile plots for checks of generalized linear models  ------------------------
 
 .check_assumptions_glm <- function(model, model_info) {
   dat <- list()
@@ -242,14 +263,22 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
+  if (isTRUE(model_info$is_binomial)) {
+    dat$BINNED_RESID <- binned_residuals(model)
+  }
+  if (isTRUE(model_info$is_count)) {
+    dat$OVERDISPERSION <- .diag_overdispersion(model)
+  }
 
-  dat <- .compact_list(dat)
+  dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
 
 
 
+# compile plots for checks of Bayesian models  ------------------------
 
 .check_assumptions_stan <- function(model) {
   if (inherits(model, "brmsfit")) {
@@ -265,7 +294,7 @@ check_model.model_fit <- function(x,
     d2 <- brms::prior_samples(model)
 
     if (is.null(d2)) {
-      stop("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model.", call. = FALSE)
+      stop(insight::format_message("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."), call. = FALSE)
     }
 
     d1 <- brms::posterior_samples(model)
@@ -301,20 +330,20 @@ check_model.model_fit <- function(x,
     # remove intercept from output for ridgeline plot.
     # this would increase the range of the scale too much
 
-    if (.obj_has_name(d1, "(Intercept)")) {
-      d1 <- .remove_column(d1, "(Intercept)")
+    if (insight::object_has_names(d1, "(Intercept)")) {
+      d1 <- datawizard::data_remove(d1, "(Intercept)")
     }
 
-    if (.obj_has_name(d2, "(Intercept)")) {
-      d2 <- .remove_column(d2, "(Intercept)")
+    if (insight::object_has_names(d2, "(Intercept)")) {
+      d2 <- datawizard::data_remove(d2, "(Intercept)")
     }
 
-    if (.obj_has_name(d1, "sigma")) {
-      d1 <- .remove_column(d1, "sigma")
+    if (insight::object_has_names(d1, "sigma")) {
+      d1 <- datawizard::data_remove(d1, "sigma")
     }
 
-    if (.obj_has_name(d2, "sigma")) {
-      d2 <- .remove_column(d2, "sigma")
+    if (insight::object_has_names(d2, "sigma")) {
+      d2 <- datawizard::data_remove(d2, "sigma")
     }
 
     d1 <- d1[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d1), perl = TRUE)]

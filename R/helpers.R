@@ -1,64 +1,24 @@
-# trim leading / trailing whitespaces
-.trim <- function(x) gsub("^\\s+|\\s+$", "", x)
+.get_BIC <- function(x, estimator = "ML") {
+  # check ML estimator
+  if (missing(estimator) && inherits(x, "lmerMod")) {
+    estimator <- "REML"
+  }
+  REML <- identical(estimator, "REML")
 
-
-
-
-.get_BIC <- function(x) {
   if (inherits(x, c("vgam", "vglm"))) {
     insight::check_if_installed("VGAM")
-    VGAM::BIC(x)
+    out <- VGAM::BIC(x)
   } else if (inherits(x, "bayesx")) {
-    stats::BIC(x)[["BIC"]]
+    out <- stats::BIC(x)[["BIC"]]
+
   } else {
-    tryCatch(
-      {
-        stats::BIC(x)
-      },
-      error = function(e) {
-        NULL
-      }
+    out <- tryCatch(
+      stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE)),
+      error = function(e) NULL
     )
   }
+  .adjust_ic_jacobian(x, out)
 }
-
-
-
-
-# safe deparse, works for very long strings
-.safe_deparse <- function(string) {
-  paste0(sapply(deparse(string, width.cutoff = 500), .trim, simplify = TRUE), collapse = "")
-}
-
-
-
-# is string empty?
-.is_empty_object <- function(x) {
-  if (is.list(x)) {
-    x <- tryCatch(
-      {
-        .compact_list(x)
-      },
-      error = function(x) {
-        x
-      }
-    )
-  }
-  # this is an ugly fix because of ugly tibbles
-  if (inherits(x, c("tbl_df", "tbl"))) x <- as.data.frame(x)
-  x <- suppressWarnings(x[!is.na(x)])
-  length(x) == 0 || is.null(x)
-}
-
-
-
-
-# has object an element with given name?
-.obj_has_name <- function(x, name) {
-  name %in% names(x)
-}
-
-
 
 
 .std <- function(x) {
@@ -134,43 +94,6 @@
 
   out
 }
-
-
-
-
-# remove NULL elements from lists
-.compact_list <- function(x, remove_na = FALSE) {
-  if (remove_na) {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || (length(i) == 1 & is.na(i)) || any(i == "NULL", na.rm = TRUE))]
-  } else {
-    x[!sapply(x, function(i) length(i) == 0 || is.null(i) || any(i == "NULL", na.rm = TRUE))]
-  }
-}
-
-
-
-
-
-# remove column
-.remove_column <- function(data, variables) {
-  data[, -which(colnames(data) %in% variables), drop = FALSE]
-}
-
-
-
-.remove_backticks_from_parameter_names <- function(x) {
-  if (is.data.frame(x)) {
-    if ("Parameter" %in% colnames(x)) {
-      x$Parameter <- gsub("`", "", x$Parameter, fixed = TRUE)
-    }
-    if ("Term" %in% colnames(x)) {
-      x$Term <- gsub("`", "", x$Term, fixed = TRUE)
-    }
-  }
-
-  x
-}
-
 
 .get_sigma <- function(model, verbose = TRUE) {
   s <- insight::get_sigma(model, ci = NULL, verbose = verbose)

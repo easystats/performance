@@ -44,7 +44,7 @@ Convergence issues are not easy to diagnose. The help page on
 how to resolve convergence issues. Another clue might be large parameter
 values, e.g. estimates (on the scale of the linear predictor) larger than
 10 in (non-identity link) generalized linear model \emph{might} indicate
-\href{https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/}{complete separation}.
+\href{https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/}{complete separation}.
 Complete separation can be addressed by regularization, e.g. penalized
 regression or Bayesian regression with appropriate priors on the fixed effects.
 }

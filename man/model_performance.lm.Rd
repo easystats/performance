@@ -10,8 +10,9 @@
 \item{model}{A model.}
 
 \item{metrics}{Can be \code{"all"}, \code{"common"} or a character vector of
-metrics to be computed (some of \code{c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")}). \code{"common"}
-will compute AIC, BIC, R2 and RMSE.}
+metrics to be computed (one or more of \code{"AIC"}, \code{"AICc"}, \code{"BIC"}, \code{"R2"},
+\code{"R2_adj"}, \code{"RMSE"}, \code{"SIGMA"}, \code{"LOGLOSS"}, \code{"PCP"}, \code{"SCORE"}).
+\code{"common"} will compute AIC, BIC, R2 and RMSE.}
 
 \item{verbose}{Toggle off warnings.}
 

@@ -3,34 +3,67 @@
 \name{performance_aicc}
 \alias{performance_aicc}
 \alias{performance_aic}
+\alias{performance_aic.default}
 \title{Compute the AIC or second-order AIC}
 \usage{
 performance_aicc(x, ...)
 
 performance_aic(x, ...)
+
+\method{performance_aic}{default}(x, estimator = "ML", verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A model object.}
 
 \item{...}{Currently not used.}
+
+\item{estimator}{Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If \code{estimator = "ML"}
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
+the same results as \code{AIC(logLik(..., REML = TRUE))}.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 Numeric, the AIC or AICc value.
 }
 \description{
 Compute the AIC or the second-order Akaike's information criterion (AICc).
-\code{performance_aic()} is a small wrapper that returns the AIC. It is
-a generic function that also works for some models that don't have a AIC method
-(like Tweedie models). \code{performance_aicc()} returns the second-order (or "small sample") AIC that incorporates a correction for small sample sizes.
+\code{performance_aic()} is a small wrapper that returns the AIC, however, for
+models with a transformed response variable, \code{performance_aic()} returns the
+corrected AIC value (see 'Examples'). It is a generic function that also
+works for some models that don't have a AIC method (like Tweedie models).
+\code{performance_aicc()} returns the second-order (or "small sample") AIC that
+incorporates a correction for small sample sizes.
+}
+\details{
+\code{performance_aic()} correctly detects transformed response and,
+unlike \code{stats::AIC()}, returns the corrected AIC value.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 AIC(m)
 performance_aicc(m)
+
+# correct AIC for models with transformed response variable
+data("mtcars")
+mtcars$mpg <- floor(mtcars$mpg)
+model <- lm(log(mpg) ~ factor(cyl), mtcars)
+
+# wrong AIC, not corrected for log-transformation
+AIC(model)
+
+# performance_aic() correctly detects transformed response and
+# returns corrected AIC
+performance_aic(model)
 }
 \references{
 \itemize{
-\item Akaike, H. (1973) Information theory as an extension of the maximum likelihood principle. In: Second International Symposium on Information Theory, pp. 267–281. Petrov, B.N., Csaki, F., Eds, Akademiai Kiado, Budapest.
-\item Hurvich, C. M., Tsai, C.-L. (1991) Bias of the corrected AIC criterion for underfitted regression and time series models. Biometrika 78, 499–509.
+\item Akaike, H. (1973) Information theory as an extension of the maximum
+likelihood principle. In: Second International Symposium on Information
+Theory, pp. 267-281. Petrov, B.N., Csaki, F., Eds, Akademiai Kiado, Budapest.
+\item Hurvich, C. M., Tsai, C.-L. (1991) Bias of the corrected AIC criterion
+for underfitted regression and time series models. Biometrika 78, 499–509.
 }
 }

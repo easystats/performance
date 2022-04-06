@@ -37,14 +37,13 @@
 #'   better fit than the null-model (in such cases, p < 0.05).
 #'
 #'
-#' @references \itemize{
-#'   \item Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
+#' @references
+#' - Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
 #'   Variable Models. Political Analysis, 8, 83–98.
 #'
-#'   \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#' - Gelman, A., & Hill, J. (2007). Data analysis using regression and
 #'   multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'   Press, 99.
-#' }
 #'
 #' @examples
 #' data(mtcars)
@@ -65,10 +64,11 @@ performance_pcp <- function(model,
   mi <- insight::model_info(model, verbose = verbose)
 
   if (!mi$is_binomial) {
-    stop("`performance_pcp()` only works for models with binary outcome.")
+    stop("`performance_pcp()` only works for models with binary outcome.", call. = FALSE)
   }
 
   resp <- insight::get_response(model, verbose = verbose)
+
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
     if (verbose) insight::print_color("`performance_pcp()` only works for models with binary response values.\n", "red")
     return(NULL)
@@ -88,6 +88,51 @@ performance_pcp <- function(model,
   }
 }
 
+
+
+# methods ----------------------------------
+
+#' @export
+print.performance_pcp <- function(x, digits = 2, ...) {
+  insight::print_color("# Percentage of Correct Predictions from Logistic Regression Model\n\n", "blue")
+  cat(sprintf("  Full model: %.2f%% [%.2f%% - %.2f%%]\n", 100 * x$pcp_model, 100 * x$model_ci_low, 100 * x$model_ci_high))
+  cat(sprintf("  Null model: %.2f%% [%.2f%% - %.2f%%]\n", 100 * x$pcp_m0, 100 * x$null_ci_low, 100 * x$null_ci_high))
+
+  insight::print_color("\n# Likelihood-Ratio-Test\n\n", "blue")
+
+  v1 <- sprintf("%.3f", x$lrt_chisq)
+  v2 <- sprintf("%.3f", x$lrt_df_error)
+  v3 <- sprintf("%.3f", x$lrt_p)
+
+  space <- max(nchar(c(v1, v2)))
+
+  cat(sprintf("  Chi-squared: %*s\n", space, v1))
+  cat(sprintf("  df: %*s\n", space, v2))
+  cat(sprintf("  p-value: %*s\n\n", space, v3))
+
+  invisible(x)
+}
+
+
+#' @export
+as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
+  data.frame(
+    "Model" = c("full", "null"),
+    "Estimate" =  c(x$pcp_model, x$pcp_m0),
+    "CI_low" = c(x$model_ci_low, x$null_ci_low),
+    "CI_high" = c(x$model_ci_high, x$null_ci_high),
+    "Chisq" = c(NA, x$lrt_chisq),
+    "df_error" = c(NA, x$lrt_df_error),
+    "p" = c(NA, x$lrt_p),
+    stringsAsFactors = FALSE,
+    row.names = row.names,
+    ...
+  )
+}
+
+
+
+# utilities --------------------------------------
 
 .pcp_herron <- function(model, m0, ci, verbose = TRUE) {
   y_full <- .recode_to_zero(insight::get_response(model, verbose = verbose))
@@ -161,21 +206,5 @@ performance_pcp <- function(model,
       lrt_df_error = model$df.null - model$df.residual,
       lrt_p = lrt.p
     )
-  )
-}
-
-#' @export
-as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
-  data.frame(
-    "Model" = c("full", "null"),
-    "Estimate" =  c(x$pcp_model, x$pcp_m0),
-    "CI_low" = c(x$model_ci_low, x$null_ci_low),
-    "CI_high" = c(x$model_ci_high, x$null_ci_high),
-    "Chisq" = c(NA, x$lrt_chisq),
-    "df_error" = c(NA, x$lrt_df_error),
-    "p" = c(NA, x$lrt_p),
-    stringsAsFactors = FALSE,
-    row.names = row.names,
-    ...
   )
 }

@@ -20,11 +20,11 @@ Numeric, the log loss of \code{model}.
 Compute the log loss for models with binary outcome.
 }
 \details{
-Logistic regression models predict the probability of an outcome of
-being a "success" or "failure" (or 1 and 0 etc.). \code{performance_logloss()} evaluates
-how good or bad the predicted probabilities are. High values indicate
-bad predictions, while low values indicate good predictions. The lower
-the log-loss, the better the model predicts the outcome.
+Logistic regression models predict the probability of an outcome of being a
+"success" or "failure" (or 1 and 0 etc.). \code{performance_logloss()} evaluates
+how good or bad the predicted probabilities are. High values indicate bad
+predictions, while low values indicate good predictions. The lower the
+log-loss, the better the model predicts the outcome.
 }
 \examples{
 data(mtcars)

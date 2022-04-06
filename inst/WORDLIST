@@ -1,11 +1,9 @@
 AGFI
 AICc
-Adressing
 Agresti
 Akademiai
 Alonso
 Ameijeiras
-Analysing
 Ankerst
 Archimbaud
 Asq
@@ -22,6 +20,7 @@ Bollen's
 Breunig
 Breusch
 Bryk
+Burnham
 Byrne
 CFA
 CFI
@@ -35,7 +34,6 @@ Crujeiras
 Csaki
 DBSCAN
 DOI
-De
 Distinguishability
 Dominicy
 Dordrecht
@@ -71,6 +69,7 @@ Holger
 Hosmer
 Hox
 Hurvich
+IC
 ICCs
 ICS
 IFI
@@ -105,7 +104,6 @@ McKelvey
 Merkle
 Michalos
 Multicollinearity
-Mundlak
 NFI
 NNFI
 Nagelkerke
@@ -114,13 +112,11 @@ Nakagawa
 Nakagawa's
 Nordhausen
 Normed
-PHQ
 PNFI
 Petrov
 Postestimation
 Psychometrika
 QE
-REWB
 RFI
 RL
 RMR
@@ -159,6 +155,7 @@ VPC
 Vanhove
 Vasishth
 Vehtari
+Verlag
 Visualisation
 Vuong
 Vuong's
@@ -177,6 +174,8 @@ analyse
 aov
 arXiv
 autocorrelated
+bayesplot
+bayestestR
 bci
 behaviour
 bife
@@ -188,13 +187,10 @@ brms
 brmsfit
 clmm
 complmrob
-conceptionally
-de
 detrend
 discriminations
 doi
 easystats
-endogeneity
 et
 eti
 favour
@@ -223,7 +219,6 @@ lmrob
 lof
 mahalanobis
 mcd
-meaned
 metafor
 mfx
 mhurdle
@@ -234,6 +229,7 @@ modelfit
 modelling
 models’
 multicollinearity
+multimodel
 multiresponse
 nd
 neighbours
@@ -244,6 +240,7 @@ poisson
 preprint
 quartile
 quartiles
+rOpenSci
 repsectively
 rescaling
 rma

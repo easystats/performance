@@ -102,7 +102,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
     group_names <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)
 
     # compute r2 by level
-    r2_random <- 1 - (vars$var.intercept / vars_null$var.intercept)
+    r2_random <- 1 - (vars$var.intercept[group_names] / vars_null$var.intercept[group_names])
     r2_fixed <- 1 - (vars$var.residual / vars_null$var.residual)
 
     out <- data.frame(
@@ -115,7 +115,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
     out
   } else {
     # Calculate R2 values
-    if (.is_empty_object(vars$var.random) || is.na(vars$var.random)) {
+    if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
       # if no random effect variance, return simple R2
       insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red")
       r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.residual)

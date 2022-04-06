@@ -184,7 +184,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     out$Sigma <- tryCatch(
       {
         s <- .get_sigma(model, verbose = verbose)
-        if (.is_empty_object(s)) {
+        if (insight::is_empty_object(s)) {
           s <- NULL
         }
         s

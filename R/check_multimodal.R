@@ -38,9 +38,10 @@
 #'   check_multimodal(m)
 #' }
 #' }
-#' @references \itemize{
-#'   \item Ameijeiras-Alonso, J., Crujeiras, R. M., \& Rodríguez-Casal, A. (2019). Mode testing, critical bandwidth and excess mass. Test, 28(3), 900-919.
-#' }
+#' @references
+#' - Ameijeiras-Alonso, J., Crujeiras, R. M., \& Rodríguez-Casal, A. (2019).
+#' Mode testing, critical bandwidth and excess mass. Test, 28(3), 900-919.
+#'
 #' @export
 check_multimodal <- function(x, ...) {
   UseMethod("check_multimodal")
@@ -85,7 +86,7 @@ check_multimodal.data.frame <- function(x, ...) {
   }
 
 
-  attr(rez, "text") <- text
+  attr(rez, "text") <- insight::format_message(text)
   attr(rez, "color") <- color
   attr(rez, "title") <- "Is the data multimodal?"
   class(rez) <- c("easystats_check", class(rez))
@@ -122,7 +123,7 @@ check_multimodal.numeric <- function(x, ...) {
     color <- "yellow"
   }
 
-  attr(rez, "text") <- text
+  attr(rez, "text") <- insight::format_message(text)
   attr(rez, "color") <- color
   attr(rez, "title") <- "Is the variable multimodal?"
   class(rez) <- c("easystats_check", class(rez))

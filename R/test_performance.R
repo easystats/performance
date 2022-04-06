@@ -1,11 +1,17 @@
-#' @title Test if Models are Different
+#' @title Test if models are different
 #'
 #' @description
+#' Testing whether models are "different" in terms of accuracy or explanatory
+#' power is a delicate and often complex procedure, with many limitations and
+#' prerequisites. Moreover, many tests exist, each coming with its own
+#' interpretation, and set of strengths and weaknesses.
 #'
-#' Testing whether models are "different" in terms of accuracy or explanatory power is a delicate and often complex
-#' procedure, with many limitations and prerequisites. Moreover, many tests exist, each coming with its own interpretation, and set of strengths and weaknesses.
-#' \cr \cr
-#' The `test_performance()` function runs the most relevant and appropriate tests based on the type of input (for instance, whether the models are *nested* or not). However, it still requires the user to understand what the tests are and what they do in order to prevent their misinterpretation. See the **details** section for more information regarding the different tests and their interpretation.
+#' The `test_performance()` function runs the most relevant and appropriate
+#' tests based on the type of input (for instance, whether the models are
+#' *nested* or not). However, it still requires the user to understand what the
+#' tests are and what they do in order to prevent their misinterpretation. See
+#' the *Details* section for more information regarding the different tests
+#' and their interpretation.
 #'
 #' @param ... Multiple model objects.
 #' @param reference This only applies when models are non-nested, and determines
@@ -38,12 +44,12 @@
 #' a significant difference in the model's performance. In this case, models are
 #' usually compared *sequentially*: m2 is tested against m1, m3 against m2,
 #' m4 against m3, etc.
-#' \cr\cr
+#'
 #' Two models are considered as *"non-nested"* if their predictors are
-#' different. For instance, `model1 (y ~ x1 + x2)` and `model2 (y ~ x3
-#' + x4)`. In the case of non-nested models, all models are usually compared
+#' different. For instance, `model1 (y ~ x1 + x2)` and `model2 (y ~ x3 + x4)`.
+#' In the case of non-nested models, all models are usually compared
 #' against the same *reference* model (by default, the first of the list).
-#' \cr\cr
+#'
 #' Nesting is detected via the `insight::is_nested_models()` function.
 #' Note that, apart from the nesting, in order for the tests to be valid,
 #' other requirements have often to be the fulfilled. For instance, outcome
@@ -51,52 +57,93 @@
 #' whether apples are significantly different from oranges!
 #' }
 #'
+#' \subsection{Estimator of the standard deviation}{
+#' The estimator is relevant when comparing regression models using
+#' `test_likelihoodratio()`. If `estimator = "OLS"`, then it uses the same
+#' method as `anova(..., test = "LRT")` implemented in base R, i.e., scaling
+#' by n-k (the unbiased OLS estimator) and using this estimator under the
+#' alternative hypothesis. If `estimator = "ML"`, which is for instance used
+#' by `lrtest(...)` in package **lmtest**, the scaling is done by n (the
+#' biased ML estimator) and the estimator under the null hypothesis. In
+#' moderately large samples, the differences should be negligible, but it
+#' is possible that OLS would perform slightly better in small samples with
+#' Gaussian errors. For `estimator = "REML"`, the LRT is based on the REML-fit
+#' log-likelihoods of the models. Note that not all types of estimators are
+#' available for all model classes.
+#' }
+#'
+#' \subsection{REML versus ML estimator}{
+#' When `estimator = "ML"`, which is the default for linear mixed models (unless
+#' they share the same fixed effects), values from information criteria (AIC,
+#' AICc) are based on the ML-estimator, while the default behaviour of `AIC()`
+#' may be different (in particular for linear mixed models from **lme4**, which
+#' sets `REML = TRUE`). This default in `test_likelihoodratio()` intentional,
+#' because comparing information criteria based on REML fits requires the same
+#' fixed effects for all models, which is often not the case. Thus, while
+#' `anova.merMod()` automatically refits all models to REML when performing a
+#' LRT, `test_likelihoodratio()` checks if a comparison based on REML fits is
+#' indeed valid, and if so, uses REML as default (else, ML is the default).
+#' Set the `estimator` argument explicitely to override the default behaviour.
+#' }
+#'
 #' \subsection{Tests Description}{
 #'
-#' \itemize{
-#'   \item **Bayes factor for Model Comparison** - `test_bf()`: If all
+#' - **Bayes factor for Model Comparison** - `test_bf()`: If all
 #'   models were fit from the same data, the returned `BF` shows the Bayes
 #'   Factor (see `bayestestR::bayesfactor_models()`) for each model against
 #'   the reference model (which depends on whether the models are nested or
 #'   not). Check out
-#'   [this
-#'   vignette](https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models) for more details.
+#'   [this vignette](https://easystats.github.io/bayestestR/articles/bayes_factors.html#bayesfactor_models)
+#'   for more details.
 #'
-#'   \item **Wald's F-Test** - `test_wald()`: The Wald test is a rough
+#' - **Wald's F-Test** - `test_wald()`: The Wald test is a rough
 #'   approximation of the Likelihood Ratio Test. However, it is more applicable
 #'   than the LRT: you can often run a Wald test in situations where no other
 #'   test can be run. Importantly, this test only makes statistical sense if the
-#'   models are nested.\cr Note: this test is also available in base R through the
-#'   [`anova()`][anova] function. It returns an `F-value` column
-#'   as a statistic and its associated `p-value`.
+#'   models are nested.
 #'
-#'   \item **Likelihood Ratio Test (LRT)** - `test_likelihoodratio()`:
+#'   Note: this test is also available in base R
+#'   through the [`anova()`][anova] function. It returns an `F-value` column
+#'   as a statistic and its associated p-value.
+#'
+#' - **Likelihood Ratio Test (LRT)** - `test_likelihoodratio()`:
 #'   The LRT tests which model is a better (more likely) explanation of the
 #'   data. Likelihood-Ratio-Test (LRT) gives usually somewhat close results (if
 #'   not equivalent) to the Wald test and, similarly, only makes sense for
-#'   nested models. However, Maximum likelihood tests make stronger assumptions
+#'   nested models. However, maximum likelihood tests make stronger assumptions
 #'   than method of moments tests like the F-test, and in turn are more
 #'   efficient. Agresti (1990) suggests that you should use the LRT instead of
 #'   the Wald test for small sample sizes (under or about 30) or if the
-#'   parameters are large.\cr Note: for regression models, this is similar to
-#'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`,
-#'   depending on the `estimator` argument. For `lavaan` models (SEM,
-#'   CFA), the function calls `lavaan::lavTestLRT()`.
+#'   parameters are large.
 #'
-#'   \item **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
+#'   Note: for regression models, this is similar to
+#'   `anova(..., test="LRT")` (on models) or `lmtest::lrtest(...)`, depending
+#'   on the `estimator` argument. For **lavaan** models (SEM, CFA), the function
+#'   calls `lavaan::lavTestLRT()`.
+#'
+#'   For models with log-transformed
+#'   response variables, `logLik()` returns a wrong log-likelihood. However,
+#'   `test_likelihoodratio()` calls `insight::get_loglikelihood()` with
+#'   `check_response=TRUE`, which returns a corrected log-likelihood value
+#'   for models with transformed response variables (like log- or
+#'   sqrt-transformation). Furthermore, since the LRT only accepts nested
+#'   models (i.e. models that differ in their fixed effects), the computed
+#'   log-likelihood is always based on the ML estimator, not on the REML fits.
+#'
+#' - **Vuong's Test** - `test_vuong()`: Vuong's (1989) test can
 #'   be used both for nested and non-nested models, and actually consists of two
 #'   tests.
-#'   \itemize{
-#'   \item The **Test of Distinguishability** (the `Omega2` column and
-#'   its associated p-value) indicates whether or not the models can possibly be
-#'   distinguished on the basis of the observed data. If its p-value is
-#'   significant, it means the models are distinguishable.
-#'   \item The **Robust Likelihood Test** (the `LR` column and its
-#'   associated p-value) indicates whether each model fits better than the
-#'   reference model. If the models are nested, then the test works as a robust
-#'   LRT. The code for this function is adapted from the `nonnest2`
-#'   package, and all credit go to their authors.}
-#' }
+#'
+#'   - The **Test of Distinguishability** (the `Omega2` column and
+#'     its associated p-value) indicates whether or not the models can possibly be
+#'     distinguished on the basis of the observed data. If its p-value is
+#'     significant, it means the models are distinguishable.
+#'
+#'   - The **Robust Likelihood Test** (the `LR` column and its
+#'     associated p-value) indicates whether each model fits better than the
+#'     reference model. If the models are nested, then the test works as a robust
+#'     LRT. The code for this function is adapted from the **nonnest2**
+#'     package, and all credit go to their authors.
 #' }
 #'
 #' @examples
@@ -117,17 +164,19 @@
 #' # Equivalent to anova(m1, m2, m3, test='LRT')
 #' test_likelihoodratio(m1, m2, m3, estimator = "OLS")
 #'
-#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
+#' if (require("CompQuadForm")) {
+#'   test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2, nested=TRUE)
 #'
-#' # Non-nested Models
-#' # -----------------
-#' m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-#' m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
-#' m3 <- lm(Sepal.Length ~ Species, data = iris)
+#'   # Non-nested Models
+#'   # -----------------
+#'   m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+#'   m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+#'   m3 <- lm(Sepal.Length ~ Species, data = iris)
 #'
-#' test_performance(m1, m2, m3)
-#' test_bf(m1, m2, m3)
-#' test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
+#'   test_performance(m1, m2, m3)
+#'   test_bf(m1, m2, m3)
+#'   test_vuong(m1, m2, m3) # nonnest2::vuongtest(m1, m2)
+#' }
 #'
 #' # Tweak the output
 #' # ----------------
@@ -185,26 +234,93 @@ test_performance <- function(..., reference = 1) {
 }
 
 
+
+# default --------------------------------
+
 #' @export
 test_performance.default <- function(..., reference = 1, include_formula = FALSE) {
 
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
-  names(objects) <- match.call(expand.dots = FALSE)$`...`
 
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
+
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_performance(objects, reference = reference, include_formula = include_formula)
   } else {
-    stop("The models cannot be compared for some reason :/")
+    stop("The models cannot be compared for some reason :/", call. = FALSE)
   }
 }
 
 
 
+# methods ------------------------------
+
+#' @export
+plot.test_performance <- function(x, ...) {
+  warning(insight::format_message("There is currently no plot() method for test-functions.",
+                                  "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."), call. = FALSE)
+}
+
+
+#' @export
+format.test_performance <- function(x, digits = 2, ...) {
+
+  # Format cols and names
+  out <- insight::format_table(x, digits = digits, ...)
+
+  if (isTRUE(attributes(x)$is_nested)) {
+    footer <- paste0(
+      "Models were detected as nested and are compared in sequential order.\n"
+    )
+  } else {
+    footer <- paste0(
+      "Each model is compared to ",
+      x$Name[attributes(x)$reference],
+      ".\n"
+    )
+  }
+  attr(out, "table_footer") <- footer
+  out
+}
+
+
+#' @export
+print.test_performance <- function(x, digits = 2, ...) {
+  out <- insight::export_table(format(x, digits = digits, ...), ...)
+  cat(out)
+}
+
+
+#' @export
+print_md.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "markdown", ...)
+}
+
+
+#' @export
+print_html.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
+}
+
+
+#' @export
+display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
+  if (format == "markdown") {
+    print_md(x = object, digits = digits, ...)
+  } else {
+    print_html(x = object, digits = digits, ...)
+  }
+}
+
+
+
+# other classes -----------------------------------
 
 #' @export
 test_performance.ListNestedRegressions <- function(objects,
@@ -227,10 +343,14 @@ test_performance.ListNestedRegressions <- function(objects,
     }
   )
 
-  # Vuong
+  # Vuong, or LRT
   tryCatch(
     {
-      rez <- test_vuong(objects)
+      if (isTRUE(insight::check_if_installed("CompQuadForm", quietly = TRUE))) {
+        rez <- test_vuong(objects)
+      } else {
+        rez <- test_lrt(objects)
+      }
       rez$Model <- NULL
       out <- merge(out, rez, sort = FALSE)
     },
@@ -267,10 +387,14 @@ test_performance.ListNonNestedRegressions <- function(objects,
     }
   )
 
-  # Vuong
+  # Vuong, or Wald - we have non-nested models, so no LRT here
   tryCatch(
     {
-      rez <- test_vuong(objects, reference = reference)
+      if (isTRUE(insight::check_if_installed("CompQuadForm", quietly = TRUE))) {
+        rez <- test_vuong(objects, reference = reference)
+      } else {
+        rez <- test_wald(objects)
+      }
       rez$Model <- NULL
       out <- merge(out, rez, sort = FALSE)
     },
@@ -299,55 +423,6 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
 # Helpers -----------------------------------------------------------------
 
-#' @export
-format.test_performance <- function(x, digits = 2, ...) {
-
-  # Format cols and names
-  out <- insight::format_table(x, digits = digits, ...)
-
-  if (isTRUE(attributes(x)$is_nested)) {
-    footer <- paste0(
-      "Models were detected as nested and are compared in sequential order.\n"
-    )
-  } else {
-    footer <- paste0(
-      "Each model is compared to ",
-      x$Name[attributes(x)$reference],
-      ".\n"
-    )
-  }
-  attr(out, "table_footer") <- footer
-  out
-}
-
-
-
-#' @export
-print.test_performance <- function(x, digits = 2, ...) {
-  out <- insight::export_table(format(x, digits = digits, ...), ...)
-  cat(out)
-}
-
-#' @export
-print_md.test_performance <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "markdown", ...)
-}
-
-#' @export
-print_html.test_performance <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
-}
-
-#' @export
-display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
-  if (format == "markdown") {
-    print_md(x = object, digits = digits, ...)
-  } else {
-    print_html(x = object, digits = digits, ...)
-  }
-}
-
-
 
 .test_performance_init <- function(objects, include_formula = FALSE) {
   names <- insight::model_name(objects, include_formula = include_formula)
@@ -359,8 +434,6 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
   row.names(out) <- NULL
   out
 }
-
-
 
 
 
@@ -386,5 +459,23 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
     }
   }
 
+  objects
+}
+
+
+
+.check_objectnames <- function(objects, dot_names) {
+  # Replace with names from the global environment, if these are not yet properly set
+  object_names <- insight::compact_character(names(objects))
+  # check if we have any names at all
+  if ((is.null(object_names) ||
+      # or if length of names doesn't match number of models
+      length(object_names) != length(objects) ||
+      # or if names are "..1", "..2" pattern
+      all(grepl("\\.\\.\\d", object_names))) &&
+      # and length of dot-names must match length of objects
+      length(objects) == length(dot_names)) {
+    names(objects) <- dot_names
+  }
   objects
 }

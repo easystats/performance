@@ -9,11 +9,12 @@
 #'
 #' @return Numeric, the log loss of `model`.
 #'
-#' @details Logistic regression models predict the probability of an outcome of
-#'   being a "success" or "failure" (or 1 and 0 etc.). `performance_logloss()` evaluates
-#'   how good or bad the predicted probabilities are. High values indicate
-#'   bad predictions, while low values indicate good predictions. The lower
-#'   the log-loss, the better the model predicts the outcome.
+#' @details
+#' Logistic regression models predict the probability of an outcome of being a
+#' "success" or "failure" (or 1 and 0 etc.). `performance_logloss()` evaluates
+#' how good or bad the predicted probabilities are. High values indicate bad
+#' predictions, while low values indicate good predictions. The lower the
+#' log-loss, the better the model predicts the outcome.
 #'
 #' @seealso [`performance_score()`][performance_score]
 #'

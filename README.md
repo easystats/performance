@@ -4,6 +4,7 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03139/status.svg)](https://doi.org/10.21105/joss.03139)
 [![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
+[![status](https://tinyverse.netlify.com/badge/performance)](https://CRAN.R-project.org/package=performance)
 
 ***Test if your model is a good model!***
 
@@ -24,6 +25,8 @@ zero-inflation, convergence or singularity.
 ## Installation
 
 [![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
+[![performance status
+badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev)
 [![R
 check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 
@@ -43,17 +46,13 @@ library("performance")
 
 ## Citation
 
-<!-- TO DO: once accepted, replace psyarxiv doi with joss doi -->
-
 To cite performance in publications use:
 
 ``` r
 citation("performance")
 #> 
-#>   Lüdecke et al., (2021). performance: An R Package
-#>   for Assessment, Comparison and Testing of
-#>   Statistical Models. Journal of Open Source
-#>   Software, 6(60), 3139.
+#>   Lüdecke et al., (2021). performance: An R Package for Assessment, Comparison and
+#>   Testing of Statistical Models. Journal of Open Source Software, 6(60), 3139.
 #>   https://doi.org/10.21105/joss.03139
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -298,7 +297,7 @@ model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 check_model(model)
 ```
 
-<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" width="60%" />
 
 ### Model performance summaries
 
@@ -338,9 +337,9 @@ m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 model_performance(m3)
 #> # Indices of model performance
 #> 
-#> AIC      |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma
-#> -----------------------------------------------------------------------
-#> 1755.628 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
+#> AIC      |     AICc |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma
+#> ----------------------------------------------------------------------------------
+#> 1755.628 | 1756.114 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
 ```
 
 ### Models comparison
@@ -358,12 +357,12 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name |   Model |      AIC | AIC (weighted) |      BIC | BIC (weighted) |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
-#> -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#> m1   |      lm |  156.010 |        < 0.001 |  161.873 |        < 0.001 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                
-#> m2   |     glm |   31.298 |          1.000 |   35.695 |          1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                
-#> m3   | lmerMod | 1755.628 |        < 0.001 | 1774.786 |        < 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                
-#> m4   |     glm |   56.761 |        < 0.001 |   57.747 |        < 0.001 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657
+#> Name |   Model |      AIC | AIC weights |      BIC | BIC weights |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP |     AICc | AICc weights | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
+#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> m1   |      lm |  156.010 |     < 0.001 |  161.873 |     < 0.001 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                
+#> m2   |     glm |   31.298 |       1.000 |   35.695 |       1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |          |              |            |            |       |                
+#> m3   | lmerMod | 1763.986 |     < 0.001 | 1783.144 |     < 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                
+#> m4   |     glm |   56.761 |     < 0.001 |   57.747 |     < 0.001 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657
 ```
 
 #### General index of model performance
@@ -376,12 +375,12 @@ of model performance and sort the models from the best one to the worse.
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name |   Model |   RMSE |  Sigma | AIC (weighted) | BIC (weighted) | Performance-Score
-#> --------------------------------------------------------------------------------------
-#> m2   |     glm |  0.359 |  0.934 |          1.000 |          1.000 |           100.00%
-#> m4   |     glm |  3.043 |  1.132 |        < 0.001 |        < 0.001 |            46.89%
-#> m1   |      lm |  2.444 |  2.568 |        < 0.001 |        < 0.001 |            46.09%
-#> m3   | lmerMod | 23.438 | 25.592 |        < 0.001 |        < 0.001 |             0.00%
+#> Name |   Model |   RMSE |  Sigma | AIC weights | BIC weights | Performance-Score
+#> --------------------------------------------------------------------------------
+#> m2   |     glm |  0.359 |  0.934 |       1.000 |       1.000 |           100.00%
+#> m4   |     glm |  3.043 |  1.132 |     < 0.001 |     < 0.001 |            46.89%
+#> m1   |      lm |  2.444 |  2.568 |     < 0.001 |     < 0.001 |            46.09%
+#> m3   | lmerMod | 23.438 | 25.592 |     < 0.001 |     < 0.001 |             0.00%
 ```
 
 #### Visualisation of indices of models’ performance
@@ -435,7 +434,7 @@ test_bf(lm1, lm2, lm3, lm4)
 
 Please note that the performance project is released with a [Contributor
 Code of
-Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+Conduct](https://easystats.github.io/performance/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
 # Contributing

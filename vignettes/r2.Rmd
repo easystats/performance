@@ -7,9 +7,9 @@ output:
     fig_height: 6
 tags: [r, performance, r2]
 vignette: >
-  \usepackage[utf8]{inputenc}
   %\VignetteIndexEntry{R-squared (R2)}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 editor_options: 
   chunk_output_type: console
 ---
@@ -17,35 +17,42 @@ editor_options:
 ```{r, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
+
 knitr::opts_chunk$set(
   comment = ">",
   message = FALSE,
   warning = FALSE,
   out.width = "100%",
+  collapse = TRUE,
+  strip.white = FALSE,
   dpi = 450
 )
 options(digits = 2)
 
+if (!requireNamespace("BayesFactor", quietly = TRUE) ||
+  !requireNamespace("rstanarm", quietly = TRUE) ||
+  !requireNamespace("lme4", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+} else {
+  library(BayesFactor)
+  library(rstanarm)
+  library(lme4)
+}
+
 set.seed(333)
-library(rstanarm)
 ```
 
 # What is the R2?
 
-The **coefficient of determination**, denoted $R^2$ and pronounced "R squared",
-typically corresponds the proportion of the variance in the dependent variable (the response) that
-is *explained* (i.e., predicted) by the independent variables (the
-predictors).
+The **coefficient of determination**, denoted $R^2$ and pronounced "R squared", typically corresponds the proportion of the variance in the dependent variable (the response) that is *explained* (i.e., predicted) by the independent variables (the predictors).
 
 It is an "absolute" index of *goodness-of-fit*, ranging from 0 to 1 (often expressed in percentage), and can be used for model performance assessment or models comparison.
 
 # Different types of R2
 
-As models become more complex, the computation of an $R^2$ becomes increasingly
-less straightforward.
+As models become more complex, the computation of an $R^2$ becomes increasingly less straightforward.
 
-Currently, depending on the context of the regression model object, one can
-choose from the following measures supported in `performance`:
+Currently, depending on the context of the regression model object, one can choose from the following measures supported in `{performance}`:
 
 - Bayesian $R^2$
 - Cox & Snell's $R^2$
@@ -73,13 +80,24 @@ knitr::kable(d)
 
 *TO BE COMPLETED.*
 
-# R2 for GLMs
+Before we begin, let's first load the package.
 
-In the context of a generalized linear model (e.g., a logistic model which outcome is binary), $R^2$ doesn't measure the
-percentage of *"explained variance"*, as this concept doesn't apply. However,
-the $R^2$s that have been adapted for GLMs have retained the name of "R2",
-mostly because of the similar properties (the range, the sensitivity, and the
-interpretation as the amount of explanatory power).
+```{r}
+library(performance)
+```
+
+
+# R2 for `lm`
+
+```{r}
+m_lm <- lm(wt ~ am * cyl, data = mtcars)
+
+r2(m_lm)
+```
+
+# R2 for `glm`
+
+In the context of a generalized linear model (e.g., a logistic model which outcome is binary), $R^2$ doesn't measure the percentage of *"explained variance"*, as this concept doesn't apply. However, the $R^2$s that have been adapted for GLMs have retained the name of "R2", mostly because of the similar properties (the range, the sensitivity, and the interpretation as the amount of explanatory power).
 
 # R2 for Mixed Models
 
@@ -90,13 +108,10 @@ For mixed models, `performance` will return two different $R^2$s:
 - The **conditional** $R^2$ 
 - The **marginal** $R^2$ 
 
-The marginal $R^2$ considers only the variance of the **fixed effects** (without the random effects), while
-the conditional $R^2$ takes *both* the **fixed and random effects** into
-account (i.e., the total model).
+The marginal $R^2$ considers only the variance of the **fixed effects** (without the random effects), while the conditional $R^2$ takes *both* the **fixed and random effects** into account (i.e., the total model).
 
 ```{r}
 library(lme4)
-library(performance)
 
 # defining a linear mixed-effects model
 model <- lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
@@ -110,8 +125,7 @@ Note that `r2` functions only return the $R^2$ values. We would encourage users 
 model_performance(model)
 ```
 
-But, in the current vignette, we would like to exclusively focus on this family
-of functions and will only talk about this measure.
+But, in the current vignette, we would like to exclusively focus on this family of functions and will only talk about this measure.
 
 # R2 for Bayesian Models
 
@@ -130,6 +144,28 @@ model <- stan_lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, refr
 
 r2(model)
 ```
+
+Let's look at another regression analysis carried out with `{BayesFactor}` package.
+
+```{r, eval=utils::packageVersion("BayesFactor") >= package_version("0.9.12-4.3")}
+library(BayesFactor)
+data(puzzles)
+
+m1 <- anovaBF(extra ~ group + ID,
+  data = sleep,
+  whichRandom = "ID", progress = FALSE
+)
+
+r2(m1)
+
+m2 <- generalTestBF(RT ~ shape * color + ID,
+  data = puzzles, whichRandom = "ID",
+  neverExclude = "ID", progress = FALSE
+)
+
+r2(m2)
+```
+
 
 If you want to know more about these indices, you can check out details and references in the functions that compute them [**here**](https://easystats.github.io/performance/reference/index.html#section-r-functions).
 

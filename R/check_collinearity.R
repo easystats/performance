@@ -3,11 +3,13 @@
 #'
 #' @description
 #'
-#' `check_collinearity()` checks regression models for
-#'   multicollinearity by calculating the variance inflation factor (VIF).
-#'   `multicollinearity()` is an alias for `check_collinearity()`.
-#'   (When printed, VIF are also translated to Tolerance values, where
-#'   `tolerance = 1/vif`.)
+#'  `check_collinearity()` checks regression models for
+#'  multicollinearity by calculating the variance inflation factor (VIF).
+#'  `multicollinearity()` is an alias for `check_collinearity()`.
+#'  (When printed, VIF are also translated to tolerance values, where
+#'  `tolerance = 1/vif`.) `check_concurvity()` is a wrapper around
+#'  `mgcv::concurvity()`, and can be considered as a collinearity check
+#'  for smooth terms in GAMs.
 #'
 #' @param x A model object (that should at least respond to `vcov()`,
 #'  and if possible, also to `model.matrix()` - however, it also should
@@ -22,7 +24,7 @@
 #' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
-#' @return A data frame with three columns: The name of the model term, the
+#' @return A data frame with four columns: The name of the model term, the
 #'   variance inflation factor and the factor by which the standard error
 #'   is increased due to possible correlation with other terms.
 #'
@@ -71,11 +73,25 @@
 #'   terms \cite{(Francoeur 2013)}.
 #' }
 #'
+#' \subsection{Concurvity for Smooth Terms in Generalized Additive Models}{
+#'   `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#'   considered as a collinearity check for smooth terms in GAMs.
+#'   \dQuote{Concurvity occurs when some smooth term in a model could be
+#'   approximated by one or more of the other smooth terms in the model.} (see
+#'   `?mgcv::concurvity`). `check_concurvity()` returns a column named _VIF_,
+#'   which is the "worst" measure. While `mgcv::concurvity()` range between
+#'   0 and 1, the _VIF_ value is `1 / (1 - worst)`, to make interpretation
+#'   comparable to classical VIF values, i.e. `1` indicates no problems, while
+#'   higher values indicate increasing lack of identifiability. The _VIF proportion_
+#'   column equals the "estimate" column from `mgcv::concurvity()`, ranging
+#'   from 0 (no problem) to 1 (total lack of identifiability).
+#' }
+#'
 #' @references
 #'   \itemize{
 #'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 #'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-#'   Clusters. Open Journal of Statistics, 03(06), 24–44.
+#'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
 #'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013).
 #'   An introduction to statistical learning: with applications in R. New York:
@@ -110,11 +126,79 @@ check_collinearity <- function(x, ...) {
 multicollinearity <- check_collinearity
 
 
+
+# default ------------------------------
+
 #' @rdname check_collinearity
 #' @export
 check_collinearity.default <- function(x, verbose = TRUE, ...) {
   .check_collinearity(x, component = "conditional", verbose = verbose)
 }
+
+
+
+# methods -------------------------------------------
+
+#' @export
+print.check_collinearity <- function(x, ...) {
+  insight::print_color("# Check for Multicollinearity\n", "blue")
+
+  if ("Component" %in% colnames(x)) {
+    comp <- split(x, x$Component)
+    for (i in 1:length(comp)) {
+      cat(paste0("\n* ", comp[[i]]$Component[1], " component:\n"))
+      .print_collinearity(comp[[i]][, 1:3])
+    }
+  } else {
+    .print_collinearity(x)
+  }
+
+  invisible(x)
+}
+
+
+#' @export
+plot.check_collinearity <- function(x, ...) {
+  insight::check_if_installed("see", "to plot collinearity-check")
+  NextMethod()
+}
+
+
+.print_collinearity <- function(x) {
+  vifs <- x$VIF
+  x$Tolerance <- 1 / x$VIF
+
+  x$VIF <- sprintf("%.2f", x$VIF)
+  x$SE_factor <- sprintf("%.2f", x$SE_factor)
+  x$Tolerance <- sprintf("%.2f", x$Tolerance)
+
+  colnames(x)[3] <- "Increased SE"
+
+  low_corr <- which(vifs < 5)
+  if (length(low_corr)) {
+    cat("\n")
+    insight::print_color("Low Correlation\n\n", "green")
+    print.data.frame(x[low_corr, ], row.names = FALSE)
+  }
+
+  mid_corr <- which(vifs >= 5 & vifs < 10)
+  if (length(mid_corr)) {
+    cat("\n")
+    insight::print_color("Moderate Correlation\n\n", "yellow")
+    print.data.frame(x[mid_corr, ], row.names = FALSE)
+  }
+
+  high_corr <- which(vifs >= 10)
+  if (length(high_corr)) {
+    cat("\n")
+    insight::print_color("High Correlation\n\n", "red")
+    print.data.frame(x[high_corr, ], row.names = FALSE)
+  }
+}
+
+
+
+# other classes ----------------------------------
 
 #' @export
 check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
@@ -144,6 +228,16 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   )))
 }
 
+#' @export
+check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
+  if (!insight::is_model(x)) {
+    stop("Collinearity only applicable to regression models.")
+  }
+
+  f <- insight::find_formula(x)[[1]]
+  d <- insight::get_data(x)
+  check_collinearity(stats::lm(f, d))
+}
 
 # mfx models -------------------------------
 
@@ -178,10 +272,7 @@ check_collinearity.betamfx <- check_collinearity.logitor
 
 
 
-
-
 # zi-models -------------------------------------
-
 
 #' @rdname check_collinearity
 #' @export
@@ -194,7 +285,6 @@ check_collinearity.glmmTMB <- function(x,
 }
 
 
-
 #' @export
 check_collinearity.MixMod <- function(x,
                                       component = c("all", "conditional", "count", "zi", "zero_inflated"),
@@ -203,7 +293,6 @@ check_collinearity.MixMod <- function(x,
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
-
 
 
 #' @export
@@ -216,7 +305,6 @@ check_collinearity.hurdle <- function(x,
 }
 
 
-
 #' @export
 check_collinearity.zeroinfl <- function(x,
                                         component = c("all", "conditional", "count", "zi", "zero_inflated"),
@@ -225,7 +313,6 @@ check_collinearity.zeroinfl <- function(x,
   component <- match.arg(component)
   .check_collinearity_zi_model(x, component, verbose = verbose)
 }
-
 
 
 #' @export
@@ -238,6 +325,8 @@ check_collinearity.zerocount <- function(x,
 }
 
 
+
+# utilities ---------------------------------
 
 .check_collinearity_zi_model <- function(x, component, verbose = TRUE) {
   if (component == "count") component <- "conditional"
@@ -274,13 +363,12 @@ check_collinearity.zerocount <- function(x,
 
 
 
-
 .check_collinearity <- function(x, component, verbose = TRUE) {
   v <- insight::get_varcov(x, component = component, verbose = FALSE)
   assign <- .term_assignments(x, component, verbose = verbose)
 
   # any assignment found?
-  if (is.null(assign)) {
+  if (is.null(assign) || all(is.na(assign))) {
     if (verbose) {
       warning(insight::format_message(sprintf("Could not extract model terms for the %s component of the model.", component), call. = FALSE))
     }
@@ -359,26 +447,27 @@ check_collinearity.zerocount <- function(x,
 
   structure(
     class = c("check_collinearity", "see_check_collinearity", "data.frame"),
-    .remove_backticks_from_parameter_names(
+    insight::text_remove_backticks(
       data.frame(
         Term = terms,
         VIF = result,
         SE_factor = sqrt(result),
         stringsAsFactors = FALSE
-      )
+      ),
+      column = "Term"
     ),
-    data = .remove_backticks_from_parameter_names(
+    data = insight::text_remove_backticks(
       data.frame(
         Term = terms,
         VIF = result,
         SE_factor = sqrt(result),
         Component = component,
         stringsAsFactors = FALSE
-      )
+      ),
+      column = "Term"
     )
   )
 }
-
 
 
 
@@ -418,7 +507,6 @@ check_collinearity.zerocount <- function(x,
 
 
 
-
 .find_term_assignment <- function(x, component, verbose = TRUE) {
   pred <- insight::find_predictors(x)[[component]]
 
@@ -440,8 +528,14 @@ check_collinearity.zerocount <- function(x,
     }
   }))
 
+  if (insight::is_gam_model(x)) {
+    model_params <- as.vector(unlist(unlist(insight::find_parameters(x)[c(component, "smooth_terms")])))
+  } else {
+    model_params <- insight::find_parameters(x)[[component]]
+  }
+
   as.numeric(names(parms)[match(
-    insight::clean_names(insight::find_parameters(x)[[component]]),
+    insight::clean_names(model_params),
     parms
   )])
 }

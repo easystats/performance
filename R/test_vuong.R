@@ -10,16 +10,18 @@ test_vuong.default <- function(..., reference = 1) {
 
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
-  names(objects) <- match.call(expand.dots = FALSE)$`...`
 
   # Sanity checks (will throw error if non-valid objects)
   .test_performance_checks(objects)
+
+  # ensure proper object names
+  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_vuong(objects, reference = reference)
   } else {
-    stop("The models cannot be compared for some reason :/")
+    stop("The models cannot be compared for some reason :/", call. = FALSE)
   }
 }
 
@@ -63,7 +65,16 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
       ref <- objects[[reference]]
     }
     rez <- .test_vuong_pairs(ref, objects[[i]], nested = nested, adj = "none")
-    out <- rbind(out, data.frame(Omega2 = rez$Omega2, p_Omega2 = rez$p_Omega2, LR = rez$LRTstat, p_LR = rez$p_LRT, stringsAsFactors = FALSE))
+    out <- rbind(
+      out,
+      data.frame(
+        Omega2 = rez$Omega2,
+        p_Omega2 = rez$p_Omega2,
+        LR = rez$LRTstat,
+        p_LR = rez$p_LRT,
+        stringsAsFactors = FALSE
+      )
+    )
   }
 
   out <- cbind(.test_performance_init(objects), out)

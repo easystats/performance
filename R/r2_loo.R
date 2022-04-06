@@ -18,7 +18,7 @@
 #'
 #' @details `r2_loo()` returns an "adjusted" R2 value computed using a
 #'   leave-one-out-adjusted posterior distribution. This is conceptually similar
-#'   to an adjusted/unbiased R2 estiamte in classical regression modeling. See
+#'   to an adjusted/unbiased R2 estimate in classical regression modeling. See
 #'   [r2_bayes()] for an "unadjusted" R2.
 #'   \cr \cr
 #'   Mixed models are not currently fully supported.
@@ -36,7 +36,6 @@
 #' }
 #' @export
 r2_loo <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
-
   loo_r2 <- r2_loo_posterior(model, verbose = verbose, ...)
 
   if (is.null(loo_r2)) {

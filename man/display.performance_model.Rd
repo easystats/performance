@@ -5,9 +5,9 @@
 \alias{print_md.performance_model}
 \title{Print tables in different output formats}
 \usage{
-\method{display}{performance_model}(object, format = "markdown", digits = 2, ...)
+\method{display}{performance_model}(object, format = "markdown", digits = 2, caption = NULL, ...)
 
-\method{print_md}{performance_model}(x, digits = 2, ...)
+\method{print_md}{performance_model}(x, digits = 2, caption = "Indices of model performance", ...)
 }
 \arguments{
 \item{object, x}{An object returned by \code{\link[=model_performance]{model_performance()}}
@@ -18,6 +18,8 @@ or its summary.}
 \code{"markdown"} is supported.}
 
 \item{digits}{Number of decimal places.}
+
+\item{caption}{Table caption as string. If \code{NULL}, no table caption is printed.}
 
 \item{...}{Currently not used.}
 }

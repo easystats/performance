@@ -18,7 +18,7 @@ bibliography: paper/paper.bib
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  tidy.opts = list(width.cutoff = 80),
+  tidy.opts = list(width.cutoff = 100),
   tidy = TRUE,
   warning = FALSE,
   message = FALSE,
@@ -30,14 +30,14 @@ knitr::opts_chunk$set(
 options(
   knitr.kable.NA = "",
   digits = 4,
-  width = 60
+  width = 100
 )
 
 library(performance)
 ```
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03139/status.svg)](https://doi.org/10.21105/joss.03139)
-[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/) 
+[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/) [![status](https://tinyverse.netlify.com/badge/performance)](https://CRAN.R-project.org/package=performance)
 
 ***Test if your model is a good model!***
 
@@ -47,8 +47,7 @@ The primary goal of the **performance** package is to fill this gap and to provi
 
 ## Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
-[![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![performance status badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
 
 The *performance* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
 
@@ -64,8 +63,6 @@ library("performance")
 ```
 
 ## Citation
-
-<!-- TO DO: once accepted, replace psyarxiv doi with joss doi -->
 
 To cite performance in publications use:
 
@@ -258,7 +255,7 @@ check_heteroscedasticity(model)
 `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To
 get a comprehensive check, use `check_model()`.
 
-```{r, fig.height=9, fig.width=7}
+```{r, fig.height=10, fig.width=8, out.width="60%"}
 # defining a model
 model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 
@@ -338,8 +335,7 @@ data(iris)
 lm1 <- lm(Sepal.Length ~ Species, data = iris)
 lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
 lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
-lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + 
-          Petal.Length + Petal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
 
 test_performance(lm1, lm2, lm3, lm4)
 
@@ -348,7 +344,8 @@ test_bf(lm1, lm2, lm3, lm4)
 
 # Code of Conduct
 
-Please note that the performance project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+Please note that the performance project is released with a [Contributor Code of Conduct](https://easystats.github.io/performance/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
 
 # Contributing
 

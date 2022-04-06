@@ -72,31 +72,92 @@ check_overdispersion <- function(x, ...) {
 }
 
 
+
+# default -----------------------
+
 #' @export
 check_overdispersion.default <- function(x, ...) {
-  stop(paste0("'check_overdisperion()' not yet implemented for models of class '", class(x)[1], "'."))
+  stop(insight::format_message(paste0("'check_overdisperion()' not yet implemented for models of class '", class(x)[1], "'.")), call. = FALSE)
+}
+
+
+
+# Methods -----------------------------
+
+#' @export
+plot.check_overdisp <- function(x, ...) {
+  insight::check_if_installed("see", "for overdispersion plots")
+  obj_name <- attr(x, "object_name", exact = TRUE)
+  model <- NULL
+
+  if (!is.null(obj_name)) {
+    model <- tryCatch(get(obj_name, envir = parent.frame()),
+                      error = function(e) NULL)
+    if (is.null(model)) {
+      # second try, global env
+      model <- tryCatch(get(obj_name, envir = globalenv()),
+                        error = function(e) NULL)
+    }
+  }
+  if (!is.null(model)) {
+    x <- .diag_overdispersion(model)
+    class(x) <- c("see_check_overdisp", "data.frame")
+    attr(x, "colors") <- list(...)$colors
+    attr(x, "line_size") <- list(...)$size_line
+    attr(x, "overdisp_type") <- list(...)$plot_type
+    plot(x, ...)
+  }
+}
+
+#' @export
+print.check_overdisp <- function(x, digits = 3, ...) {
+  orig_x <- x
+
+  x$dispersion_ratio <- sprintf("%.*f", digits, x$dispersion_ratio)
+  x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
+
+  x$p_value <- pval <- round(x$p_value, digits = digits)
+  if (x$p_value < .001) x$p_value <- "< 0.001"
+
+  maxlen <- max(
+    nchar(x$dispersion_ratio),
+    nchar(x$chisq_statistic),
+    nchar(x$p_value)
+  )
+
+  insight::print_color("# Overdispersion test\n\n", "blue")
+  cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
+  cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
+  cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+
+  if (pval > 0.05) {
+    message("No overdispersion detected.")
+  } else {
+    message("Overdispersion detected.")
+  }
+
+  invisible(orig_x)
 }
 
 
 
 # Overdispersion for classical models -----------------------------
 
-
 #' @export
-check_overdispersion.glm <- function(x, ...) {
+check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   # check if we have poisson
   info <- insight::model_info(x)
-  if (!info$is_poisson && !info$is_binomial) {
-    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+  if (!info$is_count && !info$is_binomial) {
+    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
+    stop("Overdispersion checks cannot be used for Bernoulli models.", call. = FALSE)
   }
 
   if (info$is_binomial) {
-    return(check_overdispersion.merMod(x, ...))
+    return(check_overdispersion.merMod(x, verbose = verbose, ...))
   }
 
   yhat <- stats::fitted(x)
@@ -109,15 +170,17 @@ check_overdispersion.glm <- function(x, ...) {
   ratio <- chisq / (n - k)
   p.value <- stats::pchisq(chisq, df = n - k, lower.tail = FALSE)
 
-  structure(
-    class = "check_overdisp",
-    list(
-      chisq_statistic = chisq,
-      dispersion_ratio = ratio,
-      residual_df = n - k,
-      p_value = p.value
-    )
+  out <- list(
+    chisq_statistic = chisq,
+    dispersion_ratio = ratio,
+    residual_df = n - k,
+    p_value = p.value
   )
+
+  class(out) <- c("check_overdisp", "see_check_overdisp")
+  attr(out, "object_name") <- insight::safe_deparse(substitute(x))
+
+  out
 }
 
 #' @export
@@ -149,35 +212,49 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 
 # Overdispersion for mixed models ---------------------------
 
-
 #' @export
-check_overdispersion.merMod <- function(x, ...) {
+check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   # check if we have poisson or binomial
   info <- insight::model_info(x)
-  if (!info$is_poisson && !info$is_binomial) {
-    stop("Model must be from Poisson or binomial family.", call. = FALSE)
+  if (!info$is_count && !info$is_binomial) {
+    stop(insight::format_message("Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."), call. = FALSE)
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    stop("Model is not allowed to be a Bernoulli model.", call. = FALSE)
+    stop("Overdispersion checks cannot be used for Bernoulli models.", call. = FALSE)
   }
 
   rdf <- stats::df.residual(x)
-  rp <- stats::residuals(x, type = "pearson")
-  Pearson.chisq <- sum(rp^2)
-  prat <- Pearson.chisq / rdf
-  pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
+  rp <- insight::get_residuals(x, type = "pearson")
+  if (insight::is_empty_object(rp)) {
+    Pearson.chisq <- NA
+    prat <- NA
+    pval <- NA
+    rp <- NA
+    if (isTRUE(verbose)) {
+      warning(insight::format_message(
+        "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion.",
+        "Only the visual inspection using 'plot(check_overdispersion(model))' is possible."
+      ), call. = FALSE)
+    }
+  } else {
+    Pearson.chisq <- sum(rp^2)
+    prat <- Pearson.chisq / rdf
+    pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
+  }
 
-  structure(
-    class = "check_overdisp",
-    list(
-      chisq_statistic = Pearson.chisq,
-      dispersion_ratio = prat,
-      residual_df = rdf,
-      p_value = pval
-    )
+  out <- list(
+    chisq_statistic = Pearson.chisq,
+    dispersion_ratio = prat,
+    residual_df = rdf,
+    p_value = pval
   )
+
+  class(out) <- c("check_overdisp", "see_check_overdisp")
+  attr(out, "object_name") <- insight::safe_deparse(substitute(x))
+
+  out
 }
 
 #' @export

@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.8.0.1
+Version: 0.9.0.1
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -39,9 +39,9 @@ Authors@R:
              role = "ctb",
              comment = c(ORCID = "0000-0003-2042-7063")),
       person(given = "Martin",
-             family = "Jullum",   
+             family = "Jullum",
              role = "rev"),
-      person(given = "gjo11",   
+      person(given = "gjo11",
              role = "rev"))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
@@ -59,9 +59,9 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.4)
 Imports:
-    bayestestR (>= 0.9.0),
-    insight (>= 0.14.0),
-    datawizard (>= 0.2.0),
+    bayestestR (>= 0.11.5),
+    insight (>= 0.17.0),
+    datawizard (>= 0.3.0),
     methods,
     stats,
     utils
@@ -72,18 +72,19 @@ Suggests:
     bayesplot,
     betareg,
     bigutilsr,
+    blavaan,
     brms,
     car,
     CompQuadForm,
     correlation,
     cplm,
     dbscan,
-    dplyr,
     fixest,
     forecast,
     gamm4,
     ggplot2,
     glmmTMB,
+    httr,
     ICS,
     ICSOutlier,
     ISLR,
@@ -105,6 +106,7 @@ Suggests:
     parallel,
     parameters,
     patchwork,
+    poorman,
     pscl,
     psych,
     randomForest,
