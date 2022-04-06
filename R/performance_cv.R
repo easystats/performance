@@ -74,11 +74,20 @@ performance_cv <- function(
       test_resp <- model_data[-train_i, resp.name]
       test_pred <- insight::get_predicted(model_upd, data = model_data[-train_i, ])
       test_resd <- test_resp - test_pred
+    } else if (method == "loo") {
+      model_response <- insight::get_response(model)
+      MSE <- mean(insight::get_residuals(model, weighted = TRUE)^2 /
+                    (1 - stats::hatvalues(model))^2)
+        mean(test_resd^2, na.rm = TRUE)
+      RMSE <- sqrt(MSE)
+      R2 <- 1 - MSE / (mean(model_response^2, na.rm = TRUE) - mean(model_response, na.rm = TRUE)^2)
+      out <- data.frame(MSE = MSE, RMSE = RMSE, R2 = R2)
     } else {
-      if (method == "loo") {
-        stack <- TRUE
-        k <- nrow(model_data)
-      }
+      # Manual method for LOO, use this for non-linear models
+      # if (method == "loo") {
+      #   stack <- TRUE
+      #   k <- nrow(model_data)
+      # }
       if (k > nrow(model_data)) {
         message(insight::color_text(insight::format_message(
           "Requested number of folds (k) larger than the sample size.",
@@ -98,8 +107,7 @@ performance_cv <- function(
       })
     }
   } else {
-    warning("Only linear models currently supported.", call. = FALSE)
-    return(NULL)
+    stop("Only linear models currently supported.", call. = FALSE)
   }
   if (isTRUE(stack)) {
     test_resp <- unlist(test_resp)
@@ -162,7 +170,7 @@ print.performance_cv <- function(x, digits = 2, ...) {
       insight::format_value(attr(x, "prop"), as_percent = TRUE, digits = 0),
       " holdout"),
     k_fold = paste0(attr(x, "k"), "-fold"),
-    loo = "LOO"
+    loo = "leave-one-out [LOO]"
   )
 
   formatted_table <- format(x = x, digits = digits, format = "text",
