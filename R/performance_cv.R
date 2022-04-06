@@ -11,8 +11,8 @@
 #' @param method Character string, indicating the cross-validation method to use:
 #'   whether holdout (`"holdout"`, aka train-test), k-fold (`"k_fold"`), or
 #'   leave-one-out (`"loo"`). If `data` is supplied, this argument is ignored.
-#' @param metrics Can be "all", "common" or a character vector of metrics to be
-#'   computed (some of c("Deviance", "MSE", "RMSE", "R2")). "common" will
+#' @param metrics Can be `"all"`, `"common"` or a character vector of metrics to be
+#'   computed (some of `c("ELPD", "Deviance", "MSE", "RMSE", "R2")`). "common" will
 #'   compute R2 and RMSE.
 #' @param prop If `method = "holdout"`, what proportion of the sample to hold
 #'   out as the test sample?
@@ -50,6 +50,9 @@ performance_cv <- function(
     metrics <- c("MSE", "RMSE", "R2")
   } else if (metrics == "common") {
     metrics <- c("RMSE", "R2")
+  } else {
+    metrics <- toupper(metrics)
+    metrics[metrics == "DEVIANCE"] <- "Deviance"
   }
   if (is.null(data)) {
     method <- match.arg(method, choices = c("holdout", "k_fold", "loo"))
@@ -74,7 +77,14 @@ performance_cv <- function(
     } else {
       if (method == "loo") {
         stack <- TRUE
-        k = length(test_pred)
+        k <- nrow(model_data)
+      }
+      if (k > nrow(model_data)) {
+        message(insight::color_text(insight::format_message(
+          "Requested number of folds (k) larger than the sample size.",
+          "'k' set equal to the sample size (leave-one-out [LOO])."
+        ), color = "yellow"))
+        k <- nrow(model_data)
       }
       cv_folds <- .crossv_kfold(model_data, k = k)
       models_upd <- lapply(cv_folds, function(.x) {
@@ -115,15 +125,25 @@ performance_cv <- function(
   }
 
   out <- out[, colnames(out) %in% c(metrics, paste0(metrics, "_SE"))]
-  out$Method <- method
-  out$k <- if (method == "k_fold") k else NULL
-  if ("deviance" %in% metrics) mesage("Metric 'deviance' not yet implemented.")
+  attr(out, "method") <- method
+  attr(out, "k") <- if(method == "k_fold") k
+  attr(out, "prop") <- if(method == "holdout") prop
+  if (length(missing_metrics <- setdiff(metrics, c("MSE", "RMSE", "R2")))) {
+    message(insight::colour_text(insight::format_message(
+      paste0(
+        "Metric",
+        ifelse(length(missing_metrics) > 1, "s '", " '"),
+        paste0(missing_metrics, collapse = "', '"),
+        "' not yet supported."
+      )
+    ), colour = "red"))
+  }
   class(out) <- c("performance_cv", "data.frame")
   return(out)
 }
 
-# TODO: implement performance::log_lik() function
-#   - When given a model, it should pass it to stats4::logLik, stats::logLik, or rstantools::log_lik
+# TODO: implement performance::log_lik() function for deviance/elpd metrics
+#   - When given a model, it should pass it to insight::get_loglikelihood, stats4::logLik, stats::logLik, or rstantools::log_lik
 #   - When given a model and new data, it should pass to rstantools::log_lik if stan
 #     or compute a df like this:
 #       df <- list(residuals = cv_residuals); class(df) <- class(model)
@@ -131,6 +151,33 @@ performance_cv <- function(
 #   - for model classes that do not compute their ll inside of logLik,
 #       then compute the ll by running:
 #       logLik(update(model, formula = {{response}} ~ 0, offset = predict(model, newdata), data = newdata))
+
+# methods ----------------------------------
+
+#' @export
+print.performance_cv <- function(x, digits = 2, ...) {
+  method <- switch(
+    attr(x, "method"),
+    holdout = paste0(
+      insight::format_value(attr(x, "prop"), as_percent = TRUE, digits = 0),
+      " holdout"),
+    k_fold = paste0(attr(x, "k"), "-fold"),
+    loo = "LOO"
+  )
+
+  formatted_table <- format(x = x, digits = digits, format = "text",
+                            ...)
+  cat(insight::export_table(
+    x = formatted_table,
+    digits = digits,
+    format = "text",
+    caption = c(paste0("# Cross-validation performance (",
+                       method,
+                       " method)"), "blue"),
+    ...
+  ))
+  invisible(x)
+}
 
 #' @export
 as.data.frame.performance_cv <- function(x, row.names = NULL, ...) {
