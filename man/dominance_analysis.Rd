@@ -4,10 +4,41 @@
 \alias{dominance_analysis}
 \title{Dominance Analysis}
 \usage{
-dominance_analysis(model, ...)
+dominance_analysis(
+  model,
+  sets = NULL,
+  all = NULL,
+  conditional = TRUE,
+  complete = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A model object supported by \code{performance::r2()}. See 'Details'.}
+
+\item{sets}{A (named) list of formula objects with no left hand
+side/response.  A named list uses the name provided each element
+as the label for the set.
+
+Predictors in each formula are bound together as a set in the dominance
+analysis and dominance statistics and designations are computed for
+the predictors together.  Predictors in \code{sets} must be present in the model
+submitted to the \code{model} argument and cannot be in the \code{all} argument.}
+
+\item{all}{A formula with no left hand side/response.
+
+Predictors in the formula are included in each subset in the dominance
+analysis and the R2 value associated with them is subtracted from the
+overall value.  Predictors in \code{all} must be present in the model
+submitted to the \code{model} argument and cannot be in the \code{sets} argument.}
+
+\item{conditional}{Logical.  If \code{FALSE} then conditional dominance matrix is not computed.
+
+If conditional dominance is not desired as an importance criterion, avoiding computing the conditional dominance matrix can save computation time.}
+
+\item{complete}{Logical.  If \code{FALSE} then complete dominance matrix is not computed.
+
+If complete dominance is not desired as an importance criterion, avoiding computing complete dominance designations can save computation time.}
 
 \item{...}{Not used at current.}
 }
@@ -25,14 +56,16 @@ statistics.}
 \item{\code{conditional_dominance}}{Matrix of conditional dominance
 statistics.  Each row represents a predictor; each column represents an
 the average increment to R2 with a specific number of predictors in
-the model.}
+the model or \code{NULL}.}
 \item{\code{complete_dominance}}{Logical matrix of complete dominance
 designations. The predictors represented in each row are
 cross-referenced with predictors in each column.  Whether the predictor
 in each column dominates the predictor in each row is represented in the
-logical value in the matrix.}
+logical value in the matrix or \code{NULL}.}
 \item{\code{model_R2}}{Value of R2 value returned by the \code{r2()} method for
 the model.}
+\item{\code{all_subset_R2}}{Value of R2 associated with the predictors in the
+\code{all} argument or \code{NULL}.}
 }
 }
 \description{
