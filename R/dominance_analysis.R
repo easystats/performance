@@ -185,6 +185,7 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
 
   # Collect components for arguments
   ivs <- insight::find_predictors(model, flatten = TRUE)
+
   dv <- insight::find_response(model)
   reg <- insight::model_name(model)
 
@@ -239,6 +240,10 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
   }
 
   else all_processed <- NULL
+
+  if (length(c(ivs, unlist(sets_processed))) > 15) warning(
+    cat(paste("Total of", 2^length(ivs)-1, "models to be estimated.\n",
+              "Process may take some time.")) , call. = FALSE)
 
   fml <- stats::reformulate(ivs, response = dv, intercept = insight::has_intercept(model))
 

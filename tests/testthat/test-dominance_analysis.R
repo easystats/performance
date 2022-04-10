@@ -21,4 +21,21 @@ if (requiet("testthat") && requiet("performance") && requiet("domir") &&
   test_that("dominance_analysis$complete_dominance", {
     expect_equal(DA_domir$Complete_Dominance,DA_perf_cpt)
   })
+
+  DA_performance2 <-
+    dominance_analysis(DA_test_model, all = ~ vs,  sets = c(~carb),
+                       complete = FALSE, conditional = FALSE)
+  DA_domir2 <- domin(mpg ~ cyl, lm, list(performance::r2, "R2"),
+                     all = "vs", sets = list("carb"), data = mtcars,
+                     conditional = FALSE, complete = FALSE)
+
+  test_that("dominance_analysis$general_dominance with sets/all", {
+    expect_equal(DA_domir2$General_Dominance,DA_performance2$general_dominance)
+
+    expect_equal(DA_domir2$Fit_Statistic_All_Subsets, DA_performance2$all_subset_R2)
+
+    expect_equal(DA_domir2$Conditional_Dominance,DA_performance2$conditional_dominance)
+  })
+
+
 }
