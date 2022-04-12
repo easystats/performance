@@ -115,7 +115,7 @@ performance_score <- function(model, verbose = TRUE, ...) {
   resp <- if (minfo$is_binomial) {
     .recode_to_zero(resp)
   } else {
-    .factor_to_numeric(resp)
+    datawizard::convert_data_to_numeric(resp)
   }
   p_y <- prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))
 

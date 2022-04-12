@@ -47,7 +47,7 @@
   # check if factor
   if (is.factor(x) || is.character(x)) {
     # try to convert to numeric
-    x <- .factor_to_numeric(x)
+    x <- datawizard::convert_data_to_numeric(x)
   }
 
   # retrieve lowest category
@@ -55,45 +55,6 @@
   sapply(x, function(y) y - minval)
 }
 
-
-
-
-
-# safe conversion from factor to numeric
-.factor_to_numeric <- function(x, lowest = NULL) {
-  if (is.data.frame(x)) {
-    as.data.frame(lapply(x, .factor_to_numeric_helper, lowest = lowest))
-  } else {
-    .factor_to_numeric_helper(x, lowest = lowest)
-  }
-}
-
-.factor_to_numeric_helper <- function(x, lowest = NULL) {
-  if (is.numeric(x)) {
-    return(x)
-  }
-
-  if (is.logical(x)) {
-    return(as.numeric(x))
-  }
-
-  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
-    if (is.character(x)) {
-      x <- as.factor(x)
-    }
-    x <- droplevels(x)
-    levels(x) <- 1:nlevels(x)
-  }
-
-  out <- as.numeric(as.character(x))
-
-  if (!is.null(lowest)) {
-    difference <- min(out) - lowest
-    out <- out - difference
-  }
-
-  out
-}
 
 .get_sigma <- function(model, verbose = TRUE) {
   s <- insight::get_sigma(model, ci = NULL, verbose = verbose)
