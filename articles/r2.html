@@ -199,7 +199,7 @@
 <span id="cb5-4"><a href="#cb5-4"></a><span class="kw">r2</span>(model)</span>
 <span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;</span><span class="st"> </span><span class="co"># Bayesian R2 with Compatibility Interval</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a><span class="er">&gt;</span><span class="st"> </span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="er">&gt;</span><span class="st">   </span>Conditional R2<span class="op">:</span><span class="st"> </span><span class="fl">0.816</span> (<span class="dv">95</span>% CI [<span class="fl">0.704</span>, <span class="fl">0.895</span>])</span></code></pre></div>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="er">&gt;</span><span class="st">   </span>Conditional R2<span class="op">:</span><span class="st"> </span><span class="fl">0.816</span> (<span class="dv">95</span>% CI [<span class="fl">0.704</span>, <span class="fl">0.897</span>])</span></code></pre></div>
 <p>As discussed above, for mixed-effects models, there will be two components associated with <span class="math inline">\(R^2\)</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># defining a Bayesian mixed-effects model</span></span>
 <span id="cb6-2"><a href="#cb6-2"></a>model &lt;-<span class="st"> </span><span class="kw">stan_lmer</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Petal.Width <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Species), <span class="dt">data =</span> iris, <span class="dt">refresh =</span> <span class="dv">0</span>)</span>
