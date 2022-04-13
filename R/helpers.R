@@ -47,7 +47,7 @@
   # check if factor
   if (is.factor(x) || is.character(x)) {
     # try to convert to numeric
-    x <- datawizard::convert_data_to_numeric(x)
+    x <- datawizard::convert_data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
   }
 
   # retrieve lowest category

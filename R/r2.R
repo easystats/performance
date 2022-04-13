@@ -74,7 +74,7 @@ r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRU
       if (minfo$is_binomial) {
         resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
-        resp <- datawizard::convert_data_to_numeric(insight::get_response(model, verbose = FALSE))
+        resp <- datawizard::convert_data_to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
       }
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, verbose = FALSE)
