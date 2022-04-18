@@ -272,15 +272,6 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
 
   # clean-up the below given changes to print ----
 
-  da_res <-
-    domir_res[which(names(domir_res) %in%
-                   c("Fit_Statistic_Overall", "Fit_Statistic_All_Subsets",
-                     "General_Dominance", "Conditional_Dominance", "Complete_Dominance",
-                     "Standardized", "Ranks"))]
-  names(da_res) <- c("general_dominance", "standardized", "ranks",
-                     "conditional_dominance", "complete_dominance",
-                     "model_R2", "all_subset_R2")
-
   if (!is.null(sets)) {
 
     if (!is.null(names(sets))) {
@@ -292,15 +283,12 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
       if (length(missing_set_names) > 0)
         set_names[missing_set_names] <- paste0("set", missing_set_names)
 
-      names(da_res$general_dominance) <-
-        c(names(da_res$general_dominance)[1:(length(da_res$general_dominance) - length(set_names))],
+      names(domir_res$General_Dominance) <-
+        c(names(domir_res$General_Dominance)[1:(length(domir_res$General_Dominance) - length(set_names))],
           set_names)
 
-      if (!is.null(da_res$conditional_dominance))
-        rownames(da_res$conditional_dominance) <- names(da_res$general_dominance)
-
-      if (!is.null(da_res$complete_dominance))
-        colnames(da_res$complete_dominance) <- paste0("Dmnated_", names(da_res$general_dominance))
+      if (conditional)
+        rownames(domir_res$Conditional_Dominance) <- names(domir_res$General_Dominance)
 
     }
 
@@ -308,23 +296,21 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
 
   if (complete) {
 
-    dimnames(da_res$complete_dominance) <- list(
-      colnames(da_res$complete_dominance),
-      names(da_res$general_dominance)
+    colnames(domir_res$Complete_Dominance) <- paste0("< ", names(domir_res$General_Dominance))
+
+    dimnames(domir_res$Complete_Dominance) <- list(
+      colnames(domir_res$Complete_Dominance),
+      names(domir_res$General_Dominance)
     )
 
-    da_res$complete_dominance <- t(da_res$complete_dominance)
+    domir_res$Complete_Dominance <- t(domir_res$Complete_Dominance)
 
   }
-
-  if (is.null(all)) da_res$all_subset_R2 <- NULL
 
   da_df_res <- da_df_cat <-
     data.frame(parameter = insight::find_parameters(model, flatten = TRUE))
 
   da_df_cat = data.frame(da_df_cat, subset = NA_character_)
-
-  print(da_df_cat)
 
   if (!is.null(sets)) {
 
@@ -332,8 +318,6 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
 
       set_name <- ifelse(!is.null(names(sets)[[set]]), names(sets)[[set]],
                          paste0("set", set))
-
-      print(set_name)
 
       da_df_cat$subset <-
         replace(da_df_cat$subset,
@@ -361,29 +345,27 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
     replace(da_df_cat$subset,
             is.na(da_df_cat$subset), "constant")
 
-  print(da_df_cat)
-
   da_df_res <-
     datawizard::data_merge(da_df_cat,
-                           data.frame(subset = names(da_res$general_dominance),
-                                      general_dominance = da_res$general_dominance))
+                           data.frame(subset = names(domir_res$General_Dominance),
+                                      general_dominance = domir_res$General_Dominance))
 
   if (!is.null(all)) {
 
     da_df_res$general_dominance <-
-      replace(da_df_res$general_dominance, da_df_res$subset == "all", da_res$all_subset_R2)
+      replace(da_df_res$general_dominance, da_df_res$subset == "all", domir_res$Fit_Statistic_All_Subsets)
 
   }
 
   da_df_res <-
     datawizard::data_merge(da_df_res,
-                           data.frame(subset = names(da_res$general_dominance),
-                                      standardized = da_res$standardized))
+                           data.frame(subset = names(domir_res$General_Dominance),
+                                      standardized = domir_res$Standardized))
 
   da_df_res <-
     datawizard::data_merge(da_df_res,
-                           data.frame(subset = names(da_res$general_dominance),
-                                      ranks = da_res$ranks))
+                           data.frame(subset = names(domir_res$General_Dominance),
+                                      ranks = domir_res$Ranks))
 
   da_df_res <-
     datawizard::data_relocate(da_df_res, "subset", after = "ranks")
@@ -391,17 +373,17 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
   if (conditional) {
 
     da_df_cdl <-
-      data.frame(subset = names(da_res$general_dominance))
+      data.frame(subset = names(domir_res$General_Dominance))
 
     da_df_cdl <-
       datawizard::data_merge(da_df_cdl,
-                             data.frame(subset = names(da_res$general_dominance),
-                                        da_res$conditional_dominance))
+                             data.frame(subset = names(domir_res$General_Dominance),
+                                        domir_res$Conditional_Dominance))
 
     da_df_cdl <-
       datawizard::data_rename(da_df_cdl,
                               names(da_df_cdl)[2:length(da_df_cdl)],
-                              colnames(da_res$conditional_dominance))
+                              colnames(domir_res$Conditional_Dominance))
   }
 
   else da_df_cdl <- NULL
@@ -409,25 +391,27 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
   if (complete) {
 
   da_df_cpt <-
-    data.frame(subset = names(da_res$general_dominance))
+    data.frame(subset = names(domir_res$General_Dominance))
 
   da_df_cpt <-
     datawizard::data_merge(da_df_cpt,
-                           data.frame(subset = names(da_res$general_dominance),
-                                      da_res$complete_dominance))
+                           data.frame(subset = names(domir_res$General_Dominance),
+                                      domir_res$Complete_Dominance))
 
   da_df_cpt <-
     datawizard::data_rename(da_df_cpt,
                             names(da_df_cpt)[2:length(da_df_cpt)],
-                            colnames(da_res$complete_dominance))
+                            colnames(domir_res$Complete_Dominance))
 
   }
 
   else da_df_cpt <- NULL
 
-  da_list <- list(da_df_res, da_df_cdl, da_df_cpt)
+  da_list <- list(general = da_df_res,
+                  conditional = da_df_cdl,
+                  complete = da_df_cpt)
 
-  attr(da_list, "model_R2") <- da_res$model_R2
+  attr(da_list, "model_R2") <- domir_res$Fit_Statistic_Overall
 
   class(da_list) <- c("parameters_da")
 
