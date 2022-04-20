@@ -647,6 +647,22 @@ check_outliers.BFBayesFactor <- function(x, ...) {
 
 
 
+#' @export
+check_outliers.gls <- function(x, method = "pareto", threshold = NULL, ...) {
+  valid_methods <- c("zscore_robust", "iqr", "ci", "pareto", "optics")
+  if (all(method == "all")) {
+    method <- valid_methods
+  }
+  if (!method %in% valid_methods) {
+    method <- "pareto"
+  }
+  check_outliers.default(x, method = method, threshold = threshold, ...)
+}
+
+#' @export
+check_outliers.lme <- check_outliers.gls
+
+
 
 # Thresholds --------------------------------------------------------------
 
@@ -1030,9 +1046,6 @@ check_outliers.glmmTMB <- function(x, ...) {
   message(paste0("`check_outliers()` does not yet support models of class ", class(x)[1], "."))
   NULL
 }
-
-#' @export
-check_outliers.lme <- check_outliers.glmmTMB
 
 #' @export
 check_outliers.lmrob <- check_outliers.glmmTMB
