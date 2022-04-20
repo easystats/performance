@@ -174,7 +174,10 @@ pp_check.glm <- function(object,
     return(pp_check.lm(object, iterations, check_range, re_formula, ...))
   }
 
-  # else, process matrix response
+  # else, process matrix response. for matrix response models, we compute
+  # the ratio of successes and failures, because the plot cannot handle
+  # matrix columns with separate success/failures in simulations.
+
   out <- tryCatch(
     {
       matrix_sim <- stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
