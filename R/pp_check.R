@@ -114,16 +114,23 @@ check_predictions.BFBayesFactor <- function(object,
   out
 }
 
-
-
 pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
 
+
+# pp-check functions -------------------------------------
 
 pp_check.lm <- function(object,
                         iterations = 50,
                         check_range = FALSE,
                         re_formula = NULL,
                         ...) {
+
+  # if we have a matrix-response, continue here...
+  if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
+    return(pp_check.glm(object, iterations, check_range, re_formula, ...))
+  }
+
+  # else, proceed as usual
   out <- tryCatch(
     {
       stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
@@ -155,6 +162,64 @@ pp_check.lm <- function(object,
   out
 }
 
+
+pp_check.glm <- function(object,
+                         iterations = 50,
+                         check_range = FALSE,
+                         re_formula = NULL,
+                         ...) {
+
+  # if we have no matrix-response, continue here...
+  if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
+    return(pp_check.lm(object, iterations, check_range, re_formula, ...))
+  }
+
+  # else, process matrix response
+  out <- tryCatch(
+    {
+      matrix_sim <- stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
+      as.data.frame(sapply(matrix_sim, function(i) i[, 1] / i[, 2], simplify = TRUE))
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(out)) {
+    stop(insight::format_message(sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])), call. = FALSE)
+  }
+
+  # get response data, and response term
+  response <- eval(.str2lang(insight::find_response(object)),
+                   envir = insight::get_response(object))
+  resp_string <- insight::find_terms(object)$response
+
+  out$y <- response[, 1] / response[, 2]
+
+  attr(out, "check_range") <- check_range
+  attr(out, "response_name") <- resp_string
+  class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
+  out
+}
+
+
+# styler: off
+pp_check.glmmTMB   <-
+  pp_check.glm.nb  <-
+  pp_check.lme     <-
+  pp_check.merMod  <-
+  pp_check.MixMod  <-
+  pp_check.mle2    <-
+  pp_check.negbin  <-
+  pp_check.polr    <-
+  pp_check.rma     <-
+  pp_check.vlm     <-
+  pp_check.wbm     <-
+  pp_check.lm
+# styler: on
+
+
+
 #' @rawNamespace if (getRversion() >= "3.6.0") {
 #'   S3method(bayesplot::pp_check, lm)
 #'   S3method(bayesplot::pp_check, glm)
@@ -171,21 +236,9 @@ pp_check.lm <- function(object,
 #'   S3method(bayesplot::pp_check, BFBayesFactor)
 #' }
 
-# styler: off
-pp_check.glm       <-
-  pp_check.glmmTMB <-
-  pp_check.glm.nb  <-
-  pp_check.lme     <-
-  pp_check.merMod  <-
-  pp_check.MixMod  <-
-  pp_check.mle2    <-
-  pp_check.negbin  <-
-  pp_check.polr    <-
-  pp_check.rma     <-
-  pp_check.vlm     <-
-  pp_check.wbm     <-
-  pp_check.lm
-# styler: on
+
+
+# aliases --------------------------
 
 #' @rdname check_predictions
 #' @export

@@ -4,6 +4,10 @@
 
 * `check_overdispersion()` gets a `plot()` method.
 
+## Bug fixes
+
+* `check_predictions()` did not work for glm's with matrix-response.
+
 # performance 0.9.0
 
 ## New functions
