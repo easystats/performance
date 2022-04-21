@@ -12,11 +12,12 @@ check_collinearity(x, ...)
 
 multicollinearity(x, ...)
 
-\method{check_collinearity}{default}(x, verbose = TRUE, ...)
+\method{check_collinearity}{default}(x, ci = 0.95, verbose = TRUE, ...)
 
 \method{check_collinearity}{glmmTMB}(
   x,
   component = c("all", "conditional", "count", "zi", "zero_inflated"),
+  ci = 0.95,
   verbose = TRUE,
   ...
 )
@@ -29,6 +30,8 @@ and if possible, also to \code{model.matrix()} - however, it also should
 work without \code{model.matrix()}).}
 
 \item{...}{Currently not used.}
+
+\item{ci}{Confidence Interval (CI) level for VIF and tolerance values.}
 
 \item{verbose}{Toggle off warnings or messages.}
 
@@ -114,7 +117,11 @@ from 0 (no problem) to 1 (total lack of identifiability).
 }
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+The code to compute the confidence intervals for the VIF and tolerance
+values was adapted from the Appendix B from the Marcoulides et al. paper.
+Thus, credits go to these authors the original algorithm. There is also
+a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
