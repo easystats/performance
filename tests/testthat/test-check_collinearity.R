@@ -62,6 +62,15 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
     coll <- check_collinearity(m2, component = "all")
     expect_true(all(coll$Tolerance < coll$Tolerance_CI_high))
     expect_true(all(coll$VIF > coll$VIF_CI_low))
+
+    expect_equal(
+      attributes(coll)$data$Component,
+      c("conditional", "conditional", "conditional", "zero inflated", "zero inflated", "zero inflated")
+    )
+    expect_equal(
+      colnames(attributes(coll)$CI),
+      c("VIF_CI_low", "VIF_CI_high", "Tolerance_CI_low", "Tolerance_CI_high", "Component")
+    )
   })
 
   if (requiet("afex") && utils::packageVersion("afex") >= package_version("1.0.0")) {

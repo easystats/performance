@@ -349,12 +349,22 @@ check_collinearity.zerocount <- function(x,
       cond$Component <- "conditional"
       return(cond)
     }
-    cond$Component <- "conditional"
-    zi$Component <- "zero inflated"
+
+    # retrieve data for plotting
     dat_cond <- attr(cond, "data")
     dat_zi <- attr(zi, "data")
     ci_cond <- attr(cond, "CI")
     ci_zi <- attr(zi, "CI")
+
+    # add component
+    cond$Component <- "conditional"
+    zi$Component <- "zero inflated"
+    dat_cond$Component <- "conditional"
+    dat_zi$Component <- "zero inflated"
+    ci_cond$Component <- "conditional"
+    ci_zi$Component <- "zero inflated"
+
+    # create final data
     dat <- rbind(cond, zi)
     attr(dat, "data") <- rbind(dat_cond, dat_zi)
     attr(dat, "CI") <- rbind(ci_cond, ci_zi)
