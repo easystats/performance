@@ -35,7 +35,7 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
     )
     expect_equal(
       check_collinearity(m2, component = "conditional")$VIF_CI_low,
-      c(1.03392, 1.14673, 1.10105),
+      c(1.03392, 1.14674, 1.10105),
       tolerance = 1e-3
     )
     expect_equal(
@@ -45,7 +45,7 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
     )
     expect_equal(
       check_collinearity(m2, component = "all")$VIF_CI_low,
-      c(1.03392, 1.14673, 1.10105, 1.17565, 1, 1.17565),
+      c(1.03392, 1.14674, 1.10105, 1.17565, 1, 1.17565),
       tolerance = 1e-3
     )
     expect_equal(
@@ -55,7 +55,7 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
     )
     expect_equal(
       check_collinearity(m2, component = "zero_inflated")$Tolerance_CI_high,
-      c(0.8506, 1, 0.8506),
+      c(0.85059, 1, 0.85059),
       tolerance = 1e-3
     )
 
