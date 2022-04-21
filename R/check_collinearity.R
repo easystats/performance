@@ -466,8 +466,8 @@ check_collinearity.zerocount <- function(x,
       VIF_CI_high = 1 / (1 - ci_up),
       SE_factor = sqrt(result),
       Tolerance = 1 / result,
-      Tolerance_CI_low = 1 - ci_lo,
-      Tolerance_CI_high = 1 - ci_up,
+      Tolerance_CI_low = 1 - ci_up,
+      Tolerance_CI_high = 1 - ci_lo,
       stringsAsFactors = FALSE
     ),
     column = "Term"
@@ -486,8 +486,8 @@ check_collinearity.zerocount <- function(x,
   attr(out, "CI") <- data.frame(
     VIF_CI_low = 1 / (1 - ci_lo),
     VIF_CI_high = 1 / (1 - ci_up),
-    Tolerance_CI_low = 1 - ci_lo,
-    Tolerance_CI_high = 1 - ci_up,
+    Tolerance_CI_low = 1 - ci_up,
+    Tolerance_CI_high = 1 - ci_lo,
     stringsAsFactors = FALSE
   )
 
