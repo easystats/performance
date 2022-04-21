@@ -52,7 +52,8 @@ multicollinearity by calculating the variance inflation factor (VIF).
 (When printed, VIF are also translated to tolerance values, where
 \code{tolerance = 1/vif}.) \code{check_concurvity()} is a wrapper around
 \code{mgcv::concurvity()}, and can be considered as a collinearity check
-for smooth terms in GAMs.
+for smooth terms in GAMs. Confidence intervals for VIF and tolerance
+are based on Marcoulides et al. (2019, Appendix B).
 }
 \details{
 \subsection{Multicollinearity}{
@@ -134,6 +135,10 @@ Clusters. Open Journal of Statistics, 03(06), 24-44.
 \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013).
 An introduction to statistical learning: with applications in R. New York:
 Springer.
+
+\item Marcoulides, K. M., & Raykov, T. (2019). Evaluation of Variance
+Inflation Factors in Regression Models Using Latent Variable Modeling
+Methods. Educational and Psychological Measurement, 79(5), 874–882.
 
 \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.

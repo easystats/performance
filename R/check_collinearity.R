@@ -9,7 +9,8 @@
 #'  (When printed, VIF are also translated to tolerance values, where
 #'  `tolerance = 1/vif`.) `check_concurvity()` is a wrapper around
 #'  `mgcv::concurvity()`, and can be considered as a collinearity check
-#'  for smooth terms in GAMs.
+#'  for smooth terms in GAMs. Confidence intervals for VIF and tolerance
+#'  are based on Marcoulides et al. (2019, Appendix B).
 #'
 #' @param x A model object (that should at least respond to `vcov()`,
 #'  and if possible, also to `model.matrix()` - however, it also should
@@ -97,6 +98,10 @@
 #'   An introduction to statistical learning: with applications in R. New York:
 #'   Springer.
 #'
+#'   \item Marcoulides, K. M., & Raykov, T. (2019). Evaluation of Variance
+#'   Inflation Factors in Regression Models Using Latent Variable Modeling
+#'   Methods. Educational and Psychological Measurement, 79(5), 874–882.
+#'
 #'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 #'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
@@ -166,10 +171,8 @@ plot.check_collinearity <- function(x, ...) {
 
 .print_collinearity <- function(x) {
   vifs <- x$VIF
-  x$Tolerance <- 1 / x$VIF
-
   x <- insight::format_table(x)
-  colnames(x)[4] <- "Increased SE"
+  colnames(x)[5] <- "Increased SE"
 
   low_corr <- which(vifs < 5)
   if (length(low_corr)) {
@@ -442,7 +445,7 @@ check_collinearity.zerocount <- function(x,
     }
   }
 
-  # CIs
+  # CIs, see Appendix B 10.1177/0013164418817803
   r <- 1 - (1 / result)
   n <- insight::n_obs(x)
   p <- insight::n_parameters(x)
@@ -455,32 +458,41 @@ check_collinearity.zerocount <- function(x,
   ci_lo <- 1 / (1 + exp(-ci_log_lo))
   ci_up <- 1 / (1 + exp(-ci_log_up))
 
-  structure(
-    class = c("check_collinearity", "see_check_collinearity", "data.frame"),
-    insight::text_remove_backticks(
-      data.frame(
-        Term = terms,
-        VIF = result,
-        CI_low = 1 / (1 - ci_lo),
-        CI_high = 1 / (1 - ci_up),
-        SE_factor = sqrt(result),
-        stringsAsFactors = FALSE
-      ),
-      column = "Term"
+  out <- insight::text_remove_backticks(
+    data.frame(
+      Term = terms,
+      VIF = result,
+      VIF_CI_low = 1 / (1 - ci_lo),
+      VIF_CI_high = 1 / (1 - ci_up),
+      SE_factor = sqrt(result),
+      Tolerance = 1 / result,
+      Tolerance_CI_low = ci_lo,
+      Tolerance_CI_high = ci_up,
+      stringsAsFactors = FALSE
     ),
-    data = insight::text_remove_backticks(
-      data.frame(
-        Term = terms,
-        VIF = result,
-        CI_low = 1 / (1 - ci_lo),
-        CI_high = 1 / (1 - ci_up),
-        SE_factor = sqrt(result),
-        Component = component,
-        stringsAsFactors = FALSE
-      ),
-      column = "Term"
-    )
+    column = "Term"
   )
+
+  attr(out, "data") <- insight::text_remove_backticks(
+    data.frame(
+      Term = terms,
+      VIF = result,
+      SE_factor = sqrt(result),
+      stringsAsFactors = FALSE
+    ),
+    column = "Term"
+  )
+
+  attr(out, "CI") <- data.frame(
+    VIF_CI_low = 1 / (1 - ci_lo),
+    VIF_CI_high = 1 / (1 - ci_up),
+    Tolerance_CI_low = ci_lo,
+    Tolerance_CI_high = ci_up,
+    stringsAsFactors = FALSE
+  )
+
+  class(out) <- c("check_collinearity", "see_check_collinearity", "data.frame")
+  out
 }
 
 
