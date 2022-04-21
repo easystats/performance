@@ -58,6 +58,10 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
       c(0.8506, 1, 0.8506),
       tolerance = 1e-3
     )
+
+    coll <- check_collinearity(m2, component = "all")
+    expect_true(all(coll$Tolerance < coll$Tolerance_CI_high))
+    expect_true(all(coll$VIF > coll$VIF_CI_low))
   })
 
   if (requiet("afex") && utils::packageVersion("afex") >= package_version("1.0.0")) {
