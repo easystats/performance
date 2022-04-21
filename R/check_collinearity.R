@@ -168,11 +168,8 @@ plot.check_collinearity <- function(x, ...) {
   vifs <- x$VIF
   x$Tolerance <- 1 / x$VIF
 
-  x$VIF <- sprintf("%.2f", x$VIF)
-  x$SE_factor <- sprintf("%.2f", x$SE_factor)
-  x$Tolerance <- sprintf("%.2f", x$Tolerance)
-
-  colnames(x)[3] <- "Increased SE"
+  x <- insight::format_table(x)
+  colnames(x)[4] <- "Increased SE"
 
   low_corr <- which(vifs < 5)
   if (length(low_corr)) {
@@ -445,12 +442,27 @@ check_collinearity.zerocount <- function(x,
     }
   }
 
+  # CIs
+  r <- 1 - (1 / result)
+  n <- insight::n_obs(x)
+  p <- insight::n_parameters(x)
+
+  l <- log(r / (1 - r)) # see Raykov & Marcoulides (2011, ch. 7) for details.
+  se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
+  se_log <- se / (r * (1 - r))
+  ci_log_lo <- l - 1.96 * se_log
+  ci_log_up <- l + 1.96 * se_log
+  ci_lo <- 1 / (1 + exp(-ci_log_lo))
+  ci_up <- 1 / (1 + exp(-ci_log_up))
+
   structure(
     class = c("check_collinearity", "see_check_collinearity", "data.frame"),
     insight::text_remove_backticks(
       data.frame(
         Term = terms,
         VIF = result,
+        CI_low = 1 / (1 - ci_lo),
+        CI_high = 1 / (1 - ci_up),
         SE_factor = sqrt(result),
         stringsAsFactors = FALSE
       ),
@@ -460,6 +472,8 @@ check_collinearity.zerocount <- function(x,
       data.frame(
         Term = terms,
         VIF = result,
+        CI_low = 1 / (1 - ci_lo),
+        CI_high = 1 / (1 - ci_up),
         SE_factor = sqrt(result),
         Component = component,
         stringsAsFactors = FALSE
