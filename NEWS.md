@@ -7,6 +7,9 @@
 * `check_outliers()` now also works for models of classes `gls` and `lme`. As
   a consequence, `check_model()` will no longer fail for these models.
 
+* `check_collinearity()` now includes the confidence intervals for the VIFs
+  and tolerance values.
+
 ## Bug fixes
 
 * `check_predictions()` did not work for glm's with matrix-response.
