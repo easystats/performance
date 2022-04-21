@@ -172,7 +172,7 @@ plot.check_collinearity <- function(x, ...) {
 .print_collinearity <- function(x) {
   vifs <- x$VIF
   x <- insight::format_table(x)
-  colnames(x)[5] <- "Increased SE"
+  colnames(x)[4] <- "Increased SE"
 
   low_corr <- which(vifs < 5)
   if (length(low_corr)) {
