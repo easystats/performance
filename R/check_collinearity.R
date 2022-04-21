@@ -152,7 +152,7 @@ print.check_collinearity <- function(x, ...) {
     comp <- split(x, x$Component)
     for (i in 1:length(comp)) {
       cat(paste0("\n* ", comp[[i]]$Component[1], " component:\n"))
-      .print_collinearity(comp[[i]][, 1:3])
+      .print_collinearity(datawizard::data_remove(comp[[i]], "Component"))
     }
   } else {
     .print_collinearity(x)
@@ -353,8 +353,11 @@ check_collinearity.zerocount <- function(x,
     zi$Component <- "zero inflated"
     dat_cond <- attr(cond, "data")
     dat_zi <- attr(zi, "data")
+    ci_cond <- attr(cond, "CI")
+    ci_zi <- attr(zi, "CI")
     dat <- rbind(cond, zi)
     attr(dat, "data") <- rbind(dat_cond, dat_zi)
+    attr(dat, "CI") <- rbind(ci_cond, ci_zi)
     dat
   } else {
     .check_collinearity(x, component, verbose = verbose)
