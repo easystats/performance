@@ -183,8 +183,6 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
     }
   }
 
-  # name collisions with 'all' 'constant' ----
-
   # Collect components for arguments
   ivs <- insight::find_predictors(model, flatten = TRUE)
 
@@ -209,6 +207,29 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
     }
 
     ivs <- ivs[-set_remove_loc] # update IVs
+
+    set_names <- names(sets)
+
+    missing_set_names <- which(set_names == "")
+
+    if (length(missing_set_names) > 0)
+      set_names[missing_set_names] <- paste0("set", missing_set_names)
+
+    if (any(set_names %in% c("all", "constant"))) {
+      stop(
+        insight::format_message(
+          "Names 'all' and 'constant' are reserved for subset names in the dominance_analysis function.",
+          "Please rename any sets currently named 'all' or 'constant.'"), call. = FALSE)
+    }
+
+    if (any(set_names %in% ivs)) {
+      repeat_names <- set_names[which(set_names %in% ivs)]
+
+      stop(insight::format_message(
+        "Set names",
+        paste(repeat_names, sep = " "), "are also the names of invidiual predictors.",
+           "Please rename these sets."), call. = FALSE)
+    }
 
   }
 
@@ -244,6 +265,14 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
 
   else all_processed <- NULL
 
+  if (any(ivs %in% c("all", "constant"))) {
+    stop(
+      insight::format_message(
+        "Names 'all' and 'constant' are reserved for subset names in the dominance_analysis function.",
+        "Please rename any predictors currently named 'all' or 'constant.'",
+        "Alternatively, put the predictor in a set by itself."), call. = FALSE)
+  }
+
   if (length(c(ivs, unlist(sets_processed))) > 15) warning(
     cat(paste("Total of", 2^length(ivs)-1, "models to be estimated.\n",
               "Process may take some time.")) , call. = FALSE)
@@ -270,27 +299,15 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
   # Implement DA
   utils::capture.output(domir_res <- do.call(domir::domin, args2domin))
 
-  # clean-up the below given changes to print ----
-
+  # Set up returned data.frame
   if (!is.null(sets)) {
 
-    if (!is.null(names(sets))) {
+    names(domir_res$General_Dominance) <-
+      c(names(domir_res$General_Dominance)[1:(length(domir_res$General_Dominance) - length(set_names))],
+        set_names)
 
-      set_names <- names(sets)
-
-      missing_set_names <- which(set_names == "")
-
-      if (length(missing_set_names) > 0)
-        set_names[missing_set_names] <- paste0("set", missing_set_names)
-
-      names(domir_res$General_Dominance) <-
-        c(names(domir_res$General_Dominance)[1:(length(domir_res$General_Dominance) - length(set_names))],
-          set_names)
-
-      if (conditional)
-        rownames(domir_res$Conditional_Dominance) <- names(domir_res$General_Dominance)
-
-    }
+    if (conditional)
+      rownames(domir_res$Conditional_Dominance) <- names(domir_res$General_Dominance)
 
   }
 
@@ -412,6 +429,9 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
                   complete = da_df_cpt)
 
   attr(da_list, "model_R2") <- domir_res$Fit_Statistic_Overall
+  attr(da_list$general, "table_title") <- "General Dominance Statistics"
+  attr(da_list$conditional, "table_title") <- "Conditional Dominance Statistics"
+  attr(da_list$complete, "table_title") <- "Complete Dominance Designations"
 
   class(da_list) <- c("parameters_da")
 
@@ -430,50 +450,10 @@ print.parameters_da <- function(x, digits = 3, ...) {
   insight::print_color("# Dominance Analysis Results", "blue")
   cat("\n\n")
 
-  cat("Model R2 Value: ", sprintf("%.*f", digits, attr(x, "model_R2")), "\n\n") #x$model_R2), "\n")
-
-  #zap small values? ----
+  cat("Model R2 Value: ", sprintf("%.*f", digits, attr(x, "model_R2")), "\n\n")
 
   cat(insight::export_table(x, digits = digits, ...))
 
-  # if (!is.null(x$all_subset_R2))
-  #   cat("All Subsets Predictors R2 Value:", sprintf("%.*f", digits, x$all_subset_R2), "\n\n")
-  # else cat("\n")
-#
-#   cat("General Dominance Statistics\n")
-#
-#   Display_gnr <-
-#     data.frame(`General Dominance` = x[["general_dominance"]],
-#                `Standardized` = x[["standardized"]],
-#                `Ranks` = as.character(x[["ranks"]]), check.names = FALSE,
-#                row.names = names(x[["general_dominance"]]),
-#                stringsAsFactors = FALSE)
-#
-#   print(insight::format_table(Display_gnr,
-#                               digits = digits))
-#
-#   if (!is.null(x$conditional_dominance)) {
-#     Display_cdl <- as.data.frame(x$conditional_dominance)
-#
-#     names(Display_cdl) <- gsub("IVs_", "Preds: ", names(Display_cdl))
-#
-#     cat("\nConditional Dominance Statistics\n")
-#
-#     print(insight::format_table(Display_cdl,
-#                                 digits = digits))
-#
-#   }
-#
-#   if (!is.null(x$complete_dominance)) {
-#     Display_cpt <- as.data.frame(x$complete_dominance)
-#
-#     colnames(Display_cpt) <- gsub("Dmnated_", "Dominated by: ", colnames(Display_cpt))
-#
-#     cat("\nComplete Dominance Designations\n")
-#
-#     print(insight::format_table(Display_cpt))
-#
-#   }
-
   invisible(x)
+
 }
