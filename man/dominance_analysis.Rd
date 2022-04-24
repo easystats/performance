@@ -10,6 +10,7 @@ dominance_analysis(
   all = NULL,
   conditional = TRUE,
   complete = TRUE,
+  quote_args = NULL,
   ...
 )
 }
@@ -40,32 +41,41 @@ If conditional dominance is not desired as an importance criterion, avoiding com
 
 If complete dominance is not desired as an importance criterion, avoiding computing complete dominance designations can save computation time.}
 
+\item{quote_args}{A character vector of arguments in the model submitted to
+\code{model} to \code{quote()} prior to submitting to the dominance analysis.  This
+is necessary for data masked arguments (e.g., \code{weights}) to prevent them
+from being evaluated before being applied to the model and causing an error.}
+
 \item{...}{Not used at current.}
 }
 \value{
-Object of class \code{"dominance_analysis"}.
+Object of class \code{"parameters_da"}.
 
-An object of class \code{"dominance_analysis"} is a list composed of the
-following elements:
+An object of class \code{"parameters_da"} is a list of \code{data.frame}s composed
+of the following elements:
 \describe{
+\item{\code{general}}{A \code{data.frame} which associates dominance statistics with
+model parameters. The variables in this \code{data.frame} include:
+\describe{
+\item{\code{parameter}}{Parameter names.}
 \item{\code{general_dominance}}{Vector of general dominance statistics.}
 \item{\code{standardized}}{Vector of general dominance statistics normalized
 to sum to 1.}
 \item{\code{ranks}}{Vector of ranks applied to the general dominance
 statistics.}
-\item{\code{conditional_dominance}}{Matrix of conditional dominance
-statistics.  Each row represents a predictor; each column represents an
-the average increment to R2 with a specific number of predictors in
-the model or \code{NULL}.}
-\item{\code{complete_dominance}}{Logical matrix of complete dominance
-designations. The predictors represented in each row are
-cross-referenced with predictors in each column.  Whether the predictor
-in each column dominates the predictor in each row is represented in the
-logical value in the matrix or \code{NULL}.}
-\item{\code{model_R2}}{Value of R2 value returned by the \code{r2()} method for
-the model.}
-\item{\code{all_subset_R2}}{Value of R2 associated with the predictors in the
-\code{all} argument or \code{NULL}.}
+\item{\code{subset}}{Names of the subset to which the parameter belongs in
+the dominance analysis.  Each other \code{data.frame} will refer to these
+subset names.}}}
+\item{\code{conditional_dominance}}{A \code{data.frame} of conditional dominance
+statistics.  Each observation represents a subset and each variable
+represents an the average increment to R2 with a specific number of
+subsets in the model.  \code{NULL} if \code{conditional} argument is \code{FALSE}.}
+\item{\code{complete_dominance}}{A \code{data.frame} of complete dominance
+designations. The subsets in the observations are compared to the
+subsets referenced in each variable. Whether the subset
+in each variable dominates the subset in each observation is
+represented in the  logical value. \code{NULL} if \code{complete}
+argument is \code{FALSE}..}
 }
 }
 \description{
@@ -76,6 +86,13 @@ Computes two decompositions of the model's R2 and returns
 a matrix of designations from which predictor relative importance
 determinations can be obtained.
 
+Note in the output that the "constant" subset is associated with a
+component of the model that does not directly contribute to the R2 such
+as an intercept. The "all" subset is apportioned a component of the fit
+statistic but is not considered a part of the dominance analysis and
+therefore does not receive a rank, conditional dominance statistics, or
+complete dominance designations.
+
 The input model is parsed using \code{insight::find_predictors()}, does not
 yet support interactions, transformations, or offsets applied in the
 R formula, and will fail with an error if any such terms are detected.
@@ -85,7 +102,7 @@ argument.  In addition, the model object must accept the data on which
 the model is estimated as a \code{data} argument.  Formulas submitted
 using object references (i.e., \code{lm(mtcars$mpg ~ mtcars$vs)}) and
 functions that accept data as a non-\code{data} argument
-(e.g., \code{survey::svyglm()} uses \code{design}) will fail.
+(e.g., \code{survey::svyglm()} uses \code{design}) will fail with an error.
 
 Models that return \code{TRUE} for the \code{insight::model_info()}
 function's values "is_bayesian", "is_mixed", "is_gam",
@@ -119,13 +136,6 @@ Psychological Bulletin, 114(3), 542-551. doi:10.1037/0033-2909.114.3.542
 \item Groemping, U. (2007). Estimators of relative importance in linear
 regression based on variance decomposition. The American Statistician,
 61(2), 139-147. doi:10.1198/000313007X188252
-\item Luchman, J. N., Lei, X., & Kaplan, S. A. (2020). Relative
-Importance Analysis With Multivariate Models: Shifting the Focus from
-Independent Variables to Parameter Estimates. Journal of Applied
-Structural Equation Modeling, 4(2), 1-20. doi:10.47263/JASEM.4(2)02
-\item Luchman, J. N. (2021). Determining relative importance in Stata
-using dominance analysis: domin and domme. Stata Journal 21(2),
-510-538. doi:10.1177/1536867X211025837
 }
 }
 \seealso{

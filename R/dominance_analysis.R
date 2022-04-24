@@ -19,36 +19,53 @@
 #' analysis and the R2 value associated with them is subtracted from the
 #' overall value.  Predictors in `all` must be present in the model
 #' submitted to the `model` argument and cannot be in the `sets` argument.
+#'
+#' @param quote_args A character vector of arguments in the model submitted to
+#' `model` to `quote()` prior to submitting to the dominance analysis.  This
+#' is necessary for data masked arguments (e.g., `weights`) to prevent them
+#' from being evaluated before being applied to the model and causing an error.
+#'
 #' @param ...  Not used at current.
 #'
-#' @return Object of class `"dominance_analysis"`.
+#' @return Object of class `"parameters_da"`.
 #'
-#' An object of class `"dominance_analysis"` is a list composed of the
-#' following elements:
+#' An object of class `"parameters_da"` is a list of `data.frame`s composed
+#' of the following elements:
 #' \describe{
-#'  \item{`general_dominance`}{Vector of general dominance statistics.}
-#'  \item{`standardized`}{Vector of general dominance statistics normalized
-#'  to sum to 1.}
-#'  \item{`ranks`}{Vector of ranks applied to the general dominance
-#'  statistics.}
-#'  \item{`conditional_dominance`}{Matrix of conditional dominance
-#'  statistics.  Each row represents a predictor; each column represents an
-#'  the average increment to R2 with a specific number of predictors in
-#'  the model or `NULL`.}
-#'  \item{`complete_dominance`}{Logical matrix of complete dominance
-#'  designations. The predictors represented in each row are
-#'  cross-referenced with predictors in each column.  Whether the predictor
-#'  in each column dominates the predictor in each row is represented in the
-#'  logical value in the matrix or `NULL`.}
-#'  \item{`model_R2`}{Value of R2 value returned by the `r2()` method for
-#'  the model.}
-#'  \item{`all_subset_R2`}{Value of R2 associated with the predictors in the
-#'  `all` argument or `NULL`.}
+#'  \item{`general`}{A `data.frame` which associates dominance statistics with
+#'  model parameters. The variables in this `data.frame` include:
+#'   \describe{
+#'     \item{`parameter`}{Parameter names.}
+#'      \item{`general_dominance`}{Vector of general dominance statistics.}
+#'      \item{`standardized`}{Vector of general dominance statistics normalized
+#'      to sum to 1.}
+#'      \item{`ranks`}{Vector of ranks applied to the general dominance
+#'      statistics.}
+#'      \item{`subset`}{Names of the subset to which the parameter belongs in
+#'      the dominance analysis.  Each other `data.frame` will refer to these
+#'      subset names.}}}
+#'  \item{`conditional_dominance`}{A `data.frame` of conditional dominance
+#'  statistics.  Each observation represents a subset and each variable
+#'  represents an the average increment to R2 with a specific number of
+#'  subsets in the model.  `NULL` if `conditional` argument is `FALSE`.}
+#'  \item{`complete_dominance`}{A `data.frame` of complete dominance
+#'  designations. The subsets in the observations are compared to the
+#'  subsets referenced in each variable. Whether the subset
+#'  in each variable dominates the subset in each observation is
+#'  represented in the  logical value. `NULL` if `complete`
+#'  argument is `FALSE`..}
 #' }
 #'
 #' @details Computes two decompositions of the model's R2 and returns
 #' a matrix of designations from which predictor relative importance
 #' determinations can be obtained.
+#'
+#' Note in the output that the "constant" subset is associated with a
+#' component of the model that does not directly contribute to the R2 such
+#' as an intercept. The "all" subset is apportioned a component of the fit
+#' statistic but is not considered a part of the dominance analysis and
+#' therefore does not receive a rank, conditional dominance statistics, or
+#' complete dominance designations.
 #'
 #' The input model is parsed using `insight::find_predictors()`, does not
 #' yet support interactions, transformations, or offsets applied in the
@@ -59,7 +76,7 @@
 #' the model is estimated as a `data` argument.  Formulas submitted
 #' using object references (i.e., `lm(mtcars$mpg ~ mtcars$vs)`) and
 #' functions that accept data as a non-`data` argument
-#' (e.g., `survey::svyglm()` uses `design`) will fail.
+#' (e.g., `survey::svyglm()` uses `design`) will fail with an error.
 #'
 #' Models that return `TRUE` for the `insight::model_info()`
 #' function's values "is_bayesian", "is_mixed", "is_gam",
@@ -86,15 +103,6 @@
 #'   regression based on variance decomposition. The American Statistician,
 #'   61(2), 139-147. doi:10.1198/000313007X188252
 #'
-#' - Luchman, J. N., Lei, X., & Kaplan, S. A. (2020). Relative
-#'   Importance Analysis With Multivariate Models: Shifting the Focus from
-#'   Independent Variables to Parameter Estimates. Journal of Applied
-#'   Structural Equation Modeling, 4(2), 1-20. doi:10.47263/JASEM.4(2)02
-#'
-#' - Luchman, J. N. (2021). Determining relative importance in Stata
-#'   using dominance analysis: domin and domme. Stata Journal 21(2),
-#'   510-538. doi:10.1177/1536867X211025837
-#'
 #' @seealso [domir::domin()]
 #'
 #' @author Joseph Luchman
@@ -109,10 +117,12 @@
 #'}
 #' @export
 dominance_analysis <- function(model, sets = NULL, all = NULL,
-                               conditional = TRUE, complete = TRUE, ...) {
+                               conditional = TRUE, complete = TRUE,
+                               quote_args = NULL, ...) {
 
-  # Exit Conditions
+  # Exit Conditions ----
   insight::check_if_installed("domir")
+  insight::check_if_installed("performance")
 
   if (!insight::is_regression_model(model)) {
     stop(insight::format_message(
@@ -183,17 +193,23 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
     }
   }
 
-  # Collect components for arguments
+  if (!is.null(quote_args) && !all(is.character(quote_args))) {
+    stop("All arguments in quote_args must be characters.", call. = FALSE)
+  }
+
+  # Collect components for arguments ----
   ivs <- insight::find_predictors(model, flatten = TRUE)
 
   dv <- insight::find_response(model)
 
   reg <- insight::model_name(model)
 
-  # Process sets
+  # Process sets ----
   if (!is.null(sets)) {
+    # gather predictors from each set
     sets_processed <- lapply(sets, function(x) attr(stats::terms(x), "term.labels"))
 
+    # remove predictors from `ivs` list if in sets
     set_remove_loc <- unlist(lapply(sets_processed, function(x) which(ivs %in% x)))
 
     if (length(set_remove_loc) != length(unlist(sets_processed))) {
@@ -206,8 +222,9 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
           "in sets argument do not match any predictors in model."), call. = FALSE)
     }
 
-    ivs <- ivs[-set_remove_loc] # update IVs
+    ivs <- ivs[-set_remove_loc]
 
+    # apply names to sets
     set_names <- names(sets)
 
     missing_set_names <- which(set_names == "")
@@ -235,10 +252,12 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
 
   else sets_processed <- NULL
 
-  # Process all
+  # Process all ----
   if (!is.null(all)) {
+    # gather predictors in all
     all_processed <- attr(stats::terms(all), "term.labels")
 
+    # remove predictors in all from `ivs` list
     all_remove_loc <-  which(ivs %in% all_processed)
 
     if (any(all_processed %in% unlist(sets_processed))) {
@@ -265,6 +284,7 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
 
   else all_processed <- NULL
 
+  # name collisions across subsets - exit
   if (any(ivs %in% c("all", "constant"))) {
     stop(
       insight::format_message(
@@ -273,33 +293,48 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
         "Alternatively, put the predictor in a set by itself."), call. = FALSE)
   }
 
+  # big DA warning
   if (length(c(ivs, unlist(sets_processed))) > 15) warning(
     cat(paste("Total of", 2^length(ivs)-1, "models to be estimated.\n",
               "Process may take some time.")) , call. = FALSE)
 
+  # Build non-formula model arguments to `domin` ----
   fml <- stats::reformulate(ivs, response = dv, intercept = insight::has_intercept(model))
 
   data <- insight::get_data(model)
 
   args <- as.list(insight::get_call(model), collapse = "") # extract all arguments from call
 
-  loc <- which(!(names(args) %in% c("formula", "data"))) # find formula and data arguments <- must ensure these are always there - will not for {survey} -- todo: is there better way to capture "extra" arguments?
+  loc <- which(!(names(args) %in% c("formula", "data"))) # find formula and data arguments
+
+  if (length(which(names(args) %in% c("formula", "data"))) != 2) { # exit if formula and data arguments missing
+    stop("Model submitted does not have a formula and data argument.", call. = FALSE)
+  }
 
   args <- args[loc] # remove formula and data arguments
   args <- args[-1] # remove function name
 
-  r2_wrap <- function(model, ...) { # internal wrapper to ensure r2 values conform to domin
-    list(fitstat = performance::r2(model, ...)[[1]]) # todo: must deal with multiple returned values
+  # quote arguments for domin
+  for (arg in quote_args) {
+    if (!(arg %in% names(args))) stop(arg, " in quote_args not among arguments in model.", call. = FALSE)
+
+    else args[[arg]] <- str2lang(paste0("quote(", deparse(args[[arg]]), ")", collapse = ""))
+
   }
 
+  # Internal wrapper to ensure r2 values conform to domin ----
+  r2_wrap <- function(model, ...) {
+    list(fitstat = performance::r2(model, ...)[[1]])
+  }
+
+  # Finalize and implement DA
   args2domin <- append(list(formula_overall = fml, reg = reg, fitstat = list(r2_wrap, "fitstat"),
                     data = data, conditional = conditional, complete = complete,
                     sets = sets_processed, all = all_processed), args)
 
-  # Implement DA
   utils::capture.output(domir_res <- do.call(domir::domin, args2domin))
 
-  # Set up returned data.frame
+  # Set up returned data.frames ----
   if (!is.null(sets)) {
 
     names(domir_res$General_Dominance) <-
@@ -428,10 +463,11 @@ dominance_analysis <- function(model, sets = NULL, all = NULL,
                   conditional = da_df_cdl,
                   complete = da_df_cpt)
 
+  # add attributes and class
   attr(da_list, "model_R2") <- domir_res$Fit_Statistic_Overall
   attr(da_list$general, "table_title") <- "General Dominance Statistics"
-  attr(da_list$conditional, "table_title") <- "Conditional Dominance Statistics"
-  attr(da_list$complete, "table_title") <- "Complete Dominance Designations"
+  if (conditional) attr(da_list$conditional, "table_title") <- "Conditional Dominance Statistics"
+  if (complete) attr(da_list$complete, "table_title") <- "Complete Dominance Designations"
 
   class(da_list) <- c("parameters_da")
 
