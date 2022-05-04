@@ -140,6 +140,17 @@ pp_check.lm <- function(object,
     }
   )
 
+  # glmmTMB returns column matrix for bernoulli
+  if (inherits(object, "glmmTMB") && insight::model_info(object)$is_binomial) {
+    out <- as.data.frame(lapply(out, function(i) {
+      if (is.matrix(i)) {
+        i[, 1]
+      } else {
+        i
+      }
+    }))
+  }
+
   if (is.null(out)) {
     stop(insight::format_message(sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])), call. = FALSE)
   }

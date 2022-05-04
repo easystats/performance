@@ -14,6 +14,9 @@
 
 * `check_predictions()` did not work for glm's with matrix-response.
 
+* `check_predictions()` did not work for logistic regression models (i.e. 
+  models with binary response) from package *glmmTMB*
+
 # performance 0.9.0
 
 ## New functions
