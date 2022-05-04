@@ -6,11 +6,10 @@
 #'  `check_collinearity()` checks regression models for
 #'  multicollinearity by calculating the variance inflation factor (VIF).
 #'  `multicollinearity()` is an alias for `check_collinearity()`.
-#'  (When printed, VIF are also translated to tolerance values, where
-#'  `tolerance = 1/vif`.) `check_concurvity()` is a wrapper around
-#'  `mgcv::concurvity()`, and can be considered as a collinearity check
-#'  for smooth terms in GAMs. Confidence intervals for VIF and tolerance
-#'  are based on Marcoulides et al. (2019, Appendix B).
+#'  `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#'  considered as a collinearity check for smooth terms in GAMs. Confidence
+#'  intervals for VIF and tolerance are based on Marcoulides et al.
+#'  (2019, Appendix B).
 #'
 #' @param x A model object (that should at least respond to `vcov()`,
 #'  and if possible, also to `model.matrix()` - however, it also should
@@ -26,9 +25,11 @@
 #' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
-#' @return A data frame with four columns: The name of the model term, the
-#'   variance inflation factor and the factor by which the standard error
-#'   is increased due to possible correlation with other terms.
+#' @return A data frame with information about name of the model term, the
+#'   variance inflation factor and associated confidence intervals, the factor
+#'   by which the standard error is increased due to possible correlation
+#'   with other terms, and tolerance values (including confidence intervals),
+#'   where `tolerance = 1/vif`.
 #'
 #' @details
 #'
@@ -176,28 +177,32 @@ plot.check_collinearity <- function(x, ...) {
 
 .print_collinearity <- function(x) {
   vifs <- x$VIF
-  x <- insight::format_table(x)
+  low_vif <- which(vifs < 5)
+  mid_vif <- which(vifs >= 5 & vifs < 10)
+  high_vif <- which(vifs >= 10)
+
+  all_vifs <- insight::compact_list(list(low_vif, mid_vif, high_vif))
+
+  # format table for each "ViF" group - this ensures that CIs are properly formatted
+  x <- do.call(rbind, lapply(all_vifs, function(i) insight::format_table(x[i, ])))
   colnames(x)[4] <- "Increased SE"
 
-  low_corr <- which(vifs < 5)
-  if (length(low_corr)) {
+  if (length(low_vif)) {
     cat("\n")
     insight::print_color("Low Correlation\n\n", "green")
-    print.data.frame(x[low_corr, ], row.names = FALSE)
+    print.data.frame(x[low_vif, ], row.names = FALSE)
   }
 
-  mid_corr <- which(vifs >= 5 & vifs < 10)
-  if (length(mid_corr)) {
+  if (length(mid_vif)) {
     cat("\n")
     insight::print_color("Moderate Correlation\n\n", "yellow")
-    print.data.frame(x[mid_corr, ], row.names = FALSE)
+    print.data.frame(x[mid_vif, ], row.names = FALSE)
   }
 
-  high_corr <- which(vifs >= 10)
-  if (length(high_corr)) {
+  if (length(high_vif)) {
     cat("\n")
     insight::print_color("High Correlation\n\n", "red")
-    print.data.frame(x[high_corr, ], row.names = FALSE)
+    print.data.frame(x[high_vif, ], row.names = FALSE)
   }
 }
 

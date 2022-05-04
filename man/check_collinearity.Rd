@@ -44,19 +44,20 @@ Following model-classes are currently supported: \code{hurdle},
 \code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.}
 }
 \value{
-A data frame with four columns: The name of the model term, the
-variance inflation factor and the factor by which the standard error
-is increased due to possible correlation with other terms.
+A data frame with information about name of the model term, the
+variance inflation factor and associated confidence intervals, the factor
+by which the standard error is increased due to possible correlation
+with other terms, and tolerance values (including confidence intervals),
+where \code{tolerance = 1/vif}.
 }
 \description{
 \code{check_collinearity()} checks regression models for
 multicollinearity by calculating the variance inflation factor (VIF).
 \code{multicollinearity()} is an alias for \code{check_collinearity()}.
-(When printed, VIF are also translated to tolerance values, where
-\code{tolerance = 1/vif}.) \code{check_concurvity()} is a wrapper around
-\code{mgcv::concurvity()}, and can be considered as a collinearity check
-for smooth terms in GAMs. Confidence intervals for VIF and tolerance
-are based on Marcoulides et al. (2019, Appendix B).
+\code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be
+considered as a collinearity check for smooth terms in GAMs. Confidence
+intervals for VIF and tolerance are based on Marcoulides et al.
+(2019, Appendix B).
 }
 \details{
 \subsection{Multicollinearity}{
