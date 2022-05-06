@@ -115,7 +115,16 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
       if ("R2_ADJ" %in% toupper(metrics) && "R2_adjusted" %in% names(R2)) {
         out$R2_adjusted <- R2$R2_adjusted
       }
-      if (!any(c("R2", "R2_adj") %in% names(R2))) {
+      if ("R2_ADJ" %in% toupper(metrics) && "R2_adj" %in% names(R2)) {
+        out$R2_adjusted <- R2$R2_adj
+      }
+      if ("R2_within" %in% names(R2)) {
+        out$R2_within <- R2$R2_within
+      }
+      if ("R2_within_adjusted" %in% names(R2)) {
+        out$R2_within_adjusted <- R2$R2_within_adjusted
+      }
+      if (!any(c("R2", "R2_adj", "R2_adjusted", "R2_within", "R2_within_adjusted") %in% names(R2))) {
         out <- c(out, R2)
       }
     }
