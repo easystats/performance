@@ -20,9 +20,8 @@
 #' - Spearman C. 1910. Correlation calculated from faulty data. British
 #' Journal of Psychology (3): 271-295. \doi{10.1111/j.2044-8295.1910.tb00206.x}
 #'
-#' -Brown W. 1910. Some experimental results in the correlation of mental
-#' abilities. British Journal of Psychology (3): 296-322.
-#' \doi{10.1111/j.2044-8295.1910.tb00207.x}
+#' - Brown W. 1910. Some experimental results in the correlation of mental
+#' abilities. British Journal of Psychology (3): 296-322. \doi{10.1111/j.2044-8295.1910.tb00207.x}
 #'
 #' @examples
 #' data(mtcars)
@@ -31,9 +30,9 @@
 #' @export
 item_split_half <- function(x, digits = 3) {
   # Calculating total score for even items
-  score_e <- rowMeans(x[, c(TRUE, FALSE)], na.rm = TRUE)
+  score_e <- rowMeans(x[, c(TRUE, FALSE), drop = FALSE], na.rm = TRUE)
   # Calculating total score for odd items
-  score_o <- rowMeans(x[, c(FALSE, TRUE)], na.rm = TRUE)
+  score_o <- rowMeans(x[, c(FALSE, TRUE), drop = FALSE], na.rm = TRUE)
 
   # Correlating scores from even and odd items
   shr <- stats::cor(score_e, score_o, use = "complete.obs")

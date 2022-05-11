@@ -12,10 +12,13 @@
 
 ## Bug fixes
 
-* `check_predictions()` did not work for glm's with matrix-response.
+* `check_predictions()` did not work for GLMs with matrix-response.
 
 * `check_predictions()` did not work for logistic regression models (i.e. 
   models with binary response) from package *glmmTMB*
+
+* `item_split_half()` did not work when the input data frame or matrix only
+  contained two columns.
 
 # performance 0.9.0
 

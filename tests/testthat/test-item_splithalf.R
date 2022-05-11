@@ -10,5 +10,12 @@ if (requiet("testthat") && requiet("performance")) {
       ),
       tolerance = 1e-3
     )
+
+    x <- iris[, 1:2]
+    expect_equal(
+      item_split_half(x),
+      list(splithalf = -0.11757, spearmanbrown = -0.26647),
+      tolerance = 1e-3
+    )
   })
 }
