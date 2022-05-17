@@ -93,6 +93,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
     "levene" = "Levene's Test"
   )
 
+  attr(p.val, "data") <- x
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   attr(p.val, "method") <- method.string
   class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))

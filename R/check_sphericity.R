@@ -72,6 +72,7 @@ check_sphericity.Anova.mlm <- function(x, ...) {
     p.val <- 1
   }
 
+  attr(p.val, "data") <- x
   class(p.val) <- c("check_sphericity", "see_check_sphericity", class(p.val))
   p.val
 }

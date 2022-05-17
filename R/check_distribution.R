@@ -96,6 +96,7 @@ check_distribution.default <- function(model) {
   )
 
   class(out) <- unique(c("check_distribution", "see_check_distribution", class(out)))
+  attr(out, "data") <- model
   attr(out, "object_name") <- deparse(substitute(model), width.cutoff = 500)
 
   out

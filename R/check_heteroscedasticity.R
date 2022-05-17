@@ -65,6 +65,7 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   p.val <- stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
 
+  attr(p.val, "data") <- x
   attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
   class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
 
