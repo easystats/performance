@@ -68,6 +68,28 @@ check_normality.default <- function(x, ...) {
   p.val
 }
 
+# numeric -------------------
+
+#' @export
+check_normality.numeric <- function(x, ...) {
+  # check for normality of residuals
+  p.val <- .check_normality(x, NULL, type = "raw")
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  class(p.val) <- unique(c("check_normality", "see_check_normality", "check_normality_numeric", class(p.val)))
+
+  p.val
+}
+
+#' @export
+residuals.check_normality_numeric <- function(object) {
+  attr(object, "data")
+}
+
+#' @export
+rstudent.check_normality_numeric <- residuals.check_normality_numeric
 
 
 # methods ----------------------
