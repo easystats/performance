@@ -84,11 +84,13 @@ check_normality.numeric <- function(x, ...) {
 }
 
 #' @export
+#' @importFrom stats residuals
 residuals.check_normality_numeric <- function(object, ...) {
   attr(object, "data")
 }
 
 #' @export
+#' @importFrom stats rstudent
 rstudent.check_normality_numeric <- function(model, ...) {
   attr(model, "data")
 }

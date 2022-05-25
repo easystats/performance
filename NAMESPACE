@@ -545,3 +545,5 @@ if (getRversion() >= "3.6.0") {
 importFrom(insight,display)
 importFrom(insight,print_html)
 importFrom(insight,print_md)
+importFrom(stats,residuals)
+importFrom(stats,rstudent)
