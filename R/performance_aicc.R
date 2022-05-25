@@ -89,15 +89,6 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
 }
 
 
-# fixest ----------------------------------------
-# default method hangs on `fixest`
-
-#' @export
-performance_aic.fixest <- function(x, ...) {
-    stats::AIC(x)
-}
-
-
 # mixed models ------------------------------------
 
 
