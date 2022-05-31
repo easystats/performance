@@ -230,12 +230,11 @@ parameters are large.</p>
 <code>anova(..., test="LRT")</code> (on models) or <code>lmtest::lrtest(...)</code>, depending
 on the <code>estimator</code> argument. For <strong>lavaan</strong> models (SEM, CFA), the function
 calls <code><a href="https://rdrr.io/pkg/lavaan/man/lavTestLRT.html" class="external-link">lavaan::lavTestLRT()</a></code>.</p>
-<p>For models with log-transformed
-response variables, <code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> returns a wrong log-likelihood. However,
-<code>test_likelihoodratio()</code> calls <code><a href="https://easystats.github.io/insight/reference/get_loglikelihood.html" class="external-link">insight::get_loglikelihood()</a></code> with
-<code>check_response=TRUE</code>, which returns a corrected log-likelihood value
-for models with transformed response variables (like log- or
-sqrt-transformation). Furthermore, since the LRT only accepts nested
+<p>For models with transformed response variables (like <code>log(x)</code> or <code>sqrt(x)</code>),
+<code><a href="https://rdrr.io/r/stats/logLik.html" class="external-link">logLik()</a></code> returns a wrong log-likelihood. However, <code>test_likelihoodratio()</code>
+calls <code><a href="https://easystats.github.io/insight/reference/get_loglikelihood.html" class="external-link">insight::get_loglikelihood()</a></code> with <code>check_response=TRUE</code>, which
+returns a corrected log-likelihood value for models with transformed
+response variables. Furthermore, since the LRT only accepts nested
 models (i.e. models that differ in their fixed effects), the computed
 log-likelihood is always based on the ML estimator, not on the REML fits.</p></li>
 <li><p><strong>Vuong's Test</strong> - <code>test_vuong()</code>: Vuong's (1989) test can

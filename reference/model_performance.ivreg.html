@@ -86,6 +86,13 @@ R2 and RMSE.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><code><a href="model_performance.html">model_performance()</a></code> correctly detects transformed response and
+returns the "corrected" AIC and BIC value on the original scale. To get back
+to the original scale, the likelihood of the model is multiplied by the
+Jacobian/derivative of the transformation.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

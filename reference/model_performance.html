@@ -109,6 +109,13 @@ different classes).</p></dd>
     <p>A data frame (with one row) and one column per "index" (see <code>metrics</code>).</p>
     </div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p><code>model_performance()</code> correctly detects transformed response and
+returns the "corrected" AIC and BIC value on the original scale. To get back
+to the original scale, the likelihood of the model is multiplied by the
+Jacobian/derivative of the transformation.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="compare_performance.html">compare_performance()</a></code> to compare performance of many different models.</p></div>
     </div>

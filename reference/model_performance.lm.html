@@ -104,7 +104,11 @@ metrics to be computed (one or more of <code>"AIC"</code>, <code>"AICc"</code>, 
 <li><p><strong>SCORE_LOG</strong> score of logarithmic proper scoring rule, see <code><a href="performance_score.html">performance_score()</a></code></p></li>
 <li><p><strong>SCORE_SPHERICAL</strong> score of spherical proper scoring rule, see <code><a href="performance_score.html">performance_score()</a></code></p></li>
 <li><p><strong>PCP</strong> percentage of correct predictions, see <code><a href="performance_pcp.html">performance_pcp()</a></code></p></li>
-</ul></div>
+</ul><p><code><a href="model_performance.html">model_performance()</a></code> correctly detects transformed response and
+returns the "corrected" AIC and BIC value on the original scale. To get back
+to the original scale, the likelihood of the model is multiplied by the
+Jacobian/derivative of the transformation.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

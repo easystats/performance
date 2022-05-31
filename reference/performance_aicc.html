@@ -117,7 +117,9 @@ the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>performance_aic()</code> correctly detects transformed response and,
-unlike <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::AIC()</a></code>, returns the corrected AIC value.</p>
+unlike <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::AIC()</a></code>, returns the "corrected" AIC value on the original
+scale. To get back to the original scale, the likelihood of the model is
+multiplied by the Jacobian/derivative of the transformation.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
