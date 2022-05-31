@@ -263,18 +263,18 @@ performance_aicc.rma <- function(x, ...) {
 .ll_analytic_adjustment <- function(x, model_weights = NULL) {
   tryCatch(
     {
-      trans <- find_transformation(x)
+      trans <- insight::find_transformation(x)
 
       if (trans == "identity") {
-        .weighted_sum(log(get_response(x)), w = model_weights)
+        .weighted_sum(log(insight::get_response(x)), w = model_weights)
       } else if (trans == "log") {
-        .weighted_sum(log(1 / get_response(x)), w = model_weights)
+        .weighted_sum(log(1 / insight::get_response(x)), w = model_weights)
       } else if (trans == "exp") {
-        .weighted_sum(get_response(x), w = model_weights)
+        .weighted_sum(insight::get_response(x), w = model_weights)
       } else if (trans == "sqrt") {
-        .weighted_sum(log(.5 / sqrt(get_response(x))), w = model_weights)
-      } else if (is.null(model_weights)) {
-        .ll_log_adjustment(x)
+        .weighted_sum(log(.5 / sqrt(insight::get_response(x))), w = model_weights)
+      # } else if (is.null(model_weights)) {
+      #   .ll_log_adjustment(x)
       } else {
         .ll_jacobian_adjustment(x, model_weights)
       }
