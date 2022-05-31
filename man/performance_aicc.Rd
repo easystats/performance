@@ -39,7 +39,9 @@ incorporates a correction for small sample sizes.
 }
 \details{
 \code{performance_aic()} correctly detects transformed response and,
-unlike \code{stats::AIC()}, returns the corrected AIC value.
+unlike \code{stats::AIC()}, returns the "corrected" AIC value on the original
+scale. To get back to the original scale, the likelihood of the model is
+multiplied by the Jacobian/derivative of the transformation.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

@@ -23,7 +23,9 @@
 #' @return Numeric, the AIC or AICc value.
 #'
 #' @details `performance_aic()` correctly detects transformed response and,
-#' unlike `stats::AIC()`, returns the corrected AIC value.
+#' unlike `stats::AIC()`, returns the "corrected" AIC value on the original
+#' scale. To get back to the original scale, the likelihood of the model is
+#' multiplied by the Jacobian/derivative of the transformation.
 #'
 #' @references
 #' - Akaike, H. (1973) Information theory as an extension of the maximum
@@ -269,12 +271,18 @@ performance_aicc.rma <- function(x, ...) {
         .weighted_sum(log(insight::get_response(x)), w = model_weights)
       } else if (trans == "log") {
         .weighted_sum(log(1 / insight::get_response(x)), w = model_weights)
+      } else if (trans == "log1p") {
+        .weighted_sum(log(1 / (insight::get_response(x) + 1)), w = model_weights)
+      } else if (trans == "log2") {
+        .weighted_sum(log(1 / (insight::get_response(x) * log(2))), w = model_weights)
+      } else if (trans == "log10") {
+        .weighted_sum(log(1 / (insight::get_response(x) * log(10))), w = model_weights)
       } else if (trans == "exp") {
         .weighted_sum(insight::get_response(x), w = model_weights)
+      } else if (trans == "expm1") {
+        .weighted_sum((insight::get_response(x) - 1), w = model_weights)
       } else if (trans == "sqrt") {
         .weighted_sum(log(.5 / sqrt(insight::get_response(x))), w = model_weights)
-      # } else if (is.null(model_weights)) {
-      #   .ll_log_adjustment(x)
       } else {
         .ll_jacobian_adjustment(x, model_weights)
       }
@@ -309,6 +317,7 @@ performance_aicc.rma <- function(x, ...) {
     }
   )
 }
+
 
 .weighted_sum <- function(x, w = NULL, ...) {
   if (is.null(w)) {

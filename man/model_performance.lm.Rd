@@ -39,6 +39,11 @@ Depending on \code{model}, following indices are computed:
 \item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule, see \code{\link[=performance_score]{performance_score()}}}
 \item{\strong{PCP}} {percentage of correct predictions, see \code{\link[=performance_pcp]{performance_pcp()}}}
 }
+
+\code{model_performance()} correctly detects transformed response and
+returns the "corrected" AIC and BIC value on the original scale. To get back
+to the original scale, the likelihood of the model is multiplied by the
+Jacobian/derivative of the transformation.
 }
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)

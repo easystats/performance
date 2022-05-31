@@ -30,6 +30,12 @@ See the documentation for your object's class:
 \item \link[=model_performance.rma]{Meta-analysis models}
 }
 }
+\details{
+\code{model_performance()} correctly detects transformed response and
+returns the "corrected" AIC and BIC value on the original scale. To get back
+to the original scale, the likelihood of the model is multiplied by the
+Jacobian/derivative of the transformation.
+}
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(model)

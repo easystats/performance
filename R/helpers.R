@@ -7,9 +7,10 @@
 
   if (inherits(x, c("vgam", "vglm"))) {
     insight::check_if_installed("VGAM")
-    out <- VGAM::BIC(x)
+    out <- .adjust_ic_jacobian(x, VGAM::BIC(x))
+
   } else if (inherits(x, "bayesx")) {
-    out <- stats::BIC(x)[["BIC"]]
+    out <- .adjust_ic_jacobian(x, stats::BIC(x)[["BIC"]])
 
   } else {
     out <- tryCatch(
@@ -17,7 +18,8 @@
       error = function(e) NULL
     )
   }
-  .adjust_ic_jacobian(x, out)
+
+  out
 }
 
 

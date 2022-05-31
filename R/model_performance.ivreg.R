@@ -5,6 +5,12 @@
 #'   metrics to be computed (some of `c("AIC", "AICc", "BIC", "R2", "RMSE",
 #'   "SIGMA", "Sargan", "Wu_Hausman")`). `"common"` will compute AIC, BIC,
 #'   R2 and RMSE.
+#'
+#' @details `model_performance()` correctly detects transformed response and
+#' returns the "corrected" AIC and BIC value on the original scale. To get back
+#' to the original scale, the likelihood of the model is multiplied by the
+#' Jacobian/derivative of the transformation.
+#'
 #' @export
 model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...) {
   all_metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")

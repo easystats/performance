@@ -20,3 +20,9 @@ R2 and RMSE.}
 \description{
 Performance of instrumental variable regression models
 }
+\details{
+\code{model_performance()} correctly detects transformed response and
+returns the "corrected" AIC and BIC value on the original scale. To get back
+to the original scale, the likelihood of the model is multiplied by the
+Jacobian/derivative of the transformation.
+}

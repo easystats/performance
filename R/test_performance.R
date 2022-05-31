@@ -121,12 +121,11 @@
 #'   on the `estimator` argument. For **lavaan** models (SEM, CFA), the function
 #'   calls `lavaan::lavTestLRT()`.
 #'
-#'   For models with log-transformed
-#'   response variables, `logLik()` returns a wrong log-likelihood. However,
-#'   `test_likelihoodratio()` calls `insight::get_loglikelihood()` with
-#'   `check_response=TRUE`, which returns a corrected log-likelihood value
-#'   for models with transformed response variables (like log- or
-#'   sqrt-transformation). Furthermore, since the LRT only accepts nested
+#'   For models with transformed response variables (like `log(x)` or `sqrt(x)`),
+#'   `logLik()` returns a wrong log-likelihood. However, `test_likelihoodratio()`
+#'   calls `insight::get_loglikelihood()` with `check_response=TRUE`, which
+#'   returns a corrected log-likelihood value for models with transformed
+#'   response variables. Furthermore, since the LRT only accepts nested
 #'   models (i.e. models that differ in their fixed effects), the computed
 #'   log-likelihood is always based on the ML estimator, not on the REML fits.
 #'

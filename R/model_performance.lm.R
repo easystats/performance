@@ -28,6 +28,11 @@
 #'   \item{**PCP**} {percentage of correct predictions, see [performance_pcp()]}
 #' }
 #'
+#' @details `model_performance()` correctly detects transformed response and
+#' returns the "corrected" AIC and BIC value on the original scale. To get back
+#' to the original scale, the likelihood of the model is multiplied by the
+#' Jacobian/derivative of the transformation.
+#'
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
 #' model_performance(model)

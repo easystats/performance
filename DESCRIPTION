@@ -125,6 +125,6 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
