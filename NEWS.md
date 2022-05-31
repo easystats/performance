@@ -20,6 +20,9 @@
 * `item_split_half()` did not work when the input data frame or matrix only
   contained two columns.
 
+* Fixed wrong computation of `BIC` in `model_performance()` when models had
+  transformed response values.
+
 # performance 0.9.0
 
 ## New functions
