@@ -250,12 +250,39 @@ performance_aicc.rma <- function(x, ...) {
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
   if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
-    adjustment <- tryCatch(.ll_jacobian_adjustment(model, insight::get_weights(model, na_rm = TRUE)), error = function(e) NULL)
+    adjustment <- tryCatch(.ll_analytic_adjustment(model, insight::get_weights(model, na_rm = TRUE)), error = function(e) NULL)
     if (!is.null(adjustment)) {
       ic <- ic - 2 * adjustment
     }
   }
   ic
+}
+
+
+# copied from `insight`
+.ll_analytic_adjustment <- function(x, model_weights = NULL) {
+  tryCatch(
+    {
+      trans <- find_transformation(x)
+
+      if (trans == "identity") {
+        .weighted_sum(log(get_response(x)), w = model_weights)
+      } else if (trans == "log") {
+        .weighted_sum(log(1 / get_response(x)), w = model_weights)
+      } else if (trans == "exp") {
+        .weighted_sum(get_response(x), w = model_weights)
+      } else if (trans == "sqrt") {
+        .weighted_sum(log(.5 / sqrt(get_response(x))), w = model_weights)
+      } else if (is.null(model_weights)) {
+        .ll_log_adjustment(x)
+      } else {
+        .ll_jacobian_adjustment(x, model_weights)
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
 }
 
 
