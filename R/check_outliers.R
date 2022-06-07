@@ -662,6 +662,9 @@ check_outliers.gls <- function(x, method = "pareto", threshold = NULL, ...) {
 #' @export
 check_outliers.lme <- check_outliers.gls
 
+#' @export
+check_outliers.fixest <- check_outliers.gls
+
 
 
 # Thresholds --------------------------------------------------------------
