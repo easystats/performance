@@ -86,32 +86,18 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>model</dt>
-<dd><p>A statistical model.</p></dd>
-<dt>...</dt>
-<dd><p>Arguments passed down to the related r2-methods.</p></dd>
-<dt>ci</dt>
-<dd><p>Confidence Interval (CI) level. Default is <code>NULL</code>. Confidence
-intervals for R2 can be calculated based on different methods, see
-<code>ci_method</code>.</p></dd>
-<dt>ci_method</dt>
-<dd><p>Method for constructing the R2 confidence interval.
-Options are <code>"analytical"</code> for sampling-theory-based frequentist
-intervals and <code>"bootstrap"</code> for bootstrap intervals. Analytical intervals
-are not available for all models. For Bayesian models, <code><a href="r2_bayes.html">r2_bayes()</a></code> is used.</p></dd>
-<dt>verbose</dt>
-<dd><p>Logical. Should details about R2 and CI methods be given (<code>TRUE</code>) or not (<code>FALSE</code>)?</p></dd>
-<dt>tolerance</dt>
-<dd><p>Tolerance for singularity check of random effects, to decide
-whether to compute random effect variances for the conditional r-squared
-or not. Indicates up to which value the convergence result is accepted. When
-<code><a href="r2_nakagawa.html">r2_nakagawa()</a></code> returns a warning, stating that random effect variances
-can't be computed (and thus, the conditional r-squared is <code>NA</code>),
-decrease the tolerance-level. See also <code><a href="check_singularity.html">check_singularity()</a></code>.</p></dd>
-</dl></div>
+    <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+    </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Returns a list containing values related to the most appropriate R2
+    
+
+<p>Returns a list containing values related to the most appropriate R2
 for the given model (or <code>NULL</code> if no R2 could be extracted). See the
 list below:</p><ul><li><p>Logistic models: <a href="r2_tjur.html">Tjur's R2</a></p></li>
 <li><p>General linear models: <a href="r2_nagelkerke.html">Nagelkerke's R2</a></p></li>
