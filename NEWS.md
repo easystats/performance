@@ -1,5 +1,13 @@
 # performance 0.9.1
 
+## New functions
+
+* `performance_cv()` for cross-validated model performance.
+
+## Support for new models
+
+* Added support for models from package *estimator*.
+
 ## Changes to functions
 
 * `check_overdispersion()` gets a `plot()` method.
@@ -9,6 +17,9 @@
 
 * `check_collinearity()` now includes the confidence intervals for the VIFs
   and tolerance values.
+
+* `model_performance()` now also includes within-subject R2 measures, where
+  applicable.
 
 ## Bug fixes
 
@@ -22,6 +33,8 @@
 
 * Fixed wrong computation of `BIC` in `model_performance()` when models had
   transformed response values.
+
+* Fixed issues in `check_model()` for GLMs with matrix-response.
 
 # performance 0.9.0
 
