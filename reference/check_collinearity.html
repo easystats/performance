@@ -108,12 +108,34 @@ intervals for VIF and tolerance are based on Marcoulides et al.
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>x</dt>
+<dd><p>A model object (that should at least respond to <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>,
+and if possible, also to <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> - however, it also should
+work without <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code>).</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+
+
+<dt>ci</dt>
+<dd><p>Confidence Interval (CI) level for VIF and tolerance values.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle off warnings or messages.</p></dd>
+
+
+<dt>component</dt>
+<dd><p>For models with zero-inflation component, multicollinearity
+can be checked for the conditional model (count component,
+<code>component = "conditional"</code> or <code>component = "count"</code>),
+zero-inflation component (<code>component = "zero_inflated"</code> or
+<code>component = "zi"</code>) or both components (<code>component = "all"</code>).
+Following model-classes are currently supported: <code>hurdle</code>,
+<code>zeroinfl</code>, <code>zerocount</code>, <code>MixMod</code> and <code>glmmTMB</code>.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

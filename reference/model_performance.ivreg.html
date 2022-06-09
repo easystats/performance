@@ -75,11 +75,24 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>model</dt>
+<dd><p>A model.</p></dd>
+
+
+<dt>metrics</dt>
+<dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
+metrics to be computed (some of <code>c("AIC", "AICc", "BIC", "R2", "RMSE", "SIGMA", "Sargan", "Wu_Hausman")</code>). <code>"common"</code> will compute AIC, BIC,
+R2 and RMSE.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code><a href="model_performance.html">model_performance()</a></code> correctly detects transformed response and

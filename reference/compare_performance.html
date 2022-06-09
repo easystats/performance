@@ -86,12 +86,34 @@ indices across models.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>...</dt>
+<dd><p>Multiple model objects (also of different classes).</p></dd>
+
+
+<dt>metrics</dt>
+<dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
+metrics to be computed. See related
+<code><a href="model_performance.html">documentation()</a></code> of object's class for
+details.</p></dd>
+
+
+<dt>rank</dt>
+<dd><p>Logical, if <code>TRUE</code>, models are ranked according to 'best'
+overall model performance. See 'Details'.</p></dd>
+
+
+<dt>estimator</dt>
+<dd><p>Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If <code>estimator = "ML"</code>
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using <code>AIC(logLik())</code>. Setting it to <code>"REML"</code> will give
+the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

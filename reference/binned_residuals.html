@@ -74,11 +74,27 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>model</dt>
+<dd><p>A <code>glm</code>-object with <em>binomial</em>-family.</p></dd>
+
+
+<dt>term</dt>
+<dd><p>Name of independent variable from <code>x</code>. If not <code>NULL</code>,
+average residuals for the categories of <code>term</code> are plotted; else,
+average residuals for the estimated probabilities of the response are
+plotted.</p></dd>
+
+
+<dt>n_bins</dt>
+<dd><p>Numeric, the number of bins to divide the data. If
+<code>n_bins = NULL</code>, the square root of the number of observations is
+taken.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Currently not used.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

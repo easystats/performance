@@ -110,11 +110,29 @@ for a description of the methods.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>x</dt>
+<dd><p>A model or a data.frame object.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>When <code>method = "ics"</code>, further arguments in <code>...</code> are
+passed down to <code><a href="https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html" class="external-link">ICSOutlier::ics.outlier()</a></code>.</p></dd>
+
+
+<dt>method</dt>
+<dd><p>The outlier detection method(s). Can be "all" or some of
+c("cook", "pareto", "zscore", "zscore_robust", "iqr", "eti", "hdi", "bci",
+"mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").</p></dd>
+
+
+<dt>threshold</dt>
+<dd><p>A list containing the threshold values for each method (e.g.
+<code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is
+considered as outlier. If <code>NULL</code>, default values will be used (see
+'Details'). If a numeric value is given, it will be used as the threshold
+for any of the method run.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

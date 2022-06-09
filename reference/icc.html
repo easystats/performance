@@ -97,14 +97,44 @@ on the posterior predictive distribution (see 'Details').</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>model</dt>
+<dd><p>A (Bayesian) mixed effects model.</p></dd>
+
+
+<dt>by_group</dt>
+<dd><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
+components for each random-effects level (if there are multiple levels).
+See 'Details'.</p></dd>
+
+
+<dt>tolerance</dt>
+<dd><p>Tolerance for singularity check of random effects, to decide
+whether to compute random effect variances or not. Indicates up to which
+value the convergence result is accepted. The larger tolerance is, the
+stricter the test will be. See <code><a href="check_singularity.html">performance::check_singularity()</a></code>.</p></dd>
+
+
+<dt>re_formula</dt>
+<dd><p>Formula containing group-level effects to be considered in
+the prediction. If <code>NULL</code> (default), include all group-level effects.
+Else, for instance for nested models, name a specific group-level effect
+to calculate the variance decomposition for this group-level. See 'Details'
+and <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">?brms::posterior_predict</a></code>.</p></dd>
+
+
+<dt>robust</dt>
+<dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
+calculate the central tendency of the variances.</p></dd>
+
+
+<dt>ci</dt>
+<dd><p>Credible interval level.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/brms/man/posterior_predict.brmsfit.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

@@ -77,11 +77,27 @@ based on response and predictions of a binomial model.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>x</dt>
+<dd><p>A numeric vector, representing the outcome (0/1), or a model with
+binomial outcome.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>One or more models with binomial outcome. In this case,
+<code>new_data</code> is ignored.</p></dd>
+
+
+<dt>predictions</dt>
+<dd><p>If <code>x</code> is numeric, a numeric vector of same length
+as <code>x</code>, representing the actual predicted values.</p></dd>
+
+
+<dt>new_data</dt>
+<dd><p>If <code>x</code> is a model, a data frame that is passed to
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> as <code>newdata</code>-argument. If <code>NULL</code>, the ROC for
+the full model is calculated.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

@@ -84,12 +84,31 @@ metafor package."><meta property="og:image" content="https://easystats.github.io
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>model</dt>
+<dd><p>A <code>rma</code> object as returned by <code><a href="https://wviechtb.github.io/metafor/reference/rma.uni.html" class="external-link">metafor::rma()</a></code>.</p></dd>
+
+
+<dt>metrics</dt>
+<dd><p>Can be <code>"all"</code> or a character vector of metrics to be
+computed (some of <code>c("AIC", "BIC", "I2", "H2", "TAU2", "R2", "CochransQ", "QE", "Omnibus", "QM")</code>).</p></dd>
+
+
+<dt>estimator</dt>
+<dd><p>Only for linear models. Corresponds to the different
+estimators for the standard deviation of the errors. If <code>estimator = "ML"</code>
+(default), the scaling is done by n (the biased ML estimator), which is
+then equivalent to using <code>AIC(logLik())</code>. Setting it to <code>"REML"</code> will give
+the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle off warnings.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed to or from other methods.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

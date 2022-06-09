@@ -116,11 +116,31 @@ and their interpretation.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-    </div>
+    <dl><dt>...</dt>
+<dd><p>Multiple model objects.</p></dd>
+
+
+<dt>text_length</dt>
+<dd><p>Numeric, length (number of chars) of output lines.
+<code>test_bf()</code> describes models by their formulas, which can lead to
+overly long lines in the output. <code>text_length</code> fixes the length of
+lines to a specified limit.</p></dd>
+
+
+<dt>estimator</dt>
+<dd><p>Applied when comparing regression models using
+<code>test_likelihoodratio()</code>. Corresponds to the different estimators for
+the standard deviation of the errors. Defaults to <code>"OLS"</code> for linear models,
+<code>"ML"</code> for all other models (including mixed models), or <code>"REML"</code> for
+linear mixed models when these have the same fixed effects. See 'Details'.</p></dd>
+
+
+<dt>reference</dt>
+<dd><p>This only applies when models are non-nested, and determines
+which model should be taken as a reference, against which all the other
+models are tested.</p></dd>
+
+</dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     

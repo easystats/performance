@@ -65,10 +65,18 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="performance-091">performance 0.9.1<a class="anchor" aria-label="anchor" href="#performance-091"></a></h2>
 <div class="section level3">
+<h3 id="new-functions-0-9-1">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-9-1"></a></h3>
+<ul><li>
+<code><a href="../reference/performance_cv.html">performance_cv()</a></code> for cross-validated model performance.</li></ul></div>
+<div class="section level3">
+<h3 id="support-for-new-models-0-9-1">Support for new models<a class="anchor" aria-label="anchor" href="#support-for-new-models-0-9-1"></a></h3>
+<ul><li>Added support for models from package <em>estimator</em>.</li></ul></div>
+<div class="section level3">
 <h3 id="changes-to-functions-0-9-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9-1"></a></h3>
 <ul><li><p><code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> gets a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method.</p></li>
 <li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works for models of classes <code>gls</code> and <code>lme</code>. As a consequence, <code><a href="../reference/check_model.html">check_model()</a></code> will no longer fail for these models.</p></li>
 <li><p><code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now includes the confidence intervals for the VIFs and tolerance values.</p></li>
+<li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> now also includes within-subject R2 measures, where applicable.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-1"></a></h3>
@@ -76,6 +84,7 @@
 <li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> did not work for logistic regression models (i.e.  models with binary response) from package <em>glmmTMB</em></p></li>
 <li><p><code><a href="../reference/item_split_half.html">item_split_half()</a></code> did not work when the input data frame or matrix only contained two columns.</p></li>
 <li><p>Fixed wrong computation of <code>BIC</code> in <code><a href="../reference/model_performance.html">model_performance()</a></code> when models had transformed response values.</p></li>
+<li><p>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for GLMs with matrix-response.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
