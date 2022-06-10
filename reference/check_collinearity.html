@@ -112,20 +112,12 @@ intervals for VIF and tolerance are based on Marcoulides et al.
 <dd><p>A model object (that should at least respond to <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code>,
 and if possible, also to <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code> - however, it also should
 work without <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code>).</p></dd>
-
-
 <dt>...</dt>
 <dd><p>Currently not used.</p></dd>
-
-
 <dt>ci</dt>
 <dd><p>Confidence Interval (CI) level for VIF and tolerance values.</p></dd>
-
-
 <dt>verbose</dt>
 <dd><p>Toggle off warnings or messages.</p></dd>
-
-
 <dt>component</dt>
 <dd><p>For models with zero-inflation component, multicollinearity
 can be checked for the conditional model (count component,
@@ -134,13 +126,10 @@ zero-inflation component (<code>component = "zero_inflated"</code> or
 <code>component = "zi"</code>) or both components (<code>component = "all"</code>).
 Following model-classes are currently supported: <code>hurdle</code>,
 <code>zeroinfl</code>, <code>zerocount</code>, <code>MixMod</code> and <code>glmmTMB</code>.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    
-
-<p>A data frame with information about name of the model term, the
+    <p>A data frame with information about name of the model term, the
 variance inflation factor and associated confidence intervals, the factor
 by which the standard error is increased due to possible correlation
 with other terms, and tolerance values (including confidence intervals),
@@ -272,7 +261,7 @@ examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>

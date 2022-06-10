@@ -97,41 +97,26 @@ only (marginal R2). While <code>r2_bayes()</code> returns a single R2 value,
     <dl><dt>model</dt>
 <dd><p>A Bayesian regression model (from <strong>brms</strong>,
 <strong>rstanarm</strong>, <strong>BayesFactor</strong>, etc).</p></dd>
-
-
 <dt>robust</dt>
 <dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
 calculate the central tendency of the variances.</p></dd>
-
-
 <dt>ci</dt>
 <dd><p>Value or vector of probability of the CI (between 0 and 1) to be
 estimated.</p></dd>
-
-
 <dt>verbose</dt>
 <dd><p>Toggle off warnings.</p></dd>
-
-
 <dt>...</dt>
 <dd><p>Arguments passed to <code>r2_posterior()</code>.</p></dd>
-
-
 <dt>average</dt>
 <dd><p>Compute model-averaged index? See <code><a href="https://easystats.github.io/bayestestR/reference/weighted_posteriors.html" class="external-link">bayestestR::weighted_posteriors()</a></code>.</p></dd>
-
-
 <dt>prior_odds</dt>
 <dd><p>Optional vector of prior odds for the models compared to
 the first model (or the denominator, for <code>BFBayesFactor</code> objects). For
 <code>data.frame</code>s, this will be used as the basis of weighting.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    
-
-<p>A list with the Bayesian R2 value. For mixed models, a list with the
+    <p>A list with the Bayesian R2 value. For mixed models, a list with the
 Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
 and credible intervals for the R2 values are saved as attributes.</p>
     </div>
@@ -173,6 +158,9 @@ returns a posterior sample of Bayesian R2 values.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.07, indicating chains have not mixed.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
@@ -181,8 +169,8 @@ returns a posterior sample of Bayesian R2 values.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Bayesian R2 with Compatibility Interval</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.953 (95% CI [0.942, 0.964])</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Marginal R2: 0.823 (95% CI [0.710, 0.885])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.953 (95% CI [0.941, 0.961])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Marginal R2: 0.821 (95% CI [0.702, 0.891])</span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://richarddmorey.github.io/BayesFactor/" class="external-link">"BayesFactor"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
@@ -225,7 +213,7 @@ returns a posterior sample of Bayesian R2 values.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer></div>
