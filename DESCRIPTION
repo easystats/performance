@@ -61,7 +61,7 @@ Depends:
 Imports:
     bayestestR (>= 0.11.5),
     insight (>= 0.17.0),
-    datawizard (>= 0.4.0.3),
+    datawizard (>= 0.4.1),
     methods,
     stats,
     utils
