@@ -117,7 +117,6 @@ Suggests:
     rstantools,
     sandwich,
     see,
-    spelling,
     survey,
     survival,
     testthat,
