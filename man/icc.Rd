@@ -35,7 +35,7 @@ calculate the central tendency of the variances.}
 \item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
 }
 \value{
-A list with two values, the adjusted and conditional ICC. For
+A list with two values, the adjusted ICC and the unadjusted ICC. For
 \code{variance_decomposition()}, a list with two values, the decomposed
 ICC as well as the credible intervals for this ICC.
 }
@@ -70,12 +70,13 @@ The ICC is calculated by dividing the random effect variance,
 the total variance, i.e. the sum of the random effect variance and the
 residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
 }
-\subsection{Adjusted and conditional ICC}{
-\code{icc()} calculates an adjusted and conditional ICC, which both take all
-sources of uncertainty (i.e. of \emph{all random effects}) into account.
+\subsection{Adjusted and unadjusted ICC}{
+\code{icc()} calculates an adjusted and an unadjusted ICC, which both
+take all sources of uncertainty (i.e. of \emph{all random effects}) into account.
 While the \emph{adjusted ICC} only relates to the random effects, the
-\emph{conditional ICC} also takes the fixed effects variances into account
-(see \cite{Nakagawa et al. 2017}). Typically, the \emph{adjusted} ICC is of
+\emph{unadjusted ICC} also takes the fixed effects variances into account, more precisely,
+the fixed effects variance is added to the denominator of the formula to
+calculate the ICC (see \cite{Nakagawa et al. 2017}). Typically, the \emph{adjusted} ICC is of
 interest when the analysis of random effects is of interest. \code{icc()}
 returns a meaningful ICC also for more complex random effects structures,
 like models with random slopes or nested design (more than two levels) and
