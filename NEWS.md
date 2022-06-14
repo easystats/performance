@@ -1,5 +1,9 @@
 # performance 0.9.1
 
+## Breaking
+
+* The formerly "conditional" ICC in `icc()` is now named "unadjusted" ICC.
+
 ## New functions
 
 * `performance_cv()` for cross-validated model performance.
