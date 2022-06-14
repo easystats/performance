@@ -92,36 +92,58 @@ leave-one-out cross-validation.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>model</dt>
 <dd><p>A regression model.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>Optional. A data frame containing the same variables as <code>model</code>
 that will be used as the cross-validation sample.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Character string, indicating the cross-validation method to use:
 whether holdout (<code>"holdout"</code>, aka train-test), k-fold (<code>"k_fold"</code>), or
 leave-one-out (<code>"loo"</code>). If <code>data</code> is supplied, this argument is ignored.</p></dd>
+
+
 <dt>metrics</dt>
 <dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of metrics to be
 computed (some of <code>c("ELPD", "Deviance", "MSE", "RMSE", "R2")</code>). "common" will
 compute R2 and RMSE.</p></dd>
+
+
 <dt>prop</dt>
 <dd><p>If <code>method = "holdout"</code>, what proportion of the sample to hold
 out as the test sample?</p></dd>
+
+
 <dt>k</dt>
 <dd><p>If <code>method = "k_fold"</code>, the number of folds to use.</p></dd>
+
+
 <dt>stack</dt>
 <dd><p>Logical. If <code>method = "k_fold"</code>, should performance be computed
 by stacking residuals from each holdout fold and calculating each metric on
 the stacked data (<code>TRUE</code>, default) or should performance be computed by
 calculating metrics within each holdout fold and averaging performance
 across each fold (<code>FALSE</code>)?</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Toggle warnings.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with columns for each metric requested, as well as <code>k</code>if <code>method = "holdout"</code> and the <code>Method</code> used for cross-validation. If
+    
+
+<p>A data frame with columns for each metric requested, as well as <code>k</code></p>
+
+
+<p>if <code>method = "holdout"</code> and the <code>Method</code> used for cross-validation. If
 <code>method = "holdout"</code> and <code>stack = TRUE</code>, the standard error (standard
 deviation across holdout folds) for each metric is also included.</p>
     </div>
@@ -147,7 +169,7 @@ deviation across holdout folds) for each metric is also included.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
