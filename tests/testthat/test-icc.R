@@ -23,7 +23,8 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(m1),
-        structure(list(ICC_adjusted = 0.910433115331481, ICC_conditional = 0.310947783569576), class = "icc"),
+        structure(list(ICC_adjusted = 0.910433109183341, ICC_conditional = 0.310947768161385,
+                       ICC_unadjusted = 0.310947768161385), class = "icc"),
         tolerance = 1e-3
       )
     })
@@ -33,7 +34,8 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(m2),
-        structure(list(ICC_adjusted = 0.399303562702568, ICC_conditional = 0.216907586891627), class = "icc"),
+        structure(list(ICC_adjusted = 0.399303562702568, ICC_conditional = 0.216907586891627,
+                       ICC_unadjusted = 0.216907586891627), class = "icc"),
         tolerance = 1e-3
       )
     })
@@ -53,7 +55,8 @@ if (.runThisTest && !osx) {
       set.seed(123)
       expect_equal(
         icc(m3),
-        structure(list(ICC_adjusted = 0.930217931275196, ICC_conditional = 0.771475122370036), class = "icc"),
+        structure(list(ICC_adjusted = 0.930217931275196, ICC_conditional = 0.771475122370036,
+                       ICC_unadjusted = 0.771475122370036), class = "icc"),
         tolerance = 0.05
       )
     })
@@ -85,7 +88,7 @@ if (.runThisTest && !osx) {
     out <- icc(m)
     test_that("icc", {
       expect_equal(out$ICC_adjusted, 0.9104331, tolerance = 0.01)
-      expect_equal(out$ICC_conditional, 0.3109478, tolerance = 0.01)
+      expect_equal(out$ICC_unadjusted, 0.3109478, tolerance = 0.01)
     })
   }
 }
