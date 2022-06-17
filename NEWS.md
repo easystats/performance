@@ -25,6 +25,9 @@
 * `model_performance()` now also includes within-subject R2 measures, where
   applicable.
 
+* Improved handling of random effects in `check_normality()` (i.e. when argument
+  `effects = "random"`).
+
 ## Bug fixes
 
 * `check_predictions()` did not work for GLMs with matrix-response.

@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance")) {
+if (requiet("testthat") && requiet("glmmTMB") && requiet("performance")) {
   test_that("check_normality | afex", {
     skip_if_not_installed("afex")
 
@@ -26,5 +26,23 @@ if (requiet("testthat") && requiet("performance")) {
     expect_equal(pM, 0.2054236, ignore_attr = TRUE, tolerance = 0.001)
     expect_equal(pW, 0.5496325, ignore_attr = TRUE, tolerance = 0.001)
     expect_equal(pB, 0.734765, ignore_attr = TRUE, tolerance = 0.001)
+  })
+
+  test_that("check_normality | glmmTMB", {
+    skip_if_not_installed("glmmTMB")
+
+    data("Salamanders")
+    m <- glmmTMB(
+      count ~ mined + spp + (1 | site),
+      family = poisson,
+      data = Salamanders
+    )
+
+    out <- check_normality(m, effects = "random")
+    expect_equal(attributes(out)$re_groups, "site: (Intercept)")
+    expect_equal(as.vector(out), 0.698457693553405, tolerance = 1e-3)
+
+    out <- check_normality(m, effects = "fixed")
+    expect_null(out)
   })
 }

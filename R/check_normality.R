@@ -84,10 +84,21 @@ print.check_normality <- function(x, ...) {
   pstring <- insight::format_p(x)
   type <- attributes(x)$type
 
-  if (x < 0.05) {
-    insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")
+  if (identical(attributes(x)$effects, "random")) {
+    re_groups <- attributes(x)$re_groups
+    for (i in 1:length(x)) {
+      if (x[i] < 0.05) {
+        insight::print_color(sprintf("Warning: Non-normality for random effects '%s' detected (%s).\n", re_groups[i], pstring[i]), "red")
+      } else {
+        insight::print_color(sprintf("OK: Random effects '%s' appear as normally distributed (%s).\n", re_groups[i], pstring[i]), "green")
+      }
+    }
   } else {
-    insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type, pstring), "green")
+    if (x < 0.05) {
+      insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")
+    } else {
+      insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type, pstring), "green")
+    }
   }
   invisible(x)
 }
@@ -106,7 +117,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   info <- insight::model_info(x)
 
   # valid model?
-  if (!info$is_linear) {
+  if (!info$is_linear && effects == "fixed") {
     message(insight::format_message("Checking normality of residuals is only useful an appropriate assumption for linear models."))
     return(NULL)
   }
@@ -130,18 +141,18 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
     )
 
     p.val <- c()
-    re_len <- max(nchar(unlist(lapply(re, colnames))))
+    re_groups <- c()
 
     if (!is.null(re)) {
       for (i in names(re)) {
-        insight::print_color(sprintf("Group: %s\n", i), "blue")
         for (j in colnames(re[[i]])) {
-          cat(sprintf("%*s ", re_len, j))
+          re_groups <- c(re_groups, paste0(i, ": ", j))
           p.val <- c(p.val, .check_normality(re[[i]][[j]], x, "random effects"))
         }
-        cat("\n")
       }
       attr(p.val, "re_qq") <- .diag_reqq(x, level = .95, model_info = info)
+      attr(p.val, "type") <- "random effects"
+      attr(p.val, "re_groups") <- re_groups
     }
   } else {
     # check for normality of residuals
