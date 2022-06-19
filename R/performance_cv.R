@@ -46,9 +46,9 @@ performance_cv <- function(
   verbose = TRUE,
   ...
 ) {
-  if (metrics == "all") {
+  if (all(metrics == "all")) {
     metrics <- c("MSE", "RMSE", "R2")
-  } else if (metrics == "common") {
+  } else if (all(metrics == "common")) {
     metrics <- c("RMSE", "R2")
   } else {
     metrics <- toupper(metrics)
@@ -134,16 +134,16 @@ performance_cv <- function(
     resp_vars <- sapply(test_resp, function(x) mean((x - mean(x, na.rm = TRUE))^2, na.rm = TRUE))
     R2s <- 1 - MSEs / resp_vars
     out <- data.frame(
-      MSE = mean(MSEs), MSE_SE = sd(MSEs),
-      RMSE = mean(RMSEs), RMSE_SE = sd(RMSEs),
-      R2 = mean(R2s), R2_SE = sd(R2s)
+      MSE = mean(MSEs), MSE_SE = stats::sd(MSEs),
+      RMSE = mean(RMSEs), RMSE_SE = stats::sd(RMSEs),
+      R2 = mean(R2s), R2_SE = stats::sd(R2s)
     )
   }
 
   out <- out[, colnames(out) %in% c(metrics, paste0(metrics, "_SE"))]
   attr(out, "method") <- method
-  attr(out, "k") <- if(method == "k_fold") k
-  attr(out, "prop") <- if(method == "holdout") prop
+  attr(out, "k") <- if (method == "k_fold") k
+  attr(out, "prop") <- if (method == "holdout") prop
   if (length(missing_metrics <- setdiff(metrics, c("MSE", "RMSE", "R2")))) {
     message(insight::colour_text(insight::format_message(
       paste0(
