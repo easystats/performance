@@ -17,7 +17,7 @@
 #'    0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
 #'    and everything > 0.8 is good or excellent.
 #'
-#' @references Bland, J. M., \& Altman, D. G. Statistics notes: Cronbach's
+#' @references Bland, J. M., and Altman, D. G. Statistics notes: Cronbach's
 #'   alpha. BMJ 1997;314:572. 10.1136/bmj.314.7080.572
 #'
 #' @examples
