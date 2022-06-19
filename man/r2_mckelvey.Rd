@@ -13,10 +13,10 @@ r2_mckelvey(model)
 The R2 value.
 }
 \description{
-Calculates McKelvey & Zavoinas pseudo R2.
+Calculates McKelvey and Zavoinas pseudo R2.
 }
 \details{
-McKelvey & Zavoinas R2 is based on the explained variance,
+McKelvey and Zavoinas R2 is based on the explained variance,
 where the variance of the predicted response is divided by the sum
 of the variance of the predicted response and residual variance.
 For binomial models, the residual variance is either \code{pi^2/3}

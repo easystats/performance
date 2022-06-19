@@ -102,7 +102,7 @@ if (require("BayesFactor") && require("rstantools")) {
 }
 }
 \references{
-Gelman, A., Goodrich, B., Gabry, J., & Vehtari, A. (2018).
+Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
 R-squared for Bayesian regression models. The American Statistician, The
 American Statistician, 1-6.
 }

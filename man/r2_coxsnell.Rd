@@ -18,7 +18,7 @@ A named vector with the R2 value.
 Calculates the pseudo-R2 value based on the proposal from \emph{Cox & Snell (1989)}.
 }
 \details{
-This index was proposed by \emph{Cox & Snell (1989, pp. 208-9)} and,
+This index was proposed by \emph{Cox and Snell (1989, pp. 208-9)} and,
 apparently independently, by \emph{Magee (1990)}; but had been suggested
 earlier for binary response models by \emph{Maddala (1983)}. However, this
 index achieves a maximum of less than 1 for discrete models (i.e. models

@@ -37,7 +37,7 @@
 #'   is used for plotting. The `plot()` method, in turn, creates a ggplot-object.
 #'
 #' @references
-#' Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#' Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #' multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #' Press.
 #'

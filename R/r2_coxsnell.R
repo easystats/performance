@@ -8,7 +8,7 @@
 #' @param ... Currently not used.
 #'
 #' @details
-#' This index was proposed by *Cox & Snell (1989, pp. 208-9)* and,
+#' This index was proposed by *Cox and Snell (1989, pp. 208-9)* and,
 #' apparently independently, by *Magee (1990)*; but had been suggested
 #' earlier for binary response models by *Maddala (1983)*. However, this
 #' index achieves a maximum of less than 1 for discrete models (i.e. models

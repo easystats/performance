@@ -15,8 +15,8 @@
 #'   greater than 0.05.
 #'
 #' @references
-#' Hosmer, D. W., & Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
-#' NJ, USA: John Wiley & Sons, Inc. \doi{10.1002/0471722146}
+#' Hosmer, D. W., and Lemeshow, S. (2000). Applied Logistic Regression. Hoboken,
+#' NJ, USA: John Wiley and Sons, Inc. \doi{10.1002/0471722146}
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")

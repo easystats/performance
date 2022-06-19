@@ -51,7 +51,7 @@
 #' in the 'performance' R package; Lüdecke et al., 2021) obtained via the joint
 #' application of multiple outliers detection algorithms (Z-scores, Iglewicz,
 #' 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust
-#' Mahalanobis distance, Gnanadesikan & Kettenring, 1972; Minimum Covariance
+#' Mahalanobis distance, Gnanadesikan and Kettenring, 1972; Minimum Covariance
 #' Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et
 #' al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008;
 #' and Local Outlier Factor, Breunig et al., 2000), we excluded n participants
@@ -131,7 +131,7 @@
 #' observations. The default `threshold` is often arbitrarily set to some
 #' deviation (in terms of SD or MAD) from the mean (or median) of the
 #' Mahalanobis distance. However, as the Mahalanobis distance can be
-#' approximated by a Chi squared distribution (Rousseeuw & Van Zomeren, 1990),
+#' approximated by a Chi squared distribution (Rousseeuw and Van Zomeren, 1990),
 #' we can use the alpha quantile of the chi-square distribution with k degrees
 #' of freedom (k being the number of columns). By default, the alpha threshold
 #' is set to 0.025 (corresponding to the 2.5\% most extreme observations;
@@ -140,7 +140,7 @@
 #'
 #' \item **Robust Mahalanobis Distance**:
 #' A robust version of Mahalanobis distance using an Orthogonalized
-#' Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan & Kettenring,
+#' Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
 #' 1972). Requires the \pkg{bigutilsr} package. See the
 #' `bigutilsr::dist_ogk()` function.
 #'
@@ -215,42 +215,42 @@
 #' }}
 #'
 #' @references
-#' - Archimbaud, A., Nordhausen, K., & Ruiz-Gazen, A. (2018). ICS for
+#' - Archimbaud, A., Nordhausen, K., and Ruiz-Gazen, A. (2018). ICS for
 #' multivariate outlier detection with application to quality control.
-#' Computational Statistics & Data Analysis, 128, 184-199.
+#' Computational Statistics and Data Analysis, 128, 184-199.
 #' \doi{10.1016/j.csda.2018.06.011}
 #'
-#' - Gnanadesikan, R., & Kettenring, J. R. (1972). Robust estimates, residuals,
+#' - Gnanadesikan, R., and Kettenring, J. R. (1972). Robust estimates, residuals,
 #' and outlier detection with multiresponse data. Biometrics, 81-124.
 #'
-#' - Bollen, K. A., & Jackman, R. W. (1985). Regression diagnostics: An
+#' - Bollen, K. A., and Jackman, R. W. (1985). Regression diagnostics: An
 #' expository treatment of outliers and influential cases. Sociological Methods
-#' & Research, 13(4), 510-542.
+#' and Research, 13(4), 510-542.
 #'
-#' - Cabana, E., Lillo, R. E., & Laniado, H. (2019). Multivariate outlier
+#' - Cabana, E., Lillo, R. E., and Laniado, H. (2019). Multivariate outlier
 #' detection based on a robust Mahalanobis distance with shrinkage estimators.
 #' arXiv preprint arXiv:1904.02596.
 #'
 #' - Cook, R. D. (1977). Detection of influential observation in linear
 #' regression. Technometrics, 19(1), 15-18.
 #'
-#' - Iglewicz, B., & Hoaglin, D. C. (1993). How to detect and handle outliers
+#' - Iglewicz, B., and Hoaglin, D. C. (1993). How to detect and handle outliers
 #' (Vol. 16). Asq Press.
 #'
-#' - Leys, C., Klein, O., Dominicy, Y., & Ley, C. (2018). Detecting
+#' - Leys, C., Klein, O., Dominicy, Y., and Ley, C. (2018). Detecting
 #' multivariate outliers: Use a robust variant of Mahalanobis distance. Journal
 #' of Experimental Social Psychology, 74, 150-156.
 #'
-#' - Liu, F. T., Ting, K. M., & Zhou, Z. H. (2008, December). Isolation forest.
+#' - Liu, F. T., Ting, K. M., and Zhou, Z. H. (2008, December). Isolation forest.
 #' In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
 #' IEEE.
 #'
-#' - Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., & Makowski, D.
+#' - Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., and Makowski, D.
 #' (2021). performance: An R package for assessment, comparison and testing of
 #' statistical models. Journal of Open Source Software, 6(60), 3139.
 #' \doi{10.21105/joss.03139}
 #'
-#' - Rousseeuw, P. J., & Van Zomeren, B. C. (1990). Unmasking multivariate
+#' - Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
 #' outliers and leverage points. Journal of the American Statistical
 #' association, 85(411), 633-639.
 #'

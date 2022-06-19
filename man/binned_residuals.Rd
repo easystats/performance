@@ -63,7 +63,7 @@ if (require("see") && getRversion() >= "3.6.0") {
 }
 }
 \references{
-Gelman, A., & Hill, J. (2007). Data analysis using regression and
+Gelman, A., and Hill, J. (2007). Data analysis using regression and
 multilevel/hierarchical models. Cambridge; New York: Cambridge University
 Press.
 }

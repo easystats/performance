@@ -32,10 +32,10 @@
 #'    indicates the model of interest improves the fit by 95\% relative to the
 #'    null model. The NNFI (also called the Tucker Lewis index; TLI) is
 #'    preferable for smaller samples. They should be > .90 (Byrne, 1994) or >
-#'    .95 (Schumacker & Lomax, 2004).
+#'    .95 (Schumacker and Lomax, 2004).
 #'
 #'    \item **CFI**: The Comparative Fit Index is a revised form of NFI.
-#'    Not very sensitive to sample size (Fan, Thompson, & Wang, 1999). Compares
+#'    Not very sensitive to sample size (Fan, Thompson, and Wang, 1999). Compares
 #'    the fit of a target model to the fit of an independent, or null, model. It
 #'    should be > .90.
 #'
@@ -84,14 +84,14 @@
 #'   \item Byrne, B. M. (1994). Structural equation modeling with EQS and
 #'   EQS/Windows. Thousand Oaks, CA: Sage Publications.
 #'
-#'   \item Tucker, L. R., \& Lewis, C. (1973). The reliability coefficient for
+#'   \item Tucker, L. R., and Lewis, C. (1973). The reliability coefficient for
 #'   maximum likelihood factor analysis. Psychometrika, 38, 1-10.
 #'
-#'   \item Schumacker, R. E., \& Lomax, R. G. (2004). A beginner's guide to
+#'   \item Schumacker, R. E., and Lomax, R. G. (2004). A beginner's guide to
 #'   structural equation modeling, Second edition. Mahwah, NJ: Lawrence Erlbaum
 #'   Associates.
 #'
-#'   \item Fan, X., B. Thompson, \& L. Wang (1999). Effects of sample size,
+#'   \item Fan, X., B. Thompson, and L. Wang (1999). Effects of sample size,
 #'   estimation method, and model specification on structural equation modeling
 #'   fit indexes. Structural Equation Modeling, 6, 56-83.
 #'

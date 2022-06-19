@@ -47,7 +47,7 @@
 #' @references \itemize{
 #'  \item Bolker B et al. (2017):
 #'  [GLMM FAQ.](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html)
-#'  \item Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#'  \item Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
 #'  }

@@ -25,7 +25,7 @@
 #'   weights based on these criteria are also computed. For all IC except LOOIC,
 #'   weights are computed as `w = exp(-0.5 * delta_ic) / sum(exp(-0.5 * delta_ic))`,
 #'   where `delta_ic` is the difference between the model's IC value and the
-#'   smallest IC value in the model set (Burnham & Anderson, 2002).
+#'   smallest IC value in the model set (Burnham and Anderson, 2002).
 #'   For LOOIC, weights are computed as "stacking weights" using
 #'   [loo::stacking_weights()].
 #' }
@@ -66,7 +66,7 @@
 #' }
 #'
 #' @references
-#' Burnham, K. P., & Anderson, D. R. (2002).
+#' Burnham, K. P., and Anderson, D. R. (2002).
 #' _Model selection and multimodel inference: A practical information-theoretic approach_ (2nd ed.).
 #' Springer-Verlag. \doi{10.1007/b97636}
 #'

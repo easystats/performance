@@ -58,7 +58,7 @@ scores in a school can be grouped by classroom if there are multiple
 classrooms and each classroom was administered the same test) and ICC indexes
 how strongly measurements in the same group resemble each other. This index
 goes from 0, if the grouping conveys no information, to 1, if all
-observations in a group are identical (Gelman \& Hill, 2007, p. 258). In
+observations in a group are identical (Gelman and Hill, 2007, p. 258). In
 other word, the ICC \dQuote{can also be interpreted as the expected
 correlation between two randomly drawn units that are in the same group}
 \cite{(Hox 2010: 15)}, although this definition might not apply to mixed
@@ -148,14 +148,14 @@ if (require("lme4")) {
 \itemize{
 \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
 (2nd ed). New York: Routledge.
-\item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The
+\item Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
 coefficient of determination R2 and intra-class correlation coefficient from
 generalized linear mixed-effects models revisited and expanded. Journal of
 The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
-\item Rabe-Hesketh, S., & Skrondal, A. (2012). Multilevel and longitudinal
+\item Rabe-Hesketh, S., and Skrondal, A. (2012). Multilevel and longitudinal
 modeling using Stata (3rd ed). College Station, Tex: Stata Press
 Publication.
-\item Raudenbush, S. W., & Bryk, A. S. (2002). Hierarchical linear models:
+\item Raudenbush, S. W., and Bryk, A. S. (2002). Hierarchical linear models:
 applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 Publications.
 }

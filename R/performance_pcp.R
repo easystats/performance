@@ -41,7 +41,7 @@
 #' - Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
 #'   Variable Models. Political Analysis, 8, 83–98.
 #'
-#' - Gelman, A., & Hill, J. (2007). Data analysis using regression and
+#' - Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #'   multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'   Press, 99.
 #'

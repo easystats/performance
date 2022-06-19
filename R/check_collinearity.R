@@ -96,11 +96,11 @@
 #'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
 #'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#'   \item James, G., Witten, D., Hastie, T., & Tibshirani, R. (eds.). (2013).
+#'   \item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
 #'   An introduction to statistical learning: with applications in R. New York:
 #'   Springer.
 #'
-#'   \item Marcoulides, K. M., & Raykov, T. (2019). Evaluation of Variance
+#'   \item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
 #'   Inflation Factors in Regression Models Using Latent Variable Modeling
 #'   Methods. Educational and Psychological Measurement, 79(5), 874–882.
 #'

@@ -50,15 +50,15 @@ if (require("lme4")) {
 \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
 (2nd ed). New York: Routledge.
 
-\item Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM
+\item Johnson, P. C. D. (2014). Extension of Nakagawa and Schielzeth’s R2 GLMM
 to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946.
 \doi{10.1111/2041-210X.12225}
 
-\item Nakagawa, S., & Schielzeth, H. (2013). A general and simple method for
+\item Nakagawa, S., and Schielzeth, H. (2013). A general and simple method for
 obtaining R2 from generalized linear mixed-effects models. Methods in
 Ecology and Evolution, 4(2), 133–142. \doi{10.1111/j.2041-210x.2012.00261.x}
 
-\item Nakagawa, S., Johnson, P. C. D., & Schielzeth, H. (2017). The
+\item Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
 coefficient of determination R2 and intra-class correlation coefficient from
 generalized linear mixed-effects models revisited and expanded. Journal of
 The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}

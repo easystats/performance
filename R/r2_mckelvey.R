@@ -1,7 +1,7 @@
 #' @title McKelvey & Zavoinas R2
 #' @name r2_mckelvey
 #'
-#' @description Calculates McKelvey & Zavoinas pseudo R2.
+#' @description Calculates McKelvey and Zavoinas pseudo R2.
 #'
 #' @param model Generalized linear model.
 #'
@@ -12,7 +12,7 @@
 #'   \item McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.
 #' }
 #'
-#' @details McKelvey & Zavoinas R2 is based on the explained variance,
+#' @details McKelvey and Zavoinas R2 is based on the explained variance,
 #'   where the variance of the predicted response is divided by the sum
 #'   of the variance of the predicted response and residual variance.
 #'   For binomial models, the residual variance is either `pi^2/3`
