@@ -136,12 +136,12 @@
 <div class="section level3">
 <h3 id="breaking-changes-0-8-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-8-0"></a></h3>
 <ul><li><p>The <code>ci</code>-level in <code><a href="../reference/r2.html">r2()</a></code> for Bayesian models now defaults to <code>0.95</code>, to be in line with the latest changes in the <em>bayestestR</em> package.</p></li>
-<li><p>S3-method dispatch for <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code> was revised, to avoid problems with the <em>bayesplot</em> package, where the generic is located.</p></li>
+<li><p>S3-method dispatch for <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">pp_check()</a></code> was revised, to avoid problems with the <em>bayesplot</em> package, where the generic is located.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="general-0-8-0">General<a class="anchor" aria-label="anchor" href="#general-0-8-0"></a></h3>
 <ul><li><p>Minor revisions to wording for messages from some of the check-functions.</p></li>
-<li><p><code><a href="../reference/check_predictions.html">posterior_predictive_check()</a></code> and <code><a href="../reference/check_predictions.html">check_predictions()</a></code> were added as aliases for <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code>.</p></li>
+<li><p><code><a href="../reference/check_predictions.html">posterior_predictive_check()</a></code> and <code><a href="../reference/check_predictions.html">check_predictions()</a></code> were added as aliases for <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">pp_check()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-8-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-8-0"></a></h3>
@@ -154,7 +154,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-8-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-8-0"></a></h3>
 <ul><li><p>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for Bayesian models.</p></li>
-<li><p>Fixed issue in <code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code> for models with transformed response variables, so now predictions and observed response values are on the same (transformed) scale.</p></li>
+<li><p>Fixed issue in <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">pp_check()</a></code> for models with transformed response variables, so now predictions and observed response values are on the same (transformed) scale.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -344,7 +344,7 @@
 <div class="section level3">
 <h3 id="new-functions-0-5-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-5-0"></a></h3>
 <ul><li>
-<code><a href="https://mc-stan.org/rstanarm/reference/pp_check.stanreg.html" class="external-link">pp_check()</a></code> to compute posterior predictive checks for frequentist models.</li></ul></div>
+<code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">pp_check()</a></code> to compute posterior predictive checks for frequentist models.</li></ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-5-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-5-0"></a></h3>
 <ul><li><p>Fixed issue with incorrect labeling of groups from <code><a href="../reference/icc.html">icc()</a></code> when <code>by_group =   TRUE</code>.</p></li>
@@ -435,7 +435,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
