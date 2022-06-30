@@ -21,6 +21,8 @@
 #'   considered as outlier. If `NULL`, default values will be used (see
 #'   'Details'). If a numeric value is given, it will be used as the threshold
 #'   for any of the method run.
+#' @param ID Optional, to report an ID column along with the row number When reporting outliers by variable (for univariate methods).
+#'   passed down to `ICSOutlier::ics.outlier()`.
 #' @param ... When `method = "ics"`, further arguments in `...` are
 #'   passed down to `ICSOutlier::ics.outlier()`.
 #'
@@ -168,7 +170,7 @@
 #'  clustering technique that can be used for outliers detection). The threshold
 #'  argument is passed as `minPts`, which corresponds to the minimum size
 #'  of a cluster. By default, this size is set at 2 times the number of columns
-#'  (Sander et al., 1998). Compared to the others techniques, that will always
+#'  (Sander et al., 1998). Compared to the other techniques, that will always
 #'  detect several outliers (as these are usually defined as a percentage of
 #'  extreme values), this algorithm functions in a different manner and won't
 #'  always detect outliers. Note that `method = "optics"` requires the
@@ -183,8 +185,8 @@
 #'  extreme observations). Requires the \pkg{solitude} package.
 #'
 #'  \item **Local Outlier Factor**:
-#'  Based on a K nearest neighbours algorithm, LOF compares the local density of
-#'  an point to the local densities of its neighbors instead of computing a
+#'  Based on a K nearest neighbors algorithm, LOF compares the local density of
+#'  a point to the local densities of its neighbors instead of computing a
 #'  distance from the center (Breunig et al., 2000). Points that have a
 #'  substantially lower density than their neighbors are considered outliers. A
 #'  LOF score of approximately 1 indicates that density around the point is
@@ -200,12 +202,13 @@
 #' \preformatted{
 #' list(
 #'   zscore = stats::qnorm(p = 1 - 0.025),
+#'   zscore_robust = stats::qnorm(p = 1 - 0.025),
 #'   iqr = 1.5,
 #'   ci = 0.95,
 #'   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
 #'   pareto = 0.7,
 #'   mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-#'   robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+#'   mahalanobis_robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
 #'   mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
 #'   ics = 0.025,
 #'   optics = 2 * ncol(x),
@@ -316,7 +319,7 @@
 #' insight::get_data(model)[outliers_list, ] # Show outliers data
 #'
 #' if (require("MASS")) {
-#'   check_outliers(model, method = c("mahalabonis", "mcd"))
+#'   check_outliers(model, method = c("mahalanobis", "mcd"))
 #' }
 #' if (require("ICS")) {
 #'   # This one takes some seconds to finish...
@@ -368,7 +371,6 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
       "pareto",
       "mahalanobis",
       "mahalanobis_robust",
-      "robust",
       "mcd",
       "ics",
       "optics",
@@ -426,6 +428,7 @@ check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = 
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
   attr(outlier, "influential_obs") <- .influential_obs(x)
+  attr(outlier, "variables") <- "(Whole model)"
   outlier
 }
 
@@ -446,11 +449,42 @@ as.numeric.check_outliers <- function(x, ...) {
 #' @export
 print.check_outliers <- function(x, ...) {
   outliers <- which(x)
-  if (length(outliers) >= 1) {
-    o <- paste0(" (cases ", paste0(outliers, collapse = ", "), ")")
-    insight::print_color(sprintf("Warning: %i outliers detected%s.\n", length(outliers), o), "red")
+  method <- paste(attr(x, "method"), collapse = ", ")
+  thresholds <- lapply(attr(x, "threshold"), round, 2)
+  thresholds <- thresholds[match(attr(x, "method"), names(thresholds))]
+  thresholds <- paste(thresholds, collapse = ", ")
+  vars <- paste(attr(x, "variables"), collapse = ", ")
+  vars.outliers <- attr(x, "outlier_list")
+  outlier.count <- attr(x, "outlier_count")
+
+  outlier.data <- cbind(Rows = outliers, attr(x, "data")[outliers,])
+
+  if (length(outliers) > 1) {
+    o <- paste0(": cases ", paste0(outliers, collapse = ", "))
+    insight::print_color(sprintf("%i outliers detected%s.
+- Based on the following methods: %s.
+- Using the following thresholds: %s.
+- For variables: %s\n\n", length(outliers), o, method, thresholds, vars), "yellow")
+
+    if(length(attr(x, "method")) > 1) {
+      insight::print_color("Note: Outliers were classified as such by at least half of the selected methods. \n\n", "yellow")
+    }
+
+    if(nrow(outlier.count) > 0) {
+    cat("------------------------------------------------------------------------
+The following observations were considered outliers for more than one variable by the univariate methods: \n\n")
+    print(outlier.count)
+    cat("\n")
+    }
+
+    cat("------------------------------------------------------------------------
+Outliers per variable (univariate methods): \n\n")
+    print(vars.outliers)
   } else {
-    insight::print_color("OK: No outliers detected.\n", "green")
+    insight::print_color(sprintf("OK: No outliers detected.
+- Based on the following methods: %s.
+- Using the following thresholds: %s.
+- For variables: %s\n", method, thresholds, vars), "green")
   }
   invisible(x)
 }
@@ -475,7 +509,7 @@ check_outliers.numeric <- function(x, method = "zscore_robust", threshold = NULL
 
 #' @rdname check_outliers
 #' @export
-check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NULL, ...) {
+check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NULL, ID = NULL, ...) {
 
   # Remove non-numerics
   x <- x[, sapply(x, is.numeric), drop = FALSE]
@@ -484,7 +518,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   if (all(method == "all")) {
     method <- c("zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "iforest", "lof")
   }
-  method <- match.arg(method, c("zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook", "pareto", "mahalanobis", "mahalanobis_robust", "robust", "mcd", "ics", "optics", "lof"), several.ok = TRUE)
+  method <- match.arg(method, c("zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook", "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof"), several.ok = TRUE)
 
   # Thresholds
   if (is.null(threshold)) {
@@ -496,7 +530,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
   } else {
-    stop(insight::format_message("The `threshold` argument must be NULL (for default values) or a list containig threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."), call. = FALSE)
+    stop(insight::format_message("The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."), call. = FALSE)
   }
 
   out <- list()
@@ -512,6 +546,51 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
           method = "max"
         )
       )
+
+    # Outliers per variable
+    zscore.list <- lapply(x, function(x) { .check_outliers_zscore(
+      x,
+      threshold = thresholds$zscore,
+      robust = FALSE,
+      method = "max"
+    )})
+
+    zscore.list <- lapply(zscore.list, "[[", 1)
+    if(methods::hasArg(ID)) {
+      ID.names <- data[[ID]]
+      zscore.list <- lapply(zscore.list, function(y) {
+        z <- cbind(ID = ID.names, y)
+        datawizard::data_rename(z, "ID", ID)
+      })
+    }
+
+    zscore.list <- lapply(zscore.list, datawizard::data_filter,
+                          Outlier_Zscore >= 0.5)
+    zscore.list <- lapply(zscore.list, datawizard::data_remove,
+                          "Outlier_Zscore", as_data_frame = TRUE)
+    zscore.list <- lapply(zscore.list, datawizard::rownames_as_column,
+                          var = "Row")
+    zscore.list <- zscore.list[lapply(zscore.list, nrow) > 0]
+
+    # OUtliers for several variables
+    count.table <- do.call(rbind, zscore.list)
+    count.table$Row <- as.numeric(count.table$Row)
+    if(nrow(count.table) > 0) {
+
+      count.values <- rle(sort(count.table$Row))
+      count.table <- data.frame(Row = count.values$values,
+                                n_Zscore = count.values$lengths)
+      count.table <- count.table[which(count.table$n > 1),]
+      count.table <- count.table[order(-count.table$n_Zscore),]
+      if(methods::hasArg(ID)) {
+        count.table$ID <- data[[ID]][count.table$Row]
+        count.table <- datawizard::data_relocate(count.table,
+                                                 select = "ID",
+                                                 after = "Row")
+        count.table <- datawizard::data_rename(count.table, "ID", ID)
+      }
+    }
+
   }
   if ("zscore_robust" %in% method) {
     out <-
@@ -519,7 +598,7 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
         out,
         .check_outliers_zscore(
           x,
-          threshold = thresholds$zscore,
+          threshold = thresholds$zscore_robust,
           robust = TRUE,
           method = "max"
         )
@@ -544,8 +623,8 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   }
 
   # Robust Mahalanobis
-  if (any(c("robust", "mahalanobis_robust") %in% method)) {
-    out <- c(out, .check_outliers_robust(x, threshold = thresholds$robust))
+  if ("mahalanobis_robust" %in% method) {
+    out <- c(out, .check_outliers_robust(x, threshold = thresholds$mahalanobis_robust))
   }
 
   # MCD
@@ -593,6 +672,10 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
+  attr(outlier, "variables") <- names(x)
+  attr(outlier, "raw_data") <- data
+  attr(outlier, "outlier_list") <- zscore.list
+  attr(outlier, "outlier_count") <- count.table
   outlier
 }
 
@@ -626,8 +709,9 @@ check_outliers.grouped_df <- function(x, method = "mahalanobis", threshold = NUL
   class(out) <- c("check_outliers", "see_check_outliers", class(out))
   attr(out, "data") <- data
   attr(out, "method") <- method
-  attr(out, "threshold") <- thresholds
+  attr(out, "threshold") <- thresholds[[1]]
   attr(out, "text_size") <- 3
+  attr(out, "variables") <- names(x)
   out
 }
 
@@ -675,12 +759,13 @@ check_outliers.fixest <- check_outliers.gls
 
 .check_outliers_thresholds_nowarn <- function(x) {
   zscore <- stats::qnorm(p = 1 - 0.025)
+  zscore_robust <- stats::qnorm(p = 1 - 0.025)
   iqr <- 1.5
   ci <- 0.95
   cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
   pareto <- 0.7
   mahalanobis <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
-  robust <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
+  mahalanobis_robust <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
   mcd <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
   ics <- 0.025
   optics <- 2 * ncol(x)
@@ -689,12 +774,13 @@ check_outliers.fixest <- check_outliers.gls
 
   list(
     "zscore" = zscore,
+    "zscore_robust" = zscore_robust,
     "iqr" = iqr,
     "ci" = ci,
     "cook" = cook,
     "pareto" = pareto,
     "mahalanobis" = mahalanobis,
-    "robust" = robust,
+    "mahalanobis_robust" = mahalanobis_robust,
     "mcd" = mcd,
     "ics" = ics,
     "optics" = optics,
@@ -711,6 +797,8 @@ check_outliers.fixest <- check_outliers.gls
                                    threshold = stats::qnorm(p = 1 - 0.025),
                                    robust = TRUE,
                                    method = "max") {
+  x <- as.data.frame(x)
+
   # Standardize
   if (robust == FALSE) {
     d <- abs(as.data.frame(sapply(x, function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE))))
