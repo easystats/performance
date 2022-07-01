@@ -21,8 +21,7 @@
 #'   considered as outlier. If `NULL`, default values will be used (see
 #'   'Details'). If a numeric value is given, it will be used as the threshold
 #'   for any of the method run.
-#' @param ID Optional, to report an ID column along with the row number When reporting outliers by variable (for univariate methods).
-#'   passed down to `ICSOutlier::ics.outlier()`.
+#' @param ID Optional, to report an ID column along with the row number when reporting outliers by variable (for univariate methods).
 #' @param ... When `method = "ics"`, further arguments in `...` are
 #'   passed down to `ICSOutlier::ics.outlier()`.
 #'
@@ -459,7 +458,7 @@ print.check_outliers <- function(x, ...) {
 
   outlier.data <- cbind(Rows = outliers, attr(x, "data")[outliers,])
 
-  if (length(outliers) > 1) {
+  if (length(outliers) >= 1) {
     o <- paste0(": cases ", paste0(outliers, collapse = ", "))
     insight::print_color(sprintf("%i outliers detected%s.
 - Based on the following methods: %s.
@@ -470,16 +469,16 @@ print.check_outliers <- function(x, ...) {
       insight::print_color("Note: Outliers were classified as such by at least half of the selected methods. \n\n", "yellow")
     }
 
-    if(nrow(outlier.count) > 0) {
+    if(isTRUE(nrow(outlier.count) > 0)) {
     cat("------------------------------------------------------------------------
 The following observations were considered outliers for more than one variable by the univariate methods: \n\n")
     print(outlier.count)
     cat("\n")
-    }
 
     cat("------------------------------------------------------------------------
 Outliers per variable (univariate methods): \n\n")
     print(vars.outliers)
+    }
   } else {
     insight::print_color(sprintf("OK: No outliers detected.
 - Based on the following methods: %s.
