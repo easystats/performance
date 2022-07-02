@@ -68,13 +68,13 @@ performance_cv <- function(
       method <- "holdout"
       stack <- TRUE
       test_resp <- data[, resp.name]
-      test_pred <- insight::get_predicted(model, data = data)
+      test_pred <- insight::get_predicted(model, ci = NULL, data = data)
       test_resd <- test_resp - test_pred
     } else if (method == "holdout") {
       train_i <- sample(seq_len(nrow(model_data)), size = round((1 - prop) * nrow(model_data)), replace = FALSE)
       model_upd <- stats::update(model, data = model_data[train_i,])
       test_resp <- model_data[-train_i, resp.name]
-      test_pred <- insight::get_predicted(model_upd, data = model_data[-train_i, ])
+      test_pred <- insight::get_predicted(model_upd, ci = NULL, data = model_data[-train_i, ])
       test_resd <- test_resp - test_pred
     } else if (method == "loo" && !info$is_bayesian) {
       model_response <- insight::get_response(model)
@@ -108,7 +108,7 @@ performance_cv <- function(
         stats::update(model, data = model_data[.x$train, ])
       })
       test_pred <- mapply(function(.x, .y) {
-        insight::get_predicted(.y, data = model_data[.x$test, ])
+        insight::get_predicted(.y, ci = NULL, data = model_data[.x$test, ])
       }, cv_folds, models_upd, SIMPLIFY = FALSE)
       test_resp <- lapply(cv_folds, function(.x) {
         as.data.frame(model_data[.x$test, ])[[resp.name]]
