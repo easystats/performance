@@ -1,12 +1,19 @@
 #' @rdname display.performance_model
 #' @export
-print_md.performance_model <- function(x, digits = 2, caption = "Indices of model performance", ...) {
+print_md.performance_model <- function(x, digits = 2, caption = "Indices of model performance", layout = "horizontal", ...) {
+  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
   formatted_table <- format(
     x = x,
     digits = digits,
     format = "markdown",
     ...
   )
+
+  # switch to vertical layout
+  if (layout == "vertical") {
+    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    colnames(formatted_table)[2] <- "Value"
+  }
 
   insight::export_table(
     x = formatted_table,

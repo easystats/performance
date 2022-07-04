@@ -4,7 +4,7 @@
 #' to get more accurate estimates and standard errors. This function may help to
 #' Machine learning model trained to classify distributions
 #'
-#' Mean accuracy and Kappa of 0.86 and 0.85, repsectively.
+#' Mean accuracy and Kappa of 0.86 and 0.85, respectively.
 #'
 "classify_distribution"
 
