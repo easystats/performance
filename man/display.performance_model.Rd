@@ -7,7 +7,13 @@
 \usage{
 \method{display}{performance_model}(object, format = "markdown", digits = 2, caption = NULL, ...)
 
-\method{print_md}{performance_model}(x, digits = 2, caption = "Indices of model performance", ...)
+\method{print_md}{performance_model}(
+  x,
+  digits = 2,
+  caption = "Indices of model performance",
+  layout = "horizontal",
+  ...
+)
 }
 \arguments{
 \item{object, x}{An object returned by \code{\link[=model_performance]{model_performance()}}
