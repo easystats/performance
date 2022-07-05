@@ -42,4 +42,3 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
   }
   metrics
 }
-

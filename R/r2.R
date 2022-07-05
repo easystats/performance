@@ -512,7 +512,6 @@ r2.BFBayesFactor <- r2.brmsfit
 
 #' @export
 r2.gam <- function(model, ...) {
-
   # gamlss inherits from gam, and summary.gamlss prints results automatically
   printout <- utils::capture.output(s <- summary(model))
 

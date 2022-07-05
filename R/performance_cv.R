@@ -35,17 +35,15 @@
 #' performance_cv(model)
 #'
 #' @export
-performance_cv <- function(
-  model,
-  data = NULL,
-  method = c("holdout", "k_fold", "loo"),
-  metrics = "all",
-  prop = .30,
-  k = 5,
-  stack = TRUE,
-  verbose = TRUE,
-  ...
-) {
+performance_cv <- function(model,
+                           data = NULL,
+                           method = c("holdout", "k_fold", "loo"),
+                           metrics = "all",
+                           prop = .30,
+                           k = 5,
+                           stack = TRUE,
+                           verbose = TRUE,
+                           ...) {
   if (all(metrics == "all")) {
     metrics <- c("MSE", "RMSE", "R2")
   } else if (all(metrics == "common")) {
@@ -72,15 +70,15 @@ performance_cv <- function(
       test_resd <- test_resp - test_pred
     } else if (method == "holdout") {
       train_i <- sample(seq_len(nrow(model_data)), size = round((1 - prop) * nrow(model_data)), replace = FALSE)
-      model_upd <- stats::update(model, data = model_data[train_i,])
+      model_upd <- stats::update(model, data = model_data[train_i, ])
       test_resp <- model_data[-train_i, resp.name]
       test_pred <- insight::get_predicted(model_upd, ci = NULL, data = model_data[-train_i, ])
       test_resd <- test_resp - test_pred
     } else if (method == "loo" && !info$is_bayesian) {
       model_response <- insight::get_response(model)
       MSE <- mean(insight::get_residuals(model, weighted = TRUE)^2 /
-                    (1 - stats::hatvalues(model))^2)
-        mean(test_resd^2, na.rm = TRUE)
+        (1 - stats::hatvalues(model))^2)
+      mean(test_resd^2, na.rm = TRUE)
       RMSE <- sqrt(MSE)
       R2 <- 1 - MSE / (mean(model_response^2, na.rm = TRUE) - mean(model_response, na.rm = TRUE)^2)
       out <- data.frame(MSE = MSE, RMSE = RMSE, R2 = R2)
@@ -172,24 +170,28 @@ performance_cv <- function(
 
 #' @export
 print.performance_cv <- function(x, digits = 2, ...) {
-  method <- switch(
-    attr(x, "method"),
+  method <- switch(attr(x, "method"),
     holdout = paste0(
       insight::format_value(attr(x, "prop"), as_percent = TRUE, digits = 0),
-      " holdout"),
+      " holdout"
+    ),
     k_fold = paste0(attr(x, "k"), "-fold"),
     loo = "leave-one-out [LOO]"
   )
 
-  formatted_table <- format(x = x, digits = digits, format = "text",
-                            ...)
+  formatted_table <- format(
+    x = x, digits = digits, format = "text",
+    ...
+  )
   cat(insight::export_table(
     x = formatted_table,
     digits = digits,
     format = "text",
-    caption = c(paste0("# Cross-validation performance (",
-                       method,
-                       " method)"), "blue"),
+    caption = c(paste0(
+      "# Cross-validation performance (",
+      method,
+      " method)"
+    ), "blue"),
     ...
   ))
   invisible(x)

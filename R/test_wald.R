@@ -7,7 +7,6 @@ test_wald <- function(...) {
 
 #' @export
 test_wald.default <- function(...) {
-
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
@@ -46,7 +45,6 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
 
 
 .test_wald <- function(objects, test = "F") {
-
   # Compute stuff
   dfs <- sapply(objects, insight::get_df, type = "residual")
 

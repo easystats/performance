@@ -355,7 +355,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
 
   # match?
   if ((length(colnames(params_theta)) != length(colnames(mm))) ||
-      !all(colnames(params_theta) == colnames(mm))) {
+    !all(colnames(params_theta) == colnames(mm))) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
       stop(insight::format_message("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher."), call. = FALSE)
     }

@@ -180,18 +180,18 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 
   # for REML fits, warn user
   if (isTRUE(verbose) &&
-      # only warn for REML fit
-      identical(estimator, "REML") &&
-      # only for IC comparison
-      any(grepl("(AIC|BIC)", names(dfs))) &&
-      # only when mixed models are involved, others probably don't have problems with REML fit
-      any(sapply(objects, insight::is_mixed_model)) &&
-      # only if not all models have same fixed effects (else, REML is ok)
-      !isTRUE(attributes(objects)$same_fixef)) {
-      warning(insight::format_message(
-        "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
-        "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
-      ), call. = FALSE)
+    # only warn for REML fit
+    identical(estimator, "REML") &&
+    # only for IC comparison
+    any(grepl("(AIC|BIC)", names(dfs))) &&
+    # only when mixed models are involved, others probably don't have problems with REML fit
+    any(sapply(objects, insight::is_mixed_model)) &&
+    # only if not all models have same fixed effects (else, REML is ok)
+    !isTRUE(attributes(objects)$same_fixef)) {
+    warning(insight::format_message(
+      "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
+      "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
+    ), call. = FALSE)
   }
 
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
