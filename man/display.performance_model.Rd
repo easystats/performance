@@ -28,6 +28,8 @@ or its summary.}
 \item{caption}{Table caption as string. If \code{NULL}, no table caption is printed.}
 
 \item{...}{Currently not used.}
+
+\item{layout}{Table layout (can be either \code{"horizontal"} or \code{"vertical"}).}
 }
 \value{
 A character vector. If \code{format = "markdown"}, the return value

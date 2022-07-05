@@ -9,6 +9,7 @@
 #'   or its summary.
 #' @param format String, indicating the output format. Currently, only
 #'   `"markdown"` is supported.
+#' @param layout Table layout (can be either `"horizontal"` or `"vertical"`).
 #' @param digits Number of decimal places.
 #' @param caption Table caption as string. If `NULL`, no table caption is printed.
 #' @param ... Currently not used.
