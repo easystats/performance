@@ -204,7 +204,8 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 # methods ----------------------------
 
 #' @export
-print.compare_performance <- function(x, digits = 3, ...) {
+print.compare_performance <- function(x, digits = 3, layout = "horizontal", ...) {
+  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
   table_caption <- c("# Comparison of Model Performance Indices", "blue")
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
@@ -212,6 +213,13 @@ print.compare_performance <- function(x, digits = 3, ...) {
     footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
   } else {
     footer <- NULL
+  }
+
+  # switch to vertical layout
+  if (layout == "vertical") {
+    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    formatted_table <- datawizard::row_to_colnames(formatted_table)
+    colnames(formatted_table)[1] <- "Metric"
   }
 
   cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))

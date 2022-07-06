@@ -30,7 +30,11 @@
 #' display(mp)
 #' @export
 display.performance_model <- function(object, format = "markdown", digits = 2, caption = NULL, ...) {
-  print_md(x = object, digits = digits, caption = caption, ...)
+  if (identical(format, "html")) {
+    print_html(x = object, digits = digits, caption = caption, ...)
+  } else {
+    print_md(x = object, digits = digits, caption = caption, ...)
+  }
 }
 
 
