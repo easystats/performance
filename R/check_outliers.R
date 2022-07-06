@@ -337,7 +337,6 @@ check_outliers <- function(x, ...) {
 #' @rdname check_outliers
 #' @export
 check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = NULL, ...) {
-
   # Check args
   if (all(method == "all")) {
     method <- c(

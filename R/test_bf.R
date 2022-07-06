@@ -8,7 +8,6 @@ test_bf <- function(...) {
 #' @rdname test_performance
 #' @export
 test_bf.default <- function(..., text_length = NULL) {
-
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
   names(objects) <- match.call(expand.dots = FALSE)$`...`

@@ -7,7 +7,6 @@ test_vuong <- function(...) {
 
 #' @export
 test_vuong.default <- function(..., reference = 1) {
-
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 

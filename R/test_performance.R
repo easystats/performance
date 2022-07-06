@@ -238,7 +238,6 @@ test_performance <- function(..., reference = 1) {
 
 #' @export
 test_performance.default <- function(..., reference = 1, include_formula = FALSE) {
-
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
@@ -262,14 +261,15 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
 #' @export
 plot.test_performance <- function(x, ...) {
-  warning(insight::format_message("There is currently no plot() method for test-functions.",
-                                  "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."), call. = FALSE)
+  warning(insight::format_message(
+    "There is currently no plot() method for test-functions.",
+    "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."
+  ), call. = FALSE)
 }
 
 
 #' @export
 format.test_performance <- function(x, digits = 2, ...) {
-
   # Format cols and names
   out <- insight::format_table(x, digits = digits, ...)
 
@@ -437,7 +437,6 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
 
 .test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE) {
-
   # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
   if (multiple && insight::is_model(objects)) {
     stop("At least two models are required to test them.", call. = FALSE)
@@ -468,12 +467,12 @@ test_performance.ListNonNestedRegressions <- function(objects,
   object_names <- insight::compact_character(names(objects))
   # check if we have any names at all
   if ((is.null(object_names) ||
-      # or if length of names doesn't match number of models
-      length(object_names) != length(objects) ||
-      # or if names are "..1", "..2" pattern
-      all(grepl("\\.\\.\\d", object_names))) &&
-      # and length of dot-names must match length of objects
-      length(objects) == length(dot_names)) {
+    # or if length of names doesn't match number of models
+    length(object_names) != length(objects) ||
+    # or if names are "..1", "..2" pattern
+    all(grepl("\\.\\.\\d", object_names))) &&
+    # and length of dot-names must match length of objects
+    length(objects) == length(dot_names)) {
     names(objects) <- dot_names
   }
   objects

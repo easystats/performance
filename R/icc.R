@@ -138,7 +138,6 @@
 #' }
 #' @export
 icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
-
   # special handling for smicd::semLme()
   if (inherits(model, "sem") && inherits(model, "lme")) {
     return(model$icc)

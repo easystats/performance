@@ -77,7 +77,7 @@ r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRU
         resp <- datawizard::data_to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
       }
       mean_resp <- mean(resp, na.rm = TRUE)
-      pred <- insight::get_predicted(model, verbose = FALSE)
+      pred <- insight::get_predicted(model, ci = NULL, verbose = FALSE)
       list(R2 = 1 - sum((resp - pred)^2) / sum((resp - mean_resp)^2))
     },
     error = function(e) {
@@ -512,7 +512,6 @@ r2.BFBayesFactor <- r2.brmsfit
 
 #' @export
 r2.gam <- function(model, ...) {
-
   # gamlss inherits from gam, and summary.gamlss prints results automatically
   printout <- utils::capture.output(s <- summary(model))
 

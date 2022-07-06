@@ -69,7 +69,7 @@ check_predictions.default <- function(object,
                                       re_formula = NULL,
                                       ...) {
   if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) &&
-      isFALSE(inherits(object, "BFBayesFactor"))) {
+    isFALSE(inherits(object, "BFBayesFactor"))) {
     insight::check_if_installed(
       "bayesplot",
       "to create posterior prediction plots for Stan models"
@@ -124,7 +124,6 @@ pp_check.lm <- function(object,
                         check_range = FALSE,
                         re_formula = NULL,
                         ...) {
-
   # if we have a matrix-response, continue here...
   if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
     return(pp_check.glm(object, iterations, check_range, re_formula, ...))
@@ -179,7 +178,6 @@ pp_check.glm <- function(object,
                          check_range = FALSE,
                          re_formula = NULL,
                          ...) {
-
   # if we have no matrix-response, continue here...
   if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
     return(pp_check.lm(object, iterations, check_range, re_formula, ...))
@@ -205,7 +203,8 @@ pp_check.glm <- function(object,
 
   # get response data, and response term
   response <- eval(.str2lang(insight::find_response(object)),
-                   envir = insight::get_response(object))
+    envir = insight::get_response(object)
+  )
   resp_string <- insight::find_terms(object)$response
 
   out$y <- response[, 1] / response[, 2]
@@ -293,10 +292,13 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
       if (length(missing_levs)) {
         insight::print_color(
           insight::format_message(
-            paste0("Warning: Level",
-                   ifelse(length(missing_levs) == 1, " ", "s "),
-                   paste0("'", missing_levs, "'", collapse = ", "),
-                   " from original data is not included in the replicated data."), "Model may not capture the variation of the data."),
+            paste0(
+              "Warning: Level",
+              ifelse(length(missing_levs) == 1, " ", "s "),
+              paste0("'", missing_levs, "'", collapse = ", "),
+              " from original data is not included in the replicated data."
+            ), "Model may not capture the variation of the data."
+          ),
           "red"
         )
       }

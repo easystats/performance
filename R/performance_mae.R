@@ -27,7 +27,7 @@ mae <- performance_mae
 performance_mae.default <- function(model, verbose = TRUE, ...) {
   pred <- tryCatch(
     {
-      insight::get_predicted(model, verbose = verbose, ...)
+      insight::get_predicted(model, ci = NULL, verbose = verbose, ...)
     },
     error = function(e) {
       NULL
