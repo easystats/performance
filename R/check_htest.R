@@ -49,6 +49,15 @@ check_normality.htest <- function(x, ...) {
     out <- .MVN_hz(data)[["p value"]]
     class(out) <- c("check_normality", "see_check_normality", "numeric")
     attr(out, "type") <- "residuals"
+  } else if (grepl("Pearson's Chi-squared test", method, fixed = TRUE) ||
+             grepl("Chi-squared test for given probabilities", method, fixed = TRUE)) {
+    out <- c(
+      "5" = all(x$expected >= 5),
+      "10" = all(x$expected >= 10)
+    )
+    class(out) <- c("check_normality_binom","logical")
+    attr(out, "object_name") <- substitute(x)
+    return(out)
   } else {
     stop("This htest is not supported.")
   }
@@ -100,6 +109,21 @@ check_homogeneity.htest <- function(x, ...) {
 #
 # }
 
+
+
+# Print -------------------------------------------------------------------
+
+#' @export
+print.check_normality_binom <- function(x, ...) {
+  if (x["10"]) {
+    insight::print_color("OK: All cells in the expected table have more than 10 observations", "green")
+  } else if (x["5"]) {
+    insight::print_color("Warning: All cells in the expected table have more than 5 observations,\n  but some have less than 10.", "yellow")
+  } else {
+    insight::print_color("Warning: Some cells in the expected table have less than 5 observations", "red")
+  }
+  return(invisible(x))
+}
 
 
 # Utils -------------------------------------------------------------------
