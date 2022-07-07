@@ -59,7 +59,7 @@ check_normality.htest <- function(x, ...) {
     attr(out, "object_name") <- substitute(x)
     return(out)
   } else {
-    stop("This htest is not supported.")
+    stop("This htest is not supported (or this assumption is not required for this test).")
   }
 
   attr(out, "object_name") <- substitute(x)
@@ -86,7 +86,7 @@ check_homogeneity.htest <- function(x, ...) {
   } else if (grepl("One-way analysis of means", method, fixed = TRUE)) {
     m <- stats::aov(stats::reformulate(names(data)[2], response = names(data)[1]), data = data)
   } else {
-    stop("This htest is not supported.")
+    stop("This htest is not supported (or this assumption is not required for this test).")
   }
 
   out <- check_homogeneity(m, ...)
@@ -97,14 +97,29 @@ check_homogeneity.htest <- function(x, ...) {
 }
 
 
-# check_symmetry <- function() {
-#   UseMethod("check_symmetry")
-# }
-#
-# check_symmetry.htest <- function() {
-#
-# }
-#
+#' @export
+check_symmetry.htest <- function(x, ...) {
+  data <- insight::get_data(x)
+  if (is.null(data)) {
+    stop("Cannot check assumptions - Unable to retrieve data from htest object.")
+  }
+  method <- x[["method"]]
+
+  if (grepl("signed rank", method, fixed = TRUE)) {
+    if (ncol(data) > 1) {
+      out <- check_symmetry(data[[1]] - data[[2]])
+    } else {
+      out <- check_symmetry(data[[1]])
+    }
+  } else {
+    stop("This htest is not supported (or this assumption is not required for this test).")
+  }
+
+  attr(out, "object_name") <- substitute(x)
+  out
+}
+
+
 # check_model.htest <- function() {
 #
 # }
