@@ -19,4 +19,16 @@ if (requiet("testthat") && requiet("performance")) {
       )
     )
   })
+
+  test_that("model_performance.glm-factor", {
+    model <- glm(factor(vs, labels = c("automatic", "manual")) ~ wt + mpg, data = mtcars, family = "binomial")
+    expect_equal(model_performance(model)$R2_Tjur, 0.478, tolerance = 0.01)
+    expect_equal(
+      colnames(model_performance(model)),
+      c(
+        "AIC", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
+        "Score_spherical", "PCP"
+      )
+    )
+  })
 }
