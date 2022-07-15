@@ -4,18 +4,11 @@
 \name{classify_distribution}
 \alias{classify_distribution}
 \title{Classify the distribution of a model-family using machine learning}
-\format{
-An object of class \code{randomForest.formula} (inherits from \code{randomForest}) of length 8.
-}
-\usage{
-classify_distribution
-}
 \description{
-Choosing the right distributional family for regression models is essential
-to get more accurate estimates and standard errors. This function may help to
-Machine learning model trained to classify distributions
+Classify the distribution of a model-family using machine learning
 }
 \details{
-Mean accuracy and Kappa of 0.86 and 0.85, repsectively.
+The trained model to classify distributions, which is used by the
+\code{check_distribution()} function.
 }
-\keyword{datasets}
+\keyword{data}

@@ -60,7 +60,6 @@ performance_accuracy <- function(model,
 
     # check if bootstrapping or cross validation is requested
     if (method == "boot") {
-
       # accuracy linear models with bootstrapping
 
       bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
@@ -85,7 +84,6 @@ performance_accuracy <- function(model,
         stats::cor(.x, .y, use = "pairwise.complete.obs")
       }, predictions, response)
     } else {
-
       # accuracy linear models with cross validation
 
       cv <- .crossv_kfold(model_data, k = k)
@@ -115,7 +113,6 @@ performance_accuracy <- function(model,
 
     # check if bootstrapping or cross validation is requested
     if (method == "boot") {
-
       # accuracy linear models with bootstrapping
 
       bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
@@ -141,7 +138,6 @@ performance_accuracy <- function(model,
         bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
       }, response, predictions)
     } else {
-
       # accuracy linear models with cross validation
       cv <- .crossv_kfold(model_data, k = k)
 

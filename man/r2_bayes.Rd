@@ -76,17 +76,15 @@ if (require("rstanarm") && require("rstantools")) {
   )
   r2_bayes(model)
 }
-\dontrun{
+
 if (require("BayesFactor")) {
-  data(mtcars)
 
   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-  FM <- lm(mpg ~ qsec + gear, data = mtcars)
+  FM <- lmBF(mpg ~ qsec + gear, data = mtcars)
 
   r2_bayes(FM)
   r2_bayes(BFM[3])
   r2_bayes(BFM, average = TRUE) # across all models
-
 
   # with random effects:
   mtcars$gear <- factor(mtcars$gear)
@@ -96,9 +94,11 @@ if (require("BayesFactor")) {
     progress = FALSE,
     whichRandom = c("gear", "gear:wt")
   )
+
   r2_bayes(model)
 }
 
+\dontrun{
 if (require("brms")) {
   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
   r2_bayes(model)
@@ -109,5 +109,7 @@ if (require("brms")) {
 }
 }
 \references{
-Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
+Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
+R-squared for Bayesian regression models. The American Statistician, 1–6.
+\doi{10.1080/00031305.2018.1549100}
 }

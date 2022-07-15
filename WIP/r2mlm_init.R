@@ -10,7 +10,6 @@ source("r2mlm_utils.R")
 
 
 r2mlm_init <- function(model) {
-
   # Step 1) check if model has_intercept
   has_intercept <- insight::has_intercept(model)
 

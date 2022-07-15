@@ -1,3 +1,14 @@
+# performance 0.9.2
+
+## General
+
+* `print()` methods for `model_performance()` and `compare_performance()` get a
+  `layout` argument, which can be `"horizontal"` (default) or `"vertical"`, to
+  switch the layout of the printed table.
+
+* Improved speed performance for `check_model()` and some other `performance_*()`
+  functions.
+
 # performance 0.9.1
 
 ## Breaking

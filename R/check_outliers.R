@@ -335,7 +335,6 @@ check_outliers <- function(x, ...) {
 #' @rdname check_outliers
 #' @export
 check_outliers.default <- function(x, method = c("cook", "pareto"), threshold = NULL, ...) {
-
   # Check args
   if (all(method == "all")) {
     method <- c(
@@ -476,7 +475,6 @@ check_outliers.numeric <- function(x, method = "zscore_robust", threshold = NULL
 #' @rdname check_outliers
 #' @export
 check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NULL, ...) {
-
   # Remove non-numerics
   x <- x[, sapply(x, is.numeric), drop = FALSE]
 

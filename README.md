@@ -51,6 +51,8 @@ To cite performance in publications use:
 ``` r
 citation("performance")
 #> 
+#> To cite package 'performance' in publications use:
+#> 
 #>   Lüdecke et al., (2021). performance: An R Package for Assessment, Comparison and
 #>   Testing of Statistical Models. Journal of Open Source Software, 6(60), 3139.
 #>   https://doi.org/10.21105/joss.03139
@@ -134,13 +136,17 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  cores = 4
+)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.953 (95% CI [0.941, 0.963])
-#>      Marginal R2: 0.824 (95% CI [0.713, 0.896])
+#>   Conditional R2: 0.953 (95% CI [0.942, 0.964])
+#>      Marginal R2: 0.825 (95% CI [0.721, 0.900])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -166,8 +172,8 @@ model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 icc(model)
 #> # Intraclass Correlation Coefficient
 #> 
-#>      Adjusted ICC: 0.722
-#>   Conditional ICC: 0.521
+#>     Adjusted ICC: 0.722
+#>   Unadjusted ICC: 0.521
 ```
 
 …and models of class `brmsfit`.
@@ -182,8 +188,8 @@ model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
 icc(model)
 #> # Intraclass Correlation Coefficient
 #> 
-#>      Adjusted ICC: 0.930
-#>   Conditional ICC: 0.771
+#>     Adjusted ICC: 0.930
+#>   Unadjusted ICC: 0.771
 ```
 
 ### Model diagnostics
@@ -253,12 +259,16 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
+model <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
 
 check_singularity(model)
 #> [1] TRUE
