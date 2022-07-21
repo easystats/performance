@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,6 +69,9 @@
 <ul><li><p><code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> methods for <code><a href="../reference/model_performance.html">model_performance()</a></code> and <code><a href="../reference/compare_performance.html">compare_performance()</a></code> get a <code>layout</code> argument, which can be <code>"horizontal"</code> (default) or <code>"vertical"</code>, to switch the layout of the printed table.</p></li>
 <li><p>Improved speed performance for <code><a href="../reference/check_model.html">check_model()</a></code> and some other <code>performance_*()</code> functions.</p></li>
 </ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-9-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-2"></a></h3>
+<ul><li>Fixes wrong column names in <code><a href="../reference/model_performance.html">model_performance()</a></code> output for <code>kmeans</code> objects (<a href="https://github.com/easystats/performance/issues/453" class="external-link">#453</a>)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.1" id="performance-091">performance 0.9.1<a class="anchor" aria-label="anchor" href="#performance-091"></a></h2><p class="text-muted">CRAN release: 2022-06-20</p>
@@ -93,7 +96,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-9-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-1"></a></h3>
 <ul><li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> did not work for GLMs with matrix-response.</p></li>
-<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> did not work for logistic regression models (i.e.  models with binary response) from package <em>glmmTMB</em></p></li>
+<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> did not work for logistic regression models (i.e. models with binary response) from package <em>glmmTMB</em></p></li>
 <li><p><code><a href="../reference/item_split_half.html">item_split_half()</a></code> did not work when the input data frame or matrix only contained two columns.</p></li>
 <li><p>Fixed wrong computation of <code>BIC</code> in <code><a href="../reference/model_performance.html">model_performance()</a></code> when models had transformed response values.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for GLMs with matrix-response.</p></li>
@@ -185,8 +188,9 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-7-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-7-2"></a></h3>
 <ul><li><p>Fixed issue with <code>"data length differs from size of matrix"</code> warnings in examples in forthcoming R 4.2.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/check_normality.html">check_normality()</a></code> for models with sample size larger than 5.000 observations.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_normality.html">check_normality()</a></code> for models with sample size larger than</p></li>
+</ul><p>5.000 observations.</p>
+<ul><li><p>Fixed issue in <code><a href="../reference/check_model.html">check_model()</a></code> for <em>glmmTMB</em> models.</p></li>
 <li><p>Fixed issue in <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> for <em>glmmTMB</em> models with zero-inflation, where the zero-inflated model was an intercept-only model.</p></li>
 </ul></div>
 </div>
