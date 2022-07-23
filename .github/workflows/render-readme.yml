@@ -30,8 +30,9 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
+            easystats/datawizard
             deps::.
-            any::performance
+            easystats/performance
 
       - name: Render README
         run: Rscript -e 'rmarkdown::render("README.Rmd")'
