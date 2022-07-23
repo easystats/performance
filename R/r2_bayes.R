@@ -47,7 +47,6 @@
 #' }
 #'
 #' if (require("BayesFactor")) {
-#'
 #'   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
 #'   FM <- lmBF(mpg ~ qsec + gear, data = mtcars)
 #'
@@ -318,6 +317,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
     CI = attributes(x)$CI$R2_Bayes$CI,
     CI_low = attributes(x)$CI$R2_Bayes$CI_low,
     CI_high = attributes(x)$CI$R2_Bayes$CI_high,
+    CI_method = attributes(x)$ci_method,
     stringsAsFactors = FALSE
   )
 
@@ -328,6 +328,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
       CI = attributes(x)$CI$R2_Bayes_marginal$CI,
       CI_low = attributes(x)$CI$R2_Bayes_marginal$CI_low,
       CI_high = attributes(x)$CI$R2_Bayes_marginal$CI_high,
+      CI_method = attributes(x)$ci_method,
       stringsAsFactors = FALSE
     )
 
@@ -336,6 +337,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
     out <- rbind(out, out_marginal)
   }
 
+  out$Effectsize <- "Bayesian R-squared"
   out
 }
 
