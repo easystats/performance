@@ -101,7 +101,6 @@ check_model.default <- function(x,
                                 detrend = FALSE,
                                 verbose = TRUE,
                                 ...) {
-
   # check model formula
   if (verbose) {
     insight::formula_ok(x)
@@ -282,7 +281,6 @@ check_model.model_fit <- function(x,
 
 .check_assumptions_stan <- function(model) {
   if (inherits(model, "brmsfit")) {
-
     # check if brms can be loaded
 
     if (!requireNamespace("brms", quietly = TRUE)) {
@@ -304,7 +302,6 @@ check_model.model_fit <- function(x,
     d1 <- d1[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d1), perl = TRUE)]
     d2 <- d2[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d2), perl = TRUE)]
   } else if (inherits(model, c("stanreg", "stanfit"))) {
-
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
       stop("Package `rstanarm` needs to be loaded first!", call. = FALSE)

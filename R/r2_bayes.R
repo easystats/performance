@@ -45,17 +45,14 @@
 #'   )
 #'   r2_bayes(model)
 #' }
-#' \dontrun{
-#' if (require("BayesFactor")) {
-#'   data(mtcars)
 #'
+#' if (require("BayesFactor")) {
 #'   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-#'   FM <- lm(mpg ~ qsec + gear, data = mtcars)
+#'   FM <- lmBF(mpg ~ qsec + gear, data = mtcars)
 #'
 #'   r2_bayes(FM)
 #'   r2_bayes(BFM[3])
 #'   r2_bayes(BFM, average = TRUE) # across all models
-#'
 #'
 #'   # with random effects:
 #'   mtcars$gear <- factor(mtcars$gear)
@@ -65,9 +62,11 @@
 #'     progress = FALSE,
 #'     whichRandom = c("gear", "gear:wt")
 #'   )
+#'
 #'   r2_bayes(model)
 #' }
 #'
+#' \dontrun{
 #' if (require("brms")) {
 #'   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
 #'   r2_bayes(model)
@@ -76,7 +75,9 @@
 #'   r2_bayes(model)
 #' }
 #' }
-#' @references Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
+#' @references Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
+#'   R-squared for Bayesian regression models. The American Statistician, 1–6.
+#'   \doi{10.1080/00031305.2018.1549100}
 #' @export
 r2_bayes <- function(model, robust = TRUE, ci = .95, verbose = TRUE, ...) {
   r2_bayesian <- r2_posterior(model, verbose = verbose, ...)
@@ -92,6 +93,7 @@ r2_bayes <- function(model, robust = TRUE, ci = .95, verbose = TRUE, ...) {
       "SE" = rapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd)),
       # "Estimates" = rapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
       "CI" = rapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      "ci_method" = "HDI",
       "robust" = robust
     )
   } else {
@@ -101,6 +103,7 @@ r2_bayes <- function(model, robust = TRUE, ci = .95, verbose = TRUE, ...) {
       "SE" = lapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd)),
       # "Estimates" = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
       "CI" = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      "ci_method" = "HDI",
       "robust" = robust
     )
   }
@@ -314,6 +317,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
     CI = attributes(x)$CI$R2_Bayes$CI,
     CI_low = attributes(x)$CI$R2_Bayes$CI_low,
     CI_high = attributes(x)$CI$R2_Bayes$CI_high,
+    CI_method = attributes(x)$ci_method,
     stringsAsFactors = FALSE
   )
 
@@ -324,6 +328,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
       CI = attributes(x)$CI$R2_Bayes_marginal$CI,
       CI_low = attributes(x)$CI$R2_Bayes_marginal$CI_low,
       CI_high = attributes(x)$CI$R2_Bayes_marginal$CI_high,
+      CI_method = attributes(x)$ci_method,
       stringsAsFactors = FALSE
     )
 
@@ -332,6 +337,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
     out <- rbind(out, out_marginal)
   }
 
+  out$Effectsize <- "Bayesian R-squared"
   out
 }
 
@@ -355,7 +361,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
 
   # match?
   if ((length(colnames(params_theta)) != length(colnames(mm))) ||
-      !all(colnames(params_theta) == colnames(mm))) {
+    !all(colnames(params_theta) == colnames(mm))) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
       stop(insight::format_message("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher."), call. = FALSE)
     }

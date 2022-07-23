@@ -16,7 +16,6 @@ r2mlm_sort_variables <- function(data, predictors, cluster_variable) {
   # * Step 4d) loop through all variables in grouped dataset
 
   for (variable in predictors) {
-
     # calculate variance for each cluster
     t <- data %>%
       dplyr::select(tidyselect::all_of(cluster_variable), variable) %>%
@@ -97,14 +96,12 @@ r2mlm_get_random_slope_vars <- function(model) {
 
 
 r2mlm_get_cwc <- function(l1_vars, cluster_variable, data) {
-
   # Group data
   # see "Indirection" here for explanation of this group_by formatting: https://dplyr.tidyverse.org/articles/programming.html
   data_grouped <- data %>%
     dplyr::group_by(.data[[cluster_variable]])
 
   for (variable in l1_vars) {
-
     # for each group for the given variable, sum all values
     t <- data_grouped %>%
       dplyr::select(cluster_variable, variable) %>%

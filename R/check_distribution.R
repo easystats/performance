@@ -1,12 +1,12 @@
 #' Classify the distribution of a model-family using machine learning
 #'
-#' Choosing the right distributional family for regression models is essential
-#' to get more accurate estimates and standard errors. This function may help to
-#' Machine learning model trained to classify distributions
-#'
-#' Mean accuracy and Kappa of 0.86 and 0.85, repsectively.
-#'
-"classify_distribution"
+#' @name classify_distribution
+#' @docType data
+#' @keywords data
+#' @details
+#' The trained model to classify distributions, which is used by the
+#' `check_distribution()` function.
+NULL
 
 
 #' Classify the distribution of a model-family using machine learning

@@ -14,8 +14,10 @@ test_likelihoodratio <- function(..., estimator = "ML") {
 #' @export
 performance_lrt <- function(...) {
   ## TODO remove deprecated
-  message(insight::format_message("This function name is deprecated.",
-                                  "Please use 'test_lrt()' instead."))
+  message(insight::format_message(
+    "This function name is deprecated.",
+    "Please use 'test_lrt()' instead."
+  ))
   test_likelihoodratio(...)
 }
 
@@ -31,7 +33,6 @@ test_lrt <- test_likelihoodratio
 
 #' @export
 test_likelihoodratio.default <- function(..., estimator = "OLS") {
-
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
@@ -60,7 +61,8 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
     stop(insight::format_message(
       "The models are not nested, which is a prerequisite for `test_likelihoodratio()`.",
       "See the 'Details' section.",
-      "You may try `test_vuong()` instead."), call. = FALSE)
+      "You may try `test_vuong()` instead."
+    ), call. = FALSE)
   }
 }
 
@@ -70,14 +72,15 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
 
 #' @export
 plot.test_likelihoodratio <- function(x, ...) {
-  warning(insight::format_message("There is currently no plot() method for test-functions.",
-                                  "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."), call. = FALSE)
+  warning(insight::format_message(
+    "There is currently no plot() method for test-functions.",
+    "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."
+  ), call. = FALSE)
 }
 
 
 #' @export
 print.test_likelihoodratio <- function(x, digits = 2, ...) {
-
   # Footer
   if ("LogLik" %in% names(x)) {
     best <- which.max(x$LogLik)
@@ -146,10 +149,10 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
 
   # for REML fits, warn user
   if (isTRUE(REML) &&
-      # only when mixed models are involved, others probably don't have problems with REML fit
-      any(sapply(objects, insight::is_mixed_model)) &&
-      # only if not all models have same fixed effects (else, REML is ok)
-      !isTRUE(same_fixef)) {
+    # only when mixed models are involved, others probably don't have problems with REML fit
+    any(sapply(objects, insight::is_mixed_model)) &&
+    # only if not all models have same fixed effects (else, REML is ok)
+    !isTRUE(same_fixef)) {
     warning(insight::format_message(
       "The Likelihood-Ratio-Test is probably inaccurate when comparing REML-fit models with different fixed effects."
     ), call. = FALSE)
@@ -197,6 +200,6 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
 
 .is_lmer_reml <- function(x) {
   tryCatch(inherits(x, "lmerMod") && as.logical(x@devcomp$dims[["REML"]]),
-           error = function(e) FALSE)
-
+    error = function(e) FALSE
+  )
 }
