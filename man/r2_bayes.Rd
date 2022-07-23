@@ -78,7 +78,6 @@ if (require("rstanarm") && require("rstantools")) {
 }
 
 if (require("BayesFactor")) {
-
   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
   FM <- lmBF(mpg ~ qsec + gear, data = mtcars)
 
