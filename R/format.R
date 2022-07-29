@@ -9,12 +9,12 @@ format.compare_performance <- function(x, digits = 2, ...) {
   # format weighted ICs
   weighted_ics <- grepl("_wt$", colnames(x))
   if (any(weighted_ics)) {
-    x[weighted_ics] <- lapply(x[weighted_ics], insight::format_bf, name = NULL)
+    x[weighted_ics] <- lapply(x[weighted_ics], insight::format_bf, name = NULL, exact = TRUE)
   }
 
   if ("BF" %in% colnames(x)) {
     x$BF[is.na(x$BF)] <- 1
-    # x$BF <- insight::format_bf(x$BF)
+    # x$BF <- insight::format_bf(x$BF, exact = TRUE)
   }
   insight::format_table(x, digits = digits, ...)
 }
