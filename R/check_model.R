@@ -108,16 +108,24 @@ check_model.default <- function(x,
 
   minfo <- insight::model_info(x, verbose = FALSE)
 
-  if (minfo$is_bayesian) {
-    ca <- suppressWarnings(.check_assumptions_stan(x))
-  } else if (minfo$is_linear) {
-    ca <- suppressWarnings(.check_assumptions_linear(x, minfo, verbose))
-  } else {
-    ca <- suppressWarnings(.check_assumptions_glm(x, minfo, verbose))
+  ca <- tryCatch(
+    {
+      if (minfo$is_bayesian) {
+        suppressWarnings(.check_assumptions_stan(x))
+      } else if (minfo$is_linear) {
+        suppressWarnings(.check_assumptions_linear(x, minfo, verbose))
+      } else {
+        suppressWarnings(.check_assumptions_glm(x, minfo, verbose))
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(ca)) {
+    stop(paste0("`check_model()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
   }
-  # else {
-  #   stop(paste0("`check_assumptions()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
-  # }
 
   attr(ca, "panel") <- panel
   attr(ca, "dot_size") <- dot_size
