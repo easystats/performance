@@ -111,9 +111,9 @@ check_model.default <- function(x,
   if (minfo$is_bayesian) {
     ca <- suppressWarnings(.check_assumptions_stan(x))
   } else if (minfo$is_linear) {
-    ca <- suppressWarnings(.check_assumptions_linear(x, minfo))
+    ca <- suppressWarnings(.check_assumptions_linear(x, minfo, verbose))
   } else {
-    ca <- suppressWarnings(.check_assumptions_glm(x, minfo))
+    ca <- suppressWarnings(.check_assumptions_glm(x, minfo, verbose))
   }
   # else {
   #   stop(paste0("`check_assumptions()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
@@ -221,15 +221,15 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info) {
+.check_assumptions_linear <- function(model, model_info, verbose = TRUE) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model)
-  dat$QQ <- .diag_qq(model)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
-  dat$NORM <- .diag_norm(model)
-  dat$NCV <- .diag_ncv(model)
-  dat$HOMOGENEITY <- .diag_homogeneity(model)
+  dat$VIF <- .diag_vif(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
+  dat$NORM <- .diag_norm(model, verbose = verbose)
+  dat$NCV <- .diag_ncv(model, verbose = verbose)
+  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook
@@ -248,13 +248,13 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info) {
+.check_assumptions_glm <- function(model, model_info, verbose = TRUE) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model)
-  dat$QQ <- .diag_qq(model)
-  dat$HOMOGENEITY <- .diag_homogeneity(model)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
+  dat$VIF <- .diag_vif(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook

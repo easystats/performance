@@ -9,6 +9,8 @@
 * Improved speed performance for `check_model()` and some other
   `performance_*()` functions.
 
+* Improved support for models of class `geeglm`.
+
 ## Bug Fixes
 
 * Fixes wrong column names in `model_performance()` output for `kmeans` objects
