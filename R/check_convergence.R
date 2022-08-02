@@ -61,6 +61,13 @@
 #'
 #'   check_convergence(model)
 #' }
+#'
+#' if (require("glmmTMB")) {
+#'   model <- glmmTMB(Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+#'   (1+poly(Petal.Width, 4)|Species), data=iris)
+#'
+#'   check_convergence(model)
+#' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
   UseMethod("check_convergence")
@@ -86,4 +93,11 @@ check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
 
   # return result
   retval
+}
+
+
+#' @export
+check_convergence.glmmTMB <- function(x, ...) {
+  # https://github.com/glmmTMB/glmmTMB/issues/275
+  x$sdr$pdHess
 }
