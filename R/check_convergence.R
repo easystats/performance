@@ -4,11 +4,7 @@
 #' @description `check_convergence()` provides an alternative convergence
 #'   test for `merMod`-objects.
 #'
-#' @param x A `merMod`-object.
-#' @param tolerance Indicates up to which value the convergence result is
-#'          accepted. The smaller `tolerance` is, the stricter the test
-#'          will be.
-#' @param ... Currently not used.
+#' @inheritParams insight::is_converged
 #'
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence
 #'   is suspicious. Additionally, the convergence value is returned as attribute.
@@ -63,27 +59,5 @@
 #' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
-  UseMethod("check_convergence")
-}
-
-
-#' @export
-check_convergence.default <- function(x, tolerance = 0.001, ...) {
-  insight::print_color(sprintf("check_convergence() does not work for models of class '%s'.\n", class(x)[1]), "red")
-}
-
-
-#' @export
-check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
-  insight::check_if_installed("Matrix")
-
-  relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
-
-  # copy logical value, TRUE if convergence is OK
-  retval <- max(abs(relgrad)) < tolerance
-  # copy convergence value
-  attr(retval, "gradient") <- max(abs(relgrad))
-
-  # return result
-  retval
+  insight::is_converged(x, tolerance = tolerance, ...)
 }

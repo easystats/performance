@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.9.1.5
+Version: 0.9.1.6
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -65,8 +65,6 @@ Imports:
     methods,
     stats,
     utils
-Remotes:
-    easystats/datawizard, easystats/bayestestR
 Suggests:
     AER,
     afex,
@@ -127,3 +125,5 @@ Language: en-US
 RoxygenNote: 7.2.1
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
+Remotes:
+    easystats/insight, easystats/datawizard, easystats/bayestestR
