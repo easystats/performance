@@ -7,7 +7,7 @@
 check_convergence(x, tolerance = 0.001, ...)
 }
 \arguments{
-\item{x}{A \code{merMod} of \code{glmmTMB}-object.}
+\item{x}{A \code{merMod} or \code{glmmTMB}-object.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
 accepted. The smaller \code{tolerance} is, the stricter the test will be.}

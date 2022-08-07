@@ -18,6 +18,7 @@ check_model(x, ...)
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
   detrend = FALSE,
+  show_dots = NULL,
   verbose = TRUE,
   ...
 )
@@ -53,6 +54,12 @@ for dots, and third color for outliers or extreme values.}
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
 \item{detrend}{Should QQ/PP plots be detrended?}
+
+\item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
+to \code{FALSE} for models with many observations, if generating the plot is too
+time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
+tries to guess whether performance will be poor due to a very large model
+and thus automatically shows or hides dots.}
 
 \item{verbose}{Toggle off warnings.}
 }

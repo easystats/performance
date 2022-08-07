@@ -171,7 +171,7 @@
     Std_Residuals = std_resid,
     stringsAsFactors = FALSE
   )
-  plot_data$Index <- 1:nrow(plot_data)
+  plot_data$Index <- seq_len(nrow(plot_data))
   plot_data$Influential <- "OK"
   plot_data$Influential[abs(plot_data$Cooks_Distance) >= max(cook_levels)] <- "Influential"
 

@@ -28,6 +28,11 @@
 #' @param theme String, indicating the name of the plot-theme. Must be in the
 #'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
 #' @param detrend Should QQ/PP plots be detrended?
+#' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
+#'   to `FALSE` for models with many observations, if generating the plot is too
+#'   time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
+#'   tries to guess whether performance will be poor due to a very large model
+#'   and thus automatically shows or hides dots.
 #' @param verbose Toggle off warnings.
 #' @param ... Currently not used.
 #'
@@ -99,6 +104,7 @@ check_model.default <- function(x,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
+                                show_dots = NULL,
                                 verbose = TRUE,
                                 ...) {
   # check model formula
@@ -133,6 +139,7 @@ check_model.default <- function(x,
   attr(ca, "check") <- check
   attr(ca, "alpha") <- alpha
   attr(ca, "dot_alpha") <- dot_alpha
+  attr(ca, "show_dots") <- isTRUE(show_dots)
   attr(ca, "detrend") <- detrend
   attr(ca, "colors") <- colors
   attr(ca, "theme") <- theme
@@ -174,6 +181,7 @@ check_model.stanreg <- function(x,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
+                                show_dots = NULL,
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
@@ -186,6 +194,7 @@ check_model.stanreg <- function(x,
     colors = colors,
     theme = theme,
     detrend = detrend,
+    show_dots = show_dots,
     verbose = verbose,
     ...
   )
@@ -207,6 +216,7 @@ check_model.model_fit <- function(x,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
                                   detrend = FALSE,
+                                  show_dots = NULL,
                                   verbose = TRUE,
                                   ...) {
   check_model(
@@ -220,6 +230,7 @@ check_model.model_fit <- function(x,
     colors = colors,
     theme = theme,
     detrend = detrend,
+    show_dots = show_dots,
     verbose = verbose,
     ...
   )
