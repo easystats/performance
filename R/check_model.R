@@ -136,7 +136,7 @@ check_model.default <- function(x,
   # set default for show_dots, based on "model size"
   if (is.null(show_dots)) {
     n <- tryCatch(insight::n_obs(x), error = function(e) NULL)
-    show_dots <- !is.null(n) && n > 1e5
+    show_dots <- is.null(n) || n <= 1e5
   }
 
   attr(ca, "panel") <- panel
