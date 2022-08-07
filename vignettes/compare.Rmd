@@ -8,7 +8,7 @@ output:
 tags: [r, performance, r2]
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Compare, Test and Select Models}
+  %\VignetteIndexEntry{Compare, Test, and Select Models}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
