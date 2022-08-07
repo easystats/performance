@@ -133,6 +133,12 @@ check_model.default <- function(x,
     stop(paste0("`check_model()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
   }
 
+  # set default for show_dots, based on "model size"
+  if (is.null(show_dots)) {
+    n <- tryCatch(insight::n_obs(x), error = function(e) NULL)
+    show_dots <- !is.null(n) && n > 1e5
+  }
+
   attr(ca, "panel") <- panel
   attr(ca, "dot_size") <- dot_size
   attr(ca, "line_size") <- line_size
