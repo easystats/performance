@@ -227,6 +227,17 @@ residuals (with overlayed normal curve) and for the linearity assumption use
 the default residuals for <code>lm</code> and <code>glm</code> (which are deviance
 residuals for <code>glm</code>).</p>
     </div>
+    <div class="section level2">
+    <h2 id="troubleshooting">Troubleshooting<a class="anchor" aria-label="anchor" href="#troubleshooting"></a></h2>
+    
+
+<p>For models with many observations, or for more complex models in general,
+generating the plot might become very slow. One reason might be that the
+underlying graphic engine becomes slow for plotting many data points. In
+such cases, setting the argument <code>show_dots = FALSE</code> might help. Furthermore,
+look at the <code>check</code> argument and see if some of the model checks could be
+skipped, which also increases performance.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
