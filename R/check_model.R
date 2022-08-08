@@ -68,6 +68,14 @@
 #' the default residuals for `lm` and `glm` (which are deviance
 #' residuals for `glm`).
 #'
+#' @section Troubleshooting:
+#' For models with many observations, or for more complex models in general,
+#' generating the plot might become very slow. One reason might be that the
+#' underlying graphic engine becomes slow for plotting many data points. In
+#' such cases, setting the argument `show_dots = FALSE` might help. Furthermore,
+#' look at the `check` argument and see if some of the model checks could be
+#' skipped, which also increases performance.
+#' 
 #' @examples
 #' \dontrun{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
