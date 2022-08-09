@@ -480,7 +480,6 @@ ed. Quantitative Methodology Series. New York: Routledge.
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
 Ecology and Evolution* 5 (9): 944–46.
-<https://doi.org/10.1111/2041-210X.12225>.
 
 </div>
 
@@ -490,7 +489,6 @@ Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
 Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
-<https://doi.org/10.1098/rsif.2017.0213>.
 
 </div>
 
