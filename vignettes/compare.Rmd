@@ -27,9 +27,14 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-set.seed(333)
+if (!requireNamespace("rstanarm", quietly = TRUE) ||
+    (!requireNamespace("see", quietly = TRUE) && utils::packageVersion("see") > "0.7.1")) {
+  knitr::opts_chunk$set(eval = FALSE)
+} else {
+  library(rstanarm)
+}
 
-library(rstanarm)
+set.seed(333)
 ```
 
 # Comparing vs. Testing
