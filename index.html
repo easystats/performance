@@ -240,17 +240,13 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span></span>
-<span>  <span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">iris</span>,</span>
-<span>  cores <span class="op">=</span> <span class="fl">4</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Bayesian R2 with Compatibility Interval</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Conditional R2: 0.953 (95% CI [0.942, 0.964])</span></span>
-<span><span class="co">#&gt;      Marginal R2: 0.825 (95% CI [0.721, 0.900])</span></span>
+<span><span class="co">#&gt;   Conditional R2: 0.953 (95% CI [0.941, 0.963])</span></span>
+<span><span class="co">#&gt;      Marginal R2: 0.824 (95% CI [0.713, 0.896])</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
@@ -333,16 +329,12 @@
 <span><span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size <span class="op">=</span> <span class="fl">180</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">==</span> <span class="va">i</span></span>
-<span>  <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>    <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">==</span> <span class="va">i</span></span>
+<span>    <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># fit strange model</span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
-<span>  <span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span> <span class="op">/</span> <span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">sleepstudy</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span><span class="op">/</span><span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/check_singularity.html">check_singularity</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
@@ -430,10 +422,10 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Name |   Model |      AIC | AIC weights |      BIC | BIC weights |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP |     AICc | AICc weights | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; m1   |      lm |  156.010 |     &lt; 0.001 |  161.873 |     &lt; 0.001 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                </span></span>
+<span><span class="co">#&gt; m1   |      lm |  156.010 |    8.30e-28 |  161.873 |    3.99e-28 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                </span></span>
 <span><span class="co">#&gt; m2   |     glm |   31.298 |       1.000 |   35.695 |       1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |          |              |            |            |       |                </span></span>
-<span><span class="co">#&gt; m3   | lmerMod | 1763.986 |     &lt; 0.001 | 1783.144 |     &lt; 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                </span></span>
-<span><span class="co">#&gt; m4   |     glm |   56.761 |     &lt; 0.001 |   57.747 |     &lt; 0.001 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657</span></span></code></pre></div>
+<span><span class="co">#&gt; m3   | lmerMod | 1763.986 |    0.00e+00 | 1783.144 |    0.00e+00 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                </span></span>
+<span><span class="co">#&gt; m4   |     glm |   56.761 |    2.96e-06 |   57.747 |    1.63e-05 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="general-index-of-model-performance">General index of model performance<a class="anchor" aria-label="anchor" href="#general-index-of-model-performance"></a>
 </h4>
@@ -445,9 +437,9 @@
 <span><span class="co">#&gt; Name |   Model |   RMSE |  Sigma | AIC weights | BIC weights | Performance-Score</span></span>
 <span><span class="co">#&gt; --------------------------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; m2   |     glm |  0.359 |  0.934 |       1.000 |       1.000 |           100.00%</span></span>
-<span><span class="co">#&gt; m4   |     glm |  3.043 |  1.132 |     &lt; 0.001 |     &lt; 0.001 |            46.89%</span></span>
-<span><span class="co">#&gt; m1   |      lm |  2.444 |  2.568 |     &lt; 0.001 |     &lt; 0.001 |            46.09%</span></span>
-<span><span class="co">#&gt; m3   | lmerMod | 23.438 | 25.592 |     &lt; 0.001 |     &lt; 0.001 |             0.00%</span></span></code></pre></div>
+<span><span class="co">#&gt; m4   |     glm |  3.043 |  1.132 |    2.96e-06 |    1.63e-05 |            46.89%</span></span>
+<span><span class="co">#&gt; m1   |      lm |  2.444 |  2.568 |    8.30e-28 |    3.99e-28 |            46.09%</span></span>
+<span><span class="co">#&gt; m3   | lmerMod | 23.438 | 25.592 |    0.00e+00 |    0.00e+00 |             0.00%</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="visualisation-of-indices-of-models-performance">Visualisation of indices of models’ performance<a class="anchor" aria-label="anchor" href="#visualisation-of-indices-of-models-performance"></a>
@@ -472,12 +464,12 @@
 <span><span class="va">lm4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Width</span> <span class="op">+</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; lm1  |    lm |        |        |            |       |       </span></span>
-<span><span class="co">#&gt; lm2  |    lm | &gt; 1000 |   0.69 |     &lt; .001 | -6.25 | &lt; .001</span></span>
-<span><span class="co">#&gt; lm3  |    lm | &gt; 1000 |   0.36 |     &lt; .001 | -3.44 | &lt; .001</span></span>
-<span><span class="co">#&gt; lm4  |    lm | &gt; 1000 |   0.73 |     &lt; .001 | -7.77 | &lt; .001</span></span>
+<span><span class="co">#&gt; Name | Model |       BF | Omega2 | p (Omega2) |    LR | p (LR)</span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; lm1  |    lm |          |        |            |       |       </span></span>
+<span><span class="co">#&gt; lm2  |    lm | 3.45e+26 |   0.69 |     &lt; .001 | -6.25 | &lt; .001</span></span>
+<span><span class="co">#&gt; lm3  |    lm | 4.69e+07 |   0.36 |     &lt; .001 | -3.44 | &lt; .001</span></span>
+<span><span class="co">#&gt; lm4  |    lm | 7.58e+29 |   0.73 |     &lt; .001 | -7.77 | &lt; .001</span></span>
 <span><span class="co">#&gt; Each model is compared to lm1.</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/test_performance.html">test_bf</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span></span>
@@ -510,7 +502,7 @@
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-gelman_data_2007" class="csl-entry">Gelman, Andrew, and Jennifer Hill. 2007. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Analytical Methods for Social Research. Cambridge ; New York: Cambridge University Press.</div>
 <div id="ref-hox_multilevel_2010" class="csl-entry">Hox, J. J. 2010. <em>Multilevel Analysis: Techniques and Applications</em>. 2nd ed. Quantitative Methodology Series. New York: Routledge.</div>
-<div id="ref-johnson_extension_2014" class="csl-entry">Johnson, Paul C. D. 2014. “Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to Random Slopes Models.” Edited by Robert B. O’Hara. <em>Methods in Ecology and Evolution</em> 5 (9): 944–46.</div>
+<div id="ref-johnson_extension_2014" class="csl-entry">Johnson, Paul C. D. 2014. “Extension of Nakagawa &amp; Schielzeth’s R2 GLMM to Random Slopes Models.” Edited by Robert B. O’Hara. <em>Methods in Ecology and Evolution</em> 5 (9): 944-46.</div>
 <div id="ref-nakagawa_coefficient_2017" class="csl-entry">Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017. “The Coefficient of Determination R2 and Intra-Class Correlation Coefficient from Generalized Linear Mixed-Effects Models Revisited and Expanded.” <em>Journal of The Royal Society Interface</em> 14 (134): 20170213.</div>
 </div>
 </div>
