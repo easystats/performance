@@ -13,7 +13,7 @@
 
 ## Changes to functions
 
-* `check_model()` gains a `show_dots` argument, so show or hide data points. 
+* `check_model()` gains a `show_dots` argument, to show or hide data points. 
   This is particular useful for models with many observations, where generating
   the plot would be very slow.
 
