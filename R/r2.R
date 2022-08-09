@@ -156,6 +156,21 @@ r2.systemfit <- function(model, ...) {
 }
 
 
+#' @export
+r2.lm_robust <- function(model, ...) {
+  out <- list(
+    "R2" = tryCatch(
+            model[["r.squared"]],
+            error = function(e) NULL),
+    "R2_adjusted" = tryCatch(
+            model[["adj.r.squared"]],
+            error = function(e) NULL))
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+  attr(out, "model_type") <- "Linear"
+  structure(class = "r2_generic", out)
+}
+
 
 #' @export
 r2.ols <- function(model, ...) {
@@ -165,6 +180,8 @@ r2.ols <- function(model, ...) {
   attr(out, "model_type") <- "Linear"
   structure(class = "r2_generic", out)
 }
+
+
 
 #' @export
 r2.lrm <- r2.ols
