@@ -4,7 +4,10 @@
 #' @description `check_convergence()` provides an alternative convergence
 #'   test for `merMod`-objects.
 #'
-#' @inheritParams insight::is_converged
+#' @param x A `merMod` or `glmmTMB`-object.
+#' @param tolerance Indicates up to which value the convergence result is
+#'   accepted. The smaller `tolerance` is, the stricter the test will be.
+#' @param ... Currently not used.
 #'
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence
 #'   is suspicious. Additionally, the convergence value is returned as attribute.
@@ -57,7 +60,47 @@
 #'
 #'   check_convergence(model)
 #' }
+#'
+#' \dontrun{
+#' if (require("glmmTMB")) {
+#'   model <- glmmTMB(
+#'     Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+#'       (1 + poly(Petal.Width, 4) | Species),
+#'     data = iris
+#'   )
+#'   check_convergence(model)
+#' }
+#' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
-  insight::is_converged(x, tolerance = tolerance, ...)
+  UseMethod("check_convergence")
+}
+
+
+#' @export
+check_convergence.default <- function(x, tolerance = 0.001, ...) {
+  message(sprintf("`check_convergence()` does not work for models of class '%s'.", class(x)[1]))
+}
+
+
+#' @export
+check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
+  insight::check_if_installed("Matrix")
+
+  relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
+
+  # copy logical value, TRUE if convergence is OK
+  retval <- max(abs(relgrad)) < tolerance
+  # copy convergence value
+  attr(retval, "gradient") <- max(abs(relgrad))
+
+  # return result
+  retval
+}
+
+
+#' @export
+check_convergence.glmmTMB <- function(x, ...) {
+  # https://github.com/glmmTMB/glmmTMB/issues/275
+  isTRUE(x$sdr$pdHess)
 }
