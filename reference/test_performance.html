@@ -375,11 +375,11 @@ the performance indices of many different models.</p></div>
 <span class="r-in"><span><span class="co"># Tweak the output</span></span></span>
 <span class="r-in"><span><span class="co"># ----------------</span></span></span>
 <span class="r-in"><span><span class="fu">test_performance</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, include_formula <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Name |                           Model |       BF | Omega2 | p (Omega2) |    LR | p (LR)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |  lm(Sepal.Length ~ Petal.Width) |          |        |            |       |       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m2   | lm(Sepal.Length ~ Petal.Length) | 2.90e+10 |   0.19 |     &lt; .001 | -4.57 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m3   |      lm(Sepal.Length ~ Species) | 2.00e-06 |   0.12 |     &lt; .001 |  2.51 | 0.006 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Name |                           Model |      BF | Omega2 | p (Omega2) |    LR | p (LR)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |  lm(Sepal.Length ~ Petal.Width) |         |        |            |       |       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m2   | lm(Sepal.Length ~ Petal.Length) |  &gt; 1000 |   0.19 |     &lt; .001 | -4.57 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m3   |      lm(Sepal.Length ~ Species) | &lt; 0.001 |   0.12 |     &lt; .001 |  2.51 | 0.006 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each model is compared to m1.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
@@ -422,11 +422,11 @@ the performance indices of many different models.</p></div>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: mgcv</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is mgcv 1.8-40. For overview type 'help("mgcv-package")'.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Name |   Model |       BF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |      lm |         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m2   | lmerMod | 3.78e-04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m3   |     gam |    0.012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Name |   Model |      BF</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |      lm |        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m2   | lmerMod | &lt; 0.001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m3   |     gam |   0.012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Each model is compared to m1.</span>
 </code></pre></div>
     </div>
