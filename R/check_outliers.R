@@ -546,27 +546,24 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
       )
 
     # Outliers per variable
-    zscore.list <- lapply(x, function(x) {
-      .check_outliers_zscore(
-        x,
-        threshold = thresholds$zscore,
-        robust = FALSE,
-        method = "max"
-      )
-    })
+    zscore.list <- lapply(x, function(x) { .check_outliers_zscore(
+      x,
+      threshold = thresholds$zscore,
+      robust = FALSE,
+      method = "max"
+    )})
 
     zscore.list <- lapply(zscore.list, "[[", 1)
-    if (methods::hasArg(ID)) {
-      ID.names <- zscore.list[[ID]]
+    if(methods::hasArg(ID)) {
+      ID.names <- data[[ID]]
       zscore.list <- lapply(zscore.list, function(y) {
         z <- cbind(ID = ID.names, y)
         datawizard::data_rename(z, "ID", ID)
       })
     }
 
-    zscore.list <- lapply(zscore.list, function(zl) {
-      datawizard::data_filter(zl$Outlier_Zscore >= 0.5)
-    })
+    zscore.list <- lapply(zscore.list, datawizard::data_filter,
+                          Outlier_Zscore >= 0.5)
     zscore.list <- lapply(zscore.list, datawizard::data_remove,
                           "Outlier_Zscore", as_data_frame = TRUE)
     zscore.list <- lapply(zscore.list, datawizard::rownames_as_column,
@@ -576,15 +573,15 @@ check_outliers.data.frame <- function(x, method = "mahalanobis", threshold = NUL
     # OUtliers for several variables
     count.table <- do.call(rbind, zscore.list)
     count.table$Row <- as.numeric(count.table$Row)
-    if (nrow(count.table) > 0) {
+    if(nrow(count.table) > 0) {
 
       count.values <- rle(sort(count.table$Row))
       count.table <- data.frame(Row = count.values$values,
                                 n_Zscore = count.values$lengths)
       count.table <- count.table[which(count.table$n > 1),]
       count.table <- count.table[order(-count.table$n_Zscore),]
-      if (methods::hasArg(ID)) {
-        count.table$ID <- count.table[[ID]][count.table$Row]
+      if(methods::hasArg(ID)) {
+        count.table$ID <- data[[ID]][count.table$Row]
         count.table <- datawizard::data_relocate(count.table,
                                                  select = "ID",
                                                  after = "Row")
