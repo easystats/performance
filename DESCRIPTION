@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.9.1.2
+Version: 0.9.1.8
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -60,8 +60,8 @@ Depends:
     R (>= 3.5)
 Imports:
     bayestestR (>= 0.11.5),
-    insight (>= 0.17.0),
-    datawizard (>= 0.4.1),
+    insight (>= 0.18.0),
+    datawizard (>= 0.4.1.10),
     methods,
     stats,
     utils
@@ -79,6 +79,7 @@ Suggests:
     correlation,
     cplm,
     dbscan,
+    estimatr,
     fixest,
     forecast,
     gamm4,
@@ -125,4 +126,3 @@ Language: en-US
 RoxygenNote: 7.2.1
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
-Remotes: easystats/datawizard

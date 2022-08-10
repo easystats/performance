@@ -4,10 +4,9 @@
 #' @description `check_convergence()` provides an alternative convergence
 #'   test for `merMod`-objects.
 #'
-#' @param x A `merMod`-object.
+#' @param x A `merMod` or `glmmTMB`-object.
 #' @param tolerance Indicates up to which value the convergence result is
-#'          accepted. The smaller `tolerance` is, the stricter the test
-#'          will be.
+#'   accepted. The smaller `tolerance` is, the stricter the test will be.
 #' @param ... Currently not used.
 #'
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence
@@ -61,6 +60,17 @@
 #'
 #'   check_convergence(model)
 #' }
+#'
+#' \dontrun{
+#' if (require("glmmTMB")) {
+#'   model <- glmmTMB(
+#'     Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+#'       (1 + poly(Petal.Width, 4) | Species),
+#'     data = iris
+#'   )
+#'   check_convergence(model)
+#' }
+#' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
   UseMethod("check_convergence")
@@ -69,7 +79,7 @@ check_convergence <- function(x, tolerance = 0.001, ...) {
 
 #' @export
 check_convergence.default <- function(x, tolerance = 0.001, ...) {
-  insight::print_color(sprintf("check_convergence() does not work for models of class '%s'.\n", class(x)[1]), "red")
+  message(sprintf("`check_convergence()` does not work for models of class '%s'.", class(x)[1]))
 }
 
 
@@ -86,4 +96,11 @@ check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
 
   # return result
   retval
+}
+
+
+#' @export
+check_convergence.glmmTMB <- function(x, ...) {
+  # https://github.com/glmmTMB/glmmTMB/issues/275
+  isTRUE(x$sdr$pdHess)
 }

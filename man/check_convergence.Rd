@@ -7,11 +7,10 @@
 check_convergence(x, tolerance = 0.001, ...)
 }
 \arguments{
-\item{x}{A \code{merMod}-object.}
+\item{x}{A \code{merMod} or \code{glmmTMB}-object.}
 
 \item{tolerance}{Indicates up to which value the convergence result is
-accepted. The smaller \code{tolerance} is, the stricter the test
-will be.}
+accepted. The smaller \code{tolerance} is, the stricter the test will be.}
 
 \item{...}{Currently not used.}
 }
@@ -71,5 +70,16 @@ if (require("lme4")) {
   )
 
   check_convergence(model)
+}
+
+\dontrun{
+if (require("glmmTMB")) {
+  model <- glmmTMB(
+    Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+      (1 + poly(Petal.Width, 4) | Species),
+    data = iris
+  )
+  check_convergence(model)
+}
 }
 }
