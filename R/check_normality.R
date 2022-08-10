@@ -83,14 +83,17 @@ check_normality.numeric <- function(x, ...) {
   p.val
 }
 
+#' @rawNamespace if (getRversion() >= "3.5.0") {
+#'   S3method(stats::residuals, check_normality_numeric)
+#'   S3method(stats::rstudent, check_normality_numeric)
+#' }
+
 #' @export
-#' @importFrom stats residuals
 residuals.check_normality_numeric <- function(object, ...) {
   attr(object, "data")
 }
 
 #' @export
-#' @importFrom stats rstudent
 rstudent.check_normality_numeric <- function(model, ...) {
   attr(model, "data")
 }
