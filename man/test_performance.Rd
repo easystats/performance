@@ -14,7 +14,7 @@
 \usage{
 test_bf(...)
 
-\method{test_bf}{default}(..., text_length = NULL)
+\method{test_bf}{default}(..., reference = 1, text_length = NULL)
 
 test_likelihoodratio(..., estimator = "ML")
 
@@ -31,6 +31,10 @@ test_wald(...)
 \arguments{
 \item{...}{Multiple model objects.}
 
+\item{reference}{This only applies when models are non-nested, and determines
+which model should be taken as a reference, against which all the other
+models are tested.}
+
 \item{text_length}{Numeric, length (number of chars) of output lines.
 \code{test_bf()} describes models by their formulas, which can lead to
 overly long lines in the output. \code{text_length} fixes the length of
@@ -41,10 +45,6 @@ lines to a specified limit.}
 the standard deviation of the errors. Defaults to \code{"OLS"} for linear models,
 \code{"ML"} for all other models (including mixed models), or \code{"REML"} for
 linear mixed models when these have the same fixed effects. See 'Details'.}
-
-\item{reference}{This only applies when models are non-nested, and determines
-which model should be taken as a reference, against which all the other
-models are tested.}
 }
 \value{
 A data frame containing the relevant indices.
