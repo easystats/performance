@@ -9,6 +9,14 @@
 * Improved speed performance for `check_model()` and some other
   `performance_*()` functions.
 
+* Improved support for models of class `geeglm`.
+
+## Changes to functions
+
+* `check_model()` gains a `show_dots` argument, to show or hide data points. 
+  This is particular useful for models with many observations, where generating
+  the plot would be very slow.
+
 ## Bug Fixes
 
 * Fixes wrong column names in `model_performance()` output for `kmeans` objects

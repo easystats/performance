@@ -21,3 +21,5 @@
 ^tests/_snaps/.
 ^cran-comments\.md$
 ^\.github$
+\.code-workspace$
+\.lintr$

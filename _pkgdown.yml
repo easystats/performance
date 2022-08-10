@@ -1,28 +1,8 @@
 url: https://easystats.github.io/performance/
 
-authors:
-  Dominique Makowski:
-    href: https://dominiquemakowski.github.io/
-  Daniel Lüdecke:
-    href: https://github.com/strengejacke
-  Mattan S. Ben-Shachar:
-    href: https://github.com/mattansb
-  Indrajeet Patil:
-    href: https://sites.google.com/site/indrajeetspatilmorality/
-  Brenton M. Wiernik:
-    href: https://wiernik.org/
-
-
 template:
   bootstrap: 5
-  bslib:
-    primary: "#0054AD"
-  opengraph:
-    image:
-      src: man/figures/card.png
-    twitter:
-      creator: "@easystats4u"
-      card: summary_large_image
+  package: easystatstemplate
 
 reference:
 - title: "Comprehensive Summaries"
@@ -63,24 +43,3 @@ reference:
 - title: "Sample Data"
   contents:
   - classify_distribution
-
-navbar:
-  type: default
-  right:
-  - icon: fa-twitter
-    href: http://twitter.com/easystats4u
-    aria-label: Twitter
-  - icon: fa-github
-    href: https://github.com/easystats/performance/
-    aria-label: GitHub
-  left:
-  - icon: fa-home fa-lg
-    href: index.html
-  - text: News
-    href: news/index.html
-  - text: Features
-    href: reference/index.html
-  - text: Compare, Test and Select Models
-    href: articles/compare.html
-  - text: Explained Variance (R-Squared)
-    href: articles/r2.html

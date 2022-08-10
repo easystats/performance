@@ -28,6 +28,11 @@
 #' @param theme String, indicating the name of the plot-theme. Must be in the
 #'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
 #' @param detrend Should QQ/PP plots be detrended?
+#' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
+#'   to `FALSE` for models with many observations, if generating the plot is too
+#'   time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
+#'   tries to guess whether performance will be poor due to a very large model
+#'   and thus automatically shows or hides dots.
 #' @param verbose Toggle off warnings.
 #' @param ... Currently not used.
 #'
@@ -63,6 +68,14 @@
 #' the default residuals for `lm` and `glm` (which are deviance
 #' residuals for `glm`).
 #'
+#' @section Troubleshooting:
+#' For models with many observations, or for more complex models in general,
+#' generating the plot might become very slow. One reason might be that the
+#' underlying graphic engine becomes slow for plotting many data points. In
+#' such cases, setting the argument `show_dots = FALSE` might help. Furthermore,
+#' look at the `check` argument and see if some of the model checks could be
+#' skipped, which also increases performance.
+#' 
 #' @examples
 #' \dontrun{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -99,6 +112,7 @@ check_model.default <- function(x,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
+                                show_dots = NULL,
                                 verbose = TRUE,
                                 ...) {
   # check model formula
@@ -108,16 +122,30 @@ check_model.default <- function(x,
 
   minfo <- insight::model_info(x, verbose = FALSE)
 
-  if (minfo$is_bayesian) {
-    ca <- suppressWarnings(.check_assumptions_stan(x))
-  } else if (minfo$is_linear) {
-    ca <- suppressWarnings(.check_assumptions_linear(x, minfo))
-  } else {
-    ca <- suppressWarnings(.check_assumptions_glm(x, minfo))
+  ca <- tryCatch(
+    {
+      if (minfo$is_bayesian) {
+        suppressWarnings(.check_assumptions_stan(x))
+      } else if (minfo$is_linear) {
+        suppressWarnings(.check_assumptions_linear(x, minfo, verbose))
+      } else {
+        suppressWarnings(.check_assumptions_glm(x, minfo, verbose))
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(ca)) {
+    stop(paste0("`check_model()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
   }
-  # else {
-  #   stop(paste0("`check_assumptions()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
-  # }
+
+  # set default for show_dots, based on "model size"
+  if (is.null(show_dots)) {
+    n <- tryCatch(insight::n_obs(x), error = function(e) NULL)
+    show_dots <- is.null(n) || n <= 1e5
+  }
 
   attr(ca, "panel") <- panel
   attr(ca, "dot_size") <- dot_size
@@ -125,6 +153,7 @@ check_model.default <- function(x,
   attr(ca, "check") <- check
   attr(ca, "alpha") <- alpha
   attr(ca, "dot_alpha") <- dot_alpha
+  attr(ca, "show_dots") <- isTRUE(show_dots)
   attr(ca, "detrend") <- detrend
   attr(ca, "colors") <- colors
   attr(ca, "theme") <- theme
@@ -166,6 +195,7 @@ check_model.stanreg <- function(x,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
+                                show_dots = NULL,
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
@@ -178,6 +208,7 @@ check_model.stanreg <- function(x,
     colors = colors,
     theme = theme,
     detrend = detrend,
+    show_dots = show_dots,
     verbose = verbose,
     ...
   )
@@ -199,6 +230,7 @@ check_model.model_fit <- function(x,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
                                   detrend = FALSE,
+                                  show_dots = NULL,
                                   verbose = TRUE,
                                   ...) {
   check_model(
@@ -212,6 +244,7 @@ check_model.model_fit <- function(x,
     colors = colors,
     theme = theme,
     detrend = detrend,
+    show_dots = show_dots,
     verbose = verbose,
     ...
   )
@@ -221,15 +254,15 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info) {
+.check_assumptions_linear <- function(model, model_info, verbose = TRUE) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model)
-  dat$QQ <- .diag_qq(model)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
-  dat$NORM <- .diag_norm(model)
-  dat$NCV <- .diag_ncv(model)
-  dat$HOMOGENEITY <- .diag_homogeneity(model)
+  dat$VIF <- .diag_vif(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
+  dat$NORM <- .diag_norm(model, verbose = verbose)
+  dat$NCV <- .diag_ncv(model, verbose = verbose)
+  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook
@@ -248,13 +281,13 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info) {
+.check_assumptions_glm <- function(model, model_info, verbose = TRUE) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model)
-  dat$QQ <- .diag_qq(model)
-  dat$HOMOGENEITY <- .diag_homogeneity(model)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
+  dat$VIF <- .diag_vif(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook

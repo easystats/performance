@@ -306,6 +306,9 @@ plot.compare_performance <- function(x, ...) {
 
 
 .normalize_vector <- function(x) {
+  if (all(is.na(x)) || all(is.infinite(x))) {
+    return(x)
+  }
   as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 }
 

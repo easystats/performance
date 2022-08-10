@@ -13,6 +13,8 @@
 
 # Output files from R CMD check
 /*.Rcheck/
+/revdep/
+revdep
 
 # RStudio files
 .Rproj.user/
