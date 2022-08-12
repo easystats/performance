@@ -38,6 +38,11 @@ Authors@R:
              email = "vincent.arel-bundock@umontreal.ca", 
              role = "ctb",
              comment = c(ORCID = "0000-0003-2042-7063")),
+      person(given = "Rémi",
+             family = "Thériault",
+             role = "ctb",
+             email = "remi.theriault@mail.mcgill.ca",
+             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
       person(given = "Martin",
              family = "Jullum",
              role = "rev"),
@@ -122,6 +127,6 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)

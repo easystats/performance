@@ -9,21 +9,30 @@
 \usage{
 check_outliers(x, ...)
 
-\method{check_outliers}{default}(x, method = c("cook", "pareto"), threshold = NULL, ...)
+\method{check_outliers}{default}(x, method = c("cook", "pareto"), threshold = NULL, ID = NULL)
 
 \method{check_outliers}{numeric}(x, method = "zscore_robust", threshold = NULL, ...)
 
-\method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ID = NULL, ...)
+\method{check_outliers}{data.frame}(
+  x,
+  method = "mahalanobis",
+  threshold = NULL,
+  ID = NULL,
+  error = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{A model or a data.frame object.}
 
-\item{...}{When \code{method = "ics"}, further arguments in \code{...} are
-passed down to \code{ICSOutlier::ics.outlier()}.}
+\item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
+down to \code{ICSOutlier::ics.outlier()}. When \code{method = "mahalanobis"},
+they are  passed down to \code{stats::mahalanobis()}.}
 
 \item{method}{The outlier detection method(s). Can be "all" or some of
-c("cook", "pareto", "zscore", "zscore_robust", "iqr", "eti", "hdi", "bci",
-"mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").}
+c("cook", "pareto", "zscore", "zscore_robust", "iqr", "ci", "eti",
+"hdi", "bci", "mahalanobis", "mahalanobis_robust", "mcd", "ics",
+"optics", "lof").}
 
 \item{threshold}{A list containing the threshold values for each method (e.g.
 \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
@@ -216,6 +225,9 @@ list(
   zscore_robust = stats::qnorm(p = 1 - 0.025),
   iqr = 1.5,
   ci = 0.95,
+  eti = 0.95,
+  hdi = 0.95,
+  bci = 0.95,
   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
   pareto = 0.7,
   mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
