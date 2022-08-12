@@ -1,3 +1,27 @@
+# performance 0.9.2
+
+## General
+
+* `print()` methods for `model_performance()` and `compare_performance()` get a
+  `layout` argument, which can be `"horizontal"` (default) or `"vertical"`, to
+  switch the layout of the printed table.
+
+* Improved speed performance for `check_model()` and some other
+  `performance_*()` functions.
+
+* Improved support for models of class `geeglm`.
+
+## Changes to functions
+
+* `check_model()` gains a `show_dots` argument, to show or hide data points. 
+  This is particular useful for models with many observations, where generating
+  the plot would be very slow.
+
+## Bug Fixes
+
+* Fixes wrong column names in `model_performance()` output for `kmeans` objects
+  (#453)
+
 # performance 0.9.1
 
 ## Breaking
@@ -16,11 +40,11 @@
 
 * `check_overdispersion()` gets a `plot()` method.
 
-* `check_outliers()` now also works for models of classes `gls` and `lme`. As
-  a consequence, `check_model()` will no longer fail for these models.
+* `check_outliers()` now also works for models of classes `gls` and `lme`. As a
+  consequence, `check_model()` will no longer fail for these models.
 
-* `check_collinearity()` now includes the confidence intervals for the VIFs
-  and tolerance values.
+* `check_collinearity()` now includes the confidence intervals for the VIFs and
+  tolerance values.
 
 * `model_performance()` now also includes within-subject R2 measures, where
   applicable.
@@ -32,8 +56,8 @@
 
 * `check_predictions()` did not work for GLMs with matrix-response.
 
-* `check_predictions()` did not work for logistic regression models (i.e. 
-  models with binary response) from package *glmmTMB*
+* `check_predictions()` did not work for logistic regression models (i.e. models
+  with binary response) from package *glmmTMB*
 
 * `item_split_half()` did not work when the input data frame or matrix only
   contained two columns.
@@ -47,8 +71,8 @@
 
 ## New functions
 
-* `check_concurvity()`, which returns GAM concurvity measures (comparable
-  to collinearity checks).
+* `check_concurvity()`, which returns GAM concurvity measures (comparable to
+  collinearity checks).
 
 ## Changes to functions
 
@@ -67,25 +91,25 @@
   `test_vuong()` when package *CompQuadForm* is missing.
 
 * `test_performance()` and `test_lrt()` now compute the corrected log-likelihood
-  when models with transformed response variables (such as log- or 
+  when models with transformed response variables (such as log- or
   sqrt-transformations) are passed to the functions.
 
 ### Model performance functions
 
 * `performance_aic()` now corrects the AIC value for models with transformed
-  response variables. This also means that comparing models using 
+  response variables. This also means that comparing models using
   `compare_performance()` allows comparisons of AIC values for models with and
   without transformed response variables.
 
-* Also, `model_performance()` now corrects both AIC and BIC values for models 
+* Also, `model_performance()` now corrects both AIC and BIC values for models
   with transformed response variables.
 
 ### Plotting and printing
 
 * The `print()` method for `binned_residuals()` now prints a short summary of
-  the results (and no longer generates a plot). A `plot()` method was added
-  to generate plots.
-  
+  the results (and no longer generates a plot). A `plot()` method was added to
+  generate plots.
+
 * The `plot()` output for `check_model()` was revised:
 
   - For binomial models, the constant variance plot was omitted, and a binned
@@ -120,8 +144,8 @@
 
 ## New functions
 
-* `check_multimodal()` and `check_heterogeneity_bias()`. These functions will
-  be removed from the _parameters_ packages in the future.
+* `check_multimodal()` and `check_heterogeneity_bias()`. These functions will be
+  removed from the _parameters_ packages in the future.
 
 ## Changes to functions
 
@@ -132,8 +156,8 @@
 
 * Fixed issues in `check_model()` for Bayesian models.
 
-* Fixed issue in `pp_check()` for models with transformed response variables,
-  so now predictions and observed response values are on the same (transformed)
+* Fixed issue in `pp_check()` for models with transformed response variables, so
+  now predictions and observed response values are on the same (transformed)
   scale.
 
 # performance 0.7.3
@@ -145,13 +169,13 @@
 
 * `compare_performance()` now also accepts a list of model objects.
 
-* `performance_roc()` now also works for binomial models from other classes 
-  than *glm*.
+* `performance_roc()` now also works for binomial models from other classes than
+  *glm*.
 
-* Several functions, like `icc()` or `r2_nakagawa()`, now have an 
+* Several functions, like `icc()` or `r2_nakagawa()`, now have an
   `as.data.frame()` method.
 
-* `check_collinearity()` now correctly handles objects from forthcoming *afex* 
+* `check_collinearity()` now correctly handles objects from forthcoming *afex*
   update.
 
 # performance 0.7.2
@@ -166,12 +190,13 @@
   examples in forthcoming R 4.2.
 
 * Fixed issue in `check_normality()` for models with sample size larger than
-  5.000 observations.
+
+5.000 observations.
 
 * Fixed issue in `check_model()` for *glmmTMB* models.
 
-* Fixed issue in `check_collinearity()` for *glmmTMB* models with zero-inflation,
-  where the zero-inflated model was an intercept-only model.
+* Fixed issue in `check_collinearity()` for *glmmTMB* models with
+  zero-inflation, where the zero-inflated model was an intercept-only model.
 
 # performance 0.7.1
 
@@ -193,9 +218,9 @@
 
 * Added `print()` methods for more classes of `r2()`.
 
-* The `performance_roc()` and `performance_accuracy()` functions unfortunately 
-  had spelling mistakes in the output columns: *Sensitivity* was called 
-  *Sensivity* and *Specificity* was called *Specifity*. We think these are 
+* The `performance_roc()` and `performance_accuracy()` functions unfortunately
+  had spelling mistakes in the output columns: *Sensitivity* was called
+  *Sensivity* and *Specificity* was called *Specifity*. We think these are
   understandable mistakes :-)
 
 ## Changes to functions
@@ -219,7 +244,7 @@
 * The default-method for `r2()` now tries to compute an r-squared for all models
   that have no specific `r2()`-method yet, by using following formula:
   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
-  
+
 * The column name `Parameter` in `check_collinearity()` is now more
   appropriately named `Term`.
 
@@ -231,7 +256,8 @@
 * Fixed incorrect computation of models from inverse-Gaussian families, or
   Gaussian families fitted with `glm()`.
 
-* Fixed issue in `performance_roc()` for models where outcome was not 0/1 coded.
+* Fixed issue in `performance_roc()` for models where outcome was not 0/1
+  coded.
 
 * Fixed issue in `performance_accuracy()` for logistic regression models when
   `method = "boot"`.
@@ -527,3 +553,4 @@
 * Fixed issue in `check_heteroscedasticity()` for *aov* objects.
 
 * Fixed issues for *lmrob* and *glmrob* objects.
+

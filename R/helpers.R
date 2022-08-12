@@ -8,10 +8,8 @@
   if (inherits(x, c("vgam", "vglm"))) {
     insight::check_if_installed("VGAM")
     out <- .adjust_ic_jacobian(x, VGAM::BIC(x))
-
   } else if (inherits(x, "bayesx")) {
     out <- .adjust_ic_jacobian(x, stats::BIC(x)[["BIC"]])
-
   } else {
     out <- tryCatch(
       stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE)),
@@ -49,7 +47,7 @@
   # check if factor
   if (is.factor(x) || is.character(x)) {
     # try to convert to numeric
-    x <- datawizard::data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+    x <- datawizard::to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
   }
 
   # retrieve lowest category

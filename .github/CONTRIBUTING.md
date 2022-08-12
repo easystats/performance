@@ -14,7 +14,7 @@ bug, you may also create an associated issue. If possible, try to illustrate you
 ## Pull requests
 
 *  Please create a Git branch for each pull request (PR).
-*  Your contributed code should roughly follow the [R style guide](http://style.tidyverse.org), but in particular our [**easystats convention of code-style**](https://github.com/easystats/easystats#convention-of-code-style).
+*  Your contributed code should roughly follow the [R style guide](http://style.tidyverse.org), but in particular our [**easystats convention of code-style**](https://easystats.github.io/easystats/articles/conventions.html).
 *  performance uses [roxygen2](https://cran.r-project.org/package=roxygen2), with
 [Markdown syntax](https://cran.r-project.org/web/packages/roxygen2/vignettes/markdown.html),
 for documentation.

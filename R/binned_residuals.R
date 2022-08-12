@@ -74,7 +74,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   model.binned <- as.numeric(cut(pred, breaks))
 
   d <- suppressWarnings(lapply(1:n_bins, function(.x) {
-    items <- (1:length(pred))[model.binned == .x]
+    items <- (seq_along(pred))[model.binned == .x]
     model.range <- range(pred[items], na.rm = TRUE)
     xbar <- mean(pred[items], na.rm = TRUE)
     ybar <- mean(y[items], na.rm = TRUE)

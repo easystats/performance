@@ -51,6 +51,8 @@ To cite performance in publications use:
 ``` r
 citation("performance")
 #> 
+#> To cite package 'performance' in publications use:
+#> 
 #>   Lüdecke et al., (2021). performance: An R Package for Assessment, Comparison and
 #>   Testing of Statistical Models. Journal of Open Source Software, 6(60), 3139.
 #>   https://doi.org/10.21105/joss.03139
@@ -90,8 +92,8 @@ There is a nice introduction into the package on
 r-squared for many different models, including mixed effects and
 Bayesian regression models.
 
-`r2()` returns a list containing values related to the “most
-appropriate” r-squared for the given model.
+`r2()` returns a list containing values related to the "most
+appropriate" r-squared for the given model.
 
 ``` r
 model <- lm(mpg ~ wt + cyl, data = mtcars)
@@ -119,10 +121,10 @@ full list of functions
 
 For mixed models, the *conditional* and *marginal* R-squared are
 returned. The *marginal R-squared* considers only the variance of the
-fixed effects and indicates how much of the model’s variance is
+fixed effects and indicates how much of the model's variance is
 explained by the fixed effects part only. The *conditional R-squared*
 takes both the fixed and random effects into account and indicates how
-much of the model’s variance is explained by the “complete” model.
+much of the model's variance is explained by the "complete" model.
 
 For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes
 the *mean* random effect variances, thus `r2()` is also appropriate for
@@ -154,8 +156,8 @@ r2(model)
 #### Intraclass Correlation Coefficient (ICC)
 
 Similar to R-squared, the ICC provides information on the explained
-variance and can be interpreted as “the proportion of the variance
-explained by the grouping structure in the population” (Hox 2010).
+variance and can be interpreted as "the proportion of the variance
+explained by the grouping structure in the population" (Hox 2010).
 
 `icc()` calculates the ICC for various mixed model objects, including
 `stanreg` models.
@@ -166,8 +168,8 @@ model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 icc(model)
 #> # Intraclass Correlation Coefficient
 #> 
-#>      Adjusted ICC: 0.722
-#>   Conditional ICC: 0.521
+#>     Adjusted ICC: 0.722
+#>   Unadjusted ICC: 0.521
 ```
 
 …and models of class `brmsfit`.
@@ -182,8 +184,8 @@ model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
 icc(model)
 #> # Intraclass Correlation Coefficient
 #> 
-#>      Adjusted ICC: 0.930
-#>   Conditional ICC: 0.771
+#>     Adjusted ICC: 0.930
+#>   Unadjusted ICC: 0.771
 ```
 
 ### Model diagnostics
@@ -235,7 +237,7 @@ check_zeroinflation(model)
 
 #### Check for singular model fits
 
-A “singular” model fit means that some dimensions of the
+A "singular" model fit means that some dimensions of the
 variance-covariance matrix have been estimated as exactly zero. This
 often occurs for mixed models with overly complex random effects
 structures.
@@ -359,10 +361,10 @@ compare_performance(m1, m2, m3, m4)
 #> 
 #> Name |   Model |      AIC | AIC weights |      BIC | BIC weights |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP |     AICc | AICc weights | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
 #> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#> m1   |      lm |  156.010 |     < 0.001 |  161.873 |     < 0.001 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                
+#> m1   |      lm |  156.010 |    8.30e-28 |  161.873 |    3.99e-28 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                
 #> m2   |     glm |   31.298 |       1.000 |   35.695 |       1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |          |              |            |            |       |                
-#> m3   | lmerMod | 1763.986 |     < 0.001 | 1783.144 |     < 0.001 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                
-#> m4   |     glm |   56.761 |     < 0.001 |   57.747 |     < 0.001 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657
+#> m3   | lmerMod | 1763.986 |    0.00e+00 | 1783.144 |    0.00e+00 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                
+#> m4   |     glm |   56.761 |    2.96e-06 |   57.747 |    1.63e-05 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657
 ```
 
 #### General index of model performance
@@ -378,12 +380,12 @@ compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> Name |   Model |   RMSE |  Sigma | AIC weights | BIC weights | Performance-Score
 #> --------------------------------------------------------------------------------
 #> m2   |     glm |  0.359 |  0.934 |       1.000 |       1.000 |           100.00%
-#> m4   |     glm |  3.043 |  1.132 |     < 0.001 |     < 0.001 |            46.89%
-#> m1   |      lm |  2.444 |  2.568 |     < 0.001 |     < 0.001 |            46.09%
-#> m3   | lmerMod | 23.438 | 25.592 |     < 0.001 |     < 0.001 |             0.00%
+#> m4   |     glm |  3.043 |  1.132 |    2.96e-06 |    1.63e-05 |            46.89%
+#> m1   |      lm |  2.444 |  2.568 |    8.30e-28 |    3.99e-28 |            46.09%
+#> m3   | lmerMod | 23.438 | 25.592 |    0.00e+00 |    0.00e+00 |             0.00%
 ```
 
-#### Visualisation of indices of models’ performance
+#### Visualisation of indices of models' performance
 
 Finally, we provide convenient visualisation (the `see` package must be
 installed).
@@ -410,12 +412,12 @@ lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
 
 test_performance(lm1, lm2, lm3, lm4)
-#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
-#> ------------------------------------------------------------
-#> lm1  |    lm |        |        |            |       |       
-#> lm2  |    lm | > 1000 |   0.69 |     < .001 | -6.25 | < .001
-#> lm3  |    lm | > 1000 |   0.36 |     < .001 | -3.44 | < .001
-#> lm4  |    lm | > 1000 |   0.73 |     < .001 | -7.77 | < .001
+#> Name | Model |       BF | Omega2 | p (Omega2) |    LR | p (LR)
+#> --------------------------------------------------------------
+#> lm1  |    lm |          |        |            |       |       
+#> lm2  |    lm | 3.45e+26 |   0.69 |     < .001 | -6.25 | < .001
+#> lm3  |    lm | 4.69e+07 |   0.36 |     < .001 | -3.44 | < .001
+#> lm4  |    lm | 7.58e+29 |   0.73 |     < .001 | -7.77 | < .001
 #> Each model is compared to lm1.
 
 test_bf(lm1, lm2, lm3, lm4)
@@ -467,20 +469,18 @@ ed. Quantitative Methodology Series. New York: Routledge.
 
 <div id="ref-johnson_extension_2014" class="csl-entry">
 
-Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
-to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
-Ecology and Evolution* 5 (9): 944–46.
-<https://doi.org/10.1111/2041-210X.12225>.
+Johnson, Paul C. D. 2014. "Extension of Nakagawa & Schielzeth's R2 GLMM
+to Random Slopes Models." Edited by Robert B. O'Hara. *Methods in
+Ecology and Evolution* 5 (9): 944-46.
 
 </div>
 
 <div id="ref-nakagawa_coefficient_2017" class="csl-entry">
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
-“The Coefficient of Determination R2 and Intra-Class Correlation
+"The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
-Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
-<https://doi.org/10.1098/rsif.2017.0213>.
+Expanded." *Journal of The Royal Society Interface* 14 (134): 20170213.
 
 </div>
 

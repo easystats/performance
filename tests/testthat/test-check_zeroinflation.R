@@ -32,10 +32,13 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && requi
     m <- glmer.nb(y ~ f1 * f2 + (1 | g), data = dd, verbose = FALSE)
 
     expect_equal(check_zeroinflation(m),
-                 structure(list(predicted.zeros = 153, observed.zeros = 155L,
-                                ratio = 0.987096774193548, tolerance = 0.05),
-                           class = "check_zi"),
-                 tolerance = 1e-3
+      structure(list(
+        predicted.zeros = 153, observed.zeros = 155L,
+        ratio = 0.987096774193548, tolerance = 0.05
+      ),
+      class = "check_zi"
+      ),
+      tolerance = 1e-3
     )
   })
 }

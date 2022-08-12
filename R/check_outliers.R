@@ -1166,6 +1166,10 @@ check_outliers.lme <- check_outliers.gls
 #' @export
 check_outliers.fixest <- check_outliers.gls
 
+#' @export
+check_outliers.geeglm <- check_outliers.gls
+
+
 
 
 # Thresholds --------------------------------------------------------------

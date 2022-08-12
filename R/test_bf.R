@@ -7,8 +7,7 @@ test_bf <- function(...) {
 
 #' @rdname test_performance
 #' @export
-test_bf.default <- function(..., text_length = NULL) {
-
+test_bf.default <- function(..., reference = 1, text_length = NULL) {
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
   names(objects) <- match.call(expand.dots = FALSE)$`...`
@@ -22,7 +21,7 @@ test_bf.default <- function(..., text_length = NULL) {
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_bf(objects, text_length = text_length)
+    test_bf(objects, reference = reference, text_length = text_length)
   } else {
     stop("The models cannot be compared for some reason :/", call. = FALSE)
   }

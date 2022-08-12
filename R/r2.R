@@ -74,10 +74,10 @@ r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRU
       if (minfo$is_binomial) {
         resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
-        resp <- datawizard::data_to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+        resp <- datawizard::to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
       }
       mean_resp <- mean(resp, na.rm = TRUE)
-      pred <- insight::get_predicted(model, verbose = FALSE)
+      pred <- insight::get_predicted(model, ci = NULL, verbose = FALSE)
       list(R2 = 1 - sum((resp - pred)^2) / sum((resp - mean_resp)^2))
     },
     error = function(e) {
@@ -156,6 +156,21 @@ r2.systemfit <- function(model, ...) {
 }
 
 
+#' @export
+r2.lm_robust <- function(model, ...) {
+  out <- list(
+    "R2" = tryCatch(
+            model[["r.squared"]],
+            error = function(e) NULL),
+    "R2_adjusted" = tryCatch(
+            model[["adj.r.squared"]],
+            error = function(e) NULL))
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+  attr(out, "model_type") <- "Linear"
+  structure(class = "r2_generic", out)
+}
+
 
 #' @export
 r2.ols <- function(model, ...) {
@@ -165,6 +180,8 @@ r2.ols <- function(model, ...) {
   attr(out, "model_type") <- "Linear"
   structure(class = "r2_generic", out)
 }
+
+
 
 #' @export
 r2.lrm <- r2.ols
@@ -512,7 +529,6 @@ r2.BFBayesFactor <- r2.brmsfit
 
 #' @export
 r2.gam <- function(model, ...) {
-
   # gamlss inherits from gam, and summary.gamlss prints results automatically
   printout <- utils::capture.output(s <- summary(model))
 

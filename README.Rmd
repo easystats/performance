@@ -4,12 +4,6 @@ output:
     toc: false
     fig_width: 10
     fig_height: 6
-tags: [r, reports]
-vignette: >
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
 bibliography: paper/paper.bib
 ---
 
@@ -27,6 +21,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/",
   comment = "#>"
 )
+
 options(
   knitr.kable.NA = "",
   digits = 4,

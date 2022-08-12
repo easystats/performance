@@ -1,0 +1,54 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "R-Debugger",
+        "name": "Launch R-Workspace",
+        "request": "launch",
+        "debugMode": "workspace",
+        "workingDirectory": "${workspaceFolder}"
+      },
+      {
+        "type": "R-Debugger",
+        "name": "Debug R-File",
+        "request": "launch",
+        "debugMode": "file",
+        "workingDirectory": "${workspaceFolder}",
+        "file": "${file}"
+      },
+      {
+        "type": "R-Debugger",
+        "name": "Debug R-Function",
+        "request": "launch",
+        "debugMode": "function",
+        "workingDirectory": "${workspaceFolder}",
+        "file": "${file}",
+        "mainFunction": "main",
+        "allowGlobalDebugging": false
+      },
+      {
+        "type": "R-Debugger",
+        "name": "Debug R-Package",
+        "request": "launch",
+        "debugMode": "workspace",
+        "workingDirectory": "${workspaceFolder}",
+        "includePackageScopes": true,
+        "loadPackages": [
+          "."
+        ]
+      },
+      {
+        "type": "R-Debugger",
+        "request": "attach",
+        "name": "Attach to R process",
+        "splitOverwrittenOutput": true
+      }
+    ]
+  }
+}
