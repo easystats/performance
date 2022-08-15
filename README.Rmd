@@ -250,7 +250,7 @@ check_heteroscedasticity(model)
 `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To
 get a comprehensive check, use `check_model()`.
 
-```{r, fig.height=10, fig.width=8, out.width="60%"}
+```{r, fig.height=12, fig.width=10, out.width="80%"}
 # defining a model
 model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 
