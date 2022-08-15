@@ -82,11 +82,12 @@ as.data.frame.looic <- function(x, row.names = NULL, ...) {
 print.looic <- function(x, digits = 2, ...) {
   insight::print_color("# LOOIC and ELPD with Standard Error\n\n", "blue")
 
-  out <- paste0(c(
-    sprintf("  LOOIC: %.*f [%.*f]", digits, x$LOOIC, digits, x$LOOIC_SE),
-    sprintf("   ELPD: %.*f [%.*f]", digits, x$ELPD, digits, x$ELPD_SE)
-  ),
-  collapse = "\n"
+  out <- paste0(
+    c(
+      sprintf("  LOOIC: %.*f [%.*f]", digits, x$LOOIC, digits, x$LOOIC_SE),
+      sprintf("   ELPD: %.*f [%.*f]", digits, x$ELPD, digits, x$ELPD_SE)
+    ),
+    collapse = "\n"
   )
 
   cat(out)

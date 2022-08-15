@@ -331,11 +331,12 @@ as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
 print.icc <- function(x, digits = 3, ...) {
   insight::print_color("# Intraclass Correlation Coefficient\n\n", "blue")
 
-  out <- paste0(c(
-    sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted),
-    sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted)
-  ),
-  collapse = "\n"
+  out <- paste0(
+    c(
+      sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted),
+      sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted)
+    ),
+    collapse = "\n"
   )
 
   cat(out)

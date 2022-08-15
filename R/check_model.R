@@ -75,7 +75,7 @@
 #' such cases, setting the argument `show_dots = FALSE` might help. Furthermore,
 #' look at the `check` argument and see if some of the model checks could be
 #' skipped, which also increases performance.
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
