@@ -24,7 +24,9 @@ looic <- function(model, verbose = TRUE) {
 
   if (algorithm$algorithm != "sampling") {
     if (verbose) {
-      warning(insight::format_message("`looic()` only available for models fit using the 'sampling' algorithm."), call. = FALSE)
+      warning(insight::format_message(
+        "`looic()` only available for models fit using the 'sampling' algorithm."
+      ), call. = FALSE)
     }
     return(NA)
   }

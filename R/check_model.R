@@ -325,7 +325,9 @@ check_model.model_fit <- function(x,
     d2 <- brms::prior_samples(model)
 
     if (is.null(d2)) {
-      stop(insight::format_message("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."), call. = FALSE)
+      stop(insight::format_message(
+        "No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."
+      ), call. = FALSE)
     }
 
     d1 <- brms::posterior_samples(model)
