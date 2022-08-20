@@ -89,7 +89,7 @@ mixed effects models with complex random effects structures."><meta property="og
     </div>
 
     <div class="ref-description section level2">
-    <p>Compute the marginal and conditional r-squared value for
+    <p>Compute the <em>marginal</em> and <em>conditional</em> r-squared value for
 mixed effects models with complex random effects structures.</p>
     </div>
 
@@ -128,14 +128,15 @@ decrease the tolerance-level. See also <code><a href="check_singularity.html">ch
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Marginal and conditional r-squared values for mixed models are calculated
-based on <cite>Nakagawa et al. 2017</cite>. For more details on the computation of
-the variances, see <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>.
-<br><br>
-The marginal r-squared considers only the variance of the fixed effects,
-while the conditional r-squared takes both the fixed and random effects into
-account. The random effect variances are actually the mean random effect
-variances, thus the r-squared value is also appropriate for mixed models
-with random slopes or nested random effects (see <cite>Johnson 2014</cite>).</p>
+based on <cite>Nakagawa et al. (2017)</cite>. For more details on the computation of
+the variances, see <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>. The random effect variances are
+actually the mean random effect variances, thus the r-squared value is also
+appropriate for mixed models with random slopes or nested random effects
+(see <cite>Johnson, 2014</cite>).</p>
+<ul><li><p>Conditional R2: takes both the fixed and random effects into account.</p></li>
+<li><p>Marginal R2: considers only the variance of the fixed effects.</p></li>
+</ul><p>The contribution of random effects can be deduced by the subtracting the
+marginal R2 from the conditional R2.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
