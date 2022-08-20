@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.0/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,14 +131,22 @@
 <div class="section level2">
 <h2 id="what-is-the-r2">What is the R2?<a class="anchor" aria-label="anchor" href="#what-is-the-r2"></a>
 </h2>
-<p>The <strong>coefficient of determination</strong>, denoted <span class="math inline">\(R^2\)</span> and pronounced “R squared”, typically corresponds the proportion of the variance in the dependent variable (the response) that is <em>explained</em> (i.e., predicted) by the independent variables (the predictors).</p>
-<p>It is an “absolute” index of <em>goodness-of-fit</em>, ranging from 0 to 1 (often expressed in percentage), and can be used for model performance assessment or models comparison.</p>
+<p>The <strong>coefficient of determination</strong>, denoted <span class="math inline">\(R^2\)</span> and pronounced “R squared”, typically
+corresponds the proportion of the variance in the dependent variable
+(the response) that is <em>explained</em> (i.e., predicted) by the
+independent variables (the predictors).</p>
+<p>It is an “absolute” index of <em>goodness-of-fit</em>, ranging from 0
+to 1 (often expressed in percentage), and can be used for model
+performance assessment or models comparison.</p>
 </div>
 <div class="section level2">
 <h2 id="different-types-of-r2">Different types of R2<a class="anchor" aria-label="anchor" href="#different-types-of-r2"></a>
 </h2>
-<p>As models become more complex, the computation of an <span class="math inline">\(R^2\)</span> becomes increasingly less straightforward.</p>
-<p>Currently, depending on the context of the regression model object, one can choose from the following measures supported in <a href="https://easystats.github.io/performance/">performance</a>:</p>
+<p>As models become more complex, the computation of an <span class="math inline">\(R^2\)</span> becomes increasingly less
+straightforward.</p>
+<p>Currently, depending on the context of the regression model object,
+one can choose from the following measures supported in
+<a href="https://easystats.github.io/performance/">performance</a>:</p>
 <ul>
 <li>Bayesian <span class="math inline">\(R^2\)</span>
 </li>
@@ -156,12 +164,16 @@
 </li>
 <li>Nagelkerke’s <span class="math inline">\(R^2\)</span>
 </li>
-<li>Nakagawa’s <span class="math inline">\(R^2\)</span> for mixed models</li>
-<li>Somers’ <span class="math inline">\(D_{xy}\)</span> rank correlation for binary outcomes</li>
-<li>Tjur’s <span class="math inline">\(R^2\)</span> - coefficient of determination (D)</li>
+<li>Nakagawa’s <span class="math inline">\(R^2\)</span> for mixed
+models</li>
+<li>Somers’ <span class="math inline">\(D_{xy}\)</span> rank correlation
+for binary outcomes</li>
+<li>Tjur’s <span class="math inline">\(R^2\)</span> - coefficient of
+determination (D)</li>
 <li>Xu’ <span class="math inline">\(R^2\)</span> (Omega-squared)</li>
 <li>
-<span class="math inline">\(R^2\)</span> for models with zero-inflation</li>
+<span class="math inline">\(R^2\)</span> for models with
+zero-inflation</li>
 </ul>
 <p><em>TO BE COMPLETED.</em></p>
 <p>Before we begin, let’s first load the package.</p>
@@ -181,7 +193,13 @@
 <div class="section level2">
 <h2 id="r2-for-glm">R2 for <code>glm</code><a class="anchor" aria-label="anchor" href="#r2-for-glm"></a>
 </h2>
-<p>In the context of a generalized linear model (e.g., a logistic model which outcome is binary), <span class="math inline">\(R^2\)</span> doesn’t measure the percentage of <em>“explained variance”</em>, as this concept doesn’t apply. However, the <span class="math inline">\(R^2\)</span>s that have been adapted for GLMs have retained the name of “R2”, mostly because of the similar properties (the range, the sensitivity, and the interpretation as the amount of explanatory power).</p>
+<p>In the context of a generalized linear model (e.g., a logistic model
+which outcome is binary), <span class="math inline">\(R^2\)</span>
+doesn’t measure the percentage of <em>“explained variance”</em>, as this
+concept doesn’t apply. However, the <span class="math inline">\(R^2\)</span>s that have been adapted for GLMs have
+retained the name of “R2”, mostly because of the similar properties (the
+range, the sensitivity, and the interpretation as the amount of
+explanatory power).</p>
 </div>
 <div class="section level2">
 <h2 id="r2-for-mixed-models">R2 for Mixed Models<a class="anchor" aria-label="anchor" href="#r2-for-mixed-models"></a>
@@ -189,14 +207,19 @@
 <div class="section level3">
 <h3 id="marginal-vs--conditional-r2">Marginal vs. Conditional R2<a class="anchor" aria-label="anchor" href="#marginal-vs--conditional-r2"></a>
 </h3>
-<p>For mixed models, <code>performance</code> will return two different <span class="math inline">\(R^2\)</span>s:</p>
+<p>For mixed models, <code>performance</code> will return two different
+<span class="math inline">\(R^2\)</span>s:</p>
 <ul>
 <li>The <strong>conditional</strong> <span class="math inline">\(R^2\)</span>
 </li>
 <li>The <strong>marginal</strong> <span class="math inline">\(R^2\)</span>
 </li>
 </ul>
-<p>The marginal <span class="math inline">\(R^2\)</span> considers only the variance of the <strong>fixed effects</strong> (without the random effects), while the conditional <span class="math inline">\(R^2\)</span> takes <em>both</em> the <strong>fixed and random effects</strong> into account (i.e., the total model).</p>
+<p>The marginal <span class="math inline">\(R^2\)</span> considers only
+the variance of the <strong>fixed effects</strong> (without the random
+effects), while the conditional <span class="math inline">\(R^2\)</span>
+takes <em>both</em> the <strong>fixed and random effects</strong> into
+account (i.e., the total model).</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># defining a linear mixed-effects model</span></span>
@@ -207,14 +230,17 @@
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.933</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.303</span></span></code></pre></div>
-<p>Note that <code>r2</code> functions only return the <span class="math inline">\(R^2\)</span> values. We would encourage users to instead always use the <code>model_performance</code> function to get a more comprehensive set of indices of model fit.</p>
+<p>Note that <code>r2</code> functions only return the <span class="math inline">\(R^2\)</span> values. We would encourage users to
+instead always use the <code>model_performance</code> function to get a
+more comprehensive set of indices of model fit.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model_performance</span>(model)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Indices of model performance</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> AIC     <span class="sc">|</span>    AICc <span class="sc">|</span>     BIC <span class="sc">|</span> <span class="fu">R2</span> (cond.) <span class="sc">|</span> <span class="fu">R2</span> (marg.) <span class="sc">|</span>   ICC <span class="sc">|</span>  RMSE <span class="sc">|</span> Sigma</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="sc">-----------------------------------------------------------------------------</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> <span class="fl">159.036</span> <span class="sc">|</span> <span class="fl">159.312</span> <span class="sc">|</span> <span class="fl">171.079</span> <span class="sc">|</span>      <span class="fl">0.933</span> <span class="sc">|</span>      <span class="fl">0.303</span> <span class="sc">|</span> <span class="fl">0.904</span> <span class="sc">|</span> <span class="fl">0.373</span> <span class="sc">|</span> <span class="fl">0.378</span></span></code></pre></div>
-<p>But, in the current vignette, we would like to exclusively focus on this family of functions and will only talk about this measure.</p>
+<p>But, in the current vignette, we would like to exclusively focus on
+this family of functions and will only talk about this measure.</p>
 </div>
 </div>
 <div class="section level2">
@@ -227,7 +253,8 @@
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.816</span> (<span class="dv">95</span>% CI [<span class="fl">0.704</span>, <span class="fl">0.897</span>])</span></code></pre></div>
-<p>As discussed above, for mixed-effects models, there will be two components associated with <span class="math inline">\(R^2\)</span>.</p>
+<p>As discussed above, for mixed-effects models, there will be two
+components associated with <span class="math inline">\(R^2\)</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># defining a Bayesian mixed-effects model</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">stan_lmer</span>(Petal.Length <span class="sc">~</span> Petal.Width <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Species), <span class="at">data =</span> iris, <span class="at">refresh =</span> <span class="dv">0</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -236,7 +263,8 @@
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.953</span> (<span class="dv">95</span>% CI [<span class="fl">0.942</span>, <span class="fl">0.963</span>])</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.825</span> (<span class="dv">95</span>% CI [<span class="fl">0.720</span>, <span class="fl">0.901</span>])</span></code></pre></div>
-<p>Let’s look at another regression analysis carried out with <a href="https://richarddmorey.github.io/BayesFactor/" class="external-link">BayesFactor</a> package.</p>
+<p>Let’s look at another regression analysis carried out with
+<a href="https://richarddmorey.github.io/BayesFactor/" class="external-link">BayesFactor</a> package.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BayesFactor)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(puzzles)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -261,12 +289,14 @@
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.693</span> (<span class="dv">95</span>% CI [<span class="fl">0.550</span>, <span class="fl">0.782</span>])</span>
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.029</span> (<span class="dv">95</span>% CI [<span class="fl">8.085e-08</span>, <span class="fl">0.088</span>])</span></code></pre></div>
-<p>If you want to know more about these indices, you can check out details and references in the functions that compute them <a href="https://easystats.github.io/performance/reference/index.html#section-r-functions"><strong>here</strong></a>.</p>
+<p>If you want to know more about these indices, you can check out
+details and references in the functions that compute them <a href="https://easystats.github.io/performance/reference/index.html#section-r-functions"><strong>here</strong></a>.</p>
 </div>
 <div class="section level2">
 <h2 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a>
 </h2>
-<p>If you want to know about how to <em>interpret</em> these <span class="math inline">\(R^2\)</span> values, see these <a href="https://easystats.github.io/effectsize/reference/interpret_r2.html" class="external-link"><strong>interpretation guidelines</strong></a>.</p>
+<p>If you want to know about how to <em>interpret</em> these <span class="math inline">\(R^2\)</span> values, see these <a href="https://easystats.github.io/effectsize/reference/interpret_r2.html" class="external-link"><strong>interpretation
+guidelines</strong></a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

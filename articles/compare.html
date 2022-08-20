@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.0/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -131,7 +131,9 @@
 <div class="section level2">
 <h2 id="comparing-vs--testing">Comparing vs. Testing<a class="anchor" aria-label="anchor" href="#comparing-vs--testing"></a>
 </h2>
-<p>Let’s imagine that we are interested in explaining the variability in the <code>Sepal.Length</code> using 3 different predictors. For that, we can build 3 linear models.</p>
+<p>Let’s imagine that we are interested in explaining the variability in
+the <code>Sepal.Length</code> using 3 different predictors. For that, we
+can build 3 linear models.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
@@ -139,7 +141,9 @@
 <div class="section level3">
 <h3 id="comparing-indices-of-model-performance">Comparing Indices of Model Performance<a class="anchor" aria-label="anchor" href="#comparing-indices-of-model-performance"></a>
 </h3>
-<p>The eponymous function from the package, <a href="https://easystats.github.io/performance/reference/model_performance.html"><code>performance()</code></a>, can be used to compute different indices of performance (an umbrella term for indices of fit).</p>
+<p>The eponymous function from the package, <a href="https://easystats.github.io/performance/reference/model_performance.html"><code>performance()</code></a>,
+can be used to compute different indices of performance (an umbrella
+term for indices of fit).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span></span>
@@ -167,12 +171,26 @@
 <td align="center">0.41</td>
 </tr></tbody>
 </table>
-<p>But for multiple models, one can obtain a useful table to compare these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html"><code>compare_performance()</code></a> function.</p>
+<p>But for multiple models, one can obtain a useful table to compare
+these indices at a glance using the <a href="https://easystats.github.io/performance/reference/compare_performance.html"><code>compare_performance()</code></a>
+function.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <caption>Comparison of Model Performance Indices</caption>
+<colgroup>
+<col width="8%">
+<col width="8%">
+<col width="9%">
+<col width="15%">
+<col width="9%">
+<col width="15%">
+<col width="6%">
+<col width="12%">
+<col width="6%">
+<col width="8%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">Name</th>
 <th align="center">Model</th>
@@ -224,8 +242,13 @@
 </tr>
 </tbody>
 </table>
-<p>If you remember your stats lessons, while comparing different model fits, you would like to choose a model that has a high <span class="math inline">\(R^2\)</span> value (a measure of how much variance is explained by predictors), low AIC and BIC values, and low root mean squared error (RMSE). Based on these criteria, we can immediately see that <code>model1</code> has the best fit.</p>
-<p>If you don’t like looking at tables, you can also plot them using a plotting method supported in <code>see</code> package:</p>
+<p>If you remember your stats lessons, while comparing different model
+fits, you would like to choose a model that has a high <span class="math inline">\(R^2\)</span> value (a measure of how much variance
+is explained by predictors), low AIC and BIC values, and low root mean
+squared error (RMSE). Based on these criteria, we can immediately see
+that <code>model1</code> has the best fit.</p>
+<p>If you don’t like looking at tables, you can also plot them using a
+plotting method supported in <code>see</code> package:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span>
 <span></span>
@@ -236,8 +259,14 @@
 <div class="section level3">
 <h3 id="testing-models">Testing Models<a class="anchor" aria-label="anchor" href="#testing-models"></a>
 </h3>
-<p>While <strong>comparing</strong> these indices is often useful, making a decision (for instance, which model to keep or drop) can often be hard, as the indices can give conflicting suggestions. Additionally, it is sometimes unclear which index to favour in the given context.</p>
-<p>This is one of the reason why <strong>tests</strong> are useful, as they facilitate decisions via (infamous) “significance” indices, like <em>p</em>-values (in frequentist framework) or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes Factors</a> (in Bayesian framework).</p>
+<p>While <strong>comparing</strong> these indices is often useful,
+making a decision (for instance, which model to keep or drop) can often
+be hard, as the indices can give conflicting suggestions. Additionally,
+it is sometimes unclear which index to favour in the given context.</p>
+<p>This is one of the reason why <strong>tests</strong> are useful, as
+they facilitate decisions via (infamous) “significance” indices, like
+<em>p</em>-values (in frequentist framework) or <a href="https://easystats.github.io/bayestestR/articles/bayes_factors.html" class="external-link">Bayes
+Factors</a> (in Bayesian framework).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -282,14 +311,20 @@
 </tbody>
 </table>
 <p>Each model is compared to model1.</p>
-<p>However, these tests also have strong limitations and shortcomings, and cannot be used as the <strong>one criterion to rule them all</strong>!</p>
+<p>However, these tests also have strong limitations and shortcomings,
+and cannot be used as the <strong>one criterion to rule them
+all</strong>!</p>
 <p>You can find more information on how these tests <a href="https://easystats.github.io/performance/reference/test_performance.html"><strong>here</strong></a>.</p>
 </div>
 <div class="section level3">
 <h3 id="experimenting">Experimenting<a class="anchor" aria-label="anchor" href="#experimenting"></a>
 </h3>
-<p>Although we have shown here examples only with simple linear models, we will highly encourage you to try these functions out with models of your choosing. For example, these functions work with mixed-effects regression models, Bayesian regression models, etc.</p>
-<p>To demonstrate this, we will run Bayesian versions of linear regression models we just compared:</p>
+<p>Although we have shown here examples only with simple linear models,
+we will highly encourage you to try these functions out with models of
+your choosing. For example, these functions work with mixed-effects
+regression models, Bayesian regression models, etc.</p>
+<p>To demonstrate this, we will run Bayesian versions of linear
+regression models we just compared:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span></span>
 <span></span>
@@ -379,7 +414,8 @@
 </tr>
 </tbody>
 </table>
-<p>Note that, since these are Bayesian regression models, the function automatically picked up the appropriate indices to compare!</p>
+<p>Note that, since these are Bayesian regression models, the function
+automatically picked up the appropriate indices to compare!</p>
 <p>If you are unfamiliar with some of these, explore more <a href="https://easystats.github.io/performance/reference/looic.html">here</a>.</p>
 <p><strong>Now it’s your turn to play!</strong> :)</p>
 </div>
