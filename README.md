@@ -28,7 +28,7 @@ zero-inflation, convergence or singularity.
 [![performance status
 badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev)
 [![R
-check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
+check](https://github.com/easystats/performance/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/performance/actions)
 
 The *performance* package is available on CRAN, while its latest
 development version is available on R-universe (from *rOpenSci*).
