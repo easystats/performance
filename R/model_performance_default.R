@@ -1,5 +1,8 @@
 #' @export
 model_performance.default <- function(model, metrics = "all", verbose = TRUE, ...) {
+  # check for valid input
+  .is_model_valid(model)
+
   if (any(tolower(metrics) == "log_loss")) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
@@ -36,7 +39,7 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
       warning(paste0("Following elements are no valid metric: ",
         metrics[bad_metrics],
         collapse = ", "
-      ))
+      ), call. = FALSE)
     }
     metrics <- metrics[-bad_metrics]
   }

@@ -6,20 +6,22 @@ print.r2_generic <- function(x, digits = 3, ...) {
   }
 
   if (all(c("R2_adjusted", "R2_within_adjusted") %in% names(x))) {
-    out <- paste0(c(
-      sprintf("              R2: %.*f", digits, x$R2),
-      sprintf("         adj. R2: %.*f", digits, x$R2_adjusted),
-      sprintf("       within R2: %.*f", digits, x$R2_within),
-      sprintf("  adj. within R2: %.*f", digits, x$R2_within_adjusted)
-    ),
-    collapse = "\n"
+    out <- paste0(
+      c(
+        sprintf("              R2: %.*f", digits, x$R2),
+        sprintf("         adj. R2: %.*f", digits, x$R2_adjusted),
+        sprintf("       within R2: %.*f", digits, x$R2_within),
+        sprintf("  adj. within R2: %.*f", digits, x$R2_within_adjusted)
+      ),
+      collapse = "\n"
     )
   } else if ("R2_adjusted" %in% names(x)) {
-    out <- paste0(c(
-      sprintf("       R2: %.*f", digits, x$R2),
-      sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)
-    ),
-    collapse = "\n"
+    out <- paste0(
+      c(
+        sprintf("       R2: %.*f", digits, x$R2),
+        sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)
+      ),
+      collapse = "\n"
     )
   } else {
     out <- sprintf("  %s: %.*f", names(x$R2), digits, x$R2)
@@ -55,11 +57,12 @@ print.r2_mlm <- function(x, digits = 3, ...) {
 
   for (i in names(x)) {
     insight::print_color(sprintf("## %s\n", i), "cyan")
-    out <- paste0(c(
-      sprintf("        R2: %.*f", digits, x[[i]]$R2),
-      sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
-    ),
-    collapse = "\n"
+    out <- paste0(
+      c(
+        sprintf("        R2: %.*f", digits, x[[i]]$R2),
+        sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
+      ),
+      collapse = "\n"
     )
     cat(out)
     cat("\n\n")
@@ -78,11 +81,12 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
     insight::print_color("# R2 for %s Regression\n\n", "blue")
   }
 
-  out <- paste0(c(
-    sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),
-    sprintf("     Marginal R2: %.*f", digits, x$R2_marginal)
-  ),
-  collapse = "\n"
+  out <- paste0(
+    c(
+      sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),
+      sprintf("     Marginal R2: %.*f", digits, x$R2_marginal)
+    ),
+    collapse = "\n"
   )
 
   cat(out)

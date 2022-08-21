@@ -16,7 +16,9 @@ test_bf.default <- function(..., reference = 1, text_length = NULL) {
   .test_performance_checks(objects, multiple = FALSE)
 
   if (length(objects) == 1 && isTRUE(insight::is_model(objects))) {
-    stop(insight::format_message("'test_bf()' is designed to compare multiple models together. For a single model, you might want to run bayestestR::bf_parameters() instead."), call. = FALSE)
+    stop(insight::format_message(
+      "'test_bf()' is designed to compare multiple models together. For a single model, you might want to run bayestestR::bf_parameters() instead."
+    ), call. = FALSE)
   }
 
   # If a suitable class is found, run the more specific method on it

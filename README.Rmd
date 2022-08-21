@@ -1,9 +1,5 @@
 ---
-output: 
-  github_document:
-    toc: false
-    fig_width: 10
-    fig_height: 6
+output: github_document
 bibliography: paper/paper.bib
 ---
 
@@ -42,7 +38,7 @@ The primary goal of the **performance** package is to fill this gap and to provi
 
 ## Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![performance status badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![performance status badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/performance/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/performance/actions)
 
 The *performance* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
 
@@ -250,7 +246,7 @@ check_heteroscedasticity(model)
 `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To
 get a comprehensive check, use `check_model()`.
 
-```{r, fig.height=10, fig.width=8, out.width="60%"}
+```{r, fig.height=12, fig.width=10, out.width="80%"}
 # defining a model
 model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 

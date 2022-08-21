@@ -14,10 +14,7 @@ test_likelihoodratio <- function(..., estimator = "ML") {
 #' @export
 performance_lrt <- function(...) {
   ## TODO remove deprecated
-  message(insight::format_message(
-    "This function name is deprecated.",
-    "Please use 'test_lrt()' instead."
-  ))
+  .Deprecated(msg = "This function is deprecated. Please use `test_lrt()` instead.")
   test_likelihoodratio(...)
 }
 

@@ -39,8 +39,6 @@
 }
 
 
-
-
 # recode numeric vector, so lowest value stats with 0
 # factors are coerced to numeric
 .recode_to_zero <- function(x) {
@@ -62,5 +60,16 @@
     as.numeric(s)
   } else {
     NULL
+  }
+}
+
+
+# functions to check if necessary default argument was provided ------------
+
+.is_model_valid <- function(model) {
+  if (missing(model) || is.null(model)) {
+    stop(insight::format_message(
+      "You must provide a model-object. Argument `model` cannot be missing or `NULL`."
+    ), call. = FALSE)
   }
 }

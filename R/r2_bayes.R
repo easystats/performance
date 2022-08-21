@@ -122,7 +122,9 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
-    warning(insight::format_message("`r2()` only available for models fit using the 'sampling' algorithm."), call. = FALSE)
+    warning(insight::format_message(
+      "`r2()` only available for models fit using the 'sampling' algorithm."
+    ), call. = FALSE)
     return(NA)
   }
 
@@ -147,7 +149,7 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
               summary = FALSE
             )
           )
-          br2 <- lapply(1:length(res), function(x) {
+          br2 <- lapply(seq_along(res), function(x) {
             list(
               "R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])),
               "R2_Bayes_marginal" = unname(as.vector(br2_mv$R2_Bayes_marginal[, x]))
@@ -156,7 +158,7 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           names(br2) <- res
         } else {
           br2_mv <- list("R2_Bayes" = rstantools::bayes_R2(model, summary = FALSE))
-          br2 <- lapply(1:length(res), function(x) {
+          br2 <- lapply(seq_along(res), function(x) {
             list("R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])))
           })
           names(br2) <- res
@@ -267,7 +269,9 @@ r2_posterior.BFBayesFactor <- function(model,
 
   if (any(is.na(BFMods$BF) | is.infinite(BFMods$BF))) {
     if (verbose) {
-      warning(insight::format_message("Can't compute model-averaged index. One or more Bayes factors are NA or infinite."), call. = FALSE)
+      warning(insight::format_message(
+        "Can't compute model-averaged index. One or more Bayes factors are NA or infinite."
+      ), call. = FALSE)
     }
     return(NULL)
   }

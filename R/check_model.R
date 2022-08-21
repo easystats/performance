@@ -75,7 +75,7 @@
 #' such cases, setting the argument `show_dots = FALSE` might help. Furthermore,
 #' look at the `check` argument and see if some of the model checks could be
 #' skipped, which also increases performance.
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -325,7 +325,9 @@ check_model.model_fit <- function(x,
     d2 <- brms::prior_samples(model)
 
     if (is.null(d2)) {
-      stop(insight::format_message("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."), call. = FALSE)
+      stop(insight::format_message(
+        "No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."
+      ), call. = FALSE)
     }
 
     d1 <- brms::posterior_samples(model)

@@ -60,7 +60,9 @@
 #' @export
 check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {
-    stop(insight::format_message("'x' must be an object of class 'parameters_pca', as returned by 'parameters::principal_components()'."), call. = FALSE)
+    stop(insight::format_message(
+      "'x' must be an object of class 'parameters_pca', as returned by 'parameters::principal_components()'."
+    ), call. = FALSE)
   }
 
   insight::check_if_installed("parameters")
@@ -110,7 +112,7 @@ print.check_itemscale <- function(x, digits = 2, ...) {
   insight::print_color("# Description of (Sub-)Scales", "blue")
 
   cat(insight::export_table(
-    lapply(1:length(x), function(i) {
+    lapply(seq_along(x), function(i) {
       out <- x[[i]]
       attr(out, "table_caption") <- c(sprintf("\nComponent %i", i), "red")
       attr(out, "table_footer") <- c(sprintf(

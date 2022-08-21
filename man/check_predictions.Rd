@@ -39,7 +39,7 @@ check_posterior_predictions(
 value of the original response against the minimum values of the replicated
 responses, and the same for the maximum value. This plot helps judging whether
 the variation in the original data is captured by the model or not
-(\cite{Gelman et al. 2020, pp.163}). The minimum and maximum values of \code{y} should
+(\emph{Gelman et al. 2020, pp.163}). The minimum and maximum values of \code{y} should
 be inside the range of the related minimum and maximum values of \code{yrep}.}
 
 \item{re_formula}{Formula containing group-level effects (random effects) to
@@ -53,20 +53,20 @@ effects. See \code{simulate()} in \strong{lme4}.}
 A data frame of simulated responses and the original response vector.
 }
 \description{
-Posterior predictive checks mean \dQuote{simulating replicated data
-under the fitted model and then comparing these to the observed data}
-\cite{(Gelman and Hill, 2007, p. 158)}. Posterior predictive checks
-can be used to \dQuote{look for systematic discrepancies between real and
-simulated data} \cite{(Gelman et al. 2014, p. 169)}.
+Posterior predictive checks mean "simulating replicated data
+under the fitted model and then comparing these to the observed data"
+(\emph{Gelman and Hill, 2007, p. 158}). Posterior predictive checks
+can be used to "look for systematic discrepancies between real and
+simulated data" (\emph{Gelman et al. 2014, p. 169}).
 
-\pkg{performance} provides posterior predictive check methods for a variety
+\strong{performance} provides posterior predictive check methods for a variety
 of frequentist models (e.g., \code{lm}, \code{merMod}, \code{glmmTMB}, ...). For Bayesian
 models, the model is passed to \code{\link[bayesplot:pp_check]{bayesplot::pp_check()}}.
 }
 \details{
 An example how posterior predictive checks can also be used for model
-comparison is Figure 6 from \cite{Gabry et al. 2019, Figure 6}.
-\cr
+comparison is Figure 6 from \emph{Gabry et al. 2019, Figure 6}.
+
 \if{html}{\cr \figure{pp_check.png}{options: width="90\%" alt="Posterior Predictive Check"} \cr}
 The model shown in the right panel (b) can simulate new data that are more
 similar to the observed outcome than the model in the left panel (a). Thus,
@@ -74,8 +74,8 @@ model (b) is likely to be preferred over model (a).
 }
 \note{
 Every model object that has a \code{simulate()}-method should work with
-\code{check_predictions()}. On R 3.6.0 and higher, if \pkg{bayesplot}
-(or a package that imports \pkg{bayesplot} such as \pkg{rstanarm} or \pkg{brms})
+\code{check_predictions()}. On R 3.6.0 and higher, if \strong{bayesplot} (or a
+package that imports \strong{bayesplot} such as \strong{rstanarm} or \strong{brms})
 is loaded, \code{pp_check()} is also available as an alias for \code{check_predictions()}.
 }
 \examples{
@@ -87,9 +87,14 @@ if (require("see") && getRversion() >= "3.5.0") {
 }
 \references{
 \itemize{
-\item Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., and Gelman, A. (2019). Visualization in Bayesian workflow. Journal of the Royal Statistical Society: Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378
-\item Gelman, A., and Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
-\item Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
-\item Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
+\item Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., and Gelman, A. (2019).
+Visualization in Bayesian workflow. Journal of the Royal Statistical Society:
+Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378
+\item Gelman, A., and Hill, J. (2007). Data analysis using regression and
+multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
+\item Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and
+Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
+\item Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
+Cambridge University Press.
 }
 }
