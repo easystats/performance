@@ -217,11 +217,11 @@ Springer-Verlag. <a href="https://doi.org/10.1007/b97636" class="external-link">
 <span class="r-in"><span><span class="fu">compare_performance</span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Comparison of Model Performance Indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model |     AIC | AIC weights |     BIC | BIC weights |    R2 | R2 (adj.) |  RMSE | Sigma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lm1  |    lm | 231.452 |    3.65e-28 | 243.494 |    2.80e-27 | 0.619 |     0.614 | 0.510 | 0.515</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lm2  |    lm | 106.233 |       0.566 | 121.286 |       0.964 | 0.837 |     0.833 | 0.333 | 0.338</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> lm3  |    lm | 106.767 |       0.434 | 127.842 |       0.036 | 0.840 |     0.835 | 0.330 | 0.336</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model |   AIC (weights) |   BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lm1  |    lm | 231.452 (&lt;.001) | 243.494 (&lt;.001) | 0.619 |     0.614 | 0.510 | 0.515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lm2  |    lm | 106.233 (0.566) | 121.286 (0.964) | 0.837 |     0.833 | 0.333 | 0.338</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> lm3  |    lm | 106.767 (0.434) | 127.842 (0.036) | 0.840 |     0.835 | 0.330 | 0.336</span>
 <span class="r-in"><span><span class="fu">compare_performance</span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Comparison of Model Performance Indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -241,11 +241,11 @@ Springer-Verlag. <a href="https://doi.org/10.1007/b97636" class="external-link">
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   from same data.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> # Comparison of Model Performance Indices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Name |   Model |     AIC | AIC weights |     BIC | BIC weights |  RMSE | Sigma |    R2 | R2 (adj.) | Tjur's R2 | Log_loss | Score_log | Score_spherical |   PCP |   AICc | AICc weights | R2 (cond.) | R2 (marg.) |   ICC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |      lm | 156.010 |    8.30e-28 | 161.873 |    3.99e-28 | 2.444 | 2.568 | 0.830 |     0.819 |           |          |           |                 |       |        |              |            |            |      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m2   |     glm |  31.298 |       1.000 |  35.695 |       1.000 | 0.359 | 0.934 |       |           |     0.478 |    0.395 |   -14.903 |           0.095 | 0.743 |        |              |            |            |      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> m3   | lmerMod |  74.621 |    3.91e-10 |  86.663 |    8.56e-12 | 0.279 | 0.283 |       |           |           |          |           |                 |       | 74.897 |              |      0.972 |      0.096 | 0.969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Name |   Model |   AIC (weights) |   BIC (weights) |  RMSE | Sigma |    R2 | R2 (adj.) | Tjur's R2 | Log_loss | Score_log | Score_spherical |   PCP | AICc (weights) | R2 (cond.) | R2 (marg.) |   ICC</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m1   |      lm | 156.010 (&lt;.001) | 161.873 (&lt;.001) | 2.444 | 2.568 | 0.830 |     0.819 |           |          |           |                 |       |        (&gt;.999) |            |            |      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m2   |     glm |  31.298 (&gt;.999) |  35.695 (&gt;.999) | 0.359 | 0.934 |       |           |     0.478 |    0.395 |   -14.903 |           0.095 | 0.743 |        (&gt;.999) |            |            |      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> m3   | lmerMod |  74.621 (&lt;.001) |  86.663 (&lt;.001) | 0.279 | 0.283 |       |           |           |          |           |                 |       | 74.897 (&gt;.999) |      0.972 |      0.096 | 0.969</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
