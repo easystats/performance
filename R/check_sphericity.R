@@ -29,7 +29,7 @@ check_sphericity <- function(x, ...) {
 
 #' @export
 check_sphericity.default <- function(x, ...) {
-  stop("Test not supported yet for object of class ", class(x)[1])
+  stop("Test not supported yet for object of class ", class(x)[1], call. = FALSE)
 }
 
 
@@ -81,7 +81,7 @@ check_sphericity.Anova.mlm <- function(x, ...) {
 #' @export
 check_sphericity.afex_aov <- function(x, ...) {
   if (length(attr(x, "within")) == 0) {
-    stop("Mauchly Test of Sphericity is only aplicable to ANOVAs with within-subjects factors.")
+    stop("Mauchly Test of Sphericity is only aplicable to ANOVAs with within-subjects factors.", call. = FALSE)
   }
 
   check_sphericity.Anova.mlm(x, ...)
@@ -90,9 +90,6 @@ check_sphericity.afex_aov <- function(x, ...) {
 
 #' @export
 check_sphericity.mlm <- function(x, ...) {
-  if (!requireNamespace("car")) {
-    stop("car required for this function to work.")
-  }
-
+  insight::check_if_installed("car")
   check_sphericity.Anova.mlm(car::Anova(x, ...))
 }

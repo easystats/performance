@@ -68,6 +68,9 @@ check_distribution <- function(model) {
 
 #' @export
 check_distribution.default <- function(model) {
+  # check for valid input
+  .is_model_valid(model)
+
   insight::check_if_installed("randomForest")
 
   if (inherits(model, "brmsfit")) {
@@ -82,7 +85,11 @@ check_distribution.default <- function(model) {
 
 
   # Extract features
-  x <- datawizard::to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+  x <- datawizard::to_numeric(
+    insight::get_response(model, verbose = FALSE),
+    dummy_factors = FALSE,
+    preserve_levels = TRUE
+  )
   dat <- .extract_features(x)
 
   dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))

@@ -143,6 +143,8 @@ multicollinearity <- check_collinearity
 #' @rdname check_collinearity
 #' @export
 check_collinearity.default <- function(x, ci = 0.95, verbose = TRUE, ...) {
+  # check for valid input
+  .is_model_valid(x)
   .check_collinearity(x, component = "conditional", ci = ci, verbose = verbose)
 }
 
@@ -156,7 +158,7 @@ print.check_collinearity <- function(x, ...) {
 
   if ("Component" %in% colnames(x)) {
     comp <- split(x, x$Component)
-    for (i in 1:length(comp)) {
+    for (i in seq_along(comp)) {
       cat(paste0("\n* ", comp[[i]]$Component[1], " component:\n"))
       .print_collinearity(datawizard::data_remove(comp[[i]], "Component"))
     }
@@ -228,7 +230,9 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
   if (verbose) {
-    message(insight::format_message("All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."))
+    message(insight::format_message(
+      "All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."
+    ))
   }
 
   check_collinearity(suppressWarnings(stats::lm(
@@ -241,7 +245,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
 #' @export
 check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   if (!insight::is_model(x)) {
-    stop("Collinearity only applicable to regression models.")
+    stop("Collinearity only applicable to regression models.", call. = FALSE)
   }
 
   f <- insight::find_formula(x)[[1]]
@@ -398,7 +402,9 @@ check_collinearity.zerocount <- function(x,
   # any assignment found?
   if (is.null(assign) || all(is.na(assign))) {
     if (verbose) {
-      warning(insight::format_message(sprintf("Could not extract model terms for the %s component of the model.", component), call. = FALSE))
+      warning(insight::format_message(
+        sprintf("Could not extract model terms for the %s component of the model.", component)
+      ), call. = FALSE)
     }
     return(NULL)
   }
@@ -408,7 +414,9 @@ check_collinearity.zerocount <- function(x,
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     assign <- assign[-attributes(v)$na_columns_index]
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Model matrix is rank deficient. VIFs may not be sensible."), call. = FALSE)
+      warning(insight::format_message(
+        "Model matrix is rank deficient. VIFs may not be sensible."
+      ), call. = FALSE)
     }
   }
 
@@ -438,7 +446,9 @@ check_collinearity.zerocount <- function(x,
 
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)), call. = FALSE)
+      warning(insight::format_message(
+        sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)
+      ), call. = FALSE)
     }
     return(NULL)
   }
@@ -469,7 +479,9 @@ check_collinearity.zerocount <- function(x,
   # check for interactions, VIF might be inflated...
   if (!is.null(insight::find_interactions(x)) && any(result > 10)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms."), call. = FALSE)
+      warning(insight::format_message(
+        "Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms."
+      ), call. = FALSE)
     }
   }
 
@@ -573,11 +585,11 @@ check_collinearity.zerocount <- function(x,
 
   dat <- insight::get_data(x, verbose = verbose)[, pred, drop = FALSE]
 
-  parms <- unlist(lapply(1:length(pred), function(i) {
+  parms <- unlist(lapply(seq_along(pred), function(i) {
     p <- pred[i]
     if (is.factor(dat[[p]])) {
       ps <- paste0(p, levels(dat[[p]]))
-      names(ps)[1:length(ps)] <- i
+      names(ps)[seq_along(ps)] <- i
       ps
     } else {
       names(p) <- i

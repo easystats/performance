@@ -28,9 +28,9 @@ knitr::opts_chunk$set(
 options(digits = 2)
 
 if (!requireNamespace("rstanarm", quietly = TRUE) ||
-    !requireNamespace("magrittr", quietly = TRUE) ||
-    !requireNamespace("see", quietly = TRUE) ||
-    (requireNamespace("see", quietly = TRUE) && utils::packageVersion("see") <= "0.7.1")) {
+  !requireNamespace("magrittr", quietly = TRUE) ||
+  !requireNamespace("see", quietly = TRUE) ||
+  (requireNamespace("see", quietly = TRUE) && utils::packageVersion("see") <= "0.7.1")) {
   knitr::opts_chunk$set(eval = FALSE)
 } else {
   library(rstanarm)

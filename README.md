@@ -28,7 +28,7 @@ zero-inflation, convergence or singularity.
 [![performance status
 badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev)
 [![R
-check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
+check](https://github.com/easystats/performance/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/performance/actions)
 
 The *performance* package is available on CRAN, while its latest
 development version is available on R-universe (from *rOpenSci*).
@@ -92,8 +92,8 @@ There is a nice introduction into the package on
 r-squared for many different models, including mixed effects and
 Bayesian regression models.
 
-`r2()` returns a list containing values related to the "most
-appropriate" r-squared for the given model.
+`r2()` returns a list containing values related to the “most
+appropriate” r-squared for the given model.
 
 ``` r
 model <- lm(mpg ~ wt + cyl, data = mtcars)
@@ -121,10 +121,10 @@ full list of functions
 
 For mixed models, the *conditional* and *marginal* R-squared are
 returned. The *marginal R-squared* considers only the variance of the
-fixed effects and indicates how much of the model's variance is
+fixed effects and indicates how much of the model’s variance is
 explained by the fixed effects part only. The *conditional R-squared*
 takes both the fixed and random effects into account and indicates how
-much of the model's variance is explained by the "complete" model.
+much of the model’s variance is explained by the “complete” model.
 
 For frequentist mixed models, `r2()` (resp. `r2_nakagawa()`) computes
 the *mean* random effect variances, thus `r2()` is also appropriate for
@@ -136,13 +136,17 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  cores = 4
+)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.953 (95% CI [0.941, 0.963])
-#>      Marginal R2: 0.824 (95% CI [0.713, 0.896])
+#>   Conditional R2: 0.953 (95% CI [0.942, 0.964])
+#>      Marginal R2: 0.825 (95% CI [0.721, 0.900])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -156,8 +160,8 @@ r2(model)
 #### Intraclass Correlation Coefficient (ICC)
 
 Similar to R-squared, the ICC provides information on the explained
-variance and can be interpreted as "the proportion of the variance
-explained by the grouping structure in the population" (Hox 2010).
+variance and can be interpreted as “the proportion of the variance
+explained by the grouping structure in the population” (Hox 2010).
 
 `icc()` calculates the ICC for various mixed model objects, including
 `stanreg` models.
@@ -237,7 +241,7 @@ check_zeroinflation(model)
 
 #### Check for singular model fits
 
-A "singular" model fit means that some dimensions of the
+A “singular” model fit means that some dimensions of the
 variance-covariance matrix have been estimated as exactly zero. This
 often occurs for mixed models with overly complex random effects
 structures.
@@ -255,12 +259,16 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
+model <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
 
 check_singularity(model)
 #> [1] TRUE
@@ -299,7 +307,7 @@ model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 check_model(model)
 ```
 
-<img src="man/figures/unnamed-chunk-14-1.png" width="60%" />
+<img src="man/figures/unnamed-chunk-14-1.png" width="80%" />
 
 ### Model performance summaries
 
@@ -385,7 +393,7 @@ compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> m3   | lmerMod | 23.438 | 25.592 |    0.00e+00 |    0.00e+00 |             0.00%
 ```
 
-#### Visualisation of indices of models' performance
+#### Visualisation of indices of models’ performance
 
 Finally, we provide convenient visualisation (the `see` package must be
 installed).
@@ -469,18 +477,20 @@ ed. Quantitative Methodology Series. New York: Routledge.
 
 <div id="ref-johnson_extension_2014" class="csl-entry">
 
-Johnson, Paul C. D. 2014. "Extension of Nakagawa & Schielzeth's R2 GLMM
-to Random Slopes Models." Edited by Robert B. O'Hara. *Methods in
-Ecology and Evolution* 5 (9): 944-46.
+Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
+to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
+Ecology and Evolution* 5 (9): 944–46.
+<https://doi.org/10.1111/2041-210X.12225>.
 
 </div>
 
 <div id="ref-nakagawa_coefficient_2017" class="csl-entry">
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
-"The Coefficient of Determination R2 and Intra-Class Correlation
+“The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
-Expanded." *Journal of The Royal Society Interface* 14 (134): 20170213.
+Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
+<https://doi.org/10.1098/rsif.2017.0213>.
 
 </div>
 
