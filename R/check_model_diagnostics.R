@@ -39,10 +39,12 @@
     res_ <- sort(stats::rstandard(model, type = "pearson"), na.last = NA)
   } else {
     res_ <- tryCatch(sort(stats::rstudent(model), na.last = NA),
-                     error = function(e) NULL)
+      error = function(e) NULL
+    )
     if (is.null(res_)) {
       res_ <- tryCatch(sort(stats::residuals(model), na.last = NA),
-                       error = function(e) NULL)
+        error = function(e) NULL
+      )
     }
   }
 

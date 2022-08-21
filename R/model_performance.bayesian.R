@@ -98,7 +98,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   if (algorithm$algorithm != "sampling") {
     if (verbose) {
-      warning(insight::format_message("`model_performance()` only possible for models fit using the 'sampling' algorithm."), call. = FALSE)
+      warning(insight::format_message(
+        "`model_performance()` only possible for models fit using the 'sampling' algorithm."
+      ), call. = FALSE)
     }
     return(NULL)
   }
@@ -146,7 +148,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   }
 
   # LOO-R2 ------------------
-  if (("R2_ADJUSTED" %in% metrics | "R2_LOO" %in% metrics) && mi$is_linear) {
+  if (("R2_ADJUSTED" %in% metrics || "R2_LOO" %in% metrics) && mi$is_linear) {
     r2_adj <- tryCatch(
       {
         suppressWarnings(r2_loo(model, verbose = verbose))
@@ -305,7 +307,7 @@ model_performance.BFBayesFactor <- function(model,
   }
 
   params <- insight::get_parameters(model)
-  if (!"sig2" %in% colnames(params)) stop("This is not a linear model.")
+  if (!"sig2" %in% colnames(params)) stop("This is not a linear model.", call. = FALSE)
   sqrt(params$sig2)
 }
 

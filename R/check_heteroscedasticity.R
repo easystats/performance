@@ -42,6 +42,9 @@ check_heteroskedasticity <- check_heteroscedasticity
 
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
+  # check for valid input
+  .is_model_valid(x)
+
   # only for linear models
   info <- insight::model_info(x)
   if (!info$is_linear) {

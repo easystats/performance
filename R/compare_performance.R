@@ -98,7 +98,9 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   object_names <- names(objects)
 
   if (!all(supported_models)) {
-    warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
+    warning(sprintf(
+      "Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")
+    ), call. = FALSE)
     objects <- objects[supported_models]
     object_names <- object_names[supported_models]
   }
@@ -132,7 +134,9 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 
   # check if all models were fit from same data
   if (!isTRUE(attributes(objects)$same_response) && verbose) {
-    warning(insight::format_message("When comparing models, please note that probably not all models were fit from same data."), call. = FALSE)
+    warning(insight::format_message(
+      "When comparing models, please note that probably not all models were fit from same data."
+    ), call. = FALSE)
   }
 
   # create "ranking" of models
@@ -240,7 +244,9 @@ plot.compare_performance <- function(x, ...) {
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
   if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
-    warning(insight::format_message("Models are not of same type. Comparison of indices might be not meaningful."), call. = FALSE)
+    warning(insight::format_message(
+      "Models are not of same type. Comparison of indices might be not meaningful."
+    ), call. = FALSE)
   }
 
   # set reference for Bayes factors to 1
