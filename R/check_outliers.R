@@ -344,7 +344,8 @@ check_outliers <- function(x, ...) {
 check_outliers.default <- function(x,
                                    method = c("cook", "pareto"),
                                    threshold = NULL,
-                                   ID = NULL) {
+                                   ID = NULL,
+                                   ...) {
 
   # Check args
   if (all(method == "all")) {
@@ -428,10 +429,10 @@ check_outliers.default <- function(x,
                                  by = c("Row"))
 
     count.table <- datawizard::data_filter(
-      data_cook, Outlier_Cook > 0.5)
+      data_cook, "Outlier_Cook > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("Cook"), as_data_frame = TRUE)
+      count.table, "Cook", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_Cook <- "(Multivariate)"
@@ -461,10 +462,10 @@ check_outliers.default <- function(x,
                                  by = c("Row"))
 
     count.table <- datawizard::data_filter(
-      data_pareto, Outlier_Pareto > 0.5)
+      data_pareto, "Outlier_Pareto > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("Pareto"), as_data_frame = TRUE)
+      count.table, "Pareto", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_Pareto <- "(Multivariate)"
@@ -491,7 +492,7 @@ check_outliers.default <- function(x,
 
   num.df <- outlier_count$all[!names(outlier_count$all) %in% c("Row", ID)]
   if(isTRUE(nrow(num.df) > 0)) {
-    num.df <- datawizard::data_recode(
+    num.df <- datawizard::change_code(
       num.df, recode = list(`2` = "(Multivariate)"))
     num.df <- as.data.frame(lapply(num.df, as.numeric))
 
@@ -567,6 +568,7 @@ print.check_outliers <- function(x, ...) {
   method.plural <- ifelse(length(thresholds) > 1,
                           "methods and thresholds",
                           "method and threshold")
+  long_dash <- paste0("\n", paste0(rep("-", 77), collapse = ""), "\n")
   if (length(outliers) > 1) {
     outlier.plural <- "outliers"
     case.plural <- "cases"
@@ -578,36 +580,34 @@ print.check_outliers <- function(x, ...) {
   if (length(outliers) >= 1) {
     outlier.count <- attr(x, "outlier_count")
     o <- paste0(outliers, collapse = ", ")
-    insight::print_color(sprintf("%i %s detected: %s %s.
-- Based on the following %s: %s.
-- For %s: %s.\n\n", length(outliers), outlier.plural, case.plural, o,
-                                 method.plural, method.thresholds,
-                                 var.plural, vars),
-                         "yellow")
+    insight::print_color(insight::format_message(
+      sprintf("%i %s detected: %s %s.", length(outliers),
+            outlier.plural, case.plural, o),
+      sprintf("- Based on the following %s: %s.",
+              method.plural, method.thresholds),
+      sprintf("- For %s: %s.\n", var.plural, vars),
+      indent = ""), color = "yellow")
 
     if (length(method) > 1) {
       insight::print_color(
-        c("Note: Outliers were classified as such by",
-        "at least half of the selected methods. \n\n"), "yellow")
+        c("\nNote: Outliers were classified as such by",
+        "at least half of the selected methods. \n"), "yellow")
     }
 
     if (isTRUE(nrow(outlier.count$all) > 0) | isTRUE(attributes(x)$grouped)) {
       if (length(method) > 1 | all(method %in% method.univariate)) {
-    cat("---------------------------------------",
-        "--------------------------------------\n",
+    cat(long_dash,
         "The following observations were considered outliers ",
         "for two or more variables \n",
         "by at least one of the selected methods: \n\n", sep = "")
     ifelse(isTRUE(attributes(x)$grouped),
            print(lapply(outlier.count, function(x) x$all)),
            print(outlier.count$all))
-    cat("\n")
       }
     }
 
     if (length(method) == 1 & all(method %in% method.univariate)) {
-    cat("------------------------------------------------------------------------
-Outliers per variable (", method,
+    cat(long_dash, "Outliers per variable (", method,
         "): \n\n", sep = "")
       ifelse(isTRUE(attributes(x)$grouped),
              print(vars.outliers),
@@ -655,7 +655,6 @@ check_outliers.data.frame <- function(x,
                                       method = "mahalanobis",
                                       threshold = NULL,
                                       ID = NULL,
-                                      error = FALSE,
                                       ...) {
 
   # Preserve ID column if desired
@@ -715,7 +714,6 @@ check_outliers.data.frame <- function(x,
       }
       count.table <- cbind(count.table, val = count.values$lengths)
       names(count.table)[names(count.table) == "val"] <- name.method
-      #count.table <- count.table[which(count.table$n > 1),]
       count.table <- count.table[order(-count.table[[name.method]]),]
     }
     count.table
@@ -837,14 +835,13 @@ check_outliers.data.frame <- function(x,
       x,
       threshold = thresholds$mahalanobis,
       ID.names = ID.names,
-      error = error,
       ...))
 
     count.table <- datawizard::data_filter(
-      out$data_mahalanobis, Outlier_Mahalanobis > 0.5)
+      out$data_mahalanobis, "Outlier_Mahalanobis > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("Mahalanobis"), as_data_frame = TRUE)
+      count.table, "Mahalanobis", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_Mahalanobis <- "(Multivariate)"
@@ -863,10 +860,10 @@ check_outliers.data.frame <- function(x,
       ID.names = ID.names))
 
     count.table <- datawizard::data_filter(
-      out$data_mahalanobis_robust, Outlier_Mahalanobis_robust > 0.5)
+      out$data_mahalanobis_robust, "Outlier_Mahalanobis_robust > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("Mahalanobis"), as_data_frame = TRUE)
+      count.table, "Mahalanobis", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_Mahalanobis_robust <- "(Multivariate)"
@@ -886,10 +883,10 @@ check_outliers.data.frame <- function(x,
       ID.names = ID.names))
 
     count.table <- datawizard::data_filter(
-      out$data_mcd, Outlier_MCD > 0.5)
+      out$data_mcd, "Outlier_MCD > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("MCD"), as_data_frame = TRUE)
+      count.table, "MCD", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_MCD <- "(Multivariate)"
@@ -908,10 +905,10 @@ check_outliers.data.frame <- function(x,
       ID.names = ID.names))
 
     count.table <- datawizard::data_filter(
-      out$data_ics, Outlier_ICS > 0.5)
+      out$data_ics, "Outlier_ICS > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("ICS"), as_data_frame = TRUE)
+      count.table, "ICS", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_ICS <- "(Multivariate)"
@@ -930,10 +927,10 @@ check_outliers.data.frame <- function(x,
       ID.names = ID.names))
 
     count.table <- datawizard::data_filter(
-      out$data_optics, Outlier_OPTICS > 0.5)
+      out$data_optics, "Outlier_OPTICS > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("OPTICS"), as_data_frame = TRUE)
+      count.table, "OPTICS", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_OPTICS <- "(Multivariate)"
@@ -957,10 +954,10 @@ check_outliers.data.frame <- function(x,
       ID.names = ID.names))
 
     count.table <- datawizard::data_filter(
-      out$data_lof, Outlier_LOF > 0.5)
+      out$data_lof, "Outlier_LOF > 0.5")
 
     count.table <- datawizard::data_remove(
-      count.table, contains("LOF"), as_data_frame = TRUE)
+      count.table, "LOF", regex = TRUE, as_data_frame = TRUE)
 
     if (nrow(count.table) >= 1) {
       count.table$n_LOF <- "(Multivariate)"
@@ -1008,7 +1005,7 @@ check_outliers.data.frame <- function(x,
   outlier_count <- lapply(outlier_count, function(x) {
     num.df <- x[!names(x) %in% c("Row", ID)]
     if (isTRUE(nrow(num.df) >= 1)) {
-      num.df <- datawizard::data_recode(
+      num.df <- datawizard::change_code(
         num.df, recode = list(`2` = "(Multivariate)"))
       num.df <- as.data.frame(lapply(num.df, as.numeric))
       x$max <- apply(num.df, 1, max)
@@ -1256,7 +1253,7 @@ check_outliers.geeglm <- check_outliers.gls
     names(output) <- paste0(names(output), "_robust")
     output$data_zscore_robust <- datawizard::data_addsuffix(
       output$data_zscore_robust, "_robust",
-      select = ends_with("Zscore"))
+      select = "Zscore$", regex = TRUE)
   }
 
   output
@@ -1402,11 +1399,10 @@ check_outliers.geeglm <- check_outliers.gls
 .check_outliers_mahalanobis <- function(x,
                                         threshold = NULL,
                                         ID.names = NULL,
-                                        error = FALSE,
                                         ...) {
 
-  if(any(is.na(x)) & error == TRUE) {
-    stop("NA values are not allowed for the Mahalanobis method.")
+  if (any(is.na(x)) || any(with(x, x == Inf))) {
+    stop("missing or infinite values are not allowed.")
   }
 
   out <- data.frame(Row = 1:nrow(x))
@@ -1627,7 +1623,6 @@ check_outliers.geeglm <- check_outliers.gls
   out$Distance_LOF <- log(dbscan::lof(x, minPts = ncol(x)))
 
   # Threshold
-  # TODO: use tukey_mc from bigutilsr package
   cutoff <- stats::qnorm(1 - threshold) * stats::sd(out$Distance_LOF)
 
   # Filter
