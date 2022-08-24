@@ -24,6 +24,8 @@
 #'   for any of the method run.
 #' @param ID Optional, to report an ID column along with the row number when
 #'   reporting outliers by variable (for univariate methods).
+#' @param error Logical, if `TRUE`, throw an error if data contains missing
+#'   values where actually not allowed.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to `ICSOutlier::ics.outlier()`. When `method = "mahalanobis"`,
 #' they are  passed down to `stats::mahalanobis()`.
