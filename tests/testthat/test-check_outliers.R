@@ -1,11 +1,10 @@
 if (requiet("testthat") && requiet("performance")) {
 
-  test_that({
-
-    expect_equal(
+  test_that("zscore negative threshold", {
+    expect_error(
       check_outliers(mtcars$mpg, method = "zscore", threshold = -1),
-      "Error: The `threshold` argument must be one or greater for method 'zscore'."
+      "The `threshold` argument"
     )
+  })
 
-    })
 }

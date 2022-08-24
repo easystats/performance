@@ -30,6 +30,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
+            easystats/insight
             easystats/datawizard
             easystats/bayestestR
             deps::.

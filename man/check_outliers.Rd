@@ -39,7 +39,8 @@ considered as outlier. If \code{NULL}, default values will be used (see
 'Details'). If a numeric value is given, it will be used as the threshold
 for any of the method run.}
 
-\item{ID}{Optional, to report an ID column along with the row number when reporting outliers by variable (for univariate methods).}
+\item{ID}{Optional, to report an ID column along with the row number when
+reporting outliers by variable (for univariate methods).}
 }
 \value{
 A logical vector of the detected outliers with a nice printing

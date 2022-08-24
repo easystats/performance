@@ -93,7 +93,7 @@ print.performance_roc <- function(x, ...) {
     dat <- split(x, f = x$Model)
     max_space <- max(nchar(x$Model))
 
-    for (i in 1:length(dat)) {
+    for (i in seq_along(dat)) {
       cat(sprintf(
         "  %*s: %.2f%%\n",
         max_space,
@@ -134,7 +134,9 @@ print.performance_roc <- function(x, ...) {
   response <- new_data[[insight::find_response(x)]]
 
   if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {
-    stop(insight::format_message("Can't calculate ROC for models with response-matrix (i.e. response variables with success/trials)."), call. = FALSE)
+    stop(insight::format_message(
+      "Can't calculate ROC for models with response-matrix (i.e. response variables with success/trials)."
+    ), call. = FALSE)
   }
 
   dat <- .performance_roc_numeric(response, predictions)
@@ -145,7 +147,7 @@ print.performance_roc <- function(x, ...) {
 
 
 .performance_roc_models <- function(x, names) {
-  l <- lapply(1:length(x), function(i) {
+  l <- lapply(seq_along(x), function(i) {
     if (.valid_roc_models(x[[i]])) {
       .performance_roc_model(x = x[[i]], new_data = NULL, model_name = names[i])
     } else {

@@ -1,7 +1,7 @@
 #' @title Nakagawa's R2 for mixed models
 #' @name r2_nakagawa
 #'
-#' @description Compute the marginal and conditional r-squared value for
+#' @description Compute the \emph{marginal} and \emph{conditional} r-squared value for
 #'  mixed effects models with complex random effects structures.
 #'
 #' @param model A mixed effects model.
@@ -20,14 +20,18 @@
 #' @details
 #'
 #' Marginal and conditional r-squared values for mixed models are calculated
-#' based on \cite{Nakagawa et al. 2017}. For more details on the computation of
-#' the variances, see `?insight::get_variance`.
-#'  \cr \cr
-#'  The marginal r-squared considers only the variance of the fixed effects,
-#'  while the conditional r-squared takes both the fixed and random effects into
-#'  account. The random effect variances are actually the mean random effect
-#'  variances, thus the r-squared value is also appropriate for mixed models
-#'  with random slopes or nested random effects (see \cite{Johnson 2014}).
+#' based on \cite{Nakagawa et al. (2017)}. For more details on the computation of
+#' the variances, see `?insight::get_variance`. The random effect variances are
+#' actually the mean random effect variances, thus the r-squared value is also
+#' appropriate for mixed models with random slopes or nested random effects
+#' (see \cite{Johnson, 2014}).
+#'
+#' \itemize{
+#'  \item Conditional R2: takes both the fixed and random effects into account.
+#'  \item Marginal R2: considers only the variance of the fixed effects.
+#' }
+#' The contribution of random effects can be deduced by the subtracting the
+#' marginal R2 from the conditional R2.
 #'
 #' @references \itemize{
 #'  \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
