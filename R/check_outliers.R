@@ -347,7 +347,8 @@ check_outliers <- function(x, ...) {
 check_outliers.default <- function(x,
                                    method = c("cook", "pareto"),
                                    threshold = NULL,
-                                   ID = NULL) {
+                                   ID = NULL,
+                                   ...) {
 
   # Check args
   if (all(method == "all")) {
@@ -1268,7 +1269,7 @@ check_outliers.geeglm <- check_outliers.gls
     names(output) <- paste0(names(output), "_robust")
     output$data_zscore_robust <- datawizard::data_addsuffix(
       output$data_zscore_robust, "_robust",
-      select = ends_with("Zscore"))
+      select = "Zscore$", regex = TRUE)
   }
 
   output

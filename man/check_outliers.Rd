@@ -9,7 +9,13 @@
 \usage{
 check_outliers(x, ...)
 
-\method{check_outliers}{default}(x, method = c("cook", "pareto"), threshold = NULL, ID = NULL)
+\method{check_outliers}{default}(
+  x,
+  method = c("cook", "pareto"),
+  threshold = NULL,
+  ID = NULL,
+  ...
+)
 
 \method{check_outliers}{numeric}(x, method = "zscore_robust", threshold = NULL, ...)
 
