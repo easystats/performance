@@ -150,10 +150,7 @@ they are  passed down to <code><a href="https://rdrr.io/r/stats/mahalanobis.html
 
 
 <dt>method</dt>
-<dd><p>The outlier detection method(s). Can be "all" or some of
-c("cook", "pareto", "zscore", "zscore_robust", "iqr", "ci", "eti",
-"hdi", "bci", "mahalanobis", "mahalanobis_robust", "mcd", "ics",
-"optics", "lof").</p></dd>
+<dd><p>The outlier detection method(s). Can be <code>"all"`` or some of </code>"cook"<code>, </code>"pareto"<code>, </code>"zscore"<code>, </code>"zscore_robust"<code>, </code>"iqr"<code>, </code>"ci"<code>, </code>"eti"<code>, </code>"hdi"<code>, </code>"bci"<code>, </code>"mahalanobis"<code>, </code>"mahalanobis_robust"<code>, </code>"mcd"<code>, </code>"ics"<code>, </code>"optics"<code>or</code>"lof"`.</p></dd>
 
 
 <dt>threshold</dt>
@@ -200,8 +197,19 @@ Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et
 al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008;
 and Local Outlier Factor, Breunig et al., 2000), we excluded n participants
 that were classified as outliers by at least half of the methods used."</em></p>
-<div class="section">
-<h3 id="model-specific-methods">Model-specific methods<a class="anchor" aria-label="anchor" href="#model-specific-methods"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>There is also a
+<a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
+implemented in the
+<a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>. <strong>Please
+note</strong> that the range of the distance-values along the y-axis is re-scaled
+to range from 0 to 1.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="model-specific-methods">Model-specific methods<a class="anchor" aria-label="anchor" href="#model-specific-methods"></a></h2>
+    
 
 <ul><li><p><strong>Cook's Distance</strong>:
 Among outlier detection methods, Cook's distance and leverage are less
@@ -222,9 +230,9 @@ user should be warned, although in practice the authors of the <code>loo</code>
 package observed good performance for values of k up to 0.7 (the default
 threshold used by <code>performance</code>).</p></li>
 </ul></div>
-
-<div class="section">
-<h3 id="univariate-methods">Univariate methods<a class="anchor" aria-label="anchor" href="#univariate-methods"></a></h3>
+    <div class="section level2">
+    <h2 id="univariate-methods">Univariate methods<a class="anchor" aria-label="anchor" href="#univariate-methods"></a></h2>
+    
 
 <ul><li><p><strong>Z-scores</strong> <code>("zscore", "zscore_robust")</code>:
 The Z-score, or standard score, is a way of describing a data point as
@@ -232,7 +240,7 @@ deviance from a central value, in terms of standard deviations from the mean
 (<code>"zscore"</code>) or, as it is here the case (<code>"zscore_robust"</code>) by
 default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from
 the median (which are robust measures of dispersion and centrality). The
-default threshold to classify outliers is 1.959 (<code>threshold = list("zscore" = 1.959)</code>), corresponding to the 2.5\<!-- % (\code{qnorm(0.975)}) -->
+default threshold to classify outliers is 1.959 (<code>threshold =  list("zscore" = 1.959)</code>), corresponding to the 2.5\<!-- % (\code{qnorm(0.975)}) -->
 most extreme observations (assuming the data is normally distributed).
 Importantly, the Z-score method is univariate: it is computed column by
 column. If a dataframe is passed, the Z-score is calculated for each
@@ -261,9 +269,9 @@ as outliers all observations that are outside the 95\<!-- % CI on any of the -->
 variable. See <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code> for more details
 about the intervals.</p></li>
 </ul></div>
-
-<div class="section">
-<h3 id="multivariate-methods">Multivariate methods<a class="anchor" aria-label="anchor" href="#multivariate-methods"></a></h3>
+    <div class="section level2">
+    <h2 id="multivariate-methods">Multivariate methods<a class="anchor" aria-label="anchor" href="#multivariate-methods"></a></h2>
+    
 
 <ul><li><p><strong>Mahalanobis Distance</strong>:
 Mahalanobis distance (Mahalanobis, 1930) is often used for multivariate
@@ -311,39 +319,29 @@ always detect outliers. Note that <code>method = "optics"</code> requires the
 <span class="pkg">dbscan</span> package to be installed, and that it takes some time to compute
 the results.</p></li>
 </ul></div>
-
-<div class="section">
-<h3 id="threshold-specification">Threshold specification<a class="anchor" aria-label="anchor" href="#threshold-specification"></a></h3>
-<p>Default thresholds are currently specified as follows:</p>
-<div class="sourceCode"><pre><code><span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  zscore <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.025</span><span class="op">)</span>,</span>
-<span>  zscore_robust <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.025</span><span class="op">)</span>,</span>
-<span>  iqr <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  eti <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  hdi <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  bci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  cook <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html" class="external-link">qf</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  pareto <span class="op">=</span> <span class="fl">0.7</span>,</span>
-<span>  mahalanobis <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">qchisq</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.025</span>, df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  mahalanobis_robust <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">qchisq</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.025</span>, df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  mcd <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">qchisq</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.025</span>, df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  ics <span class="op">=</span> <span class="fl">0.025</span>,</span>
-<span>  optics <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
-<span>  lof <span class="op">=</span> <span class="fl">0.025</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
-
-    </div>
     <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>There is also a
-<a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
-implemented in the
-<a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>. <strong>Please
-note</strong> that the range of the distance-values along the y-axis is re-scaled
-to range from 0 to 1.</p>
+    <h2 id="threshold-specification">Threshold specification<a class="anchor" aria-label="anchor" href="#threshold-specification"></a></h2>
+    
+
+
+<p>Default thresholds are currently specified as follows:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zscore =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zscore_robust =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">iqr =</span> <span class="fl">1.5</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci =</span> <span class="fl">0.95</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">eti =</span> <span class="fl">0.95</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">hdi =</span> <span class="fl">0.95</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">bci =</span> <span class="fl">0.95</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cook =</span> stats<span class="sc">::</span><span class="fu">qf</span>(<span class="fl">0.5</span>, <span class="fu">ncol</span>(x), <span class="fu">nrow</span>(x) <span class="sc">-</span> <span class="fu">ncol</span>(x)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pareto =</span> <span class="fl">0.7</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">mahalanobis =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">mahalanobis_robust =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">mcd =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ics =</span> <span class="fl">0.025</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">optics =</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">ncol</span>(x),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">lof =</span> <span class="fl">0.025</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
