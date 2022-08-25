@@ -23,4 +23,3 @@
 ^\.github$
 \.code-workspace$
 \.lintr$
-^CRAN-SUBMISSION$

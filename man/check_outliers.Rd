@@ -9,27 +9,38 @@
 \usage{
 check_outliers(x, ...)
 
-\method{check_outliers}{default}(x, method = c("cook", "pareto"), threshold = NULL, ...)
+\method{check_outliers}{default}(
+  x,
+  method = c("cook", "pareto"),
+  threshold = NULL,
+  ID = NULL,
+  ...
+)
 
 \method{check_outliers}{numeric}(x, method = "zscore_robust", threshold = NULL, ...)
 
-\method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ...)
+\method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ID = NULL, ...)
 }
 \arguments{
 \item{x}{A model or a data.frame object.}
 
-\item{...}{When \code{method = "ics"}, further arguments in \code{...} are
-passed down to \code{ICSOutlier::ics.outlier()}.}
+\item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
+down to \code{ICSOutlier::ics.outlier()}. When \code{method = "mahalanobis"},
+they are  passed down to \code{stats::mahalanobis()}.}
 
 \item{method}{The outlier detection method(s). Can be "all" or some of
-c("cook", "pareto", "zscore", "zscore_robust", "iqr", "eti", "hdi", "bci",
-"mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof").}
+c("cook", "pareto", "zscore", "zscore_robust", "iqr", "ci", "eti",
+"hdi", "bci", "mahalanobis", "mahalanobis_robust", "mcd", "ics",
+"optics", "lof").}
 
 \item{threshold}{A list containing the threshold values for each method (e.g.
 \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 considered as outlier. If \code{NULL}, default values will be used (see
 'Details'). If a numeric value is given, it will be used as the threshold
 for any of the method run.}
+
+\item{ID}{Optional, to report an ID column along with the row number when
+reporting outliers by variable (for univariate methods).}
 }
 \value{
 A logical vector of the detected outliers with a nice printing
@@ -179,7 +190,7 @@ The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
 clustering technique that can be used for outliers detection). The threshold
 argument is passed as \code{minPts}, which corresponds to the minimum size
 of a cluster. By default, this size is set at 2 times the number of columns
-(Sander et al., 1998). Compared to the others techniques, that will always
+(Sander et al., 1998). Compared to the other techniques, that will always
 detect several outliers (as these are usually defined as a percentage of
 extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
@@ -194,8 +205,8 @@ equivalent of SD) of the median (roughly corresponding to the 2.5\\% most
 extreme observations). Requires the \pkg{solitude} package.
 
 \item \strong{Local Outlier Factor}:
-Based on a K nearest neighbours algorithm, LOF compares the local density of
-an point to the local densities of its neighbors instead of computing a
+Based on a K nearest neighbors algorithm, LOF compares the local density of
+a point to the local densities of its neighbors instead of computing a
 distance from the center (Breunig et al., 2000). Points that have a
 substantially lower density than their neighbors are considered outliers. A
 LOF score of approximately 1 indicates that density around the point is
@@ -211,12 +222,16 @@ Default thresholds are currently specified as follows:
 \preformatted{
 list(
   zscore = stats::qnorm(p = 1 - 0.025),
+  zscore_robust = stats::qnorm(p = 1 - 0.025),
   iqr = 1.5,
   ci = 0.95,
+  eti = 0.95,
+  hdi = 0.95,
+  bci = 0.95,
   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
   pareto = 0.7,
   mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-  robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
+  mahalanobis_robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
   mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
   ics = 0.025,
   optics = 2 * ncol(x),
@@ -295,7 +310,7 @@ if (require("see")) {
 insight::get_data(model)[outliers_list, ] # Show outliers data
 
 if (require("MASS")) {
-  check_outliers(model, method = c("mahalabonis", "mcd"))
+  check_outliers(model, method = c("mahalanobis", "mcd"))
 }
 if (require("ICS")) {
   # This one takes some seconds to finish...
