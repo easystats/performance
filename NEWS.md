@@ -19,6 +19,12 @@
   This is particular useful for models with many observations, where generating
   the plot would be very slow.
 
+* Print method for `check_outliers()` changed significantly: now states the 
+  methods, thresholds, and variables used, reports outliers per variable (for 
+  univariate methods) as well as any observation flagged for several 
+  variables/methods. Includes a new optional ID argument to add along the 
+  row number in the output. (@rempsyc #443)
+
 ## Bug Fixes
 
 * Fixes wrong column names in `model_performance()` output for `kmeans` objects
