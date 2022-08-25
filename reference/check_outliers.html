@@ -310,22 +310,6 @@ extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that <code>method = "optics"</code> requires the
 <span class="pkg">dbscan</span> package to be installed, and that it takes some time to compute
 the results.</p></li>
-<li><p><strong>Isolation Forest</strong>:
-The outliers are detected using the anomaly score of an isolation forest (a
-class of random forest). The default threshold of 0.025 will classify as
-outliers the observations located at <code>qnorm(1-0.025) * MAD)</code> (a robust
-equivalent of SD) of the median (roughly corresponding to the 2.5\<!-- % most -->
-extreme observations). Requires the <span class="pkg">solitude</span> package.</p></li>
-<li><p><strong>Local Outlier Factor</strong>:
-Based on a K nearest neighbors algorithm, LOF compares the local density of
-a point to the local densities of its neighbors instead of computing a
-distance from the center (Breunig et al., 2000). Points that have a
-substantially lower density than their neighbors are considered outliers. A
-LOF score of approximately 1 indicates that density around the point is
-comparable to its neighbors. Scores significantly larger than 1 indicate
-outliers. The default threshold of 0.025 will classify as outliers the
-observations located at <code>qnorm(1-0.025) * SD)</code> of the log-transformed
-LOF distance. Requires the <span class="pkg">dbscan</span> package.</p></li>
 </ul></div>
 
 <div class="section">
@@ -347,7 +331,6 @@ LOF distance. Requires the <span class="pkg">dbscan</span> package.</p></li>
 <span>  mcd <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html" class="external-link">qchisq</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.025</span>, df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  ics <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  optics <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
-<span>  iforest <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  lof <span class="op">=</span> <span class="fl">0.025</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
