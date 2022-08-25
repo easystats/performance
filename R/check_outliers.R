@@ -1130,7 +1130,10 @@ check_outliers.BFBayesFactor <- function(x,
   }
 
   if (!missing(ID)) {
-    warning("ID argument not supported with objects of class 'model'")
+    warning(
+      paste0("ID argument not supported for objects of class `", class(x)[1], "`."),
+      call. = FALSE
+    )
   }
 
   d <- insight::get_predictors(x)
@@ -1150,7 +1153,10 @@ check_outliers.gls <- function(x,
                                ...) {
 
   if (!missing(ID)) {
-    warning("ID argument not supported with objects of class 'model'")
+    warning(
+      paste0("ID argument not supported for objects of class `", class(x)[1], "`."),
+      call. = FALSE
+    )
   }
 
   valid_methods <- c("zscore_robust", "iqr", "ci", "pareto", "optics")
@@ -1412,7 +1418,7 @@ check_outliers.geeglm <- check_outliers.gls
                                         ...) {
 
   if (any(is.na(x)) || any(with(x, x == Inf))) {
-    stop("missing or infinite values are not allowed.")
+    stop("Missing or infinite values are not allowed.", call. = FALSE)
   }
 
   out <- data.frame(Row = seq_len(nrow(x)))
