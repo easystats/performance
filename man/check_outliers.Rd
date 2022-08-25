@@ -28,10 +28,7 @@ check_outliers(x, ...)
 down to \code{ICSOutlier::ics.outlier()}. When \code{method = "mahalanobis"},
 they are  passed down to \code{stats::mahalanobis()}.}
 
-\item{method}{The outlier detection method(s). Can be "all" or some of
-c("cook", "pareto", "zscore", "zscore_robust", "iqr", "ci", "eti",
-"hdi", "bci", "mahalanobis", "mahalanobis_robust", "mcd", "ics",
-"optics", "lof").}
+\item{method}{The outlier detection method(s). Can be \verb{"all"`` or some of }"cook"\verb{, }"pareto"\verb{, }"zscore"\verb{, }"zscore_robust"\verb{, }"iqr"\verb{, }"ci"\verb{, }"eti"\verb{, }"hdi"\verb{, }"bci"\verb{, }"mahalanobis"\verb{, }"mahalanobis_robust"\verb{, }"mcd"\verb{, }"ics"\verb{, }"optics"\code{or}"lof"`.}
 
 \item{threshold}{A list containing the threshold values for each method (e.g.
 \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
@@ -81,8 +78,17 @@ Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et
 al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008;
 and Local Outlier Factor, Breunig et al., 2000), we excluded n participants
 that were classified as outliers by at least half of the methods used."}
+}
+\note{
+There is also a
+\href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the
+\href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please
+note} that the range of the distance-values along the y-axis is re-scaled
+to range from 0 to 1.
+}
+\section{Model-specific methods}{
 
-\subsection{Model-specific methods}{
 \itemize{
 \item \strong{Cook's Distance}:
 Among outlier detection methods, Cook's distance and leverage are less
@@ -95,7 +101,6 @@ approximation or heuristic is to use 4 divided by the numbers of
 observations, which usually corresponds to a lower threshold (i.e., more
 outliers are detected). This only works for Frequentist models. For Bayesian
 models, see \code{pareto}.
-
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
@@ -103,9 +108,11 @@ Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the
 user should be warned, although in practice the authors of the \code{loo}
 package observed good performance for values of k up to 0.7 (the default
 threshold used by \code{performance}).
-}}
+}
+}
 
-\subsection{Univariate methods}{
+\section{Univariate methods}{
+
 \itemize{
 \item \strong{Z-scores} \verb{("zscore", "zscore_robust")}:
 The Z-score, or standard score, is a way of describing a data point as
@@ -113,7 +120,7 @@ deviance from a central value, in terms of standard deviations from the mean
 (\code{"zscore"}) or, as it is here the case (\code{"zscore_robust"}) by
 default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from
 the median (which are robust measures of dispersion and centrality). The
-default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = 1.959)}), corresponding to the 2.5\\% (\code{qnorm(0.975)})
+default threshold to classify outliers is 1.959 (\code{threshold =  list("zscore" = 1.959)}), corresponding to the 2.5\\% (\code{qnorm(0.975)})
 most extreme observations (assuming the data is normally distributed).
 Importantly, the Z-score method is univariate: it is computed column by
 column. If a dataframe is passed, the Z-score is calculated for each
@@ -122,7 +129,6 @@ observations. Thus, all observations that are extreme on at least one
 variable might be detected as outliers. Thus, this method is not suited for
 high dimensional data (with many columns), returning too liberal results
 (detecting many outliers).
-
 \item \strong{IQR} \code{("iqr")}:
 Using the IQR (interquartile range) is a robust method developed by John
 Tukey, which often appears in box-and-whisker plots (e.g., in
@@ -132,7 +138,6 @@ fell outside of either 1.5 times (the default threshold) the IQR below the
 first or above the third quartile. Similar to the Z-score method, this is a
 univariate method for outliers detection, returning outliers detected for at
 least one column, and might thus not be suited to high dimensional data.
-
 \item \strong{CI} \verb{("ci", "eti", "hdi", "bci")}:
 Another univariate method is to compute, for each variable, some sort of
 "confidence" interval and consider as outliers values lying beyond the edges
@@ -143,9 +148,11 @@ Interval (\code{"bci"}). The default threshold is \code{0.95}, considering
 as outliers all observations that are outside the 95\\% CI on any of the
 variable. See \code{\link[bayestestR:ci]{bayestestR::ci()}} for more details
 about the intervals.
-}}
+}
+}
 
-\subsection{Multivariate methods}{
+\section{Multivariate methods}{
+
 \itemize{
 \item \strong{Mahalanobis Distance}:
 Mahalanobis distance (Mahalanobis, 1930) is often used for multivariate
@@ -159,13 +166,11 @@ of freedom (k being the number of columns). By default, the alpha threshold
 is set to 0.025 (corresponding to the 2.5\\% most extreme observations;
 Cabana, 2019). This criterion is a natural extension of the median plus or
 minus a coefficient times the MAD method (Leys et al., 2013).
-
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
 1972). Requires the \pkg{bigutilsr} package. See the
 \code{bigutilsr::dist_ogk()} function.
-
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
 Mahalanobis Distance is not a robust way to determine outliers, as it uses
@@ -175,7 +180,6 @@ calculates the mean and covariance matrix based on the most central subset of
 the data (by default, 66\\%), before computing the Mahalanobis Distance. This
 is deemed to be a more robust method of identifying and removing outliers
 than regular Mahalanobis distance.
-
 \item \strong{Invariant Coordinate Selection (ICS)}:
 The outlier are detected using ICS, which by default uses an alpha threshold
 of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off
@@ -183,7 +187,6 @@ value for outliers classification. Refer to the help-file of
 \code{ICSOutlier::ics.outlier()} to get more details about this procedure.
 Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
 to be installed, and that it takes some time to compute the results.
-
 \item \strong{OPTICS}:
 The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
 (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised
@@ -196,13 +199,15 @@ extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
 \pkg{dbscan} package to be installed, and that it takes some time to compute
 the results.
-}}
+}
+}
 
-\subsection{Threshold specification}{
+\section{Threshold specification}{
+
+
 Default thresholds are currently specified as follows:
 
-\preformatted{
-list(
+\if{html}{\out{<div class="sourceCode">}}\preformatted{list(
   zscore = stats::qnorm(p = 1 - 0.025),
   zscore_robust = stats::qnorm(p = 1 - 0.025),
   iqr = 1.5,
@@ -219,16 +224,9 @@ list(
   optics = 2 * ncol(x),
   lof = 0.025
 )
-}}
+}\if{html}{\out{</div>}}
 }
-\note{
-There is also a
-\href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-implemented in the
-\href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please
-note} that the range of the distance-values along the y-axis is re-scaled
-to range from 0 to 1.
-}
+
 \examples{
 data <- mtcars # Size nrow(data) = 32
 
