@@ -48,7 +48,7 @@
 #'   multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
 #' - Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and
 #'   Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
-#'- Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
+#' - Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
 #'   Cambridge University Press.
 #'
 #' @examples

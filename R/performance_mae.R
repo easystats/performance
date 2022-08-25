@@ -29,7 +29,8 @@ performance_mae.default <- function(model, verbose = TRUE, ...) {
   .is_model_valid(model)
 
   pred <- tryCatch(insight::get_predicted(model, ci = NULL, verbose = verbose, ...),
-                   error = function(e) NULL)
+    error = function(e) NULL
+  )
 
   observed <- insight::get_response(model)
   mean(abs(observed - pred))
