@@ -178,24 +178,6 @@
 #'  always detect outliers. Note that `method = "optics"` requires the
 #'  \pkg{dbscan} package to be installed, and that it takes some time to compute
 #'  the results.
-#'
-#' \item **Isolation Forest**:
-#'  The outliers are detected using the anomaly score of an isolation forest (a
-#'  class of random forest). The default threshold of 0.025 will classify as
-#'  outliers the observations located at `qnorm(1-0.025) * MAD)` (a robust
-#'  equivalent of SD) of the median (roughly corresponding to the 2.5\% most
-#'  extreme observations). Requires the \pkg{solitude} package.
-#'
-#'  \item **Local Outlier Factor**:
-#'  Based on a K nearest neighbors algorithm, LOF compares the local density of
-#'  a point to the local densities of its neighbors instead of computing a
-#'  distance from the center (Breunig et al., 2000). Points that have a
-#'  substantially lower density than their neighbors are considered outliers. A
-#'  LOF score of approximately 1 indicates that density around the point is
-#'  comparable to its neighbors. Scores significantly larger than 1 indicate
-#'  outliers. The default threshold of 0.025 will classify as outliers the
-#'  observations located at `qnorm(1-0.025) * SD)` of the log-transformed
-#'  LOF distance. Requires the \pkg{dbscan} package.
 #' }}
 #'
 #' \subsection{Threshold specification}{
@@ -217,7 +199,6 @@
 #'   mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
 #'   ics = 0.025,
 #'   optics = 2 * ncol(x),
-#'   iforest = 0.025,
 #'   lof = 0.025
 #' )
 #' }}
@@ -360,7 +341,6 @@ check_outliers.default <- function(x,
       "mcd",
       "ics",
       "optics",
-      "iforest",
       "lof"
     )
   }
@@ -382,7 +362,6 @@ check_outliers.default <- function(x,
       "mcd",
       "ics",
       "optics",
-      "iforest",
       "lof"
     ),
     several.ok = TRUE
@@ -404,7 +383,9 @@ check_outliers.default <- function(x,
   }
 
   if (!missing(ID)) {
-    warning("ID argument not supported with objects of class 'model'")
+    warning(insight::format_message(
+      "ID argument not supported for model objects of class `", class(x)[1], "`."
+    ), call. = FALSE)
   }
 
   # Others
@@ -715,7 +696,7 @@ check_outliers.data.frame <- function(x,
   if (all(method == "all")) {
     method <- c(
       "zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis",
-      "mahalanobis_robust", "mcd", "ics", "optics", "iforest", "lof"
+      "mahalanobis_robust", "mcd", "ics", "optics", "lof"
     )
   }
   method <- match.arg(method, c(
@@ -1198,7 +1179,7 @@ check_outliers.BFBayesFactor <- function(x,
                                          ID = NULL,
                                          ...) {
   if (!insight::is_model(x)) {
-    stop("Collinearity only applicable to regression models.")
+    stop("Collinearity only applicable to regression models.", call. = FALSE)
   }
 
   if (!missing(ID)) {
@@ -1606,7 +1587,7 @@ check_outliers.geeglm <- check_outliers.gls
     if (ncol(x) == 1) {
       insight::print_color("At least two numeric predictors are required to detect outliers.\n", "red")
     } else {
-      insight::print_color(sprintf("'check_outliers()' does not support models of class '%s'.\n", class(x)[1]), "red")
+      insight::print_color(sprintf("`check_outliers()` does not support models of class `%s`.\n", class(x)[1]), "red")
     }
   }
 
@@ -1735,7 +1716,7 @@ check_outliers.geeglm <- check_outliers.gls
 
 #' @export
 check_outliers.glmmTMB <- function(x, ...) {
-  message(paste0("`check_outliers()` does not yet support models of class ", class(x)[1], "."))
+  message(paste0("`check_outliers()` does not yet support models of class `", class(x)[1], "`."))
   NULL
 }
 

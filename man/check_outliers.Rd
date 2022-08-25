@@ -196,24 +196,6 @@ extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
 \pkg{dbscan} package to be installed, and that it takes some time to compute
 the results.
-
-\item \strong{Isolation Forest}:
-The outliers are detected using the anomaly score of an isolation forest (a
-class of random forest). The default threshold of 0.025 will classify as
-outliers the observations located at \verb{qnorm(1-0.025) * MAD)} (a robust
-equivalent of SD) of the median (roughly corresponding to the 2.5\\% most
-extreme observations). Requires the \pkg{solitude} package.
-
-\item \strong{Local Outlier Factor}:
-Based on a K nearest neighbors algorithm, LOF compares the local density of
-a point to the local densities of its neighbors instead of computing a
-distance from the center (Breunig et al., 2000). Points that have a
-substantially lower density than their neighbors are considered outliers. A
-LOF score of approximately 1 indicates that density around the point is
-comparable to its neighbors. Scores significantly larger than 1 indicate
-outliers. The default threshold of 0.025 will classify as outliers the
-observations located at \verb{qnorm(1-0.025) * SD)} of the log-transformed
-LOF distance. Requires the \pkg{dbscan} package.
 }}
 
 \subsection{Threshold specification}{
@@ -235,7 +217,6 @@ list(
   mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
   ics = 0.025,
   optics = 2 * ncol(x),
-  iforest = 0.025,
   lof = 0.025
 )
 }}
