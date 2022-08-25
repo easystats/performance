@@ -214,7 +214,7 @@ print.compare_performance <- function(x, digits = 3, layout = "horizontal", ...)
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
   if ("Performance_Score" %in% colnames(formatted_table)) {
-    footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+    footer <- c(sprintf("\nModel `%s` (of class `%s`) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
   } else {
     footer <- NULL
   }
