@@ -1,13 +1,14 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+
 on:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
 
-name: test-coverage
+name: check-readme
 
 jobs:
-  test-coverage:
-    uses: easystats/workflows/.github/workflows/test-coverage.yaml@main
+  check-readme:
+    uses: easystats/workflows/.github/workflows/check-readme.yaml@main
