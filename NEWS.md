@@ -23,7 +23,7 @@
   methods, thresholds, and variables used, reports outliers per variable (for 
   univariate methods) as well as any observation flagged for several 
   variables/methods. Includes a new optional ID argument to add along the 
-  row number in the output. (@rempsyc #443)
+  row number in the output (@rempsyc #443).
 
 ## Bug Fixes
 
