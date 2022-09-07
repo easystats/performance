@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [main, master]
 
-name: test-coverage
+name: lint
 
 jobs:
-  test-coverage:
-    uses: easystats/workflows/.github/workflows/test-coverage.yaml@main
+  lint:
+    uses: easystats/workflows/.github/workflows/lint.yaml@main

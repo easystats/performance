@@ -6,8 +6,8 @@ on:
   pull_request:
     branches: [main, master]
 
-name: test-coverage
+name: HTML5 check
 
 jobs:
-  test-coverage:
-    uses: easystats/workflows/.github/workflows/test-coverage.yaml@main
+  HTML5-check:
+    uses: easystats/workflows/.github/workflows/html-5-check.yaml@main
