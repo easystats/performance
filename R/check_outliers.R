@@ -1417,14 +1417,6 @@ check_outliers.geeglm <- check_outliers.gls
 
   # Take the max
   out <- as.data.frame(apply(Distance_CI, 1, max, na.rm = TRUE))
-
-
-
-    data.frame(x = as.numeric(sapply(as.data.frame(t(Distance_CI)),
-    max,
-    na.omit = TRUE,
-    na.rm = TRUE
-  )))
   names(out) <- paste0("Distance_", method)
 
   # Filter
