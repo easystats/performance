@@ -25,6 +25,10 @@
   variables/methods. Includes a new optional ID argument to add along the 
   row number in the output. (@rempsyc #443)
 
+* `check_outliers()` now uses more conventional outlier thresholds. The `IQR` 
+  and confidence interval methods now gain improved distance scores that
+  are continuous instead of discrete.
+
 ## Bug Fixes
 
 * Fixes wrong column names in `model_performance()` output for `kmeans` objects
