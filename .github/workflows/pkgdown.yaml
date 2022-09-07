@@ -5,9 +5,12 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  release:
+    types: [published]
+  workflow_dispatch:
 
-name: test-coverage
+name: pkgdown
 
 jobs:
-  test-coverage:
-    uses: easystats/workflows/.github/workflows/test-coverage.yaml@main
+  pkgdown:
+    uses: easystats/workflows/.github/workflows/pkgdown.yaml@main
