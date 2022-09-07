@@ -137,6 +137,9 @@ fell outside of either 1.5 times (the default threshold is 1.7) the IQR below
 the first or above the third quartile. Similar to the Z-score method, this is
 a univariate method for outliers detection, returning outliers detected for
 at least one column, and might thus not be suited to high dimensional data.
+The distance score for the IQR is the absolute deviation from the median of
+the upper and lower IQR thresholds. Then, this value is divided by the IQR
+threshold, to “standardize” it and facilitate interpretation.
 \item \strong{CI} \verb{("ci", "eti", "hdi", "bci")}:
 Another univariate method is to compute, for each variable, some sort of
 "confidence" interval and consider as outliers values lying beyond the edges
@@ -146,7 +149,10 @@ Density Interval (\code{"hdi"}) or the Bias Corrected and Accelerated
 Interval (\code{"bci"}). The default threshold is \code{0.95}, considering
 as outliers all observations that are outside the 95\% CI on any of the
 variable. See \code{\link[bayestestR:ci]{bayestestR::ci()}} for more details
-about the intervals.
+about the intervals. The distance score for the CI methods is the absolute
+deviation from the median of the upper and lower CI thresholds. Then, this
+value is divided by the difference between the upper and lower CI bounds
+divided by two, to “standardize” it and facilitate interpretation.
 }
 }
 

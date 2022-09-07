@@ -110,6 +110,9 @@
 #'  the first or above the third quartile. Similar to the Z-score method, this is
 #'  a univariate method for outliers detection, returning outliers detected for
 #'  at least one column, and might thus not be suited to high dimensional data.
+#'  The distance score for the IQR is the absolute deviation from the median of
+#'  the upper and lower IQR thresholds. Then, this value is divided by the IQR
+#'  threshold, to “standardize” it and facilitate interpretation.
 #'
 #'  - **CI** `("ci", "eti", "hdi", "bci")`:
 #'  Another univariate method is to compute, for each variable, some sort of
@@ -120,7 +123,10 @@
 #'  Interval (`"bci"`). The default threshold is `0.95`, considering
 #'  as outliers all observations that are outside the 95% CI on any of the
 #'  variable. See [bayestestR::ci()] for more details
-#'  about the intervals.
+#'  about the intervals. The distance score for the CI methods is the absolute
+#'  deviation from the median of the upper and lower CI thresholds. Then, this
+#'  value is divided by the difference between the upper and lower CI bounds
+#'  divided by two, to “standardize” it and facilitate interpretation.
 #'
 #' @section Multivariate methods:
 #'
