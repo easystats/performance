@@ -1,5 +1,9 @@
 # performance 0.9.x
 
+## Breaking Change
+
+* The minimum needed R version has been bumped to `3.6`.
+
 # performance 0.9.2
 
 ## General
