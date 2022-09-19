@@ -761,7 +761,7 @@ check_outliers.data.frame <- function(x,
     if (thresholds$zscore < 1) {
       insight::format_error(
         "The `threshold` argument must be one or greater for method `zscore`."
-      ))
+      )
     }
 
     out <- c(out, .check_outliers_zscore(
