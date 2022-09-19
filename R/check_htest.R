@@ -1,11 +1,10 @@
-
-
-
 #' @export
 check_normality.htest <- function(x, ...) {
   data <- insight::get_data(x)
   if (is.null(data)) {
-    stop("Cannot check assumptions - Unable to retrieve data from htest object.")
+    insight::format_error(
+      "Cannot check assumptions - Unable to retrieve data from `htest` object."
+    )
   }
   method <- x[["method"]]
 
@@ -17,7 +16,7 @@ check_normality.htest <- function(x, ...) {
 
     out <- check_normality(m1)
     out[2] <- check_normality(m2)[1]
-    attr(out,"units") <- c("Group1", "Group2")
+    attr(out, "units") <- c("Group1", "Group2")
   } else if (grepl("Two Sample t-test", method, fixed = TRUE)) {
     m <- stats::lm(formula = Value ~ factor(Name),
                    data = datawizard::data_to_long(data))
@@ -40,7 +39,7 @@ check_normality.htest <- function(x, ...) {
 
     out <- unlist(outs)
     attributes(out) <- attributes(outs[[1]])
-    attr(out,"units") <- paste0("Group", seq_along(outs))
+    attr(out, "units") <- paste0("Group", seq_along(outs))
   } else if (grepl("One-way analysis of means", method, fixed = TRUE)) {
     m <- stats::aov(data[[1]] ~ factor(data[[2]]))
 
@@ -55,11 +54,13 @@ check_normality.htest <- function(x, ...) {
       "5" = all(x$expected >= 5),
       "10" = all(x$expected >= 10)
     )
-    class(out) <- c("check_normality_binom","logical")
+    class(out) <- c("check_normality_binom", "logical")
     attr(out, "object_name") <- substitute(x)
     return(out)
   } else {
-    stop("This htest is not supported (or this assumption is not required for this test).")
+    insight::format_error(
+      "This `htest` is not supported (or this assumption is not required for this test)."
+    )
   }
 
   attr(out, "object_name") <- substitute(x)
@@ -67,11 +68,14 @@ check_normality.htest <- function(x, ...) {
   out
 }
 
+
 #' @export
 check_homogeneity.htest <- function(x, ...) {
   data <- insight::get_data(x)
   if (is.null(data)) {
-    stop("Cannot check assumptions - Unable to retrieve data from htest object.")
+    insight::format_error(
+      "Cannot check assumptions - Unable to retrieve data from `htest` object."
+    )
   }
   method <- x[["method"]]
 
@@ -86,7 +90,9 @@ check_homogeneity.htest <- function(x, ...) {
   } else if (grepl("One-way analysis of means", method, fixed = TRUE)) {
     m <- stats::aov(stats::reformulate(names(data)[2], response = names(data)[1]), data = data)
   } else {
-    stop("This htest is not supported (or this assumption is not required for this test).")
+    insight::format_error(
+      "This `htest` is not supported (or this assumption is not required for this test)."
+    )
   }
 
   out <- check_homogeneity(m, ...)
@@ -101,7 +107,9 @@ check_homogeneity.htest <- function(x, ...) {
 check_symmetry.htest <- function(x, ...) {
   data <- insight::get_data(x)
   if (is.null(data)) {
-    stop("Cannot check assumptions - Unable to retrieve data from htest object.")
+    insight::format_error(
+      "Cannot check assumptions - Unable to retrieve data from `htest` object."
+    )
   }
   method <- x[["method"]]
 
@@ -112,7 +120,9 @@ check_symmetry.htest <- function(x, ...) {
       out <- check_symmetry(data[[1]])
     }
   } else {
-    stop("This htest is not supported (or this assumption is not required for this test).")
+    insight::format_error(
+      "This `htest` is not supported (or this assumption is not required for this test)."
+    )
   }
 
   attr(out, "object_name") <- substitute(x)
@@ -131,11 +141,17 @@ check_symmetry.htest <- function(x, ...) {
 #' @export
 print.check_normality_binom <- function(x, ...) {
   if (x["10"]) {
-    insight::print_color("OK: All cells in the expected table have more than 10 observations", "green")
+    insight::print_color(insight::format_message(
+      "OK: All cells in the expected table have more than 10 observations."
+    ), "green")
   } else if (x["5"]) {
-    insight::print_color("Warning: All cells in the expected table have more than 5 observations,\n  but some have less than 10.", "yellow")
+    insight::print_color(insight::format_message(
+      "Warning: All cells in the expected table have more than 5 observations, but some have less than 10."
+    ), "yellow")
   } else {
-    insight::print_color("Warning: Some cells in the expected table have less than 5 observations", "red")
+    insight::print_color(insight::format_message(
+      "Warning: Some cells in the expected table have less than 5 observations."
+    ), "red")
   }
   return(invisible(x))
 }
@@ -143,9 +159,9 @@ print.check_normality_binom <- function(x, ...) {
 
 # Utils -------------------------------------------------------------------
 
-.MVN_hz <- function (data, cov = TRUE, tol = 1e-25) {
+.MVN_hz <- function(data, cov = TRUE, tol = 1e-25) {
   # from MVN:::hz
-  dataframe = as.data.frame(data)
+  dataframe <- as.data.frame(data)
   dname <- deparse(substitute(data))
   data <- data[complete.cases(data), ]
   data <- as.matrix(data)
@@ -153,41 +169,28 @@ print.check_normality_binom <- function(x, ...) {
   p <- dim(data)[2]
   data.org <- data
   if (cov) {
-    S <- ((n - 1)/n) * cov(data)
-  }
-  else {
+    S <- ((n - 1) / n) * cov(data)
+  } else {
     S <- cov(data)
   }
   dif <- scale(data, scale = FALSE)
   Dj <- diag(dif %*% solve(S, tol = tol) %*% t(dif))
   Y <- data %*% solve(S, tol = tol) %*% t(data)
-  Djk <- -2 * t(Y) + matrix(diag(t(Y))) %*% matrix(c(rep(1,
-                                                         n)), 1, n) + matrix(c(rep(1, n)), n, 1) %*% diag(t(Y))
-  b <- 1/(sqrt(2)) * ((2 * p + 1)/4)^(1/(p + 4)) * (n^(1/(p +
-                                                            4)))
-  {
-    if (qr(S)$rank == p) {
-      HZ = n * (1/(n^2) * sum(sum(exp(-(b^2)/2 * Djk))) -
-                  2 * ((1 + (b^2))^(-p/2)) * (1/n) * (sum(exp(-((b^2)/(2 *
-                                                                         (1 + (b^2)))) * Dj))) + ((1 + (2 * (b^2)))^(-p/2)))
-    }
-    else {
-      HZ = n * 4
-    }
+  Djk <- -2 * t(Y) + matrix(diag(t(Y))) %*% matrix(c(rep(1, n)), 1, n) + matrix(c(rep(1, n)), n, 1) %*% diag(t(Y))
+  b <- 1 / (sqrt(2)) * ((2 * p + 1) / 4)^(1 / (p + 4)) * (n^(1 / (p + 4)))
+  if (qr(S)$rank == p) {
+    HZ <- n * (1 / (n^2) * sum(sum(exp(-(b^2) / 2 * Djk))) - 2 * ((1 + (b^2))^(-p / 2)) * (1 / n) * (sum(exp(-((b^2) / (2 * (1 + (b^2)))) * Dj))) + ((1 + (2 * (b^2)))^(-p / 2)))
+  } else {
+    HZ <- n * 4
   }
   wb <- (1 + b^2) * (1 + 3 * b^2)
   a <- 1 + 2 * b^2
-  mu <- 1 - a^(-p/2) * (1 + p * b^2/a + (p * (p + 2) * (b^4))/(2 *
-                                                                 a^2))
-  si2 <- 2 * (1 + 4 * b^2)^(-p/2) + 2 * a^(-p) * (1 + (2 *
-                                                         p * b^4)/a^2 + (3 * p * (p + 2) * b^8)/(4 * a^4)) -
-    4 * wb^(-p/2) * (1 + (3 * p * b^4)/(2 * wb) + (p * (p +
-                                                          2) * b^8)/(2 * wb^2))
-  pmu <- log(sqrt(mu^4/(si2 + mu^2)))
-  psi <- sqrt(log((si2 + mu^2)/mu^2))
+  mu <- 1 - a^(-p / 2) * (1 + p * b^2 / a + (p * (p + 2) * (b^4)) / (2 * a^2))
+  si2 <- 2 * (1 + 4 * b^2)^(-p / 2) + 2 * a^(-p) * (1 + (2 * p * b^4) / a^2 + (3 * p * (p + 2) * b^8) / (4 * a^4)) -
+    4 * wb^(-p / 2) * (1 + (3 * p * b^4) / (2 * wb) + (p * (p + 2) * b^8) / (2 * wb^2))
+  pmu <- log(sqrt(mu^4 / (si2 + mu^2)))
+  psi <- sqrt(log((si2 + mu^2) / mu^2))
   pValue <- 1 - plnorm(HZ, pmu, psi)
-  MVN = ifelse(pValue > 0.05, "YES", "NO")
-  result <- cbind.data.frame(Test = "Henze-Zirkler", HZ = HZ,
-                             `p value` = pValue, MVN = MVN)
-  result
+  MVN <- ifelse(pValue > 0.05, "YES", "NO")
+  cbind.data.frame(Test = "Henze-Zirkler", HZ = HZ, `p value` = pValue, MVN = MVN)
 }
