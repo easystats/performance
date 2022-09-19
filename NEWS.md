@@ -6,6 +6,9 @@
 
 ## Changes to functions
 
+* `check_normality()`, `check_homogeneity()` and `check_symmetry()` now works
+  for `htest` objects.
+
 * Print method for `check_outliers()` changed significantly: now states the 
   methods, thresholds, and variables used, reports outliers per variable (for 
   univariate methods) as well as any observation flagged for several 
