@@ -1,5 +1,17 @@
 # performance 0.9.x
 
+## Breaking Change
+
+* The minimum needed R version has been bumped to `3.6`.
+
+## Changes to functions
+
+* Print method for `check_outliers()` changed significantly: now states the 
+  methods, thresholds, and variables used, reports outliers per variable (for 
+  univariate methods) as well as any observation flagged for several 
+  variables/methods. Includes a new optional ID argument to add along the 
+  row number in the output (@rempsyc #443).
+
 # performance 0.9.2
 
 ## General

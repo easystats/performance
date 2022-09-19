@@ -138,7 +138,7 @@ check_model.default <- function(x,
   )
 
   if (is.null(ca)) {
-    stop(paste0("`check_model()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
+    insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
   }
 
   # set default for show_dots, based on "model size"
@@ -317,7 +317,7 @@ check_model.model_fit <- function(x,
     # check if brms can be loaded
 
     if (!requireNamespace("brms", quietly = TRUE)) {
-      stop("Package `brms` needs to be loaded first!", call. = FALSE)
+      insight::format_error("Package `brms` needs to be loaded first!")
     }
 
     # check if prior sample are available
@@ -325,9 +325,9 @@ check_model.model_fit <- function(x,
     d2 <- brms::prior_samples(model)
 
     if (is.null(d2)) {
-      stop(insight::format_message(
+      insight::format_error(
         "No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."
-      ), call. = FALSE)
+      )
     }
 
     d1 <- brms::posterior_samples(model)
@@ -339,7 +339,7 @@ check_model.model_fit <- function(x,
   } else if (inherits(model, c("stanreg", "stanfit"))) {
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
-      stop("Package `rstanarm` needs to be loaded first!", call. = FALSE)
+      insight::format_error("Package `rstanarm` needs to be loaded first!")
     }
 
 
