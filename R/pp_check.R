@@ -116,7 +116,7 @@ check_predictions.BFBayesFactor <- function(object,
   yrep <- t(yrep)
 
   out <- as.data.frame(yrep)
-  colnames(out) <- paste0("sim_", seq(ncol(out)))
+  colnames(out) <- paste0("sim_", seq_len(ncol(out)))
   out$y <- y
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
@@ -160,9 +160,9 @@ pp_check.lm <- function(object,
   }
 
   if (is.null(out)) {
-    stop(insight::format_message(
-      sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])
-    ), call. = FALSE)
+    insight::format_error(
+      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
+    )
   }
 
   # get response data, and response term, to check for transformations
@@ -209,9 +209,9 @@ pp_check.glm <- function(object,
   )
 
   if (is.null(out)) {
-    stop(insight::format_message(
-      sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])
-    ), call. = FALSE)
+    insight::format_error(
+      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
+    )
   }
 
   # get response data, and response term

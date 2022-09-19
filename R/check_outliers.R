@@ -1175,14 +1175,11 @@ check_outliers.BFBayesFactor <- function(x,
                                          ID = NULL,
                                          ...) {
   if (!insight::is_model(x)) {
-    stop("Collinearity only applicable to regression models.", call. = FALSE)
+    insight::format_error("Collinearity only applicable to regression models.")
   }
 
   if (!missing(ID)) {
-    warning(
-      paste0("ID argument not supported for objects of class `", class(x)[1], "`."),
-      call. = FALSE
-    )
+    insight::format_warning(paste0("ID argument not supported for objects of class `", class(x)[1], "`."))
   }
 
   d <- insight::get_predictors(x)
@@ -1463,7 +1460,7 @@ check_outliers.geeglm <- check_outliers.gls
                                         ID.names = NULL,
                                         ...) {
   if (any(is.na(x)) || any(with(x, x == Inf))) {
-    stop("Missing or infinite values are not allowed.", call. = FALSE)
+    insight::format_error("Missing or infinite values are not allowed.")
   }
 
   out <- data.frame(Row = seq_len(nrow(x)))
