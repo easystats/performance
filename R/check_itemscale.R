@@ -60,9 +60,9 @@
 #' @export
 check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {
-    stop(insight::format_message(
-      "'x' must be an object of class 'parameters_pca', as returned by 'parameters::principal_components()'."
-    ), call. = FALSE)
+    insight::format_error(
+      "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`."
+    )
   }
 
   insight::check_if_installed("parameters")

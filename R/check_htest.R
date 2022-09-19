@@ -81,7 +81,7 @@ check_homogeneity.htest <- function(x, ...) {
 
   if (grepl("(not assuming equal variances)", method, fixed = TRUE) ||
       grepl("Welch", method, fixed = TRUE)) {
-    stop("Test does not assume homogeneity. No need to test this assumption.")
+    insight::format_error("Test does not assume homogeneity. No need to test this assumption.")
   }
 
   if (grepl("Two Sample t-test", method, fixed = TRUE)) {
