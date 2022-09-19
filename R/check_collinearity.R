@@ -230,9 +230,9 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
   if (verbose) {
-    message(insight::format_message(
-      "All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."
-    ))
+    insight::format_alert(
+      "All predictors have been centered (factors with `contr.sum()`, numerics with `scale()`)."
+    )
   }
 
   check_collinearity(suppressWarnings(stats::lm(
@@ -245,7 +245,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
 #' @export
 check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   if (!insight::is_model(x)) {
-    stop("Collinearity only applicable to regression models.", call. = FALSE)
+    insight::format_error("Collinearity only applicable to regression models.")
   }
 
   f <- insight::find_formula(x)[[1]]

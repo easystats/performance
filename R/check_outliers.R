@@ -373,15 +373,15 @@ check_outliers.default <- function(x,
     thresholds <- .check_outliers_thresholds(data)
     thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
   } else {
-    stop(insight::format_message(
+    insight::format_error(
       "The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."
-    ), call. = FALSE)
+    )
   }
 
   if (!missing(ID)) {
-    warning(insight::format_message(
+    insight::format_warning(
       "ID argument not supported for model objects of class `", class(x)[1], "`."
-    ), call. = FALSE)
+    )
   }
 
   # Others
@@ -712,9 +712,9 @@ check_outliers.data.frame <- function(x,
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
   } else {
-    stop(insight::format_message(
+    insight::format_error(
       "The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."
-    ), call. = FALSE)
+    )
   }
 
   thresholds <- thresholds[names(thresholds) %in% method]
@@ -759,9 +759,9 @@ check_outliers.data.frame <- function(x,
   # Z-score
   if ("zscore" %in% method) {
     if (thresholds$zscore < 1) {
-      stop(insight::format_message(
+      insight::format_error(
         "The `threshold` argument must be one or greater for method `zscore`."
-      ), call. = FALSE)
+      ))
     }
 
     out <- c(out, .check_outliers_zscore(
@@ -1124,14 +1124,14 @@ check_outliers.grouped_df <- function(x,
     outlier_var[[i]] <- lapply(
       attributes(subset)$outlier_var, function(x) {
         lapply(x, function(y) {
-          y$Row <- rows[which(seq(length(rows)) %in% y$Row)]
+          y$Row <- rows[which(seq_along(rows) %in% y$Row)]
           y
         })
       }
     )
     outlier_count[[i]] <- lapply(
       attributes(subset)$outlier_count, function(y) {
-        y$Row <- rows[which(seq(length(rows)) %in% y$Row)]
+        y$Row <- rows[which(seq_along(rows) %in% y$Row)]
         y
       }
     )
@@ -1153,7 +1153,7 @@ check_outliers.grouped_df <- function(x,
     select = names(info$groups)[1],
     after = "Row"
   )
-  data$Row <- seq(nrow(data))
+  data$Row <- seq_len(nrow(data))
 
   class(out) <- c("check_outliers", "see_check_outliers", class(out))
   attr(out, "data") <- data

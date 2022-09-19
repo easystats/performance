@@ -26,7 +26,7 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
   if (insight::is_model(x)) {
     group <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
     if (is.null(group)) {
-      stop("Model is no mixed model. Please provide a mixed model, or a data frame and arguments 'select' and 'group'.", call. = FALSE)
+      insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `group`.")
     }
     data <- insight::get_data(x)
     select <- insight::find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
