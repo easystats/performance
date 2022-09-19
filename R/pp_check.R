@@ -337,7 +337,24 @@ plot.performance_pp_check <- function(x, ...) {
   if (grepl("log(log(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) exp(exp(i)))
   } else if (grepl("log(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) exp(i))
+    # exceptions: log(x+1) or log(1+x)
+    # 1. try: log(x + number)
+    plus_minus <- tryCatch(
+      eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string))),
+      error = function(e) NULL
+    )
+    # 2. try: log(number + x)
+    if (is.null(plus_minus)) {
+      plus_minus <- tryCatch(
+        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))),
+        error = function(e) NULL
+      )
+    }
+    if (is.null(plus_minus)) {
+      sims[] <- lapply(sims, function(i) exp(i))
+    } else {
+      sims[] <- lapply(sims, function(i) exp(i) - plus_minus)
+    }
   } else if (grepl("log1p(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) expm1(i))
   } else if (grepl("log10(", resp_string, fixed = TRUE)) {
