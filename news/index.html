@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.2.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,10 @@
 <h3 id="breaking-change-0-9">Breaking Change<a class="anchor" aria-label="anchor" href="#breaking-change-0-9"></a></h3>
 <ul><li>The minimum needed R version has been bumped to <code>3.6</code>.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="changes-to-functions-0-9">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9"></a></h3>
+<ul><li>Print method for <code><a href="../reference/check_outliers.html">check_outliers()</a></code> changed significantly: now states the methods, thresholds, and variables used, reports outliers per variable (for univariate methods) as well as any observation flagged for several variables/methods. Includes a new optional ID argument to add along the row number in the output (<a href="https://github.com/rempsyc" class="external-link">@rempsyc</a> <a href="https://github.com/easystats/performance/issues/443" class="external-link">#443</a>).</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.9.2" id="performance-092">performance 0.9.2<a class="anchor" aria-label="anchor" href="#performance-092"></a></h2><p class="text-muted">CRAN release: 2022-08-10</p>
@@ -102,8 +106,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-9-2">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9-2"></a></h3>
-<ul><li><p><code><a href="../reference/check_model.html">check_model()</a></code> gains a <code>show_dots</code> argument, to show or hide data points. This is particular useful for models with many observations, where generating the plot would be very slow.</p></li>
-<li><p>Print method for <code><a href="../reference/check_outliers.html">check_outliers()</a></code> changed significantly: now states the methods, thresholds, and variables used, reports outliers per variable (for univariate methods) as well as any observation flagged for several variables/methods. Includes a new optional ID argument to add along the row number in the output (<a href="https://github.com/rempsyc" class="external-link">@rempsyc</a> <a href="https://github.com/easystats/performance/issues/443" class="external-link">#443</a>).</p></li>
+<ul><li>
+<code><a href="../reference/check_model.html">check_model()</a></code> gains a <code>show_dots</code> argument, to show or hide data points. This is particular useful for models with many observations, where generating the plot would be very slow.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-9-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9-2"></a></h3>
