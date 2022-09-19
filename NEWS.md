@@ -4,6 +4,14 @@
 
 * The minimum needed R version has been bumped to `3.6`.
 
+## Changes to functions
+
+* Print method for `check_outliers()` changed significantly: now states the 
+  methods, thresholds, and variables used, reports outliers per variable (for 
+  univariate methods) as well as any observation flagged for several 
+  variables/methods. Includes a new optional ID argument to add along the 
+  row number in the output (@rempsyc #443).
+
 # performance 0.9.2
 
 ## General
@@ -22,12 +30,6 @@
 * `check_model()` gains a `show_dots` argument, to show or hide data points. 
   This is particular useful for models with many observations, where generating
   the plot would be very slow.
-
-* Print method for `check_outliers()` changed significantly: now states the 
-  methods, thresholds, and variables used, reports outliers per variable (for 
-  univariate methods) as well as any observation flagged for several 
-  variables/methods. Includes a new optional ID argument to add along the 
-  row number in the output (@rempsyc #443).
 
 ## Bug Fixes
 
