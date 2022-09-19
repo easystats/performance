@@ -373,15 +373,15 @@ check_outliers.default <- function(x,
     thresholds <- .check_outliers_thresholds(data)
     thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
   } else {
-    stop(insight::format_message(
+    insight::format_error(
       "The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."
-    ), call. = FALSE)
+    )
   }
 
   if (!missing(ID)) {
-    warning(insight::format_message(
+    insight::format_warning(
       "ID argument not supported for model objects of class `", class(x)[1], "`."
-    ), call. = FALSE)
+    )
   }
 
   # Others
@@ -712,9 +712,9 @@ check_outliers.data.frame <- function(x,
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
   } else {
-    stop(insight::format_message(
+    insight::format_error(
       "The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."
-    ), call. = FALSE)
+    )
   }
 
   thresholds <- thresholds[names(thresholds) %in% method]
@@ -759,9 +759,9 @@ check_outliers.data.frame <- function(x,
   # Z-score
   if ("zscore" %in% method) {
     if (thresholds$zscore < 1) {
-      stop(insight::format_message(
+      insight::format_error(
         "The `threshold` argument must be one or greater for method `zscore`."
-      ), call. = FALSE)
+      )
     }
 
     out <- c(out, .check_outliers_zscore(
@@ -1124,14 +1124,14 @@ check_outliers.grouped_df <- function(x,
     outlier_var[[i]] <- lapply(
       attributes(subset)$outlier_var, function(x) {
         lapply(x, function(y) {
-          y$Row <- rows[which(seq(length(rows)) %in% y$Row)]
+          y$Row <- rows[which(seq_along(rows) %in% y$Row)]
           y
         })
       }
     )
     outlier_count[[i]] <- lapply(
       attributes(subset)$outlier_count, function(y) {
-        y$Row <- rows[which(seq(length(rows)) %in% y$Row)]
+        y$Row <- rows[which(seq_along(rows) %in% y$Row)]
         y
       }
     )
@@ -1153,7 +1153,7 @@ check_outliers.grouped_df <- function(x,
     select = names(info$groups)[1],
     after = "Row"
   )
-  data$Row <- seq(nrow(data))
+  data$Row <- seq_len(nrow(data))
 
   class(out) <- c("check_outliers", "see_check_outliers", class(out))
   attr(out, "data") <- data
@@ -1175,14 +1175,11 @@ check_outliers.BFBayesFactor <- function(x,
                                          ID = NULL,
                                          ...) {
   if (!insight::is_model(x)) {
-    stop("Collinearity only applicable to regression models.", call. = FALSE)
+    insight::format_error("Collinearity only applicable to regression models.")
   }
 
   if (!missing(ID)) {
-    warning(
-      paste0("ID argument not supported for objects of class `", class(x)[1], "`."),
-      call. = FALSE
-    )
+    insight::format_warning(paste0("ID argument not supported for objects of class `", class(x)[1], "`."))
   }
 
   d <- insight::get_predictors(x)
@@ -1463,7 +1460,7 @@ check_outliers.geeglm <- check_outliers.gls
                                         ID.names = NULL,
                                         ...) {
   if (any(is.na(x)) || any(with(x, x == Inf))) {
-    stop("Missing or infinite values are not allowed.", call. = FALSE)
+    insight::format_error("Missing or infinite values are not allowed.")
   }
 
   out <- data.frame(Row = seq_len(nrow(x)))

@@ -116,7 +116,7 @@ check_predictions.BFBayesFactor <- function(object,
   yrep <- t(yrep)
 
   out <- as.data.frame(yrep)
-  colnames(out) <- paste0("sim_", seq(ncol(out)))
+  colnames(out) <- paste0("sim_", seq_len(ncol(out)))
   out$y <- y
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
@@ -160,9 +160,9 @@ pp_check.lm <- function(object,
   }
 
   if (is.null(out)) {
-    stop(insight::format_message(
-      sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])
-    ), call. = FALSE)
+    insight::format_error(
+      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
+    )
   }
 
   # get response data, and response term, to check for transformations
@@ -209,9 +209,9 @@ pp_check.glm <- function(object,
   )
 
   if (is.null(out)) {
-    stop(insight::format_message(
-      sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])
-    ), call. = FALSE)
+    insight::format_error(
+      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
+    )
   }
 
   # get response data, and response term
@@ -337,7 +337,24 @@ plot.performance_pp_check <- function(x, ...) {
   if (grepl("log(log(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) exp(exp(i)))
   } else if (grepl("log(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) exp(i))
+    # exceptions: log(x+1) or log(1+x)
+    # 1. try: log(x + number)
+    plus_minus <- tryCatch(
+      eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string))),
+      error = function(e) NULL
+    )
+    # 2. try: log(number + x)
+    if (is.null(plus_minus)) {
+      plus_minus <- tryCatch(
+        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))),
+        error = function(e) NULL
+      )
+    }
+    if (is.null(plus_minus)) {
+      sims[] <- lapply(sims, function(i) exp(i))
+    } else {
+      sims[] <- lapply(sims, function(i) exp(i) - plus_minus)
+    }
   } else if (grepl("log1p(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) expm1(i))
   } else if (grepl("log10(", resp_string, fixed = TRUE)) {
