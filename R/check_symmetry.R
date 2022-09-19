@@ -19,17 +19,17 @@ check_symmetry <- function(x, ...) {
 
 #' @export
 check_symmetry.numeric <- function(x, ...) {
-  x <- na.omit(x)
+  x <- stats::na.omit(x)
 
   m <- mean(x)
-  a <- median(x)
+  a <- stats::median(x)
   n <- length(x)
-  s <- sd(x)
+  s <- stats::sd(x)
 
   D <- n * (m - a) / s
 
   z <- sqrt(2 * n) * (m - a) / s
-  out <- pnorm(abs(z), lower.tail = FALSE)
+  out <- stats::pnorm(abs(z), lower.tail = FALSE)
   class(out) <- c("check_symmetry", "numeric")
   attr(out, "object_name") <- substitute(x)
   out

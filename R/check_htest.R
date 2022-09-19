@@ -142,15 +142,15 @@ check_symmetry.htest <- function(x, ...) {
 print.check_normality_binom <- function(x, ...) {
   if (x["10"]) {
     insight::print_color(insight::format_message(
-      "OK: All cells in the expected table have more than 10 observations."
+      "OK: All cells in the expected table have more than 10 observations.\n"
     ), "green")
   } else if (x["5"]) {
     insight::print_color(insight::format_message(
-      "Warning: All cells in the expected table have more than 5 observations, but some have less than 10."
+      "Warning: All cells in the expected table have more than 5 observations, but some have less than 10.\n"
     ), "yellow")
   } else {
     insight::print_color(insight::format_message(
-      "Warning: Some cells in the expected table have less than 5 observations."
+      "Warning: Some cells in the expected table have less than 5 observations.\n"
     ), "red")
   }
   return(invisible(x))
