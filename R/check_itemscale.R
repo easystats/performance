@@ -67,12 +67,12 @@ check_itemscale <- function(x) {
 
   insight::check_if_installed("parameters")
 
-  data_set <- attributes(x)$data_set
+  dataset <- attributes(x)$dataset
   subscales <- parameters::closest_component(x)
 
   out <- lapply(sort(unique(subscales)), function(.subscale) {
     columns <- names(subscales)[subscales == .subscale]
-    items <- data_set[columns]
+    items <- dataset[columns]
     reliability <- item_reliability(items)
 
     .item_discr <- reliability$item_discrimination
