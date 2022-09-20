@@ -4,6 +4,9 @@
 
 * The minimum needed R version has been bumped to `3.6`.
 
+* The alias `performance_lrt()` was removed. Use `test_lrt()` resp.
+  `test_likelihoodratio()`.
+
 ## Changes to functions
 
 * `check_normality()`, `check_homogeneity()` and `check_symmetry()` now works

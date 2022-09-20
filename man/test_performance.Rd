@@ -5,7 +5,6 @@
 \alias{test_bf}
 \alias{test_bf.default}
 \alias{test_likelihoodratio}
-\alias{performance_lrt}
 \alias{test_lrt}
 \alias{test_performance}
 \alias{test_vuong}
@@ -17,8 +16,6 @@ test_bf(...)
 \method{test_bf}{default}(..., reference = 1, text_length = NULL)
 
 test_likelihoodratio(..., estimator = "ML")
-
-performance_lrt(...)
 
 test_lrt(..., estimator = "ML")
 
