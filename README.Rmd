@@ -53,6 +53,12 @@ Once you have downloaded the package, you can then load it using:
 library("performance")
 ```
 
+> **Tip**
+>
+> Instead of `library(performance)`, use `library(easystats)`. This will make all features of the  easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
+
 ## Citation
 
 To cite performance in publications use:
