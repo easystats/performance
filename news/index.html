@@ -89,7 +89,8 @@
 <h2 class="pkg-version" data-toc-text="0.9" id="performance-09x">performance 0.9.x<a class="anchor" aria-label="anchor" href="#performance-09x"></a></h2>
 <div class="section level3">
 <h3 id="breaking-change-0-9">Breaking Change<a class="anchor" aria-label="anchor" href="#breaking-change-0-9"></a></h3>
-<ul><li>The minimum needed R version has been bumped to <code>3.6</code>.</li>
+<ul><li><p>The minimum needed R version has been bumped to <code>3.6</code>.</p></li>
+<li><p>The alias <code>performance_lrt()</code> was removed. Use <code><a href="../reference/test_performance.html">test_lrt()</a></code> resp. <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="changes-to-functions-0-9">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9"></a></h3>
@@ -300,7 +301,7 @@
 <h3 id="new-functions-to-test-or-compare-models-0-7-0">New functions to test or compare models<a class="anchor" aria-label="anchor" href="#new-functions-to-test-or-compare-models-0-7-0"></a></h3>
 <ul><li><p><code><a href="../reference/test_performance.html">test_vuong()</a></code>, to compare models using Vuong’s (1989) Test.</p></li>
 <li><p><code><a href="../reference/test_performance.html">test_bf()</a></code>, to compare models using Bayes factors.</p></li>
-<li><p><code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> as an alias for <code><a href="../reference/test_performance.html">performance_lrt()</a></code>.</p></li>
+<li><p><code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> as an alias for <code>performance_lrt()</code>.</p></li>
 <li><p><code><a href="../reference/test_performance.html">test_wald()</a></code>, as a rough approximation for the LRT.</p></li>
 <li><p><code><a href="../reference/test_performance.html">test_performance()</a></code>, to run the most relevant and appropriate tests based on the input.</p></li>
 </ul></div>
@@ -308,7 +309,7 @@
 <h3 id="changes-to-functions-0-7-0">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-7-0"></a></h3>
 <div class="section level4">
 <h4 id="performance_lrt-0-7-0"><code>performance_lrt()</code><a class="anchor" aria-label="anchor" href="#performance_lrt-0-7-0"></a></h4>
-<ul><li><p><code><a href="../reference/test_performance.html">performance_lrt()</a></code> get an alias <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code>.</p></li>
+<ul><li><p><code>performance_lrt()</code> get an alias <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code>.</p></li>
 <li><p>Does not return AIC/BIC now (as they are not related to LRT <em>per se</em> and can be easily obtained with other functions).</p></li>
 <li><p>Now contains a column with the difference in degrees of freedom between models.</p></li>
 <li><p>Fixed column names for consistency.</p></li>
@@ -438,7 +439,7 @@
 <div class="section level3">
 <h3 id="bug-fixes-0-4-8">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-8"></a></h3>
 <ul><li><p>Fix issue with new version of <em>bigutilsr</em> for <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</p></li>
-<li><p>Fix issue with model order in <code><a href="../reference/test_performance.html">performance_lrt()</a></code>.</p></li>
+<li><p>Fix issue with model order in <code>performance_lrt()</code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -470,7 +471,7 @@
 <h3 id="changes-to-functions-0-4-6">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-4-6"></a></h3>
 <ul><li><p><code><a href="../reference/icc.html">icc()</a></code> gains a <code>by_group</code> argument, to compute ICCs per different group factors in mixed models with multiple levels or cross-classified design.</p></li>
 <li><p><code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gains a <code>by_group</code> argument, to compute explained variance at different levels (following the variance-reduction approach by Hox 2010).</p></li>
-<li><p><code><a href="../reference/test_performance.html">performance_lrt()</a></code> now works on <em>lavaan</em> objects.</p></li>
+<li><p><code>performance_lrt()</code> now works on <em>lavaan</em> objects.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-4-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-6"></a></h3>
