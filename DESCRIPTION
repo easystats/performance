@@ -130,7 +130,7 @@ Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
-Remotes: easystats/insight, easystats/datawizard
+Remotes: easystats/insight, easystats/datawizard, easystats/parameters
 Config/testthat/edition: 3
 Config/Needs/website:
     rstudio/bslib,
