@@ -44,6 +44,13 @@ Once you have downloaded the package, you can then load it using:
 library("performance")
 ```
 
+> **Tip**
+>
+> Instead of `library(performance)`, use `library(easystats)`. This will
+> make all features of the easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
+
 ## Citation
 
 To cite performance in publications use:
@@ -136,17 +143,13 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(
-  Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  cores = 4
-)
+model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.953 (95% CI [0.942, 0.964])
-#>      Marginal R2: 0.825 (95% CI [0.721, 0.900])
+#>   Conditional R2: 0.953 (95% CI [0.941, 0.963])
+#>      Marginal R2: 0.824 (95% CI [0.713, 0.896])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -259,16 +262,12 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
 
 check_singularity(model)
 #> [1] TRUE
@@ -367,12 +366,12 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name |   Model |      AIC | AIC weights |      BIC | BIC weights |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP |     AICc | AICc weights | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
-#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#> m1   |      lm |  156.010 |    8.30e-28 |  161.873 |    3.99e-28 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                
-#> m2   |     glm |   31.298 |       1.000 |   35.695 |       1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |          |              |            |            |       |                
-#> m3   | lmerMod | 1763.986 |    0.00e+00 | 1783.144 |    0.00e+00 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                
-#> m4   |     glm |   56.761 |    2.96e-06 |   57.747 |    1.63e-05 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657
+#> Name |   Model |  AIC (weights) |  BIC (weights) |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | AICc (weights) | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
+#> ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> m1   |      lm |  156.0 (<.001) |  161.9 (<.001) |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |        (>.999) |            |            |       |                
+#> m2   |     glm |   31.3 (>.999) |   35.7 (>.999) |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |        (>.999) |            |            |       |                
+#> m3   | lmerMod | 1764.0 (<.001) | 1783.1 (<.001) | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.5 (>.999) |      0.799 |      0.279 | 0.722 |                
+#> m4   |     glm |   56.8 (<.001) |   57.7 (<.001) |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |        (>.999) |            |            |       |           0.657
 ```
 
 #### General index of model performance
