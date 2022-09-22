@@ -30,7 +30,7 @@ check_zeroinflation <- function(x, tolerance = .05) {
   # check if we have poisson
   model_info <- insight::model_info(x)
   if (!model_info$is_count) {
-    stop("Model must be from Poisson-family.", call. = FALSE)
+    insight::format_error("Model must be from Poisson-family.")
   }
 
   # get actual zero of response

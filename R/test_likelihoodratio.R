@@ -10,15 +10,6 @@ test_likelihoodratio <- function(..., estimator = "ML") {
 }
 
 
-#' @rdname test_performance
-#' @export
-performance_lrt <- function(...) {
-  ## TODO remove deprecated
-  .Deprecated(msg = "This function is deprecated. Please use `test_lrt()` instead.")
-  test_likelihoodratio(...)
-}
-
-
 # Short name for test_likelihoodratio using the test_* naming convention
 #' @rdname test_performance
 #' @export
@@ -55,11 +46,11 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
   } else if (inherits(objects, "ListLavaan")) {
     test_likelihoodratio_ListLavaan(..., objects = objects) # Because lavaanLRT requires the ellipsis
   } else {
-    stop(insight::format_message(
+    insight::format_error(
       "The models are not nested, which is a prerequisite for `test_likelihoodratio()`.",
       "See the 'Details' section.",
       "You may try `test_vuong()` instead."
-    ), call. = FALSE)
+    )
   }
 }
 
@@ -69,10 +60,10 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
 
 #' @export
 plot.test_likelihoodratio <- function(x, ...) {
-  warning(insight::format_message(
-    "There is currently no plot() method for test-functions.",
-    "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."
-  ), call. = FALSE)
+  insight::format_warning(
+    "There is currently no `plot()` method for test-functions.",
+    "Please use `plot(compare_perfomance())` for some visual representations of your model comparisons."
+  )
 }
 
 

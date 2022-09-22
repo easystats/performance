@@ -20,7 +20,7 @@ test_wald.default <- function(...) {
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_wald(objects)
   } else {
-    stop("The models cannot be compared for some reason :/", call. = FALSE)
+    insight::format_error("The models cannot be compared for some reason :/")
   }
 }
 
@@ -38,7 +38,7 @@ test_wald.ListNestedRegressions <- function(objects, ...) {
 
 #' @export
 test_wald.ListNonNestedRegressions <- function(objects, ...) {
-  stop("Wald tests cannot be run on non-nested models. Try `test_vuong()`.", call. = FALSE)
+  insight::format_error("Wald tests cannot be run on non-nested models. Try `test_vuong()`.")
 }
 
 # Helpers --------------------------
