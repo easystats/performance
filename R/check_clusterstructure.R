@@ -109,8 +109,7 @@ plot.check_clusterstructure <- function(x, ...) {
   c <- apply(x, 2, min) # minimum value per column
   d <- apply(x, 2, max)
   p <- matrix(0, ncol = ncol(x), nrow = n) # n vectors of space
-  for (i in 1:ncol(x))
-  {
+  for (i in seq_len(ncol(x))) {
     p[, i] <- stats::runif(n, min = c[i], max = d[i])
   }
   k <- round(stats::runif(n, 1, nrow(x)))
@@ -120,12 +119,10 @@ plot.check_clusterstructure <- function(x, ...) {
   distq <- 0
   minp <- rep(0, n)
   minq <- rep(0, n)
-  for (i in 1:n)
-  {
+  for (i in 1:n) {
     distp[1] <- stats::dist(rbind(p[i, ], x[1, ]), method = distance)
     minqi <- stats::dist(rbind(q[i, ], x[1, ]), method = distance)
-    for (j in 2:nrow(x))
-    {
+    for (j in 2:nrow(x)) {
       distp[j] <- stats::dist(rbind(p[i, ], x[j, ]), method = distance)
       error <- q[i, ] - x[j, ]
       if (sum(abs(error)) != 0) {
@@ -140,6 +137,5 @@ plot.check_clusterstructure <- function(x, ...) {
     # minq[i]<-apply(distq,1,min)
     minq[i] <- minqi
   }
-  H <- (sum(minq) / (sum(minp) + sum(minq)))
-  H
+  sum(minq) / (sum(minp) + sum(minq))
 }
