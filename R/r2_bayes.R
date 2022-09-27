@@ -89,8 +89,20 @@ r2_bayes <- function(model, robust = TRUE, ci = .95, verbose = TRUE, ...) {
   if (insight::is_multivariate(model)) {
     structure(
       class = "r2_bayes_mv",
-      rapply(r2_bayesian, ifelse(robust, stats::median, mean)),
-      "SE" = rapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd)),
+      rapply(r2_bayesian, function(i) {
+        if (robust) {
+          stats::median(i)
+        } else {
+          mean(i)
+        }
+      }),
+      "SE" = rapply(r2_bayesian, function(i) {
+        if (robust) {
+          stats::mad(i)
+        } else {
+          stats::sd(i)
+        }
+      }),
       # "Estimates" = rapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
       "CI" = rapply(r2_bayesian, bayestestR::hdi, ci = ci),
       "ci_method" = "HDI",
@@ -99,8 +111,20 @@ r2_bayes <- function(model, robust = TRUE, ci = .95, verbose = TRUE, ...) {
   } else {
     structure(
       class = "r2_bayes",
-      lapply(r2_bayesian, ifelse(robust, stats::median, mean)),
-      "SE" = lapply(r2_bayesian, ifelse(robust, stats::mad, stats::sd)),
+      lapply(r2_bayesian, function(i) {
+        if (robust) {
+          stats::median(i)
+        } else {
+          mean(i)
+        }
+      }),
+      "SE" = lapply(r2_bayesian, function(i) {
+        if (robust) {
+          stats::mad(i)
+        } else {
+          stats::sd(i)
+        }
+      }),
       # "Estimates" = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
       "CI" = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
       "ci_method" = "HDI",
