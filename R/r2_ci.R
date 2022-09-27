@@ -1,7 +1,11 @@
 .r2_ci <- function(model, ci = .95, ...) {
   alpha <- 1 - ci
   n <- insight::n_obs(model)
-  df_int <- ifelse(insight::has_intercept(model), 1, 0)
+  df_int <- if (insight::has_intercept(model)) {
+    1
+  } else {
+    0
+  }
 
   model_rank <- tryCatch(
     {

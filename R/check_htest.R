@@ -163,7 +163,7 @@ print.check_normality_binom <- function(x, ...) {
   # from MVN:::hz
   dataframe <- as.data.frame(data)
   dname <- deparse(substitute(data))
-  data <- data[complete.cases(data), ]
+  data <- data[stats::complete.cases(data), ]
   data <- as.matrix(data)
   n <- dim(data)[1]
   p <- dim(data)[2]
@@ -190,7 +190,7 @@ print.check_normality_binom <- function(x, ...) {
     4 * wb^(-p / 2) * (1 + (3 * p * b^4) / (2 * wb) + (p * (p + 2) * b^8) / (2 * wb^2))
   pmu <- log(sqrt(mu^4 / (si2 + mu^2)))
   psi <- sqrt(log((si2 + mu^2) / mu^2))
-  pValue <- 1 - plnorm(HZ, pmu, psi)
+  pValue <- 1 - stats::plnorm(HZ, pmu, psi)
   MVN <- ifelse(pValue > 0.05, "YES", "NO")
   cbind.data.frame(Test = "Henze-Zirkler", HZ = HZ, `p value` = pValue, MVN = MVN)
 }
