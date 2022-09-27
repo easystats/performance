@@ -218,11 +218,7 @@ check_distribution.numeric <- function(model) {
 .is_integer <- function(x) {
   tryCatch(
     expr = {
-      if (is.infinite(x)) {
-        FALSE
-      } else {
-        x %% 1 == 0
-      }
+      ifelse(is.infinite(x), FALSE, x %% 1 == 0)
     },
     warning = function(w) {
       is.integer(x)
