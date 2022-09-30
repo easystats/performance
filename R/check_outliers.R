@@ -1296,9 +1296,9 @@ check_outliers.geeglm <- check_outliers.gls
     out <- cbind(out, ID.names)
   }
 
-  out$Distance_Zscore <- sapply(as.data.frame(t(d)), method,
-    na.omit = TRUE, na.rm = TRUE
-  )
+  out$Distance_Zscore <- apply(d, 1, function(x) {
+    ifelse(all(is.na(x)), NA, max(x, na.rm = TRUE))
+  })
 
   # Filter
   out$Outlier_Zscore <- as.numeric(out$Distance_Zscore > threshold)
