@@ -20,7 +20,7 @@
 
 ## Bug Fixes
 
-* Fixes wrong zscore values when using vector instead of dataframe (#476)
+* Fixes wrong *z*-score values when using vector instead of a data frame (#476).
 
 # performance 0.9.2
 
