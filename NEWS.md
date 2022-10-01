@@ -21,6 +21,11 @@
 * `check_outliers()` now uses more conventional outlier thresholds. The `IQR` 
   and confidence interval methods now gain improved distance scores that
   are continuous instead of discrete.
+  
+## Bug Fixes
+
+* Fixes wrong *z*-score values when using a vector instead of a data frame in
+  `check_outliers()` (#476).
 
 # performance 0.9.2
 
