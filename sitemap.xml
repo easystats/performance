@@ -37,6 +37,9 @@
     <loc>https://easystats.github.io/performance/reference/check_autocorrelation.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/performance/reference/check_clusterstructure.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/performance/reference/check_collinearity.html</loc>
   </url>
   <url>
@@ -44,6 +47,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_distribution.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/reference/check_factorstructure.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_heterogeneity_bias.html</loc>
@@ -56,6 +62,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_itemscale.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/reference/check_kmo.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_model.html</loc>
@@ -80,6 +89,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_sphericity.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/reference/check_sphericity_bartlett.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_symmetry.html</loc>
