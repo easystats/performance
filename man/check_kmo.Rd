@@ -34,10 +34,10 @@ accepting a value > 0.5. Values between 0.5 and 0.7 are mediocre, and values
 between 0.7 and 0.8 are good.
 
 This function is strongly inspired by the \code{KMO} function in the
-\code{psych} package (Revelle, 2016). All credit goes to its author.
+\strong{psych} package (Revelle, 2016). All credits goes to its author.
 }
 \examples{
-library(parameters)
+library(performance)
 check_kmo(mtcars)
 }
 \references{

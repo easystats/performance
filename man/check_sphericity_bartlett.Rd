@@ -28,7 +28,7 @@ function in the \strong{psych} package (Revelle, 2016). All credit goes to its
 author.
 }
 \examples{
-library(parameters)
+library(performance)
 check_sphericity_bartlett(mtcars)
 }
 \references{

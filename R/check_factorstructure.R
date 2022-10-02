@@ -7,11 +7,11 @@
 #'
 #' @inheritParams check_sphericity_bartlett
 #' @examples
-#' library(parameters)
+#' library(performance)
 #' check_factorstructure(mtcars)
 #' @return A list of lists of indices related to sphericity and KMO.
 #' @seealso
-#' [check_kmo()], [check_sphericity_bartlett()] and [check_clusterstructure()].
+#' [`check_kmo()`], [`check_sphericity_bartlett()`] and [`check_clusterstructure()`].
 #' @export
 check_factorstructure <- function(x, ...) {
   # TODO: detect (and remove?) factors
@@ -62,12 +62,12 @@ check_factorstructure <- function(x, ...) {
 #' @inheritParams check_sphericity_bartlett
 #'
 #' @examples
-#' library(parameters)
+#' library(performance)
 #' check_kmo(mtcars)
 #' @return A list of indices related to KMO.
 #'
 #' @details This function is strongly inspired by the `KMO` function in the
-#'   `psych` package (Revelle, 2016). All credit goes to its author.
+#'   **psych** package (Revelle, 2016). All credits goes to its author.
 #'
 #' @references
 #' - Revelle, W. (2016). How To: Use the psych package for Factor Analysis
@@ -128,7 +128,7 @@ check_kmo <- function(x, ...) {
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examples
-#' library(parameters)
+#' library(performance)
 #' check_sphericity_bartlett(mtcars)
 #' @details This function is strongly inspired by the `cortest.bartlett()`
 #'   function in the **psych** package (Revelle, 2016). All credit goes to its

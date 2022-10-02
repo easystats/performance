@@ -19,13 +19,14 @@
 #'
 #' @examples
 #' \donttest{
-#' library(parameters)
+#' library(performance)
 #' check_clusterstructure(iris[, 1:4])
 #' plot(check_clusterstructure(iris[, 1:4]))
 #' }
 #' @return The H statistic (numeric)
 #'
-#' @seealso [check_kmo()], [check_sphericity_bartlett()] and [check_factorstructure()].
+#' @seealso [`check_kmo()`], [`check_sphericity_bartlett()`] and
+#' [`check_factorstructure()`].
 #'
 #' @references
 #' - Lawson, R. G., & Jurs, P. C. (1990). New index for clustering

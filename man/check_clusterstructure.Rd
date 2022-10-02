@@ -33,7 +33,7 @@ number of square shaped blocks along the diagonal.
 }
 \examples{
 \donttest{
-library(parameters)
+library(performance)
 check_clusterstructure(iris[, 1:4])
 plot(check_clusterstructure(iris[, 1:4]))
 }
@@ -49,5 +49,6 @@ Joint Conference on Neural Networks. IJCNN02 (3), 2225-2230. IEEE.
 }
 }
 \seealso{
-\code{\link[=check_kmo]{check_kmo()}}, \code{\link[=check_sphericity_bartlett]{check_sphericity_bartlett()}} and \code{\link[=check_factorstructure]{check_factorstructure()}}.
+\code{\link[=check_kmo]{check_kmo()}}, \code{\link[=check_sphericity_bartlett]{check_sphericity_bartlett()}} and
+\code{\link[=check_factorstructure]{check_factorstructure()}}.
 }

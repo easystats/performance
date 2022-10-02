@@ -20,7 +20,7 @@ running the \link[=check_sphericity_bartlett]{Bartlett's Test of Sphericity} and
 the \link[=check_kmo]{Kaiser, Meyer, Olkin (KMO) Measure of Sampling Adequacy (MSA)}.
 }
 \examples{
-library(parameters)
+library(performance)
 check_factorstructure(mtcars)
 }
 \seealso{
