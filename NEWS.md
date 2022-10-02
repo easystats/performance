@@ -7,6 +7,12 @@
 * The alias `performance_lrt()` was removed. Use `test_lrt()` resp.
   `test_likelihoodratio()`.
 
+## New functions
+
+* Following functions were moved from package *parameters* to *performance*:
+  `check_sphericity_bartlett()`, `check_kmo()`, `check_factorstructure()` and
+  `check_clusterstructure()`.
+
 ## Changes to functions
 
 * `check_normality()`, `check_homogeneity()` and `check_symmetry()` now works
