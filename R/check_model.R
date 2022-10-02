@@ -167,13 +167,13 @@ check_model.default <- function(x,
 
 #' @export
 print.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "for model diagnositic plots")
+  insight::check_if_installed("see", "for model diagnostic plots")
   NextMethod()
 }
 
 #' @export
 plot.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "for model diagnositic plots")
+  insight::check_if_installed("see", "for model diagnostic plots")
   NextMethod()
 }
 

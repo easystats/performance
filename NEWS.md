@@ -24,6 +24,10 @@
   variables/methods. Includes a new optional ID argument to add along the 
   row number in the output (@rempsyc #443).
 
+## Bug Fixes
+
+* Fixes wrong *z*-score values when using vector instead of a data frame (#476).
+
 # performance 0.9.2
 
 ## General
