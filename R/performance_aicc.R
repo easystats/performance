@@ -288,7 +288,7 @@ performance_aicc.rma <- function(x, ...) {
       } else if (trans == "expm1") {
         .weighted_sum((insight::get_response(x) - 1), w = model_weights)
       } else if (trans == "sqrt") {
-        .weighted_sum(log(.5 / sqrt(insight::get_response(x))), w = model_weights)
+        .weighted_sum(log(0.5 / sqrt(insight::get_response(x))), w = model_weights)
       } else {
         .ll_jacobian_adjustment(x, model_weights)
       }
