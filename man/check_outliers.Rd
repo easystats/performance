@@ -36,8 +36,7 @@ considered as outlier. If \code{NULL}, default values will be used (see
 'Details'). If a numeric value is given, it will be used as the threshold
 for any of the method run.}
 
-\item{ID}{Optional, to report an ID column along with the row number when
-reporting outliers by variable (for univariate methods).}
+\item{ID}{Optional, to report an ID column along with the row number.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing
@@ -134,10 +133,13 @@ Using the IQR (interquartile range) is a robust method developed by John
 Tukey, which often appears in box-and-whisker plots (e.g., in
 \code{geom_boxplot}). The interquartile range is the range between the first
 and the third quartiles. Tukey considered as outliers any data point that
-fell outside of either 1.5 times (the default threshold) the IQR below the
-first or above the third quartile. Similar to the Z-score method, this is a
-univariate method for outliers detection, returning outliers detected for at
-least one column, and might thus not be suited to high dimensional data.
+fell outside of either 1.5 times (the default threshold is 1.7) the IQR below
+the first or above the third quartile. Similar to the Z-score method, this is
+a univariate method for outliers detection, returning outliers detected for
+at least one column, and might thus not be suited to high dimensional data.
+The distance score for the IQR is the absolute deviation from the median of
+the upper and lower IQR thresholds. Then, this value is divided by the IQR
+threshold, to “standardize” it and facilitate interpretation.
 \item \strong{CI} \verb{("ci", "eti", "hdi", "bci")}:
 Another univariate method is to compute, for each variable, some sort of
 "confidence" interval and consider as outliers values lying beyond the edges
@@ -145,9 +147,12 @@ of that interval. By default, \code{"ci"} computes the Equal-Tailed Interval
 (\code{"eti"}), but other types of intervals are available, such as Highest
 Density Interval (\code{"hdi"}) or the Bias Corrected and Accelerated
 Interval (\code{"bci"}). The default threshold is \code{0.95}, considering
-as outliers all observations that are outside the 95\\% CI on any of the
+as outliers all observations that are outside the 95\% CI on any of the
 variable. See \code{\link[bayestestR:ci]{bayestestR::ci()}} for more details
-about the intervals.
+about the intervals. The distance score for the CI methods is the absolute
+deviation from the median of the upper and lower CI thresholds. Then, this
+value is divided by the difference between the upper and lower CI bounds
+divided by two, to “standardize” it and facilitate interpretation.
 }
 }
 
@@ -208,21 +213,21 @@ the results.
 Default thresholds are currently specified as follows:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(
-  zscore = stats::qnorm(p = 1 - 0.025),
-  zscore_robust = stats::qnorm(p = 1 - 0.025),
-  iqr = 1.5,
-  ci = 0.95,
-  eti = 0.95,
-  hdi = 0.95,
-  bci = 0.95,
+  zscore = stats::qnorm(p = 1 - 0.001),
+  zscore_robust = stats::qnorm(p = 1 - 0.001),
+  iqr = 1.7,
+  ci = 0.999,
+  eti = 0.999,
+  hdi = 0.999,
+  bci = 0.999,
   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
   pareto = 0.7,
-  mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-  mahalanobis_robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-  mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-  ics = 0.025,
+  mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+  mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+  mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+  ics = 0.001,
   optics = 2 * ncol(x),
-  lof = 0.025
+  lof = 0.001
 )
 }\if{html}{\out{</div>}}
 }

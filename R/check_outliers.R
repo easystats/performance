@@ -22,8 +22,7 @@
 #'   considered as outlier. If `NULL`, default values will be used (see
 #'   'Details'). If a numeric value is given, it will be used as the threshold
 #'   for any of the method run.
-#' @param ID Optional, to report an ID column along with the row number when
-#'   reporting outliers by variable (for univariate methods).
+#' @param ID Optional, to report an ID column along with the row number.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to `ICSOutlier::ics.outlier()`. When `method = "mahalanobis"`,
 #' they are  passed down to `stats::mahalanobis()`.
@@ -107,10 +106,13 @@
 #'  Tukey, which often appears in box-and-whisker plots (e.g., in
 #'  `geom_boxplot`). The interquartile range is the range between the first
 #'  and the third quartiles. Tukey considered as outliers any data point that
-#'  fell outside of either 1.5 times (the default threshold) the IQR below the
-#'  first or above the third quartile. Similar to the Z-score method, this is a
-#'  univariate method for outliers detection, returning outliers detected for at
-#'  least one column, and might thus not be suited to high dimensional data.
+#'  fell outside of either 1.5 times (the default threshold is 1.7) the IQR below
+#'  the first or above the third quartile. Similar to the Z-score method, this is
+#'  a univariate method for outliers detection, returning outliers detected for
+#'  at least one column, and might thus not be suited to high dimensional data.
+#'  The distance score for the IQR is the absolute deviation from the median of
+#'  the upper and lower IQR thresholds. Then, this value is divided by the IQR
+#'  threshold, to “standardize” it and facilitate interpretation.
 #'
 #'  - **CI** `("ci", "eti", "hdi", "bci")`:
 #'  Another univariate method is to compute, for each variable, some sort of
@@ -119,9 +121,12 @@
 #'  (`"eti"`), but other types of intervals are available, such as Highest
 #'  Density Interval (`"hdi"`) or the Bias Corrected and Accelerated
 #'  Interval (`"bci"`). The default threshold is `0.95`, considering
-#'  as outliers all observations that are outside the 95\% CI on any of the
+#'  as outliers all observations that are outside the 95% CI on any of the
 #'  variable. See [bayestestR::ci()] for more details
-#'  about the intervals.
+#'  about the intervals. The distance score for the CI methods is the absolute
+#'  deviation from the median of the upper and lower CI thresholds. Then, this
+#'  value is divided by the difference between the upper and lower CI bounds
+#'  divided by two, to “standardize” it and facilitate interpretation.
 #'
 #' @section Multivariate methods:
 #'
@@ -181,21 +186,21 @@
 #'
 #' ```
 #' list(
-#'   zscore = stats::qnorm(p = 1 - 0.025),
-#'   zscore_robust = stats::qnorm(p = 1 - 0.025),
-#'   iqr = 1.5,
-#'   ci = 0.95,
-#'   eti = 0.95,
-#'   hdi = 0.95,
-#'   bci = 0.95,
+#'   zscore = stats::qnorm(p = 1 - 0.001),
+#'   zscore_robust = stats::qnorm(p = 1 - 0.001),
+#'   iqr = 1.7,
+#'   ci = 0.999,
+#'   eti = 0.999,
+#'   hdi = 0.999,
+#'   bci = 0.999,
 #'   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
 #'   pareto = 0.7,
-#'   mahalanobis = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-#'   mahalanobis_robust = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-#'   mcd = stats::qchisq(p = 1 - 0.025, df = ncol(x)),
-#'   ics = 0.025,
+#'   mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+#'   mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+#'   mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+#'   ics = 0.001,
 #'   optics = 2 * ncol(x),
-#'   lof = 0.025
+#'   lof = 0.001
 #' )
 #' ```
 #'
@@ -1235,22 +1240,21 @@ check_outliers.geeglm <- check_outliers.gls
 }
 
 .check_outliers_thresholds_nowarn <- function(x) {
-  zscore <- stats::qnorm(p = 1 - 0.025)
-  zscore_robust <- stats::qnorm(p = 1 - 0.025)
-  iqr <- 1.5
-  ci <- 0.95
-  hdi <- 0.95
-  eti <- 0.95
-  bci <- 0.95
-  cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
-  pareto <- 0.7
-  mahalanobis <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
-  mahalanobis_robust <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
-  mcd <- stats::qchisq(p = 1 - 0.025, df = ncol(x))
-  ics <- 0.025
-  optics <- 2 * ncol(x)
-  iforest <- 0.025
-  lof <- 0.025
+  zscore = stats::qnorm(p = 1 - 0.001)
+  zscore_robust = stats::qnorm(p = 1 - 0.001)
+  iqr = 1.7
+  ci = 0.999
+  eti = 0.999
+  hdi = 0.999
+  bci = 0.999
+  cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
+  pareto = 0.7
+  mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x))
+  mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x))
+  mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x))
+  ics = 0.001
+  optics = 2 * ncol(x)
+  lof = 0.001
 
   list(
     "zscore" = zscore,
@@ -1267,7 +1271,6 @@ check_outliers.geeglm <- check_outliers.gls
     "mcd" = mcd,
     "ics" = ics,
     "optics" = optics,
-    "iforest" = iforest,
     "lof" = lof
   )
 }
@@ -1277,7 +1280,7 @@ check_outliers.geeglm <- check_outliers.gls
 # utilities --------------------
 
 .check_outliers_zscore <- function(x,
-                                   threshold = stats::qnorm(p = 1 - 0.025),
+                                   threshold = stats::qnorm(p = 1 - 0.001),
                                    robust = TRUE,
                                    method = "max",
                                    ID.names = NULL) {
@@ -1322,10 +1325,12 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_iqr <- function(x,
-                                threshold = 1.5,
+                                threshold = 1.7,
                                 method = "tukey",
                                 ID.names = NULL) {
+
   d <- data.frame(Row = seq_len(nrow(as.data.frame(x))))
+  Distance_IQR <- d
 
   for (col in seq_len(ncol(as.data.frame(x)))) {
     v <- x[, col]
@@ -1339,24 +1344,32 @@ check_outliers.geeglm <- check_outliers.gls
     lower <- stats::quantile(v, 0.25, na.rm = TRUE) - (iqr * threshold)
     upper <- stats::quantile(v, 0.75, na.rm = TRUE) + (iqr * threshold)
 
+    m.int <- stats::median(c(lower, upper), na.rm = TRUE)
+    d2 <- abs(v - m.int)
+    Distance_IQR[names(as.data.frame(x))[col]] <- d2/(iqr * threshold)
+
     d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1,
       ifelse(v < lower, 1, 0)
     )
+
   }
 
   out <- data.frame(Row = d$Row)
   d$Row <- NULL
+  Distance_IQR$Row <- NULL
 
   if (!is.null(ID.names)) {
     out <- cbind(out, ID.names)
   }
 
-  out$Distance_IQR <- sapply(as.data.frame(t(d)), function(x) {
-    ifelse(all(is.na(x)), NA, mean(x))
+  # out$Distance_IQR <- Distance_IQR
+
+  out$Distance_IQR <- sapply(as.data.frame(t(Distance_IQR)), function(x) {
+    ifelse(all(is.na(x)), NA, max(x, na.rm = TRUE))
   })
 
   out$Outlier_IQR <- sapply(as.data.frame(t(d)), function(x) {
-    ifelse(all(is.na(x)), NA, max(x))
+    ifelse(all(is.na(x)), NA, max(x, na.rm = TRUE))
   })
 
   list(
@@ -1368,41 +1381,46 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_ci <- function(x,
-                               threshold = 0.95,
-                               method = "HDI",
+                               threshold = 0.999,
+                               method = "ci",
                                ID.names = NULL) {
-  # get CIs
-  cis <- bayestestR::ci(x, ci = threshold, method = method)
 
   # Run through columns
   d <- data.frame(Row = seq_len(nrow(x)))
+  Distance_CI <- d
+
   for (col in names(x)) {
-    d[col] <- ifelse(x[[col]] > cis[
-      cis$Parameter == col, "CI_high"
-    ] | x[[col]] < cis[
-      cis$Parameter == col, "CI_low"
-    ], 1, 0)
+
+    v <- x[, col]
+    ci <- bayestestR::ci(v, ci = threshold, method = method)
+    d[col] <- ifelse(x[[col]] > ci$CI_high |
+                       x[[col]] < ci$CI_low, 1, 0)
+
+    m.int <- stats::median(c(ci$CI_low, ci$CI_high), na.rm = TRUE)
+    d2 <- abs(v - m.int)
+    ci.range <- (ci$CI_high - ci$CI_low)/2
+
+    Distance_CI[col] <- d2/ci.range
+
   }
 
   out.0 <- data.frame(Row = d$Row)
   d$Row <- NULL
+  Distance_CI$Row <- NULL
 
   if (!is.null(ID.names)) {
     out.0 <- cbind(out.0, ID.names)
   }
 
-  # Average over rows
-  out <- data.frame(x = as.numeric(sapply(as.data.frame(t(d)),
-    mean,
-    na.omit = TRUE,
-    na.rm = TRUE
-  )))
+  # Take the max
+  out <- as.data.frame(apply(Distance_CI, 1, max, na.rm = TRUE))
   names(out) <- paste0("Distance_", method)
 
   # Filter
-  out[paste0("Outlier_", method)] <- as.numeric(
-    out[[paste0("Distance_", method)]] > 0
-  )
+  out[paste0("Outlier_", method)] <- sapply(
+    as.data.frame(t(d)), function(x) {
+      ifelse(all(is.na(x)), NA, max(x, na.rm = TRUE))
+  })
 
   out <- cbind(out.0, out)
 
@@ -1456,7 +1474,8 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_mahalanobis <- function(x,
-                                        threshold = NULL,
+                                        threshold = stats::qchisq(
+                                          p = 1 - 0.001, df = ncol(x)),
                                         ID.names = NULL,
                                         ...) {
   if (any(is.na(x)) || any(with(x, x == Inf))) {
@@ -1485,7 +1504,8 @@ check_outliers.geeglm <- check_outliers.gls
 
 # Bigutils not yet fully available on CRAN
 .check_outliers_mahalanobis_robust <- function(x,
-                                               threshold = NULL,
+                                               threshold = stats::qchisq(
+                                                 p = 1 - 0.001, df = ncol(x)),
                                                ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
@@ -1513,7 +1533,8 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_mcd <- function(x,
-                                threshold = NULL,
+                                threshold = stats::qchisq(
+                                  p = 1 - 0.001, df = ncol(x)),
                                 percentage_central = .50,
                                 ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))
@@ -1540,7 +1561,7 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_ics <- function(x,
-                                threshold = 0.025,
+                                threshold = 0.001,
                                 ID.names = NULL,
                                 ...) {
   out <- data.frame(Row = seq_len(nrow(x)))
@@ -1663,7 +1684,7 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_lof <- function(x,
-                                threshold = NULL,
+                                threshold = 0.001,
                                 ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
