@@ -35,13 +35,13 @@ if (.runThisTest &&
     set.seed(333)
 
     model <- insight::download_model("brms_1")
-    perf <- model_performance(model)
+    expect_warning(perf <- model_performance(model))
     expect_equal(perf$R2, 0.8262673, tolerance = 1e-3)
     expect_equal(perf$R2_adjusted, 0.7982615, tolerance = 1e-3)
     expect_equal(perf$ELPD, -78.59823, tolerance = 1e-3)
 
     model <- insight::download_model("brms_mixed_4")
-    perf <- model_performance(model)
+    expect_warning(perf <- model_performance(model))
     expect_equal(perf$R2, 0.954538, tolerance = 1e-3)
     expect_equal(perf$R2_adjusted, 0.9529004, tolerance = 1e-3)
     expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)

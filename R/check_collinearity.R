@@ -402,9 +402,9 @@ check_collinearity.zerocount <- function(x,
   # any assignment found?
   if (is.null(assign) || all(is.na(assign))) {
     if (verbose) {
-      warning(insight::format_message(
+      insight::format_warning(
         sprintf("Could not extract model terms for the %s component of the model.", component)
-      ), call. = FALSE)
+      )
     }
     return(NULL)
   }
@@ -414,9 +414,9 @@ check_collinearity.zerocount <- function(x,
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     assign <- assign[-attributes(v)$na_columns_index]
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Model matrix is rank deficient. VIFs may not be sensible."
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -426,7 +426,7 @@ check_collinearity.zerocount <- function(x,
     assign <- assign[-1]
   } else {
     if (isTRUE(verbose)) {
-      warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
+      insight::format_warning("Model has no intercept. VIFs may not be sensible.")
     }
   }
 
@@ -446,9 +446,9 @@ check_collinearity.zerocount <- function(x,
 
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)
-      ), call. = FALSE)
+      )
     }
     return(NULL)
   }
@@ -479,9 +479,9 @@ check_collinearity.zerocount <- function(x,
   # check for interactions, VIF might be inflated...
   if (!is.null(insight::find_interactions(x)) && any(result > 10)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms."
-      ), call. = FALSE)
+      )
     }
   }
 
