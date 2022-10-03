@@ -57,16 +57,18 @@ cronbachs_alpha.matrix <- function(x) {
 
 #' @export
 cronbachs_alpha.parameters_pca <- function(x) {
-  ## TODO change to data_name once parameters 0.10.0 is on CRAN
-  pca_data <- attr(x, "data")
-
-  if (is.null(pca_data)) {
-    insight::format_warning("Could not find data frame that was used for the PCA.")
-    return(NULL)
-  }
-
   # fetch data used for the PCA
-  pca_data <- get(pca_data, envir = parent.frame())
+  pca_data <- attr(x, "dataset")
+
+  # if NULL, can we get from environment?
+  if (is.null(pca_data)) {
+    pca_data <- attr(x, "data")
+    if (is.null(pca_data)) {
+      insight::format_warning("Could not find data frame that was used for the PCA.")
+      return(NULL)
+    }
+    pca_data <- get(pca_data, envir = parent.frame())
+  }
 
   # get columns from parameters_pca-object where loadings are saved
   loadings_columns <- attributes(x)$loadings_columns
