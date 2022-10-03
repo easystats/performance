@@ -1,3 +1,10 @@
+# performance 0.10.1
+
+## Bug fixes
+
+* `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
+
+
 # performance 0.10.0
 
 ## Breaking Change

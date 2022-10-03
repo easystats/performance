@@ -22,11 +22,11 @@
 #' @details `r2_bayes()` returns an "unadjusted" R2 value. See
 #'   [r2_loo()] to calculate a LOO-adjusted R2, which comes
 #'   conceptually closer to an adjusted R2 measure.
-#'   \cr \cr
+#'
 #'   For mixed models, the conditional and marginal R2 are returned. The marginal
 #'   R2 considers only the variance of the fixed effects, while the conditional
 #'   R2 takes both the fixed and random effects into account.
-#'   \cr \cr
+#'
 #'   `r2_posterior()` is the actual workhorse for `r2_bayes()` and
 #'   returns a posterior sample of Bayesian R2 values.
 #'
@@ -146,9 +146,9 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
-    warning(insight::format_message(
-      "`r2()` only available for models fit using the 'sampling' algorithm."
-    ), call. = FALSE)
+    insight::format_warning(
+      "`r2()` only available for models fit using the `sampling` algorithm."
+    )
     return(NA)
   }
 
@@ -231,7 +231,7 @@ r2_posterior.stanreg <- r2_posterior.brmsfit
 #' @export
 r2_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    warning("Models of class 'stanmvreg' not yet supported.", call. = FALSE)
+    insight::format_error("Models of class `stanmvreg` not yet supported.")
   }
   NULL
 }
@@ -250,7 +250,7 @@ r2_posterior.BFBayesFactor <- function(model,
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
     if (verbose) {
-      warning("Can produce R2 only for linear models.", call. = FALSE)
+      insight::format_warning("Can produce R2 only for linear models.")
     }
     return(NULL)
   }
@@ -262,7 +262,7 @@ r2_posterior.BFBayesFactor <- function(model,
   insight::check_if_installed("rstantools")
   insight::check_if_installed("BayesFactor")
 
-  everything_we_need <- .get_bfbf_predictions(model)
+  everything_we_need <- .get_bfbf_predictions(model, verbose = verbose)
 
   # Compute R2!
   y <- everything_we_need[["y"]]
@@ -293,9 +293,9 @@ r2_posterior.BFBayesFactor <- function(model,
 
   if (any(is.na(BFMods$BF) | is.infinite(BFMods$BF))) {
     if (verbose) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Can't compute model-averaged index. One or more Bayes factors are NA or infinite."
-      ), call. = FALSE)
+      )
     }
     return(NULL)
   }
@@ -373,11 +373,11 @@ as.data.frame.r2_bayes <- function(x, ...) {
 
 # Utils -------------------------------------------------------------------
 
-.get_bfbf_predictions <- function(model, iterations = 4000) {
+.get_bfbf_predictions <- function(model, iterations = 4000, verbose = TRUE) {
   insight::check_if_installed("BayesFactor")
 
   # Estimates
-  params <- insight::get_parameters(model, unreduce = FALSE, iterations = iterations)
+  params <- insight::get_parameters(model, unreduce = FALSE, iterations = iterations, verbose = verbose)
 
   # remove sig and g cols
   params_theta <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
@@ -391,9 +391,9 @@ as.data.frame.r2_bayes <- function(x, ...) {
   if ((length(colnames(params_theta)) != length(colnames(mm))) ||
     !all(colnames(params_theta) == colnames(mm))) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
-      stop(insight::format_message("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher."), call. = FALSE)
+      insight::format_error("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher.")
     }
-    stop(insight::format_message("Woops, you seem to have stumbled on some weird edge case. Please file an issue at https://github.com/easystats/performance/issues"), call. = FALSE)
+    insight::format_error("Woops, you seem to have stumbled on some weird edge case. Please file an issue at {.url https://github.com/easystats/performance/issues}")
   }
 
   out <- list(
@@ -416,12 +416,12 @@ as.data.frame.r2_bayes <- function(x, ...) {
 
 #' @export
 residuals.BFBayesFactor <- function(object, ...) {
-  everything_we_need <- .get_bfbf_predictions(object)
+  everything_we_need <- .get_bfbf_predictions(object, verbose = FALSE)
 
   everything_we_need[["y"]] - apply(everything_we_need[["y_pred"]], 2, mean)
 }
 
 #' @export
 fitted.BFBayesFactor <- function(object, ...) {
-  apply(.get_bfbf_predictions(object)[["y_pred"]], 2, mean)
+  apply(.get_bfbf_predictions(object, verbose = FALSE)[["y_pred"]], 2, mean)
 }
