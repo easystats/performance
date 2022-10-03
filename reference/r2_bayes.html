@@ -162,12 +162,11 @@ and credible intervals for the R2 values are saved as attributes.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>r2_bayes()</code> returns an "unadjusted" R2 value. See
 <code><a href="r2_loo.html">r2_loo()</a></code> to calculate a LOO-adjusted R2, which comes
-conceptually closer to an adjusted R2 measure.
-<br><br>
-For mixed models, the conditional and marginal R2 are returned. The marginal
+conceptually closer to an adjusted R2 measure.</p>
+<p>For mixed models, the conditional and marginal R2 are returned. The marginal
 R2 considers only the variance of the fixed effects, while the conditional
-R2 takes both the fixed and random effects into account.
-<br><br><code>r2_posterior()</code> is the actual workhorse for <code>r2_bayes()</code> and
+R2 takes both the fixed and random effects into account.</p>
+<p><code>r2_posterior()</code> is the actual workhorse for <code>r2_bayes()</code> and
 returns a posterior sample of Bayesian R2 values.</p>
     </div>
     <div class="section level2">
