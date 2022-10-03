@@ -13,7 +13,7 @@ if (requiet("testthat") && requiet("performance")) {
 if (requiet("testthat") && requiet("performance") && requiet("parameters")) {
   test_that("cronbachs_alpha, principal_components", {
     pca <- parameters::principal_components(mtcars[, c("cyl", "gear", "carb", "hp")], n = 1)
-    expect_equal(cronbachs_alpha(pca), 0.09463206, tolerance = 1e-3)
+    expect_equal(cronbachs_alpha(pca), c(PC1 = 0.09463206), tolerance = 1e-3)
   })
   test_that("cronbachs_alpha, principal_components", {
     pca <- parameters::principal_components(mtcars, n = 2)
