@@ -1240,21 +1240,21 @@ check_outliers.geeglm <- check_outliers.gls
 }
 
 .check_outliers_thresholds_nowarn <- function(x) {
-  zscore = stats::qnorm(p = 1 - 0.001)
-  zscore_robust = stats::qnorm(p = 1 - 0.001)
-  iqr = 1.7
-  ci = 0.999
-  eti = 0.999
-  hdi = 0.999
-  bci = 0.999
-  cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
-  pareto = 0.7
-  mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  ics = 0.001
-  optics = 2 * ncol(x)
-  lof = 0.001
+  zscore <- stats::qnorm(p = 1 - 0.001)
+  zscore_robust <- stats::qnorm(p = 1 - 0.001)
+  iqr <- 1.7
+  ci <- 0.999
+  eti <- 0.999
+  hdi <- 0.999
+  bci <- 0.999
+  cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
+  pareto <- 0.7
+  mahalanobis <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
+  mahalanobis_robust <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
+  mcd <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
+  ics <- 0.001
+  optics <- 2 * ncol(x)
+  lof <- 0.001
 
   list(
     "zscore" = zscore,
@@ -1346,7 +1346,7 @@ check_outliers.geeglm <- check_outliers.gls
 
     m.int <- stats::median(c(lower, upper), na.rm = TRUE)
     d2 <- abs(v - m.int)
-    Distance_IQR[names(as.data.frame(x))[col]] <- d2/(iqr * threshold)
+    Distance_IQR[names(as.data.frame(x))[col]] <- d2 / (iqr * threshold)
 
     d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1,
       ifelse(v < lower, 1, 0)
@@ -1398,9 +1398,9 @@ check_outliers.geeglm <- check_outliers.gls
 
     m.int <- stats::median(c(ci$CI_low, ci$CI_high), na.rm = TRUE)
     d2 <- abs(v - m.int)
-    ci.range <- (ci$CI_high - ci$CI_low)/2
+    ci.range <- (ci$CI_high - ci$CI_low) / 2
 
-    Distance_CI[col] <- d2/ci.range
+    Distance_CI[col] <- d2 / ci.range
 
   }
 
@@ -1730,7 +1730,7 @@ check_outliers.geeglm <- check_outliers.gls
 
 #' @export
 check_outliers.glmmTMB <- function(x, ...) {
-  message(paste0("`check_outliers()` does not yet support models of class `", class(x)[1], "`."))
+  insight::format_alert(paste0("`check_outliers()` does not yet support models of class `", class(x)[1], "`."))
   NULL
 }
 
