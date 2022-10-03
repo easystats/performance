@@ -21,7 +21,7 @@
   out <- lapply(model_r2, function(rsq) {
     ci_low <- stats::uniroot(
       .pRsq,
-      c(.00001, .99999),
+      c(0.00001, 0.99999),
       R2_obs = as.vector(rsq),
       p = model_rank,
       nobs = n,
@@ -30,7 +30,7 @@
 
     ci_high <- stats::uniroot(
       .pRsq,
-      c(.00001, .99999),
+      c(0.00001, 0.99999),
       R2_obs = as.vector(rsq),
       p = model_rank,
       nobs = n,
@@ -75,8 +75,8 @@
         nobs = dots$nobs
       )
     },
-    seq(0, 2, by = .25) * nobs,
-    c(seq(.25, 2, by = .25), Inf) * nobs,
+    seq(0, 2, by = 0.25) * nobs,
+    c(seq(0.25, 2, by = 0.25), Inf) * nobs,
     MoreArgs = list(
       R2_pop = R2_pop,
       R2_obs = R2_obs,

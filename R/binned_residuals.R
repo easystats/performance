@@ -87,7 +87,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
       n = n,
       x.lo = model.range[1],
       x.hi = model.range[2],
-      se = stats::qnorm(.975) * sdev / sqrt(n),
+      se = stats::qnorm(0.975) * sdev / sqrt(n),
       ci_range = sdev / sqrt(n)
     )
   }))
@@ -96,8 +96,8 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   d <- d[stats::complete.cases(d), ]
 
   # CIs
-  d$CI_low <- d$ybar - stats::qnorm(.975) * d$ci_range
-  d$CI_high <- d$ybar + stats::qnorm(.975) * d$ci_range
+  d$CI_low <- d$ybar - stats::qnorm(0.975) * d$ci_range
+  d$CI_high <- d$ybar + stats::qnorm(0.975) * d$ci_range
 
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"

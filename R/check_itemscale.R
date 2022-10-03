@@ -45,7 +45,7 @@
 #'
 #' @examples
 #' # data generation from '?prcomp', slightly modified
-#' C <- chol(S <- toeplitz(.9^(0:15)))
+#' C <- chol(S <- toeplitz(0.9^(0:15)))
 #' set.seed(17)
 #' X <- matrix(rnorm(1600), 100, 16)
 #' Z <- X %*% C

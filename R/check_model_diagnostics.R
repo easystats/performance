@@ -151,11 +151,11 @@
   s <- summary(model)
 
   if (inherits(model, "lm", which = TRUE) == 1) {
-    cook_levels <- round(stats::qf(.5, s$fstatistic[2], s$fstatistic[3]), 2)
+    cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
   } else if (!is.null(threshold)) {
     cook_levels <- threshold
   } else {
-    cook_levels <- c(.5, 1)
+    cook_levels <- c(0.5, 1)
   }
 
   n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
