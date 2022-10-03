@@ -55,9 +55,9 @@ check_normality.default <- function(x, ...) {
   .is_model_valid(x)
 
   if (!insight::model_info(x)$is_linear) {
-    message(insight::format_message(
+    insight::format_alert(
       "Checking normality of residuals is only useful an appropriate assumption for linear models."
-    ))
+    )
     return(NULL)
   }
 
@@ -131,9 +131,9 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
 
   # valid model?
   if (!info$is_linear && effects == "fixed") {
-    message(insight::format_message(
+    insight::format_alert(
       "Checking normality of residuals is only useful an appropriate assumption for linear models."
-    ))
+    )
     return(NULL)
   }
 
@@ -227,7 +227,7 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
 
   if (is.null(ts)) {
     insight::print_color(
-      sprintf("'check_normality()' does not support models of class '%s'.\n", class(model)[1]),
+      sprintf("`check_normality()` does not support models of class `%s`.\n", class(model)[1]),
       "red"
     )
     return(NULL)
