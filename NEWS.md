@@ -1,4 +1,4 @@
-# performance 0.9.x
+# performance 0.10.0
 
 ## Breaking Change
 
