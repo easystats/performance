@@ -50,7 +50,7 @@
 
   if (is.null(res_)) {
     if (verbose) {
-      message(insight::format_message(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class '%s'.", class(model)[1])))
+      insight::format_alert(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
     }
     return(NULL)
   }
@@ -102,7 +102,7 @@
 
   if (is.null(se)) {
     if (verbose) {
-      message(insight::format_message("Could not compute standard errors from random effects for diagnostic plot."))
+      insight::format_alert("Could not compute standard errors from random effects for diagnostic plot.")
     }
     return(NULL)
   }
@@ -134,7 +134,7 @@
   r <- try(stats::residuals(model), silent = TRUE)
 
   if (inherits(r, "try-error")) {
-    message(insight::format_message(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1])))
+    insight::format_alert(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
     return(NULL)
   }
 
