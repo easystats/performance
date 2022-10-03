@@ -162,8 +162,7 @@ for any of the method run.</p></dd>
 
 
 <dt>ID</dt>
-<dd><p>Optional, to report an ID column along with the row number when
-reporting outliers by variable (for univariate methods).</p></dd>
+<dd><p>Optional, to report an ID column along with the row number.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -254,10 +253,13 @@ Using the IQR (interquartile range) is a robust method developed by John
 Tukey, which often appears in box-and-whisker plots (e.g., in
 <code>geom_boxplot</code>). The interquartile range is the range between the first
 and the third quartiles. Tukey considered as outliers any data point that
-fell outside of either 1.5 times (the default threshold) the IQR below the
-first or above the third quartile. Similar to the Z-score method, this is a
-univariate method for outliers detection, returning outliers detected for at
-least one column, and might thus not be suited to high dimensional data.</p></li>
+fell outside of either 1.5 times (the default threshold is 1.7) the IQR below
+the first or above the third quartile. Similar to the Z-score method, this is
+a univariate method for outliers detection, returning outliers detected for
+at least one column, and might thus not be suited to high dimensional data.
+The distance score for the IQR is the absolute deviation from the median of
+the upper and lower IQR thresholds. Then, this value is divided by the IQR
+threshold, to “standardize” it and facilitate interpretation.</p></li>
 <li><p><strong>CI</strong> <code>("ci", "eti", "hdi", "bci")</code>:
 Another univariate method is to compute, for each variable, some sort of
 "confidence" interval and consider as outliers values lying beyond the edges
@@ -265,9 +267,12 @@ of that interval. By default, <code>"ci"</code> computes the Equal-Tailed Interv
 (<code>"eti"</code>), but other types of intervals are available, such as Highest
 Density Interval (<code>"hdi"</code>) or the Bias Corrected and Accelerated
 Interval (<code>"bci"</code>). The default threshold is <code>0.95</code>, considering
-as outliers all observations that are outside the 95\<!-- % CI on any of the -->
+as outliers all observations that are outside the 95% CI on any of the
 variable. See <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code> for more details
-about the intervals.</p></li>
+about the intervals. The distance score for the CI methods is the absolute
+deviation from the median of the upper and lower CI thresholds. Then, this
+value is divided by the difference between the upper and lower CI bounds
+divided by two, to “standardize” it and facilitate interpretation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="multivariate-methods">Multivariate methods<a class="anchor" aria-label="anchor" href="#multivariate-methods"></a></h2>
@@ -326,21 +331,21 @@ the results.</p></li>
 
 <p>Default thresholds are currently specified as follows:</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zscore =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>),</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zscore_robust =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">iqr =</span> <span class="fl">1.5</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci =</span> <span class="fl">0.95</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">eti =</span> <span class="fl">0.95</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">hdi =</span> <span class="fl">0.95</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">bci =</span> <span class="fl">0.95</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">zscore =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zscore_robust =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">iqr =</span> <span class="fl">1.7</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ci =</span> <span class="fl">0.999</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">eti =</span> <span class="fl">0.999</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">hdi =</span> <span class="fl">0.999</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">bci =</span> <span class="fl">0.999</span>,</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">cook =</span> stats<span class="sc">::</span><span class="fu">qf</span>(<span class="fl">0.5</span>, <span class="fu">ncol</span>(x), <span class="fu">nrow</span>(x) <span class="sc">-</span> <span class="fu">ncol</span>(x)),</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pareto =</span> <span class="fl">0.7</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">mahalanobis =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">mahalanobis_robust =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">mcd =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ics =</span> <span class="fl">0.025</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">mahalanobis =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">mahalanobis_robust =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">mcd =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ics =</span> <span class="fl">0.001</span>,</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">optics =</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">ncol</span>(x),</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">lof =</span> <span class="fl">0.025</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">lof =</span> <span class="fl">0.001</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
@@ -384,25 +389,15 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span><span class="co"># For single variables ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span> <span class="co"># Find outliers</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="co"># Show the row index of the outliers</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 outliers detected: cases 18, 19, 20, 28.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: zscore_robust (1.96).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variable: data$mpg.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Outliers per variable (zscore_robust): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`data$mpg`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Row Distance_Zscore_robust</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  18               2.439254</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  19               2.069670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  20               2.716442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  28               2.069670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OK: No outliers detected.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: zscore_robust (3.09).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - For variable: data$mpg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span> <span class="co"># The object is a binary vector...</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 1 0 0 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span>
 <span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="op">!</span><span class="va">outliers_list</span>, <span class="op">]</span> <span class="co"># And can be used to filter a dataframe</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">)</span> <span class="co"># New size, 28 (4 outliers removed)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Find all observations beyond +/- 2 SD</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span>, method <span class="op">=</span> <span class="st">"zscore"</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
@@ -421,9 +416,10 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For dataframes ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on dataframes</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 outlier detected: case 9.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: mahalanobis (21.92).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OK: No outliers detected.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: mahalanobis (31.26).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># You can also use multiple methods at once</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
@@ -432,9 +428,9 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span>  <span class="st">"zscore"</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 outliers detected: cases 9, 15, 16, 17, 20, 31.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following methods and thresholds: mahalanobis (1.96), iqr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   (1.5), zscore (21.92).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 outlier detected: case 31.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following methods and thresholds: mahalanobis (3.09), iqr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   (1.7), zscore (31.26).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Note: Outliers were classified as such by at least half of the selected methods. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -442,20 +438,19 @@ association, 85(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more variables </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> by at least one of the selected methods: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Row n_Zscore n_IQR  n_Mahalanobis</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  31        2     2              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   9        1     1 (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Row n_Zscore n_IQR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  31        1     2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using `as.data.frame()`, we can access more details!</span></span></span>
 <span class="r-in"><span><span class="va">outliers_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">outliers_info</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Row Distance_Zscore Outlier_Zscore Distance_IQR Outlier_IQR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1        1.189901              0            0           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2        1.189901              0            0           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3        1.224858              0            0           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4        1.122152              0            0           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5        1.043081              0            0           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6        1.564608              0            0           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1        1.189901              0    0.4208483           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2        1.189901              0    0.2941176           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3        1.224858              0    0.5882353           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4        1.122152              0    0.5882353           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5        1.043081              0    0.3915954           0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6        1.564608              0    0.6809025           0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Distance_Mahalanobis Outlier_Mahalanobis Outlier</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1             8.946673                   0       0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2             8.287933                   0       0</span>
@@ -465,10 +460,10 @@ association, 85(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6             8.877558                   0       0</span>
 <span class="r-in"><span><span class="va">outliers_info</span><span class="op">$</span><span class="va">Outlier</span> <span class="co"># Including the probability of being an outlier</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.6666667 0.6666667 0.6666667 0.3333333 0.3333333 0.6666667 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.3333333 0.6666667 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.0000000 0.6666667 0.0000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># And we can be more stringent in our outliers removal process</span></span></span>
 <span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="va">outliers_info</span><span class="op">$</span><span class="va">Outlier</span> <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="op">]</span></span></span>
@@ -488,9 +483,10 @@ association, 85(411), 633-639.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 outliers detected: cases 42, 44, 69, 119.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: mahalanobis (11.14).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OK: No outliers detected.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: mahalanobis (18.47).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># You can also run all the methods</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>

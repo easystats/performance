@@ -100,10 +100,11 @@
 <h3 id="changes-to-functions-0-9">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-9"></a></h3>
 <ul><li><p><code><a href="../reference/check_normality.html">check_normality()</a></code>, <code><a href="../reference/check_homogeneity.html">check_homogeneity()</a></code> and <code><a href="../reference/check_symmetry.html">check_symmetry()</a></code> now works for <code>htest</code> objects.</p></li>
 <li><p>Print method for <code><a href="../reference/check_outliers.html">check_outliers()</a></code> changed significantly: now states the methods, thresholds, and variables used, reports outliers per variable (for univariate methods) as well as any observation flagged for several variables/methods. Includes a new optional ID argument to add along the row number in the output (<a href="https://github.com/rempsyc" class="external-link">@rempsyc</a> <a href="https://github.com/easystats/performance/issues/443" class="external-link">#443</a>).</p></li>
+<li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> now uses more conventional outlier thresholds. The <code>IQR</code> and confidence interval methods now gain improved distance scores that are continuous instead of discrete.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-9">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-9"></a></h3>
-<ul><li>Fixes wrong <em>z</em>-score values when using vector instead of a data frame (<a href="https://github.com/easystats/performance/issues/476" class="external-link">#476</a>).</li>
+<ul><li>Fixes wrong <em>z</em>-score values when using a vector instead of a data frame in <code><a href="../reference/check_outliers.html">check_outliers()</a></code> (<a href="https://github.com/easystats/performance/issues/476" class="external-link">#476</a>).</li>
 </ul></div>
 </div>
     <div class="section level2">
