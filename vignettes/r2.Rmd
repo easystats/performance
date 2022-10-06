@@ -29,14 +29,16 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-if (!requireNamespace("BayesFactor", quietly = TRUE) ||
-  !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("lme4", quietly = TRUE)) {
-  knitr::opts_chunk$set(eval = FALSE)
-} else {
+pkgs <- c(
+  "effectsize", "BayesFactor", "lme4", "rstanarm"
+)
+successfully_loaded <- sapply(pkgs, requireNamespace, quietly = TRUE)
+if (all(successfully_loaded)) {
+  library(performance)
+  library(effectsize)
   library(BayesFactor)
-  library(rstanarm)
   library(lme4)
+  library(rstanarm)
 }
 
 set.seed(333)
@@ -110,7 +112,7 @@ For mixed models, `performance` will return two different $R^2$s:
 
 The marginal $R^2$ considers only the variance of the **fixed effects** (without the random effects), while the conditional $R^2$ takes *both* the **fixed and random effects** into account (i.e., the total model).
 
-```{r}
+```{r eval=successfully_loaded["lme4"]}
 library(lme4)
 
 # defining a linear mixed-effects model
@@ -129,7 +131,7 @@ But, in the current vignette, we would like to exclusively focus on this family 
 
 # R2 for Bayesian Models
 
-```{r}
+```{r eval=successfully_loaded["rstanarm"]}
 library(rstanarm)
 
 model <- stan_glm(mpg ~ wt + cyl, data = mtcars, refresh = 0)
@@ -138,7 +140,7 @@ r2(model)
 
 As discussed above, for mixed-effects models, there will be two components associated with $R^2$.
 
-```{r}
+```{r eval=successfully_loaded["rstanarm"]}
 # defining a Bayesian mixed-effects model
 model <- stan_lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, refresh = 0)
 
@@ -147,7 +149,7 @@ r2(model)
 
 Let's look at another regression analysis carried out with `{BayesFactor}` package.
 
-```{r, eval=utils::packageVersion("BayesFactor") >= package_version("0.9.12-4.3")}
+```{r, eval=eval=successfully_loaded["BayesFactor"] && utils::packageVersion("BayesFactor") >= package_version("0.9.12-4.3")}
 library(BayesFactor)
 data(puzzles)
 
@@ -166,6 +168,23 @@ m2 <- generalTestBF(RT ~ shape * color + ID,
 r2(m2)
 ```
 
+# Comparing change in R2 using Cohen's *f*
+
+Cohen's $f$ (of [ANOVA fame](https://easystats.github.io/effectsize/articles/anovaES.html)) can be used as a measure of effect size in the context of sequential multiple regression (i.e., [**nested models**](https://easystats.github.io/performance/reference/test_performance.html)).
+That is, when comparing two models, we can examine the ratio between the
+increase in $R^2$ and the unexplained variance:
+
+$$
+f^{2}={R_{AB}^{2}-R_{A}^{2} \over 1-R_{AB}^{2}}
+$$
+
+```{r eval=successfully_loaded["effectsize"]}
+library(effectsize)
+m1 <- lm(salary ~ xtra_hours, data = hardlyworking)
+m2 <- lm(salary ~ xtra_hours + n_comps + seniority, data = hardlyworking)
+
+cohens_f_squared(m1, model2 = m2)
+```
 
 If you want to know more about these indices, you can check out details and references in the functions that compute them [**here**](https://easystats.github.io/performance/reference/index.html#section-r-functions).
 
