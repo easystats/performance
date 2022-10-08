@@ -56,10 +56,9 @@
   # sanity check, sometime either residuals or fitted can contain NA, see #488
   if (anyNA(res_) || anyNA(fitted_)) {
     # drop NA and make sure both fitted and residuals match
-    fitted_non_na <- fitted_[!is.na(fitted_) & !is.na(res_)]
-    res_non_na <- res_[!is.na(fitted_) & !is.na(res_)]
-    fitted_ <- fitted_non_na
-    res_ <- res_non_na
+    non_na <- !is.na(fitted_) & !is.na(res_)
+    fitted_ <- fitted_[non_na]
+    res_ <- res_[non_na]
   }
 
   res_ <- sort(res_, na.last = NA)
