@@ -4,6 +4,8 @@
 
 * `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
 
+* Fixes issues in `check_model()` for models with convergence issues that lead
+  to `NA` values in residuals.
 
 # performance 0.10.0
 
