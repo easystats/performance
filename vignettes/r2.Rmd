@@ -180,6 +180,7 @@ $$
 
 ```{r eval=successfully_loaded["effectsize"]}
 library(effectsize)
+data(hardlyworking)
 m1 <- lm(salary ~ xtra_hours, data = hardlyworking)
 m2 <- lm(salary ~ xtra_hours + n_comps + seniority, data = hardlyworking)
 
