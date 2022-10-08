@@ -32,31 +32,39 @@
 
 .diag_qq <- function(model, verbose = TRUE) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB", "gam"))) {
-    res_ <- sort(stats::residuals(model), na.last = NA)
+    res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
-    res_ <- sort(stats::residuals(model, type = "pearson"), na.last = NA)
+    res_ <- stats::residuals(model, type = "pearson")
   } else if (inherits(model, "glm")) {
-    res_ <- sort(stats::rstandard(model, type = "pearson"), na.last = NA)
+    res_ <- stats::rstandard(model, type = "pearson")
   } else {
-    res_ <- tryCatch(sort(stats::rstudent(model), na.last = NA),
-      error = function(e) NULL
-    )
+    res_ <- tryCatch(stats::rstudent(model), error = function(e) NULL)
     if (is.null(res_)) {
-      res_ <- tryCatch(sort(stats::residuals(model), na.last = NA),
-        error = function(e) NULL
-      )
+      res_ <- tryCatch(stats::residuals(model), error = function(e) NULL)
     }
   }
 
   if (is.null(res_)) {
     if (verbose) {
-      insight::format_alert(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
+      insight::format_alert(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class `%s`.", class(model)[1]))
     }
     return(NULL)
   }
 
-  fitted_ <- sort(stats::fitted(model), na.last = NA)
-  stats::na.omit(data.frame(x = fitted_, y = res_))
+  fitted_ <- stats::fitted(model)
+
+  # sanity check, sometime either residuals or fitted can contain NA, see #488
+  if (anyNA(res_) || anyNA(fitted_)) {
+    # drop NA and make sure both fitted and residuals match
+    non_na <- !is.na(fitted_) & !is.na(res_)
+    fitted_ <- fitted_[non_na]
+    res_ <- res_[non_na]
+  }
+
+  res_ <- sort(res_, na.last = NA)
+  fitted_ <- sort(fitted_, na.last = NA)
+
+  data.frame(x = fitted_, y = res_)
 }
 
 
