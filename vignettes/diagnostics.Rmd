@@ -76,7 +76,7 @@ and may use different types of diagnostic plots.
 Linear models include linear regression and many common statistical tests,
 such as *t*-tests, correlations, ANOVA, ANCOVA, and *χ*^2^ tests.
 
-Linear models assume a *normal likelihood*, which means that they assume that residuals on the response variable (*y*) are normally distributed around theur predicted values after accounting for any predictor variables (*x*).
+Linear models assume a *normal likelihood*, which means that they assume that residuals on the response variable (*y*) are normally distributed around their predicted values after accounting for any predictor variables (*x*).
 
 Linear models make the following assumptions:
 
