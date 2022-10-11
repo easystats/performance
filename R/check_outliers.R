@@ -513,7 +513,7 @@ check_outliers.default <- function(x,
   thresholds <- thresholds[names(thresholds) %in% method]
 
   # Composite outlier score
-  df$Outlier <- rowMeans(df[grepl("Outlier_", names(df))])
+  df$Outlier <- rowMeans(df[grepl("Outlier_", names(df), fixed = TRUE)])
   df <- df[c(names(df)[names(df) != "Outlier"], "Outlier")]
 
   # Out
@@ -742,7 +742,7 @@ check_outliers.data.frame <- function(x,
   count_outlier_table <- function(outlier.list) {
     count.table <- do.call(rbind, outlier.list)
     name.method <- grep("Distance_", names(count.table), value = TRUE)
-    name.method <- paste0("n_", gsub("Distance_", "", name.method))
+    name.method <- paste0("n_", gsub("Distance_", "", name.method, fixed = TRUE))
     if (isTRUE(nrow(count.table) > 0)) {
       count.values <- rle(sort(count.table$Row))
       count.table <- data.frame(Row = count.values$values)
@@ -1034,7 +1034,7 @@ check_outliers.data.frame <- function(x,
   }
 
   # Composite outlier score
-  df$Outlier <- rowMeans(df[grepl("Outlier_", names(df))])
+  df$Outlier <- rowMeans(df[grepl("Outlier_", names(df), fixed = TRUE)])
 
   # Out
   outlier <- df$Outlier > 0.5

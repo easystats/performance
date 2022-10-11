@@ -94,7 +94,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   )
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(p.val, "object_name") <- insight::safe_deparse_substitute(x)
   attr(p.val, "method") <- method.string
   class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))
 
@@ -167,7 +167,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
 
   p.val <- test[1, "Pr(>F)"]
 
-  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(p.val, "object_name") <- insight::safe_deparse_substitute(x)
   attr(p.val, "method") <- "Levene's Test"
   class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))
 

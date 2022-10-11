@@ -9,7 +9,7 @@ check_normality.htest <- function(x, ...) {
   method <- x[["method"]]
 
 
-  if (grepl("Welch", method) ||
+  if (grepl("Welch", method, fixed = TRUE) ||
       grepl("F test to compare two variances", method, fixed = TRUE)) {
     m1 <- stats::lm(data[[1]] ~ 1)
     m2 <- stats::lm(data[[2]] ~ 1)
@@ -162,7 +162,7 @@ print.check_normality_binom <- function(x, ...) {
 .MVN_hz <- function(data, cov = TRUE, tol = 1e-25) {
   # from MVN:::hz
   dataframe <- as.data.frame(data)
-  dname <- deparse(substitute(data))
+  dname <- insight::safe_deparse_substitute(data)
   data <- data[stats::complete.cases(data), ]
   data <- as.matrix(data)
   n <- dim(data)[1]

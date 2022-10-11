@@ -173,7 +173,7 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   colnames(out)[names(out) == "Df"] <- "df"
   colnames(out)[names(out) == "Df diff"] <- "df_diff"
   colnames(out)[names(out) == "Chisq"] <- "Chi2"
-  colnames(out)[grepl("^Pr\\(>", names(out))] <- "p"
+  colnames(out)[startsWith(names(out), "Pr(>")] <- "p"
   out$Model <- row.names(out)
 
   # Bind all data

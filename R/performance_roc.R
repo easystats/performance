@@ -49,7 +49,7 @@ performance_roc <- function(x, ..., predictions, new_data) {
   dots <- list(...)
 
   object_names <- c(
-    insight::safe_deparse(substitute(x)),
+    insight::safe_deparse_substitute(x),
     sapply(match.call(expand.dots = FALSE)$`...`, insight::safe_deparse)
   )
 
