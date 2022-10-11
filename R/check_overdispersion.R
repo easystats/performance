@@ -186,7 +186,7 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse_substitute(x)
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
 
   out
 }
@@ -262,7 +262,7 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse_substitute(x)
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
 
   out
 }

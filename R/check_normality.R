@@ -65,7 +65,7 @@ check_normality.default <- function(x, ...) {
   p.val <- .check_normality(stats::rstandard(x), x)
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- insight::safe_deparse_substitute(x)
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   attr(p.val, "effects") <- "fixed"
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
@@ -175,7 +175,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   }
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- insight::safe_deparse_substitute(x)
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   attr(p.val, "effects") <- effects
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
@@ -197,7 +197,7 @@ check_normality.afex_aov <- function(x, ...) {
   p.val <- .check_normality(r, x)
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- insight::safe_deparse_substitute(x)
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
   invisible(p.val)

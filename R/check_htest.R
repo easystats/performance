@@ -162,7 +162,7 @@ print.check_normality_binom <- function(x, ...) {
 .MVN_hz <- function(data, cov = TRUE, tol = 1e-25) {
   # from MVN:::hz
   dataframe <- as.data.frame(data)
-  dname <- insight::safe_deparse_substitute(data)
+  dname <- insight::safe_deparse_symbol(data)
   data <- data[stats::complete.cases(data), ]
   data <- as.matrix(data)
   n <- dim(data)[1]
