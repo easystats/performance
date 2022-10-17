@@ -28,7 +28,10 @@ check_outliers(x, ...)
 down to \code{ICSOutlier::ics.outlier()}. When \code{method = "mahalanobis"},
 they are  passed down to \code{stats::mahalanobis()}.}
 
-\item{method}{The outlier detection method(s). Can be \verb{"all"`` or some of }"cook"\verb{, }"pareto"\verb{, }"zscore"\verb{, }"zscore_robust"\verb{, }"iqr"\verb{, }"ci"\verb{, }"eti"\verb{, }"hdi"\verb{, }"bci"\verb{, }"mahalanobis"\verb{, }"mahalanobis_robust"\verb{, }"mcd"\verb{, }"ics"\verb{, }"optics"\code{or}"lof"`.}
+\item{method}{The outlier detection method(s). Can be \code{"all"} or some of
+\code{"cook"}, \code{"pareto"}, \code{"zscore"}, \code{"zscore_robust"}, \code{"iqr"}, \code{"ci"}, \code{"eti"},
+\code{"hdi"}, \code{"bci"}, \code{"mahalanobis"}, \code{"mahalanobis_robust"}, \code{"mcd"}, \code{"ics"},
+\code{"optics"} or \code{"lof"}.}
 
 \item{threshold}{A list containing the threshold values for each method (e.g.
 \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is

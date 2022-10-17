@@ -1328,7 +1328,6 @@ check_outliers.geeglm <- check_outliers.gls
                                 threshold = 1.7,
                                 method = "tukey",
                                 ID.names = NULL) {
-
   d <- data.frame(Row = seq_len(nrow(as.data.frame(x))))
   Distance_IQR <- d
 
@@ -1351,7 +1350,6 @@ check_outliers.geeglm <- check_outliers.gls
     d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1,
       ifelse(v < lower, 1, 0)
     )
-
   }
 
   out <- data.frame(Row = d$Row)
@@ -1384,24 +1382,21 @@ check_outliers.geeglm <- check_outliers.gls
                                threshold = 0.999,
                                method = "ci",
                                ID.names = NULL) {
-
   # Run through columns
   d <- data.frame(Row = seq_len(nrow(x)))
   Distance_CI <- d
 
   for (col in names(x)) {
-
     v <- x[, col]
     ci <- bayestestR::ci(v, ci = threshold, method = method)
     d[col] <- ifelse(x[[col]] > ci$CI_high |
-                       x[[col]] < ci$CI_low, 1, 0)
+      x[[col]] < ci$CI_low, 1, 0)
 
     m.int <- stats::median(c(ci$CI_low, ci$CI_high), na.rm = TRUE)
     d2 <- abs(v - m.int)
     ci.range <- (ci$CI_high - ci$CI_low) / 2
 
     Distance_CI[col] <- d2 / ci.range
-
   }
 
   out.0 <- data.frame(Row = d$Row)
@@ -1420,7 +1415,8 @@ check_outliers.geeglm <- check_outliers.gls
   out[paste0("Outlier_", method)] <- sapply(
     as.data.frame(t(d)), function(x) {
       ifelse(all(is.na(x)), NA, max(x, na.rm = TRUE))
-  })
+    }
+  )
 
   out <- cbind(out.0, out)
 
@@ -1475,7 +1471,8 @@ check_outliers.geeglm <- check_outliers.gls
 
 .check_outliers_mahalanobis <- function(x,
                                         threshold = stats::qchisq(
-                                          p = 1 - 0.001, df = ncol(x)),
+                                          p = 1 - 0.001, df = ncol(x)
+                                        ),
                                         ID.names = NULL,
                                         ...) {
   if (any(is.na(x)) || any(with(x, x == Inf))) {
@@ -1505,7 +1502,8 @@ check_outliers.geeglm <- check_outliers.gls
 # Bigutils not yet fully available on CRAN
 .check_outliers_mahalanobis_robust <- function(x,
                                                threshold = stats::qchisq(
-                                                 p = 1 - 0.001, df = ncol(x)),
+                                                 p = 1 - 0.001, df = ncol(x)
+                                               ),
                                                ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
@@ -1534,7 +1532,8 @@ check_outliers.geeglm <- check_outliers.gls
 
 .check_outliers_mcd <- function(x,
                                 threshold = stats::qchisq(
-                                  p = 1 - 0.001, df = ncol(x)),
+                                  p = 1 - 0.001, df = ncol(x)
+                                ),
                                 percentage_central = .50,
                                 ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))

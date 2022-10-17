@@ -10,7 +10,7 @@ check_normality.htest <- function(x, ...) {
 
 
   if (grepl("Welch", method, fixed = TRUE) ||
-      grepl("F test to compare two variances", method, fixed = TRUE)) {
+    grepl("F test to compare two variances", method, fixed = TRUE)) {
     m1 <- stats::lm(data[[1]] ~ 1)
     m2 <- stats::lm(data[[2]] ~ 1)
 
@@ -18,8 +18,10 @@ check_normality.htest <- function(x, ...) {
     out[2] <- check_normality(m2)[1]
     attr(out, "units") <- c("Group1", "Group2")
   } else if (grepl("Two Sample t-test", method, fixed = TRUE)) {
-    m <- stats::lm(formula = Value ~ factor(Name),
-                   data = datawizard::data_to_long(data))
+    m <- stats::lm(
+      formula = Value ~ factor(Name),
+      data = datawizard::data_to_long(data)
+    )
 
     out <- check_normality(m)
   } else if (grepl("One Sample t-test", method, fixed = TRUE)) {
@@ -49,7 +51,7 @@ check_normality.htest <- function(x, ...) {
     class(out) <- c("check_normality", "see_check_normality", "numeric")
     attr(out, "type") <- "residuals"
   } else if (grepl("Pearson's Chi-squared test", method, fixed = TRUE) ||
-             grepl("Chi-squared test for given probabilities", method, fixed = TRUE)) {
+    grepl("Chi-squared test for given probabilities", method, fixed = TRUE)) {
     out <- c(
       "5" = all(x$expected >= 5),
       "10" = all(x$expected >= 10)
@@ -80,13 +82,15 @@ check_homogeneity.htest <- function(x, ...) {
   method <- x[["method"]]
 
   if (grepl("(not assuming equal variances)", method, fixed = TRUE) ||
-      grepl("Welch", method, fixed = TRUE)) {
+    grepl("Welch", method, fixed = TRUE)) {
     insight::format_error("Test does not assume homogeneity. No need to test this assumption.")
   }
 
   if (grepl("Two Sample t-test", method, fixed = TRUE)) {
-    m <- stats::lm(formula = Value ~ factor(Name),
-                   data = datawizard::data_to_long(data))
+    m <- stats::lm(
+      formula = Value ~ factor(Name),
+      data = datawizard::data_to_long(data)
+    )
   } else if (grepl("One-way analysis of means", method, fixed = TRUE)) {
     m <- stats::aov(stats::reformulate(names(data)[2], response = names(data)[1]), data = data)
   } else {
