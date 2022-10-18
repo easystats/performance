@@ -90,16 +90,15 @@
 #'  (`"zscore"`) or, as it is here the case (`"zscore_robust"`) by
 #'  default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from
 #'  the median (which are robust measures of dispersion and centrality). The
-#'  default threshold to classify outliers is 1.959 (`threshold =
-#'  list("zscore" = 1.959)`), corresponding to the 2.5\% (`qnorm(0.975)`)
-#'  most extreme observations (assuming the data is normally distributed).
-#'  Importantly, the Z-score method is univariate: it is computed column by
-#'  column. If a dataframe is passed, the Z-score is calculated for each
-#'  variable separately, and the maximum (absolute) Z-score is kept for each
-#'  observations. Thus, all observations that are extreme on at least one
-#'  variable might be detected as outliers. Thus, this method is not suited for
-#'  high dimensional data (with many columns), returning too liberal results
-#'  (detecting many outliers).
+#'  default threshold to classify outliers is 1.959 (`threshold = list("zscore" = 1.959)`),
+#'  corresponding to the 2.5\% (`qnorm(0.975)`) most extreme observations
+#'  (assuming the data is normally distributed). Importantly, the Z-score
+#'  method is univariate: it is computed column by column. If a dataframe is
+#'  passed, the Z-score is calculated for each variable separately, and the
+#'  maximum (absolute) Z-score is kept for each observations. Thus, all
+#'  observations that are extreme on at least one variable might be detected
+#'  as outliers. Thus, this method is not suited for high dimensional data
+#'  (with many columns), returning too liberal results (detecting many outliers).
 #'
 #'  - **IQR** `("iqr")`:
 #'  Using the IQR (interquartile range) is a robust method developed by John
