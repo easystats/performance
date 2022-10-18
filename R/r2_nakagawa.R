@@ -95,7 +95,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
   if (isTRUE(by_group)) {
     # with random slopes, explained variance is inaccurate
     if (!is.null(insight::find_random_slopes(model))) {
-      warning(insight::format_message("Model contains random slopes. Explained variance by levels is not accurate."), call. = FALSE)
+      insight::format_warning("Model contains random slopes. Explained variance by levels is not accurate.")
     }
 
     # null-model
