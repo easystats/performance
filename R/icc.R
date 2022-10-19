@@ -62,11 +62,15 @@
 #'  different clusters, and setting it as a random factor might not be necessary.
 #'  }
 #'  \subsection{Difference with R2}{
-#'  The coefficient of determination R2 (that can be computed with `r2()`)
+#'  The coefficient of determination R2 (that can be computed with [`r2()`])
 #'  quantifies the proportion of variance explained by a statistical model, but
 #'  its definition in mixed model is complex (hence, different methods to compute
 #'  a proxy exist). ICC is related to R2 because they are both ratios of
-#'  variance components.
+#'  variance components. More precisely, R2 is the proportion of the explained
+#'  variance (of the full model), while the ICC is the proportion of explained
+#'  variance that can be attributed to the random effects. In simple cases, the
+#'  ICC corresponds to the difference between the *conditional R2* and the
+#'  *marginal R2* (see [`r2_nakagawa()`]).
 #'  }
 #'  \subsection{Calculation}{
 #'  The ICC is calculated by dividing the random effect variance,

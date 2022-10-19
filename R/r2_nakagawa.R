@@ -27,11 +27,11 @@
 #' (see \cite{Johnson, 2014}).
 #'
 #' \itemize{
-#'  \item Conditional R2: takes both the fixed and random effects into account.
-#'  \item Marginal R2: considers only the variance of the fixed effects.
+#'  \item **Conditional R2**: takes both the fixed and random effects into account.
+#'  \item **Marginal R2**: considers only the variance of the fixed effects.
 #' }
-#' The contribution of random effects can be deduced by the subtracting the
-#' marginal R2 from the conditional R2.
+#' The contribution of random effects can be deduced by subtracting the
+#' marginal R2 from the conditional R2 or by computing the [icc()].
 #'
 #' @references \itemize{
 #'  \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
