@@ -4,8 +4,11 @@
 
 * `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
 
-* Fixes issues in `check_model()` for models with convergence issues that lead
+* Fixed issues in `check_model()` for models with convergence issues that lead
   to `NA` values in residuals.
+  
+* Fixed bug in `check_outliers` whereby passing multiple elements to the 
+  threshold list generated an error (#496).
 
 # performance 0.10.0
 
