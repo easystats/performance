@@ -59,3 +59,174 @@ print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
   cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = c("# Indices of model performance", "blue"), ...))
   invisible(x)
 }
+
+#' @export
+model_performance.optim  <- model_performance.default
+
+ #' @export
+model_performance.aareg  <- model_performance.default
+
+ #' @export
+model_performance.anova  <- model_performance.default
+
+ #' @export
+model_performance.aov  <- model_performance.default
+
+ #' @export
+model_performance.biglm  <- model_performance.default
+
+ #' @export
+model_performance.binDesign  <- model_performance.default
+
+ #' @export
+model_performance.cch  <- model_performance.default
+
+ #' @export
+model_performance.clmm  <- model_performance.default
+
+ #' @export
+model_performance.coeftest  <- model_performance.default
+
+ #' @export
+model_performance.crr  <- model_performance.default
+
+ #' @export
+model_performance.cv.glmnet  <- model_performance.default
+
+ #' @export
+model_performance.data.frame  <- model_performance.default
+
+ #' @export
+model_performance.drc  <- model_performance.default
+
+ #' @export
+model_performance.durbinWatsonTest  <- model_performance.default
+
+ #' @export
+model_performance.ergm  <- model_performance.default
+
+ #' @export
+model_performance.factanal  <- model_performance.default
+
+ #' @export
+model_performance.fitdistr  <- model_performance.default
+
+ #' @export
+model_performance.gam  <- model_performance.default
+
+ #' @export
+model_performance.Gam  <- model_performance.default
+
+ #' @export
+model_performance.garch  <- model_performance.default
+
+ #' @export
+model_performance.geeglm  <- model_performance.default
+
+ #' @export
+model_performance.glmnet  <- model_performance.default
+
+ #' @export
+model_performance.glmRob  <- model_performance.default
+
+ #' @export
+model_performance.gmm  <- model_performance.default
+
+ #' @export
+model_performance.htest  <- model_performance.default
+
+ #' @export
+model_performance.list  <- model_performance.default
+
+ #' @export
+model_performance.lmodel2  <- model_performance.default
+
+ #' @export
+model_performance.lmRob  <- model_performance.default
+
+ #' @export
+model_performance.Mclust  <- model_performance.default
+
+ #' @export
+model_performance.mfx  <- model_performance.default
+
+ #' @export
+model_performance.mjoint  <- model_performance.default
+
+ #' @export
+model_performance.muhaz  <- model_performance.default
+
+ #' @export
+model_performance.negbin  <- model_performance.default
+
+ #' @export
+model_performance.nlrq  <- model_performance.default
+
+ #' @export
+model_performance.nls  <- model_performance.default
+
+ #' @export
+model_performance.NULL  <- model_performance.default
+
+ #' @export
+model_performance.orcutt  <- model_performance.default
+
+ #' @export
+model_performance.pam  <- model_performance.default
+
+ #' @export
+model_performance.poLCA  <- model_performance.default
+
+ #' @export
+model_performance.pyears  <- model_performance.default
+
+ #' @export
+model_performance.ridgelm  <- model_performance.default
+
+ #' @export
+model_performance.rlm  <- model_performance.default
+
+ #' @export
+model_performance.rq  <- model_performance.default
+
+ #' @export
+model_performance.rqs  <- model_performance.default
+
+ #' @export
+model_performance.sarlm  <- model_performance.default
+
+ #' @export
+model_performance.Sarlm  <- model_performance.default
+
+ #' @export
+model_performance.smooth.spline  <- model_performance.default
+
+ #' @export
+model_performance.speedglm  <- model_performance.default
+
+ #' @export
+model_performance.speedlm  <- model_performance.default
+
+ #' @export
+model_performance.summary.lm  <- model_performance.default
+
+ #' @export
+model_performance.summaryDefault  <- model_performance.default
+
+ #' @export
+model_performance.survdiff  <- model_performance.default
+
+ #' @export
+model_performance.survexp  <- model_performance.default
+
+ #' @export
+model_performance.survfit  <- model_performance.default
+
+ #' @export
+model_performance.svyolr  <- model_performance.default
+
+ #' @export
+model_performance.tbl_df  <- model_performance.default
+
+ #' @export
+model_performance.varest  <- model_performance.default
