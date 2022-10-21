@@ -712,7 +712,7 @@ check_outliers.data.frame <- function(x,
     thresholds <- .check_outliers_thresholds(x)
   } else if (is.list(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
-    thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
+    thresholds[names(threshold)] <- threshold[names(threshold)]
   } else if (is.numeric(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
