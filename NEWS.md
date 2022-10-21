@@ -7,6 +7,8 @@
 * Fixes issues in `check_model()` for models with convergence issues that lead
   to `NA` values in residuals.
 
+*	Fix issue #452.  Export S3 methods for `model_performance()` generic.   @jimrothstein 
+
 # performance 0.10.0
 
 ## Breaking Change
