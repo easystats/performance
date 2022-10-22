@@ -10,6 +10,8 @@
 * Fixed bug in `check_outliers` whereby passing multiple elements to the 
   threshold list generated an error (#496).
 
+*	Fix issue #452.  Export S3 methods for `model_performance()` generic.   @jimrothstein 
+
 # performance 0.10.0
 
 ## Breaking Change
