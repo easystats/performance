@@ -70,7 +70,7 @@ item_reliability <- function(x, standardize = FALSE, digits = 3) {
       stringsAsFactors = FALSE
     )
   } else {
-    warning("Data frame needs at least three columns for reliability-test.", call. = FALSE)
+    insight::format_warning("Data frame needs at least three columns for reliability-test.")
   }
 
   ret.df

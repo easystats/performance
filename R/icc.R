@@ -278,11 +278,11 @@ variance_decomposition <- function(model,
     resp <- insight::find_response(model)
     is.mixed <- unlist(lapply(resp, function(i) mi[[i]]$is_mixed))
     if (!any(is.mixed)) {
-      warning("'model' has no random effects.", call. = FALSE)
+      warning("`model` has no random effects.", call. = FALSE)
       return(NULL)
     }
   } else if (!insight::is_mixed_model(model)) {
-    warning("'model' has no random effects.", call. = FALSE)
+    warning("`model` has no random effects.", call. = FALSE)
     return(NULL)
   }
 
