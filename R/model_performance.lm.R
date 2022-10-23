@@ -46,7 +46,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
   # all available options...
-  all_metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
+  all_metrics <- c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
 
   if (all(metrics == "all")) {
     metrics <- all_metrics
