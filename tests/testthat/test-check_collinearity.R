@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance") && requiet("glmmTMB")) {
+if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRversion() >= "4.0.0") {
   data(Salamanders)
   m1 <- glmmTMB(count ~ spp + mined + (1 | site),
     ziformula = ~spp,
