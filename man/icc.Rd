@@ -41,9 +41,9 @@ ICC as well as the credible intervals for this ICC.
 }
 \description{
 This function calculates the intraclass-correlation coefficient (ICC) -
-sometimes also called \emph{variance partition coefficient} (VPC) - for mixed
-effects models. The ICC can be calculated for all models supported by
-\code{insight::get_variance()}. For models fitted with the
+sometimes also called \emph{variance partition coefficient} (VPC) or
+\emph{repeatability} - for mixed effects models. The ICC can be calculated for all
+models supported by \code{insight::get_variance()}. For models fitted with the
 \strong{brms}-package, \code{icc()} might fail due to the large variety of
 models and families supported by the \strong{brms}-package. In such cases, an
 alternative to the ICC is the \code{variance_decomposition()}, which is based
@@ -59,10 +59,25 @@ classrooms and each classroom was administered the same test) and ICC indexes
 how strongly measurements in the same group resemble each other. This index
 goes from 0, if the grouping conveys no information, to 1, if all
 observations in a group are identical (Gelman and Hill, 2007, p. 258). In
-other word, the ICC \dQuote{can also be interpreted as the expected
+other word, the ICC - sometimes conceptualized as the measurement
+repeatability - \dQuote{can also be interpreted as the expected
 correlation between two randomly drawn units that are in the same group}
 \cite{(Hox 2010: 15)}, although this definition might not apply to mixed
-models with more complex random effects structures.
+models with more complex random effects structures. The ICC can help determine
+whether a mixed model is even necessary: an ICC of zero means the
+observations within clusters are no more similar than observations from
+different clusters, and setting it as a random factor might not be necessary.
+}
+\subsection{Difference with R2}{
+The coefficient of determination R2 (that can be computed with \code{\link[=r2]{r2()}})
+quantifies the proportion of variance explained by a statistical model, but
+its definition in mixed model is complex (hence, different methods to compute
+a proxy exist). ICC is related to R2 because they are both ratios of
+variance components. More precisely, R2 is the proportion of the explained
+variance (of the full model), while the ICC is the proportion of explained
+variance that can be attributed to the random effects. In simple cases, the
+ICC corresponds to the difference between the \emph{conditional R2} and the
+\emph{marginal R2} (see \code{\link[=r2_nakagawa]{r2_nakagawa()}}).
 }
 \subsection{Calculation}{
 The ICC is calculated by dividing the random effect variance,
