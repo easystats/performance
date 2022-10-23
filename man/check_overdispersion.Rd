@@ -55,6 +55,7 @@ negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
 }
 }
 \examples{
+\dontshow{if (getRversion() >= "4.0.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 if (require("glmmTMB")) {
   data(Salamanders)
   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
@@ -67,6 +68,7 @@ if (require("glmmTMB")) {
   )
   check_overdispersion(m)
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

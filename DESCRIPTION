@@ -90,6 +90,7 @@ Suggests:
     gamm4,
     ggplot2,
     glmmTMB,
+    graphics,
     httr,
     ICS,
     ICSOutlier,
