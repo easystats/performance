@@ -8,19 +8,19 @@ if (requiet("testthat") && requiet("performance")) {
   test_that("compare_performance", {
     expect_silent(expect_equal(
       colnames(compare_performance(lm1, lm2, lm3)),
-      c("Name", "Model", "AIC", "AIC_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+      c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
     ))
 
     expect_warning(
       expect_equal(
         colnames(compare_performance(lm1, lm2, lm3, lm4)),
-        c("Name", "Model", "AIC", "AIC_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+        c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
       )
     )
 
     expect_silent(expect_equal(
       colnames(compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)),
-      c("Name", "Model", "AIC", "AIC_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+      c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
     ))
 
     out <- compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)
@@ -33,7 +33,7 @@ if (requiet("testthat") && requiet("performance")) {
     out <- compare_performance(list(lm1, lm2, lm3, lm4), verbose = FALSE)
     expect_equal(
       colnames(out),
-      c("Name", "Model", "AIC", "AIC_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+      c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
     )
     expect_equal(out$Name, c("Model 1", "Model 2", "Model 3", "Model 4"))
 
@@ -41,7 +41,7 @@ if (requiet("testthat") && requiet("performance")) {
     out <- compare_performance(models, verbose = FALSE)
     expect_equal(
       colnames(out),
-      c("Name", "Model", "AIC", "AIC_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+      c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
     )
     expect_equal(out$Name, c("Model 1", "Model 2", "Model 3", "Model 4"))
 

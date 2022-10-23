@@ -4,7 +4,7 @@ if (requiet("testthat") && requiet("performance")) {
     expect_equal(model_performance(model)$R2, 0.830, tolerance = 0.01)
     expect_equal(
       colnames(model_performance(model)),
-      c("AIC", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma")
+      c("AIC", "AICc", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma")
     )
   })
 
@@ -14,7 +14,7 @@ if (requiet("testthat") && requiet("performance")) {
     expect_equal(
       colnames(model_performance(model)),
       c(
-        "AIC", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
+        "AIC", "AICc", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
         "Score_spherical", "PCP"
       )
     )
@@ -26,7 +26,7 @@ if (requiet("testthat") && requiet("performance")) {
     expect_equal(
       colnames(model_performance(model)),
       c(
-        "AIC", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
+        "AIC", "AICc", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
         "Score_spherical", "PCP"
       )
     )

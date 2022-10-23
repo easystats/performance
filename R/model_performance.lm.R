@@ -14,19 +14,18 @@
 #' A data frame (with one row) and one column per "index" (see `metrics`).
 #'
 #' @details Depending on `model`, following indices are computed:
-#' \itemize{
-#'   \item{**AIC**} {Akaike's Information Criterion, see `?stats::AIC`}
-#'   \item{**AICc**} {Second-order (or small sample) AIC with a correction for small sample sizes}
-#'   \item{**BIC**} {Bayesian Information Criterion, see `?stats::BIC`}
-#'   \item{**R2**} {r-squared value, see [r2()]}
-#'   \item{**R2_adj**} {adjusted r-squared, see [r2()]}
-#'   \item{**RMSE**} {root mean squared error, see [performance_rmse()]}
-#'   \item{**SIGMA**} {residual standard deviation, see [insight::get_sigma()]}
-#'   \item{**LOGLOSS**} {Log-loss, see [performance_logloss()]}
-#'   \item{**SCORE_LOG**} {score of logarithmic proper scoring rule, see [performance_score()]}
-#'   \item{**SCORE_SPHERICAL**} {score of spherical proper scoring rule, see [performance_score()]}
-#'   \item{**PCP**} {percentage of correct predictions, see [performance_pcp()]}
-#' }
+#' 
+#' - **AIC**: Akaike's Information Criterion, see `?stats::AIC`
+#' - **AICc**: Second-order (or small sample) AIC with a correction for small sample sizes
+#' - **BIC**: Bayesian Information Criterion, see `?stats::BIC`
+#' - **R2**: r-squared value, see [`r2()`]
+#' - **R2_adj**: adjusted r-squared, see [`r2()`]
+#' - **RMSE**: root mean squared error, see [`performance_rmse()`]
+#' - **SIGMA**: residual standard deviation, see [`insight::get_sigma()`]
+#' - **LOGLOSS**: Log-loss, see [`performance_logloss()`]
+#' - **SCORE_LOG**: score of logarithmic proper scoring rule, see [`performance_score()`]
+#' - **SCORE_SPHERICAL**: score of spherical proper scoring rule, see [`performance_score()`]
+#' - **PCP**: percentage of correct predictions, see [`performance_pcp()`]
 #'
 #' @details `model_performance()` correctly detects transformed response and
 #' returns the "corrected" AIC and BIC value on the original scale. To get back
