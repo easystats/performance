@@ -148,37 +148,37 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   # Reorder columns
   if (all(c("BIC", "BF") %in% names(dfs))) {
     idx1 <- grep("^BIC$", names(dfs))
-    idx2 <- grep("BF", names(dfs))
+    idx2 <- grep("BF", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("AIC", "AIC_wt") %in% names(dfs))) {
     idx1 <- grep("^AIC$", names(dfs))
-    idx2 <- grep("AIC_wt", names(dfs))
+    idx2 <- grep("AIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("BIC", "BIC_wt") %in% names(dfs))) {
     idx1 <- grep("^BIC$", names(dfs))
-    idx2 <- grep("BIC_wt", names(dfs))
+    idx2 <- grep("BIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("AICc", "AICc_wt") %in% names(dfs))) {
     idx1 <- grep("^AICc$", names(dfs))
-    idx2 <- grep("AICc_wt", names(dfs))
+    idx2 <- grep("AICc_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("WAIC", "WAIC_wt") %in% names(dfs))) {
     idx1 <- grep("^WAIC$", names(dfs))
-    idx2 <- grep("WAIC_wt", names(dfs))
+    idx2 <- grep("WAIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("LOOIC", "LOOIC_wt") %in% names(dfs))) {
     idx1 <- grep("^LOOIC$", names(dfs))
-    idx2 <- grep("LOOIC_wt", names(dfs))
+    idx2 <- grep("LOOIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
