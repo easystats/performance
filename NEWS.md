@@ -1,5 +1,10 @@
 # performance 0.10.1
 
+## Changes to functions
+
+* The model underlying `check_distribution()` was now also trained to detect
+  cauchy, half-cauchy and inverse-gamma distributions.
+
 ## Bug fixes
 
 * `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
