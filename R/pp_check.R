@@ -126,6 +126,13 @@ check_predictions.BFBayesFactor <- function(object,
 pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
 
 
+#' @export
+check_predictions.lme <- function(object, ...) {
+  insight::format_error("`check_predictions()` does currently not work for models of class `lme`.")
+}
+
+
+
 # pp-check functions -------------------------------------
 
 pp_check.lm <- function(object,
@@ -139,14 +146,8 @@ pp_check.lm <- function(object,
   }
 
   # else, proceed as usual
-  out <- tryCatch(
-    {
-      stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  out <- tryCatch(stats::simulate(object, nsim = iterations, re.form = re_formula, ...),
+                  error = function(e) NULL)
 
   # glmmTMB returns column matrix for bernoulli
   if (inherits(object, "glmmTMB") && insight::model_info(object)$is_binomial) {
