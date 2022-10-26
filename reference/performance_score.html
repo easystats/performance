@@ -164,7 +164,7 @@ in <strong>lme4</strong>.</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Salamanders</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">site</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    zi <span class="op">=</span>  <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>,</span></span>
+<span class="r-in"><span>    zi <span class="op">=</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>,</span></span>
 <span class="r-in"><span>    family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">nbinom2</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    data <span class="op">=</span> <span class="va">Salamanders</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
