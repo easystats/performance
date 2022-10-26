@@ -22,7 +22,7 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRv
 
   m2 <- glmmTMB(
     count ~ spp + mined + cover + (1 | site),
-    ziformula =  ~ spp + mined + cover,
+    ziformula = ~ spp + mined + cover,
     family = nbinom2,
     data = Salamanders
   )
