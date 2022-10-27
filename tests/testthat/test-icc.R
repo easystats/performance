@@ -31,6 +31,17 @@ if (.runThisTest && !osx) {
       )
     })
 
+
+    # bootstrapped CIs ------------
+    m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+    set.seed(123)
+    out <- icc(m, ci = .95)
+    test_that("icc, CI", {
+      expect_equal(out$CI_low_adjusted, 0.65801, tolerance = 1e-3)
+      expect_equal(out$CI_low_unadjusted, 0.48697, tolerance = 1e-3)
+    })
+
+
     m2 <- insight::download_model("stanreg_lmerMod_1")
 
     test_that("icc", {
