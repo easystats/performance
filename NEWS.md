@@ -2,6 +2,9 @@
 
 ## Changes to functions
 
+* `icc()` gets `ci` and `iterations` arguments, to compute confidence intervals
+  for the ICC, based on bootstrapped sampling of ICC values.
+
 * The model underlying `check_distribution()` was now also trained to detect
   cauchy, half-cauchy and inverse-gamma distributions.
 
