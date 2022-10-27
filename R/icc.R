@@ -243,13 +243,21 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
         model = model,
         tolerance = tolerance
       )
-      icc_ci <- as.vector(result$t)
-      icc_ci <- icc_ci[!is.na(icc_ci)]
-      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
 
       out$CI <- ci
-      out$CI_low <- icc_ci$CI_low
-      out$CI_high <- icc_ci$CI_high
+      # CI for adjusted ICC
+      icc_ci <- as.vector(result$t[, 1])
+      icc_ci <- icc_ci[!is.na(icc_ci)]
+      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
+      out$CI_low_adjusted <- icc_ci$CI_low
+      out$CI_high_adjusted <- icc_ci$CI_high
+
+      # CI for unadjusted ICC
+      icc_ci <- as.vector(result$t[, 2])
+      icc_ci <- icc_ci[!is.na(icc_ci)]
+      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
+      out$CI_low_unadjusted <- icc_ci$CI_low
+      out$CI_high_unadjusted <- icc_ci$CI_high
     }
 
     class(out) <- c("icc", "data.frame")
@@ -354,11 +362,18 @@ print.icc <- function(x, digits = 3, ...) {
 
   out <- paste0(
     c(
-      sprintf("    Adjusted ICC: %.*f %s",
-              digits,
-              x$ICC_adjusted,
-              insight::format_ci(x$CI_low, x$CI_high, digits = digits, ci = NULL)),
-      sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted)
+      sprintf(
+        "    Adjusted ICC: %.*f %s",
+        digits,
+        x$ICC_adjusted,
+        insight::format_ci(x$CI_low_adjusted, x$CI_high_adjusted, digits = digits, ci = NULL)
+      ),
+      sprintf(
+        "  Unadjusted ICC: %.*f %s",
+        digits,
+        x$ICC_unadjusted,
+        insight::format_ci(x$CI_low_unadjusted, x$CI_high_unadjusted, digits = digits, ci = NULL)
+      )
     ),
     collapse = "\n"
   )
@@ -516,5 +531,8 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   if (is.null(vars) || all(is.na(vars))) {
     return(NA)
   }
-  vars$var.intercept / (vars$var.random + vars$var.residual)
+  c(
+    vars$var.random / (vars$var.random + vars$var.residual),
+    vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
+  )
 }
