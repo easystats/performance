@@ -56,6 +56,15 @@ print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
     colnames(formatted_table)[2] <- "Value"
   }
 
-  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = c("# Indices of model performance", "blue"), ...))
+  cat(
+    insight::export_table(
+      x = formatted_table,
+      digits = digits,
+      format = "text",
+      caption = c("# Indices of model performance", "blue"),
+      ...
+    )
+  )
+
   invisible(x)
 }

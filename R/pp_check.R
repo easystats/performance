@@ -147,7 +147,8 @@ pp_check.lm <- function(object,
 
   # else, proceed as usual
   out <- tryCatch(stats::simulate(object, nsim = iterations, re.form = re_formula, ...),
-                  error = function(e) NULL)
+    error = function(e) NULL
+  )
 
   # glmmTMB returns column matrix for bernoulli
   if (inherits(object, "glmmTMB") && insight::model_info(object)$is_binomial) {

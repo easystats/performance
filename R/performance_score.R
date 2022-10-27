@@ -41,7 +41,7 @@
 #'   data(Salamanders)
 #'   model <- glmmTMB(
 #'     count ~ spp + mined + (1 | site),
-#'     zi =  ~ spp + mined,
+#'     zi = ~ spp + mined,
 #'     family = nbinom2(),
 #'     data = Salamanders
 #'   )

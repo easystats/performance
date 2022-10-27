@@ -118,7 +118,7 @@ print.performance_pcp <- function(x, digits = 2, ...) {
 as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
   data.frame(
     "Model" = c("full", "null"),
-    "Estimate" =  c(x$pcp_model, x$pcp_m0),
+    "Estimate" = c(x$pcp_model, x$pcp_m0),
     "CI_low" = c(x$model_ci_low, x$null_ci_low),
     "CI_high" = c(x$model_ci_high, x$null_ci_high),
     "Chisq" = c(NA, x$lrt_chisq),
