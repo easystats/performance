@@ -5,7 +5,7 @@
 \alias{variance_decomposition}
 \title{Intraclass Correlation Coefficient (ICC)}
 \usage{
-icc(model, by_group = FALSE, tolerance = 1e-05)
+icc(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iterations = 100)
 
 variance_decomposition(model, re_formula = NULL, robust = TRUE, ci = 0.95, ...)
 }
@@ -21,6 +21,11 @@ whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See \code{\link[performance:check_singularity]{performance::check_singularity()}}.}
 
+\item{ci}{Credible interval level.}
+
+\item{iterations}{Number of bootstrap-replicates when computing confidence
+intervals for the ICC.}
+
 \item{re_formula}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
@@ -29,8 +34,6 @@ and \code{?brms::posterior_predict}.}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
 calculate the central tendency of the variances.}
-
-\item{ci}{Credible interval level.}
 
 \item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
 }
@@ -164,9 +167,10 @@ if (require("lme4")) {
 \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
 (2nd ed). New York: Routledge.
 \item Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
-coefficient of determination R2 and intra-class correlation coefficient from
-generalized linear mixed-effects models revisited and expanded. Journal of
-The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+coefficient of determination R2 and intra-class correlation coefficient
+from generalized linear mixed-effects models revisited and expanded.
+Journal of The Royal Society Interface, 14(134), 20170213.
+\doi{10.1098/rsif.2017.0213}
 \item Rabe-Hesketh, S., and Skrondal, A. (2012). Multilevel and longitudinal
 modeling using Stata (3rd ed). College Station, Tex: Stata Press
 Publication.

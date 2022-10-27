@@ -78,6 +78,7 @@ Suggests:
     betareg,
     bigutilsr,
     blavaan,
+    boot,
     brms,
     car,
     CompQuadForm,
