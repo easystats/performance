@@ -27,7 +27,7 @@
   }
 
   # remove missings
-  tmp <- stats::na.omit(x)
+  tmp <- x[!is.na(x)]
 
   # standardize
   tmp <- (tmp - mean(tmp)) / stats::sd(tmp)

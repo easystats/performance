@@ -25,7 +25,7 @@
 #' @export
 item_difficulty <- function(x) {
   d <- sapply(x, function(.x) {
-    .x <- stats::na.omit(.x)
+    .x <- .x[!is.na(.x)]
     round(sum(.x) / (max(.x) * length(.x)), 2)
   })
 

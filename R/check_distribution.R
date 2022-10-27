@@ -192,6 +192,9 @@ check_distribution.numeric <- function(model) {
 # utilities -----------------------------
 
 .extract_features <- function(x) {
+  # sanity check, remove missings
+  x <- x[!is.na(x)]
+
   data.frame(
     "SD" = stats::sd(x),
     "MAD" = stats::mad(x, constant = 1),

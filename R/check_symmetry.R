@@ -19,7 +19,7 @@ check_symmetry <- function(x, ...) {
 
 #' @export
 check_symmetry.numeric <- function(x, ...) {
-  x <- stats::na.omit(x)
+  x <- x[!is.na(x)]
 
   m <- mean(x)
   a <- stats::median(x)
