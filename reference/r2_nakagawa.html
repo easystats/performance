@@ -100,7 +100,8 @@ mixed effects models with complex random effects structures.</p>
 <span>  by_group <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  tolerance <span class="op">=</span> <span class="fl">1e-05</span>,</span>
 <span>  ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  iterations <span class="op">=</span> <span class="fl">100</span></span>
+<span>  iterations <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -134,6 +135,10 @@ R2 value. See <code>iterations</code>.</p></dd>
 <dt>iterations</dt>
 <dd><p>Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed down to <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
