@@ -6,13 +6,6 @@
 #'   R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param ci Confidence Interval (CI) level. Default is `NULL`. Confidence
-#'   intervals for R2 can be calculated based on different methods, see
-#'   `ci_method`.
-#' @param ci_method Method for constructing the R2 confidence interval.
-#'   Options are `"analytical"` for sampling-theory-based frequentist
-#'   intervals and `"bootstrap"` for bootstrap intervals. Analytical intervals
-#'   are not available for all models. For Bayesian models, [`r2_bayes()`] is used.
 #' @param verbose Logical. Should details about R2 and CI methods be given (`TRUE`) or not (`FALSE`)?
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
@@ -57,15 +50,14 @@ r2 <- function(model, ...) {
 
 #' @rdname r2
 #' @export
-r2.default <- function(model, ci = NULL, ci_method = "analytical", verbose = TRUE, ...) {
-  ci_method <- match.arg(ci_method, choices = c("analytical", "bootstrap"))
-
+r2.default <- function(model, verbose = TRUE, ...) {
   if (is.null(minfo <- list(...)$model_info)) {
     minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 
+  ## TODO: implement CIs later? See #504
   # check input
-  ci <- .check_r2_ci_args(ci, ci_method, "bootstrap", verbose)
+  # ci <- .check_r2_ci_args(ci, ci_method, "bootstrap", verbose)
 
   out <- tryCatch(
     {
