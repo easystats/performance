@@ -14,7 +14,7 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned."><meta property="o
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.7</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.8</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,7 +101,7 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
-<span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, ci_method <span class="op">=</span> <span class="st">"analytical"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for merMod</span></span>
 <span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -115,19 +115,6 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
 
 <dt>...</dt>
 <dd><p>Arguments passed down to the related r2-methods.</p></dd>
-
-
-<dt>ci</dt>
-<dd><p>Confidence Interval (CI) level. Default is <code>NULL</code>. Confidence
-intervals for R2 can be calculated based on different methods, see
-<code>ci_method</code>.</p></dd>
-
-
-<dt>ci_method</dt>
-<dd><p>Method for constructing the R2 confidence interval.
-Options are <code>"analytical"</code> for sampling-theory-based frequentist
-intervals and <code>"bootstrap"</code> for bootstrap intervals. Analytical intervals
-are not available for all models. For Bayesian models, <code><a href="r2_bayes.html">r2_bayes()</a></code> is used.</p></dd>
 
 
 <dt>verbose</dt>
