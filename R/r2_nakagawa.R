@@ -239,7 +239,12 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 # main bootstrap function
 .bootstrap_r2_nakagawa <- function(model, iterations, tolerance, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
-    result <- .do_lme4_bootmer(model, .boot_r2_fun_lme4, iterations, dots = list(...))
+    result <- .do_lme4_bootmer(
+      model,
+      .boot_r2_fun_lme4,
+      iterations,
+      dots = list(...)
+    )
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
