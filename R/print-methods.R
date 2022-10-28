@@ -83,8 +83,18 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
   out <- paste0(
     c(
-      sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),
-      sprintf("     Marginal R2: %.*f", digits, x$R2_marginal)
+      sprintf(
+        "  Conditional R2: %.*f %s",
+        digits,
+        x$R2_conditional,
+        insight::format_ci(x$CI_low_conditional, x$CI_high_conditional, digits = digits, ci = NULL)
+      ),
+      sprintf(
+        "     Marginal R2: %.*f %s",
+        digits,
+        x$R2_marginal,
+        insight::format_ci(x$CI_low_marginal, x$CI_high_marginal, digits = digits, ci = NULL)
+      )
     ),
     collapse = "\n"
   )

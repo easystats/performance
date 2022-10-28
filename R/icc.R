@@ -15,13 +15,14 @@
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the variance decomposition for this group-level. See 'Details'
 #'   and `?brms::posterior_predict`.
-#' @param ci Confidence resp. credible interval level. For `icc()`, confidence
-#'   intervals are based on bootstrapped samples from the ICC. See `iterations`.
+#' @param ci Confidence resp. credible interval level. For `icc()` and `r2()`,
+#'   confidence intervals are based on bootstrapped samples from the ICC resp.
+#'   R2 value. See `iterations`.
 #' @param by_group Logical, if `TRUE`, `icc()` returns the variance
 #'   components for each random-effects level (if there are multiple levels).
 #'   See 'Details'.
 #' @param iterations Number of bootstrap-replicates when computing confidence
-#'   intervals for the ICC.
+#'   intervals for the ICC or R2.
 #'
 #' @inheritParams r2_bayes
 #' @inheritParams insight::get_variance
@@ -490,12 +491,17 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 # helper -----------------
 
-.compute_random_vars <- function(model, tolerance, verbose = TRUE) {
+.compute_random_vars <- function(model,
+                                 tolerance,
+                                 components = c("var.fixed", "var.random", "var.residual"),
+                                 name_fun = "icc()",
+                                 name_full = "ICC",
+                                 verbose = TRUE) {
   vars <- tryCatch(
     {
       insight::get_variance(model,
-        name_fun = "icc()",
-        name_full = "ICC",
+        name_fun = name_fun,
+        name_full = name_full,
         tolerance = tolerance,
         verbose = verbose
       )
@@ -514,7 +520,6 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   }
 
   # check if we have successfully computed all variance components...
-  components <- c("var.fixed", "var.random", "var.residual")
   check_elements <- sapply(components, function(.i) !is.null(vars[[.i]]))
 
   if (!all(check_elements)) {
@@ -529,7 +534,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
   vars <- .compute_random_vars(fit, tolerance, verbose = FALSE)
   if (is.null(vars) || all(is.na(vars))) {
-    return(NA)
+    return(c(NA, NA))
   }
   c(
     vars$var.random / (vars$var.random + vars$var.residual),

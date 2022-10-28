@@ -4,7 +4,13 @@
 \alias{r2_nakagawa}
 \title{Nakagawa's R2 for mixed models}
 \usage{
-r2_nakagawa(model, by_group = FALSE, tolerance = 1e-05)
+r2_nakagawa(
+  model,
+  by_group = FALSE,
+  tolerance = 1e-05,
+  ci = NULL,
+  iterations = 100
+)
 }
 \arguments{
 \item{model}{A mixed effects model.}

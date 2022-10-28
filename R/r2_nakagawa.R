@@ -58,44 +58,30 @@
 #'   r2_nakagawa(model, by_group = TRUE)
 #' }
 #' @export
-r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
-  vars <- tryCatch(
-    {
-      insight::get_variance(model,
-        tolerance = tolerance,
-        name_fun = "r2()",
-        name_full = "r-squared"
-      )
-    },
-    error = function(e) {
-      if (inherits(e, c("simpleError", "error"))) {
-        insight::print_color(e$message, "red")
-        cat("\n")
-      }
-      NULL
-    }
+r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, iterations = 100) {
+  # calculate random effect variances
+  vars <- .compute_random_vars(
+    model,
+    tolerance,
+    components = c("var.fixed", "var.residual"),
+    name_fun = "r2()",
+    name_full = "r-squared"
   )
 
-
+  # return if R2 couldn't be computed
   if (is.null(vars) || all(is.na(vars))) {
-    return(NA)
+    return(vars)
   }
-
-  # check if we have successfully computed all variance components...
-
-  components <- c("var.fixed", "var.residual")
-  check_elements <- sapply(components, function(.i) !is.null(vars[[.i]]))
-
-  if (!all(check_elements)) {
-    return(NA)
-  }
-
 
   # compute R2 by group
   if (isTRUE(by_group)) {
     # with random slopes, explained variance is inaccurate
     if (!is.null(insight::find_random_slopes(model))) {
       insight::format_warning("Model contains random slopes. Explained variance by levels is not accurate.")
+    }
+
+    if (!is.null(ci) && !is.na(ci)) {
+      insight::format_warning("Confidence intervals are not yet supported for `by_group = TRUE`.")
     }
 
     # null-model
@@ -116,7 +102,6 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
     )
 
     class(out) <- c("r2_nakagawa_by_group", "data.frame")
-    out
   } else {
     # Calculate R2 values
     if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
@@ -129,18 +114,41 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5) {
       r2_conditional <- (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
     }
 
-
     names(r2_conditional) <- "Conditional R2"
     names(r2_marginal) <- "Marginal R2"
+    out <- list(R2_conditional = r2_conditional, R2_marginal = r2_marginal)
 
-    structure(
-      class = "r2_nakagawa",
-      list(
-        "R2_conditional" = r2_conditional,
-        "R2_marginal" = r2_marginal
+    # check if CIs are requested, and compute bootstrapped CIs
+    if (!is.null(ci) && !is.na(ci)) {
+      insight::check_if_installed("boot")
+      result <- boot::boot(
+        data = insight::get_data(model),
+        statistic = .boot_r2_fun,
+        R = iterations,
+        sim = "ordinary",
+        model = model,
+        tolerance = tolerance
       )
-    )
+
+      out$CI <- ci
+      # CI for marginal R2
+      icc_ci <- as.vector(result$t[, 1])
+      icc_ci <- icc_ci[!is.na(icc_ci)]
+      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
+      out$CI_low_marginal <- icc_ci$CI_low
+      out$CI_high_marginal <- icc_ci$CI_high
+
+      # CI for unadjusted R2
+      icc_ci <- as.vector(result$t[, 2])
+      icc_ci <- icc_ci[!is.na(icc_ci)]
+      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
+      out$CI_low_conditional <- icc_ci$CI_low
+      out$CI_high_conditional <- icc_ci$CI_high
+    }
+
+    class(out)  <- c("r2_nakagawa", "list")
   }
+  out
 }
 
 
@@ -156,4 +164,23 @@ as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...
     optional = optional,
     ...
   )
+}
+
+
+.boot_r2_fun <- function(data, indices, model, tolerance) {
+  d <- data[indices, ] # allows boot to select sample
+  fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
+  vars <- .compute_random_vars(fit, tolerance, verbose = FALSE)
+  if (is.null(vars) || all(is.na(vars))) {
+    return(c(NA, NA))
+  }
+  # Calculate R2 values
+  if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
+    c(vars$var.fixed / (vars$var.fixed + vars$var.residual), NA)
+  } else {
+    c(
+      vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual),
+      (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+    )
+  }
 }

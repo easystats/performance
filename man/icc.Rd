@@ -21,10 +21,12 @@ whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See \code{\link[performance:check_singularity]{performance::check_singularity()}}.}
 
-\item{ci}{Credible interval level.}
+\item{ci}{Confidence resp. credible interval level. For \code{icc()} and \code{r2()},
+confidence intervals are based on bootstrapped samples from the ICC resp.
+R2 value. See \code{iterations}.}
 
 \item{iterations}{Number of bootstrap-replicates when computing confidence
-intervals for the ICC.}
+intervals for the ICC or R2.}
 
 \item{re_formula}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
