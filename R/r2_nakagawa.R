@@ -115,16 +115,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      insight::check_if_installed("boot")
-      result <- boot::boot(
-        data = insight::get_data(model),
-        statistic = .boot_r2_fun,
-        R = iterations,
-        sim = "ordinary",
-        model = model,
-        tolerance = tolerance
-      )
-
+      result <- .bootstrap_r2_nakagawa(model, iterations, tolerance)
       out$CI <- ci
       # CI for marginal R2
       icc_ci <- as.vector(result$t[, 1])
@@ -148,6 +139,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
 
 
 
+# methods ------
 
 #' @export
 as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...) {
@@ -161,6 +153,52 @@ as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...
   )
 }
 
+
+#' @export
+print.r2_nakagawa <- function(x, digits = 3, ...) {
+  model_type <- attr(x, "model_type")
+  if (is.null(model_type)) {
+    insight::print_color("# R2 for Mixed Models\n\n", "blue")
+  } else {
+    insight::print_color("# R2 for %s Regression\n\n", "blue")
+  }
+
+  if (!is.null(x$CI_low_marginal) && !is.null(x$CI_low_conditional)) {
+    out <- paste0(
+      c(
+        sprintf(
+          "  Conditional R2: %.*f %s",
+          digits,
+          x$R2_conditional,
+          insight::format_ci(x$CI_low_conditional, x$CI_high_conditional, digits = digits, ci = NULL)
+        ),
+        sprintf(
+          "     Marginal R2: %.*f %s",
+          digits,
+          x$R2_marginal,
+          insight::format_ci(x$CI_low_marginal, x$CI_high_marginal, digits = digits, ci = NULL)
+        )
+      ),
+      collapse = "\n"
+    )
+  } else {
+    out <- paste0(
+      c(
+        sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),
+        sprintf("     Marginal R2: %.*f", digits, x$R2_marginal)
+      ),
+      collapse = "\n"
+    )
+  }
+
+  cat(out)
+  cat("\n")
+  invisible(x)
+}
+
+
+
+# bootstrapping --------------
 
 .boot_r2_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
@@ -178,4 +216,46 @@ as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...
       (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
     )
   }
+}
+
+.boot_r2_fun_lme4 <- function(model) {
+  vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
+  if (is.null(vars) || all(is.na(vars))) {
+    return(c(NA, NA))
+  }
+  # Calculate R2 values
+  if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
+    c(vars$var.fixed / (vars$var.fixed + vars$var.residual), NA)
+  } else {
+    c(
+      vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual),
+      (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+    )
+  }
+}
+
+.bootstrap_r2_nakagawa <- function(model, iterations, tolerance) {
+  if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
+    insight::check_if_installed(c("lme4", "boot"))
+    result <- lme4::bootMer(
+      model,
+      .boot_r2_fun_lme4,
+      nsim = iterations,
+      type = "parametric",
+      parallel = "no",
+      ncpus = 1,
+      cl = NULL
+    )
+  } else {
+    insight::check_if_installed("boot")
+    result <- boot::boot(
+      data = insight::get_data(model),
+      statistic = .boot_r2_fun,
+      R = iterations,
+      sim = "ordinary",
+      model = model,
+      tolerance = tolerance
+    )
+  }
+  result
 }

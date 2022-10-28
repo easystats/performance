@@ -235,16 +235,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      insight::check_if_installed("boot")
-      result <- boot::boot(
-        data = insight::get_data(model),
-        statistic = .boot_icc_fun,
-        R = iterations,
-        sim = "ordinary",
-        model = model,
-        tolerance = tolerance
-      )
-
+      result <- .bootstrap_icc(model, iterations, tolerance)
       out$CI <- ci
       # CI for adjusted ICC
       icc_ci <- as.vector(result$t[, 1])
@@ -361,23 +352,34 @@ as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
 print.icc <- function(x, digits = 3, ...) {
   insight::print_color("# Intraclass Correlation Coefficient\n\n", "blue")
 
-  out <- paste0(
-    c(
-      sprintf(
-        "    Adjusted ICC: %.*f %s",
-        digits,
-        x$ICC_adjusted,
-        insight::format_ci(x$CI_low_adjusted, x$CI_high_adjusted, digits = digits, ci = NULL)
+  if (!is.null(x$CI_low_adjusted) && !is.null(x$CI_low_unadjusted)) {
+    out <- paste0(
+      c(
+        sprintf(
+          "    Adjusted ICC: %.*f %s",
+          digits,
+          x$ICC_adjusted,
+          insight::format_ci(x$CI_low_adjusted, x$CI_high_adjusted, digits = digits, ci = NULL)
+        ),
+        sprintf(
+          "  Unadjusted ICC: %.*f %s",
+          digits,
+          x$ICC_unadjusted,
+          insight::format_ci(x$CI_low_unadjusted, x$CI_high_unadjusted, digits = digits, ci = NULL)
+        )
       ),
-      sprintf(
-        "  Unadjusted ICC: %.*f %s",
-        digits,
-        x$ICC_unadjusted,
-        insight::format_ci(x$CI_low_unadjusted, x$CI_high_unadjusted, digits = digits, ci = NULL)
-      )
-    ),
-    collapse = "\n"
-  )
+      collapse = "\n"
+    )
+  } else {
+    out <- paste0(
+      c(
+        sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted),
+        sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted)
+      ),
+      collapse = "\n"
+    )
+  }
+
 
   cat(out)
   cat("\n")
@@ -529,6 +531,9 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   vars
 }
 
+
+# bootstrapping ------------------
+
 .boot_icc_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
@@ -540,4 +545,41 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
     vars$var.random / (vars$var.random + vars$var.residual),
     vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
   )
+}
+
+.boot_icc_fun_lme4 <- function(model) {
+  vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
+  if (is.null(vars) || all(is.na(vars))) {
+    return(c(NA, NA))
+  }
+  c(
+    vars$var.random / (vars$var.random + vars$var.residual),
+    vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
+  )
+}
+
+.bootstrap_icc <- function(model, iterations, tolerance) {
+  if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
+    insight::check_if_installed(c("lme4", "boot"))
+    result <- lme4::bootMer(
+      model,
+      .boot_icc_fun_lme4,
+      nsim = iterations,
+      type = "parametric",
+      parallel = "no",
+      ncpus = 1,
+      cl = NULL
+    )
+  } else {
+    insight::check_if_installed("boot")
+    result <- boot::boot(
+      data = insight::get_data(model),
+      statistic = .boot_icc_fun,
+      R = iterations,
+      sim = "ordinary",
+      model = model,
+      tolerance = tolerance
+    )
+  }
+  result
 }

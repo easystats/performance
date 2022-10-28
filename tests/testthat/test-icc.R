@@ -38,8 +38,8 @@ if (.runThisTest && !osx) {
     set.seed(123)
     out <- icc(m, ci = .95)
     test_that("icc, CI", {
-      expect_equal(out$CI_low_adjusted, 0.65801, tolerance = 1e-3)
-      expect_equal(out$CI_low_unadjusted, 0.48697, tolerance = 1e-3)
+      expect_equal(out$CI_low_adjusted, 0.5223931, tolerance = 1e-3)
+      expect_equal(out$CI_low_unadjusted, 0.3242904, tolerance = 1e-3)
     })
 
 
