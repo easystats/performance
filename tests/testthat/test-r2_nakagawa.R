@@ -22,8 +22,8 @@ if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
     test_that("r2_nakagawa, ci", {
       set.seed(123)
       out <- r2_nakagawa(model, ci = 0.95)
-      expect_equal(out$CI_low_marginal, 0.6108, tolerance = 1e-3)
-      expect_equal(out$CI_high_conditional, 0.98003, tolerance = 1e-3)
+      expect_equal(out$CI_low_marginal, 0.33708, tolerance = 1e-3)
+      expect_equal(out$CI_high_conditional, 0.9842639, tolerance = 1e-3)
     })
   }
 

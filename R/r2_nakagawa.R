@@ -115,16 +115,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      insight::check_if_installed("boot")
-      result <- boot::boot(
-        data = insight::get_data(model),
-        statistic = .boot_r2_fun,
-        R = iterations,
-        sim = "ordinary",
-        model = model,
-        tolerance = tolerance
-      )
-
+      result <- .bootstrap_r2_nakagawa(model, iterations, tolerance)
       out$CI <- ci
       # CI for marginal R2
       icc_ci <- as.vector(result$t[, 1])
@@ -162,6 +153,9 @@ as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...
 }
 
 
+
+# bootstrapping --------------
+
 .boot_r2_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
@@ -178,4 +172,46 @@ as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...
       (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
     )
   }
+}
+
+.boot_r2_fun_lme4 <- function(model) {
+  vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
+  if (is.null(vars) || all(is.na(vars))) {
+    return(c(NA, NA))
+  }
+  # Calculate R2 values
+  if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
+    c(vars$var.fixed / (vars$var.fixed + vars$var.residual), NA)
+  } else {
+    c(
+      vars$var.fixed / (vars$var.fixed + vars$var.random + vars$var.residual),
+      (vars$var.fixed + vars$var.random) / (vars$var.fixed + vars$var.random + vars$var.residual)
+    )
+  }
+}
+
+.bootstrap_r2_nakagawa <- function(model, iterations, tolerance) {
+  if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
+    insight::check_if_installed(c("lme4", "boot"))
+    result <- lme4::bootMer(
+      model,
+      .boot_r2_fun_lme4,
+      nsim = iterations,
+      type = "parametric",
+      parallel = "no",
+      ncpus = 1,
+      cl = NULL
+    )
+  } else {
+    insight::check_if_installed("boot")
+    result <- boot::boot(
+      data = insight::get_data(model),
+      statistic = .boot_r2_fun,
+      R = iterations,
+      sim = "ordinary",
+      model = model,
+      tolerance = tolerance
+    )
+  }
+  result
 }
