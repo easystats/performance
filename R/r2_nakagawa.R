@@ -139,6 +139,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
 
 
 
+# methods ------
 
 #' @export
 as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...) {
@@ -150,6 +151,49 @@ as.data.frame.r2_nakagawa <- function(x, row.names = NULL, optional = FALSE, ...
     optional = optional,
     ...
   )
+}
+
+
+#' @export
+print.r2_nakagawa <- function(x, digits = 3, ...) {
+  model_type <- attr(x, "model_type")
+  if (is.null(model_type)) {
+    insight::print_color("# R2 for Mixed Models\n\n", "blue")
+  } else {
+    insight::print_color("# R2 for %s Regression\n\n", "blue")
+  }
+
+  if (!is.null(x$CI_low_marginal) && !is.null(x$CI_low_conditional)) {
+    out <- paste0(
+      c(
+        sprintf(
+          "  Conditional R2: %.*f %s",
+          digits,
+          x$R2_conditional,
+          insight::format_ci(x$CI_low_conditional, x$CI_high_conditional, digits = digits, ci = NULL)
+        ),
+        sprintf(
+          "     Marginal R2: %.*f %s",
+          digits,
+          x$R2_marginal,
+          insight::format_ci(x$CI_low_marginal, x$CI_high_marginal, digits = digits, ci = NULL)
+        )
+      ),
+      collapse = "\n"
+    )
+  } else {
+    out <- paste0(
+      c(
+        sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),
+        sprintf("     Marginal R2: %.*f", digits, x$R2_marginal)
+      ),
+      collapse = "\n"
+    )
+  }
+
+  cat(out)
+  cat("\n")
+  invisible(x)
 }
 
 
