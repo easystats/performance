@@ -23,6 +23,8 @@
 #'   See 'Details'.
 #' @param iterations Number of bootstrap-replicates when computing confidence
 #'   intervals for the ICC or R2.
+#' @param ... Arguments passed down to `lme4::bootMer()` or `boot::boot()`
+#'   for bootstrapped ICC or R2.
 #'
 #' @inheritParams r2_bayes
 #' @inheritParams insight::get_variance
@@ -156,7 +158,7 @@
 #'   icc(model, by_group = TRUE)
 #' }
 #' @export
-icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iterations = 100) {
+icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iterations = 100, ...) {
   # special handling for smicd::semLme()
   if (inherits(model, "sem") && inherits(model, "lme")) {
     return(model$icc)
@@ -235,7 +237,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      result <- .bootstrap_icc(model, iterations, tolerance)
+      result <- .bootstrap_icc(model, iterations, tolerance, ...)
       out$CI <- ci
       # CI for adjusted ICC
       icc_ci <- as.vector(result$t[, 1])
@@ -558,18 +560,41 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   )
 }
 
-.bootstrap_icc <- function(model, iterations, tolerance) {
+.bootstrap_icc <- function(model, iterations, tolerance, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
     insight::check_if_installed(c("lme4", "boot"))
-    result <- lme4::bootMer(
+    dots <- list(...)
+    args <- list(
       model,
       .boot_icc_fun_lme4,
       nsim = iterations,
       type = "parametric",
       parallel = "no",
-      ncpus = 1,
-      cl = NULL
+      use.u = FALSE,
+      ncpus = 1
     )
+
+    # add dot-args
+    if (!is.null(dots[["use.u"]])) {
+      args$use.u <- dots[["use.u"]]
+    }
+    if (!is.null(dots[["re.form"]])) {
+      args$re.form <- dots[["re.form"]]
+    }
+    if (!is.null(dots[["type"]])) {
+      args$type <- dots[["type"]]
+      if (args$type == "semiparametric") {
+        args$use.u <- TRUE
+      }
+    }
+    if (!is.null(dots[["parallel"]])) {
+      args$parallel <- dots[["parallel"]]
+    }
+    if (!is.null(dots[["ncpus"]])) {
+      args$ncpus <- dots[["ncpus"]]
+    }
+    result <- do.call(lme4::bootMer, args)
+
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(

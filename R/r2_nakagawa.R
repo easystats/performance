@@ -53,7 +53,7 @@
 #'   r2_nakagawa(model, by_group = TRUE)
 #' }
 #' @export
-r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, iterations = 100) {
+r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, iterations = 100, ...) {
   # calculate random effect variances
   vars <- .compute_random_vars(
     model,
@@ -115,7 +115,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      result <- .bootstrap_r2_nakagawa(model, iterations, tolerance)
+      result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, ...)
       out$CI <- ci
       # CI for marginal R2
       icc_ci <- as.vector(result$t[, 1])
@@ -234,18 +234,41 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   }
 }
 
-.bootstrap_r2_nakagawa <- function(model, iterations, tolerance) {
+.bootstrap_r2_nakagawa <- function(model, iterations, tolerance, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
     insight::check_if_installed(c("lme4", "boot"))
-    result <- lme4::bootMer(
+    dots <- list(...)
+    args <- list(
       model,
       .boot_r2_fun_lme4,
       nsim = iterations,
       type = "parametric",
       parallel = "no",
-      ncpus = 1,
-      cl = NULL
+      use.u = FALSE,
+      ncpus = 1
     )
+
+    # add dot-args
+    if (!is.null(dots[["use.u"]])) {
+      args$use.u <- dots[["use.u"]]
+    }
+    if (!is.null(dots[["re.form"]])) {
+      args$re.form <- dots[["re.form"]]
+    }
+    if (!is.null(dots[["type"]])) {
+      args$type <- dots[["type"]]
+      if (args$type == "semiparametric") {
+        args$use.u <- TRUE
+      }
+    }
+    if (!is.null(dots[["parallel"]])) {
+      args$parallel <- dots[["parallel"]]
+    }
+    if (!is.null(dots[["ncpus"]])) {
+      args$ncpus <- dots[["ncpus"]]
+    }
+    result <- do.call(lme4::bootMer, args)
+
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(

@@ -9,7 +9,8 @@ r2_nakagawa(
   by_group = FALSE,
   tolerance = 1e-05,
   ci = NULL,
-  iterations = 100
+  iterations = 100,
+  ...
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ R2 value. See \code{iterations}.}
 
 \item{iterations}{Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.}
+
+\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
 }
 \value{
 A list with the conditional and marginal R2 values.

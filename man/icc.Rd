@@ -5,7 +5,14 @@
 \alias{variance_decomposition}
 \title{Intraclass Correlation Coefficient (ICC)}
 \usage{
-icc(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iterations = 100)
+icc(
+  model,
+  by_group = FALSE,
+  tolerance = 1e-05,
+  ci = NULL,
+  iterations = 100,
+  ...
+)
 
 variance_decomposition(model, re_formula = NULL, robust = TRUE, ci = 0.95, ...)
 }
@@ -28,6 +35,8 @@ R2 value. See \code{iterations}.}
 \item{iterations}{Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.}
 
+\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
+
 \item{re_formula}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
@@ -36,8 +45,6 @@ and \code{?brms::posterior_predict}.}
 
 \item{robust}{Logical, if \code{TRUE}, the median instead of mean is used to
 calculate the central tendency of the variances.}
-
-\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
 }
 \value{
 A list with two values, the adjusted ICC and the unadjusted ICC. For
