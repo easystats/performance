@@ -226,7 +226,10 @@ account (i.e., the total model).</p>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(Petal.Length <span class="sc">~</span> Petal.Width <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Species), <span class="at">data =</span> iris)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(model)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># R2 for Mixed Models</span></span></code></pre></div>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># R2 for Mixed Models</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.933</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.303</span></span></code></pre></div>
 <p>Note that <code>r2</code> functions only return the <span class="math inline">\(R^2\)</span> values. We would encourage users to
 instead always use the <code>model_performance</code> function to get a
 more comprehensive set of indices of model fit.</p>
