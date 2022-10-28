@@ -12,7 +12,7 @@ mixed effects models with complex random effects structures."><meta property="og
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,13 @@ mixed effects models with complex random effects structures.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">r2_nakagawa</span><span class="op">(</span><span class="va">model</span>, by_group <span class="op">=</span> <span class="cn">FALSE</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">r2_nakagawa</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  by_group <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  tolerance <span class="op">=</span> <span class="fl">1e-05</span>,</span>
+<span>  ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -107,7 +113,7 @@ mixed effects models with complex random effects structures.</p>
 <dt>by_group</dt>
 <dd><p>Logical, if <code>TRUE</code>, returns the explained variance
 at different levels (if there are multiple levels). This is essentially
-similar to the variance reduction approach by <cite>Hox (2010), pp. 69-78</cite>.</p></dd>
+similar to the variance reduction approach by <em>Hox (2010), pp. 69-78</em>.</p></dd>
 
 
 <dt>tolerance</dt>
@@ -117,6 +123,17 @@ or not. Indicates up to which value the convergence result is accepted. When
 <code>r2_nakagawa()</code> returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is <code>NA</code>),
 decrease the tolerance-level. See also <code><a href="check_singularity.html">check_singularity()</a></code>.</p></dd>
+
+
+<dt>ci</dt>
+<dd><p>Confidence resp. credible interval level. For <code><a href="icc.html">icc()</a></code> and <code><a href="r2.html">r2()</a></code>,
+confidence intervals are based on bootstrapped samples from the ICC resp.
+R2 value. See <code>iterations</code>.</p></dd>
+
+
+<dt>iterations</dt>
+<dd><p>Number of bootstrap-replicates when computing confidence
+intervals for the ICC or R2.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -128,12 +145,11 @@ decrease the tolerance-level. See also <code><a href="check_singularity.html">ch
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Marginal and conditional r-squared values for mixed models are calculated
-based on <cite>Nakagawa et al. (2017)</cite>. For more details on the computation of
+based on <em>Nakagawa et al. (2017)</em>. For more details on the computation of
 the variances, see <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>. The random effect variances are
 actually the mean random effect variances, thus the r-squared value is also
 appropriate for mixed models with random slopes or nested random effects
-(see <cite>Johnson, 2014</cite>).</p>
-<ul><li><p><strong>Conditional R2</strong>: takes both the fixed and random effects into account.</p></li>
+(see <em>Johnson, 2014</em>).</p><ul><li><p><strong>Conditional R2</strong>: takes both the fixed and random effects into account.</p></li>
 <li><p><strong>Marginal R2</strong>: considers only the variance of the fixed effects.</p></li>
 </ul><p>The contribution of random effects can be deduced by subtracting the
 marginal R2 from the conditional R2 or by computing the <code><a href="icc.html">icc()</a></code>.</p>
