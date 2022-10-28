@@ -563,7 +563,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 }
 
 # prepare arguments for "lme4::bootMer"
-.do_lme4_bootmer <- function(.boot_fun, iterations, dots) {
+.do_lme4_bootmer <- function(model, .boot_fun, iterations, dots) {
   insight::check_if_installed(c("lme4", "boot"))
   args <- list(
     model,
@@ -600,7 +600,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 # main function for bootstrapping
 .bootstrap_icc <- function(model, iterations, tolerance, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
-    result <- .do_lme4_bootmer(.boot_icc_fun_lme4, iterations, dots = list(...))
+    result <- .do_lme4_bootmer(model, .boot_icc_fun_lme4, iterations, dots = list(...))
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
