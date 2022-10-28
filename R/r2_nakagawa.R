@@ -200,6 +200,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
 # bootstrapping --------------
 
+# bootstrapping using package "boot"
 .boot_r2_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
@@ -218,6 +219,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   }
 }
 
+# bootstrapping using "lme4::bootMer"
 .boot_r2_fun_lme4 <- function(model) {
   vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
   if (is.null(vars) || all(is.na(vars))) {
@@ -234,41 +236,10 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   }
 }
 
+# main bootstrap function
 .bootstrap_r2_nakagawa <- function(model, iterations, tolerance, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
-    insight::check_if_installed(c("lme4", "boot"))
-    dots <- list(...)
-    args <- list(
-      model,
-      .boot_r2_fun_lme4,
-      nsim = iterations,
-      type = "parametric",
-      parallel = "no",
-      use.u = FALSE,
-      ncpus = 1
-    )
-
-    # add dot-args
-    if (!is.null(dots[["use.u"]])) {
-      args$use.u <- dots[["use.u"]]
-    }
-    if (!is.null(dots[["re.form"]])) {
-      args$re.form <- dots[["re.form"]]
-    }
-    if (!is.null(dots[["type"]])) {
-      args$type <- dots[["type"]]
-      if (args$type == "semiparametric") {
-        args$use.u <- TRUE
-      }
-    }
-    if (!is.null(dots[["parallel"]])) {
-      args$parallel <- dots[["parallel"]]
-    }
-    if (!is.null(dots[["ncpus"]])) {
-      args$ncpus <- dots[["ncpus"]]
-    }
-    result <- do.call(lme4::bootMer, args)
-
+    result <- .do_lme4_bootmer(.boot_r2_fun_lme4, iterations, dots = list(...))
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(

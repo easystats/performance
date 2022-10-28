@@ -536,6 +536,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 # bootstrapping ------------------
 
+# bootstrapping using package "boot"
 .boot_icc_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
@@ -549,6 +550,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   )
 }
 
+# bootstrapping using "lme4::bootMer"
 .boot_icc_fun_lme4 <- function(model) {
   vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
   if (is.null(vars) || all(is.na(vars))) {
@@ -560,41 +562,45 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   )
 }
 
+# prepare arguments for "lme4::bootMer"
+.do_lme4_bootmer <- function(.boot_fun, iterations, dots) {
+  insight::check_if_installed(c("lme4", "boot"))
+  args <- list(
+    model,
+    .boot_fun,
+    nsim = iterations,
+    type = "parametric",
+    parallel = "no",
+    use.u = FALSE,
+    ncpus = 1
+  )
+  # add/overwrite dot-args
+  if (!is.null(dots[["use.u"]])) {
+    args$use.u <- dots[["use.u"]]
+  }
+  if (!is.null(dots[["re.form"]])) {
+    args$re.form <- dots[["re.form"]]
+  }
+  if (!is.null(dots[["type"]])) {
+    args$type <- dots[["type"]]
+    if (args$type == "semiparametric") {
+      args$use.u <- TRUE
+    }
+  }
+  if (!is.null(dots[["parallel"]])) {
+    args$parallel <- dots[["parallel"]]
+  }
+  if (!is.null(dots[["ncpus"]])) {
+    args$ncpus <- dots[["ncpus"]]
+  }
+  # bootsrap
+  do.call(lme4::bootMer, args)
+}
+
+# main function for bootstrapping
 .bootstrap_icc <- function(model, iterations, tolerance, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
-    insight::check_if_installed(c("lme4", "boot"))
-    dots <- list(...)
-    args <- list(
-      model,
-      .boot_icc_fun_lme4,
-      nsim = iterations,
-      type = "parametric",
-      parallel = "no",
-      use.u = FALSE,
-      ncpus = 1
-    )
-
-    # add dot-args
-    if (!is.null(dots[["use.u"]])) {
-      args$use.u <- dots[["use.u"]]
-    }
-    if (!is.null(dots[["re.form"]])) {
-      args$re.form <- dots[["re.form"]]
-    }
-    if (!is.null(dots[["type"]])) {
-      args$type <- dots[["type"]]
-      if (args$type == "semiparametric") {
-        args$use.u <- TRUE
-      }
-    }
-    if (!is.null(dots[["parallel"]])) {
-      args$parallel <- dots[["parallel"]]
-    }
-    if (!is.null(dots[["ncpus"]])) {
-      args$ncpus <- dots[["ncpus"]]
-    }
-    result <- do.call(lme4::bootMer, args)
-
+    result <- .do_lme4_bootmer(.boot_icc_fun_lme4, iterations, dots = list(...))
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
