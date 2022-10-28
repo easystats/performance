@@ -23,11 +23,12 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(m1),
-        structure(list(
+        data.frame(
           ICC_adjusted = 0.910433109183341, ICC_conditional = 0.310947768161385,
           ICC_unadjusted = 0.310947768161385
-        ), class = "icc"),
-        tolerance = 1e-3
+        ),
+        tolerance = 1e-3,
+        ignore_attr = TRUE
       )
     })
 
@@ -47,11 +48,12 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(m2),
-        structure(list(
+        data.frame(
           ICC_adjusted = 0.399303562702568, ICC_conditional = 0.216907586891627,
           ICC_unadjusted = 0.216907586891627
-        ), class = "icc"),
-        tolerance = 1e-3
+        ),
+        tolerance = 1e-3,
+        ignore_attr = TRUE
       )
     })
 
@@ -70,11 +72,12 @@ if (.runThisTest && !osx) {
       set.seed(123)
       expect_equal(
         icc(m3),
-        structure(list(
+        data.frame(
           ICC_adjusted = 0.930217931275196, ICC_conditional = 0.771475122370036,
           ICC_unadjusted = 0.771475122370036
-        ), class = "icc"),
-        tolerance = 0.05
+        ),
+        tolerance = 0.05,
+        ignore_attr = TRUE
       )
     })
 
