@@ -2,7 +2,7 @@
 
 ## General
 
-* Polish documentation.
+* Minor improvements to the documentation.
 
 ## Changes to functions
 
