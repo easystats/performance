@@ -1,5 +1,9 @@
 # performance 0.10.1
 
+## General
+
+* Polish documentation.
+
 ## Changes to functions
 
 * `icc()` and `r2_nakagawa()` get `ci` and `iterations` arguments, to compute
