@@ -6,13 +6,13 @@
 #'   R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param ci Confidence Interval (CI) level. Default is \code{NULL}. Confidence
+#' @param ci Confidence Interval (CI) level. Default is `NULL`. Confidence
 #'   intervals for R2 can be calculated based on different methods, see
-#'   \code{ci_method}.
+#'   `ci_method`.
 #' @param ci_method Method for constructing the R2 confidence interval.
-#'   Options are \code{"analytical"} for sampling-theory-based frequentist
-#'   intervals and \code{"bootstrap"} for bootstrap intervals. Analytical intervals
-#'   are not available for all models. For Bayesian models, [r2_bayes()] is used.
+#'   Options are `"analytical"` for sampling-theory-based frequentist
+#'   intervals and `"bootstrap"` for bootstrap intervals. Analytical intervals
+#'   are not available for all models. For Bayesian models, [`r2_bayes()`] is used.
 #' @param verbose Logical. Should details about R2 and CI methods be given (`TRUE`) or not (`FALSE`)?
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
@@ -20,23 +20,21 @@
 #' @return Returns a list containing values related to the most appropriate R2
 #'   for the given model (or `NULL` if no R2 could be extracted). See the
 #'   list below:
-#' \itemize{
-#'   \item Logistic models: [Tjur's R2][r2_tjur]
-#'   \item General linear models: [Nagelkerke's R2][r2_nagelkerke]
-#'   \item Multinomial Logit: [McFadden's R2][r2_mcfadden]
-#'   \item Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
-#'   \item Mixed models: [Nakagawa's R2][r2_nakagawa]
-#'   \item Bayesian models: [R2 bayes][r2_bayes]
-#' }
+#'   - Logistic models: [Tjur's R2][r2_tjur]
+#'   - General linear models: [Nagelkerke's R2][r2_nagelkerke]
+#'   - Multinomial Logit: [McFadden's R2][r2_mcfadden]
+#'   - Models with zero-inflation: [R2 for zero-inflated models][r2_zeroinflated]
+#'   - Mixed models: [Nakagawa's R2][r2_nakagawa]
+#'   - Bayesian models: [R2 bayes][r2_bayes]
 #'
 #' @note If there is no `r2()`-method defined for the given model class,
 #'   `r2()` tries to return a "generic r2 value, calculated as following:
 #'   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
 #'
-#' @seealso [r2_bayes()], [r2_coxsnell()], [r2_kullback()],
-#'   [r2_loo()], [r2_mcfadden()], [r2_nagelkerke()],
-#'   [r2_nakagawa()], [r2_tjur()], [r2_xu()] and
-#'   [r2_zeroinflated()].
+#' @seealso [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`],
+#'   [`r2_loo()`], [`r2_mcfadden()`], [`r2_nagelkerke()`],
+#'   [`r2_nakagawa()`], [`r2_tjur()`], [`r2_xu()`] and
+#'   [`r2_zeroinflated()`].
 #'
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
@@ -809,7 +807,9 @@ r2.DirichletRegModel <- function(model, ...) {
   if (!is.null(ci) && !is.na(ci)) {
     if (!is.null(valid_ci_method) && !ci_method %in% valid_ci_method) {
       if (verbose) {
-        warning(paste0("Method '", ci_method, "' to compute confidence intervals for R2 not supported."), call. = FALSE)
+        insight::format_warning(
+          paste0("Method `", ci_method, "` to compute confidence intervals for R2 not supported.")
+        )
       }
       return(NULL)
     }

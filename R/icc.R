@@ -15,10 +15,14 @@
 #'   Else, for instance for nested models, name a specific group-level effect
 #'   to calculate the variance decomposition for this group-level. See 'Details'
 #'   and `?brms::posterior_predict`.
-#' @param ci Credible interval level.
+#' @param ci Confidence resp. credible interval level. For `icc()` and `r2()`,
+#'   confidence intervals are based on bootstrapped samples from the ICC resp.
+#'   R2 value. See `iterations`.
 #' @param by_group Logical, if `TRUE`, `icc()` returns the variance
 #'   components for each random-effects level (if there are multiple levels).
 #'   See 'Details'.
+#' @param iterations Number of bootstrap-replicates when computing confidence
+#'   intervals for the ICC or R2.
 #'
 #' @inheritParams r2_bayes
 #' @inheritParams insight::get_variance
@@ -27,20 +31,20 @@
 #' `variance_decomposition()`, a list with two values, the decomposed
 #' ICC as well as the credible intervals for this ICC.
 #'
-#' @references \itemize{
-#'  \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
-#'  (2nd ed). New York: Routledge.
-#'  \item Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
-#'  coefficient of determination R2 and intra-class correlation coefficient from
-#'  generalized linear mixed-effects models revisited and expanded. Journal of
-#'  The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
-#'  \item Rabe-Hesketh, S., and Skrondal, A. (2012). Multilevel and longitudinal
-#'  modeling using Stata (3rd ed). College Station, Tex: Stata Press
-#'  Publication.
-#'  \item Raudenbush, S. W., and Bryk, A. S. (2002). Hierarchical linear models:
-#'  applications and data analysis methods (2nd ed). Thousand Oaks: Sage
-#'  Publications.
-#'  }
+#' @references
+#'  - Hox, J. J. (2010). Multilevel analysis: techniques and applications
+#'    (2nd ed). New York: Routledge.
+#'  - Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
+#'    coefficient of determination R2 and intra-class correlation coefficient
+#'    from generalized linear mixed-effects models revisited and expanded.
+#'    Journal of The Royal Society Interface, 14(134), 20170213.
+#'    \doi{10.1098/rsif.2017.0213}
+#'  - Rabe-Hesketh, S., and Skrondal, A. (2012). Multilevel and longitudinal
+#'    modeling using Stata (3rd ed). College Station, Tex: Stata Press
+#'    Publication.
+#'  - Raudenbush, S. W., and Bryk, A. S. (2002). Hierarchical linear models:
+#'    applications and data analysis methods (2nd ed). Thousand Oaks: Sage
+#'    Publications.
 #'
 #' @details
 #'  \subsection{Interpretation}{
@@ -152,7 +156,7 @@
 #'   icc(model, by_group = TRUE)
 #' }
 #' @export
-icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
+icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iterations = 100) {
   # special handling for smicd::semLme()
   if (inherits(model, "sem") && inherits(model, "lme")) {
     return(model$icc)
@@ -163,7 +167,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
       return(variance_decomposition(model))
     } else {
       insight::print_color(
-        "Multiple response models not yet supported. You may use 'performance::variance_decomposition()'.\n",
+        "Multiple response models not yet supported. You may use `performance::variance_decomposition()`.\n",
         "red"
       )
       return(NULL)
@@ -175,46 +179,25 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
     return(NULL)
   }
 
-  vars <- tryCatch(
-    {
-      insight::get_variance(model,
-        name_fun = "icc()",
-        name_full = "ICC",
-        tolerance = tolerance
-      )
-    },
-    error = function(e) {
-      if (inherits(e, c("simpleError", "error"))) {
-        insight::print_color(e$message, "red")
-        cat("\n")
-      }
-      NULL
-    }
-  )
+  # calculate random effect variances
+  vars <- .compute_random_vars(model, tolerance)
 
-
+  # return if ICC couldn't be computed
   if (is.null(vars) || all(is.na(vars))) {
-    return(NA)
+    return(vars)
   }
-
-
-  # check if we have successfully computed all variance components...
-
-  components <- c("var.fixed", "var.random", "var.residual")
-  check_elements <- sapply(components, function(.i) !is.null(vars[[.i]]))
-
-  if (!all(check_elements)) {
-    return(NA)
-  }
-
 
   # Calculate ICC values by groups
   if (isTRUE(by_group)) {
     # with random slopes, icc is inaccurate
     if (!is.null(insight::find_random_slopes(model))) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Model contains random slopes. Cannot compute accurate ICCs by group factors."
-      ), call. = FALSE)
+      )
+    }
+
+    if (!is.null(ci) && !is.na(ci)) {
+      insight::format_warning("Confidence intervals are not yet supported for `by_group = TRUE`.")
     }
 
     # icc per group factor with reference to overall model
@@ -239,21 +222,48 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05) {
     # )
 
     class(out) <- c("icc_by_group", class(out))
-    out
   } else {
     # Calculate ICC values
     icc_adjusted <- vars$var.random / (vars$var.random + vars$var.residual)
     icc_unadjusted <- vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
 
-    structure(
-      class = "icc",
-      list(
-        "ICC_adjusted" = icc_adjusted,
-        "ICC_conditional" = icc_unadjusted,
-        "ICC_unadjusted" = icc_unadjusted
-      )
+    out <- data.frame(
+      ICC_adjusted = icc_adjusted,
+      ICC_conditional = icc_unadjusted,
+      ICC_unadjusted = icc_unadjusted
     )
+
+    # check if CIs are requested, and compute bootstrapped CIs
+    if (!is.null(ci) && !is.na(ci)) {
+      insight::check_if_installed("boot")
+      result <- boot::boot(
+        data = insight::get_data(model),
+        statistic = .boot_icc_fun,
+        R = iterations,
+        sim = "ordinary",
+        model = model,
+        tolerance = tolerance
+      )
+
+      out$CI <- ci
+      # CI for adjusted ICC
+      icc_ci <- as.vector(result$t[, 1])
+      icc_ci <- icc_ci[!is.na(icc_ci)]
+      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
+      out$CI_low_adjusted <- icc_ci$CI_low
+      out$CI_high_adjusted <- icc_ci$CI_high
+
+      # CI for unadjusted ICC
+      icc_ci <- as.vector(result$t[, 2])
+      icc_ci <- icc_ci[!is.na(icc_ci)]
+      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
+      out$CI_low_unadjusted <- icc_ci$CI_low
+      out$CI_high_unadjusted <- icc_ci$CI_high
+    }
+
+    class(out) <- c("icc", "data.frame")
   }
+  out
 }
 
 
@@ -268,7 +278,7 @@ variance_decomposition <- function(model,
                                    ci = .95,
                                    ...) {
   if (!inherits(model, "brmsfit")) {
-    stop("Only models from package 'brms' are supported.", call. = FALSE)
+    insight::format_error("Only models from package `brms` are supported.")
   }
 
   mi <- insight::model_info(model)
@@ -353,8 +363,18 @@ print.icc <- function(x, digits = 3, ...) {
 
   out <- paste0(
     c(
-      sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted),
-      sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted)
+      sprintf(
+        "    Adjusted ICC: %.*f %s",
+        digits,
+        x$ICC_adjusted,
+        insight::format_ci(x$CI_low_adjusted, x$CI_high_adjusted, digits = digits, ci = NULL)
+      ),
+      sprintf(
+        "  Unadjusted ICC: %.*f %s",
+        digits,
+        x$ICC_unadjusted,
+        insight::format_ci(x$CI_low_unadjusted, x$CI_high_unadjusted, digits = digits, ci = NULL)
+      )
     ),
     collapse = "\n"
   )
@@ -465,4 +485,59 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   ))
 
   invisible(x)
+}
+
+
+
+# helper -----------------
+
+.compute_random_vars <- function(model,
+                                 tolerance,
+                                 components = c("var.fixed", "var.random", "var.residual"),
+                                 name_fun = "icc()",
+                                 name_full = "ICC",
+                                 verbose = TRUE) {
+  vars <- tryCatch(
+    {
+      insight::get_variance(model,
+        name_fun = name_fun,
+        name_full = name_full,
+        tolerance = tolerance,
+        verbose = verbose
+      )
+    },
+    error = function(e) {
+      if (inherits(e, c("simpleError", "error")) && verbose) {
+        insight::print_color(e$message, "red")
+        cat("\n")
+      }
+      NULL
+    }
+  )
+
+  if (is.null(vars) || all(is.na(vars))) {
+    return(NA)
+  }
+
+  # check if we have successfully computed all variance components...
+  check_elements <- sapply(components, function(.i) !is.null(vars[[.i]]))
+
+  if (!all(check_elements)) {
+    return(NA)
+  }
+
+  vars
+}
+
+.boot_icc_fun <- function(data, indices, model, tolerance) {
+  d <- data[indices, ] # allows boot to select sample
+  fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
+  vars <- .compute_random_vars(fit, tolerance, verbose = FALSE)
+  if (is.null(vars) || all(is.na(vars))) {
+    return(c(NA, NA))
+  }
+  c(
+    vars$var.random / (vars$var.random + vars$var.residual),
+    vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
+  )
 }
