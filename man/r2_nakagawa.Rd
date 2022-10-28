@@ -25,6 +25,13 @@ or not. Indicates up to which value the convergence result is accepted. When
 \code{r2_nakagawa()} returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is \code{NA}),
 decrease the tolerance-level. See also \code{\link[=check_singularity]{check_singularity()}}.}
+
+\item{ci}{Confidence resp. credible interval level. For \code{icc()} and \code{r2()},
+confidence intervals are based on bootstrapped samples from the ICC resp.
+R2 value. See \code{iterations}.}
+
+\item{iterations}{Number of bootstrap-replicates when computing confidence
+intervals for the ICC or R2.}
 }
 \value{
 A list with the conditional and marginal R2 values.

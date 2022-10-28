@@ -14,6 +14,7 @@
 #'   `r2_nakagawa()` returns a warning, stating that random effect variances
 #'   can't be computed (and thus, the conditional r-squared is `NA`),
 #'   decrease the tolerance-level. See also [`check_singularity()`].
+#' @inheritParams icc
 #'
 #' @return A list with the conditional and marginal R2 values.
 #'
