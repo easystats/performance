@@ -16,17 +16,21 @@
 #' in the interval `[0, 1]`, with values closer to 1 indicating a more
 #' accurate model, and the logarithmic rule in the interval `[-Inf, 0]`,
 #' with values closer to 0 indicating a more accurate model.
-#' \cr \cr
+#'
 #' For `stan_lmer()` and `stan_glmer()` models, the predicted values
 #' are based on `posterior_predict()`, instead of `predict()`. Thus,
 #' results may differ more than expected from their non-Bayesian counterparts
 #' in **lme4**.
 #'
-#' @references Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
+#' @references
+#' Carvalho, A. (2016). An overview of applications of proper scoring rules.
+#' Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 #'
-#' @note Code is partially based on [GLMMadaptive::scoring_rules()](https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html).
+#' @note
+#' Code is partially based on
+#' [GLMMadaptive::scoring_rules()](https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html).
 #'
-#' @seealso [`performance_logloss()`][performance_logloss]
+#' @seealso [`performance_logloss()`]
 #'
 #' @examples
 #' ## Dobson (1990) Page 93: Randomized Controlled Trial :

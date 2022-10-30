@@ -16,23 +16,23 @@
 #'   null model.
 #'
 #' @details `method = "Gelman-Hill"` (or `"gelman_hill"`) computes the
-#'   PCP based on the proposal from \cite{Gelman and Hill 2017, 99}, which is
+#'   PCP based on the proposal from _Gelman and Hill 2017, 99_, which is
 #'   defined as the proportion of cases for which the deterministic prediction
 #'   is wrong, i.e. the proportion where the predicted probability is above 0.5,
-#'   although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
-#'   \cr \cr
+#'   although y=0 (and vice versa) (see also _Herron 1999, 90_).
+#'
 #'   `method = "Herron"` (or `"herron"`) computes a modified version
-#'   of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted
+#'   of the PCP (_Herron 1999, 90-92_), which is the sum of predicted
 #'   probabilities, where y=1, plus the sum of 1 - predicted probabilities,
 #'   where y=0, divided by the number of observations. This approach is said to
 #'   be more accurate.
-#'   \cr \cr
+#'
 #'   The PCP ranges from 0 to 1, where values closer to 1 mean that the model
 #'   predicts the outcome better than models with an PCP closer to 0. In general,
 #'   the PCP should be above 0.5 (i.e. 50\%), the closer to one, the better.
 #'   Furthermore, the PCP of the full model should be considerably above
 #'   the null model's PCP.
-#'   \cr \cr
+#'
 #'   The likelihood-ratio test indicates whether the model has a significantly
 #'   better fit than the null-model (in such cases, p < 0.05).
 #'
@@ -40,7 +40,6 @@
 #' @references
 #' - Herron, M. (1999). Postestimation Uncertainty in Limited Dependent
 #'   Variable Models. Political Analysis, 8, 83–98.
-#'
 #' - Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #'   multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'   Press, 99.
@@ -64,7 +63,7 @@ performance_pcp <- function(model,
   mi <- insight::model_info(model, verbose = verbose)
 
   if (!mi$is_binomial) {
-    stop("`performance_pcp()` only works for models with binary outcome.", call. = FALSE)
+    insight::format_error("`performance_pcp()` only works for models with binary outcome.")
   }
 
   resp <- insight::get_response(model, verbose = verbose)
