@@ -9,6 +9,8 @@
 * `icc()` and `r2_nakagawa()` get `ci` and `iterations` arguments, to compute
   confidence intervals for the ICC resp. R2, based on bootstrapped sampling.
 
+* `r2()` gets `ci`, to compute (analytical) confidence intervals for the R2.
+
 * The model underlying `check_distribution()` was now also trained to detect
   cauchy, half-cauchy and inverse-gamma distributions.
 
