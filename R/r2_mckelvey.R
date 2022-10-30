@@ -8,9 +8,9 @@
 #' @return The R2 value.
 #'
 #' @references
-#' \itemize{
-#'   \item McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.
-#' }
+#' McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of
+#' Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S.
+#' 103–120.
 #'
 #' @details McKelvey and Zavoinas R2 is based on the explained variance,
 #'   where the variance of the predicted response is divided by the sum
@@ -20,7 +20,6 @@
 #'   residual variance is based on log-normal approximation, similar to
 #'   the *distribution-specific variance* as described in
 #'   `?insight::get_variance`.
-#'
 #'
 #' @examples
 #' ## Dobson (1990) Page 93: Randomized Controlled Trial:
