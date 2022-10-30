@@ -59,7 +59,7 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
   }
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
+      insight::format_error("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     return(NULL)
   } else {
