@@ -19,7 +19,7 @@ print.r2_generic <- function(x, digits = 3, ...) {
       sprintf("  adj. R2: %.*f", digits, x$R2_adjusted[1])
     )
   } else {
-    out <- sprintf("  %s: %.*f", names(x$R2), digits, x$R2[1])
+    out <- sprintf("  %s: %.*f", names(x$R2[1]), digits, x$R2[1])
   }
 
   # add CI?
