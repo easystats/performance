@@ -62,7 +62,8 @@ alternative to the ICC is the \code{variance_decomposition()}, which is based
 on the posterior predictive distribution (see 'Details').
 }
 \details{
-\strong{Interpretation}
+\subsection{Interpretation}{
+
 The ICC can be interpreted as "the proportion of the variance explained by
 the grouping structure in the population". The grouping structure entails
 that measurements are organized into groups (e.g., test scores in a school
@@ -79,6 +80,8 @@ ICC can help determine whether a mixed model is even necessary: an ICC of
 zero (or very close to zero) means the observations within clusters are no
 more similar than observations from different clusters, and setting it as a
 random factor might not be necessary.
+}
+
 \subsection{Difference with R2}{
 
 The coefficient of determination R2 (that can be computed with \code{\link[=r2]{r2()}})
@@ -90,14 +93,18 @@ variance (of the full model), while the ICC is the proportion of explained
 variance that can be attributed to the random effects. In simple cases, the
 ICC corresponds to the difference between the \emph{conditional R2} and the
 \emph{marginal R2} (see \code{\link[=r2_nakagawa]{r2_nakagawa()}}).
+}
 
-\strong{Calculation}
+\subsection{Calculation}{
+
 The ICC is calculated by dividing the random effect variance,
 \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}}, by
 the total variance, i.e. the sum of the random effect variance and the
 residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
+}
 
-\strong{Adjusted and unadjusted ICC}
+\subsection{Adjusted and unadjusted ICC}{
+
 \code{icc()} calculates an adjusted and an unadjusted ICC, which both take all
 sources of uncertainty (i.e. of \emph{all random effects}) into account. While
 the \emph{adjusted ICC} only relates to the random effects, the \emph{unadjusted ICC}
@@ -110,23 +117,29 @@ structures, like models with random slopes or nested design (more than two
 levels) and is applicable for models with other distributions than Gaussian.
 For more details on the computation of the variances, see
 \code{?insight::get_variance}.
+}
 
-\strong{ICC for unconditional and conditional models}
+\subsection{ICC for unconditional and conditional models}{
+
 Usually, the ICC is calculated for the null model ("unconditional model").
 However, according to \emph{Raudenbush and Bryk (2002)} or
 \emph{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the
 ICC for full models with covariates ("conditional models") and compare how
 much, e.g., a level-2 variable explains the portion of variation in the
 grouping structure (random intercept).
+}
 
-\strong{ICC for specific group-levels}
+\subsection{ICC for specific group-levels}{
+
 The proportion of variance for specific levels related to the overall model
 can be computed by setting \code{by_group = TRUE}. The reported ICC is
 the variance for each (random effect) group compared to the total
 variance of the model. For mixed models with a simple random intercept,
 this is identical to the classical (adjusted) ICC.
+}
 
-\strong{Variance decomposition for brms-models}
+\subsection{Variance decomposition for brms-models}{
+
 If \code{model} is of class \code{brmsfit}, \code{icc()} might fail due to the large
 variety of models and families supported by the \strong{brms} package. In such
 cases, \code{variance_decomposition()} is an alternative ICC measure. The function
