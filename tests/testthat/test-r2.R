@@ -13,12 +13,12 @@ if (requiet("testthat") && requiet("performance")) {
     out <- r2(model, ci = .95)
     expect_equal(
       out$R2,
-      c(`adjusted R2` = 0.83337, CI_low = 0.77282, CI_high = 0.87406),
+      c(R2 = 0.83672, CI_low = 0.77725, CI_high = 0.87665),
       tolerance = 1e-3
     )
     expect_equal(
       out$R2_adjusted,
-      c(R2 = 0.83672, CI_low = 0.77725, CI_high = 0.87665),
+      c(`adjusted R2` = 0.83337, CI_low = 0.77282, CI_high = 0.87406),
       tolerance = 1e-3
     )
   })
