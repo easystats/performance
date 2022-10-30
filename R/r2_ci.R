@@ -8,12 +8,8 @@
   }
 
   model_rank <- tryCatch(
-    {
-      model$rank - df_int
-    },
-    error = function(e) {
-      insight::n_parameters(model) - df_int
-    }
+    model$rank - df_int,
+    error = function(e) insight::n_parameters(model) - df_int
   )
 
   model_r2 <- r2(model, ci = NULL)
