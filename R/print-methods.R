@@ -36,7 +36,7 @@ print.r2_generic <- function(x, digits = 3, ...) {
     out[4] <- .add_r2_ci_to_print(out[4], x$R2_within_adjusted[2], x$R2_within_adjusted[3], digits = digits)
   }
 
-  # separate multiple R2
+  # separate lines for multiple R2
   out <- paste0(out, collapse = "\n")
 
   cat(out)

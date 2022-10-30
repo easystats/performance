@@ -37,6 +37,7 @@
   })
 
   names(out) <- names(model_r2)
+  attr(out, "ci") <- ci
   class(out) <- class(model_r2)
   out
 }
