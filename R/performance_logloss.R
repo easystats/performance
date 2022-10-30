@@ -16,7 +16,7 @@
 #' predictions, while low values indicate good predictions. The lower the
 #' log-loss, the better the model predicts the outcome.
 #'
-#' @seealso [`performance_score()`][performance_score]
+#' @seealso [`performance_score()`]
 #'
 #' @examples
 #' data(mtcars)

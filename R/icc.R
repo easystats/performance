@@ -238,20 +238,23 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
       result <- .bootstrap_icc(model, iterations, tolerance, ...)
-      out$CI <- ci
       # CI for adjusted ICC
-      icc_ci <- as.vector(result$t[, 1])
-      icc_ci <- icc_ci[!is.na(icc_ci)]
-      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
-      out$CI_low_adjusted <- icc_ci$CI_low
-      out$CI_high_adjusted <- icc_ci$CI_high
+      icc_ci_adjusted <- as.vector(result$t[, 1])
+      icc_ci_adjusted <- icc_ci_adjusted[!is.na(icc_ci_adjusted)]
+      icc_ci_adjusted <- bayestestR::eti(icc_ci_adjusted, ci = ci)
 
       # CI for unadjusted ICC
-      icc_ci <- as.vector(result$t[, 2])
-      icc_ci <- icc_ci[!is.na(icc_ci)]
-      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
-      out$CI_low_unadjusted <- icc_ci$CI_low
-      out$CI_high_unadjusted <- icc_ci$CI_high
+      icc_ci_unadjusted <- as.vector(result$t[, 2])
+      icc_ci_unadjusted <- icc_ci_unadjusted[!is.na(icc_ci_unadjusted)]
+      icc_ci_unadjusted <- bayestestR::eti(icc_ci_unadjusted, ci = ci)
+
+      out_ci <- data.frame(
+        ICC_adjusted = c(CI_low = icc_ci_adjusted$CI_low, CI_high = icc_ci_adjusted$CI_high),
+        ICC_conditional = c(CI_low = icc_ci_unadjusted$CI_low, CI_high = icc_ci_unadjusted$CI_high),
+        ICC_unadjusted = c(CI_low = icc_ci_unadjusted$CI_low, CI_high = icc_ci_unadjusted$CI_high)
+      )
+      out <- rbind(out, out_ci)
+      attr(out, "ci") <- ci
     }
 
     class(out) <- c("icc", "data.frame")
@@ -341,7 +344,7 @@ variance_decomposition <- function(model,
 as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
   data.frame(
     ICC_adjusted = x$ICC_adjusted,
-    ICC_conditional = x$ICC_unadjusted,
+    ICC_unadjusted = x$ICC_unadjusted,
     stringsAsFactors = FALSE,
     row.names = row.names,
     optional = optional,
@@ -354,35 +357,22 @@ as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
 print.icc <- function(x, digits = 3, ...) {
   insight::print_color("# Intraclass Correlation Coefficient\n\n", "blue")
 
-  if (!is.null(x$CI_low_adjusted) && !is.null(x$CI_low_unadjusted)) {
-    out <- paste0(
-      c(
-        sprintf(
-          "    Adjusted ICC: %.*f %s",
-          digits,
-          x$ICC_adjusted,
-          insight::format_ci(x$CI_low_adjusted, x$CI_high_adjusted, digits = digits, ci = NULL)
-        ),
-        sprintf(
-          "  Unadjusted ICC: %.*f %s",
-          digits,
-          x$ICC_unadjusted,
-          insight::format_ci(x$CI_low_unadjusted, x$CI_high_unadjusted, digits = digits, ci = NULL)
-        )
-      ),
-      collapse = "\n"
-    )
-  } else {
-    out <- paste0(
-      c(
-        sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted),
-        sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted)
-      ),
-      collapse = "\n"
-    )
+  out <- c(
+    sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted[1]),
+    sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted[1])
+  )
+
+  # add CI
+  if (length(x$ICC_adjusted) == 3) {
+    out[1] <- .add_r2_ci_to_print(out[1], x$ICC_adjusted[2], x$ICC_adjusted[3], digits = digits)
+  }
+  if (length(x$ICC_unadjusted) == 3) {
+    out[2] <- .add_r2_ci_to_print(out[2], x$ICC_unadjusted[2], x$ICC_unadjusted[3], digits = digits)
   }
 
-
+  # separate lines for multiple R2
+  out <- paste0(out, collapse = "\n")
+  
   cat(out)
   cat("\n")
   invisible(x)

@@ -10,13 +10,10 @@
 #'   R2 value. For some models, only McFadden's R2 is available.
 #'
 #' @references
-#' \itemize{
-#'   \item McFadden, D. (1987). Regression-based specification tests for the
+#' - McFadden, D. (1987). Regression-based specification tests for the
 #'   multinomial logit model. Journal of econometrics, 34(1-2), 63-82.
-#'
-#'   \item McFadden, D. (1973). Conditional logit analysis of qualitative choice
+#' - McFadden, D. (1973). Conditional logit analysis of qualitative choice
 #'   behavior.
-#' }
 #'
 #' @examples
 #' if (require("mlogit")) {
@@ -67,7 +64,7 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
   }
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
+      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     return(NULL)
   } else {

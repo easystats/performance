@@ -35,7 +35,7 @@ model <- glm(counts ~ outcome + treatment, family = poisson())
 r2_mckelvey(model)
 }
 \references{
-\itemize{
-\item McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S. 103–120.
-}
+McKelvey, R., Zavoina, W. (1975), "A Statistical Model for the Analysis of
+Ordinal Level Dependent Variables", Journal of Mathematical Sociology 4, S.
+103–120.
 }

@@ -6,7 +6,10 @@
 #'   R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param verbose Logical. Should details about R2 and CI methods be given (`TRUE`) or not (`FALSE`)?
+#' @param verbose Logical. Should details about R2 and CI methods be given
+#' (`TRUE`) or not (`FALSE`)?
+#' @param ci Confidence interval level, as scalar. If `NULL` (default), no
+#' confidence intervals for R2 are calculated.
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'
@@ -50,7 +53,12 @@ r2 <- function(model, ...) {
 
 #' @rdname r2
 #' @export
-r2.default <- function(model, verbose = TRUE, ...) {
+r2.default <- function(model, ci = NULL, verbose = TRUE, ...) {
+  # CI has own function
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, verbose = verbose, ...))
+  }
+
   if (is.null(minfo <- list(...)$model_info)) {
     minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
@@ -64,7 +72,11 @@ r2.default <- function(model, verbose = TRUE, ...) {
       if (minfo$is_binomial) {
         resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
-        resp <- datawizard::to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+        resp <- datawizard::to_numeric(
+          insight::get_response(model, verbose = FALSE),
+          dummy_factors = FALSE,
+          preserve_levels = TRUE
+        )
       }
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, ci = NULL, verbose = FALSE)
@@ -76,7 +88,7 @@ r2.default <- function(model, verbose = TRUE, ...) {
   )
 
   if (is.null(out) && isTRUE(verbose)) {
-    insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
+    insight::print_color(sprintf("`r2()` does not support models of class `%s`.\n", class(model)[1]), "red")
   }
 
   if (!is.null(out)) {
@@ -89,12 +101,15 @@ r2.default <- function(model, verbose = TRUE, ...) {
 
 
 #' @export
-r2.lm <- function(model, ...) {
+r2.lm <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
   .r2_lm(summary(model))
 }
 
 
-.r2_lm <- function(model_summary) {
+.r2_lm <- function(model_summary, ci = NULL) {
   out <- list(
     R2 = model_summary$r.squared,
     R2_adjusted = model_summary$adj.r.squared
@@ -121,7 +136,10 @@ r2.lm <- function(model, ...) {
 
 
 #' @export
-r2.summary.lm <- function(model, ...) {
+r2.summary.lm <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
   .r2_lm(model)
 }
 
@@ -208,7 +226,11 @@ r2.mhurdle <- function(model, ...) {
 
 
 #' @export
-r2.aov <- function(model, ...) {
+r2.aov <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
+
   model_summary <- stats::summary.lm(model)
 
   out <- list(
@@ -250,7 +272,11 @@ r2.mlm <- function(model, ...) {
 
 
 #' @export
-r2.glm <- function(model, verbose = TRUE, ...) {
+r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, verbose = verbose, ...))
+  }
+
   if (is.null(info <- list(...)$model_info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
@@ -264,7 +290,7 @@ r2.glm <- function(model, verbose = TRUE, ...) {
     class(out) <- c("r2_pseudo", class(out))
   } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
+      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     out <- NULL
   } else {
@@ -426,8 +452,8 @@ r2.zeroinfl <- r2.hurdle
 
 #' @rdname r2
 #' @export
-r2.merMod <- function(model, tolerance = 1e-5, ...) {
-  r2_nakagawa(model, tolerance = tolerance, ...)
+r2.merMod <- function(model, ci = NULL, tolerance = 1e-5, ...) {
+  r2_nakagawa(model, ci = ci, tolerance = tolerance, ...)
 }
 
 #' @export

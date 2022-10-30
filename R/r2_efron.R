@@ -8,7 +8,6 @@
 #' @return The R2 value.
 #'
 #' @details
-#'
 #' Efron's R2 is calculated by taking the sum of the squared model residuals,
 #' divided by the total variability in the dependent variable. This R2 equals
 #' the squared correlation between the predicted values and actual values,
@@ -16,8 +15,7 @@
 #' generally comparable to those of OLS.
 #'
 #' @references
-#'
-#' - Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of
+#' Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of
 #' residual variation. Journal of the American Statistical Association, 73,
 #' 113-121.
 #'

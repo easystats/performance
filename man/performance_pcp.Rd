@@ -28,23 +28,23 @@ with binary outcome.
 }
 \details{
 \code{method = "Gelman-Hill"} (or \code{"gelman_hill"}) computes the
-PCP based on the proposal from \cite{Gelman and Hill 2017, 99}, which is
+PCP based on the proposal from \emph{Gelman and Hill 2017, 99}, which is
 defined as the proportion of cases for which the deterministic prediction
 is wrong, i.e. the proportion where the predicted probability is above 0.5,
-although y=0 (and vice versa) (see also \cite{Herron 1999, 90}).
-\cr \cr
+although y=0 (and vice versa) (see also \emph{Herron 1999, 90}).
+
 \code{method = "Herron"} (or \code{"herron"}) computes a modified version
-of the PCP (\cite{Herron 1999, 90-92}), which is the sum of predicted
+of the PCP (\emph{Herron 1999, 90-92}), which is the sum of predicted
 probabilities, where y=1, plus the sum of 1 - predicted probabilities,
 where y=0, divided by the number of observations. This approach is said to
 be more accurate.
-\cr \cr
+
 The PCP ranges from 0 to 1, where values closer to 1 mean that the model
 predicts the outcome better than models with an PCP closer to 0. In general,
 the PCP should be above 0.5 (i.e. 50\\%), the closer to one, the better.
 Furthermore, the PCP of the full model should be considerably above
 the null model's PCP.
-\cr \cr
+
 The likelihood-ratio test indicates whether the model has a significantly
 better fit than the null-model (in such cases, p < 0.05).
 }
