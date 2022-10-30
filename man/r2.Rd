@@ -8,7 +8,7 @@
 \usage{
 r2(model, ...)
 
-\method{r2}{default}(model, verbose = TRUE, ...)
+\method{r2}{default}(model, ci = NULL, verbose = TRUE, ...)
 
 \method{r2}{merMod}(model, tolerance = 1e-05, ...)
 }
@@ -17,7 +17,11 @@ r2(model, ...)
 
 \item{...}{Arguments passed down to the related r2-methods.}
 
-\item{verbose}{Logical. Should details about R2 and CI methods be given (\code{TRUE}) or not (\code{FALSE})?}
+\item{ci}{Confidence interval level, as scalar. If \code{NULL} (default), no
+confidence intervals for R2 are calculated.}
+
+\item{verbose}{Logical. Should details about R2 and CI methods be given
+(\code{TRUE}) or not (\code{FALSE})?}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared

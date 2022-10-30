@@ -6,7 +6,10 @@
 #'   R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param verbose Logical. Should details about R2 and CI methods be given (`TRUE`) or not (`FALSE`)?
+#' @param verbose Logical. Should details about R2 and CI methods be given
+#' (`TRUE`) or not (`FALSE`)?
+#' @param ci Confidence interval level, as scalar. If `NULL` (default), no
+#' confidence intervals for R2 are calculated.
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'
@@ -50,7 +53,12 @@ r2 <- function(model, ...) {
 
 #' @rdname r2
 #' @export
-r2.default <- function(model, verbose = TRUE, ...) {
+r2.default <- function(model, ci = NULL, verbose = TRUE, ...) {
+  # CI has own function
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, verbose = verbose, ...))
+  }
+
   if (is.null(minfo <- list(...)$model_info)) {
     minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
@@ -76,7 +84,7 @@ r2.default <- function(model, verbose = TRUE, ...) {
   )
 
   if (is.null(out) && isTRUE(verbose)) {
-    insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
+    insight::print_color(sprintf("`r2()` does not support models of class `%s`.\n", class(model)[1]), "red")
   }
 
   if (!is.null(out)) {
@@ -89,12 +97,15 @@ r2.default <- function(model, verbose = TRUE, ...) {
 
 
 #' @export
-r2.lm <- function(model, ...) {
+r2.lm <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
   .r2_lm(summary(model))
 }
 
 
-.r2_lm <- function(model_summary) {
+.r2_lm <- function(model_summary, ci = NULL) {
   out <- list(
     R2 = model_summary$r.squared,
     R2_adjusted = model_summary$adj.r.squared
@@ -121,7 +132,10 @@ r2.lm <- function(model, ...) {
 
 
 #' @export
-r2.summary.lm <- function(model, ...) {
+r2.summary.lm <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
   .r2_lm(model)
 }
 
