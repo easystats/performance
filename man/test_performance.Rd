@@ -61,6 +61,7 @@ and their interpretation.
 }
 \details{
 \subsection{Nested vs. Non-nested Models}{
+
 Model's "nesting" is an important concept of models comparison. Indeed, many
 tests only make sense when the models are \emph{"nested",} i.e., when their
 predictors are nested. This means that all the predictors of a model are
@@ -89,6 +90,7 @@ whether apples are significantly different from oranges!
 }
 
 \subsection{Estimator of the standard deviation}{
+
 The estimator is relevant when comparing regression models using
 \code{test_likelihoodratio()}. If \code{estimator = "OLS"}, then it uses the same
 method as \code{anova(..., test = "LRT")} implemented in base R, i.e., scaling
@@ -104,6 +106,7 @@ available for all model classes.
 }
 
 \subsection{REML versus ML estimator}{
+
 When \code{estimator = "ML"}, which is the default for linear mixed models (unless
 they share the same fixed effects), values from information criteria (AIC,
 AICc) are based on the ML-estimator, while the default behaviour of \code{AIC()}
@@ -259,6 +262,6 @@ structural equation models. Psychological Methods, 21, 151-163.
 }
 }
 \seealso{
-\code{\link[=compare_performance]{compare_performance()}} to compare
-the performance indices of many different models.
+\code{\link[=compare_performance]{compare_performance()}} to compare the performance indices of
+many different models.
 }

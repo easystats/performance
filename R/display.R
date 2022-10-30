@@ -4,8 +4,8 @@
 #' @description Prints tables (i.e. data frame) in different output formats.
 #'   `print_md()` is a alias for `display(format = "markdown")`.
 #'
-#' @param object,x An object returned by [`model_performance()`][model_performance]
-#'   or [`compare_performance()`][compare_performance].
+#' @param object,x An object returned by [`model_performance()`] or
+#'   or [`compare_performance()`].
 #'   or its summary.
 #' @param format String, indicating the output format. Currently, only
 #'   `"markdown"` is supported.

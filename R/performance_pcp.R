@@ -80,11 +80,7 @@ performance_pcp <- function(model,
     weights = stats::weights(model)
   ))
 
-  if (method %in% c("Herron", "herron")) {
-    .pcp_herron(model, m0, ci, verbose = verbose)
-  } else {
-    .pcp_gelman_hill(model, m0, ci, verbose = verbose)
-  }
+  .performance_pcp(model, m0, ci, method = method, verbose = verbose)
 }
 
 
@@ -133,7 +129,7 @@ as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
 
 # utilities --------------------------------------
 
-.pcp_herron <- function(model, m0, ci, verbose = TRUE) {
+.performance_pcp <- function(model, m0, ci, method, verbose = TRUE) {
   y_full <- .recode_to_zero(insight::get_response(model, verbose = verbose))
   y_null <- .recode_to_zero(insight::get_response(m0, verbose = verbose))
 
@@ -143,46 +139,13 @@ as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
   pr_full <- stats::predict(model, type = "response")
   pr_null <- stats::predict(m0, type = "response")
 
-  pcp_full <- (sum(1 - pr_full[y_full == 0]) + sum(pr_full[y_full == 1])) / n_full
-  pcp_null <- (sum(1 - pr_null[y_null == 0]) + sum(pr_null[y_null == 1])) / n_null
-
-  lrt.p <- 1 - stats::pchisq(
-    q = model$null.deviance - model$deviance,
-    df = model$df.null - model$df.residual,
-    lower.tail = TRUE
-  )
-
-  lrt.chisq <- 2 * abs(insight::get_loglikelihood(model, verbose = verbose) - insight::get_loglikelihood(m0, verbose = verbose))
-
-  structure(
-    class = "performance_pcp",
-    list(
-      pcp_model = pcp_full,
-      model_ci_low = pcp_full - stats::qnorm((1 + ci) / 2) * sqrt(pcp_full * (1 - pcp_full) / n_full),
-      model_ci_high = pcp_full + stats::qnorm((1 + ci) / 2) * sqrt(pcp_full * (1 - pcp_full) / n_full),
-      pcp_m0 = pcp_null,
-      null_ci_low = pcp_null - stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
-      null_ci_high = pcp_null + stats::qnorm((1 + ci) / 2) * sqrt(pcp_null * (1 - pcp_null) / n_null),
-      lrt_chisq = as.vector(lrt.chisq),
-      lrt_df_error = model$df.null - model$df.residual,
-      lrt_p = lrt.p
-    )
-  )
-}
-
-
-.pcp_gelman_hill <- function(model, m0, ci, verbose = TRUE) {
-  y_full <- .recode_to_zero(insight::get_response(model, verbose = verbose))
-  y_null <- .recode_to_zero(insight::get_response(m0, verbose = verbose))
-
-  n_full <- suppressWarnings(insight::n_obs(model))
-  n_null <- suppressWarnings(insight::n_obs(m0))
-
-  pr_full <- stats::predict(model, type = "response")
-  pr_null <- stats::predict(m0, type = "response")
-
-  pcp_full <- 1 - mean((pr_full > .5 & y_full == 0) | (pr_full <= .5 & y_full == 1))
-  pcp_null <- 1 - mean((pr_null > .5 & y_null == 0) | (pr_null <= .5 & y_null == 1))
+  if (tolower(method) == "herron") {
+    pcp_full <- (sum(1 - pr_full[y_full == 0]) + sum(pr_full[y_full == 1])) / n_full
+    pcp_null <- (sum(1 - pr_null[y_null == 0]) + sum(pr_null[y_null == 1])) / n_null
+  } else {
+    pcp_full <- 1 - mean((pr_full > .5 & y_full == 0) | (pr_full <= .5 & y_full == 1))
+    pcp_null <- 1 - mean((pr_null > .5 & y_null == 0) | (pr_null <= .5 & y_null == 1))
+  }
 
   lrt.p <- 1 - stats::pchisq(
     q = model$null.deviance - model$deviance,

@@ -24,12 +24,11 @@
 #'
 #' @return A data frame containing the relevant indices.
 #'
-#' @seealso [`compare_performance()`][compare_performance] to compare
-#'   the performance indices of many different models.
+#' @seealso [`compare_performance()`] to compare the performance indices of
+#' many different models.
 #'
 #' @details
-#'
-#' \subsection{Nested vs. Non-nested Models}{
+#' ## Nested vs. Non-nested Models
 #' Model's "nesting" is an important concept of models comparison. Indeed, many
 #' tests only make sense when the models are *"nested",* i.e., when their
 #' predictors are nested. This means that all the predictors of a model are
@@ -55,9 +54,8 @@
 #' other requirements have often to be the fulfilled. For instance, outcome
 #' variables (the response) must be the same. You cannot meaningfully test
 #' whether apples are significantly different from oranges!
-#' }
 #'
-#' \subsection{Estimator of the standard deviation}{
+#' ## Estimator of the standard deviation
 #' The estimator is relevant when comparing regression models using
 #' `test_likelihoodratio()`. If `estimator = "OLS"`, then it uses the same
 #' method as `anova(..., test = "LRT")` implemented in base R, i.e., scaling
@@ -70,9 +68,8 @@
 #' Gaussian errors. For `estimator = "REML"`, the LRT is based on the REML-fit
 #' log-likelihoods of the models. Note that not all types of estimators are
 #' available for all model classes.
-#' }
 #'
-#' \subsection{REML versus ML estimator}{
+#' ## REML versus ML estimator
 #' When `estimator = "ML"`, which is the default for linear mixed models (unless
 #' they share the same fixed effects), values from information criteria (AIC,
 #' AICc) are based on the ML-estimator, while the default behaviour of `AIC()`
@@ -84,9 +81,8 @@
 #' LRT, `test_likelihoodratio()` checks if a comparison based on REML fits is
 #' indeed valid, and if so, uses REML as default (else, ML is the default).
 #' Set the `estimator` argument explicitely to override the default behaviour.
-#' }
 #'
-#' \subsection{Tests Description}{
+#' ## Tests Description
 #'
 #' - **Bayes factor for Model Comparison** - `test_bf()`: If all
 #'   models were fit from the same data, the returned `BF` shows the Bayes
@@ -143,7 +139,6 @@
 #'     reference model. If the models are nested, then the test works as a robust
 #'     LRT. The code for this function is adapted from the **nonnest2**
 #'     package, and all credit go to their authors.
-#' }
 #'
 #' @examples
 #' # Nested Models
@@ -439,13 +434,13 @@ test_performance.ListNonNestedRegressions <- function(objects,
 .test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE) {
   # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
   if (multiple && insight::is_model(objects)) {
-    stop("At least two models are required to test them.", call. = FALSE)
+    insight::format_error("At least two models are required to test them.")
   }
 
   if (same_response && !inherits(objects, "ListLavaan") && attributes(objects)$same_response == FALSE) {
-    stop(insight::format_message(
+    insight::format_error(
       "The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models."
-    ), call. = FALSE)
+    )
   }
 
   # check formula of all models, but warn only once
