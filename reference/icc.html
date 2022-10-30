@@ -185,25 +185,30 @@ ICC as well as the credible intervals for this ICC.</p>
     
 <div class="section">
 <h3 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a></h3>
-<p>The ICC can be interpreted as “the proportion of the variance
-explained by the grouping structure in the population”. The grouping
-structure entails that measurements are organized into groups (e.g., test
-scores in a school can be grouped by classroom if there are multiple
-classrooms and each classroom was administered the same test) and ICC indexes
-how strongly measurements in the same group resemble each other. This index
-goes from 0, if the grouping conveys no information, to 1, if all
-observations in a group are identical (Gelman and Hill, 2007, p. 258). In
-other word, the ICC - sometimes conceptualized as the measurement
-repeatability - “can also be interpreted as the expected
-correlation between two randomly drawn units that are in the same group”
-<cite>(Hox 2010: 15)</cite>, although this definition might not apply to mixed
-models with more complex random effects structures. The ICC can help determine
-whether a mixed model is even necessary: an ICC of zero means the
-observations within clusters are no more similar than observations from
-different clusters, and setting it as a random factor might not be necessary.</p>
+
+
+<p>The ICC can be interpreted as "the proportion of the variance explained by
+the grouping structure in the population". The grouping structure entails
+that measurements are organized into groups (e.g., test scores in a school
+can be grouped by classroom if there are multiple classrooms and each
+classroom was administered the same test) and ICC indexes how strongly
+measurements in the same group resemble each other. This index goes from 0,
+if the grouping conveys no information, to 1, if all observations in a group
+are identical (<em>Gelman and Hill, 2007, p. 258</em>). In other word, the ICC -
+sometimes conceptualized as the measurement repeatability - "can also be
+interpreted as the expected correlation between two randomly drawn units
+that are in the same group" <em>(Hox 2010: 15)</em>, although this definition might
+not apply to mixed models with more complex random effects structures. The
+ICC can help determine whether a mixed model is even necessary: an ICC of
+zero (or very close to zero) means the observations within clusters are no
+more similar than observations from different clusters, and setting it as a
+random factor might not be necessary.</p>
 </div>
+
 <div class="section">
 <h3 id="difference-with-r-">Difference with R2<a class="anchor" aria-label="anchor" href="#difference-with-r-"></a></h3>
+
+
 <p>The coefficient of determination R2 (that can be computed with <code><a href="r2.html">r2()</a></code>)
 quantifies the proportion of variance explained by a statistical model, but
 its definition in mixed model is complex (hence, different methods to compute
@@ -214,63 +219,77 @@ variance that can be attributed to the random effects. In simple cases, the
 ICC corresponds to the difference between the <em>conditional R2</em> and the
 <em>marginal R2</em> (see <code><a href="r2_nakagawa.html">r2_nakagawa()</a></code>).</p>
 </div>
+
 <div class="section">
 <h3 id="calculation">Calculation<a class="anchor" aria-label="anchor" href="#calculation"></a></h3>
+
+
 <p>The ICC is calculated by dividing the random effect variance,
 σ<sup>2</sup><sub>i</sub>, by
 the total variance, i.e. the sum of the random effect variance and the
 residual variance, σ<sup>2</sup><sub>ε</sub>.</p>
 </div>
+
 <div class="section">
 <h3 id="adjusted-and-unadjusted-icc">Adjusted and unadjusted ICC<a class="anchor" aria-label="anchor" href="#adjusted-and-unadjusted-icc"></a></h3>
-<p><code>icc()</code> calculates an adjusted and an unadjusted ICC, which both
-take all sources of uncertainty (i.e. of <em>all random effects</em>) into account.
-While the <em>adjusted ICC</em> only relates to the random effects, the
-<em>unadjusted ICC</em> also takes the fixed effects variances into account, more precisely,
-the fixed effects variance is added to the denominator of the formula to
-calculate the ICC (see <cite>Nakagawa et al. 2017</cite>). Typically, the <em>adjusted</em> ICC is of
-interest when the analysis of random effects is of interest. <code>icc()</code>
-returns a meaningful ICC also for more complex random effects structures,
-like models with random slopes or nested design (more than two levels) and
-is applicable for models with other distributions than Gaussian. For more
-details on the computation of the variances, see
+
+
+<p><code>icc()</code> calculates an adjusted and an unadjusted ICC, which both take all
+sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
+the <em>adjusted ICC</em> only relates to the random effects, the <em>unadjusted ICC</em>
+also takes the fixed effects variances into account, more precisely, the
+fixed effects variance is added to the denominator of the formula to
+calculate the ICC (see <em>Nakagawa et al. 2017</em>). Typically, the <em>adjusted</em>
+ICC is of interest when the analysis of random effects is of interest.
+<code>icc()</code> returns a meaningful ICC also for more complex random effects
+structures, like models with random slopes or nested design (more than two
+levels) and is applicable for models with other distributions than Gaussian.
+For more details on the computation of the variances, see
 <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>.</p>
 </div>
+
 <div class="section">
 <h3 id="icc-for-unconditional-and-conditional-models">ICC for unconditional and conditional models<a class="anchor" aria-label="anchor" href="#icc-for-unconditional-and-conditional-models"></a></h3>
+
+
 <p>Usually, the ICC is calculated for the null model ("unconditional model").
-However, according to <cite>Raudenbush and Bryk (2002)</cite> or
-<cite>Rabe-Hesketh and Skrondal (2012)</cite> it is also feasible to compute the
+However, according to <em>Raudenbush and Bryk (2002)</em> or
+<em>Rabe-Hesketh and Skrondal (2012)</em> it is also feasible to compute the
 ICC for full models with covariates ("conditional models") and compare how
 much, e.g., a level-2 variable explains the portion of variation in the
 grouping structure (random intercept).</p>
 </div>
+
 <div class="section">
 <h3 id="icc-for-specific-group-levels">ICC for specific group-levels<a class="anchor" aria-label="anchor" href="#icc-for-specific-group-levels"></a></h3>
+
+
 <p>The proportion of variance for specific levels related to the overall model
 can be computed by setting <code>by_group = TRUE</code>. The reported ICC is
 the variance for each (random effect) group compared to the total
 variance of the model. For mixed models with a simple random intercept,
 this is identical to the classical (adjusted) ICC.</p>
 </div>
+
 <div class="section">
 <h3 id="variance-decomposition-for-brms-models">Variance decomposition for brms-models<a class="anchor" aria-label="anchor" href="#variance-decomposition-for-brms-models"></a></h3>
-<p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to
-the large variety of models and families supported by the <strong>brms</strong>
-package. In such cases, <code>variance_decomposition()</code> is an alternative
-ICC measure. The function calculates a variance decomposition based on the
-posterior predictive distribution. In this case, first, the draws from the
-posterior predictive distribution <em>not conditioned</em> on group-level
-terms (<code>posterior_predict(..., re_formula = NA)</code>) are calculated as
-well as draws from this distribution <em>conditioned</em> on <em>all random
-effects</em> (by default, unless specified else in <code>re_formula</code>) are taken.
-Then, second, the variances for each of these draws are calculated. The
-"ICC" is then the ratio between these two variances. This is the recommended
-way to analyse random-effect-variances for non-Gaussian models. It is then
-possible to compare variances across models, also by specifying different
-group-level terms via the <code>re_formula</code>-argument.
-<br><br>
-Sometimes, when the variance of the posterior predictive distribution is
+
+
+<p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to the large
+variety of models and families supported by the <strong>brms</strong> package. In such
+cases, <code>variance_decomposition()</code> is an alternative ICC measure. The function
+calculates a variance decomposition based on the posterior predictive
+distribution. In this case, first, the draws from the posterior predictive
+distribution <em>not conditioned</em> on group-level terms
+(<code>posterior_predict(..., re_formula = NA)</code>) are calculated as well as draws
+from this distribution <em>conditioned</em> on <em>all random effects</em> (by default,
+unless specified else in <code>re_formula</code>) are taken. Then, second, the variances
+for each of these draws are calculated. The "ICC" is then the ratio between
+these two variances. This is the recommended way to analyse
+random-effect-variances for non-Gaussian models. It is then possible to
+compare variances across models, also by specifying different group-level
+terms via the <code>re_formula</code>-argument.</p>
+<p>Sometimes, when the variance of the posterior predictive distribution is
 very large, the variance ratio in the output makes no sense, e.g. because
 it is negative. In such cases, it might help to use <code>robust = TRUE</code>.</p>
 </div>

@@ -173,6 +173,8 @@ linear mixed models when these have the same fixed effects. See 'Details'.</p></
     
 <div class="section">
 <h3 id="nested-vs-non-nested-models">Nested vs. Non-nested Models<a class="anchor" aria-label="anchor" href="#nested-vs-non-nested-models"></a></h3>
+
+
 <p>Model's "nesting" is an important concept of models comparison. Indeed, many
 tests only make sense when the models are <em>"nested",</em> i.e., when their
 predictors are nested. This means that all the predictors of a model are
@@ -200,6 +202,8 @@ whether apples are significantly different from oranges!</p>
 
 <div class="section">
 <h3 id="estimator-of-the-standard-deviation">Estimator of the standard deviation<a class="anchor" aria-label="anchor" href="#estimator-of-the-standard-deviation"></a></h3>
+
+
 <p>The estimator is relevant when comparing regression models using
 <code>test_likelihoodratio()</code>. If <code>estimator = "OLS"</code>, then it uses the same
 method as <code>anova(..., test = "LRT")</code> implemented in base R, i.e., scaling
@@ -216,6 +220,8 @@ available for all model classes.</p>
 
 <div class="section">
 <h3 id="reml-versus-ml-estimator">REML versus ML estimator<a class="anchor" aria-label="anchor" href="#reml-versus-ml-estimator"></a></h3>
+
+
 <p>When <code>estimator = "ML"</code>, which is the default for linear mixed models (unless
 they share the same fixed effects), values from information criteria (AIC,
 AICc) are based on the ML-estimator, while the default behaviour of <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code>
@@ -292,8 +298,8 @@ structural equation models. Psychological Methods, 21, 151-163.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="compare_performance.html">compare_performance()</a></code> to compare
-the performance indices of many different models.</p></div>
+    <div class="dont-index"><p><code><a href="compare_performance.html">compare_performance()</a></code> to compare the performance indices of
+many different models.</p></div>
     </div>
 
     <div class="section level2">
