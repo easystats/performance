@@ -222,7 +222,11 @@ r2.mhurdle <- function(model, ...) {
 
 
 #' @export
-r2.aov <- function(model, ...) {
+r2.aov <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
+  
   model_summary <- stats::summary.lm(model)
 
   out <- list(
@@ -264,7 +268,11 @@ r2.mlm <- function(model, ...) {
 
 
 #' @export
-r2.glm <- function(model, verbose = TRUE, ...) {
+r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, verbose = verbose, ...))
+  }
+
   if (is.null(info <- list(...)$model_info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
@@ -440,8 +448,8 @@ r2.zeroinfl <- r2.hurdle
 
 #' @rdname r2
 #' @export
-r2.merMod <- function(model, tolerance = 1e-5, ...) {
-  r2_nakagawa(model, tolerance = tolerance, ...)
+r2.merMod <- function(model, ci = NULL, tolerance = 1e-5, ...) {
+  r2_nakagawa(model, ci = ci, tolerance = tolerance, ...)
 }
 
 #' @export

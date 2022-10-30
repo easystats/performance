@@ -10,7 +10,7 @@ r2(model, ...)
 
 \method{r2}{default}(model, ci = NULL, verbose = TRUE, ...)
 
-\method{r2}{merMod}(model, tolerance = 1e-05, ...)
+\method{r2}{merMod}(model, ci = NULL, tolerance = 1e-05, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
