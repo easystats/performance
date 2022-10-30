@@ -72,7 +72,11 @@ r2.default <- function(model, ci = NULL, verbose = TRUE, ...) {
       if (minfo$is_binomial) {
         resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
-        resp <- datawizard::to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+        resp <- datawizard::to_numeric(
+          insight::get_response(model, verbose = FALSE),
+          dummy_factors = FALSE,
+          preserve_levels = TRUE
+        )
       }
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, ci = NULL, verbose = FALSE)
@@ -226,7 +230,7 @@ r2.aov <- function(model, ci = NULL, ...) {
   if (!is.null(ci) && !is.na(ci)) {
     return(.r2_ci(model, ci = ci, ...))
   }
-  
+
   model_summary <- stats::summary.lm(model)
 
   out <- list(
@@ -286,7 +290,7 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
     class(out) <- c("r2_pseudo", class(out))
   } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
+      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     out <- NULL
   } else {
