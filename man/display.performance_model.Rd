@@ -25,7 +25,7 @@
 )
 }
 \arguments{
-\item{object, x}{An object returned by \code{\link[=model_performance]{model_performance()}}
+\item{object, x}{An object returned by \code{\link[=model_performance]{model_performance()}} or
 or \code{\link[=compare_performance]{compare_performance()}}.
 or its summary.}
 
