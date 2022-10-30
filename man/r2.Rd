@@ -50,12 +50,17 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 }
 \note{
 If there is no \code{r2()}-method defined for the given model class,
-\code{r2()} tries to return a "generic r2 value, calculated as following:
+\code{r2()} tries to return a "generic" r-quared value, calculated as following:
 \verb{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
 }
 \examples{
+# Pseudo r-quared for GLM
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)
+
+# r-squared including confidence intervals
+model <- lm(mpg ~ wt + hp, data = mtcars)
+r2(model, ci = 0.95)
 
 if (require("lme4")) {
   model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)

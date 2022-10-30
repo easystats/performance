@@ -24,7 +24,7 @@
 #'   - Bayesian models: [R2 bayes][r2_bayes]
 #'
 #' @note If there is no `r2()`-method defined for the given model class,
-#'   `r2()` tries to return a "generic r2 value, calculated as following:
+#'   `r2()` tries to return a "generic" r-quared value, calculated as following:
 #'   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
 #'
 #' @seealso [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`],
@@ -33,8 +33,13 @@
 #'   [`r2_zeroinflated()`].
 #'
 #' @examples
+#' # Pseudo r-quared for GLM
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2(model)
+#'
+#' # r-squared including confidence intervals
+#' model <- lm(mpg ~ wt + hp, data = mtcars)
+#' r2(model, ci = 0.95)
 #'
 #' if (require("lme4")) {
 #'   model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
@@ -63,7 +68,7 @@ r2.default <- function(model, ci = NULL, verbose = TRUE, ...) {
     minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 
-  ## TODO: implement CIs later? See #504
+  ## TODO: implement bootstrapped CIs later?
   # check input
   # ci <- .check_r2_ci_args(ci, ci_method, "bootstrap", verbose)
 
