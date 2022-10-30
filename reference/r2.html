@@ -101,10 +101,10 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
-<span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for merMod</span></span>
-<span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -117,8 +117,14 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
 <dd><p>Arguments passed down to the related r2-methods.</p></dd>
 
 
+<dt>ci</dt>
+<dd><p>Confidence interval level, as scalar. If <code>NULL</code> (default), no
+confidence intervals for R2 are calculated.</p></dd>
+
+
 <dt>verbose</dt>
-<dd><p>Logical. Should details about R2 and CI methods be given (<code>TRUE</code>) or not (<code>FALSE</code>)?</p></dd>
+<dd><p>Logical. Should details about R2 and CI methods be given
+(<code>TRUE</code>) or not (<code>FALSE</code>)?</p></dd>
 
 
 <dt>tolerance</dt>

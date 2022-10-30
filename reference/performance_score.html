@@ -125,20 +125,21 @@ predictions and model fit. <code>performance_score()</code> calculates the logar
 quadratic/Brier and spherical scoring rules. The spherical rule takes values
 in the interval <code>[0, 1]</code>, with values closer to 1 indicating a more
 accurate model, and the logarithmic rule in the interval <code>[-Inf, 0]</code>,
-with values closer to 0 indicating a more accurate model.
-<br><br>
-For <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer()</a></code> models, the predicted values
+with values closer to 0 indicating a more accurate model.</p>
+<p>For <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_lmer()</a></code> and <code><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer()</a></code> models, the predicted values
 are based on <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">posterior_predict()</a></code>, instead of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>. Thus,
 results may differ more than expected from their non-Bayesian counterparts
 in <strong>lme4</strong>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Code is partially based on <a href="https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html" class="external-link">GLMMadaptive::scoring_rules()</a>.</p>
+    <p>Code is partially based on
+<a href="https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html" class="external-link">GLMMadaptive::scoring_rules()</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. <a href="https://doi.org/10.1287/deca.2016.0337" class="external-link">doi:10.1287/deca.2016.0337</a></p>
+    <p>Carvalho, A. (2016). An overview of applications of proper scoring rules.
+Decision Analysis 13, 223–242. <a href="https://doi.org/10.1287/deca.2016.0337" class="external-link">doi:10.1287/deca.2016.0337</a></p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
