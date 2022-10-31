@@ -36,7 +36,7 @@ if (.runThisTest && !osx) {
     # bootstrapped CIs ------------
     m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
     set.seed(123)
-    out <- icc(m, ci = .95)
+    out <- icc(m, ci = 0.95)
     test_that("icc, CI", {
       expect_equal(out$ICC_adjusted, c(0.72166, 0.52239, 0.84024), tolerance = 1e-3)
       expect_equal(out$ICC_unadjusted, c(0.52057, 0.32429, 0.67123), tolerance = 1e-3)

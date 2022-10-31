@@ -71,7 +71,7 @@
 
 # prepare data for random effects QQ plot ----------------------------------
 
-.diag_reqq <- function(model, level = .95, model_info, verbose = TRUE) {
+.diag_reqq <- function(model, level = 0.95, model_info, verbose = TRUE) {
   # check if we have mixed model
   if (!model_info$is_mixed) {
     return(NULL)

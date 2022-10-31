@@ -10,7 +10,7 @@ if (requiet("testthat") && requiet("performance")) {
   test_that("r2 lm, ci", {
     data(iris)
     model <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
-    out <- r2(model, ci = .95)
+    out <- r2(model, ci = 0.95)
     expect_equal(
       out$R2,
       c(R2 = 0.83672, CI_low = 0.77725, CI_high = 0.87665),
@@ -33,7 +33,7 @@ if (requiet("testthat") && requiet("performance")) {
   test_that("r2 glm, ci", {
     data(mtcars)
     model <- glm(am ~ mpg, data = mtcars)
-    out <- r2(model, ci = .95)
+    out <- r2(model, ci = 0.95)
     expect_equal(
       out$R2,
       c(R2 = 0.3598, CI_low = 0.09758, CI_high = 0.6066),

@@ -1,4 +1,4 @@
-.r2_ci <- function(model, ci = .95, verbose = TRUE, ...) {
+.r2_ci <- function(model, ci = 0.95, verbose = TRUE, ...) {
   alpha <- 1 - ci
   n <- insight::n_obs(model)
   df_int <- if (insight::has_intercept(model)) {

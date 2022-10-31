@@ -270,7 +270,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
 variance_decomposition <- function(model,
                                    re_formula = NULL,
                                    robust = TRUE,
-                                   ci = .95,
+                                   ci = 0.95,
                                    ...) {
   if (!inherits(model, "brmsfit")) {
     insight::format_error("Only models from package `brms` are supported.")
