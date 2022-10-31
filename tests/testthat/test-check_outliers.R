@@ -275,27 +275,3 @@ if (requiet("datawizard")) {
 #     )
 #   })
 # }
-
-#' 20. BFBayesFactor, multiple methods:
-if (requiet("nlme")) {
-  # test_that("nlme which", {
-  #   library(nlme)
-  #   model <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
-  #                      correlation = corAR1(form = ~ 1 | Mare))
-  #   expect_equal(
-  #     which(check_outliers(model, threshold = list(zscore_robust = 2.2))),
-  #     31
-  #   )
-  # })
-
-  test_that("nlme multiple methods", {
-    library(nlme)
-    model <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
-                 correlation = corAR1(form = ~ 1 | Mare))
-    expect_error(
-      check_outliers(model, method = c("zscore_robust", "iqr")),
-      "the condition has length > 1"
-    )
-  })
-}
-
