@@ -2,8 +2,8 @@ test_that("zscore negative threshold", {
   expect_error(
     check_outliers(mtcars$mpg, method = "zscore", threshold = -1),
     "The `threshold` argument"
-    )
-  })
+  )
+})
 
 # 1. We first test that each method consistently flags outliers,
 # (given a specific threshold)
@@ -179,13 +179,18 @@ test_that("multiple methods which", {
 # We exclude method ics because it is too slow
 test_that("all methods which", {
   expect_equal(
-    which(check_outliers(mtcars, method = c(
-      "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-      "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"),
-      threshold = list("zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-      "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-      "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-      "optics" = 14, "lof" = 0.005))),
+    which(check_outliers(mtcars,
+      method = c(
+        "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
+        "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+      ),
+      threshold = list(
+        "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
+        "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
+        "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
+        "optics" = 14, "lof" = 0.005
+      )
+    )),
     c(9, 15, 16, 19, 20, 28, 29, 31)
   )
 })
@@ -195,14 +200,19 @@ test_that("all methods which", {
 if (requiet("datawizard")) {
   test_that("multiple methods with ID", {
     data <- datawizard::rownames_as_column(mtcars, var = "car")
-    x <- attributes(check_outliers(data, method = c(
-      "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-      "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"),
-      threshold = list("zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-                       "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-                       "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-                       "optics" = 14, "lof" = 0.005),
-      ID = "car"))
+    x <- attributes(check_outliers(data,
+      method = c(
+        "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
+        "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+      ),
+      threshold = list(
+        "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
+        "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
+        "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
+        "optics" = 14, "lof" = 0.005
+      ),
+      ID = "car"
+    ))
     expect_equal(
       x$outlier_var$zscore$mpg$car,
       "Toyota Corolla"

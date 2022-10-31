@@ -403,7 +403,7 @@ check_outliers.default <- function(x,
 
   # Cook
   if ("cook" %in% method &&
-    insight::model_info(x)$is_bayesian == FALSE &&
+    !insight::model_info(x)$is_bayesian &&
     !inherits(x, "bife")) {
     data_cook <- .check_outliers_cook(
       x,
@@ -1285,7 +1285,7 @@ check_outliers.geeglm <- check_outliers.gls
   x <- as.data.frame(x)
 
   # Standardize
-  if (robust == FALSE) {
+  if (!robust) {
     d <- abs(as.data.frame(sapply(x, function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE))))
   } else {
     d <- abs(as.data.frame(sapply(x, function(x) (x - stats::median(x, na.rm = TRUE)) / stats::mad(x, na.rm = TRUE))))

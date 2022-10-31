@@ -437,7 +437,7 @@ test_performance.ListNonNestedRegressions <- function(objects,
     insight::format_error("At least two models are required to test them.")
   }
 
-  if (same_response && !inherits(objects, "ListLavaan") && attributes(objects)$same_response == FALSE) {
+  if (same_response && !inherits(objects, "ListLavaan") && !attributes(objects)$same_response) {
     insight::format_error(
       "The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models."
     )

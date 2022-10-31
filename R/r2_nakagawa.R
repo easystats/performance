@@ -131,7 +131,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
       attr(out, "ci") <- ci
     }
 
-    class(out)  <- c("r2_nakagawa", "list")
+    class(out) <- c("r2_nakagawa", "list")
   }
   out
 }
