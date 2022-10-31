@@ -1201,9 +1201,8 @@ check_outliers.gls <- function(x,
                                ID = NULL,
                                ...) {
   if (!missing(ID)) {
-    warning(
-      paste0("ID argument not supported for objects of class `", class(x)[1], "`."),
-      call. = FALSE
+    insight::format_warning(
+      paste0("ID argument not supported for objects of class `", class(x)[1], "`.")
     )
   }
 
@@ -1213,7 +1212,7 @@ check_outliers.gls <- function(x,
     method <- valid_methods
   }
 
-  if (!method %in% valid_methods) {
+  if (!all(method %in% valid_methods)) {
     method <- "pareto"
   }
 
