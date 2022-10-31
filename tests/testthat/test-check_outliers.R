@@ -1,3 +1,7 @@
+requiet("bigutilsr")
+requiet("ICS")
+requiet("dbscan")
+
 test_that("zscore negative threshold", {
   expect_error(
     check_outliers(mtcars$mpg, method = "zscore", threshold = -1),
