@@ -24,6 +24,9 @@
 * Fixed bug in `check_outliers` whereby passing multiple elements to the 
   threshold list generated an error (#496).
 
+* `test_wald()` now warns the user about inappropriate F test and calls
+  `test_likelihoodratio()` for binomial models.
+
 # performance 0.10.0
 
 ## Breaking Change
