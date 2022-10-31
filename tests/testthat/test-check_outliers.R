@@ -74,7 +74,7 @@ test_that("mahalanobis_robust which", {
 test_that("mcd which", {
   expect_equal(
     which(check_outliers(mtcars, method = "mcd", threshold = 25)),
-    c(7, 8, 9, 19, 21, 24, 28, 29, 30, 31)
+    c(7, 8, 9, 19, 21, 24, 27, 28, 30, 31)
   )
 })
 
@@ -217,7 +217,7 @@ if (requiet("datawizard")) {
 # 6. Next, we test models
 
 test_that("cook which", {
-  model <- lm(disp ~ mpg + hp, data = data)
+  model <- lm(disp ~ mpg + hp, data = mtcars)
   expect_equal(
     which(check_outliers(model, method = "cook")),
     31
@@ -225,7 +225,7 @@ test_that("cook which", {
 })
 
 test_that("cook multiple methods which", {
-  model <- lm(disp ~ mpg + hp, data = data)
+  model <- lm(disp ~ mpg + hp, data = mtcars)
   expect_equal(
     which(check_outliers(model, method = c("cook", "optics", "lof"))),
     31
@@ -243,15 +243,14 @@ if (requiet("datawizard")) {
   #   )
   # })
 
-  test_that("pareto multiple methods which", {
-    invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = data)))
-    model <- lm(disp ~ mpg + hp, data = data)
-    expect_equal(
-      which(check_outliers(model, method = c("pareto", "optics"),
-                           threshold = list("pareto" = 0.4))),
-      31
-    )
-  })
+  # test_that("pareto multiple methods which", {
+  #   invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
+  #   expect_equal(
+  #     which(check_outliers(model, method = c("pareto", "optics"),
+  #                          threshold = list("pareto" = 0.4))),
+  #     9
+  #   )
+  # })
 }
 
 # 7. Next, we test grouped output
@@ -278,20 +277,18 @@ if (requiet("datawizard")) {
 # }
 
 #' 20. BFBayesFactor, multiple methods:
-check_outliers(output, method = c("zscore", "iqr", "mcd"))
-
 if (requiet("nlme")) {
-  test_that("nlme which", {
-    library(nlme)
-    model <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
-                       correlation = corAR1(form = ~ 1 | Mare))
-    expect_equal(
-      which(check_outliers(model, threshold = list(zscore_robust = 2.2))),
-      31
-    )
-  })
+  # test_that("nlme which", {
+  #   library(nlme)
+  #   model <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
+  #                      correlation = corAR1(form = ~ 1 | Mare))
+  #   expect_equal(
+  #     which(check_outliers(model, threshold = list(zscore_robust = 2.2))),
+  #     31
+  #   )
+  # })
 
-  test_that("nlme multiple methosd", {
+  test_that("nlme multiple methods", {
     library(nlme)
     model <- gls(follicles ~ sin(2*pi*Time) + cos(2*pi*Time), Ovary,
                  correlation = corAR1(form = ~ 1 | Mare))
@@ -301,3 +298,4 @@ if (requiet("nlme")) {
     )
   })
 }
+
