@@ -28,7 +28,16 @@ test_wald.default <- function(...) {
 
 #' @export
 test_wald.ListNestedRegressions <- function(objects, ...) {
-  out <- .test_wald(objects, test = "F")
+  # for binomial models, only chisq-test
+  if (all(attributes(objects)$is_binomial)) {
+    insight::format_warning(
+      "Using Wald's F-Test is inappropriate for models with `binomial` family.",
+      "Running Likelihood Ratio Test (LRT) now."
+    )
+    return(test_likelihoodratio(objects))
+  } else {
+    out <- .test_wald(objects, test = "F")
+  }
 
   attr(out, "is_nested") <- TRUE
   class(out) <- c("test_performance", class(out))
