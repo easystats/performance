@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.10</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.11</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,6 +102,7 @@
 <ul><li><p><code>verbose</code> didn’t work for <code><a href="../reference/r2_bayes.html">r2_bayes()</a></code> with <code>BFBayesFactor</code> objects.</p></li>
 <li><p>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for models with convergence issues that lead to <code>NA</code> values in residuals.</p></li>
 <li><p>Fixed bug in <code>check_outliers</code> whereby passing multiple elements to the threshold list generated an error (<a href="https://github.com/easystats/performance/issues/496" class="external-link">#496</a>).</p></li>
+<li><p><code><a href="../reference/test_performance.html">test_wald()</a></code> now warns the user about inappropriate F test and calls <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> for binomial models.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
