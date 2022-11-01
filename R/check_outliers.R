@@ -375,7 +375,7 @@ check_outliers.default <- function(x,
     thresholds <- .check_outliers_thresholds(data)
   } else if (is.list(threshold)) {
     thresholds <- .check_outliers_thresholds(data)
-    thresholds[[names(threshold)]] <- threshold[[names(threshold)]]
+    thresholds[names(threshold)] <- threshold[names(threshold)]
   } else {
     insight::format_error(
       "The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."

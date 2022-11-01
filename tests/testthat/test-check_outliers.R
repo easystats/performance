@@ -77,7 +77,7 @@ test_that("mahalanobis_robust which", {
 
 test_that("mcd which", {
   expect_equal(
-    which(check_outliers(mtcars, method = "mcd", threshold = 25)),
+    which(check_outliers(mtcars, method = "mcd", threshold = 35)),
     c(7, 8, 9, 19, 21, 24, 27, 28, 30, 31)
   )
 })
@@ -139,7 +139,7 @@ test_that("attributes variables", {
   )
 })
 
-test_that("attributes variables", {
+test_that("attributes data", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
   expect_equal(
     class(x$data),
@@ -147,7 +147,7 @@ test_that("attributes variables", {
   )
 })
 
-test_that("attributes variables", {
+test_that("attributes raw data", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
   expect_equal(
     class(x$raw_data),
@@ -155,7 +155,7 @@ test_that("attributes variables", {
   )
 })
 
-test_that("attributes variables", {
+test_that("attributes univariate data frames", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
   expect_equal(
     class(x$outlier_var$zscore$mpg),
@@ -163,7 +163,7 @@ test_that("attributes variables", {
   )
 })
 
-test_that("attributes variables", {
+test_that("attributes outlier count data frame", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
   expect_equal(
     class(x$outlier_count$all),
@@ -171,7 +171,7 @@ test_that("attributes variables", {
   )
 })
 
-# 4. Next, we test multiple methods
+# 4. Next, we test multiple simultaneous methods
 
 test_that("multiple methods which", {
   expect_equal(
@@ -233,10 +233,19 @@ if (requiet("datawizard")) {
 test_that("cook which", {
   model <- lm(disp ~ mpg + hp, data = mtcars)
   expect_equal(
-    which(check_outliers(model, method = "cook")),
+    which(check_outliers(model, method = "cook", threshold = list(cook = 0.85))),
     31
   )
 })
+
+# test_that("cook which", {
+#   model <- lm(disp ~ mpg + hp, data = mtcars)
+#   expect_equal(
+#     which(check_outliers(model, method = "cook", threshold = 0.85)),
+#     # Error: The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).
+#     31
+#   )
+# })
 
 test_that("cook multiple methods which", {
   model <- lm(disp ~ mpg + hp, data = mtcars)
@@ -246,25 +255,36 @@ test_that("cook multiple methods which", {
   )
 })
 
-if (requiet("datawizard")) {
-  # test_that("pareto which", {
-  #   invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = data)))
-  #   model <- lm(disp ~ mpg + hp, data = data)
-  #   expect_equal(
-  #     which(check_outliers(model, method = "pareto",
-  #                          threshold = list("pareto" = 0.09))),
-  #     c(9, 17, 21)
-  #   )
-  # })
+if (requiet("rstanarm")) {
+  test_that("pareto which", {
+    set.seed(123)
+    invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
+    expect_equal(
+      which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
+      17
+    )
+  })
 
-  # test_that("pareto multiple methods which", {
-  #   invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
-  #   expect_equal(
-  #     which(check_outliers(model, method = c("pareto", "optics"),
-  #                          threshold = list("pareto" = 0.4))),
-  #     9
-  #   )
-  # })
+  test_that("pareto multiple methods which", {
+    set.seed(123)
+    invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
+    expect_equal(
+      which(check_outliers(model, method = c("pareto", "optics"),
+                           threshold = list(pareto = 0.3, optics = 11))),
+      9
+    )
+  })
+}
+
+if (requiet("BayesFactor")) {
+  test_that("BayesFactor which", {
+    set.seed(123)
+    model <- BayesFactor::regressionBF(rating ~ ., data = attitude, progress = FALSE)
+    expect_equal(
+      which(check_outliers(model, threshold = list(mahalanobis = 15))),
+      18
+    )
+  })
 }
 
 # 7. Next, we test grouped output
@@ -279,13 +299,3 @@ if (requiet("datawizard")) {
     )
   })
 }
-
-# if (requiet("BayesFactor")) {
-#   test_that("BayesFactor which", {
-#     model <- BayesFactor::regressionBF(rating ~ ., data = attitude, progress = FALSE)
-#     expect_equal(
-#       which(check_outliers(model, threshold = list(pareto = 5))),
-#       31
-#     )
-#   })
-# }
