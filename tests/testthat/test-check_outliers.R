@@ -266,6 +266,7 @@ if (requiet("rstanarm")) {
   })
 
   test_that("pareto multiple methods which", {
+    set.seed(123)
     invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
     expect_equal(
       which(check_outliers(model, method = c("pareto", "optics"),
@@ -277,6 +278,7 @@ if (requiet("rstanarm")) {
 
 if (requiet("BayesFactor")) {
   test_that("BayesFactor which", {
+    set.seed(123)
     model <- BayesFactor::regressionBF(rating ~ ., data = attitude, progress = FALSE)
     expect_equal(
       which(check_outliers(model, threshold = list(mahalanobis = 15))),
