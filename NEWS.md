@@ -11,6 +11,11 @@
 
 * `r2()` gets `ci`, to compute (analytical) confidence intervals for the R2.
 
+* `check_predictions()` accepts a `bw` argument (smoothing bandwidth), which is
+  passed down to the `plot()` methods density-estimation. The default for the
+  smoothing bandwidth `bw` has changed from `"nrd0"` to `"nrd"`, which seems
+  to produce better fitting plots for non-gaussian models.
+  
 * The model underlying `check_distribution()` was now also trained to detect
   cauchy, half-cauchy and inverse-gamma distributions.
 
