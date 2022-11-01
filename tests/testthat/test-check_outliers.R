@@ -260,7 +260,7 @@ if (requiet("rstanarm")) {
     invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
     expect_equal(
       which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
-      17
+      c(9, 17)
     )
   })
 
