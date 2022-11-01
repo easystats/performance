@@ -257,6 +257,7 @@ test_that("cook multiple methods which", {
 
 if (requiet("rstanarm")) {
   test_that("pareto which", {
+    set.seed(123)
     invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
     expect_equal(
       which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
