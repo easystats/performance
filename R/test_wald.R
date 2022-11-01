@@ -69,7 +69,7 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
 
   out <- data.frame(
     df = dfs,
-    df_diff = dfs_diff,
+    df_diff = round(dfs_diff),
     stringsAsFactors = FALSE
   )
 
