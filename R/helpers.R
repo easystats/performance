@@ -15,6 +15,10 @@
       stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE)),
       error = function(e) NULL
     )
+    # when `get_loglikelihood()` does not work, `stats::BIC` sometimes still works (e.g., `fixest`)
+    if (is.null(out)) {
+      out <- tryCatch(stats::BIC(x), error = function(e) NULL)
+    }
   }
 
   out
