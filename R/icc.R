@@ -176,7 +176,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
   }
 
   if (!insight::is_mixed_model(model)) {
-    warning("'model' has no random effects.", call. = FALSE)
+    warning("`model` has no random effects.", call. = FALSE)
     return(NULL)
   }
 

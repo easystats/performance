@@ -19,6 +19,8 @@
 * The model underlying `check_distribution()` was now also trained to detect
   cauchy, half-cauchy and inverse-gamma distributions.
 
+* `model_performance()` now allows to include the ICC for Bayesian models.
+
 ## Bug fixes
 
 * `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
