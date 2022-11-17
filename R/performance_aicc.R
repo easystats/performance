@@ -89,6 +89,10 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
       stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
       error = function(e) NULL
     )
+    # when `get_loglikelihood()` does not work, `stats::AIC` sometimes still works (e.g., `fixest`)
+    if (is.null(aic)) {
+      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
+    }
   }
   aic
 }
