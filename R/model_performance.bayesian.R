@@ -98,9 +98,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   if (algorithm$algorithm != "sampling") {
     if (verbose) {
-      warning(insight::format_message(
-        "`model_performance()` only possible for models fit using the 'sampling' algorithm."
-      ), call. = FALSE)
+      insight::format_warning(
+        "`model_performance()` only possible for models fit using the \"sampling\" algorithm."
+      )
     }
     return(NULL)
   }
@@ -267,7 +267,7 @@ model_performance.BFBayesFactor <- function(model,
 
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
-    warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.", call. = FALSE)
+    insight::format_warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.")
     return(NULL)
   }
 
