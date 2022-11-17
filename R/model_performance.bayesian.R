@@ -175,7 +175,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   # ICC ------------------
   if ("ICC" %in% metrics) {
     out$ICC <- tryCatch(
-      suppressWarnings(icc(model, verbose = verbose)),
+      suppressWarnings(icc(model, verbose = verbose)$ICC_adjusted),
       error = function(e) NULL
     )
   }
