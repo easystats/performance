@@ -152,7 +152,7 @@ Jacobian/derivative of the transformation.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">model_performance</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Indices of model performance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Indices of model performance</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AIC     |    AICc |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------</span>
@@ -160,7 +160,7 @@ Jacobian/derivative of the transformation.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">model_performance</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Indices of model performance</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Indices of model performance</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AIC    |   AICc |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------------------------------</span>

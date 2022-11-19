@@ -215,7 +215,7 @@ Springer-Verlag. <a href="https://doi.org/10.1007/b97636" class="external-link">
 <span class="r-in"><span><span class="va">lm2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">lm3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">compare_performance</span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Comparison of Model Performance Indices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Comparison of Model Performance Indices</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model | AIC (weights) | AICc (weights) | BIC (weights) |    R2 | R2 (adj.) |  RMSE | Sigma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------------</span>
@@ -223,7 +223,7 @@ Springer-Verlag. <a href="https://doi.org/10.1007/b97636" class="external-link">
 <span class="r-out co"><span class="r-pr">#&gt;</span> lm2  |    lm | 106.2 (0.566) |  106.6 (0.611) | 121.3 (0.964) | 0.837 |     0.833 | 0.333 | 0.338</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> lm3  |    lm | 106.8 (0.434) |  107.6 (0.389) | 127.8 (0.036) | 0.840 |     0.835 | 0.330 | 0.336</span>
 <span class="r-in"><span><span class="fu">compare_performance</span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Comparison of Model Performance Indices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Comparison of Model Performance Indices</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model |    R2 | R2 (adj.) |  RMSE | Sigma | AIC weights | AICc weights | BIC weights | Performance-Score</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------------------------------------------</span>
@@ -239,7 +239,7 @@ Springer-Verlag. <a href="https://doi.org/10.1007/b97636" class="external-link">
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>When comparing models, please note that probably not all models were fit</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   from same data.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Comparison of Model Performance Indices</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Comparison of Model Performance Indices</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name |   Model | AIC (weights) | AICc (weights) | BIC (weights) |  RMSE | Sigma |    R2 | R2 (adj.) | Tjur's R2 | Log_loss | Score_log | Score_spherical |   PCP | R2 (cond.) | R2 (marg.) |   ICC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>

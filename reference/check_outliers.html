@@ -392,9 +392,10 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span><span class="co"># For single variables ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span> <span class="co"># Find outliers</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="co"># Show the row index of the outliers</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OK: No outliers detected.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: zscore_robust (3.09).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variable: data$mpg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: zscore_robust (3.09).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variable: data$mpg</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span> <span class="co"># The object is a binary vector...</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span>
@@ -404,9 +405,9 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Find all observations beyond +/- 2 SD</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span>, method <span class="op">=</span> <span class="st">"zscore"</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 outliers detected: cases 18, 20.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: zscore (2).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variable: data$mpg.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">2 outliers detected: cases 18, 20.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following method and threshold: zscore (2).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variable: data$mpg.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Outliers per variable (zscore): </span>
@@ -419,9 +420,10 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For dataframes ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on dataframes</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OK: No outliers detected.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: mahalanobis (31.26).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (31.26).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># You can also use multiple methods at once</span></span></span>
@@ -431,11 +433,11 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span>  <span class="st">"zscore"</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 outlier detected: case 31.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following methods and thresholds: mahalanobis (3.09), iqr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   (1.7), zscore (31.26).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Note: Outliers were classified as such by at least half of the selected methods. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">1 outlier detected: case 31.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: mahalanobis (3.09), iqr</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (1.7), zscore (31.26).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Note: Outliers were classified as such by</span> <span style="color: #BBBB00;">at least half of the selected methods. </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more variables </span>
@@ -486,9 +488,10 @@ association, 85(411), 633-639.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OK: No outliers detected.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Based on the following method and threshold: mahalanobis (18.47).</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - For variables: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (18.47).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variables: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># You can also run all the methods</span></span></span>

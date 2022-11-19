@@ -134,7 +134,7 @@ negative binomial or zero-inflated models.</p>
 <span class="r-in"><span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">Salamanders</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">check_zeroinflation</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Check for zero-inflation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for zero-inflation</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Observed zeros: 387</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Predicted zeros: 298</span>

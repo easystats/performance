@@ -319,14 +319,14 @@ many different models.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Models were detected as nested and are compared in sequential order.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">test_bf</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bayes Factors for Model Comparison</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Bayes Factors for Model Comparison</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      Model                       BF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [m2] Petal.Width + Species    0.007</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [m3] Petal.Width * Species 2.64e-04</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * Against Denominator: [m1] Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> *   Bayes Factor Type: BIC approximation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Against Denominator: <span style="color: #00BBBB;">[m1] Petal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> *   Bayes Factor Type: <span style="color: #00BBBB;">BIC approximation</span></span>
 <span class="r-in"><span><span class="fu">test_wald</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span><span class="op">)</span> <span class="co"># Equivalent to anova(m1, m2, m3)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model |  df | df_diff |    F |     p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------</span>
@@ -337,7 +337,7 @@ many different models.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Equivalent to lmtest::lrtest(m1, m2, m3)</span></span></span>
 <span class="r-in"><span><span class="fu">test_likelihoodratio</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, estimator <span class="op">=</span> <span class="st">"ML"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model | df | df_diff | Chi2 |     p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------</span>
@@ -347,7 +347,7 @@ many different models.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Equivalent to anova(m1, m2, m3, test='LRT')</span></span></span>
 <span class="r-in"><span><span class="fu">test_likelihoodratio</span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, estimator <span class="op">=</span> <span class="st">"OLS"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> # Likelihood-Ratio-Test (LRT) for Model Comparison (OLS-estimator)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Likelihood-Ratio-Test (LRT) for Model Comparison (OLS-estimator)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Name | Model | df | df_diff | Chi2 |     p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------</span>
