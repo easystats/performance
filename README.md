@@ -475,7 +475,6 @@ ed. Quantitative Methodology Series. New York: Routledge.
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
 Ecology and Evolution* 5 (9): 944–46.
-<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12225>.
 
 </div>
 
