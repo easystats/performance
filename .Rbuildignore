@@ -8,6 +8,8 @@
 
 ^\.travis.yml
 ^\_pkgdown.yml
+^\_pkgdown.yaml
+^paper.bib$
 
 ^data/.
 ^docs/.
