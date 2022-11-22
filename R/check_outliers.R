@@ -303,14 +303,6 @@
 #' }
 #'
 #' insight::get_data(model)[outliers_list, ] # Show outliers data
-#'
-#' if (require("MASS")) {
-#'   check_outliers(model, method = c("mahalanobis", "mcd"))
-#' }
-#' if (require("ICS")) {
-#'   # This one takes some seconds to finish...
-#'   check_outliers(model, method = "ics")
-#' }
 #' }
 #' @export
 check_outliers <- function(x, ...) {
