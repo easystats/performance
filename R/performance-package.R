@@ -1,4 +1,4 @@
-#' \code{performance}
+#' \code{performance-package}
 #'
 #' @title performance: An R Package for Assessment, Comparison and Testing of
 #' Statistical Models
@@ -22,7 +22,6 @@
 #' References: Lüdecke et al. (2021) \doi{10.21105/joss.03139}
 #'
 #' @docType package
-#' @aliases performance performance-package
 #' @name performance-package
 #' @keywords internal
 "_PACKAGE"

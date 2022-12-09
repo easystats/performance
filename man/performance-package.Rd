@@ -2,9 +2,8 @@
 % Please edit documentation in R/performance-package.R
 \docType{package}
 \name{performance-package}
-\alias{performance-package}
-\alias{_PACKAGE}
 \alias{performance}
+\alias{performance-package}
 \title{performance: An R Package for Assessment, Comparison and Testing of
 Statistical Models}
 \description{
@@ -25,7 +24,7 @@ zero-inflation, convergence or singularity.
 References: Lüdecke et al. (2021) \doi{10.21105/joss.03139}
 }
 \details{
-\code{performance}
+\code{performance-package}
 }
 \seealso{
 Useful links:
