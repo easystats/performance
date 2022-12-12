@@ -1,9 +1,10 @@
 if (requiet("testthat") && requiet("performance")) {
   data("mtcars")
   mtcars$mpg <- floor(mtcars$mpg)
+  d <<- mtcars
 
-  model_lnorm <- lm(log(mpg) ~ factor(cyl), mtcars)
-  model_norm <- lm(mpg ~ factor(cyl), mtcars)
+  model_lnorm <- lm(log(mpg) ~ factor(cyl), d)
+  model_norm <- lm(mpg ~ factor(cyl), dd)
   model_pois <- glm(mpg ~ factor(cyl), mtcars, family = poisson())
 
   test_that("performance_aic works", {
