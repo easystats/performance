@@ -134,9 +134,9 @@ print.performance_roc <- function(x, ...) {
   response <- new_data[[insight::find_response(x)]]
 
   if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {
-    stop(insight::format_message(
+    insight::format_error(
       "Can't calculate ROC for models with response-matrix (i.e. response variables with success/trials)."
-    ), call. = FALSE)
+    )
   }
 
   dat <- .performance_roc_numeric(response, predictions)
@@ -151,7 +151,7 @@ print.performance_roc <- function(x, ...) {
     if (.valid_roc_models(x[[i]])) {
       .performance_roc_model(x = x[[i]], new_data = NULL, model_name = names[i])
     } else {
-      warning("Object '", names[i], "' is not valid.", call. = FALSE)
+      insight::format_warning("Object '", names[i], "' is not valid.")
     }
   })
   do.call(rbind, l)
