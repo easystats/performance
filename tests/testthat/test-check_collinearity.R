@@ -93,7 +93,7 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRv
       }))
 
       expect_message(ccoM <- check_collinearity(aM))
-      expect_message(ccoW <- check_collinearity(aW))
+      expect_warning(expect_message(ccoW <- check_collinearity(aW)))
       expect_message(ccoB <- check_collinearity(aB), regexp = NA)
 
       expect_equal(nrow(ccoM), 15)
@@ -118,7 +118,7 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRv
       }))
 
       expect_message(ccoM <- check_collinearity(aM))
-      expect_message(ccoW <- check_collinearity(aW))
+      expect_warning(expect_message(ccoW <- check_collinearity(aW)))
       expect_message(ccoB <- check_collinearity(aB), regexp = NA)
 
       expect_equal(nrow(ccoM), 15)

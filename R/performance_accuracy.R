@@ -50,7 +50,7 @@ performance_accuracy <- function(model,
   resp.name <- insight::find_response(model)
 
   # model data, for cross validation
-  model_data <- insight::get_data(model, verbose = verbose)
+  model_data <- insight::get_data(model, verbose = FALSE)
 
   info <- insight::model_info(model, verbose = verbose)
 
@@ -165,10 +165,18 @@ performance_accuracy <- function(model,
 
     if (anyNA(accuracy)) {
       m <- ifelse(method == "cv", "cross-validated", "bootstrapped")
-      warning(paste0("Some of the ", m, " samples were not eligible for calculating AUC."), call. = FALSE)
+      if (verbose) {
+        insight::format_warning(
+          paste0("Some of the ", m, " samples were not eligible for calculating AUC.")
+        )
+      }
     }
   } else {
-    warning(paste0("Models of class '", class(model)[1], "' are not supported."), call. = FALSE)
+    if (verbose) {
+      insight::format_warning(
+        paste0("Models of class '", class(model)[1], "' are not supported.")
+      )
+    }
     return(NULL)
   }
 

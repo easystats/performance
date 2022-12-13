@@ -76,7 +76,7 @@ performance_pcp <- function(model,
   m0 <- suppressWarnings(stats::glm(
     formula = stats::as.formula(sprintf("%s ~ 1", insight::find_response(model))),
     family = stats::binomial(link = "logit"),
-    data = insight::get_data(model, verbose = verbose),
+    data = insight::get_data(model, verbose = FALSE),
     weights = stats::weights(model)
   ))
 
