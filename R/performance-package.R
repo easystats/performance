@@ -23,5 +23,6 @@
 #'
 #' @docType package
 #' @name performance-package
+#' @aliases performance-package
 #' @keywords internal
 "_PACKAGE"
