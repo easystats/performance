@@ -130,7 +130,7 @@ print.performance_roc <- function(x, ...) {
 
 .performance_roc_model <- function(x, new_data, model_name = "Model 1") {
   predictions <- stats::predict(x, newdata = new_data, type = "response")
-  if (is.null(new_data)) new_data <- insight::get_data(x)
+  if (is.null(new_data)) new_data <- insight::get_data(x, verbose = FALSE)
   response <- new_data[[insight::find_response(x)]]
 
   if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {

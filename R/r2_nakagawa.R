@@ -235,7 +235,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
-      data = insight::get_data(model),
+      data = insight::get_data(model, verbose = FALSE),
       statistic = .boot_r2_fun,
       R = iterations,
       sim = "ordinary",

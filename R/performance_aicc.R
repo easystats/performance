@@ -312,7 +312,7 @@ performance_aicc.rma <- function(x, ...) {
       trans <- insight::get_transformation(model)$transformation
       .weighted_sum(log(
         diag(attr(with(
-          insight::get_data(model),
+          insight::get_data(model, verbose = FALSE),
           stats::numericDeriv(
             expr = quote(trans(
               get(insight::find_response(model))

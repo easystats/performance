@@ -223,7 +223,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
   f <- stats::as.formula(f)
 
-  d <- insight::get_data(x, verbose = verbose)
+  d <- insight::get_data(x, verbose = FALSE)
   is_num <- sapply(d, is.numeric)
   d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
   is_fac <- !is_num
@@ -249,7 +249,7 @@ check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   }
 
   f <- insight::find_formula(x)[[1]]
-  d <- insight::get_data(x)
+  d <- insight::get_data(x, verbose  = FALSE)
   check_collinearity(stats::lm(f, d))
 }
 
@@ -583,7 +583,7 @@ check_collinearity.zerocount <- function(x,
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = verbose)[, pred, drop = FALSE]
+  dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
 
   parms <- unlist(lapply(seq_along(pred), function(i) {
     p <- pred[i]
@@ -615,7 +615,7 @@ check_collinearity.zerocount <- function(x,
   tryCatch(
     {
       rhs <- insight::find_formula(x)[[component]]
-      d <- insight::get_data(x, verbose = verbose)
+      d <- insight::get_data(x, verbose = FALSE)
       attr(insight::get_modelmatrix(rhs, data = d), "assign")
     },
     error = function(e) {
