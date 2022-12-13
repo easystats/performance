@@ -56,7 +56,7 @@
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)
-  mf <- insight::get_data(model)
+  mf <- insight::get_data(model, verbose = FALSE)
 
   if (is.null(term)) {
     pred <- fv
