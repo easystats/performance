@@ -8,13 +8,17 @@ if (requiet("testthat") && requiet("see") && requiet("performance")) {
   )
 
   test_that("`check_model()` works if convergence issues", {
-    expect_warning(m <- glm(y ~ x + offset(offset), family = poisson, data = d))
+    expect_warning(expect_warning(expect_warning(expect_warning(
+      expect_warning(m <- glm(y ~ x + offset(offset), family = poisson, data = d))
+    ))))
     x <- check_model(m)
     expect_s3_class(x, "check_model")
   })
 
   test_that("`check_outliers()` works if convergence issues", {
-    expect_warning(m <- glm(y ~ x + offset(offset), family = poisson, data = d))
+    expect_warning(expect_warning(expect_warning(expect_warning(expect_warning(
+      m <- glm(y ~ x + offset(offset), family = poisson, data = d)
+    )))))
     x <- check_outliers(m)
     expect_s3_class(x, "check_outliers")
   })

@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.1.1
+Version: 0.10.1.2
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -131,10 +131,11 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
+Remotes: easystats/insight@revise_get_data, easystats/datawizard

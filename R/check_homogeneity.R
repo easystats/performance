@@ -75,10 +75,10 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   }
 
   if (method == "fligner") {
-    r <- stats::fligner.test(f, data = insight::get_data(x))
+    r <- stats::fligner.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "bartlett") {
-    r <- stats::bartlett.test(f, data = insight::get_data(x))
+    r <- stats::bartlett.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "levene") {
     insight::check_if_installed("car")

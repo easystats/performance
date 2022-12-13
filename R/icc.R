@@ -176,7 +176,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
   }
 
   if (!insight::is_mixed_model(model)) {
-    warning("`model` has no random effects.", call. = FALSE)
+    insight::format_warning("`model` has no random effects.")
     return(NULL)
   }
 
@@ -283,11 +283,11 @@ variance_decomposition <- function(model,
     resp <- insight::find_response(model)
     is.mixed <- unlist(lapply(resp, function(i) mi[[i]]$is_mixed))
     if (!any(is.mixed)) {
-      warning("`model` has no random effects.", call. = FALSE)
+      insight::format_warning("`model` has no random effects.")
       return(NULL)
     }
   } else if (!insight::is_mixed_model(model)) {
-    warning("`model` has no random effects.", call. = FALSE)
+    insight::format_warning("`model` has no random effects.")
     return(NULL)
   }
 
@@ -601,7 +601,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
-      data = insight::get_data(model),
+      data = insight::get_data(model, verbose  = FALSE),
       statistic = .boot_icc_fun,
       R = iterations,
       sim = "ordinary",

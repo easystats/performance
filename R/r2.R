@@ -746,7 +746,7 @@ r2.Arima <- function(model, ...) {
   if (!requireNamespace("forecast", quietly = TRUE)) {
     list(R2 = NA)
   } else {
-    list(R2 = stats::cor(stats::fitted(model), insight::get_data(model))^2)
+    list(R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2)
   }
 }
 
