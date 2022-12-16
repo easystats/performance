@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
-if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
+if (requiet("lme4")) {
   data(iris)
   model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 

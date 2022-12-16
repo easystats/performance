@@ -601,7 +601,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
-      data = insight::get_data(model, verbose  = FALSE),
+      data = insight::get_data(model, verbose = FALSE),
       statistic = .boot_icc_fun,
       R = iterations,
       sim = "ordinary",

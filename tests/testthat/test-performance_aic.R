@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance") && requiet("parameters")) {
+if (requiet("parameters")) {
   data("fish")
 
   model_lnorm <- lm(log1p(count) ~ factor(persons), fish)

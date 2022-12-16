@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance")) {
+if (requiet("performance")) {
   data(iris)
   iris$`a m` <- iris$Species
   iris$`Sepal Width` <- iris$Sepal.Width

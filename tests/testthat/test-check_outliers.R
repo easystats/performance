@@ -187,16 +187,16 @@ if (packageVersion("insight") >= "0.18.7") {
   test_that("all methods which", {
     expect_equal(
       which(check_outliers(mtcars,
-                           method = c(
-                             "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-                             "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
-                           ),
-                           threshold = list(
-                             "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-                             "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-                             "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-                             "optics" = 14, "lof" = 0.005
-                           )
+        method = c(
+          "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
+          "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+        ),
+        threshold = list(
+          "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
+          "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
+          "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
+          "optics" = 14, "lof" = 0.005
+        )
       )),
       c(9, 15, 16, 19, 20, 28, 29, 31)
     )
@@ -208,17 +208,17 @@ if (packageVersion("insight") >= "0.18.7") {
     test_that("multiple methods with ID", {
       data <- datawizard::rownames_as_column(mtcars, var = "car")
       x <- attributes(check_outliers(data,
-                                     method = c(
-                                       "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-                                       "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
-                                     ),
-                                     threshold = list(
-                                       "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-                                       "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-                                       "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-                                       "optics" = 14, "lof" = 0.005
-                                     ),
-                                     ID = "car"
+        method = c(
+          "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
+          "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+        ),
+        threshold = list(
+          "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
+          "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
+          "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
+          "optics" = 14, "lof" = 0.005
+        ),
+        ID = "car"
       ))
       expect_equal(
         x$outlier_var$zscore$mpg$car,
@@ -272,8 +272,10 @@ if (packageVersion("insight") >= "0.18.7") {
       set.seed(123)
       invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
       expect_equal(
-        which(check_outliers(model, method = c("pareto", "optics"),
-                             threshold = list(pareto = 0.3, optics = 11))),
+        which(check_outliers(model,
+          method = c("pareto", "optics"),
+          threshold = list(pareto = 0.3, optics = 11)
+        )),
         9
       )
     })

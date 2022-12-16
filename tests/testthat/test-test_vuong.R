@@ -1,6 +1,4 @@
-if (requiet("testthat") &&
-  requiet("nonnest2") &&
-  requiet("lavaan")) {
+if (requiet("nonnest2") && requiet("lavaan")) {
   test_that("test_vuong - nested", {
     m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
     m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)

@@ -1,9 +1,9 @@
-if (requiet("testthat") &&
-  requiet("performance") &&
-  requiet("insight") &&
+if (
+
+
   requiet("AER") &&
-  requiet("ordinal") &&
-  requiet("betareg")) {
+    requiet("ordinal") &&
+    requiet("betareg")) {
   data("Affairs", package = "AER")
   data("GasolineYield")
   data("wine")
@@ -32,7 +32,7 @@ if (requiet("testthat") &&
 
 ## DirichletReg is currently orphaned
 
-# if (requiet("testthat") && requiet("performance") && requiet("DirichletReg")) {
+# if (  requiet("DirichletReg")) {
 #   set.seed(123)
 #   data("ArcticLake")
 #

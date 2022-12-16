@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance")) {
+if (requiet("performance")) {
   test_that("model_performance.lm", {
     model <- lm(mpg ~ wt + cyl, data = mtcars)
     expect_equal(model_performance(model)$R2, 0.830, tolerance = 0.01)

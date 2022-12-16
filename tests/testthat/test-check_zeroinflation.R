@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && requiet("lme4")) {
+if (requiet("glmmTMB") && requiet("lme4")) {
   set.seed(123)
   data(Salamanders)
   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)

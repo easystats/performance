@@ -249,7 +249,7 @@ check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   }
 
   f <- insight::find_formula(x)[[1]]
-  d <- insight::get_data(x, verbose  = FALSE)
+  d <- insight::get_data(x, verbose = FALSE)
   check_collinearity(stats::lm(f, d))
 }
 

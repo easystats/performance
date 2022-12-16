@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance")) {
+if (requiet("performance")) {
   test_that("r2 lm", {
     data(iris)
     model <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)

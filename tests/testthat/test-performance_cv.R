@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance")) {
+if (requiet("performance")) {
   model <- lm(mpg ~ wt + cyl, data = mtcars)
 
   set.seed(123)

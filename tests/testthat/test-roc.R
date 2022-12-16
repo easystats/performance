@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance") && requiet("ISLR") && requiet("bayestestR")) {
+if (requiet("ISLR")) {
   data(Smarket, package = "ISLR")
 
   m1 <- glm(am ~ vs + wt, family = binomial(), data = mtcars)

@@ -1,6 +1,6 @@
-if (requiet("testthat") &&
+if (
   requiet("lavaan") &&
-  requiet("lmtest")) {
+    requiet("lmtest")) {
   test_that("test_performance - nested", {
     # Decreasing
     m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
