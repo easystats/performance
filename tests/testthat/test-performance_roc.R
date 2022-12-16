@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("performance") &&
+if (
+
   requiet("lme4")) {
   data(mtcars)
   m <- glmer(vs ~ mpg + (1 | gear), family = "binomial", data = mtcars)

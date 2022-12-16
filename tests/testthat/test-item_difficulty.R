@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance")) {
+if (requiet("performance")) {
   test_that("item_difficulty", {
     data(iris)
     x <- iris[, 1:4]

@@ -1,8 +1,8 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("performance") &&
+
+
   requiet("rstanarm") &&
   requiet("httr") &&
   requiet("brms")) {
@@ -61,10 +61,10 @@ if (.runThisTest &&
   })
 }
 
-if (requiet("testthat") &&
-  requiet("performance") &&
+if (
+
   requiet("BayesFactor") &&
-  requiet("rstantools")) {
+    requiet("rstantools")) {
   test_that("model_performance.BFBayesFactor", {
     mod <- ttestBF(mtcars$wt, mu = 3)
     expect_warning(p <- model_performance(mod))

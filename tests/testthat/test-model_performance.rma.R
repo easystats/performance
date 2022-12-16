@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance") && requiet("metafor")) {
+if (requiet("metafor")) {
   dat <- escalc(measure = "RR", ai = tpos, bi = tneg, ci = cpos, di = cneg, data = dat.bcg)
 
   test_that("model_performance.rma", {

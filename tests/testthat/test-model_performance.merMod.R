@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("insight") && requiet("performance") && requiet("httr") && requiet("lme4")) {
+if (requiet("httr") && requiet("lme4")) {
   .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
   if (.runThisTest) {
