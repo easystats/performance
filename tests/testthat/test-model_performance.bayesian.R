@@ -1,8 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
+skip_if_offline()
 
 if (.runThisTest &&
-
-
   requiet("rstanarm") &&
   requiet("httr") &&
   requiet("brms")) {

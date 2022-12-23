@@ -1,3 +1,5 @@
+skip_if_offline()
+
 if (requiet("httr") && requiet("lme4")) {
   .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
