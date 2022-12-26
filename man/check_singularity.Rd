@@ -60,7 +60,7 @@ worked correctly or not.
 }
 }
 \examples{
-require("lme4")
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(lme4)
 data(sleepstudy)
 set.seed(123)
@@ -78,6 +78,7 @@ model <- lmer(
 )
 
 check_singularity(model)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

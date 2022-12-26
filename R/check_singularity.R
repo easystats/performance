@@ -60,7 +60,7 @@
 #'
 #' - lme4 Reference Manual, <https://cran.r-project.org/package=lme4>
 #'
-#' @examples require("lme4")
+#' @examplesIf require("lme4")
 #' library(lme4)
 #' data(sleepstudy)
 #' set.seed(123)
