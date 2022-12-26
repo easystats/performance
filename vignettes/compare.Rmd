@@ -28,12 +28,13 @@ knitr::opts_chunk$set(
 options(digits = 2)
 
 if (!requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("magrittr", quietly = TRUE) ||
-  !requireNamespace("see", quietly = TRUE) ||
-  (requireNamespace("see", quietly = TRUE) && utils::packageVersion("see") <= "0.7.1")) {
+  !requireNamespace("poorman", quietly = TRUE) ||
+  !requireNamespace("see", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 } else {
   library(rstanarm)
+  library(poorman)
+  library(see)
 }
 
 set.seed(333)
@@ -59,7 +60,7 @@ indices of fit).
 ```{r}
 library(performance)
 library(insight)
-library(magrittr) # for pipe operator
+library(poorman) # for pipe operator
 
 # we will use `print_md` function to display a well-formatted table
 performance(model1) %>%
