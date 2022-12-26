@@ -80,24 +80,24 @@
 #'   model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 #'   model_performance(model)
 #' }
-#' @references \itemize{
-#'   \item Byrne, B. M. (1994). Structural equation modeling with EQS and
+#' @references
+#'
+#' - Byrne, B. M. (1994). Structural equation modeling with EQS and
 #'   EQS/Windows. Thousand Oaks, CA: Sage Publications.
 #'
-#'   \item Tucker, L. R., and Lewis, C. (1973). The reliability coefficient for
+#' - Tucker, L. R., and Lewis, C. (1973). The reliability coefficient for
 #'   maximum likelihood factor analysis. Psychometrika, 38, 1-10.
 #'
-#'   \item Schumacker, R. E., and Lomax, R. G. (2004). A beginner's guide to
+#' - Schumacker, R. E., and Lomax, R. G. (2004). A beginner's guide to
 #'   structural equation modeling, Second edition. Mahwah, NJ: Lawrence Erlbaum
 #'   Associates.
 #'
-#'   \item Fan, X., B. Thompson, and L. Wang (1999). Effects of sample size,
+#' - Fan, X., B. Thompson, and L. Wang (1999). Effects of sample size,
 #'   estimation method, and model specification on structural equation modeling
 #'   fit indexes. Structural Equation Modeling, 6, 56-83.
 #'
-#'   \item Kline, R. B. (2015). Principles and practice of structural equation
+#' - Kline, R. B. (2015). Principles and practice of structural equation
 #'   modeling. Guilford publications.
-#' }
 #'
 #' @export
 model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...) {

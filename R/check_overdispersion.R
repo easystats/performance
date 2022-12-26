@@ -44,28 +44,28 @@
 #' negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
 #' }
 #'
-#' @references \itemize{
-#'  \item Bolker B et al. (2017):
+#' @references
+#'
+#' - Bolker B et al. (2017):
 #'  [GLMM FAQ.](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html)
-#'  \item Gelman, A., and Hill, J. (2007). Data analysis using regression and
+#'
+#' - Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
-#'  }
 #'
+#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)
 #'
-#' @examplesIf getRversion() >= "4.0.0"
-#' if (require("glmmTMB")) {
-#'   data(Salamanders)
-#'   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#'   check_overdispersion(m)
+#' library(glmmTMB)
+#' data(Salamanders)
+#' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+#' check_overdispersion(m)
 #'
-#'   m <- glmmTMB(
-#'     count ~ mined + spp + (1 | site),
-#'     family = poisson,
-#'     data = Salamanders
-#'   )
-#'   check_overdispersion(m)
-#' }
+#' m <- glmmTMB(
+#'   count ~ mined + spp + (1 | site),
+#'   family = poisson,
+#'   data = Salamanders
+#' )
+#' check_overdispersion(m)
 #' @export
 check_overdispersion <- function(x, ...) {
   UseMethod("check_overdispersion")
