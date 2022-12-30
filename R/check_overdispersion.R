@@ -123,7 +123,7 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
 
   x$p_value <- pval <- round(x$p_value, digits = digits)
-  if (x$p_value < .001) x$p_value <- "< 0.001"
+  if (x$p_value < 0.001) x$p_value <- "< 0.001"
 
   maxlen <- max(
     nchar(x$dispersion_ratio),

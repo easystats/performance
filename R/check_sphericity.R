@@ -44,8 +44,8 @@ plot.check_sphericity <- function(x, ...) {
 
 #' @export
 print.check_sphericity <- function(x, ...) {
-  if (any(x < .05)) {
-    pp <- x[x < .05]
+  if (any(x < 0.05)) {
+    pp <- x[x < 0.05]
     pp <- paste0("\n - ", names(pp), " (", insight::format_p(pp), ")", collapse = "")
     insight::print_color(sprintf("Warning: Sphericity violated for: %s.\n", pp), "red")
   } else {
