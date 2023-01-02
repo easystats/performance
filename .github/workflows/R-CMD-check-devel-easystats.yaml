@@ -1,8 +1,8 @@
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    # Trigger once a day at midnight.
-    - cron: "0 0 * * *"
+    # Trigger once a week at 00:00 on Sunday
+    - cron: "0 0 * * SUN"
 
 name: R-CMD-check-devel-easystats
 
