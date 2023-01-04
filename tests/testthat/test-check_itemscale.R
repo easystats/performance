@@ -14,7 +14,7 @@ if (requiet("parameters")) {
     pca <- principal_components(d, n = 2)
     out <- check_itemscale(pca)
     expect_length(out, 2L)
-    expect_equal(out[[1]]$Mean, vapply(d[out[[1]]$Item], mean, numeric(1)), tolerance = 1e-4)
-    expect_equal(out[[2]]$Difficulty, item_difficulty(d[out[[2]]$Item])$difficulty, tolerance = 1e-4)
+    expect_equal(out[[1]]$Mean, vapply(d[out[[1]]$Item], mean, numeric(1)), tolerance = 1e-4, ignore_attr = TRUE)
+    expect_equal(out[[2]]$Difficulty, item_difficulty(d[out[[2]]$Item])$difficulty, tolerance = 1e-4, ignore_attr = TRUE)
   })
 }
