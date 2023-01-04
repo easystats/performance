@@ -560,21 +560,6 @@ if (getRversion() >= "3.5.0") {
   S3method(stats::residuals, check_normality_numeric)
   S3method(stats::rstudent, check_normality_numeric)
 }
-if (getRversion() >= "3.6.0") {
-  S3method(bayesplot::pp_check, lm)
-  S3method(bayesplot::pp_check, glm)
-  S3method(bayesplot::pp_check, glmmTMB)
-  S3method(bayesplot::pp_check, glm.nb)
-  S3method(bayesplot::pp_check, merMod)
-  S3method(bayesplot::pp_check, MixMod)
-  S3method(bayesplot::pp_check, mle2)
-  S3method(bayesplot::pp_check, negbin)
-  S3method(bayesplot::pp_check, polr)
-  S3method(bayesplot::pp_check, rma)
-  S3method(bayesplot::pp_check, vlm)
-  S3method(bayesplot::pp_check, wbm)
-  S3method(bayesplot::pp_check, BFBayesFactor)
-}
 importFrom(insight,display)
 importFrom(insight,print_html)
 importFrom(insight,print_md)
