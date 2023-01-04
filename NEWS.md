@@ -34,6 +34,10 @@
 * `test_wald()` now warns the user about inappropriate F test and calls
   `test_likelihoodratio()` for binomial models.
 
+* Fixed issue in `item_difficulty()` with detecting the maximum values of an
+  item set. Furthermore, `item_difficulty()` gets a `maximum_value` argument
+  in case no item contains the maximum value due to missings.
+
 # performance 0.10.0
 
 ## Breaking Change

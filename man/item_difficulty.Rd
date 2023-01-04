@@ -4,12 +4,16 @@
 \alias{item_difficulty}
 \title{Difficulty of Questionnaire Items}
 \usage{
-item_difficulty(x)
+item_difficulty(x, maximum_value = NULL)
 }
 \arguments{
 \item{x}{Depending on the function, \code{x} may be a \code{matrix} as
 returned by the \code{cor()}-function, or a data frame
 with items (e.g. from a test or questionnaire).}
+
+\item{maximum_value}{Numeric value, indicating the maximum value of an item.
+If \code{NULL} (default), the maximum is taken from the maximum value of all
+columns in \code{x}.}
 }
 \value{
 A data frame with three columns: The name(s) of the item(s), the item

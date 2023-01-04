@@ -7,7 +7,9 @@
 #' @param x Depending on the function, `x` may be a `matrix` as
 #'    returned by the `cor()`-function, or a data frame
 #'    with items (e.g. from a test or questionnaire).
-#'
+#' @param maximum_value Numeric value, indicating the maximum value of an item.
+#'   If `NULL` (default), the maximum is taken from the maximum value of all
+#'   columns in `x`.
 #' @return A data frame with three columns: The name(s) of the item(s), the item
 #'      difficulties for each item, and the ideal item difficulty.
 #'
@@ -23,15 +25,22 @@
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_difficulty(x)
 #' @export
-item_difficulty <- function(x) {
+item_difficulty <- function(x, maximum_value = NULL) {
+  # find general maximum of scale
+  if (is.null(maximum_value)) {
+    maximum_value <- suppressWarnings(max(vapply(x, max, numeric(1L), na.rm = TRUE)))
+  } else if (!is.numeric(maximum_value)) {
+    insight::format_error("`maximum_value` must be a numeric value, indicating the maximum value of an item.")
+  }
+
   d <- sapply(x, function(.x) {
     .x <- .x[!is.na(.x)]
-    round(sum(.x) / (max(.x) * length(.x)), 2)
+    round(sum(.x) / (maximum_value * length(.x)), 2)
   })
 
   # ideal item item_difficulty
   fun.diff.ideal <- function(.x) {
-    p <- 1 / max(.x, na.rm = TRUE)
+    p <- 1 / maximum_value
     round(p + (1 - p) / 2, 2)
   }
 
