@@ -86,6 +86,18 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.2" id="performance-0102">performance 0.10.2<a class="anchor" aria-label="anchor" href="#performance-0102"></a></h2>
+<div class="section level3">
+<h3 id="changes-to-functions-0-10-2">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-10-2"></a></h3>
+<ul><li>
+<code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now accepts <code>NULL</code> for the <code>ci</code> argument.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-10-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-2"></a></h3>
+<ul><li>Fixed issue in <code><a href="../reference/item_difficulty.html">item_difficulty()</a></code> with detecting the maximum values of an item set. Furthermore, <code><a href="../reference/item_difficulty.html">item_difficulty()</a></code> gets a <code>maximum_value</code> argument in case no item contains the maximum value due to missings.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.1" id="performance-0101">performance 0.10.1<a class="anchor" aria-label="anchor" href="#performance-0101"></a></h2><p class="text-muted">CRAN release: 2022-11-25</p>
 <div class="section level3">
 <h3 id="general-0-10-1">General<a class="anchor" aria-label="anchor" href="#general-0-10-1"></a></h3>
@@ -98,7 +110,6 @@
 <li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> accepts a <code>bw</code> argument (smoothing bandwidth), which is passed down to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods density-estimation. The default for the smoothing bandwidth <code>bw</code> has changed from <code>"nrd0"</code> to <code>"nrd"</code>, which seems to produce better fitting plots for non-gaussian models.</p></li>
 <li><p>The model underlying <code><a href="../reference/check_distribution.html">check_distribution()</a></code> was now also trained to detect cauchy, half-cauchy and inverse-gamma distributions.</p></li>
 <li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> now allows to include the ICC for Bayesian models.</p></li>
-<li><p><code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> now accepts <code>NULL</code> for the <code>ci</code> argument.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-10-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-1"></a></h3>
@@ -106,7 +117,6 @@
 <li><p>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for models with convergence issues that lead to <code>NA</code> values in residuals.</p></li>
 <li><p>Fixed bug in <code>check_outliers</code> whereby passing multiple elements to the threshold list generated an error (<a href="https://github.com/easystats/performance/issues/496" class="external-link">#496</a>).</p></li>
 <li><p><code><a href="../reference/test_performance.html">test_wald()</a></code> now warns the user about inappropriate F test and calls <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> for binomial models.</p></li>
-<li><p>Fixed issue in <code><a href="../reference/item_difficulty.html">item_difficulty()</a></code> with detecting the maximum values of an item set. Furthermore, <code><a href="../reference/item_difficulty.html">item_difficulty()</a></code> gets a <code>maximum_value</code> argument in case no item contains the maximum value due to missings.</p></li>
 <li><p>Fixed edge case for usage of <code>parellel::detectCores()</code> in <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</p></li>
 </ul></div>
 </div>
