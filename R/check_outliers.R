@@ -706,6 +706,7 @@ check_outliers.data.frame <- function(x,
     thresholds[names(threshold)] <- threshold[names(threshold)]
   } else if (is.numeric(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
+    ## FIXME: @rempsyc is this working as intended? 
     thresholds <- lapply(thresholds, function(x) threshold)
   } else {
     insight::format_error(
