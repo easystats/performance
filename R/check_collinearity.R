@@ -184,6 +184,9 @@ plot.check_collinearity <- function(x, ...) {
 
   all_vifs <- insight::compact_list(list(low_vif, mid_vif, high_vif))
 
+  # if we have no CIs, remove those columns
+  x <- datawizard::remove_empty_columns(x)
+
   # format table for each "ViF" group - this ensures that CIs are properly formatted
   x <- do.call(rbind, lapply(all_vifs, function(i) insight::format_table(x[i, ])))
   colnames(x)[4] <- "Increased SE"
@@ -489,15 +492,20 @@ check_collinearity.zerocount <- function(x,
   n <- insight::n_obs(x)
   p <- insight::n_parameters(x)
 
-  ci_lvl <- (1 + ci) / 2
+  # check if CIs are requested
+  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
+    ci_lvl <- (1 + ci) / 2
 
-  logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
-  se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
-  se_log <- se / (r * (1 - r))
-  ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
-  ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
-  ci_lo <- stats::plogis(ci_log_lo)
-  ci_up <- stats::plogis(ci_log_up)
+    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
+    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
+    se_log <- se / (r * (1 - r))
+    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
+    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
+    ci_lo <- stats::plogis(ci_log_lo)
+    ci_up <- stats::plogis(ci_log_up)
+  } else {
+    ci_lo <- ci_up <- NA
+  }
 
   out <- insight::text_remove_backticks(
     data.frame(
