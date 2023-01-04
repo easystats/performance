@@ -1,3 +1,15 @@
+# performance 0.10.2
+
+## Changes to functions
+
+* `check_collinearity()` now accepts `NULL` for the `ci` argument.
+
+## Bug fixes
+
+* Fixed issue in `item_difficulty()` with detecting the maximum values of an
+  item set. Furthermore, `item_difficulty()` gets a `maximum_value` argument
+  in case no item contains the maximum value due to missings.
+
 # performance 0.10.1
 
 ## General
@@ -21,8 +33,6 @@
 
 * `model_performance()` now allows to include the ICC for Bayesian models.
 
-* `check_collinearity()` now accepts `NULL` for the `ci` argument.
-
 ## Bug fixes
 
 * `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
@@ -35,10 +45,6 @@
 
 * `test_wald()` now warns the user about inappropriate F test and calls
   `test_likelihoodratio()` for binomial models.
-
-* Fixed issue in `item_difficulty()` with detecting the maximum values of an
-  item set. Furthermore, `item_difficulty()` gets a `maximum_value` argument
-  in case no item contains the maximum value due to missings.
 
 * Fixed edge case for usage of `parellel::detectCores()` in `check_outliers()`.
 
