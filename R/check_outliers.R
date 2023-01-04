@@ -1337,7 +1337,7 @@ check_outliers.geeglm <- check_outliers.gls
     d2 <- abs(v - m.int)
     Distance_IQR[names(as.data.frame(x))[col]] <- d2 / (iqr * threshold)
 
-    d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1, ifelse(v < lower, 1, 0)) #nolint
+    d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1, ifelse(v < lower, 1, 0)) # nolint
   }
 
   out <- data.frame(Row = d$Row)
@@ -1377,7 +1377,7 @@ check_outliers.geeglm <- check_outliers.gls
   for (col in names(x)) {
     v <- x[, col]
     ci <- bayestestR::ci(v, ci = threshold, method = method)
-    d[col] <- ifelse(x[[col]] > ci$CI_high | x[[col]] < ci$CI_low, 1, 0) #nolint
+    d[col] <- ifelse(x[[col]] > ci$CI_high | x[[col]] < ci$CI_low, 1, 0) # nolint
 
     m.int <- stats::median(c(ci$CI_low, ci$CI_high), na.rm = TRUE)
     d2 <- abs(v - m.int)
