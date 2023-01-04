@@ -1,7 +1,7 @@
 osx <- tryCatch({
   si <- Sys.info()
   if (!is.null(si["sysname"])) {
-    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+    si["sysname"] == "Darwin" || startsWith(R.version$os, "darwin")
   } else {
     FALSE
   }
@@ -100,7 +100,12 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(model, by_group = TRUE),
-        structure(list(Group = c("Subject", "grp"), ICC = c(0.5896587, 0.0016551)), class = c("icc_by_group", "data.frame"), row.names = c(NA, -2L)),
+        structure(list(
+          Group = c("Subject", "grp"),
+          ICC = c(0.5896587, 0.0016551)),
+          class = c("icc_by_group", "data.frame"),
+          row.names = c(NA, -2L)
+        ),
         tolerance = 0.05
       )
     })

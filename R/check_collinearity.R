@@ -226,7 +226,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   f <- stats::as.formula(f)
 
   d <- insight::get_data(x, verbose = FALSE)
-  is_num <- sapply(d, is.numeric)
+  is_num <- vapply(d, is.numeric, logical(1))
   d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
   is_fac <- !is_num
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]

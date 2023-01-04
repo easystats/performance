@@ -72,9 +72,9 @@ performance_accuracy <- function(model,
         model_upd
       })
 
-      predictions <- mapply(function(.x, .y) {
+      predictions <- Map(function(.x, .y) {
         stats::predict(.y, newdata = model_data[.x, ])
-      }, bootstr, models, SIMPLIFY = FALSE)
+      }, bootstr, models)
 
       response <- lapply(bootstr, function(.x) {
         as.data.frame(model_data[.x, ])[[resp.name]]
@@ -96,9 +96,9 @@ performance_accuracy <- function(model,
         # stats::lm(formula, data = model_data[.x$train, ])
       })
 
-      predictions <- mapply(function(.x, .y) {
+      predictions <- Map(function(.x, .y) {
         stats::predict(.y, newdata = model_data[.x$test, ])
-      }, cv, models, SIMPLIFY = FALSE)
+      }, cv, models)
 
       response <- lapply(cv, function(.x) {
         as.data.frame(model_data[.x$test, ])[[resp.name]]
@@ -125,9 +125,9 @@ performance_accuracy <- function(model,
         model_upd
       })
 
-      predictions <- mapply(function(.x, .y) {
+      predictions <- Map(function(.x, .y) {
         stats::predict(.y, newdata = model_data[.x, ], type = "link")
-      }, bootstr, models, SIMPLIFY = FALSE)
+      }, bootstr, models)
 
       response <- lapply(bootstr, function(.x) {
         .recode_to_zero(as.data.frame(model_data[.x, ])[[resp.name]])
@@ -149,9 +149,9 @@ performance_accuracy <- function(model,
         # stats::glm(formula, data = model_data[.x$train, ], family = stats::binomial(link = "logit"))
       })
 
-      predictions <- mapply(function(.x, .y) {
+      predictions <- Map(function(.x, .y) {
         stats::predict(.y, newdata = model_data[.x$test, ], type = "link")
-      }, cv, models, SIMPLIFY = FALSE)
+      }, cv, models)
 
       response <- lapply(cv, function(.x) {
         .recode_to_zero(as.data.frame(model_data[.x$test, ])[[resp.name]])
@@ -182,7 +182,7 @@ performance_accuracy <- function(model,
 
   # return mean value of accuracy
   structure(
-    class = c("performance_accuracy"),
+    class = "performance_accuracy",
     list(
       Accuracy = mean(accuracy, na.rm = TRUE),
       SE = stats::sd(accuracy, na.rm = TRUE),
