@@ -21,6 +21,8 @@
 
 * `model_performance()` now allows to include the ICC for Bayesian models.
 
+* `check_collinearity()` now accepts `NULL` for the `ci` argument.
+
 ## Bug fixes
 
 * `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
@@ -37,6 +39,8 @@
 * Fixed issue in `item_difficulty()` with detecting the maximum values of an
   item set. Furthermore, `item_difficulty()` gets a `maximum_value` argument
   in case no item contains the maximum value due to missings.
+
+* Fixed edge case for usage of `parellel::detectCores()` in `check_outliers()`.
 
 # performance 0.10.0
 
