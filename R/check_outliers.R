@@ -1278,12 +1278,12 @@ check_outliers.geeglm <- check_outliers.gls
   if (!robust) {
     d <- abs(as.data.frame(sapply(
       x,
-      function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE),
+      function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE)
     )))
   } else {
     d <- abs(as.data.frame(sapply(
       x,
-      function(x) (x - stats::median(x, na.rm = TRUE)) / stats::mad(x, na.rm = TRUE),
+      function(x) (x - stats::median(x, na.rm = TRUE)) / stats::mad(x, na.rm = TRUE)
     )))
   }
 
