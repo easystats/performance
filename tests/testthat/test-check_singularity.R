@@ -1,7 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest) {
-  if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
+  if (requiet("lme4")) {
     data(sleepstudy)
     set.seed(123)
     sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
@@ -18,9 +18,7 @@ if (.runThisTest) {
     )
 
     test_that("check_singularity", {
-      if (paste0(R.Version()[c("major", "minor")], collapse = ".") > "3.5.3") {
-        expect_true(check_singularity(model))
-      }
+      expect_true(check_singularity(model))
     })
   }
 }

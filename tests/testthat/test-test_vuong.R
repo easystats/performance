@@ -1,51 +1,50 @@
-if (requiet("testthat") &&
-  requiet("nonnest2") &&
-  requiet("lavaan")) {
-  test_that("test_vuong - nested", {
-    m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
-    m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
-    m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+requiet("nonnest2")
+requiet("lavaan")
 
-    rez <- test_vuong(m1, m2, m3)
+test_that("test_vuong - nested", {
+  m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+  m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+  m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
 
-    ref <- nonnest2::vuongtest(m1, m2, nested = TRUE)
-    expect_equal(rez[2, "Omega2"], ref$omega)
-    expect_equal(rez[2, "p_Omega2"], ref$p_omega)
-    expect_equal(rez[2, "LR"], ref$LRTstat)
-    expect_equal(rez[2, "p_LR"], ref$p_LRT$A)
+  rez <- test_vuong(m1, m2, m3)
 
-    ref <- nonnest2::vuongtest(m2, m3, nested = TRUE)
-    expect_equal(rez[3, "Omega2"], ref$omega)
-    expect_equal(rez[3, "p_Omega2"], ref$p_omega)
-    expect_equal(rez[3, "LR"], ref$LRTstat)
-    expect_equal(rez[3, "p_LR"], ref$p_LRT$A)
-  })
+  ref <- nonnest2::vuongtest(m1, m2, nested = TRUE)
+  expect_equal(rez[2L, "Omega2"], ref$omega)
+  expect_equal(rez[2L, "p_Omega2"], ref$p_omega)
+  expect_equal(rez[2L, "LR"], ref$LRTstat)
+  expect_equal(rez[2L, "p_LR"], ref$p_LRT$A)
 
-
-  test_that("test_vuong - nested (reversed)", {
-    # m1 <- lm(mpg ~ wt + cyl, data = mtcars)
-    # m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
-    # m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-  })
+  ref <- nonnest2::vuongtest(m2, m3, nested = TRUE)
+  expect_equal(rez[3L, "Omega2"], ref$omega)
+  expect_equal(rez[3L, "p_Omega2"], ref$p_omega)
+  expect_equal(rez[3L, "LR"], ref$LRTstat)
+  expect_equal(rez[3L, "p_LR"], ref$p_LRT$A)
+})
 
 
-  test_that("test_vuong - non-nested", {
-    m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
-    m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
-    m3 <- lm(Sepal.Length ~ Species, data = iris)
+# test_that("test_vuong - nested (reversed)", {
+# m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+# m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+# m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+# })
 
-    rez <- test_vuong(m1, m2, m3)
 
-    ref <- nonnest2::vuongtest(m1, m2)
-    expect_equal(rez[2, "Omega2"], ref$omega)
-    expect_equal(rez[2, "p_Omega2"], ref$p_omega)
-    expect_equal(rez[2, "LR"], ref$LRTstat)
-    expect_equal(rez[2, "p_LR"], ref$p_LRT$B)
+test_that("test_vuong - non-nested", {
+  m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+  m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
+  m3 <- lm(Sepal.Length ~ Species, data = iris)
 
-    ref <- nonnest2::vuongtest(m1, m3)
-    expect_equal(rez[3, "Omega2"], ref$omega)
-    expect_equal(rez[3, "p_Omega2"], ref$p_omega)
-    expect_equal(rez[3, "LR"], ref$LRTstat)
-    expect_equal(rez[3, "p_LR"], ref$p_LRT$A)
-  })
-}
+  rez <- test_vuong(m1, m2, m3)
+
+  ref <- nonnest2::vuongtest(m1, m2)
+  expect_equal(rez[2L, "Omega2"], ref$omega)
+  expect_equal(rez[2L, "p_Omega2"], ref$p_omega)
+  expect_equal(rez[2L, "LR"], ref$LRTstat)
+  expect_equal(rez[2L, "p_LR"], ref$p_LRT$B)
+
+  ref <- nonnest2::vuongtest(m1, m3)
+  expect_equal(rez[3L, "Omega2"], ref$omega)
+  expect_equal(rez[3L, "p_Omega2"], ref$p_omega)
+  expect_equal(rez[3L, "LR"], ref$LRTstat)
+  expect_equal(rez[3L, "p_LR"], ref$p_LRT$A)
+})

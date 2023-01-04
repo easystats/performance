@@ -55,18 +55,20 @@ negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
 }
 }
 \examples{
-if (require("glmmTMB")) {
-  data(Salamanders)
-  m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-  check_overdispersion(m)
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
-  m <- glmmTMB(
-    count ~ mined + spp + (1 | site),
-    family = poisson,
-    data = Salamanders
-  )
-  check_overdispersion(m)
-}
+library(glmmTMB)
+data(Salamanders)
+m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_overdispersion(m)
+
+m <- glmmTMB(
+  count ~ mined + spp + (1 | site),
+  family = poisson,
+  data = Salamanders
+)
+check_overdispersion(m)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

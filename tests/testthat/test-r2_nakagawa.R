@@ -1,6 +1,6 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
-if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
+if (requiet("lme4")) {
   data(iris)
   model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
 
@@ -12,11 +12,30 @@ if (requiet("testthat") && requiet("performance") && requiet("lme4")) {
           R2_conditional = c(`Conditional R2` = 0.969409477972726),
           R2_marginal = c(`Marginal R2` = 0.65846169440315)
         ),
-        class = "r2_nakagawa"
+        class = c("r2_nakagawa", "list")
       ),
       tolerance = 1e-3
     )
   })
+
+  if (.runThisTest) {
+    test_that("r2_nakagawa, ci", {
+      set.seed(123)
+      out <- r2_nakagawa(model, ci = 0.95)
+      expect_equal(
+        out$R2_marginal,
+        c(`Marginal R2` = 0.65846, CI_low = 0.33708, CI_high = 0.94718),
+        tolerance = 1e-3,
+        ignore_attr = TRUE
+      )
+      expect_equal(
+        out$R2_conditional,
+        c(`Conditional R2` = 0.96941, CI_low = 0.94299, CI_high = 0.98426),
+        tolerance = 1e-3,
+        ignore_attr = TRUE
+      )
+    })
+  }
 
   if (.runThisTest) {
     dat <- structure(list(

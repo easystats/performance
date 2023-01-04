@@ -14,19 +14,18 @@
 #' A data frame (with one row) and one column per "index" (see `metrics`).
 #'
 #' @details Depending on `model`, following indices are computed:
-#' \itemize{
-#'   \item{**AIC**} {Akaike's Information Criterion, see `?stats::AIC`}
-#'   \item{**AICc**} {Second-order (or small sample) AIC with a correction for small sample sizes}
-#'   \item{**BIC**} {Bayesian Information Criterion, see `?stats::BIC`}
-#'   \item{**R2**} {r-squared value, see [r2()]}
-#'   \item{**R2_adj**} {adjusted r-squared, see [r2()]}
-#'   \item{**RMSE**} {root mean squared error, see [performance_rmse()]}
-#'   \item{**SIGMA**} {residual standard deviation, see [insight::get_sigma()]}
-#'   \item{**LOGLOSS**} {Log-loss, see [performance_logloss()]}
-#'   \item{**SCORE_LOG**} {score of logarithmic proper scoring rule, see [performance_score()]}
-#'   \item{**SCORE_SPHERICAL**} {score of spherical proper scoring rule, see [performance_score()]}
-#'   \item{**PCP**} {percentage of correct predictions, see [performance_pcp()]}
-#' }
+#'
+#' - **AIC**: Akaike's Information Criterion, see `?stats::AIC`
+#' - **AICc**: Second-order (or small sample) AIC with a correction for small sample sizes
+#' - **BIC**: Bayesian Information Criterion, see `?stats::BIC`
+#' - **R2**: r-squared value, see [`r2()`]
+#' - **R2_adj**: adjusted r-squared, see [`r2()`]
+#' - **RMSE**: root mean squared error, see [`performance_rmse()`]
+#' - **SIGMA**: residual standard deviation, see [`insight::get_sigma()`]
+#' - **LOGLOSS**: Log-loss, see [`performance_logloss()`]
+#' - **SCORE_LOG**: score of logarithmic proper scoring rule, see [`performance_score()`]
+#' - **SCORE_SPHERICAL**: score of spherical proper scoring rule, see [`performance_score()`]
+#' - **PCP**: percentage of correct predictions, see [`performance_pcp()`]
 #'
 #' @details `model_performance()` correctly detects transformed response and
 #' returns the "corrected" AIC and BIC value on the original scale. To get back
@@ -45,8 +44,11 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
+  # all available options...
+  all_metrics <- c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
+
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
+    metrics <- all_metrics
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
@@ -56,6 +58,8 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     insight::formula_ok(model)
   }
 
+  # check for valid input
+  metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
   info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
 
   ## TODO remove is.list() once insight 0.8.3 is on CRAN
@@ -68,49 +72,29 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # AIC -------------
   if ("AIC" %in% toupper(metrics)) {
-    out$AIC <- tryCatch(
-      {
-        performance_aic(model, model_info = info)
-      },
-      error = function(e) {
-        NULL
-      }
+    out$AIC <- tryCatch(performance_aic(model, model_info = info),
+      error = function(e) NULL
     )
   }
 
   # AICc -------------
   if ("AICC" %in% toupper(metrics)) {
-    out$AICc <- tryCatch(
-      {
-        performance_aicc(model)
-      },
-      error = function(e) {
-        NULL
-      }
+    out$AICc <- tryCatch(performance_aicc(model),
+      error = function(e) NULL
     )
   }
 
   # BIC -------------
   if ("BIC" %in% toupper(metrics)) {
-    out$BIC <- tryCatch(
-      {
-        .get_BIC(model)
-      },
-      error = function(e) {
-        NULL
-      }
+    out$BIC <- tryCatch(.get_BIC(model),
+      error = function(e) NULL
     )
   }
 
   # R2 -------------
   if (any(c("R2", "R2_ADJ") %in% toupper(metrics))) {
-    R2 <- tryCatch(
-      {
-        r2(model, verbose = verbose, model_info = info)
-      },
-      error = function(e) {
-        NULL
-      }
+    R2 <- tryCatch(r2(model, verbose = verbose, model_info = info),
+      error = function(e) NULL
     )
     if (!is.null(R2)) {
       attrib$r2 <- attributes(R2)
@@ -137,25 +121,15 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # RMSE -------------
   if ("RMSE" %in% toupper(metrics)) {
-    out$RMSE <- tryCatch(
-      {
-        performance_rmse(model, verbose = verbose)
-      },
-      error = function(e) {
-        NULL
-      }
+    out$RMSE <- tryCatch(performance_rmse(model, verbose = verbose),
+      error = function(e) NULL
     )
   }
 
   # SIGMA -------------
   if ("SIGMA" %in% toupper(metrics)) {
-    out$Sigma <- tryCatch(
-      {
-        .get_sigma(model, verbose = verbose)
-      },
-      error = function(e) {
-        NULL
-      }
+    out$Sigma <- tryCatch(.get_sigma(model, verbose = verbose),
+      error = function(e) NULL
     )
   }
 
@@ -178,13 +152,8 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # SCORE -------------
   if (("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))) {
-    .scoring_rules <- tryCatch(
-      {
-        performance_score(model, verbose = verbose)
-      },
-      error = function(e) {
-        NULL
-      }
+    .scoring_rules <- tryCatch(performance_score(model, verbose = verbose),
+      error = function(e) NULL
     )
     if (!is.null(.scoring_rules)) {
       if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
@@ -193,14 +162,12 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
   # PCP -------------
-  if (("PCP" %in% toupper(metrics)) && isTRUE(info$is_binomial) && isFALSE(info$is_multinomial) && isFALSE(info$is_ordinal)) {
-    out$PCP <- tryCatch(
-      {
-        performance_pcp(model, verbose = verbose)$pcp_model
-      },
-      error = function(e) {
-        NULL
-      }
+  if (("PCP" %in% toupper(metrics)) &&
+    isTRUE(info$is_binomial) &&
+    isFALSE(info$is_multinomial) &&
+    isFALSE(info$is_ordinal)) {
+    out$PCP <- tryCatch(performance_pcp(model, verbose = verbose)$pcp_model,
+      error = function(e) NULL
     )
   }
 
@@ -210,7 +177,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   # check if model was actually supported...
   if (nrow(out) == 0 || ncol(out) == 0) {
     if (isTRUE(verbose)) {
-      warning(paste0("Models of class '", class(model)[1], "' are not yet supported."), call. = FALSE)
+      insight::format_warning(paste0("Models of class `", class(model)[1], "` are not yet supported."))
     }
     return(NULL)
   }

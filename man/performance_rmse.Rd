@@ -29,7 +29,7 @@ the absolute fit of the model to the data (difference between observed data
 to model's predicted values). It can be interpreted as the standard
 deviation of the unexplained variance, and is in the same units as the
 response variable. Lower values indicate better model fit.
-\cr \cr
+
 The normalized RMSE is the proportion of the RMSE related to the
 range of the response variable. Hence, lower values indicate
 less residual variance.

@@ -1,8 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
+skip_if_offline()
 
 if (.runThisTest &&
-  requiet("testthat") &&
-  requiet("performance") &&
   requiet("rstanarm") &&
   requiet("httr") &&
   requiet("brms")) {
@@ -35,16 +34,24 @@ if (.runThisTest &&
     set.seed(333)
 
     model <- insight::download_model("brms_1")
-    perf <- model_performance(model)
+    expect_warning(perf <- model_performance(model))
     expect_equal(perf$R2, 0.8262673, tolerance = 1e-3)
     expect_equal(perf$R2_adjusted, 0.7982615, tolerance = 1e-3)
     expect_equal(perf$ELPD, -78.59823, tolerance = 1e-3)
+    expect_equal(colnames(perf), c(
+      "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_adjusted",
+      "RMSE", "Sigma"
+    ))
 
     model <- insight::download_model("brms_mixed_4")
-    perf <- model_performance(model)
+    expect_warning(perf <- model_performance(model))
     expect_equal(perf$R2, 0.954538, tolerance = 1e-3)
     expect_equal(perf$R2_adjusted, 0.9529004, tolerance = 1e-3)
     expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)
+    expect_equal(colnames(perf), c(
+      "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_marginal",
+      "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
+    ))
 
     model <- insight::download_model("brms_ordinal_1")
     perf <- suppressWarnings(model_performance(model))
@@ -53,10 +60,10 @@ if (.runThisTest &&
   })
 }
 
-if (requiet("testthat") &&
-  requiet("performance") &&
+if (
+
   requiet("BayesFactor") &&
-  requiet("rstantools")) {
+    requiet("rstantools")) {
   test_that("model_performance.BFBayesFactor", {
     mod <- ttestBF(mtcars$wt, mu = 3)
     expect_warning(p <- model_performance(mod))
@@ -74,11 +81,11 @@ if (requiet("testthat") &&
     expect_warning(p <- model_performance(mod))
     expect_null(p)
 
-    mod <- proportionBF(y = 15, N = 25, p = .5)
+    mod <- proportionBF(y = 15, N = 25, p = 0.5)
     expect_warning(p <- model_performance(mod))
     expect_null(p)
 
-    t <- c(-.15, 2.39, 2.42, 2.43, -.15, 2.39, 2.42, 2.43)
+    t <- c(-0.15, 2.39, 2.42, 2.43, -0.15, 2.39, 2.42, 2.43)
     N <- c(100, 150, 97, 99, 99, 97, 100, 150)
     mod <- meta.ttestBF(t, N)
     expect_warning(p <- model_performance(mod))

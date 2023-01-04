@@ -26,15 +26,15 @@
 #'   check_zeroinflation(m)
 #' }
 #' @export
-check_zeroinflation <- function(x, tolerance = .05) {
+check_zeroinflation <- function(x, tolerance = 0.05) {
   # check if we have poisson
   model_info <- insight::model_info(x)
   if (!model_info$is_count) {
-    stop("Model must be from Poisson-family.", call. = FALSE)
+    insight::format_error("Model must be from Poisson-family.")
   }
 
   # get actual zero of response
-  obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0)
+  obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0L)
 
   if (obs.zero == 0) {
     insight::print_color("Model has no observed zeros in the response variable.\n", "red")

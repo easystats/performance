@@ -38,7 +38,7 @@ cronbachs_alpha.data.frame <- function(x) {
 
   # we need at least two columns for Cronach's Alpha
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
-    warning("Too few columns in `x` to compute Cronbach's Alpha.", call. = FALSE)
+    insight::format_warning("Too few columns in `x` to compute Cronbach's Alpha.")
     return(NULL)
   }
 
@@ -57,22 +57,27 @@ cronbachs_alpha.matrix <- function(x) {
 
 #' @export
 cronbachs_alpha.parameters_pca <- function(x) {
-  ## TODO change to data_name once parameters 0.10.0 is on CRAN
-  pca_data <- attr(x, "data")
+  # fetch data used for the PCA
+  pca_data <- attributes(x)$dataset
 
+  ## TODO: remove once parameters 0.18.3 or higher on CRAN
+  # backward compatibility to parameters 0.18.2
   if (is.null(pca_data)) {
-    warning("Could not find data frame that was used for the PCA.", call. = FALSE)
-    return(NULL)
+    pca_data <- attributes(x)$data_set
   }
 
-  # fetch data used for the PCA
-  pca_data <- get(pca_data, envir = parent.frame())
+  # if NULL, can we get from environment?
+  if (is.null(pca_data)) {
+    pca_data <- attr(x, "data")
+    if (is.null(pca_data)) {
+      insight::format_warning("Could not find data frame that was used for the PCA.")
+      return(NULL)
+    }
+    pca_data <- get(pca_data, envir = parent.frame())
+  }
 
-  # get columns from parameters_pca-object where loadings are saved
-  loadings_columns <- attributes(x)$loadings_columns
-
-  # find component with max loading for each variable
-  factor_assignment <- apply(x[, loadings_columns], 1, function(i) which.max(abs(i)))
+  # get assignment of columns to extracted components, based on the max loading
+  factor_assignment <- attributes(x)$closest_component
 
   # sort and get unique IDs so we only get data from relevant columns
   unique_factors <- sort(unique(factor_assignment))
@@ -83,6 +88,6 @@ cronbachs_alpha.parameters_pca <- function(x) {
     cronbachs_alpha(pca_data[, as.vector(x$Variable[factor_assignment == i]), drop = FALSE])
   })
 
-  names(cronb) <- colnames(x)[loadings_columns[unique_factors]]
+  names(cronb) <- paste0("PC", unique_factors)
   unlist(cronb)
 }

@@ -15,6 +15,10 @@
       stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE)),
       error = function(e) NULL
     )
+    # when `get_loglikelihood()` does not work, `stats::BIC` sometimes still works (e.g., `fixest`)
+    if (is.null(out)) {
+      out <- tryCatch(stats::BIC(x), error = function(e) NULL)
+    }
   }
 
   out
@@ -27,7 +31,7 @@
   }
 
   # remove missings
-  tmp <- stats::na.omit(x)
+  tmp <- x[!is.na(x)]
 
   # standardize
   tmp <- (tmp - mean(tmp)) / stats::sd(tmp)
@@ -68,8 +72,8 @@
 
 .is_model_valid <- function(model) {
   if (missing(model) || is.null(model)) {
-    stop(insight::format_message(
+    insight::format_error(
       "You must provide a model-object. Argument `model` cannot be missing or `NULL`."
-    ), call. = FALSE)
+    )
   }
 }

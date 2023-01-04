@@ -7,7 +7,7 @@ format.compare_performance <- function(x, digits = 2, ...) {
   }
 
   # format weighted ICs
-  weighted_ics <- grepl("_wt$", colnames(x))
+  weighted_ics <- endsWith(colnames(x), "_wt")
   if (any(weighted_ics)) {
     x[weighted_ics] <- lapply(x[weighted_ics], insight::format_bf, name = NULL, exact = TRUE)
   }

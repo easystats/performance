@@ -104,7 +104,7 @@ check_distribution.default <- function(model) {
 
   class(out) <- unique(c("check_distribution", "see_check_distribution", class(out)))
   attr(out, "data") <- model
-  attr(out, "object_name") <- deparse(substitute(model), width.cutoff = 500)
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(model))
 
   out
 }
@@ -192,6 +192,9 @@ check_distribution.numeric <- function(model) {
 # utilities -----------------------------
 
 .extract_features <- function(x) {
+  # sanity check, remove missings
+  x <- x[!is.na(x)]
+
   data.frame(
     "SD" = stats::sd(x),
     "MAD" = stats::mad(x, constant = 1),

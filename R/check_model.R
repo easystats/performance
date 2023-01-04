@@ -104,11 +104,11 @@ check_model <- function(x, ...) {
 #' @export
 check_model.default <- function(x,
                                 dot_size = 2,
-                                line_size = .8,
+                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
-                                alpha = .2,
-                                dot_alpha = .8,
+                                alpha = 0.2,
+                                dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
@@ -138,7 +138,7 @@ check_model.default <- function(x,
   )
 
   if (is.null(ca)) {
-    stop(paste0("`check_model()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
+    insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
   }
 
   # set default for show_dots, based on "model size"
@@ -167,13 +167,13 @@ check_model.default <- function(x,
 
 #' @export
 print.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "for model diagnositic plots")
+  insight::check_if_installed("see", "for model diagnostic plots")
   NextMethod()
 }
 
 #' @export
 plot.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "for model diagnositic plots")
+  insight::check_if_installed("see", "for model diagnostic plots")
   NextMethod()
 }
 
@@ -187,11 +187,11 @@ plot.check_model <- function(x, ...) {
 #' @export
 check_model.stanreg <- function(x,
                                 dot_size = 2,
-                                line_size = .8,
+                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
-                                alpha = .2,
-                                dot_alpha = .8,
+                                alpha = 0.2,
+                                dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
@@ -222,11 +222,11 @@ check_model.brmsfit <- check_model.stanreg
 #' @export
 check_model.model_fit <- function(x,
                                   dot_size = 2,
-                                  line_size = .8,
+                                  line_size = 0.8,
                                   panel = TRUE,
                                   check = "all",
-                                  alpha = .2,
-                                  dot_alpha = .8,
+                                  alpha = 0.2,
+                                  dot_alpha = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
                                   detrend = FALSE,
@@ -259,7 +259,7 @@ check_model.model_fit <- function(x,
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- .diag_qq(model, verbose = verbose)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$NORM <- .diag_norm(model, verbose = verbose)
   dat$NCV <- .diag_ncv(model, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
@@ -287,7 +287,7 @@ check_model.model_fit <- function(x,
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- .diag_qq(model, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook
@@ -317,7 +317,7 @@ check_model.model_fit <- function(x,
     # check if brms can be loaded
 
     if (!requireNamespace("brms", quietly = TRUE)) {
-      stop("Package `brms` needs to be loaded first!", call. = FALSE)
+      insight::format_error("Package `brms` needs to be loaded first!")
     }
 
     # check if prior sample are available
@@ -325,9 +325,9 @@ check_model.model_fit <- function(x,
     d2 <- brms::prior_samples(model)
 
     if (is.null(d2)) {
-      stop(insight::format_message(
+      insight::format_error(
         "No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."
-      ), call. = FALSE)
+      )
     }
 
     d1 <- brms::posterior_samples(model)
@@ -339,7 +339,7 @@ check_model.model_fit <- function(x,
   } else if (inherits(model, c("stanreg", "stanfit"))) {
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
-      stop("Package `rstanarm` needs to be loaded first!", call. = FALSE)
+      insight::format_error("Package `rstanarm` needs to be loaded first!")
     }
 
 

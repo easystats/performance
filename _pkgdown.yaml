@@ -1,0 +1,45 @@
+url: https://easystats.github.io/performance/
+
+template:
+  bootstrap: 5
+  package: easystatstemplate
+
+reference:
+  - title: "Comprehensive Summaries"
+    contents:
+      - starts_with("model_performance")
+
+  - title: "Check Model Assumptions or Data Properties"
+    contents:
+      - binned_residuals
+      - starts_with("check_")
+
+  - title: "Check Model Performance or Quality"
+    contents:
+      - starts_with("performance_")
+      - icc
+      - looic
+
+  - title: "Check Items and Scales"
+    contents:
+      - check_itemscale
+      - cronbachs_alpha
+      - starts_with("item_")
+
+  - title: "Comparing and Testing Models"
+    contents:
+      - compare_performance
+      - starts_with("test_")
+
+  - title: "R2 Functions"
+    contents:
+      - starts_with("r2")
+
+  - title: "Table Formatting"
+    contents:
+      - display.performance_model
+      - print_md
+
+  - title: "Sample Data"
+    contents:
+      - classify_distribution

@@ -20,7 +20,7 @@
 #'    \cr \cr
 #'    \dQuote{Ideally, the average inter-item correlation for a set of
 #'    items should be between .20 and .40, suggesting that while the
-#'    items are reasonably homogenous, they do contain sufficiently
+#'    items are reasonably homogeneous, they do contain sufficiently
 #'    unique variance so as to not be isomorphic with each other.
 #'    When values are lower than .20, then the items may not be
 #'    representative of the same content domain. If values are higher than

@@ -89,6 +89,10 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
       stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
       error = function(e) NULL
     )
+    # when `get_loglikelihood()` does not work, `stats::AIC` sometimes still works (e.g., `fixest`)
+    if (is.null(aic)) {
+      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
+    }
   }
   aic
 }
@@ -288,7 +292,7 @@ performance_aicc.rma <- function(x, ...) {
       } else if (trans == "expm1") {
         .weighted_sum((insight::get_response(x) - 1), w = model_weights)
       } else if (trans == "sqrt") {
-        .weighted_sum(log(.5 / sqrt(insight::get_response(x))), w = model_weights)
+        .weighted_sum(log(0.5 / sqrt(insight::get_response(x))), w = model_weights)
       } else {
         .ll_jacobian_adjustment(x, model_weights)
       }
@@ -308,7 +312,7 @@ performance_aicc.rma <- function(x, ...) {
       trans <- insight::get_transformation(model)$transformation
       .weighted_sum(log(
         diag(attr(with(
-          insight::get_data(model),
+          insight::get_data(model, verbose = FALSE),
           stats::numericDeriv(
             expr = quote(trans(
               get(insight::find_response(model))

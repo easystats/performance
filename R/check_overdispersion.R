@@ -44,28 +44,28 @@
 #' negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
 #' }
 #'
-#' @references \itemize{
-#'  \item Bolker B et al. (2017):
+#' @references
+#'
+#' - Bolker B et al. (2017):
 #'  [GLMM FAQ.](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html)
-#'  \item Gelman, A., and Hill, J. (2007). Data analysis using regression and
+#'
+#' - Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
-#'  }
 #'
+#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)
 #'
-#' @examples
-#' if (require("glmmTMB")) {
-#'   data(Salamanders)
-#'   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#'   check_overdispersion(m)
+#' library(glmmTMB)
+#' data(Salamanders)
+#' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+#' check_overdispersion(m)
 #'
-#'   m <- glmmTMB(
-#'     count ~ mined + spp + (1 | site),
-#'     family = poisson,
-#'     data = Salamanders
-#'   )
-#'   check_overdispersion(m)
-#' }
+#' m <- glmmTMB(
+#'   count ~ mined + spp + (1 | site),
+#'   family = poisson,
+#'   data = Salamanders
+#' )
+#' check_overdispersion(m)
 #' @export
 check_overdispersion <- function(x, ...) {
   UseMethod("check_overdispersion")
@@ -79,9 +79,9 @@ check_overdispersion <- function(x, ...) {
 check_overdispersion.default <- function(x, ...) {
   # check for valid input
   .is_model_valid(x)
-  stop(insight::format_message(
-    paste0("'check_overdisperion()' not yet implemented for models of class '", class(x)[1], "'.")
-  ), call. = FALSE)
+  insight::format_error(
+    paste0("`check_overdisperion()` not yet implemented for models of class `", class(x)[1], "`.")
+  )
 }
 
 
@@ -90,7 +90,7 @@ check_overdispersion.default <- function(x, ...) {
 
 #' @export
 plot.check_overdisp <- function(x, ...) {
-  insight::check_if_installed("see", "for overdispersion plots")
+  insight::check_if_installed(c("see", "graphics"), "for overdispersion plots")
   obj_name <- attr(x, "object_name", exact = TRUE)
   model <- NULL
 
@@ -111,7 +111,7 @@ plot.check_overdisp <- function(x, ...) {
     attr(x, "colors") <- list(...)$colors
     attr(x, "line_size") <- list(...)$size_line
     attr(x, "overdisp_type") <- list(...)$plot_type
-    plot(x, ...)
+    graphics::plot(x, ...)
   }
 }
 
@@ -123,7 +123,7 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
 
   x$p_value <- pval <- round(x$p_value, digits = digits)
-  if (x$p_value < .001) x$p_value <- "< 0.001"
+  if (x$p_value < 0.001) x$p_value <- "< 0.001"
 
   maxlen <- max(
     nchar(x$dispersion_ratio),
@@ -154,14 +154,14 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   # check if we have poisson
   info <- insight::model_info(x)
   if (!info$is_count && !info$is_binomial) {
-    stop(insight::format_message(
+    insight::format_error(
       "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."
-      ), call. = FALSE)
+    )
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    stop("Overdispersion checks cannot be used for Bernoulli models.", call. = FALSE)
+    insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
   }
 
   if (info$is_binomial) {
@@ -186,7 +186,7 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
 
   out
 }
@@ -225,14 +225,14 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   # check if we have poisson or binomial
   info <- insight::model_info(x)
   if (!info$is_count && !info$is_binomial) {
-    stop(insight::format_message(
+    insight::format_error(
       "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."
-      ), call. = FALSE)
+    )
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    stop("Overdispersion checks cannot be used for Bernoulli models.", call. = FALSE)
+    insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
   }
 
   rdf <- stats::df.residual(x)
@@ -243,10 +243,10 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
     pval <- NA
     rp <- NA
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion.",
-        "Only the visual inspection using 'plot(check_overdispersion(model))' is possible."
-      ), call. = FALSE)
+        "Only the visual inspection using `plot(check_overdispersion(model))` is possible."
+      )
     }
   } else {
     Pearson.chisq <- sum(rp^2)
@@ -262,7 +262,7 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
 
   out
 }

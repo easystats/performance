@@ -1,3 +1,16 @@
+rhalfcauchy <- function(n, location, scale) {
+  r <- vector(length = n)
+  for (i in 1:n) {
+    r_1 <- rcauchy(1, location, scale)
+    while (r_1 < 0) {
+      r_1 <- rcauchy(1, location, scale)
+    }
+    r[i] <- r_1
+  }
+  return(r)
+}
+
+
 generate_distribution <- function(family = "normal",
                                   size = 1000,
                                   location = 0,
@@ -24,6 +37,12 @@ generate_distribution <- function(family = "normal",
     rf(size, location, scale + 0.1)
   } else if (family == "gamma") {
     rgamma(size, location, scale)
+  } else if (family == "inverse-gamma") {
+    actuar::rinvgamma(size, location, scale)
+  } else if (family == "cauchy") {
+    rcauchy(size, location, scale)
+  } else if (family == "half-cauchy") {
+    rhalfcauchy(size, location, scale)
   } else if (family == "lognormal") {
     rlnorm(size, location, scale)
   } else if (family == "poisson") {
@@ -53,9 +72,9 @@ generate_distribution <- function(family = "normal",
 
 df <- data.frame()
 distrs <- c(
-  "normal", "beta", "chi", "F", "exponential", "gamma", "lognormal",
-  "poisson", "uniform", "negative binomial", "bernoulli",
-  "poisson (zero-infl.)", "neg. binomial (zero-infl.)",
+  "normal", "beta", "chi", "F", "exponential", "gamma", "inverse-gamma",
+  "lognormal", "poisson", "uniform", "negative binomial", "bernoulli", "cauchy",
+  "half-cauchy", "poisson (zero-infl.)", "neg. binomial (zero-infl.)",
   "weibull", "beta-binomial", "binomial", "pareto", "tweedie"
 )
 
@@ -75,7 +94,7 @@ distrs <- c(
 
 pb <- txtProgressBar(min = 0, max = length(distrs), style = 3)
 
-for (di in 1:length(distrs)) {
+for (di in seq_along(distrs)) {
   setTxtProgressBar(pb, di - 1)
   distribution <- distrs[di]
   cat("\n\n", sprintf("Distribution %i of %i:", di, length(distrs)), distribution, "\n")
@@ -126,8 +145,8 @@ for (di in 1:length(distrs)) {
         "Range_SD" = diff(range(x)) / sd(x),
         "Range" = diff(range(x)),
         "IQR" = stats::IQR(x),
-        "Skewness" = as.numeric(parameters::skewness(x)),
-        "Kurtosis" = as.numeric(parameters::kurtosis(x)),
+        "Skewness" = as.numeric(datawizard::skewness(x)),
+        "Kurtosis" = as.numeric(datawizard::kurtosis(x)),
         "Uniques" = length(unique(x)) / length(x),
         "N_Uniques" = length(unique(x)),
         "Min" = min(x),

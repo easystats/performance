@@ -44,6 +44,13 @@ Once you have downloaded the package, you can then load it using:
 library("performance")
 ```
 
+> **Tip**
+>
+> Instead of `library(performance)`, use `library(easystats)`. This will
+> make all features of the easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
+
 ## Citation
 
 To cite performance in publications use:
@@ -72,10 +79,6 @@ citation("performance")
 ```
 
 ## Documentation
-
-[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
-[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
-[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html)
 
 There is a nice introduction into the package on
 [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
@@ -136,11 +139,7 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(
-  Petal.Length ~ Petal.Width + (1 | Species),
-  data = iris,
-  cores = 4
-)
+model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
@@ -259,16 +258,12 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-  filter_group <- sleepstudy$mygrp == i
-  sleepstudy$mysubgrp[filter_group] <-
-    sample(1:30, size = sum(filter_group), replace = TRUE)
+    filter_group <- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(
-  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-  data = sleepstudy
-)
+model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
 
 check_singularity(model)
 #> [1] TRUE
@@ -322,9 +317,9 @@ m1 <- lm(mpg ~ wt + cyl, data = mtcars)
 model_performance(m1)
 #> # Indices of model performance
 #> 
-#> AIC     |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
-#> -----------------------------------------------------
-#> 156.010 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568
+#> AIC     |    AICc |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
+#> ---------------------------------------------------------------
+#> 156.010 | 157.492 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568
 ```
 
 #### Logistic regression
@@ -334,9 +329,9 @@ m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 model_performance(m2)
 #> # Indices of model performance
 #> 
-#> AIC    |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP
-#> --------------------------------------------------------------------------------------------
-#> 31.298 | 35.695 |     0.478 | 0.359 | 0.934 |    0.395 |   -14.903 |           0.095 | 0.743
+#> AIC    |   AICc |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP
+#> -----------------------------------------------------------------------------------------------------
+#> 31.298 | 32.155 | 35.695 |     0.478 | 0.359 | 0.934 |    0.395 |   -14.903 |           0.095 | 0.743
 ```
 
 #### Linear mixed model
@@ -367,12 +362,12 @@ m4 <- glm(counts ~ outcome + treatment, family = poisson())
 compare_performance(m1, m2, m3, m4)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name |   Model |      AIC | AIC weights |      BIC | BIC weights |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP |     AICc | AICc weights | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
-#> -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#> m1   |      lm |  156.010 |    8.30e-28 |  161.873 |    3.99e-28 |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |          |              |            |            |       |                
-#> m2   |     glm |   31.298 |       1.000 |   35.695 |       1.000 |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |          |              |            |            |       |                
-#> m3   | lmerMod | 1763.986 |    0.00e+00 | 1783.144 |    0.00e+00 | 23.438 | 25.592 |           |                 |       |           |           |          |       | 1764.471 |              |      0.799 |      0.279 | 0.722 |                
-#> m4   |     glm |   56.761 |    2.96e-06 |   57.747 |    1.63e-05 |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |          |              |            |            |       |           0.657
+#> Name |   Model |  AIC (weights) | AICc (weights) |  BIC (weights) |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
+#> ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> m1   |      lm |  156.0 (<.001) |  157.5 (<.001) |  161.9 (<.001) |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                
+#> m2   |     glm |   31.3 (>.999) |   32.2 (>.999) |   35.7 (>.999) |  0.359 |  0.934 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                
+#> m3   | lmerMod | 1764.0 (<.001) | 1764.5 (<.001) | 1783.1 (<.001) | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                
+#> m4   |     glm |   56.8 (<.001) |   76.8 (<.001) |   57.7 (<.001) |  3.043 |  1.132 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657
 ```
 
 #### General index of model performance
@@ -385,12 +380,12 @@ of model performance and sort the models from the best one to the worse.
 compare_performance(m1, m2, m3, m4, rank = TRUE)
 #> # Comparison of Model Performance Indices
 #> 
-#> Name |   Model |   RMSE |  Sigma | AIC weights | BIC weights | Performance-Score
-#> --------------------------------------------------------------------------------
-#> m2   |     glm |  0.359 |  0.934 |       1.000 |       1.000 |           100.00%
-#> m4   |     glm |  3.043 |  1.132 |    2.96e-06 |    1.63e-05 |            46.89%
-#> m1   |      lm |  2.444 |  2.568 |    8.30e-28 |    3.99e-28 |            46.09%
-#> m3   | lmerMod | 23.438 | 25.592 |    0.00e+00 |    0.00e+00 |             0.00%
+#> Name |   Model |   RMSE |  Sigma | AIC weights | AICc weights | BIC weights | Performance-Score
+#> -----------------------------------------------------------------------------------------------
+#> m2   |     glm |  0.359 |  0.934 |       1.000 |        1.000 |       1.000 |           100.00%
+#> m4   |     glm |  3.043 |  1.132 |    2.96e-06 |     2.06e-10 |    1.63e-05 |            37.51%
+#> m1   |      lm |  2.444 |  2.568 |    8.30e-28 |     6.07e-28 |    3.99e-28 |            36.87%
+#> m3   | lmerMod | 23.438 | 25.592 |    0.00e+00 |     0.00e+00 |    0.00e+00 |             0.00%
 ```
 
 #### Visualisation of indices of models’ performance
@@ -480,7 +475,6 @@ ed. Quantitative Methodology Series. New York: Routledge.
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
 Ecology and Evolution* 5 (9): 944–46.
-<https://doi.org/10.1111/2041-210X.12225>.
 
 </div>
 

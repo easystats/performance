@@ -1,4 +1,75 @@
-# performance 0.9.x
+# performance 0.10.1
+
+## General
+
+* Minor improvements to the documentation.
+
+## Changes to functions
+
+* `icc()` and `r2_nakagawa()` get `ci` and `iterations` arguments, to compute
+  confidence intervals for the ICC resp. R2, based on bootstrapped sampling.
+
+* `r2()` gets `ci`, to compute (analytical) confidence intervals for the R2.
+
+* `check_predictions()` accepts a `bw` argument (smoothing bandwidth), which is
+  passed down to the `plot()` methods density-estimation. The default for the
+  smoothing bandwidth `bw` has changed from `"nrd0"` to `"nrd"`, which seems
+  to produce better fitting plots for non-gaussian models.
+  
+* The model underlying `check_distribution()` was now also trained to detect
+  cauchy, half-cauchy and inverse-gamma distributions.
+
+* `model_performance()` now allows to include the ICC for Bayesian models.
+
+## Bug fixes
+
+* `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
+
+* Fixed issues in `check_model()` for models with convergence issues that lead
+  to `NA` values in residuals.
+  
+* Fixed bug in `check_outliers` whereby passing multiple elements to the 
+  threshold list generated an error (#496).
+
+* `test_wald()` now warns the user about inappropriate F test and calls
+  `test_likelihoodratio()` for binomial models.
+
+# performance 0.10.0
+
+## Breaking Change
+
+* The minimum needed R version has been bumped to `3.6`.
+
+* The alias `performance_lrt()` was removed. Use `test_lrt()` resp.
+  `test_likelihoodratio()`.
+
+## New functions
+
+* Following functions were moved from package *parameters* to *performance*:
+  `check_sphericity_bartlett()`, `check_kmo()`, `check_factorstructure()` and
+  `check_clusterstructure()`.
+
+## Changes to functions
+
+* `check_normality()`, `check_homogeneity()` and `check_symmetry()` now works
+  for `htest` objects.
+
+* Print method for `check_outliers()` changed significantly: now states the 
+  methods, thresholds, and variables used, reports outliers per variable (for 
+  univariate methods) as well as any observation flagged for several 
+  variables/methods. Includes a new optional ID argument to add along the 
+  row number in the output (@rempsyc #443).
+
+* `check_outliers()` now uses more conventional outlier thresholds. The `IQR` 
+  and confidence interval methods now gain improved distance scores that
+  are continuous instead of discrete.
+  
+## Bug Fixes
+
+* Fixed wrong *z*-score values when using a vector instead of a data frame in
+  `check_outliers()` (#476).
+
+* Fixed `cronbachs_alpha()` for objects from `parameters::principal_component()`.
 
 # performance 0.9.2
 

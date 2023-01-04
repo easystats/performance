@@ -91,25 +91,24 @@
 #' }
 #'
 #' @references
-#'   \itemize{
-#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
-#'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-#'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#'   \item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
-#'   An introduction to statistical learning: with applications in R. New York:
-#'   Springer.
+#' - Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
+#' Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+#' Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#'   \item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-#'   Inflation Factors in Regression Models Using Latent Variable Modeling
-#'   Methods. Educational and Psychological Measurement, 79(5), 874–882.
+#' - James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
+#' An introduction to statistical learning: with applications in R. New York:
+#' Springer.
 #'
-#'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
-#'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#' - Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
+#' Inflation Factors in Regression Models Using Latent Variable Modeling
+#' Methods. Educational and Psychological Measurement, 79(5), 874–882.
 #'
-#'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#'   [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
-#'   }
+#' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
+#' examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#'
+#' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
+#' [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
 #'
 #' @note The code to compute the confidence intervals for the VIF and tolerance
 #' values was adapted from the Appendix B from the Marcoulides et al. paper.
@@ -223,16 +222,16 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
   f <- stats::as.formula(f)
 
-  d <- insight::get_data(x, verbose = verbose)
+  d <- insight::get_data(x, verbose = FALSE)
   is_num <- sapply(d, is.numeric)
   d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
   is_fac <- !is_num
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
   if (verbose) {
-    message(insight::format_message(
-      "All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."
-    ))
+    insight::format_alert(
+      "All predictors have been centered (factors with `contr.sum()`, numerics with `scale()`)."
+    )
   }
 
   check_collinearity(suppressWarnings(stats::lm(
@@ -245,11 +244,11 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
 #' @export
 check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   if (!insight::is_model(x)) {
-    stop("Collinearity only applicable to regression models.", call. = FALSE)
+    insight::format_error("Collinearity only applicable to regression models.")
   }
 
   f <- insight::find_formula(x)[[1]]
-  d <- insight::get_data(x)
+  d <- insight::get_data(x, verbose = FALSE)
   check_collinearity(stats::lm(f, d))
 }
 
@@ -402,9 +401,9 @@ check_collinearity.zerocount <- function(x,
   # any assignment found?
   if (is.null(assign) || all(is.na(assign))) {
     if (verbose) {
-      warning(insight::format_message(
+      insight::format_warning(
         sprintf("Could not extract model terms for the %s component of the model.", component)
-      ), call. = FALSE)
+      )
     }
     return(NULL)
   }
@@ -414,9 +413,9 @@ check_collinearity.zerocount <- function(x,
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     assign <- assign[-attributes(v)$na_columns_index]
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Model matrix is rank deficient. VIFs may not be sensible."
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -426,7 +425,7 @@ check_collinearity.zerocount <- function(x,
     assign <- assign[-1]
   } else {
     if (isTRUE(verbose)) {
-      warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
+      insight::format_warning("Model has no intercept. VIFs may not be sensible.")
     }
   }
 
@@ -446,9 +445,9 @@ check_collinearity.zerocount <- function(x,
 
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)
-      ), call. = FALSE)
+      )
     }
     return(NULL)
   }
@@ -479,9 +478,9 @@ check_collinearity.zerocount <- function(x,
   # check for interactions, VIF might be inflated...
   if (!is.null(insight::find_interactions(x)) && any(result > 10)) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(
+      insight::format_warning(
         "Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms."
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -583,7 +582,7 @@ check_collinearity.zerocount <- function(x,
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = verbose)[, pred, drop = FALSE]
+  dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
 
   parms <- unlist(lapply(seq_along(pred), function(i) {
     p <- pred[i]
@@ -615,7 +614,7 @@ check_collinearity.zerocount <- function(x,
   tryCatch(
     {
       rhs <- insight::find_formula(x)[[component]]
-      d <- insight::get_data(x, verbose = verbose)
+      d <- insight::get_data(x, verbose = FALSE)
       attr(insight::get_modelmatrix(rhs, data = d), "assign")
     },
     error = function(e) {

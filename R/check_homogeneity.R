@@ -75,10 +75,10 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   }
 
   if (method == "fligner") {
-    r <- stats::fligner.test(f, data = insight::get_data(x))
+    r <- stats::fligner.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "bartlett") {
-    r <- stats::bartlett.test(f, data = insight::get_data(x))
+    r <- stats::bartlett.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "levene") {
     insight::check_if_installed("car")
@@ -94,7 +94,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   )
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   attr(p.val, "method") <- method.string
   class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))
 
@@ -136,11 +136,11 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   insight::check_if_installed("car")
 
   if (tolower(method) != "levene") {
-    message("Only Levene's test for homogeneity supported for afex_aov")
+    insight::format_alert("Only Levene's test for homogeneity supported for `afex_aov()`.")
   }
 
   if (length(attr(x, "between")) == 0) {
-    stop("Levene test is only aplicable to ANOVAs with between-subjects factors.", call. = FALSE)
+    insight::format_error("Levene test is only aplicable to ANOVAs with between-subjects factors.")
   }
 
   data <- x$data$long # Use this to also get id column
@@ -153,9 +153,9 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   colnames(ag_data)[length(c(between, id)) + 1] <- dv
 
   if (any(is_covar)) {
-    warning(insight::format_message(
+    insight::format_warning(
       "Levene's test is not appropriate with quantitative explanatory variables. Testing assumption of homogeneity among factor groups only."
-    ), call. = FALSE)
+    )
     # ## TODO maybe add as option?
     # warning("Testing assumption of homogeneity on residualzied data among factor groups only.", call. = FALSE)
     # ag_data[dv] <- stats::residuals(stats::lm(ag_data[,dv] ~ as.matrix(ag_data[between[is_covar]])))
@@ -167,7 +167,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
 
   p.val <- test[1, "Pr(>F)"]
 
-  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   attr(p.val, "method") <- "Levene's Test"
   class(p.val) <- unique(c("check_homogeneity", "see_check_homogeneity", class(p.val)))
 

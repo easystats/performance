@@ -20,7 +20,7 @@ test_wald.default <- function(...) {
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_wald(objects)
   } else {
-    stop("The models cannot be compared for some reason :/", call. = FALSE)
+    insight::format_error("The models cannot be compared for some reason :/")
   }
 }
 
@@ -28,7 +28,16 @@ test_wald.default <- function(...) {
 
 #' @export
 test_wald.ListNestedRegressions <- function(objects, ...) {
-  out <- .test_wald(objects, test = "F")
+  # for binomial models, only chisq-test
+  if (all(attributes(objects)$is_binomial)) {
+    insight::format_warning(
+      "Using Wald's F-Test is inappropriate for models with `binomial` family.",
+      "Running Likelihood Ratio Test (LRT) now."
+    )
+    return(test_likelihoodratio(objects))
+  } else {
+    out <- .test_wald(objects, test = "F")
+  }
 
   attr(out, "is_nested") <- TRUE
   class(out) <- c("test_performance", class(out))
@@ -38,7 +47,7 @@ test_wald.ListNestedRegressions <- function(objects, ...) {
 
 #' @export
 test_wald.ListNonNestedRegressions <- function(objects, ...) {
-  stop("Wald tests cannot be run on non-nested models. Try `test_vuong()`.", call. = FALSE)
+  insight::format_error("Wald tests cannot be run on non-nested models. Try `test_vuong()`.")
 }
 
 # Helpers --------------------------
@@ -60,7 +69,7 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
 
   out <- data.frame(
     df = dfs,
-    df_diff = dfs_diff,
+    df_diff = round(dfs_diff),
     stringsAsFactors = FALSE
   )
 

@@ -25,7 +25,7 @@
 #' @export
 item_difficulty <- function(x) {
   d <- sapply(x, function(.x) {
-    .x <- stats::na.omit(.x)
+    .x <- .x[!is.na(.x)]
     round(sum(.x) / (max(.x) * length(.x)), 2)
   })
 
@@ -59,7 +59,7 @@ print.item_difficulty <- function(x, ...) {
   insight::print_color("# Item Difficulty\n\n", "blue")
   insight::print_color(sprintf("  %*s  ideal\n", spaces + 10, "difficulty"), "red")
 
-  for (i in 1:length(x$item)) {
+  for (i in seq_along(x$item)) {
     cat(sprintf("  %*s      %.2f   %.2f\n", spaces, x$item[i], x$difficulty[i], x$ideal[i]))
   }
   invisible(x)

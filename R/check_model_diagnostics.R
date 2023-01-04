@@ -13,10 +13,15 @@
   dat <- datawizard::data_rename(
     dat,
     c("Term", "VIF", "SE_factor", "Component"),
-    c("x", "y", "se", "facet")
+    c("x", "y", "se", "facet"),
+    verbose = FALSE
   )
 
-  dat <- datawizard::data_select(dat, c("x", "y", "facet", "group"))
+  dat <- datawizard::data_select(
+    dat,
+    c("x", "y", "facet", "group"),
+    verbose = FALSE
+  )
 
   if (insight::n_unique(dat$facet) <= 1) {
     dat$facet <- NULL
@@ -32,38 +37,46 @@
 
 .diag_qq <- function(model, verbose = TRUE) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB", "gam"))) {
-    res_ <- sort(stats::residuals(model), na.last = NA)
+    res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
-    res_ <- sort(stats::residuals(model, type = "pearson"), na.last = NA)
+    res_ <- stats::residuals(model, type = "pearson")
   } else if (inherits(model, "glm")) {
-    res_ <- sort(stats::rstandard(model, type = "pearson"), na.last = NA)
+    res_ <- stats::rstandard(model, type = "pearson")
   } else {
-    res_ <- tryCatch(sort(stats::rstudent(model), na.last = NA),
-      error = function(e) NULL
-    )
+    res_ <- tryCatch(stats::rstudent(model), error = function(e) NULL)
     if (is.null(res_)) {
-      res_ <- tryCatch(sort(stats::residuals(model), na.last = NA),
-        error = function(e) NULL
-      )
+      res_ <- tryCatch(stats::residuals(model), error = function(e) NULL)
     }
   }
 
   if (is.null(res_)) {
     if (verbose) {
-      message(insight::format_message(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class '%s'.", class(model)[1])))
+      insight::format_alert(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class `%s`.", class(model)[1]))
     }
     return(NULL)
   }
 
-  fitted_ <- sort(stats::fitted(model), na.last = NA)
-  stats::na.omit(data.frame(x = fitted_, y = res_))
+  fitted_ <- stats::fitted(model)
+
+  # sanity check, sometime either residuals or fitted can contain NA, see #488
+  if (anyNA(res_) || anyNA(fitted_)) {
+    # drop NA and make sure both fitted and residuals match
+    non_na <- !is.na(fitted_) & !is.na(res_)
+    fitted_ <- fitted_[non_na]
+    res_ <- res_[non_na]
+  }
+
+  res_ <- sort(res_, na.last = NA)
+  fitted_ <- sort(fitted_, na.last = NA)
+
+  data.frame(x = fitted_, y = res_)
 }
 
 
 
 # prepare data for random effects QQ plot ----------------------------------
 
-.diag_reqq <- function(model, level = .95, model_info, verbose = TRUE) {
+.diag_reqq <- function(model, level = 0.95, model_info, verbose = TRUE) {
   # check if we have mixed model
   if (!model_info$is_mixed) {
     return(NULL)
@@ -102,7 +115,7 @@
 
   if (is.null(se)) {
     if (verbose) {
-      message(insight::format_message("Could not compute standard errors from random effects for diagnostic plot."))
+      insight::format_alert("Could not compute standard errors from random effects for diagnostic plot.")
     }
     return(NULL)
   }
@@ -134,7 +147,7 @@
   r <- try(stats::residuals(model), silent = TRUE)
 
   if (inherits(r, "try-error")) {
-    message(insight::format_message(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1])))
+    insight::format_alert(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
     return(NULL)
   }
 
@@ -151,11 +164,11 @@
   s <- summary(model)
 
   if (inherits(model, "lm", which = TRUE) == 1) {
-    cook_levels <- round(stats::qf(.5, s$fstatistic[2], s$fstatistic[3]), 2)
+    cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
   } else if (!is.null(threshold)) {
     cook_levels <- threshold
   } else {
-    cook_levels <- c(.5, 1)
+    cook_levels <- c(0.5, 1)
   }
 
   n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))

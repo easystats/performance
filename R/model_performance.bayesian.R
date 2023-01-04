@@ -14,38 +14,31 @@
 #'   `metrics`).
 #'
 #' @details Depending on `model`, the following indices are computed:
-#' \itemize{
-#'   \item{**ELPD**} {expected log predictive density. Larger ELPD values
-#'   mean better fit. See [looic()].}
 #'
-#'   \item{**LOOIC**} {leave-one-out cross-validation (LOO) information
-#'   criterion. Lower LOOIC values mean better fit. See [looic()].}
+#'   - **ELPD**: expected log predictive density. Larger ELPD values
+#'   mean better fit. See [looic()].
 #'
-#'   \item{**WAIC**} {widely applicable information criterion. Lower WAIC
-#'   values mean better fit. See `?loo::waic`.}
+#'   - **LOOIC**: leave-one-out cross-validation (LOO) information
+#'   criterion. Lower LOOIC values mean better fit. See [looic()].
 #'
-#'   \item{**R2**} {r-squared value, see [r2_bayes()].}
+#'   - **WAIC**: widely applicable information criterion. Lower WAIC
+#'   values mean better fit. See `?loo::waic`.
 #'
-#'   \item{**R2_adjusted**} {LOO-adjusted r-squared, see
-#'   [r2_loo()].}
+#'   - **R2**: r-squared value, see [r2_bayes()].
 #'
-#'   \item{**RMSE**} {root mean squared error, see
-#'   [performance_rmse()].}
+#'   - **R2_adjusted**: LOO-adjusted r-squared, see [r2_loo()].
 #'
-#'   \item{**SIGMA**} {residual standard deviation, see
-#'   [insight::get_sigma()].}
+#'   - **RMSE**: root mean squared error, see [performance_rmse()].
 #'
-#'   \item{**LOGLOSS**} {Log-loss, see [performance_logloss()].}
+#'   - **SIGMA**: residual standard deviation, see [insight::get_sigma()].
 #'
-#'   \item{**SCORE_LOG**} {score of logarithmic proper scoring rule, see
-#'   [performance_score()].}
+#'   - **LOGLOSS**: Log-loss, see [performance_logloss()].
 #'
-#'   \item{**SCORE_SPHERICAL**} {score of spherical proper scoring rule,
-#'   see [performance_score()].}
+#'   - **SCORE_LOG**: score of logarithmic proper scoring rule, see [performance_score()].
 #'
-#'   \item{**PCP**} {percentage of correct predictions, see
-#'   [performance_pcp()].}
-#' }
+#'   - **SCORE_SPHERICAL**: score of spherical proper scoring rule, see [performance_score()].
+#'
+#'   - **PCP**: percentage of correct predictions, see [performance_pcp()].
 #'
 #' @examples
 #' \dontrun{
@@ -83,7 +76,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
-  all_metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
+  all_metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
 
   if (all(metrics == "all")) {
     metrics <- all_metrics
@@ -98,9 +91,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   if (algorithm$algorithm != "sampling") {
     if (verbose) {
-      warning(insight::format_message(
-        "`model_performance()` only possible for models fit using the 'sampling' algorithm."
-      ), call. = FALSE)
+      insight::format_warning(
+        "`model_performance()` only possible for models fit using the \"sampling\" algorithm."
+      )
     }
     return(NULL)
   }
@@ -150,12 +143,8 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   # LOO-R2 ------------------
   if (("R2_ADJUSTED" %in% metrics || "R2_LOO" %in% metrics) && mi$is_linear) {
     r2_adj <- tryCatch(
-      {
-        suppressWarnings(r2_loo(model, verbose = verbose))
-      },
-      error = function(e) {
-        NULL
-      }
+      suppressWarnings(r2_loo(model, verbose = verbose)),
+      error = function(e) NULL
     )
     if (!is.null(r2_adj)) {
       # save attributes
@@ -171,9 +160,17 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     }
   }
 
-  if (length(attri_r2) > 0) {
+  if (length(attri_r2) > 0L) {
     attri$r2 <- attri_r2
     attri$r2_bayes <- attri_r2
+  }
+
+  # ICC ------------------
+  if ("ICC" %in% metrics) {
+    out$ICC <- tryCatch(
+      suppressWarnings(icc(model, verbose = verbose)$ICC_adjusted),
+      error = function(e) NULL
+    )
   }
 
   # RMSE ------------------
@@ -263,7 +260,7 @@ model_performance.BFBayesFactor <- function(model,
 
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
-    warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.", call. = FALSE)
+    insight::format_warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.")
     return(NULL)
   }
 

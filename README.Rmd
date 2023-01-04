@@ -1,6 +1,6 @@
 ---
 output: github_document
-bibliography: paper/paper.bib
+bibliography: paper.bib
 ---
 
 # performance <img src='man/figures/logo.png' align="right" height="139" />
@@ -53,6 +53,12 @@ Once you have downloaded the package, you can then load it using:
 library("performance")
 ```
 
+> **Tip**
+>
+> Instead of `library(performance)`, use `library(easystats)`. This will make all features of the  easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
+
 ## Citation
 
 To cite performance in publications use:
@@ -62,10 +68,6 @@ citation("performance")
 ```
 
 ## Documentation
-
-[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
-[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
-[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html) 
 
 There is a nice introduction into the package on [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
 

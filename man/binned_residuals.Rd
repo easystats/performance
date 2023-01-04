@@ -58,7 +58,7 @@ result
 as.data.frame(result)
 
 # plot
-if (require("see") && getRversion() >= "3.6.0") {
+if (require("see")) {
   plot(result)
 }
 }

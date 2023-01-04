@@ -44,17 +44,19 @@
 #' - Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., and Gelman, A. (2019).
 #'   Visualization in Bayesian workflow. Journal of the Royal Statistical Society:
 #'   Series A (Statistics in Society), 182(2), 389–402. https://doi.org/10.1111/rssa.12378
+#'
 #' - Gelman, A., and Hill, J. (2007). Data analysis using regression and
 #'   multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
+#'
 #' - Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and
 #'   Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
-#'- Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
+#' - Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
 #'   Cambridge University Press.
 #'
 #' @examples
 #' library(performance)
 #' model <- lm(mpg ~ disp, data = mtcars)
-#' if (require("see") && getRversion() >= "3.5.0") {
+#' if (require("see")) {
 #'   check_predictions(model)
 #' }
 #' @export
@@ -114,7 +116,7 @@ check_predictions.BFBayesFactor <- function(object,
   yrep <- t(yrep)
 
   out <- as.data.frame(yrep)
-  colnames(out) <- paste0("sim_", seq(ncol(out)))
+  colnames(out) <- paste0("sim_", seq_len(ncol(out)))
   out$y <- y
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
@@ -122,6 +124,13 @@ check_predictions.BFBayesFactor <- function(object,
 }
 
 pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
+
+
+#' @export
+check_predictions.lme <- function(object, ...) {
+  insight::format_error("`check_predictions()` does currently not work for models of class `lme`.")
+}
+
 
 
 # pp-check functions -------------------------------------
@@ -137,13 +146,8 @@ pp_check.lm <- function(object,
   }
 
   # else, proceed as usual
-  out <- tryCatch(
-    {
-      stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
-    },
-    error = function(e) {
-      NULL
-    }
+  out <- tryCatch(stats::simulate(object, nsim = iterations, re.form = re_formula, ...),
+    error = function(e) NULL
   )
 
   # glmmTMB returns column matrix for bernoulli
@@ -158,9 +162,9 @@ pp_check.lm <- function(object,
   }
 
   if (is.null(out)) {
-    stop(insight::format_message(
-      sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])
-    ), call. = FALSE)
+    insight::format_error(
+      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
+    )
   }
 
   # get response data, and response term, to check for transformations
@@ -207,13 +211,13 @@ pp_check.glm <- function(object,
   )
 
   if (is.null(out)) {
-    stop(insight::format_message(
-      sprintf("Could not simulate responses. Maybe there is no 'simulate()' for objects of class '%s'?", class(object)[1])
-    ), call. = FALSE)
+    insight::format_error(
+      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
+    )
   }
 
   # get response data, and response term
-  response <- eval(.str2lang(insight::find_response(object)),
+  response <- eval(str2lang(insight::find_response(object)),
     envir = insight::get_response(object)
   )
   resp_string <- insight::find_terms(object)$response
@@ -244,21 +248,20 @@ pp_check.glmmTMB   <-
 
 
 
-#' @rawNamespace if (getRversion() >= "3.6.0") {
-#'   S3method(bayesplot::pp_check, lm)
-#'   S3method(bayesplot::pp_check, glm)
-#'   S3method(bayesplot::pp_check, glmmTMB)
-#'   S3method(bayesplot::pp_check, glm.nb)
-#'   S3method(bayesplot::pp_check, merMod)
-#'   S3method(bayesplot::pp_check, MixMod)
-#'   S3method(bayesplot::pp_check, mle2)
-#'   S3method(bayesplot::pp_check, negbin)
-#'   S3method(bayesplot::pp_check, polr)
-#'   S3method(bayesplot::pp_check, rma)
-#'   S3method(bayesplot::pp_check, vlm)
-#'   S3method(bayesplot::pp_check, wbm)
-#'   S3method(bayesplot::pp_check, BFBayesFactor)
-#' }
+#' @rawNamespace
+#' S3method(bayesplot::pp_check, lm)
+#' S3method(bayesplot::pp_check, glm)
+#' S3method(bayesplot::pp_check, glmmTMB)
+#' S3method(bayesplot::pp_check, glm.nb)
+#' S3method(bayesplot::pp_check, merMod)
+#' S3method(bayesplot::pp_check, MixMod)
+#' S3method(bayesplot::pp_check, mle2)
+#' S3method(bayesplot::pp_check, negbin)
+#' S3method(bayesplot::pp_check, polr)
+#' S3method(bayesplot::pp_check, rma)
+#' S3method(bayesplot::pp_check, vlm)
+#' S3method(bayesplot::pp_check, wbm)
+#' S3method(bayesplot::pp_check, BFBayesFactor)
 
 
 
@@ -336,7 +339,24 @@ plot.performance_pp_check <- function(x, ...) {
   if (grepl("log(log(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) exp(exp(i)))
   } else if (grepl("log(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) exp(i))
+    # exceptions: log(x+1) or log(1+x)
+    # 1. try: log(x + number)
+    plus_minus <- tryCatch(
+      eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string))),
+      error = function(e) NULL
+    )
+    # 2. try: log(number + x)
+    if (is.null(plus_minus)) {
+      plus_minus <- tryCatch(
+        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))),
+        error = function(e) NULL
+      )
+    }
+    if (is.null(plus_minus)) {
+      sims[] <- lapply(sims, function(i) exp(i))
+    } else {
+      sims[] <- lapply(sims, function(i) exp(i) - plus_minus)
+    }
   } else if (grepl("log1p(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) expm1(i))
   } else if (grepl("log10(", resp_string, fixed = TRUE)) {

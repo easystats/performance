@@ -5,7 +5,6 @@
 \alias{test_bf}
 \alias{test_bf.default}
 \alias{test_likelihoodratio}
-\alias{performance_lrt}
 \alias{test_lrt}
 \alias{test_performance}
 \alias{test_vuong}
@@ -17,8 +16,6 @@ test_bf(...)
 \method{test_bf}{default}(..., reference = 1, text_length = NULL)
 
 test_likelihoodratio(..., estimator = "ML")
-
-performance_lrt(...)
 
 test_lrt(..., estimator = "ML")
 
@@ -64,6 +61,7 @@ and their interpretation.
 }
 \details{
 \subsection{Nested vs. Non-nested Models}{
+
 Model's "nesting" is an important concept of models comparison. Indeed, many
 tests only make sense when the models are \emph{"nested",} i.e., when their
 predictors are nested. This means that all the predictors of a model are
@@ -92,6 +90,7 @@ whether apples are significantly different from oranges!
 }
 
 \subsection{Estimator of the standard deviation}{
+
 The estimator is relevant when comparing regression models using
 \code{test_likelihoodratio()}. If \code{estimator = "OLS"}, then it uses the same
 method as \code{anova(..., test = "LRT")} implemented in base R, i.e., scaling
@@ -107,6 +106,7 @@ available for all model classes.
 }
 
 \subsection{REML versus ML estimator}{
+
 When \code{estimator = "ML"}, which is the default for linear mixed models (unless
 they share the same fixed effects), values from information criteria (AIC,
 AICc) are based on the ML-estimator, while the default behaviour of \code{AIC()}
@@ -251,17 +251,17 @@ if (require("lavaan")) {
     test_performance(m1, m2, m3)
   }
 }
+
 }
 \references{
 \itemize{
 \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
 non-nested hypotheses. Econometrica, 57, 307-333.
-
 \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested
 structural equation models. Psychological Methods, 21, 151-163.
 }
 }
 \seealso{
-\code{\link[=compare_performance]{compare_performance()}} to compare
-the performance indices of many different models.
+\code{\link[=compare_performance]{compare_performance()}} to compare the performance indices of
+many different models.
 }
