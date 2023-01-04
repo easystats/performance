@@ -251,12 +251,12 @@ if (require("lavaan")) {
     test_performance(m1, m2, m3)
   }
 }
+
 }
 \references{
 \itemize{
 \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
 non-nested hypotheses. Econometrica, 57, 307-333.
-
 \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested
 structural equation models. Psychological Methods, 21, 151-163.
 }

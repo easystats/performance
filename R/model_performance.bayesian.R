@@ -14,38 +14,31 @@
 #'   `metrics`).
 #'
 #' @details Depending on `model`, the following indices are computed:
-#' \itemize{
-#'   \item{**ELPD**} {expected log predictive density. Larger ELPD values
-#'   mean better fit. See [looic()].}
 #'
-#'   \item{**LOOIC**} {leave-one-out cross-validation (LOO) information
-#'   criterion. Lower LOOIC values mean better fit. See [looic()].}
+#'   - **ELPD**: expected log predictive density. Larger ELPD values
+#'   mean better fit. See [looic()].
 #'
-#'   \item{**WAIC**} {widely applicable information criterion. Lower WAIC
-#'   values mean better fit. See `?loo::waic`.}
+#'   - **LOOIC**: leave-one-out cross-validation (LOO) information
+#'   criterion. Lower LOOIC values mean better fit. See [looic()].
 #'
-#'   \item{**R2**} {r-squared value, see [r2_bayes()].}
+#'   - **WAIC**: widely applicable information criterion. Lower WAIC
+#'   values mean better fit. See `?loo::waic`.
 #'
-#'   \item{**R2_adjusted**} {LOO-adjusted r-squared, see
-#'   [r2_loo()].}
+#'   - **R2**: r-squared value, see [r2_bayes()].
 #'
-#'   \item{**RMSE**} {root mean squared error, see
-#'   [performance_rmse()].}
+#'   - **R2_adjusted**: LOO-adjusted r-squared, see [r2_loo()].
 #'
-#'   \item{**SIGMA**} {residual standard deviation, see
-#'   [insight::get_sigma()].}
+#'   - **RMSE**: root mean squared error, see [performance_rmse()].
 #'
-#'   \item{**LOGLOSS**} {Log-loss, see [performance_logloss()].}
+#'   - **SIGMA**: residual standard deviation, see [insight::get_sigma()].
 #'
-#'   \item{**SCORE_LOG**} {score of logarithmic proper scoring rule, see
-#'   [performance_score()].}
+#'   - **LOGLOSS**: Log-loss, see [performance_logloss()].
 #'
-#'   \item{**SCORE_SPHERICAL**} {score of spherical proper scoring rule,
-#'   see [performance_score()].}
+#'   - **SCORE_LOG**: score of logarithmic proper scoring rule, see [performance_score()].
 #'
-#'   \item{**PCP**} {percentage of correct predictions, see
-#'   [performance_pcp()].}
-#' }
+#'   - **SCORE_SPHERICAL**: score of spherical proper scoring rule, see [performance_score()].
+#'
+#'   - **PCP**: percentage of correct predictions, see [performance_pcp()].
 #'
 #' @examples
 #' \dontrun{
@@ -167,7 +160,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     }
   }
 
-  if (length(attri_r2) > 0) {
+  if (length(attri_r2) > 0L) {
     attri$r2 <- attri_r2
     attri$r2_bayes <- attri_r2
   }

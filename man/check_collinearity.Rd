@@ -139,18 +139,14 @@ if (require("see")) {
 \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
 Clusters. Open Journal of Statistics, 03(06), 24-44.
-
 \item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
 An introduction to statistical learning: with applications in R. New York:
 Springer.
-
 \item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
 Inflation Factors in Regression Models Using Latent Variable Modeling
 Methods. Educational and Psychological Measurement, 79(5), 874–882.
-
 \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
-
 \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
 \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
 }

@@ -1,8 +1,7 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
+skip_if_offline()
 
 if (.runThisTest &&
-
-
   requiet("rstanarm") &&
   requiet("httr") &&
   requiet("brms")) {
@@ -82,11 +81,11 @@ if (
     expect_warning(p <- model_performance(mod))
     expect_null(p)
 
-    mod <- proportionBF(y = 15, N = 25, p = .5)
+    mod <- proportionBF(y = 15, N = 25, p = 0.5)
     expect_warning(p <- model_performance(mod))
     expect_null(p)
 
-    t <- c(-.15, 2.39, 2.42, 2.43, -.15, 2.39, 2.42, 2.43)
+    t <- c(-0.15, 2.39, 2.42, 2.43, -0.15, 2.39, 2.42, 2.43)
     N <- c(100, 150, 97, 99, 99, 97, 100, 150)
     mod <- meta.ttestBF(t, N)
     expect_warning(p <- model_performance(mod))

@@ -1,3 +1,5 @@
+skip_if_offline()
+
 if (requiet("httr") && requiet("lme4")) {
   .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
@@ -10,10 +12,10 @@ if (requiet("httr") && requiet("lme4")) {
       model <- insight::download_model("merMod_1")
       expect_equal(model_performance(model)$AIC, AIC(model), tolerance = 0.01)
       expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
-      expect_equal(model_performance(model)$AIC, 23.58593, tolerance = .01)
+      expect_equal(model_performance(model)$AIC, 23.58593, tolerance = 0.01)
 
       model <- insight::download_model("merMod_2")
-      expect_equal(model_performance(model)$AIC, 21.4729, tolerance = .01)
+      expect_equal(model_performance(model)$AIC, 21.4729, tolerance = 0.01)
     })
 
 

@@ -1518,9 +1518,7 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_mcd <- function(x,
-                                threshold = stats::qchisq(
-                                  p = 1 - 0.001, df = ncol(x)
-                                ),
+                                threshold = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
                                 percentage_central = 0.50,
                                 ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))
