@@ -1566,7 +1566,7 @@ check_outliers.geeglm <- check_outliers.gls
   n_cores <- if (!requireNamespace("parallel", quietly = TRUE)) {
     NULL
   } else {
-    parallel::detectCores() - 1
+    max(1L, parallel::detectCores() - 2L, na.rm = TRUE)
   }
 
   # Run algorithm
