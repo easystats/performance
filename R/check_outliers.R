@@ -404,7 +404,7 @@ check_outliers.default <- function(x,
 
     df <- datawizard::data_merge(list(df, data_cook),
       join = "full",
-      by = c("Row")
+      by = "Row"
     )
 
     count.table <- datawizard::data_filter(
@@ -426,7 +426,7 @@ check_outliers.default <- function(x,
       outlier_count$all <- datawizard::data_merge(
         list(outlier_count$all, count.table),
         join = "full",
-        by = c("Row")
+        by = "Row"
       )
     } else {
       outlier_count$all <- count.table
@@ -444,7 +444,7 @@ check_outliers.default <- function(x,
 
     df <- datawizard::data_merge(list(df, data_pareto),
       join = "full",
-      by = c("Row")
+      by = "Row"
     )
 
     count.table <- datawizard::data_filter(
@@ -466,7 +466,7 @@ check_outliers.default <- function(x,
       outlier_count$all <- datawizard::data_merge(
         list(outlier_count$all, count.table),
         join = "full",
-        by = c("Row")
+        by = "Row"
       )
     } else {
       outlier_count$all <- count.table
@@ -561,7 +561,7 @@ print.check_outliers <- function(x, ...) {
     "eti", "hdi", "bci"
   )
 
-  vars <- paste(attr(x, "variables"), collapse = ", ")
+  vars <- toString(attr(x, "variables"))
   vars.outliers <- attr(x, "outlier_var")
 
   var.plural <- ifelse(length(attr(x, "variables")) > 1,
@@ -582,7 +582,7 @@ print.check_outliers <- function(x, ...) {
 
   if (length(outliers) >= 1) {
     outlier.count <- attr(x, "outlier_count")
-    o <- paste0(outliers, collapse = ", ")
+    o <- toString(outliers)
     insight::print_color(insight::format_message(
       sprintf(
         "%i %s detected: %s %s.", length(outliers),
@@ -682,7 +682,7 @@ check_outliers.data.frame <- function(x,
 
   # Remove non-numerics
   data <- x
-  x <- x[, sapply(x, is.numeric), drop = FALSE]
+  x <- x[, vapply(x, is.numeric, logical(1)), drop = FALSE]
 
   # Check args
   if (all(method == "all")) {
@@ -732,7 +732,7 @@ check_outliers.data.frame <- function(x,
   # Count table of repeated outliers (for several variables)
   count_outlier_table <- function(outlier.list) {
     count.table <- do.call(rbind, outlier.list)
-    name.method <- grep("Distance_", names(count.table), value = TRUE)
+    name.method <- grep("Distance_", names(count.table), value = TRUE, fixed = TRUE)
     name.method <- paste0("n_", gsub("Distance_", "", name.method, fixed = TRUE))
     if (isTRUE(nrow(count.table) > 0)) {
       count.values <- rle(sort(count.table$Row))
@@ -917,7 +917,7 @@ check_outliers.data.frame <- function(x,
     out <- c(out, .check_outliers_mcd(
       x,
       threshold = thresholds$mcd,
-      percentage_central = .66,
+      percentage_central = 0.66,
       ID.names = ID.names
     ))
 
@@ -1015,7 +1015,7 @@ check_outliers.data.frame <- function(x,
   }
 
   # Combine outlier data
-  df <- out[sapply(out, is.data.frame)]
+  df <- out[vapply(out, is.data.frame, logical(1))]
   if (length(df) > 1 && !is.null(ID)) {
     df <- datawizard::data_merge(df, by = c("Row", ID))
   } else if (length(df) > 1) {
@@ -1039,7 +1039,7 @@ check_outliers.data.frame <- function(x,
   } else if (length(outlier_count) > 1) {
     outlier_count$all <- datawizard::data_merge(outlier_count,
       join = "full",
-      by = c("Row")
+      by = "Row"
     )
   } else if (length(outlier_count) == 1) {
     outlier_count$all <- outlier_count[[1]]
@@ -1100,7 +1100,7 @@ check_outliers.grouped_df <- function(x,
 
   # Initialize elements
   data <- data.frame()
-  out <- c()
+  out <- NULL
   thresholds <- list()
   outlier_var <- list()
   outlier_count <- list()
@@ -1156,7 +1156,7 @@ check_outliers.grouped_df <- function(x,
   attr(out, "method") <- method
   attr(out, "threshold") <- thresholds[[1]]
   attr(out, "text_size") <- 3
-  attr(out, "variables") <- names(x[, sapply(x, is.numeric), drop = FALSE])
+  attr(out, "variables") <- names(x[, vapply(x, is.numeric, logical(1)), drop = FALSE])
   attr(out, "raw_data") <- x
   attr(out, "outlier_var") <- outlier_var
   attr(out, "outlier_count") <- outlier_count
@@ -1337,9 +1337,7 @@ check_outliers.geeglm <- check_outliers.gls
     d2 <- abs(v - m.int)
     Distance_IQR[names(as.data.frame(x))[col]] <- d2 / (iqr * threshold)
 
-    d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1,
-      ifelse(v < lower, 1, 0)
-    )
+    d[names(as.data.frame(x))[col]] <- ifelse(v > upper, 1, ifelse(v < lower, 1, 0)) #nolint
   }
 
   out <- data.frame(Row = d$Row)
@@ -1379,8 +1377,7 @@ check_outliers.geeglm <- check_outliers.gls
   for (col in names(x)) {
     v <- x[, col]
     ci <- bayestestR::ci(v, ci = threshold, method = method)
-    d[col] <- ifelse(x[[col]] > ci$CI_high |
-      x[[col]] < ci$CI_low, 1, 0)
+    d[col] <- ifelse(x[[col]] > ci$CI_high | x[[col]] < ci$CI_low, 1, 0) #nolint
 
     m.int <- stats::median(c(ci$CI_low, ci$CI_high), na.rm = TRUE)
     d2 <- abs(v - m.int)
