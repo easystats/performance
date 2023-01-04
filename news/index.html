@@ -105,6 +105,7 @@
 <li><p>Fixed issues in <code><a href="../reference/check_model.html">check_model()</a></code> for models with convergence issues that lead to <code>NA</code> values in residuals.</p></li>
 <li><p>Fixed bug in <code>check_outliers</code> whereby passing multiple elements to the threshold list generated an error (<a href="https://github.com/easystats/performance/issues/496" class="external-link">#496</a>).</p></li>
 <li><p><code><a href="../reference/test_performance.html">test_wald()</a></code> now warns the user about inappropriate F test and calls <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> for binomial models.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/item_difficulty.html">item_difficulty()</a></code> with detecting the maximum values of an item set. Furthermore, <code><a href="../reference/item_difficulty.html">item_difficulty()</a></code> gets a <code>maximum_value</code> argument in case no item contains the maximum value due to missings.</p></li>
 </ul></div>
 </div>
     <div class="section level2">

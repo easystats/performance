@@ -95,7 +95,7 @@ for tests or item-scales of questionnaires.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">item_difficulty</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">item_difficulty</span><span class="op">(</span><span class="va">x</span>, maximum_value <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -104,6 +104,15 @@ for tests or item-scales of questionnaires.</p>
 <dd><p>Depending on the function, <code>x</code> may be a <code>matrix</code> as
 returned by the <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>-function, or a data frame
 with items (e.g. from a test or questionnaire).</p></dd>
+
+
+<dt>maximum_value</dt>
+<dd><p>Numeric value, indicating the maximum value of an item.
+If <code>NULL</code> (default), the maximum is taken from the maximum value of all
+columns in <code>x</code> (assuming that the maximum value at least appears once in
+the data). If <code>NA</code>, each item's maximum value is taken as maximum. If the
+required maximum value is not present in the data, specify the theoreritcal
+maximum using <code>maximum_value</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -115,13 +124,25 @@ difficulties for each item, and the ideal item difficulty.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates the item difficulty, which should
-range between 0.2 and 0.8. Lower values are a signal for
-more difficult items, while higher values close to one
-are a sign for easier items. The ideal value for item difficulty
-is <code>p + (1 - p) / 2</code>, where <code>p = 1 / max(x)</code>. In most
+    <p><em>Item difficutly</em> of an item is defined as the quotient of the sum
+actually achieved for this item of all and the maximum achievable score.
+This function calculates the item difficulty, which should range between
+0.2 and 0.8. Lower values are a signal for more difficult items, while
+higher values close to one are a sign for easier items. The ideal value
+for item difficulty is <code>p + (1 - p) / 2</code>, where <code>p = 1 / max(x)</code>. In most
 cases, the ideal item difficulty lies between 0.5 and 0.8.</p>
     </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    
+<ul><li><p>Bortz, J., and Döring, N. (2006). Quantitative Methoden der Datenerhebung.
+In J. Bortz and N. Döring, Forschungsmethoden und Evaluation. Springer:
+Berlin, Heidelberg: 137–293</p></li>
+<li><p>Kelava, A., and Moosbrugger, H. (2012). Deskriptivstatistische Evaluation
+von Items (Itemanalyse) und Testwertverteilungen. In H. Moosbrugger and
+A. Kelava (Hrsg.), Testtheorie und Fragebogenkonstruktion. Springer:
+Berlin, Heidelberg: 75–102</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -131,9 +152,9 @@ cases, the ideal item difficulty lies between 0.5 and 0.8.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Item Difficulty</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">      difficulty  ideal</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    cyl      0.77   0.56</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   gear      0.74   0.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   carb      0.35   0.56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    cyl      0.02   0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   gear      0.01   0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   carb      0.01   0.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     hp      0.44   0.50</span>
 </code></pre></div>
     </div>

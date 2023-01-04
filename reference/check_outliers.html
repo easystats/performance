@@ -391,32 +391,21 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For single variables ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span> <span class="co"># Find outliers</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in vapply(x, function(x) (x - stats::median(x, na.rm = TRUE))/stats::mad(x,     na.rm = TRUE), numeric(1)):</span> values must be length 1,</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  but FUN(X[[1]]) result is length 32</span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="co"># Show the row index of the outliers</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: zscore_robust (3.09).</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variable: data$mpg</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'outliers_list' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span> <span class="co"># The object is a binary vector...</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'outliers_list' not found</span>
 <span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="op">!</span><span class="va">outliers_list</span>, <span class="op">]</span> <span class="co"># And can be used to filter a dataframe</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `[.data.frame`(data, !outliers_list, ):</span> object 'outliers_list' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">)</span> <span class="co"># New size, 28 (4 outliers removed)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in nrow(filtered_data):</span> object 'filtered_data' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Find all observations beyond +/- 2 SD</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span>, method <span class="op">=</span> <span class="st">"zscore"</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">2 outliers detected: cases 18, 20.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following method and threshold: zscore (2).</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variable: data$mpg.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Outliers per variable (zscore): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`data$mpg`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Row Distance_Zscore</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  18        2.042389</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  20        2.291272</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in vapply(x, function(x) (x - mean(x, na.rm = TRUE))/stats::sd(x,     na.rm = TRUE), numeric(1)):</span> values must be length 1,</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  but FUN(X[[1]]) result is length 32</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For dataframes ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on dataframes</span></span></span>
@@ -432,46 +421,22 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span>  <span class="st">"iqr"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"zscore"</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in vapply(x, function(x) (x - mean(x, na.rm = TRUE))/stats::sd(x,     na.rm = TRUE), numeric(1)):</span> values must be length 1,</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>  but FUN(X[[1]]) result is length 32</span>
 <span class="r-in"><span><span class="va">outliers_list</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">1 outlier detected: case 31.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: mahalanobis (3.09), iqr</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (1.7), zscore (31.26).</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Note: Outliers were classified as such by</span> <span style="color: #BBBB00;">at least half of the selected methods. </span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more variables </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> by at least one of the selected methods: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Row n_Zscore n_IQR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  31        1     2</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'outliers_list' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using `as.data.frame()`, we can access more details!</span></span></span>
 <span class="r-in"><span><span class="va">outliers_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.data.frame(outliers_list):</span> object 'outliers_list' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">outliers_info</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Row Distance_Zscore Outlier_Zscore Distance_IQR Outlier_IQR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1        1.189901              0    0.4208483           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   2        1.189901              0    0.2941176           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   3        1.224858              0    0.5882353           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   4        1.122152              0    0.5882353           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   5        1.043081              0    0.3915954           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   6        1.564608              0    0.6809025           0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Distance_Mahalanobis Outlier_Mahalanobis Outlier</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1             8.946673                   0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2             8.287933                   0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3             8.937150                   0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4             6.096726                   0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5             5.429061                   0       0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6             8.877558                   0       0</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'head': object 'outliers_info' not found</span>
 <span class="r-in"><span><span class="va">outliers_info</span><span class="op">$</span><span class="va">Outlier</span> <span class="co"># Including the probability of being an outlier</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.0000000 0.6666667 0.0000000</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'outliers_info' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># And we can be more stringent in our outliers removal process</span></span></span>
 <span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="va">outliers_info</span><span class="op">$</span><span class="va">Outlier</span> <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="op">]</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `[.data.frame`(data, outliers_info$Outlier &lt; 0.1, ):</span> object 'outliers_info' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># We can run the function stratified by groups using `{dplyr}` package:</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://nathaneastwood.github.io/poorman/" class="external-link">"poorman"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
