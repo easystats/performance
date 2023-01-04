@@ -391,8 +391,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For single variables ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span> <span class="co"># Find outliers</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in vapply(x, function(x) (x - stats::median(x, na.rm = TRUE))/stats::mad(x,     na.rm = TRUE), numeric(1)):</span> values must be length 1,</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span>  but FUN(X[[1]]) result is length 32</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in FUN(X[[i]], ...):</span> unused argument (alist())</span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="co"># Show the row index of the outliers</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'outliers_list' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span> <span class="co"># The object is a binary vector...</span></span></span>
@@ -404,8 +403,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Find all observations beyond +/- 2 SD</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span>, method <span class="op">=</span> <span class="st">"zscore"</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in vapply(x, function(x) (x - mean(x, na.rm = TRUE))/stats::sd(x,     na.rm = TRUE), numeric(1)):</span> values must be length 1,</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span>  but FUN(X[[1]]) result is length 32</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in FUN(X[[i]], ...):</span> unused argument (alist())</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For dataframes ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on dataframes</span></span></span>
@@ -421,8 +419,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span>  <span class="st">"iqr"</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"zscore"</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in vapply(x, function(x) (x - mean(x, na.rm = TRUE))/stats::sd(x,     na.rm = TRUE), numeric(1)):</span> values must be length 1,</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span>  but FUN(X[[1]]) result is length 32</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in FUN(X[[i]], ...):</span> unused argument (alist())</span>
 <span class="r-in"><span><span class="va">outliers_list</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'outliers_list' not found</span>
 <span class="r-in"><span></span></span>
