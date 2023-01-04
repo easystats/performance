@@ -1465,7 +1465,7 @@ check_outliers.geeglm <- check_outliers.gls
                                         ),
                                         ID.names = NULL,
                                         ...) {
-  if (any(is.na(x)) || any(with(x, x == Inf))) {
+  if (anyNA(x) || any(with(x, x == Inf))) {
     insight::format_error("Missing or infinite values are not allowed.")
   }
 
@@ -1524,7 +1524,7 @@ check_outliers.geeglm <- check_outliers.gls
                                 threshold = stats::qchisq(
                                   p = 1 - 0.001, df = ncol(x)
                                 ),
-                                percentage_central = .50,
+                                percentage_central = 0.50,
                                 ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
