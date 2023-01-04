@@ -1276,16 +1276,14 @@ check_outliers.geeglm <- check_outliers.gls
 
   # Standardize
   if (!robust) {
-    d <- abs(as.data.frame(vapply(
+    d <- abs(as.data.frame(sapply(
       x,
       function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE),
-      numeric(1)
     )))
   } else {
-    d <- abs(as.data.frame(vapply(
+    d <- abs(as.data.frame(sapply(
       x,
       function(x) (x - stats::median(x, na.rm = TRUE)) / stats::mad(x, na.rm = TRUE),
-      numeric(1)
     )))
   }
 
