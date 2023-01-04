@@ -9,16 +9,29 @@
 #'    with items (e.g. from a test or questionnaire).
 #' @param maximum_value Numeric value, indicating the maximum value of an item.
 #'   If `NULL` (default), the maximum is taken from the maximum value of all
-#'   columns in `x`.
+#'   columns in `x` (assuming that the maximum value at least appears once in
+#'   the data). If `NA`, each item's maximum value is taken as maximum. If the
+#'   required maximum value is not present in the data, specify the theoreritcal
+#'   maximum using `maximum_value`.
 #' @return A data frame with three columns: The name(s) of the item(s), the item
 #'      difficulties for each item, and the ideal item difficulty.
 #'
-#' @details This function calculates the item difficulty, which should
-#'    range between 0.2 and 0.8. Lower values are a signal for
-#'    more difficult items, while higher values close to one
-#'    are a sign for easier items. The ideal value for item difficulty
-#'    is `p + (1 - p) / 2`, where `p = 1 / max(x)`. In most
-#'    cases, the ideal item difficulty lies between 0.5 and 0.8.
+#' @details _Item difficutly_ of an item is defined as the quotient of the sum
+#'   actually achieved for this item of all and the maximum achievable score.
+#'   This function calculates the item difficulty, which should range between
+#'   0.2 and 0.8. Lower values are a signal for more difficult items, while
+#'   higher values close to one are a sign for easier items. The ideal value
+#'   for item difficulty is `p + (1 - p) / 2`, where `p = 1 / max(x)`. In most
+#'   cases, the ideal item difficulty lies between 0.5 and 0.8.
+#'
+#' @references
+#' - Bortz, J., and Döring, N. (2006). Quantitative Methoden der Datenerhebung.
+#'   In J. Bortz and N. Döring, Forschungsmethoden und Evaluation. Springer:
+#'   Berlin, Heidelberg: 137–293
+#' - Kelava, A., and Moosbrugger, H. (2012). Deskriptivstatistische Evaluation
+#'   von Items (Itemanalyse) und Testwertverteilungen. In H. Moosbrugger and
+#'   A. Kelava (Hrsg.), Testtheorie und Fragebogenkonstruktion. Springer:
+#'   Berlin, Heidelberg: 75–102
 #'
 #' @examples
 #' data(mtcars)
@@ -29,22 +42,34 @@ item_difficulty <- function(x, maximum_value = NULL) {
   # find general maximum of scale
   if (is.null(maximum_value)) {
     maximum_value <- suppressWarnings(max(vapply(x, max, numeric(1L), na.rm = TRUE)))
-  } else if (!is.numeric(maximum_value)) {
+  } else if (!is.na(maximum_value) && !is.numeric(maximum_value)) {
     insight::format_error("`maximum_value` must be a numeric value, indicating the maximum value of an item.")
   }
 
-  d <- sapply(x, function(.x) {
+  d <- vapply(x, function(.x) {
+    # general maximum value, or per-item maximum value?
+    if (is.na(maximum_value)) {
+      max_val <- max(.x, na.rm = TRUE)
+    } else {
+      max_val <- maximum_value
+    }
     .x <- .x[!is.na(.x)]
-    round(sum(.x) / (maximum_value * length(.x)), 2)
-  })
+    round(sum(.x) / (max_val * length(.x)), 2)
+  }, numeric(1))
 
   # ideal item item_difficulty
   fun.diff.ideal <- function(.x) {
-    p <- 1 / maximum_value
+    # general maximum value, or per-item maximum value?
+    if (is.na(maximum_value)) {
+      max_val <- max(.x, na.rm = TRUE)
+    } else {
+      max_val <- maximum_value
+    }
+    p <- 1 / max_val
     round(p + (1 - p) / 2, 2)
   }
 
-  di <- apply(x, 2, fun.diff.ideal)
+  di <- vapply(x, fun.diff.ideal, numeric(1))
 
   structure(
     class = c("item_difficulty", "data.frame"),
