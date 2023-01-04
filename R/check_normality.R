@@ -72,6 +72,35 @@ check_normality.default <- function(x, ...) {
   p.val
 }
 
+# numeric -------------------
+
+#' @export
+check_normality.numeric <- function(x, ...) {
+  # check for normality of residuals
+  p.val <- .check_normality(x, NULL, type = "raw")
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  class(p.val) <- unique(c("check_normality", "see_check_normality", "check_normality_numeric", class(p.val)))
+
+  p.val
+}
+
+#' @rawNamespace if (getRversion() >= "3.5.0") {
+#'   S3method(stats::residuals, check_normality_numeric)
+#'   S3method(stats::rstudent, check_normality_numeric)
+#' }
+
+#' @export
+residuals.check_normality_numeric <- function(object, ...) {
+  attr(object, "data")
+}
+
+#' @export
+rstudent.check_normality_numeric <- function(model, ...) {
+  attr(model, "data")
+}
 
 
 # methods ----------------------
