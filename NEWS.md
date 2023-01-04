@@ -1,5 +1,10 @@
 # performance 0.10.2
 
+## General
+
+* Revised usage of `insight::get_data()` to meet forthcoming changes in the
+  _insight_ package.
+
 ## Changes to functions
 
 * `check_collinearity()` now accepts `NULL` for the `ci` argument.
