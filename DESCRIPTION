@@ -130,7 +130,7 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.3.9000
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/Needs/website:

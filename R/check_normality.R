@@ -87,23 +87,23 @@ check_normality.numeric <- function(x, ...) {
   p.val
 }
 
-#' @rawNamespace if (getRversion() >= "3.5.0") {
-#'   S3method(stats::residuals, check_normality_numeric)
-#'   S3method(stats::rstudent, check_normality_numeric)
-#' }
 
+# methods ----------------------
+
+
+#' @importFrom stats residuals
 #' @export
 residuals.check_normality_numeric <- function(object, ...) {
   attr(object, "data")
 }
 
+
+#' @importFrom stats rstudent
 #' @export
 rstudent.check_normality_numeric <- function(model, ...) {
   attr(model, "data")
 }
 
-
-# methods ----------------------
 
 #' @export
 plot.check_normality <- function(x, ...) {
@@ -184,8 +184,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
       }
     )
 
-    p.val <- c()
-    re_groups <- c()
+    p.val <- re_groups <- NULL
 
     if (!is.null(re)) {
       for (i in names(re)) {

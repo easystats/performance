@@ -556,10 +556,8 @@ export(test_performance)
 export(test_vuong)
 export(test_wald)
 export(variance_decomposition)
-if (getRversion() >= "3.5.0") {
-  S3method(stats::residuals, check_normality_numeric)
-  S3method(stats::rstudent, check_normality_numeric)
-}
 importFrom(insight,display)
 importFrom(insight,print_html)
 importFrom(insight,print_md)
+importFrom(stats,residuals)
+importFrom(stats,rstudent)
