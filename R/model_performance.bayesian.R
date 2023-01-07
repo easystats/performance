@@ -279,7 +279,14 @@ model_performance.BFBayesFactor <- function(model,
 
 
   if ("SIGMA" %in% toupper(metrics)) {
-    sig <- suppressMessages(.get_sigma_bfbayesfactor(model, average = average, prior_odds = prior_odds))
+    sig <- suppressMessages(
+      .get_sigma_bfbayesfactor(
+        model,
+        average = average,
+        prior_odds = prior_odds,
+        verbose = verbose
+      )
+    )
     out$Sigma <- bayestestR::point_estimate(sig, "median")[[1]]
   }
 
@@ -298,12 +305,12 @@ model_performance.BFBayesFactor <- function(model,
 # helper -------------------
 
 
-.get_sigma_bfbayesfactor <- function(model, average = FALSE, prior_odds = NULL) {
+.get_sigma_bfbayesfactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE) {
   if (average) {
     return(.get_sigma_bfbayesfactor_model_average(model, prior_odds = prior_odds))
   }
 
-  params <- insight::get_parameters(model)
+  params <- insight::get_parameters(model, verbose = verbose)
   if (!"sig2" %in% colnames(params)) stop("This is not a linear model.", call. = FALSE)
   sqrt(params$sig2)
 }

@@ -378,7 +378,12 @@ as.data.frame.r2_bayes <- function(x, ...) {
   insight::check_if_installed("BayesFactor")
 
   # Estimates
-  params <- insight::get_parameters(model, unreduce = FALSE, iterations = iterations, verbose = verbose)
+  params <- insight::get_parameters(
+    model,
+    unreduce = FALSE,
+    iterations = iterations,
+    verbose = verbose
+  )
 
   # remove sig and g cols
   params_theta <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
