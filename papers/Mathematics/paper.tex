@@ -152,8 +152,8 @@ xyz
 Statistical outliers need to be addressed because they can significantly
 affect our statistical models.
 
-Leys, Delacre, Mora, Lakens, \& Ley (2019) distinguish between error
-outliers, interesting outliers, and random outliers.
+Leys et al. (2019) distinguish between error outliers, interesting
+outliers, and random outliers.
 
 \hypertarget{current-recommendations}{%
 \subsection{Current recommendations}\label{current-recommendations}}
@@ -168,10 +168,10 @@ preregistered a priori (Leys et al., 2019).
 
 When using t-tests for example.
 
-For univariate outliers, it is recommended (Leys et al., 2019) to use
-the Median Absolute Deviation (MAD) (Leys, Ley, Klein, Bernard, \&
-Licata, 2013). In easystats' \texttt{check\_outliers()},one can use this
-approach with \texttt{method\ =\ "zscore\_robust"}.
+For univariate outliers, it is recommended (Leys et al., 2013, 2019) to
+use the Median Absolute Deviation (MAD). In easystats'
+\texttt{check\_outliers()},one can use this approach with
+\texttt{method\ =\ "zscore\_robust"}.
 
 Example:
 
@@ -294,12 +294,48 @@ Example:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{cat}\NormalTok{(}\StringTok{"temp holder"}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(data, }\AttributeTok{method =} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"zscore"}\NormalTok{, }\StringTok{"IQR"}\NormalTok{, }\StringTok{"mahalanobis"}\NormalTok{, }\StringTok{"mahalanobis\_robust"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{, }\StringTok{"ics"}\NormalTok{, }\StringTok{"optics"}\NormalTok{, }\StringTok{"lof"}\NormalTok{))}
+\NormalTok{x}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## temp holder
+## 2 outliers detected: cases 33, 34.
+## - Based on the following methods and thresholds: zscore (3.09),
+##   mahalanobis (31.26), mahalanobis_robust (31.26), mcd (31.26), ics
+##   (0.001), optics (22), lof (0.001).
+## - For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.
+## Note: Outliers were classified as such by at least half of the selected methods. 
+## 
+## -----------------------------------------------------------------------------
+## The following observations were considered outliers for two or more variables 
+## by at least one of the selected methods: 
+## 
+##    Row n_Zscore n_Mahalanobis_robust          n_MCD          n_ICS
+## 1   34        9       (Multivariate) (Multivariate) (Multivariate)
+## 2   33        7       (Multivariate) (Multivariate) (Multivariate)
+## 3    9        0       (Multivariate) (Multivariate)              0
+## 4   19        0       (Multivariate)              0              0
+## 5   27        0       (Multivariate) (Multivariate)              0
+## 6   28        0       (Multivariate) (Multivariate)              0
+## 7   29        0       (Multivariate)              0              0
+## 8   30        0       (Multivariate) (Multivariate)              0
+## 9   31        0       (Multivariate) (Multivariate) (Multivariate)
+## 10   8        0                    0 (Multivariate)              0
+## 11  21        0                    0 (Multivariate)              0
+##             n_LOF
+## 1  (Multivariate)
+## 2  (Multivariate)
+## 3               0
+## 4               0
+## 5               0
+## 6               0
+## 7               0
+## 8               0
+## 9               0
+## 10              0
+## 11              0
 \end{verbatim}
 
 An example sentence for reporting the usage of the composite method
@@ -314,7 +350,7 @@ Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana,
 Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate
 Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999;
 Isolation Forest, Liu et al.~2008; and Local Outlier Factor, Breunig et
-al., 2000), we excluded n participants that were classified as outliers
+al., 2000), we excluded one participant that was classified as outlier
 by at least half of the methods used.
 \end{quote}
 

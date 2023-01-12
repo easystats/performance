@@ -48,7 +48,7 @@ We note also that ideally the handling of outliers should be preregistered a pri
 
 When using t-tests for example.
 
-For univariate outliers, it is recommended [@leys2019outliers] to use the Median Absolute Deviation (MAD) [@leys2013outliers]. In easystats' `check_outliers()`,one can use this approach with `method = "zscore_robust"`.
+For univariate outliers, it is recommended [@leys2019outliers; @leys2013outliers] to use the Median Absolute Deviation (MAD). In easystats' `check_outliers()`,one can use this approach with `method = "zscore_robust"`.
 
 Example:
 
@@ -117,7 +117,7 @@ x
 
 An example sentence for reporting the usage of the composite method could be:
 
-> Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2021) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan and Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded n participants that were classified as outliers by at least half of the methods used.
+> Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2021) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan and Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded one participant that was classified as outlier by at least half of the methods used.
 
 # Conclusion
 
