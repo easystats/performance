@@ -1,4 +1,4 @@
-.r2_ci <- function(model, ci = .95, ...) {
+.r2_ci <- function(model, ci = 0.95, verbose = TRUE, ...) {
   alpha <- 1 - ci
   n <- insight::n_obs(model)
   df_int <- if (insight::has_intercept(model)) {
@@ -8,15 +8,11 @@
   }
 
   model_rank <- tryCatch(
-    {
-      model$rank - df_int
-    },
-    error = function(e) {
-      insight::n_parameters(model) - df_int
-    }
+    model$rank - df_int,
+    error = function(e) insight::n_parameters(model) - df_int
   )
 
-  model_r2 <- r2(model, ci = NULL)
+  model_r2 <- r2(model, ci = NULL, verbose = verbose, ...)
 
   out <- lapply(model_r2, function(rsq) {
     ci_low <- stats::uniroot(
@@ -41,6 +37,8 @@
   })
 
   names(out) <- names(model_r2)
+  attr(out, "ci") <- ci
+  class(out) <- class(model_r2)
   out
 }
 

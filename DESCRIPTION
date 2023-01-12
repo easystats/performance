@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.0.9
+Version: 0.10.2
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -57,7 +57,7 @@ Description: Utilities for computing measures to assess model quality,
     check models for overdispersion, singularity or zero-inflation and
     more. Functions apply to a large variety of regression models,
     including generalized linear models, mixed effects models and Bayesian
-    models.
+    models. References: Lüdecke et al. (2021) <doi:10.21105/joss.03139>.
 License: GPL-3
 URL: https://easystats.github.io/performance/
 BugReports: https://github.com/easystats/performance/issues
@@ -65,8 +65,8 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.0),
-    insight (>= 0.18.5),
-    datawizard (>= 0.6.2),
+    insight (>= 0.18.8),
+    datawizard (>= 0.6.5),
     methods,
     stats,
     utils
@@ -92,6 +92,7 @@ Suggests:
     ggplot2,
     glmmTMB,
     graphics,
+    Hmisc,
     httr,
     ICS,
     ICSOutlier,
@@ -100,7 +101,6 @@ Suggests:
     lme4,
     lmtest,
     loo,
-    magrittr,
     MASS,
     Matrix,
     mclust,
@@ -122,7 +122,7 @@ Suggests:
     rstanarm,
     rstantools,
     sandwich,
-    see,
+    see (>= 0.7.4),
     survey,
     survival,
     testthat,
@@ -130,11 +130,10 @@ Suggests:
     VGAM
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
-Remotes: easystats/insight

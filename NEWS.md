@@ -1,3 +1,20 @@
+# performance 0.10.2
+
+## General
+
+* Revised usage of `insight::get_data()` to meet forthcoming changes in the
+  _insight_ package.
+
+## Changes to functions
+
+* `check_collinearity()` now accepts `NULL` for the `ci` argument.
+
+## Bug fixes
+
+* Fixed issue in `item_difficulty()` with detecting the maximum values of an
+  item set. Furthermore, `item_difficulty()` gets a `maximum_value` argument
+  in case no item contains the maximum value due to missings.
+
 # performance 0.10.1
 
 ## General
@@ -9,8 +26,17 @@
 * `icc()` and `r2_nakagawa()` get `ci` and `iterations` arguments, to compute
   confidence intervals for the ICC resp. R2, based on bootstrapped sampling.
 
+* `r2()` gets `ci`, to compute (analytical) confidence intervals for the R2.
+
+* `check_predictions()` accepts a `bw` argument (smoothing bandwidth), which is
+  passed down to the `plot()` methods density-estimation. The default for the
+  smoothing bandwidth `bw` has changed from `"nrd0"` to `"nrd"`, which seems
+  to produce better fitting plots for non-gaussian models.
+  
 * The model underlying `check_distribution()` was now also trained to detect
   cauchy, half-cauchy and inverse-gamma distributions.
+
+* `model_performance()` now allows to include the ICC for Bayesian models.
 
 ## Bug fixes
 
@@ -21,6 +47,11 @@
   
 * Fixed bug in `check_outliers` whereby passing multiple elements to the 
   threshold list generated an error (#496).
+
+* `test_wald()` now warns the user about inappropriate F test and calls
+  `test_likelihoodratio()` for binomial models.
+
+* Fixed edge case for usage of `parellel::detectCores()` in `check_outliers()`.
 
 # performance 0.10.0
 

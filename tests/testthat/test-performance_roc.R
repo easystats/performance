@@ -1,5 +1,5 @@
-if (requiet("testthat") &&
-  requiet("performance") &&
+if (
+
   requiet("lme4")) {
   data(mtcars)
   m <- glmer(vs ~ mpg + (1 | gear), family = "binomial", data = mtcars)
@@ -21,10 +21,12 @@ if (requiet("testthat") &&
   data(iris)
   set.seed(123)
   d <- iris[sample(1:nrow(iris), size = 50), ]
-  d$y <- rbinom(nrow(d), size = 1, .3)
+  d$y <- as.factor(rbinom(nrow(d), size = 1, 0.3))
+  dat <<- d
+
   m <- glm(
     y ~ Sepal.Length + Sepal.Width,
-    data = transform(d, y = as.factor(y)),
+    data = dat,
     family = "binomial"
   )
   test_that("performance_roc", {

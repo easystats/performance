@@ -36,14 +36,16 @@
 #' roc <- performance_roc(model, new_data = test_data)
 #' area_under_curve(roc$Specificity, roc$Sensitivity)
 #'
-#' m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
-#' m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
-#' m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
-#' performance_roc(m1, m2, m3)
+#' if (interactive()) {
+#'   m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
+#'   m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
+#'   m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
+#'   performance_roc(m1, m2, m3)
 #'
-#' # if you have `see` package installed, you can also plot comparison of
-#' # ROC curves for different models
-#' if (require("see")) plot(performance_roc(m1, m2, m3))
+#'   # if you have `see` package installed, you can also plot comparison of
+#'   # ROC curves for different models
+#'   if (require("see")) plot(performance_roc(m1, m2, m3))
+#' }
 #' @export
 performance_roc <- function(x, ..., predictions, new_data) {
   dots <- list(...)
@@ -130,13 +132,13 @@ print.performance_roc <- function(x, ...) {
 
 .performance_roc_model <- function(x, new_data, model_name = "Model 1") {
   predictions <- stats::predict(x, newdata = new_data, type = "response")
-  if (is.null(new_data)) new_data <- insight::get_data(x)
+  if (is.null(new_data)) new_data <- insight::get_data(x, verbose = FALSE)
   response <- new_data[[insight::find_response(x)]]
 
   if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {
-    stop(insight::format_message(
+    insight::format_error(
       "Can't calculate ROC for models with response-matrix (i.e. response variables with success/trials)."
-    ), call. = FALSE)
+    )
   }
 
   dat <- .performance_roc_numeric(response, predictions)
@@ -151,7 +153,7 @@ print.performance_roc <- function(x, ...) {
     if (.valid_roc_models(x[[i]])) {
       .performance_roc_model(x = x[[i]], new_data = NULL, model_name = names[i])
     } else {
-      warning("Object '", names[i], "' is not valid.", call. = FALSE)
+      insight::format_warning("Object '", names[i], "' is not valid.")
     }
   })
   do.call(rbind, l)

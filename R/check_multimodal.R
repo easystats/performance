@@ -63,7 +63,7 @@ check_multimodal.data.frame <- function(x, ...) {
 
   # Text
   text <- "The parametric mixture modelling test suggests that "
-  if (rez$p < .05) {
+  if (rez$p < 0.05) {
     text <- paste0(
       text,
       "the multivariate distribution is significantly multimodal (Chi2(",
@@ -105,7 +105,7 @@ check_multimodal.numeric <- function(x, ...) {
 
   text <- "The Ameijeiras-Alonso et al. (2018) excess mass test suggests that "
 
-  if (rez$p < .05) {
+  if (rez$p < 0.05) {
     text <- paste0(
       text,
       "the distribution is significantly multimodal (excess mass = ",

@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("parameters")) {
+if (requiet("parameters")) {
   data(mtcars)
   test_that("check_factorstructure", {
     x <- check_factorstructure(mtcars)

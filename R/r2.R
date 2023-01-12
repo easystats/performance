@@ -6,7 +6,10 @@
 #'   R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 #'
 #' @param model A statistical model.
-#' @param verbose Logical. Should details about R2 and CI methods be given (`TRUE`) or not (`FALSE`)?
+#' @param verbose Logical. Should details about R2 and CI methods be given
+#' (`TRUE`) or not (`FALSE`)?
+#' @param ci Confidence interval level, as scalar. If `NULL` (default), no
+#' confidence intervals for R2 are calculated.
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'
@@ -21,7 +24,7 @@
 #'   - Bayesian models: [R2 bayes][r2_bayes]
 #'
 #' @note If there is no `r2()`-method defined for the given model class,
-#'   `r2()` tries to return a "generic r2 value, calculated as following:
+#'   `r2()` tries to return a "generic" r-quared value, calculated as following:
 #'   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
 #'
 #' @seealso [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`],
@@ -30,8 +33,13 @@
 #'   [`r2_zeroinflated()`].
 #'
 #' @examples
+#' # Pseudo r-quared for GLM
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2(model)
+#'
+#' # r-squared including confidence intervals
+#' model <- lm(mpg ~ wt + hp, data = mtcars)
+#' r2(model, ci = 0.95)
 #'
 #' if (require("lme4")) {
 #'   model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
@@ -50,12 +58,17 @@ r2 <- function(model, ...) {
 
 #' @rdname r2
 #' @export
-r2.default <- function(model, verbose = TRUE, ...) {
+r2.default <- function(model, ci = NULL, verbose = TRUE, ...) {
+  # CI has own function
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, verbose = verbose, ...))
+  }
+
   if (is.null(minfo <- list(...)$model_info)) {
     minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 
-  ## TODO: implement CIs later? See #504
+  ## TODO: implement bootstrapped CIs later?
   # check input
   # ci <- .check_r2_ci_args(ci, ci_method, "bootstrap", verbose)
 
@@ -64,7 +77,11 @@ r2.default <- function(model, verbose = TRUE, ...) {
       if (minfo$is_binomial) {
         resp <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
       } else {
-        resp <- datawizard::to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+        resp <- datawizard::to_numeric(
+          insight::get_response(model, verbose = FALSE),
+          dummy_factors = FALSE,
+          preserve_levels = TRUE
+        )
       }
       mean_resp <- mean(resp, na.rm = TRUE)
       pred <- insight::get_predicted(model, ci = NULL, verbose = FALSE)
@@ -76,7 +93,7 @@ r2.default <- function(model, verbose = TRUE, ...) {
   )
 
   if (is.null(out) && isTRUE(verbose)) {
-    insight::print_color(sprintf("'r2()' does not support models of class '%s'.\n", class(model)[1]), "red")
+    insight::print_color(sprintf("`r2()` does not support models of class `%s`.\n", class(model)[1]), "red")
   }
 
   if (!is.null(out)) {
@@ -89,12 +106,15 @@ r2.default <- function(model, verbose = TRUE, ...) {
 
 
 #' @export
-r2.lm <- function(model, ...) {
+r2.lm <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
   .r2_lm(summary(model))
 }
 
 
-.r2_lm <- function(model_summary) {
+.r2_lm <- function(model_summary, ci = NULL) {
   out <- list(
     R2 = model_summary$r.squared,
     R2_adjusted = model_summary$adj.r.squared
@@ -121,7 +141,10 @@ r2.lm <- function(model, ...) {
 
 
 #' @export
-r2.summary.lm <- function(model, ...) {
+r2.summary.lm <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
   .r2_lm(model)
 }
 
@@ -208,7 +231,11 @@ r2.mhurdle <- function(model, ...) {
 
 
 #' @export
-r2.aov <- function(model, ...) {
+r2.aov <- function(model, ci = NULL, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, ...))
+  }
+
   model_summary <- stats::summary.lm(model)
 
   out <- list(
@@ -233,7 +260,7 @@ r2.mlm <- function(model, ...) {
     tmp <- list(
       R2 = model_summary[[i]]$r.squared,
       R2_adjusted = model_summary[[i]]$adj.r.squared,
-      Response = sub("Response ", "", i)
+      Response = sub("Response ", "", i, fixed = TRUE)
     )
     names(tmp$R2) <- "R2"
     names(tmp$R2_adjusted) <- "adjusted R2"
@@ -250,7 +277,11 @@ r2.mlm <- function(model, ...) {
 
 
 #' @export
-r2.glm <- function(model, verbose = TRUE, ...) {
+r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
+  if (!is.null(ci) && !is.na(ci)) {
+    return(.r2_ci(model, ci = ci, verbose = verbose, ...))
+  }
+
   if (is.null(info <- list(...)$model_info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
@@ -264,7 +295,7 @@ r2.glm <- function(model, verbose = TRUE, ...) {
     class(out) <- c("r2_pseudo", class(out))
   } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
+      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     out <- NULL
   } else {
@@ -426,8 +457,8 @@ r2.zeroinfl <- r2.hurdle
 
 #' @rdname r2
 #' @export
-r2.merMod <- function(model, tolerance = 1e-5, ...) {
-  r2_nakagawa(model, tolerance = tolerance, ...)
+r2.merMod <- function(model, ci = NULL, tolerance = 1e-5, ...) {
+  r2_nakagawa(model, ci = ci, tolerance = tolerance, ...)
 }
 
 #' @export
@@ -661,7 +692,7 @@ r2.bigglm <- function(model, ...) {
 
 #' @export
 r2.biglm <- function(model, ...) {
-  df.int <- ifelse(insight::has_intercept(model), 1, 0)
+  df.int <- as.numeric(insight::has_intercept(model))
   n <- suppressWarnings(insight::n_obs(model))
 
   rsq <- summary(model)$rsq
@@ -715,7 +746,7 @@ r2.Arima <- function(model, ...) {
   if (!requireNamespace("forecast", quietly = TRUE)) {
     list(R2 = NA)
   } else {
-    list(R2 = stats::cor(stats::fitted(model), insight::get_data(model))^2)
+    list(R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2)
   }
 }
 

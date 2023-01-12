@@ -116,23 +116,22 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
       result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, ...)
-      out$CI <- ci
       # CI for marginal R2
-      icc_ci <- as.vector(result$t[, 1])
-      icc_ci <- icc_ci[!is.na(icc_ci)]
-      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
-      out$CI_low_marginal <- icc_ci$CI_low
-      out$CI_high_marginal <- icc_ci$CI_high
+      r2_ci <- as.vector(result$t[, 1])
+      r2_ci <- r2_ci[!is.na(r2_ci)]
+      r2_ci <- bayestestR::eti(r2_ci, ci = ci)
+      out$R2_marginal <- c(out$R2_marginal, CI_low = r2_ci$CI_low, CI_high = r2_ci$CI_high)
 
       # CI for unadjusted R2
-      icc_ci <- as.vector(result$t[, 2])
-      icc_ci <- icc_ci[!is.na(icc_ci)]
-      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
-      out$CI_low_conditional <- icc_ci$CI_low
-      out$CI_high_conditional <- icc_ci$CI_high
+      r2_ci <- as.vector(result$t[, 2])
+      r2_ci <- r2_ci[!is.na(r2_ci)]
+      r2_ci <- bayestestR::eti(r2_ci, ci = ci)
+      out$R2_conditional <- c(out$R2_conditional, CI_low = r2_ci$CI_low, CI_high = r2_ci$CI_high)
+
+      attr(out, "ci") <- ci
     }
 
-    class(out)  <- c("r2_nakagawa", "list")
+    class(out) <- c("r2_nakagawa", "list")
   }
   out
 }
@@ -163,33 +162,21 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
     insight::print_color("# R2 for %s Regression\n\n", "blue")
   }
 
-  if (!is.null(x$CI_low_marginal) && !is.null(x$CI_low_conditional)) {
-    out <- paste0(
-      c(
-        sprintf(
-          "  Conditional R2: %.*f %s",
-          digits,
-          x$R2_conditional,
-          insight::format_ci(x$CI_low_conditional, x$CI_high_conditional, digits = digits, ci = NULL)
-        ),
-        sprintf(
-          "     Marginal R2: %.*f %s",
-          digits,
-          x$R2_marginal,
-          insight::format_ci(x$CI_low_marginal, x$CI_high_marginal, digits = digits, ci = NULL)
-        )
-      ),
-      collapse = "\n"
-    )
-  } else {
-    out <- paste0(
-      c(
-        sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),
-        sprintf("     Marginal R2: %.*f", digits, x$R2_marginal)
-      ),
-      collapse = "\n"
-    )
+  out <- c(
+    sprintf("  Conditional R2: %.*f", digits, x$R2_conditional[1]),
+    sprintf("     Marginal R2: %.*f", digits, x$R2_marginal[1])
+  )
+
+  # add CI
+  if (length(x$R2_conditional) == 3) {
+    out[1] <- .add_r2_ci_to_print(out[1], x$R2_conditional[2], x$R2_conditional[3], digits = digits)
   }
+  if (length(x$R2_marginal) == 3) {
+    out[2] <- .add_r2_ci_to_print(out[2], x$R2_marginal[2], x$R2_marginal[3], digits = digits)
+  }
+
+  # separate lines for multiple R2
+  out <- paste0(out, collapse = "\n")
 
   cat(out)
   cat("\n")
@@ -248,7 +235,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
-      data = insight::get_data(model),
+      data = insight::get_data(model, verbose = FALSE),
       statistic = .boot_r2_fun,
       R = iterations,
       sim = "ordinary",

@@ -50,7 +50,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   }
 
   if (length(pred) > 1) {
-    pred <- paste0("interaction(", paste0(pred, collapse = ", "), ")", collapse = "")
+    pred <- paste0("interaction(", toString(pred), ")", collapse = "")
   }
 
   f <- stats::as.formula(sprintf("%s ~ %s", resp, pred))
@@ -75,10 +75,10 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   }
 
   if (method == "fligner") {
-    r <- stats::fligner.test(f, data = insight::get_data(x))
+    r <- stats::fligner.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "bartlett") {
-    r <- stats::bartlett.test(f, data = insight::get_data(x))
+    r <- stats::bartlett.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "levene") {
     insight::check_if_installed("car")
@@ -109,7 +109,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
 print.check_homogeneity <- function(x, ...) {
   method.string <- attributes(x)$method
   if (is.na(x)) {
-    warning(paste0("Could not perform ", method.string, "."), call. = FALSE)
+    insight::format_warning(paste0("Could not perform ", method.string, "."))
     invisible(NULL)
   } else if (x < 0.05) {
     insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, x), "red")
@@ -147,7 +147,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   dv <- attr(x, "dv")
   id <- attr(x, "id")
   between <- names(attr(x, "between"))
-  is_covar <- sapply(attr(x, "between"), is.null)
+  is_covar <- vapply(attr(x, "between"), is.null, logical(1))
 
   ag_data <- stats::aggregate(data[, dv], data[, c(between, id)], mean)
   colnames(ag_data)[length(c(between, id)) + 1] <- dv

@@ -28,7 +28,7 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
     if (is.null(group)) {
       insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `group`.")
     }
-    data <- insight::get_data(x)
+    data <- insight::get_data(x, source = "mf", verbose = FALSE)
     select <- insight::find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
   } else {
     if (inherits(select, "formula")) {

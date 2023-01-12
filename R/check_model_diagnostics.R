@@ -13,10 +13,15 @@
   dat <- datawizard::data_rename(
     dat,
     c("Term", "VIF", "SE_factor", "Component"),
-    c("x", "y", "se", "facet")
+    c("x", "y", "se", "facet"),
+    verbose = FALSE
   )
 
-  dat <- datawizard::data_select(dat, c("x", "y", "facet", "group"))
+  dat <- datawizard::data_select(
+    dat,
+    c("x", "y", "facet", "group"),
+    verbose = FALSE
+  )
 
   if (insight::n_unique(dat$facet) <= 1) {
     dat$facet <- NULL
@@ -71,7 +76,7 @@
 
 # prepare data for random effects QQ plot ----------------------------------
 
-.diag_reqq <- function(model, level = .95, model_info, verbose = TRUE) {
+.diag_reqq <- function(model, level = 0.95, model_info, verbose = TRUE) {
   # check if we have mixed model
   if (!model_info$is_mixed) {
     return(NULL)

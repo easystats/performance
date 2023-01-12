@@ -104,11 +104,11 @@ check_model <- function(x, ...) {
 #' @export
 check_model.default <- function(x,
                                 dot_size = 2,
-                                line_size = .8,
+                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
-                                alpha = .2,
-                                dot_alpha = .8,
+                                alpha = 0.2,
+                                dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
@@ -187,11 +187,11 @@ plot.check_model <- function(x, ...) {
 #' @export
 check_model.stanreg <- function(x,
                                 dot_size = 2,
-                                line_size = .8,
+                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
-                                alpha = .2,
-                                dot_alpha = .8,
+                                alpha = 0.2,
+                                dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
@@ -222,11 +222,11 @@ check_model.brmsfit <- check_model.stanreg
 #' @export
 check_model.model_fit <- function(x,
                                   dot_size = 2,
-                                  line_size = .8,
+                                  line_size = 0.8,
                                   panel = TRUE,
                                   check = "all",
-                                  alpha = .2,
-                                  dot_alpha = .8,
+                                  alpha = 0.2,
+                                  dot_alpha = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
                                   detrend = FALSE,
@@ -259,7 +259,7 @@ check_model.model_fit <- function(x,
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- .diag_qq(model, verbose = verbose)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$NORM <- .diag_norm(model, verbose = verbose)
   dat$NCV <- .diag_ncv(model, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
@@ -287,7 +287,7 @@ check_model.model_fit <- function(x,
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- .diag_qq(model, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook

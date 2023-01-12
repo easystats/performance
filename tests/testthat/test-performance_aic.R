@@ -1,20 +1,20 @@
-if (requiet("testthat") && requiet("performance")) {
-  data("mtcars")
-  mtcars$mpg <- floor(mtcars$mpg)
+if (requiet("parameters")) {
+  data("fish")
 
-  model_lnorm <- lm(log(mpg) ~ factor(cyl), mtcars)
-  model_norm <- lm(mpg ~ factor(cyl), mtcars)
-  model_pois <- glm(mpg ~ factor(cyl), mtcars, family = poisson())
+  model_lnorm <- lm(log1p(count) ~ factor(persons), fish)
+  model_norm <- lm(count ~ factor(persons), fish)
+  model_pois <- glm(count ~ factor(persons), fish, family = poisson())
 
   test_that("performance_aic works", {
-    expect_equal(performance_aic(model_norm), 170.8753, tolerance = 1e-2)
-    expect_equal(performance_aic(model_pois), 173.591, tolerance = 1e-2)
+    expect_equal(performance_aic(model_norm), 1930.755, tolerance = 1e-2)
+    expect_equal(performance_aic(model_pois), 2758.236, tolerance = 1e-2)
   })
 
   test_that("performance_aic for log-model works", {
-    expect_equal(performance_aic(model_lnorm), 168.2152, tolerance = 1e-2)
+    expect_equal(performance_aic(model_lnorm), 1025.352, tolerance = 1e-2)
   })
 
+  data(mtcars)
   m1 <- lm(disp ~ hp, data = mtcars)
   m2 <- lm(sqrt(disp) ~ hp, data = mtcars)
 

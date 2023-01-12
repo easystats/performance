@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRversion() >= "4.0.0") {
+if (requiet("glmmTMB") && getRversion() >= "4.0.0") {
   data(Salamanders)
   m1 <- glmmTMB(count ~ spp + mined + (1 | site),
     ziformula = ~spp,
@@ -63,11 +63,11 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRv
     expect_true(all(coll$Tolerance < coll$Tolerance_CI_high))
     expect_true(all(coll$VIF > coll$VIF_CI_low))
 
-    expect_equal(
+    expect_identical(
       attributes(coll)$data$Component,
       c("conditional", "conditional", "conditional", "zero inflated", "zero inflated", "zero inflated")
     )
-    expect_equal(
+    expect_identical(
       colnames(attributes(coll)$CI),
       c("VIF_CI_low", "VIF_CI_high", "Tolerance_CI_low", "Tolerance_CI_high", "Component")
     )
@@ -93,12 +93,12 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRv
       }))
 
       expect_message(ccoM <- check_collinearity(aM))
-      expect_message(ccoW <- check_collinearity(aW))
+      expect_warning(expect_message(ccoW <- check_collinearity(aW)))
       expect_message(ccoB <- check_collinearity(aB), regexp = NA)
 
-      expect_equal(nrow(ccoM), 15)
-      expect_equal(nrow(ccoW), 3)
-      expect_equal(nrow(ccoB), 3)
+      expect_identical(nrow(ccoM), 15L)
+      expect_identical(nrow(ccoW), 3L)
+      expect_identical(nrow(ccoB), 3L)
 
       suppressWarnings(suppressMessages({
         aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
@@ -118,12 +118,27 @@ if (requiet("testthat") && requiet("performance") && requiet("glmmTMB") && getRv
       }))
 
       expect_message(ccoM <- check_collinearity(aM))
-      expect_message(ccoW <- check_collinearity(aW))
+      expect_warning(expect_message(ccoW <- check_collinearity(aW)))
       expect_message(ccoB <- check_collinearity(aB), regexp = NA)
 
-      expect_equal(nrow(ccoM), 15)
-      expect_equal(nrow(ccoW), 3)
-      expect_equal(nrow(ccoB), 3)
+      expect_identical(nrow(ccoM), 15L)
+      expect_identical(nrow(ccoW), 3L)
+      expect_identical(nrow(ccoB), 3L)
     })
   }
+
+  test_that("check_collinearity, ci = NULL", { #518
+    data(npk)
+    m <- lm(yield ~ N + P + K, npk)
+    out <- check_collinearity(m, ci = NULL)
+
+    expect_identical(
+      colnames(out),
+      c(
+        "Term", "VIF", "VIF_CI_low", "VIF_CI_high", "SE_factor", "Tolerance",
+        "Tolerance_CI_low", "Tolerance_CI_high"
+      )
+    )
+    expect_snapshot(print(out))
+  })
 }

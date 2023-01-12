@@ -1,34 +1,32 @@
-if (requiet("testthat") && requiet("performance")) {
-  test_that("model_performance.lm", {
-    model <- lm(mpg ~ wt + cyl, data = mtcars)
-    expect_equal(model_performance(model)$R2, 0.830, tolerance = 0.01)
-    expect_equal(
-      colnames(model_performance(model)),
-      c("AIC", "AICc", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma")
-    )
-  })
+test_that("model_performance.lm", {
+  model <- lm(mpg ~ wt + cyl, data = mtcars)
+  expect_equal(model_performance(model)$R2, 0.830, tolerance = 0.01)
+  expect_equal(
+    colnames(model_performance(model)),
+    c("AIC", "AICc", "BIC", "R2", "R2_adjusted", "RMSE", "Sigma")
+  )
+})
 
-  test_that("model_performance.glm", {
-    model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-    expect_equal(model_performance(model)$R2_Tjur, 0.478, tolerance = 0.01)
-    expect_equal(
-      colnames(model_performance(model)),
-      c(
-        "AIC", "AICc", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
-        "Score_spherical", "PCP"
-      )
+test_that("model_performance.glm", {
+  model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+  expect_equal(model_performance(model)$R2_Tjur, 0.478, tolerance = 0.01)
+  expect_equal(
+    colnames(model_performance(model)),
+    c(
+      "AIC", "AICc", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
+      "Score_spherical", "PCP"
     )
-  })
+  )
+})
 
-  test_that("model_performance.glm-factor", {
-    model <- glm(factor(vs, labels = c("automatic", "manual")) ~ wt + mpg, data = mtcars, family = "binomial")
-    expect_equal(model_performance(model)$R2_Tjur, 0.478, tolerance = 0.01)
-    expect_equal(
-      colnames(model_performance(model)),
-      c(
-        "AIC", "AICc", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
-        "Score_spherical", "PCP"
-      )
+test_that("model_performance.glm-factor", {
+  model <- glm(factor(vs, labels = c("automatic", "manual")) ~ wt + mpg, data = mtcars, family = "binomial")
+  expect_equal(model_performance(model)$R2_Tjur, 0.478, tolerance = 0.01)
+  expect_equal(
+    colnames(model_performance(model)),
+    c(
+      "AIC", "AICc", "BIC", "R2_Tjur", "RMSE", "Sigma", "Log_loss", "Score_log",
+      "Score_spherical", "PCP"
     )
-  })
-}
+  )
+})

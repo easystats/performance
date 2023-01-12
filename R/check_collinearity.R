@@ -91,25 +91,24 @@
 #' }
 #'
 #' @references
-#'   \itemize{
-#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
-#'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-#'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#'   \item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
-#'   An introduction to statistical learning: with applications in R. New York:
-#'   Springer.
+#' - Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
+#' Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+#' Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#'   \item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-#'   Inflation Factors in Regression Models Using Latent Variable Modeling
-#'   Methods. Educational and Psychological Measurement, 79(5), 874–882.
+#' - James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
+#' An introduction to statistical learning: with applications in R. New York:
+#' Springer.
 #'
-#'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
-#'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#' - Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
+#' Inflation Factors in Regression Models Using Latent Variable Modeling
+#' Methods. Educational and Psychological Measurement, 79(5), 874–882.
 #'
-#'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#'   [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
-#'   }
+#' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
+#' examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#'
+#' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
+#' [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
 #'
 #' @note The code to compute the confidence intervals for the VIF and tolerance
 #' values was adapted from the Appendix B from the Marcoulides et al. paper.
@@ -185,6 +184,9 @@ plot.check_collinearity <- function(x, ...) {
 
   all_vifs <- insight::compact_list(list(low_vif, mid_vif, high_vif))
 
+  # if we have no CIs, remove those columns
+  x <- datawizard::remove_empty_columns(x)
+
   # format table for each "ViF" group - this ensures that CIs are properly formatted
   x <- do.call(rbind, lapply(all_vifs, function(i) insight::format_table(x[i, ])))
   colnames(x)[4] <- "Increased SE"
@@ -223,8 +225,8 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
   f <- stats::as.formula(f)
 
-  d <- insight::get_data(x, verbose = verbose)
-  is_num <- sapply(d, is.numeric)
+  d <- insight::get_data(x, verbose = FALSE)
+  is_num <- vapply(d, is.numeric, logical(1))
   d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
   is_fac <- !is_num
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
@@ -249,7 +251,7 @@ check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   }
 
   f <- insight::find_formula(x)[[1]]
-  d <- insight::get_data(x)
+  d <- insight::get_data(x, verbose = FALSE)
   check_collinearity(stats::lm(f, d))
 }
 
@@ -490,15 +492,20 @@ check_collinearity.zerocount <- function(x,
   n <- insight::n_obs(x)
   p <- insight::n_parameters(x)
 
-  ci_lvl <- (1 + ci) / 2
+  # check if CIs are requested
+  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
+    ci_lvl <- (1 + ci) / 2
 
-  logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
-  se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
-  se_log <- se / (r * (1 - r))
-  ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
-  ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
-  ci_lo <- stats::plogis(ci_log_lo)
-  ci_up <- stats::plogis(ci_log_up)
+    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
+    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
+    se_log <- se / (r * (1 - r))
+    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
+    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
+    ci_lo <- stats::plogis(ci_log_lo)
+    ci_up <- stats::plogis(ci_log_up)
+  } else {
+    ci_lo <- ci_up <- NA
+  }
 
   out <- insight::text_remove_backticks(
     data.frame(
@@ -583,7 +590,7 @@ check_collinearity.zerocount <- function(x,
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = verbose)[, pred, drop = FALSE]
+  dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
 
   parms <- unlist(lapply(seq_along(pred), function(i) {
     p <- pred[i]
@@ -615,7 +622,7 @@ check_collinearity.zerocount <- function(x,
   tryCatch(
     {
       rhs <- insight::find_formula(x)[[component]]
-      d <- insight::get_data(x, verbose = verbose)
+      d <- insight::get_data(x, verbose = FALSE)
       attr(insight::get_modelmatrix(rhs, data = d), "assign")
     },
     error = function(e) {

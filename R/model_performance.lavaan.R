@@ -17,53 +17,52 @@
 #'   `metrics`).
 #'
 #' @details \subsection{Indices of fit}{
-#' \itemize{
-#'    \item **Chisq**: The model Chi-squared assesses overall fit and the
+#'
+#'    - **Chisq**: The model Chi-squared assesses overall fit and the
 #'    discrepancy between the sample and fitted covariance matrices. Its p-value
 #'    should be > .05 (i.e., the hypothesis of a perfect fit cannot be
 #'    rejected). However, it is quite sensitive to sample size.
 #'
-#'    \item **GFI/AGFI**: The (Adjusted) Goodness of Fit is the proportion
+#'    - **GFI/AGFI**: The (Adjusted) Goodness of Fit is the proportion
 #'    of variance accounted for by the estimated population covariance.
 #'    Analogous to R2. The GFI and the AGFI should be > .95 and > .90,
 #'    respectively.
 #'
-#'    \item **NFI/NNFI/TLI**: The (Non) Normed Fit Index. An NFI of 0.95,
+#'    - **NFI/NNFI/TLI**: The (Non) Normed Fit Index. An NFI of 0.95,
 #'    indicates the model of interest improves the fit by 95\% relative to the
 #'    null model. The NNFI (also called the Tucker Lewis index; TLI) is
 #'    preferable for smaller samples. They should be > .90 (Byrne, 1994) or >
 #'    .95 (Schumacker and Lomax, 2004).
 #'
-#'    \item **CFI**: The Comparative Fit Index is a revised form of NFI.
+#'    - **CFI**: The Comparative Fit Index is a revised form of NFI.
 #'    Not very sensitive to sample size (Fan, Thompson, and Wang, 1999). Compares
 #'    the fit of a target model to the fit of an independent, or null, model. It
 #'    should be > .90.
 #'
-#'    \item **RMSEA**: The Root Mean Square Error of Approximation is a
+#'    - **RMSEA**: The Root Mean Square Error of Approximation is a
 #'    parsimony-adjusted index. Values closer to 0 represent a good fit. It
 #'    should be < .08 or < .05. The p-value printed with it tests the hypothesis
 #'    that RMSEA is less than or equal to .05 (a cutoff sometimes used for good
 #'    fit), and thus should be not significant.
 #'
-#'    \item **RMR/SRMR**: the (Standardized) Root Mean Square Residual
+#'    - **RMR/SRMR**: the (Standardized) Root Mean Square Residual
 #'    represents the square-root of the difference between the residuals of the
 #'    sample covariance matrix and the hypothesized model. As the RMR can be
 #'    sometimes hard to interpret, better to use SRMR. Should be < .08.
 #'
-#'    \item **RFI**: the Relative Fit Index, also known as RHO1, is not
+#'    - **RFI**: the Relative Fit Index, also known as RHO1, is not
 #'    guaranteed to vary from 0 to 1. However, RFI close to 1 indicates a good
 #'    fit.
 #'
-#'    \item **IFI**: the Incremental Fit Index (IFI) adjusts the Normed Fit
+#'    - **IFI**: the Incremental Fit Index (IFI) adjusts the Normed Fit
 #'    Index (NFI) for sample size and degrees of freedom (Bollen's, 1989). Over
 #'    0.90 is a good fit, but the index can exceed 1.
 #'
-#'    \item **PNFI**: the Parsimony-Adjusted Measures Index. There is no
+#'    - **PNFI**: the Parsimony-Adjusted Measures Index. There is no
 #'    commonly agreed-upon cutoff value for an acceptable model for this index.
 #'    Should be > 0.50. }
 #'
 #'    See the documentation for `?lavaan::fitmeasures`.
-#' }
 #'
 #' \subsection{What to report}{
 #' Kline (2015) suggests that at a minimum the following indices should be
@@ -80,24 +79,25 @@
 #'   model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
 #'   model_performance(model)
 #' }
-#' @references \itemize{
-#'   \item Byrne, B. M. (1994). Structural equation modeling with EQS and
+#'
+#' @references
+#'
+#' - Byrne, B. M. (1994). Structural equation modeling with EQS and
 #'   EQS/Windows. Thousand Oaks, CA: Sage Publications.
 #'
-#'   \item Tucker, L. R., and Lewis, C. (1973). The reliability coefficient for
+#' - Tucker, L. R., and Lewis, C. (1973). The reliability coefficient for
 #'   maximum likelihood factor analysis. Psychometrika, 38, 1-10.
 #'
-#'   \item Schumacker, R. E., and Lomax, R. G. (2004). A beginner's guide to
+#' - Schumacker, R. E., and Lomax, R. G. (2004). A beginner's guide to
 #'   structural equation modeling, Second edition. Mahwah, NJ: Lawrence Erlbaum
 #'   Associates.
 #'
-#'   \item Fan, X., B. Thompson, and L. Wang (1999). Effects of sample size,
+#' - Fan, X., B. Thompson, and L. Wang (1999). Effects of sample size,
 #'   estimation method, and model specification on structural equation modeling
 #'   fit indexes. Structural Equation Modeling, 6, 56-83.
 #'
-#'   \item Kline, R. B. (2015). Principles and practice of structural equation
+#' - Kline, R. B. (2015). Principles and practice of structural equation
 #'   modeling. Guilford publications.
-#' }
 #'
 #' @export
 model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...) {

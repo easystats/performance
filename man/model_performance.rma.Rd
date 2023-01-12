@@ -39,36 +39,28 @@ Compute indices of model performance for meta-analysis model from the
 \details{
 \subsection{Indices of fit}{
 \itemize{
-\item{\strong{AIC}} {Akaike's Information Criterion, see
-\code{?stats::AIC}}
-
-\item{\strong{BIC}} {Bayesian Information Criterion, see
-\code{?stats::BIC}}
-
+\item \strong{AIC} Akaike's Information Criterion, see \code{?stats::AIC}
+\item \strong{BIC} {Bayesian Information Criterion, see \code{?stats::BIC}}
 \item \strong{I2}: For a random effects model, \code{I2} estimates (in
 percent) how much of the total variability in the effect size estimates
 can be attributed to heterogeneity among the true effects. For a
 mixed-effects model, \code{I2} estimates how much of the unaccounted
 variability can be attributed to residual heterogeneity.
-
 \item \strong{H2}: For a random-effects model, \code{H2} estimates the
 ratio of the total amount of variability in the effect size estimates to
 the amount of sampling variability. For a mixed-effects model, \code{H2}
 estimates the ratio of the unaccounted variability in the effect size
 estimates to the amount of sampling variability.
-
 \item \strong{TAU2}: The amount of (residual) heterogeneity in the random
 or mixed effects model.
-
 \item \strong{CochransQ (QE)}: Test for (residual) Heterogeneity. Without
 moderators in the model, this is simply Cochran's Q-test.
-
 \item \strong{Omnibus (QM)}: Omnibus test of parameters.
-
 \item \strong{R2}: Pseudo-R2-statistic, which indicates the amount of
 heterogeneity accounted for by the moderators included in a fixed-effects
 model.
 }
+
 See the documentation for \code{?metafor::fitstats}.
 }
 }

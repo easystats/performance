@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("performance") && requiet("pscl")) {
+if (requiet("pscl")) {
   data(bioChemists)
 
   model <- zeroinfl(

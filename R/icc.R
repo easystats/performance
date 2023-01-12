@@ -49,90 +49,89 @@
 #'    Publications.
 #'
 #' @details
-#'  \subsection{Interpretation}{
-#'  The ICC can be interpreted as \dQuote{the proportion of the variance
-#'  explained by the grouping structure in the population}. The grouping
-#'  structure entails that measurements are organized into groups (e.g., test
-#'  scores in a school can be grouped by classroom if there are multiple
-#'  classrooms and each classroom was administered the same test) and ICC indexes
-#'  how strongly measurements in the same group resemble each other. This index
-#'  goes from 0, if the grouping conveys no information, to 1, if all
-#'  observations in a group are identical (Gelman and Hill, 2007, p. 258). In
-#'  other word, the ICC - sometimes conceptualized as the measurement
-#'  repeatability - \dQuote{can also be interpreted as the expected
-#'  correlation between two randomly drawn units that are in the same group}
-#'  \cite{(Hox 2010: 15)}, although this definition might not apply to mixed
-#'  models with more complex random effects structures. The ICC can help determine
-#'  whether a mixed model is even necessary: an ICC of zero means the
-#'  observations within clusters are no more similar than observations from
-#'  different clusters, and setting it as a random factor might not be necessary.
-#'  }
-#'  \subsection{Difference with R2}{
-#'  The coefficient of determination R2 (that can be computed with [`r2()`])
-#'  quantifies the proportion of variance explained by a statistical model, but
-#'  its definition in mixed model is complex (hence, different methods to compute
-#'  a proxy exist). ICC is related to R2 because they are both ratios of
-#'  variance components. More precisely, R2 is the proportion of the explained
-#'  variance (of the full model), while the ICC is the proportion of explained
-#'  variance that can be attributed to the random effects. In simple cases, the
-#'  ICC corresponds to the difference between the *conditional R2* and the
-#'  *marginal R2* (see [`r2_nakagawa()`]).
-#'  }
-#'  \subsection{Calculation}{
-#'  The ICC is calculated by dividing the random effect variance,
-#'  \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}}, by
-#'  the total variance, i.e. the sum of the random effect variance and the
-#'  residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
-#'  }
-#'  \subsection{Adjusted and unadjusted ICC}{
-#'  `icc()` calculates an adjusted and an unadjusted ICC, which both
-#'  take all sources of uncertainty (i.e. of *all random effects*) into account.
-#'  While the *adjusted ICC* only relates to the random effects, the
-#'  *unadjusted ICC* also takes the fixed effects variances into account, more precisely,
-#'  the fixed effects variance is added to the denominator of the formula to
-#'  calculate the ICC (see \cite{Nakagawa et al. 2017}). Typically, the *adjusted* ICC is of
-#'  interest when the analysis of random effects is of interest. `icc()`
-#'  returns a meaningful ICC also for more complex random effects structures,
-#'  like models with random slopes or nested design (more than two levels) and
-#'  is applicable for models with other distributions than Gaussian. For more
-#'  details on the computation of the variances, see
-#'  `?insight::get_variance`.
-#'  }
-#'  \subsection{ICC for unconditional and conditional models}{
-#'  Usually, the ICC is calculated for the null model ("unconditional model").
-#'  However, according to \cite{Raudenbush and Bryk (2002)} or
-#'  \cite{Rabe-Hesketh and Skrondal (2012)} it is also feasible to compute the
-#'  ICC for full models with covariates ("conditional models") and compare how
-#'  much, e.g., a level-2 variable explains the portion of variation in the
-#'  grouping structure (random intercept).
-#'  }
-#'  \subsection{ICC for specific group-levels}{
-#'  The proportion of variance for specific levels related to the overall model
-#'  can be computed by setting `by_group = TRUE`. The reported ICC is
-#'  the variance for each (random effect) group compared to the total
-#'  variance of the model. For mixed models with a simple random intercept,
-#'  this is identical to the classical (adjusted) ICC.
-#'  }
-#'  \subsection{Variance decomposition for brms-models}{
-#'  If `model` is of class `brmsfit`, `icc()` might fail due to
-#'  the large variety of models and families supported by the **brms**
-#'  package. In such cases, `variance_decomposition()` is an alternative
-#'  ICC measure. The function calculates a variance decomposition based on the
-#'  posterior predictive distribution. In this case, first, the draws from the
-#'  posterior predictive distribution *not conditioned* on group-level
-#'  terms (`posterior_predict(..., re_formula = NA)`) are calculated as
-#'  well as draws from this distribution *conditioned* on *all random
-#'  effects* (by default, unless specified else in `re_formula`) are taken.
-#'  Then, second, the variances for each of these draws are calculated. The
-#'  "ICC" is then the ratio between these two variances. This is the recommended
-#'  way to analyse random-effect-variances for non-Gaussian models. It is then
-#'  possible to compare variances across models, also by specifying different
-#'  group-level terms via the `re_formula`-argument.
-#'  \cr \cr
-#'  Sometimes, when the variance of the posterior predictive distribution is
-#'  very large, the variance ratio in the output makes no sense, e.g. because
-#'  it is negative. In such cases, it might help to use `robust = TRUE`.
-#'  }
+#' ## Interpretation
+#' The ICC can be interpreted as "the proportion of the variance explained by
+#' the grouping structure in the population". The grouping structure entails
+#' that measurements are organized into groups (e.g., test scores in a school
+#' can be grouped by classroom if there are multiple classrooms and each
+#' classroom was administered the same test) and ICC indexes how strongly
+#' measurements in the same group resemble each other. This index goes from 0,
+#' if the grouping conveys no information, to 1, if all observations in a group
+#' are identical (_Gelman and Hill, 2007, p. 258_). In other word, the ICC -
+#' sometimes conceptualized as the measurement repeatability - "can also be
+#' interpreted as the expected correlation between two randomly drawn units
+#' that are in the same group" _(Hox 2010: 15)_, although this definition might
+#' not apply to mixed models with more complex random effects structures. The
+#' ICC can help determine whether a mixed model is even necessary: an ICC of
+#' zero (or very close to zero) means the observations within clusters are no
+#' more similar than observations from different clusters, and setting it as a
+#' random factor might not be necessary.
+#'
+#' ## Difference with R2
+#' The coefficient of determination R2 (that can be computed with [`r2()`])
+#' quantifies the proportion of variance explained by a statistical model, but
+#' its definition in mixed model is complex (hence, different methods to compute
+#' a proxy exist). ICC is related to R2 because they are both ratios of
+#' variance components. More precisely, R2 is the proportion of the explained
+#' variance (of the full model), while the ICC is the proportion of explained
+#' variance that can be attributed to the random effects. In simple cases, the
+#' ICC corresponds to the difference between the *conditional R2* and the
+#' *marginal R2* (see [`r2_nakagawa()`]).
+#'
+#' ## Calculation
+#' The ICC is calculated by dividing the random effect variance,
+#' \ifelse{html}{\out{&sigma;<sup>2</sup><sub>i</sub>}}{\eqn{\sigma^2_i}}, by
+#' the total variance, i.e. the sum of the random effect variance and the
+#' residual variance, \ifelse{html}{\out{&sigma;<sup>2</sup><sub>&epsilon;</sub>}}{\eqn{\sigma^2_\epsilon}}.
+#'
+#' ## Adjusted and unadjusted ICC
+#' `icc()` calculates an adjusted and an unadjusted ICC, which both take all
+#' sources of uncertainty (i.e. of *all random effects*) into account. While
+#' the *adjusted ICC* only relates to the random effects, the *unadjusted ICC*
+#' also takes the fixed effects variances into account, more precisely, the
+#' fixed effects variance is added to the denominator of the formula to
+#' calculate the ICC (see _Nakagawa et al. 2017_). Typically, the *adjusted*
+#' ICC is of interest when the analysis of random effects is of interest.
+#' `icc()` returns a meaningful ICC also for more complex random effects
+#' structures, like models with random slopes or nested design (more than two
+#' levels) and is applicable for models with other distributions than Gaussian.
+#' For more details on the computation of the variances, see
+#' `?insight::get_variance`.
+#'
+#' ## ICC for unconditional and conditional models
+#' Usually, the ICC is calculated for the null model ("unconditional model").
+#' However, according to _Raudenbush and Bryk (2002)_ or
+#' _Rabe-Hesketh and Skrondal (2012)_ it is also feasible to compute the
+#' ICC for full models with covariates ("conditional models") and compare how
+#' much, e.g., a level-2 variable explains the portion of variation in the
+#' grouping structure (random intercept).
+#'
+#' ## ICC for specific group-levels
+#' The proportion of variance for specific levels related to the overall model
+#' can be computed by setting `by_group = TRUE`. The reported ICC is
+#' the variance for each (random effect) group compared to the total
+#' variance of the model. For mixed models with a simple random intercept,
+#' this is identical to the classical (adjusted) ICC.
+#'
+#' ## Variance decomposition for brms-models
+#' If `model` is of class `brmsfit`, `icc()` might fail due to the large
+#' variety of models and families supported by the **brms** package. In such
+#' cases, `variance_decomposition()` is an alternative ICC measure. The function
+#' calculates a variance decomposition based on the posterior predictive
+#' distribution. In this case, first, the draws from the posterior predictive
+#' distribution *not conditioned* on group-level terms
+#' (`posterior_predict(..., re_formula = NA)`) are calculated as well as draws
+#' from this distribution *conditioned* on *all random effects* (by default,
+#' unless specified else in `re_formula`) are taken. Then, second, the variances
+#' for each of these draws are calculated. The "ICC" is then the ratio between
+#' these two variances. This is the recommended way to analyse
+#' random-effect-variances for non-Gaussian models. It is then possible to
+#' compare variances across models, also by specifying different group-level
+#' terms via the `re_formula`-argument.
+#'
+#' Sometimes, when the variance of the posterior predictive distribution is
+#' very large, the variance ratio in the output makes no sense, e.g. because
+#' it is negative. In such cases, it might help to use `robust = TRUE`.
 #'
 #' @examples
 #' if (require("lme4")) {
@@ -177,7 +176,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
   }
 
   if (!insight::is_mixed_model(model)) {
-    warning("'model' has no random effects.", call. = FALSE)
+    insight::format_warning("`model` has no random effects.")
     return(NULL)
   }
 
@@ -238,20 +237,23 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
       result <- .bootstrap_icc(model, iterations, tolerance, ...)
-      out$CI <- ci
       # CI for adjusted ICC
-      icc_ci <- as.vector(result$t[, 1])
-      icc_ci <- icc_ci[!is.na(icc_ci)]
-      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
-      out$CI_low_adjusted <- icc_ci$CI_low
-      out$CI_high_adjusted <- icc_ci$CI_high
+      icc_ci_adjusted <- as.vector(result$t[, 1])
+      icc_ci_adjusted <- icc_ci_adjusted[!is.na(icc_ci_adjusted)]
+      icc_ci_adjusted <- bayestestR::eti(icc_ci_adjusted, ci = ci)
 
       # CI for unadjusted ICC
-      icc_ci <- as.vector(result$t[, 2])
-      icc_ci <- icc_ci[!is.na(icc_ci)]
-      icc_ci <- bayestestR::eti(icc_ci, ci = ci)
-      out$CI_low_unadjusted <- icc_ci$CI_low
-      out$CI_high_unadjusted <- icc_ci$CI_high
+      icc_ci_unadjusted <- as.vector(result$t[, 2])
+      icc_ci_unadjusted <- icc_ci_unadjusted[!is.na(icc_ci_unadjusted)]
+      icc_ci_unadjusted <- bayestestR::eti(icc_ci_unadjusted, ci = ci)
+
+      out_ci <- data.frame(
+        ICC_adjusted = c(CI_low = icc_ci_adjusted$CI_low, CI_high = icc_ci_adjusted$CI_high),
+        ICC_conditional = c(CI_low = icc_ci_unadjusted$CI_low, CI_high = icc_ci_unadjusted$CI_high),
+        ICC_unadjusted = c(CI_low = icc_ci_unadjusted$CI_low, CI_high = icc_ci_unadjusted$CI_high)
+      )
+      out <- rbind(out, out_ci)
+      attr(out, "ci") <- ci
     }
 
     class(out) <- c("icc", "data.frame")
@@ -268,7 +270,7 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
 variance_decomposition <- function(model,
                                    re_formula = NULL,
                                    robust = TRUE,
-                                   ci = .95,
+                                   ci = 0.95,
                                    ...) {
   if (!inherits(model, "brmsfit")) {
     insight::format_error("Only models from package `brms` are supported.")
@@ -281,11 +283,11 @@ variance_decomposition <- function(model,
     resp <- insight::find_response(model)
     is.mixed <- unlist(lapply(resp, function(i) mi[[i]]$is_mixed))
     if (!any(is.mixed)) {
-      warning("`model` has no random effects.", call. = FALSE)
+      insight::format_warning("`model` has no random effects.")
       return(NULL)
     }
   } else if (!insight::is_mixed_model(model)) {
-    warning("`model` has no random effects.", call. = FALSE)
+    insight::format_warning("`model` has no random effects.")
     return(NULL)
   }
 
@@ -341,7 +343,7 @@ variance_decomposition <- function(model,
 as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
   data.frame(
     ICC_adjusted = x$ICC_adjusted,
-    ICC_conditional = x$ICC_unadjusted,
+    ICC_unadjusted = x$ICC_unadjusted,
     stringsAsFactors = FALSE,
     row.names = row.names,
     optional = optional,
@@ -354,34 +356,21 @@ as.data.frame.icc <- function(x, row.names = NULL, optional = FALSE, ...) {
 print.icc <- function(x, digits = 3, ...) {
   insight::print_color("# Intraclass Correlation Coefficient\n\n", "blue")
 
-  if (!is.null(x$CI_low_adjusted) && !is.null(x$CI_low_unadjusted)) {
-    out <- paste0(
-      c(
-        sprintf(
-          "    Adjusted ICC: %.*f %s",
-          digits,
-          x$ICC_adjusted,
-          insight::format_ci(x$CI_low_adjusted, x$CI_high_adjusted, digits = digits, ci = NULL)
-        ),
-        sprintf(
-          "  Unadjusted ICC: %.*f %s",
-          digits,
-          x$ICC_unadjusted,
-          insight::format_ci(x$CI_low_unadjusted, x$CI_high_unadjusted, digits = digits, ci = NULL)
-        )
-      ),
-      collapse = "\n"
-    )
-  } else {
-    out <- paste0(
-      c(
-        sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted),
-        sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted)
-      ),
-      collapse = "\n"
-    )
+  out <- c(
+    sprintf("    Adjusted ICC: %.*f", digits, x$ICC_adjusted[1]),
+    sprintf("  Unadjusted ICC: %.*f", digits, x$ICC_unadjusted[1])
+  )
+
+  # add CI
+  if (length(x$ICC_adjusted) == 3) {
+    out[1] <- .add_r2_ci_to_print(out[1], x$ICC_adjusted[2], x$ICC_adjusted[3], digits = digits)
+  }
+  if (length(x$ICC_unadjusted) == 3) {
+    out[2] <- .add_r2_ci_to_print(out[2], x$ICC_unadjusted[2], x$ICC_unadjusted[3], digits = digits)
   }
 
+  # separate lines for multiple R2
+  out <- paste0(out, collapse = "\n")
 
   cat(out)
   cat("\n")
@@ -550,6 +539,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   )
 }
 
+
 # bootstrapping using "lme4::bootMer"
 .boot_icc_fun_lme4 <- function(model) {
   vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
@@ -561,6 +551,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
     vars$var.random / (vars$var.fixed + vars$var.random + vars$var.residual)
   )
 }
+
 
 # prepare arguments for "lme4::bootMer"
 .do_lme4_bootmer <- function(model, .boot_fun, iterations, dots) {
@@ -597,6 +588,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   do.call(lme4::bootMer, args)
 }
 
+
 # main function for bootstrapping
 .bootstrap_icc <- function(model, iterations, tolerance, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
@@ -609,7 +601,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   } else {
     insight::check_if_installed("boot")
     result <- boot::boot(
-      data = insight::get_data(model),
+      data = insight::get_data(model, verbose = FALSE),
       statistic = .boot_icc_fun,
       R = iterations,
       sim = "ordinary",

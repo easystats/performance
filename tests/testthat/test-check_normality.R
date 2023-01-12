@@ -1,4 +1,4 @@
-if (requiet("testthat") && requiet("glmmTMB") && requiet("performance") && getRversion() >= "4.0.0") {
+if (requiet("glmmTMB") && getRversion() >= "4.0.0") {
   test_that("check_normality | afex", {
     skip_if_not_installed("afex")
 

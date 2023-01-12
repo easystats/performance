@@ -123,7 +123,7 @@ r2(model)
 
 Note that `r2` functions only return the $R^2$ values. We would encourage users to instead always use the `model_performance` function to get a more comprehensive set of indices of model fit. 
 
-```{r}
+```{r eval=successfully_loaded["lme4"]}
 model_performance(model)
 ```
 

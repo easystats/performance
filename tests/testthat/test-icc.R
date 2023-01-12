@@ -1,7 +1,7 @@
 osx <- tryCatch({
   si <- Sys.info()
   if (!is.null(si["sysname"])) {
-    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+    si["sysname"] == "Darwin" || startsWith(R.version$os, "darwin")
   } else {
     FALSE
   }
@@ -11,7 +11,9 @@ osx <- tryCatch({
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest && !osx) {
-  if (requiet("testthat") && requiet("brms") && requiet("rstanarm") && requiet("performance") && requiet("lme4") && requiet("nlme") && requiet("insight") && requiet("httr")) {
+  if (requiet("brms") && requiet("rstanarm") && requiet("lme4") && requiet("nlme") && requiet("httr")) {
+    skip_if_offline()
+
     data(iris)
     m0 <- lm(Sepal.Length ~ Petal.Length, data = iris)
     m1 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
@@ -36,10 +38,10 @@ if (.runThisTest && !osx) {
     # bootstrapped CIs ------------
     m <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
     set.seed(123)
-    out <- icc(m, ci = .95)
+    out <- icc(m, ci = 0.95)
     test_that("icc, CI", {
-      expect_equal(out$CI_low_adjusted, 0.5223931, tolerance = 1e-3)
-      expect_equal(out$CI_low_unadjusted, 0.3242904, tolerance = 1e-3)
+      expect_equal(out$ICC_adjusted, c(0.72166, 0.52239, 0.84024), tolerance = 1e-3)
+      expect_equal(out$ICC_unadjusted, c(0.52057, 0.32429, 0.67123), tolerance = 1e-3)
     })
 
 
@@ -98,7 +100,12 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(model, by_group = TRUE),
-        structure(list(Group = c("Subject", "grp"), ICC = c(0.5896587, 0.0016551)), class = c("icc_by_group", "data.frame"), row.names = c(NA, -2L)),
+        structure(list(
+          Group = c("Subject", "grp"),
+          ICC = c(0.5896587, 0.0016551)),
+          class = c("icc_by_group", "data.frame"),
+          row.names = c(NA, -2L)
+        ),
         tolerance = 0.05
       )
     })

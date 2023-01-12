@@ -89,6 +89,10 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
       stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
       error = function(e) NULL
     )
+    # when `get_loglikelihood()` does not work, `stats::AIC` sometimes still works (e.g., `fixest`)
+    if (is.null(aic)) {
+      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
+    }
   }
   aic
 }
@@ -308,7 +312,7 @@ performance_aicc.rma <- function(x, ...) {
       trans <- insight::get_transformation(model)$transformation
       .weighted_sum(log(
         diag(attr(with(
-          insight::get_data(model),
+          insight::get_data(model, verbose = FALSE),
           stats::numericDeriv(
             expr = quote(trans(
               get(insight::find_response(model))

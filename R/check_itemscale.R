@@ -86,10 +86,10 @@ check_itemscale <- function(x) {
 
     s_out <- data.frame(
       Item = columns,
-      Missings = sapply(items, function(i) sum(is.na(i)) / nrow(items)),
-      Mean = sapply(items, mean, na.rm = TRUE),
-      SD = sapply(items, stats::sd, na.rm = TRUE),
-      Skewness = sapply(items, function(i) as.numeric(datawizard::skewness(i))),
+      Missings = vapply(items, function(i) sum(is.na(i)) / nrow(items), numeric(1)),
+      Mean = vapply(items, mean, numeric(1), na.rm = TRUE),
+      SD = vapply(items, stats::sd, numeric(1), na.rm = TRUE),
+      Skewness = vapply(items, function(i) as.numeric(datawizard::skewness(i)), numeric(1)),
       "Difficulty" = item_difficulty(items)$difficulty,
       "Discrimination" = .item_discr,
       "alpha if deleted" = .item_alpha,
