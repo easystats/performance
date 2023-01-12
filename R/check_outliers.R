@@ -24,13 +24,13 @@
 #'   for any of the method run.
 #' @param ID Optional, to report an ID column along with the row number.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
-#' down to `ICSOutlier::ics.outlier()`. When `method = "mahalanobis"`,
-#' they are  passed down to `stats::mahalanobis()`.
+#' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
+#' they are  passed down to [stats::mahalanobis()].
 #'
 #' @return A logical vector of the detected outliers with a nice printing
 #'   method: a check (message) on whether outliers were detected or not. The
 #'   information on the distance measure and whether or not an observation is
-#'   considered as outlier can be recovered with the `as.data.frame`
+#'   considered as outlier can be recovered with the [as.data.frame]
 #'   function.
 #'
 #' @note There is also a
@@ -71,14 +71,14 @@
 #'  the quantile distribution can be used as a cut-off (Bollen, 1985). A common
 #'  approximation or heuristic is to use 4 divided by the numbers of
 #'  observations, which usually corresponds to a lower threshold (i.e., more
-#'  outliers are detected). This only works for Frequentist models. For Bayesian
+#'  outliers are detected). This only works for frequentist models. For Bayesian
 #'  models, see `pareto`.
 #'
 #' - **Pareto**:
 #' The reliability and approximate convergence of Bayesian models can be
 #' assessed using the estimates for the shape parameter k of the generalized
 #' Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the
-#' user should be warned, although in practice the authors of the `loo`
+#' user should be warned, although in practice the authors of the [loo::loo]
 #' package observed good performance for values of k up to 0.7 (the default
 #' threshold used by `performance`).
 #'
@@ -103,7 +103,7 @@
 #'  - **IQR** `("iqr")`:
 #'  Using the IQR (interquartile range) is a robust method developed by John
 #'  Tukey, which often appears in box-and-whisker plots (e.g., in
-#'  `geom_boxplot`). The interquartile range is the range between the first
+#'  [ggplot2::geom_boxplot]). The interquartile range is the range between the first
 #'  and the third quartiles. Tukey considered as outliers any data point that
 #'  fell outside of either 1.5 times (the default threshold is 1.7) the IQR below
 #'  the first or above the third quartile. Similar to the Z-score method, this is
@@ -145,8 +145,8 @@
 #' - **Robust Mahalanobis Distance**:
 #' A robust version of Mahalanobis distance using an Orthogonalized
 #' Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-#' 1972). Requires the \pkg{bigutilsr} package. See the
-#' `bigutilsr::dist_ogk()` function.
+#' 1972). Requires the [bigutilsr::bigutilsr] package. See the
+#' [bigutilsr::dist_ogk()] function.
 #'
 #' - **Minimum Covariance Determinant (MCD)**:
 #' Another robust version of Mahalanobis. Leys et al. (2018) argue that
@@ -162,8 +162,8 @@
 #'  The outlier are detected using ICS, which by default uses an alpha threshold
 #'  of 0.025 (corresponding to the 2.5\% most extreme observations) as a cut-off
 #'  value for outliers classification. Refer to the help-file of
-#'  `ICSOutlier::ics.outlier()` to get more details about this procedure.
-#'  Note that `method = "ics"` requires both \pkg{ICS} and \pkg{ICSOutlier}
+#'  [ICSOutlier::ics.outlier()] to get more details about this procedure.
+#'  Note that `method = "ics"` requires both [ICS] and [ICSOutlier::ICSOutlier]
 #'  to be installed, and that it takes some time to compute the results.
 #'
 #'  - **OPTICS**:
@@ -176,8 +176,19 @@
 #'  detect several outliers (as these are usually defined as a percentage of
 #'  extreme values), this algorithm functions in a different manner and won't
 #'  always detect outliers. Note that `method = "optics"` requires the
-#'  \pkg{dbscan} package to be installed, and that it takes some time to compute
+#'  [dbscan::dbscan] package to be installed, and that it takes some time to compute
 #'  the results.
+#'
+#'  - **Local Outlier Factor**:
+#'  Based on a K nearest neighbors algorithm, LOF compares the local density of
+#'  a point to the local densities of its neighbors instead of computing a
+#'  distance from the center (Breunig et al., 2000). Points that have a
+#'  substantially lower density than their neighbors are considered outliers. A
+#'  LOF score of approximately 1 indicates that density around the point is
+#'  comparable to its neighbors. Scores significantly larger than 1 indicate
+#'  outliers. The default threshold of 0.025 will classify as outliers the
+#'  observations located at `qnorm(1-0.025) * SD)` of the log-transformed
+#'  LOF distance. Requires the [dbscan::dbscan] package.
 #'
 #' @section Threshold specification:
 #'
@@ -395,8 +406,8 @@ check_outliers.default <- function(x,
 
   # Cook
   if ("cook" %in% method &&
-        !insight::model_info(x)$is_bayesian &&
-        !inherits(x, "bife")) {
+    !insight::model_info(x)$is_bayesian &&
+    !inherits(x, "bife")) {
     data_cook <- .check_outliers_cook(
       x,
       threshold = thresholds$cook
@@ -606,7 +617,7 @@ print.check_outliers <- function(x, ...) {
     }
 
     if ((isTRUE(nrow(outlier.count$all) > 0) || isTRUE(attributes(x)$grouped)) &&
-        (length(method) > 1 || all(method %in% method.univariate))) {
+      (length(method) > 1 || all(method %in% method.univariate))) {
       cat(long_dash,
         "The following observations were considered outliers ",
         "for two or more variables \n",
@@ -754,12 +765,6 @@ check_outliers.data.frame <- function(x,
 
   # Z-score
   if ("zscore" %in% method) {
-    if (thresholds$zscore < 1) {
-      insight::format_error(
-        "The `threshold` argument must be one or greater for method `zscore`."
-      )
-    }
-
     out <- c(out, .check_outliers_zscore(
       x,
       threshold = thresholds$zscore,
@@ -1272,6 +1277,12 @@ check_outliers.geeglm <- check_outliers.gls
                                    robust = TRUE,
                                    method = "max",
                                    ID.names = NULL) {
+  if (threshold < 1) {
+    insight::format_error(
+      "The `threshold` argument must be one or greater for method `zscore`."
+    )
+  }
+
   x <- as.data.frame(x)
 
   # Standardize
@@ -1674,6 +1685,12 @@ check_outliers.geeglm <- check_outliers.gls
 .check_outliers_lof <- function(x,
                                 threshold = 0.001,
                                 ID.names = NULL) {
+  if (threshold < 0 || threshold > 1) {
+    insight::format_error(
+      "The `threshold` argument must be between 0 and 1 for method `lof`."
+    )
+  }
+
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {

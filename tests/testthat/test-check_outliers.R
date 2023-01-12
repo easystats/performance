@@ -10,6 +10,17 @@ if (packageVersion("insight") >= "0.18.7") {
     )
   })
 
+  test_that("lof illegal threshold", {
+    expect_error(
+      check_outliers(mtcars$mpg, method = "lof", threshold = -1),
+      "The `threshold` argument"
+    )
+    expect_error(
+      check_outliers(mtcars$mpg, method = "lof", threshold = 1.1),
+      "The `threshold` argument"
+    )
+  })
+
   # 1. We first test that each method consistently flags outliers,
   # (given a specific threshold)
 
