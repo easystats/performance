@@ -1,0 +1,126 @@
+---
+title: "Check your outliers! An accessible introduction to identifying statistical outliers with R and *easystats*"
+subtitle: "(Alt title:) Statistical Outliers: Univariate, Multivariate, and Model-Based"
+
+authors:
+- affiliation: 1
+  name: Rémi Thériault
+  orcid: 0000-0003-4315-6788
+
+affiliations:
+- index: 1
+  name: Université du Québec à Montréal, Montréal, Québec
+
+output: 
+  pdf_document:
+    keep_tex: true
+    latex_engine: xelatex
+
+bibliography: paper.bib
+csl: apa.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(performance)
+library(see)
+```
+
+# Abstract
+
+xyz
+
+# Introduction
+
+Statistical outliers need to be addressed because they can significantly affect our statistical models.
+
+@leys2019outliers distinguish between error outliers, interesting outliers, and random outliers.
+
+
+## Current recommendations
+
+Current guidelines recommend the following:
+
+We note also that ideally the handling of outliers should be preregistered a priori [@leys2019outliers].
+
+# Univariate Outliers
+
+When using t-tests for example.
+
+For univariate outliers, it is recommended [@leys2019outliers] to use the Median Absolute Deviation (MAD) [@leys2013outliers]. In easystats' `check_outliers()`,one can use this approach with `method = "zscore_robust"`.
+
+Example:
+
+```{r univariate outliers}
+library(performance)
+data <- na.omit(airquality)
+
+x <- check_outliers(data, method = "zscore_robust")
+x
+
+library(see)
+plot(x)
+
+```
+
+
+# Multivariate Outliers
+
+For multivariate outliers, it is recommended [@leys2019outliers] to use the Minimum Covariance Determinant (MCD).
+
+Example:
+
+```{r multivarite outliers}
+
+x <- check_outliers(data, method = "mcd")
+x
+
+plot(x)
+
+```
+
+# Model-Based Outliers
+
+When using linear regression models for example.
+
+Example:
+
+```{r model-based outliers}
+
+# create some fake outliers
+data <- rbind(mtcars, 42, 55)
+
+# fit model with outliers
+model <- lm(disp ~ mpg + hp, data = data)
+x <- check_outliers(model, method = "cook")
+x
+
+plot(x)
+
+```
+
+# Multiple methods
+
+An alternative approach suggested by easystats is to combine several methods (model-based, univariate, and multivariate). This approach computes a composite outlier score, made of the average of the binary (0 or 1) results of each method. It represents the probability of each observation to be classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods).
+
+Example:
+
+```{r multimethod}
+
+x <- check_outliers(data, method = c(
+  "zscore", "IQR", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof"))
+x
+
+
+```
+
+An example sentence for reporting the usage of the composite method could be:
+
+> Based on a composite outlier score (see the 'check_outliers' function in the 'performance' R package; Lüdecke et al., 2021) obtained via the joint application of multiple outliers detection algorithms (Z-scores, Iglewicz, 1993; Interquartile range (IQR); Mahalanobis distance, Cabana, 2019; Robust Mahalanobis distance, Gnanadesikan and Kettenring, 1972; Minimum Covariance Determinant, Leys et al., 2018; Invariant Coordinate Selection, Archimbaud et al., 2018; OPTICS, Ankerst et al., 1999; Isolation Forest, Liu et al. 2008; and Local Outlier Factor, Breunig et al., 2000), we excluded n participants that were classified as outliers by at least half of the methods used.
+
+# Conclusion
+
+This is the conclusion.
+
+# References
