@@ -556,7 +556,11 @@ print.check_outliers <- function(x, ...) {
 
   method <- attr(x, "method")
 
-  thresholds <- lapply(attr(x, "threshold"), round, 2)
+  round_to_last_digit <- function(x, n = 2) {
+    max(abs(round(x, n)), abs(signif(x, 1))) * sign(x)
+  }
+
+  thresholds <- lapply(attr(x, "threshold"), round_to_last_digit, 2)
 
   method.thresholds <- data.frame(
     method = method,
