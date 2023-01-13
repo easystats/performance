@@ -163,10 +163,11 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # PCP -------------
   if (("PCP" %in% toupper(metrics)) &&
-    isTRUE(info$is_binomial) &&
-    isFALSE(info$is_multinomial) &&
-    isFALSE(info$is_ordinal)) {
-    out$PCP <- tryCatch(performance_pcp(model, verbose = verbose)$pcp_model,
+        isTRUE(info$is_binomial) &&
+        isFALSE(info$is_multinomial) &&
+        isFALSE(info$is_ordinal)) {
+    out$PCP <- tryCatch(
+      performance_pcp(model, verbose = verbose)$pcp_model,
       error = function(e) NULL
     )
   }
