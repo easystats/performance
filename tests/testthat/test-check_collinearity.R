@@ -127,7 +127,7 @@ if (requiet("glmmTMB") && getRversion() >= "4.0.0") {
     })
   }
 
-  test_that("check_collinearity, ci = NULL", { #518
+  test_that("check_collinearity, ci = NULL", { # 518
     data(npk)
     m <- lm(yield ~ N + P + K, npk)
     out <- check_collinearity(m, ci = NULL)
