@@ -395,8 +395,8 @@ check_outliers.default <- function(x,
 
   # Cook
   if ("cook" %in% method &&
-        !insight::model_info(x)$is_bayesian &&
-        !inherits(x, "bife")) {
+    !insight::model_info(x)$is_bayesian &&
+    !inherits(x, "bife")) {
     data_cook <- .check_outliers_cook(
       x,
       threshold = thresholds$cook
@@ -606,7 +606,7 @@ print.check_outliers <- function(x, ...) {
     }
 
     if ((isTRUE(nrow(outlier.count$all) > 0) || isTRUE(attributes(x)$grouped)) &&
-        (length(method) > 1 || all(method %in% method.univariate))) {
+      (length(method) > 1 || all(method %in% method.univariate))) {
       cat(long_dash,
         "The following observations were considered outliers ",
         "for two or more variables \n",

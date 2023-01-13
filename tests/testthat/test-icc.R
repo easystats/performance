@@ -100,9 +100,11 @@ if (.runThisTest && !osx) {
     test_that("icc", {
       expect_equal(
         icc(model, by_group = TRUE),
-        structure(list(
-          Group = c("Subject", "grp"),
-          ICC = c(0.5896587, 0.0016551)),
+        structure(
+          list(
+            Group = c("Subject", "grp"),
+            ICC = c(0.5896587, 0.0016551)
+          ),
           class = c("icc_by_group", "data.frame"),
           row.names = c(NA, -2L)
         ),

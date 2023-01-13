@@ -1,3 +1,10 @@
+# performance 0.10.3
+
+## Changes to functions
+
+* Warnings in `model_performance()` for unsupported objects of class
+  `BFBayesFactor` can now be suppressed with `verbose = FALSE`.
+
 # performance 0.10.2
 
 ## General
