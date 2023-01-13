@@ -266,7 +266,10 @@ model_performance.BFBayesFactor <- function(model,
   # check for valid BFBayesFactor object
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
-    insight::format_error("This type of Bayes factor models is not supported.")
+    if (isTRUE(verbose)) {
+      insight::format_warning("This type of Bayes factor models is not supported.")
+    }
+    return(NULL)
   }
 
   out <- list()
