@@ -229,7 +229,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
-  out <- out[sapply(out, function(i) !all(is.na(i)))]
+  out <- out[vapply(out, function(i) !all(is.na(i)), TRUE)]
 
   attributes(out) <- c(attributes(out), attri)
   class(out) <- c("performance_model", class(out))
@@ -260,7 +260,13 @@ model_performance.BFBayesFactor <- function(model,
 
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
-    insight::format_warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.")
+    if (verbose) {
+      insight::format_warning(paste0(
+        "Can produce ",
+        datawizard::text_concatenate(metrics, enclose = "`"),
+        " only for linear models."
+      ))
+    }
     return(NULL)
   }
 
@@ -311,7 +317,9 @@ model_performance.BFBayesFactor <- function(model,
   }
 
   params <- insight::get_parameters(model, verbose = verbose)
-  if (!"sig2" %in% colnames(params)) stop("This is not a linear model.", call. = FALSE)
+  if (!"sig2" %in% colnames(params)) {
+    insight::format_error("This is not a linear model.")
+  }
   sqrt(params$sig2)
 }
 
