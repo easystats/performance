@@ -16,7 +16,7 @@ indicative of a better fit."><meta property="og:image" content="https://easystat
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,24 +127,6 @@ indicative of a better fit.</p>
 <span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span>, chains <span class="op">=</span> <span class="fl">1</span>, iter <span class="op">=</span> <span class="fl">500</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu">looic</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: rstanarm</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Rcpp</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> This is rstanarm version 2.21.3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> - See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘rstanarm’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:car’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     logit</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:psych’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     logit</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:parameters’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     compare_models</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
