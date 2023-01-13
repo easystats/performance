@@ -254,20 +254,19 @@ model_performance.BFBayesFactor <- function(model,
                                             average = FALSE,
                                             prior_odds = NULL,
                                             ...) {
+  all_metrics <- c("R2", "SIGMA")
+
   if (all(metrics == "all")) {
     metrics <- c("R2", "SIGMA")
   }
 
+  # check for valid input
+  metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
+
+  # check for valid BFBayesFactor object
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
-    if (verbose) {
-      insight::format_warning(paste0(
-        "Can produce ",
-        datawizard::text_concatenate(metrics, enclose = "`"),
-        " only for linear models."
-      ))
-    }
-    return(NULL)
+    insight::format_error("This type of Bayes factor models is not supported.")
   }
 
   out <- list()
