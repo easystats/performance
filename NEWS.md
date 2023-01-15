@@ -5,6 +5,10 @@
 * Warnings in `model_performance()` for unsupported objects of class
   `BFBayesFactor` can now be suppressed with `verbose = FALSE`.
 
+* `check_predictions()` no longer fails with issues when `re_formula = NULL`
+  for mixed models, but instead gives a warning and tries to compute posterior
+  predictive checks with `re_formuka = NA`.
+
 # performance 0.10.2
 
 ## General
