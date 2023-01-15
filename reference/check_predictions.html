@@ -113,29 +113,21 @@ models, the model is passed to <code><a href="https://mc-stan.org/bayesplot/refe
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_predictions</span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_predictions</span><span class="op">(</span><span class="va">object</span>, iterations <span class="op">=</span> <span class="fl">50</span>, check_range <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for default</span></span>
+<span><span class="fu">check_predictions</span><span class="op">(</span></span>
 <span>  <span class="va">object</span>,</span>
 <span>  iterations <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  check_range <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  re_formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">posterior_predictive_check</span><span class="op">(</span></span>
-<span>  <span class="va">object</span>,</span>
-<span>  iterations <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  check_range <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  re_formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
+<span><span class="fu">posterior_predictive_check</span><span class="op">(</span><span class="va">object</span>, iterations <span class="op">=</span> <span class="fl">50</span>, check_range <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">check_posterior_predictions</span><span class="op">(</span></span>
-<span>  <span class="va">object</span>,</span>
-<span>  iterations <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  check_range <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  re_formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">check_posterior_predictions</span><span class="op">(</span><span class="va">object</span>, iterations <span class="op">=</span> <span class="fl">50</span>, check_range <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -157,6 +149,10 @@ the variation in the original data is captured by the model or not
 be inside the range of the related minimum and maximum values of <code>yrep</code>.</p></dd>
 
 
+<dt>...</dt>
+<dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code>.</p></dd>
+
+
 <dt>re_formula</dt>
 <dd><p>Formula containing group-level effects (random effects) to
 be considered in the simulated data. If <code>NULL</code> (default), condition
@@ -164,8 +160,8 @@ on all random effects. If <code>NA</code> or <code>~0</code>, condition on no ra
 effects. See <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code> in <strong>lme4</strong>.</p></dd>
 
 
-<dt>...</dt>
-<dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code>.</p></dd>
+<dt>verbose</dt>
+<dd><p>Toggle warnings.</p></dd>
 
 </dl></div>
     <div class="section level2">
