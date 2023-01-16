@@ -58,7 +58,7 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
   if (method == "auto") {
     check <- tryCatch(
       {
-        utils::capture.output(p <- check_normality(x)) #nolint
+        utils::capture.output(p <- check_normality(x)) # nolint
         p
       },
       error = function(e) {
