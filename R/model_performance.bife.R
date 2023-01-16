@@ -1,14 +1,18 @@
 #' @export
 model_performance.bife <- function(model, metrics = "all", verbose = TRUE, ...) {
+  all_metrics <- c("AIC", "R2", "LOGLOSS", "PCP")
   if (any(tolower(metrics) == "log_loss")) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
   if (all(metrics == "all")) {
-    metrics <- c("AIC", "R2", "LOGLOSS", "PCP")
+    metrics <- all_metrics
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "R2")
   }
+
+  # check for valid input
+  metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   info <- insight::model_info(model)
 

@@ -42,7 +42,10 @@ if (requiet("glmmTMB") && getRversion() >= "4.0.0") {
     expect_equal(attributes(out)$re_groups, "site: (Intercept)")
     expect_equal(as.vector(out), 0.698457693553405, tolerance = 1e-3)
 
-    out <- check_normality(m, effects = "fixed")
+    expect_message(
+      out <- check_normality(m, effects = "fixed"),
+      "for linear models"
+    )
     expect_null(out)
   })
 }
