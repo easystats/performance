@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.2.2
+Version: 0.10.2.3
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -132,8 +132,12 @@ Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.2.3.9000
 Roxygen: list(markdown = TRUE)
+Remotes:
+    easystats/insight,
+    easystats/see
 Config/testthat/edition: 3
 Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
+Config/rcmdcheck/ignore-inconsequential-notes: true

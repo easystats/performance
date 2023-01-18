@@ -90,7 +90,7 @@ check_itemscale <- function(x) {
       Mean = vapply(items, mean, numeric(1), na.rm = TRUE),
       SD = vapply(items, stats::sd, numeric(1), na.rm = TRUE),
       Skewness = vapply(items, function(i) as.numeric(datawizard::skewness(i)), numeric(1)),
-      "Difficulty" = item_difficulty(items)$difficulty,
+      "Difficulty" = item_difficulty(items)$Difficulty,
       "Discrimination" = .item_discr,
       "alpha if deleted" = .item_alpha,
       stringsAsFactors = FALSE,
