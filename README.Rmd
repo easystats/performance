@@ -9,7 +9,6 @@ bibliography: paper.bib
 knitr::opts_chunk$set(
   collapse = TRUE,
   tidy.opts = list(width.cutoff = 100),
-  tidy = TRUE,
   warning = FALSE,
   message = FALSE,
   out.width = "100%",
