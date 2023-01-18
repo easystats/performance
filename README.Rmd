@@ -8,7 +8,6 @@ bibliography: paper.bib
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  tidy.opts = list(width.cutoff = 100),
   warning = FALSE,
   message = FALSE,
   out.width = "100%",
