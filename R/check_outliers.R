@@ -387,8 +387,8 @@ check_outliers.default <- function(x,
 
   if (!missing(ID)) {
     insight::format_warning(
-      "ID argument not supported for model objects of class `", class(x)[1], "`."
-    )
+      paste0("ID argument not supported for model objects of class `", class(x)[1], "`."
+    ))
   }
 
   # Others
@@ -556,11 +556,11 @@ print.check_outliers <- function(x, ...) {
 
   method <- attr(x, "method")
 
-  round_to_last_digit <- function(x, n = 2) {
+  round_to_last_digit <- function(x, n = 3) {
     max(abs(round(x, n)), abs(signif(x, 1))) * sign(x)
   }
 
-  thresholds <- lapply(attr(x, "threshold"), round_to_last_digit, 2)
+  thresholds <- lapply(attr(x, "threshold"), round_to_last_digit, 3)
 
   method.thresholds <- data.frame(
     method = method,
