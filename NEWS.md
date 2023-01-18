@@ -1,5 +1,9 @@
 # performance 0.10.3
 
+## New functions
+
+* `item_discrimination()`, to calculate the discrimination of a scale's items.
+
 ## Changes to functions
 
 * Warnings in `model_performance()` for unsupported objects of class

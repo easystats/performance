@@ -45,9 +45,8 @@ item_difficulty(x)
 \item Bortz, J., and Döring, N. (2006). Quantitative Methoden der Datenerhebung.
 In J. Bortz and N. Döring, Forschungsmethoden und Evaluation. Springer:
 Berlin, Heidelberg: 137–293
-\item Kelava, A., and Moosbrugger, H. (2012). Deskriptivstatistische Evaluation
-von Items (Itemanalyse) und Testwertverteilungen. In H. Moosbrugger and
-A. Kelava (Hrsg.), Testtheorie und Fragebogenkonstruktion. Springer:
-Berlin, Heidelberg: 75–102
+\item Kelava A, Moosbrugger H (2020). Deskriptivstatistische Itemanalyse und
+Testwertbestimmung. In: Moosbrugger H,  Kelava A, editors. Testtheorie und
+Fragebogenkonstruktion. Berlin, Heidelberg: Springer, 143–158
 }
 }
