@@ -64,7 +64,7 @@ item_reliability <- function(x, standardize = FALSE, digits = 3) {
     # calculate corrected total-item correlation
     totalCorr <- vapply(seq_len(ncol(x)), function(i) {
       stats::cor(x[, i], apply(x[, -i], 1, sum), use = "pairwise.complete.obs")
-    }, , numeric(1L))
+    }, numeric(1L))
 
     ret.df <- data.frame(
       term = df.names,
