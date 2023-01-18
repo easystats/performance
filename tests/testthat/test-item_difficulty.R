@@ -5,12 +5,12 @@ test_that("item_difficulty", {
     item_difficulty(x, maximum_value = NA), # old behaviour
     structure(
       list(
-        item = c(
+        Item = c(
           "Sepal.Length", "Sepal.Width", "Petal.Length",
           "Petal.Width"
         ),
-        difficulty = c(0.74, 0.69, 0.54, 0.48),
-        ideal = c(0.56, 0.61, 0.57, 0.7)
+        Difficulty = c(0.74, 0.69, 0.54, 0.48),
+        Ideal = c(0.56, 0.61, 0.57, 0.7)
       ),
       class = c("item_difficulty", "data.frame"),
       row.names = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
@@ -19,8 +19,8 @@ test_that("item_difficulty", {
   )
 
   out <- item_difficulty(x) # new behaviour
-  expect_equal(out$difficulty, c(0.74, 0.39, 0.48, 0.15), tolerance = 1e-3)
-  expect_equal(out$ideal, c(0.56, 0.56, 0.56, 0.56), tolerance = 1e-3)
+  expect_equal(out$Difficulty, c(0.74, 0.39, 0.48, 0.15), tolerance = 1e-3)
+  expect_equal(out$Ideal, c(0.56, 0.56, 0.56, 0.56), tolerance = 1e-3)
 })
 
 test_that("item_difficulty, maximum value", {
@@ -30,7 +30,7 @@ test_that("item_difficulty, maximum value", {
   expect_equal(out1, out2, tolerance = 1e-3, ignore_attr = TRUE)
 
   out <- item_difficulty(x, maximum_value = 10)
-  expect_equal(out$difficulty, c(NaN, 0.3, 0.32), tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out$Difficulty, c(NaN, 0.3, 0.32), tolerance = 1e-3, ignore_attr = TRUE)
 })
 
 test_that("item_difficulty, maximum value", {

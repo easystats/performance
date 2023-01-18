@@ -28,10 +28,9 @@
 #' - Bortz, J., and Döring, N. (2006). Quantitative Methoden der Datenerhebung.
 #'   In J. Bortz and N. Döring, Forschungsmethoden und Evaluation. Springer:
 #'   Berlin, Heidelberg: 137–293
-#' - Kelava, A., and Moosbrugger, H. (2012). Deskriptivstatistische Evaluation
-#'   von Items (Itemanalyse) und Testwertverteilungen. In H. Moosbrugger and
-#'   A. Kelava (Hrsg.), Testtheorie und Fragebogenkonstruktion. Springer:
-#'   Berlin, Heidelberg: 75–102
+#' - Kelava A, Moosbrugger H (2020). Deskriptivstatistische Itemanalyse und
+#'   Testwertbestimmung. In: Moosbrugger H,  Kelava A, editors. Testtheorie und
+#'   Fragebogenkonstruktion. Berlin, Heidelberg: Springer, 143–158
 #'
 #' @examples
 #' data(mtcars)
@@ -74,9 +73,9 @@ item_difficulty <- function(x, maximum_value = NULL) {
   structure(
     class = c("item_difficulty", "data.frame"),
     data.frame(
-      item = colnames(x),
-      difficulty = d,
-      ideal = di,
+      Item = colnames(x),
+      Difficulty = d,
+      Ideal = di,
       stringsAsFactors = FALSE
     )
   )
@@ -88,13 +87,7 @@ item_difficulty <- function(x, maximum_value = NULL) {
 
 #' @export
 print.item_difficulty <- function(x, ...) {
-  spaces <- max(nchar(x$item))
-
-  insight::print_color("# Item Difficulty\n\n", "blue")
-  insight::print_color(sprintf("  %*s  ideal\n", spaces + 10, "difficulty"), "red")
-
-  for (i in seq_along(x$item)) {
-    cat(sprintf("  %*s      %.2f   %.2f\n", spaces, x$item[i], x$difficulty[i], x$ideal[i]))
-  }
+  out <- insight::format_table(x, ...)
+  cat(insight::export_table(out, caption = c("Item Difficulty", "blue"), ...))
   invisible(x)
 }

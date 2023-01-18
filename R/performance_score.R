@@ -60,7 +60,8 @@ performance_score <- function(model, verbose = TRUE, ...) {
     model <- model$fit
   }
 
-  if (is.null(minfo <- list(...)$model_info)) {
+  minfo <- list(...)$model_info
+  if (is.null(minfo)) {
     minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 

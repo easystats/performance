@@ -23,6 +23,7 @@
 #'   be considered in the simulated data. If `NULL` (default), condition
 #'   on all random effects. If `NA` or `~0`, condition on no random
 #'   effects. See `simulate()` in **lme4**.
+#' @param verbose Toggle warnings.
 #' @param ... Passed down to `simulate()`.
 #'
 #' @return A data frame of simulated responses and the original response vector.
@@ -63,16 +64,17 @@
 check_predictions <- function(object,
                               iterations = 50,
                               check_range = FALSE,
-                              re_formula = NULL,
                               ...) {
   UseMethod("check_predictions")
 }
 
+#' @rdname check_predictions
 #' @export
 check_predictions.default <- function(object,
                                       iterations = 50,
                                       check_range = FALSE,
                                       re_formula = NULL,
+                                      verbose = TRUE,
                                       ...) {
   # check for valid input
   .is_model_valid(object)
@@ -90,6 +92,7 @@ check_predictions.default <- function(object,
       iterations = iterations,
       check_range = check_range,
       re_formula = re_formula,
+      verbose = verbose,
       ...
     )
   }
@@ -100,6 +103,7 @@ check_predictions.BFBayesFactor <- function(object,
                                             iterations = 50,
                                             check_range = FALSE,
                                             re_formula = NULL,
+                                            verbose = TRUE,
                                             ...) {
   everything_we_need <- .get_bfbf_predictions(object, iterations = iterations)
 
@@ -139,10 +143,11 @@ pp_check.lm <- function(object,
                         iterations = 50,
                         check_range = FALSE,
                         re_formula = NULL,
+                        verbose = TRUE,
                         ...) {
   # if we have a matrix-response, continue here...
   if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.glm(object, iterations, check_range, re_formula, ...))
+    return(pp_check.glm(object, iterations, check_range, re_formula, verbose, ...))
   }
 
   # else, proceed as usual
@@ -150,8 +155,11 @@ pp_check.lm <- function(object,
     error = function(e) NULL
   )
 
+  # sanity check, for mixed models, where re.form = NULL (default) might fail
+  out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
+
   # glmmTMB returns column matrix for bernoulli
-  if (inherits(object, "glmmTMB") && insight::model_info(object)$is_binomial) {
+  if (inherits(object, "glmmTMB") && insight::model_info(object)$is_binomial && !is.null(out)) {
     out <- as.data.frame(lapply(out, function(i) {
       if (is.matrix(i)) {
         i[, 1]
@@ -190,6 +198,7 @@ pp_check.glm <- function(object,
                          iterations = 50,
                          check_range = FALSE,
                          re_formula = NULL,
+                         verbose = TRUE,
                          ...) {
   # if we have no matrix-response, continue here...
   if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
@@ -209,6 +218,9 @@ pp_check.glm <- function(object,
       NULL
     }
   )
+
+  # sanity check, for mixed models, where re.form = NULL (default) might fail
+  out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
 
   if (is.null(out)) {
     insight::format_error(
@@ -334,6 +346,7 @@ plot.performance_pp_check <- function(x, ...) {
 }
 
 
+# helper --------------------
 
 .backtransform_sims <- function(sims, resp_string) {
   if (grepl("log(log(", resp_string, fixed = TRUE)) {
@@ -372,4 +385,26 @@ plot.performance_pp_check <- function(x, ...) {
   }
 
   sims
+}
+
+
+.check_re_formula <- function(out, object, iterations, re_formula, verbose, ...) {
+  # sanity check, for mixed models, where re.form = NULL (default) might fail
+  if (is.null(out) && insight::is_mixed_model(object) && !isTRUE(is.na(re_formula))) {
+    if (verbose) {
+      insight::format_warning(
+        paste0(
+          "Failed to compute posterior predictive checks with `re_formula=",
+          deparse(re_formula),
+          "`."
+        ),
+        "Trying again with `re_formula=NA` now."
+      )
+    }
+    out <- tryCatch(
+      stats::simulate(object, nsim = iterations, re.form = NA, ...),
+      error = function(e) NULL
+    )
+  }
+  out
 }

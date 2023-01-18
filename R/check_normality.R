@@ -56,7 +56,7 @@ check_normality.default <- function(x, ...) {
 
   if (!insight::model_info(x)$is_linear) {
     insight::format_alert(
-      "Checking normality of residuals is only useful an appropriate assumption for linear models."
+      "Checking normality of residuals is only appropriate for linear models."
     )
     return(NULL)
   }
@@ -161,7 +161,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   # valid model?
   if (!info$is_linear && effects == "fixed") {
     insight::format_alert(
-      "Checking normality of residuals is only useful an appropriate assumption for linear models."
+      "Checking normality of residuals is only appropriate for linear models."
     )
     return(NULL)
   }
