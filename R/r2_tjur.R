@@ -23,7 +23,8 @@
 #'
 #' @export
 r2_tjur <- function(model, ...) {
-  if (is.null(info <- list(...)$model_info)) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 
