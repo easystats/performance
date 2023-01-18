@@ -137,3 +137,4 @@ Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
+Config/rcmdcheck/ignore-inconsequential-notes: true
