@@ -58,7 +58,7 @@ item_discrimination <- function(x, standardize = FALSE) {
 
   out <- data.frame(
     item = df.names,
-    discrimination = out,
+    discrimination = id,
     stringsAsFactors = FALSE
   )
 
