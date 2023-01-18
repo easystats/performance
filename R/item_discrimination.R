@@ -57,8 +57,8 @@ item_discrimination <- function(x, standardize = FALSE) {
   }, numeric(1))
 
   out <- data.frame(
-    item = df.names,
-    discrimination = id,
+    Item = df.names,
+    Discrimination = id,
     stringsAsFactors = FALSE
   )
 
@@ -71,6 +71,6 @@ item_discrimination <- function(x, standardize = FALSE) {
 #' @export
 print.item_discrimination <- function(x, ...) {
   out <- insight::format_table(x, ...)
-  cat(insight::export_table(out, ...))
+  cat(insight::export_table(out, caption = c("Item Discrimination", "blue"), ...))
   invisible(x)
 }
