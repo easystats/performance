@@ -59,12 +59,12 @@ item_reliability <- function(x, standardize = FALSE, digits = 3) {
     if (standardize) x <- .std(x)
 
     # calculate cronbach-if-deleted
-    cronbachDeleted <- sapply(seq_len(ncol(x)), function(i) cronbachs_alpha(x[, -i]))
+    cronbachDeleted <- vapply(seq_len(ncol(x)), function(i) cronbachs_alpha(x[, -i]), numeric(1L))
 
     # calculate corrected total-item correlation
-    totalCorr <- sapply(seq_len(ncol(x)), function(i) {
+    totalCorr <- vapply(seq_len(ncol(x)), function(i) {
       stats::cor(x[, i], apply(x[, -i], 1, sum), use = "pairwise.complete.obs")
-    })
+    }, , numeric(1L))
 
     ret.df <- data.frame(
       term = df.names,
