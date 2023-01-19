@@ -183,12 +183,12 @@ zero-inflation</li>
 <div class="section level2">
 <h2 id="r2-for-lm">R2 for <code>lm</code><a class="anchor" aria-label="anchor" href="#r2-for-lm"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>m_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(wt <span class="sc">~</span> am <span class="sc">*</span> cyl, <span class="at">data =</span> mtcars)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(m_lm)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># R2 for Linear Regression</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>        R2<span class="sc">:</span> <span class="fl">0.724</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>   adj. R2<span class="sc">:</span> <span class="fl">0.694</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>m_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(wt <span class="sc">~</span> am <span class="sc">*</span> cyl, <span class="at">data =</span> mtcars)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">r2</span>(m_lm)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># R2 for Linear Regression</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="er">&gt;</span>        R2<span class="sc">:</span> <span class="fl">0.724</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="sc">&gt;</span>   adj. R2<span class="sc">:</span> <span class="fl">0.694</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="r2-for-glm">R2 for <code>glm</code><a class="anchor" aria-label="anchor" href="#r2-for-glm"></a>
@@ -220,25 +220,25 @@ the variance of the <strong>fixed effects</strong> (without the random
 effects), while the conditional <span class="math inline">\(R^2\)</span>
 takes <em>both</em> the <strong>fixed and random effects</strong> into
 account (i.e., the total model).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># defining a linear mixed-effects model</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(Petal.Length <span class="sc">~</span> Petal.Width <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Species), <span class="at">data =</span> iris)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(model)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># R2 for Mixed Models</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.933</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.303</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># defining a linear mixed-effects model</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(Petal.Length <span class="sc">~</span> Petal.Width <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Species), <span class="at">data =</span> iris)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">r2</span>(model)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># R2 for Mixed Models</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="er">&gt;</span> </span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.933</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.303</span></span></code></pre></div>
 <p>Note that <code>r2</code> functions only return the <span class="math inline">\(R^2\)</span> values. We would encourage users to
 instead always use the <code>model_performance</code> function to get a
 more comprehensive set of indices of model fit.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">model_performance</span>(model)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Indices of model performance</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> AIC     <span class="sc">|</span>    AICc <span class="sc">|</span>     BIC <span class="sc">|</span> <span class="fu">R2</span> (cond.) <span class="sc">|</span> <span class="fu">R2</span> (marg.) <span class="sc">|</span>   ICC <span class="sc">|</span>  RMSE <span class="sc">|</span> Sigma</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="sc">-----------------------------------------------------------------------------</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> <span class="fl">159.036</span> <span class="sc">|</span> <span class="fl">159.312</span> <span class="sc">|</span> <span class="fl">171.079</span> <span class="sc">|</span>      <span class="fl">0.933</span> <span class="sc">|</span>      <span class="fl">0.303</span> <span class="sc">|</span> <span class="fl">0.904</span> <span class="sc">|</span> <span class="fl">0.373</span> <span class="sc">|</span> <span class="fl">0.378</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">model_performance</span>(model)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Indices of model performance</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="er">&gt;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="er">&gt;</span> AIC     <span class="sc">|</span>    AICc <span class="sc">|</span>     BIC <span class="sc">|</span> <span class="fu">R2</span> (cond.) <span class="sc">|</span> <span class="fu">R2</span> (marg.) <span class="sc">|</span>   ICC <span class="sc">|</span>  RMSE <span class="sc">|</span> Sigma</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="sc">&gt;</span> <span class="sc">-----------------------------------------------------------------------------</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="er">&gt;</span> <span class="fl">159.036</span> <span class="sc">|</span> <span class="fl">159.312</span> <span class="sc">|</span> <span class="fl">171.079</span> <span class="sc">|</span>      <span class="fl">0.933</span> <span class="sc">|</span>      <span class="fl">0.303</span> <span class="sc">|</span> <span class="fl">0.904</span> <span class="sc">|</span> <span class="fl">0.373</span> <span class="sc">|</span> <span class="fl">0.378</span></span></code></pre></div>
 <p>But, in the current vignette, we would like to exclusively focus on
 this family of functions and will only talk about this measure.</p>
 </div>
@@ -246,49 +246,49 @@ this family of functions and will only talk about this measure.</p>
 <div class="section level2">
 <h2 id="r2-for-bayesian-models">R2 for Bayesian Models<a class="anchor" aria-label="anchor" href="#r2-for-bayesian-models"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstanarm)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> cyl, <span class="at">data =</span> mtcars, <span class="at">refresh =</span> <span class="dv">0</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(model)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.816</span> (<span class="dv">95</span>% CI [<span class="fl">0.704</span>, <span class="fl">0.897</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(rstanarm)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(mpg <span class="sc">~</span> wt <span class="sc">+</span> cyl, <span class="at">data =</span> mtcars, <span class="at">refresh =</span> <span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">r2</span>(model)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="er">&gt;</span> </span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.816</span> (<span class="dv">95</span>% CI [<span class="fl">0.704</span>, <span class="fl">0.897</span>])</span></code></pre></div>
 <p>As discussed above, for mixed-effects models, there will be two
 components associated with <span class="math inline">\(R^2\)</span>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># defining a Bayesian mixed-effects model</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">stan_lmer</span>(Petal.Length <span class="sc">~</span> Petal.Width <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Species), <span class="at">data =</span> iris, <span class="at">refresh =</span> <span class="dv">0</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(model)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.953</span> (<span class="dv">95</span>% CI [<span class="fl">0.942</span>, <span class="fl">0.963</span>])</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.825</span> (<span class="dv">95</span>% CI [<span class="fl">0.720</span>, <span class="fl">0.901</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># defining a Bayesian mixed-effects model</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">stan_lmer</span>(Petal.Length <span class="sc">~</span> Petal.Width <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Species), <span class="at">data =</span> iris, <span class="at">refresh =</span> <span class="dv">0</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">r2</span>(model)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="er">&gt;</span> </span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.953</span> (<span class="dv">95</span>% CI [<span class="fl">0.942</span>, <span class="fl">0.963</span>])</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.825</span> (<span class="dv">95</span>% CI [<span class="fl">0.720</span>, <span class="fl">0.901</span>])</span></code></pre></div>
 <p>Let’s look at another regression analysis carried out with
 <a href="https://richarddmorey.github.io/BayesFactor/" class="external-link">BayesFactor</a> package.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BayesFactor)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(puzzles)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">anovaBF</span>(extra <span class="sc">~</span> group <span class="sc">+</span> ID,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> sleep,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">whichRandom =</span> <span class="st">"ID"</span>, <span class="at">progress =</span> <span class="cn">FALSE</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(m1)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.773</span> (<span class="dv">95</span>% CI [<span class="fl">0.439</span>, <span class="fl">0.900</span>])</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.124</span> (<span class="dv">95</span>% CI [<span class="fl">2.468e-08</span>, <span class="fl">0.252</span>])</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">generalTestBF</span>(RT <span class="sc">~</span> shape <span class="sc">*</span> color <span class="sc">+</span> ID,</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> puzzles, <span class="at">whichRandom =</span> <span class="st">"ID"</span>,</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">neverExclude =</span> <span class="st">"ID"</span>, <span class="at">progress =</span> <span class="cn">FALSE</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="fu">r2</span>(m2)</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span> </span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.693</span> (<span class="dv">95</span>% CI [<span class="fl">0.550</span>, <span class="fl">0.782</span>])</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.029</span> (<span class="dv">95</span>% CI [<span class="fl">8.085e-08</span>, <span class="fl">0.088</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(BayesFactor)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">data</span>(puzzles)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">anovaBF</span>(extra <span class="sc">~</span> group <span class="sc">+</span> ID,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">data =</span> sleep,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">whichRandom =</span> <span class="st">"ID"</span>, <span class="at">progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">r2</span>(m1)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="er">&gt;</span> </span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.773</span> (<span class="dv">95</span>% CI [<span class="fl">0.439</span>, <span class="fl">0.900</span>])</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.124</span> (<span class="dv">95</span>% CI [<span class="fl">2.468e-08</span>, <span class="fl">0.252</span>])</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">generalTestBF</span>(RT <span class="sc">~</span> shape <span class="sc">*</span> color <span class="sc">+</span> ID,</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  <span class="at">data =</span> puzzles, <span class="at">whichRandom =</span> <span class="st">"ID"</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="at">neverExclude =</span> <span class="st">"ID"</span>, <span class="at">progress =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>)</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="fu">r2</span>(m2)</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Bayesian R2 with Compatibility Interval</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="er">&gt;</span> </span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.693</span> (<span class="dv">95</span>% CI [<span class="fl">0.550</span>, <span class="fl">0.782</span>])</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.029</span> (<span class="dv">95</span>% CI [<span class="fl">8.085e-08</span>, <span class="fl">0.088</span>])</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="comparing-change-in-r2-using-cohens-f">Comparing change in R2 using Cohen’s <em>f</em><a class="anchor" aria-label="anchor" href="#comparing-change-in-r2-using-cohens-f"></a>
@@ -301,17 +301,17 @@ the ratio between the increase in <span class="math inline">\(R^2\)</span> and t
 <p><span class="math display">\[
 f^{2}={R_{AB}^{2}-R_{A}^{2} \over 1-R_{AB}^{2}}
 \]</span></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(hardlyworking)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(salary <span class="sc">~</span> xtra_hours, <span class="at">data =</span> hardlyworking)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(salary <span class="sc">~</span> xtra_hours <span class="sc">+</span> n_comps <span class="sc">+</span> seniority, <span class="at">data =</span> hardlyworking)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_f_squared</span>(m1, <span class="at">model2 =</span> m2)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> Cohen<span class="st">'s f2 (partial) |      95% CI | R2_delta</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; ---------------------------------------------</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; 1.19                 | [0.99, Inf] |     0.17</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; </span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; - One-sided CIs: upper bound fixed at [Inf].</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">data</span>(hardlyworking)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(salary <span class="sc">~</span> xtra_hours, <span class="at">data =</span> hardlyworking)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(salary <span class="sc">~</span> xtra_hours <span class="sc">+</span> n_comps <span class="sc">+</span> seniority, <span class="at">data =</span> hardlyworking)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">cohens_f_squared</span>(m1, <span class="at">model2 =</span> m2)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="sc">&gt;</span> Cohen<span class="st">'s f2 (partial) |      95% CI | R2_delta</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="st">&gt; ---------------------------------------------</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="st">&gt; 1.19                 | [0.99, Inf] |     0.17</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="st">&gt; </span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="st">&gt; - One-sided CIs: upper bound fixed at [Inf].</span></span></code></pre></div>
 <p>If you want to know more about these indices, you can check out
 details and references in the functions that compute them <a href="https://easystats.github.io/performance/reference/index.html#section-r-functions"><strong>here</strong></a>.</p>
 </div>
