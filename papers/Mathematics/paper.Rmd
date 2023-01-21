@@ -1,5 +1,5 @@
 ---
-title: "Check your outliers! An accessible introduction to identifying statistical outliers with R and *easystats*"
+title: "Check your outliers! An accessible introduction to identifying statistical outliers in R with *easystats*"
 subtitle: "(Alt title:) Detecting Statistical Outliers: Univariate, Multivariate, and Model-Based"
 
 authors:
@@ -21,12 +21,22 @@ csl: apa.csl
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  comment = "#>",
+  out.width = "100%",
+  dpi = 300,
+  warning = FALSE
+)
 
 library(performance)
 library(see)
 library(datawizard)
 ```
+
+<!-- IP: Should there be equations? The title says "accessible" introduction to outlier detection methods, but if we don't do a good job of explaining these equations, we might be compromise on the accessibility. -->
+
+<!-- IP: All figures need to have captions. -->
 
 # Abstract
 
@@ -34,21 +44,23 @@ xyz
 
 # Introduction
 
-The improper handling of outliers can substantially affect our statistical model estimations, thus contributing to false positives [@simmons2011false] but almost certainly to false negatives as well. It is thus essential to address this problem in a thoughtful manner. Fortunately, guidelines exist in this regard. Yet, especially in the field of psychology, many researchers still do not treat outliers in a consistent manner or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
+The improper handling of outliers can substantially affect statistical model estimations, thus contributing to false positives [@simmons2011false] but almost certainly to false negatives as well. It is thus essential to address this problem in a thoughtful manner. Fortunately, guidelines exist in this regard. Yet, especially in the field of psychology, many researchers still do not treat outliers in a consistent manner or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
 
-One possible reason is that researchers do not know of existing recommendations, or of currently available software options for their implementation. In this paper, we show how to follow current recommendations for the detection of outliers using R and easystats's {performance} package [@ludecke2021performance].
+One possible reason is that researchers do not know of existing recommendations or currently available software options for their implementation. In this paper, we show how to follow current recommendations for the detection of outliers using R and {performance} package [@ludecke2021performance] from *easystats* ecosystem.
 
 <!-- Use of brackets or italics for packages seem inconsistent among our papers. What should we use here? -->
+<!-- IP: We now tend to use bracket notation {} for package names, so we should stick to that convention henceforth. But when we want to refer to the entire ecosystem (and not the package), we can use italics -->
 
 <!-- Add a "performance is part of the easystats ecosystem" paragraph? -->
 
 <!-- Add a "Compared to other packages" paragraph? -->
+<!-- I have changed the title to specify that we are specifically focusing on easystats, which means we don't need to get into the discussion about the available outliers. -->
 
 # Identifying Outliers
 
-Although many researchers attempt to identify outliers with measures based on the mean (e.g., z-scores), those methods are problematic because the mean and standard deviation themselves are influenced by outliers and they assume a normal distribution [@leys2019outliers; @leys2013outliers]. Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean.
+Although many researchers attempt to identify outliers with measures based on the mean (e.g. z-scores), those methods are problematic because the mean and standard deviation themselves are influenced by outliers and they assume a normal distribution [@leys2019outliers; @leys2013outliers]. Therefore, current guidelines [ref?] recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean.
 
-Nonetheless, what outlier method to use exactly depends on several factors, including which statistical test is of interest. When using a regression model for example, the most relevant information will be regarding observations that do not fit well with the model, that is, model-based outliers. When no method is readily available to check model-based outliers, such as for structural equation modeling (SEM), it can make sense to check for multivariate outliers. Finally, for simple tests comparing values on the same variable for example, such as t-tests or correlations, it can make sense to check for univariate outliers. Below we go through each of the mentioned methods in turn.
+Nonetheless, which exact outlier method to use depends on several factors, like the statistical test of interest. When using a regression model, for example, the most relevant information will be regarding observations that do not fit well with the model, known as model-based outliers. When no method is readily available to detect model-based outliers, such as for structural equation modelling (SEM), looking for multivariate outliers maybe relevant. Finally, for simple tests (t-tests or correlations) that compare values of the same variable, it makes sense to check for univariate outliers. In the following section, we will go through each of the mentioned methods.
 
 <!-- Any references for this or is it just common sense? -->
 
@@ -60,7 +72,7 @@ $$
 MAD = b M_i(|x_i-M_j(x_j)|)
 $$
 
-In {performance}'s `check_outliers()`, one can use this approach with `method = "zscore_robust"`. Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, for consistency with other outlier detection methods, {performance} uses a less conservative threshold of 3.09 by default, meaning outliers will be flagged if they go beyond +/- 3.09 MAD. However, note that this parameter can also be specified manually if desired using the `threshold` argument.
+In {performance}'s `check_outliers()`, one can use this approach with `method = "zscore_robust"`. Although @leys2013outliers suggests a default threshold of 2.5 and @leys2019outliers a threshold of 3, for consistency with other outlier detection methods, {performance} uses a less conservative threshold of 3.09 by default. That is, data points will be flagged as outliers if they go beyond +/- 3.09 MAD. Users can adjust this threshold using `threshold` argument.
 
 <!-- Question: should we change our default threshold to align with recommendations?? -->
 
@@ -77,14 +89,12 @@ x <- check_outliers(data, method = "zscore_robust", ID = "car")
 x
 ```
 
-All the `check_outliers()` output objects possess a `plot()` method, meaning it is possible to visually observe the outliers, as below:
+All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
 
 ```{r univariate plot}
 library(see)
 plot(x)
-
 ```
-
 
 ## Multivariate Outliers
 
@@ -101,12 +111,10 @@ $$
 Example:
 
 ```{r multivariate outliers}
-
 x <- check_outliers(data, method = "mcd")
 x
 
 plot(x)
-
 ```
 
 ## Model-Based Outliers
@@ -115,7 +123,7 @@ plot(x)
 
 <!-- @bwiernik I know you prefer model-based outlier detection methods over multivariate methods, and I do as well. Do we have any references to back this or is it just common sense?-->
 
-When using linear regression models for example. In {performance}'s `check_outliers()`, one can use this approach with `method = "cook"` (or `method = "pareto"` for Bayesian models). The cook distance can be calculated as follow:
+When working with regression models, model-based outliers can be detected using `check_outliers()` by specifying `method = "cook"` (or `method = "pareto"` for Bayesian models). The Cook's distance can be calculated as follow:
 
 $$
 MATTHS_{gohere}^{andB}
@@ -126,13 +134,11 @@ $$
 Example:
 
 ```{r model-based outliers}
-
 model <- lm(disp ~ mpg * hp, data = data)
 x <- check_outliers(model, method = "cook")
 x
 
 plot(x)
-
 ```
 
 ## Multiple methods
@@ -142,14 +148,14 @@ An alternative approach suggested by easystats is to combine several methods. Th
 Example:
 
 ```{r multimethod}
-
-x <- check_outliers(data, method = c(
-  "zscore_robust", "iqr", "mcd", "ics"), ID = "car")
+x <- check_outliers(
+  data,
+  method = c("zscore_robust", "iqr", "mcd", "ics"),
+  ID = "car"
+)
 x
 
 plot(x)
-
-
 ```
 
 An example sentence for reporting the usage of the composite method could be:
@@ -158,15 +164,15 @@ An example sentence for reporting the usage of the composite method could be:
 
 # Handling Outliers
 
-We have at this point demonstrated how to identify outliers. But what should we do with these outliers once identified? There is no one-size-fits-all rule, as this depends on several factors. For example, @leys2019outliers distinguish between error outliers, interesting outliers, and random outliers.
+We have at this point demonstrated how to identify outliers. But what should we do with these outliers once identified? There is no one-size-fits-all rule, as this depends on several factors. For example, @leys2019outliers distinguishes between error outliers, interesting outliers, and random outliers.
 
-_Error outliers_ are likely due to human error should be corrected before data analysis or removed since they are invalid observations. _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed for the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution, therefore should be kept.
+_Error outliers_ are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations. _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
 
-It is recommended to _keep_ observations which are expected to be part of the distribution of interest, even if they are outliers [@leys2019outliers]. However, if it is suspected that the outliers belong to an alternative distribution, then those observations could have a large impact on the results and call into question their robustness, especially if significance depends on their inclusion or exclusion.
+It is recommended to _keep_ observations which are expected to be part of the distribution of interest, even if they are outliers [@leys2019outliers]. However, if it is suspected that the outliers belong to an alternative distribution, then those observations could have a large impact on the results and call into question their robustness, especially if significance is conditional on their inclusion.
 
-_Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results (assuming the study was not preregistered with a prespecified outlier treatment plan). This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, that is, winsorization [@tukey1963less], whereby outliers are brought back within acceptable limits (e.g., 3 MAD). However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
+_Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results (assuming the study was not preregistered with a prespecified outlier treatment plan). This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach; i.e., winsorizing [@tukey1963less] outliers to bring them back within acceptable limits (e.g., 3 MAD). However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
 
-We note that no matter which outlier method you use, the handling of outliers should be specified a priori with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report exactly how many and how outliers were handled, if possible mentioning the package, function, and threshold used (ideally linking to the full code).
+We note that no matter which outlier method you use, the handling of outliers should be specified *a priori* with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report exactly how many and which outliers were handled, and share code so that the exclusion criteria can be reproduced.
 
 ## Winsorization
 
@@ -180,12 +186,13 @@ library(datawizard)
 winsorized.data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
 
 winsorized.data[33:34, ]
-
 ```
 
 # Conclusion
 
-In this paper, we have showed how to investigate outliers using the `check_outliers` function of the {performance} package in accordance with existing guidelines and good practices. We note that in addition to using the current functions and respecting existing recommendations, it is also important to pre-specify your plans to manage outliers, such as with preregistration, or at the very least justify your choices and stay consistent. Ideally, one would additionally also report the package, function, and threshold used (ideally linking to the full code). We hope that this paper will help more researchers engage in good research practices while providing a smooth experience.
+<!-- IP: Once the rest of the content is finalized, we need to give this another shot. The current version doesn't jibe with me. -->
+
+In this paper, we have showed how to investigate outliers using the `check_outliers()` function of the {performance} package while following current good practices. We note that in addition to using the current functions and respecting existing recommendations, it is also important to pre-specify your plans to manage outliers, such as with preregistration, or at the very least justify your choices and stay consistent. Ideally, one would additionally also report the package, function, and threshold used (ideally linking to the full code). We hope that this paper will help more researchers engage in good research practices while providing a smooth experience.
 
 # Acknowledgments
 

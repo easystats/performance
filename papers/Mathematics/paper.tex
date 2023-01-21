@@ -5,16 +5,19 @@
 \documentclass[
 ]{article}
 \usepackage{amsmath,amssymb}
-\usepackage{lmodern}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -119,14 +122,14 @@
 \fi
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
-  pdftitle={Check your outliers! An accessible introduction to identifying statistical outliers with R and easystats},
+  pdftitle={Check your outliers! An accessible introduction to identifying statistical outliers in R with easystats},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
 \title{Check your outliers! An accessible introduction to identifying
-statistical outliers with R and \emph{easystats}}
+statistical outliers in R with \emph{easystats}}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -149,42 +152,43 @@ xyz
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-The improper handling of outliers can substantially affect our
-statistical model estimations, thus contributing to false positives
-(Simmons et al., 2011) but almost certainly to false negatives as well.
-It is thus essential to address this problem in a thoughtful manner.
-Fortunately, guidelines exist in this regard. Yet, especially in the
-field of psychology, many researchers still do not treat outliers in a
-consistent manner or do so using inappropriate strategies (Leys et al.,
-2013; Simmons et al., 2011).
+The improper handling of outliers can substantially affect statistical
+model estimations, thus contributing to false positives (Simmons et al.,
+2011) but almost certainly to false negatives as well. It is thus
+essential to address this problem in a thoughtful manner. Fortunately,
+guidelines exist in this regard. Yet, especially in the field of
+psychology, many researchers still do not treat outliers in a consistent
+manner or do so using inappropriate strategies (Leys et al., 2013;
+Simmons et al., 2011).
 
 One possible reason is that researchers do not know of existing
-recommendations, or of currently available software options for their
+recommendations or currently available software options for their
 implementation. In this paper, we show how to follow current
-recommendations for the detection of outliers using R and easystats's
-\{performance\} package (Lüdecke et al., 2021).
+recommendations for the detection of outliers using R and
+\{performance\} package (Lüdecke et al., 2021) from \emph{easystats}
+ecosystem.
 
 \hypertarget{identifying-outliers}{%
 \section{Identifying Outliers}\label{identifying-outliers}}
 
 Although many researchers attempt to identify outliers with measures
-based on the mean (e.g., z-scores), those methods are problematic
-because the mean and standard deviation themselves are influenced by
-outliers and they assume a normal distribution (Leys et al., 2013,
-2019). Therefore, current guidelines recommend using robust methods to
-identify outliers, such as those relying on the median as opposed to the
-mean.
+based on the mean (e.g.~z-scores), those methods are problematic because
+the mean and standard deviation themselves are influenced by outliers
+and they assume a normal distribution (Leys et al., 2013, 2019).
+Therefore, current guidelines {[}ref?{]} recommend using robust methods
+to identify outliers, such as those relying on the median as opposed to
+the mean.
 
-Nonetheless, what outlier method to use exactly depends on several
-factors, including which statistical test is of interest. When using a
-regression model for example, the most relevant information will be
-regarding observations that do not fit well with the model, that is,
-model-based outliers. When no method is readily available to check
-model-based outliers, such as for structural equation modeling (SEM), it
-can make sense to check for multivariate outliers. Finally, for simple
-tests comparing values on the same variable for example, such as t-tests
-or correlations, it can make sense to check for univariate outliers.
-Below we go through each of the mentioned methods in turn.
+Nonetheless, which exact outlier method to use depends on several
+factors, like the statistical test of interest. When using a regression
+model, for example, the most relevant information will be regarding
+observations that do not fit well with the model, known as model-based
+outliers. When no method is readily available to detect model-based
+outliers, such as for structural equation modelling (SEM), looking for
+multivariate outliers maybe relevant. Finally, for simple tests (t-tests
+or correlations) that compare values of the same variable, it makes
+sense to check for univariate outliers. In the following section, we
+will go through each of the mentioned methods.
 
 \hypertarget{univariate-outliers}{%
 \subsection{Univariate Outliers}\label{univariate-outliers}}
@@ -200,12 +204,12 @@ MAD = b M_i(|x_i-M_j(x_j)|)
 
 In \{performance\}'s \texttt{check\_outliers()}, one can use this
 approach with \texttt{method\ =\ "zscore\_robust"}. Although Leys et al.
-(2013) suggest a default threshold of 2.5 and Leys et al. (2019) a
+(2013) suggests a default threshold of 2.5 and Leys et al. (2019) a
 threshold of 3, for consistency with other outlier detection methods,
-\{performance\} uses a less conservative threshold of 3.09 by default,
-meaning outliers will be flagged if they go beyond +/- 3.09 MAD.
-However, note that this parameter can also be specified manually if
-desired using the \texttt{threshold} argument.
+\{performance\} uses a less conservative threshold of 3.09 by default.
+That is, data points will be flagged as outliers if they go beyond +/-
+3.09 MAD. Users can adjust this threshold using \texttt{threshold}
+argument.
 
 Example:
 
@@ -223,35 +227,34 @@ Example:
 \end{Shaded}
 
 \begin{verbatim}
-## 2 outliers detected: cases 33, 34.
-## - Based on the following method and threshold: zscore_robust (3.09).
-## - For variables: mpg, cyl, disp, hp.
-## 
-## -----------------------------------------------------------------------------
-## The following observations were considered outliers for two or more variables 
-## by at least one of the selected methods: 
-## 
-##   Row car n_Zscore_robust
-## 1  33  33               2
-## 2  34  34               2
-## 
-## -----------------------------------------------------------------------------
-## Outliers per variable (zscore_robust): 
-## 
-## $mpg
-##    Row car Distance_Zscore_robust
-## 33  33  33               3.709699
-## 34  34  34               5.848328
-## 
-## $cyl
-##    Row car Distance_Zscore_robust
-## 33  33  33               12.14083
-## 34  34  34               16.52502
+#> 2 outliers detected: cases 33, 34.
+#> - Based on the following method and threshold: zscore_robust (3.09).
+#> - For variables: mpg, cyl, disp, hp.
+#> 
+#> -----------------------------------------------------------------------------
+#> The following observations were considered outliers for two or more variables 
+#> by at least one of the selected methods: 
+#> 
+#>   Row car n_Zscore_robust
+#> 1  33  33               2
+#> 2  34  34               2
+#> 
+#> -----------------------------------------------------------------------------
+#> Outliers per variable (zscore_robust): 
+#> 
+#> $mpg
+#>    Row car Distance_Zscore_robust
+#> 33  33  33               3.709699
+#> 34  34  34               5.848328
+#> 
+#> $cyl
+#>    Row car Distance_Zscore_robust
+#> 33  33  33               12.14083
+#> 34  34  34               16.52502
 \end{verbatim}
 
-All the \texttt{check\_outliers()} output objects possess a
-\texttt{plot()} method, meaning it is possible to visually observe the
-outliers, as below:
+All \texttt{check\_outliers()} output objects possess a \texttt{plot()}
+method, meaning it is also possible to visualize the outliers:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -260,7 +263,7 @@ outliers, as below:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{paper_files/figure-latex/univariate plot-1.pdf}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/univariate plot-1}
 
 \hypertarget{multivariate-outliers}{%
 \subsection{Multivariate Outliers}\label{multivariate-outliers}}
@@ -289,9 +292,9 @@ Example:
 \end{Shaded}
 
 \begin{verbatim}
-## 9 outliers detected: cases 7, 15, 16, 17, 24, 29, 31, 33, 34.
-## - Based on the following method and threshold: mcd (18.467).
-## - For variables: mpg, cyl, disp, hp.
+#> 9 outliers detected: cases 7, 15, 16, 17, 24, 29, 31, 33, 34.
+#> - Based on the following method and threshold: mcd (18.47).
+#> - For variables: mpg, cyl, disp, hp.
 \end{verbatim}
 
 \begin{Shaded}
@@ -300,7 +303,7 @@ Example:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{paper_files/figure-latex/multivariate outliers-1.pdf}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/multivariate outliers-1}
 
 \hypertarget{model-based-outliers}{%
 \subsection{Model-Based Outliers}\label{model-based-outliers}}
@@ -308,10 +311,10 @@ Example:
 {[}FIND REFERENCES TO SUPPORT MODEL-BASED OUTLIER DETECTION ABOVE ALL
 OTHER METHODS!!{]}
 
-When using linear regression models for example. In \{performance\}'s
-\texttt{check\_outliers()}, one can use this approach with
+When working with regression models, model-based outliers can be
+detected using \texttt{check\_outliers()} by specifying
 \texttt{method\ =\ "cook"} (or \texttt{method\ =\ "pareto"} for Bayesian
-models). The cook distance can be calculated as follow:
+models). The Cook's distance can be calculated as follow:
 
 \[
 MATTHS_{gohere}^{andB}
@@ -330,9 +333,9 @@ Example:
 \end{Shaded}
 
 \begin{verbatim}
-## 2 outliers detected: cases 31, 34.
-## - Based on the following method and threshold: cook (0.858).
-## - For variable: (Whole model).
+#> 2 outliers detected: cases 31, 34.
+#> - Based on the following method and threshold: cook (0.86).
+#> - For variable: (Whole model).
 \end{verbatim}
 
 \begin{Shaded}
@@ -341,7 +344,7 @@ Example:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{paper_files/figure-latex/model-based outliers-1.pdf}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/model-based outliers-1}
 
 \hypertarget{multiple-methods}{%
 \subsection{Multiple methods}\label{multiple-methods}}
@@ -361,34 +364,37 @@ Example:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(data, }\AttributeTok{method =} \FunctionTok{c}\NormalTok{(}
-  \StringTok{"zscore\_robust"}\NormalTok{, }\StringTok{"iqr"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{, }\StringTok{"ics"}\NormalTok{), }\AttributeTok{ID =} \StringTok{"car"}\NormalTok{)}
+\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(}
+\NormalTok{  data,}
+  \AttributeTok{method =} \FunctionTok{c}\NormalTok{(}\StringTok{"zscore\_robust"}\NormalTok{, }\StringTok{"iqr"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{, }\StringTok{"ics"}\NormalTok{),}
+  \AttributeTok{ID =} \StringTok{"car"}
+\NormalTok{)}
 \NormalTok{x}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## 3 outliers detected: cases 31, 33, 34.
-## - Based on the following methods and thresholds: zscore_robust (3.09),
-##   iqr (1.7), mcd (18.467), ics (0.001).
-## - For variables: mpg, cyl, disp, hp.
-## 
-## Note: Outliers were classified as such by at least half of the selected methods. 
-## 
-## -----------------------------------------------------------------------------
-## The following observations were considered outliers for two or more variables 
-## by at least one of the selected methods: 
-## 
-##   Row                 car n_Zscore_robust n_IQR          n_MCD          n_ICS
-## 1  33                  33               2     2 (Multivariate) (Multivariate)
-## 2  34                  34               2     2 (Multivariate) (Multivariate)
-## 3  31       Maserati Bora               0     1 (Multivariate) (Multivariate)
-## 4   7          Duster 360               0     0 (Multivariate)              0
-## 5  15  Cadillac Fleetwood               0     0 (Multivariate)              0
-## 6  16 Lincoln Continental               0     0 (Multivariate)              0
-## 7  17   Chrysler Imperial               0     0 (Multivariate)              0
-## 8  24          Camaro Z28               0     0 (Multivariate)              0
-## 9  29      Ford Pantera L               0     0 (Multivariate)              0
+#> 3 outliers detected: cases 31, 33, 34.
+#> - Based on the following methods and thresholds: zscore_robust (3.09),
+#>   iqr (1.7), mcd (18.47), ics (0).
+#> - For variables: mpg, cyl, disp, hp.
+#> 
+#> Note: Outliers were classified as such by at least half of the selected methods. 
+#> 
+#> -----------------------------------------------------------------------------
+#> The following observations were considered outliers for two or more variables 
+#> by at least one of the selected methods: 
+#> 
+#>   Row                 car n_Zscore_robust n_IQR          n_MCD          n_ICS
+#> 1  33                  33               2     2 (Multivariate) (Multivariate)
+#> 2  34                  34               2     2 (Multivariate) (Multivariate)
+#> 3  31       Maserati Bora               0     1 (Multivariate) (Multivariate)
+#> 4   7          Duster 360               0     0 (Multivariate)              0
+#> 5  15  Cadillac Fleetwood               0     0 (Multivariate)              0
+#> 6  16 Lincoln Continental               0     0 (Multivariate)              0
+#> 7  17   Chrysler Imperial               0     0 (Multivariate)              0
+#> 8  24          Camaro Z28               0     0 (Multivariate)              0
+#> 9  29      Ford Pantera L               0     0 (Multivariate)              0
 \end{verbatim}
 
 \begin{Shaded}
@@ -397,7 +403,7 @@ Example:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{paper_files/figure-latex/multimethod-1.pdf}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/multimethod-1}
 
 An example sentence for reporting the usage of the composite method
 could be:
@@ -420,45 +426,45 @@ methods used.
 We have at this point demonstrated how to identify outliers. But what
 should we do with these outliers once identified? There is no
 one-size-fits-all rule, as this depends on several factors. For example,
-Leys et al. (2019) distinguish between error outliers, interesting
+Leys et al. (2019) distinguishes between error outliers, interesting
 outliers, and random outliers.
 
-\emph{Error outliers} are likely due to human error should be corrected
-before data analysis or removed since they are invalid observations.
-\emph{Interesting outliers} are not due to technical error and may be of
-theoretical interest; it might thus be relevant to investigate them
-further even though they should be removed for the current analysis of
-interest. \emph{Random outliers} are assumed to be due to chance alone
-and to belong to the correct distribution, therefore should be kept.
+\emph{Error outliers} are likely due to human error and should be
+corrected before data analysis or outright removed since they are
+invalid observations. \emph{Interesting outliers} are not due to
+technical error and may be of theoretical interest; it might thus be
+relevant to investigate them further even though they should be removed
+from the current analysis of interest. \emph{Random outliers} are
+assumed to be due to chance alone and to belong to the correct
+distribution and, therefore, should be retained.
 
 It is recommended to \emph{keep} observations which are expected to be
 part of the distribution of interest, even if they are outliers (Leys et
 al., 2019). However, if it is suspected that the outliers belong to an
 alternative distribution, then those observations could have a large
 impact on the results and call into question their robustness,
-especially if significance depends on their inclusion or exclusion.
+especially if significance is conditional on their inclusion.
 
 \emph{Removing} outliers can in this case be a valid strategy, and
 ideally one would report results with and without outliers to see the
 extent of their impact on results (assuming the study was not
 preregistered with a prespecified outlier treatment plan). This approach
 however can reduce statistical power. Therefore, some propose a
-\emph{recoding} approach, that is, winsorization (Tukey \& McLaughlin,
-1963), whereby outliers are brought back within acceptable limits (e.g.,
-3 MAD). However, if possible, it is recommended to collect enough data
-so that even after removing outliers, there is still sufficient
-statistical power without having to resort to winsorization (Leys et
-al., 2019).
+\emph{recoding} approach; i.e., winsorizing (Tukey \& McLaughlin, 1963)
+outliers to bring them back within acceptable limits (e.g., 3 MAD).
+However, if possible, it is recommended to collect enough data so that
+even after removing outliers, there is still sufficient statistical
+power without having to resort to winsorization (Leys et al., 2019).
 
 We note that no matter which outlier method you use, the handling of
-outliers should be specified a priori with as much detail as possible,
-and ideally preregistered, to limit researchers' degrees of freedom and
-therefore risks of false positives (Leys et al., 2019). This is
-especially true given that interesting outliers and random outliers are
-oftentimes hard to distinguish in practice. Thus, researchers should
-always prioritize transparency and report exactly how many and how
-outliers were handled, if possible mentioning the package, function, and
-threshold used (ideally linking to the full code).
+outliers should be specified \emph{a priori} with as much detail as
+possible, and ideally preregistered, to limit researchers' degrees of
+freedom and therefore risks of false positives (Leys et al., 2019). This
+is especially true given that interesting outliers and random outliers
+are oftentimes hard to distinguish in practice. Thus, researchers should
+always prioritize transparency and report exactly how many and which
+outliers were handled, and share code so that the exclusion criteria can
+be reproduced.
 
 \hypertarget{winsorization}{%
 \subsection{Winsorization}\label{winsorization}}
@@ -473,9 +479,9 @@ the intro/recommendations?)
 \end{Shaded}
 
 \begin{verbatim}
-##    car mpg cyl disp hp
-## 33  33  42  42   42 42
-## 34  34  55  55   55 55
+#>    car mpg cyl disp hp
+#> 33  33  42  42   42 42
+#> 34  34  55  55   55 55
 \end{verbatim}
 
 \begin{Shaded}
@@ -489,25 +495,24 @@ the intro/recommendations?)
 \end{Shaded}
 
 \begin{verbatim}
-##    car      mpg     cyl disp hp
-## 33  33 37.68598 14.8956   42 42
-## 34  34 37.68598 14.8956   55 55
+#>    car      mpg     cyl disp hp
+#> 33  33 37.68598 14.8956   42 42
+#> 34  34 37.68598 14.8956   55 55
 \end{verbatim}
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
 In this paper, we have showed how to investigate outliers using the
-\texttt{check\_outliers} function of the \{performance\} package in
-accordance with existing guidelines and good practices. We note that in
-addition to using the current functions and respecting existing
-recommendations, it is also important to pre-specify your plans to
-manage outliers, such as with preregistration, or at the very least
-justify your choices and stay consistent. Ideally, one would
-additionally also report the package, function, and threshold used
-(ideally linking to the full code). We hope that this paper will help
-more researchers engage in good research practices while providing a
-smooth experience.
+\texttt{check\_outliers()} function of the \{performance\} package while
+following current good practices. We note that in addition to using the
+current functions and respecting existing recommendations, it is also
+important to pre-specify your plans to manage outliers, such as with
+preregistration, or at the very least justify your choices and stay
+consistent. Ideally, one would additionally also report the package,
+function, and threshold used (ideally linking to the full code). We hope
+that this paper will help more researchers engage in good research
+practices while providing a smooth experience.
 
 \hypertarget{acknowledgments}{%
 \section{Acknowledgments}\label{acknowledgments}}
