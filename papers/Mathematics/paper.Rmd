@@ -9,13 +9,18 @@ authors:
 - affiliation: 2
   name: Mattan S. Ben-Shachar
   orcid: 0000-0002-4287-4801
-
+- affiliation: 3
+  name: Indrajeet Patil
+  orcid: 0000-0003-1995-6531
+  
 affiliations:
 - index: 1
   name: Université du Québec à Montréal, Montréal, Québec
 - index: 2
   name: XXX
-
+- index: 3
+  name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany 
+  
 output: 
   pdf_document:
     keep_tex: true

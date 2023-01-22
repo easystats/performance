@@ -164,7 +164,7 @@ Simmons et al., 2011).
 One possible reason is that researchers do not know of existing
 recommendations or currently available software options for their
 implementation. In this paper, we show how to follow current
-recommendations for the detection of outliers using R and
+recommendations for statistical outlier detection (SOD) using R and
 \{performance\} package (Lüdecke et al., 2021) from \emph{easystats}
 ecosystem.
 
@@ -173,11 +173,11 @@ ecosystem.
 
 Although many researchers attempt to identify outliers with measures
 based on the mean (e.g.~z-scores), those methods are problematic because
-the mean and standard deviation themselves are influenced by outliers
-and they assume a normal distribution (Leys et al., 2013, 2019).
-Therefore, current guidelines {[}ref?{]} recommend using robust methods
-to identify outliers, such as those relying on the median as opposed to
-the mean.
+the mean and standard deviation themselves are not robust to the
+influence of outliers and they assume a normal distribution (Leys et
+al., 2013, 2019). Therefore, current guidelines {[}ref?{]} recommend
+using robust methods to identify outliers, such as those relying on the
+median as opposed to the mean.
 
 Nonetheless, which exact outlier method to use depends on several
 factors, like the statistical test of interest. When using a regression
@@ -200,7 +200,8 @@ interquartile range or the mean and its standard deviation (Leys et al.,
 
 \[
 MAD = b M_i(|x_i-M_j(x_j)|)
-\]
+\] Where \(b\) is a scaler, often set to
+\(1/\left(\Phi ^{-1}(3/4)\right)\approx 1.4826\).
 
 In \{performance\}'s \texttt{check\_outliers()}, one can use this
 approach with \texttt{method\ =\ "zscore\_robust"}. Although Leys et al.
@@ -310,6 +311,10 @@ Example:
 
 {[}FIND REFERENCES TO SUPPORT MODEL-BASED OUTLIER DETECTION ABOVE ALL
 OTHER METHODS!!{]}
+
+Something something\ldots{} what is leverage\ldots{} why we should care
+if few observations have (relatively) strong leverage (answer: they are
+suspect of biasing our estimates!).
 
 When working with regression models, model-based outliers can be
 detected using \texttt{check\_outliers()} by specifying
@@ -424,9 +429,14 @@ methods used.
 \section{Handling Outliers}\label{handling-outliers}}
 
 We have at this point demonstrated how to identify outliers. But what
-should we do with these outliers once identified? There is no
-one-size-fits-all rule, as this depends on several factors. For example,
-Leys et al. (2019) distinguishes between error outliers, interesting
+should we do with these outliers once identified? Although it is common
+to automatically discard any observation that has been marked as ``an
+outlier'' as if it might infect the rest of the data with its
+statistical ailment, we believe that the use of SOD methods is but one
+step in the get-to-know-your-data pipeline; a researcher or analyst's
+\emph{domain knowledge} must be involved in the decision of how to deal
+with observations marked as outliers by means of SOD. For example, Leys
+et al. (2019) distinguishes between error outliers, interesting
 outliers, and random outliers.
 
 \emph{Error outliers} are likely due to human error and should be
@@ -444,6 +454,14 @@ al., 2019). However, if it is suspected that the outliers belong to an
 alternative distribution, then those observations could have a large
 impact on the results and call into question their robustness,
 especially if significance is conditional on their inclusion.
+
+On the other hand, there are also outliers that cannot be detected by
+statistical tools, but should be found and removed. For example, if
+we're studying the effects of X on Y among teenages and we have one
+observation from a 20-year-old, this observation might not be a
+\emph{statistical outlier}, but it is an outlier in the \emph{context}
+of our research, and should be discarded to allow for valid inferences
+of interest.
 
 \emph{Removing} outliers can in this case be a valid strategy, and
 ideally one would report results with and without outliers to see the
