@@ -92,7 +92,7 @@ test_that("mahalanobis_robust which", {
 test_that("mcd which", {
   set.seed(42)
   expect_identical(
-    which(check_outliers(mtcars, method = "mcd", threshold = 35)),
+    which(check_outliers(mtcars, method = "mcd", threshold = 45)),
     as.integer(c(7, 8, 9, 19, 21, 24, 27, 28, 30, 31))
   )
 })
