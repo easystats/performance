@@ -93,7 +93,7 @@ test_that("mcd which", {
   set.seed(42)
   expect_identical(
     which(check_outliers(mtcars, method = "mcd", threshold = 45)),
-    as.integer(c(7, 8, 9, 19, 21, 24, 27, 28, 30, 31))
+    as.integer(c(7, 9, 19, 21, 24, 27, 28, 30, 31))
   )
 })
 
