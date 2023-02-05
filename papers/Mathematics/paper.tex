@@ -217,6 +217,24 @@ Example:
 #> 34  34  34               16.52502
 \end{verbatim}
 
+Specific outliers can be obtained by using \texttt{which()} on the output object, which can be used for exclusions for example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{which}\NormalTok{(x)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> [1] 33 34
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data2 }\OtherTok{\textless{}{-}}\NormalTok{ data[}\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(x), ]}
+\end{Highlighting}
+\end{Shaded}
+
 All \texttt{check\_outliers()} output objects possess a \texttt{plot()} method, meaning it is also possible to visualize the outliers:
 
 
@@ -229,7 +247,7 @@ All \texttt{check\_outliers()} output objects possess a \texttt{plot()} method, 
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/univariate-1} \caption{Visual depiction of outliers using the robust \emph{z} score method.}\label{fig:univariate}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/univariate-1} \caption{Visual depiction of outliers using the robust \emph{z}-score method.}\label{fig:univariate}
 \end{figure}
 
 \hypertarget{multivariate-outliers}{%
@@ -255,7 +273,7 @@ Example:
 \end{Shaded}
 
 \begin{verbatim}
-#> 6 outliers detected: cases 15, 16, 17, 31, 33, 34.
+#> 9 outliers detected: cases 7, 15, 16, 17, 24, 29, 31, 33, 34.
 #> - Based on the following method and threshold: mcd (18.47).
 #> - For variables: mpg, cyl, disp, hp.
 \end{verbatim}
@@ -367,6 +385,67 @@ Example:
 \includegraphics[width=1\linewidth]{paper_files/figure-latex/multimethod-1} \caption{Visual depiction of outliers using several different statistical outlier detection methods.}\label{fig:multimethod}
 \end{figure}
 
+Outliers (counts or per variables) for individual methods can then be obtained through attributes. For example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{attributes}\NormalTok{(x)}\SpecialCharTok{$}\NormalTok{outlier\_var}\SpecialCharTok{$}\NormalTok{zscore\_robust}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> $mpg
+#>    Row car Distance_Zscore_robust
+#> 33  33  33               3.709699
+#> 34  34  34               5.848328
+#> 
+#> $cyl
+#>    Row car Distance_Zscore_robust
+#> 33  33  33               12.14083
+#> 34  34  34               16.52502
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{attributes}\NormalTok{(x)}\SpecialCharTok{$}\NormalTok{outlier\_var}\SpecialCharTok{$}\NormalTok{iqr}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> $mpg
+#>    Row car Distance_IQR
+#> 33  33  33     1.550881
+#> 34  34  34     2.458544
+#> 
+#> $cyl
+#>    Row car Distance_IQR
+#> 33  33  33     5.294118
+#> 34  34  34     7.205882
+#> 
+#> $hp
+#>               Row           car Distance_IQR
+#> Maserati Bora  31 Maserati Bora     1.348181
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{attributes}\NormalTok{(x)}\SpecialCharTok{$}\NormalTok{outlier\_count}\SpecialCharTok{$}\NormalTok{mcd}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#>                     Row                 car          n_MCD
+#> Duster 360            7          Duster 360 (Multivariate)
+#> Cadillac Fleetwood   15  Cadillac Fleetwood (Multivariate)
+#> Lincoln Continental  16 Lincoln Continental (Multivariate)
+#> Chrysler Imperial    17   Chrysler Imperial (Multivariate)
+#> Camaro Z28           24          Camaro Z28 (Multivariate)
+#> Ford Pantera L       29      Ford Pantera L (Multivariate)
+#> Maserati Bora        31       Maserati Bora (Multivariate)
+#> 33                   33                  33 (Multivariate)
+#> 34                   34                  34 (Multivariate)
+\end{verbatim}
+
 An example sentence for reporting the usage of the composite method could be:
 
 \begin{quote}
@@ -376,7 +455,12 @@ Based on a composite outlier score (see the `check\_outliers' function in the `p
 \hypertarget{handling-outliers}{%
 \section{Handling Outliers}\label{handling-outliers}}
 
-We have at this point demonstrated how to identify outliers. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as ``an outlier'' as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's \emph{domain knowledge} must be involved in the decision of how to deal with observations marked as outliers by means of SOD. For example, Leys et al. (2019) distinguish between error outliers, interesting outliers, and random outliers.
+We have at this point demonstrated how to identify outliers. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as ``an outlier'' as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's \emph{domain knowledge} must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are not perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
+
+\hypertarget{error-interesting-and-random-outliers}{%
+\subsection{Error, Interesting, and Random Outliers}\label{error-interesting-and-random-outliers}}
+
+Leys et al. (2019) distinguish between error outliers, interesting outliers, and random outliers.
 
 \emph{Error outliers} are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations. \emph{Interesting outliers} are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. \emph{Random outliers} are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
 
@@ -386,14 +470,10 @@ On the other hand, there are also outliers that cannot be detected by statistica
 
 \emph{Removing} outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a \emph{recoding} approach, namely, winsorization: bringing outliers back within acceptable limits (e.g., 3 MAD. Tukey \& McLaughlin, 1963). However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization (Leys et al., 2019).
 
-Furthermore, automatic tools can help detect outliers, but they are not perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
-
-Lastly, we note that no matter which outlier method you use, the handling of outliers should be specified \emph{a priori} with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives (Leys et al., 2019). This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework, so that the exclusion criteria can be reproduced precisely.
-
 \hypertarget{winsorization}{%
 \subsection{Winsorization}\label{winsorization}}
 
-Above, we mentioned a recoding approach to handling outliers: winsorization (Tukey \& McLaughlin, 1963). The \emph{easystats} ecosystem makes it easy to incorporate this step into your workflow through the \texttt{winsorize()} function of the \{datawizard\} package. This procedure will bring back univariate outliers within the limits of `acceptable' values, based either on the percentile, the \emph{z} score, or, ideally, the robust \emph{z} score (based on the MAD).
+Above, we mentioned a recoding approach to handling outliers: winsorization (Tukey \& McLaughlin, 1963). The \emph{easystats} ecosystem makes it easy to incorporate this step into your workflow through the \texttt{winsorize()} function of the \{datawizard\} package (Patil et al., 2022). This procedure will bring back univariate outliers within the limits of `acceptable' values, based either on the percentile, the \emph{z} score, or, ideally, the robust \emph{z} score (based on the MAD).
 
 Example:
 
@@ -425,6 +505,11 @@ Example:
 #> 34  34 37.68598 14.8956   55 55
 \end{verbatim}
 
+\hypertarget{the-importance-of-transparency}{%
+\subsection{The Importance of Transparency}\label{the-importance-of-transparency}}
+
+We note that no matter which outlier method you use, the handling of outliers should be specified \emph{a priori} with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives (Leys et al., 2019). This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework, so that the exclusion criteria can be reproduced precisely.
+
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
@@ -455,6 +540,9 @@ Leys, C., Ley, C., Klein, O., Bernard, P., \& Licata, L. (2013). Detecting outli
 
 \leavevmode\vadjust pre{\hypertarget{ref-ludecke2021performance}{}}%
 Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., \& Makowski, D. (2021). {performance}: An r package for assessment, comparison and testing of statistical models. \emph{Journal of Open Source Software}, \emph{6}(60), 3139. \url{https://doi.org/10.21105/joss.03139}
+
+\leavevmode\vadjust pre{\hypertarget{ref-patil2022datawizard}{}}%
+Patil, I., Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Bacher, E., \& Lüdecke, D. (2022). {datawizard}: An {R} package for easy data preparation and statistical transformations. \emph{Journal of Open Source Software}, \emph{7}(78), 4684. \url{https://doi.org/10.21105/joss.04684}
 
 \leavevmode\vadjust pre{\hypertarget{ref-simmons2011false}{}}%
 Simmons, J. P., Nelson, L. D., \& Simonsohn, U. (2011). False-positive psychology: Undisclosed flexibility in data collection and analysis allows presenting anything as significant. \emph{Psychological Science}, \emph{22}(11), 1359--1366. \url{https://doi.org/10.1177/0956797611417632}

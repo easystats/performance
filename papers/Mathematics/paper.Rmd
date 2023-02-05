@@ -96,9 +96,18 @@ x <- check_outliers(data, method = "zscore_robust", ID = "car")
 x
 ```
 
+Specific outliers can be obtained by using `which()` on the output object, which can be used for exclusions for example:
+
+```{r}
+which(x)
+
+data2 <- data[-which(x), ]
+```
+
+
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
 
-(ref:univariate) Visual depiction of outliers using the robust _z_ score method.
+(ref:univariate) Visual depiction of outliers using the robust _z_-score method.
 
 ```{r univariate, fig.cap = '(ref:univariate)'}
 library(see)
@@ -179,13 +188,27 @@ x
 plot(x)
 ```
 
+Outliers (counts or per variables) for individual methods can then be obtained through attributes. For example:
+
+```{r}
+attributes(x)$outlier_var$zscore_robust
+
+attributes(x)$outlier_var$iqr
+
+attributes(x)$outlier_count$mcd
+```
+
 An example sentence for reporting the usage of the composite method could be:
 
 > Based on a composite outlier score [see the 'check_outliers' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust z-scores, @leys2013outliers; (b) interquartile range (IQR), (c) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (d) invariant coordinate selection (ICS), @archimbaud2018ics], we excluded three participants that were classified as outliers by at least half of the methods used.
 
 # Handling Outliers
 
-We have at this point demonstrated how to identify outliers. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. For example, @leys2019outliers distinguish between error outliers, interesting outliers, and random outliers.
+We have at this point demonstrated how to identify outliers. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are not perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
+
+## Error, Interesting, and Random Outliers
+
+@leys2019outliers distinguish between error outliers, interesting outliers, and random outliers.
 
 _Error outliers_ are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations. _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
 
@@ -195,13 +218,9 @@ On the other hand, there are also outliers that cannot be detected by statistica
 
 _Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MAD. @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
 
-Furthermore, automatic tools can help detect outliers, but they are not perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
-
-Lastly, we note that no matter which outlier method you use, the handling of outliers should be specified *a priori* with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework, so that the exclusion criteria can be reproduced precisely.
-
 ## Winsorization
 
-Above, we mentioned a recoding approach to handling outliers: winsorization [@tukey1963less]. The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of the {datawizard} package. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or, ideally, the robust _z_ score (based on the MAD).
+Above, we mentioned a recoding approach to handling outliers: winsorization [@tukey1963less]. The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of the {datawizard} package [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or, ideally, the robust _z_ score (based on the MAD).
 
 Example:
 
@@ -214,6 +233,10 @@ winsorized.data <- winsorize(data, method = "zscore", robust = TRUE, threshold =
 
 winsorized.data[33:34, ]
 ```
+
+## The Importance of Transparency
+
+We note that no matter which outlier method you use, the handling of outliers should be specified *a priori* with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework, so that the exclusion criteria can be reproduced precisely.
 
 # Conclusion
 
