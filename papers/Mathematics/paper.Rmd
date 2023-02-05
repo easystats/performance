@@ -98,7 +98,7 @@ x
 
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
 
-(ref:univariate) Visual depiction of outliers using the robust _z_-score method.
+(ref:univariate) Visual depiction of outliers using the robust _z_ score method.
 
 ```{r univariate, fig.cap = '(ref:univariate)'}
 library(see)
@@ -195,7 +195,7 @@ On the other hand, there are also outliers that cannot be detected by statistica
 
 _Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MAD. @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
 
-Furthermore, automatic tools can help detect outliers, but they are not perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace proper vigilance and human eyes from the researcher.
+Furthermore, automatic tools can help detect outliers, but they are not perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
 
 Lastly, we note that no matter which outlier method you use, the handling of outliers should be specified *a priori* with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework, so that the exclusion criteria can be reproduced precisely.
 
