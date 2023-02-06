@@ -619,7 +619,7 @@ print.check_outliers <- function(x, ...) {
 
     if ((isTRUE(nrow(outlier.count$all) > 0) || isTRUE(attributes(x)$grouped)) &&
           (length(method) > 1 || all(method %in% method.univariate))) {
-      cat(long_dash, format_message("\nThe following observations were considered outliers for two or more",
+      cat(long_dash, insight::format_message("\nThe following observations were considered outliers for two or more",
       "variables by at least one of the selected methods:\n\n"))
       ifelse(isTRUE(attributes(x)$grouped),
         print(lapply(outlier.count, function(x) x$all)),
