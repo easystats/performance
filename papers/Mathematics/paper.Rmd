@@ -211,7 +211,12 @@ An alternative approach suggested by _easystats_ is to combine several methods, 
 (ref:multimethod) Visual depiction of outliers using several different statistical outlier detection methods.
 
 ```{r multimethod, fig.cap = '(ref:multimethod)'}
-results <- check_outliers(data[1:5], method = c("zscore", "iqr", "mcd", "ics"))
+# Combine multiple methods
+results <- check_outliers(
+  data[1:5], 
+  method = c("zscore_robust", "iqr", "mcd", "ics")
+  )
+
 results
 
 plot(results)
