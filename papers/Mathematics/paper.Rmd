@@ -101,6 +101,7 @@ check_outliers(var, method = "zscore")
 check_outliers(var, method = "zscore", threshold = 2.5)
 ```
 <!-- Dom: Note: I wouldn't showcase the ID arg as it would be nice to replace it by `select` in the future to be consistent with the other functions -->
+<!-- Dom (edit): sorry I got confused didnt get that ID corresponded to the rownames... disregard the comment above ^^ -->
 
 However, this approach presents some important limitations, as the mean and standard deviation themselves are not robust to the influence of outliers and they assume a symmetric and Gaussian distribution. One easy alternative is to compute the distribution center and deviation using methods more robust to extreme values, such as the median and the Median Absolute Deviation (MAD) [@leys2019outliers; @leys2013outliers; @leys2018outliers], though this approach shares many of the limitations of the former. One can use this method in R by changing the method to `method = "zscore_robust"`, store its results, and re-use it to remove the corresponding observations from the dataset.
 
@@ -118,8 +119,8 @@ However, this approach presents some important limitations, as the mean and stan
 data <- mtcars 
 
 # Replace 6th and 10th observation by odd values
-data[6, 1:7] <- c(0, 0, 0, 0, 0, 0, 0)
-data[10, 1:7] <- c(1, 1, 1, 1, 1, 1, 1)
+data[6, 1:5] <- rep(-5, 5)
+data[10, 1:5] <- rep(50, 5)
 
 outliers <- check_outliers(data$mpg, method = "zscore_robust")
 outliers
@@ -173,7 +174,7 @@ plot(results)
 
 ## Model-Based Outliers
 
-Whenever possible when working with regression models, we recommend using model-based SOD methods. These methods rely on the concept of leverage, or how much influence a given observation can have on the whole model. If few observations have a relatively strong leverage/influence on our model, then we can be confident that they are probably biasing our estimates. Thus, we can safely flag them as outliers. The Cook's distance, an example of such a model-based SOD, can be calculated as follow:
+Working with regression models open the possibility of using model-based SOD methods. These methods rely on the concept of *leverage*, i.e., how much influence a given observation can have on the whole model. If few observations have a relatively strong leverage/influence on the model, one can suspect that the model's estimates are biased by these observations, in which case flagging them as outliers could prove helpful. The Cook's distance, an example of such a model-based SOD, can be calculated as follow:
 
 $$
 MATTHS_{gohere}^{andB}
@@ -183,9 +184,7 @@ $$
 
 <!-- MSB: Honesly, I would just copy from wikipedia... https://en.wikipedia.org/wiki/Cook%27s_distance -->
 
-When working with regression models, model-based outliers can be detected using `check_outliers()` by specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
-
-Example:
+The `check_outliers()` cam ne applied directly on regression models, specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
 (ref:model) Visual depiction of outliers based on Cook's distance (leverage and standardized residuals).
 
@@ -199,50 +198,40 @@ x
 plot(x)
 ```
 
-### Cook's Distance vs. MCD
+Interestingly, @leys2018outliers report a preference for the MCD method over Cook's distance. This is because Cook's distance removes one observation at a time and checks its corresponding influence on the model each time [@cook1977detection], and flags any observation that has a large influence. In the view of these authors, when there are several outliers, the process of removing a single outlier at a time is problematic as the model remains "contaminated" or influenced by other possible outliers in the model, rendering this method suboptimal in the presence of multiple outliers.
 
-@leys2018outliers write that they favour the MCD method over Cook's distance. This is because Cook's distance removes one observation at a time and checks its corresponding influence (leverage) on the model each time [@cook1977detection]. The method flags as outliers any observation that has a large influence. In the view of these authors, when there are several outliers, the process of removing a single outlier at a time is problematic because the model remains "contaminated" or influenced by other possible outliers in the model. Therefore the method is not robust to the presence of multiple outliers.
+That said, distribution-based approaches are not a silver bullet either, and there are cases where the usage of methods agnostic to theoretical and statistical models of interest might be problematic. For example, a very tall person would be expected to also be much heavier than average, but that would still fit with the expected relationship between height and weight (i.e., would be in line with a model such as `age ~ weight`). In contrast, using multivariate outlier detection methods there may flag this person as being an outlier - being unusual on two variables, height and weight = even though the pattern fits perfectly with our predictions.
 
-Although this is true, we believe that model-based methods are still preferable to the MCD when possible. In our view, our SOD methods should not be agnostic to the results or to our theoretical and statistical model of interest. For example, a very tall person would be expected to also be much heavier than average, but that would still fit with the expected relationship between height and weight. In contrast, a multivariate outlier detection method may flag this person as being an outlier even though the pattern fits perfectly with our predictions, because that person is unusual on two variables, height and weight.
-
-Furthermore, unusual observations happen naturally: there are always extreme observations even in a normal distribution. We believe our models should reflect that, and that multivariate outlier methods are too conservative, in the sense that they will tend to flag too many outliers even if they belong to the proper distribution. If the presence of multiple outliers is a non-trivial concern, we recommend using robust regression methods instead, like _t_ regression or quantile regression.
+Furthermore, unusual observations happen naturally: extreme observations are also expected even when taken from a normal distribution. While statistical models can integrate this "expectation", multivariate outlier methods might be too conservative, flagging too many observations despite belonging to the right generative process. Finally, certain classes of models are directly more robust to outliers, like _t_ regression or quantile regression, rendering their precise identification less critical.
 
 ## Multiple Methods
 
-An alternative approach suggested by _easystats_ is to combine several methods. This approach computes a composite outlier score, formed of the average of the binary (0 or 1) results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In {performance}'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
-
-Example:
+An alternative approach suggested by _easystats_ is to combine several methods, based on the assumption that different methods provide different angles of looking at the problem. By applying a variety of methods, one can hope to "triangulate" the true outliers (those consistently flagged by multiple methods) and minimize false positive. In practice, this approach computes a composite outlier score, formed of the average of the binary (0 or 1) classification results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In {performance}'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
 
 (ref:multimethod) Visual depiction of outliers using several different statistical outlier detection methods.
 
 ```{r multimethod, fig.cap = '(ref:multimethod)'}
-x <- check_outliers(
-  data,
-  method = c("zscore_robust", "iqr", "mcd", "ics"),
-  ID = "car"
-)
-x
+results <- check_outliers(data[1:5], method = c("zscore", "iqr", "mcd", "ics"))
+results
 
-plot(x)
+plot(results)
 ```
 
 Outliers (counts or per variables) for individual methods can then be obtained through attributes. For example:
 
 ```{r}
-attributes(x)$outlier_var$zscore_robust
-
-attributes(x)$outlier_var$iqr
-
-attributes(x)$outlier_count$mcd
+attributes(results)$outlier_var$iqr
 ```
 
 An example sentence for reporting the usage of the composite method could be:
 
 > Based on a composite outlier score [see the 'check_outliers' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust z-scores, @leys2013outliers; (b) interquartile range (IQR), (c) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (d) invariant coordinate selection (ICS), @archimbaud2018ics], we excluded three participants that were classified as outliers by at least half of the methods used.
 
+<!-- Dom: note: we should add support to this in report to create this sentence... -->
+
 # Handling Outliers
 
-We have at this point demonstrated how to identify outliers. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are not perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
+The above section demonstrated how to identify outliers using the `check_outliers()` function in the *{performance}* package. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are nowhere near perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
 
 ## Error, Interesting, and Random Outliers
 
