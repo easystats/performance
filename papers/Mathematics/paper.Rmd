@@ -52,9 +52,19 @@ xyz
 
 # Introduction
 
-The improper handling of outliers can substantially affect statistical model estimations, thus contributing to false positives [@simmons2011false] but almost certainly to false negatives as well. It is thus essential to address this problem in a thoughtful manner. Fortunately, guidelines exist in this regard. Yet, especially in the field of psychology, many researchers still do not treat outliers in a consistent manner or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
+<!-- What is an outlier -->
 
-One possible reason is that researchers do not know of existing recommendations or currently available software options for their implementation. In this paper, we show how to follow current recommendations for statistical outlier detection (SOD) using R and the {performance} package [@ludecke2021performance] from the *easystats* ecosystem.
+Real-life data often contain observations that can be considered as *abnormal* when compared to the main population. The cause of it - be it because they belong to a different distribution (originating from a different generative process) or simply being extreme cases, statistically rare but not impossible - can be hard to access, and the boundaries of "abnormal" hard to define. 
+
+<!-- The problem with outliers -->
+
+Nonetheless, the improper handling of these outliers can substantially affect statistical model estimations,
+<!-- thus contributing to false positives [@simmons2011false] as well as false negatives. [[Dom: False positive/negatives of what? Are we talking about a classification case? I'd replace with:]] -->
+biasing effect estimation and weakening the models' predictive performance. 
+It is thus essential to address this problem in a thoughtful manner. Despite the existence of established recommendations and guidelines, many researchers still do not treat outliers in a consistent manner, or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
+<!-- Fortunately, guidelines exist in this regard. Yet, especially in the field of psychology [[Dom: that would probably need a ref lol]], many researchers still do not treat outliers in a consistent manner or do so using inappropriate strategies [@simmons2011false; @leys2013outliers]. -->
+
+One possible reason is that researchers are not aware of the existing recommendations, or do not know how to implement them using their analysis software. In this paper, we show how to follow current best practices for statistical outlier detection (SOD) using R and the *{performance}* package [@ludecke2021performance] from the *easystats* ecosystem <!-- Dom: add Ref here of easystats -->.
 
 # Identifying Outliers
 
