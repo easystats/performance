@@ -64,50 +64,68 @@ biasing effect estimation and weakening the models' predictive performance.
 It is thus essential to address this problem in a thoughtful manner. Despite the existence of established recommendations and guidelines, many researchers still do not treat outliers in a consistent manner, or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
 <!-- Fortunately, guidelines exist in this regard. Yet, especially in the field of psychology [[Dom: that would probably need a ref lol]], many researchers still do not treat outliers in a consistent manner or do so using inappropriate strategies [@simmons2011false; @leys2013outliers]. -->
 
-One possible reason is that researchers are not aware of the existing recommendations, or do not know how to implement them using their analysis software. In this paper, we show how to follow current best practices for statistical outlier detection (SOD) using R and the *{performance}* package [@ludecke2021performance] from the *easystats* ecosystem <!-- Dom: add Ref here of easystats -->.
+<!-- What this paper is about -->
+
+One possible reason is that researchers are not aware of the existing recommendations, or do not know how to implement them using their analysis software. In this paper, we show how to follow current best practices for automatic and reproducible statistical outlier detection (SOD) using R and the *{performance}* package [@ludecke2021performance] from the *easystats* ecosystem <!-- Dom: add Ref here of easystats -->.
 
 # Identifying Outliers
 
-Although many researchers attempt to identify outliers with measures based on the mean (e.g., _z_ scores), those methods are problematic because the mean and standard deviation themselves are not robust to the influence of outliers and they assume a normal distribution. Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean [@leys2019outliers; @leys2013outliers; @leys2018outliers].
+<!-- upfront with the subjectivity and limitations of automatic SOD blabla -->
+Which exact outlier method to use depends on many factors. In some cases, eye-gauging odd observations can be an appropriate solution, though many researchers will favour algorithmic solutions to detect potential outliers, i.e., based on a mathematical score. Importantly, whatever approach is chosen remains a subjective decision of the researcher which usage (and rationale) must be transparently documented and reproducible [@leys2019outliers]. Researchers should commit (ideally in a preregistration) to an outlier treatment method before collecting the data. They should report in the paper their decisions and details of their methods, as well as any deviation from their original plan. These transparency practices can help reduce false positives due to excessive researchers' degrees of freedom (choice flexibility throughout the analysis).
 
-Nonetheless, which exact outlier method to use depends on several factors, like the statistical test of interest. When using a regression model, for example, the most relevant information will be regarding observations that do not fit well with the model, known as model-based outliers. When no method is readily available to detect model-based outliers, such as for structural equation modelling (SEM), looking for multivariate outliers may be of relevance. Finally, for simple tests (_t_ tests or correlations) that compare values of the same variable, it can make sense to check for univariate outliers. However, univariate methods can give false positives since _t_ tests and correlations, ultimately, are also models/multivariable statistics [REF?]. They are in this sense more limited, but we show them nonetheless for educational purposes. In the following section, we will go through each of the mentioned methods.
-
-<!-- MSB: t-tests and correlations are model/multivariable statistics, so univariate outlier methods might give false-positives... RT: Sure, so when would you use them? Only when you have no other variables? How would you convey this idea in writting for the paper? What do you think of what I wrote above? And do you have any reference for that? -->
-
-<!-- RT: Any references for this or is it just common sense? -->
-
-Regardless of the method used, we remind readers that transparency is key [@leys2019outliers]. Researchers should commit (ideally in a preregistration) to an outlier decision tree before collecting the data. They should report in the paper their decisions and details of their methods, as well as any deviation from their original plan. These transparency practices can help reduce false positives due to excessive researchers' degrees of freedom (choice flexibility throughout the analysis).
+<!-- Overview of sections -->
+One of the factor to consider when selecting a outlier detection method is the statistical test of interest. When using a regression model, for example, relevant information can be found by identifying observations that do not fit well with the model. This approach, known as model-based outliers detection (as outliers are extracted after the statistical model has been fit), can be opposed to distribution-based outliers detection, which is based on the distance between an observation and the "center" of its population. There, various quantifications of distance exist, some being univariate (involving only one variable) or multivariate. In the following section, we will go through each of the mentioned methods and provide examples on how to implement them with R.
 
 ## Univariate Outliers
 
-For univariate outliers, it is recommended to use the median along the Median Absolute Deviation (MAD), which is more robust than the interquartile range or the mean and its standard deviation [@leys2019outliers; @leys2013outliers]. The MAD can be calculated as follow:
+One common method used by researchers is to identify outliers with measures of deviation from the center of a variable's distribution. This approach can be appropriate when the goal is to analyze a subset of independent variables using simple tests (e.g., *t*-tests or correlations). One of the most popular procedure is the z-scores transformation, which computes the distance in standard deviation (SD) from the mean. Cut-offs are often used, such as "+/- 2 SDs" (more exactly, 1.96), which will yield the ~2.5\% most extreme values on both sides - assuming a normally distributed variable. 
 
-$$
-MAD = b M_i(|x_i-M_j(x_j)|)
-$$
-Where $b$ is a scaler, often set to $1/\left(\Phi ^{-1}(3/4)\right)\approx 1.4826$.
+<!-- MSB: t-tests and correlations are model/multivariable statistics, so univariate outlier methods might give false-positives... RT: Sure, so when would you use them? Only when you have no other variables? How would you convey this idea in writting for the paper? What do you think of what I wrote above? And do you have any reference for that? -->
 
-In {performance}'s `check_outliers()`, one can use this approach with `method = "zscore_robust"`. Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, {performance} uses a less conservative default threshold of ~3.09 by default.^[ 3.09 is an approximation of the critical value for _p_ < .001, obtained through `qnorm(.999)`. We chose this threshold for consistency with the thresholds of all our other methods.] That is, data points will be flagged as outliers if they go beyond +/- ~3.09 MAD. Users can adjust this threshold using the `threshold` argument.
+<!-- Slowly introduce chec_outlier
+-->
+Researchers can identify outliers based on their z-score using the `check_outliers()` in the  *{performance}* package. Although @leys2013outliers suggest a threshold of +/-2.5 and @leys2019outliers a threshold of +/-3, *{performance}* uses by default a less conservative default threshold of ~3.09t.^[ 3.09 is an approximation of the critical value for _p_ < .001, obtained through `qnorm(.999)`. We chose this threshold for consistency with the thresholds of all our other methods.] That is, data points will be flagged as outliers if they go beyond +/- ~3.09 SD. However, users can adjust this threshold using the `threshold` argument, as demonstrated below:
 
-Example:
 
-```{r univariate outliers}
+```{r z_score}
 library(performance)
 
-# create some fake outliers and an ID column
-data <- rbind(mtcars[1:4], 42, 55)
-data <- cbind(car = row.names(data), data)
+# Create a variable with outliers
+var <- c(1, 2, 3, 2, 1, 666, 1, 2, 3, 2, 1)
 
-x <- check_outliers(data, method = "zscore_robust", ID = "car")
-x
+# Use default threshold to identify outliers
+check_outliers(var, method = "zscore")
+```
+```{r z_score_threshold}
+# Change threshold
+check_outliers(var, method = "zscore", threshold = 2.5)
+```
+<!-- Dom: Note: I wouldn't showcase the ID arg as it would be nice to replace it by `select` in the future to be consistent with the other functions -->
+
+However, this approach presents some important limitations, as the mean and standard deviation themselves are not robust to the influence of outliers and they assume a symmetric and Gaussian distribution. One easy alternative is to compute the distribution center and deviation using methods more robust to extreme values, such as the median and the Median Absolute Deviation (MAD) [@leys2019outliers; @leys2013outliers; @leys2018outliers], though this approach shares many of the limitations of the former. One can use this method in R by changing the method to `method = "zscore_robust"`, store its results, and re-use it to remove the corresponding observations from the dataset.
+
+
+<!-- Dom: Is the MAD definition necessary? I'd skip --> 
+<!-- $$ -->
+<!-- MAD = b M_i(|x_i-M_j(x_j)|) -->
+<!-- $$ -->
+<!-- Where $b$ is a scaler, often set to $1/\left(\Phi ^{-1}(3/4)\right)\approx 1.4826$. -->
+
+
+
+```{r univariate outliers}
+outliers <- check_outliers(var, method = "zscore_robust")
+outliers
 ```
 
-Specific outliers can be obtained by using `which()` on the output object, which can be used for exclusions for example:
+
+
+The row names of the detected outliers can be obtained by using `which()` on the output object, which can be used for exclusions for example:
 
 ```{r}
-which(x)
+which(outliers)
 
-data2 <- data[-which(x), ]
+data2 <- data[-which(outliers), ]
 ```
 
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
@@ -116,10 +134,14 @@ All `check_outliers()` output objects possess a `plot()` method, meaning it is a
 
 ```{r univariate, fig.cap = '(ref:univariate)'}
 library(see)
-plot(x)
+
+plot(outliers)
 ```
 
 ## Multivariate Outliers
+
+
+<!-- When no method is readily available to detect model-based outliers, such as for structural equation modelling (SEM), looking for multivariate outliers may be of relevance.  -->
 
 For multivariate outliers, it is recommended to use the Minimum Covariance Determinant, a robust version of the Mahalanobis distance [MCD, @leys2018outliers; @leys2019outliers]. The MCD can be calculated as follow [@hubert2018mcd]:
 
