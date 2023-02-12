@@ -138,12 +138,14 @@ library(see)
 plot(outliers)
 ```
 
+Other univariate methods are available, such as using the interquartile range (IQR), or based on different intervals, such as the Highest Density Interval (HDI) or the Bias Corrected and Accelerated Interval (BCI). These methods are documented and described in the function's [help page](https://easystats.github.io/performance/reference/check_outliers.html).
+
 ## Multivariate Outliers
 
-
-<!-- When no method is readily available to detect model-based outliers, such as for structural equation modelling (SEM), looking for multivariate outliers may be of relevance.  -->
-
-For multivariate outliers, it is recommended to use the Minimum Covariance Determinant, a robust version of the Mahalanobis distance [MCD, @leys2018outliers; @leys2019outliers]. The MCD can be calculated as follow [@hubert2018mcd]:
+Univariate outliers can be useful when the focus is on a particular variabe, for instance the reaction time, as extreme values might be indicative of inattention or non-task-related behavior^[ Note that they might not be the optimal way of treating reaction time outliers, see Ratcliff (1993) and Van Zandt et al. (1995).].
+<!-- Van Zandt, T., & Ratcliff, R. (1995). Statistical mimicking of reaction time data: Single-process models, parameter variability, and mixtures. Psychonomic Bulletin & Review, 2(1), 20-54.-->
+<!-- Ratcliff, R. (1993). Methods for dealing with reaction time outliers. Psychological bulletin, 114(3), 510. -->
+However, in many scenarios, variables of a dataset are not independent, and an abnormal observation will impact multiple dimensions. Let's imagine a participant giving random answers to a questionnaire. In this case, computing the z-score for each of the questions might not lead to satisfactory results. Instead, one might want to look at these variables together. One popular approach is to compute multivariate distance metrics such as the Mahalanobis distance. However, another possibility is to use its robust alternative, namely the Minimum Covariance Determinant [MCD, @leys2018outliers; @leys2019outliers]. The MCD can be calculated as follow [@hubert2018mcd]:
 
 $$
 MATTHS_{gohere}^{andB}
