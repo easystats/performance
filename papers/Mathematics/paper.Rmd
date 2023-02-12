@@ -114,7 +114,14 @@ However, this approach presents some important limitations, as the mean and stan
 
 
 ```{r univariate outliers}
-outliers <- check_outliers(var, method = "zscore_robust")
+# Load toy dataset available in R
+data <- mtcars 
+
+# Replace 6th and 10th observation by odd values
+data[6, 1:7] <- c(0, 0, 0, 0, 0, 0, 0)
+data[10, 1:7] <- c(1, 1, 1, 1, 1, 1, 1)
+
+outliers <- check_outliers(data$mpg, method = "zscore_robust")
 outliers
 ```
 
@@ -125,7 +132,7 @@ The row names of the detected outliers can be obtained by using `which()` on the
 ```{r}
 which(outliers)
 
-data2 <- data[-which(outliers), ]
+data_clean <- data[-which(outliers), ]
 ```
 
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
@@ -153,17 +160,15 @@ $$
 
 **[mattansb can you add some maths here; perhaps from @hubert2018mcd? https://doi.org/10.1002/wics.1421]**
 
-In {performance}'s `check_outliers()`, one can use this approach with `method = "mcd"`.^[Our default threshold for the MCD method is defined by `stats::qchisq(p = 1 - 0.001, df = ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
-
-Example:
+In {performance}'s `check_outliers()`, one can use this approach with `method = "mcd"`.^[Our default threshold for the MCD method is defined by `stats::qchisq(p = 1 - 0.001, df = ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]=
 
 (ref:multivariate) Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance.
 
 ```{r multivariate, fig.cap = '(ref:multivariate)'}
-x <- check_outliers(data, method = "mcd")
-x
+results <- check_outliers(data, method = "mcd")
+results
 
-plot(x)
+plot(results)
 ```
 
 ## Model-Based Outliers
