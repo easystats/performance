@@ -58,7 +58,7 @@ One possible reason is that researchers do not know of existing recommendations 
 
 # Identifying Outliers
 
-Although many researchers attempt to identify outliers with measures based on the mean (e.g., _z_ scores), those methods are problematic because the mean and standard deviation themselves are not robust to the influence of outliers and they assume a normal distribution. Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean [@leys2019outliers; @leys2013outliers].
+Although many researchers attempt to identify outliers with measures based on the mean (e.g., _z_ scores), those methods are problematic because the mean and standard deviation themselves are not robust to the influence of outliers and they assume a normal distribution. Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean [@leys2019outliers; @leys2013outliers; @leys2018outliers].
 
 Nonetheless, which exact outlier method to use depends on several factors, like the statistical test of interest. When using a regression model, for example, the most relevant information will be regarding observations that do not fit well with the model, known as model-based outliers. When no method is readily available to detect model-based outliers, such as for structural equation modelling (SEM), looking for multivariate outliers may be of relevance. Finally, for simple tests (_t_ tests or correlations) that compare values of the same variable, it can make sense to check for univariate outliers. However, univariate methods can give false positives since _t_ tests and correlations, ultimately, are also models/multivariable statistics [REF?]. They are in this sense more limited, but we show them nonetheless for educational purposes. In the following section, we will go through each of the mentioned methods.
 
@@ -77,11 +77,7 @@ MAD = b M_i(|x_i-M_j(x_j)|)
 $$
 Where $b$ is a scaler, often set to $1/\left(\Phi ^{-1}(3/4)\right)\approx 1.4826$.
 
-In {performance}'s `check_outliers()`, one can use this approach with `method = "zscore_robust"`. Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, for consistency with other outlier detection methods, {performance} uses a less conservative threshold of 3.09 by default. That is, data points will be flagged as outliers if they go beyond +/- 3.09 MAD. Users can adjust this threshold using the `threshold` argument.
-
-<!-- RT: (@leys2013outliers is multiple authors that's why I changed the conjugation) -->
-
-<!-- RT: Question: should we change our default threshold to align with recommendations?? Wiernik, what's our justification for using 3.09 instead of 3? -->
+In {performance}'s `check_outliers()`, one can use this approach with `method = "zscore_robust"`. Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, {performance} uses a less conservative default threshold of ~3.09 by default.^[ 3.09 is an approximation of the critical value for _p_ < .001, obtained through `qnorm(.999)`. We chose this threshold for consistency with the thresholds of all our other methods.] That is, data points will be flagged as outliers if they go beyond +/- ~3.09 MAD. Users can adjust this threshold using the `threshold` argument.
 
 Example:
 
@@ -104,7 +100,6 @@ which(x)
 data2 <- data[-which(x), ]
 ```
 
-
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
 
 (ref:univariate) Visual depiction of outliers using the robust _z_-score method.
@@ -116,7 +111,7 @@ plot(x)
 
 ## Multivariate Outliers
 
-For multivariate outliers, it is recommended to use the Minimum Covariance Determinant, a robust version of the Mahalanobis distance [MCD, @leys2019outliers]. In {performance}'s `check_outliers()`, one can use this approach with `method = "mcd"`. The MCD can be calculated as follow [@hubert2018mcd]:
+For multivariate outliers, it is recommended to use the Minimum Covariance Determinant, a robust version of the Mahalanobis distance [MCD, @leys2018outliers; @leys2019outliers]. The MCD can be calculated as follow [@hubert2018mcd]:
 
 $$
 MATTHS_{gohere}^{andB}
@@ -124,7 +119,7 @@ $$
 
 **[mattansb can you add some maths here; perhaps from @hubert2018mcd? https://doi.org/10.1002/wics.1421]**
 
-<!-- RT: @leys2019outliers write, "MCD75 (breakdown point = 0.25) (or the MCD50 (breakdown point = 0.5) if you suspect the presence of more than 25% of outlying values)". We use a threshold of `stats::qchisq(p = 1 - 0.001, df = ncol(x))` (18.467 in the example below). @bwiernik, how do these thresholds compare, and should we align our threshold with this recommendation? -->
+In {performance}'s `check_outliers()`, one can use this approach with `method = "mcd"`.^[Our default threshold for the MCD method is defined by `stats::qchisq(p = 1 - 0.001, df = ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
 Example:
 
@@ -139,13 +134,7 @@ plot(x)
 
 ## Model-Based Outliers
 
-[FIND REFERENCES TO SUPPORT MODEL-BASED OUTLIER DETECTION ABOVE ALL OTHER METHODS!!]
-
-Something something... what is leverage... why we should care if few observations have (relatively) strong leverage (answer: they are suspect of biasing our estimates!).
-
-<!-- @bwiernik I know you prefer model-based outlier detection methods over multivariate methods, and I do as well. Do we have any references to back this or is it just common sense?-->
-
-When working with regression models, model-based outliers can be detected using `check_outliers()` by specifying `method = "cook"` (or `method = "pareto"` for Bayesian models). The Cook's distance can be calculated as follow:
+Whenever possible when working with regression models, we recommend using model-based SOD methods. These methods rely on the concept of leverage, or how much influence a given observation can have on the whole model. If few observations have a relatively strong leverage/influence on our model, then we can be confident that they are probably biasing our estimates. Thus, we can safely flag them as outliers. The Cook's distance, an example of such a model-based SOD, can be calculated as follow:
 
 $$
 MATTHS_{gohere}^{andB}
@@ -155,9 +144,11 @@ $$
 
 <!-- MSB: Honesly, I would just copy from wikipedia... https://en.wikipedia.org/wiki/Cook%27s_distance -->
 
+When working with regression models, model-based outliers can be detected using `check_outliers()` by specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
+
 Example:
 
-(ref:model) Visual depiction of outliers using Cook's distance.
+(ref:model) Visual depiction of outliers based on Cook's distance (leverage and standardized residuals).
 
 <!-- RT: Is this what this plot is called?? Is it using Cook's distance or what? -->
 
@@ -169,9 +160,17 @@ x
 plot(x)
 ```
 
-## Multiple methods
+### Cook's Distance vs. MCD
 
-An alternative approach suggested by easystats is to combine several methods. This approach computes a composite outlier score, formed of the average of the binary (0 or 1) results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In {performance}'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
+@leys2018outliers write that they favour the MCD method over Cook's distance. This is because Cook's distance removes one observation at a time and checks its corresponding influence (leverage) on the model each time [@cook1977detection]. The method flags as outliers any observation that has a large influence. In the view of these authors, when there are several outliers, the process of removing a single outlier at a time is problematic because the model remains "contaminated" or influenced by other possible outliers in the model. Therefore the method is not robust to the presence of multiple outliers.
+
+Although this is true, we believe that model-based methods are still preferable to the MCD when possible. In our view, our SOD methods should not be agnostic to the results or to our theoretical and statistical model of interest. For example, a very tall person would be expected to also be much heavier than average, but that would still fit with the expected relationship between height and weight. In contrast, a multivariate outlier detection method may flag this person as being an outlier even though the pattern fits perfectly with our predictions, because that person is unusual on two variables, height and weight.
+
+Furthermore, unusual observations happen naturally: there are always extreme observations even in a normal distribution. We believe our models should reflect that, and that multivariate outlier methods are too conservative, in the sense that they will tend to flag too many outliers even if they belong to the proper distribution. If the presence of multiple outliers is a non-trivial concern, we recommend using robust regression methods instead, like _t_ regression or quantile regression.
+
+## Multiple Methods
+
+An alternative approach suggested by _easystats_ is to combine several methods. This approach computes a composite outlier score, formed of the average of the binary (0 or 1) results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In {performance}'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
 
 Example:
 
