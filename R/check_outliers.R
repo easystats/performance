@@ -31,7 +31,8 @@
 #'   method: a check (message) on whether outliers were detected or not. The
 #'   information on the distance measure and whether or not an observation is
 #'   considered as outlier can be recovered with the [as.data.frame]
-#'   function.
+#'   function. Note that the function will (silently) return a vector of `FALSE`
+#'   for non-supported data types such as character strings.
 #'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
@@ -91,7 +92,7 @@
 #'  default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from
 #'  the median (which are robust measures of dispersion and centrality). The
 #'  default threshold to classify outliers is 1.959 (`threshold = list("zscore" = 1.959)`),
-#'  corresponding to the 2.5\% (`qnorm(0.975)`) most extreme observations
+#'  corresponding to the 2.5% (`qnorm(0.975)`) most extreme observations
 #'  (assuming the data is normally distributed). Importantly, the Z-score
 #'  method is univariate: it is computed column by column. If a dataframe is
 #'  passed, the Z-score is calculated for each variable separately, and the
@@ -320,7 +321,10 @@ check_outliers <- function(x, ...) {
   UseMethod("check_outliers")
 }
 
-
+#' @export
+check_outliers.character <- function(x, ...) {
+  rep(0, length(x))
+}
 
 # default ---------------------
 
