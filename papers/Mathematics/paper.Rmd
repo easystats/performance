@@ -11,7 +11,10 @@ authors:
 - affiliation: 3
   name: Indrajeet Patil
   orcid: 0000-0003-1995-6531
-  
+- affiliation: 4
+  name: Dominique Makowski
+  orcid: 0000-0001-5375-9967
+
 affiliations:
 - index: 1
   name: Université du Québec à Montréal, Montréal, Québec
@@ -19,7 +22,9 @@ affiliations:
   name: XXX
 - index: 3
   name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany 
-  
+- index: 4
+  name: School of Psychology, University of Sussex, Brighton, UK
+
 output: 
   bookdown::pdf_document2:
     toc: false
