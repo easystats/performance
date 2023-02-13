@@ -240,35 +240,34 @@ The above section demonstrated how to identify outliers using the `check_outlier
 
 ## Error, Interesting, and Random Outliers
 
-@leys2019outliers distinguish between error outliers, interesting outliers, and random outliers.
-
-_Error outliers_ are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations. _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
+@leys2019outliers distinguish between error outliers, interesting outliers, and random outliers. _Error outliers_ are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations. _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
 
 It is recommended to _keep_ observations which are expected to be part of the distribution of interest, even if they are outliers [@leys2019outliers]. However, if it is suspected that the outliers belong to an alternative distribution, then those observations could have a large impact on the results and call into question their robustness, especially if significance is conditional on their inclusion.
 
-On the other hand, there are also outliers that cannot be detected by statistical tools, but should be found and removed. For example, if we're studying the effects of X on Y among teenagers and we have one observation from a 20-year-old, this observation might not be a _statistical outlier_, but it is an outlier in the _context_ of our research, and should be discarded to allow for valid inferences of interest.
-
-_Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MAD. @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
+On the other hand, there are also outliers that cannot be detected by statistical tools, but should be found and removed. For example, if we are studying the effects of X on Y among teenagers and we have one observation from a 20-year-old, this observation might not be a _statistical outlier_, but it is an outlier in the _context_ of our research, and should be discarded to allow for valid inferences of interest.
 
 ## Winsorization
 
-Above, we mentioned a recoding approach to handling outliers: winsorization [@tukey1963less]. The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of the {datawizard} package [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or, ideally, the robust _z_ score (based on the MAD).
+_Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MADs @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
 
-Example:
+The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of the {datawizard} package [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD.
+
 
 ```{r winsorization}
-data[33:34, ]
+data[6:10, 1:2]  # See outliers rows
 
-# winsorizing using the MAD
+# Winsorizing using the MAD
 library(datawizard)
-winsorized.data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
 
-winsorized.data[33:34, ]
+winsorized_data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
+
+# Values > +/- MAD have been winsorized
+winsorized_data[6:10, 1:2]
 ```
 
 ## The Importance of Transparency
 
-We note that no matter which outlier method you use, the handling of outliers should be specified *a priori* with as much detail as possible, and ideally preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are oftentimes hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework, so that the exclusion criteria can be reproduced precisely.
+Once again, it is an critical part of a sound outlier treatment that no matter which outlier method you use, it should be reported in a reproducible manner. Ideally, the handling of outliers should be specified *a priori* with as much detail as possible, and preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are often times hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework (OSF), so that the exclusion criteria can be reproduced precisely.
 
 # Conclusion
 
@@ -276,7 +275,7 @@ We note that no matter which outlier method you use, the handling of outliers sh
 
 <!-- MSB: Same - I think we should address the need for human eyes on data. Automatic tools are good for flagging suspect data, but they can have misses and false alarms. RT: What about the extra sentence I added in the "handling outliers" section? -->
 
-In this paper, we have showed how to investigate outliers using the `check_outliers()` function of the {performance} package while following current good practices. We note that in addition to using the current functions and respecting existing recommendations, it is also important to pre-specify your plans to manage outliers, such as with preregistration, or at the very least justify your choices and stay consistent. Ideally, one would additionally also report the package, function, and threshold used (ideally linking to the full code). We hope that this paper will help more researchers engage in good research practices while providing a smooth outlier detection experience.
+In this paper, we have showed how to investigate outliers using the `check_outliers()` function of the {performance} package while following current good practices. However, best practices for outlier treatment do not stop at using appropriate statistical algorithms, but entail respecting existing recommendations, such as preregistration, reproducibility, consistency, transparency and justification. Ideally, one would additionally also report the package, function, and threshold used (ideally linking to the full code). We hope that this paper and the accompanying `check_outlier()` function of *eaststats* will help researchers engage in good research practices while providing a smooth outlier detection experience.
 
 # Acknowledgments
 
