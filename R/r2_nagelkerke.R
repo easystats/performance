@@ -54,7 +54,8 @@ r2_nagelkerke <- function(model, ...) {
 
 #' @export
 r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
-  if (is.null(info <- list(...)$model_info)) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
