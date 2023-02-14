@@ -175,7 +175,7 @@ for any of the method run.</p></dd>
 <p>A logical vector of the detected outliers with a nice printing
 method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
-considered as outlier can be recovered with the <code>as.data.frame</code></p>
+considered as outlier can be recovered with the <a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></p>
 
 
 <p>function.</p>
@@ -222,13 +222,13 @@ of an F distribution with p and n-p degrees of freedom, the median point of
 the quantile distribution can be used as a cut-off (Bollen, 1985). A common
 approximation or heuristic is to use 4 divided by the numbers of
 observations, which usually corresponds to a lower threshold (i.e., more
-outliers are detected). This only works for Frequentist models. For Bayesian
+outliers are detected). This only works for frequentist models. For Bayesian
 models, see <code>pareto</code>.</p></li>
 <li><p><strong>Pareto</strong>:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
 Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the
-user should be warned, although in practice the authors of the <code>loo</code>
+user should be warned, although in practice the authors of the <a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo::loo</a>
 package observed good performance for values of k up to 0.7 (the default
 threshold used by <code>performance</code>).</p></li>
 </ul></div>
@@ -254,7 +254,7 @@ as outliers. Thus, this method is not suited for high dimensional data
 <li><p><strong>IQR</strong> <code>("iqr")</code>:
 Using the IQR (interquartile range) is a robust method developed by John
 Tukey, which often appears in box-and-whisker plots (e.g., in
-<code>geom_boxplot</code>). The interquartile range is the range between the first
+<a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">ggplot2::geom_boxplot</a>). The interquartile range is the range between the first
 and the third quartiles. Tukey considered as outliers any data point that
 fell outside of either 1.5 times (the default threshold is 1.7) the IQR below
 the first or above the third quartile. Similar to the Z-score method, this is
@@ -296,7 +296,7 @@ minus a coefficient times the MAD method (Leys et al., 2013).</p></li>
 <li><p><strong>Robust Mahalanobis Distance</strong>:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-1972). Requires the <span class="pkg">bigutilsr</span> package. See the
+1972). Requires the <a href="https://rdrr.io/pkg/bigutilsr/man/bigutilsr-package.html" class="external-link">bigutilsr::bigutilsr</a> package. See the
 <code><a href="https://rdrr.io/pkg/bigutilsr/man/covrob_ogk.html" class="external-link">bigutilsr::dist_ogk()</a></code> function.</p></li>
 <li><p><strong>Minimum Covariance Determinant (MCD)</strong>:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
@@ -312,7 +312,7 @@ The outlier are detected using ICS, which by default uses an alpha threshold
 of 0.025 (corresponding to the 2.5\<!-- % most extreme observations) as a cut-off -->
 value for outliers classification. Refer to the help-file of
 <code><a href="https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html" class="external-link">ICSOutlier::ics.outlier()</a></code> to get more details about this procedure.
-Note that <code>method = "ics"</code> requires both <span class="pkg">ICS</span> and <span class="pkg">ICSOutlier</span>
+Note that <code>method = "ics"</code> requires both ICS and ICSOutlier::ICSOutlier
 to be installed, and that it takes some time to compute the results.</p></li>
 <li><p><strong>OPTICS</strong>:
 The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
@@ -324,8 +324,18 @@ of a cluster. By default, this size is set at 2 times the number of columns
 detect several outliers (as these are usually defined as a percentage of
 extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that <code>method = "optics"</code> requires the
-<span class="pkg">dbscan</span> package to be installed, and that it takes some time to compute
+<a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan</a> package to be installed, and that it takes some time to compute
 the results.</p></li>
+<li><p><strong>Local Outlier Factor</strong>:
+Based on a K nearest neighbors algorithm, LOF compares the local density of
+a point to the local densities of its neighbors instead of computing a
+distance from the center (Breunig et al., 2000). Points that have a
+substantially lower density than their neighbors are considered outliers. A
+LOF score of approximately 1 indicates that density around the point is
+comparable to its neighbors. Scores significantly larger than 1 indicate
+outliers. The default threshold of 0.025 will classify as outliers the
+observations located at <code>qnorm(1-0.025) * SD)</code> of the log-transformed
+LOF distance. Requires the <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan::dbscan</a> package.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="threshold-specification">Threshold specification<a class="anchor" aria-label="anchor" href="#threshold-specification"></a></h2>
@@ -421,7 +431,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span><span class="co"># For dataframes ------------------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on dataframes</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (31.26).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (31.264).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -435,13 +445,14 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span><span class="va">outliers_list</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">1 outlier detected: case 31.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: mahalanobis (3.09), iqr</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (1.7), zscore (31.26).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (2), zscore (31.264).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Note: Outliers were classified as such by</span> <span style="color: #BBBB00;">at least half of the selected methods. </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more variables </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> by at least one of the selected methods: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   variables by at least one of the selected methods:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Row n_Zscore n_IQR</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  31        1     2</span>
@@ -489,7 +500,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (18.47).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (20).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variables: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -498,14 +509,16 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">3 outliers detected: cases 9, 29, 31.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: zscore_robust (3.09),</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  iqr (1.7), ci (1), cook (0.97), pareto (0.7), mahalanobis (31.26),</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  mahalanobis_robust (31.26), mcd (31.26), ics (0), optics (22), lof (0).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  iqr (2), ci (1), cook (1), pareto (0.7), mahalanobis (31.264),</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  mahalanobis_robust (31.264), mcd (31.264), ics (0.001), optics (22), lof</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (0.001).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Note: Outliers were classified as such by</span> <span style="color: #BBBB00;">at least half of the selected methods. </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more variables </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> by at least one of the selected methods: </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   variables by at least one of the selected methods:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Row n_Zscore_robust n_IQR n_ci n_Mahalanobis_robust          n_MCD</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1    3               2     0    0                    0              0</span>
