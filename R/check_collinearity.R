@@ -188,7 +188,7 @@ plot.check_collinearity <- function(x, ...) {
   x <- datawizard::remove_empty_columns(x)
 
   # format table for each "ViF" group - this ensures that CIs are properly formatted
-  x <- do.call(rbind, lapply(all_vifs, function(i) insight::format_table(x[i, ])))
+  x <- insight::format_table(x)
   colnames(x)[4] <- "Increased SE"
 
   if (length(low_vif)) {

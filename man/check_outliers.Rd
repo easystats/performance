@@ -25,8 +25,8 @@ check_outliers(x, ...)
 \item{x}{A model or a data.frame object.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
-down to \code{ICSOutlier::ics.outlier()}. When \code{method = "mahalanobis"},
-they are  passed down to \code{stats::mahalanobis()}.}
+down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
+they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}.}
 
 \item{method}{The outlier detection method(s). Can be \code{"all"} or some of
 \code{"cook"}, \code{"pareto"}, \code{"zscore"}, \code{"zscore_robust"}, \code{"iqr"}, \code{"ci"}, \code{"eti"},
@@ -45,7 +45,7 @@ for any of the method run.}
 A logical vector of the detected outliers with a nice printing
 method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
-considered as outlier can be recovered with the \code{as.data.frame}
+considered as outlier can be recovered with the \link{as.data.frame}
 function.
 }
 \description{
@@ -101,13 +101,13 @@ of an F distribution with p and n-p degrees of freedom, the median point of
 the quantile distribution can be used as a cut-off (Bollen, 1985). A common
 approximation or heuristic is to use 4 divided by the numbers of
 observations, which usually corresponds to a lower threshold (i.e., more
-outliers are detected). This only works for Frequentist models. For Bayesian
+outliers are detected). This only works for frequentist models. For Bayesian
 models, see \code{pareto}.
 \item \strong{Pareto}:
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
 Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the
-user should be warned, although in practice the authors of the \code{loo}
+user should be warned, although in practice the authors of the \link[loo:loo]{loo::loo}
 package observed good performance for values of k up to 0.7 (the default
 threshold used by \code{performance}).
 }
@@ -134,7 +134,7 @@ as outliers. Thus, this method is not suited for high dimensional data
 \item \strong{IQR} \code{("iqr")}:
 Using the IQR (interquartile range) is a robust method developed by John
 Tukey, which often appears in box-and-whisker plots (e.g., in
-\code{geom_boxplot}). The interquartile range is the range between the first
+\link[ggplot2:geom_boxplot]{ggplot2::geom_boxplot}). The interquartile range is the range between the first
 and the third quartiles. Tukey considered as outliers any data point that
 fell outside of either 1.5 times (the default threshold is 1.7) the IQR below
 the first or above the third quartile. Similar to the Z-score method, this is
@@ -177,8 +177,8 @@ minus a coefficient times the MAD method (Leys et al., 2013).
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-1972). Requires the \pkg{bigutilsr} package. See the
-\code{bigutilsr::dist_ogk()} function.
+1972). Requires the \link[bigutilsr:bigutilsr-package]{bigutilsr::bigutilsr} package. See the
+\code{\link[bigutilsr:covrob_ogk]{bigutilsr::dist_ogk()}} function.
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
 Mahalanobis Distance is not a robust way to determine outliers, as it uses
@@ -192,8 +192,8 @@ than regular Mahalanobis distance.
 The outlier are detected using ICS, which by default uses an alpha threshold
 of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off
 value for outliers classification. Refer to the help-file of
-\code{ICSOutlier::ics.outlier()} to get more details about this procedure.
-Note that \code{method = "ics"} requires both \pkg{ICS} and \pkg{ICSOutlier}
+\code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}} to get more details about this procedure.
+Note that \code{method = "ics"} requires both \link{ICS} and \link[ICSOutlier:ICSOutlier-package]{ICSOutlier::ICSOutlier}
 to be installed, and that it takes some time to compute the results.
 \item \strong{OPTICS}:
 The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
@@ -205,8 +205,18 @@ of a cluster. By default, this size is set at 2 times the number of columns
 detect several outliers (as these are usually defined as a percentage of
 extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
-\pkg{dbscan} package to be installed, and that it takes some time to compute
+\link[dbscan:dbscan]{dbscan::dbscan} package to be installed, and that it takes some time to compute
 the results.
+\item \strong{Local Outlier Factor}:
+Based on a K nearest neighbors algorithm, LOF compares the local density of
+a point to the local densities of its neighbors instead of computing a
+distance from the center (Breunig et al., 2000). Points that have a
+substantially lower density than their neighbors are considered outliers. A
+LOF score of approximately 1 indicates that density around the point is
+comparable to its neighbors. Scores significantly larger than 1 indicate
+outliers. The default threshold of 0.025 will classify as outliers the
+observations located at \verb{qnorm(1-0.025) * SD)} of the log-transformed
+LOF distance. Requires the \link[dbscan:dbscan]{dbscan::dbscan} package.
 }
 }
 
