@@ -733,12 +733,12 @@ or its robust alternative based on the MAD.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# winsorizing using the MAD}
+\CommentTok{\# Winsorizing using the MAD}
 \FunctionTok{library}\NormalTok{(datawizard)}
-\NormalTok{winsorized.data }\OtherTok{\textless{}{-}} \FunctionTok{winsorize}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"zscore"}\NormalTok{, }\AttributeTok{robust =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{threshold =} \DecValTok{3}\NormalTok{)}
+\NormalTok{winsorized\_data }\OtherTok{\textless{}{-}} \FunctionTok{winsorize}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"zscore"}\NormalTok{, }\AttributeTok{robust =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{threshold =} \DecValTok{3}\NormalTok{)}
 
 \CommentTok{\# Values \textgreater{} +/{-} MAD have been winsorized}
-\NormalTok{winsorized.data[}\DecValTok{33}\SpecialCharTok{:}\DecValTok{34}\NormalTok{, ]}
+\NormalTok{winsorized\_data[}\DecValTok{33}\SpecialCharTok{:}\DecValTok{34}\NormalTok{, ]}
 \end{Highlighting}
 \end{Shaded}
 

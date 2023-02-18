@@ -246,13 +246,12 @@ The _easystats_ ecosystem makes it easy to incorporate this step into your workf
 ```{r winsorization}
 data[33:34, ]  # See outliers rows
 
-# winsorizing using the MAD
+# Winsorizing using the MAD
 library(datawizard)
-winsorized.data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
+winsorized_data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
 
 # Values > +/- MAD have been winsorized
-winsorized.data[33:34, ]
-
+winsorized_data[33:34, ]
 ```
 
 ## The Importance of Transparency
@@ -260,10 +259,6 @@ winsorized.data[33:34, ]
 Once again, it is a critical part of a sound outlier treatment that regardless of which SOD method used, it should be reported in a reproducible manner. Ideally, the handling of outliers should be specified *a priori* with as much detail as possible, and preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are often times hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function of which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework (OSF), so that the exclusion criteria can be reproduced precisely.
 
 # Conclusion
-
-<!-- IP: Once the rest of the content is finalized, we need to give this another shot. The current version doesn't jibe with me. -->
-
-<!-- MSB: Same - I think we should address the need for human eyes on data. Automatic tools are good for flagging suspect data, but they can have misses and false alarms. RT: What about the extra sentence I added in the "handling outliers" section? -->
 
 In this paper, we have showed how to investigate outliers using the `check_outliers()` function of the *{performance}* package while following current good practices. However, best practice for outlier treatment does not stop at using appropriate statistical algorithms, but entails respecting existing recommendations, such as preregistration, reproducibility, consistency, transparency, and justification. Ideally, one would additionally also report the package, function, and threshold used (linking to the full code when possible). We hope that this paper and the accompanying `check_outlier()` function of *easystats* will help researchers engage in good research practices while providing a smooth outlier detection experience.
 
