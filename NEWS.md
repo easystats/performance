@@ -13,6 +13,11 @@
   for mixed models, but instead gives a warning and tries to compute posterior
   predictive checks with `re_formuka = NA`.
 
+## Bug fixes
+
+* Fixed issue in `print()` method for `check_collinearity()`, which could mix
+  up the correct order of parameters.
+
 # performance 0.10.2
 
 ## General
