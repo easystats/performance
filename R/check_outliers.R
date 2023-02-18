@@ -185,13 +185,13 @@
 #'
 #' ```
 #' list(
-#'   zscore = stats::qnorm(p = 1 - 0.001),
-#'   zscore_robust = stats::qnorm(p = 1 - 0.001),
+#'   zscore = stats::qnorm(p = 1 - 0.001 / 2),
+#'   zscore_robust = stats::qnorm(p = 1 - 0.001 / 2),
 #'   iqr = 1.7,
-#'   ci = 0.999,
-#'   eti = 0.999,
-#'   hdi = 0.999,
-#'   bci = 0.999,
+#'   ci = 1 - 0.001,
+#'   eti = 1 - 0.001,
+#'   hdi = 1 - 0.001,
+#'   bci = 1 - 0.001,
 #'   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
 #'   pareto = 0.7,
 #'   mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
@@ -1228,13 +1228,13 @@ check_outliers.geeglm <- check_outliers.gls
 }
 
 .check_outliers_thresholds_nowarn <- function(x) {
-  zscore <- stats::qnorm(p = 1 - 0.001)
-  zscore_robust <- stats::qnorm(p = 1 - 0.001)
+  zscore <- stats::qnorm(p = 1 - 0.001 / 2)
+  zscore_robust <- stats::qnorm(p = 1 - 0.001 / 2)
   iqr <- 1.7
-  ci <- 0.999
-  eti <- 0.999
-  hdi <- 0.999
-  bci <- 0.999
+  ci <- 1 - 0.001
+  eti <- 1 - 0.001
+  hdi <- 1 - 0.001
+  bci <- 1 - 0.001
   cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
   pareto <- 0.7
   mahalanobis <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
@@ -1268,7 +1268,7 @@ check_outliers.geeglm <- check_outliers.gls
 # utilities --------------------
 
 .check_outliers_zscore <- function(x,
-                                   threshold = stats::qnorm(p = 1 - 0.001),
+                                   threshold = stats::qnorm(p = 1 - 0.001 / 2),
                                    robust = TRUE,
                                    method = "max",
                                    ID.names = NULL) {
@@ -1371,7 +1371,7 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 .check_outliers_ci <- function(x,
-                               threshold = 0.999,
+                               threshold = 1 - 0.001,
                                method = "ci",
                                ID.names = NULL) {
   # Run through columns

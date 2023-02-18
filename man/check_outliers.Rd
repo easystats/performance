@@ -216,13 +216,13 @@ the results.
 Default thresholds are currently specified as follows:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{list(
-  zscore = stats::qnorm(p = 1 - 0.001),
-  zscore_robust = stats::qnorm(p = 1 - 0.001),
+  zscore = stats::qnorm(p = 1 - 0.001 / 2),
+  zscore_robust = stats::qnorm(p = 1 - 0.001 / 2),
   iqr = 1.7,
-  ci = 0.999,
-  eti = 0.999,
-  hdi = 0.999,
-  bci = 0.999,
+  ci = 1 - 0.001,
+  eti = 1 - 0.001,
+  hdi = 1 - 0.001,
+  bci = 1 - 0.001,
   cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
   pareto = 0.7,
   mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
