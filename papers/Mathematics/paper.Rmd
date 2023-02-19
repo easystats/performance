@@ -13,6 +13,9 @@ author:
   - name: Dominique Makowski
     affil: 4
     orcid: 0000-0001-5375-9967
+  - name: Brenton M. Wiernik
+    affil: 5
+    orcid: 0000-0001-9560-6336
 affiliation:
   - num: 1
     address: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
