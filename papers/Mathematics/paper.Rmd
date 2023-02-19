@@ -25,6 +25,8 @@ affiliation:
     address: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany 
   - num: 4
     address: School of Psychology, University of Sussex, Brighton, UK
+  - num: 5
+    address: Independent Researcher, Tampa, FL, USA
 correspondence: theriault.remi@courrier.uqam.ca.
 journal: "mathematics"
 type: article
