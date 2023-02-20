@@ -43,7 +43,7 @@ simplesummary: |
   `check_outiers()` function.
 abstract: |
   Beyond the challenge of keeping up-to-date with current best practices 
-  regarding the diagnosis and treament of outliers, an additional difficulty 
+  regarding the diagnosis and treatment of outliers, an additional difficulty 
   arises concerning the mathematical implementation of the recommended methods. 
   In this paper, we provide an overview of current recommandations and best
   practices and demonstrate how they can easily and conveniently be 
@@ -112,8 +112,7 @@ library(datawizard)
 Real-life data often contain observations that can be considered *abnormal* when compared to the main population. The cause of it---be it because they belong to a different distribution (originating from a different generative process) or simply being extreme cases, statistically rare but not impossible---can be hard to assess, and the boundaries of "abnormal" are hard to define.
 
 Nonetheless, the improper handling of these outliers can substantially affect statistical model estimations, biasing effect estimations and weakening the models' predictive performance.
-It is thus essential to address this problem in a thoughtful manner. Despite the existence of established recommendations and guidelines, many researchers still do not treat outliers in a consistent manner, or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
-Fortunately, guidelines exist in this regard.
+It is thus essential to address this problem in a thoughtful manner. Yet, despite the existence of established recommendations and guidelines, many researchers still do not treat outliers in a consistent manner, or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
 
 One possible reason is that researchers are not aware of the existing recommendations, or do not know how to implement them using their analysis software. In this paper, we show how to follow current best practices for automatic and reproducible statistical outlier detection (SOD) using R and the *{performance}* package [@ludecke2021performance], which is part of the *easystats* ecosystem of packages that build an R framework for easy statistical modeling, visualization, and reporting [@easystatspackage].
 
@@ -185,9 +184,9 @@ Other multivariate methods are available, such as another type of robust Mahalan
 
 ## Model-Based Outliers
 
-Working with regression models creates the possibility of using model-based SOD methods. These methods rely on the concept of *leverage*, that is, how much influence a given observation can have on the whole model. If few observations have a relatively strong leverage/influence on the model, one can suspect that the model's estimates are biased by these observations, in which case flagging them as outliers could prove helpful.
+Working with regression models creates the possibility of using model-based SOD methods. These methods rely on the concept of *leverage*, that is, how much influence a given observation can have on the model estimates. If few observations have a relatively strong leverage/influence on the model, one can suspect that the model's estimates are biased by these observations, in which case flagging them as outliers could prove helpful (see next section, "Handling Outliers").
 
-`check_outliers()` can be applied directly on regression models, specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
+In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
 ```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals)."}
 model <- lm(disp ~ mpg * hp, data = data)
@@ -195,6 +194,17 @@ outliers <- check_outliers(model, method = "cook")
 outliers
 
 plot(outliers)
+```
+
+Table 1 below summarizes which methods to use in which cases, and with what threshold.
+
+```{r, echo=FALSE}
+df <- data.frame(
+  `Statistical Test` = c("Supported regression model", "Structural Equation Modeling (or other unsupported model)", "Simple test with few variables (*t* test, correlation, etc.)"),
+  `Diagnosis Method` = c("**Model-based**: Cook (or Pareto for Bayesian models)", "**Multivariate**: Minimum Covariance Determinant (MCD)", "**Univariate**: robust *z* scores (MAD)"),
+  `Recommended Threshold` = c("`qf(0.5, ncol(x), nrow(x) - ncol(x))` (or 0.7 for Pareto)", "`qchisq(p = 1 - 0.001, df = ncol(x))`", "`qnorm(p = 1 - 0.001 / 2)`, ~ 3.29")
+)
+knitr::kable(df, col.names = gsub("[.]", " ", names(df)), caption = "Summary of Statistical Outlier Detection Methods Recommendations.", longtable = TRUE)
 ```
 
 ### Cook's Distance vs. MCD
@@ -207,7 +217,7 @@ Furthermore, unusual observations happen naturally: extreme observations are exp
 
 ## Multiple Methods
 
-An alternative approach we would suggest is to combine several methods, based on the assumption that different methods provide different angles of looking at the problem. By applying a variety of methods, one can hope to "triangulate" the true outliers (those consistently flagged by multiple methods) and thus attempt to minimize false positives.
+An alternative approach that is possible is to combine several methods, based on the assumption that different methods provide different angles of looking at the problem. By applying a variety of methods, one can hope to "triangulate" the true outliers (those consistently flagged by multiple methods) and thus attempt to minimize false positives.
 
 In practice, this approach computes a composite outlier score, formed of the average of the binary (0 or 1) classification results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In *{performance}*'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
 
@@ -231,13 +241,11 @@ attributes(outliers)$outlier_var$iqr
 
 An example sentence for reporting the usage of the composite method could be:
 
-> Based on a composite outlier score [see the 'check_outliers' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust _z_ scores, @leys2013outliers; (b) interquartile range (IQR), (c) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (d) invariant coordinate selection (ICS), @archimbaud2018ics], we excluded three participants that were classified as outliers by at least half of the methods used.
-
-<!-- Dom: note: we should add support to this in report to create this sentence... -->
+Based on a composite outlier score [see the 'check_outliers()' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust _z_ scores, @leys2013outliers; (b) interquartile range (IQR), (c) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (d) invariant coordinate selection (ICS), @archimbaud2018ics], we excluded three participants that were classified as outliers by at least half of the methods used.
 
 # Handling Outliers
 
-The above section demonstrated how to identify outliers using the `check_outliers()` function in the *{performance}* package. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are nowhere near perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
+The above section demonstrated how to identify outliers using the `check_outliers()` function in the *{performance}* package. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are nowhere near perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher. If you do end up manually inspecting your data for outliers, it can be helpful to think of outliers as belonging to different types of outliers, or categories, which can help decide what to do with a given outlier.
 
 ## Error, Interesting, and Random Outliers
 
@@ -249,7 +257,7 @@ On the other hand, there are also outliers that cannot be detected by statistica
 
 ## Winsorization
 
-_Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MADs @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
+_Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MADs, @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
 
 The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of the *{datawizard}* package [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD.
 

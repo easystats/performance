@@ -80,14 +80,15 @@ statistical outliers in R with \emph{easystats}}
 Thériault$^{1,*}$\href{https://orcid.org/0000-0003-4315-6788}{\orcidicon}, Mattan
 S.
 Ben-Shachar$^{2}$\href{https://orcid.org/0000-0002-4287-4801}{\orcidicon}, Indrajeet
-Patil$^{3}$\href{https://orcid.org/0000-0003-1995-6531}{\orcidicon}, Dominique
-Makowski$^{4}$\href{https://orcid.org/0000-0001-5375-9967}{\orcidicon}, Brenton
+Patil$^{3}$\href{https://orcid.org/0000-0003-1995-6531}{\orcidicon}, Daniel
+Lüdecke$^{4}$\href{https://orcid.org/0000-0002-8895-3206}{\orcidicon}, Brenton
 M.
-Wiernik$^{5}$\href{https://orcid.org/0000-0001-9560-6336}{\orcidicon}}
+Wiernik$^{5}$\href{https://orcid.org/0000-0001-9560-6336}{\orcidicon}, Dominique
+Makowski$^{6}$\href{https://orcid.org/0000-0001-5375-9967}{\orcidicon}}
 
 % Authors, for metadata in PDF
 \AuthorNames{Rémi Thériault, Mattan S. Ben-Shachar, Indrajeet
-Patil, Dominique Makowski, Brenton M. Wiernik}
+Patil, Daniel Lüdecke, Brenton M. Wiernik, Dominique Makowski}
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
@@ -96,9 +97,11 @@ Montréal, Québec, Canada; \\
 $^{2}$ \quad Independent Researcher; \\
 $^{3}$ \quad Center for Humans and Machines, Max Planck Institute for
 Human Development, Berlin, Germany; \\
-$^{4}$ \quad School of Psychology, University of Sussex, Brighton,
-UK; \\
+$^{4}$ \quad Institute of Medical Sociology, University Medical Center
+Hamburg-Eppendorf, Germany; \\
 $^{5}$ \quad Independent Researcher, Tampa, FL, USA; \\
+$^{6}$ \quad School of Psychology, University of Sussex, Brighton,
+UK; \\
 }
 % Contact information of the corresponding author
 \corres{Correspondence: \href{mailto:theriault.remi@courrier.uqam.ca}{\nolinkurl{theriault.remi@courrier.uqam.ca}}.}
@@ -130,7 +133,7 @@ easily and conveniently be implemented in the R statistical computing
 software, using the \emph{\{performance\}} package of the
 \emph{easystats} ecosystem. We cover univariate, multivariate, and
 model-based statistical outlier detection methods, their recommended
-threshold, standard output, and plotting method. We conclude with
+threshold, standard output, and plotting methods. We conclude with
 recommendations on the handling of outliers: the different theoretical
 types of outliers, whether to exclude or winsorize them, and the
 importance of transparency.}
@@ -212,6 +215,17 @@ methods; R; easystats}
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
+% From pandoc table feature
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 
 
 
@@ -233,22 +247,19 @@ boundaries of ``abnormal'' are hard to define.
 Nonetheless, the improper handling of these outliers can substantially
 affect statistical model estimations, biasing effect estimations and
 weakening the models' predictive performance. It is thus essential to
-address this problem in a thoughtful manner. Despite the existence of
-established recommendations and guidelines, many researchers still do
+address this problem in a thoughtful manner. Yet, despite the existence
+of established recommendations and guidelines, many researchers still do
 not treat outliers in a consistent manner, or do so using inappropriate
-strategies \citep{simmons2011false, leys2013outliers}. Fortunately,
-guidelines exist in this regard. Yet, especially in the field of
-psychology, many researchers still do not treat outliers in a consistent
-manner or do so using inappropriate strategies
-\citep{simmons2011false, leys2013outliers}.
+strategies \citep{simmons2011false, leys2013outliers}.
 
 One possible reason is that researchers are not aware of the existing
 recommendations, or do not know how to implement them using their
 analysis software. In this paper, we show how to follow current best
 practices for automatic and reproducible statistical outlier detection
 (SOD) using R and the \emph{\{performance\}} package
-\citep{ludecke2021performance} from the \emph{easystats} ecosystem
-\citep{easystatspackage}.
+\citep{ludecke2021performance}, which is part of the \emph{easystats}
+ecosystem of packages that build an R framework for easy statistical
+modeling, visualization, and reporting \citep{easystatspackage}.
 
 \hypertarget{identifying-outliers}{%
 \section{Identifying Outliers}\label{identifying-outliers}}
@@ -266,17 +277,17 @@ In some cases, eye-gauging odd observations can be an appropriate
 solution, though many researchers will favour algorithmic solutions to
 detect potential outliers, for example, based on a mathematical score.
 
-One of the factor to consider when selecting an algorithmic outlier
+One of the factors to consider when selecting an algorithmic outlier
 detection method is the statistical test of interest. When using a
-regression model, for example, relevant information can be found by
-identifying observations that do not fit well with the model. This
-approach, known as model-based outliers detection (as outliers are
-extracted after the statistical model has been fit), can be contrasted
-with distribution-based outliers detection, which is based on the
-distance between an observation and the ``center'' of its population.
-Various quantification strategies of this distance exist for the latter,
-some being univariate (involving only one variable at a time) or
-multivariate (involving multiple variables).
+regression model, relevant information can be found by identifying
+observations that do not fit well with the model. This approach, known
+as model-based outliers detection (as outliers are extracted after the
+statistical model has been fit), can be contrasted with
+distribution-based outliers detection, which is based on the distance
+between an observation and the ``center'' of its population. Various
+quantification strategies of this distance exist for the latter, both
+univariate (involving only one variable at a time) or multivariate
+(involving multiple variables).
 
 When no method is readily available to detect model-based outliers, such
 as for structural equation modelling (SEM), looking for multivariate
@@ -421,11 +432,11 @@ indicative of inattention or non-task-related behavior\footnote{ Note
   outliers \citep{ratcliff1993methods, van1995statistical}}.
 
 However, in many scenarios, variables of a data set are not independent,
-and an abnormal observation will impact multiple dimensions. Let's
-imagine a participant giving random answers to a questionnaire. In this
-case, computing the \emph{z} score for each of the questions might not
-lead to satisfactory results. Instead, one might want to look at these
-variables together.
+and an abnormal observation will impact multiple dimensions. For
+instance, a participant giving random answers to a questionnaire. In
+this case, computing the \emph{z} score for each of the questions might
+not lead to satisfactory results. Instead, one might want to look at
+these variables together.
 
 One common approach for this is to compute multivariate distance metrics
 such as the Mahalanobis distance. Although the Mahalanobis distance is
@@ -479,16 +490,20 @@ page}.
 Working with regression models creates the possibility of using
 model-based SOD methods. These methods rely on the concept of
 \emph{leverage}, that is, how much influence a given observation can
-have on the whole model. If few observations have a relatively strong
-leverage/influence on the model, one can suspect that the model's
+have on the model estimates. If few observations have a relatively
+strong leverage/influence on the model, one can suspect that the model's
 estimates are biased by these observations, in which case flagging them
-as outliers could prove helpful.
+as outliers could prove helpful (see next section, ``Handling
+Outliers'').
 
-\texttt{check\_outliers()} can be applied directly on regression models,
-specifying \texttt{method\ =\ "cook"} (or \texttt{method\ =\ "pareto"}
-for Bayesian models).\footnote{Our default threshold for the Cook method
-  is defined by \texttt{stats::qf(0.5,\ ncol(x),\ nrow(x)\ -\ ncol(x))},
-  which again is an approximation of the critical value for \emph{p}
+In \{performance\}, two such model-based SOD methods are currently
+available: Cook's distance, for regular regression models, and Pareto,
+for Bayesian models. As such, \texttt{check\_outliers()} can be applied
+directly on regression model objects, by simply specifying
+\texttt{method\ =\ "cook"} (or \texttt{method\ =\ "pareto"} for Bayesian
+models).\footnote{Our default threshold for the Cook method is defined
+  by \texttt{stats::qf(0.5,\ ncol(x),\ nrow(x)\ -\ ncol(x))}, which
+  again is an approximation of the critical value for \emph{p}
   \textless{} .001 consistent with the thresholds of our other methods.}
 
 \begin{Shaded}
@@ -514,6 +529,47 @@ for Bayesian models).\footnote{Our default threshold for the Cook method
 \begin{figure}
 \includegraphics[width=1\linewidth]{paper_files/figure-latex/model-1} \caption{Visual depiction of outliers based on Cook's distance (leverage and standardized residuals).}\label{fig:model}
 \end{figure}
+
+Table 1 below summarizes which methods to use in which cases, and with
+what threshold.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3506}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3161}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\caption{Summary of Statistical Outlier Detection Methods
+Recommendations.}\tabularnewline
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+Statistical Test
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Diagnosis Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recommended Threshold
+\end{minipage} \\
+\midrule()
+\endfirsthead
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+Statistical Test
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Diagnosis Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recommended Threshold
+\end{minipage} \\
+\midrule()
+\endhead
+Supported regression model & \textbf{Model-based}: Cook (or Pareto for
+Bayesian models) & \texttt{qf(0.5,\ ncol(x),\ nrow(x)\ -\ ncol(x))} (or
+0.7 for Pareto) \\
+Structural Equation Modeling (or other unsupported model) &
+\textbf{Multivariate}: Minimum Covariance Determinant (MCD) &
+\texttt{qchisq(p\ =\ 1\ -\ 0.001,\ df\ =\ ncol(x))} \\
+Simple test with few variables (\emph{t} test, correlation, etc.) &
+\textbf{Univariate}: robust \emph{z} scores (MAD) &
+\texttt{qnorm(p\ =\ 1\ -\ 0.001\ /\ 2)}, \textasciitilde{} 3.29 \\
+\bottomrule()
+\end{longtable}
 
 \hypertarget{cooks-distance-vs.-mcd}{%
 \subsubsection{Cook's Distance vs.~MCD}\label{cooks-distance-vs.-mcd}}
@@ -546,20 +602,19 @@ outlier methods might be too conservative, flagging too many
 observations despite belonging to the right generative process. For
 these reasons, we believe that model-based methods are still preferable
 to the MCD when using compatible regression models. Additionally, if the
-presence of multiple outliers is a significant concern, robust
-regression methods should be considered---like \emph{t} regression or
-quantile regression---as they are more robust to outliers, rendering
-their precise identification less critical.
+presence of multiple outliers is a significant concern, regression
+methods that are more robust to outliers should be considered---like
+\emph{t} regression or quantile regression---as they render their
+precise identification less critical.
 
 \hypertarget{multiple-methods}{%
 \subsection{Multiple Methods}\label{multiple-methods}}
 
-An alternative approach suggested by \emph{easystats} is to combine
-several methods, based on the assumption that different methods provide
-different angles of looking at the problem. By applying a variety of
-methods, one can hope to ``triangulate'' the true outliers (those
-consistently flagged by multiple methods) and thus attempt to minimize
-false positives.
+An alternative approach that is possible is to combine several methods,
+based on the assumption that different methods provide different angles
+of looking at the problem. By applying a variety of methods, one can
+hope to ``triangulate'' the true outliers (those consistently flagged by
+multiple methods) and thus attempt to minimize false positives.
 
 In practice, this approach computes a composite outlier score, formed of
 the average of the binary (0 or 1) classification results of each
@@ -575,9 +630,9 @@ desired methods in the corresponding argument.
 \begin{Highlighting}[]
 \CommentTok{\# Combine multiple methods}
 \NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(}
-\NormalTok{  data[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{], }
+\NormalTok{  data[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{5}\NormalTok{],}
   \AttributeTok{method =} \FunctionTok{c}\NormalTok{(}\StringTok{"zscore\_robust"}\NormalTok{, }\StringTok{"iqr"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{, }\StringTok{"ics"}\NormalTok{)}
-\NormalTok{  )}
+\NormalTok{)}
 
 \NormalTok{outliers}
 \end{Highlighting}
@@ -646,8 +701,7 @@ obtained through attributes. For example:
 An example sentence for reporting the usage of the composite method
 could be:
 
-\begin{quote}
-Based on a composite outlier score \citep[see the `check\_outliers'
+Based on a composite outlier score \citep[see the `check\_outliers()'
 function in the `performance' R package,][]{ludecke2021performance}
 obtained via the joint application of multiple outliers detection
 algorithms \citetext{\citealp[(a) median absolute deviation (MAD)-based
@@ -656,7 +710,6 @@ range (IQR), (c) Mahalanobis minimum covariance determinant
 (MCD),][]{leys2019outliers}; \citealp[and (d) invariant coordinate
 selection (ICS),][]{archimbaud2018ics}}, we excluded three participants
 that were classified as outliers by at least half of the methods used.
-\end{quote}
 
 \hypertarget{handling-outliers}{%
 \section{Handling Outliers}\label{handling-outliers}}
@@ -673,7 +726,10 @@ how to deal with observations marked as outliers by means of SOD.
 Indeed, automatic tools can help detect outliers, but they are nowhere
 near perfect. Although they can be useful to flag suspect data, they can
 have misses and false alarms, and they cannot replace human eyes and
-proper vigilance from the researcher.
+proper vigilance from the researcher. If you do end up manually
+inspecting your data for outliers, it can be helpful to think of
+outliers as belonging to different types of outliers, or categories,
+which can help decide what to do with a given outlier.
 
 \hypertarget{error-interesting-and-random-outliers}{%
 \subsection{Error, Interesting, and Random
@@ -712,7 +768,7 @@ ideally one would report results with and without outliers to see the
 extent of their impact on results. This approach however can reduce
 statistical power. Therefore, some propose a \emph{recoding} approach,
 namely, winsorization: bringing outliers back within acceptable limits
-\citep[e.g., 3 MADs][]{tukey1963less}. However, if possible, it is
+\citep[e.g., 3 MADs,][]{tukey1963less}. However, if possible, it is
 recommended to collect enough data so that even after removing outliers,
 there is still sufficient statistical power without having to resort to
 winsorization \citep{leys2019outliers}.
