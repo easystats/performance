@@ -214,9 +214,9 @@ In practice, this approach computes a composite outlier score, formed of the ave
 ```{r multimethod, fig.cap = "Visual depiction of outliers using several different statistical outlier detection methods."}
 # Combine multiple methods
 outliers <- check_outliers(
-  data[1:5], 
+  data[1:5],
   method = c("zscore_robust", "iqr", "mcd", "ics")
-  )
+)
 
 outliers
 
