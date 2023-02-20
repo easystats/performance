@@ -163,7 +163,7 @@ Other univariate methods are available, such as using the interquartile range (I
 
 Univariate outliers can be useful when the focus is on a particular variable, for instance the reaction time, as extreme values might be indicative of inattention or non-task-related behavior^[ Note that they might not be the optimal way of treating reaction time outliers [@ratcliff1993methods; @van1995statistical]].
 
-However, in many scenarios, variables of a data set are not independent, and an abnormal observation will impact multiple dimensions. Let's imagine a participant giving random answers to a questionnaire. In this case, computing the _z_ score for each of the questions might not lead to satisfactory results. Instead, one might want to look at these variables together.
+However, in many scenarios, variables of a data set are not independent, and an abnormal observation will impact multiple dimensions. For instance, a participant giving random answers to a questionnaire. In this case, computing the _z_ score for each of the questions might not lead to satisfactory results. Instead, one might want to look at these variables together.
 
 One common approach for this is to compute multivariate distance metrics such as the Mahalanobis distance. Although the Mahalanobis distance is very popular, just like the regular _z_ scores method, it is not robust and is heavily influenced by the outliers themselves. Therefore, for multivariate outliers, it is recommended to use the Minimum Covariance Determinant, a robust version of the Mahalanobis distance [MCD, @leys2018outliers; @leys2019outliers]. 
 
