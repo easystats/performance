@@ -257,7 +257,7 @@ model_performance.BFBayesFactor <- function(model,
   all_metrics <- c("R2", "SIGMA")
 
   if (all(metrics == "all")) {
-    metrics <- c("R2", "SIGMA")
+    metrics <- all_metrics
   }
 
   # check for valid input
@@ -276,7 +276,7 @@ model_performance.BFBayesFactor <- function(model,
   attri <- list()
 
   if ("R2" %in% c(metrics)) {
-    r2 <- r2_bayes(model, average = average, prior_odds = prior_odds)
+    r2 <- r2_bayes(model, average = average, prior_odds = prior_odds, verbose = verbose)
     attri$r2_bayes <- attributes(r2) # save attributes
 
     # Format to df then to list
