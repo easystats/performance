@@ -143,12 +143,12 @@ check_kmo <- function(x, n = NULL, ...) {
 
   # Individual scores:
   text_ind <- paste(paste0(
-                       names(MSA_variable),
-                       " (",
-                       insight::format_value(MSA_variable),
-                       ifelse(MSA_variable < 0.5, "*", ""),
-                       ")"
-                       ), collapse = ", ")
+    names(MSA_variable),
+    " (",
+    insight::format_value(MSA_variable),
+    ifelse(MSA_variable < 0.5, "*", ""),
+    ")"
+  ), collapse = ", ")
 
   text <- paste0(text, " The individual KMO scores are: ", text_ind, ".")
 
@@ -167,7 +167,6 @@ check_kmo <- function(x, n = NULL, ...) {
 #' @rdname check_factorstructure
 #' @export
 check_sphericity_bartlett <- function(x, n = NULL, ...) {
-
   out <- .check_factor_structure_sanity(x, n, ...)
 
   p <- dim(out$r)[2]
