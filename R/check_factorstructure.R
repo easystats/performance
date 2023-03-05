@@ -7,7 +7,7 @@
 #'
 #'
 #' @details
-#' - **Bartlett's Test of Sphericity**
+#' ### Bartlett's Test of Sphericity
 #'
 #' Bartlett's (1951) test of sphericity tests whether a matrix (of correlations)
 #' is significantly different from an identity matrix (filled with 0). It tests
@@ -22,7 +22,9 @@
 #' As the sample size increases, this test tends to be always significant, which
 #' makes it not particularly useful or informative in well-powered studies.
 #'
-#' - **Kaiser, Meyer, Olkin (KMO)** Measure of Sampling Adequacy (MSA) for Factor Analysis
+#' ### Kaiser, Meyer, Olkin (KMO)
+#'
+#' *(Measure of Sampling Adequacy (MSA) for Factor Analysis.)*
 #'
 #' Kaiser (1970) introduced a Measure of Sampling Adequacy (MSA), later modified
 #' by Kaiser and Rice (1974). The Kaiser-Meyer-Olkin (KMO) statistic, which can

@@ -31,9 +31,7 @@ Measure of Sampling Adequacy (MSA). See \strong{details} below for more informat
 about the interpretation and meaning of each test.
 }
 \details{
-\itemize{
-\item \strong{Bartlett's Test of Sphericity}
-}
+\subsection{Bartlett's Test of Sphericity}{
 
 Bartlett's (1951) test of sphericity tests whether a matrix (of correlations)
 is significantly different from an identity matrix (filled with 0). It tests
@@ -47,9 +45,11 @@ significant before starting with factor analysis, one needs to remember that
 the test is testing a pretty extreme scenario (that all correlations are non-significant).
 As the sample size increases, this test tends to be always significant, which
 makes it not particularly useful or informative in well-powered studies.
-\itemize{
-\item \strong{Kaiser, Meyer, Olkin (KMO)} Measure of Sampling Adequacy (MSA) for Factor Analysis
 }
+
+\subsection{Kaiser, Meyer, Olkin (KMO)}{
+
+\emph{(Measure of Sampling Adequacy (MSA) for Factor Analysis.)}
 
 Kaiser (1970) introduced a Measure of Sampling Adequacy (MSA), later modified
 by Kaiser and Rice (1974). The Kaiser-Meyer-Olkin (KMO) statistic, which can
@@ -74,6 +74,7 @@ between 0.7 and 0.8 are good.
 Variables with individual KMO values below 0.5 could be considered for
 exclusion them from the analysis (note that you would need to re-compute the
 KMO indices as they are dependent on the whole dataset).
+}
 }
 \examples{
 library(performance)
