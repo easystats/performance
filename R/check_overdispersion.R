@@ -95,14 +95,10 @@ plot.check_overdisp <- function(x, ...) {
   model <- NULL
 
   if (!is.null(obj_name)) {
-    model <- tryCatch(get(obj_name, envir = parent.frame()),
-      error = function(e) NULL
-    )
+    model <- .safe(get(obj_name, envir = parent.frame()))
     if (is.null(model)) {
       # second try, global env
-      model <- tryCatch(get(obj_name, envir = globalenv()),
-        error = function(e) NULL
-      )
+      model <- .safe(get(obj_name, envir = globalenv()))
     }
   }
   if (!is.null(model)) {

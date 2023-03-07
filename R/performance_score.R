@@ -189,14 +189,7 @@ print.performance_score <- function(x, ...) {
       sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
     }
   } else {
-    tryCatch(
-      {
-        sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
-      },
-      error = function(e) {
-        0
-      }
-    )
+    .safe(sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model), 0)
   }
 }
 

@@ -46,7 +46,8 @@ A logical vector of the detected outliers with a nice printing
 method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
 considered as outlier can be recovered with the \link{as.data.frame}
-function.
+function. Note that the function will (silently) return a vector of \code{FALSE}
+for non-supported data types such as character strings.
 }
 \description{
 Checks for and locates influential observations (i.e.,
@@ -123,7 +124,7 @@ deviance from a central value, in terms of standard deviations from the mean
 default (Iglewicz, 1993), in terms of Median Absolute Deviation (MAD) from
 the median (which are robust measures of dispersion and centrality). The
 default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = 1.959)}),
-corresponding to the 2.5\\% (\code{qnorm(0.975)}) most extreme observations
+corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations
 (assuming the data is normally distributed). Importantly, the Z-score
 method is univariate: it is computed column by column. If a dataframe is
 passed, the Z-score is calculated for each variable separately, and the
