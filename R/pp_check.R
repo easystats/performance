@@ -151,9 +151,7 @@ pp_check.lm <- function(object,
   }
 
   # else, proceed as usual
-  out <- tryCatch(stats::simulate(object, nsim = iterations, re.form = re_formula, ...),
-    error = function(e) NULL
-  )
+  out <- .safe(stats::simulate(object, nsim = iterations, re.form = re_formula, ...))
 
   # sanity check, for mixed models, where re.form = NULL (default) might fail
   out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
@@ -354,24 +352,18 @@ plot.performance_pp_check <- function(x, ...) {
   } else if (grepl("log(", resp_string, fixed = TRUE)) {
     # exceptions: log(x+1) or log(1+x)
     # 1. try: log(x + number)
-    plus_minus <- tryCatch(
-      eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string))),
-      error = function(e) NULL
-    )
+    plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string))))
     # 2. try: log(number + x)
     if (is.null(plus_minus)) {
-      plus_minus <- tryCatch(
-        eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))),
-        error = function(e) NULL
-      )
+      plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))))
     }
     if (is.null(plus_minus)) {
-      sims[] <- lapply(sims, function(i) exp(i))
+      sims[] <- lapply(sims, exp)
     } else {
       sims[] <- lapply(sims, function(i) exp(i) - plus_minus)
     }
   } else if (grepl("log1p(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) expm1(i))
+    sims[] <- lapply(sims, expm1)
   } else if (grepl("log10(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) 10^i)
   } else if (grepl("log2(", resp_string, fixed = TRUE)) {
@@ -379,9 +371,9 @@ plot.performance_pp_check <- function(x, ...) {
   } else if (grepl("sqrt(", resp_string, fixed = TRUE)) {
     sims[] <- lapply(sims, function(i) i^2)
   } else if (grepl("exp(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) log(i))
+    sims[] <- lapply(sims, log)
   } else if (grepl("expm1(", resp_string, fixed = TRUE)) {
-    sims[] <- lapply(sims, function(i) log1p(i))
+    sims[] <- lapply(sims, log1p)
   }
 
   sims
@@ -401,10 +393,7 @@ plot.performance_pp_check <- function(x, ...) {
         "Trying again with `re_formula=NA` now."
       )
     }
-    out <- tryCatch(
-      stats::simulate(object, nsim = iterations, re.form = NA, ...),
-      error = function(e) NULL
-    )
+    out <- .safe(stats::simulate(object, nsim = iterations, re.form = NA, ...))
   }
   out
 }

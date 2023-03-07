@@ -32,13 +32,10 @@ mse <- performance_mse
 
 #' @export
 performance_mse.default <- function(model, verbose = TRUE, ...) {
-  res <- tryCatch(
-    insight::get_residuals(model, verbose = verbose, type = "response", ...),
-    error = function(e) NULL
-  )
+  res <- .safe(insight::get_residuals(model, verbose = verbose, type = "response", ...))
 
   if (is.null(res)) {
-    res <- tryCatch(
+    res <- .safe(
       {
         def_res <- insight::get_residuals(model, verbose = FALSE, ...)
         if (verbose) {
@@ -47,9 +44,6 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
           )
         }
         def_res
-      },
-      error = function(e) {
-        NULL
       }
     )
   }

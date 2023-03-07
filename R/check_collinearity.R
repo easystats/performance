@@ -604,7 +604,7 @@ check_collinearity.zerocount <- function(x,
   }))
 
   if (insight::is_gam_model(x)) {
-    model_params <- as.vector(unlist(unlist(insight::find_parameters(x)[c(component, "smooth_terms")])))
+    model_params <- as.vector(unlist(insight::find_parameters(x)[c(component, "smooth_terms")]))
   } else {
     model_params <- insight::find_parameters(x)[[component]]
   }

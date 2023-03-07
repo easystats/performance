@@ -43,7 +43,7 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
   unique_groups <- .n_unique(data[[group]])
   combinations <- expand.grid(select, group)
 
-  result <- mapply(function(predictor, id) {
+  result <- Map(function(predictor, id) {
     # demean predictor
     d <- datawizard::demean(data, select = predictor, group = id, verbose = FALSE)
 
@@ -52,14 +52,14 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
 
     # check if any within-variable differs from zero. if yes, we have
     # a within-subject effect
-    if (any(sum(abs(d[[within_name]]) > 1e-5, na.rm = TRUE) > 0)) {
+    if (any(abs(d[[within_name]]) > 1e-5)) {
       predictor
     } else {
       NULL
     }
-  }, as.character(combinations[[1]]), as.character(combinations[[2]]), SIMPLIFY = FALSE)
+  }, as.character(combinations[[1]]), as.character(combinations[[2]]))
 
-  out <- unname(unlist(insight::compact_list(result)))
+  out <- unlist(insight::compact_list(result), use.names = FALSE)
 
   if (is.null(out)) {
     message("No predictor found that could cause heterogeneity bias.")
@@ -77,7 +77,7 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
 #' @export
 print.check_heterogeneity_bias <- function(x, ...) {
   cat("Possible heterogeneity bias due to following predictors: ")
-  insight::print_color(paste(x, collapse = ", "), "red")
+  insight::print_color(toString(x), "red")
   cat("\n")
   invisible(x)
 }

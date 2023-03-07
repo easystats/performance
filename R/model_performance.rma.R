@@ -89,14 +89,7 @@ model_performance.rma <- function(model, metrics = "all", estimator = "ML", verb
   if (any(c("QE", "COCHRANSQ") %in% toupper(metrics))) {
     out$CochransQ <- s$QE
     out$p_CochransQ <- s$QEp
-    out$df_error <- tryCatch(
-      {
-        stats::df.residual(model)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    out$df_error <- .safe(stats::df.residual(model))
   }
 
   if (any(c("QM", "OMNIBUS") %in% toupper(metrics))) {

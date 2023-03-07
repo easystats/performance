@@ -1728,14 +1728,7 @@ check_outliers.geeglm <- check_outliers.gls
 # influential observations data --------
 
 .influential_obs <- function(x, threshold = NULL) {
-  tryCatch(
-    {
-      .diag_influential_obs(x, threshold = threshold)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  .safe(.diag_influential_obs(x, threshold = threshold))
 }
 
 
