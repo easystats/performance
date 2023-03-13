@@ -5,7 +5,6 @@
 #'    for tests or item-scales of questionnaires.
 #'
 #' @param x A matrix or a data frame.
-#' @param verbose Toggle warnings.
 #' @param ... Currently not used.
 #'
 #' @return The Cronbach's Alpha value for `x`.

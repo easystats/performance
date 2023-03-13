@@ -10,8 +10,6 @@ cronbachs_alpha(x, ...)
 \item{x}{A matrix or a data frame.}
 
 \item{...}{Currently not used.}
-
-\item{verbose}{Toggle warnings.}
 }
 \value{
 The Cronbach's Alpha value for \code{x}.
