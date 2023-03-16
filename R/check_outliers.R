@@ -1497,8 +1497,6 @@ check_outliers.geeglm <- check_outliers.gls
   }
 
   # Compute
-  print(x)
-  print(cov(x))
   out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), cov = stats::cov(x), ...)
 
   # Filter
