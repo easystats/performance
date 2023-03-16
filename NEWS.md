@@ -7,7 +7,7 @@
 ## Support for new models
 
 * `model_performance()`, `check_overdispersion()`, `check_outliers()` and `r2()`
-  now work with objects of class `fixest_multi` (@etiennebacher).
+  now work with objects of class `fixest_multi` (@etiennebacher, #554).
 
 ## Changes to functions
 
