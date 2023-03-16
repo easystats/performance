@@ -1,10 +1,11 @@
 base <- iris
-names(base)  <- c("y1", "y2", "x1", "x2", "species")
+names(base) <- c("y1", "y2", "x1", "x2", "species")
 
 test_that("fixest: r2", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(y1 ~ x1 + x2 + x2^2 | species, base)
-  r2_res <- r2(res)
+  r2_res <- performance::r2(res)
 
   expect_equal(r2_res$R2, fitstat(res, "r2")[[1]])
   expect_equal(r2_res$R2_adjusted, fitstat(res, "ar2")[[1]])
@@ -15,6 +16,7 @@ test_that("fixest: r2", {
 
 test_that("fixest: overdispersion", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(y1 ~ x1 + x2 + x2^2 | species, base)
   expect_error(
     check_overdispersion(res),
@@ -24,6 +26,7 @@ test_that("fixest: overdispersion", {
 
 test_that("fixest: outliers", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(y1 ~ x1 + x2 + x2^2 | species, base)
   outliers_list <- suppressMessages(check_outliers(res))
   expect_identical(attr(outliers_list, "outlier_count"), list())
@@ -31,6 +34,7 @@ test_that("fixest: outliers", {
 
 test_that("fixest: model_performance", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(y1 ~ x1 + x2 + x2^2 | species, base)
   perf <- model_performance(res)
   expect_equal(perf$AIC, 107.743, tolerance = 1e-3)
@@ -47,14 +51,16 @@ test_that("fixest: model_performance", {
 
 test_that("fixest_multi: r2", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(c(y1, y2) ~ x1 + csw(x2, x2^2) | species, base)
-  r2_res <- r2(res)
+  r2_res <- performance::r2(res)
 
-  expect_equal(r2_res[[1]]$R2, 0.837, tolerance = 1e-3)
+  expect_equal(unname(r2_res[[1]]$R2), 0.837, tolerance = 1e-3)
 })
 
 test_that("fixest_multi: overdispersion", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(c(y1, y2) ~ x1 + csw(x2, x2^2) | species, base)
   expect_error(
     check_overdispersion(res),
@@ -64,6 +70,7 @@ test_that("fixest_multi: overdispersion", {
 
 test_that("fixest_multi: outliers", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(c(y1, y2) ~ x1 + csw(x2, x2^2) | species, base)
   outliers_list <- suppressMessages(check_outliers(res)[[1]])
   expect_identical(attr(outliers_list, "outlier_count"), list())
@@ -71,6 +78,7 @@ test_that("fixest_multi: outliers", {
 
 test_that("fixest_multi: model_performance", {
   skip_if_not_installed("fixest")
+  library(fixest)
   res <- feols(c(y1, y2) ~ x1 + csw(x2, x2^2) | species, base)
   res2 <- feols(y1 ~ x1 + x2 + x2^2 | species, base)
   perf <- model_performance(res)
