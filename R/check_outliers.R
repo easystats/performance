@@ -1221,6 +1221,15 @@ check_outliers.lme <- check_outliers.gls
 check_outliers.fixest <- check_outliers.gls
 
 #' @export
+check_outliers.fixest_multi <- function(x,
+                                        method = "pareto",
+                                        threshold = NULL,
+                                        ID = NULL,
+                                        ...) {
+  lapply(x, check_outliers.fixest)
+}
+
+#' @export
 check_outliers.geeglm <- check_outliers.gls
 
 

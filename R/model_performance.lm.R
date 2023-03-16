@@ -236,6 +236,11 @@ model_performance.vglm <- model_performance.lm
 model_performance.fixest <- model_performance.lm
 
 #' @export
+model_performance.fixest_multi <- function(model, metrics = "all", verbose = TRUE, ...) {
+  lapply(model, model_performance.fixest)
+}
+
+#' @export
 model_performance.DirichletRegModel <- model_performance.lm
 
 #' @export

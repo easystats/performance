@@ -638,6 +638,11 @@ r2.fixest <- function(model, ...) {
   structure(class = "r2_generic", out)
 }
 
+#' @export
+r2.fixest_multi <- function(model, ...) {
+  lapply(model, r2.fixest)
+}
+
 
 
 #' @export
