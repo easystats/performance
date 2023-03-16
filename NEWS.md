@@ -4,6 +4,11 @@
 
 * `item_discrimination()`, to calculate the discrimination of a scale's items.
 
+## Support for new models
+
+* `model_performance()`, `check_overdispersion()`, `check_outliers()` and `r2()`
+  now work with objects of class `fixest_multi` (@etiennebacher).
+
 ## Changes to functions
 
 * Warnings in `model_performance()` for unsupported objects of class

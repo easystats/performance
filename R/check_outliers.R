@@ -1221,6 +1221,15 @@ check_outliers.lme <- check_outliers.gls
 check_outliers.fixest <- check_outliers.gls
 
 #' @export
+check_outliers.fixest_multi <- function(x,
+                                        method = "pareto",
+                                        threshold = NULL,
+                                        ID = NULL,
+                                        ...) {
+  lapply(model, check_outliers.fixest)
+}
+
+#' @export
 check_outliers.geeglm <- check_outliers.gls
 
 
@@ -1488,6 +1497,8 @@ check_outliers.geeglm <- check_outliers.gls
   }
 
   # Compute
+  print(x)
+  print(cov(x))
   out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), cov = stats::cov(x), ...)
 
   # Filter
