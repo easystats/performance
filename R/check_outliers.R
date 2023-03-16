@@ -1226,7 +1226,7 @@ check_outliers.fixest_multi <- function(x,
                                         threshold = NULL,
                                         ID = NULL,
                                         ...) {
-  lapply(model, check_outliers.fixest)
+  lapply(x, check_outliers.fixest)
 }
 
 #' @export
