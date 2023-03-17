@@ -35,17 +35,15 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
   res <- .safe(insight::get_residuals(model, verbose = verbose, type = "response", ...))
 
   if (is.null(res)) {
-    res <- .safe(
-      {
-        def_res <- insight::get_residuals(model, verbose = FALSE, ...)
-        if (verbose) {
-          insight::format_warning(
-            "Response residuals not available to calculate mean square error. (R)MSE is probably not reliable."
-          )
-        }
-        def_res
+    res <- .safe({
+      def_res <- insight::get_residuals(model, verbose = FALSE, ...)
+      if (verbose) {
+        insight::format_warning(
+          "Response residuals not available to calculate mean square error. (R)MSE is probably not reliable."
+        )
       }
-    )
+      def_res
+    })
   }
 
   if (is.null(res) || all(is.na(res))) {

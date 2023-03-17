@@ -16,7 +16,8 @@ Invisibly returns the p-values of the test statistics. A p-value <
 0.05 indicates a violation of sphericity.
 }
 \description{
-Check model for violation of sphericity
+Check model for violation of sphericity. For \link[=check_factorstructure]{Bartlett's Test of Sphericity}
+(used for correlation matrices and factor analyses), see \link{check_sphericity_bartlett}.
 }
 \examples{
 if (require("car")) {
