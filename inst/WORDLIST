@@ -55,6 +55,7 @@ EQS
 Econometrica
 Efron
 Efron's
+Elphick
 Erlbaum
 Fligner
 Forschungsmethoden
@@ -87,6 +88,7 @@ ICCs
 ICS
 IFI
 IJCNN
+Ieno
 Iglewicz
 Intra
 Intraclass
@@ -101,6 +103,7 @@ Kiado
 Killeen
 Kliegl
 Kullback
+LOF
 LOGLOSS
 LOOIC
 Laniado
@@ -172,7 +175,6 @@ Subscales
 TLI
 Technometrics
 Testtheorie
-Testwertverteilungen
 Testwertbestimmung
 Tibshirani
 Tily
@@ -200,12 +202,14 @@ Zavoina
 Zavoinas
 Zhou
 Zomeren
+Zuur
 afex
 al
 analyse
 aov
 arXiv
 autocorrelated
+bartlett
 bayesplot
 bayestestR
 behaviour
@@ -295,4 +299,3 @@ underfitting
 visualisation
 xy
 youtube
-LOF
