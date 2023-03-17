@@ -66,7 +66,7 @@
 #' _Zuur et al. (2019)_ suggest using lower values, e.g. a VIF of 3 or larger
 #' may already no longer be considered as "low".
 #'
-#' @section Multicollinearity and Interaction Terms
+#' @section Multicollinearity and Interaction Terms:
 #' If interaction terms are included in a model, high VIF values are expected.
 #' This portion of multicollinearity among the component terms of an
 #' interaction is also called "inessential ill-conditioning", which leads to
@@ -120,11 +120,10 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
+#' @examplesIf require("see")
 #' # plot results
-#' if (require("see")) {
-#'   x <- check_collinearity(m)
-#'   plot(x)
-#' }
+#' x <- check_collinearity(m)
+#' plot(x)
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")

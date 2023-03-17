@@ -105,6 +105,15 @@ thresholds, although commonly used, are also criticized for being too high.
 may already no longer be considered as "low".
 }
 
+\section{Multicollinearity and Interaction Terms}{
+
+If interaction terms are included in a model, high VIF values are expected.
+This portion of multicollinearity among the component terms of an
+interaction is also called "inessential ill-conditioning", which leads to
+inflated VIF values that are typically seen for models with interaction
+terms \emph{(Francoeur 2013)}.
+}
+
 \section{Concurvity for Smooth Terms in Generalized Additive Models}{
 
 \code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be
@@ -124,11 +133,11 @@ increasing lack of identifiability. The \emph{VIF proportion} column equals the
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)
 
+\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # plot results
-if (require("see")) {
-  x <- check_collinearity(m)
-  plot(x)
-}
+x <- check_collinearity(m)
+plot(x)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
