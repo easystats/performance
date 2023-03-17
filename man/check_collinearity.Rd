@@ -59,8 +59,15 @@ considered as a collinearity check for smooth terms in GAMs. Confidence
 intervals for VIF and tolerance are based on Marcoulides et al.
 (2019, Appendix B).
 }
-\details{
-\subsection{Multicollinearity}{
+\note{
+The code to compute the confidence intervals for the VIF and tolerance
+values was adapted from the Appendix B from the Marcoulides et al. paper.
+Thus, credits go to these authors the original algorithm. There is also
+a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+}
+\section{Multicollinearity}{
+
 Multicollinearity should not be confused with a raw strong correlation
 between predictors. What matters is the association between one or more
 predictor variables, \emph{conditional on the other variables in the
@@ -72,58 +79,47 @@ multicollinearity is a problem, the model seems to suggest that the
 predictors in question don't seems to be reliably associated with the
 outcome (low estimates, high standard errors), although these predictors
 actually are strongly associated with the outcome, i.e. indeed might have
-strong effect (\cite{McElreath 2020, chapter 6.1}).
-\cr \cr
+strong effect (\emph{McElreath 2020, chapter 6.1}).
+
 Multicollinearity might arise when a third, unobserved variable has a causal
 effect on each of the two predictors that are associated with the outcome.
 In such cases, the actual relationship that matters would be the association
 between the unobserved variable and the outcome.
-\cr \cr
-Remember: \dQuote{Pairwise correlations are not the problem. It is the
-conditional associations - not correlations - that matter.}
-(\cite{McElreath 2020, p. 169})
+
+Remember: "Pairwise correlations are not the problem. It is the conditional
+associations - not correlations - that matter." (\emph{McElreath 2020, p. 169})
 }
 
-\subsection{Interpretation of the Variance Inflation Factor}{
+\section{Interpretation of the Variance Inflation Factor}{
+
 The variance inflation factor is a measure to analyze the magnitude of
 multicollinearity of model terms. A VIF less than 5 indicates a low
 correlation of that predictor with other predictors. A value between 5 and
 10 indicates a moderate correlation, while VIF values larger than 10 are a
-sign for high, not tolerable correlation of model predictors (\cite{James
-et al. 2013}). The \emph{Increased SE} column in the output indicates how
-much larger the standard error is due to the association with other
-predictors conditional on the remaining variables in the model.
+sign for high, not tolerable correlation of model predictors (\emph{James et al.
+2013}). The \emph{Increased SE} column in the output indicates how much larger
+the standard error is due to the association with other predictors
+conditional on the remaining variables in the model. Note that these
+thresholds, although commonly used, are also criticized for being too high.
+\emph{Zuur et al. (2019)} suggest using lower values, e.g. a VIF of 3 or larger
+may already no longer be considered as "low".
 }
 
-\subsection{Multicollinearity and Interaction Terms}{
-If interaction terms are included in a model, high VIF values are expected.
-This portion of multicollinearity among the component terms of an
-interaction is also called "inessential ill-conditioning", which leads to
-inflated VIF values that are typically seen for models with interaction
-terms \cite{(Francoeur 2013)}.
-}
+\section{Concurvity for Smooth Terms in Generalized Additive Models}{
 
-\subsection{Concurvity for Smooth Terms in Generalized Additive Models}{
 \code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be
-considered as a collinearity check for smooth terms in GAMs.
-\dQuote{Concurvity occurs when some smooth term in a model could be
-approximated by one or more of the other smooth terms in the model.} (see
-\code{?mgcv::concurvity}). \code{check_concurvity()} returns a column named \emph{VIF},
-which is the "worst" measure. While \code{mgcv::concurvity()} range between
-0 and 1, the \emph{VIF} value is \code{1 / (1 - worst)}, to make interpretation
-comparable to classical VIF values, i.e. \code{1} indicates no problems, while
-higher values indicate increasing lack of identifiability. The \emph{VIF proportion}
-column equals the "estimate" column from \code{mgcv::concurvity()}, ranging
-from 0 (no problem) to 1 (total lack of identifiability).
+considered as a collinearity check for smooth terms in GAMs."Concurvity
+occurs when some smooth term in a model could be approximated by one or more
+of the other smooth terms in the model." (see \code{?mgcv::concurvity}).
+\code{check_concurvity()} returns a column named \emph{VIF}, which is the "worst"
+measure. While \code{mgcv::concurvity()} range between 0 and 1, the \emph{VIF} value
+is \code{1 / (1 - worst)}, to make interpretation comparable to classical VIF
+values, i.e. \code{1} indicates no problems, while higher values indicate
+increasing lack of identifiability. The \emph{VIF proportion} column equals the
+"estimate" column from \code{mgcv::concurvity()}, ranging from 0 (no problem) to
+1 (total lack of identifiability).
 }
-}
-\note{
-The code to compute the confidence intervals for the VIF and tolerance
-values was adapted from the Appendix B from the Marcoulides et al. paper.
-Thus, credits go to these authors the original algorithm. There is also
-a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
-}
+
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)
@@ -149,5 +145,8 @@ Methods. Educational and Psychological Measurement, 79(5), 874–882.
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
 \href{https://janhove.github.io/analysis/2019/09/11/collinearity}{webpage}
+\item Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
+common statistical problems: Data exploration. Methods in Ecology and
+Evolution (2010) 1:3–14.
 }
 }

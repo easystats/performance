@@ -5,6 +5,7 @@
 #'    for tests or item-scales of questionnaires.
 #'
 #' @param x A matrix or a data frame.
+#' @param ... Currently not used.
 #'
 #' @return The Cronbach's Alpha value for `x`.
 #'
@@ -25,20 +26,22 @@
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' cronbachs_alpha(x)
 #' @export
-cronbachs_alpha <- function(x) {
+cronbachs_alpha <- function(x, ...) {
   UseMethod("cronbachs_alpha")
 }
 
 
 
 #' @export
-cronbachs_alpha.data.frame <- function(x) {
+cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
   # remove missings
   .data <- stats::na.omit(x)
 
   # we need at least two columns for Cronach's Alpha
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
-    insight::format_warning("Too few columns in `x` to compute Cronbach's Alpha.")
+    if (verbose) {
+      insight::format_warning("Too few columns in `x` to compute Cronbach's Alpha.")
+    }
     return(NULL)
   }
 
@@ -49,14 +52,14 @@ cronbachs_alpha.data.frame <- function(x) {
 
 
 #' @export
-cronbachs_alpha.matrix <- function(x) {
-  cronbachs_alpha(as.data.frame(x))
+cronbachs_alpha.matrix <- function(x, verbose = TRUE, ...) {
+  cronbachs_alpha(as.data.frame(x), verbose = verbose, ...)
 }
 
 
 
 #' @export
-cronbachs_alpha.parameters_pca <- function(x) {
+cronbachs_alpha.parameters_pca <- function(x, verbose = TRUE, ...) {
   # fetch data used for the PCA
   pca_data <- attributes(x)$dataset
 
@@ -70,7 +73,9 @@ cronbachs_alpha.parameters_pca <- function(x) {
   if (is.null(pca_data)) {
     pca_data <- attr(x, "data")
     if (is.null(pca_data)) {
-      insight::format_warning("Could not find data frame that was used for the PCA.")
+      if (verbose) {
+        insight::format_warning("Could not find data frame that was used for the PCA.")
+      }
       return(NULL)
     }
     pca_data <- get(pca_data, envir = parent.frame())
@@ -85,7 +90,11 @@ cronbachs_alpha.parameters_pca <- function(x) {
   # apply cronbach's alpha for each component,
   # only for variables with max loading
   cronb <- sapply(unique_factors, function(i) {
-    cronbachs_alpha(pca_data[, as.vector(x$Variable[factor_assignment == i]), drop = FALSE])
+    cronbachs_alpha(
+      pca_data[, as.vector(x$Variable[factor_assignment == i]), drop = FALSE],
+      verbose = verbose,
+      ...
+    )
   })
 
   names(cronb) <- paste0("PC", unique_factors)
