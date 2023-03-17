@@ -170,10 +170,17 @@ with other terms, and tolerance values (including confidence intervals),
 where <code>tolerance = 1/vif</code>.</p>
     </div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>The code to compute the confidence intervals for the VIF and tolerance
+values was adapted from the Appendix B from the Marcoulides et al. paper.
+Thus, credits go to these authors the original algorithm. There is also
+a <a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
+implemented in the <a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="multicollinearity">Multicollinearity<a class="anchor" aria-label="anchor" href="#multicollinearity"></a></h2>
     
-<div class="section">
-<h3 id="multicollinearity">Multicollinearity<a class="anchor" aria-label="anchor" href="#multicollinearity"></a></h3>
+
 <p>Multicollinearity should not be confused with a raw strong correlation
 between predictors. What matters is the association between one or more
 predictor variables, <em>conditional on the other variables in the
@@ -185,62 +192,45 @@ multicollinearity is a problem, the model seems to suggest that the
 predictors in question don't seems to be reliably associated with the
 outcome (low estimates, high standard errors), although these predictors
 actually are strongly associated with the outcome, i.e. indeed might have
-strong effect (<cite>McElreath 2020, chapter 6.1</cite>).
-<br><br>
-Multicollinearity might arise when a third, unobserved variable has a causal
+strong effect (<em>McElreath 2020, chapter 6.1</em>).</p>
+<p>Multicollinearity might arise when a third, unobserved variable has a causal
 effect on each of the two predictors that are associated with the outcome.
 In such cases, the actual relationship that matters would be the association
-between the unobserved variable and the outcome.
-<br><br>
-Remember: “Pairwise correlations are not the problem. It is the
-conditional associations - not correlations - that matter.”
-(<cite>McElreath 2020, p. 169</cite>)</p>
-</div>
+between the unobserved variable and the outcome.</p>
+<p>Remember: "Pairwise correlations are not the problem. It is the conditional
+associations - not correlations - that matter." (<em>McElreath 2020, p. 169</em>)</p>
+    </div>
+    <div class="section level2">
+    <h2 id="interpretation-of-the-variance-inflation-factor">Interpretation of the Variance Inflation Factor<a class="anchor" aria-label="anchor" href="#interpretation-of-the-variance-inflation-factor"></a></h2>
+    
 
-<div class="section">
-<h3 id="interpretation-of-the-variance-inflation-factor">Interpretation of the Variance Inflation Factor<a class="anchor" aria-label="anchor" href="#interpretation-of-the-variance-inflation-factor"></a></h3>
 <p>The variance inflation factor is a measure to analyze the magnitude of
 multicollinearity of model terms. A VIF less than 5 indicates a low
 correlation of that predictor with other predictors. A value between 5 and
 10 indicates a moderate correlation, while VIF values larger than 10 are a
-sign for high, not tolerable correlation of model predictors (<cite>James
-et al. 2013</cite>). The <em>Increased SE</em> column in the output indicates how
-much larger the standard error is due to the association with other
-predictors conditional on the remaining variables in the model.</p>
-</div>
-
-<div class="section">
-<h3 id="multicollinearity-and-interaction-terms">Multicollinearity and Interaction Terms<a class="anchor" aria-label="anchor" href="#multicollinearity-and-interaction-terms"></a></h3>
-<p>If interaction terms are included in a model, high VIF values are expected.
-This portion of multicollinearity among the component terms of an
-interaction is also called "inessential ill-conditioning", which leads to
-inflated VIF values that are typically seen for models with interaction
-terms <cite>(Francoeur 2013)</cite>.</p>
-</div>
-
-<div class="section">
-<h3 id="concurvity-for-smooth-terms-in-generalized-additive-models">Concurvity for Smooth Terms in Generalized Additive Models<a class="anchor" aria-label="anchor" href="#concurvity-for-smooth-terms-in-generalized-additive-models"></a></h3>
-<p><code>check_concurvity()</code> is a wrapper around <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code>, and can be
-considered as a collinearity check for smooth terms in GAMs.
-“Concurvity occurs when some smooth term in a model could be
-approximated by one or more of the other smooth terms in the model.” (see
-<code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">?mgcv::concurvity</a></code>). <code>check_concurvity()</code> returns a column named <em>VIF</em>,
-which is the "worst" measure. While <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code> range between
-0 and 1, the <em>VIF</em> value is <code>1 / (1 - worst)</code>, to make interpretation
-comparable to classical VIF values, i.e. <code>1</code> indicates no problems, while
-higher values indicate increasing lack of identifiability. The <em>VIF proportion</em>
-column equals the "estimate" column from <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code>, ranging
-from 0 (no problem) to 1 (total lack of identifiability).</p>
-</div>
-
+sign for high, not tolerable correlation of model predictors (<em>James et al.
+2013</em>). The <em>Increased SE</em> column in the output indicates how much larger
+the standard error is due to the association with other predictors
+conditional on the remaining variables in the model. Note that these
+thresholds, although commonly used, are also criticized for being too high.
+<em>Zuur et al. (2019)</em> suggest using lower values, e.g. a VIF of 3 or larger
+may already no longer be considered as "low".</p>
     </div>
     <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>The code to compute the confidence intervals for the VIF and tolerance
-values was adapted from the Appendix B from the Marcoulides et al. paper.
-Thus, credits go to these authors the original algorithm. There is also
-a <a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
-implemented in the <a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
+    <h2 id="concurvity-for-smooth-terms-in-generalized-additive-models">Concurvity for Smooth Terms in Generalized Additive Models<a class="anchor" aria-label="anchor" href="#concurvity-for-smooth-terms-in-generalized-additive-models"></a></h2>
+    
+
+<p><code>check_concurvity()</code> is a wrapper around <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code>, and can be
+considered as a collinearity check for smooth terms in GAMs."Concurvity
+occurs when some smooth term in a model could be approximated by one or more
+of the other smooth terms in the model." (see <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">?mgcv::concurvity</a></code>).
+<code>check_concurvity()</code> returns a column named <em>VIF</em>, which is the "worst"
+measure. While <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code> range between 0 and 1, the <em>VIF</em> value
+is <code>1 / (1 - worst)</code>, to make interpretation comparable to classical VIF
+values, i.e. <code>1</code> indicates no problems, while higher values indicate
+increasing lack of identifiability. The <em>VIF proportion</em> column equals the
+"estimate" column from <code><a href="https://rdrr.io/pkg/mgcv/man/concurvity.html" class="external-link">mgcv::concurvity()</a></code>, ranging from 0 (no problem) to
+1 (total lack of identifiability).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -258,6 +248,9 @@ Methods. Educational and Psychological Measurement, 79(5), 874–882.</p></li>
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.</p></li>
 <li><p>Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
 <a href="https://janhove.github.io/analysis/2019/09/11/collinearity" class="external-link">webpage</a></p></li>
+<li><p>Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
+common statistical problems: Data exploration. Methods in Ecology and
+Evolution (2010) 1:3–14.</p></li>
 </ul></div>
 
     <div class="section level2">
