@@ -40,7 +40,6 @@
 #'    coefficient of determination R2 and intra-class correlation coefficient
 #'    from generalized linear mixed-effects models revisited and expanded.
 #'    Journal of The Royal Society Interface, 14(134), 20170213.
-#'    \doi{10.1098/rsif.2017.0213}
 #'  - Rabe-Hesketh, S., and Skrondal, A. (2012). Multilevel and longitudinal
 #'    modeling using Stata (3rd ed). College Station, Tex: Stata Press
 #'    Publication.
