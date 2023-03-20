@@ -55,7 +55,7 @@
     
     <a class="navbar-brand me-2" href="index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -244,13 +244,17 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span></span>
+<span>  <span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">iris</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fl">4</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Bayesian R2 with Compatibility Interval</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Conditional R2: 0.953 (95% CI [0.942, 0.964])</span></span>
-<span><span class="co">#&gt;      Marginal R2: 0.825 (95% CI [0.721, 0.900])</span></span>
+<span><span class="co">#&gt;   Conditional R2: 0.953 (95% CI [0.941, 0.963])</span></span>
+<span><span class="co">#&gt;      Marginal R2: 0.824 (95% CI [0.713, 0.896])</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
@@ -333,12 +337,16 @@
 <span><span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, size <span class="op">=</span> <span class="fl">180</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">==</span> <span class="va">i</span></span>
-<span>    <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">filter_group</span> <span class="op">&lt;-</span> <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mygrp</span> <span class="op">==</span> <span class="va">i</span></span>
+<span>  <span class="va">sleepstudy</span><span class="op">$</span><span class="va">mysubgrp</span><span class="op">[</span><span class="va">filter_group</span><span class="op">]</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">filter_group</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># fit strange model</span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span><span class="op">/</span><span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
+<span>  <span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">mygrp</span> <span class="op">/</span> <span class="va">mysubgrp</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">sleepstudy</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/check_singularity.html">check_singularity</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
@@ -421,7 +429,7 @@
 <span><span class="va">treatment</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/gl.html" class="external-link">gl</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">counts</span> <span class="op">~</span> <span class="va">outcome</span> <span class="op">+</span> <span class="va">treatment</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Comparison of Model Performance Indices</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Name |   Model |  AIC (weights) | AICc (weights) |  BIC (weights) |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span></span>

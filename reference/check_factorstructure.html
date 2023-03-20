@@ -16,7 +16,7 @@ about the interpretation and meaning of each test."><meta property="og:image" co
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -209,10 +209,13 @@ Psychometrika, 39(1), 31-36.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  - KMO: The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = 0.83). The individual KMO scores are: mpg (0.93), cyl (0.90), disp (0.76), hp (0.84), drat (0.95), wt (0.74), qsec (0.74), vs (0.91), am (0.88), gear (0.85), carb (0.62).</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># One can also pass a correlation matrix</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is.data.frame(x):</span> object 'x' not found</span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">check_factorstructure</span><span class="op">(</span><span class="va">r</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .check_factor_structure_sanity(x, n, ...):</span> object 'r' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Is the data suitable for Factor Analysis?</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  - Sphericity: Bartlett's test of sphericity suggests that there is sufficient significant correlation in the data for factor analysis (Chisq(55) = 408.01, p &lt; .001).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">  - KMO: The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = 0.83). The individual KMO scores are: mpg (0.93), cyl (0.90), disp (0.76), hp (0.84), drat (0.95), wt (0.74), qsec (0.74), vs (0.91), am (0.88), gear (0.85), carb (0.62).</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
