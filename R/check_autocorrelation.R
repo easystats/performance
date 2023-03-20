@@ -53,7 +53,7 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
 
 #' @export
 plot.check_autocorrelation <- function(x, ...) {
-  warning(insight::format_message("There is currently no plot() method for `check_autocorrelation()`."), call. = FALSE)
+  insight::format_warning("There is currently no `plot()` method for `check_autocorrelation()`.")
 }
 
 

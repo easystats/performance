@@ -211,7 +211,7 @@ check_sphericity_bartlett <- function(x, n = NULL, ...) {
 
   # Sanity check
   if (nrow(r) != ncol(r)) {
-    stop("The correlation matrix is not square.")
+    insight::format_error("The correlation matrix is not square.")
   }
 
   return(list(n = n, r = r))
