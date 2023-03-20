@@ -27,6 +27,15 @@ if (
     expect_equal(model_performance(m3, verbose = FALSE)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
     expect_equal(model_performance(m4, verbose = FALSE)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
     expect_equal(model_performance(m5, verbose = FALSE)$R2, 0.4294224, tolerance = 1e-4)
+
+    mp <- model_performance(m5)
+    ms <- summary(m5, diagnostics = TRUE)
+    expect_equal(mp$Sargan, ms$diagnostics["Sargan", 3])
+    expect_equal(mp$Sargan_p, ms$diagnostics["Sargan", 4])
+    expect_equal(mp$Wu_Hausman, ms$diagnostics["Wu-Hausman", 3])
+    expect_equal(mp$Wu_Hausman_p, ms$diagnostics["Wu-Hausman", 4])
+    expect_equal(mp$weak_instruments, ms$diagnostics["Weak instruments", 3])
+    expect_equal(mp$weak_instruments_p, ms$diagnostics["Weak instruments", 4])
   })
 }
 

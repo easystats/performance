@@ -8,6 +8,9 @@
 
 * `model_performance()`, `check_overdispersion()`, `check_outliers()` and `r2()`
   now work with objects of class `fixest_multi` (@etiennebacher, #554).
+  
+* `model_performance()` now returns the "Weak instruments" statistic and p-value
+  for models of class `ivreg` (@etiennebacher).
 
 ## Changes to functions
 
