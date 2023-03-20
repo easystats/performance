@@ -296,7 +296,7 @@ plot.compare_performance <- function(x, ...) {
   if (any(missing_indices) && isTRUE(verbose)) {
     insight::format_warning(sprintf(
       "Following indices with missing values are not used for ranking: %s",
-      paste0(colnames(out)[missing_indices], collapse = ", ")
+      toString(colnames(out)[missing_indices])
     ))
   }
 
