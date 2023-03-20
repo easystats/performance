@@ -280,7 +280,7 @@ variance_decomposition <- function(model,
   # for multivariate response models, we need a more complicated check...
   if (insight::is_multivariate(model)) {
     resp <- insight::find_response(model)
-    is.mixed <- unlist(lapply(resp, function(i) mi[[i]]$is_mixed))
+    is.mixed <- unlist(lapply(resp, function(i) mi[[i]]$is_mixed), use.names = FALSE)
     if (!any(is.mixed)) {
       insight::format_warning("`model` has no random effects.")
       return(NULL)
