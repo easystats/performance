@@ -59,7 +59,8 @@ r2_mcfadden <- function(model, ...) {
 
 #' @export
 r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
-  if (is.null(info <- list(...)$model_info)) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
@@ -138,7 +139,7 @@ r2_mcfadden.negbinmfx <- r2_mcfadden.logitmfx
 #' @export
 r2_mcfadden.vglm <- function(model, ...) {
   if (!(is.null(model@call$summ) && !identical(model@call$summ, 0))) {
-    stop("Can't get log-likelihood when `summ` is not zero.", call. = FALSE)
+    insight::format_error("Can't get log-likelihood when `summ` is not zero.")
   }
 
   l_null <- insight::get_loglikelihood(stats::update(model, ~1))

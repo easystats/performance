@@ -293,7 +293,7 @@ outcome <- gl(3, 1, 9)
 treatment <- gl(3, 3)
 m4 <- glm(counts ~ outcome + treatment, family = poisson())
 
-compare_performance(m1, m2, m3, m4)
+compare_performance(m1, m2, m3, m4, verbose = FALSE)
 ```
 
 #### General index of model performance

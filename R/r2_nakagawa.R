@@ -44,7 +44,7 @@
 #'  - Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
 #'    coefficient of determination R2 and intra-class correlation coefficient from
 #'    generalized linear mixed-effects models revisited and expanded. Journal of
-#'    The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+#'    The Royal Society Interface, 14(134), 20170213.
 #'
 #' @examples
 #' if (require("lme4")) {

@@ -82,7 +82,7 @@ library(performance)
 check_factorstructure(mtcars)
 
 # One can also pass a correlation matrix
-r <- cor(x)
+r <- cor(mtcars)
 check_factorstructure(r, n = nrow(mtcars))
 
 }

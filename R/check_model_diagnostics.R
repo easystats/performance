@@ -214,7 +214,7 @@
 
   if (is.null(ncv)) {
     if (verbose) {
-      message(insight::format_message(sprintf("Non-constant error variance could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1])))
+      insight::format_alert(sprintf("Non-constant error variance could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
     }
     return(NULL)
   }
@@ -254,7 +254,7 @@
 
   if (is.null(r)) {
     if (verbose) {
-      message(insight::format_message(sprintf("Homogeneity of variance could not be computed. Cannot extract residual variance from objects of class '%s'.", class(model)[1])))
+      insight::format_alert(sprintf("Homogeneity of variance could not be computed. Cannot extract residual variance from objects of class '%s'.", class(model)[1]))
     }
     return(NULL)
   }

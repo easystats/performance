@@ -63,7 +63,7 @@
 #' check_factorstructure(mtcars)
 #'
 #' # One can also pass a correlation matrix
-#' r <- cor(x)
+#' r <- cor(mtcars)
 #' check_factorstructure(r, n = nrow(mtcars))
 #'
 #' @return A list of lists of indices related to sphericity and KMO.
@@ -144,13 +144,13 @@ check_kmo <- function(x, n = NULL, ...) {
   }
 
   # Individual scores:
-  text_ind <- paste(paste0(
+  text_ind <- toString(paste0(
     names(MSA_variable),
     " (",
     insight::format_value(MSA_variable),
     ifelse(MSA_variable < 0.5, "*", ""),
     ")"
-  ), collapse = ", ")
+  ))
 
   text <- paste0(text, " The individual KMO scores are: ", text_ind, ".")
 
@@ -211,7 +211,7 @@ check_sphericity_bartlett <- function(x, n = NULL, ...) {
 
   # Sanity check
   if (nrow(r) != ncol(r)) {
-    stop("The correlation matrix is not square.")
+    insight::format_error("The correlation matrix is not square.")
   }
 
   return(list(n = n, r = r))

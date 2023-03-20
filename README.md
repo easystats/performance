@@ -139,13 +139,17 @@ Schielzeth 2017).
 set.seed(123)
 library(rstanarm)
 
-model <- stan_glmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, cores = 4)
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  cores = 4
+)
 
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.953 (95% CI [0.942, 0.964])
-#>      Marginal R2: 0.825 (95% CI [0.721, 0.900])
+#>   Conditional R2: 0.953 (95% CI [0.941, 0.963])
+#>      Marginal R2: 0.824 (95% CI [0.713, 0.896])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -258,12 +262,16 @@ set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 sleepstudy$mysubgrp <- NA
 for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <- sample(1:30, size = sum(filter_group), replace = TRUE)
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
 
 # fit strange model
-model <- lmer(Reaction ~ Days + (1 | mygrp/mysubgrp) + (1 | Subject), data = sleepstudy)
+model <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
 
 check_singularity(model)
 #> [1] TRUE
@@ -359,7 +367,7 @@ outcome <- gl(3, 1, 9)
 treatment <- gl(3, 3)
 m4 <- glm(counts ~ outcome + treatment, family = poisson())
 
-compare_performance(m1, m2, m3, m4)
+compare_performance(m1, m2, m3, m4, verbose = FALSE)
 #> # Comparison of Model Performance Indices
 #> 
 #> Name |   Model |  AIC (weights) | AICc (weights) |  BIC (weights) |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2
