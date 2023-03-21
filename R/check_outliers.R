@@ -287,12 +287,12 @@
 #' # And we can be more stringent in our outliers removal process
 #' filtered_data <- data[outliers_info$Outlier < 0.1, ]
 #'
+#' @examplesIf requireNamespace("poorman", quietly = TRUE)
 #' # We can run the function stratified by groups using `{dplyr}` package:
-#' if (require("poorman")) {
-#'   iris %>%
-#'     group_by(Species) %>%
-#'     check_outliers()
-#' }
+#' iris %>%
+#'   group_by(Species) %>%
+#'   check_outliers()
+#'
 #' \dontrun{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all")
@@ -385,8 +385,10 @@ check_outliers.default <- function(x,
     thresholds[names(threshold)] <- threshold[names(threshold)]
   } else {
     insight::format_error(
-      paste("The `threshold` argument must be NULL (for default values) or a list containing",
-            "threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).")
+      paste(
+        "The `threshold` argument must be NULL (for default values) or a list containing",
+        "threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."
+      )
     )
   }
 
@@ -622,9 +624,11 @@ print.check_outliers <- function(x, ...) {
     }
 
     if ((isTRUE(nrow(outlier.count$all) > 0) || isTRUE(attributes(x)$grouped)) &&
-          (length(method) > 1 || all(method %in% method.univariate))) {
-      cat(long_dash, insight::format_message("\nThe following observations were considered outliers for two or more",
-      "variables by at least one of the selected methods:\n\n"))
+      (length(method) > 1 || all(method %in% method.univariate))) {
+      cat(long_dash, insight::format_message(
+        "\nThe following observations were considered outliers for two or more",
+        "variables by at least one of the selected methods:\n\n"
+      ))
       ifelse(isTRUE(attributes(x)$grouped),
         print(lapply(outlier.count, function(x) x$all)),
         print(outlier.count$all)
@@ -720,8 +724,10 @@ check_outliers.data.frame <- function(x,
     thresholds <- lapply(thresholds, function(x) threshold)
   } else {
     insight::format_error(
-      paste("The `threshold` argument must be NULL (for default values) or a list containing",
-            "threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).")
+      paste(
+        "The `threshold` argument must be NULL (for default values) or a list containing",
+        "threshold values for desired methods (e.g., `list('mahalanobis' = 7)`)."
+      )
     )
   }
 
@@ -808,8 +814,8 @@ check_outliers.data.frame <- function(x,
     })
     outlier.list <- outlier.list[lapply(outlier.list, nrow) > 0]
     outlier.list <- lapply(outlier.list, datawizard::data_remove,
-                           Outlier_method,
-                           as_data_frame = TRUE
+      Outlier_method,
+      as_data_frame = TRUE
     )
     outlier.list
   }
@@ -871,8 +877,10 @@ check_outliers.data.frame <- function(x,
     ))
 
     # Outliers per variable
-    zscore_robust.var <- lapply(x, .check_outliers_zscore, threshold = thresholds$zscore_robust,
-                                robust = TRUE, method = "max", ID.names = ID.names)
+    zscore_robust.var <- lapply(x, .check_outliers_zscore,
+      threshold = thresholds$zscore_robust,
+      robust = TRUE, method = "max", ID.names = ID.names
+    )
 
     outlier_var$zscore_robust <- process_outlier_list(
       zscore_robust.var, "Outlier_Zscore_robust"

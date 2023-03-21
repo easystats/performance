@@ -174,29 +174,25 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # SIGMA ------------------
   if ("SIGMA" %in% metrics) {
-    out$Sigma <- .safe(
-      {
-        s <- .get_sigma(model, verbose = verbose)
-        if (insight::is_empty_object(s)) {
-          s <- NULL
-        }
-        s
+    out$Sigma <- .safe({
+      s <- .get_sigma(model, verbose = verbose)
+      if (insight::is_empty_object(s)) {
+        s <- NULL
       }
-    )
+      s
+    })
   }
 
   # LOGLOSS ------------------
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$Log_loss <- .safe(
-      {
-        .logloss <- performance_logloss(model, verbose = verbose)
-        if (!is.na(.logloss)) {
-          .logloss
-        } else {
-          NULL
-        }
+    out$Log_loss <- .safe({
+      .logloss <- performance_logloss(model, verbose = verbose)
+      if (!is.na(.logloss)) {
+        .logloss
+      } else {
+        NULL
       }
-    )
+    })
   }
 
   # SCORE ------------------

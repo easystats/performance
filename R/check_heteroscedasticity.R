@@ -52,7 +52,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     if (info$is_count) {
       paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
     }
-    message(insight::format_message(msg))
+    insight::format_alert(msg)
     return(NULL)
   }
 

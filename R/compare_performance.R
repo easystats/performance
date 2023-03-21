@@ -245,9 +245,9 @@ plot.compare_performance <- function(x, ...) {
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
   if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
-    warning(insight::format_message(
+    insight::format_warning(
       "Models are not of same type. Comparison of indices might be not meaningful."
-    ), call. = FALSE)
+    )
   }
 
   # set reference for Bayes factors to 1
@@ -294,10 +294,10 @@ plot.compare_performance <- function(x, ...) {
   # any indices with NA?
   missing_indices <- sapply(out, anyNA)
   if (any(missing_indices) && isTRUE(verbose)) {
-    warning(insight::format_message(sprintf(
+    insight::format_warning(sprintf(
       "Following indices with missing values are not used for ranking: %s",
-      paste0(colnames(out)[missing_indices], collapse = ", ")
-    )), call. = FALSE)
+      toString(colnames(out)[missing_indices])
+    ))
   }
 
   # create rank-index, only for complete indices

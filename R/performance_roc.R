@@ -113,7 +113,7 @@ print.performance_roc <- function(x, ...) {
 
 .performance_roc_numeric <- function(x, predictions) {
   if (length(x) != length(predictions)) {
-    stop("'x' and ' predictions' must be of same length.", call. = FALSE)
+    insight::format_error("`x` and `predictions` must be of same length.")
   }
 
   x <- .recode_to_zero(x)

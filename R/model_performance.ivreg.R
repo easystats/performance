@@ -25,7 +25,8 @@ model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...)
   # check for valid input
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
-  out <- model_performance.lm(model, metrics = metrics, verbose = verbose, ...)
+  # the lm-method does not accept ivreg-specific metrics
+  out <- model_performance.lm(model, metrics = setdiff(metrics, c("Sargan", "Wu_Hausman")), verbose = verbose, ...)
 
   diagnostics <- c("Sargan", "Wu_Hausman")
   if (any(metrics %in% diagnostics)) {
