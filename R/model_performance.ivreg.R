@@ -13,8 +13,10 @@
 #'
 #' @export
 model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...) {
-  all_metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan",
-                   "Wu_Hausman", "weak_instruments")
+  all_metrics <- c(
+    "AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan",
+    "Wu_Hausman", "weak_instruments"
+  )
 
   if (all(metrics == "all")) {
     metrics <- all_metrics
@@ -53,9 +55,13 @@ model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...)
     }
 
     # remove NA columns
-    completed_tests <- intersect(c("Sargan", "Sargan_p", "Wu_Hausman", "Wu_Hausman_p",
-                                   "weak_instruments", "weak_instruments_p"),
-                                 colnames(out))
+    completed_tests <- intersect(
+      c(
+        "Sargan", "Sargan_p", "Wu_Hausman", "Wu_Hausman_p",
+        "weak_instruments", "weak_instruments_p"
+      ),
+      colnames(out)
+    )
     missing <- sapply(out[completed_tests], function(i) all(is.na(i)))
     if (any(missing)) {
       out[completed_tests[missing]] <- NULL
