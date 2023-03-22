@@ -47,7 +47,12 @@ Authors@R:
              family = "Jullum",
              role = "rev"),
       person(given = "gjo11",
-             role = "rev"))
+             role = "rev"),
+      person("Etienne", 
+             "Bacher", , 
+             "etienne.bacher@protonmail.com", 
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-9271-5075")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's 'base' or 'stats' packages.
