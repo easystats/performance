@@ -66,9 +66,9 @@ if (requiet("mclogit")) {
       c(
         "# Indices of model performance",
         "",
-        "AIC    |    BIC | Nagelkerke's R2 |  RMSE | Sigma",
+        "AIC    |    BIC | Nagelkerke.s.R2 |  RMSE | Sigma",
         "-------------------------------------------------",
-        "38.823 | 47.618 |           0.836 | 0.298 | 1.016"
+        "13.228 | 24.424 |           0.998 | 0.009 | 0.068"
       )
     )
   })

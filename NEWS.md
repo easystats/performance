@@ -13,6 +13,8 @@
   p-value for models of class `ivreg` with `metrics = "weak_instruments"`
   (@etiennebacher, #560).
 
+* Support for `mclogit` models.
+
 ## Changes to functions
 
 * Warnings in `model_performance()` for unsupported objects of class

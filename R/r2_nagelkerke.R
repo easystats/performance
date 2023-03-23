@@ -156,9 +156,6 @@ r2_nagelkerke.glmx <- r2_nagelkerke.clm
 r2_nagelkerke.brmultinom <- r2_nagelkerke.clm
 
 #' @export
-r2_nagelkerke.mclogit <- r2_nagelkerke.clm
-
-#' @export
 r2_nagelkerke.censReg <- r2_nagelkerke.clm
 
 #' @export
