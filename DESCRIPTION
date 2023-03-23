@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.2.7
+Version: 0.10.2.8
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -108,6 +108,7 @@ Suggests:
     loo,
     MASS,
     Matrix,
+    mclogit,
     mclust,
     metafor,
     mgcv,

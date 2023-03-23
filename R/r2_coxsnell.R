@@ -89,7 +89,22 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
 r2_coxsnell.BBreg <- r2_coxsnell.glm
 
 #' @export
-r2_coxsnell.mclogit <- r2_coxsnell.glm
+r2_coxsnell.mclogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mclogit(model)
+  r2_coxsnell <- s$sumstat["Cox.Snell"]
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
+}
+
+#' @export
+r2_coxsnell.mblogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mblogit(model)
+  r2_coxsnell <- s$sumstat["Cox.Snell"]
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
+}
 
 #' @export
 r2_coxsnell.bife <- function(model, ...) {

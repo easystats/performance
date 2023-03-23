@@ -400,6 +400,9 @@ r2.coxph <- r2.censReg
 r2.mclogit <- r2.censReg
 
 #' @export
+r2.mblogit <- r2.censReg
+
+#' @export
 r2.polr <- r2.censReg
 
 #' @export
