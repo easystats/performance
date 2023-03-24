@@ -120,7 +120,6 @@ Suggests:
     parallel,
     parameters,
     patchwork,
-    poorman,
     pscl,
     psych,
     randomForest,
