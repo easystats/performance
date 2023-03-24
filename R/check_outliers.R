@@ -287,11 +287,9 @@
 #' # And we can be more stringent in our outliers removal process
 #' filtered_data <- data[outliers_info$Outlier < 0.1, ]
 #'
-#' @examplesIf requireNamespace("poorman", quietly = TRUE)
 #' # We can run the function stratified by groups using `{dplyr}` package:
-#' iris %>%
-#'   group_by(Species) %>%
-#'   check_outliers()
+#' group_iris <- datawizard::data_group(iris, "Species"))
+#' check_outliers(group_irs)
 #'
 #' \dontrun{
 #' # You can also run all the methods

@@ -278,11 +278,9 @@ outliers_info$Outlier # Including the probability of being an outlier
 # And we can be more stringent in our outliers removal process
 filtered_data <- data[outliers_info$Outlier < 0.1, ]
 
-\dontshow{if (requireNamespace("poorman", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # We can run the function stratified by groups using `{dplyr}` package:
-iris \%>\%
-  group_by(Species) \%>\%
-  check_outliers()
+group_iris <- datawizard::data_group(iris, "Species"))
+check_outliers(group_irs)
 
 \dontrun{
 # You can also run all the methods
@@ -307,7 +305,6 @@ if (require("see")) {
 
 insight::get_data(model)[outliers_list, ] # Show outliers data
 }
-\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
