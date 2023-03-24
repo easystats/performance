@@ -289,7 +289,7 @@
 #'
 #' # We can run the function stratified by groups using `{datawizard}` package:
 #' group_iris <- datawizard::data_group(iris, "Species")
-#' check_outliers(group_irs)
+#' check_outliers(group_iris)
 #'
 #' \dontrun{
 #' # You can also run all the methods
