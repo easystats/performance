@@ -492,7 +492,6 @@ Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
 Expanded.” *Journal of the Royal Society Interface* 14 (134): 20170213.
-<https://royalsocietypublishing.org/doi/10.1098/rsif.2017.0213>.
 
 </div>
 
