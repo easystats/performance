@@ -443,7 +443,7 @@
 </h4>
 <p>One can also easily compute and a <a href="https://easystats.github.io/performance/reference/compare_performance.html#details"><strong>composite index</strong></a> of model performance and sort the models from the best one to the worse.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Comparison of Model Performance Indices</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Name |   Model |   RMSE |  Sigma | AIC weights | AICc weights | BIC weights | Performance-Score</span></span>
@@ -458,7 +458,7 @@
 </h4>
 <p>Finally, we provide convenient visualisation (the <code>see</code> package must be installed).</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-20-1.png" width="100%"></p>
 </div>
 </div>
