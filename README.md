@@ -6,7 +6,7 @@
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
 [![status](https://tinyverse.netlify.com/badge/performance)](https://CRAN.R-project.org/package=performance)
 
-***Test if your model is a good model!***
+***Test if your model is a good model\!***
 
 A crucial aspect when building regression models is to evaluate the
 quality of modelfit. It is important to investigate how well models fit
@@ -34,7 +34,7 @@ The *performance* package is available on CRAN, while its latest
 development version is available on R-universe (from *rOpenSci*).
 
 | Type        | Source     | Command                                                                       |
-|-------------|------------|-------------------------------------------------------------------------------|
+| ----------- | ---------- | ----------------------------------------------------------------------------- |
 | Release     | CRAN       | `install.packages("performance")`                                             |
 | Development | R-universe | `install.packages("performance", repos = "https://easystats.r-universe.dev")` |
 
@@ -45,10 +45,10 @@ library("performance")
 ```
 
 > **Tip**
->
+> 
 > Instead of `library(performance)`, use `library(easystats)`. This will
 > make all features of the easystats-ecosystem available.
->
+> 
 > To stay updated, use `easystats::install_latest()`.
 
 ## Citation
@@ -461,9 +461,9 @@ Please follow contributing guidelines mentioned here:
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references">
 
-<div id="ref-gelman_data_2007" class="csl-entry">
+<div id="ref-gelman_data_2007">
 
 Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
 and Multilevel/Hierarchical Models*. Analytical Methods for Social
@@ -471,14 +471,14 @@ Research. Cambridge ; New York: Cambridge University Press.
 
 </div>
 
-<div id="ref-hox_multilevel_2010" class="csl-entry">
+<div id="ref-hox_multilevel_2010">
 
 Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
 ed. Quantitative Methodology Series. New York: Routledge.
 
 </div>
 
-<div id="ref-johnson_extension_2014" class="csl-entry">
+<div id="ref-johnson_extension_2014">
 
 Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
 to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
@@ -486,13 +486,13 @@ Ecology and Evolution* 5 (9): 944–46.
 
 </div>
 
-<div id="ref-nakagawa_coefficient_2017" class="csl-entry">
+<div id="ref-nakagawa_coefficient_2017">
 
 Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
 “The Coefficient of Determination R2 and Intra-Class Correlation
 Coefficient from Generalized Linear Mixed-Effects Models Revisited and
-Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
-<https://doi.org/10.1098/rsif.2017.0213>.
+Expanded.” *Journal of the Royal Society Interface* 14 (134): 20170213.
+<https://royalsocietypublishing.org/doi/10.1098/rsif.2017.0213>.
 
 </div>
 
