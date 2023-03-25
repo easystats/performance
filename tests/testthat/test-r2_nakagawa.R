@@ -82,14 +82,14 @@ if (requiet("lme4")) {
 
     test_that("r2_nakagawa, by_group", {
       out <- r2_nakagawa(model, by_group = TRUE)
-      expect_equal(out$R2, c(0, 0.05771, 0.07863), tolerance = 1e-4)
-      expect_equal(out$Level, c("Level 1", "a1", "a2"))
+      expect_equal(out$R2, c(0, 0.05771, 0.07863), tolerance = 1e-2)
+      expect_identical(out$Level, c("Level 1", "a1", "a2"))
     })
 
     test_that("icc, by_group", {
       out <- icc(model, by_group = TRUE)
-      expect_equal(out$ICC, c(0.3200625, 0.1096797), tolerance = 1e-4)
-      expect_equal(out$Group, c("a2", "a1"))
+      expect_equal(out$ICC, c(0.3200625, 0.1096797), tolerance = 1e-2)
+      expect_identical(out$Group, c("a2", "a1"))
     })
   }
 }

@@ -287,9 +287,9 @@
 #' # And we can be more stringent in our outliers removal process
 #' filtered_data <- data[outliers_info$Outlier < 0.1, ]
 #'
-#' # We can run the function stratified by groups using `{dplyr}` package:
-#' group_iris <- datawizard::data_group(iris, "Species"))
-#' check_outliers(group_irs)
+#' # We can run the function stratified by groups using `{datawizard}` package:
+#' group_iris <- datawizard::data_group(iris, "Species")
+#' check_outliers(group_iris)
 #'
 #' \dontrun{
 #' # You can also run all the methods
