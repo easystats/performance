@@ -59,7 +59,7 @@ as.data.frame(result)
 
 # plot
 if (require("see")) {
-  plot(result)
+  suppressWarnings(plot(result))
 }
 }
 \references{
