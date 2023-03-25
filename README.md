@@ -385,7 +385,7 @@ index**](https://easystats.github.io/performance/reference/compare_performance.h
 of model performance and sort the models from the best one to the worse.
 
 ``` r
-compare_performance(m1, m2, m3, m4, rank = TRUE)
+compare_performance(m1, m2, m3, m4, rank = TRUE, verbose = FALSE)
 #> # Comparison of Model Performance Indices
 #> 
 #> Name |   Model |   RMSE |  Sigma | AIC weights | AICc weights | BIC weights | Performance-Score
@@ -402,7 +402,7 @@ Finally, we provide convenient visualisation (the `see` package must be
 installed).
 
 ``` r
-plot(compare_performance(m1, m2, m4, rank = TRUE))
+plot(compare_performance(m1, m2, m4, rank = TRUE, verbose = FALSE))
 ```
 
 <img src="man/figures/unnamed-chunk-20-1.png" width="100%" />

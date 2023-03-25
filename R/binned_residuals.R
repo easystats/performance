@@ -51,7 +51,7 @@
 #'
 #' # plot
 #' if (require("see")) {
-#'   suppressWarnings(plot(result))
+#'   plot(result)
 #' }
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
