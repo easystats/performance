@@ -359,8 +359,11 @@ check_outliers.default <- function(x,
     several.ok = TRUE
   )
 
+  # Get data
+  data <- insight::get_data(x)
+
   # Remove non-numerics
-  data <- as.data.frame(insight::get_modelmatrix(x))
+  data <- datawizard::data_select(data, select = is.numeric)
 
   # Thresholds
   if (is.null(threshold)) {
