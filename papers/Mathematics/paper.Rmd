@@ -226,7 +226,7 @@ However, distribution-based approaches are not a silver bullet either, and there
 
 In the example below, we plot the raw data and see two possible outliers. The first one falls along the regression line, and is therefore "in line" with our hypothesis. The second one clearly diverges from the regression line, and therefore we can conclude that this outlier may have a disproportionate influence on our model.
 
-```{r scatter, fig.cap = "Scatter plot of height and weight, with two extreme observations: one model-consistent (top-right) and the other, model-inconsistent (i.e., and outlier; bottom-right)."}
+```{r scatter, fig.cap = "Scatter plot of height and weight, with two extreme observations: one model-consistent (top-right) and the other, model-inconsistent (i.e., an outlier; bottom-right)."}
 data <- women[rep(seq_len(nrow(women)), each = 100), ]
 data <- rbind(data, c(100, 258), c(100, 200))
 model <- lm(weight ~ height, data)
