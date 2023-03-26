@@ -240,15 +240,13 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
 # helper ---------------------
 
 .check_normality <- function(x, model, type = "residuals") {
-  ts <- .safe(
-    {
-      if (length(x) >= 5000) {
-        suppressWarnings(stats::ks.test(x, y = "pnorm", alternative = "two.sided"))
-      } else {
-        stats::shapiro.test(x)
-      }
+  ts <- .safe({
+    if (length(x) >= 5000) {
+      suppressWarnings(stats::ks.test(x, y = "pnorm", alternative = "two.sided"))
+    } else {
+      stats::shapiro.test(x)
     }
-  )
+  })
 
   if (is.null(ts)) {
     insight::print_color(

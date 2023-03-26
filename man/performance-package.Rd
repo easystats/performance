@@ -52,6 +52,7 @@ Other contributors:
   \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) (@rempsyc) [contributor]
   \item Martin Jullum [reviewer]
   \item gjo11 [reviewer]
+  \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID}) [contributor]
 }
 
 }

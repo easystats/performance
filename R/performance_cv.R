@@ -142,7 +142,8 @@ performance_cv <- function(model,
   attr(out, "method") <- method
   attr(out, "k") <- if (method == "k_fold") k
   attr(out, "prop") <- if (method == "holdout") prop
-  if (length(missing_metrics <- setdiff(metrics, c("MSE", "RMSE", "R2")))) {
+  missing_metrics <- setdiff(metrics, c("MSE", "RMSE", "R2"))
+  if (length(missing_metrics)) {
     message(insight::colour_text(insight::format_message(
       paste0(
         "Metric",

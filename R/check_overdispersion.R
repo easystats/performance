@@ -191,6 +191,11 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
 check_overdispersion.fixest <- check_overdispersion.glm
 
 #' @export
+check_overdispersion.fixest_multi <- function(x, verbose = TRUE, ...) {
+  lapply(x, check_overdispersion.fixest)
+}
+
+#' @export
 check_overdispersion.glmx <- check_overdispersion.glm
 
 

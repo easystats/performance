@@ -123,16 +123,14 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   # LOGLOSS -------------
   if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
-    out$Log_loss <- .safe(
-      {
-        .logloss <- performance_logloss(model, verbose = verbose)
-        if (!is.na(.logloss)) {
-          .logloss
-        } else {
-          NULL
-        }
+    out$Log_loss <- .safe({
+      .logloss <- performance_logloss(model, verbose = verbose)
+      if (!is.na(.logloss)) {
+        .logloss
+      } else {
+        NULL
       }
-    )
+    })
   }
 
   # SCORE -------------
@@ -234,6 +232,11 @@ model_performance.vglm <- model_performance.lm
 
 #' @export
 model_performance.fixest <- model_performance.lm
+
+#' @export
+model_performance.fixest_multi <- function(model, metrics = "all", verbose = TRUE, ...) {
+  lapply(model, model_performance.fixest)
+}
 
 #' @export
 model_performance.DirichletRegModel <- model_performance.lm

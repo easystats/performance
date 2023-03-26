@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.2.4
+Version: 0.10.2.7
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -47,7 +47,12 @@ Authors@R:
              family = "Jullum",
              role = "rev"),
       person(given = "gjo11",
-             role = "rev"))
+             role = "rev"),
+      person("Etienne", 
+             "Bacher", , 
+             "etienne.bacher@protonmail.com", 
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-9271-5075")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
 Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's 'base' or 'stats' packages.
@@ -65,7 +70,7 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.0),
-    insight (>= 0.18.8),
+    insight (>= 0.19.1),
     datawizard (>= 0.6.5),
     methods,
     stats,
@@ -114,7 +119,6 @@ Suggests:
     parallel,
     parameters,
     patchwork,
-    poorman,
     pscl,
     psych,
     randomForest,
@@ -132,12 +136,11 @@ Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.2.3.9000
 Roxygen: list(markdown = TRUE)
-Remotes:
-    easystats/insight,
-    easystats/see
 Config/testthat/edition: 3
+Config/testthat/parallel: true
 Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
+Remotes: easystats/parameters
