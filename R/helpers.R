@@ -1,3 +1,9 @@
+# small wrapper around this commonly used try-catch
+.safe <- function(code, on_error = NULL) {
+  tryCatch(code, error = function(e) on_error)
+}
+
+
 .get_BIC <- function(x, estimator = "ML") {
   # check ML estimator
   if (missing(estimator) && inherits(x, "lmerMod")) {
@@ -11,13 +17,12 @@
   } else if (inherits(x, "bayesx")) {
     out <- .adjust_ic_jacobian(x, stats::BIC(x)[["BIC"]])
   } else {
-    out <- tryCatch(
-      stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE)),
-      error = function(e) NULL
+    out <- .safe(
+      stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE))
     )
     # when `get_loglikelihood()` does not work, `stats::BIC` sometimes still works (e.g., `fixest`)
     if (is.null(out)) {
-      out <- tryCatch(stats::BIC(x), error = function(e) NULL)
+      out <- .safe(stats::BIC(x))
     }
   }
 

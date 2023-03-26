@@ -4,10 +4,12 @@
 \alias{cronbachs_alpha}
 \title{Cronbach's Alpha for Items or Scales}
 \usage{
-cronbachs_alpha(x)
+cronbachs_alpha(x, ...)
 }
 \arguments{
 \item{x}{A matrix or a data frame.}
+
+\item{...}{Currently not used.}
 }
 \value{
 The Cronbach's Alpha value for \code{x}.

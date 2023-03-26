@@ -65,7 +65,8 @@ r2_coxsnell <- function(model, ...) {
 
 #' @export
 r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
-  if (is.null(info <- list(...)$model_info)) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
@@ -165,7 +166,7 @@ r2_coxsnell.clm2 <- function(model, ...) {
 
 #' @export
 r2_coxsnell.bayesx <- function(model, ...) {
-  junk <- utils::capture.output(l_base <- insight::get_loglikelihood(stats::update(model, ~1)))
+  junk <- utils::capture.output(l_base <- insight::get_loglikelihood(stats::update(model, ~1))) # nolint
   .r2_coxsnell(model, l_base)
 }
 

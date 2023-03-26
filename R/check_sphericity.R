@@ -1,7 +1,8 @@
 #' @title Check model for violation of sphericity
 #' @name check_sphericity
 #'
-#' @description Check model for violation of sphericity
+#' @description Check model for violation of sphericity. For [Bartlett's Test of Sphericity][check_factorstructure]
+#'   (used for correlation matrices and factor analyses), see [check_sphericity_bartlett].
 #'
 #' @param x A model object.
 #' @param ... Arguments passed to `car::Anova`.

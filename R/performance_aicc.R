@@ -71,7 +71,8 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
   # check for valid input
   .is_model_valid(x)
 
-  if (is.null(info <- list(...)$model_info)) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(x, verbose = FALSE))
   }
 
@@ -85,13 +86,12 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
     aic <- suppressMessages(tweedie::AICtweedie(x))
   } else {
     # all other models...
-    aic <- tryCatch(
-      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
-      error = function(e) NULL
+    aic <- .safe(
+      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose))
     )
     # when `get_loglikelihood()` does not work, `stats::AIC` sometimes still works (e.g., `fixest`)
     if (is.null(aic)) {
-      aic <- tryCatch(stats::AIC(x), error = function(e) NULL)
+      aic <- .safe(stats::AIC(x))
     }
   }
   aic
@@ -106,9 +106,8 @@ performance_aic.lmerMod <- function(x, estimator = "REML", verbose = TRUE, ...) 
   REML <- identical(estimator, "REML")
   if (isFALSE(list(...)$REML)) REML <- FALSE
 
-  tryCatch(
-    stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
-    error = function(e) NULL
+  .safe(
+    stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose))
   )
 }
 
@@ -131,7 +130,7 @@ performance_aic.vglm <- performance_aic.vgam
 
 #' @export
 performance_aic.svyglm <- function(x, ...) {
-  aic <- tryCatch(stats::AIC(x)[["AIC"]], error = function(e) NULL)
+  aic <- .safe(stats::AIC(x)[["AIC"]])
   .adjust_ic_jacobian(x, aic)
 }
 
@@ -262,7 +261,7 @@ performance_aicc.rma <- function(x, ...) {
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
   if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
-    adjustment <- tryCatch(.ll_analytic_adjustment(model, insight::get_weights(model, na_rm = TRUE)), error = function(e) NULL)
+    adjustment <- .safe(.ll_analytic_adjustment(model, insight::get_weights(model, na_rm = TRUE)))
     if (!is.null(adjustment)) {
       ic <- ic - 2 * adjustment
     }

@@ -23,7 +23,7 @@ r2_somers <- function(model) {
 
   info <- insight::model_info(model, verbose = FALSE)
   if (!info$is_binomial) {
-    stop("'r2_somers()' only accepts logistic regression models.", call. = FALSE)
+    insight::format_error("`r2_somers()` only accepts logistic regression models.")
   }
 
   input <- data.frame(

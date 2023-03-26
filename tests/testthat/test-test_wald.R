@@ -1,5 +1,4 @@
 skip_on_os("linux")
-skip_on_os("solaris")
 
 test_that("test_wald - lm", {
   m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
