@@ -43,9 +43,9 @@
   } else if (inherits(model, "glm")) {
     res_ <- stats::rstandard(model, type = "pearson")
   } else {
-    res_ <- tryCatch(stats::rstudent(model), error = function(e) NULL)
+    res_ <- .safe(stats::rstudent(model))
     if (is.null(res_)) {
-      res_ <- tryCatch(stats::residuals(model), error = function(e) NULL)
+      res_ <- .safe(stats::residuals(model))
     }
   }
 
@@ -121,7 +121,7 @@
   }
 
 
-  mapply(function(.re, .se) {
+  Map(function(.re, .se) {
     ord <- unlist(lapply(.re, order)) + rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
 
     df.y <- unlist(.re)[ord]
@@ -136,7 +136,7 @@
       stringsAsFactors = FALSE,
       row.names = NULL
     )
-  }, re, se, SIMPLIFY = FALSE)
+  }, re, se)
 }
 
 
@@ -214,7 +214,7 @@
 
   if (is.null(ncv)) {
     if (verbose) {
-      message(insight::format_message(sprintf("Non-constant error variance could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1])))
+      insight::format_alert(sprintf("Non-constant error variance could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
     }
     return(NULL)
   }
@@ -254,7 +254,7 @@
 
   if (is.null(r)) {
     if (verbose) {
-      message(insight::format_message(sprintf("Homogeneity of variance could not be computed. Cannot extract residual variance from objects of class '%s'.", class(model)[1])))
+      insight::format_alert(sprintf("Homogeneity of variance could not be computed. Cannot extract residual variance from objects of class '%s'.", class(model)[1]))
     }
     return(NULL)
   }

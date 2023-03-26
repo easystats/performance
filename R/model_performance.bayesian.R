@@ -142,10 +142,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # LOO-R2 ------------------
   if (("R2_ADJUSTED" %in% metrics || "R2_LOO" %in% metrics) && mi$is_linear) {
-    r2_adj <- tryCatch(
-      suppressWarnings(r2_loo(model, verbose = verbose)),
-      error = function(e) NULL
-    )
+    r2_adj <- .safe(suppressWarnings(r2_loo(model, verbose = verbose)))
     if (!is.null(r2_adj)) {
       # save attributes
       attri_r2$SE$R2_loo <- attributes(r2_adj)$SE$R2_loo
@@ -167,10 +164,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # ICC ------------------
   if ("ICC" %in% metrics) {
-    out$ICC <- tryCatch(
-      suppressWarnings(icc(model, verbose = verbose)$ICC_adjusted),
-      error = function(e) NULL
-    )
+    out$ICC <- .safe(suppressWarnings(icc(model, verbose = verbose)$ICC_adjusted))
   }
 
   # RMSE ------------------
@@ -180,47 +174,30 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # SIGMA ------------------
   if ("SIGMA" %in% metrics) {
-    out$Sigma <- tryCatch(
-      {
-        s <- .get_sigma(model, verbose = verbose)
-        if (insight::is_empty_object(s)) {
-          s <- NULL
-        }
-        s
-      },
-      error = function(e) {
-        NULL
+    out$Sigma <- .safe({
+      s <- .get_sigma(model, verbose = verbose)
+      if (insight::is_empty_object(s)) {
+        s <- NULL
       }
-    )
+      s
+    })
   }
 
   # LOGLOSS ------------------
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$Log_loss <- tryCatch(
-      {
-        .logloss <- performance_logloss(model, verbose = verbose)
-        if (!is.na(.logloss)) {
-          .logloss
-        } else {
-          NULL
-        }
-      },
-      error = function(e) {
+    out$Log_loss <- .safe({
+      .logloss <- performance_logloss(model, verbose = verbose)
+      if (!is.na(.logloss)) {
+        .logloss
+      } else {
         NULL
       }
-    )
+    })
   }
 
   # SCORE ------------------
   if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
-    .scoring_rules <- tryCatch(
-      {
-        performance_score(model, verbose = verbose)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    .scoring_rules <- .safe(performance_score(model, verbose = verbose))
     if (!is.null(.scoring_rules)) {
       if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
       if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
@@ -257,7 +234,7 @@ model_performance.BFBayesFactor <- function(model,
   all_metrics <- c("R2", "SIGMA")
 
   if (all(metrics == "all")) {
-    metrics <- c("R2", "SIGMA")
+    metrics <- all_metrics
   }
 
   # check for valid input
@@ -276,7 +253,7 @@ model_performance.BFBayesFactor <- function(model,
   attri <- list()
 
   if ("R2" %in% c(metrics)) {
-    r2 <- r2_bayes(model, average = average, prior_odds = prior_odds)
+    r2 <- r2_bayes(model, average = average, prior_odds = prior_odds, verbose = verbose)
     attri$r2_bayes <- attributes(r2) # save attributes
 
     # Format to df then to list

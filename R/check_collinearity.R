@@ -31,64 +31,60 @@
 #'   with other terms, and tolerance values (including confidence intervals),
 #'   where `tolerance = 1/vif`.
 #'
-#' @details
+#' @section Multicollinearity:
+#' Multicollinearity should not be confused with a raw strong correlation
+#' between predictors. What matters is the association between one or more
+#' predictor variables, *conditional on the other variables in the
+#' model*. In a nutshell, multicollinearity means that once you know the
+#' effect of one predictor, the value of knowing the other predictor is rather
+#' low. Thus, one of the predictors doesn't help much in terms of better
+#' understanding the model or predicting the outcome. As a consequence, if
+#' multicollinearity is a problem, the model seems to suggest that the
+#' predictors in question don't seems to be reliably associated with the
+#' outcome (low estimates, high standard errors), although these predictors
+#' actually are strongly associated with the outcome, i.e. indeed might have
+#' strong effect (_McElreath 2020, chapter 6.1_).
 #'
-#' \subsection{Multicollinearity}{
-#'   Multicollinearity should not be confused with a raw strong correlation
-#'   between predictors. What matters is the association between one or more
-#'   predictor variables, *conditional on the other variables in the
-#'   model*. In a nutshell, multicollinearity means that once you know the
-#'   effect of one predictor, the value of knowing the other predictor is rather
-#'   low. Thus, one of the predictors doesn't help much in terms of better
-#'   understanding the model or predicting the outcome. As a consequence, if
-#'   multicollinearity is a problem, the model seems to suggest that the
-#'   predictors in question don't seems to be reliably associated with the
-#'   outcome (low estimates, high standard errors), although these predictors
-#'   actually are strongly associated with the outcome, i.e. indeed might have
-#'   strong effect (\cite{McElreath 2020, chapter 6.1}).
-#'   \cr \cr
-#'   Multicollinearity might arise when a third, unobserved variable has a causal
-#'   effect on each of the two predictors that are associated with the outcome.
-#'   In such cases, the actual relationship that matters would be the association
-#'   between the unobserved variable and the outcome.
-#'   \cr \cr
-#'   Remember: \dQuote{Pairwise correlations are not the problem. It is the
-#'   conditional associations - not correlations - that matter.}
-#'   (\cite{McElreath 2020, p. 169})
-#' }
+#' Multicollinearity might arise when a third, unobserved variable has a causal
+#' effect on each of the two predictors that are associated with the outcome.
+#' In such cases, the actual relationship that matters would be the association
+#' between the unobserved variable and the outcome.
 #'
-#' \subsection{Interpretation of the Variance Inflation Factor}{
-#'   The variance inflation factor is a measure to analyze the magnitude of
-#'   multicollinearity of model terms. A VIF less than 5 indicates a low
-#'   correlation of that predictor with other predictors. A value between 5 and
-#'   10 indicates a moderate correlation, while VIF values larger than 10 are a
-#'   sign for high, not tolerable correlation of model predictors (\cite{James
-#'   et al. 2013}). The *Increased SE* column in the output indicates how
-#'   much larger the standard error is due to the association with other
-#'   predictors conditional on the remaining variables in the model.
-#' }
+#' Remember: "Pairwise correlations are not the problem. It is the conditional
+#' associations - not correlations - that matter." (_McElreath 2020, p. 169_)
 #'
-#' \subsection{Multicollinearity and Interaction Terms}{
-#'   If interaction terms are included in a model, high VIF values are expected.
-#'   This portion of multicollinearity among the component terms of an
-#'   interaction is also called "inessential ill-conditioning", which leads to
-#'   inflated VIF values that are typically seen for models with interaction
-#'   terms \cite{(Francoeur 2013)}.
-#' }
+#' @section Interpretation of the Variance Inflation Factor:
+#' The variance inflation factor is a measure to analyze the magnitude of
+#' multicollinearity of model terms. A VIF less than 5 indicates a low
+#' correlation of that predictor with other predictors. A value between 5 and
+#' 10 indicates a moderate correlation, while VIF values larger than 10 are a
+#' sign for high, not tolerable correlation of model predictors (_James et al.
+#' 2013_). The *Increased SE* column in the output indicates how much larger
+#' the standard error is due to the association with other predictors
+#' conditional on the remaining variables in the model. Note that these
+#' thresholds, although commonly used, are also criticized for being too high.
+#' _Zuur et al. (2019)_ suggest using lower values, e.g. a VIF of 3 or larger
+#' may already no longer be considered as "low".
 #'
-#' \subsection{Concurvity for Smooth Terms in Generalized Additive Models}{
-#'   `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
-#'   considered as a collinearity check for smooth terms in GAMs.
-#'   \dQuote{Concurvity occurs when some smooth term in a model could be
-#'   approximated by one or more of the other smooth terms in the model.} (see
-#'   `?mgcv::concurvity`). `check_concurvity()` returns a column named _VIF_,
-#'   which is the "worst" measure. While `mgcv::concurvity()` range between
-#'   0 and 1, the _VIF_ value is `1 / (1 - worst)`, to make interpretation
-#'   comparable to classical VIF values, i.e. `1` indicates no problems, while
-#'   higher values indicate increasing lack of identifiability. The _VIF proportion_
-#'   column equals the "estimate" column from `mgcv::concurvity()`, ranging
-#'   from 0 (no problem) to 1 (total lack of identifiability).
-#' }
+#' @section Multicollinearity and Interaction Terms:
+#' If interaction terms are included in a model, high VIF values are expected.
+#' This portion of multicollinearity among the component terms of an
+#' interaction is also called "inessential ill-conditioning", which leads to
+#' inflated VIF values that are typically seen for models with interaction
+#' terms _(Francoeur 2013)_.
+#'
+#' @section Concurvity for Smooth Terms in Generalized Additive Models:
+#' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#' considered as a collinearity check for smooth terms in GAMs."Concurvity
+#' occurs when some smooth term in a model could be approximated by one or more
+#' of the other smooth terms in the model." (see `?mgcv::concurvity`).
+#' `check_concurvity()` returns a column named _VIF_, which is the "worst"
+#' measure. While `mgcv::concurvity()` range between 0 and 1, the _VIF_ value
+#' is `1 / (1 - worst)`, to make interpretation comparable to classical VIF
+#' values, i.e. `1` indicates no problems, while higher values indicate
+#' increasing lack of identifiability. The _VIF proportion_ column equals the
+#' "estimate" column from `mgcv::concurvity()`, ranging from 0 (no problem) to
+#' 1 (total lack of identifiability).
 #'
 #' @references
 #'
@@ -110,6 +106,10 @@
 #' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
 #' [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
 #'
+#' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
+#' common statistical problems: Data exploration. Methods in Ecology and
+#' Evolution (2010) 1:3–14.
+#'
 #' @note The code to compute the confidence intervals for the VIF and tolerance
 #' values was adapted from the Appendix B from the Marcoulides et al. paper.
 #' Thus, credits go to these authors the original algorithm. There is also
@@ -120,11 +120,10 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
+#' @examplesIf require("see")
 #' # plot results
-#' if (require("see")) {
-#'   x <- check_collinearity(m)
-#'   plot(x)
-#' }
+#' x <- check_collinearity(m)
+#' plot(x)
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
@@ -604,7 +603,7 @@ check_collinearity.zerocount <- function(x,
   }))
 
   if (insight::is_gam_model(x)) {
-    model_params <- as.vector(unlist(unlist(insight::find_parameters(x)[c(component, "smooth_terms")])))
+    model_params <- as.vector(unlist(insight::find_parameters(x)[c(component, "smooth_terms")]))
   } else {
     model_params <- insight::find_parameters(x)[[component]]
   }

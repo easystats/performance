@@ -143,7 +143,7 @@ check_model.default <- function(x,
 
   # set default for show_dots, based on "model size"
   if (is.null(show_dots)) {
-    n <- tryCatch(insight::n_obs(x), error = function(e) NULL)
+    n <- .safe(insight::n_obs(x))
     show_dots <- is.null(n) || n <= 1e5
   }
 
@@ -270,7 +270,7 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
+  dat$PP_CHECK <- .safe(check_predictions(model))
 
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -295,7 +295,7 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
+  dat$PP_CHECK <- .safe(check_predictions(model))
   if (isTRUE(model_info$is_binomial)) {
     dat$BINNED_RESID <- binned_residuals(model)
   }

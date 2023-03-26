@@ -28,12 +28,10 @@ knitr::opts_chunk$set(
 options(digits = 2)
 
 if (!requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("poorman", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 } else {
   library(rstanarm)
-  library(poorman)
   library(see)
 }
 
@@ -60,11 +58,10 @@ indices of fit).
 ```{r}
 library(performance)
 library(insight)
-library(poorman) # for pipe operator
 
 # we will use `print_md` function to display a well-formatted table
-performance(model1) %>%
-  print_md()
+result <- performance(model1)
+print_md(result)
 ```
 
 But for multiple models, one can obtain a useful table to compare these indices
@@ -73,8 +70,8 @@ at a glance using the
 function.
 
 ```{r}
-compare_performance(model1, model2, model3) %>%
-  print_md()
+result <- compare_performance(model1, model2, model3)
+print_md(result)
 ```
 
 If you remember your stats lessons, while comparing different model fits, you
@@ -106,8 +103,8 @@ framework) or [Bayes Factors](https://easystats.github.io/bayestestR/articles/ba
 Bayesian framework).
 
 ```{r}
-test_performance(model1, model2, model3) %>%
-  print_md()
+result <- test_performance(model1, model2, model3)
+print_md(result)
 ```
 
 However, these tests also have strong limitations and shortcomings, and cannot
@@ -132,8 +129,8 @@ model1 <- stan_glm(Sepal.Length ~ Petal.Length, data = iris, refresh = 0)
 model2 <- stan_glm(Sepal.Length ~ Petal.Width, data = iris, refresh = 0)
 model3 <- stan_glm(Sepal.Length ~ Sepal.Width, data = iris, refresh = 0)
 
-compare_performance(model1, model2, model3) %>%
-  print_md()
+result <- compare_performance(model1, model2, model3)
+print_md(result)
 ```
 
 Note that, since these are Bayesian regression models, the function

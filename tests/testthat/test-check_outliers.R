@@ -9,99 +9,116 @@ test_that("zscore negative threshold", {
   )
 })
 
+test_that("lof illegal threshold", {
+  expect_error(
+    check_outliers(mtcars$mpg, method = "lof", threshold = -1),
+    "The `threshold` argument"
+  )
+  expect_error(
+    check_outliers(mtcars$mpg, method = "lof", threshold = 1.1),
+    "The `threshold` argument"
+  )
+})
+
 # 1. We first test that each method consistently flags outliers,
 # (given a specific threshold)
 
 test_that("zscore which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars$mpg, method = "zscore", threshold = 2.2)),
-    20
+    20L
   )
 })
 
 test_that("zscore_robust which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars$mpg, method = "zscore_robust", threshold = 2.2)),
-    c(18, 20)
+    as.integer(c(18, 20))
   )
 })
 
 test_that("iqr which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars$mpg, method = "iqr", threshold = 1.2)),
-    c(18, 20)
+    as.integer(c(18, 20))
   )
 })
 
 test_that("ci which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars$mpg, method = "ci", threshold = 0.95)),
-    20
+    20L
   )
 })
 
 test_that("eti which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars$mpg, method = "eti", threshold = 0.95)),
-    20
+    20L
   )
 })
 
 test_that("hdi which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars$mpg, method = "hdi", threshold = 0.90)),
-    c(18, 20)
+    as.integer(c(18, 20))
   )
 })
 
 test_that("bci which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars$mpg, method = "bci", threshold = 0.95)),
-    c(15, 16, 20)
+    as.integer(c(15, 16, 20))
   )
 })
 
 test_that("mahalanobis which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars, method = "mahalanobis", threshold = 20)),
-    c(9, 29)
+    as.integer(c(9, 29))
   )
 })
 
 test_that("mahalanobis_robust which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars, method = "mahalanobis_robust", threshold = 25)),
-    c(7, 9, 21, 24, 27, 28, 29, 31)
+    as.integer(c(7, 9, 21, 24, 27, 28, 29, 31))
   )
 })
 
 ## FIXME: Fails on CRAN/windows
-# test_that("mcd which", {
-#   expect_equal(
-#     which(check_outliers(mtcars, method = "mcd", threshold = 35)),
-#     c(7, 8, 9, 19, 21, 24, 27, 28, 30, 31)
-#   )
-# })
+# (should be fixed but not clear why method mcd needs a seed;
+# there should not be an element of randomness to it I think)
+test_that("mcd which", {
+  set.seed(42)
+  expect_identical(
+    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45))),
+    31L
+  )
+})
 
 ## FIXME: Fails on CRAN/windows
-# test_that("ics which", {
-#   expect_equal(
-#     which(check_outliers(mtcars, method = "ics", threshold = 0.001)),
-#     c(9, 29)
-#   )
-# })
+# (current CRAN version rstan is not compatible with R > 4.2)
+test_that("ics which", {
+  testthat::skip_if_not(packageVersion("rstan") >= "2.26.0")
+  set.seed(42)
+  expect_identical(
+    which(check_outliers(mtcars, method = "ics", threshold = 0.001)),
+    as.integer(c(9, 29))
+  )
+})
 
 test_that("optics which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars, method = "optics", threshold = 14)),
-    c(5, 7, 15, 16, 17, 24, 25, 29, 31)
+    as.integer(c(5, 7, 15, 16, 17, 24, 25, 29, 31))
   )
 })
 
 test_that("lof which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars, method = "lof", threshold = 0.005)),
-    31
+    31L
   )
 })
 
@@ -127,7 +144,7 @@ test_that("attributes threshold", {
 
 test_that("attributes method", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
-  expect_equal(
+  expect_identical(
     x$method,
     "zscore"
   )
@@ -135,7 +152,7 @@ test_that("attributes method", {
 
 test_that("attributes variables", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
-  expect_equal(
+  expect_identical(
     x$variables,
     c("mpg", "cyl", "disp", "hp", "drat", "wt", "qsec", "vs", "am", "gear", "carb")
   )
@@ -143,48 +160,36 @@ test_that("attributes variables", {
 
 test_that("attributes data", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
-  expect_equal(
-    class(x$data),
-    "data.frame"
-  )
+  expect_s3_class(x$data, "data.frame")
 })
 
 test_that("attributes raw data", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
-  expect_equal(
-    class(x$raw_data),
-    "data.frame"
-  )
+  expect_s3_class(x$raw_data, "data.frame")
 })
 
 test_that("attributes univariate data frames", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
-  expect_equal(
-    class(x$outlier_var$zscore$mpg),
-    "data.frame"
-  )
+  expect_s3_class(x$outlier_var$zscore$mpg, "data.frame")
 })
 
 test_that("attributes outlier count data frame", {
   x <- attributes(check_outliers(mtcars, method = "zscore", threshold = 2.2))
-  expect_equal(
-    class(x$outlier_count$all),
-    "data.frame"
-  )
+  expect_s3_class(x$outlier_count$all, "data.frame")
 })
 
 # 4. Next, we test multiple simultaneous methods
 
 test_that("multiple methods which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars, method = c("zscore", "iqr"))),
-    31
+    31L
   )
 })
 
 # We exclude method ics because it is too slow
 test_that("all methods which", {
-  expect_equal(
+  expect_identical(
     which(check_outliers(mtcars,
       method = c(
         "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
@@ -197,7 +202,7 @@ test_that("all methods which", {
         "optics" = 14, "lof" = 0.005
       )
     )),
-    c(9, 15, 16, 19, 20, 28, 29, 31)
+    as.integer(c(9, 15, 16, 19, 20, 28, 29, 31))
   )
 })
 
@@ -219,11 +224,11 @@ test_that("multiple methods with ID", {
     ),
     ID = "car"
   ))
-  expect_equal(
+  expect_identical(
     x$outlier_var$zscore$mpg$car,
     "Toyota Corolla"
   )
-  expect_equal(
+  expect_identical(
     x$outlier_count$all$car[1],
     "Maserati Bora"
   )
@@ -234,44 +239,50 @@ test_that("multiple methods with ID", {
 
 test_that("cook which", {
   model <- lm(disp ~ mpg + hp, data = mtcars)
-  expect_equal(
+  expect_identical(
     which(check_outliers(model, method = "cook", threshold = list(cook = 0.85))),
-    31
+    31L
   )
 })
 
+## FIXME: Cannot use a single threshold, but only for this case
 # test_that("cook which", {
 #   model <- lm(disp ~ mpg + hp, data = mtcars)
 #   expect_equal(
 #     which(check_outliers(model, method = "cook", threshold = 0.85)),
-#     # Error: The `threshold` argument must be NULL (for default values) or a list containing threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).
+#     # Error: The `threshold` argument must be NULL (for default values) or a list containing
+#       threshold values for desired methods (e.g., `list('mahalanobis' = 7)`).
 #     31
 #   )
 # })
 
 test_that("cook multiple methods which", {
   model <- lm(disp ~ mpg + hp, data = mtcars)
-  expect_equal(
+  expect_identical(
     which(check_outliers(model, method = c("cook", "optics", "lof"))),
-    31
+    31L
   )
 })
 
 if (requiet("rstanarm")) {
   test_that("pareto which", {
     set.seed(123)
-    invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
-    expect_equal(
+    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)
+    invisible(capture.output(model))
+
+    expect_identical(
       which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
-      17
+      17L
     )
   })
 
   test_that("pareto multiple methods which", {
     set.seed(123)
-    invisible(capture.output(model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)))
-    expect_equal(
-      which(check_outliers(model,
+    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)
+    invisible(capture.output(model))
+    expect_identical(
+      which(check_outliers(
+        model,
         method = c("pareto", "optics"),
         threshold = list(pareto = 0.3, optics = 11)
       )),
@@ -284,9 +295,9 @@ if (requiet("BayesFactor")) {
   test_that("BayesFactor which", {
     set.seed(123)
     model <- BayesFactor::regressionBF(rating ~ ., data = attitude, progress = FALSE)
-    expect_equal(
+    expect_identical(
       which(check_outliers(model, threshold = list(mahalanobis = 15))),
-      18
+      18L
     )
   })
 }
@@ -296,8 +307,8 @@ if (requiet("BayesFactor")) {
 test_that("cook multiple methods which", {
   iris2 <- datawizard::data_group(iris, "Species")
   z <- attributes(check_outliers(iris2, method = c("zscore", "iqr")))
-  expect_equal(
-    names(z$outlier_count),
+  expect_named(
+    z$outlier_count,
     c("setosa", "versicolor", "virginica")
   )
 })
