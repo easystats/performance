@@ -1134,6 +1134,9 @@ check_outliers.grouped_df <- function(x,
     )
   }
 
+  # Add compatibility between dplyr and poorman
+  info$groups$.rows <- lapply(info$groups$.rows, as.numeric)
+
   outlier_var <- stats::setNames(outlier_var, info$groups[[1]])
   outlier_count <- stats::setNames(outlier_count, info$groups[[1]])
 
