@@ -118,7 +118,7 @@ One possible reason is that researchers are not aware of the existing recommenda
 
 # Identifying Outliers
 
-Although many researchers attempt to identify outliers with measures based on the mean (e.g., _z_ scores), those methods are problematic because the mean and standard deviation themselves are not robust to the influence of outliers and they assume normally distribute data (i.e., a Gaussian distribution). Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean [@leys2019outliers; @leys2013outliers; @leys2018outliers].
+Although many researchers attempt to identify outliers with measures based on the mean (e.g., _z_ scores), those methods are problematic because the mean and standard deviation themselves are not robust to the influence of outliers and they assume normally distributed data (i.e., a Gaussian distribution). Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean [@leys2019outliers; @leys2013outliers; @leys2018outliers].
 
 Nonetheless, which exact outlier method to use depends on many factors. In some cases, eye-gauging odd observations can be an appropriate solution, though many researchers will favour algorithmic solutions to detect potential outliers, for example, based on a continuous value expressing the observation stands out from the others.
 
@@ -224,7 +224,31 @@ knitr::kable(
 
 However, distribution-based approaches are not a silver bullet either, and there are cases where the usage of methods agnostic to theoretical and statistical models of interest might be problematic. For example, a very tall person would be expected to also be much heavier than average, but that would still fit with the expected association between height and weight (i.e., it would be in line with a model such as `weight ~ height`). In contrast, using multivariate outlier detection methods there may flag this person as being an outlier---being unusual on two variables, height and weight---even though the pattern fits perfectly with our predictions.
 
-Furthermore, unusual observations happen naturally: extreme observations are expected even when taken from a normal distribution. While statistical models can integrate this "expectation", multivariate outlier methods might be too conservative, flagging too many observations despite belonging to the right generative process. For these reasons, we believe that model-based methods are still preferable to the MCD when using supported regression models. Additionally, if the presence of multiple outliers is a significant concern, regression methods that are more robust to outliers should be considered---like _t_ regression or quantile regression---as they render their precise identification less critical.
+In the example below, we plot the raw data and see two possible outliers. The first one falls along the regression line, and is therefore "in line" with our hypothesis. The second one clearly diverges from the regression line, and therefore we can conclude that this outlier may have a disproportionate influence on our model.
+
+```{r}
+data <- women[rep(seq_len(nrow(women)), each = 100), ]
+data <- rbind(data, c(100, 258), c(100, 200))
+model <- lm(weight ~ height, data)
+rempsyc::nice_scatter(data, "height", "weight")
+```
+
+Using either the *z*-score or MCD methods, our model-consistent observation will be incorrectly flagged as an outlier or influential observation.
+
+```{r}
+outliers <- check_outliers(model, method = c("zscore_robust", "mcd"))
+which(outliers)
+```
+
+In contrast, the model-based detection method displays the desired behaviour: it correctly flags the person who is very tall but very light, without flagging the person who is both tall and heavy.
+
+```{r}
+outliers <- check_outliers(model, method = "cook")
+which(outliers)
+plot(outliers)
+```
+
+Finally, unusual observations happen naturally: extreme observations are expected even when taken from a normal distribution. While statistical models can integrate this "expectation", multivariate outlier methods might be too conservative, flagging too many observations despite belonging to the right generative process. For these reasons, we believe that model-based methods are still preferable to the MCD when using supported regression models. Additionally, if the presence of multiple outliers is a significant concern, regression methods that are more robust to outliers should be considered---like _t_ regression or quantile regression---as they render their precise identification less critical.
 
 ## Multiple Methods
 
@@ -234,9 +258,7 @@ In practice, this approach computes a composite outlier score, formed of the ave
 
 ```{r multimethod, fig.cap = "Visual depiction of outliers using several different statistical outlier detection methods."}
 outliers <- check_outliers(model, method = c("zscore_robust", "mcd", "cook"))
-outliers
-
-plot(outliers)
+which(outliers)
 ```
 
 Outliers (counts or per variables) for individual methods can then be obtained through attributes. For example:
@@ -247,7 +269,7 @@ attributes(outliers)$outlier_var$zscore_robust
 
 An example sentence for reporting the usage of the composite method could be:
 
-> Based on a composite outlier score [see the 'check_outliers()' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust _z_ scores, @leys2013outliers; (b) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (c) Cook's distance, @cook1977detection], we excluded two participants that were classified as outliers by at least half of the methods used.
+> Based on a composite outlier score (see the 'check_outliers()' function in the 'performance' R package, [@ludecke2021performance]) obtained via the joint application of multiple outliers detection algorithms ((a) median absolute deviation (MAD)-based robust _z_ scores, [@leys2013outliers]; (b) Mahalanobis minimum covariance determinant (MCD), [@leys2019outliers]; and (c) Cook's distance, [@cook1977detection]), we excluded two participants that were classified as outliers by at least half of the methods used.
 
 # Handling Outliers
 
@@ -268,14 +290,14 @@ _Removing_ outliers can in this case be a valid strategy, and ideally one would 
 The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of *{datawizard}*, a lightweight R package to facilitate data wrangling and statistical transformations [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD.
 
 ```{r winsorization}
-data[33:34, ]  # See outliers rows
+data[1501:1502, ]  # See outliers rows
 
 # Winsorizing using the MAD
 library(datawizard)
 winsorized_data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
 
 # Values > +/- MAD have been winsorized
-winsorized_data[33:34, ]
+winsorized_data[1501:1502, ]
 ```
 
 ## The Importance of Transparency

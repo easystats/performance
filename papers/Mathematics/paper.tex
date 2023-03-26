@@ -267,7 +267,7 @@ modeling, visualization, and reporting \citep{easystatspackage}.
 Although many researchers attempt to identify outliers with measures
 based on the mean (e.g., \emph{z} scores), those methods are problematic
 because the mean and standard deviation themselves are not robust to the
-influence of outliers and they assume normally distribute data (i.e., a
+influence of outliers and they assume normally distributed data (i.e., a
 Gaussian distribution). Therefore, current guidelines recommend using
 robust methods to identify outliers, such as those relying on the median
 as opposed to the mean
@@ -598,17 +598,72 @@ multivariate outlier detection methods there may flag this person as
 being an outlier---being unusual on two variables, height and
 weight---even though the pattern fits perfectly with our predictions.
 
-Furthermore, unusual observations happen naturally: extreme observations
-are expected even when taken from a normal distribution. While
-statistical models can integrate this ``expectation'', multivariate
-outlier methods might be too conservative, flagging too many
-observations despite belonging to the right generative process. For
-these reasons, we believe that model-based methods are still preferable
-to the MCD when using supported regression models. Additionally, if the
-presence of multiple outliers is a significant concern, regression
-methods that are more robust to outliers should be considered---like
-\emph{t} regression or quantile regression---as they render their
-precise identification less critical.
+In the example below, we plot the raw data and see two possible
+outliers. The first one falls along the regression line, and is
+therefore ``in line'' with our hypothesis. The second one clearly
+diverges from the regression line, and therefore we can conclude that
+this outlier may have a disproportionate influence on our model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ women[}\FunctionTok{rep}\NormalTok{(}\FunctionTok{seq\_len}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(women)), }\AttributeTok{each =} \DecValTok{100}\NormalTok{), ]}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(data, }\FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{258}\NormalTok{), }\FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{200}\NormalTok{))}
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(weight }\SpecialCharTok{\textasciitilde{}}\NormalTok{ height, data)}
+\NormalTok{rempsyc}\SpecialCharTok{::}\FunctionTok{nice\_scatter}\NormalTok{(data, }\StringTok{"height"}\NormalTok{, }\StringTok{"weight"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/unnamed-chunk-3-1}
+
+Using either the \emph{z}-score or MCD methods, our model-consistent
+observation will be incorrectly flagged as an outlier or influential
+observation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(model, }\AttributeTok{method =} \FunctionTok{c}\NormalTok{(}\StringTok{"zscore\_robust"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{))}
+\FunctionTok{which}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> [1] 1501 1502
+\end{verbatim}
+
+In contrast, the model-based detection method displays the desired
+behaviour: it correctly flags the person who is very tall but very
+light, without flagging the person who is both tall and heavy.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(model, }\AttributeTok{method =} \StringTok{"cook"}\NormalTok{)}
+\FunctionTok{which}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> [1] 1502
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/unnamed-chunk-5-1}
+
+Finally, unusual observations happen naturally: extreme observations are
+expected even when taken from a normal distribution. While statistical
+models can integrate this ``expectation'', multivariate outlier methods
+might be too conservative, flagging too many observations despite
+belonging to the right generative process. For these reasons, we believe
+that model-based methods are still preferable to the MCD when using
+supported regression models. Additionally, if the presence of multiple
+outliers is a significant concern, regression methods that are more
+robust to outliers should be considered---like \emph{t} regression or
+quantile regression---as they render their precise identification less
+critical.
 
 \hypertarget{multiple-methods}{%
 \subsection{Multiple Methods}\label{multiple-methods}}
@@ -632,38 +687,13 @@ desired methods in the corresponding argument.
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(model, }\AttributeTok{method =} \FunctionTok{c}\NormalTok{(}\StringTok{"zscore\_robust"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{, }\StringTok{"cook"}\NormalTok{))}
-\NormalTok{outliers}
+\FunctionTok{which}\NormalTok{(outliers)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-#> 2 outliers detected: cases 33, 34.
-#> - Based on the following methods and thresholds: zscore_robust (3.09),
-#>   mcd (0.708), cook (13.816).
-#> - For variable: (Whole model).
-#> 
-#> Note: Outliers were classified as such by at least half of the selected methods. 
-#> 
-#> -----------------------------------------------------------------------------
-#>  
-#> The following observations were considered outliers for two or more
-#>   variables by at least one of the selected methods:
-#> 
-#>   Row n_Zscore_robust          n_MCD         n_Cook
-#> 1  33               1 (Multivariate)              0
-#> 2  34               1 (Multivariate) (Multivariate)
-#> 3  20               0 (Multivariate)              0
+#> [1] 1501 1502
 \end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{plot}\NormalTok{(outliers)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/multimethod-1} \caption{Visual depiction of outliers using several different statistical outlier detection methods.}\label{fig:multimethod}
-\end{figure}
 
 Outliers (counts or per variables) for individual methods can then be
 obtained through attributes. For example:
@@ -675,25 +705,29 @@ obtained through attributes. For example:
 \end{Shaded}
 
 \begin{verbatim}
-#> $mpg
-#>    Row Distance_Zscore_robust
-#> 33  33               3.709699
-#> 34  34               5.848328
+#> $weight
+#>       Row Distance_Zscore_robust
+#> 1501 1501               6.913530
+#> 1502 1502               3.653492
+#> 
+#> $height
+#>       Row Distance_Zscore_robust
+#> 1501 1501               5.901794
+#> 1502 1502               5.901794
 \end{verbatim}
 
 An example sentence for reporting the usage of the composite method
 could be:
 
 \begin{quote}
-Based on a composite outlier score \citep[see the `check\_outliers()'
-function in the `performance' R package,][]{ludecke2021performance}
-obtained via the joint application of multiple outliers detection
-algorithms \citetext{\citealp[(a) median absolute deviation (MAD)-based
-robust \emph{z} scores,][]{leys2013outliers}; \citealp[(b) Mahalanobis
-minimum covariance determinant (MCD),][]{leys2019outliers}; \citealp[and
-(c) Cook's distance,][]{cook1977detection}}, we excluded two
-participants that were classified as outliers by at least half of the
-methods used.
+Based on a composite outlier score (see the `check\_outliers()' function
+in the `performance' R package, \citep{ludecke2021performance}) obtained
+via the joint application of multiple outliers detection algorithms ((a)
+median absolute deviation (MAD)-based robust \emph{z} scores,
+\citep{leys2013outliers}; (b) Mahalanobis minimum covariance determinant
+(MCD), \citep{leys2019outliers}; and (c) Cook's distance,
+\citep{cook1977detection}), we excluded two participants that were
+classified as outliers by at least half of the methods used.
 \end{quote}
 
 \hypertarget{handling-outliers}{%
@@ -768,14 +802,14 @@ or its robust alternative based on the MAD.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{data[}\DecValTok{33}\SpecialCharTok{:}\DecValTok{34}\NormalTok{, ]  }\CommentTok{\# See outliers rows}
+\NormalTok{data[}\DecValTok{1501}\SpecialCharTok{:}\DecValTok{1502}\NormalTok{, ]  }\CommentTok{\# See outliers rows}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-#>    car mpg cyl disp hp
-#> 33  33  42  42   42 42
-#> 34  34  55  55   55 55
+#>      height weight
+#> 1501    100    258
+#> 1502    100    200
 \end{verbatim}
 
 \begin{Shaded}
@@ -785,14 +819,14 @@ or its robust alternative based on the MAD.
 \NormalTok{winsorized\_data }\OtherTok{\textless{}{-}} \FunctionTok{winsorize}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"zscore"}\NormalTok{, }\AttributeTok{robust =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{threshold =} \DecValTok{3}\NormalTok{)}
 
 \CommentTok{\# Values \textgreater{} +/{-} MAD have been winsorized}
-\NormalTok{winsorized\_data[}\DecValTok{33}\SpecialCharTok{:}\DecValTok{34}\NormalTok{, ]}
+\NormalTok{winsorized\_data[}\DecValTok{1501}\SpecialCharTok{:}\DecValTok{1502}\NormalTok{, ]}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-#>    car      mpg     cyl disp hp
-#> 33  33 37.68598 14.8956   42 42
-#> 34  34 37.68598 14.8956   55 55
+#>       height   weight
+#> 1501 82.7912 188.3736
+#> 1502 82.7912 188.3736
 \end{verbatim}
 
 \hypertarget{the-importance-of-transparency}{%
