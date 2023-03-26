@@ -118,9 +118,9 @@ One possible reason is that researchers are not aware of the existing recommenda
 
 # Identifying Outliers
 
-Although many researchers attempt to identify outliers with measures based on the mean (e.g., _z_ scores), those methods are problematic because the mean and standard deviation themselves are not robust to the influence of outliers and they assume a normal distribution. Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean [@leys2019outliers; @leys2013outliers; @leys2018outliers].
+Although many researchers attempt to identify outliers with measures based on the mean (e.g., _z_ scores), those methods are problematic because the mean and standard deviation themselves are not robust to the influence of outliers and they assume normally distribute data (i.e., a Gaussian distribution). Therefore, current guidelines recommend using robust methods to identify outliers, such as those relying on the median as opposed to the mean [@leys2019outliers; @leys2013outliers; @leys2018outliers].
 
-Nonetheless, which exact outlier method to use depends on many factors. In some cases, eye-gauging odd observations can be an appropriate solution, though many researchers will favour algorithmic solutions to detect potential outliers, for example, based on a mathematical score.
+Nonetheless, which exact outlier method to use depends on many factors. In some cases, eye-gauging odd observations can be an appropriate solution, though many researchers will favour algorithmic solutions to detect potential outliers, for example, based on a continuous value expressing the observation stands out from the others.
 
 One of the factors to consider when selecting an algorithmic outlier detection method is the statistical test of interest. When using a regression model, relevant information can be found by identifying observations that do not fit well with the model. This approach, known as model-based outliers detection (as outliers are extracted after the statistical model has been fit), can be contrasted with distribution-based outliers detection, which is based on the distance between an observation and the "center" of its population. Various quantification strategies of this distance exist for the latter, both univariate (involving only one variable at a time) or multivariate (involving multiple variables).
 
@@ -132,7 +132,7 @@ Importantly, whatever approach researchers choose remains a subjective decision,
 
 Researchers frequently attempt to identify outliers using measures of deviation from the center of a variable's distribution. One of the most popular such procedure is the _z_ score transformation, which computes the distance in standard deviation (SD) from the mean. However, as mentioned earlier, this popular method is not robust. Therefore, for univariate outliers, it is recommended to use the median along with the Median Absolute Deviation (MAD), which are more robust than the interquartile range or the mean and its standard deviation [@leys2019outliers; @leys2013outliers].
 
-Researchers can identify outliers based on robust (i.e., MAD-based) _z_ scores using the `check_outliers()` function of the  *{performance}* package, by specifying `method = "zscore_robust"`. Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, *{performance}* uses by default a less conservative threshold of ~3.29.^[3.29 is an approximation of the two-tailed critical value for _p_ < .001, obtained through `qnorm(p = 1 - 0.001 / 2)`. We chose this threshold for consistency with the thresholds of all our other methods.] That is, data points will be flagged as outliers if they go beyond +/- ~3.29 MAD. Users can adjust this threshold using the `threshold` argument, as demonstrated below.
+Researchers can identify outliers based on robust (i.e., MAD-based) _z_ scores using the `check_outliers()` function of the  *{performance}* package, by specifying `method = "zscore_robust"`.^[Note that `check_outliers()` only checks numeric variables.] Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, *{performance}* uses by default a less conservative threshold of ~3.29.^[3.29 is an approximation of the two-tailed critical value for _p_ < .001, obtained through `qnorm(p = 1 - 0.001 / 2)`. We chose this threshold for consistency with the thresholds of all our other methods.] That is, data points will be flagged as outliers if they go beyond +/- ~3.29 MAD. Users can adjust this threshold using the `threshold` argument, as demonstrated below.
 
 ```{r z_score}
 library(performance)
@@ -189,7 +189,7 @@ Working with regression models creates the possibility of using model-based SOD 
 In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
 ```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals)."}
-model <- lm(disp ~ mpg * disp * cyl, data = data)
+model <- lm(disp ~ mpg * disp, data = data)
 outliers <- check_outliers(model, method = "cook")
 outliers
 
@@ -224,7 +224,7 @@ knitr::kable(
 
 However, distribution-based approaches are not a silver bullet either, and there are cases where the usage of methods agnostic to theoretical and statistical models of interest might be problematic. For example, a very tall person would be expected to also be much heavier than average, but that would still fit with the expected association between height and weight (i.e., it would be in line with a model such as `weight ~ height`). In contrast, using multivariate outlier detection methods there may flag this person as being an outlier---being unusual on two variables, height and weight---even though the pattern fits perfectly with our predictions.
 
-Furthermore, unusual observations happen naturally: extreme observations are expected even when taken from a normal distribution. While statistical models can integrate this "expectation", multivariate outlier methods might be too conservative, flagging too many observations despite belonging to the right generative process. For these reasons, we believe that model-based methods are still preferable to the MCD when using compatible regression models. Additionally, if the presence of multiple outliers is a significant concern, regression methods that are more robust to outliers should be considered---like _t_ regression or quantile regression---as they render their precise identification less critical.
+Furthermore, unusual observations happen naturally: extreme observations are expected even when taken from a normal distribution. While statistical models can integrate this "expectation", multivariate outlier methods might be too conservative, flagging too many observations despite belonging to the right generative process. For these reasons, we believe that model-based methods are still preferable to the MCD when using supported regression models. Additionally, if the presence of multiple outliers is a significant concern, regression methods that are more robust to outliers should be considered---like _t_ regression or quantile regression---as they render their precise identification less critical.
 
 ## Multiple Methods
 
@@ -233,19 +233,6 @@ An alternative approach that is possible is to combine several methods, based on
 In practice, this approach computes a composite outlier score, formed of the average of the binary (0 or 1) classification results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In *{performance}*'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
 
 ```{r multimethod, fig.cap = "Visual depiction of outliers using several different statistical outlier detection methods."}
-# Combine multiple methods
-# outliers <- check_outliers(
-#   data[1:5],
-#   method = c("zscore_robust", "iqr", "mcd", "ics")
-# )
-
-model <- lm(mpg ~ cyl, data = data)
-outliers <- check_outliers(model, method = "mcd")
-
-check_outliers(model, method = "iqr")
-
-check_outliers(data$cyl, method = "iqr")
-
 outliers <- check_outliers(model, method = c("zscore_robust", "mcd", "cook"))
 outliers
 
@@ -255,12 +242,12 @@ plot(outliers)
 Outliers (counts or per variables) for individual methods can then be obtained through attributes. For example:
 
 ```{r}
-attributes(outliers)$outlier_var$iqr
+attributes(outliers)$outlier_var$zscore_robust
 ```
 
 An example sentence for reporting the usage of the composite method could be:
 
-Based on a composite outlier score [see the 'check_outliers()' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust _z_ scores, @leys2013outliers; (b) interquartile range (IQR), (c) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (d) invariant coordinate selection (ICS), @archimbaud2018ics], we excluded three participants that were classified as outliers by at least half of the methods used.
+> Based on a composite outlier score [see the 'check_outliers()' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust _z_ scores, @leys2013outliers; (b) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (c) Cook's distance, @cook1977detection], we excluded two participants that were classified as outliers by at least half of the methods used.
 
 # Handling Outliers
 
@@ -278,7 +265,7 @@ On the other hand, there are also outliers that cannot be detected by statistica
 
 _Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MADs, @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
 
-The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of the *{datawizard}* package [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD.
+The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of *{datawizard}*, a lightweight R package to facilitate data wrangling and statistical transformations [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD.
 
 ```{r winsorization}
 data[33:34, ]  # See outliers rows
