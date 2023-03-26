@@ -286,7 +286,7 @@ if (requiet("rstanarm")) {
         method = c("pareto", "optics"),
         threshold = list(pareto = 0.3, optics = 11)
       )),
-      20
+      20L
     )
   })
 }
