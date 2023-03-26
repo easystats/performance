@@ -1,5 +1,5 @@
 ---
-title: "Check your outliers! An accessible introduction to identifying statistical outliers in R with *easystats*"
+title: "Check your outliers! An introduction to identifying statistical outliers in R with *easystats*"
 author:
   - name: Rémi Thériault
     affil: 1,*
@@ -174,10 +174,10 @@ One common approach for this is to compute multivariate distance metrics such as
 In *{performance}*'s `check_outliers()`, one can use this approach with `method = "mcd"`.^[Our default threshold for the MCD method is defined by `stats::qchisq(p = 1 - 0.001, df = ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
 ```{r multivariate, fig.cap = "Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance."}
-results <- check_outliers(data, method = "mcd")
-results
+outliers <- check_outliers(data, method = "mcd")
+outliers
 
-plot(results)
+plot(outliers)
 ```
 
 Other multivariate methods are available, such as another type of robust Mahalanobis distance that in this case relies on an orthogonalized Gnanadesikan-Kettenring pairwise estimator [@gnanadesikan1972robust]. These methods are documented and described in the function's [help page](https://easystats.github.io/performance/reference/check_outliers.html).
@@ -189,7 +189,7 @@ Working with regression models creates the possibility of using model-based SOD 
 In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
 ```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals)."}
-model <- lm(disp ~ mpg * hp, data = data)
+model <- lm(disp ~ mpg * disp * cyl, data = data)
 outliers <- check_outliers(model, method = "cook")
 outliers
 
@@ -200,18 +200,29 @@ Table 1 below summarizes which methods to use in which cases, and with what thre
 
 ```{r, echo=FALSE}
 df <- data.frame(
-  `Statistical Test` = c("Supported regression model", "Structural Equation Modeling (or other unsupported model)", "Simple test with few variables (*t* test, correlation, etc.)"),
-  `Diagnosis Method` = c("**Model-based**: Cook (or Pareto for Bayesian models)", "**Multivariate**: Minimum Covariance Determinant (MCD)", "**Univariate**: robust *z* scores (MAD)"),
-  `Recommended Threshold` = c("`qf(0.5, ncol(x), nrow(x) - ncol(x))` (or 0.7 for Pareto)", "`qchisq(p = 1 - 0.001, df = ncol(x))`", "`qnorm(p = 1 - 0.001 / 2)`, ~ 3.29")
+  `Statistical Test` = c(
+    "Supported regression model", 
+    "Structural Equation Modeling (or other unsupported model)", 
+    "Simple test with few variables (*t* test, correlation, etc.)"),
+  `Diagnosis Method` = c(
+    "**Model-based**: Cook (or Pareto for Bayesian models)", 
+    "**Multivariate**: Minimum Covariance Determinant (MCD)", 
+    "**Univariate**: robust *z* scores (MAD)"),
+  `Recommended Threshold` = c(
+    "`qf(0.5, ncol(x), nrow(x) - ncol(x))` (or 0.7 for Pareto)", 
+    "`qchisq(p = 1 - 0.001, df = ncol(x))`", 
+    "`qnorm(p = 1 - 0.001 / 2)`, ~ 3.29")
 )
-knitr::kable(df, col.names = gsub("[.]", " ", names(df)), caption = "Summary of Statistical Outlier Detection Methods Recommendations.", longtable = TRUE)
+knitr::kable(
+  df, col.names = gsub("[.]", " ", names(df)), 
+  caption = "Summary of Statistical Outlier Detection Methods Recommendations.", longtable = TRUE)
 ```
 
 ### Cook's Distance vs. MCD
 
 @leys2018outliers report a preference for the MCD method over Cook's distance. This is because Cook's distance removes one observation at a time and checks its corresponding influence on the model each time [@cook1977detection], and flags any observation that has a large influence. In the view of these authors, when there are several outliers, the process of removing a single outlier at a time is problematic as the model remains "contaminated" or influenced by other possible outliers in the model, rendering this method suboptimal in the presence of multiple outliers.
 
-However, distribution-based approaches are not a silver bullet either, and there are cases where the usage of methods agnostic to theoretical and statistical models of interest might be problematic. For example, a very tall person would be expected to also be much heavier than average, but that would still fit with the expected relationship between height and weight (i.e., it would be in line with a model such as `weight ~ height`). In contrast, using multivariate outlier detection methods there may flag this person as being an outlier---being unusual on two variables, height and weight---even though the pattern fits perfectly with our predictions.
+However, distribution-based approaches are not a silver bullet either, and there are cases where the usage of methods agnostic to theoretical and statistical models of interest might be problematic. For example, a very tall person would be expected to also be much heavier than average, but that would still fit with the expected association between height and weight (i.e., it would be in line with a model such as `weight ~ height`). In contrast, using multivariate outlier detection methods there may flag this person as being an outlier---being unusual on two variables, height and weight---even though the pattern fits perfectly with our predictions.
 
 Furthermore, unusual observations happen naturally: extreme observations are expected even when taken from a normal distribution. While statistical models can integrate this "expectation", multivariate outlier methods might be too conservative, flagging too many observations despite belonging to the right generative process. For these reasons, we believe that model-based methods are still preferable to the MCD when using compatible regression models. Additionally, if the presence of multiple outliers is a significant concern, regression methods that are more robust to outliers should be considered---like _t_ regression or quantile regression---as they render their precise identification less critical.
 
@@ -223,11 +234,19 @@ In practice, this approach computes a composite outlier score, formed of the ave
 
 ```{r multimethod, fig.cap = "Visual depiction of outliers using several different statistical outlier detection methods."}
 # Combine multiple methods
-outliers <- check_outliers(
-  data[1:5],
-  method = c("zscore_robust", "iqr", "mcd", "ics")
-)
+# outliers <- check_outliers(
+#   data[1:5],
+#   method = c("zscore_robust", "iqr", "mcd", "ics")
+# )
 
+model <- lm(mpg ~ cyl, data = data)
+outliers <- check_outliers(model, method = "mcd")
+
+check_outliers(model, method = "iqr")
+
+check_outliers(data$cyl, method = "iqr")
+
+outliers <- check_outliers(model, method = c("zscore_robust", "mcd", "cook"))
 outliers
 
 plot(outliers)
