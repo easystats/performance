@@ -613,7 +613,9 @@ this outlier may have a disproportionate influence on our model.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/unnamed-chunk-3-1}
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/scatter-1} \caption{Scatter plot of height and weight, with two extreme observations: one model-consistent (top-right) and the other, model-inconsistent (i.e., and outlier; bottom-right).}\label{fig:scatter}
+\end{figure}
 
 Using either the \emph{z}-score or MCD methods, our model-consistent
 observation will be incorrectly flagged as an outlier or influential
@@ -651,7 +653,9 @@ light, without flagging the person who is both tall and heavy.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/unnamed-chunk-5-1}
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/model2-1} \caption{The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation).}\label{fig:model2}
+\end{figure}
 
 Finally, unusual observations happen naturally: extreme observations are
 expected even when taken from a normal distribution. While statistical
