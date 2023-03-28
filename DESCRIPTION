@@ -71,7 +71,7 @@ Depends:
 Imports:
     bayestestR (>= 0.13.0),
     insight (>= 0.19.1),
-    datawizard (>= 0.6.5),
+    datawizard (>= 0.7.0),
     methods,
     stats,
     utils
@@ -127,7 +127,7 @@ Suggests:
     rstanarm,
     rstantools,
     sandwich,
-    see (>= 0.7.4),
+    see (>= 0.7.5),
     survey,
     survival,
     testthat,

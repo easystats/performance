@@ -114,6 +114,8 @@ r2.lm <- function(model, ci = NULL, ...) {
   .r2_lm(summary(model))
 }
 
+#' @export
+r2.phylolm <- r2.lm
 
 .r2_lm <- function(model_summary, ci = NULL) {
   out <- list(
