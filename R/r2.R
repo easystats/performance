@@ -399,9 +399,6 @@ r2.clm2 <- r2.censReg
 r2.coxph <- r2.censReg
 
 #' @export
-r2.mclogit <- r2.censReg
-
-#' @export
 r2.polr <- r2.censReg
 
 #' @export
@@ -419,7 +416,15 @@ r2.brmultinom <- r2.censReg
 #' @export
 r2.bife <- r2.censReg
 
+#' @export
+r2.mclogit <- function(model, ...) {
+  r2_nagelkerke(model)
+}
 
+#' @export
+r2.mblogit <- function(model, ...) {
+  r2_nagelkerke(model)
+}
 
 
 
@@ -740,12 +745,6 @@ r2.complmrob <- r2.lmrob
 
 #' @export
 r2.mmclogit <- function(model, ...) {
-  list(R2 = NA)
-}
-
-
-#' @export
-r2.mclogit <- function(model, ...) {
   list(R2 = NA)
 }
 

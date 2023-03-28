@@ -93,13 +93,28 @@ r2_mcfadden.bracl <- r2_mcfadden.glm
 r2_mcfadden.brmultinom <- r2_mcfadden.glm
 
 #' @export
-r2_mcfadden.mclogit <- r2_mcfadden.glm
-
-#' @export
 r2_mcfadden.censReg <- r2_mcfadden.glm
 
 #' @export
 r2_mcfadden.truncreg <- r2_mcfadden.glm
+
+#' @export
+r2_mcfadden.mclogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mclogit(model)
+  r2_mcfadden <- s$sumstat["McFadden"]
+  names(r2_mcfadden) <- "McFadden's R2"
+  r2_mcfadden
+}
+
+#' @export
+r2_mcfadden.mblogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mblogit(model)
+  r2_mcfadden <- s$sumstat["McFadden"]
+  names(r2_mcfadden) <- "McFadden's R2"
+  r2_mcfadden
+}
 
 
 

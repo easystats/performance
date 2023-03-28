@@ -108,6 +108,7 @@ Suggests:
     loo,
     MASS,
     Matrix,
+    mclogit,
     mclust,
     metafor,
     mgcv,

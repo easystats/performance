@@ -156,9 +156,6 @@ r2_nagelkerke.glmx <- r2_nagelkerke.clm
 r2_nagelkerke.brmultinom <- r2_nagelkerke.clm
 
 #' @export
-r2_nagelkerke.mclogit <- r2_nagelkerke.clm
-
-#' @export
 r2_nagelkerke.censReg <- r2_nagelkerke.clm
 
 #' @export
@@ -188,4 +185,25 @@ r2_nagelkerke.crch <- r2_nagelkerke.coxph
 r2_nagelkerke.svycoxph <- function(model, ...) {
   l_base <- model$ll[1]
   .r2_nagelkerke(model, l_base)
+}
+
+
+# other ---------------------
+
+#' @export
+r2_nagelkerke.mclogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mclogit(model)
+  r2_nagelkerke <- s$sumstat["Nagelkerke"]
+  names(r2_nagelkerke) <- "Nagelkerke's R2"
+  r2_nagelkerke
+}
+
+#' @export
+r2_nagelkerke.mblogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mblogit(model)
+  r2_nagelkerke <- s$sumstat["Nagelkerke"]
+  names(r2_nagelkerke) <- "Nagelkerke's R2"
+  r2_nagelkerke
 }
