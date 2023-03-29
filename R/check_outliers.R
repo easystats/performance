@@ -1348,7 +1348,6 @@ check_outliers.rma <- function(x, ci = 0.95, ...) {
 
   # which study's CI-range is not covered by/does not overlap with overall CI?
   outlier <- upper_bounds < thresholds[1] | lower_bounds > thresholds[2]
-  raw_data <- insight::get_data(x)
 
   d <- data.frame(
     Row = seq_along(x$yi),
@@ -1360,7 +1359,6 @@ check_outliers.rma <- function(x, ci = 0.95, ...) {
   attr(outlier, "data") <- d
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "text_size") <- 3
-  attr(outlier, "raw_data") <- raw_data
   attr(outlier, "outlier_var") <- x$slab[outlier]
   attr(outlier, "outlier_count") <- sum(outlier)
 
