@@ -24,6 +24,9 @@
   for mixed models, but instead gives a warning and tries to compute posterior
   predictive checks with `re_formuka = NA`.
 
+* `check_outliers()` now also works for meta-analysis models from packages
+  *metafor* and *meta*.
+
 ## Bug fixes
 
 * Fixed issue in `print()` method for `check_collinearity()`, which could mix
