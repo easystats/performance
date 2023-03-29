@@ -678,9 +678,9 @@ print.check_outliers_metafor <- function(x, ...) {
 
   if (length(outliers) >= 1) {
     if (all(as.character(studies) == as.character(outliers))) {
-      o <- toString(outliers)
+      o <- datawizard::text_concatenate(outliers)
     } else {
-      o <- toString(paste0(outliers, " (", studies, ")"))
+      o <- datawizard::text_concatenate(paste0(outliers, " (", studies, ")"))
     }
     insight::print_color(insight::format_message(
       sprintf("%i %s detected: %s %s.\n", length(outliers), outlier.plural, case.plural, o)
@@ -698,7 +698,7 @@ print.check_outliers_metagen <- function(x, ...) {
 
   studies <- attr(x, "studies")
 
-  if (length(outliers) > 1) {
+  if (length(outliers_fixed) > 1) {
     outlier.plural <- "outliers"
     case.plural <- "cases"
   } else {
@@ -708,23 +708,35 @@ print.check_outliers_metagen <- function(x, ...) {
 
   if (length(outliers_fixed) >= 1) {
     if (all(as.character(studies[outliers_fixed]) == as.character(outliers_fixed))) {
-      o <- toString(outliers_fixed)
+      o <- datawizard::text_concatenate(outliers_fixed)
     } else {
-      o <- toString(paste0(outliers_fixed, " (", studies[outliers_fixed], ")"))
+      o <- datawizard::text_concatenate(paste0(outliers_fixed, " (", studies[outliers_fixed], ")"))
     }
     insight::print_color(insight::format_message(
-      sprintf("# Fixed effects:\n%i %s detected: %s %s.\n", length(outliers_fixed), outlier.plural, case.plural, o)
+      sprintf("- %i %s in fixed effects detected: %s %s.\n", length(outliers_fixed), outlier.plural, case.plural, o)
     ), "yellow")
+  }
+
+
+  if (length(outliers_random) > 1) {
+    outlier.plural <- "outliers"
+    case.plural <- "cases"
+  } else {
+    outlier.plural <- "outlier"
+    case.plural <- "case"
   }
 
   if (length(outliers_random) >= 1) {
     if (all(as.character(studies[outliers_random]) == as.character(outliers_random))) {
-      o <- toString(outliers_random)
+      o <- datawizard::text_concatenate(outliers_random)
     } else {
-      o <- toString(paste0(outliers_random, " (", studies[outliers_random], ")"))
+      o <- datawizard::text_concatenate(paste0(outliers_random, " (", studies[outliers_random], ")"))
+    }
+    if (length(outliers_fixed) >= 1) {
+      cat("\n")
     }
     insight::print_color(insight::format_message(
-      sprintf("# Random effects:\n%i %s detected: %s %s.\n", length(outliers_random), outlier.plural, case.plural, o)
+      sprintf("- %i %s in random effects detected: %s %s.\n", length(outliers_random), outlier.plural, case.plural, o)
     ), "yellow")
   }
 
@@ -1364,22 +1376,19 @@ check_outliers.metagen <- function(x, ...) {
     fixed = upper_bounds < thresholds_fixed[1] | lower_bounds > thresholds_fixed[2],
     random = upper_bounds < thresholds_random[1] | lower_bounds > thresholds_random[2]
   )
-  raw_data <- insight::get_data(x)
 
   d <- data.frame(
     Row = seq_along(x$TE),
-    Outlier_fixed = as.numeric(outlier_fixed),
-    Outlier_random = as.numeric(outlier_random),
+    Outlier_fixed = as.numeric(outlier$fixed),
+    Outlier_random = as.numeric(outlier$random)
   )
 
   # Attributes
   class(outlier) <- c("check_outliers_metagen", class(outlier))
   attr(outlier, "data") <- d
-  attr(outlier, "threshold") <- thresholds
   attr(outlier, "text_size") <- 3
-  attr(outlier, "raw_data") <- raw_data
   attr(outlier, "studies") <- x$studlab
-  attr(outlier, "outlier_count") <- sum(outlier)
+  attr(outlier, "outlier_count") <- sum(c(outlier$fixed, outlier$random))
 
   outlier
 }
@@ -1388,7 +1397,7 @@ check_outliers.metagen <- function(x, ...) {
 check_outliers.meta <- check_outliers.metagen
 
 #' @export
-check_outliers.metabin <- check_outliers.meta
+check_outliers.metabin <- check_outliers.metagen
 
 
 
