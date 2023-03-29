@@ -658,6 +658,83 @@ print.check_outliers <- function(x, ...) {
 }
 
 #' @export
+print.check_outliers_metafor <- function(x, ...) {
+  outliers <- which(x)
+
+  round_to_last_digit <- function(x, n = 3) {
+    max(abs(round(x, n)), abs(signif(x, 1))) * sign(x)
+  }
+
+  thresholds <- lapply(attr(x, "threshold"), round_to_last_digit, 3)
+  studies <- attr(x, "outlier_var")
+
+  if (length(outliers) > 1) {
+    outlier.plural <- "outliers"
+    case.plural <- "cases"
+  } else {
+    outlier.plural <- "outlier"
+    case.plural <- "case"
+  }
+
+  if (length(outliers) >= 1) {
+    if (all(as.character(studies) == as.character(outliers))) {
+      o <- toString(outliers)
+    } else {
+      o <- toString(paste0(outliers, " (", studies, ")"))
+    }
+    insight::print_color(insight::format_message(
+      sprintf("%i %s detected: %s %s.\n", length(outliers), outlier.plural, case.plural, o)
+    ), "yellow")
+  } else {
+    insight::print_color("OK: No outliers detected.\n", "green")
+  }
+  invisible(x)
+}
+
+#' @export
+print.check_outliers_metagen <- function(x, ...) {
+  outliers_fixed <- which(x$fixed)
+  outliers_random <- which(x$random)
+
+  studies <- attr(x, "studies")
+
+  if (length(outliers) > 1) {
+    outlier.plural <- "outliers"
+    case.plural <- "cases"
+  } else {
+    outlier.plural <- "outlier"
+    case.plural <- "case"
+  }
+
+  if (length(outliers_fixed) >= 1) {
+    if (all(as.character(studies[outliers_fixed]) == as.character(outliers_fixed))) {
+      o <- toString(outliers_fixed)
+    } else {
+      o <- toString(paste0(outliers_fixed, " (", studies[outliers_fixed], ")"))
+    }
+    insight::print_color(insight::format_message(
+      sprintf("# Fixed effects:\n%i %s detected: %s %s.\n", length(outliers_fixed), outlier.plural, case.plural, o)
+    ), "yellow")
+  }
+
+  if (length(outliers_random) >= 1) {
+    if (all(as.character(studies[outliers_random]) == as.character(outliers_random))) {
+      o <- toString(outliers_random)
+    } else {
+      o <- toString(paste0(outliers_random, " (", studies[outliers_random], ")"))
+    }
+    insight::print_color(insight::format_message(
+      sprintf("# Random effects:\n%i %s detected: %s %s.\n", length(outliers_random), outlier.plural, case.plural, o)
+    ), "yellow")
+  }
+
+  if (!length(outliers_random) && !length(outliers_fixed)) {
+    insight::print_color("OK: No outliers detected.\n", "green")
+  }
+  invisible(x)
+}
+
+#' @export
 plot.check_outliers <- function(x, ...) {
   insight::check_if_installed("see", "to plot outliers")
   NextMethod()
@@ -1247,15 +1324,72 @@ check_outliers.geeglm <- check_outliers.gls
 
 #' @export
 check_outliers.rma <- function(x, ...) {
-  thresholds <- c(
-    as.numeric(x$yi - 1.96 * sqrt(x$vi)),
-    as.numeric(x$yi + 1.96 * sqrt(x$vi))
-  )
+  thresholds <- c(x$ci.lb, x$ci.ub)
+  lower_bounds <- as.numeric(x$yi - stats::qnorm(0.975) * sqrt(x$vi))
+  upper_bounds <- as.numeric(x$yi + stats::qnorm(0.975) * sqrt(x$vi))
 
   # which study's CI-range is not covered by/does not overlap with overall CI?
-  outlier_var <- which(x$ci.lb > thresholds[1] | x$ci.ub < thresholds[2])
-  names(outlier_var) <- as.character(x$slab[outlier_var])
+  outlier <- upper_bounds < thresholds[1] | lower_bounds > thresholds[2]
+  raw_data <- insight::get_data(x)
+
+  d <- data.frame(
+    Row = seq_along(x$yi),
+    Outlier = as.numeric(outlier)
+  )
+
+  # Attributes
+  class(outlier) <- c("check_outliers_metafor", class(outlier))
+  attr(outlier, "data") <- d
+  attr(outlier, "threshold") <- thresholds
+  attr(outlier, "text_size") <- 3
+  attr(outlier, "raw_data") <- raw_data
+  attr(outlier, "outlier_var") <- x$slab[outlier]
+  attr(outlier, "outlier_count") <- sum(outlier)
+
+  outlier
 }
+
+#' @export
+check_outliers.rma.uni <- check_outliers.rma
+
+#' @export
+check_outliers.metagen <- function(x, ...) {
+  thresholds_fixed <- c(x$lower.fixed, x$upper.fixed)
+  thresholds_random <- c(x$lower.random, x$upper.random)
+  lower_bounds <- as.numeric(x$TE - stats::qnorm(0.975) * x$seTE)
+  upper_bounds <- as.numeric(x$TE + stats::qnorm(0.975) * x$seTE)
+
+  # which study's CI-range is not covered by/does not overlap with overall CI?
+  outlier <- list(
+    fixed = upper_bounds < thresholds_fixed[1] | lower_bounds > thresholds_fixed[2],
+    random = upper_bounds < thresholds_random[1] | lower_bounds > thresholds_random[2]
+  )
+  raw_data <- insight::get_data(x)
+
+  d <- data.frame(
+    Row = seq_along(x$TE),
+    Outlier_fixed = as.numeric(outlier_fixed),
+    Outlier_random = as.numeric(outlier_random),
+  )
+
+  # Attributes
+  class(outlier) <- c("check_outliers_metagen", class(outlier))
+  attr(outlier, "data") <- d
+  attr(outlier, "threshold") <- thresholds
+  attr(outlier, "text_size") <- 3
+  attr(outlier, "raw_data") <- raw_data
+  attr(outlier, "studies") <- x$studlab
+  attr(outlier, "outlier_count") <- sum(outlier)
+
+  outlier
+}
+
+#' @export
+check_outliers.meta <- check_outliers.metagen
+
+#' @export
+check_outliers.metabin <- check_outliers.meta
+
 
 
 # Thresholds --------------------------------------------------------------
