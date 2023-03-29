@@ -676,10 +676,10 @@ print.check_outliers_metafor <- function(x, ...) {
 
   if (length(outliers) > 1) {
     outlier.plural <- "outliers"
-    case.plural <- "cases"
+    case.plural <- "studies"
   } else {
     outlier.plural <- "outlier"
-    case.plural <- "case"
+    case.plural <- "study"
   }
 
   if (length(outliers) >= 1) {
@@ -706,10 +706,10 @@ print.check_outliers_metagen <- function(x, ...) {
 
   if (length(outliers_fixed) > 1) {
     outlier.plural <- "outliers"
-    case.plural <- "cases"
+    case.plural <- "studies"
   } else {
     outlier.plural <- "outlier"
-    case.plural <- "case"
+    case.plural <- "study"
   }
 
   if (length(outliers_fixed) >= 1) {
