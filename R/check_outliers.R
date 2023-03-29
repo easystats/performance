@@ -1245,6 +1245,17 @@ check_outliers.fixest_multi <- function(x,
 check_outliers.geeglm <- check_outliers.gls
 
 
+#' @export
+check_outliers.rma <- function(x, ...) {
+  thresholds <- c(
+    as.numeric(x$yi - 1.96 * sqrt(x$vi)),
+    as.numeric(x$yi + 1.96 * sqrt(x$vi))
+  )
+
+  # which study's CI-range is not covered by/does not overlap with overall CI?
+  outlier_var <- which(x$ci.lb > thresholds[1] | x$ci.ub < thresholds[2])
+  names(outlier_var) <- as.character(x$slab[outlier_var])
+}
 
 
 # Thresholds --------------------------------------------------------------
