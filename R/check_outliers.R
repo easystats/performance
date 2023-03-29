@@ -215,6 +215,12 @@
 #' )
 #' ```
 #'
+#' @section Meta-analysis models:
+#' For meta-analysis models (e.g. objects of class `rma` from the *metafor*
+#' package or `metagen` from package *meta*), studies are defined as outliers
+#' when their confidence interval lies ouside the confidence interval of the
+#' pooled effect.
+#'
 #' @references
 #' - Archimbaud, A., Nordhausen, K., and Ruiz-Gazen, A. (2018). ICS for
 #' multivariate outlier detection with application to quality control.
@@ -1335,10 +1341,10 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 #' @export
-check_outliers.rma <- function(x, ...) {
+check_outliers.rma <- function(x, ci = 0.95, ...) {
   thresholds <- c(x$ci.lb, x$ci.ub)
-  lower_bounds <- as.numeric(x$yi - stats::qnorm(0.975) * sqrt(x$vi))
-  upper_bounds <- as.numeric(x$yi + stats::qnorm(0.975) * sqrt(x$vi))
+  lower_bounds <- as.numeric(x$yi - stats::qnorm((1 + ci) / 2) * sqrt(x$vi))
+  upper_bounds <- as.numeric(x$yi + stats::qnorm((1 + ci) / 2) * sqrt(x$vi))
 
   # which study's CI-range is not covered by/does not overlap with overall CI?
   outlier <- upper_bounds < thresholds[1] | lower_bounds > thresholds[2]
@@ -1365,11 +1371,11 @@ check_outliers.rma <- function(x, ...) {
 check_outliers.rma.uni <- check_outliers.rma
 
 #' @export
-check_outliers.metagen <- function(x, ...) {
+check_outliers.metagen <- function(x, ci = 0.95, ...) {
   thresholds_fixed <- c(x$lower.fixed, x$upper.fixed)
   thresholds_random <- c(x$lower.random, x$upper.random)
-  lower_bounds <- as.numeric(x$TE - stats::qnorm(0.975) * x$seTE)
-  upper_bounds <- as.numeric(x$TE + stats::qnorm(0.975) * x$seTE)
+  lower_bounds <- as.numeric(x$TE - stats::qnorm((1 + ci) / 2) * x$seTE)
+  upper_bounds <- as.numeric(x$TE + stats::qnorm((1 + ci) / 2) * x$seTE)
 
   # which study's CI-range is not covered by/does not overlap with overall CI?
   outlier <- list(
