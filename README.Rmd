@@ -146,7 +146,7 @@ icc(model)
 
 ...and models of class `brmsfit`.
  
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=curl::has_internet()}
 model <- insight::download_model("brms_mixed_1")
 ```
 ```{r, eval=FALSE}
