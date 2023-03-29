@@ -250,7 +250,7 @@ Default thresholds are currently specified as follows:
 
 For meta-analysis models (e.g. objects of class \code{rma} from the \emph{metafor}
 package or \code{metagen} from package \emph{meta}), studies are defined as outliers
-when their confidence interval lies ouside the confidence interval of the
+when their confidence interval lies outside the confidence interval of the
 pooled effect.
 }
 

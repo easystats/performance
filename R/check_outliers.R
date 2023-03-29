@@ -218,7 +218,7 @@
 #' @section Meta-analysis models:
 #' For meta-analysis models (e.g. objects of class `rma` from the *metafor*
 #' package or `metagen` from package *meta*), studies are defined as outliers
-#' when their confidence interval lies ouside the confidence interval of the
+#' when their confidence interval lies outside the confidence interval of the
 #' pooled effect.
 #'
 #' @references
@@ -1341,7 +1341,10 @@ check_outliers.geeglm <- check_outliers.gls
 
 
 #' @export
-check_outliers.rma <- function(x, ci = 0.95, ...) {
+check_outliers.rma <- function(x, ...) {
+  ## TODO Check whether we can enable CI argument
+  # but we need to find out at which CI-level the overall effect interval was estimated
+  ci <- 0.95
   thresholds <- c(x$ci.lb, x$ci.ub)
   lower_bounds <- as.numeric(x$yi - stats::qnorm((1 + ci) / 2) * sqrt(x$vi))
   upper_bounds <- as.numeric(x$yi + stats::qnorm((1 + ci) / 2) * sqrt(x$vi))
@@ -1369,7 +1372,8 @@ check_outliers.rma <- function(x, ci = 0.95, ...) {
 check_outliers.rma.uni <- check_outliers.rma
 
 #' @export
-check_outliers.metagen <- function(x, ci = 0.95, ...) {
+check_outliers.metagen <- function(x, ...) {
+  ci <- 0.95
   thresholds_fixed <- c(x$lower.fixed, x$upper.fixed)
   thresholds_random <- c(x$lower.random, x$upper.random)
   lower_bounds <- as.numeric(x$TE - stats::qnorm((1 + ci) / 2) * x$seTE)
