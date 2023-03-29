@@ -28,7 +28,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.8</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -363,6 +363,15 @@ LOF distance. Requires the <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" 
 <span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>  <span class="at">optics =</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">ncol</span>(x),</span>
 <span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="at">lof =</span> <span class="fl">0.001</span></span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>)</span></code></pre><p></p></div>
+    </div>
+    <div class="section level2">
+    <h2 id="meta-analysis-models">Meta-analysis models<a class="anchor" aria-label="anchor" href="#meta-analysis-models"></a></h2>
+    
+
+<p>For meta-analysis models (e.g. objects of class <code>rma</code> from the <em>metafor</em>
+package or <code>metagen</code> from package <em>meta</em>), studies are defined as outliers
+when their confidence interval lies outside the confidence interval of the
+pooled effect.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
