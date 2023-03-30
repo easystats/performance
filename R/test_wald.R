@@ -60,7 +60,7 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
   # sort by df
   if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
     objects <- objects[order(dfs)]
-    dfs <- dfs[order(dfs)]
+    dfs <- sort(dfs, na.last = TRUE)
   }
 
   dfs_diff <- c(NA, diff(sapply(objects, insight::get_df, type = "model")))
