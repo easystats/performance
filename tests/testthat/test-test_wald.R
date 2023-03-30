@@ -12,7 +12,7 @@ test_that("test_wald - lm", {
   expect_equal(rez$p, ref$`Pr(>F)`, tolerance = 1e-4)
 
   # setting test = "LRT" is not expected, but should at least not fail
-  expect_message({
+  expect_warning({
     rez <- test_wald(m1, m2, test = "LRT")
   })
   expect_identical(rez$Name, c("..1", "..2"))

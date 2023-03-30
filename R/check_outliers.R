@@ -379,7 +379,7 @@ check_outliers.default <- function(x,
   )
 
   # Get data
-  data <- insight::get_data(x)
+  data <- insight::get_data(x, verbose = FALSE)
 
   # Remove non-numerics
   data <- datawizard::data_select(data, select = is.numeric)
