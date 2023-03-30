@@ -1,7 +1,7 @@
 # https://github.com/easystats/performance/pull/547
 test_that("check_collinearity, correct order in print", {
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-  out <- capture.output(print(check_collinearity(m)))
+  out <- capture.output(print(check_collinearity(m, verbose = FALSE)))
   expect_identical(
     out,
     c(
@@ -42,7 +42,7 @@ if (requiet("glmmTMB") && getRversion() >= "4.0.0") {
       c(1.00037354840318, 1.00037354840318),
       tolerance = 1e-3
     )
-    expect_null(suppressWarnings(check_collinearity(m1, component = "zero_inflated")))
+    expect_null(check_collinearity(m1, verbose = FALSE, component = "zero_inflated"))
   })
 
   m2 <- glmmTMB(

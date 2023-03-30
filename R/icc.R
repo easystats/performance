@@ -166,9 +166,8 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
     if (inherits(model, "brmsfit")) {
       return(variance_decomposition(model))
     } else {
-      insight::print_color(
-        "Multiple response models not yet supported. You may use `performance::variance_decomposition()`.\n",
-        "red"
+      insight::format_warning(
+        "Multiple response models not yet supported. You may use `performance::variance_decomposition()`."
       )
       return(NULL)
     }
@@ -191,13 +190,13 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
   if (isTRUE(by_group)) {
     # with random slopes, icc is inaccurate
     if (!is.null(insight::find_random_slopes(model))) {
-      insight::format_warning(
+      insight::format_alert(
         "Model contains random slopes. Cannot compute accurate ICCs by group factors."
       )
     }
 
     if (!is.null(ci) && !is.na(ci)) {
-      insight::format_warning("Confidence intervals are not yet supported for `by_group = TRUE`.")
+      insight::format_alert("Confidence intervals are not yet supported for `by_group = TRUE`.")
     }
 
     # icc per group factor with reference to overall model

@@ -30,7 +30,7 @@ test_wald.default <- function(...) {
 test_wald.ListNestedRegressions <- function(objects, ...) {
   # for binomial models, only chisq-test
   if (all(attributes(objects)$is_binomial)) {
-    insight::format_warning(
+    insight::format_alert(
       "Using Wald's F-Test is inappropriate for models with `binomial` family.",
       "Running Likelihood Ratio Test (LRT) now."
     )
@@ -60,7 +60,7 @@ test_wald.ListNonNestedRegressions <- function(objects, ...) {
   # sort by df
   if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
     objects <- objects[order(dfs)]
-    dfs <- dfs[order(dfs)]
+    dfs <- sort(dfs, na.last = TRUE)
   }
 
   dfs_diff <- c(NA, diff(sapply(objects, insight::get_df, type = "model")))

@@ -51,7 +51,7 @@ print.check_sphericity <- function(x, ...) {
     insight::print_color(sprintf("Warning: Sphericity violated for: %s.\n", pp), "red")
   } else {
     pp <- insight::format_p(min(x))
-    pp <- sub("=", ">", pp)
+    pp <- sub("=", ">", pp, fixed = TRUE)
     insight::print_color(sprintf("OK: Data seems to be spherical (%s).\n", pp), "green")
   }
   invisible(x)

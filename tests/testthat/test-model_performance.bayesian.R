@@ -34,21 +34,25 @@ if (.runThisTest &&
     set.seed(333)
 
     model <- insight::download_model("brms_1")
-    expect_warning(perf <- model_performance(model))
+    expect_message({
+      perf <- model_performance(model)
+    })
     expect_equal(perf$R2, 0.8262673, tolerance = 1e-3)
     expect_equal(perf$R2_adjusted, 0.7982615, tolerance = 1e-3)
     expect_equal(perf$ELPD, -78.59823, tolerance = 1e-3)
-    expect_equal(colnames(perf), c(
+    expect_identical(colnames(perf), c(
       "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_adjusted",
       "RMSE", "Sigma"
     ))
 
     model <- insight::download_model("brms_mixed_4")
-    expect_warning(perf <- model_performance(model))
+    expect_message({
+      perf <- model_performance(model)
+    })
     expect_equal(perf$R2, 0.954538, tolerance = 1e-3)
     expect_equal(perf$R2_adjusted, 0.9529004, tolerance = 1e-3)
     expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)
-    expect_equal(colnames(perf), c(
+    expect_identical(colnames(perf), c(
       "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_marginal",
       "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
     ))
@@ -66,29 +70,41 @@ if (
     requiet("rstantools")) {
   test_that("model_performance.BFBayesFactor", {
     mod <- ttestBF(mtcars$wt, mu = 3)
-    expect_warning(p <- model_performance(mod))
+    expect_warning({
+      p <- model_performance(mod)
+    })
     expect_null(p)
 
     mod <- ttestBF(mtcars$wt, factor(mtcars$am))
-    expect_warning(p <- model_performance(mod))
+    expect_warning({
+      p <- model_performance(mod)
+    })
     expect_null(p)
 
     mods <- contingencyTableBF(matrix(1:4, 2), sampleType = "indepMulti", fixedMargin = "cols")
-    expect_warning(p <- model_performance(mod))
+    expect_warning({
+      p <- model_performance(mod)
+    })
     expect_null(p)
 
     mod <- correlationBF(mtcars$wt, mtcars$am)
-    expect_warning(p <- model_performance(mod))
+    expect_warning({
+      p <- model_performance(mod)
+    })
     expect_null(p)
 
     mod <- proportionBF(y = 15, N = 25, p = 0.5)
-    expect_warning(p <- model_performance(mod))
+    expect_warning({
+      p <- model_performance(mod)
+    })
     expect_null(p)
 
     t <- c(-0.15, 2.39, 2.42, 2.43, -0.15, 2.39, 2.42, 2.43)
     N <- c(100, 150, 97, 99, 99, 97, 100, 150)
     mod <- meta.ttestBF(t, N)
-    expect_warning(p <- model_performance(mod))
+    expect_warning({
+      p <- model_performance(mod)
+    })
     expect_null(p)
 
 

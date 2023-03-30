@@ -65,9 +65,9 @@ performance_accuracy <- function(model,
       bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
 
       models <- lapply(bootstr, function(.x) {
-        text <- utils::capture.output(
+        text <- utils::capture.output({
           model_upd <- stats::update(model, data = model_data[.x, ])
-        )
+        })
         # stats::lm(formula, data = model_data[.x, ])
         model_upd
       })
@@ -89,9 +89,9 @@ performance_accuracy <- function(model,
       cv <- .crossv_kfold(model_data, k = k)
 
       models <- lapply(cv, function(.x) {
-        text <- utils::capture.output(
+        text <- utils::capture.output({
           model_upd <- stats::update(model, data = model_data[.x$train, ])
-        )
+        })
         model_upd
         # stats::lm(formula, data = model_data[.x$train, ])
       })
@@ -118,9 +118,9 @@ performance_accuracy <- function(model,
       bootstr <- replicate(n, sample(nrow(model_data), replace = TRUE), simplify = FALSE)
 
       models <- lapply(bootstr, function(.x) {
-        text <- utils::capture.output(
+        text <- utils::capture.output({
           model_upd <- stats::update(model, data = model_data[.x, ])
-        )
+        })
         # stats::glm(formula, data = model_data[.x, ], family = stats::binomial(link = "logit"))
         model_upd
       })
@@ -142,9 +142,9 @@ performance_accuracy <- function(model,
       cv <- .crossv_kfold(model_data, k = k)
 
       models <- lapply(cv, function(.x) {
-        text <- utils::capture.output(
+        text <- utils::capture.output({
           model_upd <- stats::update(model, data = model_data[.x$train, ])
-        )
+        })
         model_upd
         # stats::glm(formula, data = model_data[.x$train, ], family = stats::binomial(link = "logit"))
       })
@@ -166,7 +166,7 @@ performance_accuracy <- function(model,
     if (anyNA(accuracy)) {
       m <- ifelse(method == "cv", "cross-validated", "bootstrapped")
       if (verbose) {
-        insight::format_warning(
+        insight::format_alert(
           paste0("Some of the ", m, " samples were not eligible for calculating AUC.")
         )
       }

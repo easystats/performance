@@ -257,7 +257,7 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
 #' @export
 plot.test_performance <- function(x, ...) {
-  insight::format_warning(
+  insight::format_alert(
     "There is currently no `plot()` method for test-functions.",
     "Please use `plot(compare_perfomance())` for some visual representations of your model comparisons."
   )

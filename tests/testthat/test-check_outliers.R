@@ -267,7 +267,7 @@ test_that("cook multiple methods which", {
 if (requiet("rstanarm")) {
   test_that("pareto which", {
     set.seed(123)
-    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)
+    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
     invisible(capture.output(model))
 
     expect_identical(
@@ -278,7 +278,7 @@ if (requiet("rstanarm")) {
 
   test_that("pareto multiple methods which", {
     set.seed(123)
-    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars)
+    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
     invisible(capture.output(model))
     expect_identical(
       which(check_outliers(

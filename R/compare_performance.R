@@ -98,7 +98,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   object_names <- names(objects)
 
   if (!all(supported_models)) {
-    insight::format_warning(
+    insight::format_alert(
       "Following objects are not supported:",
       datawizard::text_concatenate(object_names[!supported_models], enclose = "`")
     )
@@ -135,7 +135,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 
   # check if all models were fit from same data
   if (!isTRUE(attributes(objects)$same_response) && verbose) {
-    insight::format_warning(
+    insight::format_alert(
       "When comparing models, please note that probably not all models were fit from same data."
     )
   }
@@ -193,7 +193,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     any(sapply(objects, insight::is_mixed_model)) &&
     # only if not all models have same fixed effects (else, REML is ok)
     !isTRUE(attributes(objects)$same_fixef)) {
-    insight::format_warning(
+    insight::format_alert(
       "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
       "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
     )
@@ -245,7 +245,7 @@ plot.compare_performance <- function(x, ...) {
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
   if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
-    insight::format_warning(
+    insight::format_alert(
       "Models are not of same type. Comparison of indices might be not meaningful."
     )
   }
@@ -294,7 +294,7 @@ plot.compare_performance <- function(x, ...) {
   # any indices with NA?
   missing_indices <- sapply(out, anyNA)
   if (any(missing_indices) && isTRUE(verbose)) {
-    insight::format_warning(sprintf(
+    insight::format_alert(sprintf(
       "Following indices with missing values are not used for ranking: %s",
       toString(colnames(out)[missing_indices])
     ))
