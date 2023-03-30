@@ -226,7 +226,7 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
 
   d <- insight::get_data(x, verbose = FALSE)
   is_num <- vapply(d, is.numeric, logical(1))
-  d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
+  d[is_num] <- sapply(d[is_num], datawizard::center, simplify = TRUE)
   is_fac <- !is_num
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
@@ -403,7 +403,7 @@ check_collinearity.zerocount <- function(x,
   # any assignment found?
   if (is.null(assign) || all(is.na(assign))) {
     if (verbose) {
-      insight::format_warning(
+      insight::format_alert(
         sprintf("Could not extract model terms for the %s component of the model.", component)
       )
     }
@@ -415,7 +415,7 @@ check_collinearity.zerocount <- function(x,
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     assign <- assign[-attributes(v)$na_columns_index]
     if (isTRUE(verbose)) {
-      insight::format_warning(
+      insight::format_alert(
         "Model matrix is rank deficient. VIFs may not be sensible."
       )
     }
@@ -427,7 +427,7 @@ check_collinearity.zerocount <- function(x,
     assign <- assign[-1]
   } else {
     if (isTRUE(verbose)) {
-      insight::format_warning("Model has no intercept. VIFs may not be sensible.")
+      insight::format_alert("Model has no intercept. VIFs may not be sensible.")
     }
   }
 
@@ -447,7 +447,7 @@ check_collinearity.zerocount <- function(x,
 
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
-      insight::format_warning(
+      insight::format_alert(
         sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)
       )
     }
@@ -479,7 +479,7 @@ check_collinearity.zerocount <- function(x,
 
   # check for interactions, VIF might be inflated...
   if (!is.null(insight::find_interactions(x)) && any(result > 10) && isTRUE(verbose)) {
-    insight::format_warning(
+    insight::format_alert(
       "Model has interaction terms. VIFs might be inflated.",
       "You may check multicollinearity among predictors of a model without interaction terms."
     )

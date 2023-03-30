@@ -38,7 +38,7 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
     res <- .safe({
       def_res <- insight::get_residuals(model, verbose = FALSE, ...)
       if (verbose) {
-        insight::format_warning(
+        insight::format_alert(
           "Response residuals not available to calculate mean square error. (R)MSE is probably not reliable."
         )
       }

@@ -60,7 +60,7 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
 
 #' @export
 plot.test_likelihoodratio <- function(x, ...) {
-  insight::format_warning(
+  insight::format_alert(
     "There is currently no `plot()` method for test-functions.",
     "Please use `plot(compare_perfomance())` for some visual representations of your model comparisons."
   )
@@ -108,7 +108,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   # sort by df
   if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
     objects <- objects[order(dfs)]
-    dfs <- dfs[order(dfs)]
+    dfs <- sort(dfs, na.last = TRUE)
   }
 
   dfs_diff <- c(NA, diff(dfs))

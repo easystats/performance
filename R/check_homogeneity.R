@@ -153,7 +153,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   colnames(ag_data)[length(c(between, id)) + 1] <- dv
 
   if (any(is_covar)) {
-    insight::format_warning(
+    insight::format_alert(
       "Levene's test is not appropriate with quantitative explanatory variables. Testing assumption of homogeneity among factor groups only."
     )
     # ## TODO maybe add as option?

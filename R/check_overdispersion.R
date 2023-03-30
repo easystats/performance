@@ -244,7 +244,7 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
     pval <- NA
     rp <- NA
     if (isTRUE(verbose)) {
-      insight::format_warning(
+      insight::format_alert(
         "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion.",
         "Only the visual inspection using `plot(check_overdispersion(model))` is possible."
       )
