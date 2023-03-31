@@ -347,13 +347,13 @@ LOF distance. Requires the <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" 
 
 <p>Default thresholds are currently specified as follows:</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">zscore =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>),</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">zscore_robust =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>),</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">zscore =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span> <span class="sc">/</span> <span class="dv">2</span>),</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">zscore_robust =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span> <span class="sc">/</span> <span class="dv">2</span>),</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">iqr =</span> <span class="fl">1.7</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">ci =</span> <span class="fl">0.999</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">eti =</span> <span class="fl">0.999</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">hdi =</span> <span class="fl">0.999</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">bci =</span> <span class="fl">0.999</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">ci =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="at">eti =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="at">hdi =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="at">bci =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>,</span>
 <span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="at">cook =</span> stats<span class="sc">::</span><span class="fu">qf</span>(<span class="fl">0.5</span>, <span class="fu">ncol</span>(x), <span class="fu">nrow</span>(x) <span class="sc">-</span> <span class="fu">ncol</span>(x)),</span>
 <span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">pareto =</span> <span class="fl">0.7</span>,</span>
 <span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="at">mahalanobis =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
@@ -415,7 +415,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span> <span class="co"># Find outliers</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="co"># Show the row index of the outliers</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: zscore_robust (3.09).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: zscore_robust (3.291).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variable: data$mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -455,19 +455,11 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span>  <span class="st">"zscore"</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">1 outlier detected: case 31.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: mahalanobis (3.09), iqr</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (2), zscore (31.264).</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Note: Outliers were classified as such by</span> <span style="color: #BBBB00;">at least half of the selected methods. </span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following methods and thresholds: mahalanobis (3.291), iqr (2), zscore (31.264).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The following observations were considered outliers for two or more</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   variables by at least one of the selected methods:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Row n_Zscore n_IQR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  31        1     2</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using `as.data.frame()`, we can access more details!</span></span></span>
 <span class="r-in"><span><span class="va">outliers_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span></span></span>
@@ -491,7 +483,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [8] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [15] 0.0000000 0.3333333 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [22] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.0000000 0.6666667 0.0000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [29] 0.0000000 0.0000000 0.3333333 0.0000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># And we can be more stringent in our outliers removal process</span></span></span>
 <span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="va">outliers_info</span><span class="op">$</span><span class="va">Outlier</span> <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="op">]</span></span></span>
@@ -509,7 +501,7 @@ association, 85(411), 633-639.</p></li>
 <span class="r-in"><span><span class="co"># You can also run all the methods</span></span></span>
 <span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">3 outliers detected: cases 9, 29, 31.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: zscore_robust (3.09),</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: zscore_robust (3.291),</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  iqr (2), ci (1), cook (1), pareto (0.7), mahalanobis (31.264),</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  mahalanobis_robust (31.264), mcd (31.264), ics (0.001), optics (22), lof</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (0.001).</span></span>
@@ -531,13 +523,12 @@ association, 85(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7   28               2     0    1       (Multivariate) (Multivariate)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8   31               2     2    2       (Multivariate) (Multivariate)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9   32               2     0    0                    0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   8               1     0    0                    0 (Multivariate)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  21               1     0    0       (Multivariate) (Multivariate)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  27               1     0    0       (Multivariate)              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  29               1     0    1       (Multivariate) (Multivariate)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  30               1     0    0                    0 (Multivariate)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   7               0     0    0       (Multivariate) (Multivariate)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  24               0     0    0       (Multivariate) (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  21               1     0    0       (Multivariate) (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  27               1     0    0       (Multivariate) (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  29               1     0    1       (Multivariate) (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  30               1     0    0                    0 (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14   7               0     0    0       (Multivariate) (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  24               0     0    0       (Multivariate) (Multivariate)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             n_ICS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1               0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  (Multivariate)</span>
@@ -550,11 +541,10 @@ association, 85(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9               0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10              0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 (Multivariate)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13              0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14              0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16              0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For statistical models ---------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="co"># select only mpg and disp (continuous)</span></span></span>
