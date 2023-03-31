@@ -19,7 +19,6 @@ test_that("check_convergence", {
   )
 })
 
-
 test_that("check_convergence", {
   skip_if_not_installed("lme4")
 
