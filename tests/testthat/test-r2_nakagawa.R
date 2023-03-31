@@ -1,7 +1,8 @@
 skip_if_not_installed("lme4")
 
+model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+
 test_that("r2_nakagawa", {
-  model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
   expect_equal(
     r2_nakagawa(model),
     structure(
@@ -18,7 +19,6 @@ test_that("r2_nakagawa", {
 skip_on_cran()
 
 test_that("r2_nakagawa, ci", {
-  skip_on_cran()
   set.seed(123)
   out <- r2_nakagawa(model, ci = 0.95)
   expect_equal(

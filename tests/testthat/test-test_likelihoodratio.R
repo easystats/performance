@@ -55,9 +55,9 @@ test_that("test_likelihoodratio - reversed order", {
 skip_on_cran()
 
 skip_if_not_installed("lme4")
-m1 <- lmer(Sepal.Length ~ Petal.Width + (1 | Species), data = iris)
-m2 <- lmer(Sepal.Length ~ Petal.Width + Petal.Length + (1 | Species), data = iris)
-m3 <- lmer(Sepal.Length ~ Petal.Width * Petal.Length + (1 | Species), data = iris)
+m1 <- lme4::lmer(Sepal.Length ~ Petal.Width + (1 | Species), data = iris)
+m2 <- lme4::lmer(Sepal.Length ~ Petal.Width + Petal.Length + (1 | Species), data = iris)
+m3 <- lme4::lmer(Sepal.Length ~ Petal.Width * Petal.Length + (1 | Species), data = iris)
 
 test_that("test_likelihoodratio - lme4 ML", {
   t1 <- test_lrt(m1, m2, m3)
