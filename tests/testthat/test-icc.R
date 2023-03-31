@@ -114,6 +114,7 @@ test_that("icc", {
 test_that("icc", {
   skip_on_cran()
   skip_if_not_installed("nlme")
+  skip_if_not_installed("lme4")
   m <- nlme::lme(Sepal.Length ~ Petal.Length, random = ~ 1 | Species, data = iris)
   out <- icc(m)
   expect_equal(out$ICC_adjusted, 0.9104331, tolerance = 0.01)
