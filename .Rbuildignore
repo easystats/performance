@@ -16,7 +16,7 @@
 ^vignettes/.
 ^pkgdown/.
 ^WIP/.
-^paper/.
+^papers/.
 ^.github/.
 ^CODE_OF_CONDUCT\.md$
 ^revdep$
