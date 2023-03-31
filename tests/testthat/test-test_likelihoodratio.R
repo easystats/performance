@@ -53,15 +53,15 @@ test_that("test_likelihoodratio - reversed order", {
 })
 
 skip_on_cran()
-
 skip_if_not_installed("lme4")
-m1 <- lme4::lmer(Sepal.Length ~ Petal.Width + (1 | Species), data = iris)
-m2 <- lme4::lmer(Sepal.Length ~ Petal.Width + Petal.Length + (1 | Species), data = iris)
-m3 <- lme4::lmer(Sepal.Length ~ Petal.Width * Petal.Length + (1 | Species), data = iris)
+
+m1 <- suppressMessages(lme4::lmer(Sepal.Length ~ Petal.Width + (1 | Species), data = iris))
+m2 <- suppressMessages(lme4::lmer(Sepal.Length ~ Petal.Width + Petal.Length + (1 | Species), data = iris))
+m3 <- suppressMessages(lme4::lmer(Sepal.Length ~ Petal.Width * Petal.Length + (1 | Species), data = iris))
 
 test_that("test_likelihoodratio - lme4 ML", {
   t1 <- test_lrt(m1, m2, m3)
-  t2 <- anova(m1, m2, m3)
+  t2 <- suppressMessages(anova(m1, m2, m3))
   expect_equal(attributes(t1)$estimator, "ml")
   expect_equal(t1$Chi2, c(NA, 85.26365, 0.84141), tolerance = 1e-3)
   expect_equal(t1$p, c(NA, 0, 0.35899), tolerance = 1e-3)

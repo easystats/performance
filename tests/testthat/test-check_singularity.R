@@ -11,9 +11,9 @@ test_that("check_singularity", {
       sample(1:30, size = sum(filter_group), replace = TRUE)
   }
 
-  model <- lme4::lmer(
+  model <- suppressMessages(lme4::lmer(
     Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
     data = sleepstudy
-  )
+  ))
   expect_true(check_singularity(model))
 })
