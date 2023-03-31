@@ -5,7 +5,7 @@ test_that("model_performance various", {
 
   data("Affairs", package = "AER")
   data("GasolineYield", package = "betareg")
-  data("wine", package = "betareg")
+  data("wine", package = "ordinal")
   data("CigarettesSW", package = "AER")
 
   CigarettesSW$rprice <- with(CigarettesSW, price / cpi)

@@ -58,7 +58,7 @@ test_that("check_collinearity", {
   m2 <- glmmTMB::glmmTMB(
     count ~ spp + mined + cover + (1 | site),
     ziformula = ~ spp + mined + cover,
-    family = nbinom2,
+    family = glmmTMB::nbinom2,
     data = Salamanders
   )
 

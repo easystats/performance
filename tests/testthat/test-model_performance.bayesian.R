@@ -1,71 +1,70 @@
-.runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
+test_that("model_performance.stanreg", {
+  skip_on_cran()
+  skip_if_offline()
+  skip_if_not_installed("httr")
+  set.seed(333)
+  model <- insight::download_model("stanreg_lm_1")
+  perf <- model_performance(model)
+
+  expect_equal(perf$R2, 0.7398733, tolerance = 1e-3)
+  expect_equal(perf$R2_adjusted, 0.7162912, tolerance = 1e-3)
+  expect_equal(perf$ELPD, -83.49838, tolerance = 1e-3)
+
+  model <- insight::download_model("stanreg_lm_2")
+  perf <- model_performance(model)
+
+  expect_equal(perf$R2, 0.8168386, tolerance = 1e-3)
+  expect_equal(perf$R2_adjusted, 0.7979026, tolerance = 1e-3)
+  expect_equal(perf$ELPD, -78.38735, tolerance = 1e-3)
+
+  model <- insight::download_model("stanreg_lmerMod_1")
+  perf <- model_performance(model)
+
+  expect_equal(perf$R2, 0.6286546, tolerance = 1e-3)
+  expect_equal(perf$R2_adjusted, 0.6053507, tolerance = 1e-3)
+  expect_equal(perf$ELPD, -31.55849, tolerance = 1e-3)
+})
 
 
-if (.runThisTest) {
-  test_that("model_performance.stanreg", {
-    skip_if_offline()
-    skip_if_not_installed("httr")
-    set.seed(333)
-    model <- insight::download_model("stanreg_lm_1")
+test_that("model_performance.brmsfit", {
+  skip_on_cran()
+  skip_if_offline()
+  skip_if_not_installed("httr")
+  set.seed(333)
+
+  model <- insight::download_model("brms_1")
+  expect_message({
     perf <- model_performance(model)
-
-    expect_equal(perf$R2, 0.7398733, tolerance = 1e-3)
-    expect_equal(perf$R2_adjusted, 0.7162912, tolerance = 1e-3)
-    expect_equal(perf$ELPD, -83.49838, tolerance = 1e-3)
-
-    model <- insight::download_model("stanreg_lm_2")
-    perf <- model_performance(model)
-
-    expect_equal(perf$R2, 0.8168386, tolerance = 1e-3)
-    expect_equal(perf$R2_adjusted, 0.7979026, tolerance = 1e-3)
-    expect_equal(perf$ELPD, -78.38735, tolerance = 1e-3)
-
-    model <- insight::download_model("stanreg_lmerMod_1")
-    perf <- model_performance(model)
-
-    expect_equal(perf$R2, 0.6286546, tolerance = 1e-3)
-    expect_equal(perf$R2_adjusted, 0.6053507, tolerance = 1e-3)
-    expect_equal(perf$ELPD, -31.55849, tolerance = 1e-3)
   })
+  expect_equal(perf$R2, 0.8262673, tolerance = 1e-3)
+  expect_equal(perf$R2_adjusted, 0.7982615, tolerance = 1e-3)
+  expect_equal(perf$ELPD, -78.59823, tolerance = 1e-3)
+  expect_identical(colnames(perf), c(
+    "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_adjusted",
+    "RMSE", "Sigma"
+  ))
 
-
-  test_that("model_performance.brmsfit", {
-    skip_if_offline()
-    skip_if_not_installed("httr")
-    set.seed(333)
-
-    model <- insight::download_model("brms_1")
-    expect_message({
-      perf <- model_performance(model)
-    })
-    expect_equal(perf$R2, 0.8262673, tolerance = 1e-3)
-    expect_equal(perf$R2_adjusted, 0.7982615, tolerance = 1e-3)
-    expect_equal(perf$ELPD, -78.59823, tolerance = 1e-3)
-    expect_identical(colnames(perf), c(
-      "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_adjusted",
-      "RMSE", "Sigma"
-    ))
-
-    model <- insight::download_model("brms_mixed_4")
-    expect_message({
-      perf <- model_performance(model)
-    })
-    expect_equal(perf$R2, 0.954538, tolerance = 1e-3)
-    expect_equal(perf$R2_adjusted, 0.9529004, tolerance = 1e-3)
-    expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)
-    expect_identical(colnames(perf), c(
-      "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_marginal",
-      "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
-    ))
-
-    model <- insight::download_model("brms_ordinal_1")
-    perf <- suppressWarnings(model_performance(model))
-    expect_equal(perf$R2, 0.8760015, tolerance = 1e-3)
-    expect_equal(perf$ELPD, -11.65433, tolerance = 1e-3)
+  model <- insight::download_model("brms_mixed_4")
+  expect_message({
+    perf <- model_performance(model)
   })
-}
+  expect_equal(perf$R2, 0.954538, tolerance = 1e-3)
+  expect_equal(perf$R2_adjusted, 0.9529004, tolerance = 1e-3)
+  expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)
+  expect_identical(colnames(perf), c(
+    "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_marginal",
+    "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
+  ))
+
+  model <- insight::download_model("brms_ordinal_1")
+  perf <- suppressWarnings(model_performance(model))
+  expect_equal(perf$R2, 0.8760015, tolerance = 1e-3)
+  expect_equal(perf$ELPD, -11.65433, tolerance = 1e-3)
+})
+
 
 test_that("model_performance.BFBayesFactor", {
+  skip_on_cran()
   skip_if_not_installed("BayesFactor")
   mod <- BayesFactor::ttestBF(mtcars$wt, mu = 3)
   expect_warning({

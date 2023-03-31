@@ -1,11 +1,11 @@
 skip_if_not_installed("survival")
-data(lung, package = "survival")
+lung <- survival::lung
 
 lung <- subset(lung, subset = ph.ecog %in% 0:2)
 lung$sex <- factor(lung$sex, labels = c("male", "female"))
 lung$ph.ecog <- factor(lung$ph.ecog, labels = c("good", "ok", "limited"))
 
-m1 <- coxph(Surv(time, status) ~ sex + age + ph.ecog, data = lung)
+m1 <- survival::coxph(survival::Surv(time, status) ~ sex + age + ph.ecog, data = lung)
 
 test_that("r2", {
   expect_equal(r2_nagelkerke(m1), c(`Nagelkerke's R2` = 0.1203544), tolerance = 1e-3)
