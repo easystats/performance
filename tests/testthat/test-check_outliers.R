@@ -181,9 +181,10 @@ test_that("attributes outlier count data frame", {
 # 4. Next, we test multiple simultaneous methods
 
 test_that("multiple methods which", {
+  data <- rbind(mtcars, 99)
   expect_identical(
-    which(check_outliers(mtcars, method = c("zscore", "iqr"))),
-    31L
+    which(check_outliers(data, method = c("zscore", "iqr"))),
+    33L
   )
 })
 
