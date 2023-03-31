@@ -123,11 +123,29 @@ print.binned_residuals <- function(x, ...) {
 
   if (!is.null(resid_ok)) {
     if (resid_ok < 0.8) {
-      insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
+      insight::print_color(
+        sprintf(
+          "Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n",
+          round(100 * resid_ok)
+        ),
+        "red"
+      )
     } else if (resid_ok < 0.95) {
-      insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
+      insight::print_color(
+        sprintf(
+          "Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n",
+          round(100 * resid_ok)
+        ),
+        "yellow"
+      )
     } else {
-      insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
+      insight::print_color(
+        sprintf(
+          "Ok: About %g%% of the residuals are inside the error bounds.\n",
+          round(100 * resid_ok)
+        ),
+        "green"
+      )
     }
   }
 }

@@ -14,7 +14,8 @@
 #' @param ... One or more models with binomial outcome. In this case,
 #'   `new_data` is ignored.
 #'
-#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @return A data frame with three columns, the x/y-coordinate pairs for the ROC
 #'   curve (`Sensitivity` and `Specificity`), and a column with the

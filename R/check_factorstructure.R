@@ -136,10 +136,18 @@ check_kmo <- function(x, n = NULL, ...) {
 
   # TODO: add interpret_kmo in effectsize and use that here for more fine-grained interpretation
   if (MSA < 0.5) {
-    text <- sprintf("The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that factor analysis is likely to be inappropriate (KMO = %.2f).", MSA)
+    text <-
+      sprintf(
+        "The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that factor analysis is likely to be inappropriate (KMO = %.2f).",
+        MSA
+      )
     color <- "red"
   } else {
-    text <- sprintf("The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = %.2f).", MSA)
+    text <-
+      sprintf(
+        "The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = %.2f).",
+        MSA
+      )
     color <- "green"
   }
 

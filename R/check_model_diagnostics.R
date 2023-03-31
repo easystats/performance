@@ -51,7 +51,12 @@
 
   if (is.null(res_)) {
     if (verbose) {
-      insight::format_alert(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class `%s`.", class(model)[1]))
+      insight::format_alert(
+        sprintf(
+          "QQ plot could not be created. Cannot extract residuals from objects of class `%s`.",
+          class(model)[1]
+        )
+      )
     }
     return(NULL)
   }

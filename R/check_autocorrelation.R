@@ -60,9 +60,21 @@ plot.check_autocorrelation <- function(x, ...) {
 #' @export
 print.check_autocorrelation <- function(x, ...) {
   if (x < 0.05) {
-    insight::print_color(sprintf("Warning: Autocorrelated residuals detected (%s).", insight::format_p(x)), "red")
+    insight::print_color(
+      sprintf(
+        "Warning: Autocorrelated residuals detected (%s).",
+        insight::format_p(x)
+      ),
+      "red"
+    )
   } else {
-    insight::print_color(sprintf("OK: Residuals appear to be independent and not autocorrelated (%s).", insight::format_p(x)), "green")
+    insight::print_color(
+      sprintf(
+        "OK: Residuals appear to be independent and not autocorrelated (%s).",
+        insight::format_p(x)
+      ),
+      "green"
+    )
   }
   invisible(x)
 }
