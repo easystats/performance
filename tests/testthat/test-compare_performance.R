@@ -47,11 +47,10 @@ test_that("compare_performance", {
   expect_silent(compare_performance(lm1, lm2, estimator = "REML"))
 })
 
-if (requiet("lme4")) {
-  test_that("compare_performance, REML fit", {
-    m1 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-    m2 <- lmer(Petal.Length ~ Sepal.Length + Sepal.Width + (1 | Species), data = iris)
-    expect_silent(compare_performance(m1, m2))
-    expect_message(compare_performance(m1, m2, estimator = "REML"))
-  })
-}
+test_that("compare_performance, REML fit", {
+  skip_if_not_installed("lme4")
+  m1 <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+  m2 <- lme4::lmer(Petal.Length ~ Sepal.Length + Sepal.Width + (1 | Species), data = iris)
+  expect_silent(compare_performance(m1, m2))
+  expect_message(compare_performance(m1, m2, estimator = "REML"))
+})

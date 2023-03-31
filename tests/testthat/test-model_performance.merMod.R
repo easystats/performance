@@ -1,10 +1,12 @@
-skip_if_offline()
 
-if (requiet("httr") && requiet("lme4")) {
+
   .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
   if (.runThisTest) {
     test_that("model_performance.merMod", {
+      skip_if_offline()
+      skip_if_not_installed("httr")
+
       model <- insight::download_model("lmerMod_1")
       expect_equal(model_performance(model, estimator = "ML")$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
       expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
@@ -20,7 +22,8 @@ if (requiet("httr") && requiet("lme4")) {
 
 
     test_that("model_performance.merMod AICc", {
-      m1 <- lmer(mpg ~ disp + am + (1 | cyl), data = mtcars)
+      skip_if_not_installed("lme4")
+      m1 <- lme4::lmer(mpg ~ disp + am + (1 | cyl), data = mtcars)
       m2 <- lm(mpg ~ hp + vs, data = mtcars)
 
       # REML
@@ -45,5 +48,4 @@ if (requiet("httr") && requiet("lme4")) {
       expect_equal(performance_aicc(m1), 177.52804, tolerance = 1e-3)
       expect_equal(performance_aicc(m1, estimator = "ML"), 174.5701, tolerance = 1e-3)
     })
-  }
 }

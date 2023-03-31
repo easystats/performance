@@ -1,8 +1,9 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
 if (.runThisTest) {
-  if (requiet("lme4")) {
-    data(sleepstudy)
+  test_that("check_singularity", {
+    skip_if_not_installed("lme4")
+    data(sleepstudy, package = "lme4")
     set.seed(123)
     sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
     sleepstudy$mysubgrp <- NA
@@ -12,13 +13,10 @@ if (.runThisTest) {
         sample(1:30, size = sum(filter_group), replace = TRUE)
     }
 
-    model <- lmer(
+    model <- lme4::lmer(
       Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
       data = sleepstudy
     )
-
-    test_that("check_singularity", {
-      expect_true(check_singularity(model))
-    })
-  }
+    expect_true(check_singularity(model))
+  })
 }

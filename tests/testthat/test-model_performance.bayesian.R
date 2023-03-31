@@ -1,11 +1,10 @@
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
-skip_if_offline()
 
-if (.runThisTest &&
-  requiet("rstanarm") &&
-  requiet("httr") &&
-  requiet("brms")) {
+
+if (.runThisTest) {
   test_that("model_performance.stanreg", {
+    skip_if_offline()
+    skip_if_not_installed("httr")
     set.seed(333)
     model <- insight::download_model("stanreg_lm_1")
     perf <- model_performance(model)
@@ -31,6 +30,8 @@ if (.runThisTest &&
 
 
   test_that("model_performance.brmsfit", {
+    skip_if_offline()
+    skip_if_not_installed("httr")
     set.seed(333)
 
     model <- insight::download_model("brms_1")
@@ -64,54 +65,50 @@ if (.runThisTest &&
   })
 }
 
-if (
-
-  requiet("BayesFactor") &&
-    requiet("rstantools")) {
-  test_that("model_performance.BFBayesFactor", {
-    mod <- ttestBF(mtcars$wt, mu = 3)
-    expect_warning({
-      p <- model_performance(mod)
-    })
-    expect_null(p)
-
-    mod <- ttestBF(mtcars$wt, factor(mtcars$am))
-    expect_warning({
-      p <- model_performance(mod)
-    })
-    expect_null(p)
-
-    mods <- contingencyTableBF(matrix(1:4, 2), sampleType = "indepMulti", fixedMargin = "cols")
-    expect_warning({
-      p <- model_performance(mod)
-    })
-    expect_null(p)
-
-    mod <- correlationBF(mtcars$wt, mtcars$am)
-    expect_warning({
-      p <- model_performance(mod)
-    })
-    expect_null(p)
-
-    mod <- proportionBF(y = 15, N = 25, p = 0.5)
-    expect_warning({
-      p <- model_performance(mod)
-    })
-    expect_null(p)
-
-    t <- c(-0.15, 2.39, 2.42, 2.43, -0.15, 2.39, 2.42, 2.43)
-    N <- c(100, 150, 97, 99, 99, 97, 100, 150)
-    mod <- meta.ttestBF(t, N)
-    expect_warning({
-      p <- model_performance(mod)
-    })
-    expect_null(p)
-
-
-    mod <- regressionBF(mpg ~ cyl, mtcars, progress = FALSE)
-    modF <- lm(mpg ~ cyl, mtcars)
+test_that("model_performance.BFBayesFactor", {
+  skip_if_not_installed("BayesFactor")
+  mod <- BayesFactor::ttestBF(mtcars$wt, mu = 3)
+  expect_warning({
     p <- model_performance(mod)
-    expect_equal(p$R2, unname(r2(modF)[[1]]), tolerance = 0.05)
-    expect_equal(p$Sigma, sigma(modF), tolerance = 0.05)
   })
-}
+  expect_null(p)
+
+  mod <- BayesFactor::ttestBF(mtcars$wt, factor(mtcars$am))
+  expect_warning({
+    p <- model_performance(mod)
+  })
+  expect_null(p)
+
+  mods <- BayesFactor::contingencyTableBF(matrix(1:4, 2), sampleType = "indepMulti", fixedMargin = "cols")
+  expect_warning({
+    p <- model_performance(mod)
+  })
+  expect_null(p)
+
+  mod <- BayesFactor::correlationBF(mtcars$wt, mtcars$am)
+  expect_warning({
+    p <- model_performance(mod)
+  })
+  expect_null(p)
+
+  mod <- BayesFactor::proportionBF(y = 15, N = 25, p = 0.5)
+  expect_warning({
+    p <- model_performance(mod)
+  })
+  expect_null(p)
+
+  t <- c(-0.15, 2.39, 2.42, 2.43, -0.15, 2.39, 2.42, 2.43)
+  N <- c(100, 150, 97, 99, 99, 97, 100, 150)
+  mod <- BayesFactor::meta.ttestBF(t, N)
+  expect_warning({
+    p <- model_performance(mod)
+  })
+  expect_null(p)
+
+
+  mod <- BayesFactor::regressionBF(mpg ~ cyl, mtcars, progress = FALSE)
+  modF <- lm(mpg ~ cyl, mtcars)
+  p <- model_performance(mod)
+  expect_equal(p$R2, unname(r2(modF)[[1]]), tolerance = 0.05)
+  expect_equal(p$Sigma, sigma(modF), tolerance = 0.05)
+})

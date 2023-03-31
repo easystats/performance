@@ -1,10 +1,8 @@
+skip_if_not_installed("lme4")
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
-if (requiet("lme4")) {
-  data(iris)
-  model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-
   test_that("r2_nakagawa", {
+    model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
     expect_equal(
       r2_nakagawa(model),
       structure(
@@ -78,7 +76,7 @@ if (requiet("lme4")) {
       )
     ), row.names = c(NA, -110L), class = "data.frame")
 
-    model <- glmer(y ~ x1 + (1 | a1) + (1 | a2), family = binomial(link = "logit"), data = dat)
+    model <- lme4::glmer(y ~ x1 + (1 | a1) + (1 | a2), family = binomial(link = "logit"), data = dat)
 
     test_that("r2_nakagawa, by_group", {
       out <- r2_nakagawa(model, by_group = TRUE)
@@ -92,4 +90,4 @@ if (requiet("lme4")) {
       expect_identical(out$Group, c("a2", "a1"))
     })
   }
-}
+

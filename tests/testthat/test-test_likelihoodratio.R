@@ -54,7 +54,8 @@ test_that("test_likelihoodratio - reversed order", {
 
 .runThisTest <- Sys.getenv("RunAllperformanceTests") == "yes"
 
-if (.runThisTest && requiet("lme4")) {
+if (.runThisTest) {
+  skip_if_not_installed("lme4")
   m1 <- lmer(Sepal.Length ~ Petal.Width + (1 | Species), data = iris)
   m2 <- lmer(Sepal.Length ~ Petal.Width + Petal.Length + (1 | Species), data = iris)
   m3 <- lmer(Sepal.Length ~ Petal.Width * Petal.Length + (1 | Species), data = iris)

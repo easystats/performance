@@ -1,6 +1,6 @@
-requiet("bigutilsr")
-requiet("ICS")
-requiet("dbscan")
+skip_if_not_installed("bigutilsr")
+skip_if_not_installed("ICS")
+skip_if_not_installed("dbscan")
 
 test_that("zscore negative threshold", {
   expect_error(
@@ -100,7 +100,7 @@ test_that("mcd which", {
 ## FIXME: Fails on CRAN/windows
 # (current CRAN version rstan is not compatible with R > 4.2)
 test_that("ics which", {
-  testthat::skip_if_not(packageVersion("rstan") >= "2.26.0")
+  skip_if_not_installed("rstan", minimum_version = "2.26.0")
   set.seed(42)
   expect_identical(
     which(check_outliers(mtcars, method = "ics", threshold = 0.001)),
@@ -264,43 +264,43 @@ test_that("cook multiple methods which", {
   )
 })
 
-if (requiet("rstanarm")) {
-  test_that("pareto which", {
-    set.seed(123)
-    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
-    invisible(capture.output(model))
+test_that("pareto which", {
+  skip_if_not_installed("rstanarm")
+  set.seed(123)
+  model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
+  invisible(capture.output(model))
 
-    expect_identical(
-      which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
-      17L
-    )
-  })
+  expect_identical(
+    which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
+    17L
+  )
+})
 
-  test_that("pareto multiple methods which", {
-    set.seed(123)
-    model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
-    invisible(capture.output(model))
-    expect_identical(
-      which(check_outliers(
-        model,
-        method = c("pareto", "optics"),
-        threshold = list(pareto = 0.3, optics = 11)
-      )),
-      20L
-    )
-  })
-}
+test_that("pareto multiple methods which", {
+  set.seed(123)
+  model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
+  invisible(capture.output(model))
+  expect_identical(
+    which(check_outliers(
+      model,
+      method = c("pareto", "optics"),
+      threshold = list(pareto = 0.3, optics = 11)
+    )),
+    20L
+  )
+})
 
-if (requiet("BayesFactor")) {
-  test_that("BayesFactor which", {
-    set.seed(123)
-    model <- BayesFactor::regressionBF(rating ~ ., data = attitude, progress = FALSE)
-    expect_identical(
-      which(check_outliers(model, threshold = list(mahalanobis = 15))),
-      18L
-    )
-  })
-}
+
+test_that("BayesFactor which", {
+  skip_if_not_installed("BayesFactor")
+  set.seed(123)
+  model <- BayesFactor::regressionBF(rating ~ ., data = attitude, progress = FALSE)
+  expect_identical(
+    which(check_outliers(model, threshold = list(mahalanobis = 15))),
+    18L
+  )
+})
+
 
 # 7. Next, we test grouped output
 
