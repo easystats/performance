@@ -1,7 +1,6 @@
-requiet("nonnest2")
-requiet("lavaan")
-
 test_that("test_vuong - nested", {
+  skip_if_not_installed("nonnest2")
+
   m1 <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
   m2 <- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
   m3 <- lm(Sepal.Length ~ Petal.Width, data = iris)
@@ -21,15 +20,16 @@ test_that("test_vuong - nested", {
   expect_equal(rez[3L, "p_LR"], ref$p_LRT$A)
 })
 
-
 # test_that("test_vuong - nested (reversed)", {
-# m1 <- lm(mpg ~ wt + cyl, data = mtcars)
-# m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
-# m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+#   skip_if_not_installed("nonnest2")
+#   m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+#   m2 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+#   m3 <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 # })
 
-
 test_that("test_vuong - non-nested", {
+  skip_if_not_installed("nonnest2")
+
   m1 <- lm(Sepal.Length ~ Petal.Width, data = iris)
   m2 <- lm(Sepal.Length ~ Petal.Length, data = iris)
   m3 <- lm(Sepal.Length ~ Species, data = iris)

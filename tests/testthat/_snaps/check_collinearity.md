@@ -1,7 +1,7 @@
 # check_collinearity, ci = NULL
 
     Code
-      print(out)
+      out
     Output
       # Check for Multicollinearity
       

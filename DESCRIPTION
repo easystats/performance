@@ -102,6 +102,7 @@ Suggests:
     ICS,
     ICSOutlier,
     ISLR,
+    ivreg,
     lavaan,
     lme4,
     lmtest,
@@ -110,6 +111,7 @@ Suggests:
     Matrix,
     mclogit,
     mclust,
+    metadat,
     metafor,
     mgcv,
     mlogit,
@@ -132,7 +134,8 @@ Suggests:
     survival,
     testthat,
     tweedie,
-    VGAM
+    VGAM,
+    withr
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.2.3.9000
