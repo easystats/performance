@@ -26,4 +26,3 @@ test_that("check_convergence", {
   model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
   expect_true(check_convergence(model))
 })
-

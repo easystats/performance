@@ -28,5 +28,3 @@ test_that("performance_aic lme4 default", {
   expect_equal(performance_aic(m1), AIC(m1), tolerance = 1e-2)
   expect_equal(performance_aic(m1, estimator = "ML"), 125.0043, tolerance = 1e-2)
 })
-
-

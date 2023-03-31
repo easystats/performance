@@ -75,4 +75,3 @@ test_that("r2_zeroinflated", {
     tolerance = 1e-4
   )
 })
-

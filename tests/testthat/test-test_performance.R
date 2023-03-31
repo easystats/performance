@@ -29,4 +29,3 @@ test_that("test_performance - nested", {
   #
   # rez <- test_performance(m1, m2, m3)
 })
-

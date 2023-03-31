@@ -89,5 +89,3 @@ test_that("icc, by_group", {
   expect_equal(out$ICC, c(0.3200625, 0.1096797), tolerance = 1e-2)
   expect_identical(out$Group, c("a2", "a1"))
 })
-
-

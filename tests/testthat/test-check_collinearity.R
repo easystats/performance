@@ -30,9 +30,9 @@ test_that("check_collinearity", {
   data(Salamanders, package = "glmmTMB")
 
   m1 <- glmmTMB::glmmTMB(count ~ spp + mined + (1 | site),
-                         ziformula = ~spp,
-                         Salamanders,
-                         family = poisson()
+    ziformula = ~spp,
+    Salamanders,
+    family = poisson()
   )
   expect_equal(
     suppressWarnings(check_collinearity(m1, component = "conditional", verbose = FALSE)$VIF),
@@ -115,15 +115,15 @@ test_that("check_collinearity | afex", {
   obk.long$treatment <- as.character(obk.long$treatment)
   suppressWarnings(suppressMessages({
     aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
-                        data = obk.long
+      data = obk.long
     )
 
     aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
-                        data = obk.long
+      data = obk.long
     )
 
     aB <- afex::aov_car(value ~ treatment * gender + Error(id),
-                        data = obk.long
+      data = obk.long
     )
   }))
 
@@ -137,18 +137,18 @@ test_that("check_collinearity | afex", {
 
   suppressWarnings(suppressMessages({
     aM <- afex::aov_car(value ~ treatment * gender + Error(id / (phase * hour)),
-                        include_aov = TRUE,
-                        data = obk.long
+      include_aov = TRUE,
+      data = obk.long
     )
 
     aW <- afex::aov_car(value ~ Error(id / (phase * hour)),
-                        include_aov = TRUE,
-                        data = obk.long
+      include_aov = TRUE,
+      data = obk.long
     )
 
     aB <- afex::aov_car(value ~ treatment * gender + Error(id),
-                        include_aov = TRUE,
-                        data = obk.long
+      include_aov = TRUE,
+      data = obk.long
     )
   }))
 
@@ -175,4 +175,3 @@ test_that("check_collinearity, ci = NULL", { # 518
   )
   expect_snapshot(out)
 })
-

@@ -20,4 +20,3 @@ test_that("`check_outliers()` works if convergence issues", {
   x <- check_outliers(m, verbose = FALSE)
   expect_s3_class(x, "check_outliers")
 })
-

@@ -45,4 +45,3 @@ test_that("model_performance.merMod AICc", {
   expect_equal(performance_aicc(m1), 177.52804, tolerance = 1e-3)
   expect_equal(performance_aicc(m1, estimator = "ML"), 174.5701, tolerance = 1e-3)
 })
-

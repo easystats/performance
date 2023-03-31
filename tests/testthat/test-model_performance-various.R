@@ -67,4 +67,3 @@ test_that("model_performance (Dirichlet regression)", {
     tolerance = 1e-3
   )
 })
-

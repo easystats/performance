@@ -29,4 +29,3 @@ test_that("mgcv::gam", {
 #   r2(model$lme)
 #   r2(model$gam)
 # })
-

@@ -53,4 +53,3 @@ test_that("model_performance", {
   expect_snapshot(model_performance(mod_mb))
   expect_snapshot(model_performance(mod_mc))
 })
-

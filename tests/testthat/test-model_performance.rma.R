@@ -1,8 +1,10 @@
 skip_if_not_installed("metafor")
 skip_if_not_installed("metadat")
 data(dat.bcg, package = "metadat")
-dat <- metafor::escalc(measure = "RR", ai = tpos, bi = tneg, ci = cpos,
-                       di = cneg, data = dat.bcg)
+dat <- metafor::escalc(
+  measure = "RR", ai = tpos, bi = tneg, ci = cpos,
+  di = cneg, data = dat.bcg
+)
 
 test_that("model_performance.rma", {
   model <- metafor::rma(yi, vi, data = dat, method = "REML")
@@ -42,4 +44,3 @@ test_that("model_performance.rma", {
     "p_CochransQ", "df_error", "Omnibus", "p_Omnibus", "R2"
   ))
 })
-

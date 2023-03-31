@@ -26,6 +26,4 @@ test_that("r2_BayesFactor", {
   expect_equal(r_BF$R2_Bayes_marginal, 0.21, tolerance = 0.05)
   expect_equal(r_CI$CI_low, 0.27, tolerance = 0.05)
   expect_equal(r_CI$CI_high, 0.54, tolerance = 0.05)
-
 })
-

@@ -25,6 +25,7 @@ test_that("icc", {
 test_that("icc, CI", {
   skip_on_cran()
   skip_if_not_installed("lme4")
+  data(sleepstudy, package = "lme4")
   m <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
   set.seed(123)
   out <- icc(m, ci = 0.95)
@@ -118,5 +119,3 @@ test_that("icc", {
   expect_equal(out$ICC_adjusted, 0.9104331, tolerance = 0.01)
   expect_equal(out$ICC_unadjusted, 0.3109478, tolerance = 0.01)
 })
-
-

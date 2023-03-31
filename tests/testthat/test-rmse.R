@@ -16,4 +16,3 @@ test_that("rmse", {
   )
   expect_equal(cp$RMSE, c(47.4489, 47.39881, 47.38701, 47.41375, 47.39979, 47.38705), tolerance = 1e-3)
 })
-

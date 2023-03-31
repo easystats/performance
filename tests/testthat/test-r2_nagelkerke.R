@@ -15,4 +15,3 @@ test_that("r2_nagelkerke", {
     }
   )
 })
-

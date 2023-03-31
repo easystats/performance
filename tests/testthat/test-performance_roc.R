@@ -40,4 +40,3 @@ test_that("performance_roc", {
     tolerance = 1e-3
   )
 })
-

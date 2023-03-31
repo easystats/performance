@@ -26,4 +26,3 @@ test_that("check_convergence", {
     ignore_attr = TRUE
   )
 })
-

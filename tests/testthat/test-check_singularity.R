@@ -17,4 +17,3 @@ test_that("check_singularity", {
   )
   expect_true(check_singularity(model))
 })
-

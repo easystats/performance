@@ -50,4 +50,3 @@ test_that("check_zeroinflation, glmer.nb", {
     tolerance = 1e-3
   )
 })
-

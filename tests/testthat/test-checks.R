@@ -10,4 +10,3 @@ test_that("check_clusterstructure", {
   set.seed(333)
   expect_equal(check_clusterstructure(iris[, 1:4])$H, 0.187, tolerance = 0.01)
 })
-
