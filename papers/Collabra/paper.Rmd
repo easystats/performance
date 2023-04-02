@@ -155,10 +155,19 @@ data_clean <- data[-which(outliers), ]
 
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
 
-```{r univariate, fig.cap = "Visual depiction of outliers using the robust z-score method."}
+```{r univariate, eval=FALSE}
 library(see)
 
 plot(outliers)
+```
+
+```{r univariate_implicit, fig.cap = "Visual depiction of outliers using the robust z-score method. The distance represents an aggregate score for variables mpg, cyl, disp, and hp.", echo=FALSE}
+library(see)
+
+plot(outliers) + 
+  ggplot2::theme(axis.text.x = ggplot2::element_text(
+    angle = 45, size = 7
+))
 ```
 
 Other univariate methods are available, such as using the interquartile range (IQR), or based on different intervals, such as the Highest Density Interval (HDI) or the Bias Corrected and Accelerated Interval (BCI). These methods are documented and described in the function's [help page](<https://easystats.github.io/performance/reference/check_outliers.html>).
@@ -173,11 +182,20 @@ One common approach for this is to compute multivariate distance metrics such as
 
 In *{performance}*'s `check_outliers()`, one can use this approach with `method = "mcd"`.^[Our default threshold for the MCD method is defined by `stats::qchisq(p = 1 - 0.001, df = ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
-```{r multivariate, fig.cap = "Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance."}
+```{r multivariate}
 outliers <- check_outliers(data, method = "mcd")
 outliers
+```
 
+```{r multivariate_plot, eval=FALSE}
 plot(outliers)
+```
+
+```{r multivariate_implicit, fig.cap = "Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance. The distance represents the MCD scores for variables mpg, cyl, disp, and hp.", echo=FALSE}
+plot(outliers) + 
+  ggplot2::theme(axis.text.x = ggplot2::element_text(
+    angle = 45, size = 7
+))
 ```
 
 Other multivariate methods are available, such as another type of robust Mahalanobis distance that in this case relies on an orthogonalized Gnanadesikan-Kettenring pairwise estimator [@gnanadesikan1972robust]. These methods are documented and described in the function's [help page](https://easystats.github.io/performance/reference/check_outliers.html).
@@ -188,7 +206,7 @@ Working with regression models creates the possibility of using model-based SOD 
 
 In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
-```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals)."}
+```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
 model <- lm(disp ~ mpg * disp, data = data)
 outliers <- check_outliers(model, method = "cook")
 outliers
@@ -242,7 +260,7 @@ which(outliers)
 
 In contrast, the model-based detection method displays the desired behaviour: it correctly flags the person who is very tall but very light, without flagging the person who is both tall and heavy.
 
-```{r model2, fig.cap = "The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation)."}
+```{r model2, fig.cap = "The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation), based on the fitted model."}
 outliers <- check_outliers(model, method = "cook")
 which(outliers)
 plot(outliers)

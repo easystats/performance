@@ -311,7 +311,7 @@ method, meaning it is also possible to visualize the outliers:
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/univariate-1} \caption{Visual depiction of outliers using the robust z-score method.}\label{fig:univariate}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/univariate_implicit-1} \caption{Visual depiction of outliers using the robust z-score method. The distance represents an aggregate score for variables mpg, cyl, disp, and hp.}\label{fig:univariate_implicit}
 \end{figure}
 
 Other univariate methods are available, such as using the interquartile
@@ -372,7 +372,7 @@ approach with \texttt{method\ =\ "mcd"}.\footnote{Our default threshold
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/multivariate-1} \caption{Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance.}\label{fig:multivariate}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/multivariate_implicit-1} \caption{Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance. The distance represents the MCD scores for variables mpg, cyl, disp, and hp.}\label{fig:multivariate_implicit}
 \end{figure}
 
 Other multivariate methods are available, such as another type of robust
@@ -425,7 +425,7 @@ models).\footnote{Our default threshold for the Cook method is defined
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/model-1} \caption{Visual depiction of outliers based on Cook's distance (leverage and standardized residuals).}\label{fig:model}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/model-1} \caption{Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model.}\label{fig:model}
 \end{figure}
 
 Table 1 below summarizes which methods to use in which cases, and with
@@ -548,7 +548,7 @@ light, without flagging the person who is both tall and heavy.
 \end{Shaded}
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/model2-1} \caption{The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation).}\label{fig:model2}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/model2-1} \caption{The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation), based on the fitted model.}\label{fig:model2}
 \end{figure}
 
 Finally, unusual observations happen naturally: extreme observations are
