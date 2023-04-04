@@ -129,12 +129,26 @@ In case of autocorrelation, robust standard errors return more accurate
 results for the estimates, or maybe a mixed model with error term for the
 cluster groups should be used.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other functions to check model assumptions and and assess model quality: 
+<code><a href="check_collinearity.html">check_collinearity</a>()</code>,
+<code><a href="check_convergence.html">check_convergence</a>()</code>,
+<code><a href="check_heteroscedasticity.html">check_heteroscedasticity</a>()</code>,
+<code><a href="check_homogeneity.html">check_homogeneity</a>()</code>,
+<code><a href="check_model.html">check_model</a>()</code>,
+<code><a href="check_outliers.html">check_outliers</a>()</code>,
+<code><a href="check_overdispersion.html">check_overdispersion</a>()</code>,
+<code><a href="check_predictions.html">check_predictions</a>()</code>,
+<code><a href="check_singularity.html">check_singularity</a>()</code>,
+<code><a href="check_zeroinflation.html">check_zeroinflation</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">check_autocorrelation</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: Residuals appear to be independent and not autocorrelated (p = 0.292).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: Residuals appear to be independent and not autocorrelated (p = 0.268).</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

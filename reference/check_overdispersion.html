@@ -122,22 +122,27 @@ statistics, p-value or dispersion ratio.</p>
 variance of a theoretical model. For Poisson models, variance increases
 with the mean and, therefore, variance usually (roughly) equals the mean
 value. If the variance is much higher, the data are "overdispersed".</p>
-<div class="section">
-<h3 id="interpretation-of-the-dispersion-ratio">Interpretation of the Dispersion Ratio<a class="anchor" aria-label="anchor" href="#interpretation-of-the-dispersion-ratio"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="interpretation-of-the-dispersion-ratio">Interpretation of the Dispersion Ratio<a class="anchor" aria-label="anchor" href="#interpretation-of-the-dispersion-ratio"></a></h2>
+    
+
 <p>If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
 negative binomial model or similar might fit better to the data. A p-value &lt;
 .05 indicates overdispersion.</p>
-</div>
+    </div>
+    <div class="section level2">
+    <h2 id="overdispersion-in-poisson-models">Overdispersion in Poisson Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-poisson-models"></a></h2>
+    
 
-<div class="section">
-<h3 id="overdispersion-in-poisson-models">Overdispersion in Poisson Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-poisson-models"></a></h3>
 <p>For Poisson models, the overdispersion test is based on the code from
-<cite>Gelman and Hill (2007), page 115</cite>.</p>
-</div>
+<em>Gelman and Hill (2007), page 115</em>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="overdispersion-in-mixed-models">Overdispersion in Mixed Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-mixed-models"></a></h2>
+    
 
-<div class="section">
-<h3 id="overdispersion-in-mixed-models">Overdispersion in Mixed Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-mixed-models"></a></h3>
 <p>For <code>merMod</code>- and <code>glmmTMB</code>-objects, <code>check_overdispersion()</code>
 is based on the code in the
 <a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html" class="external-link">GLMM FAQ</a>,
@@ -145,15 +150,14 @@ section <em>How can I deal with overdispersion in GLMMs?</em>. Note that this
 function only returns an <em>approximate</em> estimate of an overdispersion
 parameter, and is probably inaccurate for zero-inflated mixed models (fitted
 with <code>glmmTMB</code>).</p>
-</div>
+    </div>
+    <div class="section level2">
+    <h2 id="how-to-fix-overdispersion">How to fix Overdispersion<a class="anchor" aria-label="anchor" href="#how-to-fix-overdispersion"></a></h2>
+    
 
-<div class="section">
-<h3 id="how-to-fix-overdispersion">How to fix Overdispersion<a class="anchor" aria-label="anchor" href="#how-to-fix-overdispersion"></a></h3>
 <p>Overdispersion can be fixed by either modeling the dispersion parameter, or
 by choosing a different distributional family (like Quasi-Poisson, or
-negative binomial, see <cite>Gelman and Hill (2007), pages 115-116</cite>).</p>
-</div>
-
+negative binomial, see <em>Gelman and Hill (2007), pages 115-116</em>).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -164,6 +168,20 @@ negative binomial, see <cite>Gelman and Hill (2007), pages 115-116</cite>).</p>
 multilevel/hierarchical models. Cambridge; New York: Cambridge University
 Press.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other functions to check model assumptions and and assess model quality: 
+<code><a href="check_autocorrelation.html">check_autocorrelation</a>()</code>,
+<code><a href="check_collinearity.html">check_collinearity</a>()</code>,
+<code><a href="check_convergence.html">check_convergence</a>()</code>,
+<code><a href="check_heteroscedasticity.html">check_heteroscedasticity</a>()</code>,
+<code><a href="check_homogeneity.html">check_homogeneity</a>()</code>,
+<code><a href="check_model.html">check_model</a>()</code>,
+<code><a href="check_outliers.html">check_outliers</a>()</code>,
+<code><a href="check_predictions.html">check_predictions</a>()</code>,
+<code><a href="check_singularity.html">check_singularity</a>()</code>,
+<code><a href="check_zeroinflation.html">check_zeroinflation</a>()</code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

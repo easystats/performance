@@ -121,26 +121,29 @@ accepted. The smaller <code>tolerance</code> is, the stricter the test will be.<
 is suspicious. Additionally, the convergence value is returned as attribute.</p>
     </div>
     <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <h2 id="convergence-and-log-likelihood">Convergence and log-likelihood<a class="anchor" aria-label="anchor" href="#convergence-and-log-likelihood"></a></h2>
     
-<div class="section">
-<h3 id="convergence-and-log-likelihood">Convergence and log-likelihood<a class="anchor" aria-label="anchor" href="#convergence-and-log-likelihood"></a></h3>
+
 <p>Convergence problems typically arise when the model hasn't converged
 to a solution where the log-likelihood has a true maximum. This may result
 in unreliable and overly complex (or non-estimable) estimates and standard
 errors.</p>
-</div>
-<div class="section">
-<h3 id="inspect-model-convergence">Inspect model convergence<a class="anchor" aria-label="anchor" href="#inspect-model-convergence"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="inspect-model-convergence">Inspect model convergence<a class="anchor" aria-label="anchor" href="#inspect-model-convergence"></a></h2>
+    
+
 <p><strong>lme4</strong> performs a convergence-check (see <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code>),
 however, as as discussed <a href="https://github.com/lme4/lme4/issues/120" class="external-link">here</a>
 and suggested by one of the lme4-authors in
 <a href="https://github.com/lme4/lme4/issues/120#issuecomment-39920269" class="external-link">this comment</a>,
 this check can be too strict. <code>check_convergence()</code> thus provides an
 alternative convergence test for <code>merMod</code>-objects.</p>
-</div>
-<div class="section">
-<h3 id="resolving-convergence-issues">Resolving convergence issues<a class="anchor" aria-label="anchor" href="#resolving-convergence-issues"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="resolving-convergence-issues">Resolving convergence issues<a class="anchor" aria-label="anchor" href="#resolving-convergence-issues"></a></h2>
+    
+
 <p>Convergence issues are not easy to diagnose. The help page on
 <code><a href="https://rdrr.io/pkg/lme4/man/convergence.html" class="external-link">?lme4::convergence</a></code> provides most of the current advice about
 how to resolve convergence issues. Another clue might be large parameter
@@ -149,17 +152,31 @@ values, e.g. estimates (on the scale of the linear predictor) larger than
 <a href="https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/" class="external-link">complete separation</a>.
 Complete separation can be addressed by regularization, e.g. penalized
 regression or Bayesian regression with appropriate priors on the fixed effects.</p>
-</div>
-<div class="section">
-<h3 id="convergence-versus-singularity">Convergence versus Singularity<a class="anchor" aria-label="anchor" href="#convergence-versus-singularity"></a></h3>
+    </div>
+    <div class="section level2">
+    <h2 id="convergence-versus-singularity">Convergence versus Singularity<a class="anchor" aria-label="anchor" href="#convergence-versus-singularity"></a></h2>
+    
+
 <p>Note the different meaning between singularity and convergence: singularity
 indicates an issue with the "true" best estimate, i.e. whether the maximum
 likelihood estimation for the variance-covariance matrix of the random effects
 is positive definite or only semi-definite. Convergence is a question of
 whether we can assume that the numerical optimization has worked correctly
 or not.</p>
-</div>
-
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other functions to check model assumptions and and assess model quality: 
+<code><a href="check_autocorrelation.html">check_autocorrelation</a>()</code>,
+<code><a href="check_collinearity.html">check_collinearity</a>()</code>,
+<code><a href="check_heteroscedasticity.html">check_heteroscedasticity</a>()</code>,
+<code><a href="check_homogeneity.html">check_homogeneity</a>()</code>,
+<code><a href="check_model.html">check_model</a>()</code>,
+<code><a href="check_outliers.html">check_outliers</a>()</code>,
+<code><a href="check_overdispersion.html">check_overdispersion</a>()</code>,
+<code><a href="check_predictions.html">check_predictions</a>()</code>,
+<code><a href="check_singularity.html">check_singularity</a>()</code>,
+<code><a href="check_zeroinflation.html">check_zeroinflation</a>()</code></p></div>
     </div>
 
     <div class="section level2">
