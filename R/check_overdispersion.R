@@ -16,19 +16,17 @@
 #'   with the mean and, therefore, variance usually (roughly) equals the mean
 #'   value. If the variance is much higher, the data are "overdispersed".
 #'
-#' \subsection{Interpretation of the Dispersion Ratio}{
+#' @section Interpretation of the Dispersion Ratio:
 #' If the dispersion ratio is close to one, a Poisson model fits well to the
 #' data. Dispersion ratios larger than one indicate overdispersion, thus a
 #' negative binomial model or similar might fit better to the data. A p-value <
 #' .05 indicates overdispersion.
-#' }
 #'
-#' \subsection{Overdispersion in Poisson Models}{
+#' @section Overdispersion in Poisson Models:
 #' For Poisson models, the overdispersion test is based on the code from
-#' \cite{Gelman and Hill (2007), page 115}.
-#' }
+#' _Gelman and Hill (2007), page 115_.
 #'
-#' \subsection{Overdispersion in Mixed Models}{
+#' @section Overdispersion in Mixed Models:
 #' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
 #' is based on the code in the
 #' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
@@ -36,16 +34,15 @@
 #' function only returns an *approximate* estimate of an overdispersion
 #' parameter, and is probably inaccurate for zero-inflated mixed models (fitted
 #' with `glmmTMB`).
-#' }
 #'
-#' \subsection{How to fix Overdispersion}{
+#' @section How to fix Overdispersion:
 #' Overdispersion can be fixed by either modeling the dispersion parameter, or
 #' by choosing a different distributional family (like Quasi-Poisson, or
-#' negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
-#' }
+#' negative binomial, see _Gelman and Hill (2007), pages 115-116_).
+#'
+#' @family checking model assumptions and quality
 #'
 #' @references
-#'
 #' - Bolker B et al. (2017):
 #'  [GLMM FAQ.](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html)
 #'

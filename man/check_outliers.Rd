@@ -347,3 +347,16 @@ outliers and leverage points. Journal of the American Statistical
 association, 85(411), 633-639.
 }
 }
+\seealso{
+Other checking model assumptions and quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_singularity}()},
+\code{\link{check_zeroinflation}()}
+}
+\concept{checking model assumptions and quality}

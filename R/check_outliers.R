@@ -34,6 +34,8 @@
 #'   function. Note that the function will (silently) return a vector of `FALSE`
 #'   for non-supported data types such as character strings.
 #'
+#' @family checking model assumptions and quality
+#'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 #'   implemented in the

@@ -43,3 +43,16 @@ if (require("see")) {
 \references{
 Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287-1294.
 }
+\seealso{
+Other checking model assumptions and quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_outliers}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_singularity}()},
+\code{\link{check_zeroinflation}()}
+}
+\concept{checking model assumptions and quality}
