@@ -11,7 +11,7 @@
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates autocorrelated residuals.
 #'
-#' @family checking model assumptions and quality
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @details Performs a Durbin-Watson-Test to check for autocorrelated residuals.
 #' In case of autocorrelation, robust standard errors return more accurate

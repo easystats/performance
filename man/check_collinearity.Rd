@@ -160,7 +160,7 @@ Evolution (2010) 1:3–14.
 }
 }
 \seealso{
-Other checking model assumptions and quality: 
+Other functions to check model assumptions and and assess model quality: 
 \code{\link{check_autocorrelation}()},
 \code{\link{check_convergence}()},
 \code{\link{check_heteroscedasticity}()},
@@ -168,7 +168,8 @@ Other checking model assumptions and quality:
 \code{\link{check_model}()},
 \code{\link{check_outliers}()},
 \code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
 \code{\link{check_singularity}()},
 \code{\link{check_zeroinflation}()}
 }
-\concept{checking model assumptions and quality}
+\concept{functions to check model assumptions and and assess model quality}

@@ -44,7 +44,7 @@
 #' whether we can assume that the numerical optimization has worked correctly
 #' or not.
 #'
-#' @family checking model assumptions and quality
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @examples
 #' if (require("lme4")) {

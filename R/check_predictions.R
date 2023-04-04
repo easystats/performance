@@ -36,10 +36,12 @@
 #'   similar to the observed outcome than the model in the left panel (a). Thus,
 #'   model (b) is likely to be preferred over model (a).
 #'
-#' @note  Every model object that has a `simulate()`-method should work with
-#'   `check_predictions()`. On R 3.6.0 and higher, if **bayesplot** (or a
-#'   package that imports **bayesplot** such as **rstanarm** or **brms**)
-#'   is loaded, `pp_check()` is also available as an alias for `check_predictions()`.
+#' @note Every model object that has a `simulate()`-method should work with
+#' `check_predictions()`. On R 3.6.0 and higher, if **bayesplot** (or a
+#' package that imports **bayesplot** such as **rstanarm** or **brms**)
+#' is loaded, `pp_check()` is also available as an alias for `check_predictions()`.
+#'
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @references
 #' - Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., and Gelman, A. (2019).
@@ -51,6 +53,7 @@
 #'
 #' - Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and
 #'   Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
+#'
 #' - Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
 #'   Cambridge University Press.
 #'
@@ -80,7 +83,7 @@ check_predictions.default <- function(object,
   .is_model_valid(object)
 
   if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) &&
-    isFALSE(inherits(object, "BFBayesFactor"))) {
+        isFALSE(inherits(object, "BFBayesFactor"))) {
     insight::check_if_installed(
       "bayesplot",
       "to create posterior prediction plots for Stan models"

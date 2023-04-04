@@ -18,7 +18,7 @@
 #'
 #' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
-#' @family checking model assumptions and quality
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @examples
 #' model <<- lm(len ~ supp + dose, data = ToothGrowth)

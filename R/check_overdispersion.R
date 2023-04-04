@@ -40,7 +40,7 @@
 #' by choosing a different distributional family (like Quasi-Poisson, or
 #' negative binomial, see _Gelman and Hill (2007), pages 115-116_).
 #'
-#' @family checking model assumptions and quality
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @references
 #' - Bolker B et al. (2017):

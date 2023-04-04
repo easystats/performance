@@ -19,7 +19,7 @@
 #' zero-inflation in the data. In such cases, it is recommended to use
 #' negative binomial or zero-inflated models.
 #'
-#' @family checking model assumptions and quality
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @examples
 #' if (require("glmmTMB")) {

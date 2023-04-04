@@ -37,7 +37,7 @@ if (require("glmmTMB")) {
 }
 }
 \seealso{
-Other checking model assumptions and quality: 
+Other functions to check model assumptions and and assess model quality: 
 \code{\link{check_autocorrelation}()},
 \code{\link{check_collinearity}()},
 \code{\link{check_convergence}()},
@@ -46,6 +46,7 @@ Other checking model assumptions and quality:
 \code{\link{check_model}()},
 \code{\link{check_outliers}()},
 \code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
 \code{\link{check_singularity}()}
 }
-\concept{checking model assumptions and quality}
+\concept{functions to check model assumptions and and assess model quality}
