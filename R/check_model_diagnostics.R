@@ -41,7 +41,7 @@
   } else if (inherits(model, "geeglm")) {
     res_ <- stats::residuals(model, type = "pearson")
   } else if (inherits(model, "glm")) {
-    res_ <- stats::rstandard(model, type = "pearson")
+    res_ <- abs(stats::rstandard(model, type = "deviance"))
   } else {
     res_ <- .safe(stats::rstudent(model))
     if (is.null(res_)) {
@@ -61,7 +61,11 @@
     return(NULL)
   }
 
-  fitted_ <- stats::fitted(model)
+  if (inherits(model, "glm")) {
+    fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)[order(order(res_))]
+  } else {
+    fitted_ <- stats::fitted(model)
+  }
 
   # sanity check, sometime either residuals or fitted can contain NA, see #488
   if (anyNA(res_) || anyNA(fitted_)) {

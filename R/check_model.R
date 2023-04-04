@@ -98,8 +98,10 @@
 #' normally distributed. Usually, dots should fall along the line. If there is
 #' some deviation (mostly at the tails), this indicates that the model doesn't
 #' predict the outcome well for that range that shows larger deviations from
-#' the line. See [`check_normality()`] for further details.
-
+#' the line. For generalized linear models, a half-normal Q-Q plot of the
+#' absolute value of the standardized deviance residuals is shown. See
+#' [`check_normality()`] for further details.
+#'
 #' @section Overdispersion:
 #' For count models, an *overdispersion plot* is shown. Overdispersion occurs
 #' when the observed variance is higher than the variance of a theoretical model.
