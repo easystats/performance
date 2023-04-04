@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.9</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.2.10</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,6 +103,7 @@
 <ul><li><p>Warnings in <code><a href="../reference/model_performance.html">model_performance()</a></code> for unsupported objects of class <code>BFBayesFactor</code> can now be suppressed with <code>verbose = FALSE</code>.</p></li>
 <li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> no longer fails with issues when <code>re_formula = NULL</code> for mixed models, but instead gives a warning and tries to compute posterior predictive checks with <code>re_formuka = NA</code>.</p></li>
 <li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> now also works for meta-analysis models from packages <em>metafor</em> and <em>meta</em>.</p></li>
+<li><p><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> for <code><a href="../reference/check_model.html">performance::check_model()</a></code> no longer produces a normal QQ plot for GLMs. Instead, it now shows a half-normal QQ plot of the absolute value of the standardized deviance residuals.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-10-3">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-3"></a></h3>
