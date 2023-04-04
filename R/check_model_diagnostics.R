@@ -41,7 +41,7 @@
   } else if (inherits(model, "geeglm")) {
     res_ <- stats::residuals(model, type = "pearson")
   } else if (inherits(model, "glm")) {
-    res_ <- stats::rstandard(model, type = "pearson")
+    res_ <- abs(stats::rstandard(model, type = "deviance"))
   } else {
     res_ <- .safe(stats::rstudent(model))
     if (is.null(res_)) {
