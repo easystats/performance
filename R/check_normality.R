@@ -72,6 +72,24 @@ check_normality.default <- function(x, ...) {
   p.val
 }
 
+# glm ---------------
+
+#' @export
+check_normality.glm <- function(x, ...) {
+  out <- 1
+  attr(out, "data") <- x
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "effects") <- "fixed"
+  attr(out, "model_info") <- insight::model_info(x)
+  class(out) <- unique(c("check_normality", "see_check_normality", class(out)))
+
+  insight::format_alert(
+    "There's no formal statistical test for normality for generalized linear model.",
+    "Please use `plot()` on the return value of this function: `plot(check_normality(model))`"
+  )
+  invisible(out)
+}
+
 # numeric -------------------
 
 #' @export
