@@ -2,22 +2,24 @@
 #' @name check_zeroinflation
 #'
 #' @description `check_zeroinflation()` checks whether count models are
-#'   over- or underfitting zeros in the outcome.
+#' over- or underfitting zeros in the outcome.
 #'
-#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`,
-#'    or `glm.nb` (package \pkg{MASS}).
+#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
+#' (package **MASS**).
 #' @param tolerance The tolerance for the ratio of observed and predicted
-#'    zeros to considered as over- or underfitting zeros. A ratio
-#'    between 1 +/- `tolerance` is considered as OK, while a ratio
-#'    beyond or below this threshold would indicate over- or underfitting.
+#'  zeros to considered as over- or underfitting zeros. A ratio
+#'  between 1 +/- `tolerance` is considered as OK, while a ratio
+#'  beyond or below this threshold would indicate over- or underfitting.
 #'
 #' @return A list with information about the amount of predicted and observed
-#'    zeros in the outcome, as well as the ratio between these two values.
+#'  zeros in the outcome, as well as the ratio between these two values.
 #'
 #' @details If the amount of observed zeros is larger than the amount of
-#'   predicted zeros, the model is underfitting zeros, which indicates a
-#'   zero-inflation in the data. In such cases, it is recommended to use
-#'   negative binomial or zero-inflated models.
+#' predicted zeros, the model is underfitting zeros, which indicates a
+#' zero-inflation in the data. In such cases, it is recommended to use
+#' negative binomial or zero-inflated models.
+#'
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @examples
 #' if (require("glmmTMB")) {

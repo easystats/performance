@@ -131,6 +131,8 @@
 #' look at the `check` argument and see if some of the model checks could be
 #' skipped, which also increases performance.
 #'
+#' @family functions to check model assumptions and and assess model quality
+#'
 #' @examples
 #' \dontrun{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

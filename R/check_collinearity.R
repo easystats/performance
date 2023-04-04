@@ -110,6 +110,8 @@
 #' common statistical problems: Data exploration. Methods in Ecology and
 #' Evolution (2010) 1:3–14.
 #'
+#' @family functions to check model assumptions and and assess model quality
+#'
 #' @note The code to compute the confidence intervals for the VIF and tolerance
 #' values was adapted from the Appendix B from the Marcoulides et al. paper.
 #' Thus, credits go to these authors the original algorithm. There is also
