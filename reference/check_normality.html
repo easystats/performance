@@ -124,18 +124,21 @@ significant deviation from normal distribution.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>check_normality()</code> calls <code><a href="https://rdrr.io/r/stats/shapiro.test.html" class="external-link">stats::shapiro.test</a></code> and checks the
-standardized residuals (or Studentized residuals for mixed models) for
+standardized residuals (or studentized residuals for mixed models) for
 normal distribution. Note that this formal test almost always yields
 significant results for the distribution of residuals and visual inspection
-(e.g. Q-Q plots) are preferable.</p>
+(e.g. Q-Q plots) are preferable. For generalized linear models, no formal
+statistical test is carried out. Rather, there's only a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method for
+GLMs. This plot shows a half-normal Q-Q plot of the absolute value of the
+standardized deviance residuals is shown (being in line with changes in
+<code>plot.lm()</code> for R 4.3+).</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>For mixed-effects models, studentized residuals, and <em>not</em>
 standardized residuals, are used for the test. There is also a
 <a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
-implemented in the
-<a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>.</p>
+implemented in the ((https://easystats.github.io/see/).</p>
     </div>
 
     <div class="section level2">
