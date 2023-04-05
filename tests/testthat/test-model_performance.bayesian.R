@@ -3,21 +3,24 @@ test_that("model_performance.stanreg", {
   skip_if_offline()
   skip_if_not_installed("httr")
   set.seed(333)
-  model <- insight::download_model("stanreg_lm_1")
+  model <- tryCatch(insight::download_model("stanreg_lm_1"), error = function(e) NULL)
+  skip_if(is.null(model))
   perf <- model_performance(model)
 
   expect_equal(perf$R2, 0.7398733, tolerance = 1e-3)
   expect_equal(perf$R2_adjusted, 0.7162912, tolerance = 1e-3)
   expect_equal(perf$ELPD, -83.49838, tolerance = 1e-3)
 
-  model <- insight::download_model("stanreg_lm_2")
+  model <- tryCatch(insight::download_model("stanreg_lm_2"), error = function(e) NULL)
+  skip_if(is.null(model))
   perf <- model_performance(model)
 
   expect_equal(perf$R2, 0.8168386, tolerance = 1e-3)
   expect_equal(perf$R2_adjusted, 0.7979026, tolerance = 1e-3)
   expect_equal(perf$ELPD, -78.38735, tolerance = 1e-3)
 
-  model <- insight::download_model("stanreg_lmerMod_1")
+  model <- tryCatch(insight::download_model("stanreg_lmerMod_1"), error = function(e) NULL)
+  skip_if(is.null(model))
   perf <- model_performance(model)
 
   expect_equal(perf$R2, 0.6286546, tolerance = 1e-3)
@@ -32,7 +35,8 @@ test_that("model_performance.brmsfit", {
   skip_if_not_installed("httr")
   set.seed(333)
 
-  model <- insight::download_model("brms_1")
+  model <- tryCatch(insight::download_model("brms_1"), error = function(e) NULL)
+  skip_if(is.null(model))
   expect_message({
     perf <- model_performance(model)
   })
@@ -44,7 +48,8 @@ test_that("model_performance.brmsfit", {
     "RMSE", "Sigma"
   ))
 
-  model <- insight::download_model("brms_mixed_4")
+  model <- tryCatch(insight::download_model("brms_mixed_4"), error = function(e) NULL)
+  skip_if(is.null(model))
   expect_message({
     perf <- model_performance(model)
   })
@@ -56,7 +61,8 @@ test_that("model_performance.brmsfit", {
     "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
   ))
 
-  model <- insight::download_model("brms_ordinal_1")
+  model <- tryCatch(insight::download_model("brms_ordinal_1"), error = function(e) NULL)
+  skip_if(is.null(model))
   perf <- suppressWarnings(model_performance(model))
   expect_equal(perf$R2, 0.8760015, tolerance = 1e-3)
   expect_equal(perf$ELPD, -11.65433, tolerance = 1e-3)
