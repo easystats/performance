@@ -40,7 +40,7 @@ standardized deviance residuals is shown (being in line with changes in
 For mixed-effects models, studentized residuals, and \emph{not}
 standardized residuals, are used for the test. There is also a
 \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-implemented in the ((https://easystats.github.io/see/).
+implemented in the \href{https://easystats.github.io/see/}{\strong{see}-package}.
 }
 \examples{
 m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

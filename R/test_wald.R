@@ -1,17 +1,17 @@
 #' @rdname test_performance
 #' @export
-test_wald <- function(...) {
+test_wald <- function(..., verbose = TRUE) {
   UseMethod("test_wald")
 }
 
 
 #' @export
-test_wald.default <- function(...) {
+test_wald.default <- function(..., verbose = TRUE) {
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
-  .test_performance_checks(objects)
+  objects <- .test_performance_checks(objects, verbose = verbose)
 
   # ensure proper object names
   objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
@@ -27,13 +27,15 @@ test_wald.default <- function(...) {
 
 
 #' @export
-test_wald.ListNestedRegressions <- function(objects, ...) {
+test_wald.ListNestedRegressions <- function(objects, verbose = TRUE, ...) {
   # for binomial models, only chisq-test
   if (all(attributes(objects)$is_binomial)) {
-    insight::format_alert(
-      "Using Wald's F-Test is inappropriate for models with `binomial` family.",
-      "Running Likelihood Ratio Test (LRT) now."
-    )
+    if (verbose) {
+      insight::format_alert(
+        "Using Wald's F-Test is inappropriate for models with `binomial` family.",
+        "Running Likelihood Ratio Test (LRT) now."
+      )
+    }
     return(test_likelihoodratio(objects))
   } else {
     out <- .test_wald(objects, test = "F")
@@ -46,7 +48,7 @@ test_wald.ListNestedRegressions <- function(objects, ...) {
 
 
 #' @export
-test_wald.ListNonNestedRegressions <- function(objects, ...) {
+test_wald.ListNonNestedRegressions <- function(objects, verbose = TRUE, ...) {
   insight::format_error("Wald tests cannot be run on non-nested models. Try `test_vuong()`.")
 }
 

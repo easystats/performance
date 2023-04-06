@@ -21,6 +21,7 @@
 #'   `test_bf()` describes models by their formulas, which can lead to
 #'   overly long lines in the output. `text_length` fixes the length of
 #'   lines to a specified limit.
+#' @param verbose Toggle warning and messages.
 #'
 #' @return A data frame containing the relevant indices.
 #'
@@ -224,7 +225,7 @@
 #'    structural equation models. Psychological Methods, 21, 151-163.
 #'
 #' @export
-test_performance <- function(..., reference = 1) {
+test_performance <- function(..., reference = 1, verbose = TRUE) {
   UseMethod("test_performance")
 }
 
@@ -233,12 +234,12 @@ test_performance <- function(..., reference = 1) {
 # default --------------------------------
 
 #' @export
-test_performance.default <- function(..., reference = 1, include_formula = FALSE) {
+test_performance.default <- function(..., reference = 1, include_formula = FALSE, verbose = TRUE) {
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
-  .test_performance_checks(objects)
+  objects <- .test_performance_checks(objects, verbose = verbose)
 
   # ensure proper object names
   objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
@@ -432,10 +433,22 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
 
 
-.test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE) {
+.test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE, verbose = TRUE) {
   # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
   if (multiple && insight::is_model(objects)) {
-    insight::format_error("At least two models are required to test them.")
+    null_model <- .safe(insight::null_model(objects, verbose = FALSE))
+    if (!is.null(null_model) && insight::is_model(null_model)) {
+      objects <- insight::ellipsis_info(list(null_model, objects))
+      names(objects) <- c("Null model", "Full model")
+      if (verbose) {
+        insight::format_alert(
+          "Only one model was provided, however, at least two are required for comparison.",
+          "Fitting a null-model as reference now."
+        )
+      }
+    } else {
+      insight::format_error("At least two models are required to test them.")
+    }
   }
 
   if (same_response && !inherits(objects, "ListLavaan") && isFALSE(attributes(objects)$same_response)) {
