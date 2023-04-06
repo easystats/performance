@@ -86,6 +86,7 @@ Hurvich
 IC
 ICCs
 ICS
+ICSOutlier
 IFI
 IJCNN
 Ieno
@@ -222,6 +223,7 @@ brmsfit
 cauchy
 clusterable
 concurvity
+dbscan
 der
 detrend
 difficutly
