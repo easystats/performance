@@ -63,12 +63,6 @@ cronbachs_alpha.parameters_pca <- function(x, verbose = TRUE, ...) {
   # fetch data used for the PCA
   pca_data <- attributes(x)$dataset
 
-  ## TODO: remove once parameters 0.18.3 or higher on CRAN
-  # backward compatibility to parameters 0.18.2
-  if (is.null(pca_data)) {
-    pca_data <- attributes(x)$data_set
-  }
-
   # if NULL, can we get from environment?
   if (is.null(pca_data)) {
     pca_data <- attr(x, "data")
