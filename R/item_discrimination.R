@@ -36,7 +36,7 @@
 item_discrimination <- function(x, standardize = FALSE) {
   # check param
   if (!is.matrix(x) && !is.data.frame(x)) {
-    insight::format_warning("`x` needs to be a data frame or matrix.")
+    insight::format_alert("`x` needs to be a data frame or matrix.")
     return(NULL)
   }
 
