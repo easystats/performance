@@ -83,7 +83,7 @@ check_predictions.default <- function(object,
   .is_model_valid(object)
 
   if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) &&
-        isFALSE(inherits(object, "BFBayesFactor"))) {
+    isFALSE(inherits(object, "BFBayesFactor"))) {
     insight::check_if_installed(
       "bayesplot",
       "to create posterior prediction plots for Stan models"
