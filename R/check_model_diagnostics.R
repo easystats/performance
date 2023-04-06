@@ -62,8 +62,7 @@
   }
 
   if (inherits(model, "glm")) {
-    ## TODO: check if we need "[order(order(res_))]" - we sort fitted later anyway
-    fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)[order(order(res_))]
+    fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)
   } else {
     fitted_ <- stats::fitted(model)
   }
