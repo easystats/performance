@@ -54,7 +54,7 @@ item_discrimination <- function(x, standardize = FALSE) {
   }
   # calculate corrected total-item correlation
   id <- vapply(seq_len(ncol(x)), function(i) {
-    stats::cor(x[, i], apply(x[, -i], 1, sum), use = "pairwise.complete.obs")
+    stats::cor(x[, i], rowSums(x[, -i]), use = "pairwise.complete.obs")
   }, numeric(1))
 
   out <- data.frame(
