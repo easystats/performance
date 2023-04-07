@@ -29,3 +29,14 @@ test_that("test_performance - nested", {
   #
   # rez <- test_performance(m1, m2, m3)
 })
+
+test_that("test_performance - single model", {
+  m1 <- lm(Sepal.Length ~ 1, data = iris)
+  m2 <- lm(Sepal.Length ~ Petal.Width, data = iris)
+  expect_message(test_performance(m2), regex = "Only one model")
+  expect_silent(test_performance(m2, verbose = FALSE))
+
+  out1 <- test_performance(m2, verbose = FALSE)
+  out2 <- test_performance(m1, m2, verbose = FALSE)
+  expect_equal(out1$Omega2, out2$Omega2, tolerance = 1e-3)
+})

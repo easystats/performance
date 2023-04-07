@@ -15,7 +15,7 @@
 #' @note For mixed-effects models, studentized residuals, and *not*
 #' standardized residuals, are used for the test. There is also a
 #' [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
-#'  implemented in the [**see**-package]((https://easystats.github.io/see/).
+#'  implemented in the [**see**-package](https://easystats.github.io/see/).
 #'
 #' @details `check_normality()` calls `stats::shapiro.test` and checks the
 #' standardized residuals (or studentized residuals for mixed models) for

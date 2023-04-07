@@ -81,7 +81,7 @@
 #' The reliability and approximate convergence of Bayesian models can be
 #' assessed using the estimates for the shape parameter k of the generalized
 #' Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the
-#' user should be warned, although in practice the authors of the [loo::loo]
+#' user should be warned, although in practice the authors of the **loo**
 #' package observed good performance for values of k up to 0.7 (the default
 #' threshold used by `performance`).
 #'
@@ -148,8 +148,8 @@
 #' - **Robust Mahalanobis Distance**:
 #' A robust version of Mahalanobis distance using an Orthogonalized
 #' Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-#' 1972). Requires the [bigutilsr::bigutilsr] package. See the
-#' [bigutilsr::dist_ogk()] function.
+#' 1972). Requires the **bigutilsr** package. See the [bigutilsr::dist_ogk()]
+#' function.
 #'
 #' - **Minimum Covariance Determinant (MCD)**:
 #' Another robust version of Mahalanobis. Leys et al. (2018) argue that
@@ -166,7 +166,7 @@
 #'  of 0.025 (corresponding to the 2.5\% most extreme observations) as a cut-off
 #'  value for outliers classification. Refer to the help-file of
 #'  [ICSOutlier::ics.outlier()] to get more details about this procedure.
-#'  Note that `method = "ics"` requires both [ICS] and [ICSOutlier::ICSOutlier]
+#'  Note that `method = "ics"` requires both **ICS** and **ICSOutlier**
 #'  to be installed, and that it takes some time to compute the results.
 #'
 #'  - **OPTICS**:
@@ -179,7 +179,7 @@
 #'  detect several outliers (as these are usually defined as a percentage of
 #'  extreme values), this algorithm functions in a different manner and won't
 #'  always detect outliers. Note that `method = "optics"` requires the
-#'  [dbscan::dbscan] package to be installed, and that it takes some time to compute
+#'  **dbscan** package to be installed, and that it takes some time to compute
 #'  the results.
 #'
 #'  - **Local Outlier Factor**:
@@ -191,7 +191,7 @@
 #'  comparable to its neighbors. Scores significantly larger than 1 indicate
 #'  outliers. The default threshold of 0.025 will classify as outliers the
 #'  observations located at `qnorm(1-0.025) * SD)` of the log-transformed
-#'  LOF distance. Requires the [dbscan::dbscan] package.
+#'  LOF distance. Requires the **dbscan** package.
 #'
 #' @section Threshold specification:
 #'

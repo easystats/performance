@@ -5,7 +5,7 @@
 #'   `"ML"` for all other models (including mixed models), or `"REML"` for
 #'   linear mixed models when these have the same fixed effects. See 'Details'.
 #' @export
-test_likelihoodratio <- function(..., estimator = "ML") {
+test_likelihoodratio <- function(..., estimator = "ML", verbose = TRUE) {
   UseMethod("test_likelihoodratio")
 }
 
@@ -20,12 +20,12 @@ test_lrt <- test_likelihoodratio
 # default --------------------
 
 #' @export
-test_likelihoodratio.default <- function(..., estimator = "OLS") {
+test_likelihoodratio.default <- function(..., estimator = "OLS", verbose = TRUE) {
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
-  .test_performance_checks(objects)
+  objects <- .test_performance_checks(objects, verbose = verbose)
 
   # different default when mixed model or glm is included
   if (missing(estimator)) {
@@ -101,7 +101,7 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
 # other classes ---------------------------
 
 #' @export
-test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
+test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", verbose = TRUE, ...) {
   dfs <- sapply(objects, insight::get_df, type = "model")
   same_fixef <- attributes(objects)$same_fixef
 
@@ -140,10 +140,10 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     # only when mixed models are involved, others probably don't have problems with REML fit
     any(sapply(objects, insight::is_mixed_model)) &&
     # only if not all models have same fixed effects (else, REML is ok)
-    !isTRUE(same_fixef)) {
-    warning(insight::format_message(
+    !isTRUE(same_fixef) && isTRUE(verbose)) {
+    insight::format_warning(
       "The Likelihood-Ratio-Test is probably inaccurate when comparing REML-fit models with different fixed effects."
-    ), call. = FALSE)
+    )
   }
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing

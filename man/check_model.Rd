@@ -145,8 +145,9 @@ normally distributed. Usually, dots should fall along the line. If there is
 some deviation (mostly at the tails), this indicates that the model doesn't
 predict the outcome well for that range that shows larger deviations from
 the line. For generalized linear models, a half-normal Q-Q plot of the
-absolute value of the standardized deviance residuals is shown. See
-\code{\link[=check_normality]{check_normality()}} for further details.
+absolute value of the standardized deviance residuals is shown, however, the
+intrepretation of the plot remains the same. See \code{\link[=check_normality]{check_normality()}} for
+further details.
 }
 
 \section{Overdispersion}{

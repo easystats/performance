@@ -17,6 +17,9 @@
 
 ## Changes to functions
 
+* `test_*()` functions now automatically fit a null-model when only one model
+  objects was provided for testing multiple models.
+
 * Warnings in `model_performance()` for unsupported objects of class
   `BFBayesFactor` can now be suppressed with `verbose = FALSE`.
 
