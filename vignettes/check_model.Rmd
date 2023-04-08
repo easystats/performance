@@ -110,7 +110,7 @@ plot(out)
 
 As you can see, the green line in this plot deviates visibly from the blue lines. This may indicate that our linear model is not appropriate, since it does not capture the distributional nature of the response variable properly.
 
-**How to fix this?**
+#### How to fix this?
 
 The best way, if there are serious concerns that the model does not fit well to the data, is to use a different type (family) of regression model. In our example, it is obvious that we shoud better use a Poisson-regression.
 
@@ -140,11 +140,12 @@ out <- plot(check_model(m, panel = FALSE))
 out[[2]]
 ```
 
-**How to fix?**
+#### How to fix this?
 
- If the line is not roughly flat and horizontal, but rather, For instance, U-shaped, this may indicate that some of the predictors probably should better be modeled as quadratic term.
+ If the line is not roughly flat and horizontal, but rather - like in our example - U-shaped, this may indicate that some of the predictors probably should better be modeled as quadratic term. Transforming the response variable might be another solution when linearity assumptions are not met.
 
 ```{r eval=all(successfully_loaded[c("see", "ggplot2")])}
+# model quadratic term
 m <- lm(y ~ x + I(x^2) + z, data = d)
 out <- plot(check_model(m, panel = FALSE))
 
@@ -153,6 +154,17 @@ out[[2]]
 ```
 
 **Some caution is needed** when interpreting these plots. Although these plots are helpful to check model assumptions, they do not necessarily indicate so-called "lack of fit", e.g. missed non-linear relationships or interactions. Thus, it is always recommended to also look at [effect plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
+
+### Homegeneity of variance - detecting heteroscedasticity
+
+This plot checks the assumption of equal (or constant) variance, i.e. homoscedasticity. To meet this assumption, the variance of the residuals across different values of predictors is similar and does not notably increase or decrease. Hence, the desired pattern would be that dots spread equally above and below a roughly straight, horizontal line and show no apparent deviation.
+
+Usually, this can be easily inspected 
+
+#### How to fix this?
+
+m1 <- lm(dist ~ speed, data = cars)
+
 
 # References
 
