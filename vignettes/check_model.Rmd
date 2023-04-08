@@ -159,14 +159,42 @@ out[[2]]
 
 This plot checks the assumption of equal (or constant) variance, i.e. homoscedasticity. To meet this assumption, the variance of the residuals across different values of predictors is similar and does not notably increase or decrease. Hence, the desired pattern would be that dots spread equally above and below a roughly straight, horizontal line and show no apparent deviation.
 
-Usually, this can be easily inspected 
+Usually, this can be easily inspected when plotting the residuals against fitted values, possibly adding trend lines to the plot. If these are horizontal and parallel, everything is ok. If the spread of the dot increases (decreases) across the x-axis, the model may suffer from heteroscedasticity.
+
+```{r eval=all(successfully_loaded[c("ggplot2")])}
+library(ggplot2)
+d <- data.frame(
+  x = fitted(m1),
+  y = residuals(m1),
+  grp = as.factor(residuals(m1) >= 0)
+)
+ggplot(d, aes(x, y, colour = grp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+For our example model, we see that our model indeed violates the assumption of homoscedasticity.
+
+But why does the diagnostic plot used in `check_model()` looks different? `check_model()` plots the square-root of the absolute values of residuals. This makes the visual inspection slightly easier, as you only have one line that needs to be judged. A roughly flat and horizontal line indicates homoscedasticity. However, a steeper slope of that line indicates that the model suffers from heteroscedasticity.
+
+```{r eval=all(successfully_loaded[c("see", "ggplot2")])}
+# homoscedasticiy - homogeneity of variance
+diagnostic_plots[[3]]
+```
 
 #### How to fix this?
 
-m1 <- lm(dist ~ speed, data = cars)
+There are several ways to address heteroscedasticity.
 
+1. Calculating heteroscedasticity-consistent standard errors accounts for the larger variation, better reflecting the increased uncertainty. This can be easily done using the **parameters** package, e.g. `parameters::model_parameters(m1, vcov = "HC3")`. A detailed vignette on robust standard errors [can be found here](https://easystats.github.io/parameters/articles/model_parameters_robust.html).
+
+2. The heteroscedasticity can be modeled directly, e.g. using package **glmmTMB** and the dispersion formular, to estimate the dispersion parameter and account for heteroscedasticity (see _Brooks et al. 2017_).
+
+3. Transforming the response variable, for instance, taking the `log()`, may also help to avoid issues with heteroscedasticity.
 
 # References
+
+Brooks ME, Kristensen K, Benthem KJ van, Magnusson A, Berg CW, Nielsen A, et al. glmmTMB Balances Speed and Flexibility Among Packages for Zero-inflated Generalized Linear Mixed Modeling. The R Journal. 2017;9: 378–400.
 
 Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
 
