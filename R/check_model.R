@@ -3,7 +3,7 @@
 #'
 #' @description
 #'
-#' Visual check of model various assumptions (normality of residuals, normality
+#' Visual check of various model assumptions (normality of residuals, normality
 #' of random effects, linear relationship, homogeneity of variance,
 #' multicollinearity).
 #'
@@ -39,7 +39,7 @@
 #' @return The data frame that is used for plotting.
 #'
 #' @note This function just prepares the data for plotting. To create the plots,
-#'   \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+#'   **see** needs to be installed. Furthermore, this function suppresses
 #'   all possible warnings. In case you observe suspicious plots, please refer
 #'   to the dedicated functions (like `check_collinearity()`,
 #'   `check_normality()` etc.) to get informative messages and warnings.

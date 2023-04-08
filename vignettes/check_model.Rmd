@@ -1,0 +1,101 @@
+---
+title: "Checking model assumption"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, performance, r2]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Checking model assumption}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r , include=FALSE}
+library(knitr)
+library(performance)
+options(knitr.kable.NA = "")
+knitr::opts_chunk$set(
+  comment = ">",
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%",
+  dpi = 450
+)
+options(digits = 2)
+
+pkgs <- c("see", "ggplot2", "datawizard", "parameters")
+successfully_loaded <- vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE)
+can_evaluate <- all(successfully_loaded)
+
+if (can_evaluate) {
+  knitr::opts_chunk$set(eval = TRUE)
+  vapply(pkgs, require, FUN.VALUE = logical(1L), quietly = TRUE, character.only = TRUE)
+} else {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+# Make sure your model inference is accurate!
+
+Checking model assumptions is crucial, because parameter estimation, p-values and confidence interval depend on correct model assumptions as well as on the data. If model assumptions are violated, estimates can be statistically signicant "even if the effect under study is null" (_Gelman/Greenland 2019_).
+
+There are several problems associated with checking model assumptions. Different types of models require different checks. For instance, normally distributed residuals is important for linear regression, but not for logistic. Furthermore, it is recommended to carry out visual inspections, so called diagnostic plots, of model assumptions, since formal statistcal tests are often too strict and warn of violation of the model assumptions, although everything is fine within a certain tolerance range. But how should such diagnostic plots be interpreted? And if violations have been detected, how to fix them?
+
+This vignette introduces the `check_model()` function of the **performance** package, shows how to use this function for different types of models and how the resulting diagnostic plots should be interpreted. Furthermore, recommendations are given how to address possible violations of model assumptions.
+
+## Are all assumptions for linear models met?
+
+We start with a simple example for a linear model.
+
+```{r}
+data(iris)
+m1 <- lm(Sepal.Width ~ Species + Petal.Length + Petal.Width, data = iris)
+```
+
+Before we go into details of the diagnostic plots, let's first look at the summary table.
+
+```{r eval=successfully_loaded["parameters"]}
+library(parameters)
+model_parameters(m1)
+```
+
+There is nothing suspicious so far. Now let's start with model diagnostics. We use the `check_model()` function, which provides an overview with the most important and appropriate diagnostic plots for the model under investigation.
+
+```{r eval=all(successfully_loaded[c("see", "ggplot2")]), fig.height=11}
+library(performance)
+check_model(m1)
+```
+
+Now let's take a closer look for each plot. To do so, we ask `check_model()` to return a single plot for each check, instead of arranging them in a grid. We can do so using the `panel` argument. This returns a list of *ggplot* plots.
+
+```{r eval=all(successfully_loaded[c("see", "ggplot2")])}
+# return a list of single plots
+diagnostic_plots <- plot(check_model(m1, panel = FALSE))
+```
+
+### Posterior predictive checks
+
+The first plot is based on `check_predictions()`. Posterior predictive checks can be used to look for systematic discrepancies between real and simulated data. It helps to see whether the type of model (distributional family) fits well to the data (_Gelman and Hill, 2007, p. 158_). Posterior predictive checks can be used to "look for systematic discrepancies between real and simulated data" (_Gelman et al. 2014, p. 169_).
+
+```{r eval=all(successfully_loaded[c("see", "ggplot2")])}
+# posterior predicive checks
+diagnostic_plots[[1]]
+```
+
+
+
+parameters::model_parameters(m)
+
+model <- lm(neg_c_7 ~ e42dep + c161sex + c172code, data = efc)
+
+# References
+
+Gelman, A., Carlin, J. B., Stern, H. S., Dunson, D. B., Vehtari, A., and Rubin, D. B. (2014). Bayesian data analysis. (Third edition). CRC Press.
+
+Gelman A, Greenland S. Are confidence intervals better termed "uncertainty intervals"? BMJ (2019)l5381. doi:10.1136/bmj.l5381
+
+Gelman, A., and Hill, J. (2007). Data analysis using regression and multilevel/hierarchical models. Cambridge; New York: Cambridge University Press.
