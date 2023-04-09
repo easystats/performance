@@ -68,7 +68,11 @@ performance_aic <- function(x, ...) {
 #' @rdname performance_aicc
 #' @export
 performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
-  if (is.null(info <- list(...)$model_info)) {
+  # check for valid input
+  .is_model_valid(x)
+
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(x, verbose = FALSE))
   }
 
@@ -82,10 +86,13 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
     aic <- suppressMessages(tweedie::AICtweedie(x))
   } else {
     # all other models...
-    aic <- tryCatch(
-      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
-      error = function(e) NULL
+    aic <- .safe(
+      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose))
     )
+    # when `get_loglikelihood()` does not work, `stats::AIC` sometimes still works (e.g., `fixest`)
+    if (is.null(aic)) {
+      aic <- .safe(stats::AIC(x))
+    }
   }
   aic
 }
@@ -99,9 +106,8 @@ performance_aic.lmerMod <- function(x, estimator = "REML", verbose = TRUE, ...) 
   REML <- identical(estimator, "REML")
   if (isFALSE(list(...)$REML)) REML <- FALSE
 
-  tryCatch(
-    stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose)),
-    error = function(e) NULL
+  .safe(
+    stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose))
   )
 }
 
@@ -124,7 +130,7 @@ performance_aic.vglm <- performance_aic.vgam
 
 #' @export
 performance_aic.svyglm <- function(x, ...) {
-  aic <- tryCatch(stats::AIC(x)[["AIC"]], error = function(e) NULL)
+  aic <- .safe(stats::AIC(x)[["AIC"]])
   .adjust_ic_jacobian(x, aic)
 }
 
@@ -191,6 +197,9 @@ AIC.bife <- function(object, ..., k = 2) {
 
 #' @export
 performance_aicc.default <- function(x, estimator = "ML", ...) {
+  # check for valid input
+  .is_model_valid(x)
+
   # check ML estimator
   REML <- identical(estimator, "REML")
   if (isTRUE(list(...)$REML)) REML <- TRUE
@@ -252,7 +261,7 @@ performance_aicc.rma <- function(x, ...) {
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
   if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
-    adjustment <- tryCatch(.ll_analytic_adjustment(model, insight::get_weights(model, na_rm = TRUE)), error = function(e) NULL)
+    adjustment <- .safe(.ll_analytic_adjustment(model, insight::get_weights(model, na_rm = TRUE)))
     if (!is.null(adjustment)) {
       ic <- ic - 2 * adjustment
     }
@@ -282,7 +291,7 @@ performance_aicc.rma <- function(x, ...) {
       } else if (trans == "expm1") {
         .weighted_sum((insight::get_response(x) - 1), w = model_weights)
       } else if (trans == "sqrt") {
-        .weighted_sum(log(.5 / sqrt(insight::get_response(x))), w = model_weights)
+        .weighted_sum(log(0.5 / sqrt(insight::get_response(x))), w = model_weights)
       } else {
         .ll_jacobian_adjustment(x, model_weights)
       }
@@ -302,7 +311,7 @@ performance_aicc.rma <- function(x, ...) {
       trans <- insight::get_transformation(model)$transformation
       .weighted_sum(log(
         diag(attr(with(
-          insight::get_data(model),
+          insight::get_data(model, verbose = FALSE),
           stats::numericDeriv(
             expr = quote(trans(
               get(insight::find_response(model))

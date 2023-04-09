@@ -32,28 +32,18 @@ mse <- performance_mse
 
 #' @export
 performance_mse.default <- function(model, verbose = TRUE, ...) {
-  res <- tryCatch(
-    {
-      insight::get_residuals(model, verbose = verbose, type = "response", ...)
-    },
-    error = function(e) {
-      NULL
-    }
-  )
+  res <- .safe(insight::get_residuals(model, verbose = verbose, type = "response", ...))
 
   if (is.null(res)) {
-    res <- tryCatch(
-      {
-        def_res <- insight::get_residuals(model, verbose = FALSE, ...)
-        if (verbose) {
-          warning(insight::format_message("Response residuals not available to calculate mean square error. (R)MSE is probably not reliable."), call. = FALSE)
-        }
-        def_res
-      },
-      error = function(e) {
-        NULL
+    res <- .safe({
+      def_res <- insight::get_residuals(model, verbose = FALSE, ...)
+      if (verbose) {
+        insight::format_alert(
+          "Response residuals not available to calculate mean square error. (R)MSE is probably not reliable."
+        )
       }
-    )
+      def_res
+    })
   }
 
   if (is.null(res) || all(is.na(res))) {
@@ -63,7 +53,7 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
   # for multivariate response models...
   if (is.data.frame(res)) {
     if (verbose) {
-      warning(insight::format_message("Multiple response variables detected. Cannot reliably compute (R)MSE."), call. = FALSE)
+      insight::format_warning("Multiple response variables detected. Cannot reliably compute (R)MSE.")
     }
     return(NA)
   }

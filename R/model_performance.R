@@ -2,14 +2,13 @@
 #' @name model_performance
 #'
 #' @description See the documentation for your object's class:
-#' \itemize{
-#'   \item [Frequentist Regressions][model_performance.lm]
-#'   \item [Instrumental Variables Regressions][model_performance.ivreg]
-#'   \item [Mixed models][model_performance.merMod]
-#'   \item [Bayesian models][model_performance.stanreg]
-#'   \item [CFA / SEM lavaan models][model_performance.lavaan]
-#'   \item [Meta-analysis models][model_performance.rma]
-#' }
+#'
+#'  - [Frequentist Regressions][model_performance.lm]
+#'  - [Instrumental Variables Regressions][model_performance.ivreg]
+#'  - [Mixed models][model_performance.merMod]
+#'  - [Bayesian models][model_performance.stanreg]
+#'  - [CFA / SEM lavaan models][model_performance.lavaan]
+#'  - [Meta-analysis models][model_performance.rma]
 #'
 #' @seealso [`compare_performance()`][compare_performance] to compare performance of many different models.
 #'
@@ -46,8 +45,25 @@ performance <- model_performance
 # methods --------------------------------
 
 #' @export
-print.performance_model <- function(x, digits = 3, ...) {
+print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
+  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
-  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = c("# Indices of model performance", "blue"), ...))
+
+  # switch to vertical layout
+  if (layout == "vertical") {
+    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    colnames(formatted_table)[2] <- "Value"
+  }
+
+  cat(
+    insight::export_table(
+      x = formatted_table,
+      digits = digits,
+      format = "text",
+      caption = c("# Indices of model performance", "blue"),
+      ...
+    )
+  )
+
   invisible(x)
 }

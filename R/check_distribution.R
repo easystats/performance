@@ -1,12 +1,12 @@
 #' Classify the distribution of a model-family using machine learning
 #'
-#' Choosing the right distributional family for regression models is essential
-#' to get more accurate estimates and standard errors. This function may help to
-#' Machine learning model trained to classify distributions
-#'
-#' Mean accuracy and Kappa of 0.86 and 0.85, repsectively.
-#'
-"classify_distribution"
+#' @name classify_distribution
+#' @docType data
+#' @keywords data
+#' @details
+#' The trained model to classify distributions, which is used by the
+#' `check_distribution()` function.
+NULL
 
 
 #' Classify the distribution of a model-family using machine learning
@@ -68,6 +68,9 @@ check_distribution <- function(model) {
 
 #' @export
 check_distribution.default <- function(model) {
+  # check for valid input
+  .is_model_valid(model)
+
   insight::check_if_installed("randomForest")
 
   if (inherits(model, "brmsfit")) {
@@ -82,7 +85,11 @@ check_distribution.default <- function(model) {
 
 
   # Extract features
-  x <- datawizard::data_to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+  x <- datawizard::to_numeric(
+    insight::get_response(model, verbose = FALSE),
+    dummy_factors = FALSE,
+    preserve_levels = TRUE
+  )
   dat <- .extract_features(x)
 
   dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
@@ -97,7 +104,7 @@ check_distribution.default <- function(model) {
 
   class(out) <- unique(c("check_distribution", "see_check_distribution", class(out)))
   attr(out, "data") <- model
-  attr(out, "object_name") <- deparse(substitute(model), width.cutoff = 500)
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(model))
 
   out
 }
@@ -185,6 +192,9 @@ check_distribution.numeric <- function(model) {
 # utilities -----------------------------
 
 .extract_features <- function(x) {
+  # sanity check, remove missings
+  x <- x[!is.na(x)]
+
   data.frame(
     "SD" = stats::sd(x),
     "MAD" = stats::mad(x, constant = 1),

@@ -15,37 +15,35 @@
 #'   `metrics`).
 #'
 #' @details \subsection{Indices of fit}{
-#' \itemize{
-#'   \item{**AIC**} {Akaike's Information Criterion, see
-#'   `?stats::AIC`}
 #'
-#'   \item{**BIC**} {Bayesian Information Criterion, see
-#'   `?stats::BIC`}
+#'   - **AIC** Akaike's Information Criterion, see `?stats::AIC`
 #'
-#'    \item **I2**: For a random effects model, `I2` estimates (in
+#'   - **BIC** {Bayesian Information Criterion, see `?stats::BIC`}
+#'
+#'    - **I2**: For a random effects model, `I2` estimates (in
 #'    percent) how much of the total variability in the effect size estimates
 #'    can be attributed to heterogeneity among the true effects. For a
 #'    mixed-effects model, `I2` estimates how much of the unaccounted
 #'    variability can be attributed to residual heterogeneity.
 #'
-#'    \item **H2**: For a random-effects model, `H2` estimates the
+#'    - **H2**: For a random-effects model, `H2` estimates the
 #'    ratio of the total amount of variability in the effect size estimates to
 #'    the amount of sampling variability. For a mixed-effects model, `H2`
 #'    estimates the ratio of the unaccounted variability in the effect size
 #'    estimates to the amount of sampling variability.
 #'
-#'    \item **TAU2**: The amount of (residual) heterogeneity in the random
+#'    - **TAU2**: The amount of (residual) heterogeneity in the random
 #'    or mixed effects model.
 #'
-#'    \item **CochransQ (QE)**: Test for (residual) Heterogeneity. Without
+#'    - **CochransQ (QE)**: Test for (residual) Heterogeneity. Without
 #'    moderators in the model, this is simply Cochran's Q-test.
 #'
-#'    \item **Omnibus (QM)**: Omnibus test of parameters.
+#'    - **Omnibus (QM)**: Omnibus test of parameters.
 #'
-#'    \item **R2**: Pseudo-R2-statistic, which indicates the amount of
+#'    - **R2**: Pseudo-R2-statistic, which indicates the amount of
 #'    heterogeneity accounted for by the moderators included in a fixed-effects
 #'    model.
-#' }
+#'
 #' See the documentation for `?metafor::fitstats`.
 #' }
 #'
@@ -91,14 +89,7 @@ model_performance.rma <- function(model, metrics = "all", estimator = "ML", verb
   if (any(c("QE", "COCHRANSQ") %in% toupper(metrics))) {
     out$CochransQ <- s$QE
     out$p_CochransQ <- s$QEp
-    out$df_error <- tryCatch(
-      {
-        stats::df.residual(model)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    out$df_error <- .safe(stats::df.residual(model))
   }
 
   if (any(c("QM", "OMNIBUS") %in% toupper(metrics))) {

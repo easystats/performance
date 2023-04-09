@@ -23,8 +23,10 @@
       sandwich::estfun(x, ...)
     },
     error = function(e) {
-      stop(insight::format_message(paste0("Could not compute gradients from a model object of class '", class(x)[1], "'."),
-                                   "Please try a different test-function, or file an issue at https://github.com/easystats/performance/issues."), call. = FALSE)
+      insight::format_error(
+        paste0("Could not compute gradients from a model object of class `", class(x)[1], "`."),
+        "Please try a different test-function, or file an issue at {.url https://github.com/easystats/performance/issues}."
+      )
     }
   )
 }

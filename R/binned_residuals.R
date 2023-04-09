@@ -50,13 +50,13 @@
 #' as.data.frame(result)
 #'
 #' # plot
-#' if (require("see") && getRversion() >= "3.6.0") {
+#' if (require("see")) {
 #'   plot(result)
 #' }
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)
-  mf <- insight::get_data(model)
+  mf <- insight::get_data(model, verbose = FALSE)
 
   if (is.null(term)) {
     pred <- fv
@@ -74,7 +74,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   model.binned <- as.numeric(cut(pred, breaks))
 
   d <- suppressWarnings(lapply(1:n_bins, function(.x) {
-    items <- (1:length(pred))[model.binned == .x]
+    items <- (seq_along(pred))[model.binned == .x]
     model.range <- range(pred[items], na.rm = TRUE)
     xbar <- mean(pred[items], na.rm = TRUE)
     ybar <- mean(y[items], na.rm = TRUE)
@@ -87,7 +87,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
       n = n,
       x.lo = model.range[1],
       x.hi = model.range[2],
-      se = stats::qnorm(.975) * sdev / sqrt(n),
+      se = stats::qnorm(0.975) * sdev / sqrt(n),
       ci_range = sdev / sqrt(n)
     )
   }))
@@ -96,8 +96,8 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   d <- d[stats::complete.cases(d), ]
 
   # CIs
-  d$CI_low <- d$ybar - stats::qnorm(.975) * d$ci_range
-  d$CI_high <- d$ybar + stats::qnorm(.975) * d$ci_range
+  d$CI_low <- d$ybar - stats::qnorm(0.975) * d$ci_range
+  d$CI_high <- d$ybar + stats::qnorm(0.975) * d$ci_range
 
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"
@@ -122,12 +122,30 @@ print.binned_residuals <- function(x, ...) {
   resid_ok <- attributes(x)$resid_ok
 
   if (!is.null(resid_ok)) {
-    if (resid_ok < .8) {
-      insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
-    } else if (resid_ok < .95) {
-      insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
+    if (resid_ok < 0.8) {
+      insight::print_color(
+        sprintf(
+          "Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n",
+          round(100 * resid_ok)
+        ),
+        "red"
+      )
+    } else if (resid_ok < 0.95) {
+      insight::print_color(
+        sprintf(
+          "Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n",
+          round(100 * resid_ok)
+        ),
+        "yellow"
+      )
     } else {
-      insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
+      insight::print_color(
+        sprintf(
+          "Ok: About %g%% of the residuals are inside the error bounds.\n",
+          round(100 * resid_ok)
+        ),
+        "green"
+      )
     }
   }
 }

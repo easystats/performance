@@ -53,11 +53,11 @@ only (marginal R2). While \code{r2_bayes()} returns a single R2 value,
 \code{r2_bayes()} returns an "unadjusted" R2 value. See
 \code{\link[=r2_loo]{r2_loo()}} to calculate a LOO-adjusted R2, which comes
 conceptually closer to an adjusted R2 measure.
-\cr \cr
+
 For mixed models, the conditional and marginal R2 are returned. The marginal
 R2 considers only the variance of the fixed effects, while the conditional
 R2 takes both the fixed and random effects into account.
-\cr \cr
+
 \code{r2_posterior()} is the actual workhorse for \code{r2_bayes()} and
 returns a posterior sample of Bayesian R2 values.
 }
@@ -76,17 +76,14 @@ if (require("rstanarm") && require("rstantools")) {
   )
   r2_bayes(model)
 }
-\dontrun{
-if (require("BayesFactor")) {
-  data(mtcars)
 
+if (require("BayesFactor")) {
   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-  FM <- lm(mpg ~ qsec + gear, data = mtcars)
+  FM <- lmBF(mpg ~ qsec + gear, data = mtcars)
 
   r2_bayes(FM)
   r2_bayes(BFM[3])
   r2_bayes(BFM, average = TRUE) # across all models
-
 
   # with random effects:
   mtcars$gear <- factor(mtcars$gear)
@@ -96,9 +93,11 @@ if (require("BayesFactor")) {
     progress = FALSE,
     whichRandom = c("gear", "gear:wt")
   )
+
   r2_bayes(model)
 }
 
+\dontrun{
 if (require("brms")) {
   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
   r2_bayes(model)
@@ -109,5 +108,7 @@ if (require("brms")) {
 }
 }
 \references{
-Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for Bayesian regression models. The American Statistician, 1–6. \doi{10.1080/00031305.2018.1549100}
+Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
+R-squared for Bayesian regression models. The American Statistician, 1–6.
+\doi{10.1080/00031305.2018.1549100}
 }

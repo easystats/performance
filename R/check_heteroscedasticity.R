@@ -18,6 +18,8 @@
 #'
 #' @references Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287-1294.
 #'
+#' @family functions to check model assumptions and and assess model quality
+#'
 #' @examples
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_heteroscedasticity(m)
@@ -42,6 +44,9 @@ check_heteroskedasticity <- check_heteroscedasticity
 
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
+  # check for valid input
+  .is_model_valid(x)
+
   # only for linear models
   info <- insight::model_info(x)
   if (!info$is_linear) {
@@ -49,7 +54,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     if (info$is_count) {
       paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
     }
-    message(insight::format_message(msg))
+    insight::format_alert(msg)
     return(NULL)
   }
 
@@ -66,7 +71,7 @@ check_heteroscedasticity.default <- function(x, ...) {
   p.val <- stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
 
   p.val

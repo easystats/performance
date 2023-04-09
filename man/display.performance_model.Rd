@@ -3,14 +3,29 @@
 \name{display.performance_model}
 \alias{display.performance_model}
 \alias{print_md.performance_model}
+\alias{print_md.compare_performance}
 \title{Print tables in different output formats}
 \usage{
 \method{display}{performance_model}(object, format = "markdown", digits = 2, caption = NULL, ...)
 
-\method{print_md}{performance_model}(x, digits = 2, caption = "Indices of model performance", ...)
+\method{print_md}{performance_model}(
+  x,
+  digits = 2,
+  caption = "Indices of model performance",
+  layout = "horizontal",
+  ...
+)
+
+\method{print_md}{compare_performance}(
+  x,
+  digits = 2,
+  caption = "Comparison of Model Performance Indices",
+  layout = "horizontal",
+  ...
+)
 }
 \arguments{
-\item{object, x}{An object returned by \code{\link[=model_performance]{model_performance()}}
+\item{object, x}{An object returned by \code{\link[=model_performance]{model_performance()}} or
 or \code{\link[=compare_performance]{compare_performance()}}.
 or its summary.}
 
@@ -22,6 +37,8 @@ or its summary.}
 \item{caption}{Table caption as string. If \code{NULL}, no table caption is printed.}
 
 \item{...}{Currently not used.}
+
+\item{layout}{Table layout (can be either \code{"horizontal"} or \code{"vertical"}).}
 }
 \value{
 A character vector. If \code{format = "markdown"}, the return value

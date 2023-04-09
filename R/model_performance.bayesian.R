@@ -14,38 +14,31 @@
 #'   `metrics`).
 #'
 #' @details Depending on `model`, the following indices are computed:
-#' \itemize{
-#'   \item{**ELPD**} {expected log predictive density. Larger ELPD values
-#'   mean better fit. See [looic()].}
 #'
-#'   \item{**LOOIC**} {leave-one-out cross-validation (LOO) information
-#'   criterion. Lower LOOIC values mean better fit. See [looic()].}
+#'   - **ELPD**: expected log predictive density. Larger ELPD values
+#'   mean better fit. See [looic()].
 #'
-#'   \item{**WAIC**} {widely applicable information criterion. Lower WAIC
-#'   values mean better fit. See `?loo::waic`.}
+#'   - **LOOIC**: leave-one-out cross-validation (LOO) information
+#'   criterion. Lower LOOIC values mean better fit. See [looic()].
 #'
-#'   \item{**R2**} {r-squared value, see [r2_bayes()].}
+#'   - **WAIC**: widely applicable information criterion. Lower WAIC
+#'   values mean better fit. See `?loo::waic`.
 #'
-#'   \item{**R2_adjusted**} {LOO-adjusted r-squared, see
-#'   [r2_loo()].}
+#'   - **R2**: r-squared value, see [r2_bayes()].
 #'
-#'   \item{**RMSE**} {root mean squared error, see
-#'   [performance_rmse()].}
+#'   - **R2_adjusted**: LOO-adjusted r-squared, see [r2_loo()].
 #'
-#'   \item{**SIGMA**} {residual standard deviation, see
-#'   [insight::get_sigma()].}
+#'   - **RMSE**: root mean squared error, see [performance_rmse()].
 #'
-#'   \item{**LOGLOSS**} {Log-loss, see [performance_logloss()].}
+#'   - **SIGMA**: residual standard deviation, see [insight::get_sigma()].
 #'
-#'   \item{**SCORE_LOG**} {score of logarithmic proper scoring rule, see
-#'   [performance_score()].}
+#'   - **LOGLOSS**: Log-loss, see [performance_logloss()].
 #'
-#'   \item{**SCORE_SPHERICAL**} {score of spherical proper scoring rule,
-#'   see [performance_score()].}
+#'   - **SCORE_LOG**: score of logarithmic proper scoring rule, see [performance_score()].
 #'
-#'   \item{**PCP**} {percentage of correct predictions, see
-#'   [performance_pcp()].}
-#' }
+#'   - **SCORE_SPHERICAL**: score of spherical proper scoring rule, see [performance_score()].
+#'
+#'   - **PCP**: percentage of correct predictions, see [performance_pcp()].
 #'
 #' @examples
 #' \dontrun{
@@ -83,7 +76,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
-  all_metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
+  all_metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
 
   if (all(metrics == "all")) {
     metrics <- all_metrics
@@ -98,7 +91,9 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   if (algorithm$algorithm != "sampling") {
     if (verbose) {
-      warning(insight::format_message("`model_performance()` only possible for models fit using the 'sampling' algorithm."), call. = FALSE)
+      insight::format_warning(
+        "`model_performance()` only possible for models fit using the \"sampling\" algorithm."
+      )
     }
     return(NULL)
   }
@@ -146,15 +141,8 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   }
 
   # LOO-R2 ------------------
-  if (("R2_ADJUSTED" %in% metrics | "R2_LOO" %in% metrics) && mi$is_linear) {
-    r2_adj <- tryCatch(
-      {
-        suppressWarnings(r2_loo(model, verbose = verbose))
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+  if (("R2_ADJUSTED" %in% metrics || "R2_LOO" %in% metrics) && mi$is_linear) {
+    r2_adj <- .safe(suppressWarnings(r2_loo(model, verbose = verbose)))
     if (!is.null(r2_adj)) {
       # save attributes
       attri_r2$SE$R2_loo <- attributes(r2_adj)$SE$R2_loo
@@ -169,9 +157,14 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     }
   }
 
-  if (length(attri_r2) > 0) {
+  if (length(attri_r2) > 0L) {
     attri$r2 <- attri_r2
     attri$r2_bayes <- attri_r2
+  }
+
+  # ICC ------------------
+  if ("ICC" %in% metrics) {
+    out$ICC <- .safe(suppressWarnings(icc(model, verbose = verbose)$ICC_adjusted))
   }
 
   # RMSE ------------------
@@ -181,47 +174,30 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   # SIGMA ------------------
   if ("SIGMA" %in% metrics) {
-    out$Sigma <- tryCatch(
-      {
-        s <- .get_sigma(model, verbose = verbose)
-        if (insight::is_empty_object(s)) {
-          s <- NULL
-        }
-        s
-      },
-      error = function(e) {
-        NULL
+    out$Sigma <- .safe({
+      s <- .get_sigma(model, verbose = verbose)
+      if (insight::is_empty_object(s)) {
+        s <- NULL
       }
-    )
+      s
+    })
   }
 
   # LOGLOSS ------------------
   if (("LOGLOSS" %in% metrics) && mi$is_binomial) {
-    out$Log_loss <- tryCatch(
-      {
-        .logloss <- performance_logloss(model, verbose = verbose)
-        if (!is.na(.logloss)) {
-          .logloss
-        } else {
-          NULL
-        }
-      },
-      error = function(e) {
+    out$Log_loss <- .safe({
+      .logloss <- performance_logloss(model, verbose = verbose)
+      if (!is.na(.logloss)) {
+        .logloss
+      } else {
         NULL
       }
-    )
+    })
   }
 
   # SCORE ------------------
   if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
-    .scoring_rules <- tryCatch(
-      {
-        performance_score(model, verbose = verbose)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    .scoring_rules <- .safe(performance_score(model, verbose = verbose))
     if (!is.null(.scoring_rules)) {
       if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
       if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
@@ -230,7 +206,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
-  out <- out[sapply(out, function(i) !all(is.na(i)))]
+  out <- out[vapply(out, function(i) !all(is.na(i)), TRUE)]
 
   attributes(out) <- c(attributes(out), attri)
   class(out) <- c("performance_model", class(out))
@@ -255,13 +231,21 @@ model_performance.BFBayesFactor <- function(model,
                                             average = FALSE,
                                             prior_odds = NULL,
                                             ...) {
+  all_metrics <- c("R2", "SIGMA")
+
   if (all(metrics == "all")) {
-    metrics <- c("R2", "SIGMA")
+    metrics <- all_metrics
   }
 
+  # check for valid input
+  metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
+
+  # check for valid BFBayesFactor object
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_linear || mi$is_correlation || mi$is_ttest || mi$is_binomial || mi$is_meta) {
-    warning("Can produce ", paste0(metrics, collapse = " & "), " only for linear models.", call. = FALSE)
+    if (isTRUE(verbose)) {
+      insight::format_warning("This type of Bayes factor models is not supported.")
+    }
     return(NULL)
   }
 
@@ -269,7 +253,7 @@ model_performance.BFBayesFactor <- function(model,
   attri <- list()
 
   if ("R2" %in% c(metrics)) {
-    r2 <- r2_bayes(model, average = average, prior_odds = prior_odds)
+    r2 <- r2_bayes(model, average = average, prior_odds = prior_odds, verbose = verbose)
     attri$r2_bayes <- attributes(r2) # save attributes
 
     # Format to df then to list
@@ -280,7 +264,14 @@ model_performance.BFBayesFactor <- function(model,
 
 
   if ("SIGMA" %in% toupper(metrics)) {
-    sig <- suppressMessages(.get_sigma_bfbayesfactor(model, average = average, prior_odds = prior_odds))
+    sig <- suppressMessages(
+      .get_sigma_bfbayesfactor(
+        model,
+        average = average,
+        prior_odds = prior_odds,
+        verbose = verbose
+      )
+    )
     out$Sigma <- bayestestR::point_estimate(sig, "median")[[1]]
   }
 
@@ -299,13 +290,15 @@ model_performance.BFBayesFactor <- function(model,
 # helper -------------------
 
 
-.get_sigma_bfbayesfactor <- function(model, average = FALSE, prior_odds = NULL) {
+.get_sigma_bfbayesfactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE) {
   if (average) {
     return(.get_sigma_bfbayesfactor_model_average(model, prior_odds = prior_odds))
   }
 
-  params <- insight::get_parameters(model)
-  if (!"sig2" %in% colnames(params)) stop("This is not a linear model.")
+  params <- insight::get_parameters(model, verbose = verbose)
+  if (!"sig2" %in% colnames(params)) {
+    insight::format_error("This is not a linear model.")
+  }
   sqrt(params$sig2)
 }
 

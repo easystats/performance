@@ -1,7 +1,7 @@
 # prepare data for VIF plot ----------------------------------
 
-.diag_vif <- function(model) {
-  out <- check_collinearity(model)
+.diag_vif <- function(model, verbose = TRUE) {
+  out <- check_collinearity(model, verbose = verbose)
   dat <- insight::compact_list(out)
   if (is.null(dat)) {
     return(NULL)
@@ -13,10 +13,15 @@
   dat <- datawizard::data_rename(
     dat,
     c("Term", "VIF", "SE_factor", "Component"),
-    c("x", "y", "se", "facet")
+    c("x", "y", "se", "facet"),
+    verbose = FALSE
   )
 
-  dat <- datawizard::data_select(dat, c("x", "y", "facet", "group"))
+  dat <- datawizard::data_select(
+    dat,
+    c("x", "y", "facet", "group"),
+    verbose = FALSE
+  )
 
   if (insight::n_unique(dat$facet) <= 1) {
     dat$facet <- NULL
@@ -30,46 +35,57 @@
 
 # prepare data for QQ plot ----------------------------------
 
-.diag_qq <- function(model) {
+.diag_qq <- function(model, verbose = TRUE) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB", "gam"))) {
-    res_ <- sort(stats::residuals(model), na.last = NA)
+    res_ <- stats::residuals(model)
+  } else if (inherits(model, "geeglm")) {
+    res_ <- stats::residuals(model, type = "pearson")
   } else if (inherits(model, "glm")) {
-    res_ <- sort(stats::rstandard(model, type = "pearson"), na.last = NA)
+    res_ <- .safe(abs(stats::rstandard(model, type = "deviance")))
   } else {
-    res_ <- tryCatch(
-      {
-        sort(stats::rstudent(model), na.last = NA)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    res_ <- .safe(stats::rstudent(model))
     if (is.null(res_)) {
-      res_ <- tryCatch(
-        {
-          sort(stats::residuals(model), na.last = NA)
-        },
-        error = function(e) {
-          NULL
-        }
-      )
+      res_ <- .safe(stats::residuals(model))
     }
   }
 
   if (is.null(res_)) {
-    insight::print_color(sprintf("QQ plot could not be created. Cannot extract residuals from objects of class '%s'.\n", class(model)[1]), "red")
+    if (verbose) {
+      insight::format_alert(
+        sprintf(
+          "QQ plot could not be created. Cannot extract residuals from objects of class `%s`.",
+          class(model)[1]
+        )
+      )
+    }
     return(NULL)
   }
 
-  fitted_ <- sort(stats::fitted(model), na.last = NA)
-  stats::na.omit(data.frame(x = fitted_, y = res_))
+  if (inherits(model, "glm")) {
+    fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)
+  } else {
+    fitted_ <- stats::fitted(model)
+  }
+
+  # sanity check, sometimes either residuals or fitted can contain NA, see #488
+  if (anyNA(res_) || anyNA(fitted_)) {
+    # drop NA and make sure both fitted and residuals match
+    non_na <- !is.na(fitted_) & !is.na(res_)
+    fitted_ <- fitted_[non_na]
+    res_ <- res_[non_na]
+  }
+
+  res_ <- sort(res_, na.last = NA)
+  fitted_ <- sort(fitted_, na.last = NA)
+
+  data.frame(x = fitted_, y = res_)
 }
 
 
 
 # prepare data for random effects QQ plot ----------------------------------
 
-.diag_reqq <- function(model, level = .95, model_info) {
+.diag_reqq <- function(model, level = 0.95, model_info, verbose = TRUE) {
   # check if we have mixed model
   if (!model_info$is_mixed) {
     return(NULL)
@@ -107,12 +123,14 @@
   )
 
   if (is.null(se)) {
-    insight::print_color("Could not compute standard errors from random effects for diagnostic plot.\n", "red")
+    if (verbose) {
+      insight::format_alert("Could not compute standard errors from random effects for diagnostic plot.")
+    }
     return(NULL)
   }
 
 
-  mapply(function(.re, .se) {
+  Map(function(.re, .se) {
     ord <- unlist(lapply(.re, order)) + rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
 
     df.y <- unlist(.re)[ord]
@@ -127,18 +145,18 @@
       stringsAsFactors = FALSE,
       row.names = NULL
     )
-  }, re, se, SIMPLIFY = FALSE)
+  }, re, se)
 }
 
 
 
 # prepare data for normality of residuals plot ----------------------------------
 
-.diag_norm <- function(model) {
+.diag_norm <- function(model, verbose = TRUE) {
   r <- try(stats::residuals(model), silent = TRUE)
 
   if (inherits(r, "try-error")) {
-    insight::print_color(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.\n", class(model)[1]), "red")
+    insight::format_alert(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
     return(NULL)
   }
 
@@ -155,33 +173,19 @@
   s <- summary(model)
 
   if (inherits(model, "lm", which = TRUE) == 1) {
-    cook_levels <- round(stats::qf(.5, s$fstatistic[2], s$fstatistic[3]), 2)
+    cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
   } else if (!is.null(threshold)) {
     cook_levels <- threshold
   } else {
-    cook_levels <- c(.5, 1)
+    cook_levels <- c(0.5, 1)
   }
 
-  n_params <- tryCatch(
-    {
-      model$rank
-    },
-    error = function(e) {
-      insight::n_parameters(model)
-    }
-  )
+  n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
 
   infl <- stats::influence(model, do.coef = FALSE)
   resid <- insight::get_residuals(model)
 
-  std_resid <- tryCatch(
-    {
-      stats::rstandard(model, infl)
-    },
-    error = function(e) {
-      resid
-    }
-  )
+  std_resid <- tryCatch(stats::rstandard(model, infl), error = function(e) resid)
 
   plot_data <- data.frame(
     Hat = infl$hat,
@@ -191,7 +195,7 @@
     Std_Residuals = std_resid,
     stringsAsFactors = FALSE
   )
-  plot_data$Index <- 1:nrow(plot_data)
+  plot_data$Index <- seq_len(nrow(plot_data))
   plot_data$Influential <- "OK"
   plot_data$Influential[abs(plot_data$Cooks_Distance) >= max(cook_levels)] <- "Influential"
 
@@ -204,7 +208,7 @@
 
 # prepare data for non-constant variance plot ----------------------------------
 
-.diag_ncv <- function(model) {
+.diag_ncv <- function(model, verbose = TRUE) {
   ncv <- tryCatch(
     {
       data.frame(
@@ -218,7 +222,9 @@
   )
 
   if (is.null(ncv)) {
-    insight::print_color(sprintf("Non-constant error variance could not be computed. Cannot extract residuals from objects of class '%s'.\n", class(model)[1]), "red")
+    if (verbose) {
+      insight::format_alert(sprintf("Non-constant error variance could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
+    }
     return(NULL)
   }
 
@@ -229,7 +235,7 @@
 
 # prepare data for homogeneity of variance plot ----------------------------------
 
-.diag_homogeneity <- function(model) {
+.diag_homogeneity <- function(model, verbose = TRUE) {
   faminfo <- insight::model_info(model)
   r <- tryCatch(
     {
@@ -245,6 +251,7 @@
         }
         stats::residuals(model) / sigma
       } else if (inherits(model, "glm")) {
+        ## TODO: check if we can / should use deviance residuals (as for QQ plots) here as well?
         stats::rstandard(model, type = "pearson")
       } else {
         stats::rstandard(model)
@@ -256,7 +263,9 @@
   )
 
   if (is.null(r)) {
-    insight::print_color(sprintf("Homogeneity of variance could not be computed. Cannot extract residual variance from objects of class '%s'.\n", class(model)[1]), "red")
+    if (verbose) {
+      insight::format_alert(sprintf("Homogeneity of variance could not be computed. Cannot extract residual variance from objects of class '%s'.", class(model)[1]))
+    }
     return(NULL)
   }
 

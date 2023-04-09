@@ -32,9 +32,7 @@ model <- glm(counts ~ outcome + treatment, family = poisson())
 r2_efron(model)
 }
 \references{
-\itemize{
-\item Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of
+Efron, B. (1978). Regression and ANOVA with zero-one data: Measures of
 residual variation. Journal of the American Statistical Association, 73,
 113-121.
-}
 }

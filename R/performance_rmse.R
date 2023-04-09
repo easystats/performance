@@ -13,7 +13,7 @@
 #'   to model's predicted values). It can be interpreted as the standard
 #'   deviation of the unexplained variance, and is in the same units as the
 #'   response variable. Lower values indicate better model fit.
-#'   \cr \cr
+#'
 #'   The normalized RMSE is the proportion of the RMSE related to the
 #'   range of the response variable. Hence, lower values indicate
 #'   less residual variance.
@@ -40,7 +40,7 @@ performance_rmse <- function(model, normalized = FALSE, verbose = TRUE) {
       # if normalized, divide by range of response
       if (normalized) {
         # get response
-        resp <- datawizard::data_to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+        resp <- datawizard::to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
         # compute rmse, normalized
         rmse_val <- rmse_val / (max(resp, na.rm = TRUE) - min(resp, na.rm = TRUE))
       }

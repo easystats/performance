@@ -15,17 +15,22 @@
 #' @examples
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2_tjur(model)
-#' @references Tjur, T. (2009). Coefficients of determination in logistic regression models - A new proposal: The coefficient of discrimination. The American Statistician, 63(4), 366-372.
+#'
+#' @references
+#' Tjur, T. (2009). Coefficients of determination in logistic regression
+#' models - A new proposal: The coefficient of discrimination. The American
+#' Statistician, 63(4), 366-372.
 #'
 #' @export
 r2_tjur <- function(model, ...) {
-  if (is.null(info <- list(...)$model_info)) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 
   # check for valid object class
   if (!info$is_binomial) {
-    stop("`model` must be binomial.", call. = FALSE)
+    insight::format_error("`model` must be binomial.")
   }
 
   y <- .recode_to_zero(insight::get_response(model, verbose = FALSE))

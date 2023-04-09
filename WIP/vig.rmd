@@ -46,7 +46,7 @@ For non-Gaussian models, there is no clean variance decomposition and hence the 
 You can achieve this with the `ppd`-argument. In this case, draws from the posterior predictive distribution _not conditioned_ on group-level terms (using `posterior_predict(..., re.form = NA)`) as well as draws from this distribution _conditioned_ on _all random effects_ (by default, unless specified else in the `re.form`-argument) are taken. Then, the variances for each of these draws are calculated. The "ICC" is then the ratio between these two variances.
 
 ```{r, message=TRUE}
-icc(m4, ppd = TRUE, re.form = ~(1 | cyl), prob = .5)
+icc(m4, ppd = TRUE, re.form = ~ (1 | cyl), prob = .5)
 ```
 
 Sometimes, when the variance of the posterior predictive distribution is very large, the variance ratio in the output makes no sense, e.g. because it is negative. In such cases, it might help to use a more robust measure to calculate the central tendency of the variances. This can be done with the `typical`-argument.
@@ -125,7 +125,7 @@ For linear mixed models, the approximation of p-values are more precise when `p.
 # Using the t-statistics for calculating the p-value
 p_value(m2)
 
-# p-values based on conditional F-tests with 
+# p-values based on conditional F-tests with
 # Kenward-Roger approximation for the degrees of freedom
 p_value(m2, p.kr = TRUE)
 ```

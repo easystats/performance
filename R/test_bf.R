@@ -7,8 +7,7 @@ test_bf <- function(...) {
 
 #' @rdname test_performance
 #' @export
-test_bf.default <- function(..., text_length = NULL) {
-
+test_bf.default <- function(..., reference = 1, text_length = NULL) {
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
   names(objects) <- match.call(expand.dots = FALSE)$`...`
@@ -17,12 +16,14 @@ test_bf.default <- function(..., text_length = NULL) {
   .test_performance_checks(objects, multiple = FALSE)
 
   if (length(objects) == 1 && isTRUE(insight::is_model(objects))) {
-    stop(insight::format_message("'test_bf()' is designed to compare multiple models together. For a single model, you might want to run bayestestR::bf_parameters() instead."), call. = FALSE)
+    insight::format_error(
+      "`test_bf()` is designed to compare multiple models together. For a single model, you might want to run `bayestestR::bf_parameters()` instead."
+    )
   }
 
   # If a suitable class is found, run the more specific method on it
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_bf(objects, text_length = text_length)
+    test_bf(objects, reference = reference, text_length = text_length)
   } else {
     stop("The models cannot be compared for some reason :/", call. = FALSE)
   }
@@ -33,7 +34,7 @@ test_bf.default <- function(..., text_length = NULL) {
 #' @export
 test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) {
   if (.test_bf_areAllBayesian(objects) == "mixed") {
-    stop("You cannot mix Bayesian and non-Bayesian models in 'test_bf()'.", call. = FALSE)
+    insight::format_error("You cannot mix Bayesian and non-Bayesian models in `test_bf()`.")
   }
 
   # Adapt reference but keep original input
@@ -84,9 +85,9 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
 .test_bf_areAllBayesian <- function(objects) {
   bayesian_models <- sapply(objects, function(i) isTRUE(insight::model_info(i)$is_bayesian))
 
-  if (all(bayesian_models == TRUE)) {
+  if (all(bayesian_models)) {
     "yes"
-  } else if (all(bayesian_models == FALSE)) {
+  } else if (!all(bayesian_models)) {
     "no"
   } else {
     "mixed"

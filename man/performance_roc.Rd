@@ -30,7 +30,8 @@ This function calculates a simple ROC curves of x/y coordinates
 based on response and predictions of a binomial model.
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 library(bayestestR)
@@ -48,12 +49,14 @@ as.data.frame(performance_roc(model, new_data = test_data))
 roc <- performance_roc(model, new_data = test_data)
 area_under_curve(roc$Specificity, roc$Sensitivity)
 
-m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
-m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
-m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
-performance_roc(m1, m2, m3)
+if (interactive()) {
+  m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
+  m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
+  m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
+  performance_roc(m1, m2, m3)
 
-# if you have `see` package installed, you can also plot comparison of
-# ROC curves for different models
-if (require("see")) plot(performance_roc(m1, m2, m3))
+  # if you have `see` package installed, you can also plot comparison of
+  # ROC curves for different models
+  if (require("see")) plot(performance_roc(m1, m2, m3))
+}
 }

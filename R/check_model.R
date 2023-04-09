@@ -28,6 +28,11 @@
 #' @param theme String, indicating the name of the plot-theme. Must be in the
 #'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
 #' @param detrend Should QQ/PP plots be detrended?
+#' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
+#'   to `FALSE` for models with many observations, if generating the plot is too
+#'   time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
+#'   tries to guess whether performance will be poor due to a very large model
+#'   and thus automatically shows or hides dots.
 #' @param verbose Toggle off warnings.
 #' @param ... Currently not used.
 #'
@@ -45,15 +50,73 @@
 #'   A more advanced model-check for Bayesian models will be implemented at a
 #'   later stage.
 #'
+#' @section Posterior Predictive Checks:
+#' Posterior predictive checks can be used to look for systematic discrepancies
+#' between real and simulated data. It helps to see whether the type of model
+#' (distributional family) fits well to the data. See [`check_predictions()`]
+#' for further details.
+#'
 #' @section Linearity Assumption:
 #' The plot **Linearity** checks the assumption of linear relationship.
 #' However, the spread of dots also indicate possible heteroscedasticity (i.e.
-#' non-constant variance); hence, the alias `"ncv"` for this plot.
+#' non-constant variance, hence, the alias `"ncv"` for this plot), thus it shows
+#' if residuals have non-linear patterns. This plot helps to see whether
+#' predictors may have a non-linear relationship with the outcome, in which case
+#' the reference line may roughly indicate that relationship. A straight and
+#' horizontal line indicates that the model specification seems to be ok. But
+#' for instance, if the line would be U-shaped, some of the predictors probably
+#' should better be modeled as quadratic term. See [`check_heteroscedasticity()`]
+#' for further details.
+#'
 #' **Some caution is needed** when interpreting these plots. Although these
-#' plots are helpful to check model assumptions, they do not necessarily
-#' indicate so-called "lack of fit", e.g. missed non-linear relationships or
-#' interactions. Thus, it is always recommended to also look at
+#' plots are helpful to check model assumptions, they do not necessarily indicate
+#' so-called "lack of fit", e.g. missed non-linear relationships or interactions.
+#' Thus, it is always recommended to also look at
 #' [effect plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
+#'
+#' @section Homogeneity of Variance:
+#' This plot checks the assumption of equal variance (homoscedasticity). The
+#' desired pattern would be that dots spread equally above and below a straight,
+#' horizontal line and show no apparent deviation.
+#'
+#' @section Influential Observations:
+#' This plot is used to identify influential observations. If any points in this
+#' plot fall outside of Cook’s distance (the dashed lines) then it is considered
+#' an influential observation. See [`check_outliers()`] for further details.
+#'
+#' @section Multicollinearity:
+#' This plot checks for potential collinearity among predictors. In a nutshell,
+#' multicollinearity means that once you know the effect of one predictor, the
+#' value of knowing the other predictor is rather low. Multicollinearity might
+#' arise when a third, unobserved variable has a causal effect on each of the
+#' two predictors that are associated with the outcome. In such cases, the actual
+#' relationship that matters would be the association between the unobserved
+#' variable and the outcome. See [`check_collinearity()`] for further details.
+#'
+#' @section Normality of Residuals:
+#' This plot is used to determine if the residuals of the regression model are
+#' normally distributed. Usually, dots should fall along the line. If there is
+#' some deviation (mostly at the tails), this indicates that the model doesn't
+#' predict the outcome well for that range that shows larger deviations from
+#' the line. For generalized linear models, a half-normal Q-Q plot of the
+#' absolute value of the standardized deviance residuals is shown, however, the
+#' interpretation of the plot remains the same. See [`check_normality()`] for
+#' further details.
+#'
+#' @section Overdispersion:
+#' For count models, an *overdispersion plot* is shown. Overdispersion occurs
+#' when the observed variance is higher than the variance of a theoretical model.
+#' For Poisson models, variance increases with the mean and, therefore, variance
+#' usually (roughly) equals the mean value. If the variance is much higher,
+#' the data are "overdispersed". See [`check_overdispersion()`] for further
+#' details.
+#'
+#' @section Binned Residuals:
+#' For models from binomial families, a *binned residuals plot* is shown.
+#' Binned residual plots are achieved by cutting the the data into bins and then
+#' plotting the average residual versus the average fitted value for each bin.
+#' If the model were true, one would expect about 95% of the residuals to fall
+#' inside the error bounds. See [`binned_residuals()`] for further details.
 #'
 #' @section Residuals for (Generalized) Linear Models:
 #' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
@@ -62,6 +125,16 @@
 #' residuals (with overlayed normal curve) and for the linearity assumption use
 #' the default residuals for `lm` and `glm` (which are deviance
 #' residuals for `glm`).
+#'
+#' @section Troubleshooting:
+#' For models with many observations, or for more complex models in general,
+#' generating the plot might become very slow. One reason might be that the
+#' underlying graphic engine becomes slow for plotting many data points. In
+#' such cases, setting the argument `show_dots = FALSE` might help. Furthermore,
+#' look at the `check` argument and see if some of the model checks could be
+#' skipped, which also increases performance.
+#'
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @examples
 #' \dontrun{
@@ -91,17 +164,17 @@ check_model <- function(x, ...) {
 #' @export
 check_model.default <- function(x,
                                 dot_size = 2,
-                                line_size = .8,
+                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
-                                alpha = .2,
-                                dot_alpha = .8,
+                                alpha = 0.2,
+                                dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
+                                show_dots = NULL,
                                 verbose = TRUE,
                                 ...) {
-
   # check model formula
   if (verbose) {
     insight::formula_ok(x)
@@ -109,16 +182,30 @@ check_model.default <- function(x,
 
   minfo <- insight::model_info(x, verbose = FALSE)
 
-  if (minfo$is_bayesian) {
-    ca <- suppressWarnings(.check_assumptions_stan(x))
-  } else if (minfo$is_linear) {
-    ca <- suppressWarnings(.check_assumptions_linear(x, minfo))
-  } else {
-    ca <- suppressWarnings(.check_assumptions_glm(x, minfo))
+  ca <- tryCatch(
+    {
+      if (minfo$is_bayesian) {
+        suppressWarnings(.check_assumptions_stan(x))
+      } else if (minfo$is_linear) {
+        suppressWarnings(.check_assumptions_linear(x, minfo, verbose))
+      } else {
+        suppressWarnings(.check_assumptions_glm(x, minfo, verbose))
+      }
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  if (is.null(ca)) {
+    insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
   }
-  # else {
-  #   stop(paste0("`check_assumptions()` not implemented for models of class '", class(x)[1], "' yet."), call. = FALSE)
-  # }
+
+  # set default for show_dots, based on "model size"
+  if (is.null(show_dots)) {
+    n <- .safe(insight::n_obs(x))
+    show_dots <- is.null(n) || n <= 1e5
+  }
 
   attr(ca, "panel") <- panel
   attr(ca, "dot_size") <- dot_size
@@ -126,6 +213,7 @@ check_model.default <- function(x,
   attr(ca, "check") <- check
   attr(ca, "alpha") <- alpha
   attr(ca, "dot_alpha") <- dot_alpha
+  attr(ca, "show_dots") <- isTRUE(show_dots)
   attr(ca, "detrend") <- detrend
   attr(ca, "colors") <- colors
   attr(ca, "theme") <- theme
@@ -139,13 +227,13 @@ check_model.default <- function(x,
 
 #' @export
 print.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "for model diagnositic plots")
+  insight::check_if_installed("see", "for model diagnostic plots")
   NextMethod()
 }
 
 #' @export
 plot.check_model <- function(x, ...) {
-  insight::check_if_installed("see", "for model diagnositic plots")
+  insight::check_if_installed("see", "for model diagnostic plots")
   NextMethod()
 }
 
@@ -159,14 +247,15 @@ plot.check_model <- function(x, ...) {
 #' @export
 check_model.stanreg <- function(x,
                                 dot_size = 2,
-                                line_size = .8,
+                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
-                                alpha = .2,
-                                dot_alpha = .8,
+                                alpha = 0.2,
+                                dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
+                                show_dots = NULL,
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
@@ -179,6 +268,7 @@ check_model.stanreg <- function(x,
     colors = colors,
     theme = theme,
     detrend = detrend,
+    show_dots = show_dots,
     verbose = verbose,
     ...
   )
@@ -192,14 +282,15 @@ check_model.brmsfit <- check_model.stanreg
 #' @export
 check_model.model_fit <- function(x,
                                   dot_size = 2,
-                                  line_size = .8,
+                                  line_size = 0.8,
                                   panel = TRUE,
                                   check = "all",
-                                  alpha = .2,
-                                  dot_alpha = .8,
+                                  alpha = 0.2,
+                                  dot_alpha = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
                                   detrend = FALSE,
+                                  show_dots = NULL,
                                   verbose = TRUE,
                                   ...) {
   check_model(
@@ -213,6 +304,7 @@ check_model.model_fit <- function(x,
     colors = colors,
     theme = theme,
     detrend = detrend,
+    show_dots = show_dots,
     verbose = verbose,
     ...
   )
@@ -222,15 +314,15 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info) {
+.check_assumptions_linear <- function(model, model_info, verbose = TRUE) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model)
-  dat$QQ <- .diag_qq(model)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
-  dat$NORM <- .diag_norm(model)
-  dat$NCV <- .diag_ncv(model)
-  dat$HOMOGENEITY <- .diag_homogeneity(model)
+  dat$VIF <- .diag_vif(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+  dat$NORM <- .diag_norm(model, verbose = verbose)
+  dat$NCV <- .diag_ncv(model, verbose = verbose)
+  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook
@@ -238,7 +330,7 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
+  dat$PP_CHECK <- .safe(check_predictions(model))
 
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -249,13 +341,13 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info) {
+.check_assumptions_glm <- function(model, model_info, verbose = TRUE) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model)
-  dat$QQ <- .diag_qq(model)
-  dat$HOMOGENEITY <- .diag_homogeneity(model)
-  dat$REQQ <- .diag_reqq(model, level = .95, model_info = model_info)
+  dat$VIF <- .diag_vif(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
   if (!is.null(dat$OUTLIERS)) {
     threshold <- attributes(dat$OUTLIERS)$threshold$cook
@@ -263,7 +355,7 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- tryCatch(check_predictions(model), error = function(e) NULL)
+  dat$PP_CHECK <- .safe(check_predictions(model))
   if (isTRUE(model_info$is_binomial)) {
     dat$BINNED_RESID <- binned_residuals(model)
   }
@@ -282,11 +374,10 @@ check_model.model_fit <- function(x,
 
 .check_assumptions_stan <- function(model) {
   if (inherits(model, "brmsfit")) {
-
     # check if brms can be loaded
 
     if (!requireNamespace("brms", quietly = TRUE)) {
-      stop("Package `brms` needs to be loaded first!", call. = FALSE)
+      insight::format_error("Package `brms` needs to be loaded first!")
     }
 
     # check if prior sample are available
@@ -294,7 +385,9 @@ check_model.model_fit <- function(x,
     d2 <- brms::prior_samples(model)
 
     if (is.null(d2)) {
-      stop(insight::format_message("No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."), call. = FALSE)
+      insight::format_error(
+        "No prior-samples found. Please use option `sample_prior = TRUE` when fitting the model."
+      )
     }
 
     d1 <- brms::posterior_samples(model)
@@ -304,10 +397,9 @@ check_model.model_fit <- function(x,
     d1 <- d1[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d1), perl = TRUE)]
     d2 <- d2[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d2), perl = TRUE)]
   } else if (inherits(model, c("stanreg", "stanfit"))) {
-
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
-      stop("Package `rstanarm` needs to be loaded first!", call. = FALSE)
+      insight::format_error("Package `rstanarm` needs to be loaded first!")
     }
 
 

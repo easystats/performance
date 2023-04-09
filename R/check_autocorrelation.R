@@ -11,6 +11,8 @@
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates autocorrelated residuals.
 #'
+#' @family functions to check model assumptions and and assess model quality
+#'
 #' @details Performs a Durbin-Watson-Test to check for autocorrelated residuals.
 #' In case of autocorrelation, robust standard errors return more accurate
 #' results for the estimates, or maybe a mixed model with error term for the
@@ -27,6 +29,9 @@ check_autocorrelation <- function(x, ...) {
 #' @rdname check_autocorrelation
 #' @export
 check_autocorrelation.default <- function(x, nsim = 1000, ...) {
+  # check for valid input
+  .is_model_valid(x)
+
   .residuals <- stats::residuals(x)
   n <- length(.residuals)
   dw <- .durbWats(.residuals)
@@ -50,16 +55,28 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
 
 #' @export
 plot.check_autocorrelation <- function(x, ...) {
-  warning(insight::format_message("There is currently no plot() method for `check_autocorrelation()`."), call. = FALSE)
+  insight::format_warning("There is currently no `plot()` method for `check_autocorrelation()`.")
 }
 
 
 #' @export
 print.check_autocorrelation <- function(x, ...) {
   if (x < 0.05) {
-    insight::print_color(sprintf("Warning: Autocorrelated residuals detected (%s).", insight::format_p(x)), "red")
+    insight::print_color(
+      sprintf(
+        "Warning: Autocorrelated residuals detected (%s).",
+        insight::format_p(x)
+      ),
+      "red"
+    )
   } else {
-    insight::print_color(sprintf("OK: Residuals appear to be independent and not autocorrelated (%s).", insight::format_p(x)), "green")
+    insight::print_color(
+      sprintf(
+        "OK: Residuals appear to be independent and not autocorrelated (%s).",
+        insight::format_p(x)
+      ),
+      "green"
+    )
   }
   invisible(x)
 }

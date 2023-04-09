@@ -21,15 +21,15 @@
 #'   `test_bf()` describes models by their formulas, which can lead to
 #'   overly long lines in the output. `text_length` fixes the length of
 #'   lines to a specified limit.
+#' @param verbose Toggle warning and messages.
 #'
 #' @return A data frame containing the relevant indices.
 #'
-#' @seealso [`compare_performance()`][compare_performance] to compare
-#'   the performance indices of many different models.
+#' @seealso [`compare_performance()`] to compare the performance indices of
+#' many different models.
 #'
 #' @details
-#'
-#' \subsection{Nested vs. Non-nested Models}{
+#' ## Nested vs. Non-nested Models
 #' Model's "nesting" is an important concept of models comparison. Indeed, many
 #' tests only make sense when the models are *"nested",* i.e., when their
 #' predictors are nested. This means that all the predictors of a model are
@@ -55,9 +55,8 @@
 #' other requirements have often to be the fulfilled. For instance, outcome
 #' variables (the response) must be the same. You cannot meaningfully test
 #' whether apples are significantly different from oranges!
-#' }
 #'
-#' \subsection{Estimator of the standard deviation}{
+#' ## Estimator of the standard deviation
 #' The estimator is relevant when comparing regression models using
 #' `test_likelihoodratio()`. If `estimator = "OLS"`, then it uses the same
 #' method as `anova(..., test = "LRT")` implemented in base R, i.e., scaling
@@ -70,9 +69,8 @@
 #' Gaussian errors. For `estimator = "REML"`, the LRT is based on the REML-fit
 #' log-likelihoods of the models. Note that not all types of estimators are
 #' available for all model classes.
-#' }
 #'
-#' \subsection{REML versus ML estimator}{
+#' ## REML versus ML estimator
 #' When `estimator = "ML"`, which is the default for linear mixed models (unless
 #' they share the same fixed effects), values from information criteria (AIC,
 #' AICc) are based on the ML-estimator, while the default behaviour of `AIC()`
@@ -84,9 +82,8 @@
 #' LRT, `test_likelihoodratio()` checks if a comparison based on REML fits is
 #' indeed valid, and if so, uses REML as default (else, ML is the default).
 #' Set the `estimator` argument explicitely to override the default behaviour.
-#' }
 #'
-#' \subsection{Tests Description}{
+#' ## Tests Description
 #'
 #' - **Bayes factor for Model Comparison** - `test_bf()`: If all
 #'   models were fit from the same data, the returned `BF` shows the Bayes
@@ -143,7 +140,6 @@
 #'     reference model. If the models are nested, then the test works as a robust
 #'     LRT. The code for this function is adapted from the **nonnest2**
 #'     package, and all credit go to their authors.
-#' }
 #'
 #' @examples
 #' # Nested Models
@@ -219,16 +215,17 @@
 #'     test_performance(m1, m2, m3)
 #'   }
 #' }
-#' @references
-#' \itemize{
-#'   \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
-#'   non-nested hypotheses. Econometrica, 57, 307-333.
 #'
-#'   \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested
-#'   structural equation models. Psychological Methods, 21, 151-163.
-#' }
+#' @references
+#'
+#'  - Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
+#'    non-nested hypotheses. Econometrica, 57, 307-333.
+#'
+#'  - Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested
+#'    structural equation models. Psychological Methods, 21, 151-163.
+#'
 #' @export
-test_performance <- function(..., reference = 1) {
+test_performance <- function(..., reference = 1, verbose = TRUE) {
   UseMethod("test_performance")
 }
 
@@ -237,13 +234,12 @@ test_performance <- function(..., reference = 1) {
 # default --------------------------------
 
 #' @export
-test_performance.default <- function(..., reference = 1, include_formula = FALSE) {
-
+test_performance.default <- function(..., reference = 1, include_formula = FALSE, verbose = TRUE) {
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
-  .test_performance_checks(objects)
+  objects <- .test_performance_checks(objects, verbose = verbose)
 
   # ensure proper object names
   objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
@@ -252,7 +248,7 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_performance(objects, reference = reference, include_formula = include_formula)
   } else {
-    stop("The models cannot be compared for some reason :/", call. = FALSE)
+    insight::format_error("The models cannot be compared for some reason :/")
   }
 }
 
@@ -262,14 +258,15 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
 
 #' @export
 plot.test_performance <- function(x, ...) {
-  warning(insight::format_message("There is currently no plot() method for test-functions.",
-                                  "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."), call. = FALSE)
+  insight::format_alert(
+    "There is currently no `plot()` method for test-functions.",
+    "Please use `plot(compare_perfomance())` for some visual representations of your model comparisons."
+  )
 }
 
 
 #' @export
 format.test_performance <- function(x, digits = 2, ...) {
-
   # Format cols and names
   out <- insight::format_table(x, digits = digits, ...)
 
@@ -436,15 +433,28 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
 
 
-.test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE) {
-
+.test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE, verbose = TRUE) {
   # TODO: we could actually generate a baseline model 'y ~ 1' whenever a single model is passed
   if (multiple && insight::is_model(objects)) {
-    stop("At least two models are required to test them.", call. = FALSE)
+    null_model <- .safe(insight::null_model(objects, verbose = FALSE))
+    if (!is.null(null_model) && insight::is_model(null_model)) {
+      objects <- insight::ellipsis_info(list(null_model, objects))
+      names(objects) <- c("Null model", "Full model")
+      if (verbose) {
+        insight::format_alert(
+          "Only one model was provided, however, at least two are required for comparison.",
+          "Fitting a null-model as reference now."
+        )
+      }
+    } else {
+      insight::format_error("At least two models are required to test them.")
+    }
   }
 
-  if (same_response && !inherits(objects, "ListLavaan") && attributes(objects)$same_response == FALSE) {
-    stop(insight::format_message("The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models."), call. = FALSE)
+  if (same_response && !inherits(objects, "ListLavaan") && isFALSE(attributes(objects)$same_response)) {
+    insight::format_error(
+      "The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models."
+    )
   }
 
   # check formula of all models, but warn only once
@@ -468,12 +478,12 @@ test_performance.ListNonNestedRegressions <- function(objects,
   object_names <- insight::compact_character(names(objects))
   # check if we have any names at all
   if ((is.null(object_names) ||
-      # or if length of names doesn't match number of models
-      length(object_names) != length(objects) ||
-      # or if names are "..1", "..2" pattern
-      all(grepl("\\.\\.\\d", object_names))) &&
-      # and length of dot-names must match length of objects
-      length(objects) == length(dot_names)) {
+    # or if length of names doesn't match number of models
+    length(object_names) != length(objects) ||
+    # or if names are "..1", "..2" pattern
+    all(grepl("\\.\\.\\d", object_names))) &&
+    # and length of dot-names must match length of objects
+    length(objects) == length(dot_names)) {
     names(objects) <- dot_names
   }
   objects

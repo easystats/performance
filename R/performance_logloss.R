@@ -16,7 +16,7 @@
 #' predictions, while low values indicate good predictions. The lower the
 #' log-loss, the better the model predicts the outcome.
 #'
-#' @seealso [`performance_score()`][performance_score]
+#' @seealso [`performance_score()`]
 #'
 #' @examples
 #' data(mtcars)
@@ -30,6 +30,9 @@ performance_logloss <- function(model, verbose = TRUE, ...) {
 
 #' @export
 performance_logloss.default <- function(model, verbose = TRUE, ...) {
+  # check for valid input
+  .is_model_valid(model)
+
   resp <- .recode_to_zero(insight::get_response(model, verbose = verbose))
   ll <- suppressWarnings(mean(log(1 - abs(resp - stats::fitted(model))) * -1))
 

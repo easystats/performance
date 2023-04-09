@@ -1,35 +1,30 @@
-if (requiet("testthat") && requiet("performance")) {
-  data("mtcars")
-  mtcars$mpg <- floor(mtcars$mpg)
+test_that("performance_aic works", {
+  skip_if_not_installed("parameters")
+  data(fish, package = "parameters")
 
-  model_lnorm <- lm(log(mpg) ~ factor(cyl), mtcars)
-  model_norm <- lm(mpg ~ factor(cyl), mtcars)
-  model_pois <- glm(mpg ~ factor(cyl), mtcars, family = poisson())
+  model_norm <- lm(count ~ factor(persons), fish)
+  model_pois <- glm(count ~ factor(persons), fish, family = poisson())
+  expect_equal(performance_aic(model_norm), 1930.755, tolerance = 1e-2)
+  expect_equal(performance_aic(model_pois), 2758.236, tolerance = 1e-2)
+})
 
-  test_that("performance_aic works", {
-    expect_equal(performance_aic(model_norm), 170.8753, tolerance = 1e-2)
-    expect_equal(performance_aic(model_pois), 173.591, tolerance = 1e-2)
-  })
+test_that("performance_aic for log-model works", {
+  skip_if_not_installed("parameters")
+  data(fish, package = "parameters")
+  model_lnorm <- lm(log1p(count) ~ factor(persons), fish)
+  expect_equal(performance_aic(model_lnorm), 1025.352, tolerance = 1e-2)
+})
 
-  test_that("performance_aic for log-model works", {
-    expect_equal(performance_aic(model_lnorm), 168.2152, tolerance = 1e-2)
-  })
-
+test_that("performance_aic Jacobian", {
   m1 <- lm(disp ~ hp, data = mtcars)
   m2 <- lm(sqrt(disp) ~ hp, data = mtcars)
+  expect_equal(performance_aic(m1), 372.8247, tolerance = 1e-2)
+  expect_equal(performance_aic(m2), 367.1239, tolerance = 1e-2)
+})
 
-  test_that("performance_aic Jacobian", {
-    expect_equal(performance_aic(m1), 372.8247, tolerance = 1e-2)
-    expect_equal(performance_aic(m2), 367.1239, tolerance = 1e-2)
-  })
-
-  if (requiet("lme4")) {
-    data(iris)
-    m1 <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-
-    test_that("performance_aic lme4 default", {
-      expect_equal(performance_aic(m1), AIC(m1), tolerance = 1e-2)
-      expect_equal(performance_aic(m1, estimator = "ML"), 125.0043, tolerance = 1e-2)
-    })
-  }
-}
+test_that("performance_aic lme4 default", {
+  skip_if_not_installed("lme4")
+  m1 <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+  expect_equal(performance_aic(m1), AIC(m1), tolerance = 1e-2)
+  expect_equal(performance_aic(m1, estimator = "ML"), 125.0043, tolerance = 1e-2)
+})

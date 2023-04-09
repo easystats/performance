@@ -10,7 +10,6 @@ source("r2mlm_utils.R")
 
 
 r2mlm_init <- function(model) {
-
   # Step 1) check if model has_intercept
   has_intercept <- insight::has_intercept(model)
 
@@ -102,7 +101,7 @@ r2mlm_init <- function(model) {
 
   # 8b) gamma_b, intercept value if hasintercept = TRUE, and fixed slopes for L2 variables (from between list)
   gammab <- c()
-  if (has_intercept == TRUE) {
+  if (has_intercept ) {
     gammab[1] <- fixef(model)[1]
     i <- 2
   } else {

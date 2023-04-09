@@ -37,7 +37,7 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
 
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_zero_inflated) {
-    warning("Model has no zero-inflation component.")
+    insight::format_warning("Model has no zero-inflation component.")
   }
 
   if (method == "default") {
