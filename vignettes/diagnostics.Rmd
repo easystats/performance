@@ -254,7 +254,7 @@ data <- as.data.frame(sapply(data, as.numeric))
 ```{r message=FALSE, warning=FALSE, fig.align='center'}
 library(datawizard) # for reshape_longer
 data |>
-  reshape_longer(cols = 3:6, colnames_to = "Method", values_to = "Distance") |>
+  reshape_longer(cols = 3:6, names_to = "Method", values_to = "Distance") |>
   ggplot(aes(x = sample_size, y = Distance, color = Method, fill = Method)) +
   geom_point(alpha = 0.3, stroke = 0, shape = 16) +
   geom_smooth(alpha = 0.2) +
