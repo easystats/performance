@@ -67,7 +67,7 @@ and thus automatically shows or hides dots.}
 The data frame that is used for plotting.
 }
 \description{
-Visual check of model various assumptions (normality of residuals, normality
+Visual check of various model assumptions (normality of residuals, normality
 of random effects, linear relationship, homogeneity of variance,
 multicollinearity).
 }
@@ -80,7 +80,7 @@ later stage.
 }
 \note{
 This function just prepares the data for plotting. To create the plots,
-\CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+\strong{see} needs to be installed. Furthermore, this function suppresses
 all possible warnings. In case you observe suspicious plots, please refer
 to the dedicated functions (like \code{check_collinearity()},
 \code{check_normality()} etc.) to get informative messages and warnings.
@@ -146,7 +146,7 @@ some deviation (mostly at the tails), this indicates that the model doesn't
 predict the outcome well for that range that shows larger deviations from
 the line. For generalized linear models, a half-normal Q-Q plot of the
 absolute value of the standardized deviance residuals is shown, however, the
-intrepretation of the plot remains the same. See \code{\link[=check_normality]{check_normality()}} for
+interpretation of the plot remains the same. See \code{\link[=check_normality]{check_normality()}} for
 further details.
 }
 
