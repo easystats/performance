@@ -2,20 +2,19 @@
 output: pdf_document
 ---
 
-Dear Editor,
+Dear Dr. Vazire,
 
-We are pleased to submit this paper to [TODO].
+We are pleased to submit this paper to *Collabra: Psychology*.
 
-The paper, titled "Check your outliers! An accessible introduction to identifying statistical outliers in R with *easystats*", provides an overview of current recommendations and best practices regarding the diagnosis and treatment of outliers, a common issue faced by researchers - and a potential source of scientific malpractice. 
+The paper, titled "Check your outliers! An introduction to identifying statistical outliers in R with *easystats*", provides an overview of current recommendations and best practices regarding the diagnosis and treatment of outliers, a common issue faced by researchers---and a potential source of scientific malpractice.
 
-It explains the key approaches and highlights recommendations, and shows how users can adopt them in their R analysis with just one function. The manuscript covers univariate, multivariate, and model-based statistical outlier detection methods, their recommended threshold, standard output, and plotting method, among other things.
+It explains the key approaches, highlights recommendations, and shows how users can adopt them in their R analysis with a single function. The manuscript covers univariate, multivariate, and model-based statistical outlier detection methods, their recommended threshold, standard output, and plotting method, among other things.
 
-Beyond acting like a concise review of outlier treatment procedures and practical tutorial, we also describe a new method (a consensus-based approach) and discuss its benefits ad limitations. In this sense, the paper fits very well with the scope of the journal, as it essentially communicates to the wider public current advances in the statistical computing of outlier detection algorithms and their implementation in currently available open source and free software. This makes the manuscript relevant to data science, behavioural science, and statistical computing more generally. 
-<!-- Adapt the previous to new journal -->
+Beyond acting like a concise review of outlier treatment procedures and practical tutorial, we also introduce a new outlier-detection method that relies on a consensus-based approach. In this sense, the paper fits well with the "Methodology and Research Practice in Psychology" section of the journal, as it essentially communicates to psychologists how to easily follow some of the best practices in the detection of statistical outlier using currently available open source and free software. This makes the manuscript relevant to data science, behavioural science, and good research and statistical practices more generally.
 
-Our current submission is original and has been neither published elsewhere nor is currently under consideration for publication elsewhere. All authors have contributed substantially to the software and manuscript. All authors gave final approval to the manuscript and accept to be accountable. We have no conflicts of interest to disclose.
+As Associated Editor, we would like to suggest Jeffrey Girard, as he is familiar with the *easystats* and R ecosystems, as well as good statistical practices. Additionally, we would like to request a streamlined review, as the manuscript has been rejected within the previous 365 days from the journal *Mathematics*. Accordingly, we provide in this submission a detailed letter that includes prior reviews, the decision letter, as well as how we addressed the reviewers' comments. We have in this regard integrated most of the changes suggested by the reviewers. Note that the previous editors and reviewers have not given their permission for their comments to be openly available at *Collabra: Psychology*. However, although an open review was requested, the reviewers did not sign their reviews.
 
-<!-- We would also like to use the open peer review option. -->
+Our current submission is original and has been neither published elsewhere nor is currently under consideration for publication elsewhere. All authors have contributed substantially to the software and manuscript. All authors gave final approval to the manuscript and accept to be accountable. We have no conflicts of interest to disclose. We have also read the Transparency and Openness policy of the Editorial Policies of *Collabra: Psychology*.
 
 Thank you for considering our submission.
 

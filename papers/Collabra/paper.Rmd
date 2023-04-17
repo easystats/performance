@@ -91,6 +91,7 @@ abbreviations:
   - short: OSF
     long: Open Science Framework
 output: rticles::arxiv_article
+csl: apa.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -287,7 +288,7 @@ attributes(outliers)$outlier_var$zscore_robust
 
 An example sentence for reporting the usage of the composite method could be:
 
-> Based on a composite outlier score (see the 'check_outliers()' function in the 'performance' R package, [@ludecke2021performance]) obtained via the joint application of multiple outliers detection algorithms ((a) median absolute deviation (MAD)-based robust _z_ scores, [@leys2013outliers]; (b) Mahalanobis minimum covariance determinant (MCD), [@leys2019outliers]; and (c) Cook's distance, [@cook1977detection]), we excluded two participants that were classified as outliers by at least half of the methods used.
+> Based on a composite outlier score [see the 'check_outliers()' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust _z_ scores, @leys2013outliers; (b) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (c) Cook's distance, @cook1977detection], we excluded two participants that were classified as outliers by at least half of the methods used.
 
 # Handling Outliers
 
@@ -325,5 +326,21 @@ Once again, it is a critical part of a sound outlier treatment that regardless o
 # Conclusion
 
 In this paper, we have showed how to investigate outliers using the `check_outliers()` function of the *{performance}* package while following current good practices. However, best practice for outlier treatment does not stop at using appropriate statistical algorithms, but entails respecting existing recommendations, such as preregistration, reproducibility, consistency, transparency, and justification. Ideally, one would additionally also report the package, function, and threshold used (linking to the full code when possible). We hope that this paper and the accompanying `check_outlier()` function of *easystats* will help researchers engage in good research practices while providing a smooth outlier detection experience.
+
+### Contributions
+
+Author 1 drafted the paper; all authors contributed to both the writing of the paper and the conception of the software.
+
+### Acknowledgements
+
+*{performance}* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem [@easystatspackage]. Thus, we thank all [members of easystats](https://github.com/orgs/easystats/people), contributors, and users alike.
+
+### Funding information
+
+This research received no external funding.
+
+### Competing Interests
+
+The authors declare no conflict of interest
 
 # References

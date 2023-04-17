@@ -1,0 +1,83 @@
+---
+output: pdf_document
+---
+
+The paper "Check your outliers! An introduction to identifying statistical outliers in R with *easystats*" has been submitted to the Journal *Mathematics* before, and has been rejected.
+
+# Editor comments:
+
+> Less convinced as a scientific research is the major concern. I cannot find a solid contribution for the statistical methodologies, new packages, or sound applications in this study. Almost all the obtained conclusions are known. The readers would be happy to see more convincing results from good real examples from the real world if only the well known statistical methods and packages are used in this study. The tutorial-like results using the examples in R are too weak for an academic paper. It is contributive if the authors can include real examples in different areas to show the power of the used package and present the insight findings, not just show how to use the packages. Then, resubmit the revision as a new paper for review.
+
+First, we thank the *Mathematics* Editor for their analysis of the paper. We agree that the paper was perhaps less suited to a purely mathematical journal and more so for psychology-oriented journals encouraging open science, good research practices, and good statistical practices. As for the contributions, we believe we make a unique contribution through our proposal of a consensus-based approach to detecting outliers, as well as through our argument that researchers should prefer model-based outlier detection methods over, for example, the  Minimum Covariance Determinant (MCD) method which is currently recommended in other guideline documents. We have thus expanded this section to make the contribution more substantial in the revised version of the manuscript, and, as suggested by the Editor, added a real-world example further illustrating our point.
+
+# Reviewer 1 comments:
+
+> In this paper, the authors have shown how to search for outliers using the check_outliers() function of the {performance} package while following current good practices. This contribution will help researchers engage in good search practices while providing an outlier detection experience. They cover univariate, multivariate, and model-based statistical outlier detection methods, their recommended threshold, standard output, and plotting methods. The present paper represents the subject of check the outliers, An accessible introduction to identifying statistical outliers in R with easystats. The study design and methods appropriate for the research question. The results presented clearly and accurately. The authors logically explain the findings.  I highly recommend the publication of this paper in Mathematics Journal.
+
+Overall, this reviewer has very positive comments, requests no additional changes, and highly recommend the paper for publication.
+
+# Reviewer 2 comments:
+
+> The authors propose the illustration of an R library for detecting outliers. The paper is quite clear, however, the following remarks are provided to improve the article
+
+> - The word accessible in the title should be removed. 
+
+This has been fixed.
+
+> - The authors should clarify whether the functions implemented in the library were implemented only for continuous variables or other types of variables are also considered. 
+
+This has been fixed.
+
+> - The author's reference to the Normal distribution on page 2, line 31 is unclear. They should clarify or delete this sentence.
+
+This has been fixed.
+
+> - The reference to the mathematical score is unclear on page 2, line 36. I think this reference should be removed. 
+
+This has been fixed.
+
+> A critical review on the analysis of outliers is proposed in this article which must  be cited
+
+> Riani, M., & Atkinson, A. C. (2020). Robust regression methods in machine learning. Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery, 10(2), e1359.
+
+Thank you for this suggestion. We have added a reference to robust regression methods, although we have opted for a different, more suited reference.
+
+> - Page 3, lines 101-102: It is unclear what the authors mean when referring to BCA, a technique used in non-parametric bootstrapping, but the paper does not mention this.  
+
+At the end of the univariate outliers section, we mention that other methods (in addition to robust *z* scores) are available, and give a few examples, including of the  Bias Corrected and Accelerated Interval. Given that we mention that these methods are documented and described in the corresponding functions’ help pages, we think it would not be appropriate to provide an in-depth explanation of these concepts in the current paper since the topic is too tangential to the paper's objectives.
+
+> - It is necessary to change the x-axis labels of all the figures as the numbers overlap; they should be written in a smaller font or otherwise eliminate some of them since they are not readable. I am talking about the figures referring to the histogram of the outliers.
+
+This has been fixed.
+
+> - Page seven, line 146, it is better to write association instead of relationship.
+
+This has been fixed.
+
+> - Page 7, line 154, the authors should specify what they mean by compatible regression models.
+
+This has been fixed.
+
+> - Page 7, code of the first chunk, the authors use the iqr method, but this is not discussed above. They must add details of all the methods they show in the output.
+
+This has been fixed.
+
+> - Page 9, line 247, it is difficult to follow the discussion for those unfamiliar with the R datawizard package. What does it do? How does the proposed function tie in with those in the package? 
+
+This has been fixed.
+
+> - Page 10, line 272, what does " Registration " mean? 
+
+The word in question was "preregistration", and we think that for a journal such as *Collabra: Psychology*, the readers will be familiar enough with this common concept that there is no need to define it.
+
+> - Check the reference style because it is not uniform
+
+We now use APA style.
+
+# Reviewer 3 comments:
+
+> The paper outlines techniques for processing data with inhomogeneities, such as outliers. However, the style of the article does not correspond to scientific research. The work is educational and auxiliary in nature and is more in line with educational publications, including popular scientific ones.
+
+We respectfully disagree with this comment. Good research practices as well as good statistical practices are of paramount importance in this era of the replication crisis, especially in psychology. However, having scattered specialized works covering some of these aspects is not enough for the common, non-expert psychologists. There must also be accessible works that not only gives a cohesive and comprehensive overview of the issues, but also show how to easily apply these guidelines in practice in their own research. We believe we thus make an important applied contribution for psychologists in this regard.
+
+In addition, we also make a unique theoretical contribution through our proposal of a consensus-based approach to detecting outliers, as well as through our argument that researchers should prefer model-based outlier detection methods over, for example, the  Minimum Covariance Determinant (MCD) method which is currently recommended in other guideline documents. We have expanded this section to make the contribution more substantial in the revised version of the manuscript and added a real-world example further illustrating our point.
