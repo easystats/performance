@@ -53,7 +53,14 @@
 #'   r2_nakagawa(model, by_group = TRUE)
 #' }
 #' @export
-r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, iterations = 100, ...) {
+r2_nakagawa <- function(model,
+                        by_group = FALSE,
+                        tolerance = 1e-5,
+                        ci = NULL,
+                        iterations = 100,
+                        boot_method = NULL,
+                        verbose = TRUE,
+                        ...) {
   # calculate random effect variances
   vars <- .compute_random_vars(
     model,
@@ -71,11 +78,11 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
   # compute R2 by group
   if (isTRUE(by_group)) {
     # with random slopes, explained variance is inaccurate
-    if (!is.null(insight::find_random_slopes(model))) {
+    if (!is.null(insight::find_random_slopes(model)) && verbose) {
       insight::format_warning("Model contains random slopes. Explained variance by levels is not accurate.")
     }
 
-    if (!is.null(ci) && !is.na(ci)) {
+    if (!is.null(ci) && !is.na(ci) && verbose) {
       insight::format_warning("Confidence intervals are not yet supported for `by_group = TRUE`.")
     }
 
@@ -100,8 +107,10 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
   } else {
     # Calculate R2 values
     if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
-      # if no random effect variance, return simple R2
-      insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red")
+      if (verbose) {
+        # if no random effect variance, return simple R2
+        insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red")
+      }
       r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.residual)
       r2_conditional <- NA
     } else {
@@ -115,7 +124,7 @@ r2_nakagawa <- function(model, by_group = FALSE, tolerance = 1e-5, ci = NULL, it
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, ...)
+      result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, boot_method, ...)
       # CI for marginal R2
       r2_ci <- as.vector(result$t[, 1])
       r2_ci <- r2_ci[!is.na(r2_ci)]
@@ -224,8 +233,8 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 }
 
 # main bootstrap function
-.bootstrap_r2_nakagawa <- function(model, iterations, tolerance, ...) {
-  if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
+.bootstrap_r2_nakagawa <- function(model, iterations, tolerance, boot_method = NULL, ...) {
+  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(boot_method, "simple")) {
     result <- .do_lme4_bootmer(
       model,
       .boot_r2_fun_lme4,

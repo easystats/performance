@@ -11,6 +11,7 @@ icc(
   tolerance = 1e-05,
   ci = NULL,
   iterations = 100,
+  boot_method = NULL,
   ...
 )
 
@@ -34,6 +35,14 @@ R2 value. See \code{iterations}.}
 
 \item{iterations}{Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.}
+
+\item{boot_method}{Character string, indicating the bootstrap-method. Only
+applies to mixed models. Should be \code{NULL} (default), in which case
+\code{lme4::bootMer()} is used for bootstrapped confidence intervals. However,
+if bootstrapped intervals cannot be calculated this was, try
+\code{boot_method = "simple"}, which falls back to \code{boot::boot()}. This may
+successfully return bootstrapped confidence intervals, but bootstrapped
+samples may not be appropriate for the multilevel structure of the model.}
 
 \item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
 

@@ -23,6 +23,14 @@
 #'   See 'Details'.
 #' @param iterations Number of bootstrap-replicates when computing confidence
 #'   intervals for the ICC or R2.
+#' @param boot_method Character string, indicating the bootstrap-method. Only
+#'   applies to mixed models. Should be `NULL` (default), in which case
+#'   `lme4::bootMer()` is used for bootstrapped confidence intervals. However,
+#'   if bootstrapped intervals cannot be calculated this was, try
+#'   `boot_method = "simple"`, which falls back to `boot::boot()`. This may
+#'   successfully return bootstrapped confidence intervals, but bootstrapped
+#'   samples may not be appropriate for the multilevel structure of the model.
+#' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed down to `lme4::bootMer()` or `boot::boot()`
 #'   for bootstrapped ICC or R2.
 #'
@@ -156,7 +164,14 @@
 #'   icc(model, by_group = TRUE)
 #' }
 #' @export
-icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iterations = 100, ...) {
+icc <- function(model,
+                by_group = FALSE,
+                tolerance = 1e-05,
+                ci = NULL,
+                iterations = 100,
+                boot_method = NULL,
+                verbose = TRUE,
+                ...) {
   # special handling for smicd::semLme()
   if (inherits(model, "sem") && inherits(model, "lme")) {
     return(model$icc)
@@ -166,15 +181,19 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
     if (inherits(model, "brmsfit")) {
       return(variance_decomposition(model))
     } else {
-      insight::format_warning(
-        "Multiple response models not yet supported. You may use `performance::variance_decomposition()`."
-      )
+      if (verbose) {
+        insight::format_warning(
+          "Multiple response models not yet supported. You may use `performance::variance_decomposition()`."
+        )
+      }
       return(NULL)
     }
   }
 
   if (!insight::is_mixed_model(model)) {
-    insight::format_warning("`model` has no random effects.")
+    if (verbose) {
+      insight::format_warning("`model` has no random effects.")
+    }
     return(NULL)
   }
 
@@ -189,18 +208,19 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
   # Calculate ICC values by groups
   if (isTRUE(by_group)) {
     # with random slopes, icc is inaccurate
-    if (!is.null(insight::find_random_slopes(model))) {
+    if (!is.null(insight::find_random_slopes(model)) && verbose) {
       insight::format_alert(
         "Model contains random slopes. Cannot compute accurate ICCs by group factors."
       )
     }
 
-    if (!is.null(ci) && !is.na(ci)) {
+    if (!is.null(ci) && !is.na(ci) && verbose) {
       insight::format_alert("Confidence intervals are not yet supported for `by_group = TRUE`.")
     }
 
     # icc per group factor with reference to overall model
     icc_overall <- vars$var.intercept / (vars$var.random + vars$var.residual)
+
 
     out <- data.frame(
       Group = names(icc_overall),
@@ -234,11 +254,14 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      result <- .bootstrap_icc(model, iterations, tolerance, ...)
+      result <- .bootstrap_icc(model, iterations, tolerance, boot_method, ...)
       # CI for adjusted ICC
       icc_ci_adjusted <- as.vector(result$t[, 1])
       icc_ci_adjusted <- icc_ci_adjusted[!is.na(icc_ci_adjusted)]
-      icc_ci_adjusted <- bayestestR::eti(icc_ci_adjusted, ci = ci)
+      # sanity check
+      if (length(icc_ci_adjusted)) {
+        icc_ci_adjusted <- bayestestR::eti(icc_ci_adjusted, ci = ci)
+      }
 
       # CI for unadjusted ICC
       icc_ci_unadjusted <- as.vector(result$t[, 2])
@@ -588,8 +611,8 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 
 # main function for bootstrapping
-.bootstrap_icc <- function(model, iterations, tolerance, ...) {
-  if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
+.bootstrap_icc <- function(model, iterations, tolerance, boot_method = NULL, ...) {
+  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(boot_method, "simple")) {
     result <- .do_lme4_bootmer(
       model,
       .boot_icc_fun_lme4,
