@@ -1,3 +1,13 @@
+# performance 0.10.4
+
+* `icc()` and `r2_nakagawa()` gain a `ci_method` argument, to either calculate
+  confidence intervals using `boot::boot()` (instead of `lmer::bootMer()`) when
+  `ci_method = "boot"` or analytical confidence intervals
+  (`ci_method = "analytical"`). Use `ci_method = "boot"` when the default method
+  fails to compute confidence intervals and use `ci_method = "analytical"` if
+  bootstrapped intervals cannot be calculated at all. Note that the default
+  computation method is preferred.
+
 # performance 0.10.3
 
 ## New functions
