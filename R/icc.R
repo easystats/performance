@@ -29,7 +29,10 @@
 #'   be calculated this was, try `ci_method = "boot"`, which falls back to
 #'   `boot::boot()`. This may successfully return bootstrapped confidence intervals,
 #'   but bootstrapped samples may not be appropriate for the multilevel structure
-#'   of the model.
+#'   of the model. There is also an option `ci_method = "analytical"`, which tries
+#'   to calculate analytical confidence assuming a chi-squared distribution.
+#'   However, these intervals are rather inaccurate and often too narrow. It is
+#'   recommended to calculate bootstrapped confidence intervals for mixed models.
 #' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed down to `lme4::bootMer()` or `boot::boot()`
 #'   for bootstrapped ICC or R2.
