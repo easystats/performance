@@ -1,3 +1,5 @@
+skip_on_os("mac")
+
 test_that("icc", {
   skip_on_cran()
   m0 <- lm(Sepal.Length ~ Petal.Length, data = iris)
