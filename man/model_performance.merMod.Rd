@@ -25,7 +25,7 @@ estimators for the standard deviation of the errors. If \code{estimator = "ML"}
 then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
 the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 
-\item{verbose}{Toggle off warnings.}
+\item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

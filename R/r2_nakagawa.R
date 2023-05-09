@@ -58,7 +58,7 @@ r2_nakagawa <- function(model,
                         tolerance = 1e-5,
                         ci = NULL,
                         iterations = 100,
-                        boot_method = NULL,
+                        ci_method = NULL,
                         verbose = TRUE,
                         ...) {
   # calculate random effect variances
@@ -124,18 +124,54 @@ r2_nakagawa <- function(model,
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, boot_method, ...)
-      # CI for marginal R2
-      r2_ci <- as.vector(result$t[, 1])
-      r2_ci <- r2_ci[!is.na(r2_ci)]
-      r2_ci <- bayestestR::eti(r2_ci, ci = ci)
-      out$R2_marginal <- c(out$R2_marginal, CI_low = r2_ci$CI_low, CI_high = r2_ci$CI_high)
+      # this is experimental!
+      if (identical(ci_method, "analytical")) {
+        result <- .safe(.analytical_icc_ci(model, ci, fun = "r2_nakagawa"))
+        if (!is.null(result)) {
+          r2_ci_marginal <- result$R2_marginal
+          r2_ci_conditional <- result$R2_conditional
+        } else {
+          r2_ci_marginal <- r2_ci_conditional <- NA
+        }
+      } else {
+        result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, ci_method, ...)
+        # CI for marginal R2
+        r2_ci_marginal <- as.vector(result$t[, 1])
+        r2_ci_marginal <- r2_ci_marginal[!is.na(r2_ci_marginal)]
+        # sanity check
+        if (length(r2_ci_marginal) > 0) {
+          r2_ci_marginal <- bayestestR::eti(r2_ci_marginal, ci = ci)
+        } else {
+          r2_ci_marginal <- NA
+        }
 
-      # CI for unadjusted R2
-      r2_ci <- as.vector(result$t[, 2])
-      r2_ci <- r2_ci[!is.na(r2_ci)]
-      r2_ci <- bayestestR::eti(r2_ci, ci = ci)
-      out$R2_conditional <- c(out$R2_conditional, CI_low = r2_ci$CI_low, CI_high = r2_ci$CI_high)
+        # CI for unadjusted R2
+        r2_ci_conditional <- as.vector(result$t[, 2])
+        r2_ci_conditional <- r2_ci_conditional[!is.na(r2_ci_conditional)]
+        # sanity check
+        if (length(r2_ci_conditional) > 0) {
+          r2_ci_conditional <- bayestestR::eti(r2_ci_conditional, ci = ci)
+        } else {
+          r2_ci_conditional <- NA
+        }
+
+        if ((all(is.na(r2_ci_marginal)) || all(is.na(r2_ci_conditional))) && verbose) {
+          insight::format_warning(
+            "Could not compute confidence intervals for R2. Try `ci_method = \"simple\"."
+          )
+        }
+      }
+
+      out$R2_marginal <- c(
+        out$R2_marginal,
+        CI_low = r2_ci_marginal$CI_low,
+        CI_high = r2_ci_marginal$CI_high
+      )
+      out$R2_conditional <- c(
+        out$R2_conditional,
+        CI_low = r2_ci_conditional$CI_low,
+        CI_high = r2_ci_conditional$CI_high
+      )
 
       attr(out, "ci") <- ci
     }
@@ -233,8 +269,8 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 }
 
 # main bootstrap function
-.bootstrap_r2_nakagawa <- function(model, iterations, tolerance, boot_method = NULL, ...) {
-  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(boot_method, "simple")) {
+.bootstrap_r2_nakagawa <- function(model, iterations, tolerance, ci_method = NULL, ...) {
+  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")) {
     result <- .do_lme4_bootmer(
       model,
       .boot_r2_fun_lme4,
