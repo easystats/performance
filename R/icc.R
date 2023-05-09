@@ -592,7 +592,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
     result <- .do_lme4_bootmer(
       model,
-      .boot_icc_fun_lme4,
+      .boot_fun = get(".boot_icc_fun_lme4", asNamespace("performance")),
       iterations,
       dots = list(...)
     )
