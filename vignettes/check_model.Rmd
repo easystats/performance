@@ -41,9 +41,9 @@ if (can_evaluate) {
 
 # Make sure your model inference is accurate!
 
-Model diagnostics is crucial, because parameter estimation, p-values and confidence interval depend on correct model assumptions as well as on the data. If model assumptions are violated, estimates can be statistically signicant "even if the effect under study is null" (_Gelman/Greenland 2019_).
+Model diagnostics is crucial, because parameter estimation, p-values and confidence interval depend on correct model assumptions as well as on the data. If model assumptions are violated, estimates can be statistically significant "even if the effect under study is null" (_Gelman/Greenland 2019_).
 
-There are several problems associated with model diagnostics. Different types of models require different checks. For instance, normally distributed residuals are assumed to apply for linear regression, but is no appropriate assumption for logistic regression. Furthermore, it is recommended to carry out visual inspections, i.e. to generate and inspect so called diagnostic plots of model assumptions - formal statistcal tests are often too strict and warn of violation of the model assumptions, although everything is fine within a certain tolerance range. But how should such diagnostic plots be interpreted? And if violations have been detected, how to fix them?
+There are several problems associated with model diagnostics. Different types of models require different checks. For instance, normally distributed residuals are assumed to apply for linear regression, but is no appropriate assumption for logistic regression. Furthermore, it is recommended to carry out visual inspections, i.e. to generate and inspect so called diagnostic plots of model assumptions - formal statistical tests are often too strict and warn of violation of the model assumptions, although everything is fine within a certain tolerance range. But how should such diagnostic plots be interpreted? And if violations have been detected, how to fix them?
 
 This vignette introduces the `check_model()` function of the **performance** package, shows how to use this function for different types of models and how the resulting diagnostic plots should be interpreted. Furthermore, recommendations are given how to address possible violations of model assumptions.
 
