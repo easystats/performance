@@ -32,12 +32,12 @@ estimated probabilities.
 Check model quality of binomial logistic regression models.
 }
 \details{
-Binned residual plots are achieved by \dQuote{dividing the data into
+Binned residual plots are achieved by "dividing the data into
 categories (bins) based on their fitted values, and then plotting
-the average residual versus the average fitted value for each bin.}
-\cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
+the average residual versus the average fitted value for each bin."
+\emph{(Gelman, Hill 2007: 97)}. If the model were true, one would
 expect about 95\% of the residuals to fall inside the error bounds.
-\cr \cr
+
 If \code{term} is not \code{NULL}, one can compare the residuals in
 relation to a specific model predictor. This may be helpful to check if a
 term would fit better when transformed, e.g. a rising and falling pattern
@@ -57,10 +57,11 @@ result
 # look at the data frame
 as.data.frame(result)
 
+\dontrun{
 # plot
 if (require("see")) {
   plot(result)
-}
+}}
 }
 \references{
 Gelman, A., and Hill, J. (2007). Data analysis using regression and
