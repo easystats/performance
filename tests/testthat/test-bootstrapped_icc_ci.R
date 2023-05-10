@@ -3,8 +3,8 @@ test_that("bootstrapped icc ci_methods", {
   skip_on_os(c("mac", "linux"))
   skip_if_not_installed("lme4")
 
-  data(sleepstudy)
-  m_icc <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+  data(sleepstudy, package = "lme4")
+  m_icc <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
   set.seed(123)
   out1 <- icc(m_icc, ci = 0.95, iterations = 20)
@@ -45,8 +45,8 @@ test_that("bootstrapped r2_nakagawa ci_methods", {
   skip_on_os(c("mac", "linux"))
   skip_if_not_installed("lme4")
 
-  data(sleepstudy)
-  m_icc <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+  data(sleepstudy, package = "lme4")
+  m_icc <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
   set.seed(123)
   out1 <- r2_nakagawa(m_icc, ci = 0.95, iterations = 20)
