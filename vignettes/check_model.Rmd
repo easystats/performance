@@ -104,8 +104,9 @@ Next, a different example. We use a Poisson-distributed outcome for our linear m
 
 ```{r eval=all(successfully_loaded[c("see", "ggplot2")]), warning=FALSE}
 set.seed(99)
-iris$skewed <- rpois(150, 1)
-m2 <- lm(skewed ~ Species + Petal.Length + Petal.Width, data = iris)
+d <- iris
+d$skewed <- rpois(150, 1)
+m2 <- lm(skewed ~ Species + Petal.Length + Petal.Width, data = d)
 out <- check_predictions(m2)
 plot(out)
 ```
