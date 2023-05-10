@@ -24,7 +24,7 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,6 +119,8 @@ on the posterior predictive distribution (see 'Details').</p>
 <span>  tolerance <span class="op">=</span> <span class="fl">1e-05</span>,</span>
 <span>  ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  iterations <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  ci_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -153,6 +155,23 @@ R2 value. See <code>iterations</code>.</p></dd>
 <dt>iterations</dt>
 <dd><p>Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.</p></dd>
+
+
+<dt>ci_method</dt>
+<dd><p>Character string, indicating the bootstrap-method. Should
+be <code>NULL</code> (default), in which case <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code> is used for
+bootstrapped confidence intervals. However, if bootstrapped intervals cannot
+be calculated this was, try <code>ci_method = "boot"</code>, which falls back to
+<code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>. This may successfully return bootstrapped confidence intervals,
+but bootstrapped samples may not be appropriate for the multilevel structure
+of the model. There is also an option <code>ci_method = "analytical"</code>, which tries
+to calculate analytical confidence assuming a chi-squared distribution.
+However, these intervals are rather inaccurate and often too narrow. It is
+recommended to calculate bootstrapped confidence intervals for mixed models.</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Toggle warnings and messages.</p></dd>
 
 
 <dt>...</dt>

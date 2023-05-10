@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,6 +85,11 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.10.4" id="performance-0104">performance 0.10.4<a class="anchor" aria-label="anchor" href="#performance-0104"></a></h2>
+<ul><li>
+<code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gain a <code>ci_method</code> argument, to either calculate confidence intervals using <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> (instead of <code>lmer::bootMer()</code>) when <code>ci_method = "boot"</code> or analytical confidence intervals (<code>ci_method = "analytical"</code>). Use <code>ci_method = "boot"</code> when the default method fails to compute confidence intervals and use <code>ci_method = "analytical"</code> if bootstrapped intervals cannot be calculated at all. Note that the default computation method is preferred.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.3" id="performance-0103">performance 0.10.3<a class="anchor" aria-label="anchor" href="#performance-0103"></a></h2><p class="text-muted">CRAN release: 2023-04-07</p>
 <div class="section level3">
