@@ -114,7 +114,7 @@ As you can see, the green line in this plot deviates visibly from the blue lines
 
 #### How to fix this?
 
-The best way, if there are serious concerns that the model does not fit well to the data, is to use a different type (family) of regression models. In our example, it is obvious that we shoud better use a Poisson regression.
+The best way, if there are serious concerns that the model does not fit well to the data, is to use a different type (family) of regression models. In our example, it is obvious that we should better use a Poisson regression.
 
 ### Linearity
 
@@ -157,7 +157,7 @@ out[[2]]
 
 **Some caution is needed** when interpreting these plots. Although these plots are helpful to check model assumptions, they do not necessarily indicate so-called "lack of fit", e.g. missed non-linear relationships or interactions. Thus, it is always recommended to also look at [effect plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
 
-### Homegeneity of variance - detecting heteroscedasticity
+### Homogeneity of variance - detecting heteroscedasticity
 
 This plot helps to check the assumption of equal (or constant) variance, i.e. homoscedasticity. To meet this assumption, the variance of the residuals across different values of predictors is similar and does not notably increase or decrease. Hence, the desired pattern would be that dots spread equally above and below a roughly straight, horizontal line and show no apparent deviation.
 
