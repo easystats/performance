@@ -23,6 +23,17 @@
 #'   See 'Details'.
 #' @param iterations Number of bootstrap-replicates when computing confidence
 #'   intervals for the ICC or R2.
+#' @param ci_method Character string, indicating the bootstrap-method. Should
+#'   be `NULL` (default), in which case `lme4::bootMer()` is used for
+#'   bootstrapped confidence intervals. However, if bootstrapped intervals cannot
+#'   be calculated this was, try `ci_method = "boot"`, which falls back to
+#'   `boot::boot()`. This may successfully return bootstrapped confidence intervals,
+#'   but bootstrapped samples may not be appropriate for the multilevel structure
+#'   of the model. There is also an option `ci_method = "analytical"`, which tries
+#'   to calculate analytical confidence assuming a chi-squared distribution.
+#'   However, these intervals are rather inaccurate and often too narrow. It is
+#'   recommended to calculate bootstrapped confidence intervals for mixed models.
+#' @param verbose Toggle warnings and messages.
 #' @param ... Arguments passed down to `lme4::bootMer()` or `boot::boot()`
 #'   for bootstrapped ICC or R2.
 #'
@@ -156,7 +167,14 @@
 #'   icc(model, by_group = TRUE)
 #' }
 #' @export
-icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iterations = 100, ...) {
+icc <- function(model,
+                by_group = FALSE,
+                tolerance = 1e-05,
+                ci = NULL,
+                iterations = 100,
+                ci_method = NULL,
+                verbose = TRUE,
+                ...) {
   # special handling for smicd::semLme()
   if (inherits(model, "sem") && inherits(model, "lme")) {
     return(model$icc)
@@ -166,15 +184,19 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
     if (inherits(model, "brmsfit")) {
       return(variance_decomposition(model))
     } else {
-      insight::format_warning(
-        "Multiple response models not yet supported. You may use `performance::variance_decomposition()`."
-      )
+      if (verbose) {
+        insight::format_warning(
+          "Multiple response models not yet supported. You may use `performance::variance_decomposition()`."
+        )
+      }
       return(NULL)
     }
   }
 
   if (!insight::is_mixed_model(model)) {
-    insight::format_warning("`model` has no random effects.")
+    if (verbose) {
+      insight::format_warning("`model` has no random effects.")
+    }
     return(NULL)
   }
 
@@ -189,18 +211,19 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
   # Calculate ICC values by groups
   if (isTRUE(by_group)) {
     # with random slopes, icc is inaccurate
-    if (!is.null(insight::find_random_slopes(model))) {
+    if (!is.null(insight::find_random_slopes(model)) && verbose) {
       insight::format_alert(
         "Model contains random slopes. Cannot compute accurate ICCs by group factors."
       )
     }
 
-    if (!is.null(ci) && !is.na(ci)) {
+    if (!is.null(ci) && !is.na(ci) && verbose) {
       insight::format_alert("Confidence intervals are not yet supported for `by_group = TRUE`.")
     }
 
     # icc per group factor with reference to overall model
     icc_overall <- vars$var.intercept / (vars$var.random + vars$var.residual)
+
 
     out <- data.frame(
       Group = names(icc_overall),
@@ -234,17 +257,41 @@ icc <- function(model, by_group = FALSE, tolerance = 1e-05, ci = NULL, iteration
 
     # check if CIs are requested, and compute bootstrapped CIs
     if (!is.null(ci) && !is.na(ci)) {
-      result <- .bootstrap_icc(model, iterations, tolerance, ...)
-      # CI for adjusted ICC
-      icc_ci_adjusted <- as.vector(result$t[, 1])
-      icc_ci_adjusted <- icc_ci_adjusted[!is.na(icc_ci_adjusted)]
-      icc_ci_adjusted <- bayestestR::eti(icc_ci_adjusted, ci = ci)
-
-      # CI for unadjusted ICC
-      icc_ci_unadjusted <- as.vector(result$t[, 2])
-      icc_ci_unadjusted <- icc_ci_unadjusted[!is.na(icc_ci_unadjusted)]
-      icc_ci_unadjusted <- bayestestR::eti(icc_ci_unadjusted, ci = ci)
-
+      # this is experimental!
+      if (identical(ci_method, "analytical")) {
+        result <- .safe(.analytical_icc_ci(model, ci))
+        if (!is.null(result)) {
+          icc_ci_adjusted <- result$ICC_adjusted
+          icc_ci_unadjusted <- result$ICC_unadjusted
+        } else {
+          icc_ci_adjusted <- icc_ci_unadjusted <- NA
+        }
+      } else {
+        result <- .bootstrap_icc(model, iterations, tolerance, ci_method, ...)
+        # CI for adjusted ICC
+        icc_ci_adjusted <- as.vector(result$t[, 1])
+        icc_ci_adjusted <- icc_ci_adjusted[!is.na(icc_ci_adjusted)]
+        # sanity check
+        if (length(icc_ci_adjusted) > 0) {
+          icc_ci_adjusted <- bayestestR::eti(icc_ci_adjusted, ci = ci)
+        } else {
+          icc_ci_adjusted <- NA
+        }
+        # CI for unadjusted ICC
+        icc_ci_unadjusted <- as.vector(result$t[, 2])
+        icc_ci_unadjusted <- icc_ci_unadjusted[!is.na(icc_ci_unadjusted)]
+        # sanity check
+        if (length(icc_ci_unadjusted) > 0) {
+          icc_ci_unadjusted <- bayestestR::eti(icc_ci_unadjusted, ci = ci)
+        } else {
+          icc_ci_unadjusted <- NA
+        }
+        if ((all(is.na(icc_ci_adjusted)) || all(is.na(icc_ci_unadjusted))) && verbose) {
+          insight::format_warning(
+            "Could not compute confidence intervals for ICC. Try `ci_method = \"simple\"."
+          )
+        }
+      }
       out_ci <- data.frame(
         ICC_adjusted = c(CI_low = icc_ci_adjusted$CI_low, CI_high = icc_ci_adjusted$CI_high),
         ICC_conditional = c(CI_low = icc_ci_unadjusted$CI_low, CI_high = icc_ci_unadjusted$CI_high),
@@ -588,8 +635,8 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 
 # main function for bootstrapping
-.bootstrap_icc <- function(model, iterations, tolerance, ...) {
-  if (inherits(model, c("merMod", "lmerMod", "glmmTMB"))) {
+.bootstrap_icc <- function(model, iterations, tolerance, ci_method = NULL, ...) {
+  if (inherits(model, c("merMod", "lmerMod", "glmmTMB")) && !identical(ci_method, "boot")) {
     result <- .do_lme4_bootmer(
       model,
       .boot_icc_fun_lme4,
@@ -608,4 +655,57 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
     )
   }
   result
+}
+
+
+.analytical_icc_ci <- function(model, ci = 0.95, fun = "icc", ...) {
+  alpha <- 1 - ci
+  n <- insight::n_obs(model)
+  df_int <- if (insight::has_intercept(model)) {
+    1
+  } else {
+    0
+  }
+
+  model_rank <- tryCatch(
+    {
+      if (!is.null(model$rank)) {
+        model$rank - df_int
+      } else {
+        insight::n_parameters(model) - df_int
+      }
+    },
+    error = function(e) insight::n_parameters(model) - df_int
+  )
+
+  if (identical(fun, "icc")) {
+    model_icc <- icc(model, ci = NULL, verbose = FALSE, ...)
+  } else {
+    model_icc <- r2_nakagawa(model, ci = NULL, verbose = FALSE, ...)
+  }
+
+  out <- lapply(model_icc, function(.icc) {
+    ci_low <- stats::uniroot(
+      .pRsq,
+      c(0.00001, 0.99999),
+      R2_obs = as.vector(.icc),
+      p = model_rank,
+      nobs = n,
+      alpha = 1 - alpha / 2
+    )$root
+
+    ci_high <- stats::uniroot(
+      .pRsq,
+      c(0.00001, 0.99999),
+      R2_obs = as.vector(.icc),
+      p = model_rank,
+      nobs = n,
+      alpha = alpha / 2
+    )$root
+
+    data.frame(CI_low = ci_low, CI_high = ci_high)
+  })
+
+  names(out) <- names(model_icc)
+  out
 }
