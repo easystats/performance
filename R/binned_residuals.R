@@ -20,12 +20,12 @@
 #'   points indicate model under- or over-fitting for the relevant range of
 #'   estimated probabilities.
 #'
-#' @details Binned residual plots are achieved by \dQuote{dividing the data into
+#' @details Binned residual plots are achieved by "dividing the data into
 #'   categories (bins) based on their fitted values, and then plotting
-#'   the average residual versus the average fitted value for each bin.}
-#'   \cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
+#'   the average residual versus the average fitted value for each bin."
+#'   _(Gelman, Hill 2007: 97)_. If the model were true, one would
 #'   expect about 95% of the residuals to fall inside the error bounds.
-#'   \cr \cr
+#'
 #'   If `term` is not `NULL`, one can compare the residuals in
 #'   relation to a specific model predictor. This may be helpful to check if a
 #'   term would fit better when transformed, e.g. a rising and falling pattern
@@ -49,10 +49,11 @@
 #' # look at the data frame
 #' as.data.frame(result)
 #'
+#' \dontrun{
 #' # plot
 #' if (require("see")) {
 #'   plot(result)
-#' }
+#' }}
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)
