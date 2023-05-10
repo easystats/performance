@@ -63,7 +63,7 @@
 #' the standard error is due to the association with other predictors
 #' conditional on the remaining variables in the model. Note that these
 #' thresholds, although commonly used, are also criticized for being too high.
-#' _Zuur et al. (2019)_ suggest using lower values, e.g. a VIF of 3 or larger
+#' _Zuur et al. (2010)_ suggest using lower values, e.g. a VIF of 3 or larger
 #' may already no longer be considered as "low".
 #'
 #' @section Multicollinearity and Interaction Terms:

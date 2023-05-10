@@ -101,7 +101,7 @@ sign for high, not tolerable correlation of model predictors (\emph{James et al.
 the standard error is due to the association with other predictors
 conditional on the remaining variables in the model. Note that these
 thresholds, although commonly used, are also criticized for being too high.
-\emph{Zuur et al. (2019)} suggest using lower values, e.g. a VIF of 3 or larger
+\emph{Zuur et al. (2010)} suggest using lower values, e.g. a VIF of 3 or larger
 may already no longer be considered as "low".
 }
 
