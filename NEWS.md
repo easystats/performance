@@ -1,5 +1,7 @@
 # performance 0.10.4
 
+## Changes to functions
+
 * `icc()` and `r2_nakagawa()` gain a `ci_method` argument, to either calculate
   confidence intervals using `boot::boot()` (instead of `lmer::bootMer()`) when
   `ci_method = "boot"` or analytical confidence intervals
@@ -7,6 +9,11 @@
   fails to compute confidence intervals and use `ci_method = "analytical"` if
   bootstrapped intervals cannot be calculated at all. Note that the default
   computation method is preferred.
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` for _fixest_ models that used `i()`
+  to create interactions in formulas.
 
 # performance 0.10.3
 
