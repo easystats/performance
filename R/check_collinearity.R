@@ -190,7 +190,12 @@ plot.check_collinearity <- function(x, ...) {
 
   # format table for each "ViF" group - this ensures that CIs are properly formatted
   x <- insight::format_table(x)
-  x <- datawizard::data_rename(x, pattern = "SE_factor", replacement = "Increased SE")
+  x <- datawizard::data_rename(
+    x,
+    pattern = "SE_factor",
+    replacement = "Increased SE",
+    verbose = FALSE
+  )
 
   if (length(low_vif)) {
     cat("\n")

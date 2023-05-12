@@ -175,3 +175,19 @@ test_that("check_collinearity, ci = NULL", { # 518
   )
   expect_snapshot(out)
 })
+
+test_that("check_collinearity, ci are NA", {
+  skip_if_not_installed("fixest")
+  data(mtcars)
+  i <- fixest::i
+  m_vif <- fixest::feols(mpg ~ disp + hp + wt + i(cyl) | carb, data = mtcars)
+  out <- suppressWarnings(check_collinearity(m_vif))
+  expect_identical(
+    colnames(out),
+    c(
+      "Term", "VIF", "VIF_CI_low", "VIF_CI_high", "SE_factor", "Tolerance",
+      "Tolerance_CI_low", "Tolerance_CI_high"
+    )
+  )
+  expect_snapshot(print(out))
+})
