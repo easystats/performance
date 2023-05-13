@@ -65,13 +65,6 @@ check_itemscale <- function(x) {
   insight::check_if_installed("parameters")
 
   dataset <- attributes(x)$dataset
-
-  ## TODO: remove once parameters 0.18.3 or higher on CRAN
-  # backward compatibility to parameters 0.18.2
-  if (is.null(dataset)) {
-    dataset <- attributes(x)$data_set
-  }
-
   subscales <- parameters::closest_component(x)
 
   out <- lapply(sort(unique(subscales)), function(.subscale) {

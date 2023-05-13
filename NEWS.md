@@ -1,3 +1,13 @@
+# performance 0.10.4
+
+* `icc()` and `r2_nakagawa()` gain a `ci_method` argument, to either calculate
+  confidence intervals using `boot::boot()` (instead of `lmer::bootMer()`) when
+  `ci_method = "boot"` or analytical confidence intervals
+  (`ci_method = "analytical"`). Use `ci_method = "boot"` when the default method
+  fails to compute confidence intervals and use `ci_method = "analytical"` if
+  bootstrapped intervals cannot be calculated at all. Note that the default
+  computation method is preferred.
+
 # performance 0.10.3
 
 ## New functions
@@ -17,6 +27,9 @@
 
 ## Changes to functions
 
+* `test_*()` functions now automatically fit a null-model when only one model
+  objects was provided for testing multiple models.
+
 * Warnings in `model_performance()` for unsupported objects of class
   `BFBayesFactor` can now be suppressed with `verbose = FALSE`.
 
@@ -26,6 +39,10 @@
 
 * `check_outliers()` now also works for meta-analysis models from packages
   *metafor* and *meta*.
+
+* `plot()` for `performance::check_model()` no longer produces a normal QQ plot
+  for GLMs. Instead, it now shows a half-normal QQ plot of the absolute value
+  of the standardized deviance residuals.
 
 ## Bug fixes
 

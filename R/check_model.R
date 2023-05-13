@@ -3,7 +3,7 @@
 #'
 #' @description
 #'
-#' Visual check of model various assumptions (normality of residuals, normality
+#' Visual check of various model assumptions (normality of residuals, normality
 #' of random effects, linear relationship, homogeneity of variance,
 #' multicollinearity).
 #'
@@ -39,7 +39,7 @@
 #' @return The data frame that is used for plotting.
 #'
 #' @note This function just prepares the data for plotting. To create the plots,
-#'   \CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+#'   **see** needs to be installed. Furthermore, this function suppresses
 #'   all possible warnings. In case you observe suspicious plots, please refer
 #'   to the dedicated functions (like `check_collinearity()`,
 #'   `check_normality()` etc.) to get informative messages and warnings.
@@ -50,15 +50,73 @@
 #'   A more advanced model-check for Bayesian models will be implemented at a
 #'   later stage.
 #'
+#' @section Posterior Predictive Checks:
+#' Posterior predictive checks can be used to look for systematic discrepancies
+#' between real and simulated data. It helps to see whether the type of model
+#' (distributional family) fits well to the data. See [`check_predictions()`]
+#' for further details.
+#'
 #' @section Linearity Assumption:
 #' The plot **Linearity** checks the assumption of linear relationship.
 #' However, the spread of dots also indicate possible heteroscedasticity (i.e.
-#' non-constant variance); hence, the alias `"ncv"` for this plot.
+#' non-constant variance, hence, the alias `"ncv"` for this plot), thus it shows
+#' if residuals have non-linear patterns. This plot helps to see whether
+#' predictors may have a non-linear relationship with the outcome, in which case
+#' the reference line may roughly indicate that relationship. A straight and
+#' horizontal line indicates that the model specification seems to be ok. But
+#' for instance, if the line would be U-shaped, some of the predictors probably
+#' should better be modeled as quadratic term. See [`check_heteroscedasticity()`]
+#' for further details.
+#'
 #' **Some caution is needed** when interpreting these plots. Although these
-#' plots are helpful to check model assumptions, they do not necessarily
-#' indicate so-called "lack of fit", e.g. missed non-linear relationships or
-#' interactions. Thus, it is always recommended to also look at
+#' plots are helpful to check model assumptions, they do not necessarily indicate
+#' so-called "lack of fit", e.g. missed non-linear relationships or interactions.
+#' Thus, it is always recommended to also look at
 #' [effect plots, including partial residuals](https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html).
+#'
+#' @section Homogeneity of Variance:
+#' This plot checks the assumption of equal variance (homoscedasticity). The
+#' desired pattern would be that dots spread equally above and below a straight,
+#' horizontal line and show no apparent deviation.
+#'
+#' @section Influential Observations:
+#' This plot is used to identify influential observations. If any points in this
+#' plot fall outside of Cook’s distance (the dashed lines) then it is considered
+#' an influential observation. See [`check_outliers()`] for further details.
+#'
+#' @section Multicollinearity:
+#' This plot checks for potential collinearity among predictors. In a nutshell,
+#' multicollinearity means that once you know the effect of one predictor, the
+#' value of knowing the other predictor is rather low. Multicollinearity might
+#' arise when a third, unobserved variable has a causal effect on each of the
+#' two predictors that are associated with the outcome. In such cases, the actual
+#' relationship that matters would be the association between the unobserved
+#' variable and the outcome. See [`check_collinearity()`] for further details.
+#'
+#' @section Normality of Residuals:
+#' This plot is used to determine if the residuals of the regression model are
+#' normally distributed. Usually, dots should fall along the line. If there is
+#' some deviation (mostly at the tails), this indicates that the model doesn't
+#' predict the outcome well for that range that shows larger deviations from
+#' the line. For generalized linear models, a half-normal Q-Q plot of the
+#' absolute value of the standardized deviance residuals is shown, however, the
+#' interpretation of the plot remains the same. See [`check_normality()`] for
+#' further details.
+#'
+#' @section Overdispersion:
+#' For count models, an *overdispersion plot* is shown. Overdispersion occurs
+#' when the observed variance is higher than the variance of a theoretical model.
+#' For Poisson models, variance increases with the mean and, therefore, variance
+#' usually (roughly) equals the mean value. If the variance is much higher,
+#' the data are "overdispersed". See [`check_overdispersion()`] for further
+#' details.
+#'
+#' @section Binned Residuals:
+#' For models from binomial families, a *binned residuals plot* is shown.
+#' Binned residual plots are achieved by cutting the the data into bins and then
+#' plotting the average residual versus the average fitted value for each bin.
+#' If the model were true, one would expect about 95% of the residuals to fall
+#' inside the error bounds. See [`binned_residuals()`] for further details.
 #'
 #' @section Residuals for (Generalized) Linear Models:
 #' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
@@ -75,6 +133,8 @@
 #' such cases, setting the argument `show_dots = FALSE` might help. Furthermore,
 #' look at the `check` argument and see if some of the model checks could be
 #' skipped, which also increases performance.
+#'
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @examples
 #' \dontrun{

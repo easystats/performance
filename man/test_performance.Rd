@@ -15,15 +15,15 @@ test_bf(...)
 
 \method{test_bf}{default}(..., reference = 1, text_length = NULL)
 
-test_likelihoodratio(..., estimator = "ML")
+test_likelihoodratio(..., estimator = "ML", verbose = TRUE)
 
-test_lrt(..., estimator = "ML")
+test_lrt(..., estimator = "ML", verbose = TRUE)
 
-test_performance(..., reference = 1)
+test_performance(..., reference = 1, verbose = TRUE)
 
-test_vuong(...)
+test_vuong(..., verbose = TRUE)
 
-test_wald(...)
+test_wald(..., verbose = TRUE)
 }
 \arguments{
 \item{...}{Multiple model objects.}
@@ -42,6 +42,8 @@ lines to a specified limit.}
 the standard deviation of the errors. Defaults to \code{"OLS"} for linear models,
 \code{"ML"} for all other models (including mixed models), or \code{"REML"} for
 linear mixed models when these have the same fixed effects. See 'Details'.}
+
+\item{verbose}{Toggle warning and messages.}
 }
 \value{
 A data frame containing the relevant indices.

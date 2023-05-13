@@ -36,7 +36,7 @@
 item_reliability <- function(x, standardize = FALSE, digits = 3) {
   # check param
   if (!is.matrix(x) && !is.data.frame(x)) {
-    warning("`x` needs to be a data frame or matrix.", call. = FALSE)
+    insight::format_alert("`x` needs to be a data frame or matrix.")
     return(NULL)
   }
 
@@ -63,7 +63,7 @@ item_reliability <- function(x, standardize = FALSE, digits = 3) {
 
     # calculate corrected total-item correlation
     totalCorr <- vapply(seq_len(ncol(x)), function(i) {
-      stats::cor(x[, i], apply(x[, -i], 1, sum), use = "pairwise.complete.obs")
+      stats::cor(x[, i], rowSums(x[, -i]), use = "pairwise.complete.obs")
     }, numeric(1L))
 
     ret.df <- data.frame(

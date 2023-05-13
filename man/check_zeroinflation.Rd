@@ -7,8 +7,8 @@
 check_zeroinflation(x, tolerance = 0.05)
 }
 \arguments{
-\item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
-or \code{glm.nb} (package \pkg{MASS}).}
+\item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
+(package \strong{MASS}).}
 
 \item{tolerance}{The tolerance for the ratio of observed and predicted
 zeros to considered as over- or underfitting zeros. A ratio
@@ -36,3 +36,17 @@ if (require("glmmTMB")) {
   check_zeroinflation(m)
 }
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_outliers}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
+\code{\link{check_singularity}()}
+}
+\concept{functions to check model assumptions and and assess model quality}

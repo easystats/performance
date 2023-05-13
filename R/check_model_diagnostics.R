@@ -41,7 +41,7 @@
   } else if (inherits(model, "geeglm")) {
     res_ <- stats::residuals(model, type = "pearson")
   } else if (inherits(model, "glm")) {
-    res_ <- stats::rstandard(model, type = "pearson")
+    res_ <- .safe(abs(stats::rstandard(model, type = "deviance")))
   } else {
     res_ <- .safe(stats::rstudent(model))
     if (is.null(res_)) {
@@ -61,9 +61,13 @@
     return(NULL)
   }
 
-  fitted_ <- stats::fitted(model)
+  if (inherits(model, "glm")) {
+    fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)
+  } else {
+    fitted_ <- stats::fitted(model)
+  }
 
-  # sanity check, sometime either residuals or fitted can contain NA, see #488
+  # sanity check, sometimes either residuals or fitted can contain NA, see #488
   if (anyNA(res_) || anyNA(fitted_)) {
     # drop NA and make sure both fitted and residuals match
     non_na <- !is.na(fitted_) & !is.na(res_)
@@ -247,6 +251,7 @@
         }
         stats::residuals(model) / sigma
       } else if (inherits(model, "glm")) {
+        ## TODO: check if we can / should use deviance residuals (as for QQ plots) here as well?
         stats::rstandard(model, type = "pearson")
       } else {
         stats::rstandard(model)

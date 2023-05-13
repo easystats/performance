@@ -63,7 +63,7 @@
 #' the standard error is due to the association with other predictors
 #' conditional on the remaining variables in the model. Note that these
 #' thresholds, although commonly used, are also criticized for being too high.
-#' _Zuur et al. (2019)_ suggest using lower values, e.g. a VIF of 3 or larger
+#' _Zuur et al. (2010)_ suggest using lower values, e.g. a VIF of 3 or larger
 #' may already no longer be considered as "low".
 #'
 #' @section Multicollinearity and Interaction Terms:
@@ -109,6 +109,8 @@
 #' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 #' common statistical problems: Data exploration. Methods in Ecology and
 #' Evolution (2010) 1:3–14.
+#'
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @note The code to compute the confidence intervals for the VIF and tolerance
 #' values was adapted from the Appendix B from the Marcoulides et al. paper.

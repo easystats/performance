@@ -108,7 +108,7 @@ models, see \code{pareto}.
 The reliability and approximate convergence of Bayesian models can be
 assessed using the estimates for the shape parameter k of the generalized
 Pareto distribution. If the estimated tail shape parameter k exceeds 0.5, the
-user should be warned, although in practice the authors of the \link[loo:loo]{loo::loo}
+user should be warned, although in practice the authors of the \strong{loo}
 package observed good performance for values of k up to 0.7 (the default
 threshold used by \code{performance}).
 }
@@ -178,8 +178,8 @@ minus a coefficient times the MAD method (Leys et al., 2013).
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-1972). Requires the \link[bigutilsr:bigutilsr-package]{bigutilsr::bigutilsr} package. See the
-\code{\link[bigutilsr:covrob_ogk]{bigutilsr::dist_ogk()}} function.
+1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:covrob_ogk]{bigutilsr::dist_ogk()}}
+function.
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
 Mahalanobis Distance is not a robust way to determine outliers, as it uses
@@ -194,7 +194,7 @@ The outlier are detected using ICS, which by default uses an alpha threshold
 of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off
 value for outliers classification. Refer to the help-file of
 \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}} to get more details about this procedure.
-Note that \code{method = "ics"} requires both \link{ICS} and \link[ICSOutlier:ICSOutlier-package]{ICSOutlier::ICSOutlier}
+Note that \code{method = "ics"} requires both \strong{ICS} and \strong{ICSOutlier}
 to be installed, and that it takes some time to compute the results.
 \item \strong{OPTICS}:
 The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
@@ -206,7 +206,7 @@ of a cluster. By default, this size is set at 2 times the number of columns
 detect several outliers (as these are usually defined as a percentage of
 extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
-\link[dbscan:dbscan]{dbscan::dbscan} package to be installed, and that it takes some time to compute
+\strong{dbscan} package to be installed, and that it takes some time to compute
 the results.
 \item \strong{Local Outlier Factor}:
 Based on a K nearest neighbors algorithm, LOF compares the local density of
@@ -217,7 +217,7 @@ LOF score of approximately 1 indicates that density around the point is
 comparable to its neighbors. Scores significantly larger than 1 indicate
 outliers. The default threshold of 0.025 will classify as outliers the
 observations located at \verb{qnorm(1-0.025) * SD)} of the log-transformed
-LOF distance. Requires the \link[dbscan:dbscan]{dbscan::dbscan} package.
+LOF distance. Requires the \strong{dbscan} package.
 }
 }
 
@@ -347,3 +347,17 @@ outliers and leverage points. Journal of the American Statistical
 association, 85(411), 633-639.
 }
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
+\code{\link{check_singularity}()},
+\code{\link{check_zeroinflation}()}
+}
+\concept{functions to check model assumptions and and assess model quality}

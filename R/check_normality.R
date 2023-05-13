@@ -13,16 +13,19 @@
 #'   significant deviation from normal distribution.
 #'
 #' @note For mixed-effects models, studentized residuals, and *not*
-#'   standardized residuals, are used for the test. There is also a
-#'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
-#'    implemented in the
-#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' standardized residuals, are used for the test. There is also a
+#' [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#'  implemented in the [**see**-package](https://easystats.github.io/see/).
 #'
 #' @details `check_normality()` calls `stats::shapiro.test` and checks the
-#' standardized residuals (or Studentized residuals for mixed models) for
+#' standardized residuals (or studentized residuals for mixed models) for
 #' normal distribution. Note that this formal test almost always yields
 #' significant results for the distribution of residuals and visual inspection
-#' (e.g. Q-Q plots) are preferable.
+#' (e.g. Q-Q plots) are preferable. For generalized linear models, no formal
+#' statistical test is carried out. Rather, there's only a `plot()` method for
+#' GLMs. This plot shows a half-normal Q-Q plot of the absolute value of the
+#' standardized deviance residuals is shown (being in line with changes in
+#' `plot.lm()` for R 4.3+).
 #'
 #' @examples
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -70,6 +73,24 @@ check_normality.default <- function(x, ...) {
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
   p.val
+}
+
+# glm ---------------
+
+#' @export
+check_normality.glm <- function(x, ...) {
+  out <- 1
+  attr(out, "data") <- x
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "effects") <- "fixed"
+  attr(out, "model_info") <- insight::model_info(x)
+  class(out) <- unique(c("check_normality", "see_check_normality", class(out)))
+
+  insight::format_alert(
+    "There's no formal statistical test for normality for generalized linear model.",
+    "Please use `plot()` on the return value of this function: `plot(check_normality(model))`"
+  )
+  invisible(out)
 }
 
 # numeric -------------------
