@@ -23,6 +23,11 @@
 #'   be considered in the simulated data. If `NULL` (default), condition
 #'   on all random effects. If `NA` or `~0`, condition on no random
 #'   effects. See `simulate()` in **lme4**.
+#' @param bandwidth A character string indicating the smoothing bandwidth to
+#'   be used. Unlike `stats::density()`, which used `"nrd0"` as default, the
+#'   default used here is `"nrd"` (which seems to give more plausible results
+#'   for non-Gaussian models). When problems with plotting occur, try to change
+#'   to a different value.
 #' @param verbose Toggle warnings.
 #' @param ... Passed down to `simulate()`.
 #'
@@ -64,10 +69,7 @@
 #'   check_predictions(model)
 #' }
 #' @export
-check_predictions <- function(object,
-                              iterations = 50,
-                              check_range = FALSE,
-                              ...) {
+check_predictions <- function(object, ...) {
   UseMethod("check_predictions")
 }
 
@@ -77,6 +79,7 @@ check_predictions.default <- function(object,
                                       iterations = 50,
                                       check_range = FALSE,
                                       re_formula = NULL,
+                                      bandwidth = "nrd",
                                       verbose = TRUE,
                                       ...) {
   # check for valid input
@@ -95,6 +98,7 @@ check_predictions.default <- function(object,
       iterations = iterations,
       check_range = check_range,
       re_formula = re_formula,
+      bandwidth = bandwidth,
       verbose = verbose,
       ...
     )
@@ -106,6 +110,7 @@ check_predictions.BFBayesFactor <- function(object,
                                             iterations = 50,
                                             check_range = FALSE,
                                             re_formula = NULL,
+                                            bandwidth = "nrd",
                                             verbose = TRUE,
                                             ...) {
   everything_we_need <- .get_bfbf_predictions(object, iterations = iterations)
@@ -125,6 +130,7 @@ check_predictions.BFBayesFactor <- function(object,
   out <- as.data.frame(yrep)
   colnames(out) <- paste0("sim_", seq_len(ncol(out)))
   out$y <- y
+  attr(out, "bandwidth") <- bandwidth
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
@@ -146,11 +152,12 @@ pp_check.lm <- function(object,
                         iterations = 50,
                         check_range = FALSE,
                         re_formula = NULL,
+                        bandwidth = "nrd",
                         verbose = TRUE,
                         ...) {
   # if we have a matrix-response, continue here...
   if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.glm(object, iterations, check_range, re_formula, verbose, ...))
+    return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, verbose, ...))
   }
 
   # else, proceed as usual
@@ -190,6 +197,7 @@ pp_check.lm <- function(object,
 
   attr(out, "check_range") <- check_range
   attr(out, "response_name") <- resp_string
+  attr(out, "bandwidth") <- bandwidth
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
@@ -199,11 +207,12 @@ pp_check.glm <- function(object,
                          iterations = 50,
                          check_range = FALSE,
                          re_formula = NULL,
+                         bandwidth = "nrd",
                          verbose = TRUE,
                          ...) {
   # if we have no matrix-response, continue here...
   if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.lm(object, iterations, check_range, re_formula, ...))
+    return(pp_check.lm(object, iterations, check_range, re_formula, bandwidth, verbose, ...))
   }
 
   # else, process matrix response. for matrix response models, we compute
@@ -239,6 +248,7 @@ pp_check.glm <- function(object,
 
   attr(out, "check_range") <- check_range
   attr(out, "response_name") <- resp_string
+  attr(out, "bandwidth") <- bandwidth
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
