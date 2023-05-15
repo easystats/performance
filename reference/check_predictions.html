@@ -24,7 +24,7 @@ models, the model is passed to bayesplot::pp_check().'><meta property="og:image"
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,7 +113,7 @@ models, the model is passed to <code><a href="https://mc-stan.org/bayesplot/refe
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_predictions</span><span class="op">(</span><span class="va">object</span>, iterations <span class="op">=</span> <span class="fl">50</span>, check_range <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_predictions</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
 <span><span class="fu">check_predictions</span><span class="op">(</span></span>
@@ -121,19 +121,24 @@ models, the model is passed to <code><a href="https://mc-stan.org/bayesplot/refe
 <span>  iterations <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  check_range <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  re_formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bandwidth <span class="op">=</span> <span class="st">"nrd"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">posterior_predictive_check</span><span class="op">(</span><span class="va">object</span>, iterations <span class="op">=</span> <span class="fl">50</span>, check_range <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">posterior_predictive_check</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">check_posterior_predictions</span><span class="op">(</span><span class="va">object</span>, iterations <span class="op">=</span> <span class="fl">50</span>, check_range <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">check_posterior_predictions</span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>object</dt>
 <dd><p>A statistical model.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code>.</p></dd>
 
 
 <dt>iterations</dt>
@@ -149,15 +154,19 @@ the variation in the original data is captured by the model or not
 be inside the range of the related minimum and maximum values of <code>yrep</code>.</p></dd>
 
 
-<dt>...</dt>
-<dd><p>Passed down to <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code>.</p></dd>
-
-
 <dt>re_formula</dt>
 <dd><p>Formula containing group-level effects (random effects) to
 be considered in the simulated data. If <code>NULL</code> (default), condition
 on all random effects. If <code>NA</code> or <code>~0</code>, condition on no random
 effects. See <code><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate()</a></code> in <strong>lme4</strong>.</p></dd>
+
+
+<dt>bandwidth</dt>
+<dd><p>A character string indicating the smoothing bandwidth to
+be used. Unlike <code><a href="https://rdrr.io/r/stats/density.html" class="external-link">stats::density()</a></code>, which used <code>"nrd0"</code> as default, the
+default used here is <code>"nrd"</code> (which seems to give more plausible results
+for non-Gaussian models). When problems with plotting occur, try to change
+to a different value.</p></dd>
 
 
 <dt>verbose</dt>

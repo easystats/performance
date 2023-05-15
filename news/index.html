@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,8 +89,8 @@
 <h2 class="pkg-version" data-toc-text="0.10.4" id="performance-0104">performance 0.10.4<a class="anchor" aria-label="anchor" href="#performance-0104"></a></h2>
 <div class="section level3">
 <h3 id="changes-to-functions-0-10-4">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-10-4"></a></h3>
-<ul><li>
-<code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gain a <code>ci_method</code> argument, to either calculate confidence intervals using <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> (instead of <code>lmer::bootMer()</code>) when <code>ci_method = "boot"</code> or analytical confidence intervals (<code>ci_method = "analytical"</code>). Use <code>ci_method = "boot"</code> when the default method fails to compute confidence intervals and use <code>ci_method = "analytical"</code> if bootstrapped intervals cannot be calculated at all. Note that the default computation method is preferred.</li>
+<ul><li><p><code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gain a <code>ci_method</code> argument, to either calculate confidence intervals using <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> (instead of <code>lmer::bootMer()</code>) when <code>ci_method = "boot"</code> or analytical confidence intervals (<code>ci_method = "analytical"</code>). Use <code>ci_method = "boot"</code> when the default method fails to compute confidence intervals and use <code>ci_method = "analytical"</code> if bootstrapped intervals cannot be calculated at all. Note that the default computation method is preferred.</p></li>
+<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> accepts a <code>bandwidth</code> argument (smoothing bandwidth), which is passed down to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods density-estimation.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-10-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-4"></a></h3>
@@ -149,7 +149,6 @@
 <h3 id="changes-to-functions-0-10-1">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-10-1"></a></h3>
 <ul><li><p><code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> get <code>ci</code> and <code>iterations</code> arguments, to compute confidence intervals for the ICC resp. R2, based on bootstrapped sampling.</p></li>
 <li><p><code><a href="../reference/r2.html">r2()</a></code> gets <code>ci</code>, to compute (analytical) confidence intervals for the R2.</p></li>
-<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> accepts a <code>bw</code> argument (smoothing bandwidth), which is passed down to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods density-estimation. The default for the smoothing bandwidth <code>bw</code> has changed from <code>"nrd0"</code> to <code>"nrd"</code>, which seems to produce better fitting plots for non-gaussian models.</p></li>
 <li><p>The model underlying <code><a href="../reference/check_distribution.html">check_distribution()</a></code> was now also trained to detect cauchy, half-cauchy and inverse-gamma distributions.</p></li>
 <li><p><code><a href="../reference/model_performance.html">model_performance()</a></code> now allows to include the ICC for Bayesian models.</p></li>
 </ul></div>
