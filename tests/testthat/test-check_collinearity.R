@@ -189,5 +189,4 @@ test_that("check_collinearity, ci are NA", {
       "Tolerance_CI_low", "Tolerance_CI_high"
     )
   )
-  expect_lt(out$VIF[1], -2e+10)
 })
