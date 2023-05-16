@@ -35,6 +35,7 @@
 #'   and thus automatically shows or hides dots.
 #' @param verbose Toggle off warnings.
 #' @param ... Currently not used.
+#' @inheritParams check_predictions
 #'
 #' @return The data frame that is used for plotting.
 #'
@@ -173,6 +174,7 @@ check_model.default <- function(x,
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
                                 show_dots = NULL,
+                                bandwidth = "nrd",
                                 verbose = TRUE,
                                 ...) {
   # check model formula
@@ -219,6 +221,7 @@ check_model.default <- function(x,
   attr(ca, "theme") <- theme
   attr(ca, "model_info") <- minfo
   attr(ca, "overdisp_type") <- list(...)$plot_type
+  attr(ca, "bandwidth") <- bandwidth
   ca
 }
 
@@ -256,6 +259,7 @@ check_model.stanreg <- function(x,
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
                                 show_dots = NULL,
+                                bandwidth = "nrd",
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
@@ -269,6 +273,7 @@ check_model.stanreg <- function(x,
     theme = theme,
     detrend = detrend,
     show_dots = show_dots,
+    bandwidth = bandwidth,
     verbose = verbose,
     ...
   )
@@ -291,6 +296,7 @@ check_model.model_fit <- function(x,
                                   theme = "see::theme_lucid",
                                   detrend = FALSE,
                                   show_dots = NULL,
+                                  bandwidth = "nrd",
                                   verbose = TRUE,
                                   ...) {
   check_model(
@@ -305,6 +311,7 @@ check_model.model_fit <- function(x,
     theme = theme,
     detrend = detrend,
     show_dots = show_dots,
+    bandwidth = bandwidth,
     verbose = verbose,
     ...
   )

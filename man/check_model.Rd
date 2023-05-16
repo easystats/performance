@@ -19,6 +19,7 @@ check_model(x, ...)
   theme = "see::theme_lucid",
   detrend = FALSE,
   show_dots = NULL,
+  bandwidth = "nrd",
   verbose = TRUE,
   ...
 )
@@ -60,6 +61,12 @@ to \code{FALSE} for models with many observations, if generating the plot is too
 time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
+
+\item{bandwidth}{A character string indicating the smoothing bandwidth to
+be used. Unlike \code{stats::density()}, which used \code{"nrd0"} as default, the
+default used here is \code{"nrd"} (which seems to give more plausible results
+for non-Gaussian models). When problems with plotting occur, try to change
+to a different value.}
 
 \item{verbose}{Toggle off warnings.}
 }
