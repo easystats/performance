@@ -1,5 +1,7 @@
 # performance 0.10.4
 
+## Changes to functions
+
 * `icc()` and `r2_nakagawa()` gain a `ci_method` argument, to either calculate
   confidence intervals using `boot::boot()` (instead of `lmer::bootMer()`) when
   `ci_method = "boot"` or analytical confidence intervals
@@ -7,6 +9,14 @@
   fails to compute confidence intervals and use `ci_method = "analytical"` if
   bootstrapped intervals cannot be calculated at all. Note that the default
   computation method is preferred.
+
+* `check_predictions()` accepts a `bandwidth` argument (smoothing bandwidth),
+  which is passed down to the `plot()` methods density-estimation.
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` for _fixest_ models that used `i()`
+  to create interactions in formulas.
 
 # performance 0.10.3
 
@@ -79,11 +89,6 @@
 
 * `r2()` gets `ci`, to compute (analytical) confidence intervals for the R2.
 
-* `check_predictions()` accepts a `bw` argument (smoothing bandwidth), which is
-  passed down to the `plot()` methods density-estimation. The default for the
-  smoothing bandwidth `bw` has changed from `"nrd0"` to `"nrd"`, which seems
-  to produce better fitting plots for non-gaussian models.
-  
 * The model underlying `check_distribution()` was now also trained to detect
   cauchy, half-cauchy and inverse-gamma distributions.
 
