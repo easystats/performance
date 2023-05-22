@@ -278,6 +278,7 @@ test_that("pareto which", {
 })
 
 test_that("pareto multiple methods which", {
+  skip_if_not_installed("rstanarm")
   set.seed(123)
   model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
   invisible(capture.output(model))
@@ -306,6 +307,7 @@ test_that("BayesFactor which", {
 # 7. Next, we test grouped output
 
 test_that("cook multiple methods which", {
+  skip_if_not_installed("datawizard")
   iris2 <- datawizard::data_group(iris, "Species")
   z <- attributes(check_outliers(iris2, method = c("zscore", "iqr")))
   expect_named(
