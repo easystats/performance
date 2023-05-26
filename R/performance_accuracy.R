@@ -189,8 +189,8 @@ performance_accuracy <- function(model,
       Accuracy = mean(accuracy, na.rm = TRUE),
       SE = stats::sd(accuracy, na.rm = TRUE),
       CI = ci,
-      CI_low = stats::quantile(accuracy, 1 - ((1 + ci) / 2)),
-      CI_high = stats::quantile(accuracy, (1 + ci) / 2),
+      CI_low = as.vector(stats::quantile(accuracy, 1 - ((1 + ci) / 2), na.rm = TRUE)),
+      CI_high = as.vector(stats::quantile(accuracy, (1 + ci) / 2, na.rm = TRUE)),
       Method = measure
     )
   )
