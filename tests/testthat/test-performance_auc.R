@@ -3,7 +3,7 @@ test_that("performance_auc", {
   # message
   set.seed(3)
   expect_message({
-    out <- performance_accuracy(model)
+    out <- performance_accuracy(model_auc)
   })
   expect_equal(out$Accuracy, 0.75833, tolerance = 1e-3)
   expect_equal(out$CI_low, 0.6, tolerance = 1e-3)
@@ -11,7 +11,7 @@ test_that("performance_auc", {
 
   set.seed(12)
   expect_message({
-    out <- performance_accuracy(model)
+    out <- performance_accuracy(model_auc)
   })
   expect_equal(out$Accuracy, 0.97222, tolerance = 1e-3)
   expect_equal(out$CI_low, 0.89722, tolerance = 1e-3)
