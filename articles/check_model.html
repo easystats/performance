@@ -257,8 +257,8 @@ In this case, use the <code>type</code> argument of the
 <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method to change the plot-style. Available options
 are <code>type = "discrete_dots"</code> (dots for observed and
 replicated outcomes), <code>type = "discrete_interval"</code> (dots for
-observed, errorbars for replicated outcomes) or
-<code>type = "discrete_both"</code> (both dots and errorbars).</p>
+observed, error bars for replicated outcomes) or
+<code>type = "discrete_both"</code> (both dots and error bars).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">99</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">iris</span></span>
@@ -376,9 +376,9 @@ e.g. <code>parameters::model_parameters(m1, vcov = "HC3")</code>. A
 detailed vignette on robust standard errors <a href="https://easystats.github.io/parameters/articles/model_parameters_robust.html" class="external-link">can
 be found here</a>.</p></li>
 <li><p>The heteroscedasticity can be modeled directly, e.g. using
-package <strong>glmmTMB</strong> and the dispersion formular, to
-estimate the dispersion parameter and account for heteroscedasticity
-(see <em>Brooks et al. 2017</em>).</p></li>
+package <strong>glmmTMB</strong> and the dispersion formula, to estimate
+the dispersion parameter and account for heteroscedasticity (see
+<em>Brooks et al. 2017</em>).</p></li>
 <li><p>Transforming the response variable, for instance, taking the
 <code><a href="https://rdrr.io/r/base/Log.html" class="external-link">log()</a></code>, may also help to avoid issues with
 heteroscedasticity.</p></li>
@@ -486,7 +486,7 @@ inaccurate.</p>
 observations at the tails. Whether any action is needed to fix this or
 not can also depend on the results of the remaining diagnostic plots. If
 all other plots indicate no violation of assumptions, some deviation of
-normality, particularly at the tails, can be less critcal.</p>
+normality, particularly at the tails, can be less critical.</p>
 <div class="section level5">
 <h5 id="how-to-fix-this-5">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-5"></a>
 </h5>
