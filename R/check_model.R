@@ -46,10 +46,12 @@
 #'   `check_normality()` etc.) to get informative messages and warnings.
 #'
 #' @details For Bayesian models from packages **rstanarm** or **brms**,
-#'   models will be "converted" to their frequentist counterpart, using
-#'   [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
-#'   A more advanced model-check for Bayesian models will be implemented at a
-#'   later stage.
+#' models will be "converted" to their frequentist counterpart, using
+#' [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
+#' A more advanced model-check for Bayesian models will be implemented at a
+#' later stage.
+#'
+#' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
 #'
 #' @section Posterior Predictive Checks:
 #' Posterior predictive checks can be used to look for systematic discrepancies
@@ -175,6 +177,7 @@ check_model.default <- function(x,
                                 detrend = FALSE,
                                 show_dots = NULL,
                                 bandwidth = "nrd",
+                                type = "density",
                                 verbose = TRUE,
                                 ...) {
   # check model formula
@@ -222,6 +225,7 @@ check_model.default <- function(x,
   attr(ca, "model_info") <- minfo
   attr(ca, "overdisp_type") <- list(...)$plot_type
   attr(ca, "bandwidth") <- bandwidth
+  attr(ca, "type") <- type
   ca
 }
 
@@ -260,6 +264,7 @@ check_model.stanreg <- function(x,
                                 detrend = FALSE,
                                 show_dots = NULL,
                                 bandwidth = "nrd",
+                                type = "density",
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
@@ -274,6 +279,7 @@ check_model.stanreg <- function(x,
     detrend = detrend,
     show_dots = show_dots,
     bandwidth = bandwidth,
+    type = type,
     verbose = verbose,
     ...
   )
@@ -297,6 +303,7 @@ check_model.model_fit <- function(x,
                                   detrend = FALSE,
                                   show_dots = NULL,
                                   bandwidth = "nrd",
+                                  type = "density",
                                   verbose = TRUE,
                                   ...) {
   check_model(
@@ -312,6 +319,7 @@ check_model.model_fit <- function(x,
     detrend = detrend,
     show_dots = show_dots,
     bandwidth = bandwidth,
+    type = type,
     verbose = verbose,
     ...
   )

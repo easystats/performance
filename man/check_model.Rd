@@ -20,6 +20,7 @@ check_model(x, ...)
   detrend = FALSE,
   show_dots = NULL,
   bandwidth = "nrd",
+  type = "density",
   verbose = TRUE,
   ...
 )
@@ -68,6 +69,11 @@ default used here is \code{"nrd"} (which seems to give more plausible results
 for non-Gaussian models). When problems with plotting occur, try to change
 to a different value.}
 
+\item{type}{Plot type for the posterior predictive checks plot. Can be \code{"density"}
+(default), \code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the
+\verb{discrete_*} options are appropriate for models with discrete - binary, integer
+or ordinal etc. - outcomes).}
+
 \item{verbose}{Toggle off warnings.}
 }
 \value{
@@ -84,6 +90,8 @@ models will be "converted" to their frequentist counterpart, using
 \href{https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html}{\code{bayestestR::bayesian_as_frequentist}}.
 A more advanced model-check for Bayesian models will be implemented at a
 later stage.
+
+See also the related \href{https://easystats.github.io/performance/articles/check_model.html}{vignette}.
 }
 \note{
 This function just prepares the data for plotting. To create the plots,

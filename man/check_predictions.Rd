@@ -15,6 +15,7 @@ check_predictions(object, ...)
   check_range = FALSE,
   re_formula = NULL,
   bandwidth = "nrd",
+  type = "density",
   verbose = TRUE,
   ...
 )
@@ -47,6 +48,11 @@ be used. Unlike \code{stats::density()}, which used \code{"nrd0"} as default, th
 default used here is \code{"nrd"} (which seems to give more plausible results
 for non-Gaussian models). When problems with plotting occur, try to change
 to a different value.}
+
+\item{type}{Plot type for the posterior predictive checks plot. Can be \code{"density"}
+(default), \code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the
+\verb{discrete_*} options are appropriate for models with discrete - binary, integer
+or ordinal etc. - outcomes).}
 
 \item{verbose}{Toggle warnings.}
 }

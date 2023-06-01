@@ -13,6 +13,9 @@
 * `check_predictions()` accepts a `bandwidth` argument (smoothing bandwidth),
   which is passed down to the `plot()` methods density-estimation.
 
+* `check_predictions()` gains a `type` argument, which is passed down to the
+  `plot()` method to change plot-type (density or discrete dots/intervals).
+
 ## Bug fixes
 
 * Fixed issue in `check_collinearity()` for _fixest_ models that used `i()`

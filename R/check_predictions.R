@@ -28,6 +28,10 @@
 #'   default used here is `"nrd"` (which seems to give more plausible results
 #'   for non-Gaussian models). When problems with plotting occur, try to change
 #'   to a different value.
+#' @param type Plot type for the posterior predictive checks plot. Can be `"density"`
+#' (default), `"discrete_dots"`, `"discrete_interval"` or `"discrete_both"` (the
+#' `discrete_*` options are appropriate for models with discrete - binary, integer
+#' or ordinal etc. - outcomes).
 #' @param verbose Toggle warnings.
 #' @param ... Passed down to `simulate()`.
 #'
@@ -80,6 +84,7 @@ check_predictions.default <- function(object,
                                       check_range = FALSE,
                                       re_formula = NULL,
                                       bandwidth = "nrd",
+                                      type = "density",
                                       verbose = TRUE,
                                       ...) {
   # check for valid input
@@ -87,6 +92,9 @@ check_predictions.default <- function(object,
 
   # retrieve model information
   minfo <- insight::model_info(object, verbose = FALSE)
+
+  # args
+  type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
 
   if (isTRUE(minfo$is_bayesian) && isFALSE(inherits(object, "BFBayesFactor"))) {
     insight::check_if_installed(
@@ -101,6 +109,7 @@ check_predictions.default <- function(object,
       check_range = check_range,
       re_formula = re_formula,
       bandwidth = bandwidth,
+      type = type,
       verbose = verbose,
       model_info = minfo,
       ...
@@ -156,12 +165,13 @@ pp_check.lm <- function(object,
                         check_range = FALSE,
                         re_formula = NULL,
                         bandwidth = "nrd",
+                        type = "density",
                         verbose = TRUE,
                         model_info = NULL,
                         ...) {
   # if we have a matrix-response, continue here...
   if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, verbose, model_info, ...))
+    return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 
   # else, proceed as usual
@@ -210,6 +220,7 @@ pp_check.lm <- function(object,
   attr(out, "response_name") <- resp_string
   attr(out, "bandwidth") <- bandwidth
   attr(out, "model_info") <- minfo
+  attr(out, "type") <- type
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
@@ -220,12 +231,13 @@ pp_check.glm <- function(object,
                          check_range = FALSE,
                          re_formula = NULL,
                          bandwidth = "nrd",
+                         type = "density",
                          verbose = TRUE,
                          model_info = NULL,
                          ...) {
   # if we have no matrix-response, continue here...
   if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.lm(object, iterations, check_range, re_formula, bandwidth, verbose, model_info, ...))
+    return(pp_check.lm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 
   # else, process matrix response. for matrix response models, we compute
@@ -270,6 +282,7 @@ pp_check.glm <- function(object,
   attr(out, "response_name") <- resp_string
   attr(out, "bandwidth") <- bandwidth
   attr(out, "model_info") <- minfo
+  attr(out, "type") <- type
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
