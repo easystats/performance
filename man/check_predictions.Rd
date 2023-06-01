@@ -87,10 +87,25 @@ is loaded, \code{pp_check()} is also available as an alias for \code{check_predi
 }
 \examples{
 library(performance)
-model <- lm(mpg ~ disp, data = mtcars)
+# linear model
 if (require("see")) {
+  model <- lm(mpg ~ disp, data = mtcars)
   check_predictions(model)
 }
+
+# discrete/integer outcome
+if (require("see")) {
+  set.seed(99)
+  d <- iris
+  d$skewed <- rpois(150, 1)
+  model <- glm(
+    skewed ~ Species + Petal.Length + Petal.Width,
+    family = poisson(),
+    data = d
+  )
+  check_predictions(model, type = "discrete_both")
+}
+
 }
 \references{
 \itemize{
