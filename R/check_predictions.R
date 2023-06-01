@@ -86,7 +86,7 @@
 #'   )
 #'   check_predictions(model, type = "discrete_both")
 #' }
-#' 
+#'
 #' @export
 check_predictions <- function(object, ...) {
   UseMethod("check_predictions")

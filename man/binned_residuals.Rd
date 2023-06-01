@@ -61,7 +61,9 @@ as.data.frame(result)
 # plot
 if (require("see")) {
   plot(result)
-}}
+}
+}
+
 }
 \references{
 Gelman, A., and Hill, J. (2007). Data analysis using regression and
