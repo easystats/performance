@@ -123,6 +123,14 @@ For discrete or integer outcomes (like in logistic or Poisson regression), densi
 
 ```{r eval=all(successfully_loaded[c("see", "ggplot2")]), warning=FALSE}
 set.seed(99)
+d <- iris
+d$skewed <- rpois(150, 1)
+m3 <- glm(
+  skewed ~ Species + Petal.Length + Petal.Width,
+  family = poisson(),
+  data = d
+)
+out <- check_predictions(m3)
 plot(out, type = "discrete_both")
 ```
 
