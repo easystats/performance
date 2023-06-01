@@ -1,3 +1,4 @@
+ACM
 AGFI
 AICc
 Agresti
@@ -12,6 +13,7 @@ BFBayesFactor
 BMJ
 Baayen
 BayesFactor
+Benthem
 Betancourt
 Bezdek
 Biometrics
@@ -41,6 +43,7 @@ Csaki
 DBSCAN
 DOI
 Datenerhebung
+Delacre
 Deskriptivstatistische
 Distinguishability
 Dom
@@ -94,9 +97,11 @@ Iglewicz
 Intra
 Intraclass
 Itemanalyse
+JB
 JM
 Jackman
 Jurs
+KJ
 KMO
 Kelava
 Kettenring
@@ -104,6 +109,7 @@ Kiado
 Killeen
 Kliegl
 Kullback
+Lakens
 LOF
 LOGLOSS
 LOOIC
@@ -119,6 +125,7 @@ Lomax
 MSA
 Maddala
 Magee
+Magnusson
 Mahwah
 Marcoulides
 Mattan
@@ -129,6 +136,7 @@ Merkle
 Methoden
 Michalos
 Moosbrugger
+Mora
 Multicollinearity
 NFI
 NNFI
@@ -141,8 +149,11 @@ Normed
 ORCID
 Olkin
 PNFI
+Pek
 Petrov
 Postestimation
+Pre
+Psychol
 Psychometrika
 QE
 RFI
@@ -196,9 +207,11 @@ Vuong
 Vuong's
 WAIC
 WMK
+Weisberg
 Windmeijer
 Witten
 Xu
+YL
 Zavoina
 Zavoinas
 Zhou
@@ -233,6 +246,8 @@ easystats
 et
 explicitely
 favour
+fixest
+fpsyg
 gam
 geoms
 ggplot

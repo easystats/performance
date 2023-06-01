@@ -119,7 +119,7 @@ The best way, if there are serious concerns that the model does not fit well to 
 
 #### Plots for discrete outcomes
 
-For discrete or integer outcomes (like in logistic or Poisson regression), density plots are not always the best choice, as they look somewhat "wiggly" around the actual values of the dependent variables. In this case, use the `type` argument of the `plot()` method to change the plot-style. Available options are `type = "discrete_dots"` (dots for observed and replicated outcomes), `type = "discrete_interval"` (dots for observed, errorbars for replicated outcomes) or `type = "discrete_both"` (both dots and errorbars).
+For discrete or integer outcomes (like in logistic or Poisson regression), density plots are not always the best choice, as they look somewhat "wiggly" around the actual values of the dependent variables. In this case, use the `type` argument of the `plot()` method to change the plot-style. Available options are `type = "discrete_dots"` (dots for observed and replicated outcomes), `type = "discrete_interval"` (dots for observed, error bars for replicated outcomes) or `type = "discrete_both"` (both dots and error bars).
 
 ```{r eval=all(successfully_loaded[c("see", "ggplot2")]), warning=FALSE}
 set.seed(99)
@@ -208,7 +208,7 @@ There are several ways to address heteroscedasticity.
 
 1. Calculating heteroscedasticity-consistent standard errors accounts for the larger variation, better reflecting the increased uncertainty. This can be easily done using the **parameters** package, e.g. `parameters::model_parameters(m1, vcov = "HC3")`. A detailed vignette on robust standard errors [can be found here](https://easystats.github.io/parameters/articles/model_parameters_robust.html).
 
-2. The heteroscedasticity can be modeled directly, e.g. using package **glmmTMB** and the dispersion formular, to estimate the dispersion parameter and account for heteroscedasticity (see _Brooks et al. 2017_).
+2. The heteroscedasticity can be modeled directly, e.g. using package **glmmTMB** and the dispersion formula, to estimate the dispersion parameter and account for heteroscedasticity (see _Brooks et al. 2017_).
 
 3. Transforming the response variable, for instance, taking the `log()`, may also help to avoid issues with heteroscedasticity.
 
@@ -259,7 +259,7 @@ Usually, dots should fall along the green reference line. If there is some devia
 diagnostic_plots[[6]]
 ```
 
-In our example, we see that most data points are ok, except some observations at the tails. Whether any action is needed to fix this or not can also depend on the results of the remaining diagnostic plots. If all other plots indicate no violation of assumptions, some deviation of normality, particularly at the tails, can be less critcal.
+In our example, we see that most data points are ok, except some observations at the tails. Whether any action is needed to fix this or not can also depend on the results of the remaining diagnostic plots. If all other plots indicate no violation of assumptions, some deviation of normality, particularly at the tails, can be less critical.
 
 #### How to fix this?
 
