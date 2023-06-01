@@ -14,7 +14,7 @@ multicollinearity)."><meta property="og:image" content="https://easystats.github
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.4</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,6 +114,7 @@ multicollinearity).</p>
 <span>  detrend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  show_dots <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bandwidth <span class="op">=</span> <span class="st">"nrd"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"density"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -186,6 +187,13 @@ for non-Gaussian models). When problems with plotting occur, try to change
 to a different value.</p></dd>
 
 
+<dt>type</dt>
+<dd><p>Plot type for the posterior predictive checks plot. Can be <code>"density"</code>
+(default), <code>"discrete_dots"</code>, <code>"discrete_interval"</code> or <code>"discrete_both"</code> (the
+<code>discrete_*</code> options are appropriate for models with discrete - binary, integer
+or ordinal etc. - outcomes).</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>Toggle off warnings.</p></dd>
 
@@ -203,6 +211,7 @@ models will be "converted" to their frequentist counterpart, using
 <a href="https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html" class="external-link"><code><a href="https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html" class="external-link">bayestestR::bayesian_as_frequentist</a></code></a>.
 A more advanced model-check for Bayesian models will be implemented at a
 later stage.</p>
+<p>See also the related <a href="https://easystats.github.io/performance/articles/check_model.html">vignette</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -376,8 +385,8 @@ skipped, which also increases performance.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 2.6e-05 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Gradient evaluation took 2.4e-05 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: Adjust your expectations accordingly!</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 1: </span>
@@ -409,8 +418,8 @@ skipped, which also increases performance.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: Gradient evaluation took 1.7e-05 seconds</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: Gradient evaluation took 1.1e-05 seconds</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: Adjust your expectations accordingly!</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chain 2: </span>
