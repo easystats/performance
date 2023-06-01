@@ -12,7 +12,7 @@ or logistic regression models."><meta property="og:image" content="https://easys
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.5</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,6 +100,7 @@ or logistic regression models.</p>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cv"</span>, <span class="st">"boot"</span><span class="op">)</span>,</span>
 <span>  k <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  n <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -123,6 +124,10 @@ compute the accuracy values.</p></dd>
 
 <dt>n</dt>
 <dd><p>Number of bootstrap-samples.</p></dd>
+
+
+<dt>ci</dt>
+<dd><p>The level of the confidence interval.</p></dd>
 
 
 <dt>verbose</dt>
@@ -158,17 +163,15 @@ correlation resp. AUC-values.</p>
 <span class="r-in"><span><span class="fu">performance_accuracy</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Accuracy of Model Predictions</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy: 89.97%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       SE: 4.15%-points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Method: Correlation between observed and predicted</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy (95% CI): 89.97% [85.01%, 94.24%]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Method: Correlation between observed and predicted</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">performance_accuracy</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Accuracy of Model Predictions</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy: 92.50%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       SE: 11.18%-points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Method: Area under Curve</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accuracy (95% CI): 92.50% [76.25%, 100.00%]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Method: Area under Curve</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
