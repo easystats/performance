@@ -16,7 +16,7 @@
 * `check_predictions()` gains a `type` argument, which is passed down to the
   `plot()` method to change plot-type (density or discrete dots/intervals).
 
-* `performance_accuracy()` now includes confidence intervals, and repors those
+* `performance_accuracy()` now includes confidence intervals, and reports those
   by default (the standard error is no longer reported, but still included).
 
 ## Bug fixes
