@@ -15,6 +15,7 @@ check_predictions(object, ...)
   check_range = FALSE,
   re_formula = NULL,
   bandwidth = "nrd",
+  type = "density",
   verbose = TRUE,
   ...
 )
@@ -47,6 +48,11 @@ be used. Unlike \code{stats::density()}, which used \code{"nrd0"} as default, th
 default used here is \code{"nrd"} (which seems to give more plausible results
 for non-Gaussian models). When problems with plotting occur, try to change
 to a different value.}
+
+\item{type}{Plot type for the posterior predictive checks plot. Can be \code{"density"}
+(default), \code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the
+\verb{discrete_*} options are appropriate for models with discrete - binary, integer
+or ordinal etc. - outcomes).}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -81,10 +87,25 @@ is loaded, \code{pp_check()} is also available as an alias for \code{check_predi
 }
 \examples{
 library(performance)
-model <- lm(mpg ~ disp, data = mtcars)
+# linear model
 if (require("see")) {
+  model <- lm(mpg ~ disp, data = mtcars)
   check_predictions(model)
 }
+
+# discrete/integer outcome
+if (require("see")) {
+  set.seed(99)
+  d <- iris
+  d$skewed <- rpois(150, 1)
+  model <- glm(
+    skewed ~ Species + Petal.Length + Petal.Width,
+    family = poisson(),
+    data = d
+  )
+  check_predictions(model, type = "discrete_both")
+}
+
 }
 \references{
 \itemize{

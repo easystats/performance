@@ -333,6 +333,11 @@ test_performance(lm1, lm2, lm3, lm4)
 test_bf(lm1, lm2, lm3, lm4)
 ```
 
+### Plotting Functions
+
+Plotting functions are available through the [**see** package](https://easystats.github.io/see/articles/performance.html).
+
+
 # Code of Conduct
 
 Please note that the performance project is released with a [Contributor Code of Conduct](https://easystats.github.io/performance/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
