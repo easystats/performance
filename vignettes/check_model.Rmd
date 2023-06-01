@@ -1,5 +1,5 @@
 ---
-title: "Checking model assumption"
+title: "Checking model assumption - linear models"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -8,7 +8,7 @@ output:
 tags: [r, performance, r2]
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Checking model assumption}
+  %\VignetteIndexEntry{Checking model assumption - linear models}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -116,6 +116,15 @@ As you can see, the green line in this plot deviates visibly from the blue lines
 #### How to fix this?
 
 The best way, if there are serious concerns that the model does not fit well to the data, is to use a different type (family) of regression models. In our example, it is obvious that we should better use a Poisson regression.
+
+#### Plots for discrete outcomes
+
+For discrete or integer outcomes (like in logistic or Poisson regression), density plots are not always the best choice, as they look somewhat "wiggly" around the actual values of the dependent variables. In this case, use the `type` argument of the `plot()` method to change the plot-style. Available options are `type = "discrete_dots"` (dots for observed and replicated outcomes), `type = "discrete_interval"` (dots for observed, errorbars for replicated outcomes) or `type = "discrete_both"` (both dots and errorbars).
+
+```{r eval=all(successfully_loaded[c("see", "ggplot2")]), warning=FALSE}
+set.seed(99)
+plot(out, type = "discrete_both")
+```
 
 ### Linearity
 
