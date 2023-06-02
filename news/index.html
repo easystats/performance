@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.3.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@
 <h3 id="changes-to-functions-0-10-4">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-10-4"></a></h3>
 <ul><li><p><code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> gain a <code>ci_method</code> argument, to either calculate confidence intervals using <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code> (instead of <code>lmer::bootMer()</code>) when <code>ci_method = "boot"</code> or analytical confidence intervals (<code>ci_method = "analytical"</code>). Use <code>ci_method = "boot"</code> when the default method fails to compute confidence intervals and use <code>ci_method = "analytical"</code> if bootstrapped intervals cannot be calculated at all. Note that the default computation method is preferred.</p></li>
 <li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> accepts a <code>bandwidth</code> argument (smoothing bandwidth), which is passed down to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods density-estimation.</p></li>
-<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> gains a <code>type</code> argument, which is passed down to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method to change plot-type (density or discrete dots/intervals).</p></li>
+<li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> gains a <code>type</code> argument, which is passed down to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method to change plot-type (density or discrete dots/intervals). By default, <code>type</code> is set to <code>"default"</code> for models without discrete outcomes, and else <code>type = "discrete_interval"</code>.</p></li>
 <li><p><code><a href="../reference/performance_accuracy.html">performance_accuracy()</a></code> now includes confidence intervals, and reports those by default (the standard error is no longer reported, but still included).</p></li>
 </ul></div>
 <div class="section level3">
