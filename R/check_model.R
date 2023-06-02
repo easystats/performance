@@ -206,6 +206,12 @@ check_model.default <- function(x,
     insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
   }
 
+  # try to find sensible default for "type" argument
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  if (missing(type) && suggest_dots) {
+    type <- "discrete_interval"
+  }
+
   # set default for show_dots, based on "model size"
   if (is.null(show_dots)) {
     n <- .safe(insight::n_obs(x))

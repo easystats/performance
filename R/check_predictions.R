@@ -28,10 +28,10 @@
 #'   default used here is `"nrd"` (which seems to give more plausible results
 #'   for non-Gaussian models). When problems with plotting occur, try to change
 #'   to a different value.
-#' @param type Plot type for the posterior predictive checks plot. Can be `"density"`
-#' (default), `"discrete_dots"`, `"discrete_interval"` or `"discrete_both"` (the
-#' `discrete_*` options are appropriate for models with discrete - binary, integer
-#' or ordinal etc. - outcomes).
+#' @param type Plot type for the posterior predictive checks plot. Can be `"density"`,
+#' `"discrete_dots"`, `"discrete_interval"` or `"discrete_both"` (the `discrete_*`
+#' options are appropriate for models with discrete - binary, integer or ordinal
+#' etc. - outcomes).
 #' @param verbose Toggle warnings.
 #' @param ... Passed down to `simulate()`.
 #'
@@ -107,6 +107,12 @@ check_predictions.default <- function(object,
 
   # retrieve model information
   minfo <- insight::model_info(object, verbose = FALSE)
+
+  # try to find sensible default for "type" argument
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  if (missing(type) && suggest_dots) {
+    type <- "discrete_interval"
+  }
 
   # args
   type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
