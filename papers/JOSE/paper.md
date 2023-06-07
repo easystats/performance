@@ -9,7 +9,7 @@ tags:
 authors:
   - name: Rémi Thériault
     orcid: 0000-0003-4315-6788
-    affiliation: 1,*
+    affiliation: 1
   - name: Mattan S. Ben-Shachar
     orcid: 0000-0002-4287-4801
     affiliation: 2
@@ -31,7 +31,7 @@ affiliations:
   - index: 2
     name: Independent Researcher
   - index: 3
-    name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany 
+    name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
   - index: 4
     name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
   - index: 5
