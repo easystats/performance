@@ -21,7 +21,3 @@ jobs:
           # PDF. Note, this should be the same directory as the input
           # paper.md
           path: papers/JOSE/paper.pdf
-      - name: save pdf to repo
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Saved new PDF of paper
