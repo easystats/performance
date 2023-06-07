@@ -12,7 +12,7 @@ jobs:
         with:
           journal: jose
           # This should be the path to the paper within your repo.
-          paper-path: paper/paper.md
+          paper-path: papers/JOSE/paper.md
       - name: Upload
         uses: actions/upload-artifact@v1
         with:
@@ -20,7 +20,7 @@ jobs:
           # This is the output path where Pandoc will write the compiled
           # PDF. Note, this should be the same directory as the input
           # paper.md
-          path: paper/paper.pdf
+          path: papers/JOSE/paper.pdf
       - name: save pdf to repo
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
