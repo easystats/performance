@@ -1,5 +1,11 @@
 ---
 title: "Check your outliers! An introduction to identifying statistical outliers in R with *easystats*"
+tags:
+  - R
+  - univariate outliers
+  - multivariate outliers
+  - robust detection methods
+  - easystats
 authors:
   - name: Rémi Thériault
     orcid: 0000-0003-4315-6788
@@ -35,6 +41,7 @@ affiliations:
 correspondence: theriault.remi@courrier.uqam.ca.
 type: article
 status: submit
+date: 7 June 2023
 bibliography: mybibfile.bib
 simplesummary: |
   The *{performance}* package from the *easystats* ecosystem makes it easy to 
