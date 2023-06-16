@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.6.8)  16 JUN 2023 15:11
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.6.8)  16 JUN 2023 16:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1032,13 +1032,13 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 
-Package hyperref Warning: Suppressing link with empty target on input line 337.
+Package hyperref Warning: Suppressing link with empty target on input line 322.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 337.
+Package hyperref Warning: Suppressing link with empty target on input line 322.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 337.
+Package hyperref Warning: Suppressing link with empty target on input line 322.
 
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
@@ -1050,7 +1050,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 376.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 378.
 [1
 
 ]
@@ -1065,19 +1065,17 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [2]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 447.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 449.
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 463--463
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 465--465
 []\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 472--472
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 474--474
 []\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
-File: paper_files/figure-latex/univariate_implicit-1.pdf Graphic file (type pdf)
-<use paper_files/figure-latex/univariate_implicit-1.pdf>
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
 
@@ -1098,18 +1096,6 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [4]
-File: paper_files/figure-latex/multivariate_implicit-1.pdf Graphic file (type pdf)
-<use paper_files/figure-latex/multivariate_implicit-1.pdf>
-File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
-<D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
-
-Package fancyhdr Warning: \headheight is too small (62.59596pt): 
-(fancyhdr)                Make it at least 64.31554pt, for example:
-(fancyhdr)                \setlength{\headheight}{64.31554pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
-
-[5]
 File: paper_files/figure-latex/model-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/model-1.pdf>
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
@@ -1121,9 +1107,17 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
+[5]
+File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
+<D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
+
+Package fancyhdr Warning: \headheight is too small (62.59596pt): 
+(fancyhdr)                Make it at least 64.31554pt, for example:
+(fancyhdr)                \setlength{\headheight}{64.31554pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
+
 [6]
-File: paper_files/figure-latex/scatter-1.pdf Graphic file (type pdf)
-<use paper_files/figure-latex/scatter-1.pdf>
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
 
@@ -1134,63 +1128,17 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [7]
-File: paper_files/figure-latex/model2-1.pdf Graphic file (type pdf)
-<use paper_files/figure-latex/model2-1.pdf>
-File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
-<D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
-
-Package fancyhdr Warning: \headheight is too small (62.59596pt): 
-(fancyhdr)                Make it at least 64.31554pt, for example:
-(fancyhdr)                \setlength{\headheight}{64.31554pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
-
-[8]
-File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
-<D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
-
-Package fancyhdr Warning: \headheight is too small (62.59596pt): 
-(fancyhdr)                Make it at least 64.31554pt, for example:
-(fancyhdr)                \setlength{\headheight}{64.31554pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
-
-[9]
-File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
-<D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
-
-Package fancyhdr Warning: \headheight is too small (62.59596pt): 
-(fancyhdr)                Make it at least 64.31554pt, for example:
-(fancyhdr)                \setlength{\headheight}{64.31554pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
-
-[10]
-
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 974.
-
-File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
-<D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
-
-Package fancyhdr Warning: \headheight is too small (62.59596pt): 
-(fancyhdr)                Make it at least 64.31554pt, for example:
-(fancyhdr)                \setlength{\headheight}{64.31554pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-(fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
-
-[11]
-Underfull \hbox (badness 1584) in paragraph at lines 1062--1068
+Underfull \hbox (badness 1584) in paragraph at lines 910--916
 []\TU/lmr/m/n/10 Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psy-
  []
 
 
-Underfull \hbox (badness 3049) in paragraph at lines 1062--1068
+Underfull \hbox (badness 3049) in paragraph at lines 910--916
 \TU/lmr/m/n/10 chology: Undisclosed flexibility in data collection and analysis allows pre-
  []
 
 
-Underfull \hbox (badness 3735) in paragraph at lines 1062--1068
+Underfull \hbox (badness 3735) in paragraph at lines 910--916
 \TU/lmr/m/n/10 senting anything as significant. \TU/lmr/m/it/10 Psychological Science\TU/lmr/m/n/10 , \TU/lmr/m/it/10 22\TU/lmr/m/n/10 (11), 1359–1366.
  []
 
@@ -1203,20 +1151,20 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                You might also make \topmargin smaller to compensate:
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
-[12] (./paper.aux)
+[8] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 95B8741FA43CE9FFCC8820051C14B1E3;2674.
+(rerunfilecheck)             Checksum: EEBE57815200557F8EDD73A1BF6F9118;2043.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37341 strings out of 478641
- 771578 string characters out of 5846292
- 1873382 words of memory out of 5000000
- 56907 multiletter control sequences out of 15000+600000
- 520323 words of font info for 90 fonts, out of 8000000 for 9000
+ 37274 strings out of 478641
+ 768952 string characters out of 5846292
+ 1872382 words of memory out of 5000000
+ 56849 multiletter control sequences out of 15000+600000
+ 520299 words of font info for 87 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,13n,81p,1194b,848s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,12n,81p,1194b,848s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on paper.pdf (12 pages).
+Output written on paper.pdf (8 pages).
