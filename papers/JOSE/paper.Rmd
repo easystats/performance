@@ -42,7 +42,7 @@ correspondence: theriault.remi@courrier.uqam.ca.
 type: article
 status: submit
 date: 7 June 2023
-bibliography: mybibfile.bib
+bibliography: paper.bib
 simplesummary: |
   The *{performance}* package from the *easystats* ecosystem makes it easy to 
   diagnose outliers in R and according to current best practices thanks to the 
@@ -116,7 +116,7 @@ library(see)
 library(datawizard)
 ```
 
-# Introduction
+# Statement of Need
 
 Real-life data often contain observations that can be considered *abnormal* when compared to the main population. The cause of it---be it because they belong to a different distribution (originating from a different generative process) or simply being extreme cases, statistically rare but not impossible---can be hard to assess, and the boundaries of "abnormal" difficult to define.
 
