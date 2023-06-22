@@ -66,11 +66,11 @@ and their interpretation.
 
 Model's "nesting" is an important concept of models comparison. Indeed, many
 tests only make sense when the models are \emph{"nested",} i.e., when their
-predictors are nested. This means that all the predictors of a model are
-contained within the predictors of a larger model (sometimes referred to as
-the encompassing model). For instance, \code{model1 (y ~ x1 + x2)} is
-"nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually, people have a list
-of nested models, for instance \code{m1 (y ~ 1)}, \code{m2 (y ~ x1)},
+predictors are nested. This means that all the \emph{fixed effects} predictors of
+a model are contained within the \emph{fixed effects} predictors of a larger model
+(sometimes referred to as the encompassing model). For instance,
+\code{model1 (y ~ x1 + x2)} is "nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually,
+people have a list of nested models, for instance \code{m1 (y ~ 1)}, \code{m2 (y ~ x1)},
 \code{m3 (y ~ x1 + x2)}, \code{m4 (y ~ x1 + x2 + x3)}, and it is conventional
 that they are "ordered" from the smallest to largest, but it is up to the
 user to reverse the order from largest to smallest. The test then shows

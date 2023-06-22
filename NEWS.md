@@ -1,3 +1,11 @@
+# performance 0.10.5
+
+## Changes to functions
+
+* More informative message for `test_*()` functions that "nesting" only refers
+  to fixed effects parameters and currently ignores random effects when detecting
+  nested models.
+
 # performance 0.10.4
 
 ## Changes to functions
