@@ -27,8 +27,8 @@
 #'   for dots, and third color for outliers or extreme values.
 #' @param theme String, indicating the name of the plot-theme. Must be in the
 #'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
-#' @param detrend Logical. Should Q-Q/P-P plots be de-trended?
-#'   Defaults to `TRUE` if the *qqplotr* package is installed and `FALSE` otherwise.
+#' @param detrend Logical. Should Q-Q/P-P plots be de-trended? Defaults to
+#'   `TRUE`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #'   to `FALSE` for models with many observations, if generating the plot is too
 #'   time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
@@ -175,7 +175,7 @@ check_model.default <- function(x,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                detrend = requireNamespace("qqplotr", quietly = TRUE),
+                                detrend = TRUE,
                                 show_dots = NULL,
                                 bandwidth = "nrd",
                                 type = "density",
