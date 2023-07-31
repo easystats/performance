@@ -27,13 +27,14 @@
 #'   for dots, and third color for outliers or extreme values.
 #' @param theme String, indicating the name of the plot-theme. Must be in the
 #'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
-#' @param detrend Should QQ/PP plots be detrended?
+#' @param detrend Logical. Should Q-Q/P-P plots be de-trended? Defaults to
+#'   `TRUE`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #'   to `FALSE` for models with many observations, if generating the plot is too
 #'   time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
 #'   tries to guess whether performance will be poor due to a very large model
 #'   and thus automatically shows or hides dots.
-#' @param verbose Toggle off warnings.
+#' @param verbose If `FALSE` (default), suppress most warning messages.
 #' @param ... Currently not used.
 #' @inheritParams check_predictions
 #'
@@ -174,11 +175,11 @@ check_model.default <- function(x,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                detrend = FALSE,
+                                detrend = TRUE,
                                 show_dots = NULL,
                                 bandwidth = "nrd",
                                 type = "density",
-                                verbose = TRUE,
+                                verbose = FALSE,
                                 ...) {
   # check model formula
   if (verbose) {

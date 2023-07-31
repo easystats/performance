@@ -17,11 +17,11 @@ check_model(x, ...)
   dot_alpha = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
-  detrend = FALSE,
+  detrend = TRUE,
   show_dots = NULL,
   bandwidth = "nrd",
   type = "density",
-  verbose = TRUE,
+  verbose = FALSE,
   ...
 )
 }
@@ -55,7 +55,8 @@ for dots, and third color for outliers or extreme values.}
 \item{theme}{String, indicating the name of the plot-theme. Must be in the
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
-\item{detrend}{Should QQ/PP plots be detrended?}
+\item{detrend}{Logical. Should Q-Q/P-P plots be de-trended? Defaults to
+\code{TRUE}.}
 
 \item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
 to \code{FALSE} for models with many observations, if generating the plot is too
@@ -74,7 +75,7 @@ to a different value.}
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
 
-\item{verbose}{Toggle off warnings.}
+\item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 }
 \value{
 The data frame that is used for plotting.

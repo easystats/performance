@@ -24,7 +24,7 @@
 #' (e.g. Q-Q plots) are preferable. For generalized linear models, no formal
 #' statistical test is carried out. Rather, there's only a `plot()` method for
 #' GLMs. This plot shows a half-normal Q-Q plot of the absolute value of the
-#' standardized deviance residuals is shown (being in line with changes in
+#' standardized deviance residuals is shown (in line with changes in
 #' `plot.lm()` for R 4.3+).
 #'
 #' @examples
