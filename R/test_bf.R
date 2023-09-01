@@ -25,7 +25,7 @@ test_bf.default <- function(..., reference = 1, text_length = NULL) {
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_bf(objects, reference = reference, text_length = text_length)
   } else {
-    stop("The models cannot be compared for some reason :/", call. = FALSE)
+    insight::format_error("The models cannot be compared for some reason :/")
   }
 }
 

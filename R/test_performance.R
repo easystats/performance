@@ -268,7 +268,7 @@ plot.test_performance <- function(x, ...) {
 #' @export
 format.test_performance <- function(x, digits = 2, ...) {
   # Format cols and names
-  out <- insight::format_table(x, digits = digits, ...)
+  out <- insight::format_table(x, digits = digits, exact = FALSE, ...)
 
   if (isTRUE(attributes(x)$is_nested)) {
     footer <- paste0(
