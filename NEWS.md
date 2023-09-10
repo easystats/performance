@@ -9,6 +9,12 @@
 * `check_outliers()` for `"ICS"` method is now more stable and less likely to
   fail.
 
+## Bug fixes
+
+* `check_collinearity()` did not work for hurdle- or zero-inflated models of
+  package *pscl* when model had no explicitly defined formula for the
+  zero-inflation model.
+
 # performance 0.10.4
 
 ## Changes to functions
