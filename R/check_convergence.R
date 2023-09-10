@@ -107,3 +107,9 @@ check_convergence.glmmTMB <- function(x, ...) {
   # https://github.com/glmmTMB/glmmTMB/issues/275
   isTRUE(x$sdr$pdHess)
 }
+
+
+#' @export
+check_convergence._glm <- function(x, ...) {
+  isTRUE(x$fit$converged)
+}
