@@ -1,7 +1,3 @@
-skip_if_not_installed("bigutilsr")
-skip_if_not_installed("ICS")
-skip_if_not_installed("dbscan")
-
 test_that("zscore negative threshold", {
   expect_error(
     check_outliers(mtcars$mpg, method = "zscore", threshold = -1),
@@ -80,16 +76,15 @@ test_that("mahalanobis which", {
 })
 
 test_that("mahalanobis_robust which", {
+  skip_if_not_installed("bigutilsr")
   expect_identical(
     which(check_outliers(mtcars, method = "mahalanobis_robust", threshold = 25)),
     as.integer(c(7, 9, 21, 24, 27, 28, 29, 31))
   )
 })
 
-## FIXME: Fails on CRAN/windows
-# (should be fixed but not clear why method mcd needs a seed;
-# there should not be an element of randomness to it I think)
 test_that("mcd which", {
+  # (not clear why method mcd needs a seed)
   set.seed(42)
   expect_identical(
     tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45))),
@@ -101,7 +96,9 @@ test_that("mcd which", {
 test_that("ics which", {
   # suddenly fails on R Under development (unstable) (2023-09-07 r85102)
   # gcc-13 (Debian 13.2.0-2) 13.2.0
-  # skip_on_os("linux")
+  skip_on_cran()
+  skip_if_not_installed("ICS")
+  skip_if_not_installed("ICSOutlier")
   expect_identical(
     which(check_outliers(mtcars, method = "ics", threshold = 0.001)),
     as.integer(c(9, 29))
@@ -109,6 +106,7 @@ test_that("ics which", {
 })
 
 test_that("optics which", {
+  skip_if_not_installed("dbscan")
   expect_identical(
     which(check_outliers(mtcars, method = "optics", threshold = 14)),
     as.integer(c(5, 7, 15, 16, 17, 24, 25, 29, 31))
@@ -116,6 +114,7 @@ test_that("optics which", {
 })
 
 test_that("lof which", {
+  skip_if_not_installed("dbscan")
   expect_identical(
     which(check_outliers(mtcars, method = "lof", threshold = 0.005)),
     31L
@@ -190,6 +189,7 @@ test_that("multiple methods which", {
 
 # We exclude method ics because it is too slow
 test_that("all methods which", {
+  skip_if_not_installed("bigutilsr")
   expect_identical(
     which(check_outliers(mtcars,
       method = c(
@@ -211,6 +211,7 @@ test_that("all methods which", {
 
 
 test_that("multiple methods with ID", {
+  skip_if_not_installed("bigutilsr")
   data <- datawizard::rownames_as_column(mtcars, var = "car")
   x <- attributes(check_outliers(data,
     method = c(
@@ -258,6 +259,7 @@ test_that("cook which", {
 # })
 
 test_that("cook multiple methods which", {
+  skip_if_not_installed("dbscan")
   model <- lm(disp ~ mpg + hp, data = mtcars)
   expect_identical(
     which(check_outliers(model, method = c("cook", "optics", "lof"))),
@@ -266,6 +268,7 @@ test_that("cook multiple methods which", {
 })
 
 test_that("pareto which", {
+  skip_if_not_installed("dbscan")
   skip_if_not_installed("rstanarm")
   set.seed(123)
   model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
@@ -278,6 +281,7 @@ test_that("pareto which", {
 })
 
 test_that("pareto multiple methods which", {
+  skip_if_not_installed("dbscan")
   skip_if_not_installed("rstanarm")
   set.seed(123)
   model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
@@ -307,7 +311,6 @@ test_that("BayesFactor which", {
 # 7. Next, we test grouped output
 
 test_that("cook multiple methods which", {
-  skip_if_not_installed("datawizard")
   iris2 <- datawizard::data_group(iris, "Species")
   z <- attributes(check_outliers(iris2, method = c("zscore", "iqr")))
   expect_named(
