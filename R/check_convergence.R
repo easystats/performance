@@ -110,6 +110,6 @@ check_convergence.glmmTMB <- function(x, ...) {
 
 
 #' @export
-check_convergence._glm <- function(x, ...){
+check_convergence._glm <- function(x, ...) {
   isTRUE(x$fit$converged)
 }
