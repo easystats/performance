@@ -12,20 +12,19 @@
 #'
 #' @return The mean inter-item-correlation value for `x`.
 #'
-#' @details This function calculates a mean inter-item-correlation, i.e.
-#'    a correlation matrix of `x` will be computed (unless
-#'    `x` is already a matrix as returned by the `cor()`-function)
-#'    and the mean of the sum of all item's correlation values is returned.
-#'    Requires either a data frame or a computed `cor()`-object.
-#'    \cr \cr
-#'    \dQuote{Ideally, the average inter-item correlation for a set of
-#'    items should be between .20 and .40, suggesting that while the
-#'    items are reasonably homogeneous, they do contain sufficiently
-#'    unique variance so as to not be isomorphic with each other.
-#'    When values are lower than .20, then the items may not be
-#'    representative of the same content domain. If values are higher than
-#'    .40, the items may be only capturing a small bandwidth of the construct.}
-#'    \cite{(Piedmont 2014)}
+#' @details This function calculates a mean inter-item-correlation, i.e. a
+#'   correlation matrix of `x` will be computed (unless `x` is already a matrix
+#'   as returned by the `cor()` function) and the mean of the sum of all items'
+#'   correlation values is returned. Requires either a data frame or a computed
+#'   `cor()` object.
+#'
+#'   "Ideally, the average inter-item correlation for a set of items should be
+#'   between 0.20 and 0.40, suggesting that while the items are reasonably
+#'   homogeneous, they do contain sufficiently unique variance so as to not be
+#'   isomorphic with each other. When values are lower than 0.20, then the items
+#'   may not be representative of the same content domain. If values are higher
+#'   than 0.40, the items may be only capturing a small bandwidth of the
+#'   construct." _(Piedmont 2014)_
 #'
 #' @references
 #' Piedmont RL. 2014. Inter-item Correlations. In: Michalos AC (eds)
