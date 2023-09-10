@@ -107,7 +107,7 @@ or a data frame with items (e.g. from a test or questionnaire).</p></dd>
 
 <dt>method</dt>
 <dd><p>Correlation computation method. May be one of
-<code>"spearman"</code> (default), <code>"pearson"</code> or <code>"kendall"</code>.
+<code>"pearson"</code> (default), <code>"spearman"</code> or <code>"kendall"</code>.
 You may use initial letter only.</p></dd>
 
 </dl></div>
@@ -119,20 +119,18 @@ You may use initial letter only.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates a mean inter-item-correlation, i.e.
-a correlation matrix of <code>x</code> will be computed (unless
-<code>x</code> is already a matrix as returned by the <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>-function)
-and the mean of the sum of all item's correlation values is returned.
-Requires either a data frame or a computed <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code>-object.
-<br><br>
-“Ideally, the average inter-item correlation for a set of
-items should be between .20 and .40, suggesting that while the
-items are reasonably homogeneous, they do contain sufficiently
-unique variance so as to not be isomorphic with each other.
-When values are lower than .20, then the items may not be
-representative of the same content domain. If values are higher than
-.40, the items may be only capturing a small bandwidth of the construct.”
-<cite>(Piedmont 2014)</cite></p>
+    <p>This function calculates a mean inter-item-correlation, i.e. a
+correlation matrix of <code>x</code> will be computed (unless <code>x</code> is already a matrix
+as returned by the <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code> function) and the mean of the sum of all items'
+correlation values is returned. Requires either a data frame or a computed
+<code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor()</a></code> object.</p>
+<p>"Ideally, the average inter-item correlation for a set of items should be
+between 0.20 and 0.40, suggesting that while the items are reasonably
+homogeneous, they do contain sufficiently unique variance so as to not be
+isomorphic with each other. When values are lower than 0.20, then the items
+may not be representative of the same content domain. If values are higher
+than 0.40, the items may be only capturing a small bandwidth of the
+construct." <em>(Piedmont 2014)</em></p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>

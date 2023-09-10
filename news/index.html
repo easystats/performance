@@ -92,6 +92,11 @@
 <ul><li><p>More informative message for <code>test_*()</code> functions that “nesting” only refers to fixed effects parameters and currently ignores random effects when detecting nested models.</p></li>
 <li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> for <code>"ICS"</code> method is now more stable and less likely to fail.</p></li>
 </ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-10-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-10-5"></a></h3>
+<ul><li>
+<code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> did not work for hurdle- or zero-inflated models of package <em>pscl</em> when model had no explicitly defined formula for the zero-inflation model.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.4" id="performance-0104">performance 0.10.4<a class="anchor" aria-label="anchor" href="#performance-0104"></a></h2><p class="text-muted">CRAN release: 2023-06-02</p>
