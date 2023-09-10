@@ -104,7 +104,7 @@
 #' examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
 #' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#' [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
+#' [webpage](https://janhove.github.io/posts/2019-09-11-collinearity/)
 #'
 #' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 #' common statistical problems: Data exploration. Methods in Ecology and
