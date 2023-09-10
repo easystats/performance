@@ -190,3 +190,24 @@ test_that("check_collinearity, ci are NA", {
     )
   )
 })
+
+test_that("check_collinearity, hurdle/zi models w/o zi-formula", {
+  skip_if_not_installed("pscl")
+  data("bioChemists", package = "pscl")
+  m <- pscl::hurdle(
+    art ~ fem + mar,
+    data = bioChemists,
+    dist = "poisson",
+    zero.dist = "binomial",
+    link = "logit"
+  )
+  out <- check_collinearity(m)
+  expect_identical(
+    colnames(out),
+    c(
+      "Term", "VIF", "VIF_CI_low", "VIF_CI_high", "SE_factor", "Tolerance",
+      "Tolerance_CI_low", "Tolerance_CI_high", "Component"
+    )
+  )
+  expect_equal(out$VIF, c(1.05772, 1.05772, 1.06587, 1.06587), tolerance = 1e-4)
+})
