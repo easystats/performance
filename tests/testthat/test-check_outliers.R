@@ -98,13 +98,10 @@ test_that("mcd which", {
 })
 
 ## FIXME: Fails on CRAN/windows
-# (current CRAN version rstan is not compatible with R > 4.2)
 test_that("ics which", {
   # suddenly fails on R Under development (unstable) (2023-09-07 r85102)
   # gcc-13 (Debian 13.2.0-2) 13.2.0
-  skip_on_os("linux")
-  skip_if_not_installed("rstan", minimum_version = "2.26.0")
-  set.seed(42)
+  # skip_on_os("linux")
   expect_identical(
     which(check_outliers(mtcars, method = "ics", threshold = 0.001)),
     as.integer(c(9, 29))
