@@ -11,7 +11,7 @@ item_intercor(x, method = c("pearson", "spearman", "kendall"))
 or a data frame with items (e.g. from a test or questionnaire).}
 
 \item{method}{Correlation computation method. May be one of
-\code{"spearman"} (default), \code{"pearson"} or \code{"kendall"}.
+\code{"pearson"} (default), \code{"spearman"} or \code{"kendall"}.
 You may use initial letter only.}
 }
 \value{

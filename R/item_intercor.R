@@ -7,7 +7,7 @@
 #' @param x A matrix as returned by the `cor()`-function,
 #'    or a data frame with items (e.g. from a test or questionnaire).
 #' @param method Correlation computation method. May be one of
-#'    `"spearman"` (default), `"pearson"` or `"kendall"`.
+#'    `"pearson"` (default), `"spearman"` or `"kendall"`.
 #'    You may use initial letter only.
 #'
 #' @return The mean inter-item-correlation value for `x`.
