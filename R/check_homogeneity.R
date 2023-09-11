@@ -90,9 +90,9 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
 
 
   method.string <- switch(method,
-    "bartlett" = "Bartlett Test",
-    "fligner" = "Fligner-Killeen Test",
-    "levene" = "Levene's Test"
+    bartlett = "Bartlett Test",
+    fligner = "Fligner-Killeen Test",
+    levene = "Levene's Test"
   )
 
   attr(p.val, "data") <- x
