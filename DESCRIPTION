@@ -70,7 +70,7 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.0),
-    insight (>= 0.19.3.2),
+    insight (>= 0.19.4),
     datawizard (>= 0.7.0),
     methods,
     stats,
