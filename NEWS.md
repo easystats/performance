@@ -9,6 +9,8 @@
 * `check_outliers()` for `"ICS"` method is now more stable and less likely to
   fail.
 
+* `check_convergence()` now works for *parsnip* `_glm` models.
+
 ## Bug fixes
 
 * `check_collinearity()` did not work for hurdle- or zero-inflated models of
