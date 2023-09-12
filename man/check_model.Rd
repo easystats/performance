@@ -55,7 +55,7 @@ for dots, and third color for outliers or extreme values.}
 \item{theme}{String, indicating the name of the plot-theme. Must be in the
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
-\item{detrend}{Logical. Should Q-Q/P-P plots be de-trended? Defaults to
+\item{detrend}{Logical. Should Q-Q/P-P plots be detrended? Defaults to
 \code{TRUE}.}
 
 \item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set

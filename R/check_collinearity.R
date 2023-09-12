@@ -443,8 +443,8 @@ check_collinearity.zerocount <- function(x,
   # hurdle or zeroinfl model can have no zero-inflation formula, in which case
   # we have the same formula as for conditional formula part
   if (inherits(x, c("hurdle", "zeroinfl", "zerocount")) &&
-      component == "zero_inflated" &&
-      is.null(f[["zero_inflated"]])) {
+    component == "zero_inflated" &&
+    is.null(f[["zero_inflated"]])) {
     f$zero_inflated <- f$conditional
   }
 

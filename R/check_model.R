@@ -27,7 +27,7 @@
 #'   for dots, and third color for outliers or extreme values.
 #' @param theme String, indicating the name of the plot-theme. Must be in the
 #'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
-#' @param detrend Logical. Should Q-Q/P-P plots be de-trended? Defaults to
+#' @param detrend Logical. Should Q-Q/P-P plots be detrended? Defaults to
 #'   `TRUE`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #'   to `FALSE` for models with many observations, if generating the plot is too
