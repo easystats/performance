@@ -19,33 +19,31 @@ it always returns a significant result (suggesting that the distribution is
 multimodal). A better method might be needed here.
 }
 \examples{
+\dontshow{if (require("multimode") && require("mclust")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
-if (require("multimode")) {
-  # Univariate
-  x <- rnorm(1000)
-  check_multimodal(x)
-}
+# Univariate
+x <- rnorm(1000)
+check_multimodal(x)
 
-if (require("multimode") && require("mclust")) {
-  x <- c(rnorm(1000), rnorm(1000, 2))
-  check_multimodal(x)
+x <- c(rnorm(1000), rnorm(1000, 2))
+check_multimodal(x)
 
-  # Multivariate
-  m <- data.frame(
-    x = rnorm(200),
-    y = rbeta(200, 2, 1)
-  )
-  plot(m$x, m$y)
-  check_multimodal(m)
+# Multivariate
+m <- data.frame(
+  x = rnorm(200),
+  y = rbeta(200, 2, 1)
+)
+plot(m$x, m$y)
+check_multimodal(m)
 
-  m <- data.frame(
-    x = c(rnorm(100), rnorm(100, 4)),
-    y = c(rbeta(100, 2, 1), rbeta(100, 1, 4))
-  )
-  plot(m$x, m$y)
-  check_multimodal(m)
+m <- data.frame(
+  x = c(rnorm(100), rnorm(100, 4)),
+  y = c(rbeta(100, 2, 1), rbeta(100, 1, 4))
+)
+plot(m$x, m$y)
+check_multimodal(m)
 }
-}
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

@@ -66,26 +66,21 @@
 #' - Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
 #'   Cambridge University Press.
 #'
-#' @examples
-#' library(performance)
+#' @examplesIf require("see")
 #' # linear model
-#' if (require("see")) {
-#'   model <- lm(mpg ~ disp, data = mtcars)
-#'   check_predictions(model)
-#' }
+#' model <- lm(mpg ~ disp, data = mtcars)
+#' check_predictions(model)
 #'
 #' # discrete/integer outcome
-#' if (require("see")) {
-#'   set.seed(99)
-#'   d <- iris
-#'   d$skewed <- rpois(150, 1)
-#'   model <- glm(
-#'     skewed ~ Species + Petal.Length + Petal.Width,
-#'     family = poisson(),
-#'     data = d
-#'   )
-#'   check_predictions(model, type = "discrete_both")
-#' }
+#' set.seed(99)
+#' d <- iris
+#' d$skewed <- rpois(150, 1)
+#' model <- glm(
+#'   skewed ~ Species + Petal.Length + Petal.Width,
+#'   family = poisson(),
+#'   data = d
+#' )
+#' check_predictions(model, type = "discrete_both")
 #'
 #' @export
 check_predictions <- function(object, ...) {

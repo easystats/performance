@@ -58,8 +58,8 @@ on returned indices.
 }
 }
 \examples{
-if (require("lme4")) {
-  model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-  model_performance(model)
-}
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+model <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+model_performance(model)
+\dontshow{\}) # examplesIf}
 }

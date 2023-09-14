@@ -10,15 +10,14 @@
 #' @return Invisibly returns the p-values of the test statistics. A p-value <
 #'   0.05 indicates a violation of sphericity.
 #'
-#' @examples
-#' if (require("car")) {
-#'   soils.mod <- lm(
-#'     cbind(pH, N, Dens, P, Ca, Mg, K, Na, Conduc) ~ Block + Contour * Depth,
-#'     data = Soils
-#'   )
+#' @examplesIf require("car") && require("carData")
+#' data(Soils, package = "carData")
+#' soils.mod <- lm(
+#'   cbind(pH, N, Dens, P, Ca, Mg, K, Na, Conduc) ~ Block + Contour * Depth,
+#'   data = Soils
+#' )
 #'
-#'   check_sphericity(Manova(soils.mod))
-#' }
+#' check_sphericity(Manova(soils.mod))
 #' @export
 check_sphericity <- function(x, ...) {
   UseMethod("check_sphericity")

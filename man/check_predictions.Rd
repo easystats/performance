@@ -86,26 +86,22 @@ package that imports \strong{bayesplot} such as \strong{rstanarm} or \strong{brm
 is loaded, \code{pp_check()} is also available as an alias for \code{check_predictions()}.
 }
 \examples{
-library(performance)
+\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # linear model
-if (require("see")) {
-  model <- lm(mpg ~ disp, data = mtcars)
-  check_predictions(model)
-}
+model <- lm(mpg ~ disp, data = mtcars)
+check_predictions(model)
 
 # discrete/integer outcome
-if (require("see")) {
-  set.seed(99)
-  d <- iris
-  d$skewed <- rpois(150, 1)
-  model <- glm(
-    skewed ~ Species + Petal.Length + Petal.Width,
-    family = poisson(),
-    data = d
-  )
-  check_predictions(model, type = "discrete_both")
-}
-
+set.seed(99)
+d <- iris
+d$skewed <- rpois(150, 1)
+model <- glm(
+  skewed ~ Species + Petal.Length + Petal.Width,
+  family = poisson(),
+  data = d
+)
+check_predictions(model, type = "discrete_both")
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

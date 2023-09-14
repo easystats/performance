@@ -9,7 +9,7 @@
 #' @param ... Not used.
 #'
 #' @examples
-#' V <- wilcox.test(mtcars$mpg)
+#' V <- suppressWarnings(wilcox.test(mtcars$mpg))
 #' check_symmetry(V)
 #'
 #' @export

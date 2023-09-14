@@ -20,12 +20,13 @@ Check model for violation of sphericity. For \link[=check_factorstructure]{Bartl
 (used for correlation matrices and factor analyses), see \link{check_sphericity_bartlett}.
 }
 \examples{
-if (require("car")) {
-  soils.mod <- lm(
-    cbind(pH, N, Dens, P, Ca, Mg, K, Na, Conduc) ~ Block + Contour * Depth,
-    data = Soils
-  )
+\dontshow{if (require("car") && require("carData")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(Soils, package = "carData")
+soils.mod <- lm(
+  cbind(pH, N, Dens, P, Ca, Mg, K, Na, Conduc) ~ Block + Contour * Depth,
+  data = Soils
+)
 
-  check_sphericity(Manova(soils.mod))
-}
+check_sphericity(Manova(soils.mod))
+\dontshow{\}) # examplesIf}
 }

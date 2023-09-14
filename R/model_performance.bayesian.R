@@ -40,30 +40,31 @@
 #'
 #'   - **PCP**: percentage of correct predictions, see [performance_pcp()].
 #'
-#' @examples
+#' @examplesIf require("rstanarm") && require("rstantools") && require("BayesFactor")
 #' \dontrun{
-#' if (require("rstanarm") && require("rstantools")) {
-#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-#'   model_performance(model)
+#' model <- rstanarm::stan_glm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0
+#' )
+#' model_performance(model)
 #'
-#'   model <- stan_glmer(
-#'     mpg ~ wt + cyl + (1 | gear),
-#'     data = mtcars,
-#'     chains = 1,
-#'     iter = 500,
-#'     refresh = 0
-#'   )
-#'   model_performance(model)
-#' }
+#' model <- stan_glmer(
+#'   mpg ~ wt + cyl + (1 | gear),
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0
+#' )
+#' model_performance(model)
 #'
-#' if (require("BayesFactor") && require("rstantools")) {
-#'   model <- generalTestBF(carb ~ am + mpg, mtcars)
+#' model <- generalTestBF(carb ~ am + mpg, mtcars)
 #'
-#'   model_performance(model)
-#'   model_performance(model[3])
-#'
-#'   model_performance(model, average = TRUE)
-#' }
+#' model_performance(model)
+#' model_performance(model[3])
+#' model_performance(model, average = TRUE)
 #' }
 #' @seealso [r2_bayes]
 #' @references Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
@@ -252,7 +253,7 @@ model_performance.BFBayesFactor <- function(model,
   out <- list()
   attri <- list()
 
-  if ("R2" %in% c(metrics)) {
+  if ("R2" %in% metrics) {
     r2 <- r2_bayes(model, average = average, prior_odds = prior_odds, verbose = verbose)
     attri$r2_bayes <- attributes(r2) # save attributes
 

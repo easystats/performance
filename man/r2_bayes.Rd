@@ -64,7 +64,14 @@ returns a posterior sample of Bayesian R2 values.
 \examples{
 library(performance)
 if (require("rstanarm") && require("rstantools")) {
-  model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
+  model <- suppressWarnings(stan_glm(
+    mpg ~ wt + cyl,
+    data = mtcars,
+    chains = 1,
+    iter = 500,
+    refresh = 0,
+    show_messages = FALSE
+  ))
   r2_bayes(model)
 
   model <- stan_lmer(

@@ -27,15 +27,14 @@
 #' standardized deviance residuals is shown (in line with changes in
 #' `plot.lm()` for R 4.3+).
 #'
-#' @examples
+#' @examplesIf require("see")
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_normality(m)
 #'
 #' # plot results
-#' if (require("see")) {
-#'   x <- check_normality(m)
-#'   plot(x)
-#' }
+#' x <- check_normality(m)
+#' plot(x)
+#'
 #' \dontrun{
 #' # QQ-plot
 #' plot(check_normality(m), type = "qq")

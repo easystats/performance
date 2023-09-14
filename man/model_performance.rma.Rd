@@ -65,10 +65,17 @@ See the documentation for \code{?metafor::fitstats}.
 }
 }
 \examples{
-if (require("metafor")) {
-  data(dat.bcg)
-  dat <- escalc(measure = "RR", ai = tpos, bi = tneg, ci = cpos, di = cneg, data = dat.bcg)
-  model <- rma(yi, vi, data = dat, method = "REML")
-  model_performance(model)
-}
+\dontshow{if (require("metafor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(dat.bcg, package = "metafor")
+dat <- metafor::escalc(
+  measure = "RR",
+  ai = tpos,
+  bi = tneg,
+  ci = cpos,
+  di = cneg,
+  data = dat.bcg
+)
+model <- metafor::rma(yi, vi, data = dat, method = "REML")
+model_performance(model)
+\dontshow{\}) # examplesIf}
 }

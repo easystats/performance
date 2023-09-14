@@ -30,11 +30,11 @@ zero-inflation in the data. In such cases, it is recommended to use
 negative binomial or zero-inflated models.
 }
 \examples{
-if (require("glmmTMB")) {
-  data(Salamanders)
-  m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-  check_zeroinflation(m)
-}
+\dontshow{if (require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(Salamanders, package = "glmmTMB")
+m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_zeroinflation(m)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other functions to check model assumptions and and assess model quality: 

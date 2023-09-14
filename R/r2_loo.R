@@ -20,20 +20,25 @@
 #'   leave-one-out-adjusted posterior distribution. This is conceptually similar
 #'   to an adjusted/unbiased R2 estimate in classical regression modeling. See
 #'   [r2_bayes()] for an "unadjusted" R2.
-#'   \cr \cr
+#'
 #'   Mixed models are not currently fully supported.
-#'   \cr \cr
+#'
 #'   `r2_loo_posterior()` is the actual workhorse for `r2_loo()` and
 #'   returns a posterior sample of LOO-adjusted Bayesian R2 values.
 #'
 #' @return A list with the LOO-adjusted R2 value. The standard errors
 #'   and credible intervals for the R2 values are saved as attributes.
 #'
-#' @examples
-#' if (require("rstanarm")) {
-#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-#'   r2_loo(model)
-#' }
+#' @examplesIf require("rstanarm") && require("rstantools")
+#' model <- suppressWarnings(rstanarm::stan_glm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0,
+#'   show_messages = FALSE
+#' ))
+#' r2_loo(model)
 #' @export
 r2_loo <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
   loo_r2 <- r2_loo_posterior(model, verbose = verbose, ...)
