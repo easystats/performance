@@ -11,11 +11,15 @@
 #'
 #' @return A list with four elements, the ELPD, LOOIC and their standard errors.
 #'
-#' @examples
-#' if (require("rstanarm")) {
-#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-#'   looic(model)
-#' }
+#' @examplesIf require("rstanarm")
+#' model <- rstanarm::stan_glm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0
+#' )
+#' looic(model)
 #' @export
 looic <- function(model, verbose = TRUE) {
   insight::check_if_installed("loo")
