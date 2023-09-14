@@ -86,6 +86,7 @@ Suggests:
     boot,
     brms,
     car,
+    carData,
     CompQuadForm,
     correlation,
     cplm,
