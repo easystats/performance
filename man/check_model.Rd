@@ -214,11 +214,6 @@ if (require("lme4")) {
   m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
   check_model(m, panel = FALSE)
 }
-
-if (require("rstanarm")) {
-  m <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200)
-  check_model(m)
-}
 }
 }
 \seealso{
