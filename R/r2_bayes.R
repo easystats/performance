@@ -33,7 +33,9 @@
 #' @examples
 #' library(performance)
 #' if (require("rstanarm") && require("rstantools")) {
-#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
+#'   model <- suppressWarnings(
+#'     stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
+#'   )
 #'   r2_bayes(model)
 #'
 #'   model <- stan_lmer(
@@ -424,10 +426,10 @@ as.data.frame.r2_bayes <- function(x, ...) {
 residuals.BFBayesFactor <- function(object, ...) {
   everything_we_need <- .get_bfbf_predictions(object, verbose = FALSE)
 
-  everything_we_need[["y"]] - apply(everything_we_need[["y_pred"]], 2, mean)
+  everything_we_need[["y"]] - colMeans(everything_we_need[["y_pred"]])
 }
 
 #' @export
 fitted.BFBayesFactor <- function(object, ...) {
-  apply(.get_bfbf_predictions(object, verbose = FALSE)[["y_pred"]], 2, mean)
+  colMeans(.get_bfbf_predictions(object, verbose = FALSE)[["y_pred"]])
 }
