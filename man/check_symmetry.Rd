@@ -18,7 +18,7 @@ nonparametric skew (\eqn{\frac{(Mean - Median)}{SD}}) is different than 0.
 This is an underlying assumption of Wilcoxon signed-rank test.
 }
 \examples{
-V <- wilcox.test(mtcars$mpg)
+V <- suppressWarnings(wilcox.test(mtcars$mpg))
 check_symmetry(V)
 
 }
