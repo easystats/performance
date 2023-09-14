@@ -60,7 +60,7 @@ as.data.frame(result)
 \dontrun{
 # plot
 if (require("see")) {
-  plot(result)
+  plot(result, show_dots = TRUE)
 }
 }
 
