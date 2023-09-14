@@ -140,15 +140,14 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examples
+#' @examplesIf require("lme4")
 #' \dontrun{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_model(m)
 #'
-#' if (require("lme4")) {
-#'   m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#'   check_model(m, panel = FALSE)
-#' }
+#' data(sleepstudy, package = "lme4")
+#' m <- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#' check_model(m, panel = FALSE)
 #' }
 #' @export
 check_model <- function(x, ...) {

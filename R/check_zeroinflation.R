@@ -21,12 +21,10 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examples
-#' if (require("glmmTMB")) {
-#'   data(Salamanders)
-#'   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#'   check_zeroinflation(m)
-#' }
+#' @examplesIf require("glmmTMB")
+#' data(Salamanders, package = "glmmTMB")
+#' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+#' check_zeroinflation(m)
 #' @export
 check_zeroinflation <- function(x, tolerance = 0.05) {
   # check if we have poisson

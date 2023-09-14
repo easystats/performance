@@ -54,6 +54,7 @@ If there is no \code{r2()}-method defined for the given model class,
 \verb{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
 }
 \examples{
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Pseudo r-quared for GLM
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)
@@ -62,10 +63,9 @@ r2(model)
 model <- lm(mpg ~ wt + hp, data = mtcars)
 r2(model, ci = 0.95)
 
-if (require("lme4")) {
-  model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-  r2(model)
-}
+model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+r2(model)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=r2_bayes]{r2_bayes()}}, \code{\link[=r2_coxsnell]{r2_coxsnell()}}, \code{\link[=r2_kullback]{r2_kullback()}},

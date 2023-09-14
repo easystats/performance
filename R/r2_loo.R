@@ -29,18 +29,16 @@
 #' @return A list with the LOO-adjusted R2 value. The standard errors
 #'   and credible intervals for the R2 values are saved as attributes.
 #'
-#' @examples
-#' if (require("rstanarm")) {
-#'   model <- suppressWarnings(stan_glm(
-#'     mpg ~ wt + cyl,
-#'     data = mtcars,
-#'     chains = 1,
-#'     iter = 500,
-#'     refresh = 0,
-#'     show_messages = FALSE
-#'   ))
-#'   r2_loo(model)
-#' }
+#' @examplesIf require("rstanarm") && require("rstantools")
+#' model <- suppressWarnings(rstanarm::stan_glm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0,
+#'   show_messages = FALSE
+#' ))
+#' r2_loo(model)
 #' @export
 r2_loo <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
   loo_r2 <- r2_loo_posterior(model, verbose = verbose, ...)

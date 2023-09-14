@@ -32,7 +32,7 @@
 #'   [`r2_nakagawa()`], [`r2_tjur()`], [`r2_xu()`] and
 #'   [`r2_zeroinflated()`].
 #'
-#' @examples
+#' @examplesIf require("lme4")
 #' # Pseudo r-quared for GLM
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' r2(model)
@@ -41,10 +41,8 @@
 #' model <- lm(mpg ~ wt + hp, data = mtcars)
 #' r2(model, ci = 0.95)
 #'
-#' if (require("lme4")) {
-#'   model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-#'   r2(model)
-#' }
+#' model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+#' r2(model)
 #' @export
 r2 <- function(model, ...) {
   UseMethod("r2")

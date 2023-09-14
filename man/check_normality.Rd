@@ -43,14 +43,14 @@ standardized residuals, are used for the test. There is also a
 implemented in the \href{https://easystats.github.io/see/}{\strong{see}-package}.
 }
 \examples{
+\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
 
 # plot results
-if (require("see")) {
-  x <- check_normality(m)
-  plot(x)
-}
+x <- check_normality(m)
+plot(x)
+
 \dontrun{
 # QQ-plot
 plot(check_normality(m), type = "qq")
@@ -58,4 +58,5 @@ plot(check_normality(m), type = "qq")
 # PP-plot
 plot(check_normality(m), type = "pp")
 }
+\dontshow{\}) # examplesIf}
 }
