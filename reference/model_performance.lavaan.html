@@ -90,7 +90,7 @@ lavaan package."><meta property="og:image" content="https://easystats.github.io/
 
     <div class="ref-description section level2">
     <p>Compute indices of model performance for SEM or CFA models from the
-<span class="pkg">lavaan</span> package.</p>
+<strong>lavaan</strong> package.</p>
     </div>
 
     <div class="section level2">
@@ -102,12 +102,16 @@ lavaan package."><meta property="og:image" content="https://easystats.github.io/
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>model</dt>
-<dd><p>A <span class="pkg">lavaan</span> model.</p></dd>
+<dd><p>A <strong>lavaan</strong> model.</p></dd>
 
 
 <dt>metrics</dt>
 <dd><p>Can be <code>"all"</code> or a character vector of metrics to be
-computed (some of <code>c("Chi2", "Chi2_df", "p_Chi2", "Baseline", "Baseline_df", "p_Baseline", "GFI", "AGFI", "NFI", "NNFI", "CFI", "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high", "p_RMSEA", "RMR", "SRMR", "RFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted")</code>).</p></dd>
+computed (some of <code>"Chi2"</code>, <code>"Chi2_df"</code>, <code>"p_Chi2"</code>, <code>"Baseline"</code>,
+<code>"Baseline_df"</code>, <code>"p_Baseline"</code>, <code>"GFI"</code>, <code>"AGFI"</code>, <code>"NFI"</code>, <code>"NNFI"</code>,
+<code>"CFI"</code>, <code>"RMSEA"</code>, <code>"RMSEA_CI_low"</code>, <code>"RMSEA_CI_high"</code>, <code>"p_RMSEA"</code>,
+<code>"RMR"</code>, <code>"SRMR"</code>, <code>"RFI"</code>, <code>"PNFI"</code>, <code>"IFI"</code>, <code>"RNI"</code>, <code>"Loglikelihood"</code>,
+<code>"AIC"</code>, <code>"BIC"</code>, and <code>"BIC_adjusted"</code>.</p></dd>
 
 
 <dt>verbose</dt>
@@ -197,27 +201,17 @@ modeling. Guilford publications.</p></li>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Confirmatory Factor Analysis (CFA) ---------</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://lavaan.ugent.be" class="external-link">"lavaan"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="va">structure</span> <span class="op">&lt;-</span> <span class="st">" visual  =~ x1 + x2 + x3</span></span></span>
-<span class="r-in"><span><span class="st">                 textual =~ x4 + x5 + x6</span></span></span>
-<span class="r-in"><span><span class="st">                 speed   =~ x7 + x8 + x9 "</span></span></span>
-<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">structure</span>, data <span class="op">=</span> <span class="va">HolzingerSwineford1939</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: lavaan</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> This is lavaan 0.6-16</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> lavaan is FREE software! Please report any bugs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘lavaan’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:psych’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     cor2cov</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">HolzingerSwineford1939</span>, package <span class="op">=</span> <span class="st">"lavaan"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">structure</span> <span class="op">&lt;-</span> <span class="st">" visual  =~ x1 + x2 + x3</span></span></span>
+<span class="r-in"><span><span class="st">               textual =~ x4 + x5 + x6</span></span></span>
+<span class="r-in"><span><span class="st">               speed   =~ x7 + x8 + x9 "</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lavaan</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/cfa.html" class="external-link">cfa</a></span><span class="op">(</span><span class="va">structure</span>, data <span class="op">=</span> <span class="va">HolzingerSwineford1939</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Indices of model performance</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Chi2(24) | p (Chi2) | Baseline(36) | p (Baseline) |   GFI |  AGFI |   NFI |  NNFI |   CFI | RMSEA |    RMSEA  CI | p (RMSEA) |   RMR |  SRMR |   RFI |  PNFI |   IFI |   RNI | Loglikelihood |      AIC |      BIC | BIC_adjusted</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 85.306   |   &lt; .001 |      918.852 |       &lt; .001 | 0.943 | 0.894 | 0.907 | 0.896 | 0.931 | 0.092 | [0.07, 0.11] |    &lt; .001 | 0.082 | 0.065 | 0.861 | 0.605 | 0.931 | 0.931 |     -3737.745 | 7517.490 | 7595.339 |     7528.739</span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
