@@ -31,9 +31,14 @@
 #'
 #' @examples
 #' if (require("rstanarm")) {
-#'   model <- suppressWarnings(
-#'     stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-#'   )
+#'   model <- suppressWarnings(stan_glm(
+#'     mpg ~ wt + cyl,
+#'     data = mtcars,
+#'     chains = 1,
+#'     iter = 500,
+#'     refresh = 0,
+#'     show_messages = FALSE
+#'   ))
 #'   r2_loo(model)
 #' }
 #' @export
