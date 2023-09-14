@@ -353,8 +353,8 @@ variance_decomposition <- function(model,
   result <- structure(
     class = "icc_decomposed",
     list(
-      "ICC_decomposed" = 1 - fun(var_icc),
-      "ICC_CI" = ci_icc
+      ICC_decomposed = 1 - fun(var_icc),
+      ICC_CI = ci_icc
     )
   )
 

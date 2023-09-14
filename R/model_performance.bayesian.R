@@ -253,7 +253,7 @@ model_performance.BFBayesFactor <- function(model,
   out <- list()
   attri <- list()
 
-  if ("R2" %in% c(metrics)) {
+  if ("R2" %in% metrics) {
     r2 <- r2_bayes(model, average = average, prior_odds = prior_odds, verbose = verbose)
     attri$r2_bayes <- attributes(r2) # save attributes
 
