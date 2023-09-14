@@ -44,16 +44,17 @@ acceptability. Satisfactory range lies between 0.2 and 0.4. See also
 }
 }
 \examples{
+\dontshow{if (require("parameters") && require("psych")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # data generation from '?prcomp', slightly modified
 C <- chol(S <- toeplitz(0.9^(0:15)))
 set.seed(17)
 X <- matrix(rnorm(1600), 100, 16)
 Z <- X \%*\% C
-if (require("parameters") && require("psych")) {
-  pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
-  pca
-  check_itemscale(pca)
-}
+
+pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
+pca
+check_itemscale(pca)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
