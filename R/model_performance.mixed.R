@@ -35,11 +35,9 @@
 #'   on returned indices.
 #' }
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-#'   model_performance(model)
-#' }
+#' @examplesIf require("lme4")
+#' model <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+#' model_performance(model)
 #' @export
 model_performance.merMod <- function(model,
                                      metrics = "all",
