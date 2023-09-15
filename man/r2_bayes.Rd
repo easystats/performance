@@ -74,13 +74,13 @@ if (require("rstanarm") && require("rstantools")) {
   ))
   r2_bayes(model)
 
-  model <- stan_lmer(
+  model <- suppressWarnings(stan_lmer(
     Petal.Length ~ Petal.Width + (1 | Species),
     data = iris,
     chains = 1,
     iter = 500,
     refresh = 0
-  )
+  ))
   r2_bayes(model)
 }
 
