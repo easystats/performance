@@ -42,25 +42,25 @@
 #'
 #' @examplesIf require("rstanarm") && require("rstantools") && require("BayesFactor")
 #' \dontrun{
-#' model <- rstanarm::stan_glm(
+#' model <- suppressWarnings(rstanarm::stan_glm(
 #'   mpg ~ wt + cyl,
 #'   data = mtcars,
 #'   chains = 1,
 #'   iter = 500,
 #'   refresh = 0
-#' )
+#' ))
 #' model_performance(model)
 #'
-#' model <- stan_glmer(
+#' model <- suppressWarnings(rstanarm::stan_glmer(
 #'   mpg ~ wt + cyl + (1 | gear),
 #'   data = mtcars,
 #'   chains = 1,
 #'   iter = 500,
 #'   refresh = 0
-#' )
+#' ))
 #' model_performance(model)
 #'
-#' model <- generalTestBF(carb ~ am + mpg, mtcars)
+#' model <- BayesFactor::generalTestBF(carb ~ am + mpg, mtcars)
 #'
 #' model_performance(model)
 #' model_performance(model[3])

@@ -47,8 +47,8 @@
 #' See the documentation for `?metafor::fitstats`.
 #' }
 #'
-#' @examplesIf require("metafor")
-#' data(dat.bcg, package = "metafor")
+#' @examplesIf require("metafor") && require("metadat")
+#' data(dat.bcg, package = "metadat")
 #' dat <- metafor::escalc(
 #'   measure = "RR",
 #'   ai = tpos,
