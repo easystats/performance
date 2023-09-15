@@ -48,7 +48,7 @@ NULL
 #' There is a `plot()` method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
-#' @examplesIf require("lme4") && require("parameters")
+#' @examplesIf require("lme4") && require("parameters") && require("randomForest")
 #' data(sleepstudy, package = "lme4")
 #' model <<- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 #' check_distribution(model)

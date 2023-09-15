@@ -45,7 +45,7 @@ implemented in the
 \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
-\dontshow{if (require("lme4") && require("parameters")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4") && require("parameters") && require("randomForest")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 model <<- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 check_distribution(model)
