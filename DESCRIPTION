@@ -149,4 +149,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/see, easystats/parameters@pca_with_n1
+Remotes: easystats/see
