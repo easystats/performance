@@ -147,8 +147,8 @@ model <- stan_glmer(
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.953 (95% CI [0.941, 0.963])
-#>      Marginal R2: 0.824 (95% CI [0.713, 0.896])
+#>   Conditional R2: 0.953 (95% CI [0.942, 0.963])
+#>      Marginal R2: 0.824 (95% CI [0.721, 0.899])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -441,6 +441,11 @@ test_bf(lm1, lm2, lm3, lm4)
 #> * Against Denominator: [lm1] Species
 #> *   Bayes Factor Type: BIC approximation
 ```
+
+### Plotting Functions
+
+Plotting functions are available through the [**see**
+package](https://easystats.github.io/see/articles/performance.html).
 
 # Code of Conduct
 

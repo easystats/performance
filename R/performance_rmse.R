@@ -20,16 +20,15 @@
 #'
 #' @return Numeric, the root mean squared error.
 #'
-#' @examples
-#' if (require("nlme")) {
-#'   m <- lme(distance ~ age, data = Orthodont)
+#' @examplesIf require("nlme")
+#' data(Orthodont, package = "nlme")
+#' m <- nlme::lme(distance ~ age, data = Orthodont)
 #'
-#'   # RMSE
-#'   performance_rmse(m, normalized = FALSE)
+#' # RMSE
+#' performance_rmse(m, normalized = FALSE)
 #'
-#'   # normalized RMSE
-#'   performance_rmse(m, normalized = TRUE)
-#' }
+#' # normalized RMSE
+#' performance_rmse(m, normalized = TRUE)
 #' @export
 performance_rmse <- function(model, normalized = FALSE, verbose = TRUE) {
   tryCatch(

@@ -32,7 +32,7 @@
 #'
 #' @seealso [`performance_logloss()`]
 #'
-#' @examples
+#' @examplesIf require("glmmTMB")
 #' ## Dobson (1990) Page 93: Randomized Controlled Trial :
 #' counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 #' outcome <- gl(3, 1, 9)
@@ -40,18 +40,16 @@
 #' model <- glm(counts ~ outcome + treatment, family = poisson())
 #'
 #' performance_score(model)
-#' \dontrun{
-#' if (require("glmmTMB")) {
-#'   data(Salamanders)
-#'   model <- glmmTMB(
-#'     count ~ spp + mined + (1 | site),
-#'     zi = ~ spp + mined,
-#'     family = nbinom2(),
-#'     data = Salamanders
-#'   )
+#' \donttest{
+#' data(Salamanders, package = "glmmTMB")
+#' model <- glmmTMB::glmmTMB(
+#'   count ~ spp + mined + (1 | site),
+#'   zi = ~ spp + mined,
+#'   family = nbinom2(),
+#'   data = Salamanders
+#' )
 #'
-#'   performance_score(model)
-#' }
+#' performance_score(model)
 #' }
 #' @export
 performance_score <- function(model, verbose = TRUE, ...) {

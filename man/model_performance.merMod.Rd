@@ -25,7 +25,7 @@ estimators for the standard deviation of the errors. If \code{estimator = "ML"}
 then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
 the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 
-\item{verbose}{Toggle off warnings.}
+\item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -58,8 +58,8 @@ on returned indices.
 }
 }
 \examples{
-if (require("lme4")) {
-  model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-  model_performance(model)
-}
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+model <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+model_performance(model)
+\dontshow{\}) # examplesIf}
 }

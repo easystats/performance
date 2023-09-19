@@ -7,10 +7,14 @@
 \method{model_performance}{lavaan}(model, metrics = "all", verbose = TRUE, ...)
 }
 \arguments{
-\item{model}{A \pkg{lavaan} model.}
+\item{model}{A \strong{lavaan} model.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be
-computed (some of \code{c("Chi2", "Chi2_df", "p_Chi2", "Baseline", "Baseline_df", "p_Baseline", "GFI", "AGFI", "NFI", "NNFI", "CFI", "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high", "p_RMSEA", "RMR", "SRMR", "RFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted")}).}
+computed (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"Baseline"},
+\code{"Baseline_df"}, \code{"p_Baseline"}, \code{"GFI"}, \code{"AGFI"}, \code{"NFI"}, \code{"NNFI"},
+\code{"CFI"}, \code{"RMSEA"}, \code{"RMSEA_CI_low"}, \code{"RMSEA_CI_high"}, \code{"p_RMSEA"},
+\code{"RMR"}, \code{"SRMR"}, \code{"RFI"}, \code{"PNFI"}, \code{"IFI"}, \code{"RNI"}, \code{"Loglikelihood"},
+\code{"AIC"}, \code{"BIC"}, and \code{"BIC_adjusted"}.}
 
 \item{verbose}{Toggle off warnings.}
 
@@ -22,7 +26,7 @@ A data frame (with one row) and one column per "index" (see
 }
 \description{
 Compute indices of model performance for SEM or CFA models from the
-\pkg{lavaan} package.
+\strong{lavaan} package.
 }
 \details{
 \subsection{Indices of fit}{
@@ -73,15 +77,15 @@ and the \strong{SRMR}.
 }
 }
 \examples{
+\dontshow{if (require("lavaan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Confirmatory Factor Analysis (CFA) ---------
-if (require("lavaan")) {
-  structure <- " visual  =~ x1 + x2 + x3
-                 textual =~ x4 + x5 + x6
-                 speed   =~ x7 + x8 + x9 "
-  model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
-  model_performance(model)
-}
-
+data(HolzingerSwineford1939, package = "lavaan")
+structure <- " visual  =~ x1 + x2 + x3
+               textual =~ x4 + x5 + x6
+               speed   =~ x7 + x8 + x9 "
+model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+model_performance(model)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

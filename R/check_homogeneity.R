@@ -16,7 +16,8 @@
 #' @return Invisibly returns the p-value of the test statistics. A p-value <
 #'   0.05 indicates a significant difference in the variance between the groups.
 #'
-#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -90,9 +91,9 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
 
 
   method.string <- switch(method,
-    "bartlett" = "Bartlett Test",
-    "fligner" = "Fligner-Killeen Test",
-    "levene" = "Levene's Test"
+    bartlett = "Bartlett Test",
+    fligner = "Fligner-Killeen Test",
+    levene = "Levene's Test"
   )
 
   attr(p.val, "data") <- x

@@ -11,12 +11,14 @@
 #' @return The p-value of the test statistics. A p-value < 0.05 indicates a
 #'   non-constant variance (heteroskedasticity).
 #'
-#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @details This test of the hypothesis of (non-)constant error is also called
 #'   *Breusch-Pagan test* (\cite{1979}).
 #'
-#' @references Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287-1294.
+#' @references Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity
+#' and random coefficient variation. Econometrica 47, 1287-1294.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -84,9 +86,21 @@ check_heteroscedasticity.default <- function(x, ...) {
 #' @export
 print.check_heteroscedasticity <- function(x, ...) {
   if (x < 0.05) {
-    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(x)), "red")
+    insight::print_color(
+      sprintf(
+        "Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n",
+        insight::format_p(x)
+      ),
+      "red"
+    )
   } else {
-    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(x)), "green")
+    insight::print_color(
+      sprintf(
+        "OK: Error variance appears to be homoscedastic (%s).\n",
+        insight::format_p(x)
+      ),
+      "green"
+    )
   }
   invisible(x)
 }

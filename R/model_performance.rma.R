@@ -47,13 +47,18 @@
 #' See the documentation for `?metafor::fitstats`.
 #' }
 #'
-#' @examples
-#' if (require("metafor")) {
-#'   data(dat.bcg)
-#'   dat <- escalc(measure = "RR", ai = tpos, bi = tneg, ci = cpos, di = cneg, data = dat.bcg)
-#'   model <- rma(yi, vi, data = dat, method = "REML")
-#'   model_performance(model)
-#' }
+#' @examplesIf require("metafor") && require("metadat")
+#' data(dat.bcg, package = "metadat")
+#' dat <- metafor::escalc(
+#'   measure = "RR",
+#'   ai = tpos,
+#'   bi = tneg,
+#'   ci = cpos,
+#'   di = cneg,
+#'   data = dat.bcg
+#' )
+#' model <- metafor::rma(yi, vi, data = dat, method = "REML")
+#' model_performance(model)
 #' @export
 model_performance.rma <- function(model, metrics = "all", estimator = "ML", verbose = TRUE, ...) {
   if (all(metrics == "all")) {

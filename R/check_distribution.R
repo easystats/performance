@@ -48,15 +48,14 @@ NULL
 #' There is a `plot()` method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
-#' @examples
-#' if (require("lme4") && require("parameters") &&
-#'   require("see") && require("patchwork") && require("randomForest")) {
-#'   data(sleepstudy)
+#' @examplesIf require("lme4") && require("parameters") && require("randomForest")
+#' data(sleepstudy, package = "lme4")
+#' model <<- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#' check_distribution(model)
 #'
-#'   model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#'   check_distribution(model)
-#'   plot(check_distribution(model))
-#' }
+#' @examplesIf require("see") && require("patchwork") && require("randomForest")
+#' plot(check_distribution(model))
+#'
 #' @export
 check_distribution <- function(model) {
   UseMethod("check_distribution")
@@ -196,23 +195,23 @@ check_distribution.numeric <- function(model) {
   x <- x[!is.na(x)]
 
   data.frame(
-    "SD" = stats::sd(x),
-    "MAD" = stats::mad(x, constant = 1),
-    "Mean_Median_Distance" = mean(x) - stats::median(x),
-    "Mean_Mode_Distance" = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
-    "SD_MAD_Distance" = stats::sd(x) - stats::mad(x, constant = 1),
-    "Var_Mean_Distance" = stats::var(x) - mean(x),
-    "Range_SD" = diff(range(x)) / stats::sd(x),
-    "Range" = diff(range(x)),
-    "IQR" = stats::IQR(x),
-    "Skewness" = .skewness(x),
-    "Kurtosis" = .kurtosis(x),
-    "Uniques" = length(unique(x)) / length(x),
-    "N_Uniques" = length(unique(x)),
-    "Min" = min(x),
-    "Max" = max(x),
-    "Proportion_Positive" = sum(x >= 0) / length(x),
-    "Integer" = all(.is_integer(x))
+    SD = stats::sd(x),
+    MAD = stats::mad(x, constant = 1),
+    Mean_Median_Distance = mean(x) - stats::median(x),
+    Mean_Mode_Distance = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+    SD_MAD_Distance = stats::sd(x) - stats::mad(x, constant = 1),
+    Var_Mean_Distance = stats::var(x) - mean(x),
+    Range_SD = diff(range(x)) / stats::sd(x),
+    Range = diff(range(x)),
+    IQR = stats::IQR(x),
+    Skewness = .skewness(x),
+    Kurtosis = .kurtosis(x),
+    Uniques = length(unique(x)) / length(x),
+    N_Uniques = length(unique(x)),
+    Min = min(x),
+    Max = max(x),
+    Proportion_Positive = sum(x >= 0) / length(x),
+    Integer = all(.is_integer(x))
   )
 }
 

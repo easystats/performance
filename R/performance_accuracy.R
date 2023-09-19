@@ -12,6 +12,7 @@
 #'   compute the accuracy values.
 #' @param n Number of bootstrap-samples.
 #' @param verbose Toggle warnings.
+#' @inheritParams performance_pcp
 #'
 #' @return A list with three values: The `Accuracy` of the model
 #'   predictions, i.e. the proportion of accurately predicted values from the
@@ -40,6 +41,7 @@ performance_accuracy <- function(model,
                                  method = c("cv", "boot"),
                                  k = 5,
                                  n = 1000,
+                                 ci = 0.95,
                                  verbose = TRUE) {
   method <- match.arg(method)
 
@@ -186,6 +188,9 @@ performance_accuracy <- function(model,
     list(
       Accuracy = mean(accuracy, na.rm = TRUE),
       SE = stats::sd(accuracy, na.rm = TRUE),
+      CI = ci,
+      CI_low = as.vector(stats::quantile(accuracy, 1 - ((1 + ci) / 2), na.rm = TRUE)),
+      CI_high = as.vector(stats::quantile(accuracy, (1 + ci) / 2, na.rm = TRUE)),
       Method = measure
     )
   )
@@ -199,6 +204,9 @@ as.data.frame.performance_accuracy <- function(x, row.names = NULL, ...) {
   data.frame(
     Accuracy = x$Accuracy,
     SE = x$SE,
+    CI = x$CI,
+    CI_low = x$CI_low,
+    CI_high = x$CI_high,
     Method = x$Method,
     stringsAsFactors = FALSE,
     row.names = row.names,
@@ -213,9 +221,14 @@ print.performance_accuracy <- function(x, ...) {
   insight::print_color("# Accuracy of Model Predictions\n\n", "blue")
 
   # statistics
-  cat(sprintf("Accuracy: %.2f%%\n", 100 * x$Accuracy))
-  cat(sprintf("      SE: %.2f%%-points\n", 100 * x$SE))
-  cat(sprintf("  Method: %s\n", x$Method))
+  cat(sprintf(
+    "Accuracy (%i%% CI): %.2f%% [%.2f%%, %.2f%%]\nMethod: %s\n",
+    round(100 * x$CI),
+    100 * x$Accuracy,
+    100 * x$CI_low,
+    100 * x$CI_high,
+    x$Method
+  ))
 
   invisible(x)
 }

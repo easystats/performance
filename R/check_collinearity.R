@@ -63,7 +63,7 @@
 #' the standard error is due to the association with other predictors
 #' conditional on the remaining variables in the model. Note that these
 #' thresholds, although commonly used, are also criticized for being too high.
-#' _Zuur et al. (2019)_ suggest using lower values, e.g. a VIF of 3 or larger
+#' _Zuur et al. (2010)_ suggest using lower values, e.g. a VIF of 3 or larger
 #' may already no longer be considered as "low".
 #'
 #' @section Multicollinearity and Interaction Terms:
@@ -104,7 +104,7 @@
 #' examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
 #' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#' [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
+#' [webpage](https://janhove.github.io/posts/2019-09-11-collinearity/)
 #'
 #' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 #' common statistical problems: Data exploration. Methods in Ecology and
@@ -190,7 +190,12 @@ plot.check_collinearity <- function(x, ...) {
 
   # format table for each "ViF" group - this ensures that CIs are properly formatted
   x <- insight::format_table(x)
-  colnames(x)[4] <- "Increased SE"
+  x <- datawizard::data_rename(
+    x,
+    pattern = "SE_factor",
+    replacement = "Increased SE",
+    verbose = FALSE
+  )
 
   if (length(low_vif)) {
     cat("\n")
@@ -434,6 +439,14 @@ check_collinearity.zerocount <- function(x,
   }
 
   f <- insight::find_formula(x)
+
+  # hurdle or zeroinfl model can have no zero-inflation formula, in which case
+  # we have the same formula as for conditional formula part
+  if (inherits(x, c("hurdle", "zeroinfl", "zerocount")) &&
+    component == "zero_inflated" &&
+    is.null(f[["zero_inflated"]])) {
+    f$zero_inflated <- f$conditional
+  }
 
   if (inherits(x, "mixor")) {
     terms <- labels(x$terms)

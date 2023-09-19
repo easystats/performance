@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.3
+Version: 0.10.5.2
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -70,7 +70,7 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.0),
-    insight (>= 0.19.1),
+    insight (>= 0.19.4),
     datawizard (>= 0.7.0),
     methods,
     stats,
@@ -86,6 +86,7 @@ Suggests:
     boot,
     brms,
     car,
+    carData,
     CompQuadForm,
     correlation,
     cplm,
@@ -124,6 +125,7 @@ Suggests:
     patchwork,
     pscl,
     psych,
+    qqplotr (>= 0.0.6),
     randomForest,
     rmarkdown,
     rstanarm,
@@ -147,3 +149,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
+Remotes: easystats/see, easystats/parameters

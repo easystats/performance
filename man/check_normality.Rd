@@ -33,7 +33,7 @@ significant results for the distribution of residuals and visual inspection
 (e.g. Q-Q plots) are preferable. For generalized linear models, no formal
 statistical test is carried out. Rather, there's only a \code{plot()} method for
 GLMs. This plot shows a half-normal Q-Q plot of the absolute value of the
-standardized deviance residuals is shown (being in line with changes in
+standardized deviance residuals is shown (in line with changes in
 \code{plot.lm()} for R 4.3+).
 }
 \note{
@@ -43,19 +43,20 @@ standardized residuals, are used for the test. There is also a
 implemented in the \href{https://easystats.github.io/see/}{\strong{see}-package}.
 }
 \examples{
+\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
 
 # plot results
-if (require("see")) {
-  x <- check_normality(m)
-  plot(x)
-}
-\dontrun{
+x <- check_normality(m)
+plot(x)
+
+\donttest{
 # QQ-plot
 plot(check_normality(m), type = "qq")
 
 # PP-plot
 plot(check_normality(m), type = "pp")
 }
+\dontshow{\}) # examplesIf}
 }

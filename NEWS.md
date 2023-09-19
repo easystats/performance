@@ -1,3 +1,52 @@
+# performance (development version)
+
+# performance 0.10.5
+
+## Changes to functions
+
+* More informative message for `test_*()` functions that "nesting" only refers
+  to fixed effects parameters and currently ignores random effects when detecting
+  nested models.
+
+* `check_outliers()` for `"ICS"` method is now more stable and less likely to
+  fail.
+
+* `check_convergence()` now works for *parsnip* `_glm` models.
+
+## Bug fixes
+
+* `check_collinearity()` did not work for hurdle- or zero-inflated models of
+  package *pscl* when model had no explicitly defined formula for the
+  zero-inflation model.
+
+# performance 0.10.4
+
+## Changes to functions
+
+* `icc()` and `r2_nakagawa()` gain a `ci_method` argument, to either calculate
+  confidence intervals using `boot::boot()` (instead of `lmer::bootMer()`) when
+  `ci_method = "boot"` or analytical confidence intervals
+  (`ci_method = "analytical"`). Use `ci_method = "boot"` when the default method
+  fails to compute confidence intervals and use `ci_method = "analytical"` if
+  bootstrapped intervals cannot be calculated at all. Note that the default
+  computation method is preferred.
+
+* `check_predictions()` accepts a `bandwidth` argument (smoothing bandwidth),
+  which is passed down to the `plot()` methods density-estimation.
+
+* `check_predictions()` gains a `type` argument, which is passed down to the
+  `plot()` method to change plot-type (density or discrete dots/intervals).
+  By default, `type` is set to `"default"` for models without discrete outcomes,
+  and else `type = "discrete_interval"`.
+
+* `performance_accuracy()` now includes confidence intervals, and reports those
+  by default (the standard error is no longer reported, but still included).
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` for _fixest_ models that used `i()`
+  to create interactions in formulas.
+
 # performance 0.10.3
 
 ## New functions
@@ -69,11 +118,6 @@
 
 * `r2()` gets `ci`, to compute (analytical) confidence intervals for the R2.
 
-* `check_predictions()` accepts a `bw` argument (smoothing bandwidth), which is
-  passed down to the `plot()` methods density-estimation. The default for the
-  smoothing bandwidth `bw` has changed from `"nrd0"` to `"nrd"`, which seems
-  to produce better fitting plots for non-gaussian models.
-  
 * The model underlying `check_distribution()` was now also trained to detect
   cauchy, half-cauchy and inverse-gamma distributions.
 

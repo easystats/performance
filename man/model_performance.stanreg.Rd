@@ -60,30 +60,33 @@ values mean better fit. See \code{?loo::waic}.
 }
 }
 \examples{
-\dontrun{
-if (require("rstanarm") && require("rstantools")) {
-  model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-  model_performance(model)
+\dontshow{if (require("rstanarm") && require("rstantools") && require("BayesFactor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+model <- suppressWarnings(rstanarm::stan_glm(
+  mpg ~ wt + cyl,
+  data = mtcars,
+  chains = 1,
+  iter = 500,
+  refresh = 0
+))
+model_performance(model)
 
-  model <- stan_glmer(
-    mpg ~ wt + cyl + (1 | gear),
-    data = mtcars,
-    chains = 1,
-    iter = 500,
-    refresh = 0
-  )
-  model_performance(model)
+model <- suppressWarnings(rstanarm::stan_glmer(
+  mpg ~ wt + cyl + (1 | gear),
+  data = mtcars,
+  chains = 1,
+  iter = 500,
+  refresh = 0
+))
+model_performance(model)
+
+model <- BayesFactor::generalTestBF(carb ~ am + mpg, mtcars)
+
+model_performance(model)
+model_performance(model[3])
+model_performance(model, average = TRUE)
 }
-
-if (require("BayesFactor") && require("rstantools")) {
-  model <- generalTestBF(carb ~ am + mpg, mtcars)
-
-  model_performance(model)
-  model_performance(model[3])
-
-  model_performance(model, average = TRUE)
-}
-}
+\dontshow{\}) # examplesIf}
 }
 \references{
 Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
