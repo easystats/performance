@@ -17,8 +17,11 @@ check_model(x, ...)
   dot_alpha = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
-  detrend = FALSE,
-  verbose = TRUE,
+  detrend = TRUE,
+  show_dots = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = FALSE,
   ...
 )
 }
@@ -52,15 +55,33 @@ for dots, and third color for outliers or extreme values.}
 \item{theme}{String, indicating the name of the plot-theme. Must be in the
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
-\item{detrend}{Should QQ/PP plots be detrended?}
+\item{detrend}{Logical. Should Q-Q/P-P plots be detrended? Defaults to
+\code{TRUE}.}
 
-\item{verbose}{Toggle off warnings.}
+\item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
+to \code{FALSE} for models with many observations, if generating the plot is too
+time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
+tries to guess whether performance will be poor due to a very large model
+and thus automatically shows or hides dots.}
+
+\item{bandwidth}{A character string indicating the smoothing bandwidth to
+be used. Unlike \code{stats::density()}, which used \code{"nrd0"} as default, the
+default used here is \code{"nrd"} (which seems to give more plausible results
+for non-Gaussian models). When problems with plotting occur, try to change
+to a different value.}
+
+\item{type}{Plot type for the posterior predictive checks plot. Can be \code{"density"},
+\code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the \verb{discrete_*}
+options are appropriate for models with discrete - binary, integer or ordinal
+etc. - outcomes).}
+
+\item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 }
 \value{
 The data frame that is used for plotting.
 }
 \description{
-Visual check of model various assumptions (normality of residuals, normality
+Visual check of various model assumptions (normality of residuals, normality
 of random effects, linear relationship, homogeneity of variance,
 multicollinearity).
 }
@@ -70,24 +91,98 @@ models will be "converted" to their frequentist counterpart, using
 \href{https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html}{\code{bayestestR::bayesian_as_frequentist}}.
 A more advanced model-check for Bayesian models will be implemented at a
 later stage.
+
+See also the related \href{https://easystats.github.io/performance/articles/check_model.html}{vignette}.
 }
 \note{
 This function just prepares the data for plotting. To create the plots,
-\CRANpkg{see} needs to be installed. Furthermore, this function suppresses
+\strong{see} needs to be installed. Furthermore, this function suppresses
 all possible warnings. In case you observe suspicious plots, please refer
 to the dedicated functions (like \code{check_collinearity()},
 \code{check_normality()} etc.) to get informative messages and warnings.
 }
+\section{Posterior Predictive Checks}{
+
+Posterior predictive checks can be used to look for systematic discrepancies
+between real and simulated data. It helps to see whether the type of model
+(distributional family) fits well to the data. See \code{\link[=check_predictions]{check_predictions()}}
+for further details.
+}
+
 \section{Linearity Assumption}{
 
 The plot \strong{Linearity} checks the assumption of linear relationship.
 However, the spread of dots also indicate possible heteroscedasticity (i.e.
-non-constant variance); hence, the alias \code{"ncv"} for this plot.
+non-constant variance, hence, the alias \code{"ncv"} for this plot), thus it shows
+if residuals have non-linear patterns. This plot helps to see whether
+predictors may have a non-linear relationship with the outcome, in which case
+the reference line may roughly indicate that relationship. A straight and
+horizontal line indicates that the model specification seems to be ok. But
+for instance, if the line would be U-shaped, some of the predictors probably
+should better be modeled as quadratic term. See \code{\link[=check_heteroscedasticity]{check_heteroscedasticity()}}
+for further details.
+
 \strong{Some caution is needed} when interpreting these plots. Although these
-plots are helpful to check model assumptions, they do not necessarily
-indicate so-called "lack of fit", e.g. missed non-linear relationships or
-interactions. Thus, it is always recommended to also look at
+plots are helpful to check model assumptions, they do not necessarily indicate
+so-called "lack of fit", e.g. missed non-linear relationships or interactions.
+Thus, it is always recommended to also look at
 \href{https://strengejacke.github.io/ggeffects/articles/introduction_partial_residuals.html}{effect plots, including partial residuals}.
+}
+
+\section{Homogeneity of Variance}{
+
+This plot checks the assumption of equal variance (homoscedasticity). The
+desired pattern would be that dots spread equally above and below a straight,
+horizontal line and show no apparent deviation.
+}
+
+\section{Influential Observations}{
+
+This plot is used to identify influential observations. If any points in this
+plot fall outside of Cook’s distance (the dashed lines) then it is considered
+an influential observation. See \code{\link[=check_outliers]{check_outliers()}} for further details.
+}
+
+\section{Multicollinearity}{
+
+This plot checks for potential collinearity among predictors. In a nutshell,
+multicollinearity means that once you know the effect of one predictor, the
+value of knowing the other predictor is rather low. Multicollinearity might
+arise when a third, unobserved variable has a causal effect on each of the
+two predictors that are associated with the outcome. In such cases, the actual
+relationship that matters would be the association between the unobserved
+variable and the outcome. See \code{\link[=check_collinearity]{check_collinearity()}} for further details.
+}
+
+\section{Normality of Residuals}{
+
+This plot is used to determine if the residuals of the regression model are
+normally distributed. Usually, dots should fall along the line. If there is
+some deviation (mostly at the tails), this indicates that the model doesn't
+predict the outcome well for that range that shows larger deviations from
+the line. For generalized linear models, a half-normal Q-Q plot of the
+absolute value of the standardized deviance residuals is shown, however, the
+interpretation of the plot remains the same. See \code{\link[=check_normality]{check_normality()}} for
+further details.
+}
+
+\section{Overdispersion}{
+
+For count models, an \emph{overdispersion plot} is shown. Overdispersion occurs
+when the observed variance is higher than the variance of a theoretical model.
+For Poisson models, variance increases with the mean and, therefore, variance
+usually (roughly) equals the mean value. If the variance is much higher,
+the data are "overdispersed". See \code{\link[=check_overdispersion]{check_overdispersion()}} for further
+details.
+}
+
+\section{Binned Residuals}{
+
+For models from binomial families, a \emph{binned residuals plot} is shown.
+Binned residual plots are achieved by cutting the the data into bins and then
+plotting the average residual versus the average fitted value for each bin.
+If the model were true, one would expect about 95\% of the residuals to fall
+inside the error bounds. See \code{\link[=binned_residuals]{binned_residuals()}} for further details.
 }
 
 \section{Residuals for (Generalized) Linear Models}{
@@ -100,19 +195,39 @@ the default residuals for \code{lm} and \code{glm} (which are deviance
 residuals for \code{glm}).
 }
 
+\section{Troubleshooting}{
+
+For models with many observations, or for more complex models in general,
+generating the plot might become very slow. One reason might be that the
+underlying graphic engine becomes slow for plotting many data points. In
+such cases, setting the argument \code{show_dots = FALSE} might help. Furthermore,
+look at the \code{check} argument and see if some of the model checks could be
+skipped, which also increases performance.
+}
+
 \examples{
-\dontrun{
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_model(m)
 
-if (require("lme4")) {
-  m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-  check_model(m, panel = FALSE)
+data(sleepstudy, package = "lme4")
+m <- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+check_model(m, panel = FALSE)
 }
-
-if (require("rstanarm")) {
-  m <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200)
-  check_model(m)
+\dontshow{\}) # examplesIf}
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_outliers}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
+\code{\link{check_singularity}()},
+\code{\link{check_zeroinflation}()}
 }
-}
+\concept{functions to check model assumptions and and assess model quality}

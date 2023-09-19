@@ -8,25 +8,20 @@
 \usage{
 r2(model, ...)
 
-\method{r2}{default}(model, ci = NULL, ci_method = "analytical", verbose = TRUE, ...)
+\method{r2}{default}(model, ci = NULL, verbose = TRUE, ...)
 
-\method{r2}{merMod}(model, tolerance = 1e-05, ...)
+\method{r2}{merMod}(model, ci = NULL, tolerance = 1e-05, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
 
 \item{...}{Arguments passed down to the related r2-methods.}
 
-\item{ci}{Confidence Interval (CI) level. Default is \code{NULL}. Confidence
-intervals for R2 can be calculated based on different methods, see
-\code{ci_method}.}
+\item{ci}{Confidence interval level, as scalar. If \code{NULL} (default), no
+confidence intervals for R2 are calculated.}
 
-\item{ci_method}{Method for constructing the R2 confidence interval.
-Options are \code{"analytical"} for sampling-theory-based frequentist
-intervals and \code{"bootstrap"} for bootstrap intervals. Analytical intervals
-are not available for all models. For Bayesian models, \code{\link[=r2_bayes]{r2_bayes()}} is used.}
-
-\item{verbose}{Logical. Should details about R2 and CI methods be given (\code{TRUE}) or not (\code{FALSE})?}
+\item{verbose}{Logical. Should details about R2 and CI methods be given
+(\code{TRUE}) or not (\code{FALSE})?}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
@@ -55,17 +50,22 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 }
 \note{
 If there is no \code{r2()}-method defined for the given model class,
-\code{r2()} tries to return a "generic r2 value, calculated as following:
+\code{r2()} tries to return a "generic" r-quared value, calculated as following:
 \verb{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
 }
 \examples{
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Pseudo r-quared for GLM
 model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 r2(model)
 
-if (require("lme4")) {
-  model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-  r2(model)
-}
+# r-squared including confidence intervals
+model <- lm(mpg ~ wt + hp, data = mtcars)
+r2(model, ci = 0.95)
+
+model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+r2(model)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=r2_bayes]{r2_bayes()}}, \code{\link[=r2_coxsnell]{r2_coxsnell()}}, \code{\link[=r2_kullback]{r2_kullback()}},

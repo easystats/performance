@@ -7,8 +7,8 @@
 check_zeroinflation(x, tolerance = 0.05)
 }
 \arguments{
-\item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
-or \code{glm.nb} (package \pkg{MASS}).}
+\item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
+(package \strong{MASS}).}
 
 \item{tolerance}{The tolerance for the ratio of observed and predicted
 zeros to considered as over- or underfitting zeros. A ratio
@@ -30,9 +30,23 @@ zero-inflation in the data. In such cases, it is recommended to use
 negative binomial or zero-inflated models.
 }
 \examples{
-if (require("glmmTMB")) {
-  data(Salamanders)
-  m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-  check_zeroinflation(m)
+\dontshow{if (require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(Salamanders, package = "glmmTMB")
+m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_zeroinflation(m)
+\dontshow{\}) # examplesIf}
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_outliers}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
+\code{\link{check_singularity}()}
 }
+\concept{functions to check model assumptions and and assess model quality}

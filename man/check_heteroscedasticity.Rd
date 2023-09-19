@@ -28,7 +28,8 @@ This test of the hypothesis of (non-)constant error is also called
 \emph{Breusch-Pagan test} (\cite{1979}).
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -41,5 +42,20 @@ if (require("see")) {
 }
 }
 \references{
-Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287-1294.
+Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity
+and random coefficient variation. Econometrica 47, 1287-1294.
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_outliers}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
+\code{\link{check_singularity}()},
+\code{\link{check_zeroinflation}()}
+}
+\concept{functions to check model assumptions and and assess model quality}

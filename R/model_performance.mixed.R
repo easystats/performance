@@ -35,11 +35,9 @@
 #'   on returned indices.
 #' }
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   model <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-#'   model_performance(model)
-#' }
+#' @examplesIf require("lme4")
+#' model <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+#' model_performance(model)
 #' @export
 model_performance.merMod <- function(model,
                                      metrics = "all",
@@ -76,14 +74,7 @@ model_performance.merMod <- function(model,
   }
 
   if ("AICC" %in% toupper(metrics)) {
-    out$AICc <- tryCatch(
-      {
-        performance_aicc(model, estimator = estimator)
-      },
-      error = function(e) {
-        NULL
-      }
-    )
+    out$AICc <- .safe(performance_aicc(model, estimator = estimator))
   }
 
   if ("BIC" %in% toupper(metrics)) {

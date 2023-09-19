@@ -31,85 +31,86 @@
 #'   with other terms, and tolerance values (including confidence intervals),
 #'   where `tolerance = 1/vif`.
 #'
-#' @details
+#' @section Multicollinearity:
+#' Multicollinearity should not be confused with a raw strong correlation
+#' between predictors. What matters is the association between one or more
+#' predictor variables, *conditional on the other variables in the
+#' model*. In a nutshell, multicollinearity means that once you know the
+#' effect of one predictor, the value of knowing the other predictor is rather
+#' low. Thus, one of the predictors doesn't help much in terms of better
+#' understanding the model or predicting the outcome. As a consequence, if
+#' multicollinearity is a problem, the model seems to suggest that the
+#' predictors in question don't seems to be reliably associated with the
+#' outcome (low estimates, high standard errors), although these predictors
+#' actually are strongly associated with the outcome, i.e. indeed might have
+#' strong effect (_McElreath 2020, chapter 6.1_).
 #'
-#' \subsection{Multicollinearity}{
-#'   Multicollinearity should not be confused with a raw strong correlation
-#'   between predictors. What matters is the association between one or more
-#'   predictor variables, *conditional on the other variables in the
-#'   model*. In a nutshell, multicollinearity means that once you know the
-#'   effect of one predictor, the value of knowing the other predictor is rather
-#'   low. Thus, one of the predictors doesn't help much in terms of better
-#'   understanding the model or predicting the outcome. As a consequence, if
-#'   multicollinearity is a problem, the model seems to suggest that the
-#'   predictors in question don't seems to be reliably associated with the
-#'   outcome (low estimates, high standard errors), although these predictors
-#'   actually are strongly associated with the outcome, i.e. indeed might have
-#'   strong effect (\cite{McElreath 2020, chapter 6.1}).
-#'   \cr \cr
-#'   Multicollinearity might arise when a third, unobserved variable has a causal
-#'   effect on each of the two predictors that are associated with the outcome.
-#'   In such cases, the actual relationship that matters would be the association
-#'   between the unobserved variable and the outcome.
-#'   \cr \cr
-#'   Remember: \dQuote{Pairwise correlations are not the problem. It is the
-#'   conditional associations - not correlations - that matter.}
-#'   (\cite{McElreath 2020, p. 169})
-#' }
+#' Multicollinearity might arise when a third, unobserved variable has a causal
+#' effect on each of the two predictors that are associated with the outcome.
+#' In such cases, the actual relationship that matters would be the association
+#' between the unobserved variable and the outcome.
 #'
-#' \subsection{Interpretation of the Variance Inflation Factor}{
-#'   The variance inflation factor is a measure to analyze the magnitude of
-#'   multicollinearity of model terms. A VIF less than 5 indicates a low
-#'   correlation of that predictor with other predictors. A value between 5 and
-#'   10 indicates a moderate correlation, while VIF values larger than 10 are a
-#'   sign for high, not tolerable correlation of model predictors (\cite{James
-#'   et al. 2013}). The *Increased SE* column in the output indicates how
-#'   much larger the standard error is due to the association with other
-#'   predictors conditional on the remaining variables in the model.
-#' }
+#' Remember: "Pairwise correlations are not the problem. It is the conditional
+#' associations - not correlations - that matter." (_McElreath 2020, p. 169_)
 #'
-#' \subsection{Multicollinearity and Interaction Terms}{
-#'   If interaction terms are included in a model, high VIF values are expected.
-#'   This portion of multicollinearity among the component terms of an
-#'   interaction is also called "inessential ill-conditioning", which leads to
-#'   inflated VIF values that are typically seen for models with interaction
-#'   terms \cite{(Francoeur 2013)}.
-#' }
+#' @section Interpretation of the Variance Inflation Factor:
+#' The variance inflation factor is a measure to analyze the magnitude of
+#' multicollinearity of model terms. A VIF less than 5 indicates a low
+#' correlation of that predictor with other predictors. A value between 5 and
+#' 10 indicates a moderate correlation, while VIF values larger than 10 are a
+#' sign for high, not tolerable correlation of model predictors (_James et al.
+#' 2013_). The *Increased SE* column in the output indicates how much larger
+#' the standard error is due to the association with other predictors
+#' conditional on the remaining variables in the model. Note that these
+#' thresholds, although commonly used, are also criticized for being too high.
+#' _Zuur et al. (2010)_ suggest using lower values, e.g. a VIF of 3 or larger
+#' may already no longer be considered as "low".
 #'
-#' \subsection{Concurvity for Smooth Terms in Generalized Additive Models}{
-#'   `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
-#'   considered as a collinearity check for smooth terms in GAMs.
-#'   \dQuote{Concurvity occurs when some smooth term in a model could be
-#'   approximated by one or more of the other smooth terms in the model.} (see
-#'   `?mgcv::concurvity`). `check_concurvity()` returns a column named _VIF_,
-#'   which is the "worst" measure. While `mgcv::concurvity()` range between
-#'   0 and 1, the _VIF_ value is `1 / (1 - worst)`, to make interpretation
-#'   comparable to classical VIF values, i.e. `1` indicates no problems, while
-#'   higher values indicate increasing lack of identifiability. The _VIF proportion_
-#'   column equals the "estimate" column from `mgcv::concurvity()`, ranging
-#'   from 0 (no problem) to 1 (total lack of identifiability).
-#' }
+#' @section Multicollinearity and Interaction Terms:
+#' If interaction terms are included in a model, high VIF values are expected.
+#' This portion of multicollinearity among the component terms of an
+#' interaction is also called "inessential ill-conditioning", which leads to
+#' inflated VIF values that are typically seen for models with interaction
+#' terms _(Francoeur 2013)_.
+#'
+#' @section Concurvity for Smooth Terms in Generalized Additive Models:
+#' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#' considered as a collinearity check for smooth terms in GAMs."Concurvity
+#' occurs when some smooth term in a model could be approximated by one or more
+#' of the other smooth terms in the model." (see `?mgcv::concurvity`).
+#' `check_concurvity()` returns a column named _VIF_, which is the "worst"
+#' measure. While `mgcv::concurvity()` range between 0 and 1, the _VIF_ value
+#' is `1 / (1 - worst)`, to make interpretation comparable to classical VIF
+#' values, i.e. `1` indicates no problems, while higher values indicate
+#' increasing lack of identifiability. The _VIF proportion_ column equals the
+#' "estimate" column from `mgcv::concurvity()`, ranging from 0 (no problem) to
+#' 1 (total lack of identifiability).
 #'
 #' @references
-#'   \itemize{
-#'   \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
-#'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-#'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#'   \item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
-#'   An introduction to statistical learning: with applications in R. New York:
-#'   Springer.
+#' - Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
+#' Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+#' Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#'   \item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-#'   Inflation Factors in Regression Models Using Latent Variable Modeling
-#'   Methods. Educational and Psychological Measurement, 79(5), 874–882.
+#' - James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
+#' An introduction to statistical learning: with applications in R. New York:
+#' Springer.
 #'
-#'   \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
-#'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#' - Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
+#' Inflation Factors in Regression Models Using Latent Variable Modeling
+#' Methods. Educational and Psychological Measurement, 79(5), 874–882.
 #'
-#'   \item Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#'   [webpage](https://janhove.github.io/analysis/2019/09/11/collinearity)
-#'   }
+#' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
+#' examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#'
+#' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
+#' [webpage](https://janhove.github.io/posts/2019-09-11-collinearity/)
+#'
+#' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
+#' common statistical problems: Data exploration. Methods in Ecology and
+#' Evolution (2010) 1:3–14.
+#'
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @note The code to compute the confidence intervals for the VIF and tolerance
 #' values was adapted from the Appendix B from the Marcoulides et al. paper.
@@ -121,11 +122,10 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_collinearity(m)
 #'
+#' @examplesIf require("see")
 #' # plot results
-#' if (require("see")) {
-#'   x <- check_collinearity(m)
-#'   plot(x)
-#' }
+#' x <- check_collinearity(m)
+#' plot(x)
 #' @export
 check_collinearity <- function(x, ...) {
   UseMethod("check_collinearity")
@@ -143,6 +143,8 @@ multicollinearity <- check_collinearity
 #' @rdname check_collinearity
 #' @export
 check_collinearity.default <- function(x, ci = 0.95, verbose = TRUE, ...) {
+  # check for valid input
+  .is_model_valid(x)
   .check_collinearity(x, component = "conditional", ci = ci, verbose = verbose)
 }
 
@@ -156,7 +158,7 @@ print.check_collinearity <- function(x, ...) {
 
   if ("Component" %in% colnames(x)) {
     comp <- split(x, x$Component)
-    for (i in 1:length(comp)) {
+    for (i in seq_along(comp)) {
       cat(paste0("\n* ", comp[[i]]$Component[1], " component:\n"))
       .print_collinearity(datawizard::data_remove(comp[[i]], "Component"))
     }
@@ -183,9 +185,17 @@ plot.check_collinearity <- function(x, ...) {
 
   all_vifs <- insight::compact_list(list(low_vif, mid_vif, high_vif))
 
+  # if we have no CIs, remove those columns
+  x <- datawizard::remove_empty_columns(x)
+
   # format table for each "ViF" group - this ensures that CIs are properly formatted
-  x <- do.call(rbind, lapply(all_vifs, function(i) insight::format_table(x[i, ])))
-  colnames(x)[4] <- "Increased SE"
+  x <- insight::format_table(x)
+  x <- datawizard::data_rename(
+    x,
+    pattern = "SE_factor",
+    replacement = "Increased SE",
+    verbose = FALSE
+  )
 
   if (length(low_vif)) {
     cat("\n")
@@ -221,14 +231,16 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
   f <- sub("\\+\\s*Error\\(.*\\)$", "", f)
   f <- stats::as.formula(f)
 
-  d <- insight::get_data(x, verbose = verbose)
-  is_num <- sapply(d, is.numeric)
-  d[is_num] <- sapply(d[is_num], scale, center = TRUE, scale = FALSE)
+  d <- insight::get_data(x, verbose = FALSE)
+  is_num <- vapply(d, is.numeric, logical(1))
+  d[is_num] <- sapply(d[is_num], datawizard::center, simplify = TRUE)
   is_fac <- !is_num
   contrs <- lapply(is_fac, function(...) stats::contr.sum)[is_fac]
 
   if (verbose) {
-    message(insight::format_message("All predictors have been centered (factors with 'contr.sum()', numerics with 'scale()')."))
+    insight::format_alert(
+      "All predictors have been centered (factors with `contr.sum()`, numerics with `scale()`)."
+    )
   }
 
   check_collinearity(suppressWarnings(stats::lm(
@@ -241,11 +253,11 @@ check_collinearity.afex_aov <- function(x, verbose = TRUE, ...) {
 #' @export
 check_collinearity.BFBayesFactor <- function(x, verbose = TRUE, ...) {
   if (!insight::is_model(x)) {
-    stop("Collinearity only applicable to regression models.")
+    insight::format_error("Collinearity only applicable to regression models.")
   }
 
   f <- insight::find_formula(x)[[1]]
-  d <- insight::get_data(x)
+  d <- insight::get_data(x, verbose = FALSE)
   check_collinearity(stats::lm(f, d))
 }
 
@@ -398,7 +410,9 @@ check_collinearity.zerocount <- function(x,
   # any assignment found?
   if (is.null(assign) || all(is.na(assign))) {
     if (verbose) {
-      warning(insight::format_message(sprintf("Could not extract model terms for the %s component of the model.", component), call. = FALSE))
+      insight::format_alert(
+        sprintf("Could not extract model terms for the %s component of the model.", component)
+      )
     }
     return(NULL)
   }
@@ -408,7 +422,9 @@ check_collinearity.zerocount <- function(x,
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
     assign <- assign[-attributes(v)$na_columns_index]
     if (isTRUE(verbose)) {
-      warning(insight::format_message("Model matrix is rank deficient. VIFs may not be sensible."), call. = FALSE)
+      insight::format_alert(
+        "Model matrix is rank deficient. VIFs may not be sensible."
+      )
     }
   }
 
@@ -418,11 +434,19 @@ check_collinearity.zerocount <- function(x,
     assign <- assign[-1]
   } else {
     if (isTRUE(verbose)) {
-      warning("Model has no intercept. VIFs may not be sensible.", call. = FALSE)
+      insight::format_alert("Model has no intercept. VIFs may not be sensible.")
     }
   }
 
   f <- insight::find_formula(x)
+
+  # hurdle or zeroinfl model can have no zero-inflation formula, in which case
+  # we have the same formula as for conditional formula part
+  if (inherits(x, c("hurdle", "zeroinfl", "zerocount")) &&
+    component == "zero_inflated" &&
+    is.null(f[["zero_inflated"]])) {
+    f$zero_inflated <- f$conditional
+  }
 
   if (inherits(x, "mixor")) {
     terms <- labels(x$terms)
@@ -438,7 +462,9 @@ check_collinearity.zerocount <- function(x,
 
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
-      warning(insight::format_message(sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)), call. = FALSE)
+      insight::format_alert(
+        sprintf("Not enough model terms in the %s part of the model to check for multicollinearity.", component)
+      )
     }
     return(NULL)
   }
@@ -467,10 +493,11 @@ check_collinearity.zerocount <- function(x,
   }
 
   # check for interactions, VIF might be inflated...
-  if (!is.null(insight::find_interactions(x)) && any(result > 10)) {
-    if (isTRUE(verbose)) {
-      warning(insight::format_message("Model has interaction terms. VIFs might be inflated. You may check multicollinearity among predictors of a model without interaction terms."), call. = FALSE)
-    }
+  if (!is.null(insight::find_interactions(x)) && any(result > 10) && isTRUE(verbose)) {
+    insight::format_alert(
+      "Model has interaction terms. VIFs might be inflated.",
+      "You may check multicollinearity among predictors of a model without interaction terms."
+    )
   }
 
   # CIs, see Appendix B 10.1177/0013164418817803
@@ -478,15 +505,20 @@ check_collinearity.zerocount <- function(x,
   n <- insight::n_obs(x)
   p <- insight::n_parameters(x)
 
-  ci_lvl <- (1 + ci) / 2
+  # check if CIs are requested
+  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
+    ci_lvl <- (1 + ci) / 2
 
-  logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
-  se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
-  se_log <- se / (r * (1 - r))
-  ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
-  ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
-  ci_lo <- stats::plogis(ci_log_lo)
-  ci_up <- stats::plogis(ci_log_up)
+    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
+    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
+    se_log <- se / (r * (1 - r))
+    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
+    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
+    ci_lo <- stats::plogis(ci_log_lo)
+    ci_up <- stats::plogis(ci_log_up)
+  } else {
+    ci_lo <- ci_up <- NA
+  }
 
   out <- insight::text_remove_backticks(
     data.frame(
@@ -571,13 +603,13 @@ check_collinearity.zerocount <- function(x,
     return(NULL)
   }
 
-  dat <- insight::get_data(x, verbose = verbose)[, pred, drop = FALSE]
+  dat <- insight::get_data(x, verbose = FALSE)[, pred, drop = FALSE]
 
-  parms <- unlist(lapply(1:length(pred), function(i) {
+  parms <- unlist(lapply(seq_along(pred), function(i) {
     p <- pred[i]
     if (is.factor(dat[[p]])) {
       ps <- paste0(p, levels(dat[[p]]))
-      names(ps)[1:length(ps)] <- i
+      names(ps)[seq_along(ps)] <- i
       ps
     } else {
       names(p) <- i
@@ -586,7 +618,7 @@ check_collinearity.zerocount <- function(x,
   }))
 
   if (insight::is_gam_model(x)) {
-    model_params <- as.vector(unlist(unlist(insight::find_parameters(x)[c(component, "smooth_terms")])))
+    model_params <- as.vector(unlist(insight::find_parameters(x)[c(component, "smooth_terms")]))
   } else {
     model_params <- insight::find_parameters(x)[[component]]
   }
@@ -603,7 +635,7 @@ check_collinearity.zerocount <- function(x,
   tryCatch(
     {
       rhs <- insight::find_formula(x)[[component]]
-      d <- insight::get_data(x, verbose = verbose)
+      d <- insight::get_data(x, verbose = FALSE)
       attr(insight::get_modelmatrix(rhs, data = d), "assign")
     },
     error = function(e) {

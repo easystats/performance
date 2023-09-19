@@ -1,3 +1,9 @@
+# small wrapper around this commonly used try-catch
+.safe <- function(code, on_error = NULL) {
+  tryCatch(code, error = function(e) on_error)
+}
+
+
 .get_BIC <- function(x, estimator = "ML") {
   # check ML estimator
   if (missing(estimator) && inherits(x, "lmerMod")) {
@@ -11,10 +17,13 @@
   } else if (inherits(x, "bayesx")) {
     out <- .adjust_ic_jacobian(x, stats::BIC(x)[["BIC"]])
   } else {
-    out <- tryCatch(
-      stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE)),
-      error = function(e) NULL
+    out <- .safe(
+      stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE))
     )
+    # when `get_loglikelihood()` does not work, `stats::BIC` sometimes still works (e.g., `fixest`)
+    if (is.null(out)) {
+      out <- .safe(stats::BIC(x))
+    }
   }
 
   out
@@ -27,7 +36,7 @@
   }
 
   # remove missings
-  tmp <- stats::na.omit(x)
+  tmp <- x[!is.na(x)]
 
   # standardize
   tmp <- (tmp - mean(tmp)) / stats::sd(tmp)
@@ -39,15 +48,13 @@
 }
 
 
-
-
 # recode numeric vector, so lowest value stats with 0
 # factors are coerced to numeric
 .recode_to_zero <- function(x) {
   # check if factor
   if (is.factor(x) || is.character(x)) {
     # try to convert to numeric
-    x <- datawizard::data_to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
+    x <- datawizard::to_numeric(x, dummy_factors = FALSE, preserve_levels = TRUE)
   }
 
   # retrieve lowest category
@@ -62,5 +69,16 @@
     as.numeric(s)
   } else {
     NULL
+  }
+}
+
+
+# functions to check if necessary default argument was provided ------------
+
+.is_model_valid <- function(model) {
+  if (missing(model) || is.null(model)) {
+    insight::format_error(
+      "You must provide a model-object. Argument `model` cannot be missing or `NULL`."
+    )
   }
 }

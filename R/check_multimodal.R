@@ -2,7 +2,7 @@
 #'
 #' For univariate distributions (one-dimensional vectors), this functions
 #' performs a Ameijeiras-Alonso et al. (2018) excess mass test. For multivariate
-#' distributions (dataframes), it uses mixture modelling. However, it seems that
+#' distributions (data frames), it uses mixture modelling. However, it seems that
 #' it always returns a significant result (suggesting that the distribution is
 #' multimodal). A better method might be needed here.
 #'
@@ -10,33 +10,29 @@
 #' @param x A numeric vector or a data frame.
 #' @param ... Arguments passed to or from other methods.
 #'
-#' @examples
-#' \dontrun{
-#' if (require("multimode")) {
-#'   # Univariate
-#'   x <- rnorm(1000)
-#'   check_multimodal(x)
-#' }
+#' @examplesIf require("multimode") && require("mclust")
+#' \donttest{
+#' # Univariate
+#' x <- rnorm(1000)
+#' check_multimodal(x)
 #'
-#' if (require("multimode") && require("mclust")) {
-#'   x <- c(rnorm(1000), rnorm(1000, 2))
-#'   check_multimodal(x)
+#' x <- c(rnorm(1000), rnorm(1000, 2))
+#' check_multimodal(x)
 #'
-#'   # Multivariate
-#'   m <- data.frame(
-#'     x = rnorm(200),
-#'     y = rbeta(200, 2, 1)
-#'   )
-#'   plot(m$x, m$y)
-#'   check_multimodal(m)
+#' # Multivariate
+#' m <- data.frame(
+#'   x = rnorm(200),
+#'   y = rbeta(200, 2, 1)
+#' )
+#' plot(m$x, m$y)
+#' check_multimodal(m)
 #'
-#'   m <- data.frame(
-#'     x = c(rnorm(100), rnorm(100, 4)),
-#'     y = c(rbeta(100, 2, 1), rbeta(100, 1, 4))
-#'   )
-#'   plot(m$x, m$y)
-#'   check_multimodal(m)
-#' }
+#' m <- data.frame(
+#'   x = c(rnorm(100), rnorm(100, 4)),
+#'   y = c(rbeta(100, 2, 1), rbeta(100, 1, 4))
+#' )
+#' plot(m$x, m$y)
+#' check_multimodal(m)
 #' }
 #' @references
 #' - Ameijeiras-Alonso, J., Crujeiras, R. M., and Rodríguez-Casal, A. (2019).
@@ -63,7 +59,7 @@ check_multimodal.data.frame <- function(x, ...) {
 
   # Text
   text <- "The parametric mixture modelling test suggests that "
-  if (rez$p < .05) {
+  if (rez$p < 0.05) {
     text <- paste0(
       text,
       "the multivariate distribution is significantly multimodal (Chi2(",
@@ -105,7 +101,7 @@ check_multimodal.numeric <- function(x, ...) {
 
   text <- "The Ameijeiras-Alonso et al. (2018) excess mass test suggests that "
 
-  if (rez$p < .05) {
+  if (rez$p < 0.05) {
     text <- paste0(
       text,
       "the distribution is significantly multimodal (excess mass = ",

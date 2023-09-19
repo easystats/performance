@@ -20,12 +20,12 @@
 #'   points indicate model under- or over-fitting for the relevant range of
 #'   estimated probabilities.
 #'
-#' @details Binned residual plots are achieved by \dQuote{dividing the data into
+#' @details Binned residual plots are achieved by "dividing the data into
 #'   categories (bins) based on their fitted values, and then plotting
-#'   the average residual versus the average fitted value for each bin.}
-#'   \cite{(Gelman, Hill 2007: 97)}. If the model were true, one would
+#'   the average residual versus the average fitted value for each bin."
+#'   _(Gelman, Hill 2007: 97)_. If the model were true, one would
 #'   expect about 95% of the residuals to fall inside the error bounds.
-#'   \cr \cr
+#'
 #'   If `term` is not `NULL`, one can compare the residuals in
 #'   relation to a specific model predictor. This may be helpful to check if a
 #'   term would fit better when transformed, e.g. a rising and falling pattern
@@ -49,14 +49,17 @@
 #' # look at the data frame
 #' as.data.frame(result)
 #'
+#' \donttest{
 #' # plot
-#' if (require("see") && getRversion() >= "3.6.0") {
-#'   plot(result)
+#' if (require("see")) {
+#'   plot(result, show_dots = TRUE)
 #' }
+#' }
+#'
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)
-  mf <- insight::get_data(model)
+  mf <- insight::get_data(model, verbose = FALSE)
 
   if (is.null(term)) {
     pred <- fv
@@ -74,7 +77,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   model.binned <- as.numeric(cut(pred, breaks))
 
   d <- suppressWarnings(lapply(1:n_bins, function(.x) {
-    items <- (1:length(pred))[model.binned == .x]
+    items <- (seq_along(pred))[model.binned == .x]
     model.range <- range(pred[items], na.rm = TRUE)
     xbar <- mean(pred[items], na.rm = TRUE)
     ybar <- mean(y[items], na.rm = TRUE)
@@ -87,7 +90,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
       n = n,
       x.lo = model.range[1],
       x.hi = model.range[2],
-      se = stats::qnorm(.975) * sdev / sqrt(n),
+      se = stats::qnorm(0.975) * sdev / sqrt(n),
       ci_range = sdev / sqrt(n)
     )
   }))
@@ -96,8 +99,8 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   d <- d[stats::complete.cases(d), ]
 
   # CIs
-  d$CI_low <- d$ybar - stats::qnorm(.975) * d$ci_range
-  d$CI_high <- d$ybar + stats::qnorm(.975) * d$ci_range
+  d$CI_low <- d$ybar - stats::qnorm(0.975) * d$ci_range
+  d$CI_high <- d$ybar + stats::qnorm(0.975) * d$ci_range
 
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"
@@ -122,12 +125,30 @@ print.binned_residuals <- function(x, ...) {
   resid_ok <- attributes(x)$resid_ok
 
   if (!is.null(resid_ok)) {
-    if (resid_ok < .8) {
-      insight::print_color(sprintf("Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "red")
-    } else if (resid_ok < .95) {
-      insight::print_color(sprintf("Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n", round(100 * resid_ok)), "yellow")
+    if (resid_ok < 0.8) {
+      insight::print_color(
+        sprintf(
+          "Warning: Probably bad model fit. Only about %g%% of the residuals are inside the error bounds.\n",
+          round(100 * resid_ok)
+        ),
+        "red"
+      )
+    } else if (resid_ok < 0.95) {
+      insight::print_color(
+        sprintf(
+          "Warning: About %g%% of the residuals are inside the error bounds (~95%% or higher would be good).\n",
+          round(100 * resid_ok)
+        ),
+        "yellow"
+      )
     } else {
-      insight::print_color(sprintf("Ok: About %g%% of the residuals are inside the error bounds.\n", round(100 * resid_ok)), "green")
+      insight::print_color(
+        sprintf(
+          "Ok: About %g%% of the residuals are inside the error bounds.\n",
+          round(100 * resid_ok)
+        ),
+        "green"
+      )
     }
   }
 }

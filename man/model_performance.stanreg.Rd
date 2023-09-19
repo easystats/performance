@@ -43,63 +43,50 @@ Compute indices of model performance for (general) linear models.
 \details{
 Depending on \code{model}, the following indices are computed:
 \itemize{
-\item{\strong{ELPD}} {expected log predictive density. Larger ELPD values
-mean better fit. See \code{\link[=looic]{looic()}}.}
-
-\item{\strong{LOOIC}} {leave-one-out cross-validation (LOO) information
-criterion. Lower LOOIC values mean better fit. See \code{\link[=looic]{looic()}}.}
-
-\item{\strong{WAIC}} {widely applicable information criterion. Lower WAIC
-values mean better fit. See \code{?loo::waic}.}
-
-\item{\strong{R2}} {r-squared value, see \code{\link[=r2_bayes]{r2_bayes()}}.}
-
-\item{\strong{R2_adjusted}} {LOO-adjusted r-squared, see
-\code{\link[=r2_loo]{r2_loo()}}.}
-
-\item{\strong{RMSE}} {root mean squared error, see
-\code{\link[=performance_rmse]{performance_rmse()}}.}
-
-\item{\strong{SIGMA}} {residual standard deviation, see
-\code{\link[insight:get_sigma]{insight::get_sigma()}}.}
-
-\item{\strong{LOGLOSS}} {Log-loss, see \code{\link[=performance_logloss]{performance_logloss()}}.}
-
-\item{\strong{SCORE_LOG}} {score of logarithmic proper scoring rule, see
-\code{\link[=performance_score]{performance_score()}}.}
-
-\item{\strong{SCORE_SPHERICAL}} {score of spherical proper scoring rule,
-see \code{\link[=performance_score]{performance_score()}}.}
-
-\item{\strong{PCP}} {percentage of correct predictions, see
-\code{\link[=performance_pcp]{performance_pcp()}}.}
+\item \strong{ELPD}: expected log predictive density. Larger ELPD values
+mean better fit. See \code{\link[=looic]{looic()}}.
+\item \strong{LOOIC}: leave-one-out cross-validation (LOO) information
+criterion. Lower LOOIC values mean better fit. See \code{\link[=looic]{looic()}}.
+\item \strong{WAIC}: widely applicable information criterion. Lower WAIC
+values mean better fit. See \code{?loo::waic}.
+\item \strong{R2}: r-squared value, see \code{\link[=r2_bayes]{r2_bayes()}}.
+\item \strong{R2_adjusted}: LOO-adjusted r-squared, see \code{\link[=r2_loo]{r2_loo()}}.
+\item \strong{RMSE}: root mean squared error, see \code{\link[=performance_rmse]{performance_rmse()}}.
+\item \strong{SIGMA}: residual standard deviation, see \code{\link[insight:get_sigma]{insight::get_sigma()}}.
+\item \strong{LOGLOSS}: Log-loss, see \code{\link[=performance_logloss]{performance_logloss()}}.
+\item \strong{SCORE_LOG}: score of logarithmic proper scoring rule, see \code{\link[=performance_score]{performance_score()}}.
+\item \strong{SCORE_SPHERICAL}: score of spherical proper scoring rule, see \code{\link[=performance_score]{performance_score()}}.
+\item \strong{PCP}: percentage of correct predictions, see \code{\link[=performance_pcp]{performance_pcp()}}.
 }
 }
 \examples{
-\dontrun{
-if (require("rstanarm") && require("rstantools")) {
-  model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-  model_performance(model)
+\dontshow{if (require("rstanarm") && require("rstantools") && require("BayesFactor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+model <- suppressWarnings(rstanarm::stan_glm(
+  mpg ~ wt + cyl,
+  data = mtcars,
+  chains = 1,
+  iter = 500,
+  refresh = 0
+))
+model_performance(model)
 
-  model <- stan_glmer(
-    mpg ~ wt + cyl + (1 | gear),
-    data = mtcars,
-    chains = 1,
-    iter = 500,
-    refresh = 0
-  )
-  model_performance(model)
+model <- suppressWarnings(rstanarm::stan_glmer(
+  mpg ~ wt + cyl + (1 | gear),
+  data = mtcars,
+  chains = 1,
+  iter = 500,
+  refresh = 0
+))
+model_performance(model)
+
+model <- BayesFactor::generalTestBF(carb ~ am + mpg, mtcars)
+
+model_performance(model)
+model_performance(model[3])
+model_performance(model, average = TRUE)
 }
-
-if (require("BayesFactor") && require("rstantools")) {
-  model <- generalTestBF(carb ~ am + mpg, mtcars)
-
-  model_performance(model)
-  model_performance(model[3])
-
-  model_performance(model, average = TRUE)
-}
-}
+\dontshow{\}) # examplesIf}
 }
 \references{
 Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).

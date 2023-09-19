@@ -13,27 +13,29 @@
 #'   significant deviation from normal distribution.
 #'
 #' @note For mixed-effects models, studentized residuals, and *not*
-#'   standardized residuals, are used for the test. There is also a
-#'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
-#'    implemented in the
-#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' standardized residuals, are used for the test. There is also a
+#' [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#'  implemented in the [**see**-package](https://easystats.github.io/see/).
 #'
 #' @details `check_normality()` calls `stats::shapiro.test` and checks the
-#' standardized residuals (or Studentized residuals for mixed models) for
+#' standardized residuals (or studentized residuals for mixed models) for
 #' normal distribution. Note that this formal test almost always yields
 #' significant results for the distribution of residuals and visual inspection
-#' (e.g. Q-Q plots) are preferable.
+#' (e.g. Q-Q plots) are preferable. For generalized linear models, no formal
+#' statistical test is carried out. Rather, there's only a `plot()` method for
+#' GLMs. This plot shows a half-normal Q-Q plot of the absolute value of the
+#' standardized deviance residuals is shown (in line with changes in
+#' `plot.lm()` for R 4.3+).
 #'
-#' @examples
+#' @examplesIf require("see")
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_normality(m)
 #'
 #' # plot results
-#' if (require("see")) {
-#'   x <- check_normality(m)
-#'   plot(x)
-#' }
-#' \dontrun{
+#' x <- check_normality(m)
+#' plot(x)
+#'
+#' \donttest{
 #' # QQ-plot
 #' plot(check_normality(m), type = "qq")
 #'
@@ -51,9 +53,13 @@ check_normality <- function(x, ...) {
 
 #' @export
 check_normality.default <- function(x, ...) {
-  # valid model?
+  # check for valid input
+  .is_model_valid(x)
+
   if (!insight::model_info(x)$is_linear) {
-    message(insight::format_message("Checking normality of residuals is only useful an appropriate assumption for linear models."))
+    insight::format_alert(
+      "Checking normality of residuals is only appropriate for linear models."
+    )
     return(NULL)
   }
 
@@ -61,16 +67,63 @@ check_normality.default <- function(x, ...) {
   p.val <- .check_normality(stats::rstandard(x), x)
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   attr(p.val, "effects") <- "fixed"
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
   p.val
 }
 
+# glm ---------------
+
+#' @export
+check_normality.glm <- function(x, ...) {
+  out <- 1
+  attr(out, "data") <- x
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "effects") <- "fixed"
+  attr(out, "model_info") <- insight::model_info(x)
+  class(out) <- unique(c("check_normality", "see_check_normality", class(out)))
+
+  insight::format_alert(
+    "There's no formal statistical test for normality for generalized linear model.",
+    "Please use `plot()` on the return value of this function: `plot(check_normality(model))`"
+  )
+  invisible(out)
+}
+
+# numeric -------------------
+
+#' @export
+check_normality.numeric <- function(x, ...) {
+  # check for normality of residuals
+  p.val <- .check_normality(x, NULL, type = "raw")
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  class(p.val) <- unique(c("check_normality", "see_check_normality", "check_normality_numeric", class(p.val)))
+
+  p.val
+}
 
 
 # methods ----------------------
+
+
+#' @importFrom stats residuals
+#' @export
+residuals.check_normality_numeric <- function(object, ...) {
+  attr(object, "data")
+}
+
+
+#' @importFrom stats rstudent
+#' @export
+rstudent.check_normality_numeric <- function(model, ...) {
+  attr(model, "data")
+}
+
 
 #' @export
 plot.check_normality <- function(x, ...) {
@@ -86,18 +139,27 @@ print.check_normality <- function(x, ...) {
 
   if (identical(attributes(x)$effects, "random")) {
     re_groups <- attributes(x)$re_groups
-    for (i in 1:length(x)) {
+    for (i in seq_along(x)) {
       if (x[i] < 0.05) {
-        insight::print_color(sprintf("Warning: Non-normality for random effects '%s' detected (%s).\n", re_groups[i], pstring[i]), "red")
+        insight::print_color(
+          sprintf("Warning: Non-normality for random effects '%s' detected (%s).\n", re_groups[i], pstring[i]),
+          "red"
+        )
       } else {
-        insight::print_color(sprintf("OK: Random effects '%s' appear as normally distributed (%s).\n", re_groups[i], pstring[i]), "green")
+        insight::print_color(
+          sprintf("OK: Random effects '%s' appear as normally distributed (%s).\n", re_groups[i], pstring[i]),
+          "green"
+        )
       }
     }
   } else {
-    if (x < 0.05) {
-      insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type, pstring), "red")
-    } else {
-      insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type, pstring), "green")
+    if (length(x) > 1 && "units" %in% names(attributes(x))) type <- attributes(x)$units
+    for (i in seq_along(x)) {
+      if (x[i] < 0.05) {
+        insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type[i], pstring[i]), "red")
+      } else {
+        insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type[i], pstring[i]), "green")
+      }
     }
   }
   invisible(x)
@@ -118,7 +180,9 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
 
   # valid model?
   if (!info$is_linear && effects == "fixed") {
-    message(insight::format_message("Checking normality of residuals is only useful an appropriate assumption for linear models."))
+    insight::format_alert(
+      "Checking normality of residuals is only appropriate for linear models."
+    )
     return(NULL)
   }
 
@@ -140,8 +204,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
       }
     )
 
-    p.val <- c()
-    re_groups <- c()
+    p.val <- re_groups <- NULL
 
     if (!is.null(re)) {
       for (i in names(re)) {
@@ -150,7 +213,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
           p.val <- c(p.val, .check_normality(re[[i]][[j]], x, "random effects"))
         }
       }
-      attr(p.val, "re_qq") <- .diag_reqq(x, level = .95, model_info = info)
+      attr(p.val, "re_qq") <- .diag_reqq(x, level = 0.95, model_info = info)
       attr(p.val, "type") <- "random effects"
       attr(p.val, "re_groups") <- re_groups
     }
@@ -160,7 +223,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   }
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   attr(p.val, "effects") <- effects
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
@@ -182,7 +245,7 @@ check_normality.afex_aov <- function(x, ...) {
   p.val <- .check_normality(r, x)
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
 
   invisible(p.val)
@@ -197,21 +260,19 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
 # helper ---------------------
 
 .check_normality <- function(x, model, type = "residuals") {
-  ts <- tryCatch(
-    {
-      if (length(x) >= 5000) {
-        suppressWarnings(stats::ks.test(x, y = "pnorm", alternative = "two.sided"))
-      } else {
-        stats::shapiro.test(x)
-      }
-    },
-    error = function(e) {
-      NULL
+  ts <- .safe({
+    if (length(x) >= 5000) {
+      suppressWarnings(stats::ks.test(x, y = "pnorm", alternative = "two.sided"))
+    } else {
+      stats::shapiro.test(x)
     }
-  )
+  })
 
   if (is.null(ts)) {
-    insight::print_color(sprintf("'check_normality()' does not support models of class '%s'.\n", class(model)[1]), "red")
+    insight::print_color(
+      sprintf("`check_normality()` does not support models of class `%s`.\n", class(model)[1]),
+      "red"
+    )
     return(NULL)
   }
 

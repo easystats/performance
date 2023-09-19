@@ -5,20 +5,8 @@
 #'   `"ML"` for all other models (including mixed models), or `"REML"` for
 #'   linear mixed models when these have the same fixed effects. See 'Details'.
 #' @export
-test_likelihoodratio <- function(..., estimator = "ML") {
+test_likelihoodratio <- function(..., estimator = "ML", verbose = TRUE) {
   UseMethod("test_likelihoodratio")
-}
-
-
-#' @rdname test_performance
-#' @export
-performance_lrt <- function(...) {
-  ## TODO remove deprecated
-  message(insight::format_message(
-    "This function name is deprecated.",
-    "Please use 'test_lrt()' instead."
-  ))
-  test_likelihoodratio(...)
 }
 
 
@@ -32,12 +20,12 @@ test_lrt <- test_likelihoodratio
 # default --------------------
 
 #' @export
-test_likelihoodratio.default <- function(..., estimator = "OLS") {
+test_likelihoodratio.default <- function(..., estimator = "OLS", verbose = TRUE) {
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
-  .test_performance_checks(objects)
+  objects <- .test_performance_checks(objects, verbose = verbose)
 
   # different default when mixed model or glm is included
   if (missing(estimator)) {
@@ -58,11 +46,11 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
   } else if (inherits(objects, "ListLavaan")) {
     test_likelihoodratio_ListLavaan(..., objects = objects) # Because lavaanLRT requires the ellipsis
   } else {
-    stop(insight::format_message(
+    insight::format_error(
       "The models are not nested, which is a prerequisite for `test_likelihoodratio()`.",
       "See the 'Details' section.",
       "You may try `test_vuong()` instead."
-    ), call. = FALSE)
+    )
   }
 }
 
@@ -72,10 +60,10 @@ test_likelihoodratio.default <- function(..., estimator = "OLS") {
 
 #' @export
 plot.test_likelihoodratio <- function(x, ...) {
-  warning(insight::format_message(
-    "There is currently no plot() method for test-functions.",
-    "Please use 'plot(compare_perfomance())' for some visual representations of your model comparisons."
-  ), call. = FALSE)
+  insight::format_alert(
+    "There is currently no `plot()` method for test-functions.",
+    "Please use `plot(compare_perfomance())` for some visual representations of your model comparisons."
+  )
 }
 
 
@@ -113,14 +101,14 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
 # other classes ---------------------------
 
 #' @export
-test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", ...) {
+test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML", verbose = TRUE, ...) {
   dfs <- sapply(objects, insight::get_df, type = "model")
   same_fixef <- attributes(objects)$same_fixef
 
   # sort by df
   if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
     objects <- objects[order(dfs)]
-    dfs <- dfs[order(dfs)]
+    dfs <- sort(dfs, na.last = TRUE)
   }
 
   dfs_diff <- c(NA, diff(dfs))
@@ -152,10 +140,10 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     # only when mixed models are involved, others probably don't have problems with REML fit
     any(sapply(objects, insight::is_mixed_model)) &&
     # only if not all models have same fixed effects (else, REML is ok)
-    !isTRUE(same_fixef)) {
-    warning(insight::format_message(
+    !isTRUE(same_fixef) && isTRUE(verbose)) {
+    insight::format_warning(
       "The Likelihood-Ratio-Test is probably inaccurate when comparing REML-fit models with different fixed effects."
-    ), call. = FALSE)
+    )
   }
 
   attr(out, "is_nested_increasing") <- attributes(objects)$is_nested_increasing
@@ -185,7 +173,7 @@ test_likelihoodratio_ListLavaan <- function(..., objects = NULL) {
   colnames(out)[names(out) == "Df"] <- "df"
   colnames(out)[names(out) == "Df diff"] <- "df_diff"
   colnames(out)[names(out) == "Chisq"] <- "Chi2"
-  colnames(out)[grepl("^Pr\\(>", names(out))] <- "p"
+  colnames(out)[startsWith(names(out), "Pr(>")] <- "p"
   out$Model <- row.names(out)
 
   # Bind all data

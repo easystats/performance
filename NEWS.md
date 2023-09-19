@@ -1,3 +1,180 @@
+# performance (development version)
+
+# performance 0.10.5
+
+## Changes to functions
+
+* More informative message for `test_*()` functions that "nesting" only refers
+  to fixed effects parameters and currently ignores random effects when detecting
+  nested models.
+
+* `check_outliers()` for `"ICS"` method is now more stable and less likely to
+  fail.
+
+* `check_convergence()` now works for *parsnip* `_glm` models.
+
+## Bug fixes
+
+* `check_collinearity()` did not work for hurdle- or zero-inflated models of
+  package *pscl* when model had no explicitly defined formula for the
+  zero-inflation model.
+
+# performance 0.10.4
+
+## Changes to functions
+
+* `icc()` and `r2_nakagawa()` gain a `ci_method` argument, to either calculate
+  confidence intervals using `boot::boot()` (instead of `lmer::bootMer()`) when
+  `ci_method = "boot"` or analytical confidence intervals
+  (`ci_method = "analytical"`). Use `ci_method = "boot"` when the default method
+  fails to compute confidence intervals and use `ci_method = "analytical"` if
+  bootstrapped intervals cannot be calculated at all. Note that the default
+  computation method is preferred.
+
+* `check_predictions()` accepts a `bandwidth` argument (smoothing bandwidth),
+  which is passed down to the `plot()` methods density-estimation.
+
+* `check_predictions()` gains a `type` argument, which is passed down to the
+  `plot()` method to change plot-type (density or discrete dots/intervals).
+  By default, `type` is set to `"default"` for models without discrete outcomes,
+  and else `type = "discrete_interval"`.
+
+* `performance_accuracy()` now includes confidence intervals, and reports those
+  by default (the standard error is no longer reported, but still included).
+
+## Bug fixes
+
+* Fixed issue in `check_collinearity()` for _fixest_ models that used `i()`
+  to create interactions in formulas.
+
+# performance 0.10.3
+
+## New functions
+
+* `item_discrimination()`, to calculate the discrimination of a scale's items.
+
+## Support for new models
+
+* `model_performance()`, `check_overdispersion()`, `check_outliers()` and `r2()`
+  now work with objects of class `fixest_multi` (@etiennebacher, #554).
+  
+* `model_performance()` can now return the "Weak instruments" statistic and
+  p-value for models of class `ivreg` with `metrics = "weak_instruments"`
+  (@etiennebacher, #560).
+
+* Support for `mclogit` models.
+
+## Changes to functions
+
+* `test_*()` functions now automatically fit a null-model when only one model
+  objects was provided for testing multiple models.
+
+* Warnings in `model_performance()` for unsupported objects of class
+  `BFBayesFactor` can now be suppressed with `verbose = FALSE`.
+
+* `check_predictions()` no longer fails with issues when `re_formula = NULL`
+  for mixed models, but instead gives a warning and tries to compute posterior
+  predictive checks with `re_formuka = NA`.
+
+* `check_outliers()` now also works for meta-analysis models from packages
+  *metafor* and *meta*.
+
+* `plot()` for `performance::check_model()` no longer produces a normal QQ plot
+  for GLMs. Instead, it now shows a half-normal QQ plot of the absolute value
+  of the standardized deviance residuals.
+
+## Bug fixes
+
+* Fixed issue in `print()` method for `check_collinearity()`, which could mix
+  up the correct order of parameters.
+
+# performance 0.10.2
+
+## General
+
+* Revised usage of `insight::get_data()` to meet forthcoming changes in the
+  _insight_ package.
+
+## Changes to functions
+
+* `check_collinearity()` now accepts `NULL` for the `ci` argument.
+
+## Bug fixes
+
+* Fixed issue in `item_difficulty()` with detecting the maximum values of an
+  item set. Furthermore, `item_difficulty()` gets a `maximum_value` argument
+  in case no item contains the maximum value due to missings.
+
+# performance 0.10.1
+
+## General
+
+* Minor improvements to the documentation.
+
+## Changes to functions
+
+* `icc()` and `r2_nakagawa()` get `ci` and `iterations` arguments, to compute
+  confidence intervals for the ICC resp. R2, based on bootstrapped sampling.
+
+* `r2()` gets `ci`, to compute (analytical) confidence intervals for the R2.
+
+* The model underlying `check_distribution()` was now also trained to detect
+  cauchy, half-cauchy and inverse-gamma distributions.
+
+* `model_performance()` now allows to include the ICC for Bayesian models.
+
+## Bug fixes
+
+* `verbose` didn't work for `r2_bayes()` with `BFBayesFactor` objects.
+
+* Fixed issues in `check_model()` for models with convergence issues that lead
+  to `NA` values in residuals.
+  
+* Fixed bug in `check_outliers` whereby passing multiple elements to the 
+  threshold list generated an error (#496).
+
+* `test_wald()` now warns the user about inappropriate F test and calls
+  `test_likelihoodratio()` for binomial models.
+
+* Fixed edge case for usage of `parellel::detectCores()` in `check_outliers()`.
+
+# performance 0.10.0
+
+## Breaking Change
+
+* The minimum needed R version has been bumped to `3.6`.
+
+* The alias `performance_lrt()` was removed. Use `test_lrt()` resp.
+  `test_likelihoodratio()`.
+
+## New functions
+
+* Following functions were moved from package *parameters* to *performance*:
+  `check_sphericity_bartlett()`, `check_kmo()`, `check_factorstructure()` and
+  `check_clusterstructure()`.
+
+## Changes to functions
+
+* `check_normality()`, `check_homogeneity()` and `check_symmetry()` now works
+  for `htest` objects.
+
+* Print method for `check_outliers()` changed significantly: now states the 
+  methods, thresholds, and variables used, reports outliers per variable (for 
+  univariate methods) as well as any observation flagged for several 
+  variables/methods. Includes a new optional ID argument to add along the 
+  row number in the output (@rempsyc #443).
+
+* `check_outliers()` now uses more conventional outlier thresholds. The `IQR` 
+  and confidence interval methods now gain improved distance scores that
+  are continuous instead of discrete.
+  
+## Bug Fixes
+
+* Fixed wrong *z*-score values when using a vector instead of a data frame in
+  `check_outliers()` (#476).
+
+* Fixed `cronbachs_alpha()` for objects from `parameters::principal_component()`.
+
 # performance 0.9.2
 
 ## General
@@ -8,6 +185,14 @@
 
 * Improved speed performance for `check_model()` and some other
   `performance_*()` functions.
+
+* Improved support for models of class `geeglm`.
+
+## Changes to functions
+
+* `check_model()` gains a `show_dots` argument, to show or hide data points. 
+  This is particular useful for models with many observations, where generating
+  the plot would be very slow.
 
 ## Bug Fixes
 

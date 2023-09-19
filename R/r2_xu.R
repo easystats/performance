@@ -23,7 +23,7 @@
 r2_xu <- function(model) {
   mi <- insight::model_info(model)
   if (!mi$is_linear) {
-    stop("Xu's R2 is only applicable for linear models.", call. = FALSE)
+    insight::format_error("Xu's R2 is only applicable for linear models.")
   }
 
   .r2_xu <- 1 - stats::var(stats::residuals(model, verbose = FALSE)) / stats::var(insight::get_response(model, verbose = FALSE))

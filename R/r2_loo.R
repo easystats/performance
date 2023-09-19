@@ -20,20 +20,25 @@
 #'   leave-one-out-adjusted posterior distribution. This is conceptually similar
 #'   to an adjusted/unbiased R2 estimate in classical regression modeling. See
 #'   [r2_bayes()] for an "unadjusted" R2.
-#'   \cr \cr
+#'
 #'   Mixed models are not currently fully supported.
-#'   \cr \cr
+#'
 #'   `r2_loo_posterior()` is the actual workhorse for `r2_loo()` and
 #'   returns a posterior sample of LOO-adjusted Bayesian R2 values.
 #'
 #' @return A list with the LOO-adjusted R2 value. The standard errors
 #'   and credible intervals for the R2 values are saved as attributes.
 #'
-#' @examples
-#' if (require("rstanarm")) {
-#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-#'   r2_loo(model)
-#' }
+#' @examplesIf require("rstanarm") && require("rstantools")
+#' model <- suppressWarnings(rstanarm::stan_glm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0,
+#'   show_messages = FALSE
+#' ))
+#' r2_loo(model)
 #' @export
 r2_loo <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
   loo_r2 <- r2_loo_posterior(model, verbose = verbose, ...)
@@ -67,7 +72,7 @@ r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
-    warning(insight::format_message("`r2()` only available for models fit using the 'sampling' algorithm."), call. = FALSE)
+    insight::format_warning("`r2()` only available for models fit using the \"sampling\" algorithm.")
     return(NA)
   }
 
@@ -92,7 +97,7 @@ r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
               summary = FALSE
             )
           )
-          br2 <- lapply(1:length(res), function(x) {
+          br2 <- lapply(seq_along(res), function(x) {
             list(
               "R2_loo" = unname(as.vector(br2_mv$R2_loo[, x])),
               "R2_loo_marginal" = unname(as.vector(br2_mv$R2_loo_marginal[, x]))
@@ -101,7 +106,7 @@ r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           names(br2) <- res
         } else {
           br2_mv <- list("R2_loo" = rstantools::loo_R2(model, summary = FALSE))
-          br2 <- lapply(1:length(res), function(x) {
+          br2 <- lapply(seq_along(res), function(x) {
             list("R2_loo" = unname(as.vector(br2_mv$R2_loo[, x])))
           })
           names(br2) <- res
@@ -149,7 +154,7 @@ r2_loo_posterior.stanreg <- r2_loo_posterior.brmsfit
 #' @export
 r2_loo_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    warning("Models of class 'stanmvreg' not yet supported.", call. = FALSE)
+    insight::format_warning("Models of class `stanmvreg` not yet supported.")
   }
   NULL
 }
@@ -157,7 +162,7 @@ r2_loo_posterior.stanmvreg <- function(model, verbose = TRUE, ...) {
 #' @export
 r2_loo_posterior.BFBayesFactor <- function(model, verbose = TRUE, ...) {
   if (isTRUE(verbose)) {
-    warning("Models of class 'BFBayesFactor' not yet supported.", call. = FALSE)
+    insight::format_warning("Models of class `BFBayesFactor` not yet supported.")
   }
   NULL
 }

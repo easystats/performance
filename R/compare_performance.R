@@ -70,7 +70,7 @@
 #' _Model selection and multimodel inference: A practical information-theoretic approach_ (2nd ed.).
 #' Springer-Verlag. \doi{10.1007/b97636}
 #'
-#' @examples
+#' @examplesIf require("lme4")
 #' data(iris)
 #' lm1 <- lm(Sepal.Length ~ Species, data = iris)
 #' lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
@@ -78,12 +78,10 @@
 #' compare_performance(lm1, lm2, lm3)
 #' compare_performance(lm1, lm2, lm3, rank = TRUE)
 #'
-#' if (require("lme4")) {
-#'   m1 <- lm(mpg ~ wt + cyl, data = mtcars)
-#'   m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#'   m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-#'   compare_performance(m1, m2, m3)
-#' }
+#' m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+#' m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' m3 <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+#' compare_performance(m1, m2, m3)
 #' @inheritParams model_performance.lm
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
@@ -98,7 +96,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   object_names <- names(objects)
 
   if (!all(supported_models)) {
-    warning(sprintf("Following objects are not supported: %s", paste0(object_names[!supported_models], collapse = ", ")))
+    insight::format_alert(
+      "Following objects are not supported:",
+      datawizard::text_concatenate(object_names[!supported_models], enclose = "`")
+    )
     objects <- objects[supported_models]
     object_names <- object_names[supported_models]
   }
@@ -132,7 +133,9 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 
   # check if all models were fit from same data
   if (!isTRUE(attributes(objects)$same_response) && verbose) {
-    warning(insight::format_message("When comparing models, please note that probably not all models were fit from same data."), call. = FALSE)
+    insight::format_alert(
+      "When comparing models, please note that probably not all models were fit from same data."
+    )
   }
 
   # create "ranking" of models
@@ -143,37 +146,37 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   # Reorder columns
   if (all(c("BIC", "BF") %in% names(dfs))) {
     idx1 <- grep("^BIC$", names(dfs))
-    idx2 <- grep("BF", names(dfs))
+    idx2 <- grep("BF", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("AIC", "AIC_wt") %in% names(dfs))) {
     idx1 <- grep("^AIC$", names(dfs))
-    idx2 <- grep("AIC_wt", names(dfs))
+    idx2 <- grep("AIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("BIC", "BIC_wt") %in% names(dfs))) {
     idx1 <- grep("^BIC$", names(dfs))
-    idx2 <- grep("BIC_wt", names(dfs))
+    idx2 <- grep("BIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("AICc", "AICc_wt") %in% names(dfs))) {
     idx1 <- grep("^AICc$", names(dfs))
-    idx2 <- grep("AICc_wt", names(dfs))
+    idx2 <- grep("AICc_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("WAIC", "WAIC_wt") %in% names(dfs))) {
     idx1 <- grep("^WAIC$", names(dfs))
-    idx2 <- grep("WAIC_wt", names(dfs))
+    idx2 <- grep("WAIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
   if (all(c("LOOIC", "LOOIC_wt") %in% names(dfs))) {
     idx1 <- grep("^LOOIC$", names(dfs))
-    idx2 <- grep("LOOIC_wt", names(dfs))
+    idx2 <- grep("LOOIC_wt", names(dfs), fixed = TRUE)
     last_part <- (idx1 + 1):ncol(dfs)
     dfs <- dfs[, c(1:idx1, idx2, last_part[last_part != idx2])]
   }
@@ -188,10 +191,10 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     any(sapply(objects, insight::is_mixed_model)) &&
     # only if not all models have same fixed effects (else, REML is ok)
     !isTRUE(attributes(objects)$same_fixef)) {
-    warning(insight::format_message(
+    insight::format_alert(
       "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
       "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
-    ), call. = FALSE)
+    )
   }
 
   # dfs[order(sapply(object_names, as.character), dfs$Model), ]
@@ -210,7 +213,7 @@ print.compare_performance <- function(x, digits = 3, layout = "horizontal", ...)
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
   if ("Performance_Score" %in% colnames(formatted_table)) {
-    footer <- c(sprintf("\nModel %s (of class %s) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+    footer <- c(sprintf("\nModel `%s` (of class `%s`) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
   } else {
     footer <- NULL
   }
@@ -240,7 +243,9 @@ plot.compare_performance <- function(x, ...) {
 .rank_performance_indices <- function(x, verbose) {
   # all models comparable?
   if (length(unique(x$Type)) > 1 && isTRUE(verbose)) {
-    warning(insight::format_message("Models are not of same type. Comparison of indices might be not meaningful."), call. = FALSE)
+    insight::format_alert(
+      "Models are not of same type. Comparison of indices might be not meaningful."
+    )
   }
 
   # set reference for Bayes factors to 1
@@ -287,10 +292,10 @@ plot.compare_performance <- function(x, ...) {
   # any indices with NA?
   missing_indices <- sapply(out, anyNA)
   if (any(missing_indices) && isTRUE(verbose)) {
-    warning(insight::format_message(sprintf(
+    insight::format_alert(sprintf(
       "Following indices with missing values are not used for ranking: %s",
-      paste0(colnames(out)[missing_indices], collapse = ", ")
-    )), call. = FALSE)
+      toString(colnames(out)[missing_indices])
+    ))
   }
 
   # create rank-index, only for complete indices
@@ -306,6 +311,9 @@ plot.compare_performance <- function(x, ...) {
 
 
 .normalize_vector <- function(x) {
+  if (all(is.na(x)) || all(is.infinite(x))) {
+    return(x)
+  }
   as.vector((x - min(x, na.rm = TRUE)) / diff(range(x, na.rm = TRUE), na.rm = TRUE))
 }
 

@@ -16,19 +16,23 @@
 #' in the interval `[0, 1]`, with values closer to 1 indicating a more
 #' accurate model, and the logarithmic rule in the interval `[-Inf, 0]`,
 #' with values closer to 0 indicating a more accurate model.
-#' \cr \cr
+#'
 #' For `stan_lmer()` and `stan_glmer()` models, the predicted values
 #' are based on `posterior_predict()`, instead of `predict()`. Thus,
 #' results may differ more than expected from their non-Bayesian counterparts
 #' in **lme4**.
 #'
-#' @references Carvalho, A. (2016). An overview of applications of proper scoring rules. Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
+#' @references
+#' Carvalho, A. (2016). An overview of applications of proper scoring rules.
+#' Decision Analysis 13, 223–242. \doi{10.1287/deca.2016.0337}
 #'
-#' @note Code is partially based on [GLMMadaptive::scoring_rules()](https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html).
+#' @note
+#' Code is partially based on
+#' [GLMMadaptive::scoring_rules()](https://drizopoulos.github.io/GLMMadaptive/reference/scoring_rules.html).
 #'
-#' @seealso [`performance_logloss()`][performance_logloss]
+#' @seealso [`performance_logloss()`]
 #'
-#' @examples
+#' @examplesIf require("glmmTMB")
 #' ## Dobson (1990) Page 93: Randomized Controlled Trial :
 #' counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
 #' outcome <- gl(3, 1, 9)
@@ -36,18 +40,16 @@
 #' model <- glm(counts ~ outcome + treatment, family = poisson())
 #'
 #' performance_score(model)
-#' \dontrun{
-#' if (require("glmmTMB")) {
-#'   data(Salamanders)
-#'   model <- glmmTMB(
-#'     count ~ spp + mined + (1 | site),
-#'     zi =  ~ spp + mined,
-#'     family = nbinom2(),
-#'     data = Salamanders
-#'   )
+#' \donttest{
+#' data(Salamanders, package = "glmmTMB")
+#' model <- glmmTMB::glmmTMB(
+#'   count ~ spp + mined + (1 | site),
+#'   zi = ~ spp + mined,
+#'   family = nbinom2(),
+#'   data = Salamanders
+#' )
 #'
-#'   performance_score(model)
-#' }
+#' performance_score(model)
 #' }
 #' @export
 performance_score <- function(model, verbose = TRUE, ...) {
@@ -56,19 +58,27 @@ performance_score <- function(model, verbose = TRUE, ...) {
     model <- model$fit
   }
 
-  if (is.null(minfo <- list(...)$model_info)) {
+  minfo <- list(...)$model_info
+  if (is.null(minfo)) {
     minfo <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 
   if (minfo$is_ordinal || minfo$is_multinomial) {
-    if (verbose) insight::print_color("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.\n", "red")
+    if (verbose) {
+      insight::print_color("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.\n", "red")
+    }
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
 
   resp <- insight::get_response(model, verbose = verbose)
 
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
-    if (verbose) insight::print_color("Can't calculate proper scoring rules for models without integer response values.\n", "red")
+    if (verbose) {
+      insight::print_color(
+        "Can't calculate proper scoring rules for models without integer response values.\n",
+        "red"
+      )
+    }
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
 
@@ -115,7 +125,7 @@ performance_score <- function(model, verbose = TRUE, ...) {
   resp <- if (minfo$is_binomial) {
     .recode_to_zero(resp)
   } else {
-    datawizard::data_to_numeric(resp, dummy_factors = FALSE, preserve_levels = TRUE)
+    datawizard::to_numeric(resp, dummy_factors = FALSE, preserve_levels = TRUE)
   }
   p_y <- prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))
 
@@ -184,14 +194,7 @@ print.performance_score <- function(x, ...) {
       sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
     }
   } else {
-    tryCatch(
-      {
-        sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model)
-      },
-      error = function(e) {
-        0
-      }
-    )
+    .safe(sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model), 0)
   }
 }
 

@@ -4,14 +4,23 @@
 \alias{r2_nakagawa}
 \title{Nakagawa's R2 for mixed models}
 \usage{
-r2_nakagawa(model, by_group = FALSE, tolerance = 1e-05)
+r2_nakagawa(
+  model,
+  by_group = FALSE,
+  tolerance = 1e-05,
+  ci = NULL,
+  iterations = 100,
+  ci_method = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A mixed effects model.}
 
 \item{by_group}{Logical, if \code{TRUE}, returns the explained variance
 at different levels (if there are multiple levels). This is essentially
-similar to the variance reduction approach by \cite{Hox (2010), pp. 69-78}.}
+similar to the variance reduction approach by \emph{Hox (2010), pp. 69-78}.}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
@@ -19,48 +28,71 @@ or not. Indicates up to which value the convergence result is accepted. When
 \code{r2_nakagawa()} returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is \code{NA}),
 decrease the tolerance-level. See also \code{\link[=check_singularity]{check_singularity()}}.}
+
+\item{ci}{Confidence resp. credible interval level. For \code{icc()} and \code{r2()},
+confidence intervals are based on bootstrapped samples from the ICC resp.
+R2 value. See \code{iterations}.}
+
+\item{iterations}{Number of bootstrap-replicates when computing confidence
+intervals for the ICC or R2.}
+
+\item{ci_method}{Character string, indicating the bootstrap-method. Should
+be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for
+bootstrapped confidence intervals. However, if bootstrapped intervals cannot
+be calculated this was, try \code{ci_method = "boot"}, which falls back to
+\code{boot::boot()}. This may successfully return bootstrapped confidence intervals,
+but bootstrapped samples may not be appropriate for the multilevel structure
+of the model. There is also an option \code{ci_method = "analytical"}, which tries
+to calculate analytical confidence assuming a chi-squared distribution.
+However, these intervals are rather inaccurate and often too narrow. It is
+recommended to calculate bootstrapped confidence intervals for mixed models.}
+
+\item{verbose}{Toggle warnings and messages.}
+
+\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
 }
 \value{
 A list with the conditional and marginal R2 values.
 }
 \description{
-Compute the marginal and conditional r-squared value for
+Compute the \emph{marginal} and \emph{conditional} r-squared value for
 mixed effects models with complex random effects structures.
 }
 \details{
 Marginal and conditional r-squared values for mixed models are calculated
-based on \cite{Nakagawa et al. 2017}. For more details on the computation of
-the variances, see \code{?insight::get_variance}.
-\cr \cr
-The marginal r-squared considers only the variance of the fixed effects,
-while the conditional r-squared takes both the fixed and random effects into
-account. The random effect variances are actually the mean random effect
-variances, thus the r-squared value is also appropriate for mixed models
-with random slopes or nested random effects (see \cite{Johnson 2014}).
+based on \emph{Nakagawa et al. (2017)}. For more details on the computation of
+the variances, see \code{?insight::get_variance}. The random effect variances are
+actually the mean random effect variances, thus the r-squared value is also
+appropriate for mixed models with random slopes or nested random effects
+(see \emph{Johnson, 2014}).
+\itemize{
+\item \strong{Conditional R2}: takes both the fixed and random effects into account.
+\item \strong{Marginal R2}: considers only the variance of the fixed effects.
+}
+
+The contribution of random effects can be deduced by subtracting the
+marginal R2 from the conditional R2 or by computing the \code{\link[=icc]{icc()}}.
 }
 \examples{
-if (require("lme4")) {
-  model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-  r2_nakagawa(model)
-  r2_nakagawa(model, by_group = TRUE)
-}
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+r2_nakagawa(model)
+r2_nakagawa(model, by_group = TRUE)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
 \item Hox, J. J. (2010). Multilevel analysis: techniques and applications
 (2nd ed). New York: Routledge.
-
 \item Johnson, P. C. D. (2014). Extension of Nakagawa and Schielzeth’s R2 GLMM
 to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946.
 \doi{10.1111/2041-210X.12225}
-
 \item Nakagawa, S., and Schielzeth, H. (2013). A general and simple method for
 obtaining R2 from generalized linear mixed-effects models. Methods in
 Ecology and Evolution, 4(2), 133–142. \doi{10.1111/j.2041-210x.2012.00261.x}
-
 \item Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
 coefficient of determination R2 and intra-class correlation coefficient from
 generalized linear mixed-effects models revisited and expanded. Journal of
-The Royal Society Interface, 14(134), 20170213. \doi{10.1098/rsif.2017.0213}
+The Royal Society Interface, 14(134), 20170213.
 }
 }

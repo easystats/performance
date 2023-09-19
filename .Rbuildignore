@@ -8,16 +8,21 @@
 
 ^\.travis.yml
 ^\_pkgdown.yml
+^\_pkgdown.yaml
+^paper.bib$
 
 ^data/.
 ^docs/.
 ^vignettes/.
 ^pkgdown/.
 ^WIP/.
-^paper/.
+^papers/.
 ^.github/.
 ^CODE_OF_CONDUCT\.md$
 ^revdep$
 ^tests/_snaps/.
 ^cran-comments\.md$
 ^\.github$
+\.code-workspace$
+\.lintr$
+^CRAN-SUBMISSION$

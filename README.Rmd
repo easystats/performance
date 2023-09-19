@@ -1,10 +1,6 @@
 ---
-output: 
-  github_document:
-    toc: false
-    fig_width: 10
-    fig_height: 6
-bibliography: paper/paper.bib
+output: github_document
+bibliography: paper.bib
 ---
 
 # performance <img src='man/figures/logo.png' align="right" height="139" />
@@ -12,12 +8,10 @@ bibliography: paper/paper.bib
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  tidy.opts = list(width.cutoff = 100),
-  tidy = TRUE,
   warning = FALSE,
   message = FALSE,
   out.width = "100%",
-  dpi = 300,
+  dpi = 150,
   fig.path = "man/figures/",
   comment = "#>"
 )
@@ -42,7 +36,7 @@ The primary goal of the **performance** package is to fill this gap and to provi
 
 ## Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![performance status badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/performance/workflows/R-check/badge.svg?branch=master)](https://github.com/easystats/performance/actions)
+[![CRAN](http://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance) [![performance status badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev) [![R check](https://github.com/easystats/performance/workflows/R-CMD-check/badge.svg?branch=main)](https://github.com/easystats/performance/actions)
 
 The *performance* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
 
@@ -57,6 +51,12 @@ Once you have downloaded the package, you can then load it using:
 library("performance")
 ```
 
+> **Tip**
+>
+> Instead of `library(performance)`, use `library(easystats)`. This will make all features of the  easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
+
 ## Citation
 
 To cite performance in publications use:
@@ -66,10 +66,6 @@ citation("performance")
 ```
 
 ## Documentation
-
-[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
-[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
-[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html) 
 
 There is a nice introduction into the package on [youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
 
@@ -150,7 +146,7 @@ icc(model)
 
 ...and models of class `brmsfit`.
  
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=curl::has_internet()}
 model <- insight::download_model("brms_mixed_1")
 ```
 ```{r, eval=FALSE}
@@ -250,7 +246,7 @@ check_heteroscedasticity(model)
 `check_collinearity()`, `check_normality()` or `check_heteroscedasticity()`. To
 get a comprehensive check, use `check_model()`.
 
-```{r, fig.height=10, fig.width=8, out.width="60%"}
+```{r, fig.height=12, fig.width=10, out.width="80%"}
 # defining a model
 model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
 
@@ -297,7 +293,7 @@ outcome <- gl(3, 1, 9)
 treatment <- gl(3, 3)
 m4 <- glm(counts ~ outcome + treatment, family = poisson())
 
-compare_performance(m1, m2, m3, m4)
+compare_performance(m1, m2, m3, m4, verbose = FALSE)
 ```
 
 #### General index of model performance
@@ -305,7 +301,7 @@ compare_performance(m1, m2, m3, m4)
 One can also easily compute and a [**composite index**](https://easystats.github.io/performance/reference/compare_performance.html#details) of model performance and sort the models from the best one to the worse.
 
 ```{r}
-compare_performance(m1, m2, m3, m4, rank = TRUE)
+compare_performance(m1, m2, m3, m4, rank = TRUE, verbose = FALSE)
 ```
 
 #### Visualisation of indices of models' performance
@@ -314,7 +310,7 @@ Finally, we provide convenient visualisation (the `see` package must be
 installed).
 
 ```{r}
-plot(compare_performance(m1, m2, m4, rank = TRUE))
+plot(compare_performance(m1, m2, m4, rank = TRUE, verbose = FALSE))
 ```
 
 ### Testing models
@@ -336,6 +332,11 @@ test_performance(lm1, lm2, lm3, lm4)
 
 test_bf(lm1, lm2, lm3, lm4)
 ```
+
+### Plotting Functions
+
+Plotting functions are available through the [**see** package](https://easystats.github.io/see/articles/performance.html).
+
 
 # Code of Conduct
 

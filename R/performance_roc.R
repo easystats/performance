@@ -14,7 +14,8 @@
 #' @param ... One or more models with binomial outcome. In this case,
 #'   `new_data` is ignored.
 #'
-#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @return A data frame with three columns, the x/y-coordinate pairs for the ROC
 #'   curve (`Sensitivity` and `Specificity`), and a column with the
@@ -36,20 +37,22 @@
 #' roc <- performance_roc(model, new_data = test_data)
 #' area_under_curve(roc$Specificity, roc$Sensitivity)
 #'
-#' m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
-#' m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
-#' m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
-#' performance_roc(m1, m2, m3)
+#' if (interactive()) {
+#'   m1 <- glm(y ~ Sepal.Length + Sepal.Width, data = iris, family = "binomial")
+#'   m2 <- glm(y ~ Sepal.Length + Petal.Width, data = iris, family = "binomial")
+#'   m3 <- glm(y ~ Sepal.Length + Species, data = iris, family = "binomial")
+#'   performance_roc(m1, m2, m3)
 #'
-#' # if you have `see` package installed, you can also plot comparison of
-#' # ROC curves for different models
-#' if (require("see")) plot(performance_roc(m1, m2, m3))
+#'   # if you have `see` package installed, you can also plot comparison of
+#'   # ROC curves for different models
+#'   if (require("see")) plot(performance_roc(m1, m2, m3))
+#' }
 #' @export
 performance_roc <- function(x, ..., predictions, new_data) {
   dots <- list(...)
 
   object_names <- c(
-    insight::safe_deparse(substitute(x)),
+    insight::safe_deparse_symbol(substitute(x)),
     sapply(match.call(expand.dots = FALSE)$`...`, insight::safe_deparse)
   )
 
@@ -93,7 +96,7 @@ print.performance_roc <- function(x, ...) {
     dat <- split(x, f = x$Model)
     max_space <- max(nchar(x$Model))
 
-    for (i in 1:length(dat)) {
+    for (i in seq_along(dat)) {
       cat(sprintf(
         "  %*s: %.2f%%\n",
         max_space,
@@ -111,7 +114,7 @@ print.performance_roc <- function(x, ...) {
 
 .performance_roc_numeric <- function(x, predictions) {
   if (length(x) != length(predictions)) {
-    stop("'x' and ' predictions' must be of same length.", call. = FALSE)
+    insight::format_error("`x` and `predictions` must be of same length.")
   }
 
   x <- .recode_to_zero(x)
@@ -130,11 +133,13 @@ print.performance_roc <- function(x, ...) {
 
 .performance_roc_model <- function(x, new_data, model_name = "Model 1") {
   predictions <- stats::predict(x, newdata = new_data, type = "response")
-  if (is.null(new_data)) new_data <- insight::get_data(x)
+  if (is.null(new_data)) new_data <- insight::get_data(x, verbose = FALSE)
   response <- new_data[[insight::find_response(x)]]
 
   if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {
-    stop(insight::format_message("Can't calculate ROC for models with response-matrix (i.e. response variables with success/trials)."), call. = FALSE)
+    insight::format_error(
+      "Can't calculate ROC for models with response-matrix (i.e. response variables with success/trials)."
+    )
   }
 
   dat <- .performance_roc_numeric(response, predictions)
@@ -145,11 +150,11 @@ print.performance_roc <- function(x, ...) {
 
 
 .performance_roc_models <- function(x, names) {
-  l <- lapply(1:length(x), function(i) {
+  l <- lapply(seq_along(x), function(i) {
     if (.valid_roc_models(x[[i]])) {
       .performance_roc_model(x = x[[i]], new_data = NULL, model_name = names[i])
     } else {
-      warning("Object '", names[i], "' is not valid.", call. = FALSE)
+      insight::format_warning("Object '", names[i], "' is not valid.")
     }
   })
   do.call(rbind, l)

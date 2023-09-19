@@ -65,12 +65,13 @@ r2_coxsnell <- function(model, ...) {
 
 #' @export
 r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
-  if (is.null(info <- list(...)$model_info)) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      warning(insight::format_message("Can't calculate accurate R2 for binomial models that are not Bernoulli models."), call. = FALSE)
+      insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     return(NULL)
   } else {
@@ -88,7 +89,22 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
 r2_coxsnell.BBreg <- r2_coxsnell.glm
 
 #' @export
-r2_coxsnell.mclogit <- r2_coxsnell.glm
+r2_coxsnell.mclogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mclogit(model)
+  r2_coxsnell <- s$sumstat["Cox.Snell"]
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
+}
+
+#' @export
+r2_coxsnell.mblogit <- function(model, ...) {
+  insight::check_if_installed("mclogit", reason = "to calculate R2")
+  s <- mclogit::getSummary.mblogit(model)
+  r2_coxsnell <- s$sumstat["Cox.Snell"]
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
+}
 
 #' @export
 r2_coxsnell.bife <- function(model, ...) {
@@ -165,7 +181,7 @@ r2_coxsnell.clm2 <- function(model, ...) {
 
 #' @export
 r2_coxsnell.bayesx <- function(model, ...) {
-  junk <- utils::capture.output(l_base <- insight::get_loglikelihood(stats::update(model, ~1)))
+  junk <- utils::capture.output(l_base <- insight::get_loglikelihood(stats::update(model, ~1))) # nolint
   .r2_coxsnell(model, l_base)
 }
 

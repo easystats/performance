@@ -5,6 +5,7 @@
 #'    for tests or item-scales of questionnaires.
 #'
 #' @param x A matrix or a data frame.
+#' @param ... Currently not used.
 #'
 #' @return The Cronbach's Alpha value for `x`.
 #'
@@ -25,20 +26,22 @@
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' cronbachs_alpha(x)
 #' @export
-cronbachs_alpha <- function(x) {
+cronbachs_alpha <- function(x, ...) {
   UseMethod("cronbachs_alpha")
 }
 
 
 
 #' @export
-cronbachs_alpha.data.frame <- function(x) {
+cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
   # remove missings
   .data <- stats::na.omit(x)
 
   # we need at least two columns for Cronach's Alpha
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
-    warning("Too less columns in `x` to compute Cronbach's Alpha.", call. = FALSE)
+    if (verbose) {
+      insight::format_warning("Too few columns in `x` to compute Cronbach's Alpha.")
+    }
     return(NULL)
   }
 
@@ -49,30 +52,31 @@ cronbachs_alpha.data.frame <- function(x) {
 
 
 #' @export
-cronbachs_alpha.matrix <- function(x) {
-  cronbachs_alpha(as.data.frame(x))
+cronbachs_alpha.matrix <- function(x, verbose = TRUE, ...) {
+  cronbachs_alpha(as.data.frame(x), verbose = verbose, ...)
 }
 
 
 
 #' @export
-cronbachs_alpha.parameters_pca <- function(x) {
-  ## TODO change to data_name once parameters 0.10.0 is on CRAN
-  pca_data <- attr(x, "data")
+cronbachs_alpha.parameters_pca <- function(x, verbose = TRUE, ...) {
+  # fetch data used for the PCA
+  pca_data <- attributes(x)$dataset
 
+  # if NULL, can we get from environment?
   if (is.null(pca_data)) {
-    warning("Could not find data frame that was used for the PCA.", call. = FALSE)
-    return(NULL)
+    pca_data <- attr(x, "data")
+    if (is.null(pca_data)) {
+      if (verbose) {
+        insight::format_warning("Could not find data frame that was used for the PCA.")
+      }
+      return(NULL)
+    }
+    pca_data <- get(pca_data, envir = parent.frame())
   }
 
-  # fetch data used for the PCA
-  pca_data <- get(pca_data, envir = parent.frame())
-
-  # get columns from parameters_pca-object where loadings are saved
-  loadings_columns <- attributes(x)$loadings_columns
-
-  # find component with max loading for each variable
-  factor_assignment <- apply(x[, loadings_columns], 1, function(i) which.max(abs(i)))
+  # get assignment of columns to extracted components, based on the max loading
+  factor_assignment <- attributes(x)$closest_component
 
   # sort and get unique IDs so we only get data from relevant columns
   unique_factors <- sort(unique(factor_assignment))
@@ -80,9 +84,13 @@ cronbachs_alpha.parameters_pca <- function(x) {
   # apply cronbach's alpha for each component,
   # only for variables with max loading
   cronb <- sapply(unique_factors, function(i) {
-    cronbachs_alpha(pca_data[, as.vector(x$Variable[factor_assignment == i]), drop = FALSE])
+    cronbachs_alpha(
+      pca_data[, as.vector(x$Variable[factor_assignment == i]), drop = FALSE],
+      verbose = verbose,
+      ...
+    )
   })
 
-  names(cronb) <- colnames(x)[loadings_columns[unique_factors]]
+  names(cronb) <- paste0("PC", unique_factors)
   unlist(cronb)
 }

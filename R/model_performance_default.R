@@ -1,5 +1,8 @@
 #' @export
 model_performance.default <- function(model, metrics = "all", verbose = TRUE, ...) {
+  # check for valid input
+  .is_model_valid(model)
+
   if (any(tolower(metrics) == "log_loss")) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
@@ -18,7 +21,7 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
 
   if (!insight::is_model(model) || !insight::is_model_supported(model)) {
     if (isTRUE(verbose)) {
-      warning(paste0("Objects of class '", class(model)[1], "' are not supported model objects."), call. = FALSE)
+      insight::format_warning(paste0("Objects of class `", class(model)[1], "` are not supported model objects."))
     }
     return(NULL)
   }
@@ -33,9 +36,9 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
   bad_metrics <- which(!metrics %in% all_metrics)
   if (length(bad_metrics)) {
     if (verbose) {
-      warning(paste0("Following elements are no valid metric: ",
-        metrics[bad_metrics],
-        collapse = ", "
+      insight::format_warning(paste0(
+        "Following elements are no valid metric: ",
+        datawizard::text_concatenate(metrics[bad_metrics], enclose = "`")
       ))
     }
     metrics <- metrics[-bad_metrics]

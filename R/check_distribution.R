@@ -48,15 +48,14 @@ NULL
 #' There is a `plot()` method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
-#' @examples
-#' if (require("lme4") && require("parameters") &&
-#'   require("see") && require("patchwork") && require("randomForest")) {
-#'   data(sleepstudy)
+#' @examplesIf require("lme4") && require("parameters") && require("randomForest")
+#' data(sleepstudy, package = "lme4")
+#' model <<- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#' check_distribution(model)
 #'
-#'   model <<- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#'   check_distribution(model)
-#'   plot(check_distribution(model))
-#' }
+#' @examplesIf require("see") && require("patchwork") && require("randomForest")
+#' plot(check_distribution(model))
+#'
 #' @export
 check_distribution <- function(model) {
   UseMethod("check_distribution")
@@ -68,6 +67,9 @@ check_distribution <- function(model) {
 
 #' @export
 check_distribution.default <- function(model) {
+  # check for valid input
+  .is_model_valid(model)
+
   insight::check_if_installed("randomForest")
 
   if (inherits(model, "brmsfit")) {
@@ -82,7 +84,11 @@ check_distribution.default <- function(model) {
 
 
   # Extract features
-  x <- datawizard::data_to_numeric(insight::get_response(model, verbose = FALSE), dummy_factors = FALSE, preserve_levels = TRUE)
+  x <- datawizard::to_numeric(
+    insight::get_response(model, verbose = FALSE),
+    dummy_factors = FALSE,
+    preserve_levels = TRUE
+  )
   dat <- .extract_features(x)
 
   dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
@@ -97,7 +103,7 @@ check_distribution.default <- function(model) {
 
   class(out) <- unique(c("check_distribution", "see_check_distribution", class(out)))
   attr(out, "data") <- model
-  attr(out, "object_name") <- deparse(substitute(model), width.cutoff = 500)
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(model))
 
   out
 }
@@ -185,24 +191,27 @@ check_distribution.numeric <- function(model) {
 # utilities -----------------------------
 
 .extract_features <- function(x) {
+  # sanity check, remove missings
+  x <- x[!is.na(x)]
+
   data.frame(
-    "SD" = stats::sd(x),
-    "MAD" = stats::mad(x, constant = 1),
-    "Mean_Median_Distance" = mean(x) - stats::median(x),
-    "Mean_Mode_Distance" = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
-    "SD_MAD_Distance" = stats::sd(x) - stats::mad(x, constant = 1),
-    "Var_Mean_Distance" = stats::var(x) - mean(x),
-    "Range_SD" = diff(range(x)) / stats::sd(x),
-    "Range" = diff(range(x)),
-    "IQR" = stats::IQR(x),
-    "Skewness" = .skewness(x),
-    "Kurtosis" = .kurtosis(x),
-    "Uniques" = length(unique(x)) / length(x),
-    "N_Uniques" = length(unique(x)),
-    "Min" = min(x),
-    "Max" = max(x),
-    "Proportion_Positive" = sum(x >= 0) / length(x),
-    "Integer" = all(.is_integer(x))
+    SD = stats::sd(x),
+    MAD = stats::mad(x, constant = 1),
+    Mean_Median_Distance = mean(x) - stats::median(x),
+    Mean_Mode_Distance = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+    SD_MAD_Distance = stats::sd(x) - stats::mad(x, constant = 1),
+    Var_Mean_Distance = stats::var(x) - mean(x),
+    Range_SD = diff(range(x)) / stats::sd(x),
+    Range = diff(range(x)),
+    IQR = stats::IQR(x),
+    Skewness = .skewness(x),
+    Kurtosis = .kurtosis(x),
+    Uniques = length(unique(x)) / length(x),
+    N_Uniques = length(unique(x)),
+    Min = min(x),
+    Max = max(x),
+    Proportion_Positive = sum(x >= 0) / length(x),
+    Integer = all(.is_integer(x))
   )
 }
 

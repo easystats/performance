@@ -6,7 +6,7 @@
 #'   `parameters::principal_components()`.
 #'
 #' @param x An object of class `parameters_pca`, as returned by
-#'   `parameters::principal_components()`.
+#'   [`parameters::principal_components()`].
 #'
 #' @return A list of data frames, with related measures of internal
 #'   consistencies of each subscale.
@@ -16,61 +16,59 @@
 #' `check_itemscale()` calculates various measures of internal
 #' consistencies, such as Cronbach's alpha, item difficulty or discrimination
 #' etc. on subscales which were built from several items. Subscales are
-#' retrieved from the results of `parameters::principal_components()`, i.e.
+#' retrieved from the results of [`parameters::principal_components()`], i.e.
 #' based on how many components were extracted from the PCA,
 #' `check_itemscale()` retrieves those variables that belong to a component
 #' and calculates the above mentioned measures.
 #'
-#' @note \itemize{
-#'   \item *Item difficulty* should range between 0.2 and 0.8. Ideal value
+#' @note
+#' - *Item difficulty* should range between 0.2 and 0.8. Ideal value
 #'   is `p+(1-p)/2` (which mostly is between 0.5 and 0.8). See
-#'   [item_difficulty()] for details.
+#'   [`item_difficulty()`] for details.
 #'
-#'   \item For *item discrimination*, acceptable values are 0.20 or higher;
-#'   the closer to 1.00 the better. See [item_reliability()] for more
+#' - For *item discrimination*, acceptable values are 0.20 or higher;
+#'   the closer to 1.00 the better. See [`item_reliability()`] for more
 #'   details.
 #'
-#'   \item In case the total *Cronbach's alpha* value is below the
-#'   acceptable cut-off of 0.7 (mostly if an index has few items), the
+#' - In case the total *Cronbach's alpha* value is below the acceptable
+#'   cut-off of 0.7 (mostly if an index has few items), the
 #'   *mean inter-item-correlation* is an alternative measure to indicate
 #'   acceptability. Satisfactory range lies between 0.2 and 0.4. See also
-#'   [item_intercor()].
-#' }
+#'   [`item_intercor()`].
 #'
-#' @references \itemize{
-#'   \item Briggs SR, Cheek JM (1986) The role of factor analysis in the
-#'   development and evaluation of personality scales. Journal of Personality,
-#'   54(1), 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x
-#'
-#'   \item Trochim WMK (2008) Types of Reliability.
+#' @references
+#' - Briggs SR, Cheek JM (1986) The role of factor analysis in the development
+#'   and evaluation of personality scales. Journal of Personality, 54(1),
+#'   106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x
+#' - Trochim WMK (2008) Types of Reliability.
 #'   ([web](https://conjointly.com/kb/types-of-reliability/))
-#' }
 #'
-#' @examples
+#' @examplesIf require("parameters") && require("psych")
 #' # data generation from '?prcomp', slightly modified
-#' C <- chol(S <- toeplitz(.9^(0:15)))
+#' C <- chol(S <- toeplitz(0.9^(0:15)))
 #' set.seed(17)
 #' X <- matrix(rnorm(1600), 100, 16)
 #' Z <- X %*% C
-#' if (require("parameters") && require("psych")) {
-#'   pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
-#'   pca
-#'   check_itemscale(pca)
-#' }
+#'
+#' pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
+#' pca
+#' check_itemscale(pca)
 #' @export
 check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {
-    stop(insight::format_message("'x' must be an object of class 'parameters_pca', as returned by 'parameters::principal_components()'."), call. = FALSE)
+    insight::format_error(
+      "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`."
+    )
   }
 
   insight::check_if_installed("parameters")
 
-  data_set <- attributes(x)$data_set
+  dataset <- attributes(x)$dataset
   subscales <- parameters::closest_component(x)
 
   out <- lapply(sort(unique(subscales)), function(.subscale) {
     columns <- names(subscales)[subscales == .subscale]
-    items <- data_set[columns]
+    items <- dataset[columns]
     reliability <- item_reliability(items)
 
     .item_discr <- reliability$item_discrimination
@@ -80,11 +78,11 @@ check_itemscale <- function(x) {
 
     s_out <- data.frame(
       Item = columns,
-      Missings = sapply(items, function(i) sum(is.na(i)) / nrow(items)),
-      Mean = sapply(items, mean, na.rm = TRUE),
-      SD = sapply(items, stats::sd, na.rm = TRUE),
-      Skewness = sapply(items, function(i) as.numeric(datawizard::skewness(i))),
-      "Difficulty" = item_difficulty(items)$difficulty,
+      Missings = vapply(items, function(i) sum(is.na(i)) / nrow(items), numeric(1)),
+      Mean = vapply(items, mean, numeric(1), na.rm = TRUE),
+      SD = vapply(items, stats::sd, numeric(1), na.rm = TRUE),
+      Skewness = vapply(items, function(i) as.numeric(datawizard::skewness(i)), numeric(1)),
+      "Difficulty" = item_difficulty(items)$Difficulty,
       "Discrimination" = .item_discr,
       "alpha if deleted" = .item_alpha,
       stringsAsFactors = FALSE,
@@ -110,7 +108,7 @@ print.check_itemscale <- function(x, digits = 2, ...) {
   insight::print_color("# Description of (Sub-)Scales", "blue")
 
   cat(insight::export_table(
-    lapply(1:length(x), function(i) {
+    lapply(seq_along(x), function(i) {
       out <- x[[i]]
       attr(out, "table_caption") <- c(sprintf("\nComponent %i", i), "red")
       attr(out, "table_footer") <- c(sprintf(

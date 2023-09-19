@@ -2,39 +2,39 @@
 #' @name check_zeroinflation
 #'
 #' @description `check_zeroinflation()` checks whether count models are
-#'   over- or underfitting zeros in the outcome.
+#' over- or underfitting zeros in the outcome.
 #'
-#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`,
-#'    or `glm.nb` (package \pkg{MASS}).
+#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
+#' (package **MASS**).
 #' @param tolerance The tolerance for the ratio of observed and predicted
-#'    zeros to considered as over- or underfitting zeros. A ratio
-#'    between 1 +/- `tolerance` is considered as OK, while a ratio
-#'    beyond or below this threshold would indicate over- or underfitting.
+#'  zeros to considered as over- or underfitting zeros. A ratio
+#'  between 1 +/- `tolerance` is considered as OK, while a ratio
+#'  beyond or below this threshold would indicate over- or underfitting.
 #'
 #' @return A list with information about the amount of predicted and observed
-#'    zeros in the outcome, as well as the ratio between these two values.
+#'  zeros in the outcome, as well as the ratio between these two values.
 #'
 #' @details If the amount of observed zeros is larger than the amount of
-#'   predicted zeros, the model is underfitting zeros, which indicates a
-#'   zero-inflation in the data. In such cases, it is recommended to use
-#'   negative binomial or zero-inflated models.
+#' predicted zeros, the model is underfitting zeros, which indicates a
+#' zero-inflation in the data. In such cases, it is recommended to use
+#' negative binomial or zero-inflated models.
 #'
-#' @examples
-#' if (require("glmmTMB")) {
-#'   data(Salamanders)
-#'   m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#'   check_zeroinflation(m)
-#' }
+#' @family functions to check model assumptions and and assess model quality
+#'
+#' @examplesIf require("glmmTMB")
+#' data(Salamanders, package = "glmmTMB")
+#' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+#' check_zeroinflation(m)
 #' @export
-check_zeroinflation <- function(x, tolerance = .05) {
+check_zeroinflation <- function(x, tolerance = 0.05) {
   # check if we have poisson
   model_info <- insight::model_info(x)
   if (!model_info$is_count) {
-    stop("Model must be from Poisson-family.", call. = FALSE)
+    insight::format_error("Model must be from Poisson-family.")
   }
 
   # get actual zero of response
-  obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0)
+  obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0L)
 
   if (obs.zero == 0) {
     insight::print_color("Model has no observed zeros in the response variable.\n", "red")
@@ -95,7 +95,7 @@ print.check_zi <- function(x, ...) {
   } else if (x$ratio > upper) {
     message("Model is overfitting zeros.")
   } else {
-    message(insight::format_message("Model seems ok, ratio of observed and predicted zeros is within the tolerance range."))
+    insight::format_alert("Model seems ok, ratio of observed and predicted zeros is within the tolerance range.")
   }
 
   invisible(x)

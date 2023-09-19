@@ -5,7 +5,6 @@
 \alias{test_bf}
 \alias{test_bf.default}
 \alias{test_likelihoodratio}
-\alias{performance_lrt}
 \alias{test_lrt}
 \alias{test_performance}
 \alias{test_vuong}
@@ -14,22 +13,24 @@
 \usage{
 test_bf(...)
 
-\method{test_bf}{default}(..., text_length = NULL)
+\method{test_bf}{default}(..., reference = 1, text_length = NULL)
 
-test_likelihoodratio(..., estimator = "ML")
+test_likelihoodratio(..., estimator = "ML", verbose = TRUE)
 
-performance_lrt(...)
+test_lrt(..., estimator = "ML", verbose = TRUE)
 
-test_lrt(..., estimator = "ML")
+test_performance(..., reference = 1, verbose = TRUE)
 
-test_performance(..., reference = 1)
+test_vuong(..., verbose = TRUE)
 
-test_vuong(...)
-
-test_wald(...)
+test_wald(..., verbose = TRUE)
 }
 \arguments{
 \item{...}{Multiple model objects.}
+
+\item{reference}{This only applies when models are non-nested, and determines
+which model should be taken as a reference, against which all the other
+models are tested.}
 
 \item{text_length}{Numeric, length (number of chars) of output lines.
 \code{test_bf()} describes models by their formulas, which can lead to
@@ -42,9 +43,7 @@ the standard deviation of the errors. Defaults to \code{"OLS"} for linear models
 \code{"ML"} for all other models (including mixed models), or \code{"REML"} for
 linear mixed models when these have the same fixed effects. See 'Details'.}
 
-\item{reference}{This only applies when models are non-nested, and determines
-which model should be taken as a reference, against which all the other
-models are tested.}
+\item{verbose}{Toggle warning and messages.}
 }
 \value{
 A data frame containing the relevant indices.
@@ -64,13 +63,14 @@ and their interpretation.
 }
 \details{
 \subsection{Nested vs. Non-nested Models}{
+
 Model's "nesting" is an important concept of models comparison. Indeed, many
 tests only make sense when the models are \emph{"nested",} i.e., when their
-predictors are nested. This means that all the predictors of a model are
-contained within the predictors of a larger model (sometimes referred to as
-the encompassing model). For instance, \code{model1 (y ~ x1 + x2)} is
-"nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually, people have a list
-of nested models, for instance \code{m1 (y ~ 1)}, \code{m2 (y ~ x1)},
+predictors are nested. This means that all the \emph{fixed effects} predictors of
+a model are contained within the \emph{fixed effects} predictors of a larger model
+(sometimes referred to as the encompassing model). For instance,
+\code{model1 (y ~ x1 + x2)} is "nested" within \code{model2 (y ~ x1 + x2 + x3)}. Usually,
+people have a list of nested models, for instance \code{m1 (y ~ 1)}, \code{m2 (y ~ x1)},
 \code{m3 (y ~ x1 + x2)}, \code{m4 (y ~ x1 + x2 + x3)}, and it is conventional
 that they are "ordered" from the smallest to largest, but it is up to the
 user to reverse the order from largest to smallest. The test then shows
@@ -92,6 +92,7 @@ whether apples are significantly different from oranges!
 }
 
 \subsection{Estimator of the standard deviation}{
+
 The estimator is relevant when comparing regression models using
 \code{test_likelihoodratio()}. If \code{estimator = "OLS"}, then it uses the same
 method as \code{anova(..., test = "LRT")} implemented in base R, i.e., scaling
@@ -107,6 +108,7 @@ available for all model classes.
 }
 
 \subsection{REML versus ML estimator}{
+
 When \code{estimator = "ML"}, which is the default for linear mixed models (unless
 they share the same fixed effects), values from information criteria (AIC,
 AICc) are based on the ML-estimator, while the default behaviour of \code{AIC()}
@@ -251,17 +253,17 @@ if (require("lavaan")) {
     test_performance(m1, m2, m3)
   }
 }
+
 }
 \references{
 \itemize{
 \item Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
 non-nested hypotheses. Econometrica, 57, 307-333.
-
 \item Merkle, E. C., You, D., & Preacher, K. (2016). Testing non-nested
 structural equation models. Psychological Methods, 21, 151-163.
 }
 }
 \seealso{
-\code{\link[=compare_performance]{compare_performance()}} to compare
-the performance indices of many different models.
+\code{\link[=compare_performance]{compare_performance()}} to compare the performance indices of
+many different models.
 }

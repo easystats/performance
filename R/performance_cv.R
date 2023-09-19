@@ -39,7 +39,7 @@ performance_cv <- function(model,
                            data = NULL,
                            method = c("holdout", "k_fold", "loo"),
                            metrics = "all",
-                           prop = .30,
+                           prop = 0.30,
                            k = 5,
                            stack = TRUE,
                            verbose = TRUE,
@@ -56,10 +56,10 @@ performance_cv <- function(model,
     method <- match.arg(method, choices = c("holdout", "k_fold", "loo"))
   }
   if (!is.null(data) && inherits(model, "BFBayesFactor")) {
-    stop("Models of class 'BFBayesFactor' not yet supported.", call. = FALSE)
+    insight::format_error("Models of class 'BFBayesFactor' not yet supported.")
   }
   resp.name <- insight::find_response(model)
-  model_data <- insight::get_data(model, verbose = verbose)
+  model_data <- insight::get_data(model, verbose = FALSE)
   info <- insight::model_info(model, verbose = verbose)
   if (info$is_linear) {
     if (!is.null(data)) {
@@ -85,11 +85,11 @@ performance_cv <- function(model,
     } else {
       # Manual method for LOO, use this for non-linear and Bayesian models
       if (method == "loo") {
-        if (info$is_bayesian) {
-          message(insight::format_message(
+        if (info$is_bayesian && verbose) {
+          insight::format_alert(
             "Simple LOO cross-validation can be very slow for MCMC models.",
             "Try loo::loo() instead."
-          ))
+          )
         }
         stack <- TRUE
         k <- nrow(model_data)
@@ -113,7 +113,7 @@ performance_cv <- function(model,
       })
     }
   } else {
-    stop("Only linear models currently supported.", call. = FALSE)
+    insight::format_error("Only linear models currently supported.")
   }
   if (isTRUE(stack)) {
     test_resp <- unlist(test_resp)
@@ -142,7 +142,8 @@ performance_cv <- function(model,
   attr(out, "method") <- method
   attr(out, "k") <- if (method == "k_fold") k
   attr(out, "prop") <- if (method == "holdout") prop
-  if (length(missing_metrics <- setdiff(metrics, c("MSE", "RMSE", "R2")))) {
+  missing_metrics <- setdiff(metrics, c("MSE", "RMSE", "R2"))
+  if (length(missing_metrics)) {
     message(insight::colour_text(insight::format_message(
       paste0(
         "Metric",

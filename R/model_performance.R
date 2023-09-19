@@ -2,14 +2,13 @@
 #' @name model_performance
 #'
 #' @description See the documentation for your object's class:
-#' \itemize{
-#'   \item [Frequentist Regressions][model_performance.lm]
-#'   \item [Instrumental Variables Regressions][model_performance.ivreg]
-#'   \item [Mixed models][model_performance.merMod]
-#'   \item [Bayesian models][model_performance.stanreg]
-#'   \item [CFA / SEM lavaan models][model_performance.lavaan]
-#'   \item [Meta-analysis models][model_performance.rma]
-#' }
+#'
+#'  - [Frequentist Regressions][model_performance.lm]
+#'  - [Instrumental Variables Regressions][model_performance.ivreg]
+#'  - [Mixed models][model_performance.merMod]
+#'  - [Bayesian models][model_performance.stanreg]
+#'  - [CFA / SEM lavaan models][model_performance.lavaan]
+#'  - [Meta-analysis models][model_performance.rma]
 #'
 #' @seealso [`compare_performance()`][compare_performance] to compare performance of many different models.
 #'
@@ -56,6 +55,15 @@ print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
     colnames(formatted_table)[2] <- "Value"
   }
 
-  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = c("# Indices of model performance", "blue"), ...))
+  cat(
+    insight::export_table(
+      x = formatted_table,
+      digits = digits,
+      format = "text",
+      caption = c("# Indices of model performance", "blue"),
+      ...
+    )
+  )
+
   invisible(x)
 }

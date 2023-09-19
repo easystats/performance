@@ -25,20 +25,23 @@ Overdispersion occurs when the observed variance is higher than the
 variance of a theoretical model. For Poisson models, variance increases
 with the mean and, therefore, variance usually (roughly) equals the mean
 value. If the variance is much higher, the data are "overdispersed".
+}
+\section{Interpretation of the Dispersion Ratio}{
 
-\subsection{Interpretation of the Dispersion Ratio}{
 If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
 negative binomial model or similar might fit better to the data. A p-value <
 .05 indicates overdispersion.
 }
 
-\subsection{Overdispersion in Poisson Models}{
+\section{Overdispersion in Poisson Models}{
+
 For Poisson models, the overdispersion test is based on the code from
-\cite{Gelman and Hill (2007), page 115}.
+\emph{Gelman and Hill (2007), page 115}.
 }
 
-\subsection{Overdispersion in Mixed Models}{
+\section{Overdispersion in Mixed Models}{
+
 For \code{merMod}- and \code{glmmTMB}-objects, \code{check_overdispersion()}
 is based on the code in the
 \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
@@ -48,25 +51,28 @@ parameter, and is probably inaccurate for zero-inflated mixed models (fitted
 with \code{glmmTMB}).
 }
 
-\subsection{How to fix Overdispersion}{
+\section{How to fix Overdispersion}{
+
 Overdispersion can be fixed by either modeling the dispersion parameter, or
 by choosing a different distributional family (like Quasi-Poisson, or
-negative binomial, see \cite{Gelman and Hill (2007), pages 115-116}).
+negative binomial, see \emph{Gelman and Hill (2007), pages 115-116}).
 }
-}
-\examples{
-if (require("glmmTMB")) {
-  data(Salamanders)
-  m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-  check_overdispersion(m)
 
-  m <- glmmTMB(
-    count ~ mined + spp + (1 | site),
-    family = poisson,
-    data = Salamanders
-  )
-  check_overdispersion(m)
-}
+\examples{
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+library(glmmTMB)
+data(Salamanders)
+m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_overdispersion(m)
+
+m <- glmmTMB(
+  count ~ mined + spp + (1 | site),
+  family = poisson,
+  data = Salamanders
+)
+check_overdispersion(m)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
@@ -77,3 +83,17 @@ multilevel/hierarchical models. Cambridge; New York: Cambridge University
 Press.
 }
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_outliers}()},
+\code{\link{check_predictions}()},
+\code{\link{check_singularity}()},
+\code{\link{check_zeroinflation}()}
+}
+\concept{functions to check model assumptions and and assess model quality}

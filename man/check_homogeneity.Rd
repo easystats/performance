@@ -31,7 +31,8 @@ Check model for homogeneity of variances between groups described
 by independent variables in a model.
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 model <<- lm(len ~ supp + dose, data = ToothGrowth)
@@ -43,3 +44,17 @@ if (require("see")) {
   plot(result)
 }
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_model}()},
+\code{\link{check_outliers}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
+\code{\link{check_singularity}()},
+\code{\link{check_zeroinflation}()}
+}
+\concept{functions to check model assumptions and and assess model quality}

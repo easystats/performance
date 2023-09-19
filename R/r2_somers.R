@@ -8,8 +8,8 @@
 #' @return A named vector with the R2 value.
 #'
 #' @examples
-#' \dontrun{
-#' if (require("correlation")) {
+#' \donttest{
+#' if (require("correlation") && require("Hmisc")) {
 #'   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #'   r2_somers(model)
 #' }
@@ -19,12 +19,12 @@
 #'   ordinal variables. American Sociological Review. 27 (6).
 #' @export
 r2_somers <- function(model) {
+  insight::check_if_installed("correlation")
+
   info <- insight::model_info(model, verbose = FALSE)
   if (!info$is_binomial) {
-    stop("'r2_somers()' only accepts logistic regression models.", call. = FALSE)
+    insight::format_error("`r2_somers()` only accepts logistic regression models.")
   }
-
-  insight::check_if_installed("correlation")
 
   input <- data.frame(
     y = .recode_to_zero(insight::get_response(model, verbose = FALSE)),

@@ -11,11 +11,15 @@
 #'
 #' @return A list with four elements, the ELPD, LOOIC and their standard errors.
 #'
-#' @examples
-#' if (require("rstanarm")) {
-#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
-#'   looic(model)
-#' }
+#' @examplesIf require("rstanarm")
+#' model <- suppressWarnings(rstanarm::stan_glm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0
+#' ))
+#' looic(model)
 #' @export
 looic <- function(model, verbose = TRUE) {
   insight::check_if_installed("loo")
@@ -24,7 +28,9 @@ looic <- function(model, verbose = TRUE) {
 
   if (algorithm$algorithm != "sampling") {
     if (verbose) {
-      warning(insight::format_message("`looic()` only available for models fit using the 'sampling' algorithm."), call. = FALSE)
+      insight::format_warning(
+        "`looic()` only available for models fit using the 'sampling' algorithm."
+      )
     }
     return(NA)
   }
@@ -82,11 +88,12 @@ as.data.frame.looic <- function(x, row.names = NULL, ...) {
 print.looic <- function(x, digits = 2, ...) {
   insight::print_color("# LOOIC and ELPD with Standard Error\n\n", "blue")
 
-  out <- paste0(c(
-    sprintf("  LOOIC: %.*f [%.*f]", digits, x$LOOIC, digits, x$LOOIC_SE),
-    sprintf("   ELPD: %.*f [%.*f]", digits, x$ELPD, digits, x$ELPD_SE)
-  ),
-  collapse = "\n"
+  out <- paste0(
+    c(
+      sprintf("  LOOIC: %.*f [%.*f]", digits, x$LOOIC, digits, x$LOOIC_SE),
+      sprintf("   ELPD: %.*f [%.*f]", digits, x$ELPD, digits, x$ELPD_SE)
+    ),
+    collapse = "\n"
   )
 
   cat(out)

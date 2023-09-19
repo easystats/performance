@@ -6,28 +6,49 @@ print.r2_generic <- function(x, digits = 3, ...) {
   }
 
   if (all(c("R2_adjusted", "R2_within_adjusted") %in% names(x))) {
-    out <- paste0(c(
-      sprintf("              R2: %.*f", digits, x$R2),
-      sprintf("         adj. R2: %.*f", digits, x$R2_adjusted),
-      sprintf("       within R2: %.*f", digits, x$R2_within),
-      sprintf("  adj. within R2: %.*f", digits, x$R2_within_adjusted)
-    ),
-    collapse = "\n"
+    # print regular R2
+    out <- c(
+      sprintf("              R2: %.*f", digits, x$R2[1]),
+      sprintf("         adj. R2: %.*f", digits, x$R2_adjusted[1]),
+      sprintf("       within R2: %.*f", digits, x$R2_within[1]),
+      sprintf("  adj. within R2: %.*f", digits, x$R2_within_adjusted[1])
     )
   } else if ("R2_adjusted" %in% names(x)) {
-    out <- paste0(c(
-      sprintf("       R2: %.*f", digits, x$R2),
-      sprintf("  adj. R2: %.*f", digits, x$R2_adjusted)
-    ),
-    collapse = "\n"
+    out <- c(
+      sprintf("       R2: %.*f", digits, x$R2[1]),
+      sprintf("  adj. R2: %.*f", digits, x$R2_adjusted[1])
     )
   } else {
-    out <- sprintf("  %s: %.*f", names(x$R2), digits, x$R2)
+    out <- sprintf("  %s: %.*f", names(x$R2[1]), digits, x$R2[1])
   }
+
+  # add CI?
+  if (length(x$R2) == 3) {
+    out[1] <- .add_r2_ci_to_print(out[1], x$R2[2], x$R2[3], digits = digits)
+  }
+  if (!is.null(x$R2_adjusted) && length(x$R2_adjusted) == 3 && length(out) > 1) {
+    out[2] <- .add_r2_ci_to_print(out[2], x$R2_adjusted[2], x$R2_adjusted[3], digits = digits)
+  }
+  if (!is.null(x$R2_within) && length(x$R2_within) == 3 && length(out) > 2) {
+    out[3] <- .add_r2_ci_to_print(out[3], x$R2_within[2], x$R2_within[3], digits = digits)
+  }
+  if (!is.null(x$R2_within_adjusted) && length(x$R2_within_adjusted) == 3 && length(out) > 3) {
+    out[4] <- .add_r2_ci_to_print(out[4], x$R2_within_adjusted[2], x$R2_within_adjusted[3], digits = digits)
+  }
+
+  # separate lines for multiple R2
+  out <- paste0(out, collapse = "\n")
 
   cat(out)
   cat("\n")
   invisible(x)
+}
+
+.add_r2_ci_to_print <- function(out, ci_low, ci_high, digits) {
+  paste0(
+    out,
+    sprintf(" %s", insight::format_ci(ci_low, ci_high, digits = digits, ci = NULL))
+  )
 }
 
 
@@ -55,38 +76,16 @@ print.r2_mlm <- function(x, digits = 3, ...) {
 
   for (i in names(x)) {
     insight::print_color(sprintf("## %s\n", i), "cyan")
-    out <- paste0(c(
-      sprintf("        R2: %.*f", digits, x[[i]]$R2),
-      sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
-    ),
-    collapse = "\n"
+    out <- paste0(
+      c(
+        sprintf("        R2: %.*f", digits, x[[i]]$R2),
+        sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
+      ),
+      collapse = "\n"
     )
     cat(out)
     cat("\n\n")
   }
-  invisible(x)
-}
-
-
-
-#' @export
-print.r2_nakagawa <- function(x, digits = 3, ...) {
-  model_type <- attr(x, "model_type")
-  if (is.null(model_type)) {
-    insight::print_color("# R2 for Mixed Models\n\n", "blue")
-  } else {
-    insight::print_color("# R2 for %s Regression\n\n", "blue")
-  }
-
-  out <- paste0(c(
-    sprintf("  Conditional R2: %.*f", digits, x$R2_conditional),
-    sprintf("     Marginal R2: %.*f", digits, x$R2_marginal)
-  ),
-  collapse = "\n"
-  )
-
-  cat(out)
-  cat("\n")
   invisible(x)
 }
 

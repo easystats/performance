@@ -11,12 +11,16 @@
 #' @return The p-value of the test statistics. A p-value < 0.05 indicates a
 #'   non-constant variance (heteroskedasticity).
 #'
-#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html) implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+#' @note There is also a [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 #'
 #' @details This test of the hypothesis of (non-)constant error is also called
 #'   *Breusch-Pagan test* (\cite{1979}).
 #'
-#' @references Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity and random coefficient variation. Econometrica 47, 1287-1294.
+#' @references Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity
+#' and random coefficient variation. Econometrica 47, 1287-1294.
+#'
+#' @family functions to check model assumptions and and assess model quality
 #'
 #' @examples
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -42,6 +46,9 @@ check_heteroskedasticity <- check_heteroscedasticity
 
 #' @export
 check_heteroscedasticity.default <- function(x, ...) {
+  # check for valid input
+  .is_model_valid(x)
+
   # only for linear models
   info <- insight::model_info(x)
   if (!info$is_linear) {
@@ -49,7 +56,7 @@ check_heteroscedasticity.default <- function(x, ...) {
     if (info$is_count) {
       paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
     }
-    message(insight::format_message(msg))
+    insight::format_alert(msg)
     return(NULL)
   }
 
@@ -66,7 +73,7 @@ check_heteroscedasticity.default <- function(x, ...) {
   p.val <- stats::pchisq(Chisq, df = 1, lower.tail = FALSE)
 
   attr(p.val, "data") <- x
-  attr(p.val, "object_name") <- deparse(substitute(x), width.cutoff = 500)
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
 
   p.val
@@ -79,9 +86,21 @@ check_heteroscedasticity.default <- function(x, ...) {
 #' @export
 print.check_heteroscedasticity <- function(x, ...) {
   if (x < 0.05) {
-    insight::print_color(sprintf("Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n", insight::format_p(x)), "red")
+    insight::print_color(
+      sprintf(
+        "Warning: Heteroscedasticity (non-constant error variance) detected (%s).\n",
+        insight::format_p(x)
+      ),
+      "red"
+    )
   } else {
-    insight::print_color(sprintf("OK: Error variance appears to be homoscedastic (%s).\n", insight::format_p(x)), "green")
+    insight::print_color(
+      sprintf(
+        "OK: Error variance appears to be homoscedastic (%s).\n",
+        insight::format_p(x)
+      ),
+      "green"
+    )
   }
   invisible(x)
 }

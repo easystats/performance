@@ -25,31 +25,30 @@ Check mixed models for boundary fits.
 If a model is "singular", this means that some dimensions of the
 variance-covariance matrix have been estimated as exactly zero. This
 often occurs for mixed models with complex random effects structures.
-\cr \cr
-\dQuote{While singular models are statistically well defined (it is
-theoretically sensible for the true maximum likelihood estimate to
-correspond to a singular fit), there are real concerns that (1) singular
-fits correspond to overfitted models that may have poor power; (2) chances
-of numerical problems and mis-convergence are higher for singular models
-(e.g. it may be computationally difficult to compute profile confidence
-intervals for such models); (3) standard inferential procedures such as
-Wald statistics and likelihood ratio tests may be inappropriate.}
-(\cite{lme4 Reference Manual})
-\cr \cr
+
+"While singular models are statistically well defined (it is theoretically
+sensible for the true maximum likelihood estimate to correspond to a singular
+fit), there are real concerns that (1) singular fits correspond to overfitted
+models that may have poor power; (2) chances of numerical problems and
+mis-convergence are higher for singular models (e.g. it may be computationally
+difficult to compute profile confidence intervals for such models); (3)
+standard inferential procedures such as Wald statistics and likelihood ratio
+tests may be inappropriate." (\emph{lme4 Reference Manual})
+
 There is no gold-standard about how to deal with singularity and which
 random-effects specification to choose. Beside using fully Bayesian methods
 (with informative priors), proposals in a frequentist framework are:
 \itemize{
-\item avoid fitting overly complex models, such that the
-variance-covariance matrices can be estimated precisely enough
-(\cite{Matuschek et al. 2017})
+\item avoid fitting overly complex models, such that the variance-covariance
+matrices can be estimated precisely enough (\emph{Matuschek et al. 2017})
 \item use some form of model selection to choose a model that balances
-predictive accuracy and overfitting/type I error (\cite{Bates et al. 2015},
-\cite{Matuschek et al. 2017})
-\item \dQuote{keep it maximal}, i.e. fit the most complex model consistent
-with the experimental design, removing only terms required to allow a
-non-singular fit (\cite{Barr et al. 2013})
+predictive accuracy and overfitting/type I error (\emph{Bates et al. 2015},
+\emph{Matuschek et al. 2017})
+\item "keep it maximal", i.e. fit the most complex model consistent with the
+experimental design, removing only terms required to allow a non-singular
+fit (\emph{Barr et al. 2013})
 }
+
 Note the different meaning between singularity and convergence: singularity
 indicates an issue with the "true" best estimate, i.e. whether the maximum
 likelihood estimation for the variance-covariance matrix of the random
@@ -58,38 +57,50 @@ question of whether we can assume that the numerical optimization has
 worked correctly or not.
 }
 \examples{
-if (require("lme4")) {
-  data(sleepstudy)
-  set.seed(123)
-  sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
-  sleepstudy$mysubgrp <- NA
-  for (i in 1:5) {
-    filter_group <- sleepstudy$mygrp == i
-    sleepstudy$mysubgrp[filter_group] <-
-      sample(1:30, size = sum(filter_group), replace = TRUE)
-  }
-
-  model <- lmer(
-    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
-    data = sleepstudy
-  )
-
-  check_singularity(model)
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(lme4)
+data(sleepstudy)
+set.seed(123)
+sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mysubgrp <- NA
+for (i in 1:5) {
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
 }
+
+model <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
+
+check_singularity(model)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
 \item Bates D, Kliegl R, Vasishth S, Baayen H. Parsimonious Mixed Models.
 arXiv:1506.04967, June 2015.
-
 \item Barr DJ, Levy R, Scheepers C, Tily HJ. Random effects structure for
 confirmatory hypothesis testing: Keep it maximal. Journal of Memory and
 Language, 68(3):255-278, April 2013.
-
 \item Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. Balancing type
 I error and power in linear mixed models. Journal of Memory and Language,
 94:305-315, 2017.
-
 \item lme4 Reference Manual, \url{https://cran.r-project.org/package=lme4}
 }
 }
+\seealso{
+Other functions to check model assumptions and and assess model quality: 
+\code{\link{check_autocorrelation}()},
+\code{\link{check_collinearity}()},
+\code{\link{check_convergence}()},
+\code{\link{check_heteroscedasticity}()},
+\code{\link{check_homogeneity}()},
+\code{\link{check_model}()},
+\code{\link{check_outliers}()},
+\code{\link{check_overdispersion}()},
+\code{\link{check_predictions}()},
+\code{\link{check_zeroinflation}()}
+}
+\concept{functions to check model assumptions and and assess model quality}

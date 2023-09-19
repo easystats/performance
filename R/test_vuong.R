@@ -1,17 +1,17 @@
 #' @rdname test_performance
 #' @export
-test_vuong <- function(...) {
+test_vuong <- function(..., verbose = TRUE) {
   UseMethod("test_vuong")
 }
 
 
 #' @export
-test_vuong.default <- function(..., reference = 1) {
+test_vuong.default <- function(..., reference = 1, verbose = TRUE) {
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # Sanity checks (will throw error if non-valid objects)
-  .test_performance_checks(objects)
+  objects <- .test_performance_checks(objects, verbose = verbose)
 
   # ensure proper object names
   objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
@@ -20,7 +20,7 @@ test_vuong.default <- function(..., reference = 1) {
   if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
     test_vuong(objects, reference = reference)
   } else {
-    stop("The models cannot be compared for some reason :/", call. = FALSE)
+    insight::format_error("The models cannot be compared for some reason :/")
   }
 }
 
@@ -165,7 +165,7 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   # Null distribution and test stat depends on nested
   if (nested) {
     teststat <- 2 * lr
-    p_LRTA <- CompQuadForm::imhof(teststat, -lamstar)[[1]]
+    p_LRTA <- suppressWarnings(CompQuadForm::imhof(teststat, -lamstar)[[1]])
     p_LRTB <- NA
   } else {
     teststat <- (1 / sqrt(n)) * lr / sqrt(omega_hat_2)
