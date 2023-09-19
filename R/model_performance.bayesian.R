@@ -41,7 +41,7 @@
 #'   - **PCP**: percentage of correct predictions, see [performance_pcp()].
 #'
 #' @examplesIf require("rstanarm") && require("rstantools") && require("BayesFactor")
-#' \dontrun{
+#' \donttest{
 #' model <- suppressWarnings(rstanarm::stan_glm(
 #'   mpg ~ wt + cyl,
 #'   data = mtcars,

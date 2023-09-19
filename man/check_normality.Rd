@@ -51,7 +51,7 @@ check_normality(m)
 x <- check_normality(m)
 plot(x)
 
-\dontrun{
+\donttest{
 # QQ-plot
 plot(check_normality(m), type = "qq")
 

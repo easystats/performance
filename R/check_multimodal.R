@@ -11,7 +11,7 @@
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @examplesIf require("multimode") && require("mclust")
-#' \dontrun{
+#' \donttest{
 #' # Univariate
 #' x <- rnorm(1000)
 #' check_multimodal(x)

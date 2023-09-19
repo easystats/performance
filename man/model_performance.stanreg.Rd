@@ -61,7 +61,7 @@ values mean better fit. See \code{?loo::waic}.
 }
 \examples{
 \dontshow{if (require("rstanarm") && require("rstantools") && require("BayesFactor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontrun{
+\donttest{
 model <- suppressWarnings(rstanarm::stan_glm(
   mpg ~ wt + cyl,
   data = mtcars,

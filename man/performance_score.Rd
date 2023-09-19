@@ -46,7 +46,7 @@ treatment <- gl(3, 3)
 model <- glm(counts ~ outcome + treatment, family = poisson())
 
 performance_score(model)
-\dontrun{
+\donttest{
 data(Salamanders, package = "glmmTMB")
 model <- glmmTMB::glmmTMB(
   count ~ spp + mined + (1 | site),

@@ -20,7 +20,7 @@ multimodal). A better method might be needed here.
 }
 \examples{
 \dontshow{if (require("multimode") && require("mclust")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-\dontrun{
+\donttest{
 # Univariate
 x <- rnorm(1000)
 check_multimodal(x)

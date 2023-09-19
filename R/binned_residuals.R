@@ -49,7 +49,7 @@
 #' # look at the data frame
 #' as.data.frame(result)
 #'
-#' \dontrun{
+#' \donttest{
 #' # plot
 #' if (require("see")) {
 #'   plot(result, show_dots = TRUE)

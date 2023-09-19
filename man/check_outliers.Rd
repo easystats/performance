@@ -290,7 +290,7 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
 
-\dontrun{
+\donttest{
 # You can also run all the methods
 check_outliers(data, method = "all")
 

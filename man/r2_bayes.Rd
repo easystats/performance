@@ -104,7 +104,7 @@ if (require("BayesFactor")) {
   r2_bayes(model)
 }
 
-\dontrun{
+\donttest{
 if (require("brms")) {
   model <- suppressWarnings(brms::brm(
     mpg ~ wt + cyl,
