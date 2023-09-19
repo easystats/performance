@@ -2,7 +2,7 @@
 #'
 #' `check_heterogeneity_bias()` checks if model predictors or variables may
 #' cause a heterogeneity bias, i.e. if variables have a within- and/or
-#' between-effect.
+#' between-effect (_Bell and Jones, 2015_).
 #'
 #' @param x A data frame or a mixed model object.
 #' @param select Character vector (or formula) with names of variables to select
@@ -15,7 +15,12 @@
 #' @seealso
 #' For further details, read the vignette
 #' <https://easystats.github.io/parameters/articles/demean.html> and also
-#' see documentation for `?datawizard::demean`.
+#' see documentation for [`datawizard::demean()`].
+#'
+#' @references
+#' - Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
+#'   Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
+#'   Research and Methods, 3(1), 133–153.
 #'
 #' @examples
 #' data(iris)

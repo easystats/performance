@@ -7,23 +7,27 @@
 \alias{check_posterior_predictions}
 \title{Posterior predictive checks}
 \usage{
-check_predictions(object, iterations = 50, check_range = FALSE, ...)
+check_predictions(object, ...)
 
 \method{check_predictions}{default}(
   object,
   iterations = 50,
   check_range = FALSE,
   re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
   verbose = TRUE,
   ...
 )
 
-posterior_predictive_check(object, iterations = 50, check_range = FALSE, ...)
+posterior_predictive_check(object, ...)
 
-check_posterior_predictions(object, iterations = 50, check_range = FALSE, ...)
+check_posterior_predictions(object, ...)
 }
 \arguments{
 \item{object}{A statistical model.}
+
+\item{...}{Passed down to \code{simulate()}.}
 
 \item{iterations}{The number of draws to simulate/bootstrap.}
 
@@ -34,12 +38,21 @@ the variation in the original data is captured by the model or not
 (\emph{Gelman et al. 2020, pp.163}). The minimum and maximum values of \code{y} should
 be inside the range of the related minimum and maximum values of \code{yrep}.}
 
-\item{...}{Passed down to \code{simulate()}.}
-
 \item{re_formula}{Formula containing group-level effects (random effects) to
 be considered in the simulated data. If \code{NULL} (default), condition
 on all random effects. If \code{NA} or \code{~0}, condition on no random
 effects. See \code{simulate()} in \strong{lme4}.}
+
+\item{bandwidth}{A character string indicating the smoothing bandwidth to
+be used. Unlike \code{stats::density()}, which used \code{"nrd0"} as default, the
+default used here is \code{"nrd"} (which seems to give more plausible results
+for non-Gaussian models). When problems with plotting occur, try to change
+to a different value.}
+
+\item{type}{Plot type for the posterior predictive checks plot. Can be \code{"density"},
+\code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the \verb{discrete_*}
+options are appropriate for models with discrete - binary, integer or ordinal
+etc. - outcomes).}
 
 \item{verbose}{Toggle warnings.}
 }
@@ -73,11 +86,22 @@ package that imports \strong{bayesplot} such as \strong{rstanarm} or \strong{brm
 is loaded, \code{pp_check()} is also available as an alias for \code{check_predictions()}.
 }
 \examples{
-library(performance)
+\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# linear model
 model <- lm(mpg ~ disp, data = mtcars)
-if (require("see")) {
-  check_predictions(model)
-}
+check_predictions(model)
+
+# discrete/integer outcome
+set.seed(99)
+d <- iris
+d$skewed <- rpois(150, 1)
+model <- glm(
+  skewed ~ Species + Petal.Length + Petal.Width,
+  family = poisson(),
+  data = d
+)
+check_predictions(model, type = "discrete_both")
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

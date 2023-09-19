@@ -17,9 +17,11 @@ check_model(x, ...)
   dot_alpha = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
-  detrend = FALSE,
+  detrend = TRUE,
   show_dots = NULL,
-  verbose = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = FALSE,
   ...
 )
 }
@@ -53,7 +55,8 @@ for dots, and third color for outliers or extreme values.}
 \item{theme}{String, indicating the name of the plot-theme. Must be in the
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
-\item{detrend}{Should QQ/PP plots be detrended?}
+\item{detrend}{Logical. Should Q-Q/P-P plots be detrended? Defaults to
+\code{TRUE}.}
 
 \item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
 to \code{FALSE} for models with many observations, if generating the plot is too
@@ -61,7 +64,18 @@ time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_mo
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
 
-\item{verbose}{Toggle off warnings.}
+\item{bandwidth}{A character string indicating the smoothing bandwidth to
+be used. Unlike \code{stats::density()}, which used \code{"nrd0"} as default, the
+default used here is \code{"nrd"} (which seems to give more plausible results
+for non-Gaussian models). When problems with plotting occur, try to change
+to a different value.}
+
+\item{type}{Plot type for the posterior predictive checks plot. Can be \code{"density"},
+\code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the \verb{discrete_*}
+options are appropriate for models with discrete - binary, integer or ordinal
+etc. - outcomes).}
+
+\item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 }
 \value{
 The data frame that is used for plotting.
@@ -77,6 +91,8 @@ models will be "converted" to their frequentist counterpart, using
 \href{https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html}{\code{bayestestR::bayesian_as_frequentist}}.
 A more advanced model-check for Bayesian models will be implemented at a
 later stage.
+
+See also the related \href{https://easystats.github.io/performance/articles/check_model.html}{vignette}.
 }
 \note{
 This function just prepares the data for plotting. To create the plots,
@@ -190,20 +206,16 @@ skipped, which also increases performance.
 }
 
 \examples{
-\dontrun{
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_model(m)
 
-if (require("lme4")) {
-  m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-  check_model(m, panel = FALSE)
+data(sleepstudy, package = "lme4")
+m <- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+check_model(m, panel = FALSE)
 }
-
-if (require("rstanarm")) {
-  m <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200)
-  check_model(m)
-}
-}
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other functions to check model assumptions and and assess model quality: 

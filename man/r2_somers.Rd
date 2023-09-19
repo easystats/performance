@@ -16,7 +16,7 @@ A named vector with the R2 value.
 Calculates the Somers' Dxy rank correlation for logistic regression models.
 }
 \examples{
-\dontrun{
+\donttest{
 if (require("correlation") && require("Hmisc")) {
   model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
   r2_somers(model)

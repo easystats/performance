@@ -299,7 +299,7 @@
 #' group_iris <- datawizard::data_group(iris, "Species")
 #' check_outliers(group_iris)
 #'
-#' \dontrun{
+#' \donttest{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all")
 #'
@@ -1122,20 +1122,23 @@ check_outliers.data.frame <- function(x,
       ID.names = ID.names
     ))
 
-    count.table <- datawizard::data_filter(
-      out$data_ics, "Outlier_ICS > 0.5"
-    )
+    # make sure we have valid results
+    if (!is.null(out)) {
+      count.table <- datawizard::data_filter(
+        out$data_ics, "Outlier_ICS > 0.5"
+      )
 
-    count.table <- datawizard::data_remove(
-      count.table, "ICS",
-      regex = TRUE, as_data_frame = TRUE
-    )
+      count.table <- datawizard::data_remove(
+        count.table, "ICS",
+        regex = TRUE, as_data_frame = TRUE
+      )
 
-    if (nrow(count.table) >= 1) {
-      count.table$n_ICS <- "(Multivariate)"
+      if (nrow(count.table) >= 1) {
+        count.table$n_ICS <- "(Multivariate)"
+      }
+
+      outlier_count$ics <- count.table
     }
-
-    outlier_count$ics <- count.table
   }
 
   # OPTICS
@@ -1787,10 +1790,16 @@ check_outliers.metabin <- check_outliers.metagen
     } else {
       insight::print_color(sprintf("`check_outliers()` does not support models of class `%s`.\n", class(x)[1]), "red")
     }
+    return(NULL)
   }
 
   # Get results
-  cutoff <- outliers@ics.dist.cutoff
+  cutoff <- .safe(outliers@ics.dist.cutoff)
+  # sanity check
+  if (is.null(cutoff)) {
+    insight::print_color("Could not detect cut-off for outliers.\n", "red")
+    return(NULL)
+  }
   out$Distance_ICS <- outliers@ics.distances
   out$Outlier_ICS <- as.numeric(out$Distance_ICS > cutoff)
 

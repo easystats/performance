@@ -70,7 +70,7 @@
 #' _Model selection and multimodel inference: A practical information-theoretic approach_ (2nd ed.).
 #' Springer-Verlag. \doi{10.1007/b97636}
 #'
-#' @examples
+#' @examplesIf require("lme4")
 #' data(iris)
 #' lm1 <- lm(Sepal.Length ~ Species, data = iris)
 #' lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
@@ -78,12 +78,10 @@
 #' compare_performance(lm1, lm2, lm3)
 #' compare_performance(lm1, lm2, lm3, rank = TRUE)
 #'
-#' if (require("lme4")) {
-#'   m1 <- lm(mpg ~ wt + cyl, data = mtcars)
-#'   m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
-#'   m3 <- lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
-#'   compare_performance(m1, m2, m3)
-#' }
+#' m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+#' m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+#' m3 <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
+#' compare_performance(m1, m2, m3)
 #' @inheritParams model_performance.lm
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {

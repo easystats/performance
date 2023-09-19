@@ -27,14 +27,16 @@
 #'   for dots, and third color for outliers or extreme values.
 #' @param theme String, indicating the name of the plot-theme. Must be in the
 #'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
-#' @param detrend Should QQ/PP plots be detrended?
+#' @param detrend Logical. Should Q-Q/P-P plots be detrended? Defaults to
+#'   `TRUE`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #'   to `FALSE` for models with many observations, if generating the plot is too
 #'   time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
 #'   tries to guess whether performance will be poor due to a very large model
 #'   and thus automatically shows or hides dots.
-#' @param verbose Toggle off warnings.
+#' @param verbose If `FALSE` (default), suppress most warning messages.
 #' @param ... Currently not used.
+#' @inheritParams check_predictions
 #'
 #' @return The data frame that is used for plotting.
 #'
@@ -45,10 +47,12 @@
 #'   `check_normality()` etc.) to get informative messages and warnings.
 #'
 #' @details For Bayesian models from packages **rstanarm** or **brms**,
-#'   models will be "converted" to their frequentist counterpart, using
-#'   [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
-#'   A more advanced model-check for Bayesian models will be implemented at a
-#'   later stage.
+#' models will be "converted" to their frequentist counterpart, using
+#' [`bayestestR::bayesian_as_frequentist`](https://easystats.github.io/bayestestR/reference/convert_bayesian_as_frequentist.html).
+#' A more advanced model-check for Bayesian models will be implemented at a
+#' later stage.
+#'
+#' See also the related [vignette](https://easystats.github.io/performance/articles/check_model.html).
 #'
 #' @section Posterior Predictive Checks:
 #' Posterior predictive checks can be used to look for systematic discrepancies
@@ -136,20 +140,14 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf require("lme4")
+#' \donttest{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_model(m)
 #'
-#' if (require("lme4")) {
-#'   m <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-#'   check_model(m, panel = FALSE)
-#' }
-#'
-#' if (require("rstanarm")) {
-#'   m <- stan_glm(mpg ~ wt + gear, data = mtcars, chains = 2, iter = 200)
-#'   check_model(m)
-#' }
+#' data(sleepstudy, package = "lme4")
+#' m <- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#' check_model(m, panel = FALSE)
 #' }
 #' @export
 check_model <- function(x, ...) {
@@ -171,9 +169,11 @@ check_model.default <- function(x,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                detrend = FALSE,
+                                detrend = TRUE,
                                 show_dots = NULL,
-                                verbose = TRUE,
+                                bandwidth = "nrd",
+                                type = "density",
+                                verbose = FALSE,
                                 ...) {
   # check model formula
   if (verbose) {
@@ -201,6 +201,12 @@ check_model.default <- function(x,
     insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
   }
 
+  # try to find sensible default for "type" argument
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  if (missing(type) && suggest_dots) {
+    type <- "discrete_interval"
+  }
+
   # set default for show_dots, based on "model size"
   if (is.null(show_dots)) {
     n <- .safe(insight::n_obs(x))
@@ -219,6 +225,8 @@ check_model.default <- function(x,
   attr(ca, "theme") <- theme
   attr(ca, "model_info") <- minfo
   attr(ca, "overdisp_type") <- list(...)$plot_type
+  attr(ca, "bandwidth") <- bandwidth
+  attr(ca, "type") <- type
   ca
 }
 
@@ -256,6 +264,8 @@ check_model.stanreg <- function(x,
                                 theme = "see::theme_lucid",
                                 detrend = FALSE,
                                 show_dots = NULL,
+                                bandwidth = "nrd",
+                                type = "density",
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
@@ -269,6 +279,8 @@ check_model.stanreg <- function(x,
     theme = theme,
     detrend = detrend,
     show_dots = show_dots,
+    bandwidth = bandwidth,
+    type = type,
     verbose = verbose,
     ...
   )
@@ -291,6 +303,8 @@ check_model.model_fit <- function(x,
                                   theme = "see::theme_lucid",
                                   detrend = FALSE,
                                   show_dots = NULL,
+                                  bandwidth = "nrd",
+                                  type = "density",
                                   verbose = TRUE,
                                   ...) {
   check_model(
@@ -305,6 +319,8 @@ check_model.model_fit <- function(x,
     theme = theme,
     detrend = detrend,
     show_dots = show_dots,
+    bandwidth = bandwidth,
+    type = type,
     verbose = verbose,
     ...
   )

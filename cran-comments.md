@@ -1,1 +1,1 @@
-This update fixes reverse-dependency issues from the *parameters* package. We checked all reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package and saw no new problems.
+This release fixes CRAN check errors. We checked all reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package and saw no new problems.

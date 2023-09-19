@@ -49,11 +49,13 @@
 #' # look at the data frame
 #' as.data.frame(result)
 #'
-#' \dontrun{
+#' \donttest{
 #' # plot
 #' if (require("see")) {
-#'   plot(result)
-#' }}
+#'   plot(result, show_dots = TRUE)
+#' }
+#' }
+#'
 #' @export
 binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   fv <- stats::fitted(model)

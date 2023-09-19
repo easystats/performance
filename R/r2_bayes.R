@@ -33,16 +33,23 @@
 #' @examples
 #' library(performance)
 #' if (require("rstanarm") && require("rstantools")) {
-#'   model <- stan_glm(mpg ~ wt + cyl, data = mtcars, chains = 1, iter = 500, refresh = 0)
+#'   model <- suppressWarnings(stan_glm(
+#'     mpg ~ wt + cyl,
+#'     data = mtcars,
+#'     chains = 1,
+#'     iter = 500,
+#'     refresh = 0,
+#'     show_messages = FALSE
+#'   ))
 #'   r2_bayes(model)
 #'
-#'   model <- stan_lmer(
+#'   model <- suppressWarnings(stan_lmer(
 #'     Petal.Length ~ Petal.Width + (1 | Species),
 #'     data = iris,
 #'     chains = 1,
 #'     iter = 500,
 #'     refresh = 0
-#'   )
+#'   ))
 #'   r2_bayes(model)
 #' }
 #'
@@ -66,12 +73,22 @@
 #'   r2_bayes(model)
 #' }
 #'
-#' \dontrun{
+#' \donttest{
 #' if (require("brms")) {
-#'   model <- brms::brm(mpg ~ wt + cyl, data = mtcars)
+#'   model <- suppressWarnings(brms::brm(
+#'     mpg ~ wt + cyl,
+#'     data = mtcars,
+#'     silent = 2,
+#'     refresh = 0
+#'   ))
 #'   r2_bayes(model)
 #'
-#'   model <- brms::brm(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+#'   model <- suppressWarnings(brms::brm(
+#'     Petal.Length ~ Petal.Width + (1 | Species),
+#'     data = iris,
+#'     silent = 2,
+#'     refresh = 0
+#'   ))
 #'   r2_bayes(model)
 #' }
 #' }
@@ -424,10 +441,10 @@ as.data.frame.r2_bayes <- function(x, ...) {
 residuals.BFBayesFactor <- function(object, ...) {
   everything_we_need <- .get_bfbf_predictions(object, verbose = FALSE)
 
-  everything_we_need[["y"]] - apply(everything_we_need[["y_pred"]], 2, mean)
+  everything_we_need[["y"]] - colMeans(everything_we_need[["y_pred"]])
 }
 
 #' @export
 fitted.BFBayesFactor <- function(object, ...) {
-  apply(.get_bfbf_predictions(object, verbose = FALSE)[["y_pred"]], 2, mean)
+  colMeans(.get_bfbf_predictions(object, verbose = FALSE)[["y_pred"]])
 }

@@ -20,15 +20,22 @@ argument will be ignored.}
 \description{
 \code{check_heterogeneity_bias()} checks if model predictors or variables may
 cause a heterogeneity bias, i.e. if variables have a within- and/or
-between-effect.
+between-effect (\emph{Bell and Jones, 2015}).
 }
 \examples{
 data(iris)
 iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
 }
+\references{
+\itemize{
+\item Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
+Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
+Research and Methods, 3(1), 133–153.
+}
+}
 \seealso{
 For further details, read the vignette
 \url{https://easystats.github.io/parameters/articles/demean.html} and also
-see documentation for \code{?datawizard::demean}.
+see documentation for \code{\link[datawizard:demean]{datawizard::demean()}}.
 }

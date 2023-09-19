@@ -46,31 +46,27 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examples
-#' if (require("lme4")) {
-#'   data(cbpp)
-#'   set.seed(1)
-#'   cbpp$x <- rnorm(nrow(cbpp))
-#'   cbpp$x2 <- runif(nrow(cbpp))
+#' @examplesIf require("lme4") && require("glmmTMB")
+#' data(cbpp, package = "lme4")
+#' set.seed(1)
+#' cbpp$x <- rnorm(nrow(cbpp))
+#' cbpp$x2 <- runif(nrow(cbpp))
 #'
-#'   model <- glmer(
-#'     cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
-#'     data = cbpp,
-#'     family = binomial()
-#'   )
+#' model <- lme4::glmer(
+#'   cbind(incidence, size - incidence) ~ period + x + x2 + (1 + x | herd),
+#'   data = cbpp,
+#'   family = binomial()
+#' )
 #'
-#'   check_convergence(model)
-#' }
+#' check_convergence(model)
 #'
-#' \dontrun{
-#' if (require("glmmTMB")) {
-#'   model <- glmmTMB(
-#'     Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
-#'       (1 + poly(Petal.Width, 4) | Species),
-#'     data = iris
-#'   )
-#'   check_convergence(model)
-#' }
+#' \donttest{
+#' model <- suppressWarnings(glmmTMB::glmmTMB(
+#'   Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
+#'     (1 + poly(Petal.Width, 4) | Species),
+#'   data = iris
+#' ))
+#' check_convergence(model)
 #' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
@@ -106,4 +102,10 @@ check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
 check_convergence.glmmTMB <- function(x, ...) {
   # https://github.com/glmmTMB/glmmTMB/issues/275
   isTRUE(x$sdr$pdHess)
+}
+
+
+#' @export
+check_convergence._glm <- function(x, ...) {
+  isTRUE(x$fit$converged)
 }

@@ -57,11 +57,13 @@ result
 # look at the data frame
 as.data.frame(result)
 
-\dontrun{
+\donttest{
 # plot
 if (require("see")) {
-  plot(result)
-}}
+  plot(result, show_dots = TRUE)
+}
+}
+
 }
 \references{
 Gelman, A., and Hill, J. (2007). Data analysis using regression and

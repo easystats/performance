@@ -74,11 +74,11 @@ The contribution of random effects can be deduced by subtracting the
 marginal R2 from the conditional R2 or by computing the \code{\link[=icc]{icc()}}.
 }
 \examples{
-if (require("lme4")) {
-  model <- lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
-  r2_nakagawa(model)
-  r2_nakagawa(model, by_group = TRUE)
-}
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
+r2_nakagawa(model)
+r2_nakagawa(model, by_group = TRUE)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

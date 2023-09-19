@@ -31,7 +31,8 @@ Check model for homogeneity of variances between groups described
 by independent variables in a model.
 }
 \note{
-There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method} implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
+There is also a \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
+implemented in the \href{https://easystats.github.io/see/}{\pkg{see}-package}.
 }
 \examples{
 model <<- lm(len ~ supp + dose, data = ToothGrowth)

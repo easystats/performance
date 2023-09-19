@@ -1,15 +1,15 @@
 #' Performance of lavaan SEM / CFA Models
 #'
 #' Compute indices of model performance for SEM or CFA models from the
-#' \pkg{lavaan} package.
+#' **lavaan** package.
 #'
-#' @param model A \pkg{lavaan} model.
+#' @param model A **lavaan** model.
 #' @param metrics Can be `"all"` or a character vector of metrics to be
-#'   computed (some of `c("Chi2", "Chi2_df", "p_Chi2", "Baseline",
-#'   "Baseline_df", "p_Baseline", "GFI", "AGFI", "NFI", "NNFI", "CFI",
-#'   "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high", "p_RMSEA", "RMR", "SRMR",
-#'   "RFI", "PNFI", "IFI", "RNI", "Loglikelihood", "AIC", "BIC",
-#'   "BIC_adjusted")`).
+#'   computed (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"Baseline"`,
+#'   `"Baseline_df"`, `"p_Baseline"`, `"GFI"`, `"AGFI"`, `"NFI"`, `"NNFI"`,
+#'   `"CFI"`, `"RMSEA"`, `"RMSEA_CI_low"`, `"RMSEA_CI_high"`, `"p_RMSEA"`,
+#'   `"RMR"`, `"SRMR"`, `"RFI"`, `"PNFI"`, `"IFI"`, `"RNI"`, `"Loglikelihood"`,
+#'   `"AIC"`, `"BIC"`, and `"BIC_adjusted"`.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -70,15 +70,14 @@
 #' and the **SRMR**.
 #' }
 #'
-#' @examples
+#' @examplesIf require("lavaan")
 #' # Confirmatory Factor Analysis (CFA) ---------
-#' if (require("lavaan")) {
-#'   structure <- " visual  =~ x1 + x2 + x3
-#'                  textual =~ x4 + x5 + x6
-#'                  speed   =~ x7 + x8 + x9 "
-#'   model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
-#'   model_performance(model)
-#' }
+#' data(HolzingerSwineford1939, package = "lavaan")
+#' structure <- " visual  =~ x1 + x2 + x3
+#'                textual =~ x4 + x5 + x6
+#'                speed   =~ x7 + x8 + x9 "
+#' model <- lavaan::cfa(structure, data = HolzingerSwineford1939)
+#' model_performance(model)
 #'
 #' @references
 #'
@@ -113,31 +112,31 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   row.names(measures) <- NULL
 
   out <- data.frame(
-    "Chi2" = measures$chisq,
-    "Chi2_df" = measures$df,
-    "p_Chi2" = measures$pvalue,
-    "Baseline" = measures$baseline.chisq,
-    "Baseline_df" = measures$baseline.df,
-    "p_Baseline" = measures$baseline.pvalue,
-    "GFI" = measures$gfi,
-    "AGFI" = measures$agfi,
-    "NFI" = measures$nfi,
-    "NNFI" = measures$tli,
-    "CFI" = measures$cfi,
-    "RMSEA" = measures$rmsea,
-    "RMSEA_CI_low" = measures$rmsea.ci.lower,
-    "RMSEA_CI_high" = measures$rmsea.ci.upper,
-    "p_RMSEA" = measures$rmsea.pvalue,
-    "RMR" = measures$rmr,
-    "SRMR" = measures$srmr,
-    "RFI" = measures$rfi,
-    "PNFI" = measures$pnfi,
-    "IFI" = measures$ifi,
-    "RNI" = measures$rni,
-    "Loglikelihood" = measures$logl,
-    "AIC" = measures$aic,
-    "BIC" = measures$bic,
-    "BIC_adjusted" = measures$bic2
+    Chi2 = measures$chisq,
+    Chi2_df = measures$df,
+    p_Chi2 = measures$pvalue,
+    Baseline = measures$baseline.chisq,
+    Baseline_df = measures$baseline.df,
+    p_Baseline = measures$baseline.pvalue,
+    GFI = measures$gfi,
+    AGFI = measures$agfi,
+    NFI = measures$nfi,
+    NNFI = measures$tli,
+    CFI = measures$cfi,
+    RMSEA = measures$rmsea,
+    RMSEA_CI_low = measures$rmsea.ci.lower,
+    RMSEA_CI_high = measures$rmsea.ci.upper,
+    p_RMSEA = measures$rmsea.pvalue,
+    RMR = measures$rmr,
+    SRMR = measures$srmr,
+    RFI = measures$rfi,
+    PNFI = measures$pnfi,
+    IFI = measures$ifi,
+    RNI = measures$rni,
+    Loglikelihood = measures$logl,
+    AIC = measures$aic,
+    BIC = measures$bic,
+    BIC_adjusted = measures$bic2
   )
 
   if (all(metrics == "all")) {
@@ -167,22 +166,22 @@ model_performance.blavaan <- function(model, metrics = "all", verbose = TRUE, ..
   row.names(measures) <- NULL
 
   out <- data.frame(
-    "BRMSEA" = fitind[1, "EAP"],
-    "SD_BRMSEA" = fitind[1, "SD"],
-    "BGammaHat" = fitind[2, "EAP"],
-    "SD_BGammaHat" = fitind[2, "SD"],
-    "Adj_BGammaHat" = fitind[3, "EAP"],
-    "SD_Adj_BGammaHat" = fitind[3, "SD"],
-    "Loglikelihood" = measures$logl,
-    "BIC" = measures$bic,
-    "DIC" = measures$dic,
-    "p_DIC" = measures$p_dic,
-    "WAIC" = measures$waic,
-    "SE_WAIC" = measures$se_waic,
-    "p_WAIC" = measures$p_waic,
-    "LOOIC" = measures$looic,
-    "SE_LOOIC" = measures$se_loo,
-    "p_LOOIC" = measures$p_loo
+    BRMSEA = fitind[1, "EAP"],
+    SD_BRMSEA = fitind[1, "SD"],
+    BGammaHat = fitind[2, "EAP"],
+    SD_BGammaHat = fitind[2, "SD"],
+    Adj_BGammaHat = fitind[3, "EAP"],
+    SD_Adj_BGammaHat = fitind[3, "SD"],
+    Loglikelihood = measures$logl,
+    BIC = measures$bic,
+    DIC = measures$dic,
+    p_DIC = measures$p_dic,
+    WAIC = measures$waic,
+    SE_WAIC = measures$se_waic,
+    p_WAIC = measures$p_waic,
+    LOOIC = measures$looic,
+    SE_LOOIC = measures$se_loo,
+    p_LOOIC = measures$p_loo
   )
 
   if (all(metrics == "all")) {

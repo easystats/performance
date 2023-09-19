@@ -7,8 +7,8 @@
       
       Low Correlation
       
-       Term  VIF SE_factor Increased SE
-          N 1.00      1.00         1.00
-          P 1.00      1.00         1.00
-          K 1.00      1.00         1.00
+       Term  VIF Increased SE Tolerance
+          N 1.00         1.00      1.00
+          P 1.00         1.00      1.00
+          K 1.00         1.00      1.00
 

@@ -43,17 +43,16 @@
 #' - Trochim WMK (2008) Types of Reliability.
 #'   ([web](https://conjointly.com/kb/types-of-reliability/))
 #'
-#' @examples
+#' @examplesIf require("parameters") && require("psych")
 #' # data generation from '?prcomp', slightly modified
 #' C <- chol(S <- toeplitz(0.9^(0:15)))
 #' set.seed(17)
 #' X <- matrix(rnorm(1600), 100, 16)
 #' Z <- X %*% C
-#' if (require("parameters") && require("psych")) {
-#'   pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
-#'   pca
-#'   check_itemscale(pca)
-#' }
+#'
+#' pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
+#' pca
+#' check_itemscale(pca)
 #' @export
 check_itemscale <- function(x) {
   if (!inherits(x, "parameters_pca")) {

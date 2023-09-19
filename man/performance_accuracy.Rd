@@ -9,6 +9,7 @@ performance_accuracy(
   method = c("cv", "boot"),
   k = 5,
   n = 1000,
+  ci = 0.95,
   verbose = TRUE
 )
 }
@@ -23,6 +24,8 @@ compute the accuracy values.}
 \item{k}{The number of folds for the k-fold cross-validation.}
 
 \item{n}{Number of bootstrap-samples.}
+
+\item{ci}{The level of the confidence interval.}
 
 \item{verbose}{Toggle warnings.}
 }

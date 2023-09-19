@@ -35,13 +35,14 @@ range of the response variable. Hence, lower values indicate
 less residual variance.
 }
 \examples{
-if (require("nlme")) {
-  m <- lme(distance ~ age, data = Orthodont)
+\dontshow{if (require("nlme")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(Orthodont, package = "nlme")
+m <- nlme::lme(distance ~ age, data = Orthodont)
 
-  # RMSE
-  performance_rmse(m, normalized = FALSE)
+# RMSE
+performance_rmse(m, normalized = FALSE)
 
-  # normalized RMSE
-  performance_rmse(m, normalized = TRUE)
-}
+# normalized RMSE
+performance_rmse(m, normalized = TRUE)
+\dontshow{\}) # examplesIf}
 }

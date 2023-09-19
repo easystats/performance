@@ -23,6 +23,15 @@
 #'   be considered in the simulated data. If `NULL` (default), condition
 #'   on all random effects. If `NA` or `~0`, condition on no random
 #'   effects. See `simulate()` in **lme4**.
+#' @param bandwidth A character string indicating the smoothing bandwidth to
+#'   be used. Unlike `stats::density()`, which used `"nrd0"` as default, the
+#'   default used here is `"nrd"` (which seems to give more plausible results
+#'   for non-Gaussian models). When problems with plotting occur, try to change
+#'   to a different value.
+#' @param type Plot type for the posterior predictive checks plot. Can be `"density"`,
+#' `"discrete_dots"`, `"discrete_interval"` or `"discrete_both"` (the `discrete_*`
+#' options are appropriate for models with discrete - binary, integer or ordinal
+#' etc. - outcomes).
 #' @param verbose Toggle warnings.
 #' @param ... Passed down to `simulate()`.
 #'
@@ -57,17 +66,24 @@
 #' - Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
 #'   Cambridge University Press.
 #'
-#' @examples
-#' library(performance)
+#' @examplesIf require("see")
+#' # linear model
 #' model <- lm(mpg ~ disp, data = mtcars)
-#' if (require("see")) {
-#'   check_predictions(model)
-#' }
+#' check_predictions(model)
+#'
+#' # discrete/integer outcome
+#' set.seed(99)
+#' d <- iris
+#' d$skewed <- rpois(150, 1)
+#' model <- glm(
+#'   skewed ~ Species + Petal.Length + Petal.Width,
+#'   family = poisson(),
+#'   data = d
+#' )
+#' check_predictions(model, type = "discrete_both")
+#'
 #' @export
-check_predictions <- function(object,
-                              iterations = 50,
-                              check_range = FALSE,
-                              ...) {
+check_predictions <- function(object, ...) {
   UseMethod("check_predictions")
 }
 
@@ -77,13 +93,26 @@ check_predictions.default <- function(object,
                                       iterations = 50,
                                       check_range = FALSE,
                                       re_formula = NULL,
+                                      bandwidth = "nrd",
+                                      type = "density",
                                       verbose = TRUE,
                                       ...) {
   # check for valid input
   .is_model_valid(object)
 
-  if (isTRUE(insight::model_info(object, verbose = FALSE)$is_bayesian) &&
-    isFALSE(inherits(object, "BFBayesFactor"))) {
+  # retrieve model information
+  minfo <- insight::model_info(object, verbose = FALSE)
+
+  # try to find sensible default for "type" argument
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  if (missing(type) && suggest_dots) {
+    type <- "discrete_interval"
+  }
+
+  # args
+  type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
+
+  if (isTRUE(minfo$is_bayesian) && isFALSE(inherits(object, "BFBayesFactor"))) {
     insight::check_if_installed(
       "bayesplot",
       "to create posterior prediction plots for Stan models"
@@ -95,7 +124,10 @@ check_predictions.default <- function(object,
       iterations = iterations,
       check_range = check_range,
       re_formula = re_formula,
+      bandwidth = bandwidth,
+      type = type,
       verbose = verbose,
+      model_info = minfo,
       ...
     )
   }
@@ -106,6 +138,7 @@ check_predictions.BFBayesFactor <- function(object,
                                             iterations = 50,
                                             check_range = FALSE,
                                             re_formula = NULL,
+                                            bandwidth = "nrd",
                                             verbose = TRUE,
                                             ...) {
   everything_we_need <- .get_bfbf_predictions(object, iterations = iterations)
@@ -125,6 +158,7 @@ check_predictions.BFBayesFactor <- function(object,
   out <- as.data.frame(yrep)
   colnames(out) <- paste0("sim_", seq_len(ncol(out)))
   out$y <- y
+  attr(out, "bandwidth") <- bandwidth
   attr(out, "check_range") <- check_range
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
@@ -146,11 +180,14 @@ pp_check.lm <- function(object,
                         iterations = 50,
                         check_range = FALSE,
                         re_formula = NULL,
+                        bandwidth = "nrd",
+                        type = "density",
                         verbose = TRUE,
+                        model_info = NULL,
                         ...) {
   # if we have a matrix-response, continue here...
   if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.glm(object, iterations, check_range, re_formula, verbose, ...))
+    return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 
   # else, proceed as usual
@@ -159,8 +196,15 @@ pp_check.lm <- function(object,
   # sanity check, for mixed models, where re.form = NULL (default) might fail
   out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
 
+  # save information about model
+  if (!is.null(model_info)) {
+    minfo <- model_info
+  } else {
+    minfo <- insight::model_info(object)
+  }
+
   # glmmTMB returns column matrix for bernoulli
-  if (inherits(object, "glmmTMB") && insight::model_info(object)$is_binomial && !is.null(out)) {
+  if (inherits(object, "glmmTMB") && minfo$is_binomial && !is.null(out)) {
     out <- as.data.frame(lapply(out, function(i) {
       if (is.matrix(i)) {
         i[, 1]
@@ -190,6 +234,9 @@ pp_check.lm <- function(object,
 
   attr(out, "check_range") <- check_range
   attr(out, "response_name") <- resp_string
+  attr(out, "bandwidth") <- bandwidth
+  attr(out, "model_info") <- minfo
+  attr(out, "type") <- type
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
@@ -199,11 +246,14 @@ pp_check.glm <- function(object,
                          iterations = 50,
                          check_range = FALSE,
                          re_formula = NULL,
+                         bandwidth = "nrd",
+                         type = "density",
                          verbose = TRUE,
+                         model_info = NULL,
                          ...) {
   # if we have no matrix-response, continue here...
   if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.lm(object, iterations, check_range, re_formula, ...))
+    return(pp_check.lm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 
   # else, process matrix response. for matrix response models, we compute
@@ -237,8 +287,18 @@ pp_check.glm <- function(object,
 
   out$y <- response[, 1] / response[, 2]
 
+  # safe information about model
+  if (!is.null(model_info)) {
+    minfo <- model_info
+  } else {
+    minfo <- insight::model_info(object)
+  }
+
   attr(out, "check_range") <- check_range
   attr(out, "response_name") <- resp_string
+  attr(out, "bandwidth") <- bandwidth
+  attr(out, "model_info") <- minfo
+  attr(out, "type") <- type
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
