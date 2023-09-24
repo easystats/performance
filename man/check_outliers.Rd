@@ -292,6 +292,7 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
 
+\dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # You can also run all the methods
 check_outliers(data, method = "all")
@@ -308,13 +309,11 @@ mt2 <- rbind(mt1, data.frame(
 model <- lm(disp ~ mpg + hp, data = mt2)
 
 outliers_list <- check_outliers(model)
-
-if (require("see")) {
-  plot(outliers_list)
-}
+plot(outliers_list)
 
 insight::get_data(model)[outliers_list, ] # Show outliers data
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

@@ -301,6 +301,7 @@
 #' group_iris <- datawizard::data_group(iris, "Species")
 #' check_outliers(group_iris)
 #'
+#' @examplesIf require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")
 #' \donttest{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all")
@@ -317,10 +318,7 @@
 #' model <- lm(disp ~ mpg + hp, data = mt2)
 #'
 #' outliers_list <- check_outliers(model)
-#'
-#' if (require("see")) {
-#'   plot(outliers_list)
-#' }
+#' plot(outliers_list)
 #'
 #' insight::get_data(model)[outliers_list, ] # Show outliers data
 #' }
@@ -508,7 +506,7 @@ check_outliers.default <- function(x,
 
   num.df <- outlier_count$all[!names(outlier_count$all) %in% c("Row", ID)]
   if (isTRUE(nrow(num.df) > 0)) {
-    num.df <- datawizard::change_code(
+    num.df <- datawizard::recode_values(
       num.df,
       recode = list(`2` = "(Multivariate)")
     )
