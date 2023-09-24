@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.5.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +87,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="performance-development-version">performance (development version)<a class="anchor" aria-label="anchor" href="#performance-development-version"></a></h2>
+<div class="section level3">
+<h3 id="changes-to-functions-development-version">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/check_outliers.html">check_outliers()</a></code> for method <code>"ics"</code> now detects number of available cores for parallel computing via the <code>"mc.cores"</code> option. This is more robust than the previous method, which used <code><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">parallel::detectCores()</a></code>. Now you should set the number of cores via <code>options(mc.cores = 4)</code>.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.5" id="performance-0105">performance 0.10.5<a class="anchor" aria-label="anchor" href="#performance-0105"></a></h2><p class="text-muted">CRAN release: 2023-09-12</p>
