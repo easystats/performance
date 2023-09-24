@@ -195,7 +195,9 @@ of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off
 value for outliers classification. Refer to the help-file of
 \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}} to get more details about this procedure.
 Note that \code{method = "ics"} requires both \strong{ICS} and \strong{ICSOutlier}
-to be installed, and that it takes some time to compute the results.
+to be installed, and that it takes some time to compute the results. You
+can speed up computation time using parallel computing. Set the number of
+cores to use with \code{options(mc.cores = 4)} (for example).
 \item \strong{OPTICS}:
 The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
 (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised
