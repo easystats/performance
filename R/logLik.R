@@ -55,7 +55,7 @@ logLik.plm <- function(object, ...) {
 
   attr(val, "nall") <- N0
   attr(val, "nobs") <- N
-  attr(val, "df") <- insight::n_parameters(object) + 1
+  attr(val, "df") <- insight::n_parameters(object) + 1L
   class(val) <- "logLik"
 
   val
