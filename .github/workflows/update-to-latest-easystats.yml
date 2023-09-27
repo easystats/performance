@@ -37,7 +37,6 @@ jobs:
         run: |
           git status
           git add --all
-        continue-on-error: true # Continue even if there are no changes
 
       - name: Create pull request
         if: ${{ steps.update_description.outputs.changed }}
