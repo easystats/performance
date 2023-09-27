@@ -1,5 +1,7 @@
 test_that("logLik", {
   skip_if_not_installed("plm")
+  skip_if_not_installed("withr")
+  
   expr <- getOption("expressions")
   options(expressions = 25)
   set.seed(1)
