@@ -1,4 +1,4 @@
-name: Create PR for DESCRIPTION change to use latest easystats dependencies
+name: update-to-latest-easystats
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 #   - cron: "0 0 1 * *"
 
 jobs:
-  create_pr:
+  update-to-latest-easystats:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,7 +22,7 @@ jobs:
 
       - name: Update DESCRIPTION file
         run: |
-          install.packages('pak')
+          install.packages('pak', dependencies = TRUE)
           pak::pkg_install('usethis')
           usethis::use_latest_dependencies()
         shell: Rscript {0}
