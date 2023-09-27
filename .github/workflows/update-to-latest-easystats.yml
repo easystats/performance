@@ -1,0 +1,50 @@
+name: Create PR for DESCRIPTION change
+
+on:
+  push:
+    branches:
+      - [main, master]
+
+# Run on a schedule (once a month)
+schedule:
+  - cron: "0 0 1 * *"
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install dependencies
+        run: |
+          Rscript -e "install.packages('usethis')"
+        shell: bash
+        working-directory: ./ # Change this to the appropriate directory if necessary
+
+      - name: Update DESCRIPTION file
+        run: |
+          Rscript -e "usethis::use_latest_dependencies()"
+        shell: bash
+        working-directory: ./ # Change this to the appropriate directory if necessary
+
+      - name: Check for changes in DESCRIPTION
+        id: check_description
+        run: |
+          git diff --name-only
+        continue-on-error: true # Continue even if there are no changes
+
+      - name: Create pull request
+        if: steps.check_description.outputs.stdout != ''
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update-description
+          title: "Update DESCRIPTION to use latest 'easystats' dependencies"
+          body: "Automatically updated the `DESCRIPTION` file."
+          labels: "auto-update"
+          base: main # Change this to the target branch for your pull request
+          branch-suffix: timestamp
