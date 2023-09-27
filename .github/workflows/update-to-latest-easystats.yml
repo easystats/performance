@@ -22,7 +22,8 @@ jobs:
 
       - name: Update DESCRIPTION file
         run: |
-          install.packages('usethis')
+          install.packages('pak')
+          pak::pkg_install('usethis')
           usethis::use_latest_dependencies()
         shell: Rscript {0}
 
