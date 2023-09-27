@@ -1,0 +1,54 @@
+name: update-to-latest-easystats
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+# Run on a schedule (once a month)
+# schedule:
+#   - cron: "0 0 1 * *"
+
+jobs:
+  update-to-latest-easystats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: |
+            any::usethis
+
+      - name: Update DESCRIPTION file
+        id: update_description
+        run: |
+          usethis::use_latest_dependencies()
+        shell: Rscript {0}
+
+      - name: Check for changes in DESCRIPTION
+        id: check_description
+        run: |
+          git status
+          git add --all
+
+      - name: Create pull request
+        #if: ${{ steps.update_description.outputs.changed }}
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          branch: desc-${{ github.ref_name }}-${{ github.job }}
+          branch-suffix: timestamp
+          delete-branch: true
+          title: "Update `DESCRIPTION` to use latest 'easystats' dependencies"
+          body: "Automatically updated the `DESCRIPTION` file using `usethis::use_latest_dependencies()`."
+          labels: "auto-update"
+          add-paths: |
+            DESCRIPTION
