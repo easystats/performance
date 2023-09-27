@@ -27,6 +27,7 @@ jobs:
             any::usethis
 
       - name: Update DESCRIPTION file
+        id: update_description
         run: |
           usethis::use_latest_dependencies()
         shell: Rscript {0}
@@ -35,17 +36,20 @@ jobs:
         id: check_description
         run: |
           git status
-          git diff --name-only
+          git add --all
         continue-on-error: true # Continue even if there are no changes
 
       - name: Create pull request
-        if: steps.check_description.outputs.stdout != ''
+        if: ${{ steps.update_description.outputs.changed }}
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: update-description
-          title: "Update DESCRIPTION to use latest 'easystats' dependencies"
-          body: "Automatically updated the `DESCRIPTION` file."
-          labels: "auto-update"
-          base: main
+          base: ${{ github.head_ref }}
+          branch: desc-${{ github.ref_name }}-${{ github.job }}
           branch-suffix: timestamp
+          delete-branch: true
+          title: "Update `DESCRIPTION` to use latest 'easystats' dependencies"
+          body: "Automatically updated the `DESCRIPTION` file using `usethis::use_latest_dependencies()`."
+          labels: "auto-update"
+          add-paths: |
+            DESCRIPTION
