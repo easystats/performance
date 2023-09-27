@@ -24,5 +24,4 @@ test_that("logLik", {
   )
   l2 <- logLik(m2)
   expect_equal(l1, l2, tolerance = 1e-3, ignore_attr = TRUE)
-  options(expressions = expr)
 })
