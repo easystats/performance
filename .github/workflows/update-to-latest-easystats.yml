@@ -2,8 +2,9 @@ name: Create PR for DESCRIPTION change
 
 on:
   push:
-    branches:
-      - [main, master]
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
 
 # Run on a schedule (once a month)
 schedule:
