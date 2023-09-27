@@ -7,8 +7,8 @@ on:
     branches: [main, master]
 
 # Run on a schedule (once a month)
-schedule:
-  - cron: "0 0 1 * *"
+#schedule:
+#  - cron: "0 0 1 * *"
 
 jobs:
   create_pr:
