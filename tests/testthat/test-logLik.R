@@ -2,8 +2,7 @@ test_that("logLik", {
   skip_if_not_installed("plm")
   skip_if_not_installed("withr")
   
-  expr <- getOption("expressions")
-  options(expressions = 25)
+  withr::local_options(list(expressions = 25))
   set.seed(1)
   nnn <- 100
   ddta <- data.frame(
