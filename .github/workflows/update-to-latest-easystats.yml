@@ -34,6 +34,7 @@ jobs:
       - name: Check for changes in DESCRIPTION
         id: check_description
         run: |
+          git status
           git diff --name-only
         continue-on-error: true # Continue even if there are no changes
 
