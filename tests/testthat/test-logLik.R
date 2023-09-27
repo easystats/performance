@@ -1,7 +1,7 @@
 test_that("logLik", {
   skip_if_not_installed("plm")
   skip_if_not_installed("withr")
-  
+
   withr::local_options(list(expressions = 25))
   set.seed(1)
   nnn <- 100
