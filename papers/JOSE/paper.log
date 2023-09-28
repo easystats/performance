@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 23.5) (preloaded format=xelatex 2023.5.20)  27 SEP 2023 19:13
+This is XeTeX, Version 3.141592653-2.6-0.999995 (MiKTeX 23.5) (preloaded format=xelatex 2023.5.20)  27 SEP 2023 20:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1268,7 +1268,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 387.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 386.
 [1
 
 ]
@@ -1286,15 +1286,15 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [2]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 458.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 457.
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 474--474
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 473--473
 []\TU/lmtt/m/n/10 #> ----------------------------------------------------------
 -------------------[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 483--483
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 482--482
 []\TU/lmtt/m/n/10 #> ----------------------------------------------------------
 -------------------[] 
  []
@@ -1366,19 +1366,19 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [7]
-Underfull \hbox (badness 1584) in paragraph at lines 919--925
+Underfull \hbox (badness 1584) in paragraph at lines 918--924
 []\TU/lmr/m/n/10 Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-p
 ositive psy-
  []
 
 
-Underfull \hbox (badness 3049) in paragraph at lines 919--925
+Underfull \hbox (badness 3049) in paragraph at lines 918--924
 \TU/lmr/m/n/10 chology: Undisclosed flexibility in data collection and analysis
  allows pre-
  []
 
 
-Underfull \hbox (badness 3735) in paragraph at lines 919--925
+Underfull \hbox (badness 3735) in paragraph at lines 918--924
 \TU/lmr/m/n/10 senting anything as significant. \TU/lmr/m/it/10 Psychological S
 cience\TU/lmr/m/n/10 , \TU/lmr/m/it/10 22\TU/lmr/m/n/10 (11), 1359–1366.
  []
