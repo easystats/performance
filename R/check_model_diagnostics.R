@@ -183,7 +183,7 @@
   n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
 
   infl <- stats::influence(model, do.coef = FALSE)
-  resid <- insight::get_residuals(model)
+  resid <- as.numeric(insight::get_residuals(model))
 
   std_resid <- tryCatch(stats::rstandard(model, infl), error = function(e) resid)
 
