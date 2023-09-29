@@ -7,6 +7,11 @@
   the previous method, which used `parallel::detectCores()`. Now you should
   set the number of cores via `options(mc.cores = 4)`.
 
+## Bug fixes
+
+* Fixed issues is `check_model()` for models that used data sets with
+  variables of class `"haven_labelled"`.
+
 # performance 0.10.5
 
 ## Changes to functions
