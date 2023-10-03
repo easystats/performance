@@ -291,7 +291,7 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
   } else if (info$is_logit && info$is_bernoulli) {
-    out <- list("R2_Tjur" = r2_tjur(model, ...))
+    out <- list("R2_Tjur" = r2_tjur(model, model_info = info, ...))
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
@@ -312,6 +312,10 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
 #' @export
 r2.glmx <- r2.glm
 
+#' @export
+r2.nestedLogit <- function(model, ci = NULL, verbose = TRUE, ...) {
+  lapply(r2, model$models, ci = ci, verbose = verbose, ...)
+}
 
 
 
