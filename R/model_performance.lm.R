@@ -253,6 +253,17 @@ model_performance.zeroinfl <- model_performance.lm
 #' @export
 model_performance.zerotrunc <- model_performance.lm
 
+#' @export
+model_performance.nestedLogit <- function(model, metrics = "all", verbose = TRUE, ...) {
+  mp <- lapply(model$models, model_performance.lm, metrics = metrics, verbose = verbose, ...)
+  out <- cbind(
+    data.frame(Response = names(mp), stringsAsFactors = FALSE),
+    do.call(rbind, mp)
+  )
+  row.names(out) <- NULL
+  class(out) <- unique(c("performance_model", class(out)))
+  out
+}
 
 
 
