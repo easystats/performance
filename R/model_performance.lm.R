@@ -125,10 +125,10 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
     out$Log_loss <- .safe({
       .logloss <- performance_logloss(model, verbose = verbose)
-      if (!is.na(.logloss)) {
-        .logloss
-      } else {
+      if (is.na(.logloss)) {
         NULL
+      } else {
+        .logloss
       }
     })
   }
