@@ -121,7 +121,11 @@ Importantly, whatever approach researchers choose remains a subjective decision,
 
 Researchers frequently attempt to identify outliers using measures of deviation from the center of a variable's distribution. One of the most popular such procedure is the _z_ score transformation, which computes the distance in standard deviation (SD) from the mean. However, as mentioned earlier, this popular method is not robust. Therefore, for univariate outliers, it is recommended to use the median along with the Median Absolute Deviation (MAD), which are more robust than the interquartile range or the mean and its standard deviation [@leys2019outliers; @leys2013outliers].
 
-Researchers can identify outliers based on robust (i.e., MAD-based) _z_ scores using the `check_outliers()` function of the  *{performance}* package, by specifying `method = "zscore_robust"`.^[Note that `check_outliers()` only checks numeric variables.] Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, *{performance}* uses by default a less conservative threshold of ~3.29.^[3.29 is an approximation of the two-tailed critical value for _p_ < .001, obtained through `qnorm(p = 1 - 0.001 / 2)`. We chose this threshold for consistency with the thresholds of all our other methods.] That is, data points will be flagged as outliers if they go beyond +/- ~3.29 MAD. Users can adjust this threshold using the `threshold` argument, as demonstrated below.
+Researchers can identify outliers based on robust (i.e., MAD-based) _z_ scores using the `check_outliers()` function of the  *{performance}* package, by specifying `method = "zscore_robust"`.^[Note that `check_outliers()` only checks numeric variables.] Although @leys2013outliers suggest a default threshold of 2.5 and @leys2019outliers a threshold of 3, *{performance}* uses by default a less conservative threshold of ~3.29.^[3.29 is an approximation of the two-tailed critical value for _p_ < .001, obtained through `qnorm(p = 1 - 0.001 / 2)`. We chose this threshold for consistency with the thresholds of all our other methods.] That is, data points will be flagged as outliers if they go beyond +/- ~3.29 MAD. Users can adjust this threshold using the `threshold` argument.
+
+Below we provide example code using the `mtcars` dataset, which was extracted from the 1974 *Motor Trend* US magazine. The dataset contains fuel consumption and 10 characteristics of automobile design and performance for 32 different car models (see `?mtcars` for details). We chose this dataset because it is accessible from base R and familiar to many R users. We might want to conduct specific statistical analyses on this data set, say, _t_ tests or structural equation modelling, but first, we want to check for outliers that may influence those test results.
+
+Because the automobile names are stored as column names in `mtcars`, we first have to convert them to an ID column to benefit from the `check_outliers()` ID argument. Furthermore, we only really need a couple columns for this demonstration, so we choose the first four (`mpg` = Miles/(US) gallon; `cyl` = Number of cylinders; `disp` = Displacement; `hp` = Gross horsepower). Finally, because there are no outliers in this dataset, we add two artificial outliers before running our function.
 
 
 ```r
@@ -163,7 +167,9 @@ outliers
 #> 34  34  34               16.52502
 ```
 
-The row numbers of the detected outliers can be obtained by using `which()` on the output object, which can be used for exclusions for example:
+What we see is that `check_outliers()` with the robust _z_ score method detected two outliers: cases 33 and 34, which were the observations we added ourselves. They were flagged for two variables specifically: `mpg` (Miles/(US) gallon) and `cyl` (Number of cylinders), and the output provides their exact _z_ score for those variables.
+
+We describe how to deal with those cases in more details later in the paper, but should we want to exclude these detected outliers from the main dataset, we can extract row numbers using `which()` on the output object, which can then be used for indexing:
 
 
 ```r
@@ -177,8 +183,6 @@ which(outliers)
 ```r
 data_clean <- data[-which(outliers), ]
 ```
-
-All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers using the generic `plot()` function on the resulting outlier object after loading the {see} package.
 
 Other univariate methods are available, such as using the interquartile range (IQR), or based on different intervals, such as the Highest Density Interval (HDI) or the Bias Corrected and Accelerated Interval (BCI). These methods are documented and described in the function's [help page](<https://easystats.github.io/performance/reference/check_outliers.html>).
 
@@ -204,6 +208,8 @@ outliers
 #> - For variables: mpg, cyl, disp, hp.
 ```
 
+Here, we detected 9 multivariate outliers (i.e,. when looking at all variables of our dataset together).
+
 Other multivariate methods are available, such as another type of robust Mahalanobis distance that in this case relies on an orthogonalized Gnanadesikan-Kettenring pairwise estimator [@gnanadesikan1972robust]. These methods are documented and described in the function's [help page](https://easystats.github.io/performance/reference/check_outliers.html).
 
 ## Model-Based Outliers
@@ -225,12 +231,17 @@ outliers
 #> - For variable: (Whole model).
 ```
 
+Using the model-based outlier detection method, we identified a single outlier.
+
+All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers using the generic `plot()` function on the resulting outlier object after loading the {see} package.
+
+
 ```r
 plot(outliers)
 ```
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{paper_files/figure-latex/model-1} \caption{Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model.}\label{fig:model}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/model_fig-1} \caption{Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model.}\label{fig:model_fig}
 \end{figure}
 
 Table 1 below summarizes which methods to use in which cases, and with what threshold.

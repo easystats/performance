@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.9.14)  3 OCT 2023 12:56
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.9.14)  4 OCT 2023 11:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1066,14 +1066,14 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [2]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 458.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 477.
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 474--474
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 493--493
 []\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 483--483
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 502--502
 []\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
@@ -1097,8 +1097,8 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [4]
-File: paper_files/figure-latex/model-1.pdf Graphic file (type pdf)
-<use paper_files/figure-latex/model-1.pdf>
+File: paper_files/figure-latex/model_fig-1.pdf Graphic file (type pdf)
+<use paper_files/figure-latex/model_fig-1.pdf>
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
 
@@ -1129,20 +1129,6 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [7]
-Underfull \hbox (badness 1584) in paragraph at lines 926--932
-[]\TU/lmr/m/n/10 Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psy-
- []
-
-
-Underfull \hbox (badness 3049) in paragraph at lines 926--932
-\TU/lmr/m/n/10 chology: Undisclosed flexibility in data collection and analysis allows pre-
- []
-
-
-Underfull \hbox (badness 3735) in paragraph at lines 926--932
-\TU/lmr/m/n/10 senting anything as significant. \TU/lmr/m/it/10 Psychological Science\TU/lmr/m/n/10 , \TU/lmr/m/it/10 22\TU/lmr/m/n/10 (11), 1359–1366.
- []
-
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
 
@@ -1153,6 +1139,20 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [8]
+Underfull \hbox (badness 1584) in paragraph at lines 959--965
+[]\TU/lmr/m/n/10 Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psy-
+ []
+
+
+Underfull \hbox (badness 3049) in paragraph at lines 959--965
+\TU/lmr/m/n/10 chology: Undisclosed flexibility in data collection and analysis allows pre-
+ []
+
+
+Underfull \hbox (badness 3735) in paragraph at lines 959--965
+\TU/lmr/m/n/10 senting anything as significant. \TU/lmr/m/it/10 Psychological Science\TU/lmr/m/n/10 , \TU/lmr/m/it/10 22\TU/lmr/m/n/10 (11), 1359–1366.
+ []
+
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
 
@@ -1175,7 +1175,7 @@ Package logreq Info: Writing requests to 'paper.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
  36963 strings out of 477589
- 757118 string characters out of 5817003
+ 757166 string characters out of 5817003
  1940432 words of memory out of 5000000
  57602 multiletter control sequences out of 15000+600000
  564981 words of font info for 89 fonts, out of 8000000 for 9000
