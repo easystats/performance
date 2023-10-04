@@ -29,7 +29,7 @@ affiliations:
   - index: 1
     name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
   - index: 2
-    name: Independent Researcher
+    name: Independent Researcher, Ramat Gan, Israel
   - index: 3
     name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
   - index: 4
@@ -115,7 +115,7 @@ Nonetheless, the improper handling of these outliers can substantially affect st
 
 One possible reason is that researchers are not aware of the existing recommendations, or do not know how to implement them using their analysis software. In this paper, we show how to follow current best practices for automatic and reproducible statistical outlier detection (SOD) using R and the *{performance}* package [@ludecke2021performance], which is part of the *easystats* ecosystem of packages that build an R framework for easy statistical modeling, visualization, and reporting [@easystatspackage]. Installation instructions can be found on [GitHub](https://github.com/easystats/performance) or its [website](https://easystats.github.io/performance/), and its list of dependencies on [CRAN](https://cran.r-project.org/package=performance).
 
-The instructional materials that follow is aimed at an audience of researchers who want to follow good practices, and is appropriate for advanced undergraduate students, graduate students, professors, or professionals having to deal with the nuances of outlier treatment.
+The instructional materials that follow are aimed at an audience of researchers who want to follow good practices, and are appropriate for advanced undergraduate students, graduate students, professors, or professionals having to deal with the nuances of outlier treatment.
 
 # Identifying Outliers
 
@@ -123,7 +123,7 @@ Although many researchers attempt to identify outliers with measures based on th
 
 Nonetheless, which exact outlier method to use depends on many factors. In some cases, eye-gauging odd observations can be an appropriate solution, though many researchers will favour algorithmic solutions to detect potential outliers, for example, based on a continuous value expressing the observation stands out from the others.
 
-One of the factors to consider when selecting an algorithmic outlier detection method is the statistical test of interest. When using a regression model, relevant information can be found by identifying observations that do not fit well with the model. This approach, known as model-based outliers detection (as outliers are extracted after the statistical model has been fit), can be contrasted with distribution-based outliers detection, which is based on the distance between an observation and the "center" of its population. Various quantification strategies of this distance exist for the latter, both univariate (involving only one variable at a time) or multivariate (involving multiple variables).
+One of the factors to consider when selecting an algorithmic outlier detection method is the statistical test of interest. Identifying observations the regression model does not fit well can help find information relevant to our specific research context. This approach, known as model-based outliers detection (as outliers are extracted after the statistical model has been fit), can be contrasted with distribution-based outliers detection, which is based on the distance between an observation and the "center" of its population. Various quantification strategies of this distance exist for the latter, both univariate (involving only one variable at a time) or multivariate (involving multiple variables).
 
 When no method is readily available to detect model-based outliers, such as for structural equation modelling (SEM), looking for multivariate outliers may be of relevance. For simple tests (_t_ tests or correlations) that compare values of the same variable, it can be appropriate to check for univariate outliers. However, univariate methods can give false positives since _t_ tests and correlations, ultimately, are also models/multivariable statistics. They are in this sense more limited, but we show them nonetheless for educational purposes.
 
@@ -186,6 +186,8 @@ Other multivariate methods are available, such as another type of robust Mahalan
 Working with regression models creates the possibility of using model-based SOD methods. These methods rely on the concept of *leverage*, that is, how much influence a given observation can have on the model estimates. If few observations have a relatively strong leverage/influence on the model, one can suspect that the model's estimates are biased by these observations, in which case flagging them as outliers could prove helpful (see next section, "Handling Outliers").
 
 In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
+
+Currently, most lm models are supported (with the exception of `glmmTMB`, `lmrob`, and `glmrob` models), as long as they are supported by the underlying functions `stats::cooks.distance()` (or `loo::pareto_k_values()`) and `insight::get_data()` (for a full list of the 225 models currently supported by the `insight` package, see https://easystats.github.io/insight/#list-of-supported-models-by-class). We show a demo below.
 
 ```{r model}
 model <- lm(disp ~ mpg * disp, data = data)

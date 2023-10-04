@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.9.14)  4 OCT 2023 11:22
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.9.14)  4 OCT 2023 15:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1097,6 +1097,10 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [4]
+Underfull \hbox (badness 1331) in paragraph at lines 627--635
+[][]$[][][][][] [] [] [] [][][][][][][][][] [] [][][][][][] [] [][] [] [][][][][][][] [] [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]$[][]\TU/lmr/m/n/10 ). We show a
+ []
+
 File: paper_files/figure-latex/model_fig-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/model_fig-1.pdf>
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
@@ -1139,17 +1143,17 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [8]
-Underfull \hbox (badness 1584) in paragraph at lines 959--965
+Underfull \hbox (badness 1584) in paragraph at lines 968--974
 []\TU/lmr/m/n/10 Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psy-
  []
 
 
-Underfull \hbox (badness 3049) in paragraph at lines 959--965
+Underfull \hbox (badness 3049) in paragraph at lines 968--974
 \TU/lmr/m/n/10 chology: Undisclosed flexibility in data collection and analysis allows pre-
  []
 
 
-Underfull \hbox (badness 3735) in paragraph at lines 959--965
+Underfull \hbox (badness 3735) in paragraph at lines 968--974
 \TU/lmr/m/n/10 senting anything as significant. \TU/lmr/m/it/10 Psychological Science\TU/lmr/m/n/10 , \TU/lmr/m/it/10 22\TU/lmr/m/n/10 (11), 1359–1366.
  []
 
@@ -1180,6 +1184,6 @@ Here is how much of TeX's memory you used:
  57602 multiletter control sequences out of 15000+600000
  564981 words of font info for 89 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,12n,87p,1194b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,13n,87p,1194b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on paper.pdf (9 pages).
