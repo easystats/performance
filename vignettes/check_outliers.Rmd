@@ -166,7 +166,7 @@ plot(outliers)
 
 Using the model-based outlier detection method, we identified a single outlier.
 
-Table 1 below summarizes which methods to use in which cases, and with what threshold.
+Table 1 below summarizes which methods to use in which cases, and with what threshold. The recommended thresholds are the default thresholds.
 
 ```{r, echo=FALSE}
 df <- data.frame(
