@@ -170,11 +170,11 @@ r2.systemfit <- function(model, ...) {
 #' @export
 r2.lm_robust <- function(model, ...) {
   out <- list(
-    "R2" = tryCatch(
+    R2 = tryCatch(
       model[["r.squared"]],
       error = function(e) NULL
     ),
-    "R2_adjusted" = tryCatch(
+    R2_adjusted = tryCatch(
       model[["adj.r.squared"]],
       error = function(e) NULL
     )
@@ -282,7 +282,7 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
   } else if (info$is_logit && info$is_bernoulli) {
-    out <- list("R2_Tjur" = r2_tjur(model, model_info = info, ...))
+    out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
@@ -292,7 +292,7 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
     }
     out <- NULL
   } else {
-    out <- list("R2_Nagelkerke" = r2_nagelkerke(model, ...))
+    out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
     attr(out, "model_type") <- "Generalized Linear"
     class(out) <- c("r2_pseudo", class(out))
@@ -306,7 +306,7 @@ r2.glmx <- r2.glm
 
 #' @export
 r2.nestedLogit <- function(model, ci = NULL, verbose = TRUE, ...) {
-  out <- list("R2_Tjur" = r2_tjur(model, ...))
+  out <- list(R2_Tjur = r2_tjur(model, ...))
   attr(out, "model_type") <- "Logistic"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -357,7 +357,7 @@ r2.model_fit <- r2.logitmfx
 
 #' @export
 r2.BBreg <- function(model, ...) {
-  out <- list("R2_CoxSnell" = r2_coxsnell(model))
+  out <- list(R2_CoxSnell = r2_coxsnell(model))
   names(out$R2_CoxSnell) <- "Cox & Snell's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -377,7 +377,7 @@ r2.bayesx <- r2.BBreg
 
 #' @export
 r2.censReg <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+  out <- list(R2_Nagelkerke = r2_nagelkerke(model))
   names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -506,8 +506,8 @@ r2.wbm <- function(model, tolerance = 1e-5, ...) {
     names(r2_marginal) <- "Marginal R2"
 
     out <- list(
-      "R2_conditional" = r2_conditional,
-      "R2_marginal" = r2_marginal
+      R2_conditional = r2_conditional,
+      R2_marginal = r2_marginal
     )
 
     attr(out, "model_type") <- "Fixed Effects"
@@ -530,8 +530,8 @@ r2.sem <- function(model, ...) {
   structure(
     class = "r2_nakagawa",
     list(
-      "R2_conditional" = r2_conditional,
-      "R2_marginal" = r2_marginal
+      R2_conditional = r2_conditional,
+      R2_marginal = r2_marginal
     )
   )
 }
@@ -693,7 +693,7 @@ r2.ivreg <- function(model, ...) {
 
 #' @export
 r2.bigglm <- function(model, ...) {
-  out <- list("R2_CoxSnell" = summary(model)$rsq)
+  out <- list(R2_CoxSnell = summary(model)$rsq)
   names(out$R2_CoxSnell) <- "Cox & Snell's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -761,8 +761,8 @@ r2.Arima <- function(model, ...) {
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    "R2" = c(`R2` = model_summary$r.squared[1]),
-    "R2_adjusted" = c(`adjusted R2` = model_summary$r.squared[2])
+    R2 = c(`R2` = model_summary$r.squared[1]),
+    R2_adjusted = c(`adjusted R2` = model_summary$r.squared[2])
   )
 
   attr(out, "model_type") <- "Panel Data"
@@ -778,8 +778,8 @@ r2.selection <- function(model, ...) {
     return(NULL)
   }
   out <- list(
-    "R2" = c(`R2` = model_summary$rSquared$R2),
-    "R2_adjusted" = c(`adjusted R2` = model_summary$rSquared$R2adj)
+    R2 = c(`R2` = model_summary$rSquared$R2),
+    R2_adjusted = c(`adjusted R2` = model_summary$rSquared$R2adj)
   )
 
   attr(out, "model_type") <- "Tobit 2"
