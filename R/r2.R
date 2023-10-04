@@ -748,10 +748,10 @@ r2.mmclogit <- function(model, ...) {
 
 #' @export
 r2.Arima <- function(model, ...) {
-  if (!requireNamespace("forecast", quietly = TRUE)) {
-    list(R2 = NA)
-  } else {
+  if (requireNamespace("forecast", quietly = TRUE)) {
     list(R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2)
+  } else {
+    list(R2 = NA)
   }
 }
 
