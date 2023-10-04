@@ -804,7 +804,7 @@ r2.svyglm <- function(model, ...) {
 
 #' @export
 r2.vglm <- function(model, ...) {
-  out <- list("R2_McKelvey" = r2_mckelvey(model))
+  out <- list(R2_McKelvey = r2_mckelvey(model))
   names(out$R2_McKelvey) <- "McKelvey's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -817,7 +817,7 @@ r2.vgam <- r2.vglm
 
 #' @export
 r2.DirichletRegModel <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+  out <- list(R2_Nagelkerke = r2_nagelkerke(model))
   names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
