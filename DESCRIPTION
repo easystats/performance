@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.5.2
+Version: 0.10.5.6
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -69,9 +69,9 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.13.0),
-    insight (>= 0.19.4),
-    datawizard (>= 0.7.0),
+    bayestestR (>= 0.13.1),
+    insight (>= 0.19.5),
+    datawizard (>= 0.9.0),
     methods,
     stats,
     utils
@@ -117,6 +117,7 @@ Suggests:
     mgcv,
     mlogit,
     multimode,
+    nestedLogit,
     nlme,
     nonnest2,
     ordinal,
@@ -149,4 +150,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/see, easystats/parameters
+Remotes: easystats/see, easystats/parameters, easystats/insight

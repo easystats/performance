@@ -49,10 +49,7 @@ r2 <- function(model, ...) {
 }
 
 
-
-
 # Default models -----------------------------------------------
-
 
 #' @rdname r2
 #' @export
@@ -115,6 +112,8 @@ r2.lm <- function(model, ci = NULL, ...) {
 #' @export
 r2.phylolm <- r2.lm
 
+# helper -------------
+
 .r2_lm <- function(model_summary, ci = NULL) {
   out <- list(
     R2 = model_summary$r.squared,
@@ -140,7 +139,6 @@ r2.phylolm <- r2.lm
 }
 
 
-
 #' @export
 r2.summary.lm <- function(model, ci = NULL, ...) {
   if (!is.null(ci) && !is.na(ci)) {
@@ -148,7 +146,6 @@ r2.summary.lm <- function(model, ci = NULL, ...) {
   }
   .r2_lm(model)
 }
-
 
 
 #' @export
@@ -173,11 +170,11 @@ r2.systemfit <- function(model, ...) {
 #' @export
 r2.lm_robust <- function(model, ...) {
   out <- list(
-    "R2" = tryCatch(
+    R2 = tryCatch(
       model[["r.squared"]],
       error = function(e) NULL
     ),
-    "R2_adjusted" = tryCatch(
+    R2_adjusted = tryCatch(
       model[["adj.r.squared"]],
       error = function(e) NULL
     )
@@ -198,14 +195,11 @@ r2.ols <- function(model, ...) {
   structure(class = "r2_generic", out)
 }
 
-
-
 #' @export
 r2.lrm <- r2.ols
 
 #' @export
 r2.cph <- r2.ols
-
 
 
 #' @export
@@ -230,7 +224,6 @@ r2.mhurdle <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.aov <- function(model, ci = NULL, ...) {
   if (!is.null(ci) && !is.na(ci)) {
@@ -250,7 +243,6 @@ r2.aov <- function(model, ci = NULL, ...) {
   attr(out, "model_type") <- "Anova"
   structure(class = "r2_generic", out)
 }
-
 
 
 #' @export
@@ -276,7 +268,6 @@ r2.mlm <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
   if (!is.null(ci) && !is.na(ci)) {
@@ -291,7 +282,7 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
   if (info$family %in% c("gaussian", "inverse.gaussian")) {
     out <- r2.default(model, ...)
   } else if (info$is_logit && info$is_bernoulli) {
-    out <- list("R2_Tjur" = r2_tjur(model, ...))
+    out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
     attr(out, "model_type") <- "Logistic"
     names(out$R2_Tjur) <- "Tjur's R2"
     class(out) <- c("r2_pseudo", class(out))
@@ -301,7 +292,7 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
     }
     out <- NULL
   } else {
-    out <- list("R2_Nagelkerke" = r2_nagelkerke(model, ...))
+    out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
     attr(out, "model_type") <- "Generalized Linear"
     class(out) <- c("r2_pseudo", class(out))
@@ -312,6 +303,14 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
 #' @export
 r2.glmx <- r2.glm
 
+
+#' @export
+r2.nestedLogit <- function(model, ci = NULL, verbose = TRUE, ...) {
+  out <- list(R2_Tjur = r2_tjur(model, ...))
+  attr(out, "model_type") <- "Logistic"
+  class(out) <- c("r2_pseudo", class(out))
+  out
+}
 
 
 
@@ -358,7 +357,7 @@ r2.model_fit <- r2.logitmfx
 
 #' @export
 r2.BBreg <- function(model, ...) {
-  out <- list("R2_CoxSnell" = r2_coxsnell(model))
+  out <- list(R2_CoxSnell = r2_coxsnell(model))
   names(out$R2_CoxSnell) <- "Cox & Snell's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -378,7 +377,7 @@ r2.bayesx <- r2.BBreg
 
 #' @export
 r2.censReg <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+  out <- list(R2_Nagelkerke = r2_nagelkerke(model))
   names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -507,8 +506,8 @@ r2.wbm <- function(model, tolerance = 1e-5, ...) {
     names(r2_marginal) <- "Marginal R2"
 
     out <- list(
-      "R2_conditional" = r2_conditional,
-      "R2_marginal" = r2_marginal
+      R2_conditional = r2_conditional,
+      R2_marginal = r2_marginal
     )
 
     attr(out, "model_type") <- "Fixed Effects"
@@ -531,8 +530,8 @@ r2.sem <- function(model, ...) {
   structure(
     class = "r2_nakagawa",
     list(
-      "R2_conditional" = r2_conditional,
-      "R2_marginal" = r2_marginal
+      R2_conditional = r2_conditional,
+      R2_marginal = r2_marginal
     )
   )
 }
@@ -563,12 +562,10 @@ r2.gam <- function(model, ...) {
   # gamlss inherits from gam, and summary.gamlss prints results automatically
   printout <- utils::capture.output(s <- summary(model)) # nolint
 
-  if (!is.null(s$r.sq)) {
-    list(
-      R2 = c(`Adjusted R2` = s$r.sq)
-    )
-  } else {
+  if (is.null(s$r.sq)) {
     NextMethod()
+  } else {
+    list(R2 = c(`Adjusted R2` = s$r.sq))
   }
 }
 
@@ -603,7 +600,7 @@ r2.rma <- function(model, ...) {
 #' @export
 r2.feis <- function(model, ...) {
   out <- list(
-    R2 = c(`R2` = model$r2),
+    R2 = c(R2 = model$r2),
     R2_adjusted = c(`adjusted R2` = model$adj.r2)
   )
 
@@ -654,7 +651,7 @@ r2.fixest_multi <- function(model, ...) {
 r2.felm <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model_summary$r2),
+    R2 = c(R2 = model_summary$r2),
     R2_adjusted = c(`adjusted R2` = model_summary$r2adj)
   )
 
@@ -668,7 +665,7 @@ r2.felm <- function(model, ...) {
 #' @export
 r2.iv_robust <- function(model, ...) {
   out <- list(
-    R2 = c(`R2` = model$r.squared),
+    R2 = c(R2 = model$r.squared),
     R2_adjusted = c(`adjusted R2` = model$adj.r.squared)
   )
 
@@ -682,7 +679,7 @@ r2.iv_robust <- function(model, ...) {
 r2.ivreg <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model_summary$r.squared),
+    R2 = c(R2 = model_summary$r.squared),
     R2_adjusted = c(`adjusted R2` = model_summary$adj.r.squared)
   )
 
@@ -694,7 +691,7 @@ r2.ivreg <- function(model, ...) {
 
 #' @export
 r2.bigglm <- function(model, ...) {
-  out <- list("R2_CoxSnell" = summary(model)$rsq)
+  out <- list(R2_CoxSnell = summary(model)$rsq)
   names(out$R2_CoxSnell) <- "Cox & Snell's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -728,7 +725,7 @@ r2.biglm <- function(model, ...) {
 r2.lmrob <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model_summary$r.squared),
+    R2 = c(R2 = model_summary$r.squared),
     R2_adjusted = c(`adjusted R2` = model_summary$adj.r.squared)
   )
 
@@ -749,10 +746,10 @@ r2.mmclogit <- function(model, ...) {
 
 #' @export
 r2.Arima <- function(model, ...) {
-  if (!requireNamespace("forecast", quietly = TRUE)) {
-    list(R2 = NA)
-  } else {
+  if (requireNamespace("forecast", quietly = TRUE)) {
     list(R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2)
+  } else {
+    list(R2 = NA)
   }
 }
 
@@ -762,8 +759,8 @@ r2.Arima <- function(model, ...) {
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    "R2" = c(`R2` = model_summary$r.squared[1]),
-    "R2_adjusted" = c(`adjusted R2` = model_summary$r.squared[2])
+    R2 = c(R2 = model_summary$r.squared[1]),
+    R2_adjusted = c(`adjusted R2` = model_summary$r.squared[2])
   )
 
   attr(out, "model_type") <- "Panel Data"
@@ -779,8 +776,8 @@ r2.selection <- function(model, ...) {
     return(NULL)
   }
   out <- list(
-    "R2" = c(`R2` = model_summary$rSquared$R2),
-    "R2_adjusted" = c(`adjusted R2` = model_summary$rSquared$R2adj)
+    R2 = c(R2 = model_summary$rSquared$R2),
+    R2_adjusted = c(`adjusted R2` = model_summary$rSquared$R2adj)
   )
 
   attr(out, "model_type") <- "Tobit 2"
@@ -795,7 +792,7 @@ r2.svyglm <- function(model, ...) {
   rsq.adjust <- 1 - ((1 - rsq) * (model$df.null / model$df.residual))
 
   out <- list(
-    R2 = c(`R2` = rsq),
+    R2 = c(R2 = rsq),
     R2_adjusted = c(`adjusted R2` = rsq.adjust)
   )
 
@@ -807,7 +804,7 @@ r2.svyglm <- function(model, ...) {
 
 #' @export
 r2.vglm <- function(model, ...) {
-  out <- list("R2_McKelvey" = r2_mckelvey(model))
+  out <- list(R2_McKelvey = r2_mckelvey(model))
   names(out$R2_McKelvey) <- "McKelvey's R2"
   class(out) <- c("r2_pseudo", class(out))
   out
@@ -820,7 +817,7 @@ r2.vgam <- r2.vglm
 
 #' @export
 r2.DirichletRegModel <- function(model, ...) {
-  out <- list("R2_Nagelkerke" = r2_nagelkerke(model))
+  out <- list(R2_Nagelkerke = r2_nagelkerke(model))
   names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
   class(out) <- c("r2_pseudo", class(out))
   out

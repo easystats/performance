@@ -88,6 +88,26 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
 #' @export
 r2_coxsnell.BBreg <- r2_coxsnell.glm
 
+
+#' @export
+r2_coxsnell.nestedLogit <- function(model, ...) {
+  n <- insight::n_obs(model, disaggregate = TRUE)
+  stats::setNames(
+    lapply(names(model$models), function(i) {
+      m <- model$models[[i]]
+      # if no deviance, return NA
+      if (is.null(m$deviance)) {
+        return(NA)
+      }
+      r2_coxsnell <- (1 - exp((m$deviance - m$null.deviance) / n[[i]]))
+      names(r2_coxsnell) <- "Cox & Snell's R2"
+      r2_coxsnell
+    }),
+    names(model$models)
+  )
+}
+
+
 #' @export
 r2_coxsnell.mclogit <- function(model, ...) {
   insight::check_if_installed("mclogit", reason = "to calculate R2")

@@ -1,5 +1,21 @@
 # performance (development version)
 
+## General
+
+* Support for `nestedLogit` models.
+
+## Changes to functions
+
+* `check_outliers()` for method `"ics"` now detects number of available cores
+  for parallel computing via the `"mc.cores"` option. This is more robust than
+  the previous method, which used `parallel::detectCores()`. Now you should
+  set the number of cores via `options(mc.cores = 4)`.
+
+## Bug fixes
+
+* Fixed issues is `check_model()` for models that used data sets with
+  variables of class `"haven_labelled"`.
+
 # performance 0.10.5
 
 ## Changes to functions
