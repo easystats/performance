@@ -600,7 +600,7 @@ r2.rma <- function(model, ...) {
 #' @export
 r2.feis <- function(model, ...) {
   out <- list(
-    R2 = c(`R2` = model$r2),
+    R2 = c(R2 = model$r2),
     R2_adjusted = c(`adjusted R2` = model$adj.r2)
   )
 
@@ -651,7 +651,7 @@ r2.fixest_multi <- function(model, ...) {
 r2.felm <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model_summary$r2),
+    R2 = c(R2 = model_summary$r2),
     R2_adjusted = c(`adjusted R2` = model_summary$r2adj)
   )
 
@@ -665,7 +665,7 @@ r2.felm <- function(model, ...) {
 #' @export
 r2.iv_robust <- function(model, ...) {
   out <- list(
-    R2 = c(`R2` = model$r.squared),
+    R2 = c(R2 = model$r.squared),
     R2_adjusted = c(`adjusted R2` = model$adj.r.squared)
   )
 
@@ -679,7 +679,7 @@ r2.iv_robust <- function(model, ...) {
 r2.ivreg <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model_summary$r.squared),
+    R2 = c(R2 = model_summary$r.squared),
     R2_adjusted = c(`adjusted R2` = model_summary$adj.r.squared)
   )
 
@@ -725,7 +725,7 @@ r2.biglm <- function(model, ...) {
 r2.lmrob <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model_summary$r.squared),
+    R2 = c(R2 = model_summary$r.squared),
     R2_adjusted = c(`adjusted R2` = model_summary$adj.r.squared)
   )
 
@@ -759,7 +759,7 @@ r2.Arima <- function(model, ...) {
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
   out <- list(
-    R2 = c(`R2` = model_summary$r.squared[1]),
+    R2 = c(R2 = model_summary$r.squared[1]),
     R2_adjusted = c(`adjusted R2` = model_summary$r.squared[2])
   )
 
@@ -776,7 +776,7 @@ r2.selection <- function(model, ...) {
     return(NULL)
   }
   out <- list(
-    R2 = c(`R2` = model_summary$rSquared$R2),
+    R2 = c(R2 = model_summary$rSquared$R2),
     R2_adjusted = c(`adjusted R2` = model_summary$rSquared$R2adj)
   )
 
@@ -792,7 +792,7 @@ r2.svyglm <- function(model, ...) {
   rsq.adjust <- 1 - ((1 - rsq) * (model$df.null / model$df.residual))
 
   out <- list(
-    R2 = c(`R2` = rsq),
+    R2 = c(R2 = rsq),
     R2_adjusted = c(`adjusted R2` = rsq.adjust)
   )
 
