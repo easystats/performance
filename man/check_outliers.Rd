@@ -195,7 +195,9 @@ of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off
 value for outliers classification. Refer to the help-file of
 \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}} to get more details about this procedure.
 Note that \code{method = "ics"} requires both \strong{ICS} and \strong{ICSOutlier}
-to be installed, and that it takes some time to compute the results.
+to be installed, and that it takes some time to compute the results. You
+can speed up computation time using parallel computing. Set the number of
+cores to use with \code{options(mc.cores = 4)} (for example).
 \item \strong{OPTICS}:
 The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
 (Ankerst et al., 1999) is using similar concepts to DBSCAN (an unsupervised
@@ -290,6 +292,7 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
 
+\dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # You can also run all the methods
 check_outliers(data, method = "all")
@@ -306,13 +309,11 @@ mt2 <- rbind(mt1, data.frame(
 model <- lm(disp ~ mpg + hp, data = mt2)
 
 outliers_list <- check_outliers(model)
-
-if (require("see")) {
-  plot(outliers_list)
-}
+plot(outliers_list)
 
 insight::get_data(model)[outliers_list, ] # Show outliers data
 }
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

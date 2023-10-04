@@ -167,7 +167,9 @@
 #'  value for outliers classification. Refer to the help-file of
 #'  [ICSOutlier::ics.outlier()] to get more details about this procedure.
 #'  Note that `method = "ics"` requires both **ICS** and **ICSOutlier**
-#'  to be installed, and that it takes some time to compute the results.
+#'  to be installed, and that it takes some time to compute the results. You
+#'  can speed up computation time using parallel computing. Set the number of
+#'  cores to use with `options(mc.cores = 4)` (for example).
 #'
 #'  - **OPTICS**:
 #'  The Ordering Points To Identify the Clustering Structure (OPTICS) algorithm
@@ -299,6 +301,7 @@
 #' group_iris <- datawizard::data_group(iris, "Species")
 #' check_outliers(group_iris)
 #'
+#' @examplesIf require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")
 #' \donttest{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all")
@@ -315,10 +318,7 @@
 #' model <- lm(disp ~ mpg + hp, data = mt2)
 #'
 #' outliers_list <- check_outliers(model)
-#'
-#' if (require("see")) {
-#'   plot(outliers_list)
-#' }
+#' plot(outliers_list)
 #'
 #' insight::get_data(model)[outliers_list, ] # Show outliers data
 #' }
@@ -506,7 +506,7 @@ check_outliers.default <- function(x,
 
   num.df <- outlier_count$all[!names(outlier_count$all) %in% c("Row", ID)]
   if (isTRUE(nrow(num.df) > 0)) {
-    num.df <- datawizard::change_code(
+    num.df <- datawizard::recode_values(
       num.df,
       recode = list(`2` = "(Multivariate)")
     )
@@ -1764,7 +1764,20 @@ check_outliers.metabin <- check_outliers.metagen
   n_cores <- if (!requireNamespace("parallel", quietly = TRUE)) {
     NULL
   } else {
-    max(1L, parallel::detectCores() - 2L, na.rm = TRUE)
+    getOption("mc.cores", 1L)
+  }
+
+  # tell user about n-cores option
+  if (is.null(n_cores)) {
+    insight::format_alert(
+      "Package `parallel` is not installed. `check_outliers()` will run on a single core.",
+      "Install package `parallel` and set, for example, `options(mc.cores = 4)` to run on multiple cores."
+    )
+  } else if (n_cores == 1) {
+    insight::format_alert(
+      "Package `parallel` is installed, but `check_outliers()` will run on a single core.",
+      "To use multiple cores, set `options(mc.cores = 4)` (for example)."
+    )
   }
 
   # Run algorithm

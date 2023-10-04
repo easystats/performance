@@ -153,7 +153,7 @@
 # prepare data for normality of residuals plot ----------------------------------
 
 .diag_norm <- function(model, verbose = TRUE) {
-  r <- try(stats::residuals(model), silent = TRUE)
+  r <- try(as.numeric(stats::residuals(model)), silent = TRUE)
 
   if (inherits(r, "try-error")) {
     insight::format_alert(sprintf("Non-normality of residuals could not be computed. Cannot extract residuals from objects of class '%s'.", class(model)[1]))
@@ -174,16 +174,16 @@
 
   if (inherits(model, "lm", which = TRUE) == 1) {
     cook_levels <- round(stats::qf(0.5, s$fstatistic[2], s$fstatistic[3]), 2)
-  } else if (!is.null(threshold)) {
-    cook_levels <- threshold
-  } else {
+  } else if (is.null(threshold)) {
     cook_levels <- c(0.5, 1)
+  } else {
+    cook_levels <- threshold
   }
 
   n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
 
   infl <- stats::influence(model, do.coef = FALSE)
-  resid <- insight::get_residuals(model)
+  resid <- as.numeric(insight::get_residuals(model))
 
   std_resid <- tryCatch(stats::rstandard(model, infl), error = function(e) resid)
 
@@ -212,8 +212,8 @@
   ncv <- tryCatch(
     {
       data.frame(
-        x = stats::fitted(model),
-        y = stats::residuals(model)
+        x = as.numeric(stats::fitted(model)),
+        y = as.numeric(stats::residuals(model))
       )
     },
     error = function(e) {
