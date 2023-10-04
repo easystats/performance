@@ -8,7 +8,7 @@ output:
 bibliography: paper.bib
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Checking model assumption - linear models}
+  %\VignetteIndexEntry{Checking outliers with *performance*}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -110,10 +110,10 @@ plot(outliers)
 
 ```{r univariate_implicit, fig.cap = "Visual depiction of outliers using the robust z-score method. The distance represents an aggregate score for variables mpg, cyl, disp, and hp.", echo=FALSE}
 library(see)
-plot(outliers) + 
+plot(outliers) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(
     angle = 45, size = 7
-))
+  ))
 ```
 
 Other univariate methods are available, such as using the interquartile range (IQR), or based on different intervals, such as the Highest Density Interval (HDI) or the Bias Corrected and Accelerated Interval (BCI). These methods are documented and described in the function's [help page](<https://easystats.github.io/performance/reference/check_outliers.html>).
@@ -140,10 +140,10 @@ plot(outliers)
 ```
 
 ```{r multivariate_implicit, fig.cap = "Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance. The distance represents the MCD scores for variables mpg, cyl, disp, and hp.", echo=FALSE}
-plot(outliers) + 
+plot(outliers) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(
     angle = 45, size = 7
-))
+  ))
 ```
 
 Other multivariate methods are available, such as another type of robust Mahalanobis distance that in this case relies on an orthogonalized Gnanadesikan-Kettenring pairwise estimator [@gnanadesikan1972robust]. These methods are documented and described in the function's [help page](https://easystats.github.io/performance/reference/check_outliers.html).
@@ -169,21 +169,26 @@ Table 1 below summarizes which methods to use in which cases, and with what thre
 ```{r, echo=FALSE}
 df <- data.frame(
   `Statistical Test` = c(
-    "Supported regression model", 
-    "Structural Equation Modeling (or other unsupported model)", 
-    "Simple test with few variables (*t* test, correlation, etc.)"),
+    "Supported regression model",
+    "Structural Equation Modeling (or other unsupported model)",
+    "Simple test with few variables (*t* test, correlation, etc.)"
+  ),
   `Diagnosis Method` = c(
-    "**Model-based**: Cook (or Pareto for Bayesian models)", 
-    "**Multivariate**: Minimum Covariance Determinant (MCD)", 
-    "**Univariate**: robust *z* scores (MAD)"),
+    "**Model-based**: Cook (or Pareto for Bayesian models)",
+    "**Multivariate**: Minimum Covariance Determinant (MCD)",
+    "**Univariate**: robust *z* scores (MAD)"
+  ),
   `Recommended Threshold` = c(
-    "`qf(0.5, ncol(x), nrow(x) - ncol(x))` (or 0.7 for Pareto)", 
-    "`qchisq(p = 1 - 0.001, df = ncol(x))`", 
-    "`qnorm(p = 1 - 0.001 / 2)`, ~ 3.29")
+    "`qf(0.5, ncol(x), nrow(x) - ncol(x))` (or 0.7 for Pareto)",
+    "`qchisq(p = 1 - 0.001, df = ncol(x))`",
+    "`qnorm(p = 1 - 0.001 / 2)`, ~ 3.29"
+  )
 )
 knitr::kable(
-  df, col.names = gsub("[.]", " ", names(df)), 
-  caption = "Summary of Statistical Outlier Detection Methods Recommendations.", longtable = TRUE)
+  df,
+  col.names = gsub("[.]", " ", names(df)),
+  caption = "Summary of Statistical Outlier Detection Methods Recommendations.", longtable = TRUE
+)
 ```
 
 ## Cook's Distance vs. MCD
@@ -258,7 +263,7 @@ _Removing_ outliers can in this case be a valid strategy, and ideally one would 
 The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of *{datawizard}*, a lightweight R package to facilitate data wrangling and statistical transformations [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD.
 
 ```{r winsorization}
-data[1501:1502, ]  # See outliers rows
+data[1501:1502, ] # See outliers rows
 # Winsorizing using the MAD
 library(datawizard)
 winsorized_data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
