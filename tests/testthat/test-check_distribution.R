@@ -31,4 +31,6 @@ test_that("check_distribution", {
     ),
     tolerance = 1e-4
   )
+
+  expect_snapshot(print(out))
 })
