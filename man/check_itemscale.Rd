@@ -61,7 +61,5 @@ check_itemscale(pca)
 \item Briggs SR, Cheek JM (1986) The role of factor analysis in the development
 and evaluation of personality scales. Journal of Personality, 54(1),
 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x
-\item Trochim WMK (2008) Types of Reliability.
-(\href{https://conjointly.com/kb/types-of-reliability/}{web})
 }
 }
