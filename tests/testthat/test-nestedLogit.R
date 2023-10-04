@@ -29,10 +29,10 @@ test_that("r2", {
   out <- r2_tjur(mnl)
   expect_equal(
     out,
-    list(R2_Tjur = list(
+    list(
       work = c(`Tjur's R2` = 0.137759452521642),
       full = c(`Tjur's R2` = 0.332536937208286)
-    )),
+    ),
     ignore_attr = TRUE,
     tolerance = 1e-4
   )
