@@ -65,5 +65,3 @@ test_that("binned_residuals, terms", {
     tolerance = 1e-4
   )
 })
-
-dput(round(result$ybar, 5))
