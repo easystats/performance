@@ -77,8 +77,7 @@ r2_tjur.nestedLogit <- function(model, ...) {
 
       names(tjur_d) <- "Tjur's R2"
       tjur_d
-    }
-    ),
+    }),
     names(model$models)
   )
 }
