@@ -251,7 +251,7 @@ All `check_outliers()` output objects possess a `plot()` method, meaning it is a
 
 
 ```r
-plot(outliers) # Figure 1 above
+plot(outliers)
 ```
 
 \begin{figure}

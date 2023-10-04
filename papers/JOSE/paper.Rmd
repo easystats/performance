@@ -239,7 +239,7 @@ ftExtra::colformat_md(x)
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers using the generic `plot()` function on the resulting outlier object after loading the {see} package (Figure 1).
 
 ```{r model_fig, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
-plot(outliers) # Figure 1 above
+plot(outliers)
 ```
 
 ## Cook's Distance vs. MCD
