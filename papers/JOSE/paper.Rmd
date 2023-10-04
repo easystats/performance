@@ -225,7 +225,7 @@ df <- data.frame(
 
 _Summary of Statistical Outlier Detection Methods Recommendations_
 
-```{r table1_print, echo=FALSE, message=FALSE}
+```{r table1_print, echo=FALSE, message=FALSE, eval=FALSE}
 x <- flextable::flextable(df, cwidth = 1.25)
 x <- flextable::theme_apa(x)
 x <- flextable::font(x, fontname = "Latin Modern Roman", part = "all")
@@ -233,6 +233,8 @@ x <- flextable::fontsize(x, size = 10, part = "all")
 ftExtra::colformat_md(x)
 
 ```
+
+![]("paper_files/figure-latex/table1.jpg")
 
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers using the generic `plot()` function on the resulting outlier object after loading the {see} package (Figure 1).
 

@@ -197,7 +197,6 @@ Tibshirani
 Tily
 Tjur
 Tjur's
-Trochim
 Tsai
 Tweedie
 VIF
@@ -211,7 +210,6 @@ Visualisation
 Vuong
 Vuong's
 WAIC
-WMK
 Weisberg
 Windmeijer
 Winsorization
@@ -272,6 +270,7 @@ intraclass
 joss
 kmeans
 lavaan
+lm
 lme
 lmrob
 lmtest

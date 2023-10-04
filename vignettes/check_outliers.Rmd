@@ -27,8 +27,10 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-pkgs <- c("see", "performance", "datawizard", "rempsyc", 
-          "ggplot2", "flextable", "ftExtra")
+pkgs <- c(
+  "see", "performance", "datawizard", "rempsyc",
+  "ggplot2", "flextable", "ftExtra"
+)
 successfully_loaded <- vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE)
 can_evaluate <- all(successfully_loaded)
 
@@ -158,35 +160,39 @@ In {performance}, two such model-based SOD methods are currently available: Cook
 Currently, most lm models are supported (with the exception of `glmmTMB`, `lmrob`, and `glmrob` models), as long as they are supported by the underlying functions `stats::cooks.distance()` (or `loo::pareto_k_values()`) and `insight::get_data()` (for a full list of the 225 models currently supported by the `insight` package, see https://easystats.github.io/insight/#list-of-supported-models-by-class). Also note that although `check_outliers()` supports the pipe operators (`|>` or `%>%`), it does not support `tidymodels` at this time. We show a demo below.
 
 ```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
-model <- lm(disp ~ mpg * disp, data = data)
+model <- lm(disp ~ mpg * hp, data = data)
 outliers <- check_outliers(model, method = "cook")
 outliers
 
 plot(outliers)
 ```
 
-Using the model-based outlier detection method, we identified a single outlier.
+Using the model-based outlier detection method, we identified two outliers.
 
 Table 1 below summarizes which methods to use in which cases, and with what threshold. The recommended thresholds are the default thresholds.
 
 ```{r table1_prep, echo=FALSE}
 df <- data.frame(
   `Statistical Test` = c(
-    "Supported regression model", 
-    "Structural Equation Modeling (or other unsupported model)", 
-    "Simple test with few variables (*t* test, correlation, etc.)"),
+    "Supported regression model",
+    "Structural Equation Modeling (or other unsupported model)",
+    "Simple test with few variables (*t* test, correlation, etc.)"
+  ),
   `Diagnosis Method` = c(
-    "**Model-based**: Cook (or Pareto for Bayesian models)", 
-    "**Multivariate**: Minimum Covariance Determinant (MCD)", 
-    "**Univariate**: robust *z* scores (MAD)"),
+    "**Model-based**: Cook (or Pareto for Bayesian models)",
+    "**Multivariate**: Minimum Covariance Determinant (MCD)",
+    "**Univariate**: robust *z* scores (MAD)"
+  ),
   `Recommended Threshold` = c(
-    "_qf(0.5, ncol(x), nrow(x) - ncol(x))_ (or 0.7 for Pareto)", 
-    "_qchisq(p = 1 - 0.001, df = ncol(x))_", 
-    "_qnorm(p = 1 - 0.001 / 2)_, ~ 3.29"),
+    "_qf(0.5, ncol(x), nrow(x) - ncol(x))_ (or 0.7 for Pareto)",
+    "_qchisq(p = 1 - 0.001, df = ncol(x))_",
+    "_qnorm(p = 1 - 0.001 / 2)_, ~ 3.29"
+  ),
   `Function Usage` = c(
-    '_check_outliers(model, method = "cook")_', 
-    '_check_outliers(data, method = "mcd")_', 
-    '_check_outliers(data, method = "zscore_robust")_'),
+    '_check_outliers(model, method = "cook")_',
+    '_check_outliers(data, method = "mcd")_',
+    '_check_outliers(data, method = "zscore_robust")_'
+  ),
   check.names = FALSE
 )
 ```
@@ -201,7 +207,6 @@ x <- flextable::theme_apa(x)
 x <- flextable::font(x, fontname = "Latin Modern Roman", part = "all")
 # x <- flextable::fontsize(x, size = 10, part = "all")
 ftExtra::colformat_md(x)
-
 ```
 
 ## Cook's Distance vs. MCD

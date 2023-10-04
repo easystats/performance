@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.10.4)  4 OCT 2023 17:36
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.10.4)  4 OCT 2023 18:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -857,175 +857,41 @@ Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
 \cslhangindent=\skip93
 \csllabelwidth=\skip94
 \cslentryspacingunit=\skip95
-(c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
-Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
-\multirow@colwidth=\skip96
-\multirow@cntb=\count468
-\multirow@dima=\skip97
-\bigstrutjot=\dimen293
-) (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/multicol.sty
-Package: multicol 2023/03/30 v1.9f multicolumn formatting (FMi)
-\c@tracingmulticols=\count469
-\mult@box=\box77
-\multicol@leftmargin=\dimen294
-\c@unbalance=\count470
-\c@collectmore=\count471
-\doublecol@number=\count472
-\multicoltolerance=\count473
-\multicolpretolerance=\count474
-\full@width=\dimen295
-\page@free=\dimen296
-\premulticols=\dimen297
-\postmulticols=\dimen298
-\multicolsep=\skip98
-\multicolbaselineskip=\skip99
-\partial@page=\box78
-\last@line=\box79
-\mc@boxedresult=\box80
-\maxbalancingoverflow=\dimen299
-\mult@rightbox=\box81
-\mult@grightbox=\box82
-\mult@firstbox=\box83
-\mult@gfirstbox=\box84
-\@tempa=\box85
-\@tempa=\box86
-\@tempa=\box87
-\@tempa=\box88
-\@tempa=\box89
-\@tempa=\box90
-\@tempa=\box91
-\@tempa=\box92
-\@tempa=\box93
-\@tempa=\box94
-\@tempa=\box95
-\@tempa=\box96
-\@tempa=\box97
-\@tempa=\box98
-\@tempa=\box99
-\@tempa=\box100
-\@tempa=\box101
-\@tempa=\box102
-\@tempa=\box103
-\@tempa=\box104
-\@tempa=\box105
-\@tempa=\box106
-\@tempa=\box107
-\@tempa=\box108
-\@tempa=\box109
-\@tempa=\box110
-\@tempa=\box111
-\@tempa=\box112
-\@tempa=\box113
-\@tempa=\box114
-\@tempa=\box115
-\@tempa=\box116
-\@tempa=\box117
-\@tempa=\box118
-\@tempa=\box119
-\@tempa=\box120
-\c@minrows=\count475
-\c@columnbadness=\count476
-\c@finalcolumnbadness=\count477
-\last@try=\dimen300
-\multicolovershoot=\dimen301
-\multicolundershoot=\dimen302
-\mult@nat@firstbox=\box121
-\colbreak@box=\box122
-\mc@col@check@num=\count478
-) (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.sty
-Package: colortbl 2022/06/20 v1.0f Color table columns (DPC)
-(c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
-Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
-\col@sep=\dimen303
-\ar@mcellbox=\box123
-\extrarowheight=\dimen304
-\NC@list=\toks45
-\extratabsurround=\skip100
-\backup@length=\skip101
-\ar@cellbox=\box124
-)
-\everycr=\toks46
-\minrowclearance=\skip102
-\rownum=\count479
-) (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/hhline.sty
-Package: hhline 2020/01/04 v2.04 Table rule package (DPC)
-)
-\Oldarrayrulewidth=\skip103
-\Oldtabcolsep=\skip104
-(c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
-Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
-\LTleft=\skip105
-\LTright=\skip106
-\LTpre=\skip107
-\LTpost=\skip108
-\LTchunksize=\count480
-\LTcapwidth=\dimen305
-\LT@head=\box125
-\LT@firsthead=\box126
-\LT@foot=\box127
-\LT@lastfoot=\box128
-\LT@gbox=\box129
-\LT@cols=\count481
-\LT@rows=\count482
-\c@LT@tables=\count483
-\c@LT@chunks=\count484
-\LT@p@ftn=\toks47
-) (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
-Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count485
-\float@exts=\toks48
-\float@box=\box130
-\@float@everytoks=\toks49
-\@floatcapt=\box131
-) (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
-\wrapoverhang=\dimen306
-\WF@size=\dimen307
-\c@WF@wrappedlines=\count486
-\WF@box=\box132
-\WF@everypar=\toks50
-Package: wrapfig 2003/01/31  v 3.6
-)
-\@quotelevel=\count487
-\@quotereset=\count488
+\@quotelevel=\count468
+\@quotereset=\count469
 (./paper.aux)
 \openout1 = `paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 296.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 296.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 284.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 284.
 (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 296.
-LaTeX Font Info:    ... okay on input line 296.
-Package hyperref Info: Link coloring ON on input line 296.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 284.
+LaTeX Font Info:    ... okay on input line 284.
+Package hyperref Info: Link coloring ON on input line 284.
 (./paper.out) (./paper.out)
 \@outlinefile=\write6
 \openout6 = `paper.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
-Package caption Info: float package is loaded.
-Package caption Info: longtable package is loaded.
-(c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.sty
-Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
-)
-Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
@@ -1041,8 +907,8 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'paper.bbl' not found.
 No file paper.bbl.
-Package biblatex Info: Reference section=0 on input line 296.
-Package biblatex Info: Reference segment=0 on input line 296.
+Package biblatex Info: Reference section=0 on input line 284.
+Package biblatex Info: Reference segment=0 on input line 284.
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
 *geometry* verbose mode - [ preamble ] result:
@@ -1077,12 +943,12 @@ Package biblatex Info: Reference segment=0 on input line 296.
 * \@reversemargintrue
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 296.
-Package microtype Info: Applying patch `item' on input line 296.
-Package microtype Info: Applying patch `toc' on input line 296.
-Package microtype Info: Applying patch `eqnum' on input line 296.
-Package microtype Info: Applying patch `footnote' on input line 296.
-Package microtype Info: Applying patch `verbatim' on input line 296.
+LaTeX Info: Redefining \microtypecontext on input line 284.
+Package microtype Info: Applying patch `item' on input line 284.
+Package microtype Info: Applying patch `toc' on input line 284.
+Package microtype Info: Applying patch `eqnum' on input line 284.
+Package microtype Info: Applying patch `footnote' on input line 284.
+Package microtype Info: Applying patch `verbatim' on input line 284.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: No adjustment of tracking.
@@ -1092,7 +958,7 @@ Package microtype Info: No adjustment of kerning.
 File: mt-LatinModernRoman.cfg 2021/02/21 v1.1 microtype config. file: Latin Modern Roman (RS)
 )
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <17.28> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 297.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 285.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmss' (encoding: TU).
 (microtype)             For optimal results, create family-specific settings.
@@ -1100,26 +966,26 @@ Package microtype Info: Loading generic protrusion settings for font family
 (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 297.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 285.
 (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 297.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 285.
 (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (c:/Users/rempsyc/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 
-Package hyperref Warning: Suppressing link with empty target on input line 323.
+Package hyperref Warning: Suppressing link with empty target on input line 311.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 323.
+Package hyperref Warning: Suppressing link with empty target on input line 311.
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 323.
+Package hyperref Warning: Suppressing link with empty target on input line 311.
 
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
@@ -1131,7 +997,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 388.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 376.
 [1
 
 ]
@@ -1146,14 +1012,14 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [2]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 478.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 466.
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 494--494
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 482--482
 []\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 503--503
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 491--491
 []\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
@@ -1177,528 +1043,8 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [4]
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman/B scale = 0.9707163010643308.
-
-
-Package fontspec Info: Latin Modern Roman/I scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman/BI scale = 0.9707163010643308.
-
-
-Package fontspec Info: Font family 'LatinModernRoman(0)' created for font
-(fontspec)             'Latin Modern Roman' with options
-(fontspec)             [Ligatures=TeX,Scale=MatchLowercase,Ligatures=TeX].
-(fontspec)              
-(fontspec)              This font family consists of the following NFSS
-(fontspec)             series/shapes:
-(fontspec)              
-(fontspec)             - 'normal' (m/n) with NFSS spec.:
-(fontspec)             <->s*[0.9999964596882403]"Latin Modern
-(fontspec)             Roman/OT:script=latn;language=dflt;mapping=tex-text;"
-(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
-(fontspec)             - 'bold' (b/n) with NFSS spec.:
-(fontspec)             <->s*[0.9707163010643308]"Latin Modern
-(fontspec)             Roman/B/OT:script=latn;language=dflt;mapping=tex-text;"
-(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
-(fontspec)             - 'italic' (m/it) with NFSS spec.:
-(fontspec)             <->s*[0.9999964596882403]"Latin Modern
-(fontspec)             Roman/I/OT:script=latn;language=dflt;mapping=tex-text;"
-(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.: 
-(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
-(fontspec)             <->s*[0.9707163010643308]"Latin Modern
-(fontspec)             Roman/BI/OT:script=latn;language=dflt;mapping=tex-text;"
-(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.: 
-
-LaTeX Font Info:    Font shape `TU/LatinModernRoman(0)/m/n' will be
-(Font)              scaled to size 10.0pt on input line 683.
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-LaTeX Font Info:    Font shape `TU/LatinModernRoman(0)/b/n' will be
-(Font)              scaled to size 9.70718pt on input line 695.
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-LaTeX Font Info:    Font shape `TU/LatinModernRoman(0)/m/it' will be
-(Font)              scaled to size 10.0pt on input line 695.
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Overfull \hbox (4.64252pt too wide) in paragraph at lines 695--695
- []|[]\TU/LatinModernRoman(0)/m/it/10 check_outliers(model,[][] 
- []
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
-
-Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
-
+File: paper_files/figure-latex/table1.jpg Graphic file (type bmp)
+<paper_files/figure-latex/table1.jpg>
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
 
@@ -1741,17 +1087,17 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [8]
-Underfull \hbox (badness 1584) in paragraph at lines 998--1004
+Underfull \hbox (badness 1584) in paragraph at lines 928--934
 []\TU/lmr/m/n/10 Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psy-
  []
 
 
-Underfull \hbox (badness 3049) in paragraph at lines 998--1004
+Underfull \hbox (badness 3049) in paragraph at lines 928--934
 \TU/lmr/m/n/10 chology: Undisclosed flexibility in data collection and analysis allows pre-
  []
 
 
-Underfull \hbox (badness 3735) in paragraph at lines 998--1004
+Underfull \hbox (badness 3735) in paragraph at lines 928--934
 \TU/lmr/m/n/10 senting anything as significant. \TU/lmr/m/it/10 Psychological Science\TU/lmr/m/n/10 , \TU/lmr/m/it/10 22\TU/lmr/m/n/10 (11), 1359–1366.
  []
 
@@ -1776,12 +1122,12 @@ Package logreq Info: Writing requests to 'paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37306 strings out of 477589
- 764435 string characters out of 5817003
+ 36641 strings out of 477589
+ 751886 string characters out of 5817003
  1940416 words of memory out of 5000000
- 57910 multiletter control sequences out of 15000+600000
- 565093 words of font info for 103 fonts, out of 8000000 for 9000
+ 57292 multiletter control sequences out of 15000+600000
+ 564989 words of font info for 90 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,12n,128p,6197b,852s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,12n,87p,1194b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on paper.pdf (9 pages).
