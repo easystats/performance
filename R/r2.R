@@ -562,12 +562,10 @@ r2.gam <- function(model, ...) {
   # gamlss inherits from gam, and summary.gamlss prints results automatically
   printout <- utils::capture.output(s <- summary(model)) # nolint
 
-  if (!is.null(s$r.sq)) {
-    list(
-      R2 = c(`Adjusted R2` = s$r.sq)
-    )
-  } else {
+  if (is.null(s$r.sq)) {
     NextMethod()
+  } else {
+    list(R2 = c(`Adjusted R2` = s$r.sq))
   }
 }
 
