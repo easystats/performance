@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.10.4)  4 OCT 2023 16:57
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.10.4)  4 OCT 2023 17:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1177,10 +1177,6 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [4]
-Underfull \hbox (badness 1331) in paragraph at lines 628--636
-[][]$[][][][][] [] [] [] [][][][][][][][][] [] [][][][][][] [] [][] [] [][][][][][][] [] [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]$[][]\TU/lmr/m/n/10 ). We show a
- []
-
 
 Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 
@@ -1222,7 +1218,7 @@ Package fontspec Info: Font family 'LatinModernRoman(0)' created for font
 (fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.: 
 
 LaTeX Font Info:    Font shape `TU/LatinModernRoman(0)/m/n' will be
-(Font)              scaled to size 10.0pt on input line 680.
+(Font)              scaled to size 10.0pt on input line 683.
 
 Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 
@@ -1263,7 +1259,7 @@ Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 
 LaTeX Font Info:    Font shape `TU/LatinModernRoman(0)/b/n' will be
-(Font)              scaled to size 9.70718pt on input line 692.
+(Font)              scaled to size 9.70718pt on input line 695.
 
 Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 
@@ -1307,7 +1303,7 @@ Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 
 LaTeX Font Info:    Font shape `TU/LatinModernRoman(0)/m/it' will be
-(Font)              scaled to size 10.0pt on input line 692.
+(Font)              scaled to size 10.0pt on input line 695.
 
 Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 
@@ -1387,7 +1383,7 @@ Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 Package fontspec Info: Latin Modern Roman scale = 0.9999964596882403.
 
 
-Overfull \hbox (4.64252pt too wide) in paragraph at lines 692--692
+Overfull \hbox (4.64252pt too wide) in paragraph at lines 695--695
  []|[]\TU/LatinModernRoman(0)/m/it/10 check_outliers(model,[][] 
  []
 
@@ -1745,17 +1741,17 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [8]
-Underfull \hbox (badness 1584) in paragraph at lines 995--1001
+Underfull \hbox (badness 1584) in paragraph at lines 998--1004
 []\TU/lmr/m/n/10 Simmons, J. P., Nelson, L. D., & Simonsohn, U. (2011). False-positive psy-
  []
 
 
-Underfull \hbox (badness 3049) in paragraph at lines 995--1001
+Underfull \hbox (badness 3049) in paragraph at lines 998--1004
 \TU/lmr/m/n/10 chology: Undisclosed flexibility in data collection and analysis allows pre-
  []
 
 
-Underfull \hbox (badness 3735) in paragraph at lines 995--1001
+Underfull \hbox (badness 3735) in paragraph at lines 998--1004
 \TU/lmr/m/n/10 senting anything as significant. \TU/lmr/m/it/10 Psychological Science\TU/lmr/m/n/10 , \TU/lmr/m/it/10 22\TU/lmr/m/n/10 (11), 1359–1366.
  []
 

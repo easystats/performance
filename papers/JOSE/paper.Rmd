@@ -187,7 +187,7 @@ Working with regression models creates the possibility of using model-based SOD 
 
 In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
-Currently, most lm models are supported (with the exception of `glmmTMB`, `lmrob`, and `glmrob` models), as long as they are supported by the underlying functions `stats::cooks.distance()` (or `loo::pareto_k_values()`) and `insight::get_data()` (for a full list of the 225 models currently supported by the `insight` package, see https://easystats.github.io/insight/#list-of-supported-models-by-class). We show a demo below.
+Currently, most lm models are supported (with the exception of `glmmTMB`, `lmrob`, and `glmrob` models), as long as they are supported by the underlying functions `stats::cooks.distance()` (or `loo::pareto_k_values()`) and `insight::get_data()` (for a full list of the 225 models currently supported by the `insight` package, see https://easystats.github.io/insight/#list-of-supported-models-by-class). Also note that although `check_outliers()` supports the pipe operators (`|>` or `%>%`), it does not support `tidymodels` at this time. We show a demo below.
 
 ```{r model}
 model <- lm(disp ~ mpg * disp, data = data)
@@ -228,7 +228,6 @@ _Summary of Statistical Outlier Detection Methods Recommendations_
 ```{r table1_print, echo=FALSE, message=FALSE}
 x <- flextable::flextable(df, cwidth = 1.25)
 x <- flextable::theme_apa(x)
-# x <- flextable::align(x, align = "left", part = "all")
 x <- flextable::font(x, fontname = "Latin Modern Roman", part = "all")
 x <- flextable::fontsize(x, size = 10, part = "all")
 ftExtra::colformat_md(x)
@@ -238,7 +237,7 @@ ftExtra::colformat_md(x)
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers using the generic `plot()` function on the resulting outlier object after loading the {see} package (Figure 1).
 
 ```{r model_fig, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
-plot(outliers)
+plot(outliers) # Figure 1 above
 ```
 
 ## Cook's Distance vs. MCD

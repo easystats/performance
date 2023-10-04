@@ -218,7 +218,7 @@ Working with regression models creates the possibility of using model-based SOD 
 
 In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
-Currently, most lm models are supported (with the exception of `glmmTMB`, `lmrob`, and `glmrob` models), as long as they are supported by the underlying functions `stats::cooks.distance()` (or `loo::pareto_k_values()`) and `insight::get_data()` (for a full list of the 225 models currently supported by the `insight` package, see https://easystats.github.io/insight/#list-of-supported-models-by-class). We show a demo below.
+Currently, most lm models are supported (with the exception of `glmmTMB`, `lmrob`, and `glmrob` models), as long as they are supported by the underlying functions `stats::cooks.distance()` (or `loo::pareto_k_values()`) and `insight::get_data()` (for a full list of the 225 models currently supported by the `insight` package, see https://easystats.github.io/insight/#list-of-supported-models-by-class). Also note that although `check_outliers()` supports the pipe operators (`|>` or `%>%`), it does not support `tidymodels` at this time. We show a demo below.
 
 
 ```r
@@ -310,7 +310,7 @@ All `check_outliers()` output objects possess a `plot()` method, meaning it is a
 
 
 ```r
-plot(outliers)
+plot(outliers) # Figure 1 above
 ```
 
 \begin{figure}
