@@ -260,6 +260,11 @@ model_performance.nestedLogit <- function(model, metrics = "all", verbose = TRUE
     data.frame(Response = names(mp), stringsAsFactors = FALSE),
     do.call(rbind, mp)
   )
+  # need to handle R2 separately
+  if (any(c("ALL", "R2") %in% toupper(metrics))) {
+    out$R2 <- unlist(r2_tjur(model))
+  }
+
   row.names(out) <- NULL
   class(out) <- unique(c("performance_model", class(out)))
   out

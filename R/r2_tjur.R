@@ -23,6 +23,11 @@
 #'
 #' @export
 r2_tjur <- function(model, ...) {
+  UseMethod("r2_tjur")
+}
+
+#' @export
+r2_tjur.default <- function(model, ...) {
   info <- list(...)$model_info
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
@@ -49,4 +54,31 @@ r2_tjur <- function(model, ...) {
 
   names(tjur_d) <- "Tjur's R2"
   tjur_d
+}
+
+#' @export
+r2_tjur.nestedLogit <- function(model, ...) {
+  resp <- insight::get_response(model, dichotomies = TRUE, verbose = FALSE)
+
+  stats::setNames(
+    lapply(names(model$models), function(i) {
+      y <- resp[[i]]
+      m <- model$models[[i]]
+      pred <- stats::predict(m, type = "response")
+      # delete pred for cases with missing residuals
+      if (anyNA(stats::residuals(m))) {
+        pred <- pred[!is.na(stats::residuals(m))]
+      }
+      categories <- unique(y)
+      m1 <- mean(pred[which(y == categories[1])], na.rm = TRUE)
+      m2 <- mean(pred[which(y == categories[2])], na.rm = TRUE)
+
+      tjur_d <- abs(m2 - m1)
+
+      names(tjur_d) <- "Tjur's R2"
+      tjur_d
+    }
+    ),
+    names(model$models)
+  )
 }

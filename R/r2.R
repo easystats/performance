@@ -49,10 +49,7 @@ r2 <- function(model, ...) {
 }
 
 
-
-
 # Default models -----------------------------------------------
-
 
 #' @rdname r2
 #' @export
@@ -115,6 +112,8 @@ r2.lm <- function(model, ci = NULL, ...) {
 #' @export
 r2.phylolm <- r2.lm
 
+# helper -------------
+
 .r2_lm <- function(model_summary, ci = NULL) {
   out <- list(
     R2 = model_summary$r.squared,
@@ -140,7 +139,6 @@ r2.phylolm <- r2.lm
 }
 
 
-
 #' @export
 r2.summary.lm <- function(model, ci = NULL, ...) {
   if (!is.null(ci) && !is.na(ci)) {
@@ -148,7 +146,6 @@ r2.summary.lm <- function(model, ci = NULL, ...) {
   }
   .r2_lm(model)
 }
-
 
 
 #' @export
@@ -198,14 +195,11 @@ r2.ols <- function(model, ...) {
   structure(class = "r2_generic", out)
 }
 
-
-
 #' @export
 r2.lrm <- r2.ols
 
 #' @export
 r2.cph <- r2.ols
-
 
 
 #' @export
@@ -230,7 +224,6 @@ r2.mhurdle <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.aov <- function(model, ci = NULL, ...) {
   if (!is.null(ci) && !is.na(ci)) {
@@ -250,7 +243,6 @@ r2.aov <- function(model, ci = NULL, ...) {
   attr(out, "model_type") <- "Anova"
   structure(class = "r2_generic", out)
 }
-
 
 
 #' @export
@@ -274,7 +266,6 @@ r2.mlm <- function(model, ...) {
   attr(out, "model_type") <- "Multivariate Linear"
   structure(class = "r2_mlm", out)
 }
-
 
 
 #' @export
@@ -312,9 +303,13 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
 #' @export
 r2.glmx <- r2.glm
 
+
 #' @export
 r2.nestedLogit <- function(model, ci = NULL, verbose = TRUE, ...) {
-  lapply(r2, model$models, ci = ci, verbose = verbose, ...)
+  out <- list("R2_Tjur" = r2_tjur(model, ...))
+  attr(out, "model_type") <- "Logistic"
+  class(out) <- c("r2_pseudo", class(out))
+  out
 }
 
 
