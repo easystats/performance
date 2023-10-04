@@ -1,5 +1,9 @@
 # performance (development version)
 
+## General
+
+* Support for `nestedLogit` models.
+
 ## Changes to functions
 
 * `check_outliers()` for method `"ics"` now detects number of available cores

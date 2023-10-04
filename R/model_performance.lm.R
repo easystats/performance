@@ -125,10 +125,10 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (("LOGLOSS" %in% toupper(metrics)) && isTRUE(info$is_binomial)) {
     out$Log_loss <- .safe({
       .logloss <- performance_logloss(model, verbose = verbose)
-      if (!is.na(.logloss)) {
-        .logloss
-      } else {
+      if (is.na(.logloss)) {
         NULL
+      } else {
+        .logloss
       }
     })
   }
@@ -253,6 +253,22 @@ model_performance.zeroinfl <- model_performance.lm
 #' @export
 model_performance.zerotrunc <- model_performance.lm
 
+#' @export
+model_performance.nestedLogit <- function(model, metrics = "all", verbose = TRUE, ...) {
+  mp <- lapply(model$models, model_performance.lm, metrics = metrics, verbose = verbose, ...)
+  out <- cbind(
+    data.frame(Response = names(mp), stringsAsFactors = FALSE),
+    do.call(rbind, mp)
+  )
+  # need to handle R2 separately
+  if (any(c("ALL", "R2") %in% toupper(metrics))) {
+    out$R2 <- unlist(r2_tjur(model))
+  }
+
+  row.names(out) <- NULL
+  class(out) <- unique(c("performance_model", class(out)))
+  out
+}
 
 
 
