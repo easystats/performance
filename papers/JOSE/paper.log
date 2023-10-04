@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.10.4)  4 OCT 2023 18:07
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.10.4)  4 OCT 2023 18:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1043,8 +1043,8 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-1.71957pt}.
 
 [4]
-File: paper_files/figure-latex/table1.jpg Graphic file (type bmp)
-<paper_files/figure-latex/table1.jpg>
+File: table1.jpg Graphic file (type bmp)
+<table1.jpg>
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png Graphic file (type bmp)
 <D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSE-logo.png>
 
@@ -1122,10 +1122,10 @@ Package logreq Info: Writing requests to 'paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36641 strings out of 477589
- 751886 string characters out of 5817003
+ 36640 strings out of 477589
+ 751637 string characters out of 5817003
  1940416 words of memory out of 5000000
- 57292 multiletter control sequences out of 15000+600000
+ 57291 multiletter control sequences out of 15000+600000
  564989 words of font info for 90 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  84i,12n,87p,1194b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s

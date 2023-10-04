@@ -245,7 +245,7 @@ _Summary of Statistical Outlier Detection Methods Recommendations_
 
 
 
-![]("paper_files/figure-latex/table1.jpg")
+![](table1.jpg)
 
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers using the generic `plot()` function on the resulting outlier object after loading the {see} package (Figure 1).
 
