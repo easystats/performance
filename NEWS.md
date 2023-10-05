@@ -1,4 +1,4 @@
-# performance (development version)
+# performance 0.10.6
 
 ## General
 
