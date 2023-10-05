@@ -1,6 +1,6 @@
-# performance (development version)
+# performance 0.10.6
 
-## General
+## General 
 
 * Support for `nestedLogit` models.
 

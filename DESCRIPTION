@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.5.6
+Version: 0.10.6
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -93,7 +93,9 @@ Suggests:
     dbscan,
     estimatr,
     fixest,
+    flextable, 
     forecast,
+    ftExtra,
     gamm4,
     ggplot2,
     glmmTMB,
@@ -128,6 +130,7 @@ Suggests:
     psych,
     qqplotr (>= 0.0.6),
     randomForest,
+    rempsyc,
     rmarkdown,
     rstanarm,
     rstantools,
