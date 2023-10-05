@@ -193,7 +193,7 @@ pp_check.lm <- function(object,
   # else, proceed as usual
   out <- .safe(stats::simulate(object, nsim = iterations, re.form = re_formula, ...))
 
-  # sanity check, for mixed models, where re.form = NULL (default) might fail
+  # validation check, for mixed models, where re.form = NULL (default) might fail
   out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
 
   # save information about model
@@ -270,7 +270,7 @@ pp_check.glm <- function(object,
     }
   )
 
-  # sanity check, for mixed models, where re.form = NULL (default) might fail
+  # validation check, for mixed models, where re.form = NULL (default) might fail
   out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
 
   if (is.null(out)) {
@@ -444,7 +444,7 @@ plot.performance_pp_check <- function(x, ...) {
 
 
 .check_re_formula <- function(out, object, iterations, re_formula, verbose, ...) {
-  # sanity check, for mixed models, where re.form = NULL (default) might fail
+  # validation check, for mixed models, where re.form = NULL (default) might fail
   if (is.null(out) && insight::is_mixed_model(object) && !isTRUE(is.na(re_formula))) {
     if (verbose) {
       insight::format_warning(

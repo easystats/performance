@@ -191,7 +191,7 @@ check_distribution.numeric <- function(model) {
 # utilities -----------------------------
 
 .extract_features <- function(x) {
-  # sanity check, remove missings
+  # validation check, remove missings
   x <- x[!is.na(x)]
 
   data.frame(

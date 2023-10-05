@@ -120,7 +120,7 @@ check_factorstructure <- function(x, n = NULL, ...) {
 #' @rdname check_factorstructure
 #' @export
 check_kmo <- function(x, n = NULL, ...) {
-  out <- .check_factor_structure_sanity(x, n, ...)
+  out <- .validate_factor_structure(x, n, ...)
 
   Q <- solve(out$r)
 
@@ -177,7 +177,7 @@ check_kmo <- function(x, n = NULL, ...) {
 #' @rdname check_factorstructure
 #' @export
 check_sphericity_bartlett <- function(x, n = NULL, ...) {
-  out <- .check_factor_structure_sanity(x, n, ...)
+  out <- .validate_factor_structure(x, n, ...)
 
   p <- dim(out$r)[2]
 
@@ -221,7 +221,7 @@ check_sphericity_bartlett <- function(x, n = NULL, ...) {
 # Helpers -----------------------------------------------------------------
 
 #' @keywords internal
-.check_factor_structure_sanity <- function(x, n = NULL, ...) {
+.validate_factor_structure <- function(x, n = NULL, ...) {
   if (is.null(n)) {
     r <- stats::cor(x, use = "pairwise.complete.obs", ...)
     n <- nrow(x)
@@ -229,7 +229,6 @@ check_sphericity_bartlett <- function(x, n = NULL, ...) {
     r <- x
   }
 
-  # Sanity check
   if (nrow(r) != ncol(r)) {
     insight::format_error("The correlation matrix is not square.")
   }

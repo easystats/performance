@@ -267,7 +267,7 @@ icc <- function(model,
         # CI for adjusted ICC
         icc_ci_adjusted <- as.vector(result$t[, 1])
         icc_ci_adjusted <- icc_ci_adjusted[!is.na(icc_ci_adjusted)]
-        # sanity check
+        # validation check
         if (length(icc_ci_adjusted) > 0) {
           icc_ci_adjusted <- bayestestR::eti(icc_ci_adjusted, ci = ci)
         } else {
@@ -276,7 +276,7 @@ icc <- function(model,
         # CI for unadjusted ICC
         icc_ci_unadjusted <- as.vector(result$t[, 2])
         icc_ci_unadjusted <- icc_ci_unadjusted[!is.na(icc_ci_unadjusted)]
-        # sanity check
+        # validation check
         if (length(icc_ci_unadjusted) > 0) {
           icc_ci_unadjusted <- bayestestR::eti(icc_ci_unadjusted, ci = ci)
         } else {

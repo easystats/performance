@@ -67,7 +67,7 @@
     fitted_ <- stats::fitted(model)
   }
 
-  # sanity check, sometimes either residuals or fitted can contain NA, see #488
+  # validation check, sometimes either residuals or fitted can contain NA, see #488
   if (anyNA(res_) || anyNA(fitted_)) {
     # drop NA and make sure both fitted and residuals match
     non_na <- !is.na(fitted_) & !is.na(res_)

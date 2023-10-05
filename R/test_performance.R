@@ -238,7 +238,7 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
   # Attribute class to list and get names from the global environment
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
-  # Sanity checks (will throw error if non-valid objects)
+  # validation checks (will throw error if non-valid objects)
   objects <- .test_performance_checks(objects, verbose = verbose)
 
   # ensure proper object names

@@ -24,7 +24,7 @@ test_likelihoodratio.default <- function(..., estimator = "OLS", verbose = TRUE)
   # Attribute class to list
   objects <- insight::ellipsis_info(..., only_models = TRUE)
 
-  # Sanity checks (will throw error if non-valid objects)
+  # validation checks (will throw error if non-valid objects)
   objects <- .test_performance_checks(objects, verbose = verbose)
 
   # different default when mixed model or glm is included

@@ -1808,7 +1808,7 @@ check_outliers.metabin <- check_outliers.metagen
 
   # Get results
   cutoff <- .safe(outliers@ics.dist.cutoff)
-  # sanity check
+  # validation check
   if (is.null(cutoff)) {
     insight::print_color("Could not detect cut-off for outliers.\n", "red")
     return(NULL)

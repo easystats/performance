@@ -12,7 +12,7 @@ test_bf.default <- function(..., reference = 1, text_length = NULL) {
   objects <- insight::ellipsis_info(..., only_models = TRUE)
   names(objects) <- match.call(expand.dots = FALSE)$`...`
 
-  # Sanity checks (will throw error if non-valid objects)
+  # validation checks (will throw error if non-valid objects)
   .test_performance_checks(objects, multiple = FALSE)
 
   if (length(objects) == 1 && isTRUE(insight::is_model(objects))) {
