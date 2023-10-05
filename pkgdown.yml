@@ -3,9 +3,10 @@ pkgdown: 2.0.7.9000
 pkgdown_sha: 170015984ae234da3028b2b083df757227fdd241
 articles:
   check_model: check_model.html
+  check_outliers: check_outliers.html
   compare: compare.html
   r2: r2.html
-last_built: 2023-10-05T07:48Z
+last_built: 2023-10-05T15:11Z
 urls:
   reference: https://easystats.github.io/performance/reference
   article: https://easystats.github.io/performance/articles
