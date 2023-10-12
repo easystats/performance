@@ -40,7 +40,7 @@ Compute indices of model performance for meta-analysis model from the
 \subsection{Indices of fit}{
 \itemize{
 \item \strong{AIC} Akaike's Information Criterion, see \code{?stats::AIC}
-\item \strong{BIC} {Bayesian Information Criterion, see \code{?stats::BIC}}
+\item \strong{BIC} Bayesian Information Criterion, see \code{?stats::BIC}
 \item \strong{I2}: For a random effects model, \code{I2} estimates (in
 percent) how much of the total variability in the effect size estimates
 can be attributed to heterogeneity among the true effects. For a
