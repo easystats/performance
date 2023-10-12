@@ -1,7 +1,7 @@
 #' Performance of Meta-Analysis Models
 #'
 #' Compute indices of model performance for meta-analysis model from the
-#' \pkg{metafor} package.
+#' **metafor** package.
 #'
 #' @param model A `rma` object as returned by `metafor::rma()`.
 #' @param metrics Can be `"all"` or a character vector of metrics to be

@@ -34,7 +34,7 @@ A data frame (with one row) and one column per "index" (see
 }
 \description{
 Compute indices of model performance for meta-analysis model from the
-\pkg{metafor} package.
+\strong{metafor} package.
 }
 \details{
 \subsection{Indices of fit}{

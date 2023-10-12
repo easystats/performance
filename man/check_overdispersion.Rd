@@ -7,8 +7,8 @@
 check_overdispersion(x, ...)
 }
 \arguments{
-\item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm},
-or \code{glm.nb} (package \pkg{MASS}).}
+\item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
+(package \strong{MASS}).}
 
 \item{...}{Currently not used.}
 }

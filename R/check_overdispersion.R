@@ -4,8 +4,8 @@
 #' @description `check_overdispersion()` checks generalized linear (mixed)
 #'   models for overdispersion.
 #'
-#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`,
-#'    or `glm.nb` (package \pkg{MASS}).
+#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
+#'   (package **MASS**).
 #' @param ... Currently not used.
 #'
 #' @return A list with results from the overdispersion test, like chi-squared
