@@ -9,7 +9,7 @@ test_that("cronbachs_alpha", {
 
 
 test_that("cronbachs_alpha, principal_components", {
-  skip_if_not_installed("parameters", minimum_version = "0.21.2.1")
+  skip_if_not_installed("parameters", minimum_version = "0.21.3")
   pca <- parameters::principal_components(mtcars[, c("cyl", "gear", "carb", "hp")], n = 2)
   expect_equal(cronbachs_alpha(pca, verbose = FALSE), c(PC1 = 0.1101384), tolerance = 1e-3)
   expect_warning(cronbachs_alpha(pca))
