@@ -67,7 +67,8 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
     pred <- mf[[term]]
   }
 
-  y <- .recode_to_zero(insight::get_response(model, verbose = FALSE)) - fv
+  y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
+  y <- y0 - fv
 
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 
@@ -84,6 +85,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
     n <- length(items)
     sdev <- stats::sd(y[items], na.rm = TRUE)
 
+    bt <- binom.test(sum(y0[items]), n)
     data.frame(
       xbar = xbar,
       ybar = ybar,
@@ -91,7 +93,9 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
       x.lo = model.range[1],
       x.hi = model.range[2],
       se = stats::qnorm(0.975) * sdev / sqrt(n),
-      ci_range = sdev / sqrt(n)
+      ci_range = sdev / sqrt(n),
+      CI_low = bt$conf.int[1] - fv,
+      CI_high = bt$conf.int[2] - fv
     )
   }))
 
@@ -99,8 +103,6 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   d <- d[stats::complete.cases(d), ]
 
   # CIs
-  d$CI_low <- d$ybar - stats::qnorm(0.975) * d$ci_range
-  d$CI_high <- d$ybar + stats::qnorm(0.975) * d$ci_range
 
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"
