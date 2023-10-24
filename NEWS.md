@@ -1,3 +1,12 @@
+# performance 0.10.7
+
+## Changes to functions
+
+* `binned_residuals()` - like `check_model()` - gains a `show_dots` argument to
+  show or hide data points that lie inside error bounds. This is particular
+  useful for models with many observations, where generating the plot would be
+  very slow.
+
 # performance 0.10.6
 
 ## General 
