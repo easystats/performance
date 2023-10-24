@@ -66,11 +66,12 @@ binned_residuals <- function(model,
                              term = NULL,
                              n_bins = NULL,
                              show_dots = NULL,
-                             residuals = c("gaussian", "exact", "boot"),
                              ci = 0.95,
+                             ci_type = c("gaussian", "exact", "boot"),
+                             iterations = 1000,
                              ...) {
 
-  residuals <- match.arg(residuals)
+  ci_type <- match.arg(ci_type)
   fv <- stats::fitted(model)
   mf <- insight::get_data(model, verbose = FALSE)
 
@@ -104,10 +105,10 @@ binned_residuals <- function(model,
     n <- length(items)
     sdev <- stats::sd(y[items], na.rm = TRUE)
 
-    r <- switch(residuals,
+    r <- switch(ci_type,
       gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
       exact = stats:::binom.test(sum(y0[items]), n)$conf.int - fv,
-      boot = Hmisc::smean.cl.boot(y[items], conf.int = ci)[c("Lower", "Upper")]
+      boot = .boot_binned_ci(y[items], ci, iterations)
     )
     names(r) <- c("CI_low", "CI_high")
 
@@ -141,6 +142,21 @@ binned_residuals <- function(model,
   d
 }
 
+
+# utilities ---------------------------
+
+.boot_binned_ci <- function(x, ci = 0.95, iterations = 1000) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  out <- vector("numeric", iterations)
+  for (i in seq_len(iterations)) {
+    out[i] <- sum(x[sample.int(n, n, replace = TRUE)])
+  }
+  out <- out / n
+
+  quant <- stats::quantile(out, c((1 - ci) / 2, (1 + ci) / 2))
+  c(CI_low = quant[1L], CI_high = quant[2L])
+}
 
 
 # methods -----------------------------

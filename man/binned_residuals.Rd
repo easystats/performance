@@ -4,7 +4,16 @@
 \alias{binned_residuals}
 \title{Binned residuals for binomial logistic regression}
 \usage{
-binned_residuals(model, term = NULL, n_bins = NULL, show_dots = NULL, ...)
+binned_residuals(
+  model,
+  term = NULL,
+  n_bins = NULL,
+  show_dots = NULL,
+  ci = 0.95,
+  ci_type = c("gaussian", "exact", "boot"),
+  iterations = 1000,
+  ...
+)
 }
 \arguments{
 \item{model}{A \code{glm}-object with \emph{binomial}-family.}
