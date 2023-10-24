@@ -62,7 +62,9 @@
 #' }
 #'
 #' @export
-binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL, ...) {
+binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL, resids = c("gaussian", "exact", "boot"), level = 0.95, ...) {
+
+  resids <- match.arg(resids)
   fv <- stats::fitted(model)
   mf <- insight::get_data(model, verbose = FALSE)
 
@@ -78,8 +80,9 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL
     show_dots <- is.null(n) || n <= 1e5
   }
 
-  y <- .recode_to_zero(insight::get_response(model, verbose = FALSE)) - fv
->>>>>>> upstream/main
+
+  y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
+  y <- y0 - fv
 
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 
@@ -96,18 +99,28 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL
     n <- length(items)
     sdev <- stats::sd(y[items], na.rm = TRUE)
 
-    bt <- binom.test(sum(y0[items]), n)
-    data.frame(
+    ci_fun <- function() {
+        r <- switch(resids,
+               gaussian = qnorm(c((1-level)/2, (1+level)/2),
+                                mean = ybar, sd = sdev/sqrt(n)),
+               exact = stats:::binom.test(sum(y0[items]), n)$conf.int - fv,
+               boot = Hmisc::smean.cl.boot(y[items], conf.int = level)[c("Lower", "Upper")]
+               )
+        names(r) <- c("CI_low", "CI_high")
+        r
+    }
+
+    d0 <- data.frame(
       xbar = xbar,
       ybar = ybar,
       n = n,
       x.lo = model.range[1],
       x.hi = model.range[2],
-      se = stats::qnorm(0.975) * sdev / sqrt(n),
-      ci_range = sdev / sqrt(n),
-      CI_low = bt$conf.int[1] - fv,
-      CI_high = bt$conf.int[2] - fv
+      se = stats::qnorm((1+level)/2) * sdev / sqrt(n),
+      ci_range = sdev / sqrt(n)
     )
+    cbind(d0, rbind(ci_fun()))
+          
   }))
 
   d <- do.call(rbind, d)
