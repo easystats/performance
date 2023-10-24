@@ -11,6 +11,13 @@
 #' @param n_bins Numeric, the number of bins to divide the data. If
 #'   `n_bins = NULL`, the square root of the number of observations is
 #'   taken.
+#' @param ci Numeric, the confidence level for the error bounds.
+#' @param ci_type Character, the type of error bounds to calculate. Can be
+#'   `"gaussian"` (default), `"exact"` or `"boot"`.
+#' @param residuals Character, the type of residuals to calculate. Can be
+#'   `"response"` (default), `"pearson"` or `"deviance"`.
+#' @param iterations Integer, the number of iterations to use for the
+#'   bootstrap method. Only used if `ci_type = "boot"`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #'   to `FALSE` for models with many observations, if generating the plot is too
 #'   time-consuming. By default, `show_dots = NULL`. In this case `binned_residuals()`
@@ -68,15 +75,18 @@ binned_residuals <- function(model,
                              show_dots = NULL,
                              ci = 0.95,
                              ci_type = c("gaussian", "exact", "boot"),
+                             residuals = c("response", "pearson", "deviance"),
                              iterations = 1000,
                              ...) {
-
+  # match arguments
   ci_type <- match.arg(ci_type)
-  fv <- stats::fitted(model)
+  residuals <- match.arg(residuals)
+
+  fitted_values <- stats::fitted(model)
   mf <- insight::get_data(model, verbose = FALSE)
 
   if (is.null(term)) {
-    pred <- fv
+    pred <- fitted_values
   } else {
     pred <- mf[[term]]
   }
@@ -88,7 +98,13 @@ binned_residuals <- function(model,
   }
 
   y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
-  y <- y0 - fv
+
+  # calculate residuals
+  y <- switch(residuals,
+    response = y0 - fitted_values,
+    pearson = .safe((y0 - fitted_values) / sqrt(fitted_values * (1 - fitted_values))),
+    deviance = .safe(stats::residuals(model, type = "deviance"))
+  )
 
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 
@@ -107,7 +123,7 @@ binned_residuals <- function(model,
 
     r <- switch(ci_type,
       gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
-      exact = stats:::binom.test(sum(y0[items]), n)$conf.int - fv,
+      exact = stats:::binom.test(sum(y0[items]), n)$conf.int,
       boot = .boot_binned_ci(y[items], ci, iterations)
     )
     names(r) <- c("CI_low", "CI_high")

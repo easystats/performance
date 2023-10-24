@@ -11,6 +11,7 @@ binned_residuals(
   show_dots = NULL,
   ci = 0.95,
   ci_type = c("gaussian", "exact", "boot"),
+  residuals = c("response", "pearson", "deviance"),
   iterations = 1000,
   ...
 )
@@ -32,6 +33,17 @@ to \code{FALSE} for models with many observations, if generating the plot is too
 time-consuming. By default, \code{show_dots = NULL}. In this case \code{binned_residuals()}
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
+
+\item{ci}{Numeric, the confidence level for the error bounds.}
+
+\item{ci_type}{Character, the type of error bounds to calculate. Can be
+\code{"gaussian"} (default), \code{"exact"} or \code{"boot"}.}
+
+\item{residuals}{Character, the type of residuals to calculate. Can be
+\code{"response"} (default), \code{"pearson"} or \code{"deviance"}.}
+
+\item{iterations}{Integer, the number of iterations to use for the
+bootstrap method. Only used if \code{ci_type = "boot"}.}
 
 \item{...}{Currently not used.}
 }
