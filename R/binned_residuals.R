@@ -123,7 +123,11 @@ binned_residuals <- function(model,
 
     r <- switch(ci_type,
       gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
-      exact = stats:::binom.test(sum(y0[items]), n)$conf.int,
+      exact = {
+        out <- stats:::binom.test(sum(y0[items]), n)$conf.int
+        out <- out - (min(out) - ybar) - (diff(out) / 2)
+        out
+      },
       boot = .boot_binned_ci(y[items], ci, iterations)
     )
     names(r) <- c("CI_low", "CI_high")
