@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.6.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.6.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">binned_residuals</span><span class="op">(</span><span class="va">model</span>, term <span class="op">=</span> <span class="cn">NULL</span>, n_bins <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">binned_residuals</span><span class="op">(</span><span class="va">model</span>, term <span class="op">=</span> <span class="cn">NULL</span>, n_bins <span class="op">=</span> <span class="cn">NULL</span>, show_dots <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -112,6 +112,14 @@ plotted.</p></dd>
 <dd><p>Numeric, the number of bins to divide the data. If
 <code>n_bins = NULL</code>, the square root of the number of observations is
 taken.</p></dd>
+
+
+<dt>show_dots</dt>
+<dd><p>Logical, if <code>TRUE</code>, will show data points in the plot. Set
+to <code>FALSE</code> for models with many observations, if generating the plot is too
+time-consuming. By default, <code>show_dots = NULL</code>. In this case <code>binned_residuals()</code>
+tries to guess whether performance will be poor due to a very large model
+and thus automatically shows or hides dots.</p></dd>
 
 
 <dt>...</dt>
