@@ -11,6 +11,11 @@
 #' @param n_bins Numeric, the number of bins to divide the data. If
 #'   `n_bins = NULL`, the square root of the number of observations is
 #'   taken.
+#' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
+#'   to `FALSE` for models with many observations, if generating the plot is too
+#'   time-consuming. By default, `show_dots = NULL`. In this case `binned_residuals()`
+#'   tries to guess whether performance will be poor due to a very large model
+#'   and thus automatically shows or hides dots.
 #' @param ... Currently not used.
 #'
 #' @return A data frame representing the data that is mapped in the accompanying
@@ -57,7 +62,7 @@
 #' }
 #'
 #' @export
-binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
+binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL, ...) {
   fv <- stats::fitted(model)
   mf <- insight::get_data(model, verbose = FALSE)
 
@@ -67,8 +72,14 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
     pred <- mf[[term]]
   }
 
-  y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
-  y <- y0 - fv
+  # set default for show_dots, based on "model size"
+  if (is.null(show_dots)) {
+    n <- .safe(insight::n_obs(model))
+    show_dots <- is.null(n) || n <= 1e5
+  }
+
+  y <- .recode_to_zero(insight::get_response(model, verbose = FALSE)) - fv
+>>>>>>> upstream/main
 
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 
@@ -114,6 +125,7 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, ...) {
   attr(d, "resid_ok") <- resid_ok
   attr(d, "resp_var") <- insight::find_response(model)
   attr(d, "term") <- term
+  attr(d, "show_dots") <- show_dots
 
   d
 }

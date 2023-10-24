@@ -343,6 +343,9 @@ IEEE.
 (2021). performance: An R package for assessment, comparison and testing of
 statistical models. Journal of Open Source Software, 6(60), 3139.
 \doi{10.21105/joss.03139}
+\item Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M.,
+and Makowski, D. (2023). Check your outliers! An introduction to identifying
+statistical outliers in R with easystats. https://doi.org/10.31234/osf.io/bu6nt
 \item Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
 outliers and leverage points. Journal of the American Statistical
 association, 85(411), 633-639.
