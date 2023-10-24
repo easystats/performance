@@ -4,7 +4,7 @@
 \alias{binned_residuals}
 \title{Binned residuals for binomial logistic regression}
 \usage{
-binned_residuals(model, term = NULL, n_bins = NULL, ...)
+binned_residuals(model, term = NULL, n_bins = NULL, show_dots = NULL, ...)
 }
 \arguments{
 \item{model}{A \code{glm}-object with \emph{binomial}-family.}
@@ -17,6 +17,12 @@ plotted.}
 \item{n_bins}{Numeric, the number of bins to divide the data. If
 \code{n_bins = NULL}, the square root of the number of observations is
 taken.}
+
+\item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
+to \code{FALSE} for models with many observations, if generating the plot is too
+time-consuming. By default, \code{show_dots = NULL}. In this case \code{binned_residuals()}
+tries to guess whether performance will be poor due to a very large model
+and thus automatically shows or hides dots.}
 
 \item{...}{Currently not used.}
 }
