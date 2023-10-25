@@ -331,7 +331,7 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info, verbose = TRUE) {
+.check_assumptions_linear <- function(model, model_info, verbose = TRUE, ...) {
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
@@ -389,7 +389,7 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of Bayesian models  ------------------------
 
-.check_assumptions_stan <- function(model) {
+.check_assumptions_stan <- function(model, ...) {
   if (inherits(model, "brmsfit")) {
     # check if brms can be loaded
 
