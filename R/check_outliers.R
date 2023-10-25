@@ -410,16 +410,16 @@ check_outliers.default <- function(x,
   }
 
   # Others
-  if (!all(method %in% c("cook", "pareto"))) {
+  if (all(method %in% c("cook", "pareto"))) {
+    df <- data.frame(Row = seq_len(nrow(as.data.frame(data))))
+    outlier_count <- list()
+    outlier_var <- list()
+  } else {
     out <- check_outliers(data, method, threshold)
     outlier_var <- attributes(out)$outlier_var
     outlier_count <- attributes(out)$outlier_count
     df <- attributes(out)$data
-    df <- df[!names(df) %in% "Outlier"]
-  } else {
-    df <- data.frame(Row = seq_len(nrow(as.data.frame(data))))
-    outlier_count <- list()
-    outlier_var <- list()
+    df <- df[!names(df) == "Outlier"]
   }
 
   # Cook
@@ -449,17 +449,17 @@ check_outliers.default <- function(x,
 
     outlier_count$cook <- count.table
 
-    if (!all(method %in% c("cook", "pareto"))) {
+    if (all(method %in% c("cook", "pareto"))) {
+      outlier_count$all <- count.table
+    } else {
       outlier_count$all <- datawizard::data_merge(
         list(outlier_count$all, count.table),
         join = "full",
         by = "Row"
       )
-    } else {
-      outlier_count$all <- count.table
     }
   } else {
-    method <- method[!(method %in% "cook")]
+    method <- method[!(method == "cook")]
   }
 
   # Pareto
@@ -1442,21 +1442,21 @@ check_outliers.metabin <- check_outliers.metagen
   lof <- 0.001
 
   list(
-    "zscore" = zscore,
-    "zscore_robust" = zscore_robust,
-    "iqr" = iqr,
-    "ci" = ci,
-    "hdi" = hdi,
-    "eti" = eti,
-    "bci" = bci,
-    "cook" = cook,
-    "pareto" = pareto,
-    "mahalanobis" = mahalanobis,
-    "mahalanobis_robust" = mahalanobis_robust,
-    "mcd" = mcd,
-    "ics" = ics,
-    "optics" = optics,
-    "lof" = lof
+    zscore = zscore,
+    zscore_robust = zscore_robust,
+    iqr = iqr,
+    ci = ci,
+    hdi = hdi,
+    eti = eti,
+    bci = bci,
+    cook = cook,
+    pareto = pareto,
+    mahalanobis = mahalanobis,
+    mahalanobis_robust = mahalanobis_robust,
+    mcd = mcd,
+    ics = ics,
+    optics = optics,
+    lof = lof
   )
 }
 
@@ -1504,8 +1504,8 @@ check_outliers.metabin <- check_outliers.metagen
   out$Outlier_Zscore <- as.numeric(out$Distance_Zscore > threshold)
 
   output <- list(
-    "data_zscore" = out,
-    "threshold_zscore" = threshold
+    data_zscore = out,
+    threshold_zscore = threshold
   )
 
   if (isTRUE(robust)) {
@@ -1566,8 +1566,8 @@ check_outliers.metabin <- check_outliers.metagen
   }, numeric(1))
 
   list(
-    "data_iqr" = out,
-    "threshold_iqr" = threshold
+    data_iqr = out,
+    threshold_iqr = threshold
   )
 }
 
@@ -1615,8 +1615,8 @@ check_outliers.metabin <- check_outliers.metagen
   out <- cbind(out.0, out)
 
   output <- list(
-    "data_" = out,
-    "threshold_" = threshold
+    data_ = out,
+    threshold_ = threshold
   )
   names(output) <- paste0(names(output), method)
   output
@@ -1636,8 +1636,8 @@ check_outliers.metabin <- check_outliers.metagen
   out$Outlier_Cook <- as.numeric(out$Distance_Cook > threshold)
 
   list(
-    "data_cook" = out,
-    "threshold_cook" = threshold
+    data_cook = out,
+    threshold_cook = threshold
   )
 }
 
@@ -1656,8 +1656,8 @@ check_outliers.metabin <- check_outliers.metagen
   out$Outlier_Pareto <- as.numeric(out$Distance_Pareto > threshold)
 
   list(
-    "data_pareto" = out,
-    "threshold_pareto" = threshold
+    data_pareto = out,
+    threshold_pareto = threshold
   )
 }
 
@@ -1686,8 +1686,8 @@ check_outliers.metabin <- check_outliers.metagen
   out$Outlier_Mahalanobis <- as.numeric(out$Distance_Mahalanobis > threshold)
 
   list(
-    "data_mahalanobis" = out,
-    "threshold_mahalanobis" = threshold
+    data_mahalanobis = out,
+    threshold_mahalanobis = threshold
   )
 }
 
@@ -1717,8 +1717,8 @@ check_outliers.metabin <- check_outliers.metagen
   )
 
   list(
-    "data_mahalanobis_robust" = out,
-    "threshold_mahalanobis_robust" = threshold
+    data_mahalanobis_robust = out,
+    threshold_mahalanobis_robust = threshold
   )
 }
 
@@ -1744,8 +1744,8 @@ check_outliers.metabin <- check_outliers.metagen
   out$Outlier_MCD <- as.numeric(out$Distance_MCD > threshold)
 
   list(
-    "data_mcd" = out,
-    "threshold_mcd" = threshold
+    data_mcd = out,
+    threshold_mcd = threshold
   )
 }
 
@@ -1822,8 +1822,8 @@ check_outliers.metabin <- check_outliers.metagen
 
   # Out
   list(
-    "data_ics" = out,
-    "threshold_ics" = threshold
+    data_ics = out,
+    threshold_ics = threshold
   )
 }
 
@@ -1854,8 +1854,8 @@ check_outliers.metabin <- check_outliers.metagen
   }
 
   list(
-    "data_optics" = out,
-    "threshold_optics" = threshold
+    data_optics = out,
+    threshold_optics = threshold
   )
 }
 
@@ -1921,8 +1921,8 @@ check_outliers.metabin <- check_outliers.metagen
   out$Outlier_LOF <- as.numeric(out$Distance_LOF > cutoff)
 
   list(
-    "data_lof" = out,
-    "threshold_lof" = threshold
+    data_lof = out,
+    threshold_lof = threshold
   )
 }
 
