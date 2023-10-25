@@ -103,6 +103,7 @@ binned_residuals <- function(model,
     show_dots <- is.null(n) || n <= 1e5
   }
 
+  # make sure response is 0/1 (and numeric)
   y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
 
   # calculate residuals
@@ -136,6 +137,7 @@ binned_residuals <- function(model,
       gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
       exact = {
         out <- stats::binom.test(sum(y0[items]), n)$conf.int
+        # center CIs around point estimate
         out <- out - (min(out) - ybar) - (diff(out) / 2)
         out
       },
