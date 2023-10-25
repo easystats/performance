@@ -133,7 +133,7 @@ binned_residuals <- function(model,
     n <- length(items)
     sdev <- stats::sd(y[items], na.rm = TRUE)
 
-    r <- switch(ci_type,
+    conf_int <- switch(ci_type,
       gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
       exact = {
         out <- stats::binom.test(sum(y0[items]), n)$conf.int
@@ -143,7 +143,7 @@ binned_residuals <- function(model,
       },
       boot = .boot_binned_ci(y[items], ci, iterations)
     )
-    names(r) <- c("CI_low", "CI_high")
+    names(conf_int) <- c("CI_low", "CI_high")
 
     d0 <- data.frame(
       xbar = xbar,
@@ -153,7 +153,7 @@ binned_residuals <- function(model,
       x.hi = model.range[2],
       se = stats::qnorm((1 + ci) / 2) * sdev / sqrt(n)
     )
-    cbind(d0, rbind(r))
+    cbind(d0, rbind(conf_int))
   }))
 
   d <- do.call(rbind, d)
