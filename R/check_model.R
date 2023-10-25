@@ -203,7 +203,7 @@ check_model.default <- function(x,
   }
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -341,10 +341,10 @@ check_model.model_fit <- function(x,
   dat$NCV <- .diag_ncv(model, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
-  if (!is.null(dat$OUTLIERS)) {
-    threshold <- attributes(dat$OUTLIERS)$threshold$cook
-  } else {
+  if (is.null(dat$OUTLIERS)) {
     threshold <- NULL
+  } else {
+    threshold <- attributes(dat$OUTLIERS)$threshold$cook
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   dat$PP_CHECK <- .safe(check_predictions(model, ...))
@@ -366,10 +366,10 @@ check_model.model_fit <- function(x,
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
-  if (!is.null(dat$OUTLIERS)) {
-    threshold <- attributes(dat$OUTLIERS)$threshold$cook
-  } else {
+  if (is.null(dat$OUTLIERS)) {
     threshold <- NULL
+  } else {
+    threshold <- attributes(dat$OUTLIERS)$threshold$cook
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   dat$PP_CHECK <- .safe(check_predictions(model, ...))
