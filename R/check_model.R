@@ -35,7 +35,8 @@
 #'   tries to guess whether performance will be poor due to a very large model
 #'   and thus automatically shows or hides dots.
 #' @param verbose If `FALSE` (default), suppress most warning messages.
-#' @param ... Currently not used.
+#' @param ... Arguments passed down to the individual check functions, especially
+#'   to `check_predictions()` and `binned_residuals()`.
 #' @inheritParams check_predictions
 #'
 #' @return The data frame that is used for plotting.
@@ -185,11 +186,11 @@ check_model.default <- function(x,
   ca <- tryCatch(
     {
       if (minfo$is_bayesian) {
-        suppressWarnings(.check_assumptions_stan(x))
+        suppressWarnings(.check_assumptions_stan(x, ...))
       } else if (minfo$is_linear) {
-        suppressWarnings(.check_assumptions_linear(x, minfo, verbose))
+        suppressWarnings(.check_assumptions_linear(x, minfo, verbose, ...))
       } else {
-        suppressWarnings(.check_assumptions_glm(x, minfo, verbose))
+        suppressWarnings(.check_assumptions_glm(x, minfo, verbose, ...))
       }
     },
     error = function(e) {
@@ -346,7 +347,7 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- .safe(check_predictions(model))
+  dat$PP_CHECK <- .safe(check_predictions(model, ...))
 
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -357,7 +358,7 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info, verbose = TRUE) {
+.check_assumptions_glm <- function(model, model_info, verbose = TRUE, ...) {
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
@@ -371,9 +372,9 @@ check_model.model_fit <- function(x,
     threshold <- NULL
   }
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- .safe(check_predictions(model))
+  dat$PP_CHECK <- .safe(check_predictions(model, ...))
   if (isTRUE(model_info$is_binomial)) {
-    dat$BINNED_RESID <- binned_residuals(model)
+    dat$BINNED_RESID <- binned_residuals(model, ...)
   }
   if (isTRUE(model_info$is_count)) {
     dat$OVERDISPERSION <- .diag_overdispersion(model)

@@ -10,8 +10,8 @@ binned_residuals(
   n_bins = NULL,
   show_dots = NULL,
   ci = 0.95,
-  ci_type = c("gaussian", "exact", "boot"),
-  residuals = c("response", "pearson", "deviance"),
+  ci_type = c("exact", "gaussian", "boot"),
+  residuals = c("deviance", "pearson", "response"),
   iterations = 1000,
   ...
 )
@@ -37,10 +37,16 @@ and thus automatically shows or hides dots.}
 \item{ci}{Numeric, the confidence level for the error bounds.}
 
 \item{ci_type}{Character, the type of error bounds to calculate. Can be
-\code{"gaussian"} (default), \code{"exact"} or \code{"boot"}.}
+\code{"exact"} (default), \code{"gaussian"} or \code{"boot"}. \code{"exact"} calculates the
+error bounds based on the exact binomial distribution, using \code{\link[=binom.test]{binom.test()}}.
+\code{"gaussian"} uses the Gaussian approximation, while \code{"boot"} uses a simple
+bootstrap method, where confidence intervals are calculated based on the
+quantiles of the bootstrap distribution.}
 
 \item{residuals}{Character, the type of residuals to calculate. Can be
-\code{"response"} (default), \code{"pearson"} or \code{"deviance"}.}
+\code{"deviance"} (default), \code{"pearson"} or \code{"response"}. It is recommended to
+use \code{"response"} only for those models where other residuals are not
+available.}
 
 \item{iterations}{Integer, the number of iterations to use for the
 bootstrap method. Only used if \code{ci_type = "boot"}.}

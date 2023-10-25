@@ -13,9 +13,15 @@
 #'   taken.
 #' @param ci Numeric, the confidence level for the error bounds.
 #' @param ci_type Character, the type of error bounds to calculate. Can be
-#'   `"gaussian"` (default), `"exact"` or `"boot"`.
+#'   `"exact"` (default), `"gaussian"` or `"boot"`. `"exact"` calculates the
+#'   error bounds based on the exact binomial distribution, using [`binom.test()`].
+#'   `"gaussian"` uses the Gaussian approximation, while `"boot"` uses a simple
+#'   bootstrap method, where confidence intervals are calculated based on the
+#'   quantiles of the bootstrap distribution.
 #' @param residuals Character, the type of residuals to calculate. Can be
-#'   `"response"` (default), `"pearson"` or `"deviance"`.
+#'   `"deviance"` (default), `"pearson"` or `"response"`. It is recommended to
+#'   use `"response"` only for those models where other residuals are not
+#'   available.
 #' @param iterations Integer, the number of iterations to use for the
 #'   bootstrap method. Only used if `ci_type = "boot"`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
@@ -74,8 +80,8 @@ binned_residuals <- function(model,
                              n_bins = NULL,
                              show_dots = NULL,
                              ci = 0.95,
-                             ci_type = c("gaussian", "exact", "boot"),
-                             residuals = c("response", "pearson", "deviance"),
+                             ci_type = c("exact", "gaussian", "boot"),
+                             residuals = c("deviance", "pearson", "response"),
                              iterations = 1000,
                              ...) {
   # match arguments
@@ -106,6 +112,11 @@ binned_residuals <- function(model,
     deviance = .safe(stats::residuals(model, type = "deviance"))
   )
 
+  # make sure we really have residuals
+  if (is.null(y)) {
+    insight::format_error("Could not calculate residuals. Try using `residuals = \"response\"`.")
+  }
+
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 
   breaks.index <- floor(length(pred) * (1:(n_bins - 1)) / n_bins)
@@ -124,7 +135,7 @@ binned_residuals <- function(model,
     r <- switch(ci_type,
       gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
       exact = {
-        out <- stats:::binom.test(sum(y0[items]), n)$conf.int
+        out <- stats::binom.test(sum(y0[items]), n)$conf.int
         out <- out - (min(out) - ybar) - (diff(out) / 2)
         out
       },
@@ -138,8 +149,7 @@ binned_residuals <- function(model,
       n = n,
       x.lo = model.range[1],
       x.hi = model.range[2],
-      se = stats::qnorm((1 + ci) / 2) * sdev / sqrt(n),
-      ci_range = sdev / sqrt(n)
+      se = stats::qnorm((1 + ci) / 2) * sdev / sqrt(n)
     )
     cbind(d0, rbind(r))
   }))
