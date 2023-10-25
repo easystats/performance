@@ -263,7 +263,7 @@
 #'
 #' - Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M.,
 #' and Makowski, D. (2023). Check your outliers! An introduction to identifying
-#' statistical outliers in R with easystats. https://doi.org/10.31234/osf.io/bu6nt
+#' statistical outliers in R with easystats. \doi{10.31234/osf.io/bu6nt}
 #'
 #' - Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
 #' outliers and leverage points. Journal of the American Statistical
