@@ -489,17 +489,17 @@ check_outliers.default <- function(x,
 
     outlier_count$pareto <- count.table
 
-    if (!all(method %in% c("cook", "pareto"))) {
+    if (all(method %in% c("cook", "pareto"))) {
+      outlier_count$all <- count.table
+    } else {
       outlier_count$all <- datawizard::data_merge(
         list(outlier_count$all, count.table),
         join = "full",
         by = "Row"
       )
-    } else {
-      outlier_count$all <- count.table
     }
   } else {
-    method <- method[!(method %in% "pareto")]
+    method <- method[!(method == "pareto")]
   }
 
   outlier_count$all <- datawizard::convert_na_to(outlier_count$all,
@@ -1478,15 +1478,15 @@ check_outliers.metabin <- check_outliers.metagen
   x <- as.data.frame(x)
 
   # Standardize
-  if (!robust) {
+  if (robust) {
     d <- abs(as.data.frame(lapply(
       x,
-      function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE)
+      function(x) (x - stats::median(x, na.rm = TRUE)) / stats::mad(x, na.rm = TRUE)
     )))
   } else {
     d <- abs(as.data.frame(lapply(
       x,
-      function(x) (x - stats::median(x, na.rm = TRUE)) / stats::mad(x, na.rm = TRUE)
+      function(x) (x - mean(x, na.rm = TRUE)) / stats::sd(x, na.rm = TRUE)
     )))
   }
 
@@ -1765,10 +1765,10 @@ check_outliers.metabin <- check_outliers.metagen
   insight::check_if_installed("ICSOutlier")
 
   # Get n cores
-  n_cores <- if (!requireNamespace("parallel", quietly = TRUE)) {
-    NULL
-  } else {
+  n_cores <- if (requireNamespace("parallel", quietly = TRUE)) {
     getOption("mc.cores", 1L)
+  } else {
+    NULL
   }
 
   # tell user about n-cores option
