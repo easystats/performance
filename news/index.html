@@ -88,6 +88,11 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.7" id="performance-0107">performance 0.10.7<a class="anchor" aria-label="anchor" href="#performance-0107"></a></h2>
 <div class="section level3">
+<h3 id="breaking-changes-0-10-7">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-10-7"></a></h3>
+<ul><li>
+<code><a href="../reference/binned_residuals.html">binned_residuals()</a></code> gains a few new arguments to control the residuals used for the test, as well as different options to calculate confidence intervals (namely, <code>ci_type</code>, <code>residuals</code>, <code>ci</code> and <code>iterations</code>). The default values to compute binned residuals have changed. Default residuals are now “deviance” residuals (and no longer “response” residuals). Default confidence intervals are now “exact” intervals (and no longer based on Gaussian approximation). Use <code>ci_type = "gaussian"</code> and <code>residuals = "response"</code> to get the old defaults.</li>
+</ul></div>
+<div class="section level3">
 <h3 id="changes-to-functions-0-10-7">Changes to functions<a class="anchor" aria-label="anchor" href="#changes-to-functions-0-10-7"></a></h3>
 <ul><li>
 <code><a href="../reference/binned_residuals.html">binned_residuals()</a></code> - like <code><a href="../reference/check_model.html">check_model()</a></code> - gains a <code>show_dots</code> argument to show or hide data points that lie inside error bounds. This is particular useful for models with many observations, where generating the plot would be very slow.</li>

@@ -92,7 +92,17 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">binned_residuals</span><span class="op">(</span><span class="va">model</span>, term <span class="op">=</span> <span class="cn">NULL</span>, n_bins <span class="op">=</span> <span class="cn">NULL</span>, show_dots <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">binned_residuals</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  term <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n_bins <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_dots <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  ci_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"exact"</span>, <span class="st">"gaussian"</span>, <span class="st">"boot"</span><span class="op">)</span>,</span>
+<span>  residuals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"deviance"</span>, <span class="st">"pearson"</span>, <span class="st">"response"</span><span class="op">)</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -120,6 +130,31 @@ to <code>FALSE</code> for models with many observations, if generating the plot 
 time-consuming. By default, <code>show_dots = NULL</code>. In this case <code>binned_residuals()</code>
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.</p></dd>
+
+
+<dt>ci</dt>
+<dd><p>Numeric, the confidence level for the error bounds.</p></dd>
+
+
+<dt>ci_type</dt>
+<dd><p>Character, the type of error bounds to calculate. Can be
+<code>"exact"</code> (default), <code>"gaussian"</code> or <code>"boot"</code>. <code>"exact"</code> calculates the
+error bounds based on the exact binomial distribution, using <code><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test()</a></code>.
+<code>"gaussian"</code> uses the Gaussian approximation, while <code>"boot"</code> uses a simple
+bootstrap method, where confidence intervals are calculated based on the
+quantiles of the bootstrap distribution.</p></dd>
+
+
+<dt>residuals</dt>
+<dd><p>Character, the type of residuals to calculate. Can be
+<code>"deviance"</code> (default), <code>"pearson"</code> or <code>"response"</code>. It is recommended to
+use <code>"response"</code> only for those models where other residuals are not
+available.</p></dd>
+
+
+<dt>iterations</dt>
+<dd><p>Integer, the number of iterations to use for the
+bootstrap method. Only used if <code>ci_type = "boot"</code>.</p></dd>
 
 
 <dt>...</dt>
@@ -173,20 +208,20 @@ Press.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># look at the data frame</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         xbar        ybar n       x.lo       x.hi         se   ci_range</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.03786483 -0.03786483 5 0.01744776 0.06917366 0.01899089 0.00968941</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.09514191 -0.09514191 5 0.07087498 0.15160143 0.02816391 0.01436960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.25910531  0.07422802 6 0.17159955 0.35374001 0.42499664 0.21683901</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.47954643 -0.07954643 5 0.38363314 0.54063600 0.49728294 0.25372045</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.71108931  0.28891069 5 0.57299903 0.89141359 0.10975381 0.05599787</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.97119262 -0.13785929 6 0.91147360 0.99815623 0.30361062 0.15490623</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        CI_low     CI_high group</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -0.05685572 -0.01887394    no</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.12330581 -0.06697800    no</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.35076862  0.49922466   yes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.57682937  0.41773650   yes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.17915688  0.39866451    no</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 -0.44146992  0.16575133   yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 xbar        ybar n       x.lo       x.hi         se     CI_low</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int  0.03786483 -0.26905395 5 0.01744776 0.06917366 0.07079661 -0.5299658</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int1 0.09514191 -0.44334345 5 0.07087498 0.15160143 0.06530245 -0.7042553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int2 0.25910531  0.03762945 6 0.17159955 0.35374001 1.02017708 -0.3293456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int3 0.47954643 -0.19916717 5 0.38363314 0.54063600 1.16107852 -0.5994783</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int4 0.71108931  0.81563262 5 0.57299903 0.89141359 0.19814385  0.5547207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int5 0.97119262 -0.23399465 6 0.91147360 0.99815623 0.77513642 -0.5525066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                CI_high group</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int  -0.008142076    no</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int1 -0.182431572    no</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int2  0.404604465   yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int3  0.201143953   yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int4  1.076544495    no</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> conf_int5  0.084517267   yes</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>

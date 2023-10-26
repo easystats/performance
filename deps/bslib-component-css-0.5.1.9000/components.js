@@ -725,12 +725,12 @@
       }
       const count = { left: 0, right: 0 };
       layouts.forEach(function(x, i) {
-        x.style.setProperty("--bslib-sidebar-counter", i.toString());
         const isRight = x.classList.contains("sidebar-right");
         const thisCount = isRight ? count.right++ : count.left++;
+        x.style.setProperty("--_js-toggle-count-this-side", thisCount.toString());
         x.style.setProperty(
-          "--bslib-sidebar-overlap-counter",
-          thisCount.toString()
+          "--_js-toggle-count-max-side",
+          Math.max(count.right, count.left).toString()
         );
       });
     }
