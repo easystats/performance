@@ -11,6 +11,19 @@
 #' @param n_bins Numeric, the number of bins to divide the data. If
 #'   `n_bins = NULL`, the square root of the number of observations is
 #'   taken.
+#' @param ci Numeric, the confidence level for the error bounds.
+#' @param ci_type Character, the type of error bounds to calculate. Can be
+#'   `"exact"` (default), `"gaussian"` or `"boot"`. `"exact"` calculates the
+#'   error bounds based on the exact binomial distribution, using [`binom.test()`].
+#'   `"gaussian"` uses the Gaussian approximation, while `"boot"` uses a simple
+#'   bootstrap method, where confidence intervals are calculated based on the
+#'   quantiles of the bootstrap distribution.
+#' @param residuals Character, the type of residuals to calculate. Can be
+#'   `"deviance"` (default), `"pearson"` or `"response"`. It is recommended to
+#'   use `"response"` only for those models where other residuals are not
+#'   available.
+#' @param iterations Integer, the number of iterations to use for the
+#'   bootstrap method. Only used if `ci_type = "boot"`.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
 #'   to `FALSE` for models with many observations, if generating the plot is too
 #'   time-consuming. By default, `show_dots = NULL`. In this case `binned_residuals()`
@@ -62,12 +75,24 @@
 #' }
 #'
 #' @export
-binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL, ...) {
-  fv <- stats::fitted(model)
+binned_residuals <- function(model,
+                             term = NULL,
+                             n_bins = NULL,
+                             show_dots = NULL,
+                             ci = 0.95,
+                             ci_type = c("exact", "gaussian", "boot"),
+                             residuals = c("deviance", "pearson", "response"),
+                             iterations = 1000,
+                             ...) {
+  # match arguments
+  ci_type <- match.arg(ci_type)
+  residuals <- match.arg(residuals)
+
+  fitted_values <- stats::fitted(model)
   mf <- insight::get_data(model, verbose = FALSE)
 
   if (is.null(term)) {
-    pred <- fv
+    pred <- fitted_values
   } else {
     pred <- mf[[term]]
   }
@@ -78,7 +103,20 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL
     show_dots <- is.null(n) || n <= 1e5
   }
 
-  y <- .recode_to_zero(insight::get_response(model, verbose = FALSE)) - fv
+  # make sure response is 0/1 (and numeric)
+  y0 <- .recode_to_zero(insight::get_response(model, verbose = FALSE))
+
+  # calculate residuals
+  y <- switch(residuals,
+    response = y0 - fitted_values,
+    pearson = .safe((y0 - fitted_values) / sqrt(fitted_values * (1 - fitted_values))),
+    deviance = .safe(stats::residuals(model, type = "deviance"))
+  )
+
+  # make sure we really have residuals
+  if (is.null(y)) {
+    insight::format_error("Could not calculate residuals. Try using `residuals = \"response\"`.")
+  }
 
   if (is.null(n_bins)) n_bins <- round(sqrt(length(pred)))
 
@@ -95,23 +133,31 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL
     n <- length(items)
     sdev <- stats::sd(y[items], na.rm = TRUE)
 
-    data.frame(
+    conf_int <- switch(ci_type,
+      gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
+      exact = {
+        out <- stats::binom.test(sum(y0[items]), n)$conf.int
+        # center CIs around point estimate
+        out <- out - (min(out) - ybar) - (diff(out) / 2)
+        out
+      },
+      boot = .boot_binned_ci(y[items], ci, iterations)
+    )
+    names(conf_int) <- c("CI_low", "CI_high")
+
+    d0 <- data.frame(
       xbar = xbar,
       ybar = ybar,
       n = n,
       x.lo = model.range[1],
       x.hi = model.range[2],
-      se = stats::qnorm(0.975) * sdev / sqrt(n),
-      ci_range = sdev / sqrt(n)
+      se = stats::qnorm((1 + ci) / 2) * sdev / sqrt(n)
     )
+    cbind(d0, rbind(conf_int))
   }))
 
   d <- do.call(rbind, d)
   d <- d[stats::complete.cases(d), ]
-
-  # CIs
-  d$CI_low <- d$ybar - stats::qnorm(0.975) * d$ci_range
-  d$CI_high <- d$ybar + stats::qnorm(0.975) * d$ci_range
 
   gr <- abs(d$ybar) > abs(d$se)
   d$group <- "yes"
@@ -128,6 +174,21 @@ binned_residuals <- function(model, term = NULL, n_bins = NULL, show_dots = NULL
   d
 }
 
+
+# utilities ---------------------------
+
+.boot_binned_ci <- function(x, ci = 0.95, iterations = 1000) {
+  x <- x[!is.na(x)]
+  n <- length(x)
+  out <- vector("numeric", iterations)
+  for (i in seq_len(iterations)) {
+    out[i] <- sum(x[sample.int(n, n, replace = TRUE)])
+  }
+  out <- out / n
+
+  quant <- stats::quantile(out, c((1 - ci) / 2, (1 + ci) / 2))
+  c(CI_low = quant[1L], CI_high = quant[2L])
+}
 
 
 # methods -----------------------------
