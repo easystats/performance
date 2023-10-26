@@ -1,5 +1,15 @@
 # performance 0.10.7
 
+## Breaking changes
+
+* `binned_residuals()` gains a few new arguments to control the residuals used
+  for the test, as well as different options to calculate confidence intervals
+  (namely, `ci_type`, `residuals`, `ci` and `iterations`). The default values
+  to compute binned residuals have changed. Default residuals are now "deviance"
+  residuals (and no longer "response" residuals). Default confidence intervals
+  are now "exact" intervals (and no longer based on Gaussian approximation).
+  Use `ci_type = "gaussian"` and `residuals = "response"` to get the old defaults.
+
 ## Changes to functions
 
 * `binned_residuals()` - like `check_model()` - gains a `show_dots` argument to

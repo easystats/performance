@@ -28,7 +28,8 @@ check_model(x, ...)
 \arguments{
 \item{x}{A model object.}
 
-\item{...}{Currently not used.}
+\item{...}{Arguments passed down to the individual check functions, especially
+to \code{check_predictions()} and \code{binned_residuals()}.}
 
 \item{dot_size, line_size}{Size of line and dot-geoms.}
 
