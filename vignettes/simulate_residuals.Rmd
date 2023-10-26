@@ -1,0 +1,73 @@
+---
+title: "Checking simulated residuals"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, performance]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Checking simulated residuals}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+devtools::load_all()
+library(DHARMa)
+```
+
+The basic workflow for simulated residual checks using `simulate_residuals()` is as follows.
+
+First, fit a model:
+
+```{r}
+library(glmmTMB)
+
+model <- glmmTMB(
+  count ~ mined + spp + (1 | site),
+  family = poisson,
+  data = Salamanders
+)
+```
+
+Next, simulate residuals from the model:
+
+```{r}
+simulated_residuals <- simulate_residuals(model)
+
+simulated_residuals
+```
+
+<!-- Aside -->
+Note that since this inherits the DHARMa class, all the methods implemented in DHARMa just work, including all the tests:
+
+```{r}
+residuals(simulated_residuals)
+
+DHARMa::testUniformity(simulated_residuals, plot = FALSE)
+```
+<!-- Aside -->
+
+Finally, run specific checks on the simulated residuals:
+
+```{r}
+check_residuals(simulated_residuals)
+```
+
+Or check the entire model. 
+
+```{r, eval=FALSE}
+# TODO (not implemented)
+check_model(simulated_residuals)
+```
+
+The `check_model()` function is the main reason we don't want to prematurely extract the residuals in `simulate_residuals()`, because if we do then the `simulated_residuals` won't contain the model fit (`fittedModel` in the output below), so we won't be able to do all of the checks we would want to do using the model.
+
+```{r}
+str(simulated_residuals, max.level = 1)
+```
+
+It would also mean we would need to reimplement some of the tests from DHARMa (e.g., `DHARMa::testOutliers()`) if we're planning to include those checks as well. We probably don't want to do that, since some of them are fairly involved rather than just being wrappers for tests supplied in base R (e.g., <https://github.com/florianhartig/DHARMa/blob/a04bdfeec75338279152dbc00c3a1825958a226a/DHARMa/R/tests.R#L172>) .
