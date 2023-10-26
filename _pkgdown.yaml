@@ -13,6 +13,7 @@ reference:
     contents:
       - binned_residuals
       - starts_with("check_")
+      - simulate_residuals
 
   - title: "Check Model Performance or Quality"
     contents:
