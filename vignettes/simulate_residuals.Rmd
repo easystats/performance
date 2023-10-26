@@ -64,7 +64,7 @@ Or check the entire model.
 check_model(simulated_residuals)
 ```
 
-The `check_model()` function is the main reason we don't want to prematurely extract the residuals in `simulate_residuals()`, because if we do then the `simulated_residuals` won't contain the model fit (`fittedModel` in the output below), so we won't be able to do all of the checks we would want to do using the model.
+The `check_model()` function is the main reason we don't want to prematurely extract the residuals in `simulate_residuals()`, because if we do then the `simulated_residuals` won't contain the model fit (`fittedModel` in the output below), so we won't be able to do all of the checks we would want to do using the model (e.g., posterior predictive checks).
 
 ```{r}
 str(simulated_residuals, max.level = 1)
