@@ -2,14 +2,14 @@
 % Please edit documentation in R/simulate_residuals.R
 \name{simulate_residuals}
 \alias{simulate_residuals}
-\title{Check model for (non-)constant error variance}
+\title{Simulate randomized quantile residuals from a model}
 \usage{
 simulate_residuals(x, ...)
 }
 \arguments{
 \item{x}{A model object.}
 
-\item{...}{Currently not used.}
+\item{...}{Arguments passed on to \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.}
 }
 \value{
 Simulated residuals.
@@ -18,15 +18,19 @@ Simulated residuals.
 to do.
 }
 \details{
-Based on \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.
+Based on \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}. See also \code{vignette("DHARMa")}.
 }
 \examples{
-m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-check_heteroscedasticity(m)
+m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+simulate_residuals(m)
 
-# plot results
-if (require("see")) {
-  x <- check_heteroscedasticity(m)
-  plot(x)
+}
+\references{
+\itemize{
+\item Hartig, F., & Lohse, L. (2022). DHARMa: Residual Diagnostics for Hierarchical
+(Multi-Level / Mixed) Regression Models (Version 0.4.5). Retrieved from
+https://CRAN.R-project.org/package=DHARMa
+\item Dunn, P. K., & Smyth, G. K. (1996). Randomized Quantile Residuals. Journal
+of Computational and Graphical Statistics, 5(3), 236. \doi{10.2307/1390802}
 }
 }

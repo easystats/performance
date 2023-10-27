@@ -12,8 +12,12 @@
 #'
 #' @references
 #'
-#' - Hartig, F., & Lohse, L. (2022). DHARMa: Residual Diagnostics for Hierarchical (Multi-Level / Mixed) Regression Models (Version 0.4.5). Retrieved from https://CRAN.R-project.org/package=DHARMa
-#' - Dunn, P. K., & Smyth, G. K. (1996). Randomized Quantile Residuals. Journal of Computational and Graphical Statistics, 5(3), 236. https://doi.org/10.2307/1390802
+#' - Hartig, F., & Lohse, L. (2022). DHARMa: Residual Diagnostics for Hierarchical
+#'   (Multi-Level / Mixed) Regression Models (Version 0.4.5). Retrieved from
+#'   https://CRAN.R-project.org/package=DHARMa
+#'
+#' - Dunn, P. K., & Smyth, G. K. (1996). Randomized Quantile Residuals. Journal
+#'   of Computational and Graphical Statistics, 5(3), 236. \doi{10.2307/1390802}
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
