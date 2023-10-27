@@ -6,6 +6,11 @@
 \usage{
 check_residuals(x, ...)
 }
+\arguments{
+\item{x}{An object returned by \code{\link[=simulated_residuals]{simulated_residuals()}}.}
+
+\item{...}{Passed down to \code{\link[DHARMa:testUniformity]{DHARMa::testUniformity()}}}
+}
 \description{
 \code{check_residuals()} checks generalized linear (mixed) models for uniformity
 of randomized quantile residuals, which can be used to identify typical model
