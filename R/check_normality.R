@@ -101,14 +101,15 @@ check_normality.performance_simres <- function(x, ...) {
   p.val <- suppressWarnings(stats::ks.test(stats::residuals(x), "punif"))$p.value
 
   attr(p.val, "data") <- res
-  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(p.val, "object_name") <- NULL
   attr(p.val, "effects") <- "fixed"
   attr(p.val, "type") <- "residuals"
+  attr(p.val, "model") <- x$fittedModel
+  attr(p.val, "model_info") <- insight::model_info(x$fittedModel)
   class(p.val) <- unique(c("check_normality", "see_check_normality", "performance_simres", class(p.val)))
 
   p.val
 }
-
 
 # numeric -------------------
 
