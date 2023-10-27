@@ -46,5 +46,8 @@ print.performance_simres <- function(x, ...) {
   # TODO (low priority): We can probably just base this off of the print method
   # DHARMa uses, but with an easystats style. For now we can just stick with
   # DHARMa's method.
-  print(x)
+  cat(
+    "Simulated residuals from a model of class", class(x$fittedModel),
+    "based on", x$nSim, "simulations."
+  )
 }
