@@ -7,13 +7,14 @@
 #'
 #' @export
 check_residuals <- function(x, ...) {
+  insight::check_if_installed("DHARMa")
   # TODO: This should be an S3 method instead of using ifelse
-  if (any(class(x) %in% c("performance_simres", "DHARMa"))) {
+  if (inherits(x, c("performance_simres", "DHARMa"))) {
     # tests if the overall distribution conforms to expectations; equivalent to:
     # ks.test(residuals(simulated_residuals), "punif")
     DHARMa::testUniformity(x, plot = FALSE, ...)
   } else {
-    stop("Unsupported input")
+    insight::format_error("Unsupported input.")
   }
 }
 
