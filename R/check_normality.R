@@ -104,7 +104,7 @@ check_normality.performance_simres <- function(x, ...) {
   attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
   attr(p.val, "effects") <- "fixed"
   attr(p.val, "type") <- "residuals"
-  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+  class(p.val) <- unique(c("check_normality", "see_check_normality", "performance_simres", class(p.val)))
 
   p.val
 }
