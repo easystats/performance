@@ -5,6 +5,9 @@
 #' misspecification problems, such as over/underdispersion, zero-inflation, and
 #' residual spatial and temporal autocorrelation.
 #'
+#' @param x An object returned by [`simulated_residuals()`].
+#' @param ... Passed down to [`DHARMa::testUniformity()`]
+#'
 #' @export
 check_residuals <- function(x, ...) {
   insight::check_if_installed("DHARMa")
