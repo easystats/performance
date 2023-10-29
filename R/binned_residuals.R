@@ -29,6 +29,7 @@
 #'   time-consuming. By default, `show_dots = NULL`. In this case `binned_residuals()`
 #'   tries to guess whether performance will be poor due to a very large model
 #'   and thus automatically shows or hides dots.
+#' @param verbose Toggle warnings and messages.
 #' @param ... Currently not used.
 #'
 #' @return A data frame representing the data that is mapped in the accompanying
@@ -83,10 +84,19 @@ binned_residuals <- function(model,
                              ci_type = c("exact", "gaussian", "boot"),
                              residuals = c("deviance", "pearson", "response"),
                              iterations = 1000,
+                             verbose = TRUE,
                              ...) {
   # match arguments
   ci_type <- match.arg(ci_type)
   residuals <- match.arg(residuals)
+
+  # for non-bernoulli models, `"exact"` doesn't work
+  if (isFALSE(insight::model_info(model)$is_bernoulli)) {
+    ci_type <- "gaussian"
+    if (verbose) {
+      insight::format_alert("Using `ci_type = \"gaussian\"` because model is not bernoulli.")
+    }
+  }
 
   fitted_values <- stats::fitted(model)
   mf <- insight::get_data(model, verbose = FALSE)
@@ -186,7 +196,7 @@ binned_residuals <- function(model,
   }
   out <- out / n
 
-  quant <- stats::quantile(out, c((1 - ci) / 2, (1 + ci) / 2))
+  quant <- stats::quantile(out, c((1 - ci) / 2, (1 + ci) / 2), na.rm = TRUE)
   c(CI_low = quant[1L], CI_high = quant[2L])
 }
 
