@@ -171,6 +171,6 @@ test_that("binned_residuals, msg for non-bernoulli", {
     weights = tot
   )
 
-  expect_message(binned_residuals(mod1), regex = "Using `ci_type = \"gaussian\"`")
-  expect_silent(binned_residuals(mod1, verbose = FALSE))
+  expect_message(binned_residuals(mod), regex = "Using `ci_type = \"gaussian\"`")
+  expect_silent(binned_residuals(mod, verbose = FALSE))
 })
