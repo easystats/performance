@@ -119,8 +119,6 @@ test_that("check_predictions, glm, binomial", {
   set.seed(1)
   out4 <- check_predictions(mod4)
 
-
-dput(head(out4$sim_1))
   expect_equal(head(out1$sim_1), c(1, 0.9, 0.9, 0.8, 1, 0.8), tolerance = 1e-4)
   expect_false(attributes(out1)$model_info$is_bernoulli)
   expect_equal(head(out2$sim_1), c(1, 0.9, 0.9, 0.8, 1, 0.8), tolerance = 1e-4)

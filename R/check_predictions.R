@@ -197,10 +197,10 @@ pp_check.lm <- function(object,
   out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
 
   # save information about model
-  if (!is.null(model_info)) {
-    minfo <- model_info
-  } else {
+  if (is.null(model_info)) {
     minfo <- insight::model_info(object)
+  } else {
+    minfo <- model_info
   }
 
   # glmmTMB returns column matrix for bernoulli
@@ -215,9 +215,10 @@ pp_check.lm <- function(object,
   }
 
   if (is.null(out)) {
-    insight::format_error(
-      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
-    )
+    insight::format_error(sprintf(
+      "Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?",
+      class(object)[1]
+    ))
   }
 
   # get response data, and response term, to check for transformations
@@ -274,9 +275,10 @@ pp_check.glm <- function(object,
   out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
 
   if (is.null(out)) {
-    insight::format_error(
-      sprintf("Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?", class(object)[1])
-    )
+    insight::format_error(sprintf(
+      "Could not simulate responses. Maybe there is no `simulate()` for objects of class `%s`?",
+      class(object)[1]
+    ))
   }
 
   # get response data, and response term
@@ -288,10 +290,10 @@ pp_check.glm <- function(object,
   out$y <- response[, 1] / rowSums(response, na.rm = TRUE)
 
   # safe information about model
-  if (!is.null(model_info)) {
-    minfo <- model_info
-  } else {
+  if (is.null(model_info)) {
     minfo <- insight::model_info(object)
+  } else {
+    minfo <- model_info
   }
 
   attr(out, "check_range") <- check_range
@@ -363,14 +365,14 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
     if (is.numeric(original)) {
       if (min(replicated) > min(original)) {
         insight::print_color(
-          insight::format_message("Warning: Minimum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
+          insight::format_message("Warning: Minimum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."), # nolint
           "red"
         )
       }
 
       if (max(replicated) < max(original)) {
         insight::print_color(
-          insight::format_message("Warning: Maximum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."),
+          insight::format_message("Warning: Maximum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."), # nolint
           "red"
         )
       }
