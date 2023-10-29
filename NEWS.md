@@ -1,3 +1,16 @@
+# performance 0.10.8
+
+## Changes
+
+* Changed behaviour of `check_predictions()` for models from binomial family,
+  to get comparable plots for different ways of outcome specification. Now,
+  if the outcome is a proportion, or defined as matrix of trials and successes,
+  the produced plots are the same (because the models should be the same, too).
+
+## Bug fixes
+
+* Fixed CRAN check errors.
+
 # performance 0.10.7
 
 ## Breaking changes

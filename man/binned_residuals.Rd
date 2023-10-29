@@ -13,6 +13,7 @@ binned_residuals(
   ci_type = c("exact", "gaussian", "boot"),
   residuals = c("deviance", "pearson", "response"),
   iterations = 1000,
+  verbose = TRUE,
   ...
 )
 }
@@ -50,6 +51,8 @@ available.}
 
 \item{iterations}{Integer, the number of iterations to use for the
 bootstrap method. Only used if \code{ci_type = "boot"}.}
+
+\item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Currently not used.}
 }

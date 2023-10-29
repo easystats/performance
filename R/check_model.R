@@ -374,7 +374,7 @@ check_model.model_fit <- function(x,
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   dat$PP_CHECK <- .safe(check_predictions(model, ...))
   if (isTRUE(model_info$is_binomial)) {
-    dat$BINNED_RESID <- binned_residuals(model, ...)
+    dat$BINNED_RESID <- binned_residuals(model, verbose = verbose, ...)
   }
   if (isTRUE(model_info$is_count)) {
     dat$OVERDISPERSION <- .diag_overdispersion(model)
