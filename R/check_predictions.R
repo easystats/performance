@@ -263,7 +263,7 @@ pp_check.glm <- function(object,
   out <- tryCatch(
     {
       matrix_sim <- stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
-      as.data.frame(sapply(matrix_sim, function(i) i[, 1] / i[, 2], simplify = TRUE))
+      as.data.frame(sapply(matrix_sim, function(i) i[, 1] / rowSums(i, na.rm = TRUE), simplify = TRUE))
     },
     error = function(e) {
       NULL
@@ -285,7 +285,7 @@ pp_check.glm <- function(object,
   )
   resp_string <- insight::find_terms(object)$response
 
-  out$y <- response[, 1] / response[, 2]
+  out$y <- response[, 1] / rowSums(response, na.rm = TRUE)
 
   # safe information about model
   if (!is.null(model_info)) {
