@@ -167,7 +167,7 @@ test_that("binned_residuals, msg for non-bernoulli", {
 
   mod <- glm(prop ~ x1,
     family = binomial,
-    data = df,
+    data = dat,
     weights = tot
   )
 
