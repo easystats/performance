@@ -110,7 +110,7 @@ r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
           mean(i)
         }
       }),
-      "SE" = rapply(r2_bayesian, function(i) {
+      SE = rapply(r2_bayesian, function(i) {
         if (robust) {
           stats::mad(i)
         } else {
@@ -118,9 +118,9 @@ r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
         }
       }),
       # "Estimates" = rapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
-      "CI" = rapply(r2_bayesian, bayestestR::hdi, ci = ci),
-      "ci_method" = "HDI",
-      "robust" = robust
+      CI = rapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      ci_method = "HDI",
+      robust = robust
     )
   } else {
     structure(
@@ -132,17 +132,17 @@ r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
           mean(i)
         }
       }),
-      "SE" = lapply(r2_bayesian, function(i) {
+      SE = lapply(r2_bayesian, function(i) {
         if (robust) {
           stats::mad(i)
         } else {
           stats::sd(i)
         }
       }),
-      # "Estimates" = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
-      "CI" = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
-      "ci_method" = "HDI",
-      "robust" = robust
+      # Estimates = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
+      CI = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      ci_method = "HDI",
+      robust = robust
     )
   }
 }
@@ -174,13 +174,13 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
         res <- insight::find_response(model)
         if (mi[[1]]$is_mixed) {
           br2_mv <- list(
-            "R2_Bayes" = rstantools::bayes_R2(
+            R2_Bayes = rstantools::bayes_R2(
               model,
               re.form = NULL,
               re_formula = NULL,
               summary = FALSE
             ),
-            "R2_Bayes_marginal" = rstantools::bayes_R2(
+            R2_Bayes_marginal = rstantools::bayes_R2(
               model,
               re.form = NA,
               re_formula = NA,
@@ -189,28 +189,28 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           )
           br2 <- lapply(seq_along(res), function(x) {
             list(
-              "R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])),
-              "R2_Bayes_marginal" = unname(as.vector(br2_mv$R2_Bayes_marginal[, x]))
+              R2_Bayes = unname(as.vector(br2_mv$R2_Bayes[, x])),
+              R2_Bayes_marginal = unname(as.vector(br2_mv$R2_Bayes_marginal[, x]))
             )
           })
           names(br2) <- res
         } else {
-          br2_mv <- list("R2_Bayes" = rstantools::bayes_R2(model, summary = FALSE))
+          br2_mv <- list(R2_Bayes = rstantools::bayes_R2(model, summary = FALSE))
           br2 <- lapply(seq_along(res), function(x) {
-            list("R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])))
+            list(R2_Bayes = unname(as.vector(br2_mv$R2_Bayes[, x])))
           })
           names(br2) <- res
         }
       } else {
         if (mi$is_mixed) {
           br2 <- list(
-            "R2_Bayes" = as.vector(rstantools::bayes_R2(
+            R2_Bayes = as.vector(rstantools::bayes_R2(
               model,
               re.form = NULL,
               re_formula = NULL,
               summary = FALSE
             )),
-            "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(
+            R2_Bayes_marginal = as.vector(rstantools::bayes_R2(
               model,
               re.form = NA,
               re_formula = NA,
@@ -220,7 +220,7 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           names(br2$R2_Bayes) <- rep("Conditional R2", length(br2$R2_Bayes))
           names(br2$R2_Bayes_marginal) <- rep("Marginal R2", length(br2$R2_Bayes))
         } else {
-          br2 <- list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
+          br2 <- list(R2_Bayes = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
           names(br2$R2_Bayes) <- rep("R2", length(br2$R2_Bayes))
         }
       }
@@ -412,7 +412,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
       insight::format_error("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher.")
     }
-    insight::format_error("Woops, you seem to have stumbled on some weird edge case. Please file an issue at {.url https://github.com/easystats/performance/issues}")
+    insight::format_error("Woops, you seem to have stumbled on some weird edge case. Please file an issue at {.url https://github.com/easystats/performance/issues}") # nolint
   }
 
   out <- list(
