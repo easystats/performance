@@ -30,67 +30,63 @@
 #'   `r2_posterior()` is the actual workhorse for `r2_bayes()` and
 #'   returns a posterior sample of Bayesian R2 values.
 #'
-#' @examples
+#' @examplesIf require("rstanarm") && require("rstantools") && require("BayesFactor") && require("brms")
 #' library(performance)
-#' if (require("rstanarm") && require("rstantools")) {
-#'   model <- suppressWarnings(stan_glm(
-#'     mpg ~ wt + cyl,
-#'     data = mtcars,
-#'     chains = 1,
-#'     iter = 500,
-#'     refresh = 0,
-#'     show_messages = FALSE
-#'   ))
-#'   r2_bayes(model)
+#' \donttest{
+#' model <- suppressWarnings(rstanarm::stan_glm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0,
+#'   show_messages = FALSE
+#' ))
+#' r2_bayes(model)
 #'
-#'   model <- suppressWarnings(stan_lmer(
-#'     Petal.Length ~ Petal.Width + (1 | Species),
-#'     data = iris,
-#'     chains = 1,
-#'     iter = 500,
-#'     refresh = 0
-#'   ))
-#'   r2_bayes(model)
+#' model <- suppressWarnings(rstanarm::stan_lmer(
+#'   Petal.Length ~ Petal.Width + (1 | Species),
+#'   data = iris,
+#'   chains = 1,
+#'   iter = 500,
+#'   refresh = 0
+#' ))
+#' r2_bayes(model)
 #' }
 #'
-#' if (require("BayesFactor")) {
-#'   BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-#'   FM <- lmBF(mpg ~ qsec + gear, data = mtcars)
+#' BFM <- BayesFactor::generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
+#' FM <- BayesFactor::lmBF(mpg ~ qsec + gear, data = mtcars)
 #'
-#'   r2_bayes(FM)
-#'   r2_bayes(BFM[3])
-#'   r2_bayes(BFM, average = TRUE) # across all models
+#' r2_bayes(FM)
+#' r2_bayes(BFM[3])
+#' r2_bayes(BFM, average = TRUE) # across all models
 #'
-#'   # with random effects:
-#'   mtcars$gear <- factor(mtcars$gear)
-#'   model <- lmBF(
-#'     mpg ~ hp + cyl + gear + gear:wt,
-#'     mtcars,
-#'     progress = FALSE,
-#'     whichRandom = c("gear", "gear:wt")
-#'   )
+#' # with random effects:
+#' mtcars$gear <- factor(mtcars$gear)
+#' model <- BayesFactor::lmBF(
+#'   mpg ~ hp + cyl + gear + gear:wt,
+#'   mtcars,
+#'   progress = FALSE,
+#'   whichRandom = c("gear", "gear:wt")
+#' )
 #'
-#'   r2_bayes(model)
-#' }
+#' r2_bayes(model)
 #'
 #' \donttest{
-#' if (require("brms")) {
-#'   model <- suppressWarnings(brms::brm(
-#'     mpg ~ wt + cyl,
-#'     data = mtcars,
-#'     silent = 2,
-#'     refresh = 0
-#'   ))
-#'   r2_bayes(model)
+#' model <- suppressWarnings(brms::brm(
+#'   mpg ~ wt + cyl,
+#'   data = mtcars,
+#'   silent = 2,
+#'   refresh = 0
+#' ))
+#' r2_bayes(model)
 #'
-#'   model <- suppressWarnings(brms::brm(
-#'     Petal.Length ~ Petal.Width + (1 | Species),
-#'     data = iris,
-#'     silent = 2,
-#'     refresh = 0
-#'   ))
-#'   r2_bayes(model)
-#' }
+#' model <- suppressWarnings(brms::brm(
+#'   Petal.Length ~ Petal.Width + (1 | Species),
+#'   data = iris,
+#'   silent = 2,
+#'   refresh = 0
+#' ))
+#' r2_bayes(model)
 #' }
 #' @references
 #' Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
@@ -114,7 +110,7 @@ r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
           mean(i)
         }
       }),
-      "SE" = rapply(r2_bayesian, function(i) {
+      SE = rapply(r2_bayesian, function(i) {
         if (robust) {
           stats::mad(i)
         } else {
@@ -122,9 +118,9 @@ r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
         }
       }),
       # "Estimates" = rapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
-      "CI" = rapply(r2_bayesian, bayestestR::hdi, ci = ci),
-      "ci_method" = "HDI",
-      "robust" = robust
+      CI = rapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      ci_method = "HDI",
+      robust = robust
     )
   } else {
     structure(
@@ -136,17 +132,17 @@ r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
           mean(i)
         }
       }),
-      "SE" = lapply(r2_bayesian, function(i) {
+      SE = lapply(r2_bayesian, function(i) {
         if (robust) {
           stats::mad(i)
         } else {
           stats::sd(i)
         }
       }),
-      # "Estimates" = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
-      "CI" = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
-      "ci_method" = "HDI",
-      "robust" = robust
+      # Estimates = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
+      CI = lapply(r2_bayesian, bayestestR::hdi, ci = ci),
+      ci_method = "HDI",
+      robust = robust
     )
   }
 }
@@ -178,13 +174,13 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
         res <- insight::find_response(model)
         if (mi[[1]]$is_mixed) {
           br2_mv <- list(
-            "R2_Bayes" = rstantools::bayes_R2(
+            R2_Bayes = rstantools::bayes_R2(
               model,
               re.form = NULL,
               re_formula = NULL,
               summary = FALSE
             ),
-            "R2_Bayes_marginal" = rstantools::bayes_R2(
+            R2_Bayes_marginal = rstantools::bayes_R2(
               model,
               re.form = NA,
               re_formula = NA,
@@ -193,28 +189,28 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           )
           br2 <- lapply(seq_along(res), function(x) {
             list(
-              "R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])),
-              "R2_Bayes_marginal" = unname(as.vector(br2_mv$R2_Bayes_marginal[, x]))
+              R2_Bayes = unname(as.vector(br2_mv$R2_Bayes[, x])),
+              R2_Bayes_marginal = unname(as.vector(br2_mv$R2_Bayes_marginal[, x]))
             )
           })
           names(br2) <- res
         } else {
-          br2_mv <- list("R2_Bayes" = rstantools::bayes_R2(model, summary = FALSE))
+          br2_mv <- list(R2_Bayes = rstantools::bayes_R2(model, summary = FALSE))
           br2 <- lapply(seq_along(res), function(x) {
-            list("R2_Bayes" = unname(as.vector(br2_mv$R2_Bayes[, x])))
+            list(R2_Bayes = unname(as.vector(br2_mv$R2_Bayes[, x])))
           })
           names(br2) <- res
         }
       } else {
         if (mi$is_mixed) {
           br2 <- list(
-            "R2_Bayes" = as.vector(rstantools::bayes_R2(
+            R2_Bayes = as.vector(rstantools::bayes_R2(
               model,
               re.form = NULL,
               re_formula = NULL,
               summary = FALSE
             )),
-            "R2_Bayes_marginal" = as.vector(rstantools::bayes_R2(
+            R2_Bayes_marginal = as.vector(rstantools::bayes_R2(
               model,
               re.form = NA,
               re_formula = NA,
@@ -224,7 +220,7 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           names(br2$R2_Bayes) <- rep("Conditional R2", length(br2$R2_Bayes))
           names(br2$R2_Bayes_marginal) <- rep("Marginal R2", length(br2$R2_Bayes))
         } else {
-          br2 <- list("R2_Bayes" = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
+          br2 <- list(R2_Bayes = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
           names(br2$R2_Bayes) <- rep("R2", length(br2$R2_Bayes))
         }
       }
@@ -339,10 +335,10 @@ r2_posterior.BFBayesFactor <- function(model,
 
 
   # Compute posterior model probabilities
-  if (!is.null(prior_odds)) {
-    prior_odds <- c(1, prior_odds)
-  } else {
+  if (is.null(prior_odds)) {
     prior_odds <- rep(1, nrow(BFMods))
+  } else {
+    prior_odds <- c(1, prior_odds)
   }
   posterior_odds <- prior_odds * BFMods$BF
   posterior_odds <- posterior_odds[-1] / posterior_odds[1]
@@ -416,7 +412,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
     if (utils::packageVersion("BayesFactor") < package_version("0.9.12.4.3")) {
       insight::format_error("R2 for BayesFactor models with random effects requires BayesFactor v0.9.12.4.3 or higher.")
     }
-    insight::format_error("Woops, you seem to have stumbled on some weird edge case. Please file an issue at {.url https://github.com/easystats/performance/issues}")
+    insight::format_error("Woops, you seem to have stumbled on some weird edge case. Please file an issue at {.url https://github.com/easystats/performance/issues}") # nolint
   }
 
   out <- list(

@@ -78,3 +78,53 @@ test_that("check_predictions, glmmTMB", {
   )
   expect_true(attributes(out)$model_info$is_bernoulli)
 })
+
+
+test_that("check_predictions, glm, binomial", {
+  skip_if(packageVersion("insight") <= "0.19.6")
+  data(mtcars)
+  set.seed(1)
+  tot <- rep(10, 100)
+  suc <- rbinom(100, prob = 0.9, size = tot)
+  dat <- data.frame(tot, suc)
+  dat$prop <- suc / tot
+
+  mod1 <- glm(cbind(suc, tot - suc) ~ 1,
+    family = binomial,
+    data = dat
+  )
+
+  mod2 <- glm(prop ~ 1,
+    family = binomial,
+    data = dat,
+    weights = tot
+  )
+
+  mod3 <- glm(cbind(suc, tot) ~ 1,
+    family = binomial,
+    data = dat
+  )
+
+  mod4 <- glm(am ~ 1,
+    family = binomial,
+    data = mtcars
+  )
+
+  set.seed(1)
+  out1 <- check_predictions(mod1)
+  set.seed(1)
+  out2 <- check_predictions(mod2)
+  set.seed(1)
+  out3 <- check_predictions(mod3)
+  set.seed(1)
+  out4 <- check_predictions(mod4)
+
+  expect_equal(head(out1$sim_1), c(1, 0.9, 0.9, 0.8, 1, 0.8), tolerance = 1e-4)
+  expect_false(attributes(out1)$model_info$is_bernoulli)
+  expect_equal(head(out2$sim_1), c(1, 0.9, 0.9, 0.8, 1, 0.8), tolerance = 1e-4)
+  expect_false(attributes(out2)$model_info$is_bernoulli)
+  expect_equal(head(out3$sim_1), c(0.4, 0.42105, 0.47368, 0.61111, 0.4, 0.61111), tolerance = 1e-3)
+  expect_false(attributes(out3)$model_info$is_bernoulli)
+  expect_equal(head(out4$sim_1), c(0, 0, 0, 1, 0, 1), tolerance = 1e-4)
+  expect_true(attributes(out4)$model_info$is_bernoulli)
+})

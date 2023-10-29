@@ -155,3 +155,22 @@ test_that("binned_residuals, bootstrapped CI", {
     tolerance = 1e-4
   )
 })
+
+test_that("binned_residuals, msg for non-bernoulli", {
+  skip_on_cran()
+  tot <- rep(10, 100)
+  suc <- rbinom(100, prob = 0.9, size = tot)
+
+  dat <- data.frame(tot, suc)
+  dat$prop <- suc / tot
+  dat$x1 <- as.factor(sample(1:5, 100, replace = TRUE))
+
+  mod <- glm(prop ~ x1,
+    family = binomial,
+    data = dat,
+    weights = tot
+  )
+
+  expect_message(binned_residuals(mod), regex = "Using `ci_type = \"gaussian\"`")
+  expect_silent(binned_residuals(mod, verbose = FALSE))
+})

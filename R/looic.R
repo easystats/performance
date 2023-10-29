@@ -12,6 +12,7 @@
 #' @return A list with four elements, the ELPD, LOOIC and their standard errors.
 #'
 #' @examplesIf require("rstanarm")
+#' \donttest{
 #' model <- suppressWarnings(rstanarm::stan_glm(
 #'   mpg ~ wt + cyl,
 #'   data = mtcars,
@@ -20,6 +21,7 @@
 #'   refresh = 0
 #' ))
 #' looic(model)
+#' }
 #' @export
 looic <- function(model, verbose = TRUE) {
   insight::check_if_installed("loo")
