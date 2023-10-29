@@ -335,10 +335,10 @@ r2_posterior.BFBayesFactor <- function(model,
 
 
   # Compute posterior model probabilities
-  if (!is.null(prior_odds)) {
-    prior_odds <- c(1, prior_odds)
-  } else {
+  if (is.null(prior_odds)) {
     prior_odds <- rep(1, nrow(BFMods))
+  } else {
+    prior_odds <- c(1, prior_odds)
   }
   posterior_odds <- prior_odds * BFMods$BF
   posterior_odds <- posterior_odds[-1] / posterior_odds[1]
