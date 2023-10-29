@@ -9,7 +9,7 @@
 
 ## Bug fixes
 
-* Fixed CRAN check erros.
+* Fixed CRAN check errors.
 
 # performance 0.10.7
 
