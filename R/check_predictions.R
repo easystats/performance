@@ -365,14 +365,20 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
     if (is.numeric(original)) {
       if (min(replicated) > min(original)) {
         insight::print_color(
-          insight::format_message("Warning: Minimum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."), # nolint
+          insight::format_message(
+            "Warning: Minimum value of original data is not included in the replicated data.",
+            "Model may not capture the variation of the data."
+          ),
           "red"
         )
       }
 
       if (max(replicated) < max(original)) {
         insight::print_color(
-          insight::format_message("Warning: Maximum value of original data is not included in the replicated data.", "Model may not capture the variation of the data."), # nolint
+          insight::format_message(
+            "Warning: Maximum value of original data is not included in the replicated data.",
+            "Model may not capture the variation of the data."
+          ),
           "red"
         )
       }
