@@ -48,11 +48,11 @@ print.performance_simres <- function(x, ...) {
   # DHARMa uses, but with an easystats style. For now we can just stick with
   # DHARMa's method.
   msg <- paste0(
-    "Simulated residuals from a model of class `", class(x$fittedModel),
+    "Simulated residuals from a model of class `", class(x$fittedModel)[1],
     "` based on ", x$nSim, " simulations. Use `check_residuals()` to check ",
     "uniformity of residuals. It is recommended to refer to `?DHARMa::simulateReisudals`",
     " and `vignette(\"DHARMa\")` for more information about different settings",
-    " in particular situations or for particular models."
+    " in particular situations or for particular models.\n"
   )
   cat(insight::format_message(msg))
 }
