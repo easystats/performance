@@ -158,6 +158,7 @@ test_that("binned_residuals, bootstrapped CI", {
 
 test_that("binned_residuals, msg for non-bernoulli", {
   skip_on_cran()
+  skip_if(packageVersion("insight") < "0.19.7")
   tot <- rep(10, 100)
   suc <- rbinom(100, prob = 0.9, size = tot)
 
