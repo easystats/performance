@@ -11,6 +11,12 @@
 #' See [`stats::ks.test()`] for details.
 #' @param ... Passed down to [`stats::ks.test()`]
 #'
+#' @details Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
+#'
+#' @seealso [`simulate_residuals()`]
+#'
+#' @return The p-value of the test statistics.
+#'
 #' @examplesIf require("DHARMa")
 #' dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
 #' m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)

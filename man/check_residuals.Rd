@@ -18,11 +18,17 @@ check_residuals(x, ...)
 \item{alternative}{A character string specifying the alternative hypothesis.
 See \code{\link[stats:ks.test]{stats::ks.test()}} for details.}
 }
+\value{
+The p-value of the test statistics.
+}
 \description{
 \code{check_residuals()} checks generalized linear (mixed) models for uniformity
 of randomized quantile residuals, which can be used to identify typical model
 misspecification problems, such as over/underdispersion, zero-inflation, and
 residual spatial and temporal autocorrelation.
+}
+\details{
+Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
 }
 \examples{
 \dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -31,4 +37,7 @@ m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
 res <- simulate_residuals(m)
 check_residuals(res)
 \dontshow{\}) # examplesIf}
+}
+\seealso{
+\code{\link[=simulate_residuals]{simulate_residuals()}}
 }

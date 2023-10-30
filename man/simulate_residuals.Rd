@@ -14,7 +14,8 @@ simulate_residuals(x, iterations = 250, ...)
 \item{...}{Arguments passed on to \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.}
 }
 \value{
-Simulated residuals.
+Simulated residuals, which can be further processed with
+\code{\link[=check_residuals]{check_residuals()}}.
 }
 \description{
 to do.
@@ -36,4 +37,7 @@ https://CRAN.R-project.org/package=DHARMa
 \item Dunn, P. K., & Smyth, G. K. (1996). Randomized Quantile Residuals. Journal
 of Computational and Graphical Statistics, 5(3), 236. \doi{10.2307/1390802}
 }
+}
+\seealso{
+\code{\link[=check_residuals]{check_residuals()}}
 }

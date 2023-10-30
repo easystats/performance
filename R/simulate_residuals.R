@@ -7,7 +7,10 @@
 #' @param iterations Number of simulations to run.
 #' @param ... Arguments passed on to [`DHARMa::simulateResiduals()`].
 #'
-#' @return Simulated residuals.
+#' @return Simulated residuals, which can be further processed with
+#' [`check_residuals()`].
+#'
+#' @seealso [`check_residuals()`]
 #'
 #' @details Based on [`DHARMa::simulateResiduals()`]. See also `vignette("DHARMa")`.
 #'
