@@ -39,7 +39,7 @@ simulate_residuals <- function(x, iterations = 250, ...) {
   # in it that we'll want to pass onto other functions later, such as passing
   # the fitted model into check_model().
   out <- DHARMa::simulateResiduals(x, n = iterations, plot = FALSE, ...)
-  class(out) <- c("performance_simres", class(out))
+  class(out) <- c("performance_simres", "see_performance_simres", class(out))
   out
 }
 
@@ -58,4 +58,10 @@ print.performance_simres <- function(x, ...) {
     " in particular situations or for particular models.\n"
   )
   cat(insight::format_message(msg))
+}
+
+#' @export
+plot.performance_simres <- function(x, ...) {
+  insight::check_if_installed("see", "for residual plots")
+  NextMethod()
 }
