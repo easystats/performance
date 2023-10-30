@@ -5,21 +5,45 @@
 #' misspecification problems, such as over/underdispersion, zero-inflation, and
 #' residual spatial and temporal autocorrelation.
 #'
-#' @param x An object returned by [`simulated_residuals()`].
-#' @param ... Passed down to [`DHARMa::testUniformity()`]
+#' @param x An object returned by [`simulate_residuals()`] or
+#' [`DHARMa::simulateResiduals()`].
+#' @param alternative A character string specifying the alternative hypothesis.
+#' See [`stats::ks.test()`] for details.
+#' @param ... Passed down to [`stats::ks.test()`]
+#'
+#' @examplesIf require("DHARMa")
+#' dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
+#' m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
+#' res <- simulate_residuals(m)
+#' check_residuals(res)
 #'
 #' @export
 check_residuals <- function(x, ...) {
-  insight::check_if_installed("DHARMa")
-  # TODO: This should be an S3 method instead of using ifelse
-  if (inherits(x, c("performance_simres", "DHARMa"))) {
-    # tests if the overall distribution conforms to expectations; equivalent to:
-    # ks.test(residuals(simulated_residuals), "punif")
-    DHARMa::testUniformity(x, plot = FALSE, ...)
-  } else {
-    insight::format_error("Unsupported input.")
-  }
+  UseMethod("check_residuals")
 }
+
+#' @export
+check_residuals.default <- function(x, ...) {
+  insight::format_error("`check_residuals()` only works with objects returned by `simulate_residuals()` by `DHARMa::simulateResiduals()`.") # nolint
+}
+
+#' @rdname check_residuals
+#' @export
+check_residuals.performance_simres <- function(x,
+                                               alternative = c("two.sided", "less", "greater"),
+                                               ...) {
+  alternative <- match.arg(alternative)
+  stats::ks.test(
+    stats::residuals(simulated_residuals),
+    "punif",
+    alternative = alternative,
+    ...
+  )
+}
+
+#' @export
+check_residuals.DHARMa <- check_residuals.performance_simres
+
 
 # methods ------------------------------
 

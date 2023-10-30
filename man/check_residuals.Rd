@@ -2,18 +2,33 @@
 % Please edit documentation in R/check_residuals.R
 \name{check_residuals}
 \alias{check_residuals}
+\alias{check_residuals.performance_simres}
 \title{Check uniformity of simulated residuals}
 \usage{
 check_residuals(x, ...)
+
+\method{check_residuals}{performance_simres}(x, alternative = c("two.sided", "less", "greater"), ...)
 }
 \arguments{
-\item{x}{An object returned by \code{\link[=simulated_residuals]{simulated_residuals()}}.}
+\item{x}{An object returned by \code{\link[=simulate_residuals]{simulate_residuals()}} or
+\code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.}
 
-\item{...}{Passed down to \code{\link[DHARMa:testUniformity]{DHARMa::testUniformity()}}}
+\item{...}{Passed down to \code{\link[stats:ks.test]{stats::ks.test()}}}
+
+\item{alternative}{A character string specifying the alternative hypothesis.
+See \code{\link[stats:ks.test]{stats::ks.test()}} for details.}
 }
 \description{
 \code{check_residuals()} checks generalized linear (mixed) models for uniformity
 of randomized quantile residuals, which can be used to identify typical model
 misspecification problems, such as over/underdispersion, zero-inflation, and
 residual spatial and temporal autocorrelation.
+}
+\examples{
+\dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
+m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
+res <- simulate_residuals(m)
+check_residuals(res)
+\dontshow{\}) # examplesIf}
 }

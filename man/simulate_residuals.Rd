@@ -4,10 +4,12 @@
 \alias{simulate_residuals}
 \title{Simulate randomized quantile residuals from a model}
 \usage{
-simulate_residuals(x, ...)
+simulate_residuals(x, iterations = 250, ...)
 }
 \arguments{
 \item{x}{A model object.}
+
+\item{iterations}{Number of simulations to run.}
 
 \item{...}{Arguments passed on to \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.}
 }
@@ -21,9 +23,10 @@ to do.
 Based on \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}. See also \code{vignette("DHARMa")}.
 }
 \examples{
+\dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 simulate_residuals(m)
-
+\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
