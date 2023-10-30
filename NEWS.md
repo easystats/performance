@@ -11,6 +11,9 @@
 
 * Fixed CRAN check errors.
 
+* Fixed issue with `binned_residuals()` for models with binomial family, where
+  the outcome was a proportion.
+
 # performance 0.10.7
 
 ## Breaking changes
