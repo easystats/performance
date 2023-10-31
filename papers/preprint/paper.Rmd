@@ -217,14 +217,10 @@ outliers
 
 Using the model-based outlier detection method, we identified a single outlier.
 
-```{r model2, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
+```{r model_fig, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
 model <- lm(disp ~ mpg * disp, data = data)
 outliers <- check_outliers(model, method = "cook")
 outliers
-
-```
-
-```{r model_fig, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
 plot(outliers)
 ```
 
