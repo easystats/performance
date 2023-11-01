@@ -1,6 +1,7 @@
 ---
 output: pdf_document
 title: "Cover letter"
+date: "`r Sys.Date()`"
 ---
 
 Dear Dr. Steinley,
@@ -12,8 +13,6 @@ The paper, titled "Check your outliers! An introduction to identifying statistic
 The methods / tutorial paper covers best practice recommendations on methods for outlier detection and treatment in statistical analyses, as well as their implementation (with code) in the easystats performance package in R. It explains the key approaches, highlights recommendations, and shows how users can adopt them in their R analysis with a single function. The manuscript covers univariate, multivariate, and model-based statistical outlier detection methods, their recommended threshold, standard output, and plotting method, among other things.
 
 Beyond acting like a concise review of outlier treatment procedures and practical tutorial, we also introduce a new outlier-detection method that relies on a consensus-based approach. In this sense, the paper fits well with the General Call for Papers: Tutorials in Psychological Methods, as the tutorial essentially communicates to psychologists how to easily follow some of the best practices in the detection of statistical outlier using currently available open source and free software. This makes the manuscript relevant to analyzing, understanding, and interpreting quantitative psychological data, psychological and behavioural science, and good research and statistical practices more generally.
-
-Additionally, we would like to note that we submitted the paper to the *Journal of Open Source Education* (JOSE), a journal that publishes open source education materials and uses an open peer review model (hosted on GitHub). The paper went through several revisions with reviewers and was eventually enthusiastically recommended for acceptance by the reviewers and editor. However, the Editor in Chief then joined the conversation and declared the paper to be out of scope for the journal.
 
 Finally, regarding the General Call for Papers: Tutorials in Psychological Methods, we would like to highlight that: (a) our statistical outlier detection methods are of wide interest to a broad range of researchers in psychology; (b) our method paper communicates explicit guidelines, and includes reproducible examples using open computer code and data sets; (c) our proposed methodological procedures can be applied to several areas; (d) None of the current authors have previously published in *Psychological Methods*; (e) authors are from underrepresented groups and reflect diversity: The first and senior authors are early career researchers; only one of the six authors has English as their native language; only one of the six authors is from the USA; two authors belong to ethnic minorities; three authors are non-academics; and one author belongs to a sexual orientation minority.
 
