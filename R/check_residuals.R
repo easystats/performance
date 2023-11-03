@@ -30,7 +30,7 @@ check_residuals <- function(x, ...) {
 
 #' @export
 check_residuals.default <- function(x, ...) {
-  insight::format_error("`check_residuals()` only works with objects returned by `simulate_residuals()` by `DHARMa::simulateResiduals()`.") # nolint
+  insight::format_error("`check_residuals()` only works with objects returned by `simulate_residuals()` or `DHARMa::simulateResiduals()`.") # nolint
 }
 
 #' @rdname check_residuals
@@ -39,12 +39,22 @@ check_residuals.performance_simres <- function(x,
                                                alternative = c("two.sided", "less", "greater"),
                                                ...) {
   alternative <- match.arg(alternative)
-  stats::ks.test(
-    stats::residuals(simulated_residuals),
-    "punif",
-    alternative = alternative,
-    ...
+  ts <- suppressWarnings(
+    stats::ks.test(
+      stats::residuals(simulated_residuals),
+      "punif",
+      alternative = alternative,
+      ...
+    )
   )
+
+  p.val <- ts$p.value
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  class(p.val) <- unique(c("check_residuals", "see_check_residuals", class(p.val)))
+
+  p.val
 }
 
 #' @export
@@ -53,4 +63,25 @@ check_residuals.DHARMa <- check_residuals.performance_simres
 
 # methods ------------------------------
 
-# TODO: Add print method
+#' @export
+print.check_residuals <- function(x, ...) {
+  pstring <- insight::format_p(x)
+
+  if (x < 0.05) {
+    insight::print_color(
+      sprintf(
+        "Warning: Non-uniformity of simulated residuals detected (%s).\n", pstring
+      ),
+      "red"
+    )
+  } else {
+    insight::print_color(
+      sprintf(
+        "OK: Simulated residuals appear as uniformly distributed (%s).\n", pstring
+      ),
+      "green"
+    )
+  }
+
+  invisible(x)
+}
