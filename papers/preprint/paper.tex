@@ -1,61 +1,55 @@
-\documentclass{article}
+%Version 2.1 April 2023
+% See section 11 of the User Manual for version history
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{arxiv}
+\documentclass[sn-basic, lineno,pdflatex]{sn-jnl}
 
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{lmodern}        % https://github.com/rstudio/rticles/issues/343
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
-\usepackage{graphicx}
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
 
-\title{Check your outliers! An introduction to identifying statistical
-outliers in R with \emph{easystats}}
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithm}%
+\usepackage{algorithmicx}%
+\usepackage{algpseudocode}%
+\usepackage{listings}%
+%%%%
 
-\author{
-    Rémi Thériault
-   \\
-    Department of Psychology, Université du Québec à Montréal, Montréal,
-Québec, Canada \\
-   \\
-  \texttt{} \\
-   \And
-    Mattan S. Ben-Shachar
-   \\
-    Independent Researcher, Ramat Gan, Israel \\
-   \\
-  \texttt{} \\
-   \And
-    Indrajeet Patil
-   \\
-    Center for Humans and Machines, Max Planck Institute for Human
-Development, Berlin, Germany \\
-   \\
-  \texttt{} \\
-   \And
-    Daniel Lüdecke
-   \\
-    Institute of Medical Sociology, University Medical Center
-Hamburg-Eppendorf, Germany \\
-   \\
-  \texttt{} \\
-   \And
-    Brenton M. Wiernik
-   \\
-    Independent Researcher, Tampa, FL, USA \\
-   \\
-  \texttt{} \\
-   \And
-    Dominique Makowski
-   \\
-    School of Psychology, University of Sussex, Brighton, UK \\
-   \\
-  \texttt{} \\
-  }
+%%%%%=============================================================================%%%%
+%%%%  Remarks: This template is provided to aid authors with the preparation
+%%%%  of original research articles intended for submission to journals published
+%%%%  by Springer Nature. The guidance has been prepared in partnership with
+%%%%  production teams to conform to Springer Nature technical requirements.
+%%%%  Editorial and presentation requirements differ among journal portfolios and
+%%%%  research disciplines. You may find sections in this template are irrelevant
+%%%%  to your work and are empowered to omit any such section if allowed by the
+%%%%  journal you intend to submit to. The submission guidelines and policies
+%%%%  of the journal take precedence. A detailed User Manual is available in the
+%%%%  template package for technical guidance.
+%%%%%=============================================================================%%%%
+
+
+
+\raggedbottom
+
+
 
 % Pandoc syntax highlighting
 \usepackage{color}
@@ -115,45 +109,56 @@ Hamburg-Eppendorf, Germany \\
 \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
 \makesavenoteenv{longtable}
 
-% Pandoc citation processing
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-% for Pandoc 2.8 to 2.10.1
-\newenvironment{cslreferences}%
-  {}%
-  {\par}
-% For Pandoc 2.11+
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
-  \fi
-  % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
 
 \begin{document}
-\maketitle
 
 
-\begin{abstract}
-Beyond the challenge of keeping up-to-date with current best practices
-regarding the diagnosis and treatment of outliers, an additional
-difficulty arises concerning the mathematical implementation of the
-recommended methods. Here, we provide an overview of current
+\title[Check your outliers]{Check your outliers! An introduction to
+identifying statistical outliers in R with \emph{easystats}}
+
+%%=============================================================%%
+%% Prefix	-> \pfx{Dr}
+%% GivenName	-> \fnm{Joergen W.}
+%% Particle	-> \spfx{van der} -> surname prefix
+%% FamilyName	-> \sur{Ploeg}
+%% Suffix	-> \sfx{IV}
+%% NatureName	-> \tanm{Poet Laureate} -> Title after name
+%% Degrees	-> \dgr{MSc, PhD}
+%% \author*[1,2]{\pfx{Dr} \fnm{Joergen W.} \spfx{van der} \sur{Ploeg} \sfx{IV} \tanm{Poet Laureate}
+%%                 \dgr{MSc, PhD}}\email{iauthor@gmail.com}
+%%=============================================================%%
+
+\author*[1]{\fnm{Rémi} \sur{Thériault} }\email{\href{mailto:theriault.remi@courrier.uqam.ca}{\nolinkurl{theriault.remi@courrier.uqam.ca}}}
+
+\author[2]{\fnm{Mattan} \spfx{S.} \sur{Ben-Shachar} }
+
+\author[3]{\fnm{Indrajeet} \sur{Patil} }
+
+\author[4]{\fnm{Daniel} \sur{Lüdecke} }
+
+\author[5]{\fnm{Brenton} \spfx{M.} \sur{Wiernik} }
+
+\author[6]{\fnm{Dominique} \sur{Makowski} }
+
+
+
+  \affil[1]{\orgname{Department of Psychology, Université du Québec à
+Montréal, Montréal, Québec, Canada}}
+  \affil[2]{\orgname{Independent Researcher, Ramat Gan, Israel}}
+  \affil[3]{\orgname{Center for Humans and Machines, Max Planck
+Institute for Human Development, Berlin, Germany}}
+  \affil[4]{\orgname{Institute of Medical Sociology, University Medical
+Center Hamburg-Eppendorf, Germany}}
+  \affil[5]{\orgname{Independent Researcher, Tampa, FL, USA}}
+  \affil[6]{\orgname{School of Psychology, University of Sussex,
+Brighton, UK}}
+
+\abstract{Beyond the challenge of keeping up-to-date with current best
+practices regarding the diagnosis and treatment of outliers, an
+additional difficulty arises concerning the mathematical implementation
+of the recommended methods. Here, we provide an overview of current
 recommendations and best practices and demonstrate how they can easily
 and conveniently be implemented in the R statistical computing software,
 using the \emph{\{performance\}} package of the \emph{easystats}
@@ -161,13 +166,14 @@ ecosystem. We cover univariate, multivariate, and model-based
 statistical outlier detection methods, their recommended threshold,
 standard output, and plotting methods. We conclude by reviewing the
 different theoretical types of outliers, whether to exclude or winsorize
-them, and the importance of transparency.
-\end{abstract}
+them, and the importance of transparency.}
 
-\keywords{
-    univariate outliers; multivariate outliers; robust detection
-    methods; R; easystats
-  }
+\keywords{univariate outliers; multivariate outliers; robust detection
+methods; R; easystats}
+
+
+
+\maketitle
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -185,17 +191,18 @@ weakening the models' predictive performance. It is thus essential to
 address this problem in a thoughtful manner. Yet, despite the existence
 of established recommendations and guidelines, many researchers still do
 not treat outliers in a consistent manner, or do so using inappropriate
-strategies (Leys et al., 2013; Simmons et al., 2011).
+strategies \citep{simmons2011false, leys2013outliers}.
 
 One possible reason is that researchers are not aware of the existing
 recommendations, or do not know how to implement them using their
 analysis software. In this paper, we show how to follow current best
 practices for automatic and reproducible statistical outlier detection
-(SOD) using R and the \emph{\{performance\}} package (Lüdecke et al.,
-2021), which is part of the \emph{easystats} ecosystem of packages that
-build an R framework for easy statistical modeling, visualization, and
-reporting (Lüdecke et al., 2019/2023). Installation instructions can be
-found on \href{https://github.com/easystats/performance}{GitHub} or its
+(SOD) using R and the \emph{\{performance\}} package
+\citep{ludecke2021performance}, which is part of the \emph{easystats}
+ecosystem of packages that build an R framework for easy statistical
+modeling, visualization, and reporting \citep{easystatspackage}.
+Installation instructions can be found on
+\href{https://github.com/easystats/performance}{GitHub} or its
 \href{https://easystats.github.io/performance/}{website}, and its list
 of dependencies on
 \href{https://cran.r-project.org/package=performance}{CRAN}.
@@ -214,8 +221,8 @@ because the mean and standard deviation themselves are not robust to the
 influence of outliers and those methods also assume normally distributed
 data (i.e., a Gaussian distribution). Therefore, current guidelines
 recommend using robust methods to identify outliers, such as those
-relying on the median as opposed to the mean (Leys et al., 2013, 2018,
-2019).
+relying on the median as opposed to the mean
+\citep{leys2019outliers, leys2013outliers, leys2018outliers}.
 
 Nonetheless, which exact outlier method to use depends on many factors.
 In some cases, eye-gauging odd observations can be an appropriate
@@ -247,14 +254,15 @@ purposes.
 
 Importantly, whatever approach researchers choose remains a subjective
 decision, which usage (and rationale) must be transparently documented
-and reproducible (Leys et al., 2019). Researchers should commit (ideally
-in a preregistration) to an outlier treatment method before collecting
-the data. They should report in the paper their decisions and details of
-their methods, as well as any deviation from their original plan. These
-transparency practices can help reduce false positives due to excessive
-researchers' degrees of freedom (i.e., choice flexibility throughout the
-analysis). In the following section, we will go through each of the
-mentioned methods and provide examples on how to implement them with R.
+and reproducible \citep{leys2019outliers}. Researchers should commit
+(ideally in a preregistration) to an outlier treatment method before
+collecting the data. They should report in the paper their decisions and
+details of their methods, as well as any deviation from their original
+plan. These transparency practices can help reduce false positives due
+to excessive researchers' degrees of freedom (i.e., choice flexibility
+throughout the analysis). In the following section, we will go through
+each of the mentioned methods and provide examples on how to implement
+them with R.
 
 \hypertarget{univariate-outliers}{%
 \subsection{Univariate Outliers}\label{univariate-outliers}}
@@ -266,19 +274,19 @@ computes the distance in standard deviation (SD) from the mean. However,
 as mentioned earlier, this popular method is not robust. Therefore, for
 univariate outliers, it is recommended to use the median along with the
 Median Absolute Deviation (MAD), which are more robust than the
-interquartile range or the mean and its standard deviation (Leys et al.,
-2013, 2019).
+interquartile range or the mean and its standard deviation
+\citep{leys2019outliers, leys2013outliers}.
 
 Researchers can identify outliers based on robust (i.e., MAD-based)
 \emph{z} scores using the \texttt{check\_outliers()} function of the
 \emph{\{performance\}} package, by specifying
 \texttt{method\ =\ "zscore\_robust"}.\footnote{Note that
   \texttt{check\_outliers()} only checks numeric variables.} Although
-Leys et al. (2013) suggest a default threshold of 2.5 and Leys et al.
-(2019) a threshold of 3, \emph{\{performance\}} uses by default a less
-conservative threshold of \textasciitilde3.29.\footnote{3.29 is an
-  approximation of the two-tailed critical value for \emph{p}
-  \textless{} .001, obtained through
+\citet{leys2013outliers} suggest a default threshold of 2.5 and
+\citet{leys2019outliers} a threshold of 3, \emph{\{performance\}} uses
+by default a less conservative threshold of
+\textasciitilde3.29.\footnote{3.29 is an approximation of the two-tailed
+  critical value for \emph{p} \textless{} .001, obtained through
   \texttt{qnorm(p\ =\ 1\ -\ 0.001\ /\ 2)}. We chose this threshold for
   consistency with the thresholds of all our other methods.} That is,
 data points will be flagged as outliers if they go beyond +/-
@@ -404,7 +412,7 @@ Univariate outliers can be useful when the focus is on a particular
 variable, for instance the reaction time, as extreme values might be
 indicative of inattention or non-task-related behavior\footnote{ Note
   that they might not be the optimal way of treating reaction time
-  outliers (Ratcliff, 1993; Van Zandt \& Ratcliff, 1995)}.
+  outliers \citep{ratcliff1993methods, van1995statistical}}.
 
 However, in many scenarios, variables of a data set are not independent,
 and an abnormal observation will impact multiple dimensions. For
@@ -419,7 +427,7 @@ very popular, just like the regular \emph{z} scores method, it is not
 robust and is heavily influenced by the outliers themselves. Therefore,
 for multivariate outliers, it is recommended to use the Minimum
 Covariance Determinant, a robust version of the Mahalanobis distance
-(MCD, Leys et al., 2018, 2019).
+\citep[MCD,][]{leys2018outliers, leys2019outliers}.
 
 In \emph{\{performance\}}'s \texttt{check\_outliers()}, one can use this
 approach with \texttt{method\ =\ "mcd"}.\footnote{Our default threshold
@@ -456,8 +464,9 @@ variables of our dataset together).
 
 Other multivariate methods are available, such as another type of robust
 Mahalanobis distance that in this case relies on an orthogonalized
-Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan \& Kettenring,
-1972). These methods are documented and described in the function's
+Gnanadesikan-Kettenring pairwise estimator
+\citep{gnanadesikan1972robust}. These methods are documented and
+described in the function's
 \href{https://easystats.github.io/performance/reference/check_outliers.html}{help
 page}.
 
@@ -590,15 +599,15 @@ Simple test with few variables (\emph{t} test, correlation, etc.) &
 \hypertarget{cooks-distance-vs.-mcd}{%
 \subsection{Cook's Distance vs.~MCD}\label{cooks-distance-vs.-mcd}}
 
-Leys et al. (2018) report a preference for the MCD method over Cook's
-distance. This is because Cook's distance removes one observation at a
-time and checks its corresponding influence on the model each time
-(Cook, 1977), and flags any observation that has a large influence. In
-the view of these authors, when there are several outliers, the process
-of removing a single outlier at a time is problematic as the model
-remains ``contaminated'' or influenced by other possible outliers in the
-model, rendering this method suboptimal in the presence of multiple
-outliers.
+\citet{leys2018outliers} report a preference for the MCD method over
+Cook's distance. This is because Cook's distance removes one observation
+at a time and checks its corresponding influence on the model each time
+\citep{cook1977detection}, and flags any observation that has a large
+influence. In the view of these authors, when there are several
+outliers, the process of removing a single outlier at a time is
+problematic as the model remains ``contaminated'' or influenced by other
+possible outliers in the model, rendering this method suboptimal in the
+presence of multiple outliers.
 
 However, distribution-based approaches are not a silver bullet either,
 and there are cases where the usage of methods agnostic to theoretical
@@ -680,7 +689,7 @@ supported regression models. Additionally, if the presence of multiple
 outliers is a significant concern, regression methods that are more
 robust to outliers should be considered---like \emph{t} regression or
 quantile regression---as they render their precise identification less
-critical (McElreath, 2020).
+critical \citep{mcelreath2020statistical}.
 
 \hypertarget{composite-outlier-score}{%
 \subsection{Composite Outlier Score}\label{composite-outlier-score}}
@@ -738,13 +747,15 @@ An example sentence for reporting the usage of the composite method
 could be:
 
 \begin{quote}
-Based on a composite outlier score (see the `check\_outliers()' function
-in the `performance' R package, Lüdecke et al., 2021) obtained via the
-joint application of multiple outliers detection algorithms ((a) median
-absolute deviation (MAD)-based robust \emph{z} scores, Leys et al.,
-2013; (b) Mahalanobis minimum covariance determinant (MCD), Leys et al.,
-2019; and (c) Cook's distance, Cook, 1977), we excluded two participants
-that were classified as outliers by at least half of the methods used.
+Based on a composite outlier score \citep[see the `check\_outliers()'
+function in the `performance' R package,][]{ludecke2021performance}
+obtained via the joint application of multiple outliers detection
+algorithms \citetext{\citealp[(a) median absolute deviation (MAD)-based
+robust \emph{z} scores,][]{leys2013outliers}; \citealp[(b) Mahalanobis
+minimum covariance determinant (MCD),][]{leys2019outliers}; \citealp[and
+(c) Cook's distance,][]{cook1977detection}}, we excluded two
+participants that were classified as outliers by at least half of the
+methods used.
 \end{quote}
 
 \hypertarget{handling-outliers}{%
@@ -762,32 +773,48 @@ how to deal with observations marked as outliers by means of SOD.
 Indeed, automatic tools can help detect outliers, but they are nowhere
 near perfect. Although they can be useful to flag suspect data, they can
 have misses and false alarms, and they cannot replace human eyes and
-proper vigilance from the researcher. If you do end up manually
-inspecting your data for outliers, it can be helpful to think of
-outliers as belonging to different types of outliers, or categories,
-which can help decide what to do with a given outlier.
+proper vigilance from the researcher.
+
+For example, in the case of reaction time analysis,
+\citet{miller2023outlier} systematically compared 58 SOD procedures in
+simulations using large datasets of real reaction times. He concluded
+that regardless of the selected procedure, the exclusion of outliers
+(reaction times too slow or too fast) generally did more harm than good
+compared to retaining them. He thus recommends only excluding reaction
+times that are clearly invalid, such as those under 150 ms, which is
+close to the minimal physiological limit for reacting to a visual
+stimulus. \citet{miller2023outlier} also suggests that it is generally
+better to assess outliers within specific experimental conditions or
+groups (a condition-specific strategy), rather than across the entire
+dataset at once (a pooled strategy), particularly in the case of
+reaction times.
+
+Thus, when manually inspecting data for outliers, it can be helpful to
+think of outliers as belonging to different types of outliers, or
+categories, which can help decide what to do with a given outlier.
 
 \hypertarget{error-interesting-and-random-outliers}{%
 \subsection{Error, Interesting, and Random
 Outliers}\label{error-interesting-and-random-outliers}}
 
-Leys et al. (2019) distinguish between error outliers, interesting
+\citet{leys2019outliers} distinguish between error outliers, interesting
 outliers, and random outliers. \emph{Error outliers} are likely due to
 human error and should be corrected before data analysis or outright
-removed since they are invalid observations. \emph{Interesting outliers}
-are not due to technical error and may be of theoretical interest; it
-might thus be relevant to investigate them further even though they
-should be removed from the current analysis of interest. \emph{Random
-outliers} are assumed to be due to chance alone and to belong to the
-correct distribution and, therefore, should be retained.
+removed since they are invalid observations (e.g., physiologically
+implausible reaction times). \emph{Interesting outliers} are not due to
+technical error and may be of theoretical interest; it might thus be
+relevant to investigate them further even though they should be removed
+from the current analysis of interest. \emph{Random outliers} are
+assumed to be due to chance alone and to belong to the correct
+distribution and, therefore, should be retained.
 
 It is recommended to \emph{keep} observations which are expected to be
-part of the distribution of interest, even if they are outliers (Leys et
-al., 2019). However, if it is suspected that the outliers belong to an
-alternative distribution, then those observations could have a large
-impact on the results and call into question their robustness,
-especially if significance is conditional on their inclusion, so should
-be removed.
+part of the distribution of interest, even if they are outliers
+\citep{leys2019outliers}. However, if it is suspected that the outliers
+belong to an alternative distribution, then those observations could
+have a large impact on the results and call into question their
+robustness, especially if significance is conditional on their
+inclusion, so should be removed.
 
 We should also keep in mind that there might be error outliers that are
 not detected by statistical tools, but should nonetheless be found and
@@ -806,23 +833,25 @@ also essential for valid inferences.
 \hypertarget{winsorization}{%
 \subsection{Winsorization}\label{winsorization}}
 
-\emph{Removing} outliers can in this case be a valid strategy, and
-ideally one would report results with and without outliers to see the
-extent of their impact on results. This approach however can reduce
-statistical power. Therefore, some propose a \emph{recoding} approach,
-namely, winsorization: bringing outliers back within acceptable limits
-(e.g., 3 MADs, Tukey \& McLaughlin, 1963). However, if possible, it is
+\emph{Removing} outliers that do not belong to the distribution of
+interest can in this case be a valid strategy, and ideally one would
+report results with and without outliers to see the extent of their
+impact on results. This approach however can reduce statistical power.
+Therefore, some propose a \emph{recoding} approach, namely,
+winsorization: bringing outliers back within acceptable limits
+\citep[e.g., 3 MADs,][]{tukey1963less}. However, if possible, it is
 recommended to collect enough data so that even after removing outliers,
 there is still sufficient statistical power without having to resort to
-winsorization (Leys et al., 2019).
+winsorization \citep{leys2019outliers}.
 
 The \emph{easystats} ecosystem makes it easy to incorporate this step
 into your workflow through the \texttt{winsorize()} function of
 \emph{\{datawizard\}}, a lightweight R package to facilitate data
-wrangling and statistical transformations (Patil et al., 2022). This
-procedure will bring back univariate outliers within the limits of
+wrangling and statistical transformations \citep{patil2022datawizard}.
+This procedure will bring back univariate outliers within the limits of
 `acceptable' values, based either on the percentile, the \emph{z} score,
-or its robust alternative based on the MAD.
+or its robust alternative based on the MAD. For example, let's say we
+want to winsorize the two outliers identified before:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -862,17 +891,17 @@ regardless of which SOD method used, it should be reported in a
 reproducible manner. Ideally, the handling of outliers should be
 specified \emph{a priori} with as much detail as possible, and
 preregistered, to limit researchers' degrees of freedom and therefore
-risks of false positives (Leys et al., 2019). This is especially true
-given that interesting outliers and random outliers are often times hard
-to distinguish in practice. Thus, researchers should always prioritize
-transparency and report all of the following information: (a) how many
-outliers were identified (including percentage); (b) according to which
-method and criteria, (c) using which function of which R package (if
-applicable), and (d) how they were handled (excluded or winsorized, if
-the latter, using what threshold). If at all possible, (e) the
-corresponding code script along with the data should be shared on a
-public repository like the Open Science Framework (OSF), so that the
-exclusion criteria can be reproduced precisely.
+risks of false positives \citep{leys2019outliers}. This is especially
+true given that interesting outliers and random outliers are often times
+hard to distinguish in practice. Thus, researchers should always
+prioritize transparency and report all of the following information: (a)
+how many outliers were identified (including percentage); (b) according
+to which method and criteria, (c) using which function of which R
+package (if applicable), and (d) how they were handled (excluded or
+winsorized, if the latter, using what threshold). If at all possible,
+(e) the corresponding code script along with the data should be shared
+on a public repository like the Open Science Framework (OSF), so that
+the exclusion criteria can be reproduced precisely.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
@@ -902,7 +931,7 @@ Software.
 
 \emph{\{performance\}} is part of the collaborative
 \href{https://github.com/easystats/easystats}{\emph{easystats}}
-ecosystem (Lüdecke et al., 2019/2023). Thus, we thank all
+ecosystem \citep{easystatspackage}. Thus, we thank all
 \href{https://github.com/orgs/easystats/people}{members of easystats},
 contributors, and users alike.
 
@@ -916,92 +945,7 @@ This research received no external funding.
 
 The authors declare no conflict of interest
 
-\hypertarget{references}{%
-\section*{References}\label{references}}
-\addcontentsline{toc}{section}{References}
-
-\hypertarget{refs}{}
-\begin{CSLReferences}{1}{0}
-\leavevmode\vadjust pre{\hypertarget{ref-cook1977detection}{}}%
-Cook, R. D. (1977). Detection of influential observation in linear
-regression. \emph{Technometrics}, \emph{19}(1), 15--18.
-\url{https://doi.org/10.1080/00401706.1977.10489493}
-
-\leavevmode\vadjust pre{\hypertarget{ref-gnanadesikan1972robust}{}}%
-Gnanadesikan, R., \& Kettenring, J. R. (1972). Robust estimates,
-residuals, and outlier detection with multiresponse data.
-\emph{Biometrics}, 81--124. \url{https://doi.org/10.2307/2528963}
-
-\leavevmode\vadjust pre{\hypertarget{ref-leys2019outliers}{}}%
-Leys, C., Delacre, M., Mora, Y. L., Lakens, D., \& Ley, C. (2019). How
-to classify, detect, and manage univariate and multivariate outliers,
-with emphasis on pre-registration. \emph{International Review of Social
-Psychology}. \url{https://doi.org/10.5334/irsp.289}
-
-\leavevmode\vadjust pre{\hypertarget{ref-leys2018outliers}{}}%
-Leys, C., Klein, O., Dominicy, Y., \& Ley, C. (2018). Detecting
-multivariate outliers: Use a robust variant of the mahalanobis distance.
-\emph{Journal of Experimental Social Psychology}, \emph{74}, 150--156.
-\url{https://doi.org/10.1016/j.jesp.2017.09.011}
-
-\leavevmode\vadjust pre{\hypertarget{ref-leys2013outliers}{}}%
-Leys, C., Ley, C., Klein, O., Bernard, P., \& Licata, L. (2013).
-Detecting outliers: Do not use standard deviation around the mean, use
-absolute deviation around the median. \emph{Journal of Experimental
-Social Psychology}, \emph{49}(4), 764--766.
-\url{https://doi.org/10.1016/j.jesp.2013.03.013}
-
-\leavevmode\vadjust pre{\hypertarget{ref-ludecke2021performance}{}}%
-Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., \& Makowski,
-D. (2021). {performance}: An {R} package for assessment, comparison and
-testing of statistical models. \emph{Journal of Open Source Software},
-\emph{6}(60), 3139. \url{https://doi.org/10.21105/joss.03139}
-
-\leavevmode\vadjust pre{\hypertarget{ref-easystatspackage}{}}%
-Lüdecke, D., Makowski, D., Ben-Shachar, M. S., Patil, I., Wiernik, B.
-M., Bacher, E., \& Thériault, R. (2023). \emph{{easystats}: Streamline
-model interpretation, visualization, and reporting}.
-\url{https://easystats.github.io/easystats/} (Original work published
-2019)
-
-\leavevmode\vadjust pre{\hypertarget{ref-mcelreath2020statistical}{}}%
-McElreath, R. (2020). \emph{Statistical rethinking: A bayesian course
-with examples in {R} and stan}. CRC press.
-
-\leavevmode\vadjust pre{\hypertarget{ref-patil2022datawizard}{}}%
-Patil, I., Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Bacher, E.,
-\& Lüdecke, D. (2022). {datawizard}: An {R} package for easy data
-preparation and statistical transformations. \emph{Journal of Open
-Source Software}, \emph{7}(78), 4684.
-\url{https://doi.org/10.21105/joss.04684}
-
-\leavevmode\vadjust pre{\hypertarget{ref-ratcliff1993methods}{}}%
-Ratcliff, R. (1993). Methods for dealing with reaction time outliers.
-\emph{Psychological Bulletin}, \emph{114}(3), 510.
-\url{https://doi.org/10.1037/0033-2909.114.3.510}
-
-\leavevmode\vadjust pre{\hypertarget{ref-simmons2011false}{}}%
-Simmons, J. P., Nelson, L. D., \& Simonsohn, U. (2011). False-positive
-psychology: Undisclosed flexibility in data collection and analysis
-allows presenting anything as significant. \emph{Psychological Science},
-\emph{22}(11), 1359--1366.
-\url{https://doi.org/10.1177/0956797611417632}
-
-\leavevmode\vadjust pre{\hypertarget{ref-tukey1963less}{}}%
-Tukey, J. W., \& McLaughlin, D. H. (1963). Less vulnerable confidence
-and significance procedures for location based on a single sample:
-Trimming/winsorization 1. \emph{Sankhy{ā}: The Indian Journal of
-Statistics, Series A}, 331--352.
-
-\leavevmode\vadjust pre{\hypertarget{ref-van1995statistical}{}}%
-Van Zandt, T., \& Ratcliff, R. (1995). Statistical mimicking of reaction
-time data: Single-process models, parameter variability, and mixtures.
-\emph{Psychonomic Bulletin \& Review}, \emph{2}(1), 20--54.
-\url{https://doi.org/10.3758/BF03214411}
-
-\end{CSLReferences}
-
-\bibliographystyle{unsrt}
+\renewcommand\refname{References}
 \bibliography{paper.bib}
 
 

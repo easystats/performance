@@ -1,5 +1,6 @@
 ---
 title: "Check your outliers! An introduction to identifying statistical outliers in R with *easystats*"
+titlerunning: "Check your outliers"
 tags:
   - R
   - univariate outliers
@@ -7,37 +8,71 @@ tags:
   - robust detection methods
   - easystats
 authors:
-  - name: Rémi Thériault
+  # - name: Rémi Thériault
+  - firstname: Rémi
+    lastname: Thériault
     orcid: 0000-0003-4315-6788
-    affiliation: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
-  - name: Mattan S. Ben-Shachar
+    affiliation: 1
+    corresponding: TRUE
+    email: theriault.remi@courrier.uqam.ca
+    
+  # - name: Mattan S. Ben-Shachar
+  - firstname: Mattan 
+    particle: S.
+    lastname: Ben-Shachar
     orcid: 0000-0002-4287-4801
-    affiliation: Independent Researcher, Ramat Gan, Israel
-  - name: Indrajeet Patil
+    affiliation: 2
+    
+  # - name: Indrajeet Patil
+  - firstname: Indrajeet
+    lastname: Patil
     orcid: 0000-0003-1995-6531
-    affiliation: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
-  - name: Daniel Lüdecke
+    affiliation: 3
+    
+  # - name: Daniel Lüdecke
+  - firstname: Daniel
+    lastname: Lüdecke
     orcid: 0000-0002-8895-3206
-    affiliation: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
-  - name: Brenton M. Wiernik
+    affiliation: 4
+    
+  # - name: Brenton M. Wiernik
+  - firstname: Brenton
+    particle: M.
+    lastname: Wiernik
     orcid: 0000-0001-9560-6336
-    affiliation: Independent Researcher, Tampa, FL, USA
-  - name: Dominique Makowski
+    affiliation: 5
+    
+  # - name: Dominique Makowski
+  - firstname: Dominique
+    lastname: Makowski
     orcid: 0000-0001-5375-9967
-    affiliation: School of Psychology, University of Sussex, Brighton, UK
+    affiliation: 6
+
 affiliations:
-  - index: 1
-    name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
-  - index: 2
-    name: Independent Researcher, Ramat Gan, Israel
-  - index: 3
-    name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
-  - index: 4
-    name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
-  - index: 5
-    name: Independent Researcher, Tampa, FL, USA
-  - index: 6
-    name: School of Psychology, University of Sussex, Brighton, UK
+  - number: 1
+    # name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
+    info:
+      orgname: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
+  - number: 2
+    # name: Independent Researcher, Ramat Gan, Israel
+    info:
+      orgname: Independent Researcher, Ramat Gan, Israel
+  - number: 3
+    # name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+    info:
+      orgname: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+  - number: 4
+    # name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
+    info:
+      orgname: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
+  - number: 5
+    # name: Independent Researcher, Tampa, FL, USA
+    info:
+      orgname: Independent Researcher, Tampa, FL, USA
+  - number: 6
+    # name: School of Psychology, University of Sussex, Brighton, UK
+    info:
+      orgname: School of Psychology, University of Sussex, Brighton, UK
 correspondence: theriault.remi@courrier.uqam.ca.
 type: article
 status: submit
@@ -81,7 +116,10 @@ abbreviations:
     long: invariant coordinate selection
   - short: OSF
     long: Open Science Framework
-output: rticles::arxiv_article
+# output: rticles::arxiv_article
+output: rticles::springer_article
+journal: "BRM"
+classoptions: sn-basic, lineno
 csl: apa.csl
 ---
 
@@ -316,11 +354,15 @@ An example sentence for reporting the usage of the composite method could be:
 
 # Handling Outliers
 
-The above section demonstrated how to identify outliers using the `check_outliers()` function in the *{performance}* package. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are nowhere near perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher. If you do end up manually inspecting your data for outliers, it can be helpful to think of outliers as belonging to different types of outliers, or categories, which can help decide what to do with a given outlier.
+The above section demonstrated how to identify outliers using the `check_outliers()` function in the *{performance}* package. But what should we do with these outliers once identified? Although it is common to automatically discard any observation that has been marked as "an outlier" as if it might infect the rest of the data with its statistical ailment, we believe that the use of SOD methods is but one step in the get-to-know-your-data pipeline; a researcher or analyst's _domain knowledge_ must be involved in the decision of how to deal with observations marked as outliers by means of SOD. Indeed, automatic tools can help detect outliers, but they are nowhere near perfect. Although they can be useful to flag suspect data, they can have misses and false alarms, and they cannot replace human eyes and proper vigilance from the researcher.
+
+For example, in the case of reaction time analysis, @miller2023outlier systematically compared 58 SOD procedures in simulations using large datasets of real reaction times. He concluded that regardless of the selected procedure, the exclusion of outliers (reaction times too slow or too fast) generally did more harm than good compared to retaining them. He thus recommends only excluding reaction times that are clearly invalid, such as those under 150 ms, which is close to the minimal physiological limit for reacting to a visual stimulus. @miller2023outlier also suggests that it is generally better to assess outliers within specific experimental conditions or groups (a condition-specific strategy), rather than across the entire dataset at once (a pooled strategy), particularly in the case of reaction times.
+
+Thus, when manually inspecting data for outliers, it can be helpful to think of outliers as belonging to different types of outliers, or categories, which can help decide what to do with a given outlier.
 
 ## Error, Interesting, and Random Outliers
 
-@leys2019outliers distinguish between error outliers, interesting outliers, and random outliers. _Error outliers_ are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations. _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
+@leys2019outliers distinguish between error outliers, interesting outliers, and random outliers. _Error outliers_ are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations (e.g., physiologically implausible reaction times). _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
 
 It is recommended to _keep_ observations which are expected to be part of the distribution of interest, even if they are outliers [@leys2019outliers]. However, if it is suspected that the outliers belong to an alternative distribution, then those observations could have a large impact on the results and call into question their robustness, especially if significance is conditional on their inclusion, so should be removed.
 
@@ -328,9 +370,9 @@ We should also keep in mind that there might be error outliers that are not dete
 
 ## Winsorization
 
-_Removing_ outliers can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MADs, @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
+_Removing_ outliers that do not belong to the distribution of interest can in this case be a valid strategy, and ideally one would report results with and without outliers to see the extent of their impact on results. This approach however can reduce statistical power. Therefore, some propose a _recoding_ approach, namely, winsorization: bringing outliers back within acceptable limits [e.g., 3 MADs, @tukey1963less]. However, if possible, it is recommended to collect enough data so that even after removing outliers, there is still sufficient statistical power without having to resort to winsorization [@leys2019outliers].
 
-The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of *{datawizard}*, a lightweight R package to facilitate data wrangling and statistical transformations [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD.
+The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of *{datawizard}*, a lightweight R package to facilitate data wrangling and statistical transformations [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD. For example, let's say we want to winsorize the two outliers identified before:
 
 ```{r winsorization}
 data[1501:1502, ]  # See outliers rows
