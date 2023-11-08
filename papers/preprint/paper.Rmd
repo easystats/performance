@@ -395,20 +395,30 @@ Finally, it is a critical part of a sound outlier treatment that regardless of w
 
 In this paper, we have showed how to investigate outliers using the `check_outliers()` function of the *{performance}* package while following current good practices. However, best practice for outlier treatment does not stop at using appropriate statistical algorithms, but entails respecting existing recommendations, such as preregistration, reproducibility, consistency, transparency, and justification. Ideally, one would additionally also report the package, function, and threshold used (linking to the full code when possible). We hope that this paper and the accompanying `check_outlier()` function of *easystats* will help researchers engage in good research practices while providing a smooth outlier detection experience.
 
-### Contributions
+# Declarations
 
-RT: Writing- Original draft preparation, Writing- Reviewing and Editing, Software. MSB-S, IP, DL, BMW, and DM: Writing- Reviewing and Editing, Software.
-
-### Acknowledgements
-
-*{performance}* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem [@easystatspackage]. Thus, we thank all [members of easystats](https://github.com/orgs/easystats/people), contributors, and users alike.
-
-### Funding information
+## Funding information
 
 This research received no external funding.
 
-### Competing Interests
+## Competing Interests
 
 The authors declare no conflict of interest
+
+## Availability of data and materials (data transparency)
+
+This paper first appeared as a preprint (https://doi.org/10.31234/osf.io/bu6nt) and is also available as an online vignette at: https://easystats.github.io/performance/articles/check_outliers. All data used in this paper uses data included with base R.
+
+## Code availability
+
+The performance package is available at the package official website (https://easystats.github.io/performance), on CRAN (https://cran.r-project.org/package=performance), and on the R-Universe (https://easystats.r-universe.dev/performance). The source code is available on GitHub (https://github.com/easystats/performance/), and the package can be installed from CRAN with `install.packages("performance")`.
+
+## Contributions
+
+RT: Writing- Original draft preparation, Writing- Reviewing and Editing, Software. MSB-S, IP, DL, BMW, and DM: Writing- Reviewing and Editing, Software.
+
+## Acknowledgements
+
+*{performance}* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem [@easystatspackage]. Thus, we thank all [members of easystats](https://github.com/orgs/easystats/people), contributors, and users alike.
 
 # References
