@@ -781,13 +781,30 @@ simulations using large datasets of real reaction times. He concluded
 that regardless of the selected procedure, the exclusion of outliers
 (reaction times too slow or too fast) generally did more harm than good
 compared to retaining them. He thus recommends only excluding reaction
-times that are clearly invalid, such as those under 150 ms, which is
-close to the minimal physiological limit for reacting to a visual
-stimulus. \citet{miller2023outlier} also suggests that it is generally
-better to assess outliers within specific experimental conditions or
-groups (a condition-specific strategy), rather than across the entire
-dataset at once (a pooled strategy), particularly in the case of
-reaction times.
+times that are clearly invalid, such as those under a fixed threshold,
+e.g., 150 ms, which is close to the minimal physiological limit for
+reacting to a visual stimulus. Setting an upper limit on very long times
+(e.g., 3 to 5 seconds, depending on the experimental task) to remove
+potential sparse artifacts, can also improve model convergence and
+fitting.
+
+\citet{miller2023outlier} also suggests that it is generally better to
+assess outliers within specific experimental conditions or groups (a
+condition-specific strategy), rather than across the entire dataset at
+once (a pooled strategy), particularly in the case of reaction times.
+Additionally, common procedures such as statistical transformations
+(e.g.~log-transformation) reportedly offer at best no benefit (being
+instead potentially detrimental) to statistical power
+\citep{schramm2019reaction}. Given the specific shape of a typical
+reaction distribution, treating them with bespoke models that take into
+account its skewness (thus reframing the notion of outliers and
+integrating the longer right tail of the distribution) should be
+considered. Examples of such models---referred to as sequential sampling
+models or evidence accumulation models---include Wald models
+\citep{anders2016shifted}, log-normal race models
+\citep{rouder2015lognormal}, Linear Ballistic Accumulators
+\citep{brown2008simplest}, and Drift Diffusion Models
+\citep{ratcliff2016diffusion}.
 
 Thus, when manually inspecting data for outliers, it can be helpful to
 think of outliers as belonging to different types of outliers, or
