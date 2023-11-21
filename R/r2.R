@@ -468,9 +468,6 @@ r2.merMod <- function(model, ci = NULL, tolerance = 1e-5, ...) {
 }
 
 #' @export
-r2.glmmTMB <- r2.merMod
-
-#' @export
 r2.cpglmm <- r2.merMod
 
 #' @export
@@ -491,6 +488,19 @@ r2.MixMod <- r2.merMod
 #' @export
 r2.rlmerMod <- r2.merMod
 
+#' @export
+r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, ...) {
+  if (insight::is_mixed_model(model)) {
+    r2_nakagawa(model, ci = ci, tolerance = tolerance, ...)
+  } else {
+    mi <- insight::model_info(model, verbose = FALSE)
+    if (mi$is_linear) {
+      .r2_lm_manual(model)
+    } else {
+      insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
+    }
+  }
+}
 
 #' @export
 r2.wbm <- function(model, tolerance = 1e-5, ...) {
@@ -839,4 +849,16 @@ r2.DirichletRegModel <- function(model, ...) {
     return(NULL)
   }
   ci
+}
+
+
+.r2_lm_manual <- function(model) {
+  r <- stats::residuals(model)
+  f <- stats::fitted(model)
+  rss <- sum(r^2)
+  mss <- sum((f - mean(f, na.rm = TRUE))^2)  
+  out <- list(R2 = mss / (mss + rss))
+  names(out$R2) <- "R2"
+  attr(out, "model_type") <- "Linear"
+  structure(class = "r2_generic", out)
 }
