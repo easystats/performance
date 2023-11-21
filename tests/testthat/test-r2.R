@@ -39,3 +39,11 @@ test_that("r2 glm, ci", {
     tolerance = 1e-3
   )
 })
+
+test_that("r2 glmmTMB, no ranef", {
+  skip_if_not_installed("glmmTMB")
+  data(Owls, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
+  out <- r2(m)
+  expect_equal(out$R2, 0.05597288, tolerance = 1e-3, ignore_attr = TRUE)
+})
