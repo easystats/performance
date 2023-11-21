@@ -47,14 +47,14 @@ check_clusterstructure <- function(x,
 
   H <- .clusterstructure_hopkins(x, distance = distance)
   if (H < 0.5) {
-    text <- paste0(
+    res_text <- paste0(
       "The dataset is suitable for clustering (Hopkins' H = ",
       insight::format_value(H),
       ").\n"
     )
     color <- "green"
   } else {
-    text <- paste0(
+    res_text <- paste0(
       "The dataset is not suitable for clustering (Hopkins' H = ",
       insight::format_value(H),
       ").\n"
@@ -67,7 +67,7 @@ check_clusterstructure <- function(x,
     dissimilarity_matrix = .clusterstructure_dm(x, distance = distance, method = "ward.D2")
   )
 
-  attr(out, "text") <- text
+  attr(out, "text") <- res_text
   attr(out, "color") <- color
   attr(out, "title") <- "Clustering tendency"
   class(out) <- c("see_check_clusterstructure", "check_clusterstructure", "easystats_check", class(out))
@@ -107,11 +107,11 @@ plot.check_clusterstructure <- function(x, ...) {
 
   n <- nrow(x) - 1
 
-  c <- apply(x, 2, min) # minimum value per column
+  cc <- apply(x, 2, min) # minimum value per column
   d <- apply(x, 2, max)
   p <- matrix(0, ncol = ncol(x), nrow = n) # n vectors of space
   for (i in seq_len(ncol(x))) {
-    p[, i] <- stats::runif(n, min = c[i], max = d[i])
+    p[, i] <- stats::runif(n, min = cc[i], max = d[i])
   }
   k <- round(stats::runif(n, 1, nrow(x)))
   q <- as.matrix(x[k, ])
