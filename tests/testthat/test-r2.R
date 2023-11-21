@@ -46,4 +46,8 @@ test_that("r2 glmmTMB, no ranef", {
   m <- glmmTMB::glmmTMB(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
   out <- r2(m)
   expect_equal(out$R2, 0.05597288, tolerance = 1e-3, ignore_attr = TRUE)
+  # validate against lm
+  m2 <- lm(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
+  out2 <- r2(m2)
+  expect_equal(out$R2, out2$R2, tolerance = 1e-3, ignore_attr = TRUE)
 })
