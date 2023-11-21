@@ -495,7 +495,7 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, ...) {
   } else {
     mi <- insight::model_info(model, verbose = FALSE)
     if (mi$is_linear) {
-      .r2_lm_manual(model)
+      .safe(.r2_lm_manual(model))
     } else {
       insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
     }
@@ -853,12 +853,42 @@ r2.DirichletRegModel <- function(model, ...) {
 
 
 .r2_lm_manual <- function(model) {
+  w <- insight::get_weights(model, verbose = FALSE)
   r <- stats::residuals(model)
   f <- stats::fitted(model)
-  rss <- sum(r^2)
-  mss <- sum((f - mean(f, na.rm = TRUE))^2)  
-  out <- list(R2 = mss / (mss + rss))
+  n <- length(r)
+  rdf <- .safe(stats::df.residual(model))
+  df_int <- .safe(as.numeric(insight::has_intercept(model)))
+
+  if (insight::has_intercept(model)) {
+    if (is.null(w)) {
+      mss <- sum((f - mean(f))^2)
+    } else {
+      m <- sum(w * f / sum(w))
+      mss <- sum(w * (f - m)^2)
+    }
+  } else {
+    if (is.null(w)) {
+      mss <- sum(f^2)
+    } else {
+      mss <- sum(w * f^2)
+    }
+  }
+  if (is.null(w)) {
+    rss <- sum(r^2)
+  } else {
+    rss <- sum(w * r^2)
+  }
+  r_squared <- mss / (mss + rss)
+  if (is.null(df_int) || is.null(rdf)) {
+    adj_r2 <- NULL
+  } else {
+    adj_r2 <- 1 - (1 - r_squared) * ((n - df_int) / rdf)
+  }
+  out <- list(R2 = r_squared, R2_adjusted = adj_r2)
+
   names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
   attr(out, "model_type") <- "Linear"
   structure(class = "r2_generic", out)
 }
