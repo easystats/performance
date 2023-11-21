@@ -50,4 +50,13 @@ test_that("r2 glmmTMB, no ranef", {
   m2 <- lm(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
   out2 <- r2(m2)
   expect_equal(out$R2, out2$R2, tolerance = 1e-3, ignore_attr = TRUE)
+  # binomial
+  data(mtcars)
+  m <- glmmTMB::glmmTMB(am ~ mpg, data = mtcars, family = binomial())
+  out <- r2(m)
+  expect_equal(out[[1]], 0.3677326, tolerance = 1e-3, ignore_attr = TRUE)
+  # validate against glm
+  m2 <- glm(am ~ mpg, data = mtcars, family = binomial())
+  out2 <- r2(m2)
+  expect_equal(out[[1]], out[[1]], tolerance = 1e-3, ignore_attr = TRUE)
 })

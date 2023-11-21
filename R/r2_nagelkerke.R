@@ -79,6 +79,35 @@ r2_nagelkerke.BBreg <- r2_nagelkerke.glm
 
 
 #' @export
+r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
+    info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
+  if (info$is_binomial && !info$is_bernoulli) {
+    if (verbose) {
+      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+    }
+    return(NULL)
+  } else {
+    dev <- stats::deviance(model)
+    # if no deviance, return NA
+    if (is.null(dev)) {
+      return(NULL)
+    }
+    null_dev <- stats::deviance(insight::null_model(model))
+    r2_cox <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
+    if (is.na(r2cox) || is.null(r2cox)) {
+      return(NULL)
+    }
+    r2_nagelkerke <- r2cox / (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
+    names(r2_nagelkerke) <- "Nagelkerke's R2"
+    r2_nagelkerke
+  }
+}
+
+
+#' @export
 r2_nagelkerke.nestedLogit <- function(model, ...) {
   n <- insight::n_obs(model, disaggregate = TRUE)
   stats::setNames(

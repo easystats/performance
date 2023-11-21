@@ -489,17 +489,31 @@ r2.MixMod <- r2.merMod
 r2.rlmerMod <- r2.merMod
 
 #' @export
-r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, ...) {
+r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) {
   if (insight::is_mixed_model(model)) {
-    r2_nakagawa(model, ci = ci, tolerance = tolerance, ...)
+    return(r2_nakagawa(model, ci = ci, tolerance = tolerance, ...))
   } else {
+    if (!is.null(ci) && !is.na(ci)) {
+      return(.r2_ci(model, ci = ci, ...))
+    }
     mi <- insight::model_info(model, verbose = FALSE)
     if (mi$is_linear) {
-      .safe(.r2_lm_manual(model))
+      out <- .safe(.r2_lm_manual(model))
+    } else if (mi$is_logit && mi$is_bernoulli) {
+      out <- list(R2_Tjur = r2_tjur(model, model_info = mi, ...))
+      attr(out, "model_type") <- "Logistic"
+      names(out$R2_Tjur) <- "Tjur's R2"
+      class(out) <- c("r2_pseudo", class(out))
+    } else if (info$is_binomial && !info$is_bernoulli) {
+      if (verbose) {
+        insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      }
+      out <- NULL
     } else {
       insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
     }
   }
+  out
 }
 
 #' @export
