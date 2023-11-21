@@ -1,3 +1,8 @@
+# performance 0.10.9
+
+* `r2()` for models of class `glmmTMB` without random effects now returns the
+  correct r-squared value for non-mixed models.
+
 # performance 0.10.8
 
 ## Changes
