@@ -183,28 +183,26 @@ check_sphericity_bartlett <- function(x, n = NULL, ...) {
 
   detR <- det(out$r)
   statistic <- -log(detR) * (out$n - 1 - (2 * p + 5) / 6)
-  df <- p * (p - 1) / 2
-  pval <- stats::pchisq(statistic, df, lower.tail = FALSE)
+  dof <- p * (p - 1) / 2
+  pval <- stats::pchisq(statistic, df = dof, lower.tail = FALSE)
 
-  out <- list(chisq = statistic, p = pval, dof = df)
+  out <- list(chisq = statistic, p = pval, dof = dof)
 
   if (pval < 0.001) {
-    text <-
-      sprintf(
-        "Bartlett's test of sphericity suggests that there is sufficient significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).",
-        df,
-        statistic,
-        insight::format_p(pval)
-      )
+    msg_text <- sprintf(
+      "Bartlett's test of sphericity suggests that there is sufficient significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).", # nolint
+      dof,
+      statistic,
+      insight::format_p(pval)
+    )
     color <- "green"
   } else {
-    text <-
-      sprintf(
-        "Bartlett's test of sphericity suggests that there is not enough significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).",
-        df,
-        statistic,
-        insight::format_p(pval)
-      )
+    msg_text <- sprintf(
+      "Bartlett's test of sphericity suggests that there is not enough significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).", # nolint
+      dof,
+      statistic,
+      insight::format_p(pval)
+    )
     color <- "red"
   }
 
