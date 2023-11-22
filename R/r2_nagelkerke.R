@@ -96,7 +96,7 @@ r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
       return(NULL)
     }
     null_dev <- stats::deviance(insight::null_model(model))
-    r2_cox <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
+    r2cox <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
     if (is.na(r2cox) || is.null(r2cox)) {
       return(NULL)
     }

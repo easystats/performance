@@ -496,11 +496,11 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     if (!is.null(ci) && !is.na(ci)) {
       return(.r2_ci(model, ci = ci, ...))
     }
-    mi <- insight::model_info(model, verbose = FALSE)
-    if (mi$is_linear) {
+    info <- insight::model_info(model, verbose = FALSE)
+    if (info$is_linear) {
       out <- .safe(.r2_lm_manual(model))
-    } else if (mi$is_logit && mi$is_bernoulli) {
-      out <- list(R2_Tjur = r2_tjur(model, model_info = mi, ...))
+    } else if (info$is_logit && info$is_bernoulli) {
+      out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
       attr(out, "model_type") <- "Logistic"
       names(out$R2_Tjur) <- "Tjur's R2"
       class(out) <- c("r2_pseudo", class(out))
