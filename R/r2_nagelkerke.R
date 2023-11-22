@@ -58,20 +58,23 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     return(NULL)
-  } else {
-    r2cox <- r2_coxsnell(model)
-    if (is.na(r2cox) || is.null(r2cox)) {
-      return(NULL)
-    }
-    r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
-    names(r2_nagelkerke) <- "Nagelkerke's R2"
-    r2_nagelkerke
   }
+
+  r2cox <- r2_coxsnell(model)
+
+  if (is.na(r2cox) || is.null(r2cox)) {
+    return(NULL)
+  }
+
+  r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
+  names(r2_nagelkerke) <- "Nagelkerke's R2"
+  r2_nagelkerke
 }
 
 #' @export
@@ -84,26 +87,31 @@ r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+
   if (info$is_binomial && !info$is_bernoulli) {
     if (verbose) {
       insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     return(NULL)
-  } else {
-    dev <- stats::deviance(model)
-    # if no deviance, return NA
-    if (is.null(dev)) {
-      return(NULL)
-    }
-    null_dev <- stats::deviance(insight::null_model(model))
-    r2cox <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
-    if (is.na(r2cox) || is.null(r2cox)) {
-      return(NULL)
-    }
-    r2_nagelkerke <- r2cox / (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
-    names(r2_nagelkerke) <- "Nagelkerke's R2"
-    r2_nagelkerke
   }
+
+  dev <- stats::deviance(model)
+
+  # if no deviance, return NA
+  if (is.null(dev)) {
+    return(NULL)
+  }
+
+  null_dev <- stats::deviance(insight::null_model(model))
+  r2cox <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
+
+  if (is.na(r2cox) || is.null(r2cox)) {
+    return(NULL)
+  }
+
+  r2_nagelkerke <- r2cox / (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
+  names(r2_nagelkerke) <- "Nagelkerke's R2"
+  r2_nagelkerke
 }
 
 
