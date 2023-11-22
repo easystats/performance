@@ -468,9 +468,6 @@ r2.merMod <- function(model, ci = NULL, tolerance = 1e-5, ...) {
 }
 
 #' @export
-r2.glmmTMB <- r2.merMod
-
-#' @export
 r2.cpglmm <- r2.merMod
 
 #' @export
@@ -491,6 +488,33 @@ r2.MixMod <- r2.merMod
 #' @export
 r2.rlmerMod <- r2.merMod
 
+#' @export
+r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) {
+  if (insight::is_mixed_model(model)) {
+    return(r2_nakagawa(model, ci = ci, tolerance = tolerance, ...))
+  } else {
+    if (!is.null(ci) && !is.na(ci)) {
+      return(.r2_ci(model, ci = ci, ...))
+    }
+    info <- insight::model_info(model, verbose = FALSE)
+    if (info$is_linear) {
+      out <- .safe(.r2_lm_manual(model))
+    } else if (info$is_logit && info$is_bernoulli) {
+      out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
+      attr(out, "model_type") <- "Logistic"
+      names(out$R2_Tjur) <- "Tjur's R2"
+      class(out) <- c("r2_pseudo", class(out))
+    } else if (info$is_binomial && !info$is_bernoulli) {
+      if (verbose) {
+        insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      }
+      out <- NULL
+    } else {
+      insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
+    }
+  }
+  out
+}
 
 #' @export
 r2.wbm <- function(model, tolerance = 1e-5, ...) {
@@ -839,4 +863,46 @@ r2.DirichletRegModel <- function(model, ...) {
     return(NULL)
   }
   ci
+}
+
+
+.r2_lm_manual <- function(model) {
+  w <- insight::get_weights(model, verbose = FALSE)
+  r <- stats::residuals(model)
+  f <- stats::fitted(model)
+  n <- length(r)
+  rdf <- .safe(stats::df.residual(model))
+  df_int <- .safe(as.numeric(insight::has_intercept(model)))
+
+  if (insight::has_intercept(model)) {
+    if (is.null(w)) {
+      mss <- sum((f - mean(f))^2)
+    } else {
+      m <- sum(w * f / sum(w))
+      mss <- sum(w * (f - m)^2)
+    }
+  } else {
+    if (is.null(w)) {
+      mss <- sum(f^2)
+    } else {
+      mss <- sum(w * f^2)
+    }
+  }
+  if (is.null(w)) {
+    rss <- sum(r^2)
+  } else {
+    rss <- sum(w * r^2)
+  }
+  r_squared <- mss / (mss + rss)
+  if (is.null(df_int) || is.null(rdf)) {
+    adj_r2 <- NULL
+  } else {
+    adj_r2 <- 1 - (1 - r_squared) * ((n - df_int) / rdf)
+  }
+  out <- list(R2 = r_squared, R2_adjusted = adj_r2)
+
+  names(out$R2) <- "R2"
+  names(out$R2_adjusted) <- "adjusted R2"
+  attr(out, "model_type") <- "Linear"
+  structure(class = "r2_generic", out)
 }
