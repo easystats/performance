@@ -490,25 +490,40 @@ r2.rlmerMod <- r2.merMod
 
 #' @export
 r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) {
+  # most models are mixed models
   if (insight::is_mixed_model(model)) {
     return(r2_nakagawa(model, ci = ci, tolerance = tolerance, ...))
   } else {
     if (!is.null(ci) && !is.na(ci)) {
       return(.r2_ci(model, ci = ci, ...))
     }
+    # calculate r2 for non-mixed glmmTMB models here -------------------------
     info <- insight::model_info(model, verbose = FALSE)
+
     if (info$is_linear) {
+      # for linear models, use the manual calculation
       out <- .safe(.r2_lm_manual(model))
     } else if (info$is_logit && info$is_bernoulli) {
+      # logistic regression with binary outcome
       out <- list(R2_Tjur = r2_tjur(model, model_info = info, ...))
       attr(out, "model_type") <- "Logistic"
       names(out$R2_Tjur) <- "Tjur's R2"
       class(out) <- c("r2_pseudo", class(out))
     } else if (info$is_binomial && !info$is_bernoulli) {
+      # currently, non-bernoulli binomial models are not supported
       if (verbose) {
         insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
       }
       out <- NULL
+    } else if ((info$is_poisson && !info$is_zero_inflated) || info$is_exponential) {
+      # Poisson-regression or Gamma uses Nagelkerke's R2
+      out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
+      names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
+      attr(out, "model_type") <- "Generalized Linear"
+      class(out) <- c("r2_pseudo", class(out))
+    } else if (info$is_zero_inflated) {
+      # zero-inflated models use the default method
+      out <- r2_zeroinflated(model)
     } else {
       insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
     }
