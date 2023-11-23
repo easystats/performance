@@ -66,7 +66,7 @@ check_heteroscedasticity.default <- function(x, ...) {
   .U <- (r^2) / S.sq
   mod <- stats::lm(.U ~ stats::fitted(x))
 
-  SS <- stats::anova(mod)$"Sum Sq"
+  SS <- stats::anova(mod)$`Sum Sq`
   RegSS <- sum(SS) - SS[length(SS)]
   Chisq <- RegSS / 2
 
