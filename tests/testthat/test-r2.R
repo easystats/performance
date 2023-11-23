@@ -83,7 +83,7 @@ withr::with_environment(
     data(bioChemists, package = "pscl")
     m <- glmmTMB::glmmTMB(
       art ~ fem + mar + kid5 + ment,
-      ziformula = ~kid5 + phd,
+      ziformula = ~ kid5 + phd,
       family = poisson(),
       data = bioChemists
     )
