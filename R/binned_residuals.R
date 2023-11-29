@@ -143,17 +143,22 @@ binned_residuals <- function(model,
     n <- length(items)
     sdev <- stats::sd(y[items], na.rm = TRUE)
 
-    conf_int <- switch(ci_type,
-      gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
-      exact = {
-        out <- stats::binom.test(sum(y0[items]), n)$conf.int
-        # center CIs around point estimate
-        out <- out - (min(out) - ybar) - (diff(out) / 2)
-        out
-      },
-      boot = .boot_binned_ci(y[items], ci, iterations)
-    )
-    names(conf_int) <- c("CI_low", "CI_high")
+    # sanity check - do we have any data in our bin?
+    if (n == 0) {
+      conf_int <- stats::setNames(c(NA, NA), c("CI_low", "CI_high"))
+    } else {
+      conf_int <- switch(ci_type,
+        gaussian = stats::qnorm(c((1 - ci) / 2, (1 + ci) / 2), mean = ybar, sd = sdev / sqrt(n)),
+        exact = {
+          out <- stats::binom.test(sum(y0[items]), n)$conf.int
+          # center CIs around point estimate
+          out <- out - (min(out) - ybar) - (diff(out) / 2)
+          out
+        },
+        boot = .boot_binned_ci(y[items], ci, iterations)
+      )
+      names(conf_int) <- c("CI_low", "CI_high")
+    }
 
     d0 <- data.frame(
       xbar = xbar,
