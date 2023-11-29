@@ -164,7 +164,7 @@ test_that("binned_residuals, msg for non-bernoulli", {
 
   dat <- data.frame(tot, suc)
   dat$prop <- suc / tot
-  dat$x1 <- as.factor(sample(1:5, 100, replace = TRUE))
+  dat$x1 <- as.factor(sample.int(5, 100, replace = TRUE))
 
   mod <- glm(prop ~ x1,
     family = binomial,
@@ -174,4 +174,70 @@ test_that("binned_residuals, msg for non-bernoulli", {
 
   expect_message(binned_residuals(mod), regex = "Using `ci_type = \"gaussian\"`")
   expect_silent(binned_residuals(mod, verbose = FALSE))
+})
+
+test_that("binned_residuals, empty bins", {
+  eel <- data.frame(
+    cured_bin = c(
+      1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0,
+      0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+      0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+      0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+      0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1,
+      0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0
+    ),
+    intervention = c(
+      "No treatment",
+      "No treatment", "No treatment", "No treatment", "Intervention",
+      "No treatment", "Intervention", "Intervention", "No treatment",
+      "No treatment", "Intervention", "No treatment", "No treatment",
+      "Intervention", "No treatment", "No treatment", "Intervention",
+      "Intervention", "Intervention", "Intervention", "No treatment",
+      "Intervention", "Intervention", "No treatment", "Intervention",
+      "Intervention", "No treatment", "No treatment", "Intervention",
+      "Intervention", "No treatment", "No treatment", "Intervention",
+      "Intervention", "Intervention", "No treatment", "No treatment",
+      "Intervention", "No treatment", "Intervention", "No treatment",
+      "Intervention", "Intervention", "Intervention", "No treatment",
+      "No treatment", "No treatment", "Intervention", "Intervention",
+      "No treatment", "Intervention", "Intervention", "Intervention",
+      "No treatment", "No treatment", "Intervention", "Intervention",
+      "No treatment", "Intervention", "Intervention", "No treatment",
+      "No treatment", "No treatment", "Intervention", "Intervention",
+      "No treatment", "No treatment", "No treatment", "No treatment",
+      "No treatment", "Intervention", "No treatment", "Intervention",
+      "Intervention", "Intervention", "No treatment", "Intervention",
+      "Intervention", "No treatment", "Intervention", "No treatment",
+      "No treatment", "Intervention", "Intervention", "Intervention",
+      "Intervention", "No treatment", "Intervention", "Intervention",
+      "No treatment", "Intervention", "No treatment", "Intervention",
+      "Intervention", "Intervention", "Intervention", "No treatment",
+      "No treatment", "No treatment", "Intervention", "No treatment",
+      "No treatment", "Intervention", "No treatment", "No treatment",
+      "No treatment", "No treatment", "No treatment", "Intervention",
+      "Intervention", "No treatment", "No treatment", "Intervention"
+    ), duration = c(
+      7L, 7L, 6L, 8L, 7L, 6L, 7L, 7L, 8L, 7L, 7L, 7L,
+      5L, 9L, 6L, 7L, 8L, 7L, 7L, 9L, 7L, 9L, 8L, 7L, 6L, 8L, 7L, 6L,
+      7L, 6L, 7L, 6L, 5L, 6L, 7L, 7L, 8L, 7L, 5L, 7L, 9L, 10L, 7L,
+      8L, 5L, 8L, 4L, 7L, 8L, 6L, 6L, 6L, 7L, 7L, 8L, 7L, 7L, 7L, 7L,
+      8L, 7L, 9L, 7L, 8L, 8L, 7L, 7L, 7L, 8L, 7L, 8L, 7L, 8L, 8L, 9L,
+      7L, 10L, 5L, 7L, 8L, 9L, 5L, 10L, 8L, 7L, 6L, 5L, 6L, 7L, 7L,
+      7L, 7L, 7L, 7L, 8L, 5L, 6L, 7L, 6L, 7L, 7L, 9L, 6L, 6L, 7L, 7L,
+      6L, 7L, 8L, 9L, 4L, 6L, 9L
+    ),
+    stringsAsFactors = FALSE
+  )
+  m_eel <- glm(cured_bin ~ intervention + duration, data = eel, family = binomial())
+  out <- binned_residuals(m_eel)
+  expect_equal(
+    out$xbar,
+    c(0.27808, 0.28009, 0.28167, 0.28326, 0.48269, 0.56996, 0.57188, 0.57456),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    out$CI_low,
+    c(-0.42552, -0.45162, -0.10819, -0.7339, -0.28086, -0.52599, 0.02795, -0.44023),
+    tolerance = 1e-4
+  )
 })

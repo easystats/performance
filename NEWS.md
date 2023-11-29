@@ -1,7 +1,14 @@
 # performance 0.10.9
 
+## Changes
+
 * `r2()` for models of class `glmmTMB` without random effects now returns the
   correct r-squared value for non-mixed models.
+
+## Bug fixes
+
+* Fixed issue in `binned_residuals()` for models with binary outcome, where
+  in rare occasions empty bins could occur.
 
 # performance 0.10.8
 
