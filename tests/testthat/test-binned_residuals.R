@@ -164,7 +164,7 @@ test_that("binned_residuals, msg for non-bernoulli", {
 
   dat <- data.frame(tot, suc)
   dat$prop <- suc / tot
-  dat$x1 <- as.factor(sample(1:5, 100, replace = TRUE))
+  dat$x1 <- as.factor(sample.int(5, 100, replace = TRUE))
 
   mod <- glm(prop ~ x1,
     family = binomial,
