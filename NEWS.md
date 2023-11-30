@@ -10,6 +10,9 @@
 * Fixed issue in `binned_residuals()` for models with binary outcome, where
   in rare occasions empty bins could occur.
 
+* `performance_score()` should no longer fail for models where scoring rules
+  can't be calculated. Instead, an informative message is returned.
+
 # performance 0.10.8
 
 ## Changes
