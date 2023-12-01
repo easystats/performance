@@ -124,9 +124,9 @@ performance_score <- function(model, verbose = TRUE, ...) {
   } else {
     datawizard::to_numeric(resp, dummy_factors = FALSE, preserve_levels = TRUE)
   }
-  p_y <- .safe(prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp)))
+  p_y <- .safe(suppressWarnings(prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))))
 
-  if (is.null(p_y)) {
+  if (is.null(p_y) || all(is.na(p_y))) {
     if (verbose) {
       insight::format_alert("Can't calculate proper scoring rules for this model.")
     }
