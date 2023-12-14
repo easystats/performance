@@ -180,7 +180,7 @@ methods; R; easystats}
 
 Real-life data often contain observations that can be considered
 \emph{abnormal} when compared to the main population. The cause of it
-can be hard to assess and the boundaries of ``abnormal'', difficult to
+can be hard to assess and the boundaries of ``abnormal'' difficult to
 define---they may belong to a different distribution (originating from a
 different generative process) or simply be extreme cases, statistically
 rare but not impossible.
@@ -620,8 +620,9 @@ multivariate outlier detection methods there may flag this person as
 being an outlier---being unusual on two variables, height and
 weight---even though the pattern fits perfectly with our predictions.
 
-In the example below, we plot the raw data and see two possible
-outliers. The first one falls along the regression line, and is
+In the example below, we plot the raw data \citep[using the
+\emph{\{rempsyc\}} package,][]{theriault2023rempsyc} and see two
+possible outliers. The first one falls along the regression line, and is
 therefore ``in line'' with our hypothesis. The second one clearly
 diverges from the regression line, and therefore we can conclude that
 this outlier may have a disproportionate influence on our model.
@@ -923,7 +924,7 @@ the exclusion criteria can be reproduced precisely.
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
-In this paper, we have showed how to investigate outliers using the
+In this paper, we have shown how to investigate outliers using the
 \texttt{check\_outliers()} function of the \emph{\{performance\}}
 package while following current good practices. However, best practice
 for outlier treatment does not stop at using appropriate statistical
