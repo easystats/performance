@@ -10,6 +10,8 @@
   length as number of columns in `x`, where each element is the index of the
   factor to which the respective column in `x`.
 
+* `check_itemscale()` gets a `print_html()` method.
+
 ## Bug fixes
 
 * Fixed issue in `binned_residuals()` for models with binary outcome, where
