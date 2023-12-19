@@ -2,11 +2,14 @@
 #' @name check_itemscale
 #'
 #' @description Compute various measures of internal consistencies
-#'   applied to (sub)scales, which items were extracted using
-#'   `parameters::principal_components()`.
+#' applied to (sub)scales, which items were extracted using
+#' `parameters::principal_components()`.
 #'
 #' @param x An object of class `parameters_pca`, as returned by
-#'   [`parameters::principal_components()`].
+#' [`parameters::principal_components()`], or a data frame.
+#' @param factor_index If `x` is a data frame, `factor_index` must be specified.
+#' It must be a numeric vector of same length as number of columns in `x`, where
+#' each element is the index of the factor to which the respective column in `x`.
 #'
 #' @return A list of data frames, with related measures of internal
 #'   consistencies of each subscale.
@@ -48,21 +51,53 @@
 #' X <- matrix(rnorm(1600), 100, 16)
 #' Z <- X %*% C
 #'
-#' pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
+#' pca <- parameters::principal_components(
+#'   as.data.frame(Z),
+#'   rotation = "varimax",
+#'   n = 3
+#' )
 #' pca
 #' check_itemscale(pca)
+#'
+#' # as data frame
+#' check_itemscale(
+#'   as.data.frame(Z),
+#'   factor_index = parameters::closest_component(pca)
+#' )
 #' @export
-check_itemscale <- function(x) {
-  if (!inherits(x, "parameters_pca")) {
+check_itemscale <- function(x, factor_index = NULL) {
+  # check for valid input
+  if (!inherits(x, c("parameters_pca", "data.frame"))) {
     insight::format_error(
-      "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`."
+      "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, or a data frame." # nolint
     )
   }
 
-  insight::check_if_installed("parameters")
+  # if data frame, we need `factor_index`
+  if (inherits(x, "data.frame") && !inherits(x, "parameters_pca")) {
+    if (is.null(factor_index)) {
+      insight::format_error("If `x` is a data frame, `factor_index` must be specified.")
+    }
+    if (!is.numeric(factor_index)) {
+      insight::format_error("`factor_index` must be numeric.")
+    }
+    if (length(factor_index) != ncol(x)) {
+      insight::format_error(
+        "`factor_index` must be of same length as number of columns in `x`.",
+        "Each element of `factor_index` must be the index of the factor to which the respective column in `x` belongs to." # nolint
+      )
+    }
+  }
 
-  dataset <- attributes(x)$dataset
-  subscales <- parameters::closest_component(x)
+  # assign data and factor index
+  if (inherits(x, "parameters_pca")) {
+    insight::check_if_installed("parameters")
+    dataset <- attributes(x)$dataset
+    subscales <- parameters::closest_component(x)
+  } else {
+    dataset <- x
+    subscales <- factor_index
+  }
 
   out <- lapply(sort(unique(subscales)), function(.subscale) {
     columns <- names(subscales)[subscales == .subscale]
@@ -122,4 +157,27 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     missing = "<NA>",
     zap_small = TRUE
   ))
+}
+
+
+#' @export
+print_html.check_itemscale <- function(x, digits = 2, ...) {
+  x <- lapply(seq_along(x), function(i) {
+    out <- x[[i]]
+    attr(out, "table_caption") <- sprintf(
+      "Component %i: Mean inter-item-correlation = %.3f, Cronbach's alpha = %.3f",
+      i,
+      attributes(out)$item_intercorrelation,
+      attributes(out)$cronbachs_alpha
+    )
+    out
+  })
+  insight::export_table(
+    x,
+    caption = "Description of (Sub-)Scales",
+    digits = digits,
+    format = "html",
+    missing = "<NA>",
+    zap_small = TRUE
+  )
 }

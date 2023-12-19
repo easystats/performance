@@ -5,6 +5,13 @@
 * `r2()` for models of class `glmmTMB` without random effects now returns the
   correct r-squared value for non-mixed models.
 
+* `check_itemscale()` now also accepts data frames as input. In this case,
+  `factor_index` must be specified, which must be a numeric vector of same
+  length as number of columns in `x`, where each element is the index of the
+  factor to which the respective column in `x`.
+
+* `check_itemscale()` gets a `print_html()` method.
+
 ## Bug fixes
 
 * Fixed issue in `binned_residuals()` for models with binary outcome, where

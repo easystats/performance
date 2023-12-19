@@ -11,5 +11,5 @@ test_that("r2", {
     random = ~ 1 | species,
     family = "quasibinomial", data = example_dat
   )
-  expect_message(performance_score(mn), regex = "Cant calculate")
+  expect_message(performance_score(mn), regex = "Can't calculate")
 })
