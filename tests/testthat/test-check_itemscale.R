@@ -1,4 +1,4 @@
-test_that("check_convergence", {
+test_that("check_itemscale", {
   skip_if_not_installed("parameters")
 
   set.seed(123)
@@ -25,6 +25,7 @@ test_that("check_convergence", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+  expect_snapshot(print(out))
   comp <- parameters::closest_component(pca)
   out2 <- check_itemscale(d, comp)
   expect_equal(
