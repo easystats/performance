@@ -25,7 +25,7 @@ test_that("check_itemscale", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
-  expect_snapshot(print(out))
+  expect_snapshot(print(out), variant = "windows")
   comp <- parameters::closest_component(pca)
   out2 <- check_itemscale(d, comp)
   expect_equal(
