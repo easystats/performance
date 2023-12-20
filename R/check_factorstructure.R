@@ -95,7 +95,7 @@ check_factorstructure <- function(x, n = NULL, ...) {
   kmo <- check_kmo(x, n, ...)
   sphericity <- check_sphericity_bartlett(x, n, ...)
 
-  text <- paste0("\n  - Sphericity: ", attributes(sphericity)$text, "\n  - KMO: ", attributes(kmo)$text)
+  res_text <- paste0("\n  - Sphericity: ", attributes(sphericity)$text, "\n  - KMO: ", attributes(kmo)$text)
 
   if (attributes(kmo)$color == "red" || attributes(sphericity)$color == "red") {
     color <- "red"
@@ -105,7 +105,7 @@ check_factorstructure <- function(x, n = NULL, ...) {
 
   out <- list(KMO = kmo, sphericity = sphericity)
 
-  attr(out, "text") <- text
+  attr(out, "text") <- res_text
   attr(out, "color") <- color
   attr(out, "title") <- "Is the data suitable for Factor Analysis?"
   class(out) <- c("easystats_check", class(out))
@@ -136,18 +136,16 @@ check_kmo <- function(x, n = NULL, ...) {
 
   # TODO: add interpret_kmo in effectsize and use that here for more fine-grained interpretation
   if (MSA < 0.5) {
-    text <-
-      sprintf(
-        "The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that factor analysis is likely to be inappropriate (KMO = %.2f).",
-        MSA
-      )
+    msg_text <- sprintf(
+      "The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that factor analysis is likely to be inappropriate (KMO = %.2f).", # nolint
+      MSA
+    )
     color <- "red"
   } else {
-    text <-
-      sprintf(
-        "The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = %.2f).",
-        MSA
-      )
+    msg_text <- sprintf(
+      "The Kaiser, Meyer, Olkin (KMO) overall measure of sampling adequacy suggests that data seems appropriate for factor analysis (KMO = %.2f).", # nolint
+      MSA
+    )
     color <- "green"
   }
 
@@ -160,9 +158,9 @@ check_kmo <- function(x, n = NULL, ...) {
     ")"
   ))
 
-  text <- paste0(text, " The individual KMO scores are: ", text_ind, ".")
+  msg_text <- paste0(msg_text, " The individual KMO scores are: ", text_ind, ".")
 
-  attr(out, "text") <- text
+  attr(out, "text") <- msg_text
   attr(out, "color") <- color
   attr(out, "title") <- "KMO Measure of Sampling Adequacy"
   class(out) <- c("easystats_check", class(out))
@@ -183,32 +181,30 @@ check_sphericity_bartlett <- function(x, n = NULL, ...) {
 
   detR <- det(out$r)
   statistic <- -log(detR) * (out$n - 1 - (2 * p + 5) / 6)
-  df <- p * (p - 1) / 2
-  pval <- stats::pchisq(statistic, df, lower.tail = FALSE)
+  dof <- p * (p - 1) / 2
+  pval <- stats::pchisq(statistic, df = dof, lower.tail = FALSE)
 
-  out <- list(chisq = statistic, p = pval, dof = df)
+  out <- list(chisq = statistic, p = pval, dof = dof)
 
   if (pval < 0.001) {
-    text <-
-      sprintf(
-        "Bartlett's test of sphericity suggests that there is sufficient significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).",
-        df,
-        statistic,
-        insight::format_p(pval)
-      )
+    msg_text <- sprintf(
+      "Bartlett's test of sphericity suggests that there is sufficient significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).", # nolint
+      dof,
+      statistic,
+      insight::format_p(pval)
+    )
     color <- "green"
   } else {
-    text <-
-      sprintf(
-        "Bartlett's test of sphericity suggests that there is not enough significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).",
-        df,
-        statistic,
-        insight::format_p(pval)
-      )
+    msg_text <- sprintf(
+      "Bartlett's test of sphericity suggests that there is not enough significant correlation in the data for factor analysis (Chisq(%i) = %.2f, %s).", # nolint
+      dof,
+      statistic,
+      insight::format_p(pval)
+    )
     color <- "red"
   }
 
-  attr(out, "text") <- text
+  attr(out, "text") <- msg_text
   attr(out, "color") <- color
   attr(out, "title") <- "Test of Sphericity"
   class(out) <- c("easystats_check", class(out))

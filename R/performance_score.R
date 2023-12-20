@@ -65,7 +65,7 @@ performance_score <- function(model, verbose = TRUE, ...) {
 
   if (minfo$is_ordinal || minfo$is_multinomial) {
     if (verbose) {
-      insight::print_color("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.\n", "red")
+      insight::format_alert("Can't calculate proper scoring rules for ordinal, multinomial or cumulative link models.")
     }
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
@@ -74,10 +74,7 @@ performance_score <- function(model, verbose = TRUE, ...) {
 
   if (!is.null(ncol(resp)) && ncol(resp) > 1) {
     if (verbose) {
-      insight::print_color(
-        "Can't calculate proper scoring rules for models without integer response values.\n",
-        "red"
-      )
+      insight::format_alert("Can't calculate proper scoring rules for models without integer response values.")
     }
     return(list(logarithmic = NA, quadratic = NA, spherical = NA))
   }
@@ -127,7 +124,14 @@ performance_score <- function(model, verbose = TRUE, ...) {
   } else {
     datawizard::to_numeric(resp, dummy_factors = FALSE, preserve_levels = TRUE)
   }
-  p_y <- prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))
+  p_y <- .safe(suppressWarnings(prob_fun(resp, mean = pr$pred, pis = pr$pred_zi, sum(resp))))
+
+  if (is.null(p_y) || all(is.na(p_y))) {
+    if (verbose) {
+      insight::format_alert("Can't calculate proper scoring rules for this model.")
+    }
+    return(list(logarithmic = NA, quadratic = NA, spherical = NA))
+  }
 
   quadrat_p <- sum(p_y^2)
 
@@ -205,27 +209,25 @@ print.performance_score <- function(x, ...) {
   pred_zi <- NULL
 
   tryCatch(
-    {
-      if (inherits(model, "MixMod")) {
-        pred <- stats::predict(model, type = "subject_specific")
-        pred_zi <- if (!is.null(model$gammas)) attr(pred, "zi_probs")
-      } else if (inherits(model, "glmmTMB")) {
-        pred <- stats::predict(model, type = "response")
-        pred_zi <- stats::predict(model, type = "zprob")
-      } else if (inherits(model, c("hurdle", "zeroinfl"))) {
-        pred <- stats::predict(model, type = "response")
-        pred_zi <- stats::predict(model, type = "zero")
-      } else if (inherits(model, c("clm", "clm2", "clmm"))) {
-        pred <- stats::predict(model)
-      } else if (all(inherits(model, c("stanreg", "lmerMod"), which = TRUE)) > 0) {
-        insight::check_if_installed("rstanarm")
-        pred <- colMeans(rstanarm::posterior_predict(model))
-      } else {
-        pred <- stats::predict(model, type = "response")
-      }
+    if (inherits(model, "MixMod")) {
+      pred <- stats::predict(model, type = "subject_specific")
+      pred_zi <- if (!is.null(model$gammas)) attr(pred, "zi_probs")
+    } else if (inherits(model, "glmmTMB")) {
+      pred <- stats::predict(model, type = "response")
+      pred_zi <- stats::predict(model, type = "zprob")
+    } else if (inherits(model, c("hurdle", "zeroinfl"))) {
+      pred <- stats::predict(model, type = "response")
+      pred_zi <- stats::predict(model, type = "zero")
+    } else if (inherits(model, c("clm", "clm2", "clmm"))) {
+      pred <- stats::predict(model)
+    } else if (all(inherits(model, c("stanreg", "lmerMod"), which = TRUE)) > 0) {
+      insight::check_if_installed("rstanarm")
+      pred <- colMeans(rstanarm::posterior_predict(model))
+    } else {
+      pred <- stats::predict(model, type = "response")
     },
     error = function(e) {
-      return(NULL)
+      NULL
     }
   )
 

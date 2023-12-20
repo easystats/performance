@@ -90,6 +90,31 @@ r2_coxsnell.BBreg <- r2_coxsnell.glm
 
 
 #' @export
+r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
+    info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
+  if (info$is_binomial && !info$is_bernoulli) {
+    if (verbose) {
+      insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+    }
+    return(NULL)
+  } else {
+    dev <- stats::deviance(model)
+    # if no deviance, return NA
+    if (is.null(dev)) {
+      return(NULL)
+    }
+    null_dev <- stats::deviance(insight::null_model(model))
+    r2_coxsnell <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
+    names(r2_coxsnell) <- "Cox & Snell's R2"
+    r2_coxsnell
+  }
+}
+
+
+#' @export
 r2_coxsnell.nestedLogit <- function(model, ...) {
   n <- insight::n_obs(model, disaggregate = TRUE)
   stats::setNames(

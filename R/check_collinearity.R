@@ -405,10 +405,10 @@ check_collinearity.zerocount <- function(x,
 
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
   v <- insight::get_varcov(x, component = component, verbose = FALSE)
-  assign <- .term_assignments(x, component, verbose = verbose)
+  term_assign <- .term_assignments(x, component, verbose = verbose)
 
   # any assignment found?
-  if (is.null(assign) || all(is.na(assign))) {
+  if (is.null(term_assign) || all(is.na(term_assign))) {
     if (verbose) {
       insight::format_alert(
         sprintf("Could not extract model terms for the %s component of the model.", component)
@@ -420,7 +420,7 @@ check_collinearity.zerocount <- function(x,
 
   # we have rank-deficiency here. remove NA columns from assignment
   if (isTRUE(attributes(v)$rank_deficient) && !is.null(attributes(v)$na_columns_index)) {
-    assign <- assign[-attributes(v)$na_columns_index]
+    term_assign <- term_assign[-attributes(v)$na_columns_index]
     if (isTRUE(verbose)) {
       insight::format_alert(
         "Model matrix is rank deficient. VIFs may not be sensible."
@@ -431,7 +431,7 @@ check_collinearity.zerocount <- function(x,
   # check for missing intercept
   if (insight::has_intercept(x)) {
     v <- v[-1, -1]
-    assign <- assign[-1]
+    term_assign <- term_assign[-1]
   } else {
     if (isTRUE(verbose)) {
       insight::format_alert("Model has no intercept. VIFs may not be sensible.")
@@ -449,16 +449,16 @@ check_collinearity.zerocount <- function(x,
   }
 
   if (inherits(x, "mixor")) {
-    terms <- labels(x$terms)
+    model_terms <- labels(x$terms)
   } else {
-    terms <- labels(stats::terms(f[[component]]))
+    model_terms <- labels(stats::terms(f[[component]]))
   }
 
   if ("instruments" %in% names(f)) {
-    terms <- unique(c(terms, labels(stats::terms(f[["instruments"]]))))
+    model_terms <- unique(c(model_terms, labels(stats::terms(f[["instruments"]]))))
   }
 
-  n.terms <- length(terms)
+  n.terms <- length(model_terms)
 
   if (n.terms < 2) {
     if (isTRUE(verbose)) {
@@ -476,7 +476,7 @@ check_collinearity.zerocount <- function(x,
   na_terms <- vector("numeric")
 
   for (term in 1:n.terms) {
-    subs <- which(assign == term)
+    subs <- which(term_assign == term)
     if (length(subs)) {
       result <- c(
         result,
@@ -489,7 +489,7 @@ check_collinearity.zerocount <- function(x,
 
   # any terms to remove, due to rank deficiency?
   if (length(na_terms)) {
-    terms <- terms[-na_terms]
+    model_terms <- model_terms[-na_terms]
   }
 
   # check for interactions, VIF might be inflated...
@@ -522,7 +522,7 @@ check_collinearity.zerocount <- function(x,
 
   out <- insight::text_remove_backticks(
     data.frame(
-      Term = terms,
+      Term = model_terms,
       VIF = result,
       VIF_CI_low = 1 / (1 - ci_lo),
       VIF_CI_high = 1 / (1 - ci_up),
@@ -538,7 +538,7 @@ check_collinearity.zerocount <- function(x,
 
   attr(out, "data") <- insight::text_remove_backticks(
     data.frame(
-      Term = terms,
+      Term = model_terms,
       VIF = result,
       SE_factor = sqrt(result),
       stringsAsFactors = FALSE
@@ -564,29 +564,29 @@ check_collinearity.zerocount <- function(x,
   tryCatch(
     {
       if (inherits(x, c("hurdle", "zeroinfl", "zerocount"))) {
-        assign <- switch(component,
+        term_assign <- switch(component,
           conditional = attr(insight::get_modelmatrix(x, model = "count"), "assign"),
           zero_inflated = attr(insight::get_modelmatrix(x, model = "zero"), "assign")
         )
       } else if (inherits(x, "glmmTMB")) {
-        assign <- switch(component,
+        term_assign <- switch(component,
           conditional = attr(insight::get_modelmatrix(x), "assign"),
           zero_inflated = .zi_term_assignment(x, component, verbose = verbose)
         )
       } else if (inherits(x, "MixMod")) {
-        assign <- switch(component,
+        term_assign <- switch(component,
           conditional = attr(insight::get_modelmatrix(x, type = "fixed"), "assign"),
           zero_inflated = attr(insight::get_modelmatrix(x, type = "zi_fixed"), "assign")
         )
       } else {
-        assign <- attr(insight::get_modelmatrix(x), "assign")
+        term_assign <- attr(insight::get_modelmatrix(x), "assign")
       }
 
-      if (is.null(assign)) {
-        assign <- .find_term_assignment(x, component, verbose = verbose)
+      if (is.null(term_assign)) {
+        term_assign <- .find_term_assignment(x, component, verbose = verbose)
       }
 
-      assign
+      term_assign
     },
     error = function(e) {
       .find_term_assignment(x, component, verbose = verbose)

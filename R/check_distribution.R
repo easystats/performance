@@ -77,7 +77,6 @@ check_distribution.default <- function(model) {
   } else {
     x <- stats::residuals(model)
   }
-  # x_scaled <- .normalize(x)
   dat <- .extract_features(x)
 
   dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
@@ -171,11 +170,11 @@ check_distribution.numeric <- function(model) {
   insight::check_if_installed("randomForest")
 
   dat <- .extract_features(model)
-  dist <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
+  distance <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
 
   out <- data.frame(
-    Distribution = rownames(dist),
-    p_Vector = dist[[1]],
+    Distribution = rownames(distance),
+    p_Vector = distance[[1]],
     stringsAsFactors = FALSE,
     row.names = NULL
   )
@@ -219,14 +218,8 @@ check_distribution.numeric <- function(model) {
 
 .is_integer <- function(x) {
   tryCatch(
-    expr = {
-      ifelse(is.infinite(x), FALSE, x %% 1 == 0)
-    },
-    warning = function(w) {
-      is.integer(x)
-    },
-    error = function(e) {
-      FALSE
-    }
+    ifelse(is.infinite(x), FALSE, x %% 1 == 0),
+    warning = function(w) is.integer(x),
+    error = function(e) FALSE
   )
 }

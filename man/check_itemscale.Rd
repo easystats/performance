@@ -4,11 +4,15 @@
 \alias{check_itemscale}
 \title{Describe Properties of Item Scales}
 \usage{
-check_itemscale(x)
+check_itemscale(x, factor_index = NULL)
 }
 \arguments{
 \item{x}{An object of class \code{parameters_pca}, as returned by
-\code{\link[parameters:principal_components]{parameters::principal_components()}}.}
+\code{\link[parameters:principal_components]{parameters::principal_components()}}, or a data frame.}
+
+\item{factor_index}{If \code{x} is a data frame, \code{factor_index} must be specified.
+It must be a numeric vector of same length as number of columns in \code{x}, where
+each element is the index of the factor to which the respective column in \code{x}.}
 }
 \value{
 A list of data frames, with related measures of internal
@@ -51,9 +55,19 @@ set.seed(17)
 X <- matrix(rnorm(1600), 100, 16)
 Z <- X \%*\% C
 
-pca <- principal_components(as.data.frame(Z), rotation = "varimax", n = 3)
+pca <- parameters::principal_components(
+  as.data.frame(Z),
+  rotation = "varimax",
+  n = 3
+)
 pca
 check_itemscale(pca)
+
+# as data frame
+check_itemscale(
+  as.data.frame(Z),
+  factor_index = parameters::closest_component(pca)
+)
 \dontshow{\}) # examplesIf}
 }
 \references{
