@@ -12,6 +12,9 @@
 
 * `check_itemscale()` gets a `print_html()` method.
 
+* Clarification in the documentation of the `estimator` argument for
+  `performance_aic()`.
+
 ## Bug fixes
 
 * Fixed issue in `binned_residuals()` for models with binary outcome, where

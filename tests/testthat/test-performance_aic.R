@@ -27,4 +27,7 @@ test_that("performance_aic lme4 default", {
   m1 <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
   expect_equal(performance_aic(m1), AIC(m1), tolerance = 1e-2)
   expect_equal(performance_aic(m1, estimator = "ML"), 125.0043, tolerance = 1e-2)
+  m2 <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris, REML = FALSE)
+  expect_equal(performance_aic(m2, estimator = "REML"), AIC(m2), tolerance = 1e-2)
+  expect_message(performance_aic(m2), regex = "was not fitted")
 })

@@ -86,21 +86,21 @@
 #' @export
 compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
   # process input
-  objects <- insight::ellipsis_info(..., only_models = TRUE)
+  model_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # ensure proper object names
-  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
+  model_objects <- .check_objectnames(model_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
 
   # drop unsupport models
-  supported_models <- sapply(objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
-  object_names <- names(objects)
+  supported_models <- sapply(model_objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
+  object_names <- names(model_objects)
 
   if (!all(supported_models)) {
     insight::format_alert(
       "Following objects are not supported:",
       datawizard::text_concatenate(object_names[!supported_models], enclose = "`")
     )
-    objects <- objects[supported_models]
+    model_objects <- model_objects[supported_models]
     object_names <- object_names[supported_models]
   }
 
@@ -110,8 +110,8 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     model_name <- gsub("\"", "", insight::safe_deparse(.y), fixed = TRUE)
     perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
     attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
-    return(perf_df)
-  }, objects, object_names, SIMPLIFY = FALSE)
+    perf_df
+  }, model_objects, object_names, SIMPLIFY = FALSE)
 
   attri <- lapply(m, function(x) {
     attri <- attributes(x)
@@ -132,7 +132,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # check if all models were fit from same data
-  if (!isTRUE(attributes(objects)$same_response) && verbose) {
+  if (!isTRUE(attributes(model_objects)$same_response) && verbose) {
     insight::format_alert(
       "When comparing models, please note that probably not all models were fit from same data."
     )
@@ -188,9 +188,9 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
     # only for IC comparison
     any(grepl("(AIC|BIC)", names(dfs))) &&
     # only when mixed models are involved, others probably don't have problems with REML fit
-    any(sapply(objects, insight::is_mixed_model)) &&
+    any(sapply(model_objects, insight::is_mixed_model)) &&
     # only if not all models have same fixed effects (else, REML is ok)
-    !isTRUE(attributes(objects)$same_fixef)) {
+    !isTRUE(attributes(model_objects)$same_fixef)) {
     insight::format_alert(
       "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
       "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
