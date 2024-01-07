@@ -44,12 +44,12 @@ Authors:
   \item Indrajeet Patil \email{patilindrajeet.science@gmail.com} (\href{https://orcid.org/0000-0003-1995-6531}{ORCID}) (@patilindrajeets) [contributor]
   \item Philip Waggoner \email{philip.waggoner@gmail.com} (\href{https://orcid.org/0000-0002-7825-7573}{ORCID}) [contributor]
   \item Brenton M. Wiernik \email{brenton@wiernik.org} (\href{https://orcid.org/0000-0001-9560-6336}{ORCID}) (@bmwiernik) [contributor]
+  \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) (@rempsyc) [contributor]
 }
 
 Other contributors:
 \itemize{
   \item Vincent Arel-Bundock \email{vincent.arel-bundock@umontreal.ca} (\href{https://orcid.org/0000-0003-2042-7063}{ORCID}) [contributor]
-  \item Rémi Thériault \email{remi.theriault@mail.mcgill.ca} (\href{https://orcid.org/0000-0003-4315-6788}{ORCID}) (@rempsyc) [contributor]
   \item Martin Jullum [reviewer]
   \item gjo11 [reviewer]
   \item Etienne Bacher \email{etienne.bacher@protonmail.com} (\href{https://orcid.org/0000-0002-9271-5075}{ORCID}) [contributor]
