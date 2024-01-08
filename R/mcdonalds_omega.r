@@ -32,20 +32,55 @@ mcdonalds_omega <- function(x, ...) {
 
 
 #' @export
-mcdonalds_omega.data.frame <- function(x, verbose = TRUE, ...) {
-  # remove missings
-  .data <- stats::na.omit(x)
+mcdonalds_omega.data.frame <- function(x, ci = 0.95, verbose = TRUE, ...) {
+  varnames <- colnames(x)
+  q <- length(varnames)
+  N <- nrow(x)
+  loadingName <- paste0("a", 1:q)
+  errorName <- paste0("b", 1:q)
 
-  # we need at least two columns for Cronach's Alpha
-  if (is.null(ncol(.data)) || ncol(.data) < 2) {
-    if (verbose) {
-      insight::format_warning("Too few columns in `x` to compute McDonald's Omega.")
-    }
-    return(NULL)
+  model <- paste0("f1 =~ NA*", varnames[1], " + ")
+  loadingLine <- paste(paste0(loadingName, "*", varnames), collapse = " + ")
+  factorLine <- "f1 ~~ 1*f1\n"
+  errorLine <- paste(paste0(varnames, " ~~ ", errorName, "*", varnames), collapse = "\n")
+  sumLoading <- paste("loading :=", paste(loadingName, collapse = " + "), "\n")
+  sumError <- paste("error :=", paste(errorName, collapse = " + "), "\n")
+  relia <- "relia := (loading^2) / ((loading^2) + error) \n"
+  model <- paste0(
+    model,
+    loadingLine,
+    "\n",
+    factorLine,
+    errorLine,
+    "\n",
+    sumLoading,
+    sumError,
+    relia
+  )
+
+  fit <- lavaan::cfa(model,
+    data = attitude[, -1], missing = "ml", estimator = "mlr", se = "default"
+  )
+
+  lavaan::parameterEstimates(fit)
+
+  est <- 0.8274243
+  se <- 0.05258224
+
+  crit <- stats::qnorm((1 + ci) / 2)
+
+  logest <- log(est / (1 - est))
+  logse <- se / (est * (1 - est))
+  loglower <- logest - crit * logse
+  logupper <- logest + crit * logse
+  if (logupper < loglower) {
+    temp <- loglower
+    loglower <- logupper
+    loguppper <- temp
   }
-
-  # Compute Cronbach's Alpha
-  dim(.data)[2] / (dim(.data)[2] - 1) * (1 - sum(apply(.data, 2, stats::var)) / stats::var(rowSums(.data)))
+  lower <- 1 / (1 + exp(-loglower))
+  upper <- 1 / (1 + exp(-logupper))
+  c(lower, upper)
 }
 
 
