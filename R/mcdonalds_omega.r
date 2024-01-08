@@ -40,6 +40,7 @@ mcdonalds_omega <- function(x, ...) {
 }
 
 
+#' @rdname mcdonalds_omega
 #' @export
 mcdonalds_omega.data.frame <- function(x, ci = 0.95, verbose = TRUE, ...) {
   # we need at least two columns for Cronach's Alpha

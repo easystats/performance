@@ -2,9 +2,12 @@
 % Please edit documentation in R/mcdonalds_omega.r
 \name{mcdonalds_omega}
 \alias{mcdonalds_omega}
+\alias{mcdonalds_omega.data.frame}
 \title{McDonald's Omega for Items or Scales}
 \usage{
 mcdonalds_omega(x, ...)
+
+\method{mcdonalds_omega}{data.frame}(x, ci = 0.95, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A matrix or a data frame, or an object returned by
