@@ -137,7 +137,7 @@ check_itemscale <- function(x, factor_index = NULL, type = "alpha") {
     attr(s_out, "item_intercorrelation") <- item_intercor(items)
     attr(s_out, "cronbachs_alpha") <- cronbachs_alpha(items)
     if (type == "omega") {
-      attr(s_out, "mcdonalds_omega") <- mcdonalds_omega(items)
+      attr(s_out, "mcdonalds_omega") <- mcdonalds_omega(items, ci = NULL)
     }
 
     s_out
