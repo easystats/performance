@@ -34,53 +34,56 @@ mcdonalds_omega <- function(x, ...) {
 #' @export
 mcdonalds_omega.data.frame <- function(x, ci = 0.95, verbose = TRUE, ...) {
   varnames <- colnames(x)
-  q <- length(varnames)
-  N <- nrow(x)
-  loadingName <- paste0("a", 1:q)
-  errorName <- paste0("b", 1:q)
+  n_params <- length(varnames)
+  name_loadings <- paste0("a", 1:n_params)
+  name_error <- paste0("b", 1:n_params)
 
   model <- paste0("f1 =~ NA*", varnames[1], " + ")
-  loadingLine <- paste(paste0(loadingName, "*", varnames), collapse = " + ")
-  factorLine <- "f1 ~~ 1*f1\n"
-  errorLine <- paste(paste0(varnames, " ~~ ", errorName, "*", varnames), collapse = "\n")
-  sumLoading <- paste("loading :=", paste(loadingName, collapse = " + "), "\n")
-  sumError <- paste("error :=", paste(errorName, collapse = " + "), "\n")
-  relia <- "relia := (loading^2) / ((loading^2) + error) \n"
+  formula_loadings <- paste(paste0(name_loadings, "*", varnames), collapse = " + ")
+  formula_factors <- "f1 ~~ 1*f1\n"
+  formula_error <- paste(paste0(varnames, " ~~ ", name_error, "*", varnames), collapse = "\n")
+  formula_sum_loadings <- paste("loading :=", paste(name_loadings, collapse = " + "), "\n")
+  formula_sum_error <- paste("error :=", paste(name_error, collapse = " + "), "\n")
+  formula_reliability <- "relia := (loading^2) / ((loading^2) + error) \n"
+
   model <- paste0(
     model,
-    loadingLine,
+    formula_loadings,
     "\n",
-    factorLine,
-    errorLine,
+    formula_factors,
+    formula_error,
     "\n",
-    sumLoading,
-    sumError,
-    relia
+    formula_sum_loadings,
+    formula_sum_error,
+    formula_reliability
   )
 
-  fit <- lavaan::cfa(model,
-    data = attitude[, -1], missing = "ml", estimator = "mlr", se = "default"
-  )
+  insight::check_if_installed("lavaan")
 
-  lavaan::parameterEstimates(fit)
+  fit <- lavaan::cfa(model, data = x, missing = "ml", estimator = "mlr", se = "default")
+  out <- lavaan::parameterEstimates(fit)
 
-  est <- 0.8274243
-  se <- 0.05258224
+  estimate <- as.vector(out$est[out$label == "relia"])
+  se <- as.vector(out$se[out$label == "relia"])
 
-  crit <- stats::qnorm((1 + ci) / 2)
+  if (!is.null(ci) && !is.na(ci)) {
+    crit <- stats::qnorm((1 + ci) / 2)
 
-  logest <- log(est / (1 - est))
-  logse <- se / (est * (1 - est))
-  loglower <- logest - crit * logse
-  logupper <- logest + crit * logse
-  if (logupper < loglower) {
-    temp <- loglower
-    loglower <- logupper
-    loguppper <- temp
+    logest <- log(estimate / (1 - estimate))
+    logse <- se / (estimate * (1 - estimate))
+    loglower <- logest - crit * logse
+    logupper <- logest + crit * logse
+    if (logupper < loglower) {
+      temp <- loglower
+      loglower <- logupper
+      loguppper <- temp
+    }
+    ci_low <- 1 / (1 + exp(-loglower))
+    ci_high <- 1 / (1 + exp(-logupper))
+  } else {
+    ci_low <- NA
+    ci_high <- NA
   }
-  lower <- 1 / (1 + exp(-loglower))
-  upper <- 1 / (1 + exp(-logupper))
-  c(lower, upper)
 }
 
 
