@@ -16,6 +16,11 @@
 
 * `check_itemscale()` gets a `print_html()` method.
 
+* `check_itemscale()` and `item_reliability()` gain a `type` argument, to
+  specify the type of reliability to be computed. The default is `"alpha"`,
+  which computes Cronbach's alpha, the other option is `"omega"` (McDonald's
+  Omega).
+
 * Clarification in the documentation of the `estimator` argument for
   `performance_aic()`.
 

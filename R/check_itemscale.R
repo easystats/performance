@@ -10,19 +10,19 @@
 #' @param factor_index If `x` is a data frame, `factor_index` must be specified.
 #' It must be a numeric vector of same length as number of columns in `x`, where
 #' each element is the index of the factor to which the respective column in `x`.
+#' @inheritParams item_reliability
 #'
 #' @return A list of data frames, with related measures of internal
 #'   consistencies of each subscale.
 #'
 #' @details
-#'
-#' `check_itemscale()` calculates various measures of internal
-#' consistencies, such as Cronbach's alpha, item difficulty or discrimination
+#' `check_itemscale()` calculates various measures of internal consistencies,
+#' such as Cronbach's Alpha (or McDonald's Omega), item difficulty or discrimination
 #' etc. on subscales which were built from several items. Subscales are
 #' retrieved from the results of [`parameters::principal_components()`], i.e.
-#' based on how many components were extracted from the PCA,
-#' `check_itemscale()` retrieves those variables that belong to a component
-#' and calculates the above mentioned measures.
+#' based on how many components were extracted from the PCA, `check_itemscale()`
+#' retrieves those variables that belong to a component and calculates the above
+#' mentioned measures.
 #'
 #' @note
 #' - *Item difficulty* should range between 0.2 and 0.8. Ideal value
@@ -65,7 +65,7 @@
 #'   factor_index = parameters::closest_component(pca)
 #' )
 #' @export
-check_itemscale <- function(x, factor_index = NULL) {
+check_itemscale <- function(x, factor_index = NULL, type = "alpha") {
   # check for valid input
   if (!inherits(x, c("parameters_pca", "data.frame"))) {
     insight::format_error(
@@ -89,6 +89,9 @@ check_itemscale <- function(x, factor_index = NULL) {
     }
   }
 
+  # alpha or omega?
+  type <- match.arg(type, c("alpha", "omega"))
+
   # assign data and factor index
   if (inherits(x, "parameters_pca")) {
     insight::check_if_installed("parameters")
@@ -102,12 +105,15 @@ check_itemscale <- function(x, factor_index = NULL) {
   out <- lapply(sort(unique(subscales)), function(.subscale) {
     columns <- names(subscales)[subscales == .subscale]
     items <- dataset[columns]
-    reliability <- item_reliability(items)
+    reliability <- item_reliability(items, type = type)
 
     .item_discr <- reliability$item_discrimination
     if (is.null(.item_discr)) .item_discr <- NA
-    .item_alpha <- reliability$alpha_if_deleted
-    if (is.null(.item_alpha)) .item_alpha <- NA
+    .item_rel_estimate <- switch(type,
+      alpha = reliability$alpha_if_deleted,
+      omega = reliability$omega_if_deleted
+    )
+    if (is.null(.item_rel_estimate)) .item_rel_estimate <- NA
 
     s_out <- data.frame(
       Item = columns,
@@ -117,13 +123,22 @@ check_itemscale <- function(x, factor_index = NULL) {
       Skewness = vapply(items, function(i) as.numeric(datawizard::skewness(i)), numeric(1)),
       Difficulty = item_difficulty(items)$Difficulty,
       Discrimination = .item_discr,
-      `alpha if deleted` = .item_alpha,
+      reliability_if_deleted = .item_rel_estimate,
       stringsAsFactors = FALSE,
       check.names = FALSE
     )
 
+    # fix column name
+    colnames(s_out)[8] <- switch(type,
+      alpha = "alpha if deleted",
+      omega = "omega if deleted"
+    )
+
     attr(s_out, "item_intercorrelation") <- item_intercor(items)
     attr(s_out, "cronbachs_alpha") <- cronbachs_alpha(items)
+    if (type == "omega") {
+      attr(s_out, "mcdonalds_omega") <- mcdonalds_omega(items)
+    }
 
     s_out
   })
@@ -144,12 +159,17 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     lapply(seq_along(x), function(i) {
       out <- x[[i]]
       attr(out, "table_caption") <- c(sprintf("\nComponent %i", i), "red")
+      if (!is.null(attributes(out)$mcdonalds_omega)) {
+        omega <- sprintf("  McDonald's omega = %.3f", attributes(out)$mcdonalds_omega)
+      } else {
+        omega <- ""
+      }
       attr(out, "table_footer") <- c(sprintf(
-        "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+        "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f%s",
         attributes(out)$item_intercorrelation,
-        attributes(out)$cronbachs_alpha
+        attributes(out)$cronbachs_alpha,
+        omega
       ), "yellow")
-
       out
     }),
     digits = digits,
@@ -157,6 +177,7 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     missing = "<NA>",
     zap_small = TRUE
   ))
+  cat("\n")
 }
 
 
@@ -164,11 +185,17 @@ print.check_itemscale <- function(x, digits = 2, ...) {
 print_html.check_itemscale <- function(x, digits = 2, ...) {
   x <- lapply(seq_along(x), function(i) {
     out <- x[[i]]
+    if (!is.null(attributes(out)$mcdonalds_omega)) {
+      omega <- sprintf(", McDonald's omega = %.3f", attributes(out)$mcdonalds_omega)
+    } else {
+      omega <- ""
+    }
     attr(out, "table_caption") <- sprintf(
-      "Component %i: Mean inter-item-correlation = %.3f, Cronbach's alpha = %.3f",
+      "Component %i: Mean inter-item-correlation = %.3f, Cronbach's alpha = %.3f%s",
       i,
       attributes(out)$item_intercorrelation,
-      attributes(out)$cronbachs_alpha
+      attributes(out)$cronbachs_alpha,
+      omega
     )
     out
   })

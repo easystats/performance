@@ -4,10 +4,15 @@
 \alias{item_reliability}
 \title{Reliability Test for Items or Scales}
 \usage{
-item_reliability(x, standardize = FALSE, digits = 3)
+item_reliability(x, type = "alpha", standardize = FALSE, digits = 3)
 }
 \arguments{
 \item{x}{A matrix or a data frame.}
+
+\item{type}{Type of reliability estimate. Either \code{"alpha"} (default, see
+\code{\link[=cronbachs_alpha]{cronbachs_alpha()}}) or \code{"omega"} (see \code{\link[=mcdonalds_omega]{mcdonalds_omega()}}). Note that
+computing McDonald's Omega is more computationally intensive than Cronbach's
+Alpha.}
 
 \item{standardize}{Logical, if \code{TRUE}, the data frame's vectors will be
 standardized. Recommended when the variables have different measures /
@@ -18,8 +23,8 @@ scales.}
 \value{
 A data frame with the corrected item-total correlations (\emph{item
 discrimination}, column \code{item_discrimination}) and Cronbach's Alpha
-(if item deleted, column \code{alpha_if_deleted}) for each item
-of the scale, or \code{NULL} if data frame had too less columns.
+(if item deleted, column \code{alpha_if_deleted}) resp. McDonald's Omega for each
+item of the scale, or \code{NULL} if data frame had too few columns.
 }
 \description{
 Compute various measures of internal consistencies
@@ -28,7 +33,8 @@ for tests or item-scales of questionnaires.
 \details{
 This function calculates the item discriminations (corrected item-total
 correlations for each item of \code{x} with the remaining items) and the
-Cronbach's alpha for each item, if it was deleted from the scale. The
+Cronbach's alpha (when \code{type = "alpha"}) resp. McDonald's Omega (when
+\code{type = "omega"}) for each item, if it was deleted from the scale. The
 absolute value of the item discrimination indices should be above 0.2. An
 index between 0.2 and 0.4 is considered as "fair", while an index above 0.4
 (or below -0.4) is "good". The range of satisfactory values is from 0.4 to
@@ -38,7 +44,11 @@ determine why a negative value was obtained (e.g. reversed answer categories
 regarding positive and negative poles).
 }
 \examples{
+\dontshow{if (requireNamespace("lavaan", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(mtcars)
-x <- mtcars[, c("cyl", "gear", "carb", "hp")]
-item_reliability(x)
+item_reliability(mtcars[, c("cyl", "gear", "carb", "hp")])
+
+data(iris)
+item_reliability(iris[1:4], type = "omega")
+\dontshow{\}) # examplesIf}
 }
