@@ -32,7 +32,7 @@
 #'
 #' @examplesIf requireNamespace("lavaan", quietly = TRUE)
 #' data(iris)
-#' x <- iris[1:4]
+#' x <- iris[1:3]
 #' mcdonalds_omega(x)
 #' @export
 mcdonalds_omega <- function(x, ...) {
