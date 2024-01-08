@@ -13,18 +13,26 @@
 #' @details The McDonald's Omega value for `x`. A value closer to 1
 #'    indicates greater internal consistency, where usually following
 #'    rule of thumb is applied to interpret the results:
-#'    \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
-#'    0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
-#'    0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
-#'    0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
+#'    \ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.5 is unacceptable,
+#'    0.5 < \ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.6 is poor,
+#'    0.6 < \ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.7 is questionable,
+#'    0.7 < \ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.8 is acceptable,
 #'    and everything > 0.8 is good or excellent.
 #'
-#' @references Bland, J. M., and Altman, D. G. Statistics notes: Cronbach's
-#'   alpha. BMJ 1997;314:572. 10.1136/bmj.314.7080.572
+#' `mcdonalds_omega()` is a simplified implementation of the `MBESS::ci.reliability()`
+#' function. Currently, it only computes the simple McDonald's Omega estimate
+#' (not hierarchical, not for categorical data) and should return the same
+#' results as the default `MBESS::ci.reliability()` call.
+#'
+#' @note The code is based on the `MBESS::ci.reliability()` function, which
+#' is licensed under the GPL-2|GPL-3 license. Credits go to Sunthud Pornprasertmanit
+#' and Ken Kelley.
+#'
+#' @references McDonald, R.P. (1999). Test theory: A unified treatment. Hillsdale: Erlbaum.
 #'
 #' @examples
-#' data(mtcars)
-#' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
+#' data(iris)
+#' x <- iris[1:4]
 #' mcdonalds_omega(x)
 #' @export
 mcdonalds_omega <- function(x, ...) {
@@ -75,12 +83,34 @@ mcdonalds_omega.data.frame <- function(x, ci = 0.95, verbose = TRUE, ...) {
   insight::check_if_installed("lavaan")
 
   # fit CFA to get reliability estimate
-  fit <- lavaan::cfa(model, data = .data, missing = "ml", estimator = "mlr", se = "default")
-  out <- lavaan::parameterEstimates(fit)
+  fit <- .safe(suppressWarnings(lavaan::cfa(model, data = .data, missing = "ml", estimator = "mlr", se = "default")))
+  if (is.null(fit)) {
+    if (verbose) {
+      insight::format_warning("Could not compute McDonald's Omega.")
+    }
+    return(NULL)
+  }
+  out <- suppressWarnings(lavaan::parameterEstimates(fit))
 
   # extract omega and related standard error
   estimate <- as.vector(out$est[out$label == "relia"])
   se <- as.vector(out$se[out$label == "relia"])
+
+  # check if omega is in range
+  if ((estimate < 0 || estimate > 1)) {
+    if (!is.null(ci) && !is.na(ci)) {
+      if (verbose) {
+        insight::format_warning("McDonald's Omega is not in range [0, 1]. Estimate is not reliable. Furthermore, can't compute confidence intervals.") # nolint
+      }
+      ci <- NULL
+    } else if (verbose) {
+      if (estimate < 0) {
+        insight::format_warning("McDonald's Omega is negativ. Estimate is not reliable.")
+      } else {
+        insight::format_warning("McDonald's Omega is greater than 1. Estimate is not reliable.")
+      }
+    }
+  }
 
   # if user requested CI, return data frame with omega and CI
   if (!is.null(ci) && !is.na(ci)) {
@@ -141,7 +171,7 @@ mcdonalds_omega.parameters_pca <- function(x, verbose = TRUE, ...) {
   # sort and get unique IDs so we only get data from relevant columns
   unique_factors <- sort(unique(factor_assignment))
 
-  # apply cronbach's alpha for each component,
+  # apply mcdonalds_omega for each component,
   # only for variables with max loading
   omegas <- sapply(unique_factors, function(i) {
     mcdonalds_omega(
@@ -163,10 +193,10 @@ mcdonalds_omega.parameters_pca <- function(x, verbose = TRUE, ...) {
 print.mcdonalds_omega <- function(x, digits = 3, ...) {
   # print regular R2
   out <- sprintf(
-    "Omega: %.*f %s",
+    "McDonald's Omega: %.*f %s",
     digits,
-    x$omega,
-    insight::format_ci(ci_low, ci_high, digits = digits, ci = NULL)
+    x$Omega,
+    insight::format_ci(x$CI_low, x$CI_high, digits = digits, ci = NULL)
   )
 
   cat(out)

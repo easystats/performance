@@ -26,18 +26,27 @@ for tests or item-scales of questionnaires.
 The McDonald's Omega value for \code{x}. A value closer to 1
 indicates greater internal consistency, where usually following
 rule of thumb is applied to interpret the results:
-\ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
-0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
-0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
-0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
+\ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.5 is unacceptable,
+0.5 < \ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.6 is poor,
+0.6 < \ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.7 is questionable,
+0.7 < \ifelse{html}{\out{&omega;}}{\eqn{\omega}{omega}} < 0.8 is acceptable,
 and everything > 0.8 is good or excellent.
+
+\code{mcdonalds_omega()} is a simplified implementation of the \code{MBESS::ci.reliability()}
+function. Currently, it only computes the simple McDonald's Omega estimate
+(not hierarchical, not for categorical data) and should return the same
+results as the default \code{MBESS::ci.reliability()} call.
+}
+\note{
+The code is based on the \code{MBESS::ci.reliability()} function, which
+is licensed under the GPL-2|GPL-3 license. Credits go to Sunthud Pornprasertmanit
+and Ken Kelley.
 }
 \examples{
-data(mtcars)
-x <- mtcars[, c("cyl", "gear", "carb", "hp")]
+data(iris)
+x <- iris[1:4]
 mcdonalds_omega(x)
 }
 \references{
-Bland, J. M., and Altman, D. G. Statistics notes: Cronbach's
-alpha. BMJ 1997;314:572. 10.1136/bmj.314.7080.572
+McDonald, R.P. (1999). Test theory: A unified treatment. Hillsdale: Erlbaum.
 }
