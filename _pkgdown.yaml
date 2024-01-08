@@ -24,6 +24,7 @@ reference:
     contents:
       - check_itemscale
       - cronbachs_alpha
+      - mcdonalds_omega
       - starts_with("item_")
 
   - title: "Comparing and Testing Models"

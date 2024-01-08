@@ -1,5 +1,9 @@
 # performance 0.10.9
 
+## New functions
+
+* `mcdonalds_omega()` to calculate McDonald's Omega for a scale.
+
 ## Changes
 
 * `r2()` for models of class `glmmTMB` without random effects now returns the
