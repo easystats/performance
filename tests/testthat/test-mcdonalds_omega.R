@@ -1,7 +1,7 @@
 test_that("mcdonalds_omega, data frame", {
   data(mtcars)
   x <- mtcars[, c("cyl", "gear", "carb", "hp")]
-  expect_warning(mcdonalds_omega(x), regex = "is not in range [0, 1]")
+  expect_warning(mcdonalds_omega(x), regex = "is not in range")
   expect_warning(mcdonalds_omega(x, ci = NULL), regex = "is greater than 1")
   expect_equal(mcdonalds_omega(x, verbose = FALSE), 1.156718, tolerance = 1e-3)
 
@@ -35,10 +35,13 @@ test_that("mcdonalds_omega, data frame", {
   )
 })
 
+
 test_that("mcdonalds_omega", {
   expect_warning(expect_null(mcdonalds_omega(mtcars[1])), regex = "Too few columns")
 })
 
+# save time on CRAN
+skip_on_cran()
 
 test_that("mcdonalds_omega, principal_components", {
   skip_if_not_installed("parameters", minimum_version = "0.21.3")
@@ -62,7 +65,7 @@ test_that("mcdonalds_omega, principal_components", {
 test_that("mcdonalds_omega, matrix", {
   m <- as.matrix(iris[1:4])
   expect_equal(
-    mcdonalds_omega(x),
+    mcdonalds_omega(m),
     data.frame(
       Omega = 0.984746012592052,
       CI_low = 0.969115091775479,

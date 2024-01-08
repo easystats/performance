@@ -43,9 +43,11 @@ is licensed under the GPL-2|GPL-3 license. Credits go to Sunthud Pornprasertmani
 and Ken Kelley.
 }
 \examples{
+\dontshow{if (requireNamespace("lavaan", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(iris)
 x <- iris[1:4]
 mcdonalds_omega(x)
+\dontshow{\}) # examplesIf}
 }
 \references{
 McDonald, R.P. (1999). Test theory: A unified treatment. Hillsdale: Erlbaum.

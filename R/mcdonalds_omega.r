@@ -30,7 +30,7 @@
 #'
 #' @references McDonald, R.P. (1999). Test theory: A unified treatment. Hillsdale: Erlbaum.
 #'
-#' @examples
+#' @examplesIf requireNamespace("lavaan", quietly = TRUE)
 #' data(iris)
 #' x <- iris[1:4]
 #' mcdonalds_omega(x)
@@ -42,11 +42,8 @@ mcdonalds_omega <- function(x, ...) {
 
 #' @export
 mcdonalds_omega.data.frame <- function(x, ci = 0.95, verbose = TRUE, ...) {
-  # remove missings
-  .data <- stats::na.omit(x)
-
   # we need at least two columns for Cronach's Alpha
-  if (is.null(ncol(.data)) || ncol(.data) < 2) {
+  if (is.null(ncol(x)) || ncol(x) < 2) {
     if (verbose) {
       insight::format_warning("Too few columns in `x` to compute McDonald's Omega.")
     }
@@ -54,9 +51,9 @@ mcdonalds_omega.data.frame <- function(x, ci = 0.95, verbose = TRUE, ...) {
   }
 
   # prepare names and formulas for lavaan
-  varnames <- colnames(.data)
-  name_loadings <- paste0("a", seq_len(ncol(.data)))
-  name_error <- paste0("b", seq_len(ncol(.data)))
+  varnames <- colnames(x)
+  name_loadings <- paste0("a", seq_len(ncol(x)))
+  name_error <- paste0("b", seq_len(ncol(x)))
 
   # we need this specific formulation for lavaan to get the omega reliability estimate
   # see code in MBESS
@@ -83,7 +80,7 @@ mcdonalds_omega.data.frame <- function(x, ci = 0.95, verbose = TRUE, ...) {
   insight::check_if_installed("lavaan")
 
   # fit CFA to get reliability estimate
-  fit <- .safe(suppressWarnings(lavaan::cfa(model, data = .data, missing = "ml", estimator = "mlr", se = "default")))
+  fit <- .safe(suppressWarnings(lavaan::cfa(model, data = x, missing = "ml", estimator = "mlr", se = "default")))
   if (is.null(fit)) {
     if (verbose) {
       insight::format_warning("Could not compute McDonald's Omega.")
