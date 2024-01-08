@@ -7,9 +7,13 @@
 mcdonalds_omega(x, ...)
 }
 \arguments{
-\item{x}{A matrix or a data frame.}
+\item{x}{A matrix or a data frame, or an object returned by
+\verb{[parameters::principal_components()]}.}
 
 \item{...}{Currently not used.}
+
+\item{ci}{Confidence interval for the reliability estimate. If \code{NULL},
+no confidence interval is computed.}
 }
 \value{
 The McDonald's Omega value for \code{x}.

@@ -4,7 +4,8 @@
 #' @description Compute various measures of internal consistencies
 #'    for tests or item-scales of questionnaires.
 #'
-#' @param x A matrix or a data frame.
+#' @param x A matrix or a data frame, or an object returned by
+#' `[parameters::principal_components()]`.
 #' @param ... Currently not used.
 #'
 #' @return The Cronbach's Alpha value for `x`.
@@ -50,12 +51,10 @@ cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 cronbachs_alpha.matrix <- function(x, verbose = TRUE, ...) {
   cronbachs_alpha(as.data.frame(x), verbose = verbose, ...)
 }
-
 
 
 #' @export
