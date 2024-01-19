@@ -1,5 +1,6 @@
 test_that("model_performance.stanreg", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   set.seed(333)
@@ -31,6 +32,7 @@ test_that("model_performance.stanreg", {
 
 test_that("model_performance.brmsfit", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   set.seed(333)

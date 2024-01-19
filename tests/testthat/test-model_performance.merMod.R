@@ -1,5 +1,6 @@
 test_that("model_performance.merMod", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
 
