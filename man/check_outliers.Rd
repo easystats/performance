@@ -189,6 +189,9 @@ calculates the mean and covariance matrix based on the most central subset of
 the data (by default, 66\\%), before computing the Mahalanobis Distance. This
 is deemed to be a more robust method of identifying and removing outliers
 than regular Mahalanobis distance.
+This method has a \code{percentage_central} argument that allows specifying
+the breakdown point (0.75, the default, is recommended by Leys et al. 2018,
+but a commonly used alternative is 0.50).
 \item \strong{Invariant Coordinate Selection (ICS)}:
 The outlier are detected using ICS, which by default uses an alpha threshold
 of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off

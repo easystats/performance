@@ -160,6 +160,9 @@
 #' the data (by default, 66\%), before computing the Mahalanobis Distance. This
 #' is deemed to be a more robust method of identifying and removing outliers
 #' than regular Mahalanobis distance.
+#' This method has a `percentage_central` argument that allows specifying
+#' the breakdown point (0.75, the default, is recommended by Leys et al. 2018,
+#' but a commonly used alternative is 0.50).
 #'
 #'  - **Invariant Coordinate Selection (ICS)**:
 #'  The outlier are detected using ICS, which by default uses an alpha threshold
@@ -1098,8 +1101,8 @@ check_outliers.data.frame <- function(x,
     out <- c(out, .check_outliers_mcd(
       x,
       threshold = thresholds$mcd,
-      percentage_central = 0.66,
-      ID.names = ID.names
+      ID.names = ID.names,
+      ...
     ))
 
     count.table <- datawizard::data_filter(
@@ -1726,7 +1729,7 @@ check_outliers.metabin <- check_outliers.metagen
 
 .check_outliers_mcd <- function(x,
                                 threshold = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
-                                percentage_central = 0.50,
+                                percentage_central = 0.75,
                                 ID.names = NULL) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
