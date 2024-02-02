@@ -70,8 +70,8 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.1),
-    insight (>= 0.19.7),
-    datawizard (>= 0.9.0),
+    insight (>= 0.19.8),
+    datawizard (>= 0.9.1),
     methods,
     stats,
     utils
@@ -138,10 +138,10 @@ Suggests:
     see (>= 0.8.1),
     survey,
     survival,
-    testthat (>= 3.2.0),
+    testthat (>= 3.2.1),
     tweedie,
     VGAM,
-    withr
+    withr (>= 3.0.0)
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.2.3.9000

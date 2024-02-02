@@ -38,6 +38,7 @@ test_that("icc, CI", {
 
 test_that("icc", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   m2 <- insight::download_model("stanreg_lmerMod_1")
@@ -54,6 +55,7 @@ test_that("icc", {
 
 test_that("icc", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   m3 <- insight::download_model("brms_mixed_1")
@@ -67,6 +69,7 @@ test_that("icc", {
 
 test_that("icc", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   m3 <- insight::download_model("brms_mixed_1")
