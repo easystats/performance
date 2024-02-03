@@ -90,6 +90,10 @@ test_that("mcd which", {
     tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45))),
     31L
   )
+  out <- check_outliers(mtcars, method = "mcd")
+  expect_identical(sum(out), 8)
+  out <- check_outliers(mtcars, method = "mcd", percentage_central = 0.5)
+  expect_identical(sum(out), 15)
 })
 
 ## FIXME: Fails on CRAN/windows
@@ -197,10 +201,10 @@ test_that("all methods which", {
         "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
       ),
       threshold = list(
-        "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-        "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-        "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-        "optics" = 14, "lof" = 0.005
+        zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
+        ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
+        mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
+        optics = 14, lof = 0.005
       )
     )),
     as.integer(c(9, 15, 16, 19, 20, 28, 29, 31))
@@ -219,10 +223,10 @@ test_that("multiple methods with ID", {
       "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
     ),
     threshold = list(
-      "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-      "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-      "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-      "optics" = 14, "lof" = 0.005
+      zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
+      ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
+      mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
+      optics = 14, lof = 0.005
     ),
     ID = "car"
   ))
