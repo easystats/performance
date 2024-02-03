@@ -184,14 +184,12 @@ check_model.default <- function(x,
   minfo <- insight::model_info(x, verbose = FALSE)
 
   ca <- tryCatch(
-    {
-      if (minfo$is_bayesian) {
-        suppressWarnings(.check_assumptions_stan(x, ...))
-      } else if (minfo$is_linear) {
-        suppressWarnings(.check_assumptions_linear(x, minfo, verbose, ...))
-      } else {
-        suppressWarnings(.check_assumptions_glm(x, minfo, verbose, ...))
-      }
+    if (minfo$is_bayesian) {
+      suppressWarnings(.check_assumptions_stan(x, ...))
+    } else if (minfo$is_linear) {
+      suppressWarnings(.check_assumptions_linear(x, minfo, verbose, ...))
+    } else {
+      suppressWarnings(.check_assumptions_glm(x, minfo, verbose, ...))
     },
     error = function(e) {
       NULL
