@@ -197,8 +197,11 @@ check_model.default <- function(x,
   )
 
   if (inherits(ca, c("error", "simpleError"))) {
+    pattern <- "(\n|\\s{2,})"
+    replacement <- " "
+    cleaned_string <- gsub(pattern, replacement, ca$message)
     insight::format_error(
-      paste("\n`check_model()` returned following error:", ca$message),
+      paste("`check_model()` returned following error:", cleaned_string),
       paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
     )
   }

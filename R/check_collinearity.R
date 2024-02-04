@@ -404,7 +404,7 @@ check_collinearity.zerocount <- function(x,
 
 
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
-  v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
+  v <- insight::get_varcov(x, component = component, verbose = FALSE)
 
   # sanity check
   if (is.null(v)) {
