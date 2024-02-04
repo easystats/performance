@@ -36,3 +36,15 @@ test_that("`check_outliers()` works if convergence issues", {
   x <- check_outliers(m, verbose = FALSE)
   expect_s3_class(x, "check_outliers")
 })
+
+test_that("`check_model()` for invalid models", {
+  dd <- data.frame(y = as.difftime(0:5, units = "days"))
+  m1 <- lm(y ~ 1, data = dd)
+  expect_error(
+    expect_message(
+      check_model(m1),
+      regex = "Date variables are not supported"
+    ),
+    regex = "No numeric variables found"
+  )
+})
