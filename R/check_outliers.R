@@ -1732,11 +1732,24 @@ check_outliers.metabin <- check_outliers.metagen
                                 threshold = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
                                 percentage_central = 0.75,
                                 ID.names = NULL,
+                                verbose = TRUE,
                                 ...) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
     out <- cbind(out, ID.names)
+  }
+
+  # check whether N to p ratio is not too large, else MCD flags too many outliers
+  # See #672: This does seem to be a function of the N/p (N = sample size; p =
+  # number of parameters) ratio. When it is larger than 10, the % of outliers
+  # flagged is okay (in well behaved data). This makes sense: the MCD looks at
+  # the cov matrix of subsamples of the data - with high dimensional data, small
+  # samples sizes will give highly variable cov matrices, as so the "smallest"
+  # one will probably miss-represent the data.
+
+  if ((prod(dim(x)) / nrow(x)) > 10 && isTRUE(verbose)) {
+    insight::format_alert("Sample size is too small resp. number of variables is too high in your data for MCD to be reliable.") # nolint
   }
 
   insight::check_if_installed("MASS")
