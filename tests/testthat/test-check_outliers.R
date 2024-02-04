@@ -91,9 +91,9 @@ test_that("mcd which", {
     31L
   )
   out <- check_outliers(mtcars, method = "mcd")
-  expect_identical(sum(out), 8)
+  expect_identical(sum(out), 8L)
   out <- check_outliers(mtcars, method = "mcd", percentage_central = 0.5)
-  expect_identical(sum(out), 15)
+  expect_identical(sum(out), 15L)
 })
 
 ## FIXME: Fails on CRAN/windows
