@@ -26,7 +26,8 @@ check_outliers(x, ...)
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
 down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
-they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}.}
+they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}. \code{percentage_central} can
+be specified when \code{method = "mcd"}.}
 
 \item{method}{The outlier detection method(s). Can be \code{"all"} or some of
 \code{"cook"}, \code{"pareto"}, \code{"zscore"}, \code{"zscore_robust"}, \code{"iqr"}, \code{"ci"}, \code{"eti"},
@@ -189,6 +190,9 @@ calculates the mean and covariance matrix based on the most central subset of
 the data (by default, 66\\%), before computing the Mahalanobis Distance. This
 is deemed to be a more robust method of identifying and removing outliers
 than regular Mahalanobis distance.
+This method has a \code{percentage_central} argument that allows specifying
+the breakdown point (0.75, the default, is recommended by Leys et al. 2018,
+but a commonly used alternative is 0.50).
 \item \strong{Invariant Coordinate Selection (ICS)}:
 The outlier are detected using ICS, which by default uses an alpha threshold
 of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off
@@ -295,7 +299,7 @@ check_outliers(group_iris)
 \dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # You can also run all the methods
-check_outliers(data, method = "all")
+check_outliers(data, method = "all", verbose = FALSE)
 
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)

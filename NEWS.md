@@ -23,6 +23,9 @@
 * `performance_score()` should no longer fail for models where scoring rules
   can't be calculated. Instead, an informative message is returned.
 
+* `check_outliers()` now properly accept the `percentage_central` argument when
+  using the `"mcd"` method.
+
 # performance 0.10.8
 
 ## Changes

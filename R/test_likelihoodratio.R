@@ -22,29 +22,29 @@ test_lrt <- test_likelihoodratio
 #' @export
 test_likelihoodratio.default <- function(..., estimator = "OLS", verbose = TRUE) {
   # Attribute class to list
-  objects <- insight::ellipsis_info(..., only_models = TRUE)
+  my_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # validation checks (will throw error if non-valid objects)
-  objects <- .test_performance_checks(objects, verbose = verbose)
+  my_objects <- .test_performance_checks(my_objects, verbose = verbose)
 
   # different default when mixed model or glm is included
   if (missing(estimator)) {
-    mixed_models <- sapply(objects, insight::is_mixed_model)
-    if (all(mixed_models) && all(sapply(objects, .is_lmer_reml)) && isTRUE(attributes(objects)$same_fixef)) {
+    mixed_models <- sapply(my_objects, insight::is_mixed_model)
+    if (all(mixed_models) && all(sapply(my_objects, .is_lmer_reml)) && isTRUE(attributes(my_objects)$same_fixef)) {
       estimator <- "REML"
-    } else if (any(mixed_models) || !all(attributes(objects)$is_linear)) {
+    } else if (any(mixed_models) || !all(attributes(my_objects)$is_linear)) {
       estimator <- "ML"
     }
   }
 
   # ensure proper object names
-  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
+  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(objects, "ListNestedRegressions")) {
-    test_likelihoodratio(objects, estimator = estimator)
-  } else if (inherits(objects, "ListLavaan")) {
-    test_likelihoodratio_ListLavaan(..., objects = objects) # Because lavaanLRT requires the ellipsis
+  if (inherits(my_objects, "ListNestedRegressions")) {
+    test_likelihoodratio(my_objects, estimator = estimator)
+  } else if (inherits(my_objects, "ListLavaan")) {
+    test_likelihoodratio_ListLavaan(..., objects = my_objects) # Because lavaanLRT requires the ellipsis
   } else {
     insight::format_error(
       "The models are not nested, which is a prerequisite for `test_likelihoodratio()`.",
@@ -106,7 +106,7 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   same_fixef <- attributes(objects)$same_fixef
 
   # sort by df
-  if (!all(sort(dfs) == dfs) && !all(sort(dfs) == rev(dfs))) {
+  if (is.unsorted(dfs) && is.unsorted(rev(dfs))) {
     objects <- objects[order(dfs)]
     dfs <- sort(dfs, na.last = TRUE)
   }
