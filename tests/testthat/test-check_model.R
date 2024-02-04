@@ -38,6 +38,7 @@ test_that("`check_outliers()` works if convergence issues", {
 })
 
 test_that("`check_model()` for invalid models", {
+  skip_if(packageVersion("insight") < "0.19.8.2")
   dd <- data.frame(y = as.difftime(0:5, units = "days"))
   m1 <- lm(y ~ 1, data = dd)
   expect_error(check_model(m1))
