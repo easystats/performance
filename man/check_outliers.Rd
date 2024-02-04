@@ -26,7 +26,8 @@ check_outliers(x, ...)
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
 down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
-they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}.}
+they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}. \code{percentage_central} can
+be specified when \code{method = "mcd"}.}
 
 \item{method}{The outlier detection method(s). Can be \code{"all"} or some of
 \code{"cook"}, \code{"pareto"}, \code{"zscore"}, \code{"zscore_robust"}, \code{"iqr"}, \code{"ci"}, \code{"eti"},
@@ -298,7 +299,7 @@ check_outliers(group_iris)
 \dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # You can also run all the methods
-check_outliers(data, method = "all")
+check_outliers(data, method = "all", verbose = FALSE)
 
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)

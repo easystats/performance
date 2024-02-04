@@ -3,7 +3,6 @@
 \docType{package}
 \name{performance-package}
 \alias{performance-package}
-\alias{_PACKAGE}
 \title{performance: An R Package for Assessment, Comparison and Testing of
 Statistical Models}
 \description{

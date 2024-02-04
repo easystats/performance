@@ -312,7 +312,7 @@
 #' @examplesIf require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")
 #' \donttest{
 #' # You can also run all the methods
-#' check_outliers(data, method = "all")
+#' check_outliers(data, method = "all", verbose = FALSE)
 #'
 #' # For statistical models ---------------------------------------------
 #' # select only mpg and disp (continuous)
