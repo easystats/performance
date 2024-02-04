@@ -87,12 +87,17 @@ test_that("mcd which", {
   # (not clear why method mcd needs a seed)
   set.seed(42)
   expect_identical(
-    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45))),
+    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45, verbose = FALSE))),
     31L
   )
-  out <- check_outliers(mtcars, method = "mcd")
+  expect_warning(
+    {
+      out <- check_outliers(mtcars, method = "mcd")
+    },
+    regex = "The sample size is too small"
+  )
   expect_identical(sum(out), 8L)
-  out <- check_outliers(mtcars, method = "mcd", percentage_central = 0.5)
+  out <- check_outliers(mtcars, method = "mcd", percentage_central = 0.5, verbose = FALSE)
   expect_identical(sum(out), 15L)
 })
 
@@ -228,7 +233,8 @@ test_that("multiple methods with ID", {
       mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
       optics = 14, lof = 0.005
     ),
-    ID = "car"
+    ID = "car",
+    verbose = FALSE
   ))
   expect_identical(
     x$outlier_var$zscore$mpg$car,
