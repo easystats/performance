@@ -23,6 +23,7 @@
 #'   'Details'). If a numeric value is given, it will be used as the threshold
 #'   for any of the method run.
 #' @param ID Optional, to report an ID column along with the row number.
+#' @param verbose Toggle warnings.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
 #' they are  passed down to [stats::mahalanobis()]. `percentage_central` can
@@ -348,6 +349,7 @@ check_outliers.default <- function(x,
                                    method = c("cook", "pareto"),
                                    threshold = NULL,
                                    ID = NULL,
+                                   verbose = TRUE,
                                    ...) {
   # Check args
   if (all(method == "all")) {
@@ -391,8 +393,18 @@ check_outliers.default <- function(x,
   # Get data
   my_data <- insight::get_data(x, verbose = FALSE)
 
+  # sanity check for date, POSIXt and difftime variables
+  if (any(vapply(my_data, inherits, FUN.VALUE = logical(1), what = c("Date", "POSIXt", "difftime"))) && verbose) {
+    insight::format_alert("Date variables are not supported for outliers detection. These will be ignored.")
+  }
+
   # Remove non-numerics
-  my_data <- datawizard::data_select(my_data, select = is.numeric)
+  my_data <- datawizard::data_select(my_data, select = is.numeric, verbose = FALSE)
+
+  # check if any data left
+  if (is.null(my_data) || ncol(my_data) == 0) {
+    insight::format_error("No numeric variables found. No data to check for outliers.")
+  }
 
   # Thresholds
   if (is.null(threshold)) {
@@ -409,7 +421,7 @@ check_outliers.default <- function(x,
     )
   }
 
-  if (!missing(ID)) {
+  if (!missing(ID) && verbose) {
     insight::format_warning(paste0("ID argument not supported for model objects of class `", class(x)[1], "`."))
   }
 

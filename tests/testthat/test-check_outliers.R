@@ -329,3 +329,16 @@ test_that("cook multiple methods which", {
     c("setosa", "versicolor", "virginica")
   )
 })
+
+
+test_that("check_outliers with invald data", {
+  dd <- data.frame(y = as.difftime(0:5, units = "days"))
+  m1 <- lm(y ~ 1, data = dd)
+  expect_error(
+    expect_message(
+      check_outliers(m1),
+      regex = "Date variables are not supported"
+    ),
+    regex = "No numeric variables found"
+  )
+})

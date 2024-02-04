@@ -26,6 +26,9 @@
 * `check_outliers()` now properly accept the `percentage_central` argument when
   using the `"mcd"` method.
 
+* Fixed edge cases in `check_collinearity()` and `check_outliers()` for models
+  with response variables of classes `Date`, `POSIXct`, `POSIXlt` or `difftime`.
+
 # performance 0.10.8
 
 ## Changes

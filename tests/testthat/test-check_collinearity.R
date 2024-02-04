@@ -211,3 +211,9 @@ test_that("check_collinearity, hurdle/zi models w/o zi-formula", {
   )
   expect_equal(out$VIF, c(1.05772, 1.05772, 1.06587, 1.06587), tolerance = 1e-4)
 })
+
+test_that("check_collinearity, invalid data", {
+  dd <- data.frame(y = as.difftime(0:5, units = "days"))
+  m1 <- lm(y ~ 1, data = dd)
+  expect_message(expect_null(check_collinearity(m1)), "Could not extract")
+})
