@@ -1748,7 +1748,7 @@ check_outliers.metabin <- check_outliers.metagen
   # samples sizes will give highly variable cov matrices, as so the "smallest"
   # one will probably miss-represent the data.
 
-  if ((prod(dim(x)) / nrow(x)) > 10 && isTRUE(verbose)) {
+  if ((nrow(x) / ncol(x)) > 10 && isTRUE(verbose)) {
     insight::format_alert("Sample size is too small resp. number of variables is too high in your data for MCD to be reliable.") # nolint
   }
 
