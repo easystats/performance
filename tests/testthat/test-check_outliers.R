@@ -210,7 +210,8 @@ test_that("all methods which", {
         ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
         mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
         optics = 14, lof = 0.005
-      )
+      ),
+      verbose = FALSE
     )),
     as.integer(c(9, 15, 16, 19, 20, 28, 29, 31))
   )

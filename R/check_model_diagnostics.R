@@ -94,29 +94,25 @@
   insight::check_if_installed("lme4")
 
   tryCatch(
-    {
-      if (inherits(model, "glmmTMB")) {
-        var_attr <- "condVar"
-        re <- .collapse_cond(lme4::ranef(model, condVar = TRUE))
-      } else {
-        var_attr <- "postVar"
-        re <- lme4::ranef(model, condVar = TRUE)
-      }
+    if (inherits(model, "glmmTMB")) {
+      var_attr <- "condVar"
+      re <- .collapse_cond(lme4::ranef(model, condVar = TRUE))
+    } else {
+      var_attr <- "postVar"
+      re <- lme4::ranef(model, condVar = TRUE)
     },
     error = function(e) {
-      return(NULL)
+      NULL
     }
   )
 
 
   se <- tryCatch(
-    {
-      suppressWarnings(lapply(re, function(.x) {
-        pv <- attr(.x, var_attr, exact = TRUE)
-        cols <- seq_len(dim(pv)[1])
-        unlist(lapply(cols, function(.y) sqrt(pv[.y, .y, ])))
-      }))
-    },
+    suppressWarnings(lapply(re, function(.x) {
+      pv <- attr(.x, var_attr, exact = TRUE)
+      cols <- seq_len(dim(pv)[1])
+      unlist(lapply(cols, function(.y) sqrt(pv[.y, .y, ])))
+    })),
     error = function(e) {
       NULL
     }
@@ -186,15 +182,15 @@
   n_params <- tryCatch(model$rank, error = function(e) insight::n_parameters(model))
 
   infl <- stats::influence(model, do.coef = FALSE)
-  resid <- as.numeric(insight::get_residuals(model))
+  model_resid <- as.numeric(insight::get_residuals(model))
 
-  std_resid <- tryCatch(stats::rstandard(model, infl), error = function(e) resid)
+  std_resid <- tryCatch(stats::rstandard(model, infl), error = function(e) model_resid)
 
   plot_data <- data.frame(
     Hat = infl$hat,
     Cooks_Distance = stats::cooks.distance(model, infl),
     Fitted = insight::get_predicted(model, ci = NULL),
-    Residuals = resid,
+    Residuals = model_resid,
     Std_Residuals = std_resid,
     stringsAsFactors = FALSE
   )
@@ -213,12 +209,10 @@
 
 .diag_ncv <- function(model, verbose = TRUE) {
   ncv <- tryCatch(
-    {
-      data.frame(
-        x = as.numeric(stats::fitted(model)),
-        y = as.numeric(stats::residuals(model))
-      )
-    },
+    data.frame(
+      x = as.numeric(stats::fitted(model)),
+      y = as.numeric(stats::residuals(model))
+    ),
     error = function(e) {
       NULL
     }
@@ -244,24 +238,22 @@
 .diag_homogeneity <- function(model, verbose = TRUE) {
   faminfo <- insight::model_info(model)
   r <- tryCatch(
-    {
-      if (inherits(model, "merMod")) {
-        stats::residuals(model, scaled = TRUE)
-      } else if (inherits(model, "gam")) {
-        stats::residuals(model, type = "scaled.pearson")
-      } else if (inherits(model, c("glmmTMB", "MixMod"))) {
-        sigma <- if (faminfo$is_mixed) {
-          sqrt(insight::get_variance_residual(model))
-        } else {
-          .sigma_glmmTMB_nonmixed(model, faminfo)
-        }
-        stats::residuals(model) / sigma
-      } else if (inherits(model, "glm")) {
-        ## TODO: check if we can / should use deviance residuals (as for QQ plots) here as well?
-        stats::rstandard(model, type = "pearson")
+    if (inherits(model, "merMod")) {
+      stats::residuals(model, scaled = TRUE)
+    } else if (inherits(model, "gam")) {
+      stats::residuals(model, type = "scaled.pearson")
+    } else if (inherits(model, c("glmmTMB", "MixMod"))) {
+      residual_sigma <- if (faminfo$is_mixed) {
+        sqrt(insight::get_variance_residual(model))
       } else {
-        stats::rstandard(model)
+        .sigma_glmmTMB_nonmixed(model, faminfo)
       }
+      stats::residuals(model) / residual_sigma
+    } else if (inherits(model, "glm")) {
+      ## TODO: check if we can / should use deviance residuals (as for QQ plots) here as well?
+      stats::rstandard(model, type = "pearson")
+    } else {
+      stats::rstandard(model)
     },
     error = function(e) {
       NULL
