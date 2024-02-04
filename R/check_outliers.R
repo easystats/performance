@@ -1749,7 +1749,10 @@ check_outliers.metabin <- check_outliers.metagen
   # one will probably miss-represent the data.
 
   if ((nrow(x) / ncol(x)) <= 10 && isTRUE(verbose)) {
-    insight::format_alert("Sample size is too small resp. number of variables is too high in your data for MCD to be reliable.") # nolint
+    insight::format_alert(
+      "Sample size is too small resp. number of variables is too high in your data for MCD to be reliable.",
+      "You may try to increase the `percentage_central` argument (must be between 0 and 1), or choose another method."
+    )
   }
 
   insight::check_if_installed("MASS")
