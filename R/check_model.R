@@ -192,12 +192,15 @@ check_model.default <- function(x,
       suppressWarnings(.check_assumptions_glm(x, minfo, verbose, ...))
     },
     error = function(e) {
-      NULL
+      e
     }
   )
 
-  if (is.null(ca)) {
-    insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
+  if (inherits(ca, c("error", "simpleError"))) {
+    insight::format_error(
+      paste("\n`check_model()` returned following error:", ca$message),
+      paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
+    )
   }
 
   # try to find sensible default for "type" argument

@@ -395,7 +395,12 @@ check_outliers.default <- function(x,
 
   # sanity check for date, POSIXt and difftime variables
   if (any(vapply(my_data, inherits, FUN.VALUE = logical(1), what = c("Date", "POSIXt", "difftime"))) && verbose) {
-    insight::format_alert("Date variables are not supported for outliers detection. These will be ignored.")
+    insight::format_alert(
+      paste(
+        "Date variables are not supported for outliers detection. These will be ignored.",
+        "Make sure any date variables are converted to numeric or factor {.b before} fitting the model."
+      )
+    )
   }
 
   # Remove non-numerics

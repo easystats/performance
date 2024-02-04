@@ -410,7 +410,10 @@ check_collinearity.zerocount <- function(x,
   if (is.null(v)) {
     if (isTRUE(verbose)) {
       insight::format_alert(
-        sprintf("Could not extract the variance-covariance matrix for the %s component of the model.", component)
+        paste(
+          sprintf("Could not extract the variance-covariance matrix for the %s component of the model.", component),
+          "Please try to run `vcov(model)`, which may help identifying the problem."
+        )
       )
     }
     return(NULL)
