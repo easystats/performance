@@ -296,11 +296,19 @@
 
   # data for negative binomial models
   if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
-    d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
-    d$Res2 <- d$Residuals^2
-    d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
-    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    if (inherits(model, "glmmTMB")) {
+      d <- data.frame(Predicted = stats::predict(model, type = "response"))
+      d$Residuals <- insight::get_residuals(model, type = "pearson")
+      d$Res2 <- d$Residuals^2
+      d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(d$Predicted)
+      d$StdRes <- insight::get_residuals(model, type = "pearson")
+    } else {
+      d <- data.frame(Predicted = stats::predict(model, type = "response"))
+      d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
+      d$Res2 <- d$Residuals^2
+      d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+      d$StdRes <- insight::get_residuals(model, type = "pearson")
+    }
   }
 
   # data for zero-inflated poisson models
