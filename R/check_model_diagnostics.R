@@ -35,7 +35,7 @@
 
 # prepare data for QQ plot ----------------------------------
 
-.diag_qq <- function(model, verbose = TRUE) {
+.diag_qq <- function(model, model_info = NULL, verbose = TRUE) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "gam"))) {
     res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
@@ -63,7 +63,7 @@
     return(NULL)
   }
 
-  if (inherits(model, "glm")) {
+  if (inherits(model, c("glm", "glmerMod")) || (inherits(model, "glmmTMB") && isFALSE(model_info$is_linear))) {
     fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)
   } else {
     fitted_ <- stats::fitted(model)

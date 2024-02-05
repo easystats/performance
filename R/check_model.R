@@ -340,7 +340,7 @@ check_model.model_fit <- function(x,
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$NORM <- .diag_norm(model, verbose = verbose)
   dat$NCV <- .diag_ncv(model, verbose = verbose)
@@ -367,7 +367,7 @@ check_model.model_fit <- function(x,
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")
