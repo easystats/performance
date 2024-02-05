@@ -14,6 +14,7 @@ check_outliers(x, ...)
   method = c("cook", "pareto"),
   threshold = NULL,
   ID = NULL,
+  verbose = TRUE,
   ...
 )
 
@@ -41,6 +42,8 @@ considered as outlier. If \code{NULL}, default values will be used (see
 for any of the method run.}
 
 \item{ID}{Optional, to report an ID column along with the row number.}
+
+\item{verbose}{Toggle warnings.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing
