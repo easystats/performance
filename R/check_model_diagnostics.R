@@ -36,10 +36,12 @@
 # prepare data for QQ plot ----------------------------------
 
 .diag_qq <- function(model, verbose = TRUE) {
-  if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB", "gam"))) {
+  if (inherits(model, c("lme", "lmerMod", "merMod", "gam"))) {
     res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
     res_ <- stats::residuals(model, type = "pearson")
+  } else if (inherits(model, "glmmTMB")) {
+    res_ <- stats::residuals(model, type = "deviance")
   } else if (inherits(model, "glm")) {
     res_ <- .safe(abs(stats::rstandard(model, type = "deviance")))
   } else {
