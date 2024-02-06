@@ -300,9 +300,16 @@
       d <- data.frame(Predicted = stats::predict(model, type = "response"))
       d$Residuals <- insight::get_residuals(model, type = "pearson")
       d$Res2 <- d$Residuals^2
-      d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(d$Predicted)
       d$StdRes <- insight::get_residuals(model, type = "pearson")
+      if (faminfo$family == "nbinom1") {
+        # for nbinom1, we can use "sigma()"
+        d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(d$Predicted)
+      } else {
+        # for nbinom2, "sigma()" has "inverse meaning" (see #654)
+        d$V <- (1 / insight::get_sigma(model)^2) * stats::family(model)$variance(d$Predicted)
+      }
     } else {
+      ## FIXME: this is not correct for glm.nb models?
       d <- data.frame(Predicted = stats::predict(model, type = "response"))
       d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
       d$Res2 <- d$Residuals^2
