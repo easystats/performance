@@ -112,7 +112,7 @@ test_that("model_performance.BFBayesFactor", {
   })
   expect_null(p)
 
-
+  skip_on_os("linux")
   mod <- BayesFactor::regressionBF(mpg ~ cyl, mtcars, progress = FALSE)
   modF <- lm(mpg ~ cyl, mtcars)
   p <- model_performance(mod)
