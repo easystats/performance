@@ -35,11 +35,13 @@
 
 # prepare data for QQ plot ----------------------------------
 
-.diag_qq <- function(model, verbose = TRUE) {
-  if (inherits(model, c("lme", "lmerMod", "merMod", "glmmTMB", "gam"))) {
+.diag_qq <- function(model, model_info = NULL, verbose = TRUE) {
+  if (inherits(model, c("lme", "lmerMod", "merMod", "gam"))) {
     res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
     res_ <- stats::residuals(model, type = "pearson")
+  } else if (inherits(model, "glmmTMB")) {
+    res_ <- stats::residuals(model, type = "deviance")
   } else if (inherits(model, "glm")) {
     res_ <- .safe(abs(stats::rstandard(model, type = "deviance")))
   } else {
@@ -61,7 +63,7 @@
     return(NULL)
   }
 
-  if (inherits(model, "glm")) {
+  if (inherits(model, c("glm", "glmerMod")) || (inherits(model, "glmmTMB") && isFALSE(model_info$is_linear))) {
     fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)
   } else {
     fitted_ <- stats::fitted(model)
@@ -294,11 +296,26 @@
 
   # data for negative binomial models
   if (faminfo$is_negbin && !faminfo$is_zero_inflated) {
-    d <- data.frame(Predicted = stats::predict(model, type = "response"))
-    d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
-    d$Res2 <- d$Residuals^2
-    d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
-    d$StdRes <- insight::get_residuals(model, type = "pearson")
+    if (inherits(model, "glmmTMB")) {
+      d <- data.frame(Predicted = stats::predict(model, type = "response"))
+      d$Residuals <- insight::get_residuals(model, type = "pearson")
+      d$Res2 <- d$Residuals^2
+      d$StdRes <- insight::get_residuals(model, type = "pearson")
+      if (faminfo$family == "nbinom1") {
+        # for nbinom1, we can use "sigma()"
+        d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(d$Predicted)
+      } else {
+        # for nbinom2, "sigma()" has "inverse meaning" (see #654)
+        d$V <- (1 / insight::get_sigma(model)^2) * stats::family(model)$variance(d$Predicted)
+      }
+    } else {
+      ## FIXME: this is not correct for glm.nb models?
+      d <- data.frame(Predicted = stats::predict(model, type = "response"))
+      d$Residuals <- insight::get_response(model) - as.vector(d$Predicted)
+      d$Res2 <- d$Residuals^2
+      d$V <- d$Predicted * (1 + d$Predicted / insight::get_sigma(model))
+      d$StdRes <- insight::get_residuals(model, type = "pearson")
+    }
   }
 
   # data for zero-inflated poisson models

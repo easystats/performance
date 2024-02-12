@@ -15,6 +15,16 @@
 * Clarification in the documentation of the `estimator` argument for
   `performance_aic()`.
 
+* Improved plots for overdispersion-checks for negative-binomial models from
+  package *glmmTMB* (affects `check_overdispersion()` and `check_mnodel()`).
+
+* For model of class `glmmTMB`, deviance residuals are now used in the
+  `check_model()` plot.
+
+* Improved (better to understand) error messages for `check_model()`,
+  `check_collinearity()` and `check_outliers()` for models with non-numeric
+  response variables.
+
 ## Bug fixes
 
 * Fixed issue in `binned_residuals()` for models with binary outcome, where

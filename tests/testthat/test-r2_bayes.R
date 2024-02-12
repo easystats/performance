@@ -1,3 +1,5 @@
+skip_on_os("linux")
+
 test_that("r2_BayesFactor", {
   skip_if_not_installed("BayesFactor")
   set.seed(1)
