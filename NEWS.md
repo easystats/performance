@@ -18,6 +18,9 @@
 * Improved plots for overdispersion-checks for negative-binomial models from
   package *glmmTMB* (affects `check_overdispersion()` and `check_mnodel()`).
 
+* Improved detection rates for singularity in `check_singularity()` for models
+  from package *glmmTMB*.
+
 * For model of class `glmmTMB`, deviance residuals are now used in the
   `check_model()` plot.
 
