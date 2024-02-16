@@ -15,9 +15,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.7/font.css" rel="stylesheet">
-<link href="../deps/JetBrains_Mono-0.4.7/font.css" rel="stylesheet">
-<link href="../deps/Roboto_Slab-0.4.7/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.8/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.8/font.css" rel="stylesheet">
+<link href="../deps/Roboto_Slab-0.4.8/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Checking model assumption - linear models">
@@ -35,11 +35,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.8.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.8.15</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -170,9 +170,10 @@ functions, e.g.:</p>
 <li>Check for overdispersion: <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code>
 </li>
 </ul>
-<div class="section level3">
-<h3 id="linear-models-are-all-assumptions-for-linear-models-met">Linear models: Are all assumptions for linear models met?<a class="anchor" aria-label="anchor" href="#linear-models-are-all-assumptions-for-linear-models-met"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="linear-models-are-all-assumptions-for-linear-models-met">Linear models: Are all assumptions for linear models met?<a class="anchor" aria-label="anchor" href="#linear-models-are-all-assumptions-for-linear-models-met"></a>
+</h2>
 <p>We start with a simple example for a linear model.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span>
@@ -205,16 +206,15 @@ plots.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># return a list of single plots</span></span>
 <span><span class="va">diagnostic_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">m1</span>, panel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="posterior-predictive-checks">Posterior predictive checks<a class="anchor" aria-label="anchor" href="#posterior-predictive-checks"></a>
-</h4>
+<div class="section level3">
+<h3 id="posterior-predictive-checks">Posterior predictive checks<a class="anchor" aria-label="anchor" href="#posterior-predictive-checks"></a>
+</h3>
 <p>The first plot is based on <code><a href="../reference/check_predictions.html">check_predictions()</a></code>.
-Posterior predictive checks can be used to look for systematic
-discrepancies between real and simulated data. It helps to see whether
-the type of model (distributional family) fits well to the data
-(<em>Gelman and Hill, 2007, p. 158</em>). Posterior predictive checks
-can be used to “look for systematic discrepancies between real and
-simulated data” (<em>Gelman et al. 2014, p. 169</em>).</p>
+Posterior predictive checks can be used to “look for systematic
+discrepancies between real and simulated data” (<em>Gelman et al. 2014,
+p. 169</em>). It helps to see whether the type of model (distributional
+family) fits well to the data (<em>Gelman and Hill, 2007,
+p. 158</em>).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># posterior predicive checks</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
@@ -239,17 +239,17 @@ distributional assumption of a linear model.</p>
 blue lines. This may indicate that our linear model is not appropriate,
 since it does not capture the distributional nature of the response
 variable properly.</p>
-<div class="section level5">
-<h5 id="how-to-fix-this">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this"></a>
-</h5>
+<div class="section level4">
+<h4 id="how-to-fix-this">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this"></a>
+</h4>
 <p>The best way, if there are serious concerns that the model does not
 fit well to the data, is to use a different type (family) of regression
 models. In our example, it is obvious that we should better use a
 Poisson regression.</p>
 </div>
-<div class="section level5">
-<h5 id="plots-for-discrete-outcomes">Plots for discrete outcomes<a class="anchor" aria-label="anchor" href="#plots-for-discrete-outcomes"></a>
-</h5>
+<div class="section level4">
+<h4 id="plots-for-discrete-outcomes">Plots for discrete outcomes<a class="anchor" aria-label="anchor" href="#plots-for-discrete-outcomes"></a>
+</h4>
 <p>For discrete or integer outcomes (like in logistic or Poisson
 regression), density plots are not always the best choice, as they look
 somewhat “wiggly” around the actual values of the dependent variables.
@@ -273,9 +273,9 @@ observed, error bars for replicated outcomes) or
 <p><img src="check_model_files/figure-html/unnamed-chunk-8-1.png" width="100%"></p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="linearity">Linearity<a class="anchor" aria-label="anchor" href="#linearity"></a>
-</h4>
+<div class="section level3">
+<h3 id="linearity">Linearity<a class="anchor" aria-label="anchor" href="#linearity"></a>
+</h3>
 <p>This plot helps to check the assumption of linear relationship. It
 shows whether predictors may have a non-linear relationship with the
 outcome, in which case the reference line may roughly indicate that
@@ -301,9 +301,9 @@ relationship of one of the predictors and the outcome.</p>
 <span><span class="co"># linearity plot</span></span>
 <span><span class="va">out</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p><img src="check_model_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
-<div class="section level5">
-<h5 id="how-to-fix-this-1">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-1"></a>
-</h5>
+<div class="section level4">
+<h4 id="how-to-fix-this-1">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-1"></a>
+</h4>
 <p>If the green reference line is not roughly flat and horizontal, but
 rather - like in our example - U-shaped, this may indicate that some of
 the predictors probably should better be modeled as quadratic term.
@@ -325,9 +325,9 @@ to also look at <a href="https://strengejacke.github.io/ggeffects/articles/intro
 plots, including partial residuals</a>.</p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="homogeneity-of-variance---detecting-heteroscedasticity">Homogeneity of variance - detecting heteroscedasticity<a class="anchor" aria-label="anchor" href="#homogeneity-of-variance---detecting-heteroscedasticity"></a>
-</h4>
+<div class="section level3">
+<h3 id="homogeneity-of-variance---detecting-heteroscedasticity">Homogeneity of variance - detecting heteroscedasticity<a class="anchor" aria-label="anchor" href="#homogeneity-of-variance---detecting-heteroscedasticity"></a>
+</h3>
 <p>This plot helps to check the assumption of equal (or constant)
 variance, i.e. homoscedasticity. To meet this assumption, the variance
 of the residuals across different values of predictors is similar and
@@ -363,9 +363,9 @@ heteroscedasticity.</p>
 <code class="sourceCode R"><span><span class="co"># homoscedasticiy - homogeneity of variance</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p><img src="check_model_files/figure-html/unnamed-chunk-13-1.png" width="100%"></p>
-<div class="section level5">
-<h5 id="how-to-fix-this-2">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-2"></a>
-</h5>
+<div class="section level4">
+<h4 id="how-to-fix-this-2">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-2"></a>
+</h4>
 <p>There are several ways to address heteroscedasticity.</p>
 <ol style="list-style-type: decimal">
 <li><p>Calculating heteroscedasticity-consistent standard errors
@@ -385,9 +385,9 @@ heteroscedasticity.</p></li>
 </ol>
 </div>
 </div>
-<div class="section level4">
-<h4 id="influential-observations---outliers">Influential observations - outliers<a class="anchor" aria-label="anchor" href="#influential-observations---outliers"></a>
-</h4>
+<div class="section level3">
+<h3 id="influential-observations---outliers">Influential observations - outliers<a class="anchor" aria-label="anchor" href="#influential-observations---outliers"></a>
+</h3>
 <p>Outliers can be defined as particularly influential observations, and
 this plot helps detecting those outliers. Cook’s distance (<em>Cook
 1977</em>, <em>Cook &amp; Weisberg 1982</em>) is used to define
@@ -399,9 +399,9 @@ observation.</p>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p><img src="check_model_files/figure-html/unnamed-chunk-14-1.png" width="100%"></p>
 <p>In our example, everything looks well.</p>
-<div class="section level5">
-<h5 id="how-to-fix-this-3">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-3"></a>
-</h5>
+<div class="section level4">
+<h4 id="how-to-fix-this-3">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-3"></a>
+</h4>
 <p>Dealing with outliers is not straightforward, as it is not
 recommended to automatically discard any observation that has been
 marked as “an outlier”. Rather, your <em>domain knowledge</em> must be
@@ -418,9 +418,9 @@ belong to the correct distribution and, therefore, should be
 retained.</p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="multicollinearity">Multicollinearity<a class="anchor" aria-label="anchor" href="#multicollinearity"></a>
-</h4>
+<div class="section level3">
+<h3 id="multicollinearity">Multicollinearity<a class="anchor" aria-label="anchor" href="#multicollinearity"></a>
+</h3>
 <p>This plot checks for potential collinearity among predictors. In a
 nutshell multicollinearity means that once you know the effect of one
 predictor, the value of knowing the other predictor is rather low.
@@ -451,9 +451,9 @@ too high. <em>Zuur et al. (2010)</em> suggest using lower values, e.g. a
 VIF of 3 or larger may already no longer be considered as “low”.</p>
 <p>Our model clearly suffers from multicollinearity, as all predictors
 have high VIF values.</p>
-<div class="section level5">
-<h5 id="how-to-fix-this-4">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-4"></a>
-</h5>
+<div class="section level4">
+<h4 id="how-to-fix-this-4">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-4"></a>
+</h4>
 <p>Usually, predictors with (very) high VIF values should be removed
 from the model to fix multicollinearity. Some caution is needed for
 interaction terms. If interaction terms are included in a model, high
@@ -465,9 +465,9 @@ such cases, re-fit your model without interaction terms and check this
 model for collinearity among predictors.</p>
 </div>
 </div>
-<div class="section level4">
-<h4 id="normality-of-residuals">Normality of residuals<a class="anchor" aria-label="anchor" href="#normality-of-residuals"></a>
-</h4>
+<div class="section level3">
+<h3 id="normality-of-residuals">Normality of residuals<a class="anchor" aria-label="anchor" href="#normality-of-residuals"></a>
+</h3>
 <p>In linear regression, residuals should be normally distributed. This
 can be checked using so-called Q-Q plots (quantile-quantile plot) to
 compare the shapes of distributions. This plot shows the quantiles of
@@ -487,9 +487,9 @@ observations at the tails. Whether any action is needed to fix this or
 not can also depend on the results of the remaining diagnostic plots. If
 all other plots indicate no violation of assumptions, some deviation of
 normality, particularly at the tails, can be less critical.</p>
-<div class="section level5">
-<h5 id="how-to-fix-this-5">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-5"></a>
-</h5>
+<div class="section level4">
+<h4 id="how-to-fix-this-5">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-5"></a>
+</h4>
 <p>Here are some remedies to fix non-normality of residuals, according
 to <em>Pek et al. 2018</em>.</p>
 <ol style="list-style-type: decimal">
@@ -504,7 +504,6 @@ non-normally residuals. Again, this can be easily done using the
 e.g. <code>parameters::model_parameters(m1, bootstrap = TRUE)</code> or
 <a href="https://easystats.github.io/parameters/reference/bootstrap_parameters.html" class="external-link"><code>parameters::bootstrap_parameters()</code></a>.</p></li>
 </ol>
-</div>
 </div>
 </div>
 </div>
@@ -552,7 +551,7 @@ and Evolution (2010) 1:3-14.</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>.</p>
+<p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
