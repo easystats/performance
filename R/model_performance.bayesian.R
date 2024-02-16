@@ -40,7 +40,7 @@
 #'
 #'   - **PCP**: percentage of correct predictions, see [performance_pcp()].
 #'
-#' @examplesIf require("rstanarm") && require("rstantools") && require("BayesFactor")
+#' @examplesIf require("rstanarm") && require("rstantools")
 #' \donttest{
 #' model <- suppressWarnings(rstanarm::stan_glm(
 #'   mpg ~ wt + cyl,
@@ -59,12 +59,6 @@
 #'   refresh = 0
 #' ))
 #' model_performance(model)
-#'
-#' model <- BayesFactor::generalTestBF(carb ~ am + mpg, mtcars)
-#'
-#' model_performance(model)
-#' model_performance(model[3])
-#' model_performance(model, average = TRUE)
 #' }
 #' @seealso [r2_bayes]
 #' @references Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).

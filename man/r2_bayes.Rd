@@ -62,7 +62,7 @@ R2 takes both the fixed and random effects into account.
 returns a posterior sample of Bayesian R2 values.
 }
 \examples{
-\dontshow{if (require("rstanarm") && require("rstantools") && require("BayesFactor") && require("brms")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm") && require("rstantools") && require("brms")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(performance)
 \donttest{
 model <- suppressWarnings(rstanarm::stan_glm(
@@ -84,24 +84,6 @@ model <- suppressWarnings(rstanarm::stan_lmer(
 ))
 r2_bayes(model)
 }
-
-BFM <- BayesFactor::generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-FM <- BayesFactor::lmBF(mpg ~ qsec + gear, data = mtcars)
-
-r2_bayes(FM)
-r2_bayes(BFM[3])
-r2_bayes(BFM, average = TRUE) # across all models
-
-# with random effects:
-mtcars$gear <- factor(mtcars$gear)
-model <- BayesFactor::lmBF(
-  mpg ~ hp + cyl + gear + gear:wt,
-  mtcars,
-  progress = FALSE,
-  whichRandom = c("gear", "gear:wt")
-)
-
-r2_bayes(model)
 
 \donttest{
 model <- suppressWarnings(brms::brm(

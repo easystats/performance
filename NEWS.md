@@ -42,6 +42,8 @@
 * Fixed edge cases in `check_collinearity()` and `check_outliers()` for models
   with response variables of classes `Date`, `POSIXct`, `POSIXlt` or `difftime`.
 
+* Fixed issue with `check_model()` for models of package *quantreg*.
+
 # performance 0.10.8
 
 ## Changes

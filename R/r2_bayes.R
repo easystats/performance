@@ -30,7 +30,7 @@
 #'   `r2_posterior()` is the actual workhorse for `r2_bayes()` and
 #'   returns a posterior sample of Bayesian R2 values.
 #'
-#' @examplesIf require("rstanarm") && require("rstantools") && require("BayesFactor") && require("brms")
+#' @examplesIf require("rstanarm") && require("rstantools") && require("brms")
 #' library(performance)
 #' \donttest{
 #' model <- suppressWarnings(rstanarm::stan_glm(
@@ -52,24 +52,6 @@
 #' ))
 #' r2_bayes(model)
 #' }
-#'
-#' BFM <- BayesFactor::generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-#' FM <- BayesFactor::lmBF(mpg ~ qsec + gear, data = mtcars)
-#'
-#' r2_bayes(FM)
-#' r2_bayes(BFM[3])
-#' r2_bayes(BFM, average = TRUE) # across all models
-#'
-#' # with random effects:
-#' mtcars$gear <- factor(mtcars$gear)
-#' model <- BayesFactor::lmBF(
-#'   mpg ~ hp + cyl + gear + gear:wt,
-#'   mtcars,
-#'   progress = FALSE,
-#'   whichRandom = c("gear", "gear:wt")
-#' )
-#'
-#' r2_bayes(model)
 #'
 #' \donttest{
 #' model <- suppressWarnings(brms::brm(

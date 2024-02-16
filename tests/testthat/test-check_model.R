@@ -43,3 +43,11 @@ test_that("`check_model()` for invalid models", {
   m1 <- lm(y ~ 1, data = dd)
   expect_error(check_model(m1))
 })
+
+test_that("`check_model()` works for quantreg", {
+  skip_if_not_installed("quantreg")
+  data(engel, package = "quantreg")
+  qm <- quantreg::rq(foodexp ~ income, data = engel)
+  x <- check_model(qm, verbose = FALSE)
+  expect_s3_class(x, "check_model")
+})
