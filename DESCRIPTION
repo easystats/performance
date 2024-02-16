@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.8.15
+Version: 0.10.8.16
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",

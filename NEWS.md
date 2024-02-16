@@ -28,6 +28,8 @@
   `check_collinearity()` and `check_outliers()` for models with non-numeric
   response variables.
 
+* `r2_kullback()` now gives an informative error for non-supported models.
+
 ## Bug fixes
 
 * Fixed issue in `binned_residuals()` for models with binary outcome, where
