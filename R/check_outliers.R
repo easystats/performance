@@ -1987,3 +1987,12 @@ check_outliers.lmrob <- check_outliers.glmmTMB
 
 #' @export
 check_outliers.glmrob <- check_outliers.glmmTMB
+
+#' @export
+check_outliers.rq <- check_outliers.glmmTMB
+
+#' @export
+check_outliers.rqs <- check_outliers.glmmTMB
+
+#' @export
+check_outliers.rqss <- check_outliers.glmmTMB
