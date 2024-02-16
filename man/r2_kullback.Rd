@@ -2,12 +2,17 @@
 % Please edit documentation in R/r2_kl.R
 \name{r2_kullback}
 \alias{r2_kullback}
+\alias{r2_kullback.glm}
 \title{Kullback-Leibler R2}
 \usage{
-r2_kullback(model, adjust = TRUE)
+r2_kullback(model, ...)
+
+\method{r2_kullback}{glm}(model, adjust = TRUE, ...)
 }
 \arguments{
 \item{model}{A generalized linear model.}
+
+\item{...}{Additional arguments. Currently not used.}
 
 \item{adjust}{Logical, if \code{TRUE} (the default), the adjusted R2 value is
 returned.}
