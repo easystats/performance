@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.8.16
+Version: 0.10.9
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -69,7 +69,7 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.13.1),
+    bayestestR (>= 0.13.2),
     insight (>= 0.19.8),
     datawizard (>= 0.9.1),
     methods,
@@ -124,7 +124,7 @@ Suggests:
     nonnest2,
     ordinal,
     parallel,
-    parameters (>= 0.20.3),
+    parameters (>= 0.21.4),
     patchwork,
     pscl,
     psych,
@@ -136,7 +136,7 @@ Suggests:
     rstanarm,
     rstantools,
     sandwich,
-    see (>= 0.8.1),
+    see (>= 0.8.2),
     survey,
     survival,
     testthat (>= 3.2.1),
@@ -154,4 +154,3 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/insight
