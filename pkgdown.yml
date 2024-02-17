@@ -6,7 +6,7 @@ articles:
   check_outliers: check_outliers.html
   compare: compare.html
   r2: r2.html
-last_built: 2024-02-17T18:15Z
+last_built: 2024-02-17T18:22Z
 urls:
   reference: https://easystats.github.io/performance/reference
   article: https://easystats.github.io/performance/articles
