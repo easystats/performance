@@ -1,3 +1,9 @@
+# performance 0.10.10
+
+## New supported models
+
+* Rudimentary support for models of class `serp` from package *serp*.
+
 # performance 0.10.9
 
 ## Changes

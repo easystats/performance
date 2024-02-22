@@ -345,7 +345,7 @@ check_model.model_fit <- function(x,
   dat$NORM <- .diag_norm(model, verbose = verbose)
   dat$NCV <- .diag_ncv(model, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
-  dat$OUTLIERS <- check_outliers(model, method = "cook")
+  dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
   if (is.null(dat$OUTLIERS)) {
     threshold <- NULL
   } else {
@@ -370,7 +370,7 @@ check_model.model_fit <- function(x,
   dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
-  dat$OUTLIERS <- check_outliers(model, method = "cook")
+  dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
   if (is.null(dat$OUTLIERS)) {
     threshold <- NULL
   } else {
@@ -379,7 +379,7 @@ check_model.model_fit <- function(x,
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   dat$PP_CHECK <- .safe(check_predictions(model, ...))
   if (isTRUE(model_info$is_binomial)) {
-    dat$BINNED_RESID <- binned_residuals(model, verbose = verbose, ...)
+    dat$BINNED_RESID <- .safe(binned_residuals(model, verbose = verbose, ...))
   }
   if (isTRUE(model_info$is_count)) {
     dat$OVERDISPERSION <- .diag_overdispersion(model)

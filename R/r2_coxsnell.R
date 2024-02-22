@@ -244,6 +244,9 @@ r2_coxsnell.clm <- function(model, ...) {
 r2_coxsnell.crch <- r2_coxsnell.clm
 
 #' @export
+r2_coxsnell.serp <- r2_coxsnell.clm
+
+#' @export
 r2_coxsnell.cpglm <- r2_coxsnell.clm
 
 #' @export

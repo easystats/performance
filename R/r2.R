@@ -387,6 +387,9 @@ r2.censReg <- function(model, ...) {
 r2.cpglm <- r2.censReg
 
 #' @export
+r2.serp <- r2.censReg
+
+#' @export
 r2.clm <- r2.censReg
 
 #' @export
