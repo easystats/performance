@@ -132,7 +132,7 @@ One common approach for this is to compute multivariate distance metrics such as
 In *{performance}*'s `check_outliers()`, one can use this approach with `method = "mcd"`.^[Our default threshold for the MCD method is defined by `stats::qchisq(p = 1 - 0.001, df = ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
 ```{r multivariate}
-outliers <- check_outliers(data, method = "mcd")
+outliers <- check_outliers(data, method = "mcd", verbose = FALSE)
 outliers
 ```
 
@@ -227,7 +227,7 @@ rempsyc::nice_scatter(data, "height", "weight")
 Using either the *z*-score or MCD methods, our model-consistent observation will be incorrectly flagged as an outlier or influential observation.
 
 ```{r}
-outliers <- check_outliers(model, method = c("zscore_robust", "mcd"))
+outliers <- check_outliers(model, method = c("zscore_robust", "mcd"), verbose = FALSE)
 which(outliers)
 ```
 
@@ -248,7 +248,7 @@ The *{performance}* package also offers an alternative, consensus-based approach
 In practice, this approach computes a composite outlier score, formed of the average of the binary (0 or 1) classification results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In *{performance}*'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
 
 ```{r multimethod, fig.cap = "Visual depiction of outliers using several different statistical outlier detection methods."}
-outliers <- check_outliers(model, method = c("zscore_robust", "mcd", "cook"))
+outliers <- check_outliers(model, method = c("zscore_robust", "mcd", "cook"), verbose = FALSE)
 which(outliers)
 ```
 

@@ -236,17 +236,17 @@ test_performance <- function(..., reference = 1, verbose = TRUE) {
 #' @export
 test_performance.default <- function(..., reference = 1, include_formula = FALSE, verbose = TRUE) {
   # Attribute class to list and get names from the global environment
-  objects <- insight::ellipsis_info(..., only_models = TRUE)
+  my_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # validation checks (will throw error if non-valid objects)
-  objects <- .test_performance_checks(objects, verbose = verbose)
+  my_objects <- .test_performance_checks(my_objects, verbose = verbose)
 
   # ensure proper object names
-  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
+  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_performance(objects, reference = reference, include_formula = include_formula)
+  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+    test_performance(my_objects, reference = reference, include_formula = include_formula)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
   }
@@ -421,10 +421,10 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
 
 .test_performance_init <- function(objects, include_formula = FALSE) {
-  names <- insight::model_name(objects, include_formula = include_formula)
+  model_names <- insight::model_name(objects, include_formula = include_formula)
   out <- data.frame(
     Name = names(objects),
-    Model = names,
+    Model = model_names,
     stringsAsFactors = FALSE
   )
   row.names(out) <- NULL
@@ -453,7 +453,7 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
   if (same_response && !inherits(objects, "ListLavaan") && isFALSE(attributes(objects)$same_response)) {
     insight::format_error(
-      "The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models."
+      "The models' dependent variables don't have the same data, which is a prerequisite to compare them. Probably the proportion of missing data differs between models." # nolint
     )
   }
 

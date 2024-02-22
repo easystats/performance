@@ -30,7 +30,7 @@
 #'   `r2_posterior()` is the actual workhorse for `r2_bayes()` and
 #'   returns a posterior sample of Bayesian R2 values.
 #'
-#' @examplesIf require("rstanarm") && require("rstantools") && require("BayesFactor") && require("brms")
+#' @examplesIf require("rstanarm") && require("rstantools") && require("brms")
 #' library(performance)
 #' \donttest{
 #' model <- suppressWarnings(rstanarm::stan_glm(
@@ -52,24 +52,6 @@
 #' ))
 #' r2_bayes(model)
 #' }
-#'
-#' BFM <- BayesFactor::generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-#' FM <- BayesFactor::lmBF(mpg ~ qsec + gear, data = mtcars)
-#'
-#' r2_bayes(FM)
-#' r2_bayes(BFM[3])
-#' r2_bayes(BFM, average = TRUE) # across all models
-#'
-#' # with random effects:
-#' mtcars$gear <- factor(mtcars$gear)
-#' model <- BayesFactor::lmBF(
-#'   mpg ~ hp + cyl + gear + gear:wt,
-#'   mtcars,
-#'   progress = FALSE,
-#'   whichRandom = c("gear", "gear:wt")
-#' )
-#'
-#' r2_bayes(model)
 #'
 #' \donttest{
 #' model <- suppressWarnings(brms::brm(
@@ -201,28 +183,26 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           })
           names(br2) <- res
         }
+      } else if (mi$is_mixed) {
+        br2 <- list(
+          R2_Bayes = as.vector(rstantools::bayes_R2(
+            model,
+            re.form = NULL,
+            re_formula = NULL,
+            summary = FALSE
+          )),
+          R2_Bayes_marginal = as.vector(rstantools::bayes_R2(
+            model,
+            re.form = NA,
+            re_formula = NA,
+            summary = FALSE
+          ))
+        )
+        names(br2$R2_Bayes) <- rep("Conditional R2", length(br2$R2_Bayes))
+        names(br2$R2_Bayes_marginal) <- rep("Marginal R2", length(br2$R2_Bayes))
       } else {
-        if (mi$is_mixed) {
-          br2 <- list(
-            R2_Bayes = as.vector(rstantools::bayes_R2(
-              model,
-              re.form = NULL,
-              re_formula = NULL,
-              summary = FALSE
-            )),
-            R2_Bayes_marginal = as.vector(rstantools::bayes_R2(
-              model,
-              re.form = NA,
-              re_formula = NA,
-              summary = FALSE
-            ))
-          )
-          names(br2$R2_Bayes) <- rep("Conditional R2", length(br2$R2_Bayes))
-          names(br2$R2_Bayes_marginal) <- rep("Marginal R2", length(br2$R2_Bayes))
-        } else {
-          br2 <- list(R2_Bayes = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
-          names(br2$R2_Bayes) <- rep("R2", length(br2$R2_Bayes))
-        }
+        br2 <- list(R2_Bayes = as.vector(rstantools::bayes_R2(model, summary = FALSE)))
+        names(br2$R2_Bayes) <- rep("R2", length(br2$R2_Bayes))
       }
 
       br2
@@ -400,7 +380,7 @@ as.data.frame.r2_bayes <- function(x, ...) {
 
   # remove sig and g cols
   params_theta <- params[, !grepl(pattern = "^sig2$|^g_|^g$", colnames(params))]
-  params_sigma <- sqrt(params[, grepl(pattern = "^sig2$", colnames(params))])
+  params_sigma <- sqrt(params[, colnames(params) == "sig2"])
 
   # Model Matrix
   mm <- insight::get_modelmatrix(model[1])

@@ -24,6 +24,21 @@
 * Clarification in the documentation of the `estimator` argument for
   `performance_aic()`.
 
+* Improved plots for overdispersion-checks for negative-binomial models from
+  package *glmmTMB* (affects `check_overdispersion()` and `check_mnodel()`).
+
+* Improved detection rates for singularity in `check_singularity()` for models
+  from package *glmmTMB*.
+
+* For model of class `glmmTMB`, deviance residuals are now used in the
+  `check_model()` plot.
+
+* Improved (better to understand) error messages for `check_model()`,
+  `check_collinearity()` and `check_outliers()` for models with non-numeric
+  response variables.
+
+* `r2_kullback()` now gives an informative error for non-supported models.
+
 ## Bug fixes
 
 * Fixed issue in `binned_residuals()` for models with binary outcome, where
@@ -31,6 +46,14 @@
 
 * `performance_score()` should no longer fail for models where scoring rules
   can't be calculated. Instead, an informative message is returned.
+
+* `check_outliers()` now properly accept the `percentage_central` argument when
+  using the `"mcd"` method.
+
+* Fixed edge cases in `check_collinearity()` and `check_outliers()` for models
+  with response variables of classes `Date`, `POSIXct`, `POSIXlt` or `difftime`.
+
+* Fixed issue with `check_model()` for models of package *quantreg*.
 
 # performance 0.10.8
 

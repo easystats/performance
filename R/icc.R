@@ -532,14 +532,12 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
                                  name_full = "ICC",
                                  verbose = TRUE) {
   vars <- tryCatch(
-    {
-      insight::get_variance(model,
-        name_fun = name_fun,
-        name_full = name_full,
-        tolerance = tolerance,
-        verbose = verbose
-      )
-    },
+    insight::get_variance(model,
+      name_fun = name_fun,
+      name_full = name_full,
+      tolerance = tolerance,
+      verbose = verbose
+    ),
     error = function(e) {
       if (inherits(e, c("simpleError", "error")) && verbose) {
         insight::print_color(e$message, "red")
@@ -597,7 +595,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 # prepare arguments for "lme4::bootMer"
 .do_lme4_bootmer <- function(model, .boot_fun, iterations, dots) {
   insight::check_if_installed(c("lme4", "boot"))
-  args <- list(
+  my_args <- list(
     model,
     .boot_fun,
     nsim = iterations,
@@ -608,25 +606,25 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   )
   # add/overwrite dot-args
   if (!is.null(dots[["use.u"]])) {
-    args$use.u <- dots[["use.u"]]
+    my_args$use.u <- dots[["use.u"]]
   }
   if (!is.null(dots[["re.form"]])) {
-    args$re.form <- dots[["re.form"]]
+    my_args$re.form <- dots[["re.form"]]
   }
   if (!is.null(dots[["type"]])) {
-    args$type <- dots[["type"]]
-    if (args$type == "semiparametric") {
-      args$use.u <- TRUE
+    my_args$type <- dots[["type"]]
+    if (my_args$type == "semiparametric") {
+      my_args$use.u <- TRUE
     }
   }
   if (!is.null(dots[["parallel"]])) {
-    args$parallel <- dots[["parallel"]]
+    my_args$parallel <- dots[["parallel"]]
   }
   if (!is.null(dots[["ncpus"]])) {
-    args$ncpus <- dots[["ncpus"]]
+    my_args$ncpus <- dots[["ncpus"]]
   }
   # bootsrap
-  do.call(lme4::bootMer, args)
+  do.call(lme4::bootMer, args = my_args)
 }
 
 
@@ -664,12 +662,10 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   }
 
   model_rank <- tryCatch(
-    {
-      if (!is.null(model$rank)) {
-        model$rank - df_int
-      } else {
-        insight::n_parameters(model) - df_int
-      }
+    if (!is.null(model$rank)) {
+      model$rank - df_int
+    } else {
+      insight::n_parameters(model) - df_int
     },
     error = function(e) insight::n_parameters(model) - df_int
   )

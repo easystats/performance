@@ -405,6 +405,20 @@ check_collinearity.zerocount <- function(x,
 
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
   v <- insight::get_varcov(x, component = component, verbose = FALSE)
+
+  # sanity check
+  if (is.null(v)) {
+    if (isTRUE(verbose)) {
+      insight::format_alert(
+        paste(
+          sprintf("Could not extract the variance-covariance matrix for the %s component of the model.", component),
+          "Please try to run `vcov(model)`, which may help identifying the problem."
+        )
+      )
+    }
+    return(NULL)
+  }
+
   term_assign <- .term_assignments(x, component, verbose = verbose)
 
   # any assignment found?
@@ -432,10 +446,8 @@ check_collinearity.zerocount <- function(x,
   if (insight::has_intercept(x)) {
     v <- v[-1, -1]
     term_assign <- term_assign[-1]
-  } else {
-    if (isTRUE(verbose)) {
-      insight::format_alert("Model has no intercept. VIFs may not be sensible.")
-    }
+  } else if (isTRUE(verbose)) {
+    insight::format_alert("Model has no intercept. VIFs may not be sensible.")
   }
 
   f <- insight::find_formula(x)
@@ -474,6 +486,11 @@ check_collinearity.zerocount <- function(x,
 
   result <- vector("numeric")
   na_terms <- vector("numeric")
+
+  # sanity check - models with offset(?) may contain too many term assignments
+  if (length(term_assign) > ncol(v)) {
+    term_assign <- term_assign[seq_len(ncol(v))]
+  }
 
   for (term in 1:n.terms) {
     subs <- which(term_assign == term)

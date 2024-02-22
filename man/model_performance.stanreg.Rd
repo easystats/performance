@@ -60,7 +60,7 @@ values mean better fit. See \code{?loo::waic}.
 }
 }
 \examples{
-\dontshow{if (require("rstanarm") && require("rstantools") && require("BayesFactor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm") && require("rstantools")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 model <- suppressWarnings(rstanarm::stan_glm(
   mpg ~ wt + cyl,
@@ -79,12 +79,6 @@ model <- suppressWarnings(rstanarm::stan_glmer(
   refresh = 0
 ))
 model_performance(model)
-
-model <- BayesFactor::generalTestBF(carb ~ am + mpg, mtcars)
-
-model_performance(model)
-model_performance(model[3])
-model_performance(model, average = TRUE)
 }
 \dontshow{\}) # examplesIf}
 }

@@ -183,23 +183,27 @@ check_model.default <- function(x,
 
   minfo <- insight::model_info(x, verbose = FALSE)
 
-  ca <- tryCatch(
-    {
-      if (minfo$is_bayesian) {
-        suppressWarnings(.check_assumptions_stan(x, ...))
-      } else if (minfo$is_linear) {
-        suppressWarnings(.check_assumptions_linear(x, minfo, verbose, ...))
-      } else {
-        suppressWarnings(.check_assumptions_glm(x, minfo, verbose, ...))
-      }
+  assumptions_data <- tryCatch(
+    if (minfo$is_bayesian) {
+      suppressWarnings(.check_assumptions_stan(x, ...))
+    } else if (minfo$is_linear) {
+      suppressWarnings(.check_assumptions_linear(x, minfo, verbose, ...))
+    } else {
+      suppressWarnings(.check_assumptions_glm(x, minfo, verbose, ...))
     },
     error = function(e) {
-      NULL
+      e
     }
   )
 
-  if (is.null(ca)) {
-    insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
+  if (inherits(assumptions_data, c("error", "simpleError"))) {
+    pattern <- "(\n|\\s{2,})"
+    replacement <- " "
+    cleaned_string <- gsub(pattern, replacement, assumptions_data$message)
+    insight::format_error(
+      paste("`check_model()` returned following error:", cleaned_string),
+      paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
+    )
   }
 
   # try to find sensible default for "type" argument
@@ -214,21 +218,22 @@ check_model.default <- function(x,
     show_dots <- is.null(n) || n <= 1e5
   }
 
-  attr(ca, "panel") <- panel
-  attr(ca, "dot_size") <- dot_size
-  attr(ca, "line_size") <- line_size
-  attr(ca, "check") <- check
-  attr(ca, "alpha") <- alpha
-  attr(ca, "dot_alpha") <- dot_alpha
-  attr(ca, "show_dots") <- isTRUE(show_dots)
-  attr(ca, "detrend") <- detrend
-  attr(ca, "colors") <- colors
-  attr(ca, "theme") <- theme
-  attr(ca, "model_info") <- minfo
-  attr(ca, "overdisp_type") <- list(...)$plot_type
-  attr(ca, "bandwidth") <- bandwidth
-  attr(ca, "type") <- type
-  ca
+  attr(assumptions_data, "panel") <- panel
+  attr(assumptions_data, "dot_size") <- dot_size
+  attr(assumptions_data, "line_size") <- line_size
+  attr(assumptions_data, "check") <- check
+  attr(assumptions_data, "alpha") <- alpha
+  attr(assumptions_data, "dot_alpha") <- dot_alpha
+  attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
+  attr(assumptions_data, "detrend") <- detrend
+  attr(assumptions_data, "colors") <- colors
+  attr(assumptions_data, "theme") <- theme
+  attr(assumptions_data, "model_info") <- minfo
+  attr(assumptions_data, "overdisp_type") <- list(...)$plot_type
+  attr(assumptions_data, "bandwidth") <- bandwidth
+  attr(assumptions_data, "type") <- type
+  attr(assumptions_data, "model_class") <- class(x)[1]
+  assumptions_data
 }
 
 
@@ -263,7 +268,7 @@ check_model.stanreg <- function(x,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                detrend = FALSE,
+                                detrend = TRUE,
                                 show_dots = NULL,
                                 bandwidth = "nrd",
                                 type = "density",
@@ -302,7 +307,7 @@ check_model.model_fit <- function(x,
                                   dot_alpha = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
-                                  detrend = FALSE,
+                                  detrend = TRUE,
                                   show_dots = NULL,
                                   bandwidth = "nrd",
                                   type = "density",
@@ -335,7 +340,7 @@ check_model.model_fit <- function(x,
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$NORM <- .diag_norm(model, verbose = verbose)
   dat$NCV <- .diag_ncv(model, verbose = verbose)
@@ -362,7 +367,7 @@ check_model.model_fit <- function(x,
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, verbose = verbose)
+  dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- check_outliers(model, method = "cook")

@@ -23,9 +23,11 @@
 #'   'Details'). If a numeric value is given, it will be used as the threshold
 #'   for any of the method run.
 #' @param ID Optional, to report an ID column along with the row number.
+#' @param verbose Toggle warnings.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
-#' they are  passed down to [stats::mahalanobis()].
+#' they are  passed down to [stats::mahalanobis()]. `percentage_central` can
+#' be specified when `method = "mcd"`.
 #'
 #' @return A logical vector of the detected outliers with a nice printing
 #'   method: a check (message) on whether outliers were detected or not. The
@@ -160,6 +162,9 @@
 #' the data (by default, 66\%), before computing the Mahalanobis Distance. This
 #' is deemed to be a more robust method of identifying and removing outliers
 #' than regular Mahalanobis distance.
+#' This method has a `percentage_central` argument that allows specifying
+#' the breakdown point (0.75, the default, is recommended by Leys et al. 2018,
+#' but a commonly used alternative is 0.50).
 #'
 #'  - **Invariant Coordinate Selection (ICS)**:
 #'  The outlier are detected using ICS, which by default uses an alpha threshold
@@ -308,7 +313,7 @@
 #' @examplesIf require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")
 #' \donttest{
 #' # You can also run all the methods
-#' check_outliers(data, method = "all")
+#' check_outliers(data, method = "all", verbose = FALSE)
 #'
 #' # For statistical models ---------------------------------------------
 #' # select only mpg and disp (continuous)
@@ -344,6 +349,7 @@ check_outliers.default <- function(x,
                                    method = c("cook", "pareto"),
                                    threshold = NULL,
                                    ID = NULL,
+                                   verbose = TRUE,
                                    ...) {
   # Check args
   if (all(method == "all")) {
@@ -385,16 +391,31 @@ check_outliers.default <- function(x,
   )
 
   # Get data
-  data <- insight::get_data(x, verbose = FALSE)
+  my_data <- insight::get_data(x, verbose = FALSE)
+
+  # sanity check for date, POSIXt and difftime variables
+  if (any(vapply(my_data, inherits, FUN.VALUE = logical(1), what = c("Date", "POSIXt", "difftime"))) && verbose) {
+    insight::format_alert(
+      paste(
+        "Date variables are not supported for outliers detection. These will be ignored.",
+        "Make sure any date variables are converted to numeric or factor {.b before} fitting the model."
+      )
+    )
+  }
 
   # Remove non-numerics
-  data <- datawizard::data_select(data, select = is.numeric)
+  my_data <- datawizard::data_select(my_data, select = is.numeric, verbose = FALSE)
+
+  # check if any data left
+  if (is.null(my_data) || ncol(my_data) == 0) {
+    insight::format_error("No numeric variables found. No data to check for outliers.")
+  }
 
   # Thresholds
   if (is.null(threshold)) {
-    thresholds <- .check_outliers_thresholds(data)
+    thresholds <- .check_outliers_thresholds(my_data)
   } else if (is.list(threshold)) {
-    thresholds <- .check_outliers_thresholds(data)
+    thresholds <- .check_outliers_thresholds(my_data)
     thresholds[names(threshold)] <- threshold[names(threshold)]
   } else {
     insight::format_error(
@@ -405,21 +426,21 @@ check_outliers.default <- function(x,
     )
   }
 
-  if (!missing(ID)) {
+  if (!missing(ID) && verbose) {
     insight::format_warning(paste0("ID argument not supported for model objects of class `", class(x)[1], "`."))
   }
 
   # Others
   if (all(method %in% c("cook", "pareto"))) {
-    df <- data.frame(Row = seq_len(nrow(as.data.frame(data))))
+    my_df <- data.frame(Row = seq_len(nrow(as.data.frame(my_data))))
     outlier_count <- list()
     outlier_var <- list()
   } else {
-    out <- check_outliers(data, method, threshold)
+    out <- check_outliers(my_data, method, threshold)
     outlier_var <- attributes(out)$outlier_var
     outlier_count <- attributes(out)$outlier_count
-    df <- attributes(out)$data
-    df <- df[!names(df) == "Outlier"]
+    my_df <- attributes(out)$data
+    my_df <- my_df[names(my_df) != "Outlier"]
   }
 
   # Cook
@@ -429,7 +450,7 @@ check_outliers.default <- function(x,
       threshold = thresholds$cook
     )$data_cook
 
-    df <- datawizard::data_merge(list(df, data_cook),
+    my_df <- datawizard::data_merge(list(my_df, data_cook),
       join = "full",
       by = "Row"
     )
@@ -459,7 +480,7 @@ check_outliers.default <- function(x,
       )
     }
   } else {
-    method <- method[!(method == "cook")]
+    method <- method[method != "cook"]
   }
 
   # Pareto
@@ -469,7 +490,7 @@ check_outliers.default <- function(x,
       threshold = thresholds$pareto
     )$data_pareto
 
-    df <- datawizard::data_merge(list(df, data_pareto),
+    my_df <- datawizard::data_merge(list(my_df, data_pareto),
       join = "full",
       by = "Row"
     )
@@ -499,7 +520,7 @@ check_outliers.default <- function(x,
       )
     }
   } else {
-    method <- method[!(method == "pareto")]
+    method <- method[method != "pareto"]
   }
 
   outlier_count$all <- datawizard::convert_na_to(outlier_count$all,
@@ -531,21 +552,21 @@ check_outliers.default <- function(x,
   thresholds <- thresholds[names(thresholds) %in% method]
 
   # Composite outlier score
-  df$Outlier <- rowMeans(df[grepl("Outlier_", names(df), fixed = TRUE)])
-  df <- df[c(names(df)[names(df) != "Outlier"], "Outlier")]
+  my_df$Outlier <- rowMeans(my_df[grepl("Outlier_", names(my_df), fixed = TRUE)])
+  my_df <- my_df[c(names(my_df)[names(my_df) != "Outlier"], "Outlier")]
 
   # Out
-  outlier <- df$Outlier > 0.5
+  outlier <- my_df$Outlier > 0.5
 
   # Attributes
   class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
-  attr(outlier, "data") <- df
+  attr(outlier, "data") <- my_df
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
   attr(outlier, "influential_obs") <- .influential_obs(x)
   attr(outlier, "variables") <- "(Whole model)"
-  attr(outlier, "raw_data") <- data
+  attr(outlier, "raw_data") <- my_data
   attr(outlier, "outlier_var") <- outlier_var
   attr(outlier, "outlier_count") <- outlier_count
 
@@ -798,7 +819,7 @@ check_outliers.data.frame <- function(x,
   )
 
   # Remove non-numerics
-  data <- x
+  my_data <- x
   x <- x[, vapply(x, is.numeric, logical(1)), drop = FALSE]
 
   # Check args
@@ -841,20 +862,20 @@ check_outliers.data.frame <- function(x,
   outlier_var <- out.meta$outlier_var
 
   # Combine outlier data
-  df <- out[vapply(out, is.data.frame, logical(1))]
-  if (length(df) > 1 && !is.null(ID)) {
-    df <- datawizard::data_merge(df, by = c("Row", ID))
-  } else if (length(df) > 1) {
-    df <- datawizard::data_merge(df, by = "Row")
+  my_df <- out[vapply(out, is.data.frame, logical(1))]
+  if (length(my_df) > 1 && !is.null(ID)) {
+    my_df <- datawizard::data_merge(my_df, by = c("Row", ID))
+  } else if (length(my_df) > 1) {
+    my_df <- datawizard::data_merge(my_df, by = "Row")
   } else {
-    df <- df[[1]]
+    my_df <- my_df[[1]]
   }
 
   # Composite outlier score
-  df$Outlier <- rowMeans(df[grepl("Outlier_", names(df), fixed = TRUE)])
+  my_df$Outlier <- rowMeans(my_df[grepl("Outlier_", names(my_df), fixed = TRUE)])
 
   # Out
-  outlier <- df$Outlier > 0.5
+  outlier <- my_df$Outlier > 0.5
 
   # Combine outlier frequency table
   if (length(outlier_count) > 1 && !is.null(ID)) {
@@ -896,12 +917,12 @@ check_outliers.data.frame <- function(x,
 
   # Attributes
   class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
-  attr(outlier, "data") <- df
+  attr(outlier, "data") <- my_df
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
   attr(outlier, "variables") <- names(x)
-  attr(outlier, "raw_data") <- data
+  attr(outlier, "raw_data") <- my_data
   attr(outlier, "outlier_var") <- outlier_var
   attr(outlier, "outlier_count") <- outlier_count
   outlier
@@ -914,7 +935,7 @@ check_outliers.data.frame <- function(x,
     outlier.list <- lapply(outlier.list, function(x) {
       x[x[[Outlier_method]] >= 0.5, ]
     })
-    outlier.list <- outlier.list[lapply(outlier.list, nrow) > 0]
+    outlier.list <- outlier.list[vapply(outlier.list, nrow, numeric(1)) > 0]
     outlier.list <- lapply(outlier.list, datawizard::data_remove,
       Outlier_method,
       as_data_frame = TRUE
@@ -1098,8 +1119,8 @@ check_outliers.data.frame <- function(x,
     out <- c(out, .check_outliers_mcd(
       x,
       threshold = thresholds$mcd,
-      percentage_central = 0.66,
-      ID.names = ID.names
+      ID.names = ID.names,
+      ...
     ))
 
     count.table <- datawizard::data_filter(
@@ -1217,7 +1238,7 @@ check_outliers.grouped_df <- function(x,
   }
 
   # Initialize elements
-  data <- data.frame()
+  my_data <- data.frame()
   out <- NULL
   thresholds <- list()
   outlier_var <- list()
@@ -1226,24 +1247,24 @@ check_outliers.grouped_df <- function(x,
   # Loop through groups
   for (i in seq_along(grps)) {
     rows <- grps[[i]]
-    subset <- check_outliers(
+    outliers_subset <- check_outliers(
       as.data.frame(x[rows, ]),
       method = method,
       threshold = threshold,
       ID = ID,
       ...
     )
-    data <- rbind(data, as.data.frame(subset))
-    out <- c(out, subset)
-    thresholds[[paste0("group_", i)]] <- attributes(subset)$threshold
+    my_data <- rbind(my_data, as.data.frame(outliers_subset))
+    out <- c(out, outliers_subset)
+    thresholds[[paste0("group_", i)]] <- attributes(outliers_subset)$threshold
     outlier_var[[i]] <- lapply(
-      attributes(subset)$outlier_var, lapply, function(y) {
+      attributes(outliers_subset)$outlier_var, lapply, function(y) {
         y$Row <- rows[which(seq_along(rows) %in% y$Row)]
         y
       }
     )
     outlier_count[[i]] <- lapply(
-      attributes(subset)$outlier_count, function(y) {
+      attributes(outliers_subset)$outlier_count, function(y) {
         y$Row <- rows[which(seq_along(rows) %in% y$Row)]
         y
       }
@@ -1264,16 +1285,16 @@ check_outliers.grouped_df <- function(x,
     info$groups$.rows[[x]] <- as.data.frame(info$groups$.rows[[x]])
   })
 
-  data[names(info$groups)[1]] <- do.call(rbind, groups)
-  data <- datawizard::data_relocate(
-    data,
+  my_data[names(info$groups)[1]] <- do.call(rbind, groups)
+  my_data <- datawizard::data_relocate(
+    my_data,
     select = names(info$groups)[1],
     after = "Row"
   )
-  data$Row <- seq_len(nrow(data))
+  my_data$Row <- seq_len(nrow(my_data))
 
   class(out) <- c("check_outliers", "see_check_outliers", class(out))
-  attr(out, "data") <- data
+  attr(out, "data") <- my_data
   attr(out, "method") <- method
   attr(out, "threshold") <- thresholds[[1]]
   attr(out, "text_size") <- 3
@@ -1434,7 +1455,7 @@ check_outliers.metabin <- check_outliers.metagen
   bci <- 1 - 0.001
   cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
   pareto <- 0.7
-  mahalanobis <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
+  mahalanobis_value <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
   mahalanobis_robust <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
   mcd <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
   ics <- 0.001
@@ -1451,7 +1472,7 @@ check_outliers.metabin <- check_outliers.metagen
     bci = bci,
     cook = cook,
     pareto = pareto,
-    mahalanobis = mahalanobis,
+    mahalanobis = mahalanobis_value,
     mahalanobis_robust = mahalanobis_robust,
     mcd = mcd,
     ics = ics,
@@ -1726,12 +1747,29 @@ check_outliers.metabin <- check_outliers.metagen
 
 .check_outliers_mcd <- function(x,
                                 threshold = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
-                                percentage_central = 0.50,
-                                ID.names = NULL) {
+                                percentage_central = 0.75,
+                                ID.names = NULL,
+                                verbose = TRUE,
+                                ...) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
     out <- cbind(out, ID.names)
+  }
+
+  # check whether N to p ratio is not too large, else MCD flags too many outliers
+  # See #672: This does seem to be a function of the N/p (N = sample size; p =
+  # number of parameters) ratio. When it is larger than 10, the % of outliers
+  # flagged is okay (in well behaved data). This makes sense: the MCD looks at
+  # the cov matrix of subsamples of the data - with high dimensional data, small
+  # samples sizes will give highly variable cov matrices, as so the "smallest"
+  # one will probably miss-represent the data.
+
+  if ((nrow(x) / ncol(x)) <= 10 && isTRUE(verbose)) {
+    insight::format_warning(
+      "The sample size is too small in your data, relative to the number of variables, for MCD to be reliable.",
+      "You may try to increase the `percentage_central` argument (must be between 0 and 1), or choose another method."
+    )
   }
 
   insight::check_if_installed("MASS")
@@ -1949,3 +1987,12 @@ check_outliers.lmrob <- check_outliers.glmmTMB
 
 #' @export
 check_outliers.glmrob <- check_outliers.glmmTMB
+
+#' @export
+check_outliers.rq <- check_outliers.glmmTMB
+
+#' @export
+check_outliers.rqs <- check_outliers.glmmTMB
+
+#' @export
+check_outliers.rqss <- check_outliers.glmmTMB
