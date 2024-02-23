@@ -1,7 +1,7 @@
 #' @export
 check_normality.htest <- function(x, ...) {
-  data <- insight::get_data(x)
-  if (is.null(data)) {
+  model_data <- insight::get_data(x)
+  if (is.null(model_data)) {
     insight::format_error(
       "Cannot check assumptions - Unable to retrieve data from `htest` object."
     )
@@ -11,31 +11,31 @@ check_normality.htest <- function(x, ...) {
 
   if (grepl("Welch", method, fixed = TRUE) ||
     grepl("F test to compare two variances", method, fixed = TRUE)) {
-    m1 <- stats::lm(data[[1]] ~ 1)
-    m2 <- stats::lm(data[[2]] ~ 1)
+    m1 <- stats::lm(model_data[[1]] ~ 1)
+    m2 <- stats::lm(model_data[[2]] ~ 1)
 
     out <- check_normality(m1)
     out[2] <- check_normality(m2)[1]
     attr(out, "units") <- c("Group1", "Group2")
   } else if (grepl("Two Sample t-test", method, fixed = TRUE)) {
     m <- stats::lm(
-      formula = Value ~ factor(Name),
-      data = datawizard::data_to_long(data)
+      formula = value ~ factor(name),
+      data = datawizard::data_to_long(model_data)
     )
 
     out <- check_normality(m)
   } else if (grepl("One Sample t-test", method, fixed = TRUE)) {
-    m <- stats::lm(data[[1]] ~ 1)
+    m <- stats::lm(model_data[[1]] ~ 1)
 
     out <- check_normality(m)
   } else if (grepl("Paired t-test", method, fixed = TRUE)) {
-    d <- data[[1]] - data[[2]]
+    d <- model_data[[1]] - model_data[[2]]
     m <- stats::lm(d ~ 1)
 
     out <- check_normality(m)
   } else if (grepl("One-way analysis of means (not assuming equal variances)", method, fixed = TRUE)) {
-    data <- split(data, data[[2]])
-    outs <- lapply(data, function(d) {
+    model_data <- split(model_data, model_data[[2]])
+    outs <- lapply(model_data, function(d) {
       check_normality(stats::lm(d[[1]] ~ 1))
     })
 
@@ -43,11 +43,11 @@ check_normality.htest <- function(x, ...) {
     attributes(out) <- attributes(outs[[1]])
     attr(out, "units") <- paste0("Group", seq_along(outs))
   } else if (grepl("One-way analysis of means", method, fixed = TRUE)) {
-    m <- stats::aov(data[[1]] ~ factor(data[[2]]))
+    m <- stats::aov(model_data[[1]] ~ factor(model_data[[2]]))
 
     out <- check_normality(m)
   } else if (grepl("Pearson's product-moment correlation", method, fixed = TRUE)) {
-    out <- .MVN_hz(data)[["p value"]]
+    out <- .MVN_hz(model_data)[["p value"]]
     class(out) <- c("check_normality", "see_check_normality", "numeric")
     attr(out, "type") <- "residuals"
   } else if (grepl("Pearson's Chi-squared test", method, fixed = TRUE) ||
@@ -73,8 +73,8 @@ check_normality.htest <- function(x, ...) {
 
 #' @export
 check_homogeneity.htest <- function(x, ...) {
-  data <- insight::get_data(x)
-  if (is.null(data)) {
+  model_data <- insight::get_data(x)
+  if (is.null(model_data)) {
     insight::format_error(
       "Cannot check assumptions - Unable to retrieve data from `htest` object."
     )
@@ -88,11 +88,14 @@ check_homogeneity.htest <- function(x, ...) {
 
   if (grepl("Two Sample t-test", method, fixed = TRUE)) {
     m <- stats::lm(
-      formula = Value ~ factor(Name),
-      data = datawizard::data_to_long(data)
+      formula = value ~ factor(name),
+      data = datawizard::data_to_long(model_data)
     )
   } else if (grepl("One-way analysis of means", method, fixed = TRUE)) {
-    m <- stats::aov(stats::reformulate(names(data)[2], response = names(data)[1]), data = data)
+    m <- stats::aov(
+      stats::reformulate(names(model_data)[2], response = names(model_data)[1]),
+      data = model_data
+    )
   } else {
     insight::format_error(
       "This `htest` is not supported (or this assumption is not required for this test)."
@@ -109,8 +112,8 @@ check_homogeneity.htest <- function(x, ...) {
 
 #' @export
 check_symmetry.htest <- function(x, ...) {
-  data <- insight::get_data(x)
-  if (is.null(data)) {
+  model_data <- insight::get_data(x)
+  if (is.null(model_data)) {
     insight::format_error(
       "Cannot check assumptions - Unable to retrieve data from `htest` object."
     )
@@ -118,10 +121,10 @@ check_symmetry.htest <- function(x, ...) {
   method <- x[["method"]]
 
   if (grepl("signed rank", method, fixed = TRUE)) {
-    if (ncol(data) > 1) {
-      out <- check_symmetry(data[[1]] - data[[2]])
+    if (ncol(model_data) > 1) {
+      out <- check_symmetry(model_data[[1]] - model_data[[2]])
     } else {
-      out <- check_symmetry(data[[1]])
+      out <- check_symmetry(model_data[[1]])
     }
   } else {
     insight::format_error(
