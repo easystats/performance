@@ -60,6 +60,7 @@ test_that("check_normality | glmmTMB", {
 
 
 test_that("check_normality | t-test", {
+  data(mtcars)
   out <- t.test(mtcars$mpg, mtcars$hp, var.equal = TRUE)
   expect_equal(
     check_normality(out),
