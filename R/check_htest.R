@@ -11,6 +11,12 @@ check_normality.htest <- function(x, ...) {
 
   if (grepl("Welch", method, fixed = TRUE) ||
     grepl("F test to compare two variances", method, fixed = TRUE)) {
+    # sanity check
+    if (!is.numeric(model_data[[2]])) {
+      insight::format_error(
+        "Discrete or character variables are not supported for this test. Please use a continuous variable for the second argument."
+      )
+    }
     m1 <- stats::lm(model_data[[1]] ~ 1)
     m2 <- stats::lm(model_data[[2]] ~ 1)
 
@@ -29,6 +35,11 @@ check_normality.htest <- function(x, ...) {
 
     out <- check_normality(m)
   } else if (grepl("Paired t-test", method, fixed = TRUE)) {
+    if (!is.numeric(model_data[[2]])) {
+      insight::format_error(
+        "Discrete or character variables are not supported for this test. Please use a continuous variable for the second argument."
+      )
+    }
     d <- model_data[[1]] - model_data[[2]]
     m <- stats::lm(d ~ 1)
 

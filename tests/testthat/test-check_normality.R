@@ -61,6 +61,10 @@ test_that("check_normality | glmmTMB", {
 
 test_that("check_normality | t-test", {
   data(mtcars)
+  expect_error(
+    check_normality(t.test(mtcars$mpg, mtcars$hp, var.equal = FALSE)),
+    regex = "Discrete or character variables"
+  )
   out <- t.test(mtcars$mpg, mtcars$hp, var.equal = TRUE)
   expect_equal(
     check_normality(out),
