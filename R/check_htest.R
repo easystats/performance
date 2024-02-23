@@ -171,7 +171,7 @@ print.check_normality_binom <- function(x, ...) {
       "Warning: Some cells in the expected table have less than 5 observations.\n"
     ), "red")
   }
-  return(invisible(x))
+  invisible(x)
 }
 
 
@@ -194,7 +194,7 @@ print.check_normality_binom <- function(x, ...) {
   dif <- scale(data, scale = FALSE)
   Dj <- diag(dif %*% solve(S, tol = tol) %*% t(dif))
   Y <- data %*% solve(S, tol = tol) %*% t(data)
-  Djk <- -2 * t(Y) + matrix(diag(t(Y))) %*% matrix(c(rep(1, n)), 1, n) + matrix(c(rep(1, n)), n, 1) %*% diag(t(Y))
+  Djk <- -2 * t(Y) + matrix(diag(t(Y))) %*% matrix(rep(1, n), 1, n) + matrix(rep(1, n), n, 1) %*% diag(t(Y))
   b <- 1 / (sqrt(2)) * ((2 * p + 1) / 4)^(1 / (p + 4)) * (n^(1 / (p + 4)))
   if (qr(S)$rank == p) {
     HZ <- n * (1 / (n^2) * sum(sum(exp(-(b^2) / 2 * Djk))) - 2 * ((1 + (b^2))^(-p / 2)) * (1 / n) * (sum(exp(-((b^2) / (2 * (1 + (b^2)))) * Dj))) + ((1 + (2 * (b^2)))^(-p / 2)))
