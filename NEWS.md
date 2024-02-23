@@ -4,6 +4,10 @@
 
 * Rudimentary support for models of class `serp` from package *serp*.
 
+## Bug fixes
+
+* Fixed issue in `check_normality()` for t-tests.
+
 # performance 0.10.9
 
 ## Changes
