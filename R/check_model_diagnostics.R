@@ -51,12 +51,23 @@
     }
   }
 
-  if (is.null(res_)) {
+  if (is.null(res_) || all(is.na(res_))) {
     if (verbose) {
+      if (is.null(model_info$family)) {
+        fam <- "model"
+      } else {
+        fam <- paste0("`", model_info$family, "`")
+      }
       insight::format_alert(
-        sprintf(
-          "QQ plot could not be created. Cannot extract residuals from objects of class `%s`.",
-          class(model)[1]
+        paste(
+          sprintf(
+            "QQ plot could not be created. Cannot extract residuals from objects of class `%s`.",
+            class(model)[1]
+          ),
+          sprintf(
+            "Maybe the model class or the %s family does not support the computation of (deviance) residuals?",
+            fam
+          )
         )
       )
     }

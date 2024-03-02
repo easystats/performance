@@ -14,7 +14,7 @@
 #' @param check Character vector, indicating which checks for should be performed
 #'   and plotted. May be one or more of `"all"`, `"vif"`, `"qq"`, `"normality"`,
 #'   `"linearity"`, `"ncv"`, `"homogeneity"`, `"outliers"`, `"reqq"`, `"pp_check"`,
-#'   `"binned_residuals"` or `"overdispersion"`, Not that not all check apply
+#'   `"binned_residuals"` or `"overdispersion"`. Note that not all check apply
 #'   to all type of models (see 'Details'). `"reqq"` is a QQ-plot for random
 #'   effects and only available for mixed models. `"ncv"` is an alias for
 #'   `"linearity"`, and checks for non-constant variance, i.e. for

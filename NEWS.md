@@ -4,6 +4,10 @@
 
 * Rudimentary support for models of class `serp` from package *serp*.
 
+## General
+
+* Improved error messages for `check_model()` when QQ-plots cannot be created.
+
 ## Bug fixes
 
 * Fixed issue in `check_normality()` for t-tests.

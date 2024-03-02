@@ -39,7 +39,7 @@ single plots for each diagnostic are returned.}
 \item{check}{Character vector, indicating which checks for should be performed
 and plotted. May be one or more of \code{"all"}, \code{"vif"}, \code{"qq"}, \code{"normality"},
 \code{"linearity"}, \code{"ncv"}, \code{"homogeneity"}, \code{"outliers"}, \code{"reqq"}, \code{"pp_check"},
-\code{"binned_residuals"} or \code{"overdispersion"}, Not that not all check apply
+\code{"binned_residuals"} or \code{"overdispersion"}. Note that not all check apply
 to all type of models (see 'Details'). \code{"reqq"} is a QQ-plot for random
 effects and only available for mixed models. \code{"ncv"} is an alias for
 \code{"linearity"}, and checks for non-constant variance, i.e. for
