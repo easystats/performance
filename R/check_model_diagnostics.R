@@ -53,10 +53,10 @@
 
   if (is.null(res_) || all(is.na(res_))) {
     if (verbose) {
-      if (!is.null(model_info$family)) {
-        fam <- paste0("`", model_info$family, "`")
-      } else {
+      if (is.null(model_info$family)) {
         fam <- "model"
+      } else {
+        fam <- paste0("`", model_info$family, "`")
       }
       insight::format_alert(
         paste(
