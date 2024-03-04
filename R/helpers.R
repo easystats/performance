@@ -1,6 +1,10 @@
 # small wrapper around this commonly used try-catch
 .safe <- function(code, on_error = NULL) {
-  tryCatch(code, error = function(e) on_error)
+  if (getOption("easystats_erros", FALSE) && is.null(on_error)) {
+    code
+  } else {
+    tryCatch(code, error = function(e) on_error)
+  }
 }
 
 
@@ -34,13 +38,10 @@
   if (!is.numeric(x)) {
     return(x)
   }
-
   # remove missings
   tmp <- x[!is.na(x)]
-
   # standardize
   tmp <- (tmp - mean(tmp)) / stats::sd(tmp)
-
   # and fill in values in original vector
   x[!is.na(x)] <- tmp
 
@@ -65,10 +66,10 @@
 
 .get_sigma <- function(model, verbose = TRUE) {
   s <- insight::get_sigma(model, ci = NULL, verbose = verbose)
-  if (!is.null(s)) {
-    as.numeric(s)
-  } else {
+  if (is.null(s)) {
     NULL
+  } else {
+    as.numeric(s)
   }
 }
 
