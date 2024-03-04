@@ -38,13 +38,10 @@
   if (!is.numeric(x)) {
     return(x)
   }
-
   # remove missings
   tmp <- x[!is.na(x)]
-
   # standardize
   tmp <- (tmp - mean(tmp)) / stats::sd(tmp)
-
   # and fill in values in original vector
   x[!is.na(x)] <- tmp
 
