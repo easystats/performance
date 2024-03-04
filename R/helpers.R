@@ -1,6 +1,10 @@
 # small wrapper around this commonly used try-catch
 .safe <- function(code, on_error = NULL) {
-  tryCatch(code, error = function(e) on_error)
+  if (getOption("easystats_erros", FALSE) && is.null(on_error)) {
+    code
+  } else {
+    tryCatch(code, error = function(e) on_error)
+  }
 }
 
 
