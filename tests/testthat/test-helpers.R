@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_if_not_installed("withr")
 withr::with_options(
   list(easystats_erros = TRUE),
