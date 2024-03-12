@@ -40,6 +40,20 @@ test_that("check_itemscale", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+  # factor_index as none-named vector
+  out3 <- check_itemscale(d, factor_index = c(2, 1, 2, 2, 1, 1))
+  expect_equal(
+    out[[1]]$Mean,
+    out3[[1]]$Mean,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    out[[1]]$Difficulty,
+    out3[[1]]$Difficulty,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
   expect_error(
     check_itemscale(d),
     regex = "If `x` is a data"
@@ -51,5 +65,9 @@ test_that("check_itemscale", {
   expect_error(
     check_itemscale(d, factor_index = factor(comp)),
     regex = "`factor_index` must be numeric."
+  )
+  expect_error(
+    check_itemscale(iris$Species),
+    regex = "`x` must be an object of class"
   )
 })

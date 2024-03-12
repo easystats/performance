@@ -12,6 +12,9 @@
 
 * Fixed issue in `check_normality()` for t-tests.
 
+* Fixed issue in `check_itemscale()` for data frame inputs, when `factor_index`
+  was not a named vector.
+
 # performance 0.10.9
 
 ## Changes
