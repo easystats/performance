@@ -90,7 +90,7 @@ check_itemscale <- function(x, factor_index = NULL) {
   }
 
   # factor_index must be a named vector (column names as names)
-  if (!is.null(factor_index) && is.null(names(factor_index)) && inherits(x, "data.frame")) {
+  if (!is.null(factor_index) && is.null(names(factor_index)) && !inherits(x, "parameters_pca")) {
     factor_index <- stats::setNames(factor_index, colnames(x))
   }
 
