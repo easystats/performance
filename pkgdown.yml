@@ -1,12 +1,12 @@
 pandoc: 3.1.12.1
 pkgdown: 2.0.7.9000
-pkgdown_sha: 1924ebf3b65bc037c9ece195ecd7869f1d203e94
+pkgdown_sha: 96a25c507aad74d22ad1f2500c5eb661be8f84d0
 articles:
   check_model: check_model.html
   check_outliers: check_outliers.html
   compare: compare.html
   r2: r2.html
-last_built: 2024-03-12T13:05Z
+last_built: 2024-03-12T14:33Z
 urls:
   reference: https://easystats.github.io/performance/reference
   article: https://easystats.github.io/performance/articles
