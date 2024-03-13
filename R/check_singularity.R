@@ -101,14 +101,23 @@ check_singularity.merMod <- function(x, tolerance = 1e-5, ...) {
 check_singularity.rlmerMod <- check_singularity.merMod
 
 
-
 #' @export
 check_singularity.glmmTMB <- function(x, tolerance = 1e-5, ...) {
   insight::check_if_installed("lme4")
 
-  vc <- .collapse_cond(lme4::VarCorr(x))
-  any(sapply(vc, function(.x) any(abs(diag(.x)) < tolerance)))
+  eigen_values <- list()
+  vv <- lme4::VarCorr(x)
+  for (component in c("cond", "zi")) {
+    for (i in seq_along(vv[[component]])) {
+      eigen_values <- c(
+        eigen_values,
+        list(eigen(vv[[component]][[i]], only.values = TRUE)$values)
+      )
+    }
+  }
+  any(vapply(eigen_values, min, numeric(1), na.rm = TRUE) < tolerance)
 }
+
 
 #' @export
 check_singularity.glmmadmb <- check_singularity.glmmTMB

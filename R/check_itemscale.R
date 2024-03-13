@@ -89,6 +89,11 @@ check_itemscale <- function(x, factor_index = NULL) {
     }
   }
 
+  # factor_index must be a named vector (column names as names)
+  if (!is.null(factor_index) && is.null(names(factor_index)) && !inherits(x, "parameters_pca")) {
+    factor_index <- stats::setNames(factor_index, colnames(x))
+  }
+
   # assign data and factor index
   if (inherits(x, "parameters_pca")) {
     insight::check_if_installed("parameters")

@@ -9,21 +9,21 @@ test_bf <- function(...) {
 #' @export
 test_bf.default <- function(..., reference = 1, text_length = NULL) {
   # Attribute class to list and get names from the global environment
-  objects <- insight::ellipsis_info(..., only_models = TRUE)
-  names(objects) <- match.call(expand.dots = FALSE)$`...`
+  my_objects <- insight::ellipsis_info(..., only_models = TRUE)
+  names(my_objects) <- match.call(expand.dots = FALSE)[["..."]]
 
   # validation checks (will throw error if non-valid objects)
-  .test_performance_checks(objects, multiple = FALSE)
+  .test_performance_checks(objects = my_objects, multiple = FALSE)
 
-  if (length(objects) == 1 && isTRUE(insight::is_model(objects))) {
+  if (length(my_objects) == 1 && isTRUE(insight::is_model(my_objects))) {
     insight::format_error(
-      "`test_bf()` is designed to compare multiple models together. For a single model, you might want to run `bayestestR::bf_parameters()` instead."
+      "`test_bf()` is designed to compare multiple models together. For a single model, you might want to run `bayestestR::bf_parameters()` instead." # nolint
     )
   }
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_bf(objects, reference = reference, text_length = text_length)
+  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+    test_bf(my_objects, reference = reference, text_length = text_length)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
   }
@@ -87,9 +87,9 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
 
   if (all(bayesian_models)) {
     "yes"
-  } else if (!all(bayesian_models)) {
-    "no"
-  } else {
+  } else if (any(bayesian_models)) {
     "mixed"
+  } else {
+    "no"
   }
 }

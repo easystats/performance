@@ -296,6 +296,7 @@ poisson
 preprint
 priori
 pscl
+quantreg
 quared
 quartile
 quartiles
@@ -311,6 +312,7 @@ rsif
 rssa
 rstanarm
 se
+serp
 smicd
 sphericity
 strengejacke

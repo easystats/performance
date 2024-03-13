@@ -36,3 +36,39 @@ test_that("`check_outliers()` works if convergence issues", {
   x <- check_outliers(m, verbose = FALSE)
   expect_s3_class(x, "check_outliers")
 })
+
+test_that("`check_model()` for invalid models", {
+  skip_if(packageVersion("insight") < "0.19.8.2")
+  dd <- data.frame(y = as.difftime(0:5, units = "days"))
+  m1 <- lm(y ~ 1, data = dd)
+  expect_error(check_model(m1))
+})
+
+test_that("`check_model()` works for quantreg", {
+  skip_if_not_installed("quantreg")
+  data(engel, package = "quantreg")
+  qm <- quantreg::rq(foodexp ~ income, data = engel)
+  x <- check_model(qm, verbose = FALSE)
+  expect_s3_class(x, "check_model")
+})
+
+test_that("`check_model()` warnings for tweedie", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("lme4")
+  data(sleepstudy, package = "lme4")
+  set.seed(123)
+  d <- sleepstudy[sample.int(50), ]
+  m <- suppressWarnings(glmmTMB::glmmTMB(Reaction ~ Days,
+    data = d,
+    family = glmmTMB::tweedie
+  ))
+  expect_message(
+    expect_message(
+      expect_message(
+        check_model(m, iterations = 1, verbose = TRUE),
+        regex = "Not enough model terms"
+      ),
+      regex = "QQ plot could not"
+    )
+  )
+})

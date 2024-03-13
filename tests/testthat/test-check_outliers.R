@@ -87,9 +87,18 @@ test_that("mcd which", {
   # (not clear why method mcd needs a seed)
   set.seed(42)
   expect_identical(
-    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45))),
+    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45, verbose = FALSE))),
     31L
   )
+  expect_warning(
+    {
+      out <- check_outliers(mtcars, method = "mcd")
+    },
+    regex = "The sample size is too small"
+  )
+  expect_identical(sum(out), 8L)
+  out <- check_outliers(mtcars, method = "mcd", percentage_central = 0.5, verbose = FALSE)
+  expect_identical(sum(out), 15L)
 })
 
 ## FIXME: Fails on CRAN/windows
@@ -197,11 +206,12 @@ test_that("all methods which", {
         "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
       ),
       threshold = list(
-        "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-        "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-        "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-        "optics" = 14, "lof" = 0.005
-      )
+        zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
+        ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
+        mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
+        optics = 14, lof = 0.005
+      ),
+      verbose = FALSE
     )),
     as.integer(c(9, 15, 16, 19, 20, 28, 29, 31))
   )
@@ -219,12 +229,13 @@ test_that("multiple methods with ID", {
       "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
     ),
     threshold = list(
-      "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-      "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-      "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-      "optics" = 14, "lof" = 0.005
+      zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
+      ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
+      mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
+      optics = 14, lof = 0.005
     ),
-    ID = "car"
+    ID = "car",
+    verbose = FALSE
   ))
   expect_identical(
     x$outlier_var$zscore$mpg$car,
@@ -316,5 +327,18 @@ test_that("cook multiple methods which", {
   expect_named(
     z$outlier_count,
     c("setosa", "versicolor", "virginica")
+  )
+})
+
+
+test_that("check_outliers with invald data", {
+  dd <- data.frame(y = as.difftime(0:5, units = "days"))
+  m1 <- lm(y ~ 1, data = dd)
+  expect_error(
+    expect_message(
+      check_outliers(m1),
+      regex = "Date variables are not supported"
+    ),
+    regex = "No numeric variables found"
   )
 })

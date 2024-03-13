@@ -387,6 +387,9 @@ r2.censReg <- function(model, ...) {
 r2.cpglm <- r2.censReg
 
 #' @export
+r2.serp <- r2.censReg
+
+#' @export
 r2.clm <- r2.censReg
 
 #' @export
@@ -896,12 +899,10 @@ r2.DirichletRegModel <- function(model, ...) {
       m <- sum(w * f / sum(w))
       mss <- sum(w * (f - m)^2)
     }
+  } else if (is.null(w)) {
+    mss <- sum(f^2)
   } else {
-    if (is.null(w)) {
-      mss <- sum(f^2)
-    } else {
-      mss <- sum(w * f^2)
-    }
+    mss <- sum(w * f^2)
   }
   if (is.null(w)) {
     rss <- sum(r^2)
