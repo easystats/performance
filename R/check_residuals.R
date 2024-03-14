@@ -41,7 +41,7 @@ check_residuals.performance_simres <- function(x,
   alternative <- match.arg(alternative)
   ts <- suppressWarnings(
     stats::ks.test(
-      stats::residuals(simulated_residuals),
+      stats::residuals(x),
       "punif",
       alternative = alternative,
       ...
