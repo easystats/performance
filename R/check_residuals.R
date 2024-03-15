@@ -42,7 +42,7 @@ check_residuals.default <- function(x, alternative = c("two.sided", "less", "gre
 #' @export
 check_residuals.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
   alternative <- match.arg(alternative)
-  ts <- suppressWarnings(
+  ts_test <- suppressWarnings(
     stats::ks.test(
       stats::residuals(x),
       "punif",
@@ -51,7 +51,7 @@ check_residuals.performance_simres <- function(x, alternative = c("two.sided", "
     )
   )
 
-  p.val <- ts$p.value
+  p.val <- ts_test$p.value
 
   attr(p.val, "data") <- x
   attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))

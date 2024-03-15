@@ -7,9 +7,13 @@
 #' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
 #' (package **MASS**).
 #' @param tolerance The tolerance for the ratio of observed and predicted
-#'  zeros to considered as over- or underfitting zeros. A ratio
-#'  between 1 +/- `tolerance` is considered as OK, while a ratio
-#'  beyond or below this threshold would indicate over- or underfitting.
+#' zeros to considered as over- or underfitting zeros. A ratio
+#' between 1 +/- `tolerance` is considered as OK, while a ratio
+#' beyond or below this threshold would indicate over- or underfitting.
+#' @param alternative A character string specifying the alternative hypothesis.
+#' @param ... Arguments passed down to [`simulate_residuals()`]. This only applies
+#' for models with zero-inflation component, or for models of class `glmmTMB`
+#' from `nbinom1` or `nbinom2` family.
 #'
 #' @return A list with information about the amount of predicted and observed
 #'  zeros in the outcome, as well as the ratio between these two values.
@@ -23,7 +27,9 @@
 #' or hurdle models, the results from `check_zeroinflation()` are likely to be
 #' unreliable. In such cases, it is recommended to use `simulate_residuals()`
 #' first, followed by `check_zeroinflation()` to check for zero-inflation,
-#' e.g.: `check_zeroinflation(simulate_residuals(model))`.
+#' e.g.: `check_zeroinflation(simulate_residuals(model))`. Usually, such models
+#' are detected automatically and `check_zeroinflation()` internally calls
+#' `simulate_residuals()` if necessary.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'

@@ -21,10 +21,16 @@ check_zeroinflation(x, ...)
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
 (package \strong{MASS}).}
 
+\item{...}{Arguments passed down to \code{\link[=simulate_residuals]{simulate_residuals()}}. This only applies
+for models with zero-inflation component, or for models of class \code{glmmTMB}
+from \code{nbinom1} or \code{nbinom2} family.}
+
 \item{tolerance}{The tolerance for the ratio of observed and predicted
 zeros to considered as over- or underfitting zeros. A ratio
 between 1 +/- \code{tolerance} is considered as OK, while a ratio
 beyond or below this threshold would indicate over- or underfitting.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.}
 }
 \value{
 A list with information about the amount of predicted and observed
@@ -44,7 +50,9 @@ In case of negative binomial models, models with zero-inflation component,
 or hurdle models, the results from \code{check_zeroinflation()} are likely to be
 unreliable. In such cases, it is recommended to use \code{simulate_residuals()}
 first, followed by \code{check_zeroinflation()} to check for zero-inflation,
-e.g.: \code{check_zeroinflation(simulate_residuals(model))}.
+e.g.: \code{check_zeroinflation(simulate_residuals(model))}. Usually, such models
+are detected automatically and \code{check_zeroinflation()} internally calls
+\code{simulate_residuals()} if necessary.
 }
 \examples{
 \dontshow{if (require("glmmTMB") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
