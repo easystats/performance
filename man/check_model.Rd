@@ -21,6 +21,7 @@ check_model(x, ...)
   show_dots = NULL,
   bandwidth = "nrd",
   type = "density",
+  residual_type = "simulated",
   verbose = FALSE,
   ...
 )
@@ -57,7 +58,9 @@ for dots, and third color for outliers or extreme values.}
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
 \item{detrend}{Logical. Should Q-Q/P-P plots be detrended? Defaults to
-\code{TRUE}.}
+\code{TRUE} for linear models or when \code{residual_type = "normal"}. Defaults to
+\code{FALSE} for QQ plots based on simulated residuals (i.e. when
+\code{residual_type = "simulated"}).}
 
 \item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
 to \code{FALSE} for models with many observations, if generating the plot is too
@@ -75,6 +78,15 @@ to a different value.}
 \code{"discrete_dots"}, \code{"discrete_interval"} or \code{"discrete_both"} (the \verb{discrete_*}
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).}
+
+\item{residual_type}{Character, indicating the type of residuals to be used.
+For non-Gaussian models, the default is \code{"simulated"}, which uses simulated
+residuals. These are based on \code{\link[=simulate_residuals]{simulate_residuals()}} and thus uses the
+\strong{DHARMa} package to return randomized quantile residuals. For Gaussian
+models, the default is \code{"normal"}, which uses the default residuals from
+the model. Setting \code{residual_type = "normal"} for non-Gaussian models will
+use a half-normal Q-Q plot of the absolute value of the standardized deviance
+residuals.}
 
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 }
@@ -161,10 +173,20 @@ This plot is used to determine if the residuals of the regression model are
 normally distributed. Usually, dots should fall along the line. If there is
 some deviation (mostly at the tails), this indicates that the model doesn't
 predict the outcome well for that range that shows larger deviations from
-the line. For generalized linear models, a half-normal Q-Q plot of the
-absolute value of the standardized deviance residuals is shown, however, the
-interpretation of the plot remains the same. See \code{\link[=check_normality]{check_normality()}} for
-further details.
+the line. For generalized linear models and when \code{residual_type = "normal"},
+a half-normal Q-Q plot of the absolute value of the standardized deviance
+residuals is shown, however, the interpretation of the plot remains the same.
+See \code{\link[=check_normality]{check_normality()}} for further details.
+}
+
+\section{Uniformity of Residuals}{
+
+Fore non-Gaussian models, when \code{residual_type = "simulated"} (the default
+for generalized linear (mixed) models), residuals are not expected to be
+normally distributed. In this case, the created Q-Q plot checks the uniformity
+of residuals. The interpretation of the plot is the same as for the normal
+Q-Q plot. See \code{\link[=simulate_residuals]{simulate_residuals()}} and \code{\link[=check_residuals]{check_residuals()}} for further
+details.
 }
 
 \section{Overdispersion}{
@@ -188,12 +210,12 @@ inside the error bounds. See \code{\link[=binned_residuals]{binned_residuals()}}
 
 \section{Residuals for (Generalized) Linear Models}{
 
-Plots that check the normality of residuals (QQ-plot) or the homogeneity of
+Plots that check the normality of residuals (Q-Q plot) or the homogeneity of
 variance use standardized Pearson's residuals for generalized linear models,
 and standardized residuals for linear models. The plots for the normality of
 residuals (with overlayed normal curve) and for the linearity assumption use
-the default residuals for \code{lm} and \code{glm} (which are deviance
-residuals for \code{glm}).
+the default residuals for \code{lm} and \code{glm} (which are deviance residuals for
+\code{glm}).
 }
 
 \section{Troubleshooting}{
