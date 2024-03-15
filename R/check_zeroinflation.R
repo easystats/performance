@@ -68,14 +68,13 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
     return(NULL)
   }
 
-  # for zero-inflated models, tell user to use simulated_residuals()
-  if (model_info$is_zero_inflated) {
-    insight::format_warning(paste0(
-      "\nModel has zero-inflation component, returned results are likely to be unreliable. ",
-      "Please use `check_zeroinflation(simulate_residuals(",
-      model_name,
-      "))` to check for zero-inflation."
-    ))
+  # for glmmTMB models with zero-inflation component or nbinom families,
+  # we use simulated_residuals()
+  if (inherits(x, "glmmTMB") && (model_info$is_zero_inflated || model_info$is_negbin)) {
+    if (missing(tolerance)) {
+      tolerance <- 0.1
+    }
+    return(check_zeroinflation(simulate_residuals(x, ...), tolerance = tolerance, ...))
   }
 
   # get predictions of outcome
@@ -117,7 +116,7 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
 #' @rdname check_zeroinflation
 #' @export
 check_zeroinflation.performance_simres <- function(x,
-                                                   tolerance = 0.05,
+                                                   tolerance = 0.1,
                                                    alternative = c("two.sided", "less", "greater"),
                                                    ...) {
   # match arguments
