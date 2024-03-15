@@ -2,9 +2,20 @@
 % Please edit documentation in R/check_zeroinflation.R
 \name{check_zeroinflation}
 \alias{check_zeroinflation}
+\alias{check_zeroinflation.default}
+\alias{check_zeroinflation.performance_simres}
 \title{Check for zero-inflation in count models}
 \usage{
-check_zeroinflation(x, tolerance = 0.05)
+check_zeroinflation(x, ...)
+
+\method{check_zeroinflation}{default}(x, tolerance = 0.05, ...)
+
+\method{check_zeroinflation}{performance_simres}(
+  x,
+  tolerance = 0.05,
+  alternative = c("two.sided", "less", "greater"),
+  ...
+)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
@@ -28,12 +39,29 @@ If the amount of observed zeros is larger than the amount of
 predicted zeros, the model is underfitting zeros, which indicates a
 zero-inflation in the data. In such cases, it is recommended to use
 negative binomial or zero-inflated models.
+
+In case of negative binomial models, models with zero-inflation component,
+or hurdle models, the results from \code{check_zeroinflation()} are likely to be
+unreliable. In such cases, it is recommended to use \code{simulate_residuals()}
+first, followed by \code{check_zeroinflation()} to check for zero-inflation,
+e.g.: \code{check_zeroinflation(simulate_residuals(model))}.
 }
 \examples{
-\dontshow{if (require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("glmmTMB") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(m)
+
+# for models with zero-inflation component, it's better to carry out
+# the check for zero-inflation using simulated residuals
+m <- glmmTMB::glmmTMB(
+  count ~ spp + mined,
+  ziformula = ~ mined + spp,
+  family = poisson,
+  data = Salamanders
+)
+res <- simulate_residuals(m)
+check_zeroinflation(res)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

@@ -19,19 +19,46 @@
 #' zero-inflation in the data. In such cases, it is recommended to use
 #' negative binomial or zero-inflated models.
 #'
+#' In case of negative binomial models, models with zero-inflation component,
+#' or hurdle models, the results from `check_zeroinflation()` are likely to be
+#' unreliable. In such cases, it is recommended to use `simulate_residuals()`
+#' first, followed by `check_zeroinflation()` to check for zero-inflation,
+#' e.g.: `check_zeroinflation(simulate_residuals(model))`.
+#'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examplesIf require("glmmTMB")
+#' @examplesIf require("glmmTMB") && require("DHARMa")
 #' data(Salamanders, package = "glmmTMB")
 #' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 #' check_zeroinflation(m)
+#'
+#' # for models with zero-inflation component, it's better to carry out
+#' # the check for zero-inflation using simulated residuals
+#' m <- glmmTMB::glmmTMB(
+#'   count ~ spp + mined,
+#'   ziformula = ~ mined + spp,
+#'   family = poisson,
+#'   data = Salamanders
+#' )
+#' res <- simulate_residuals(m)
+#' check_zeroinflation(res)
 #' @export
-check_zeroinflation <- function(x, tolerance = 0.05) {
+check_zeroinflation <- function(x, ...) {
+  UseMethod("check_zeroinflation")
+}
+
+
+#' @rdname check_zeroinflation
+#' @export
+check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
   # check if we have poisson
   model_info <- insight::model_info(x)
   if (!model_info$is_count) {
     insight::format_error("Model must be from Poisson-family.")
   }
+
+  # for warning message
+  model_name <- insight::safe_deparse(substitute(x))
 
   # get actual zero of response
   obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0L)
@@ -39,6 +66,16 @@ check_zeroinflation <- function(x, tolerance = 0.05) {
   if (obs.zero == 0) {
     insight::print_color("Model has no observed zeros in the response variable.\n", "red")
     return(NULL)
+  }
+
+  # for zero-inflated models, tell user to use simulated_residuals()
+  if (model_info$is_zero_inflated) {
+    insight::format_warning(paste0(
+      "\nModel has zero-inflation component, returned results are likely to be unreliable. ",
+      "Please use `check_zeroinflation(simulate_residuals(",
+      model_name,
+      "))` to check for zero-inflation."
+    ))
   }
 
   # get predictions of outcome
@@ -77,6 +114,40 @@ check_zeroinflation <- function(x, tolerance = 0.05) {
 }
 
 
+#' @rdname check_zeroinflation
+#' @export
+check_zeroinflation.performance_simres <- function(x,
+                                                   tolerance = 0.05,
+                                                   alternative = c("two.sided", "less", "greater"),
+                                                   ...) {
+  # match arguments
+  alternative <- match.arg(alternative)
+  # count observed and simulated zeros
+  observed <- sum(x$observedResponse == 0)
+  simulated <- apply(x$simulatedResponse, 2, function(i) sum(i == 0))
+  # p is simply ratio of simulated zeros to observed zeros
+  p <- switch(
+    alternative,
+    greater = mean(simulated >= observed),
+    less = mean(simulated <= observed),
+    min(min(mean(simulated <= observed), mean(simulated >= observed)) * 2, 1)
+  )
+
+  structure(
+    class = "check_zi",
+    list(
+      predicted.zeros = round(mean(simulated)),
+      observed.zeros = observed,
+      ratio = mean(simulated) / observed,
+      tolerance = tolerance,
+      p.value = p
+    )
+  )
+}
+
+#' @export
+check_zeroinflation.DHARMa <- check_zeroinflation.performance_simres
+
 
 # methods ------------------
 
@@ -90,12 +161,22 @@ print.check_zi <- function(x, ...) {
   lower <- 1 - x$tolerance
   upper <- 1 + x$tolerance
 
-  if (x$ratio < lower) {
-    message("Model is underfitting zeros (probable zero-inflation).")
-  } else if (x$ratio > upper) {
-    message("Model is overfitting zeros.")
+  if (!is.null(x$p.value)) {
+    p_string <- paste0(" (", insight::format_p(x$p.value), ")")
   } else {
-    insight::format_alert("Model seems ok, ratio of observed and predicted zeros is within the tolerance range.")
+    p_string <- ""
+  }
+
+  if (x$ratio < lower) {
+    message("Model is underfitting zeros (probable zero-inflation)", p_string, ".")
+  } else if (x$ratio > upper) {
+    message("Model is overfitting zeros", p_string, ".")
+  } else {
+    insight::format_alert(paste0(
+      "Model seems ok, ratio of observed and predicted zeros is within the tolerance range",
+      p_string,
+      "."
+    ))
   }
 
   invisible(x)
