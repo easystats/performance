@@ -307,11 +307,11 @@ check_overdispersion.performance_simres <- function(x,
   dispersion <- function(i) var(i - x$fittedPredictedResponse) / variance
 
   # compute test results
-  .simres_statistics(x, statistic_fun = dispersion, alternative = alternative)
+  result <- .simres_statistics(x, statistic_fun = dispersion, alternative = alternative)
 
   out <- list(
-    dispersion_ratio = .simres_statistics$observed / mean(.simres_statistics$simulated),
-    p_value = .simres_statistics$p
+    dispersion_ratio = result$observed / mean(result$simulated),
+    p_value = result$p
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
