@@ -2,13 +2,21 @@
 % Please edit documentation in R/check_overdispersion.R
 \name{check_overdispersion}
 \alias{check_overdispersion}
+\alias{check_overdispersion.performance_simres}
 \title{Check overdispersion of GL(M)M's}
 \usage{
 check_overdispersion(x, ...)
+
+\method{check_overdispersion}{performance_simres}(
+  x,
+  tolerance = 0.1,
+  alternative = c("two.sided", "less", "greater"),
+  ...
+)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
-(package \strong{MASS}).}
+(package \strong{MASS}), or an object returned by \code{simulate_residuals()}.}
 
 \item{...}{Currently not used.}
 }

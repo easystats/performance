@@ -63,9 +63,6 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
     insight::format_error("Model must be from Poisson-family.")
   }
 
-  # for warning message
-  model_name <- insight::safe_deparse(substitute(x))
-
   # get actual zero of response
   obs.zero <- sum(insight::get_response(x, verbose = FALSE) == 0L)
 
@@ -127,25 +124,18 @@ check_zeroinflation.performance_simres <- function(x,
                                                    ...) {
   # match arguments
   alternative <- match.arg(alternative)
-  # count observed and simulated zeros
-  observed <- sum(x$observedResponse == 0)
-  simulated <- apply(x$simulatedResponse, 2, function(i) sum(i == 0))
-  # p is simply ratio of simulated zeros to observed zeros
-  p <- switch(
-    alternative,
-    greater = mean(simulated >= observed),
-    less = mean(simulated <= observed),
-    min(min(mean(simulated <= observed), mean(simulated >= observed)) * 2, 1)
-  )
+
+  # compute test results
+  .simres_statistics(x, statistic_fun = function(i) sum(i == 0), alternative = alternative)
 
   structure(
     class = "check_zi",
     list(
-      predicted.zeros = round(mean(simulated)),
-      observed.zeros = observed,
-      ratio = mean(simulated) / observed,
+      predicted.zeros = round(mean(.simres_statistics$simulated)),
+      observed.zeros = .simres_statistics$observed,
+      ratio = mean(.simres_statistics$simulated) / .simres_statistics$observed,
       tolerance = tolerance,
-      p.value = p
+      p.value = .simres_statistics$p
     )
   )
 }

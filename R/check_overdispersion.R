@@ -5,7 +5,7 @@
 #'   models for overdispersion.
 #'
 #' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
-#'   (package **MASS**).
+#'   (package **MASS**), or an object returned by `simulate_residuals()`.
 #' @param ... Currently not used.
 #'
 #' @return A list with results from the overdispersion test, like chi-squared
@@ -113,7 +113,9 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   orig_x <- x
 
   x$dispersion_ratio <- sprintf("%.*f", digits, x$dispersion_ratio)
-  x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
+  if (!is.null(x$chisq_statistic)) {
+    x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
+  }
 
   x$p_value <- pval <- round(x$p_value, digits = digits)
   if (x$p_value < 0.001) x$p_value <- "< 0.001"
@@ -125,9 +127,14 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   )
 
   insight::print_color("# Overdispersion test\n\n", "blue")
-  cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
-  cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
-  cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+  if (is.null(x$chisq_statistic)) {
+    cat(sprintf(" dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
+    cat(sprintf("          p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+  } else {
+    cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
+    cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
+    cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+  }
 
   if (pval > 0.05) {
     message("No overdispersion detected.")
@@ -147,18 +154,24 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   # check if we have poisson
   info <- insight::model_info(x)
   if (!info$is_count && !info$is_binomial) {
-    insight::format_error(
-      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."
-    )
+    insight::format_error(paste0(
+      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1. ",
+      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
+      "`check_overdispersion(simulate_residuals(", model_name, "))`."
+    ))
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
+    insight::format_error(paste0(
+      "Overdispersion checks cannot be used for Bernoulli models. ",
+      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
+      "`check_overdispersion(simulate_residuals(", model_name, "))`."
+    ))
   }
 
   if (info$is_binomial) {
-    return(check_overdispersion.merMod(x, verbose = verbose, ...))
+    return(check_overdispersion.merMod(x, ...))
   }
 
   yhat <- stats::fitted(x)
@@ -219,33 +232,37 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 # Overdispersion for mixed models ---------------------------
 
 #' @export
-check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
+check_overdispersion.merMod <- function(x, ...) {
+  # for warning message
+  model_name <- insight::safe_deparse(substitute(x))
+
   # check if we have poisson or binomial
   info <- insight::model_info(x)
   if (!info$is_count && !info$is_binomial) {
-    insight::format_error(
-      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."
-    )
+    insight::format_error(paste0(
+      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1. ",
+      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
+      "`check_overdispersion(simulate_residuals(", model_name, "))`."
+    ))
   }
 
   # check for Bernoulli
   if (info$is_bernoulli) {
-    insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
+    insight::format_error(paste0(
+      "Overdispersion checks cannot be used for Bernoulli models. ",
+      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
+      "`check_overdispersion(simulate_residuals(", model_name, "))`."
+    ))
   }
 
   rdf <- stats::df.residual(x)
   rp <- insight::get_residuals(x, type = "pearson")
   if (insight::is_empty_object(rp)) {
-    Pearson.chisq <- NA
-    prat <- NA
-    pval <- NA
-    rp <- NA
-    if (isTRUE(verbose)) {
-      insight::format_alert(
-        "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion.",
-        "Only the visual inspection using `plot(check_overdispersion(model))` is possible."
-      )
-    }
+    insight::format_error(paste0(
+      "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion. ", # nolint
+      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
+      "`check_overdispersion(simulate_residuals(", model_name, "))`."
+    ))
   } else {
     Pearson.chisq <- sum(rp^2)
     prat <- Pearson.chisq / rdf
@@ -270,3 +287,36 @@ check_overdispersion.negbin <- check_overdispersion.merMod
 
 #' @export
 check_overdispersion.glmmTMB <- check_overdispersion.merMod
+
+
+# simulated residuals -----------------------------
+
+#' @rdname check_overdispersion
+#' @export
+check_overdispersion.performance_simres <- function(x,
+                                                    tolerance = 0.1,
+                                                    alternative = c("two.sided", "less", "greater"),
+                                                    ...) {
+  # match arguments
+  alternative <- match.arg(alternative)
+
+  # statistics function
+  variance <- stats::sd(x$simulatedResponse)^2
+  dispersion <- function(i) var(i - x$fittedPredictedResponse) / variance
+
+  # compute test results
+  .simres_statistics(x, statistic_fun = dispersion, alternative = alternative)
+
+  out <- list(
+    dispersion_ratio = .simres_statistics$observed / mean(.simres_statistics$simulated),
+    p_value = .simres_statistics$p
+  )
+
+  class(out) <- c("check_overdisp", "see_check_overdisp")
+  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+
+  out
+}
+
+#' @export
+check_overdispersion.DHARMa <- check_overdispersion.performance_simres

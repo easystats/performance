@@ -50,6 +50,7 @@ simulate_residuals <- function(x, iterations = 250, ...) {
   out
 }
 
+
 # methods ------------------------------
 
 #' @export
@@ -71,4 +72,20 @@ print.performance_simres <- function(x, ...) {
 plot.performance_simres <- function(x, ...) {
   insight::check_if_installed("see", "for residual plots")
   NextMethod()
+}
+
+
+# helper functions ---------------------
+
+.simres_statistics <- function(x, statistic_fun, alternative = "two.sided") {
+  # count observed and simulated zeros
+  observed <- statistic_fun(x$observedResponse)
+  simulated <- apply(x$simulatedResponse, 2, statistic_fun)
+  # p is simply ratio of simulated zeros to observed zeros
+  p <- switch(alternative,
+    greater = mean(simulated >= observed),
+    less = mean(simulated <= observed),
+    min(min(mean(simulated <= observed), mean(simulated >= observed)) * 2, 1)
+  )
+  list(observed = observed, simulated = simulated, p = p)
 }
