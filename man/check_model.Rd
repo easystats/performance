@@ -21,7 +21,7 @@ check_model(x, ...)
   show_dots = NULL,
   bandwidth = "nrd",
   type = "density",
-  residual_type = "simulated",
+  residual_type = NULL,
   verbose = FALSE,
   ...
 )

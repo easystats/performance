@@ -192,7 +192,7 @@ check_model.default <- function(x,
                                 show_dots = NULL,
                                 bandwidth = "nrd",
                                 type = "density",
-                                residual_type = "simulated",
+                                residual_type = NULL,
                                 verbose = FALSE,
                                 ...) {
   # check model formula
@@ -202,15 +202,21 @@ check_model.default <- function(x,
 
   minfo <- insight::model_info(x, verbose = FALSE)
 
+  # set default for residual_type
+  if (is.null(residual_type)) {
+    residual_type <- ifelse(minfo$is_linear, "normal", "simulated")
+  }
+  # set default for detrend
+  if (missing(detrend)) {
+    detrend <- residual_type == "normal"
+  }
+
   assumptions_data <- tryCatch(
     if (minfo$is_bayesian) {
       suppressWarnings(.check_assumptions_stan(x, ...))
     } else if (minfo$is_linear) {
-      suppressWarnings(.check_assumptions_linear(x, minfo, verbose, ...))
+      suppressWarnings(.check_assumptions_linear(x, minfo, residual_type, verbose, ...))
     } else {
-      if (missing(detrend)) {
-        detrend <- FALSE
-      }
       suppressWarnings(.check_assumptions_glm(x, minfo, residual_type, verbose, ...))
     },
     error = function(e) {
@@ -294,6 +300,7 @@ check_model.stanreg <- function(x,
                                 show_dots = NULL,
                                 bandwidth = "nrd",
                                 type = "density",
+                                residual_type = NULL,
                                 verbose = TRUE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
@@ -309,6 +316,7 @@ check_model.stanreg <- function(x,
     show_dots = show_dots,
     bandwidth = bandwidth,
     type = type,
+    residual_type = residual_type,
     verbose = verbose,
     ...
   )
@@ -333,6 +341,7 @@ check_model.model_fit <- function(x,
                                   show_dots = NULL,
                                   bandwidth = "nrd",
                                   type = "density",
+                                  residual_type = NULL,
                                   verbose = TRUE,
                                   ...) {
   check_model(
@@ -349,6 +358,7 @@ check_model.model_fit <- function(x,
     show_dots = show_dots,
     bandwidth = bandwidth,
     type = type,
+    residual_type = residual_type,
     verbose = verbose,
     ...
   )
@@ -358,11 +368,14 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info, verbose = TRUE, ...) {
+.check_assumptions_linear <- function(model, model_info, residual_type = "normal", verbose = TRUE, ...) {
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
+  dat$QQ <- switch(residual_type,
+    simulated = simulate_residuals(model),
+    .diag_qq(model, model_info = model_info, verbose = verbose)
+  )
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$NORM <- .diag_norm(model, verbose = verbose)
   dat$NCV <- .diag_ncv(model, verbose = verbose)
