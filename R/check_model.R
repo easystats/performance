@@ -189,6 +189,9 @@ check_model.default <- function(x,
     } else if (minfo$is_linear) {
       suppressWarnings(.check_assumptions_linear(x, minfo, verbose, ...))
     } else {
+      if (missing(detrend)) {
+        detrend <- FALSE
+      }
       suppressWarnings(.check_assumptions_glm(x, minfo, verbose, ...))
     },
     error = function(e) {
