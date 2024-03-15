@@ -126,16 +126,16 @@ check_zeroinflation.performance_simres <- function(x,
   alternative <- match.arg(alternative)
 
   # compute test results
-  .simres_statistics(x, statistic_fun = function(i) sum(i == 0), alternative = alternative)
+  result <- .simres_statistics(x, statistic_fun = function(i) sum(i == 0), alternative = alternative)
 
   structure(
     class = "check_zi",
     list(
-      predicted.zeros = round(mean(.simres_statistics$simulated)),
-      observed.zeros = .simres_statistics$observed,
-      ratio = mean(.simres_statistics$simulated) / .simres_statistics$observed,
+      predicted.zeros = round(mean(result$simulated)),
+      observed.zeros = result$observed,
+      ratio = mean(result$simulated) / result$observed,
       tolerance = tolerance,
-      p.value = .simres_statistics$p
+      p.value = result$p
     )
   )
 }
