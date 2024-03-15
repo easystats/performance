@@ -367,7 +367,9 @@ check_model.model_fit <- function(x,
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
+  # old QQ plots - now replaced by DHARma
+  # dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
+  dat$QQ <- simulate_residuals(model)
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
   dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
