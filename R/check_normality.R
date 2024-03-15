@@ -181,7 +181,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   # valid model?
   if (!info$is_linear && effects == "fixed") {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models."
+      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
     )
     return(NULL)
   }
@@ -217,6 +217,8 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
       attr(p.val, "type") <- "random effects"
       attr(p.val, "re_groups") <- re_groups
     }
+  } else if (inherits(x, "glmmTMB")) {
+    p.val <- .check_normality(stats::residuals(x, type = "deviance"), x)
   } else {
     # check for normality of residuals
     p.val <- .check_normality(stats::rstudent(x), x)
