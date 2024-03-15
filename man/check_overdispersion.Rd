@@ -56,7 +56,9 @@ is based on the code in the
 section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
 function only returns an \emph{approximate} estimate of an overdispersion
 parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-with \code{glmmTMB}).
+with \code{glmmTMB}). In such cases, it is recommended to use \code{simulate_residuals()}
+first, followed by \code{check_overdispersion()} to check for overdispersion, e.g.:
+\code{check_overdispersion(simulate_residuals(model))}.
 }
 
 \section{How to fix Overdispersion}{

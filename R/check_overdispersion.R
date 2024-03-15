@@ -33,7 +33,9 @@
 #' section *How can I deal with overdispersion in GLMMs?*. Note that this
 #' function only returns an *approximate* estimate of an overdispersion
 #' parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-#' with `glmmTMB`).
+#' with `glmmTMB`). In such cases, it is recommended to use `simulate_residuals()`
+#' first, followed by `check_overdispersion()` to check for overdispersion, e.g.:
+#' `check_overdispersion(simulate_residuals(model))`.
 #'
 #' @section How to fix Overdispersion:
 #' Overdispersion can be fixed by either modeling the dispersion parameter, or
