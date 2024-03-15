@@ -29,6 +29,7 @@ residual spatial and temporal autocorrelation.
 }
 \details{
 Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
+There is a \code{plot()} method to visualize the distribution of the residuals.
 }
 \examples{
 \dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

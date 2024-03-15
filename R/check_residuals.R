@@ -12,6 +12,7 @@
 #' @param ... Passed down to [`stats::ks.test()`].
 #'
 #' @details Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
+#' There is a `plot()` method to visualize the distribution of the residuals.
 #'
 #' @seealso [`simulate_residuals()`]
 #'

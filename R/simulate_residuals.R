@@ -18,7 +18,8 @@
 #' @details This function is a small wrapper around [`DHARMa::simulateResiduals()`].
 #' It basically only sets `plot = FALSE` and adds an additional class attribute
 #' (`"performance_sim_res"`), which allows using the DHARMa object in own plotting
-#' functions in the **see** package. See also `vignette("DHARMa")`.
+#' functions in the **see** package. See also `vignette("DHARMa")`. There is a
+#' `plot()` method to visualize the distribution of the residuals.
 #'
 #' @references
 #'

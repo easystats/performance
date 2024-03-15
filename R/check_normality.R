@@ -58,7 +58,7 @@ check_normality.default <- function(x, ...) {
 
   if (!insight::model_info(x)$is_linear) {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models."
+      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
     )
     return(NULL)
   }
@@ -87,7 +87,7 @@ check_normality.glm <- function(x, ...) {
 
   insight::format_alert(
     "There's no formal statistical test for normality for generalized linear model.",
-    "Please use `plot()` on the return value of this function: `plot(check_normality(model))`"
+    "Instead, please use `simulate_residuals()` and `check_residuals()` to check for uniformity of residuals."
   )
   invisible(out)
 }
