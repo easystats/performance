@@ -9,7 +9,7 @@
 #' [`DHARMa::simulateResiduals()`].
 #' @param alternative A character string specifying the alternative hypothesis.
 #' See [`stats::ks.test()`] for details.
-#' @param ... Passed down to [`stats::ks.test()`]
+#' @param ... Passed down to [`stats::ks.test()`].
 #'
 #' @details Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
 #'
@@ -84,4 +84,10 @@ print.check_residuals <- function(x, ...) {
   }
 
   invisible(x)
+}
+
+#' @export
+plot.check_residuals <- function(x, ...) {
+  insight::check_if_installed("see", "for residual plots")
+  NextMethod()
 }

@@ -15,13 +15,19 @@ simulate_residuals(x, iterations = 250, ...)
 }
 \value{
 Simulated residuals, which can be further processed with
-\code{\link[=check_residuals]{check_residuals()}}.
+\code{\link[=check_residuals]{check_residuals()}}. The returned object is of class \code{DHARMa} and
+\code{performance_simres}.
 }
 \description{
-to do.
+Returns simulated residuals from a model. This is useful for
+checking the uniformity of residuals, in particular for non-Gaussian models,
+where the residuals are not expected to be normally distributed.
 }
 \details{
-Based on \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}. See also \code{vignette("DHARMa")}.
+This function is a small wrapper around \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.
+It basically only sets \code{plot = FALSE} and adds an additional class attribute
+(\code{"performance_sim_res"}), which allows using the DHARMa object in own plotting
+functions in the \strong{see} package. See also \code{vignette("DHARMa")}.
 }
 \examples{
 \dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

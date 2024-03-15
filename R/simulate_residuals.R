@@ -1,18 +1,24 @@
 #' @title Simulate randomized quantile residuals from a model
 #' @name simulate_residuals
 #'
-#' @description to do.
+#' @description Returns simulated residuals from a model. This is useful for
+#' checking the uniformity of residuals, in particular for non-Gaussian models,
+#' where the residuals are not expected to be normally distributed.
 #'
 #' @param x A model object.
 #' @param iterations Number of simulations to run.
 #' @param ... Arguments passed on to [`DHARMa::simulateResiduals()`].
 #'
 #' @return Simulated residuals, which can be further processed with
-#' [`check_residuals()`].
+#' [`check_residuals()`]. The returned object is of class `DHARMa` and
+#' `performance_simres`.
 #'
 #' @seealso [`check_residuals()`]
 #'
-#' @details Based on [`DHARMa::simulateResiduals()`]. See also `vignette("DHARMa")`.
+#' @details This function is a small wrapper around [`DHARMa::simulateResiduals()`].
+#' It basically only sets `plot = FALSE` and adds an additional class attribute
+#' (`"performance_sim_res"`), which allows using the DHARMa object in own plotting
+#' functions in the **see** package. See also `vignette("DHARMa")`.
 #'
 #' @references
 #'

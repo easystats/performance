@@ -13,7 +13,7 @@ check_residuals(x, ...)
 \item{x}{An object returned by \code{\link[=simulate_residuals]{simulate_residuals()}} or
 \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.}
 
-\item{...}{Passed down to \code{\link[stats:ks.test]{stats::ks.test()}}}
+\item{...}{Passed down to \code{\link[stats:ks.test]{stats::ks.test()}}.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
 See \code{\link[stats:ks.test]{stats::ks.test()}} for details.}
