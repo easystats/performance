@@ -29,16 +29,18 @@ check_residuals <- function(x, ...) {
   UseMethod("check_residuals")
 }
 
-#' @export
-check_residuals.default <- function(x, ...) {
-  insight::format_error("`check_residuals()` only works with objects returned by `simulate_residuals()` or `DHARMa::simulateResiduals()`.") # nolint
-}
-
 #' @rdname check_residuals
 #' @export
-check_residuals.performance_simres <- function(x,
-                                               alternative = c("two.sided", "less", "greater"),
-                                               ...) {
+check_residuals.default <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
+  if (insight::is_model(x)) {
+    check_residuals(simulate_residuals(x, ...), alternative = alternative)
+  } else {
+    insight::format_error("`check_residuals()` only works with objects supported by `simulate_residuals()` or `DHARMa::simulateResiduals()`.") # nolint
+  }
+}
+
+#' @export
+check_residuals.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
   alternative <- match.arg(alternative)
   ts <- suppressWarnings(
     stats::ks.test(

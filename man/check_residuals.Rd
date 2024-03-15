@@ -2,12 +2,12 @@
 % Please edit documentation in R/check_residuals.R
 \name{check_residuals}
 \alias{check_residuals}
-\alias{check_residuals.performance_simres}
+\alias{check_residuals.default}
 \title{Check uniformity of simulated residuals}
 \usage{
 check_residuals(x, ...)
 
-\method{check_residuals}{performance_simres}(x, alternative = c("two.sided", "less", "greater"), ...)
+\method{check_residuals}{default}(x, alternative = c("two.sided", "less", "greater"), ...)
 }
 \arguments{
 \item{x}{An object returned by \code{\link[=simulate_residuals]{simulate_residuals()}} or

@@ -11,4 +11,14 @@ test_that("check_singularity, lme4", {
     capture.output(print(out)),
     "Warning: Non-uniformity of simulated residuals detected (p = 0.019)."
   )
+  skip_if_not_installed("MASS")
+  set.seed(3)
+  mu <- rpois(500, lambda = 3)
+  x <- rnorm(500, mu, mu * 3)
+  x <- ceiling(x)
+  x <- pmax(x, 0)
+  quine.nb1 <- MASS::glm.nb(x ~ mu)
+  set.seed(123)
+  result <- check_residuals(quine.nb1)
+  expect_equal(result, 0.000665414, tolerance = 1e-3)
 })
