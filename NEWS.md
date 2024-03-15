@@ -4,6 +4,11 @@
 
 * Rudimentary support for models of class `serp` from package *serp*.
 
+## New functions
+
+* `simulate_residuals()` and `check_residuals()`, to simulate and check residuals
+  from generalized linear (mixed) models.
+
 ## General
 
 * Improved error messages for `check_model()` when QQ-plots cannot be created.
