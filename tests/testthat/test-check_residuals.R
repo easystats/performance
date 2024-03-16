@@ -11,6 +11,8 @@ test_that("check_singularity, lme4", {
     capture.output(print(out)),
     "Warning: Non-uniformity of simulated residuals detected (p = 0.019)."
   )
+  expect_error(simulate_residuals(m, iterations = 1), "`iterations` must be")
+
   skip_if_not_installed("MASS")
   set.seed(3)
   mu <- rpois(500, lambda = 3)

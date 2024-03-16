@@ -6,7 +6,8 @@
 #'
 #' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
 #'   (package **MASS**), or an object returned by `simulate_residuals()`.
-#' @param ... Currently not used.
+#'
+#' @inheritParams check_zeroinflation
 #'
 #' @return A list with results from the overdispersion test, like chi-squared
 #'   statistics, p-value or dispersion ratio.
@@ -153,6 +154,9 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
 #' @export
 check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
+  # for warning message
+  model_name <- insight::safe_deparse(substitute(x))
+
   # check if we have poisson
   info <- insight::model_info(x)
   if (!info$is_count && !info$is_binomial) {
@@ -295,16 +299,13 @@ check_overdispersion.glmmTMB <- check_overdispersion.merMod
 
 #' @rdname check_overdispersion
 #' @export
-check_overdispersion.performance_simres <- function(x,
-                                                    tolerance = 0.1,
-                                                    alternative = c("two.sided", "less", "greater"),
-                                                    ...) {
+check_overdispersion.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
   # match arguments
   alternative <- match.arg(alternative)
 
   # statistics function
   variance <- stats::sd(x$simulatedResponse)^2
-  dispersion <- function(i) var(i - x$fittedPredictedResponse) / variance
+  dispersion <- function(i) stats::var(i - x$fittedPredictedResponse) / variance
 
   # compute test results
   result <- .simres_statistics(x, statistic_fun = dispersion, alternative = alternative)

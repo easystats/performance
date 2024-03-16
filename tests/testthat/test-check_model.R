@@ -64,11 +64,8 @@ test_that("`check_model()` warnings for tweedie", {
   ))
   expect_message(
     expect_message(
-      expect_message(
-        check_model(m, iterations = 1, verbose = TRUE),
-        regex = "Not enough model terms"
-      ),
-      regex = "QQ plot could not"
+      check_model(m, iterations = 2, verbose = TRUE),
+      regex = "Not enough model terms"
     )
   )
 })

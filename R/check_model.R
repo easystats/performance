@@ -373,7 +373,7 @@ check_model.model_fit <- function(x,
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- switch(residual_type,
-    simulated = simulate_residuals(model),
+    simulated = simulate_residuals(model, ...),
     .diag_qq(model, model_info = model_info, verbose = verbose)
   )
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
@@ -404,7 +404,7 @@ check_model.model_fit <- function(x,
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- switch(
     residual_type,
-    simulated = simulate_residuals(model),
+    simulated = simulate_residuals(model, ...),
     .diag_qq(model, model_info = model_info, verbose = verbose)
   )
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)

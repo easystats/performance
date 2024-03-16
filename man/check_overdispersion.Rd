@@ -7,18 +7,17 @@
 \usage{
 check_overdispersion(x, ...)
 
-\method{check_overdispersion}{performance_simres}(
-  x,
-  tolerance = 0.1,
-  alternative = c("two.sided", "less", "greater"),
-  ...
-)
+\method{check_overdispersion}{performance_simres}(x, alternative = c("two.sided", "less", "greater"), ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
 (package \strong{MASS}), or an object returned by \code{simulate_residuals()}.}
 
-\item{...}{Currently not used.}
+\item{...}{Arguments passed down to \code{\link[=simulate_residuals]{simulate_residuals()}}. This only applies
+for models with zero-inflation component, or for models of class \code{glmmTMB}
+from \code{nbinom1} or \code{nbinom2} family.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.}
 }
 \value{
 A list with results from the overdispersion test, like chi-squared
