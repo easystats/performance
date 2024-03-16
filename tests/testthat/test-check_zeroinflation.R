@@ -133,3 +133,30 @@ test_that("check_zeroinflation, glmmTMB nbinom", {
     tolerance = 1e-3
   )
 })
+
+
+test_that("check_zeroinflation, MASS::negbin", {
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("DHARMa")
+  set.seed(3)
+  mu <- rpois(500, lambda = 3)
+  x <- rnorm(500, mu, mu * 3)
+  x <- ceiling(x)
+  x <- pmax(x, 0)
+  m <- MASS::glm.nb(x ~ mu)
+  expect_equal(
+    check_zeroinflation(m),
+    structure(
+      list(
+        predicted.zeros = 178,
+        observed.zeros = 202L,
+        ratio = 0.879643564356436,
+        tolerance = 0.1,
+        p.value = 0.008
+      ),
+      class = "check_zi"
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+})
