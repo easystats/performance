@@ -200,7 +200,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
         }
       },
       error = function(e) {
-        return(NULL)
+        NULL
       }
     )
 
@@ -262,7 +262,7 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
 # helper ---------------------
 
 .check_normality <- function(x, model, type = "residuals") {
-  ts <- .safe({
+  ts_result <- .safe({
     if (length(x) >= 5000) {
       suppressWarnings(stats::ks.test(x, y = "pnorm", alternative = "two.sided"))
     } else {
@@ -270,7 +270,7 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
     }
   })
 
-  if (is.null(ts)) {
+  if (is.null(ts_result)) {
     insight::print_color(
       sprintf("`check_normality()` does not support models of class `%s`.\n", class(model)[1]),
       "red"
@@ -278,7 +278,7 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
     return(NULL)
   }
 
-  out <- ts$p.value
+  out <- ts_result$p.value
   attr(out, "type") <- type
 
   out

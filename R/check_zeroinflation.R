@@ -97,10 +97,10 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
   }
 
   # get predicted zero-counts
-  if (!is.null(theta)) {
-    pred.zero <- round(sum(stats::dnbinom(x = 0, size = theta, mu = mu)))
-  } else {
+  if (is.null(theta)) {
     pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
+  } else {
+    pred.zero <- round(sum(stats::dnbinom(x = 0, size = theta, mu = mu)))
   }
 
   # proportion
@@ -156,10 +156,10 @@ print.check_zi <- function(x, ...) {
   lower <- 1 - x$tolerance
   upper <- 1 + x$tolerance
 
-  if (!is.null(x$p.value)) {
-    p_string <- paste0(" (", insight::format_p(x$p.value), ")")
-  } else {
+  if (is.null(x$p.value)) {
     p_string <- ""
+  } else {
+    p_string <- paste0(" (", insight::format_p(x$p.value), ")")
   }
 
   if (x$ratio < lower) {

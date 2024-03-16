@@ -402,8 +402,7 @@ check_model.model_fit <- function(x,
   dat <- list()
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- switch(
-    residual_type,
+  dat$QQ <- switch(residual_type,
     simulated = simulate_residuals(model, ...),
     .diag_qq(model, model_info = model_info, verbose = verbose)
   )

@@ -22,5 +22,5 @@ test_that("check_singularity, lme4", {
   quine.nb1 <- MASS::glm.nb(x ~ mu)
   set.seed(123)
   result <- check_residuals(quine.nb1)
-  expect_equal(result, 0.000665414, tolerance = 1e-3)
+  expect_equal(result, 0.000665414, tolerance = 1e-3, ignore_attr = TRUE)
 })
