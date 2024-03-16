@@ -171,6 +171,18 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
     return(check_overdispersion(simulate_residuals(x, ...), ...))
   }
 
+  # check if we have poisson - need this for models not supported by DHARMa
+  if (!info$is_count && !info$is_binomial) {
+    insight::format_error(
+      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."
+    )
+  }
+
+  # check for Bernoulli
+  if (info$is_bernoulli) {
+    insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
+  }
+
   yhat <- stats::fitted(x)
 
   n <- stats::nobs(x)
