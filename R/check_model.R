@@ -206,7 +206,7 @@ check_model.default <- function(x,
 
   # set default for residual_type
   if (is.null(residual_type)) {
-    residual_type <- ifelse(minfo$is_linear, "normal", "simulated")
+    residual_type <- ifelse(minfo$is_linear && !minfo$is_gam, "normal", "simulated")
   }
   # set default for detrend
   if (missing(detrend)) {
