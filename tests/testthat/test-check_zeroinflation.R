@@ -160,3 +160,32 @@ test_that("check_zeroinflation, MASS::negbin", {
     tolerance = 1e-4
   )
 })
+
+
+test_that("check_zeroinflation, genpois", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("DHARMa")
+  skip_if_not(getRversion() >= "4.0.0")
+  data(Salamanders, package = "glmmTMB")
+
+  model <- glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    family = glmmTMB::genpois(),
+    data = Salamanders
+  )
+  expect_equal(
+    check_zeroinflation(model),
+    structure(
+      list(
+        predicted.zeros = 386,
+        observed.zeros = 387L,
+        ratio = 0.997860465116279,
+        tolerance = 0.1,
+        p.value = 1
+      ),
+      class = "check_zi"
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})

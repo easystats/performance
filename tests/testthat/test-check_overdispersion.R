@@ -133,3 +133,29 @@ test_that("check_overdispersion, MASS::negbin", {
     tolerance = 1e-4
   )
 })
+
+
+test_that("check_overdispersion, genpois", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("DHARMa")
+  skip_if_not(getRversion() >= "4.0.0")
+  data(Salamanders, package = "glmmTMB")
+
+  model <- glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    family = glmmTMB::genpois(),
+    data = Salamanders
+  )
+  expect_equal(
+    check_overdispersion(model),
+    structure(
+      list(
+        dispersion_ratio = 1.02883236131678,
+        p_value = 0.88
+      ),
+      class = c("check_overdisp", "see_check_overdisp")
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})
