@@ -367,6 +367,47 @@ check_model.model_fit <- function(x,
 }
 
 
+#' @export
+check_model.performance_simres <- function(x,
+                                           dot_size = 2,
+                                           line_size = 0.8,
+                                           panel = TRUE,
+                                           check = "all",
+                                           alpha = 0.2,
+                                           dot_alpha = 0.8,
+                                           colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+                                           theme = "see::theme_lucid",
+                                           detrend = TRUE,
+                                           show_dots = NULL,
+                                           bandwidth = "nrd",
+                                           type = "density",
+                                           residual_type = NULL,
+                                           verbose = TRUE,
+                                           ...) {
+  check_model(
+    x$fittedModel,
+    dot_size = dot_size,
+    line_size = line_size,
+    panel = panel,
+    check = check,
+    alpha = alpha,
+    dot_alpha = dot_alpha,
+    colors = colors,
+    theme = theme,
+    detrend = detrend,
+    show_dots = show_dots,
+    bandwidth = bandwidth,
+    type = type,
+    residual_type = "simulated",
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+check_model.DHARMa <- check_model.performance_simres
+
+
 
 # compile plots for checks of linear models  ------------------------
 
