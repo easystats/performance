@@ -35,10 +35,13 @@
 #' complex model, such as mixed models or models with zero-inflation, there are
 #' several important considerations. Arguments specified in `...` are passed to
 #' [`simulate_residuals()`], which relies on [`DHARMa::simulateResiduals()`] (and
-#' therefore, arguments in `...` are passed further down to _DHARMa_). It is
-#' recommended to read the 'Details' in `?DHARMa::simulateResiduals` closely to
-#' understand the implications of the simulation process and which arguments
-#' should be modified to get the most accurate results.
+#' therefore, arguments in `...` are passed further down to _DHARMa_). The
+#' defaults in DHARMa are set on the most conservative option that works for
+#' all models. However, in many cases, the help advises to use different settings
+#' in particular situations or for particular models. It is recommended to read
+#' the 'Details' in `?DHARMa::simulateResiduals` closely to understand the
+#' implications of the simulation process and which arguments should be modified
+#' to get the most accurate results.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'

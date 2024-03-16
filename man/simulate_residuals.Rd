@@ -39,10 +39,13 @@ the traditionally used Pearson residuals. However, when simulating from more
 complex model, such as mixed models or models with zero-inflation, there are
 several important considerations. \code{simulate_residuals()} relies on
 \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}, and additional arguments specified in \code{...}
-are passed further down to that function. It is recommended to read the
-'Details' in \code{?DHARMa::simulateResiduals} closely to understand the
-implications of the simulation process and which arguments should be modified
-to get the most accurate results.
+are passed further down to that function. The defaults in DHARMa are set on
+the most conservative option that works for all models. However, in many
+cases, the help advises to use different settings in particular situations
+or for particular models. It is recommended to read the 'Details' in
+\code{?DHARMa::simulateResiduals} closely to understand the implications of the
+simulation process and which arguments should be modified to get the most
+accurate results.
 }
 
 \examples{
