@@ -47,6 +47,12 @@ For Poisson models, the overdispersion test is based on the code from
 \emph{Gelman and Hill (2007), page 115}.
 }
 
+\section{Overdispersion in Negative Binomial or Zero-Inflated Models}{
+
+For negative binomial (mixed) models or models with zero-inflation component,
+the overdispersion test is based simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}).
+}
+
 \section{Overdispersion in Mixed Models}{
 
 For \code{merMod}- and \code{glmmTMB}-objects, \code{check_overdispersion()}
@@ -54,10 +60,10 @@ is based on the code in the
 \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
 section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
 function only returns an \emph{approximate} estimate of an overdispersion
-parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-with \code{glmmTMB}). In such cases, it is recommended to use \code{simulate_residuals()}
-first, followed by \code{check_overdispersion()} to check for overdispersion, e.g.:
-\code{check_overdispersion(simulate_residuals(model))}.
+parameter. Using this approach would be inaccurate for zero-inflated or
+negative binomial mixed models (fitted with \code{glmmTMB}), thus, in such cases,
+the overdispersion test is based on \code{\link[=simulate_residuals]{simulate_residuals()}} (which is identical
+to \code{check_overdispersion(simulate_residuals(model))}).
 }
 
 \section{How to fix Overdispersion}{

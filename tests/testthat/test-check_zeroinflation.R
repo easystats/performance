@@ -93,8 +93,11 @@ test_that("check_zeroinflation, glmer.nb", {
     check_zeroinflation(m),
     structure(
       list(
-        predicted.zeros = 153, observed.zeros = 155L,
-        ratio = 0.987096774193548, tolerance = 0.05
+        predicted.zeros = 153,
+        observed.zeros = 155L,
+        ratio = 0.987329032258065,
+        tolerance = 0.1,
+        p.value = 0.944
       ),
       class = "check_zi"
     ),

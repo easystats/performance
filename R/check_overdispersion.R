@@ -27,16 +27,20 @@
 #' For Poisson models, the overdispersion test is based on the code from
 #' _Gelman and Hill (2007), page 115_.
 #'
+#' @section Overdispersion in Negative Binomial or Zero-Inflated Models:
+#' For negative binomial (mixed) models or models with zero-inflation component,
+#' the overdispersion test is based simulated residuals (see [`simulate_residuals()`]).
+#'
 #' @section Overdispersion in Mixed Models:
 #' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
 #' is based on the code in the
 #' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
 #' section *How can I deal with overdispersion in GLMMs?*. Note that this
 #' function only returns an *approximate* estimate of an overdispersion
-#' parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-#' with `glmmTMB`). In such cases, it is recommended to use `simulate_residuals()`
-#' first, followed by `check_overdispersion()` to check for overdispersion, e.g.:
-#' `check_overdispersion(simulate_residuals(model))`.
+#' parameter. Using this approach would be inaccurate for zero-inflated or
+#' negative binomial mixed models (fitted with `glmmTMB`), thus, in such cases,
+#' the overdispersion test is based on [`simulate_residuals()`] (which is identical
+#' to `check_overdispersion(simulate_residuals(model))`).
 #'
 #' @section How to fix Overdispersion:
 #' Overdispersion can be fixed by either modeling the dispersion parameter, or
@@ -154,30 +158,14 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
 #' @export
 check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
-  # for warning message
-  model_name <- insight::safe_deparse(substitute(x))
-
-  # check if we have poisson
+  # model info
   info <- insight::model_info(x)
-  if (!info$is_count && !info$is_binomial) {
-    insight::format_error(paste0(
-      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1. ",
-      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
-      "`check_overdispersion(simulate_residuals(", model_name, "))`."
-    ))
-  }
 
-  # check for Bernoulli
-  if (info$is_bernoulli) {
-    insight::format_error(paste0(
-      "Overdispersion checks cannot be used for Bernoulli models. ",
-      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
-      "`check_overdispersion(simulate_residuals(", model_name, "))`."
-    ))
-  }
+  # for certain distributions, simulated residuals are more accurate
+  use_simulated <- info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
 
-  if (info$is_binomial) {
-    return(check_overdispersion.merMod(x, ...))
+  if (use_simulated) {
+    return(check_overdispersion(simulate_residuals(x, ...), ...))
   }
 
   yhat <- stats::fitted(x)
@@ -239,41 +227,27 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 
 #' @export
 check_overdispersion.merMod <- function(x, ...) {
-  # for warning message
-  model_name <- insight::safe_deparse(substitute(x))
-
-  # check if we have poisson or binomial
+  # for certain distributions, simulated residuals are more accurate
   info <- insight::model_info(x)
-  if (!info$is_count && !info$is_binomial) {
-    insight::format_error(paste0(
-      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1. ",
-      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
-      "`check_overdispersion(simulate_residuals(", model_name, "))`."
-    ))
-  }
 
-  # check for Bernoulli
-  if (info$is_bernoulli) {
-    insight::format_error(paste0(
-      "Overdispersion checks cannot be used for Bernoulli models. ",
-      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
-      "`check_overdispersion(simulate_residuals(", model_name, "))`."
-    ))
+  # for certain distributions, simulated residuals are more accurate
+  use_simulated <- info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
+
+  if (use_simulated) {
+    return(check_overdispersion(simulate_residuals(x, ...), ...))
   }
 
   rdf <- stats::df.residual(x)
   rp <- insight::get_residuals(x, type = "pearson")
+
+  # check if pearson residuals are available
   if (insight::is_empty_object(rp)) {
-    insight::format_error(paste0(
-      "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion. ", # nolint
-      "You may try to use `check_overdispersion()` on `simulated_residuals()`, e.g. ",
-      "`check_overdispersion(simulate_residuals(", model_name, "))`."
-    ))
-  } else {
-    Pearson.chisq <- sum(rp^2)
-    prat <- Pearson.chisq / rdf
-    pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
+    return(check_overdispersion(simulate_residuals(x, ...), ...))
   }
+
+  Pearson.chisq <- sum(rp^2)
+  prat <- Pearson.chisq / rdf
+  pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
 
   out <- list(
     chisq_statistic = Pearson.chisq,
@@ -311,7 +285,7 @@ check_overdispersion.performance_simres <- function(x, alternative = c("two.side
   result <- .simres_statistics(x, statistic_fun = dispersion, alternative = alternative)
 
   out <- list(
-    dispersion_ratio = result$observed / mean(result$simulated),
+    dispersion_ratio = mean(result$simulated) / result$observed,
     p_value = result$p
   )
 

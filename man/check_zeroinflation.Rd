@@ -47,12 +47,9 @@ zero-inflation in the data. In such cases, it is recommended to use
 negative binomial or zero-inflated models.
 
 In case of negative binomial models, models with zero-inflation component,
-or hurdle models, the results from \code{check_zeroinflation()} are likely to be
-unreliable. In such cases, it is recommended to use \code{simulate_residuals()}
-first, followed by \code{check_zeroinflation()} to check for zero-inflation,
-e.g.: \code{check_zeroinflation(simulate_residuals(model))}. Usually, such models
-are detected automatically and \code{check_zeroinflation()} internally calls
-\code{simulate_residuals()} if necessary.
+or hurdle models, the results from \code{check_zeroinflation()} are based on
+\code{\link[=simulate_residuals]{simulate_residuals()}}, i.e. \code{check_zeroinflation(simulate_residuals(model))}
+is internally called if necessary.
 }
 \examples{
 \dontshow{if (require("glmmTMB") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

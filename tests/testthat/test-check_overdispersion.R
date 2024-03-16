@@ -45,3 +45,67 @@ test_that("check_overdispersion", {
     tolerance = 1e-3
   )
 })
+
+
+test_that("check_overdispersion, zero-inflated and negbin", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("DHARMa")
+  skip_if_not(getRversion() >= "4.0.0")
+  data(Salamanders, package = "glmmTMB")
+
+  m1 <- glmmTMB::glmmTMB(
+    count ~ spp + mined,
+    ziformula = ~ spp + mined,
+    family = poisson,
+    data = Salamanders
+  )
+  m2 <- glmmTMB::glmmTMB(
+    count ~ spp + mined,
+    family = poisson,
+    data = Salamanders
+  )
+  m3 <- glmmTMB::glmmTMB(
+    count ~ spp + mined,
+    family = glmmTMB::nbinom1(),
+    data = Salamanders
+  )
+  expect_equal(
+    check_overdispersion(m1),
+    structure(
+      list(
+        dispersion_ratio = 0.504903379544268,
+        p_value = 0
+      ),
+      class = c("check_overdisp", "see_check_overdisp")
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    check_overdispersion(m2),
+    structure(
+      list(
+        chisq_statistic = 1873.7105986433,
+        dispersion_ratio = 2.94608584692342,
+        residual_df = 636L,
+        p_value = 3.26556213101505e-122
+      ),
+      class = c("check_overdisp", "see_check_overdisp"),
+      object_name = "m1"
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    check_overdispersion(m1),
+    structure(
+      list(
+        dispersion_ratio = 0.504903379544268,
+        p_value = 0
+      ),
+      class = c("check_overdisp", "see_check_overdisp")
+    ),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+})

@@ -24,12 +24,9 @@
 #' negative binomial or zero-inflated models.
 #'
 #' In case of negative binomial models, models with zero-inflation component,
-#' or hurdle models, the results from `check_zeroinflation()` are likely to be
-#' unreliable. In such cases, it is recommended to use `simulate_residuals()`
-#' first, followed by `check_zeroinflation()` to check for zero-inflation,
-#' e.g.: `check_zeroinflation(simulate_residuals(model))`. Usually, such models
-#' are detected automatically and `check_zeroinflation()` internally calls
-#' `simulate_residuals()` if necessary.
+#' or hurdle models, the results from `check_zeroinflation()` are based on
+#' [`simulate_residuals()`], i.e. `check_zeroinflation(simulate_residuals(model))`
+#' is internally called if necessary.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -71,9 +68,9 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
     return(NULL)
   }
 
-  # for glmmTMB models with zero-inflation component or nbinom families,
+  # for models with zero-inflation component or negative binomial families,
   # we use simulated_residuals()
-  if (inherits(x, "glmmTMB") && (model_info$is_zero_inflated || model_info$is_negbin)) {
+  if (model_info$is_zero_inflated || model_info$is_negbin) {
     if (missing(tolerance)) {
       tolerance <- 0.1
     }
@@ -82,26 +79,8 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
 
   # get predictions of outcome
   mu <- stats::fitted(x)
-
-  # get overdispersion parameters
-  if (model_info$is_negbin) {
-    if (methods::is(x, "glmmTMB")) {
-      theta <- stats::sigma(x)
-    } else if (methods::is(x, "glmerMod")) {
-      theta <- environment(x@resp$family$aic)[[".Theta"]]
-    } else {
-      theta <- x$theta
-    }
-  } else {
-    theta <- NULL
-  }
-
   # get predicted zero-counts
-  if (is.null(theta)) {
-    pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
-  } else {
-    pred.zero <- round(sum(stats::dnbinom(x = 0, size = theta, mu = mu)))
-  }
+  pred.zero <- round(sum(stats::dpois(x = 0, lambda = mu)))
 
   # proportion
   structure(
