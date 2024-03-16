@@ -116,7 +116,9 @@
 #' the line. For generalized linear models and when `residual_type = "normal"`,
 #' a half-normal Q-Q plot of the absolute value of the standardized deviance
 #' residuals is shown, however, the interpretation of the plot remains the same.
-#' See [`check_normality()`] for further details.
+#' See [`check_normality()`] for further details. Usually, for generalized linear
+#' (mixed) models, a test for uniformity of residuals based on simulated residuals
+#' is conducted (see next section).
 #'
 #' @section Uniformity of Residuals:
 #' Fore non-Gaussian models, when `residual_type = "simulated"` (the default

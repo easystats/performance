@@ -73,6 +73,20 @@ by choosing a different distributional family (like Quasi-Poisson, or
 negative binomial, see \emph{Gelman and Hill (2007), pages 115-116}).
 }
 
+\section{Tests based on simulated residuals}{
+
+For certain models, resp. model from certain families, tests are based on
+\code{\link[=simulated_residuals]{simulated_residuals()}}. These are usually more accurate for tests than the
+traditionally used Pearson residuals. However, when simulating from more
+complex model, such as mixed models or models with zero-inflation, there are
+several important considerations. Arguments specified in \code{...} are passed to
+\code{\link[=simulate_residuals]{simulate_residuals()}}, which relies on \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} (and
+therefore, arguments in \code{...} are passed further down to \emph{DHARMa}). It is
+recommended to read the 'Details' in \code{?DHARMa::simulateResiduals} closely to
+understand the implications of the simulation process and which arguments
+should be modified to get the most accurate results.
+}
+
 \examples{
 \dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 

@@ -176,7 +176,9 @@ predict the outcome well for that range that shows larger deviations from
 the line. For generalized linear models and when \code{residual_type = "normal"},
 a half-normal Q-Q plot of the absolute value of the standardized deviance
 residuals is shown, however, the interpretation of the plot remains the same.
-See \code{\link[=check_normality]{check_normality()}} for further details.
+See \code{\link[=check_normality]{check_normality()}} for further details. Usually, for generalized linear
+(mixed) models, a test for uniformity of residuals based on simulated residuals
+is conducted (see next section).
 }
 
 \section{Uniformity of Residuals}{

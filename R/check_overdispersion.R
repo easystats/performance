@@ -42,6 +42,8 @@
 #' the overdispersion test is based on [`simulate_residuals()`] (which is identical
 #' to `check_overdispersion(simulate_residuals(model))`).
 #'
+#' @inheritSection check_zeroinflation Tests based on simulated residuals
+#'
 #' @section How to fix Overdispersion:
 #' Overdispersion can be fixed by either modeling the dispersion parameter, or
 #' by choosing a different distributional family (like Quasi-Poisson, or

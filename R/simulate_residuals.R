@@ -21,6 +21,19 @@
 #' functions in the **see** package. See also `vignette("DHARMa")`. There is a
 #' `plot()` method to visualize the distribution of the residuals.
 #'
+#' @section Tests based on simulated residuals:
+#' For certain models, resp. model from certain families, tests like
+#' [`check_zeroinflation()`] or [`check_overdispersion()`] are based on
+#' `simulated_residuals()`. These are usually more accurate for such tests than
+#' the traditionally used Pearson residuals. However, when simulating from more
+#' complex model, such as mixed models or models with zero-inflation, there are
+#' several important considerations. `simulate_residuals()` relies on
+#' [`DHARMa::simulateResiduals()`], and additional arguments specified in `...`
+#' are passed further down to that function. It is recommended to read the
+#' 'Details' in `?DHARMa::simulateResiduals` closely to understand the
+#' implications of the simulation process and which arguments should be modified
+#' to get the most accurate results.
+#'
 #' @references
 #'
 #' - Hartig, F., & Lohse, L. (2022). DHARMa: Residual Diagnostics for Hierarchical

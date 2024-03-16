@@ -14,6 +14,8 @@
 #' @details Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
 #' There is a `plot()` method to visualize the distribution of the residuals.
 #'
+#' @inheritSection simulate_residuals Tests based on simulated residuals
+#'
 #' @seealso [`simulate_residuals()`]
 #'
 #' @return The p-value of the test statistics.
