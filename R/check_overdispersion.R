@@ -248,7 +248,7 @@ check_overdispersion.merMod <- function(x, ...) {
   info <- insight::model_info(x)
 
   # for certain distributions, simulated residuals are more accurate
-  use_simulated <- info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
+  use_simulated <- info$family == "genpois" || info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin # nolint
 
   if (use_simulated) {
     return(check_overdispersion(simulate_residuals(x, ...), ...))
