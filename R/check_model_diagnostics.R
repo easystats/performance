@@ -296,9 +296,10 @@
 .new_diag_overdispersion <- function(model, ...) {
   faminfo <- insight::model_info(model)
 
-  d <- data.frame(Predicted = stats::predict(model, type = "response"))
   simres <- simulate_residuals(model, ...)
   predicted <- simres$fittedPredictedResponse
+  # d <- data.frame(Predicted = stats::predict(model, type = "response"))
+  d <- data.frame(Predicted = predicted)
 
   # residuals based on simulated residuals - but we want normally distributed residuals
   d$Residuals <- stats::residuals(simres, quantileFunction = stats::qnorm, ...)
