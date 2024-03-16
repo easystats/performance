@@ -85,7 +85,7 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
 
   # for models with zero-inflation component or negative binomial families,
   # we use simulated_residuals()
-  if (!inherits(x, not_supported) && (model_info$is_zero_inflated || model_info$is_negbin)) {
+  if (!inherits(x, not_supported) && (model_info$is_zero_inflated || model_info$is_negbin || model_info$family == "genpois")) { # nolint
     if (missing(tolerance)) {
       tolerance <- 0.1
     }
