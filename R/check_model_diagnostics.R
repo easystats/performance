@@ -298,14 +298,12 @@
 
   simres <- simulate_residuals(model, ...)
   predicted <- simres$fittedPredictedResponse
-  # d <- data.frame(Predicted = stats::predict(model, type = "response"))
   d <- data.frame(Predicted = predicted)
 
   # residuals based on simulated residuals - but we want normally distributed residuals
   d$Residuals <- stats::residuals(simres, quantileFunction = stats::qnorm, ...)
   d$Res2 <- d$Residuals^2
-  # standard residuals: residuals / sqrt(mse)
-  d$StdRes <- d$Residuals / sqrt(mean(d$Res2, na.rm = TRUE))
+  d$StdRes <- insight::get_residuals(model, type = "pearson")
 
   # data for poisson models
   if (faminfo$is_poisson && !faminfo$is_zero_inflated) {
