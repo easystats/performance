@@ -68,9 +68,12 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
     return(NULL)
   }
 
+  # model classes not supported in DHARMa
+  not_supported <- c("fixest", "glmx")
+
   # for models with zero-inflation component or negative binomial families,
   # we use simulated_residuals()
-  if (model_info$is_zero_inflated || model_info$is_negbin) {
+  if (!inherits(x, not_supported) && (model_info$is_zero_inflated || model_info$is_negbin)) {
     if (missing(tolerance)) {
       tolerance <- 0.1
     }

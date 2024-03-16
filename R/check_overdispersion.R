@@ -164,7 +164,10 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   # for certain distributions, simulated residuals are more accurate
   use_simulated <- info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
 
-  if (use_simulated) {
+  # model classes not supported in DHARMa
+  not_supported <- c("fixest", "glmx")
+
+  if (use_simulated && !inherits(x, not_supported)) {
     return(check_overdispersion(simulate_residuals(x, ...), ...))
   }
 
