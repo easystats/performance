@@ -167,6 +167,7 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   # model info
   info <- insight::model_info(x)
+  obj_name <- insight::safe_deparse_symbol(substitute(x))
 
   # for certain distributions, simulated residuals are more accurate
   use_simulated <- info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
@@ -175,7 +176,7 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   not_supported <- c("fixest", "glmx")
 
   if (use_simulated && !inherits(x, not_supported)) {
-    return(check_overdispersion(simulate_residuals(x, ...), ...))
+    return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
   # check if we have poisson - need this for models not supported by DHARMa
@@ -208,7 +209,7 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "object_name") <- obj_name
 
   out
 }
@@ -251,12 +252,13 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 check_overdispersion.merMod <- function(x, ...) {
   # for certain distributions, simulated residuals are more accurate
   info <- insight::model_info(x)
+  obj_name <- insight::safe_deparse_symbol(substitute(x))
 
   # for certain distributions, simulated residuals are more accurate
   use_simulated <- info$family == "genpois" || info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin # nolint
 
   if (use_simulated) {
-    return(check_overdispersion(simulate_residuals(x, ...), ...))
+    return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
   rdf <- stats::df.residual(x)
@@ -264,7 +266,7 @@ check_overdispersion.merMod <- function(x, ...) {
 
   # check if pearson residuals are available
   if (insight::is_empty_object(rp)) {
-    return(check_overdispersion(simulate_residuals(x, ...), ...))
+    return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
   Pearson.chisq <- sum(rp^2)
@@ -279,7 +281,7 @@ check_overdispersion.merMod <- function(x, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "object_name") <- obj_name
 
   out
 }
@@ -299,6 +301,14 @@ check_overdispersion.performance_simres <- function(x, alternative = c("two.side
   # match arguments
   alternative <- match.arg(alternative)
 
+  # check for special arguments - we may pass "object_name" from other methods
+  dots <- list(...)
+  if (!is.null(dots$object_name)) {
+    obj_name <- dots$object_name
+  } else {
+    obj_name <- insight::safe_deparse_symbol(substitute(x))
+  }
+
   # statistics function
   variance <- stats::sd(x$simulatedResponse)^2
   dispersion <- function(i) stats::var(i - x$fittedPredictedResponse) / variance
@@ -312,7 +322,7 @@ check_overdispersion.performance_simres <- function(x, alternative = c("two.side
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "object_name") <- obj_name
 
   out
 }
