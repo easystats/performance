@@ -24,7 +24,7 @@
 #' data. Dispersion ratios larger than one indicate overdispersion, thus a
 #' negative binomial model or similar might fit better to the data. Dispersion
 #' ratios much smaller than one indicate underdispersion. A p-value < .05
-#' indicates either overdispersion or underdisperion (the first being more common).
+#' indicates either overdispersion or underdispersion (the first being more common).
 #'
 #' @section Overdispersion in Poisson Models:
 #' For Poisson models, the overdispersion test is based on the code from

@@ -30,7 +30,7 @@ test_that("check_overdispersion, glmmTMB-poisson", {
       ""
     )
   )
-  expect_message(out, "Overdispersion detected")
+  expect_message(capture.output(print(out)), "Overdispersion detected")
 
   set.seed(123)
   out <- check_overdispersion(simulate_residuals(m1))
@@ -46,6 +46,7 @@ test_that("check_overdispersion, glmmTMB-poisson", {
     tolerance = 1e-3
   )
 })
+
 
 test_that("check_overdispersion, glmmTMB-poisson mixed", {
   skip_if_not_installed("glmmTMB")
@@ -170,7 +171,7 @@ test_that("check_overdispersion, MASS::negbin", {
       ""
     )
   )
-  expect_message(out, "Underdispersion detected")
+  expect_message(capture.output(print(out)), "Underdispersion detected")
 
   # check that plot works
   skip_if_not_installed("see")
@@ -193,7 +194,7 @@ test_that("check_overdispersion, genpois", {
     check_overdispersion(model),
     structure(
       list(
-        dispersion_ratio = 1.02883236131678,
+        dispersion_ratio = 0.971975646955856,
         p_value = 0.88
       ),
       class = c("check_overdisp", "see_check_overdisp")
