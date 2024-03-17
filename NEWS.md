@@ -13,6 +13,8 @@
 
 * Improved error messages for `check_model()` when QQ-plots cannot be created.
 
+* `check_distribution()` is more stable for possibly sparse data.
+
 ## Bug fixes
 
 * Fixed issue in `check_normality()` for t-tests.
