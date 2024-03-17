@@ -4,8 +4,9 @@ test_that("check_overdispersion, glmmTMB-poisson", {
   data(Salamanders, package = "glmmTMB")
 
   m1 <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+  out <- check_overdispersion(m1)
   expect_equal(
-    check_overdispersion(m1),
+    out,
     structure(
       list(
         chisq_statistic = 1873.71012423995,
@@ -15,6 +16,32 @@ test_that("check_overdispersion, glmmTMB-poisson", {
       ),
       class = c("check_overdisp", "see_check_overdisp"),
       object_name = "m1"
+    ),
+    tolerance = 1e-3
+  )
+  expect_identical(
+    capture.output(print(out)),
+    c(
+      "# Overdispersion test",
+      "",
+      "       dispersion ratio =    2.946",
+      "  Pearson's Chi-Squared = 1873.710",
+      "                p-value =  < 0.001",
+      ""
+    )
+  )
+  expect_message(out, "Overdispersion detected")
+
+  set.seed(123)
+  out <- check_overdispersion(simulate_residuals(m1))
+  expect_equal(
+    out,
+    structure(
+      list(
+        dispersion_ratio = 3.91516791651235,
+        p_value = 0
+      ),
+      class = c("check_overdisp", "see_check_overdisp")
     ),
     tolerance = 1e-3
   )
@@ -73,7 +100,7 @@ test_that("check_overdispersion, zero-inflated and negbin", {
     check_overdispersion(m1),
     structure(
       list(
-        dispersion_ratio = 0.504903379544268,
+        dispersion_ratio = 1.98057695890769,
         p_value = 0
       ),
       class = c("check_overdisp", "see_check_overdisp")
@@ -100,7 +127,7 @@ test_that("check_overdispersion, zero-inflated and negbin", {
     check_overdispersion(m1),
     structure(
       list(
-        dispersion_ratio = 0.504903379544268,
+        dispersion_ratio = 1.98057695890769,
         p_value = 0
       ),
       class = c("check_overdisp", "see_check_overdisp")
@@ -120,11 +147,12 @@ test_that("check_overdispersion, MASS::negbin", {
   x <- ceiling(x)
   x <- pmax(x, 0)
   m <- MASS::glm.nb(x ~ mu)
+  out <- check_overdispersion(m)
   expect_equal(
-    check_overdispersion(m),
+    out,
     structure(
       list(
-        dispersion_ratio = 2.44187535015136,
+        dispersion_ratio = 0.409521313173506,
         p_value = 0
       ),
       class = c("check_overdisp", "see_check_overdisp")
@@ -132,6 +160,17 @@ test_that("check_overdispersion, MASS::negbin", {
     ignore_attr = TRUE,
     tolerance = 1e-4
   )
+  expect_identical(
+    capture.output(print(out)),
+    c(
+      "# Overdispersion test",
+      "",
+      " dispersion ratio =   0.410",
+      "          p-value = < 0.001",
+      ""
+    )
+  )
+  expect_message(out, "Underdispersion detected")
 })
 
 

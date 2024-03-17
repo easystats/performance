@@ -2,7 +2,7 @@
 #' @name check_overdispersion
 #'
 #' @description `check_overdispersion()` checks generalized linear (mixed)
-#'   models for overdispersion.
+#'   models for overdispersion (and underdispersion).
 #'
 #' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
 #'   (package **MASS**), or an object returned by `simulate_residuals()`.
@@ -13,15 +13,18 @@
 #'   statistics, p-value or dispersion ratio.
 #'
 #' @details Overdispersion occurs when the observed variance is higher than the
-#'   variance of a theoretical model. For Poisson models, variance increases
-#'   with the mean and, therefore, variance usually (roughly) equals the mean
-#'   value. If the variance is much higher, the data are "overdispersed".
+#' variance of a theoretical model. For Poisson models, variance increases
+#' with the mean and, therefore, variance usually (roughly) equals the mean
+#' value. If the variance is much higher, the data are "overdispersed". A less
+#' common case is underdispersion, where the variance is much lower than the
+#' mean.
 #'
 #' @section Interpretation of the Dispersion Ratio:
 #' If the dispersion ratio is close to one, a Poisson model fits well to the
 #' data. Dispersion ratios larger than one indicate overdispersion, thus a
-#' negative binomial model or similar might fit better to the data. A p-value <
-#' .05 indicates overdispersion.
+#' negative binomial model or similar might fit better to the data. Dispersion
+#' ratios much smaller than one indicate underdispersion. A p-value < .05
+#' indicates either overdispersion or underdisperion (the first being more common).
 #'
 #' @section Overdispersion in Poisson Models:
 #' For Poisson models, the overdispersion test is based on the code from
@@ -147,8 +150,10 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
   if (pval > 0.05) {
     message("No overdispersion detected.")
-  } else {
+  } else if (x$dispersion_ratio > 1) {
     message("Overdispersion detected.")
+  } else {
+    message("Underdispersion detected.")
   }
 
   invisible(orig_x)
@@ -302,7 +307,7 @@ check_overdispersion.performance_simres <- function(x, alternative = c("two.side
   result <- .simres_statistics(x, statistic_fun = dispersion, alternative = alternative)
 
   out <- list(
-    dispersion_ratio = mean(result$simulated) / result$observed,
+    dispersion_ratio = result$observed / mean(result$simulated),
     p_value = result$p
   )
 

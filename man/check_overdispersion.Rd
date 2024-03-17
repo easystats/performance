@@ -25,20 +25,23 @@ statistics, p-value or dispersion ratio.
 }
 \description{
 \code{check_overdispersion()} checks generalized linear (mixed)
-models for overdispersion.
+models for overdispersion (and underdispersion).
 }
 \details{
 Overdispersion occurs when the observed variance is higher than the
 variance of a theoretical model. For Poisson models, variance increases
 with the mean and, therefore, variance usually (roughly) equals the mean
-value. If the variance is much higher, the data are "overdispersed".
+value. If the variance is much higher, the data are "overdispersed". A less
+common case is underdispersion, where the variance is much lower than the
+mean.
 }
 \section{Interpretation of the Dispersion Ratio}{
 
 If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
-negative binomial model or similar might fit better to the data. A p-value <
-.05 indicates overdispersion.
+negative binomial model or similar might fit better to the data. Dispersion
+ratios much smaller than one indicate underdispersion. A p-value < .05
+indicates either overdispersion or underdisperion (the first being more common).
 }
 
 \section{Overdispersion in Poisson Models}{
