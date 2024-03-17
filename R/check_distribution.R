@@ -197,7 +197,7 @@ check_distribution.numeric <- function(model) {
   map_est <- .safe(mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")))
 
   if (is.null(map_est)) {
-    map_est <- datawizard::distribution_mode(x)
+    map_est <- mean(x) - datawizard::distribution_mode(x)
     msg <- "Could not accurately estimate the mode."
     if (!is.null(type)) {
       msg <- paste(msg, "Predicted distribution of the", type, "may be less accurate.")
