@@ -3,7 +3,7 @@
 \name{check_overdispersion}
 \alias{check_overdispersion}
 \alias{check_overdispersion.performance_simres}
-\title{Check overdispersion of GL(M)M's}
+\title{Check overdispersion (and underdispersion) of GL(M)M's}
 \usage{
 check_overdispersion(x, ...)
 

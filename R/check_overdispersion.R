@@ -1,4 +1,4 @@
-#' @title Check overdispersion of GL(M)M's
+#' @title Check overdispersion (and underdispersion) of GL(M)M's
 #' @name check_overdispersion
 #'
 #' @description `check_overdispersion()` checks generalized linear (mixed)
