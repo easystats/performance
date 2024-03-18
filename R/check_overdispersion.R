@@ -303,10 +303,10 @@ check_overdispersion.performance_simres <- function(x, alternative = c("two.side
 
   # check for special arguments - we may pass "object_name" from other methods
   dots <- list(...)
-  if (!is.null(dots$object_name)) {
-    obj_name <- dots$object_name
-  } else {
+  if (is.null(dots$object_name)) {
     obj_name <- insight::safe_deparse_symbol(substitute(x))
+  } else {
+    obj_name <- dots$object_name
   }
 
   # statistics function

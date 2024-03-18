@@ -106,7 +106,7 @@ check_predictions.default <- function(object,
   minfo <- insight::model_info(object, verbose = FALSE)
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
