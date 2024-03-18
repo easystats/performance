@@ -12,7 +12,8 @@
 #'   by at least half of the methods). See the **Details** section below
 #'   for a description of the methods.
 #'
-#' @param x A model or a data.frame object.
+#' @param x A model, a data.frame, a `performance_simres` [`simulate_residuals()`]
+#' or a `DHARMa` object.
 #' @param method The outlier detection method(s). Can be `"all"` or some of
 #'   `"cook"`, `"pareto"`, `"zscore"`, `"zscore_robust"`, `"iqr"`, `"ci"`, `"eti"`,
 #'   `"hdi"`, `"bci"`, `"mahalanobis"`, `"mahalanobis_robust"`, `"mcd"`, `"ics"`,
@@ -23,11 +24,19 @@
 #'   'Details'). If a numeric value is given, it will be used as the threshold
 #'   for any of the method run.
 #' @param ID Optional, to report an ID column along with the row number.
+#' @param type Type of method to test for outliers. Can be one of `"default"`,
+#' `"binomial"` or `"bootstrap"`. Only applies when `x` is an object returned
+#' by `simulate_residuals()` or of class `DHARMa`. See 'Details' in
+#' `?DHARMa::testOutliers` for a detailed description of the types.
 #' @param verbose Toggle warnings.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
 #' they are  passed down to [stats::mahalanobis()]. `percentage_central` can
-#' be specified when `method = "mcd"`.
+#' be specified when `method = "mcd"`. For objects of class `performance_simres`
+#' or `DHARMa`, further arguments are passed down to `DHARMa::testOutliers()`.
+#'
+#' @inheritParams check_zeroinflation
+#' @inheritParams simulate_residuals
 #'
 #' @return A logical vector of the detected outliers with a nice printing
 #'   method: a check (message) on whether outliers were detected or not. The
@@ -199,6 +208,17 @@
 #'  outliers. The default threshold of 0.025 will classify as outliers the
 #'  observations located at `qnorm(1-0.025) * SD)` of the log-transformed
 #'  LOF distance. Requires the **dbscan** package.
+#'
+#' @section Methods for simulated residuals:
+#'
+#' The approach for detecting outliers based on simulated residuals differs
+#' from the traditional methods and may not be detecting outliers as expected.
+#' Literally, this approach compares observed to simulated values. However, we
+#' do not know the deviation of the observed data to the model expectation, and
+#' thus, the term "outlier" should be taken with a grain of salt. It refers to
+#' "simulation outliers". Basically, the comparison tests whether on observed
+#' data point is outside the simulated range. It is strongly recommended to read
+#' the related documentations in the **DHARMa** package, e.g. `?DHARMa::testOutliers`.
 #'
 #' @section Threshold specification:
 #'
@@ -783,6 +803,28 @@ print.check_outliers_metagen <- function(x, ...) {
 plot.check_outliers <- function(x, ...) {
   insight::check_if_installed("see", "to plot outliers")
   NextMethod()
+}
+
+#' @export
+print.check_outliers_simres <- function(x, digits = 2, ...) {
+  result <- paste0(
+    insight::format_value(100 * x$Expected, digits = digits, ...),
+    "%, ",
+    insight::format_ci(100 * x$CI_low, 100 * x$CI_high, digits = digits, ...)
+  )
+  insight::print_color("# Outliers detection\n\n", "blue")
+  cat(sprintf("  Proportion of observed outliers: %.*f%%\n", digits, 100 * x$Coefficient))
+  cat(sprintf("  Proportion of expected outliers: %s\n\n", result))
+
+  p_string <- paste0(" (", insight::format_p(x$p_value), ")")
+
+  if (x$p_value < 0.05) {
+    message("Outliers were detected", p_string, ".")
+  } else {
+    message("No outliers were detected", p_string, ".")
+  }
+
+  invisible(x)
 }
 
 
@@ -1436,6 +1478,30 @@ check_outliers.meta <- check_outliers.metagen
 
 #' @export
 check_outliers.metabin <- check_outliers.metagen
+
+
+#' @rdname check_outliers
+#' @export
+check_outliers.performance_simres <- function(x, type = "default", iterations = 100, alternative = "two.sided", ...) {
+  type <- match.arg(type, c("default", "binomial", "bootstrap"))
+  alternative <- match.arg(alternative, c("two.sided", "greater", "less"))
+
+  insight::check_if_installed("DHARMa")
+  result <- DHARMa::testOutliers(x, type = type, nBoot = iterations, alternative = alternative, plot = FALSE, ...)
+
+  outlier <- list(
+    Coefficient = as.vector(result$estimate),
+    Expected = as.numeric(gsub("(.*)\\(expected: (\\d.*)\\)", "\\2", names(result$estimate))),
+    CI_low = result$conf.int[1],
+    CI_high = result$conf.int[2],
+    p_value = result$p.value
+  )
+  class(outlier) <- c("check_outliers_simres", class(outlier))
+  outlier
+}
+
+#' @export
+check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 

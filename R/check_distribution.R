@@ -77,7 +77,7 @@ check_distribution.default <- function(model) {
   } else {
     x <- stats::residuals(model)
   }
-  dat <- .extract_features(x)
+  dat <- .extract_features(x, "residuals")
 
   dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
 
@@ -88,7 +88,7 @@ check_distribution.default <- function(model) {
     dummy_factors = FALSE,
     preserve_levels = TRUE
   )
-  dat <- .extract_features(x)
+  dat <- .extract_features(x, "response")
 
   dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
 
@@ -189,15 +189,27 @@ check_distribution.numeric <- function(model) {
 
 # utilities -----------------------------
 
-.extract_features <- function(x) {
+.extract_features <- function(x, type = NULL) {
   # validation check, remove missings
   x <- x[!is.na(x)]
+
+  # this might fail, so we wrap in ".safe()"
+  map_est <- .safe(mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")))
+
+  if (is.null(map_est)) {
+    map_est <- mean(x) - datawizard::distribution_mode(x)
+    msg <- "Could not accurately estimate the mode."
+    if (!is.null(type)) {
+      msg <- paste(msg, "Predicted distribution of the", type, "may be less accurate.")
+    }
+    insight::format_alert(msg)
+  }
 
   data.frame(
     SD = stats::sd(x),
     MAD = stats::mad(x, constant = 1),
     Mean_Median_Distance = mean(x) - stats::median(x),
-    Mean_Mode_Distance = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+    Mean_Mode_Distance = map_est,
     SD_MAD_Distance = stats::sd(x) - stats::mad(x, constant = 1),
     Var_Mean_Distance = stats::var(x) - mean(x),
     Range_SD = diff(range(x)) / stats::sd(x),

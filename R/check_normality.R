@@ -58,7 +58,7 @@ check_normality.default <- function(x, ...) {
 
   if (!insight::model_info(x)$is_linear) {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models."
+      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
     )
     return(NULL)
   }
@@ -87,7 +87,7 @@ check_normality.glm <- function(x, ...) {
 
   insight::format_alert(
     "There's no formal statistical test for normality for generalized linear model.",
-    "Please use `plot()` on the return value of this function: `plot(check_normality(model))`"
+    "Instead, please use `simulate_residuals()` and `check_residuals()` to check for uniformity of residuals."
   )
   invisible(out)
 }
@@ -181,7 +181,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
   # valid model?
   if (!info$is_linear && effects == "fixed") {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models."
+      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
     )
     return(NULL)
   }
@@ -200,7 +200,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
         }
       },
       error = function(e) {
-        return(NULL)
+        NULL
       }
     )
 
@@ -217,6 +217,8 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
       attr(p.val, "type") <- "random effects"
       attr(p.val, "re_groups") <- re_groups
     }
+  } else if (inherits(x, "glmmTMB")) {
+    p.val <- .check_normality(stats::residuals(x, type = "deviance"), x)
   } else {
     # check for normality of residuals
     p.val <- .check_normality(stats::rstudent(x), x)
@@ -260,7 +262,7 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
 # helper ---------------------
 
 .check_normality <- function(x, model, type = "residuals") {
-  ts <- .safe({
+  ts_result <- .safe({
     if (length(x) >= 5000) {
       suppressWarnings(stats::ks.test(x, y = "pnorm", alternative = "two.sided"))
     } else {
@@ -268,7 +270,7 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
     }
   })
 
-  if (is.null(ts)) {
+  if (is.null(ts_result)) {
     insight::print_color(
       sprintf("`check_normality()` does not support models of class `%s`.\n", class(model)[1]),
       "red"
@@ -276,7 +278,7 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
     return(NULL)
   }
 
-  out <- ts$p.value
+  out <- ts_result$p.value
   attr(out, "type") <- type
 
   out

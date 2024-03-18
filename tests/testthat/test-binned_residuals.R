@@ -21,6 +21,10 @@ test_that("binned_residuals", {
     c(-0.05686, -0.12331, -0.35077, -0.57683, 0.17916, -0.44147),
     tolerance = 1e-4
   )
+  expect_identical(
+    capture.output(print(result)),
+    "Warning: Probably bad model fit. Only about 50% of the residuals are inside the error bounds."
+  )
 })
 
 

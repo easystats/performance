@@ -46,6 +46,7 @@ DOI
 Datenerhebung
 Delacre
 Deskriptivstatistische
+DHARMa
 Distinguishability
 Dom
 Dominicy
@@ -76,6 +77,7 @@ Gazen
 Gelman
 Gnanadesikan
 Guilford
+Hartig
 HDI
 HJ
 Hastie
@@ -124,6 +126,7 @@ Ley
 Leys
 Lillo
 Liu
+Lohse
 Lomax
 MADs
 MSA
@@ -182,6 +185,7 @@ Sensivity
 Shachar
 Shinichi
 Skrondal
+Smyth
 Solomons
 Somers
 Specifity
@@ -279,6 +283,7 @@ metafor
 mfx
 mhurdle
 mis
+misspecification
 mlm
 mlogit
 modelfit
@@ -302,6 +307,7 @@ quartile
 quartiles
 rOpenSci
 recoding
+reimplement
 rempsyc
 reproducibility
 rescaling
@@ -325,6 +331,7 @@ unadjusted
 und
 underfitted
 underfitting
+underdispersion
 visualisation
 winsorization
 winsorize

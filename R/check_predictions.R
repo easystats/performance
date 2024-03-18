@@ -37,6 +37,8 @@
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'
+#' @seealso [`simulate_residuals()`] and [`check_residuals()`].
+#'
 #' @details An example how posterior predictive checks can also be used for model
 #'   comparison is Figure 6 from _Gabry et al. 2019, Figure 6_.
 #'
@@ -104,7 +106,7 @@ check_predictions.default <- function(object,
   minfo <- insight::model_info(object, verbose = FALSE)
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }

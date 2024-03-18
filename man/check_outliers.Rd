@@ -5,6 +5,7 @@
 \alias{check_outliers.default}
 \alias{check_outliers.numeric}
 \alias{check_outliers.data.frame}
+\alias{check_outliers.performance_simres}
 \title{Outliers detection (check for influential observations)}
 \usage{
 check_outliers(x, ...)
@@ -21,14 +22,24 @@ check_outliers(x, ...)
 \method{check_outliers}{numeric}(x, method = "zscore_robust", threshold = NULL, ...)
 
 \method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ID = NULL, ...)
+
+\method{check_outliers}{performance_simres}(
+  x,
+  type = "default",
+  iterations = 100,
+  alternative = "two.sided",
+  ...
+)
 }
 \arguments{
-\item{x}{A model or a data.frame object.}
+\item{x}{A model, a data.frame, a \code{performance_simres} \code{\link[=simulate_residuals]{simulate_residuals()}}
+or a \code{DHARMa} object.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
 down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
 they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}. \code{percentage_central} can
-be specified when \code{method = "mcd"}.}
+be specified when \code{method = "mcd"}. For objects of class \code{performance_simres}
+or \code{DHARMa}, further arguments are passed down to \code{DHARMa::testOutliers()}.}
 
 \item{method}{The outlier detection method(s). Can be \code{"all"} or some of
 \code{"cook"}, \code{"pareto"}, \code{"zscore"}, \code{"zscore_robust"}, \code{"iqr"}, \code{"ci"}, \code{"eti"},
@@ -44,6 +55,15 @@ for any of the method run.}
 \item{ID}{Optional, to report an ID column along with the row number.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{type}{Type of method to test for outliers. Can be one of \code{"default"},
+\code{"binomial"} or \code{"bootstrap"}. Only applies when \code{x} is an object returned
+by \code{simulate_residuals()} or of class \code{DHARMa}. See 'Details' in
+\code{?DHARMa::testOutliers} for a detailed description of the types.}
+
+\item{iterations}{Number of simulations to run.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing
@@ -228,6 +248,19 @@ outliers. The default threshold of 0.025 will classify as outliers the
 observations located at \verb{qnorm(1-0.025) * SD)} of the log-transformed
 LOF distance. Requires the \strong{dbscan} package.
 }
+}
+
+\section{Methods for simulated residuals}{
+
+
+The approach for detecting outliers based on simulated residuals differs
+from the traditional methods and may not be detecting outliers as expected.
+Literally, this approach compares observed to simulated values. However, we
+do not know the deviation of the observed data to the model expectation, and
+thus, the term "outlier" should be taken with a grain of salt. It refers to
+"simulation outliers". Basically, the comparison tests whether on observed
+data point is outside the simulated range. It is strongly recommended to read
+the related documentations in the \strong{DHARMa} package, e.g. \code{?DHARMa::testOutliers}.
 }
 
 \section{Threshold specification}{

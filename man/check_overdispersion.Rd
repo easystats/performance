@@ -2,15 +2,22 @@
 % Please edit documentation in R/check_overdispersion.R
 \name{check_overdispersion}
 \alias{check_overdispersion}
-\title{Check overdispersion of GL(M)M's}
+\alias{check_overdispersion.performance_simres}
+\title{Check overdispersion (and underdispersion) of GL(M)M's}
 \usage{
 check_overdispersion(x, ...)
+
+\method{check_overdispersion}{performance_simres}(x, alternative = c("two.sided", "less", "greater"), ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
-(package \strong{MASS}).}
+(package \strong{MASS}), or an object returned by \code{simulate_residuals()}.}
 
-\item{...}{Currently not used.}
+\item{...}{Arguments passed down to \code{\link[=simulate_residuals]{simulate_residuals()}}. This only applies
+for models with zero-inflation component, or for models of class \code{glmmTMB}
+from \code{nbinom1} or \code{nbinom2} family.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.}
 }
 \value{
 A list with results from the overdispersion test, like chi-squared
@@ -18,26 +25,35 @@ statistics, p-value or dispersion ratio.
 }
 \description{
 \code{check_overdispersion()} checks generalized linear (mixed)
-models for overdispersion.
+models for overdispersion (and underdispersion).
 }
 \details{
 Overdispersion occurs when the observed variance is higher than the
 variance of a theoretical model. For Poisson models, variance increases
 with the mean and, therefore, variance usually (roughly) equals the mean
-value. If the variance is much higher, the data are "overdispersed".
+value. If the variance is much higher, the data are "overdispersed". A less
+common case is underdispersion, where the variance is much lower than the
+mean.
 }
 \section{Interpretation of the Dispersion Ratio}{
 
 If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
-negative binomial model or similar might fit better to the data. A p-value <
-.05 indicates overdispersion.
+negative binomial model or similar might fit better to the data. Dispersion
+ratios much smaller than one indicate underdispersion. A p-value < .05
+indicates either overdispersion or underdispersion (the first being more common).
 }
 
 \section{Overdispersion in Poisson Models}{
 
 For Poisson models, the overdispersion test is based on the code from
 \emph{Gelman and Hill (2007), page 115}.
+}
+
+\section{Overdispersion in Negative Binomial or Zero-Inflated Models}{
+
+For negative binomial (mixed) models or models with zero-inflation component,
+the overdispersion test is based simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}).
 }
 
 \section{Overdispersion in Mixed Models}{
@@ -47,8 +63,10 @@ is based on the code in the
 \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
 section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
 function only returns an \emph{approximate} estimate of an overdispersion
-parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-with \code{glmmTMB}).
+parameter. Using this approach would be inaccurate for zero-inflated or
+negative binomial mixed models (fitted with \code{glmmTMB}), thus, in such cases,
+the overdispersion test is based on \code{\link[=simulate_residuals]{simulate_residuals()}} (which is identical
+to \code{check_overdispersion(simulate_residuals(model))}).
 }
 
 \section{How to fix Overdispersion}{
@@ -56,6 +74,23 @@ with \code{glmmTMB}).
 Overdispersion can be fixed by either modeling the dispersion parameter, or
 by choosing a different distributional family (like Quasi-Poisson, or
 negative binomial, see \emph{Gelman and Hill (2007), pages 115-116}).
+}
+
+\section{Tests based on simulated residuals}{
+
+For certain models, resp. model from certain families, tests are based on
+\code{\link[=simulated_residuals]{simulated_residuals()}}. These are usually more accurate for tests than the
+traditionally used Pearson residuals. However, when simulating from more
+complex model, such as mixed models or models with zero-inflation, there are
+several important considerations. Arguments specified in \code{...} are passed to
+\code{\link[=simulate_residuals]{simulate_residuals()}}, which relies on \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} (and
+therefore, arguments in \code{...} are passed further down to \emph{DHARMa}). The
+defaults in DHARMa are set on the most conservative option that works for
+all models. However, in many cases, the help advises to use different settings
+in particular situations or for particular models. It is recommended to read
+the 'Details' in \code{?DHARMa::simulateResiduals} closely to understand the
+implications of the simulation process and which arguments should be modified
+to get the most accurate results.
 }
 
 \examples{

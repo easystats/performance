@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.9.6
+Version: 0.10.9.8
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -70,9 +70,8 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.2),
-    insight (>= 0.19.8),
+    insight (>= 0.19.9),
     datawizard (>= 0.9.1),
-    methods,
     stats,
     utils
 Suggests:
@@ -91,6 +90,7 @@ Suggests:
     correlation,
     cplm,
     dbscan,
+    DHARMa,
     estimatr,
     fixest,
     flextable, 

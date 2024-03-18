@@ -4,9 +4,34 @@
 
 * Rudimentary support for models of class `serp` from package *serp*.
 
+## New functions
+
+* `simulate_residuals()` and `check_residuals()`, to simulate and check residuals
+  from generalized linear (mixed) models. Simulating residuals is based on the
+  DHARMa package, and objects returned by `simulate_residuals()` inherit from
+  the `DHARMa` class, and thus can be used with any functions from the *DHARMa*
+  package. However, there are also implementations in the *performance* package,
+  such as `check_overdispersion()`, `check_zeroinflation()`, `check_outliers()`
+  or `check_model()`.
+
+* Plots for `check_model()` have been improved. The Q-Q plots are now based
+  on simulated residuals from the DHARMa package for non-Gaussian models, thus
+  providing more accurate and informative plots. The half-normal QQ plot for
+  generalized linear models can still be obtained by setting the new argument
+  `residual_type = "normal"`.
+
+* Following functions now support simulated residuals (from `simulate_residuals()`)
+  resp. objects returned from `DHARMa::simulateResiduals()`:
+  - `check_overdispersion()`
+  - `check_zeroinflation()`
+  - `check_outliers()`
+  - `check_model()`
+
 ## General
 
 * Improved error messages for `check_model()` when QQ-plots cannot be created.
+
+* `check_distribution()` is more stable for possibly sparse data.
 
 ## Bug fixes
 
