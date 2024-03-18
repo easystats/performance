@@ -56,6 +56,11 @@ for any of the method run.}
 
 \item{verbose}{Toggle warnings.}
 
+\item{type}{Type of method to test for outliers. Can be one of \code{"default"},
+\code{"binomial"} or \code{"bootstrap"}. Only applies when \code{x} is an object returned
+by \code{simulate_residuals()} or of class \code{DHARMa}. See 'Details' in
+\code{?DHARMa::testOutliers} for a detailed description of the types.}
+
 \item{iterations}{Number of simulations to run.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.}
@@ -252,10 +257,10 @@ The approach for detecting outliers based on simulated residuals differs
 from the traditional methods and may not be detecting outliers as expected.
 Literally, this approach compares observed to simulated values. However, we
 do not know the deviation of the observed data to the model expectation, and
-thus, the term "outlier" should be taken with a grain of salt. Basically, the
-comparison tests whether on observed data point is outside the simulated range.
-It is strongly recommended to read the related documentations in the \strong{DHARMa}
-package, e.g. \code{?DHARMa::testOutliers}.
+thus, the term "outlier" should be taken with a grain of salt. It refers to
+"simulation outliers". Basically, the comparison tests whether on observed
+data point is outside the simulated range. It is strongly recommended to read
+the related documentations in the \strong{DHARMa} package, e.g. \code{?DHARMa::testOutliers}.
 }
 
 \section{Threshold specification}{

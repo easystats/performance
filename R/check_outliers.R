@@ -24,6 +24,10 @@
 #'   'Details'). If a numeric value is given, it will be used as the threshold
 #'   for any of the method run.
 #' @param ID Optional, to report an ID column along with the row number.
+#' @param type Type of method to test for outliers. Can be one of `"default"`,
+#' `"binomial"` or `"bootstrap"`. Only applies when `x` is an object returned
+#' by `simulate_residuals()` or of class `DHARMa`. See 'Details' in
+#' `?DHARMa::testOutliers` for a detailed description of the types.
 #' @param verbose Toggle warnings.
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
@@ -211,10 +215,10 @@
 #' from the traditional methods and may not be detecting outliers as expected.
 #' Literally, this approach compares observed to simulated values. However, we
 #' do not know the deviation of the observed data to the model expectation, and
-#' thus, the term "outlier" should be taken with a grain of salt. Basically, the
-#' comparison tests whether on observed data point is outside the simulated range.
-#' It is strongly recommended to read the related documentations in the **DHARMa**
-#' package, e.g. `?DHARMa::testOutliers`.
+#' thus, the term "outlier" should be taken with a grain of salt. It refers to
+#' "simulation outliers". Basically, the comparison tests whether on observed
+#' data point is outside the simulated range. It is strongly recommended to read
+#' the related documentations in the **DHARMa** package, e.g. `?DHARMa::testOutliers`.
 #'
 #' @section Threshold specification:
 #'
