@@ -245,6 +245,19 @@ LOF distance. Requires the \strong{dbscan} package.
 }
 }
 
+\section{Methods for simulated residuals}{
+
+
+The approach for detecting outliers based on simulated residuals differs
+from the traditional methods and may not be detecting outliers as expected.
+Literally, this approach compares observed to simulated values. However, we
+do not know the deviation of the observed data to the model expectation, and
+thus, the term "outlier" should be taken with a grain of salt. Basically, the
+comparison tests whether on observed data point is outside the simulated range.
+It is strongly recommended to read the related documentations in the \strong{DHARMa}
+package, e.g. \code{?DHARMa::testOutliers}.
+}
+
 \section{Threshold specification}{
 
 

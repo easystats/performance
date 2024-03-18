@@ -37,6 +37,8 @@
 #'
 #' @return A data frame of simulated responses and the original response vector.
 #'
+#' @seealso [`simulate_residuals()`] and [`check_residuals()`].
+#'
 #' @details An example how posterior predictive checks can also be used for model
 #'   comparison is Figure 6 from _Gabry et al. 2019, Figure 6_.
 #'

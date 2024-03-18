@@ -13,10 +13,13 @@
 #'
 #' @details Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
 #' There is a `plot()` method to visualize the distribution of the residuals.
+#' The test fpr uniformity basically tests to which extent the observed values
+#' deviate from the model expectations (i.e. simulated values). In this sense,
+#' the `check_residuals()` function has similar goals like [`check_predictions()`].
 #'
 #' @inheritSection simulate_residuals Tests based on simulated residuals
 #'
-#' @seealso [`simulate_residuals()`]
+#' @seealso [`simulate_residuals()`] and [`check_predictions()`].
 #'
 #' @return The p-value of the test statistics.
 #'

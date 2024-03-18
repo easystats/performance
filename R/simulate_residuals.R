@@ -13,7 +13,7 @@
 #' [`check_residuals()`]. The returned object is of class `DHARMa` and
 #' `performance_simres`.
 #'
-#' @seealso [`check_residuals()`]
+#' @seealso [`check_residuals()`] and [`check_predictions()`].
 #'
 #' @details This function is a small wrapper around [`DHARMa::simulateResiduals()`].
 #' It basically only sets `plot = FALSE` and adds an additional class attribute

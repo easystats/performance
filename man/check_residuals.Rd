@@ -30,6 +30,9 @@ residual spatial and temporal autocorrelation.
 \details{
 Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
 There is a \code{plot()} method to visualize the distribution of the residuals.
+The test fpr uniformity basically tests to which extent the observed values
+deviate from the model expectations (i.e. simulated values). In this sense,
+the \code{check_residuals()} function has similar goals like \code{\link[=check_predictions]{check_predictions()}}.
 }
 \section{Tests based on simulated residuals}{
 
@@ -58,5 +61,5 @@ check_residuals(res)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=simulate_residuals]{simulate_residuals()}}
+\code{\link[=simulate_residuals]{simulate_residuals()}} and \code{\link[=check_predictions]{check_predictions()}}.
 }
