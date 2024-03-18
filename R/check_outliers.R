@@ -12,7 +12,8 @@
 #'   by at least half of the methods). See the **Details** section below
 #'   for a description of the methods.
 #'
-#' @param x A model or a data.frame object.
+#' @param x A model, a data.frame, a `performance_simres` [`simulate_residuals()`]
+#' or a `DHARMa` object.
 #' @param method The outlier detection method(s). Can be `"all"` or some of
 #'   `"cook"`, `"pareto"`, `"zscore"`, `"zscore_robust"`, `"iqr"`, `"ci"`, `"eti"`,
 #'   `"hdi"`, `"bci"`, `"mahalanobis"`, `"mahalanobis_robust"`, `"mcd"`, `"ics"`,
@@ -27,7 +28,11 @@
 #' @param ... When `method = "ics"`, further arguments in `...` are passed
 #' down to [ICSOutlier::ics.outlier()]. When `method = "mahalanobis"`,
 #' they are  passed down to [stats::mahalanobis()]. `percentage_central` can
-#' be specified when `method = "mcd"`.
+#' be specified when `method = "mcd"`. For objects of class `performance_simres`
+#' or `DHARMa`, further arguments are passed down to `DHARMa::testOutliers()`.
+#'
+#' @inheritParams check_zeroinflation
+#' @inheritParams simulate_residuals
 #'
 #' @return A logical vector of the detected outliers with a nice printing
 #'   method: a check (message) on whether outliers were detected or not. The
@@ -785,6 +790,28 @@ plot.check_outliers <- function(x, ...) {
   NextMethod()
 }
 
+#' @export
+print.check_outliers_simres <- function(x, digits = 2, ...) {
+  result <- paste0(
+    insight::format_value(100 * x$Coefficient, digits = digits, ...),
+    "%, ",
+    insight::format_ci(100 * x$CI_low, 100 * x$CI_high, digits = digits, ...)
+  )
+  insight::print_color("# Outliers detection\n\n", "blue")
+  cat(sprintf("  Proportion of expected outliers: %.*f%%\n", digits, 100 * x$Expected))
+  cat(sprintf("  Proportion of observed outliers: %s\n\n", result))
+
+  p_string <- paste0(" (", insight::format_p(x$p_value), ")")
+
+  if (x$p_value < 0.05) {
+    message("Outliers were detected", p_string, ".")
+  } else {
+    message("No outliers were detected", p_string, ".")
+  }
+
+  invisible(x)
+}
+
 
 
 # other classes -------------------------
@@ -1436,6 +1463,30 @@ check_outliers.meta <- check_outliers.metagen
 
 #' @export
 check_outliers.metabin <- check_outliers.metagen
+
+
+#' @rdname check_outliers
+#' @export
+check_outliers.performance_simres <- function(x, type = "default", iterations = 100, alternative = "two.sided", ...) {
+  type <- match.arg(type, c("default", "binomial", "bootstrap"))
+  alternative <- match.arg(alternative, c("two.sided", "greater", "less"))
+
+  insight::check_if_installed("DHARMa")
+  result <- DHARMa::testOutliers(x, type = type, nBoot = iterations, alternative = alternative, plot = FALSE, ...)
+
+  outlier <- list(
+    Coefficient = as.vector(result$estimate),
+    Expected = as.numeric(gsub("(.*)\\(expected: (\\d.*)\\)", "\\2", names(result$estimate))),
+    CI_low = result$conf.int[1],
+    CI_high = result$conf.int[2],
+    p_value = result$p.value
+  )
+  class(outlier) <- c("check_outliers_simres", class(outlier))
+  outlier
+}
+
+#' @export
+check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 

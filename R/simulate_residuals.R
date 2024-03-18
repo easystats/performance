@@ -96,9 +96,17 @@ plot.performance_simres <- function(x, ...) {
 # helper functions ---------------------
 
 .simres_statistics <- function(x, statistic_fun, alternative = "two.sided") {
-  # count observed and simulated zeros
-  observed <- statistic_fun(x$observedResponse)
-  simulated <- apply(x$simulatedResponse, 2, statistic_fun)
+  # summarize the observed and simulated residuals
+  if (!is.null(statistic_fun)) {
+    # either apply a function to observed and simulated residusls,
+    # to calcualte a summary statistic
+    observed <- statistic_fun(x$observedResponse)
+    simulated <- apply(x$simulatedResponse, 2, statistic_fun)
+  } else {
+    # or we pass the values to compute the p-value directly (for "check_outliers()")
+    observed <- x
+    simulated <- statistic_fun
+  }
   # p is simply ratio of simulated zeros to observed zeros
   p <- switch(alternative,
     greater = mean(simulated >= observed),
