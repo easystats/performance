@@ -5,6 +5,7 @@
 \alias{check_outliers.default}
 \alias{check_outliers.numeric}
 \alias{check_outliers.data.frame}
+\alias{check_outliers.performance_simres}
 \title{Outliers detection (check for influential observations)}
 \usage{
 check_outliers(x, ...)
@@ -21,14 +22,24 @@ check_outliers(x, ...)
 \method{check_outliers}{numeric}(x, method = "zscore_robust", threshold = NULL, ...)
 
 \method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ID = NULL, ...)
+
+\method{check_outliers}{performance_simres}(
+  x,
+  type = "default",
+  iterations = 100,
+  alternative = "two.sided",
+  ...
+)
 }
 \arguments{
-\item{x}{A model or a data.frame object.}
+\item{x}{A model, a data.frame, a \code{performance_simres} \code{\link[=simulate_residuals]{simulate_residuals()}}
+or a \code{DHARMa} object.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
 down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
 they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}. \code{percentage_central} can
-be specified when \code{method = "mcd"}.}
+be specified when \code{method = "mcd"}. For objects of class \code{performance_simres}
+or \code{DHARMa}, further arguments are passed down to \code{DHARMa::testOutliers()}.}
 
 \item{method}{The outlier detection method(s). Can be \code{"all"} or some of
 \code{"cook"}, \code{"pareto"}, \code{"zscore"}, \code{"zscore_robust"}, \code{"iqr"}, \code{"ci"}, \code{"eti"},
@@ -44,6 +55,10 @@ for any of the method run.}
 \item{ID}{Optional, to report an ID column along with the row number.}
 
 \item{verbose}{Toggle warnings.}
+
+\item{iterations}{Number of simulations to run.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing

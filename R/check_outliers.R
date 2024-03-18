@@ -793,13 +793,13 @@ plot.check_outliers <- function(x, ...) {
 #' @export
 print.check_outliers_simres <- function(x, digits = 2, ...) {
   result <- paste0(
-    insight::format_value(100 * x$Coefficient, digits = digits, ...),
+    insight::format_value(100 * x$Expected, digits = digits, ...),
     "%, ",
     insight::format_ci(100 * x$CI_low, 100 * x$CI_high, digits = digits, ...)
   )
   insight::print_color("# Outliers detection\n\n", "blue")
-  cat(sprintf("  Proportion of expected outliers: %.*f%%\n", digits, 100 * x$Expected))
-  cat(sprintf("  Proportion of observed outliers: %s\n\n", result))
+  cat(sprintf("  Proportion of observed outliers: %.*f%%\n", digits, 100 * x$Coefficient))
+  cat(sprintf("  Proportion of expected outliers: %s\n\n", result))
 
   p_string <- paste0(" (", insight::format_p(x$p_value), ")")
 
