@@ -144,12 +144,13 @@
 #' inside the error bounds. See [`binned_residuals()`] for further details.
 #'
 #' @section Residuals for (Generalized) Linear Models:
-#' Plots that check the normality of residuals (Q-Q plot) or the homogeneity of
-#' variance use standardized Pearson's residuals for generalized linear models,
-#' and standardized residuals for linear models. The plots for the normality of
-#' residuals (with overlayed normal curve) and for the linearity assumption use
-#' the default residuals for `lm` and `glm` (which are deviance residuals for
-#' `glm`).
+#' Plots that check the homogeneity of variance use standardized Pearson's
+#' residuals for generalized linear models, and standardized residuals for
+#' linear models. The plots for the normality of residuals (with overlayed
+#' normal curve) and for the linearity assumption use the default residuals
+#' for `lm` and `glm` (which are deviance residuals for `glm`). The Q-Q plots
+#' use simulated residuals (see [`simulate_residuals()`]) for non-Gaussian
+#' models and standardized residuals for linear models.
 #'
 #' @section Troubleshooting:
 #' For models with many observations, or for more complex models in general,
