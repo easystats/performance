@@ -31,6 +31,9 @@
     <loc>https://easystats.github.io/performance/articles/r2.html</loc>
   </url>
   <url>
+    <loc>https://easystats.github.io/performance/articles/simulate_residuals.html</loc>
+  </url>
+  <url>
     <loc>https://easystats.github.io/performance/authors.html</loc>
   </url>
   <url>
@@ -89,6 +92,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_predictions.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/reference/check_residuals.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/check_singularity.html</loc>
@@ -245,6 +251,9 @@
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/reexports.html</loc>
+  </url>
+  <url>
+    <loc>https://easystats.github.io/performance/reference/simulate_residuals.html</loc>
   </url>
   <url>
     <loc>https://easystats.github.io/performance/reference/test_performance.html</loc>
