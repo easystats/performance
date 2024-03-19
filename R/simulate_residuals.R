@@ -24,9 +24,9 @@
 #' @section Tests based on simulated residuals:
 #' For certain models, resp. model from certain families, tests like
 #' [`check_zeroinflation()`] or [`check_overdispersion()`] are based on
-#' `simulated_residuals()`. These are usually more accurate for such tests than
+#' simulated residuals. These are usually more accurate for such tests than
 #' the traditionally used Pearson residuals. However, when simulating from more
-#' complex model, such as mixed models or models with zero-inflation, there are
+#' complex models, such as mixed models or models with zero-inflation, there are
 #' several important considerations. `simulate_residuals()` relies on
 #' [`DHARMa::simulateResiduals()`], and additional arguments specified in `...`
 #' are passed further down to that function. The defaults in DHARMa are set on
@@ -79,7 +79,7 @@ print.performance_simres <- function(x, ...) {
   msg <- paste0(
     "Simulated residuals from a model of class `", class(x$fittedModel)[1],
     "` based on ", x$nSim, " simulations. Use `check_residuals()` to check ",
-    "uniformity of residuals. It is recommended to refer to `?DHARMa::simulateReisudals`",
+    "uniformity of residuals. It is recommended to refer to `?DHARMa::simulateResiudals`",
     " and `vignette(\"DHARMa\")` for more information about different settings",
     " in particular situations or for particular models.\n"
   )
