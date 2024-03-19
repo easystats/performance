@@ -240,7 +240,7 @@ check_model.default <- function(x,
   if (verbose && is.null(assumptions_data$QQ) && residual_type == "simulated") {
     insight::format_warning(paste0(
       "Cannot simulate residuals for models of class `",
-      class(model)[1],
+      class(x)[1],
       "`. Please try `check_model(..., residual_type = \"normal\")` instead."
     ))
   }
