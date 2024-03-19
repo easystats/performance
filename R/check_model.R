@@ -416,7 +416,7 @@ check_model.DHARMa <- check_model.performance_simres
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- switch(residual_type,
-    simulated = simulate_residuals(model, ...),
+    simulated = .safe(simulate_residuals(model, ...)),
     .diag_qq(model, model_info = model_info, verbose = verbose)
   )
   dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
@@ -432,6 +432,15 @@ check_model.DHARMa <- check_model.performance_simres
   dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
   dat$PP_CHECK <- .safe(check_predictions(model, ...))
 
+  # warning?
+  if (verbose && is.null(dat$QQ) && residual_type == "simulated") {
+    insight::format_warning(paste0(
+      "Cannot simulate residuals for models of class `",
+      class(model)[1],
+      "`. Please try `check_model(..., residual_type = \"normal\")` instead."
+    ))
+  }
+
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
   dat
@@ -446,7 +455,7 @@ check_model.DHARMa <- check_model.performance_simres
 
   dat$VIF <- .diag_vif(model, verbose = verbose)
   dat$QQ <- switch(residual_type,
-    simulated = simulate_residuals(model, ...),
+    simulated = .safe(simulate_residuals(model, ...)),
     .diag_qq(model, model_info = model_info, verbose = verbose)
   )
   dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
@@ -464,6 +473,15 @@ check_model.DHARMa <- check_model.performance_simres
   }
   if (isTRUE(model_info$is_count)) {
     dat$OVERDISPERSION <- .diag_overdispersion(model)
+  }
+
+  # warning?
+  if (verbose && is.null(dat$QQ) && residual_type == "simulated") {
+    insight::format_warning(paste0(
+      "Cannot simulate residuals for models of class `",
+      class(model)[1],
+      "`. Please try `check_model(..., residual_type = \"normal\")` instead."
+    ))
   }
 
   dat <- insight::compact_list(dat)

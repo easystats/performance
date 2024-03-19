@@ -30,18 +30,19 @@
 #'
 #' @section Tests based on simulated residuals:
 #' For certain models, resp. model from certain families, tests are based on
-#' [`simulated_residuals()`]. These are usually more accurate for tests than the
-#' traditionally used Pearson residuals. However, when simulating from more
-#' complex model, such as mixed models or models with zero-inflation, there are
-#' several important considerations. Arguments specified in `...` are passed to
-#' [`simulate_residuals()`], which relies on [`DHARMa::simulateResiduals()`] (and
-#' therefore, arguments in `...` are passed further down to _DHARMa_). The
-#' defaults in DHARMa are set on the most conservative option that works for
-#' all models. However, in many cases, the help advises to use different settings
-#' in particular situations or for particular models. It is recommended to read
-#' the 'Details' in `?DHARMa::simulateResiduals` closely to understand the
-#' implications of the simulation process and which arguments should be modified
-#' to get the most accurate results.
+#' simulated residuals (see [`simulated_residual()`]). These are usually more
+#' accurate for testing such models than the traditionally used Pearson residuals.
+#' However, when simulating from more complex models, such as mixed models or
+#' models with zero-inflation, there are several important considerations.
+#' Arguments specified in `...` are passed to [`simulate_residuals()`], which
+#' relies on [`DHARMa::simulateResiduals()`] (and therefore, arguments in `...`
+#' are passed further down to _DHARMa_). The defaults in DHARMa are set on the
+#' most conservative option that works for all models. However, in many cases,
+#' the help advises to use different settings in particular situations or for
+#' particular models. It is recommended to read the 'Details' in
+#' `?DHARMa::simulateResiduals` closely to understand the implications of the
+#' simulation process and which arguments should be modified to get the most
+#' accurate results.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -87,7 +88,7 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
   not_supported <- c("fixest", "glmx")
 
   # for models with zero-inflation component or negative binomial families,
-  # we use simulated_residuals()
+  # we use simulate_residuals()
   if (!inherits(x, not_supported) && (model_info$is_zero_inflated || model_info$is_negbin || model_info$family == "genpois")) { # nolint
     if (missing(tolerance)) {
       tolerance <- 0.1
