@@ -217,9 +217,9 @@ check_model.default <- function(x,
     if (minfo$is_bayesian) {
       suppressWarnings(.check_assumptions_stan(x, ...))
     } else if (minfo$is_linear) {
-      suppressWarnings(.check_assumptions_linear(x, minfo, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_linear(x, minfo, check, residual_type, verbose, ...))
     } else {
-      suppressWarnings(.check_assumptions_glm(x, minfo, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_glm(x, minfo, check, residual_type, verbose, ...))
     },
     error = function(e) {
       e
@@ -234,6 +234,15 @@ check_model.default <- function(x,
       paste("`check_model()` returned following error:", cleaned_string),
       paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
     )
+  }
+
+  # did Q-Q plot work with simulated residuals?
+  if (verbose && is.null(assumptions_data$QQ) && residual_type == "simulated") {
+    insight::format_warning(paste0(
+      "Cannot simulate residuals for models of class `",
+      class(model)[1],
+      "`. Please try `check_model(..., residual_type = \"normal\")` instead."
+    ))
   }
 
   # try to find sensible default for "type" argument
@@ -411,34 +420,56 @@ check_model.DHARMa <- check_model.performance_simres
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info, residual_type = "normal", verbose = TRUE, ...) {
+.check_assumptions_linear <- function(model, model_info, check = "all", residual_type = "normal", verbose = TRUE, ...) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- switch(residual_type,
-    simulated = .safe(simulate_residuals(model, ...)),
-    .diag_qq(model, model_info = model_info, verbose = verbose)
-  )
-  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
-  dat$NORM <- .diag_norm(model, verbose = verbose)
-  dat$NCV <- .diag_ncv(model, verbose = verbose)
-  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
-  dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
-  if (is.null(dat$OUTLIERS)) {
-    threshold <- NULL
-  } else {
-    threshold <- attributes(dat$OUTLIERS)$threshold$cook
+  # multicollinearity --------------
+  if (any(c("all", "vif") %in% check)) {
+    dat$VIF <- .diag_vif(model, verbose = verbose)
   }
-  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- .safe(check_predictions(model, ...))
 
-  # warning?
-  if (verbose && is.null(dat$QQ) && residual_type == "simulated") {
-    insight::format_warning(paste0(
-      "Cannot simulate residuals for models of class `",
-      class(model)[1],
-      "`. Please try `check_model(..., residual_type = \"normal\")` instead."
-    ))
+  # Q-Q plot (normality/uniformity of residuals) --------------
+  if (any(c("all", "qq") %in% check)) {
+    dat$QQ <- switch(residual_type,
+      simulated = .safe(simulate_residuals(model, ...)),
+      .diag_qq(model, model_info = model_info, verbose = verbose)
+    )
+  }
+
+  # Random Effects Q-Q plot (normality of BLUPs) --------------
+  if (any(c("all", "reqq") %in% check)) {
+    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+  }
+
+  # normal-curve plot (normality of residuals) --------------
+  if (any(c("all", "normality") %in% check)) {
+    dat$NORM <- .diag_norm(model, verbose = verbose)
+  }
+
+  # non-constant variance (heteroskedasticity, liniearity) --------------
+  if (any(c("all", "ncv", "linearity") %in% check)) {
+    dat$NCV <- .diag_ncv(model, verbose = verbose)
+  }
+
+  # homogeneity of variance --------------
+  if (any(c("all", "homogeneity") %in% check)) {
+    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+  }
+
+  # outliers --------------
+  if (any(c("all", "outliers") %in% check)) {
+    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    if (is.null(dat$OUTLIERS)) {
+      threshold <- NULL
+    } else {
+      threshold <- attributes(dat$OUTLIERS)$threshold$cook
+    }
+    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  }
+
+  # posterior predictive checks --------------
+  if (any(c("all", "pp_check") %in% check)) {
+    dat$PP_CHECK <- .safe(check_predictions(model, ...))
   }
 
   dat <- insight::compact_list(dat)
@@ -450,38 +481,56 @@ check_model.DHARMa <- check_model.performance_simres
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info, residual_type = "simulated", verbose = TRUE, ...) {
+.check_assumptions_glm <- function(model, model_info, check = "all", residual_type = "simulated", verbose = TRUE, ...) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- switch(residual_type,
-    simulated = .safe(simulate_residuals(model, ...)),
-    .diag_qq(model, model_info = model_info, verbose = verbose)
-  )
-  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
-  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
-  dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
-  if (is.null(dat$OUTLIERS)) {
-    threshold <- NULL
-  } else {
-    threshold <- attributes(dat$OUTLIERS)$threshold$cook
-  }
-  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- .safe(check_predictions(model, ...))
-  if (isTRUE(model_info$is_binomial)) {
-    dat$BINNED_RESID <- .safe(binned_residuals(model, verbose = verbose, ...))
-  }
-  if (isTRUE(model_info$is_count)) {
-    dat$OVERDISPERSION <- .diag_overdispersion(model)
+  # multicollinearity --------------
+  if (any(c("all", "vif") %in% check)) {
+    dat$VIF <- .diag_vif(model, verbose = verbose)
   }
 
-  # warning?
-  if (verbose && is.null(dat$QQ) && residual_type == "simulated") {
-    insight::format_warning(paste0(
-      "Cannot simulate residuals for models of class `",
-      class(model)[1],
-      "`. Please try `check_model(..., residual_type = \"normal\")` instead."
-    ))
+  # Q-Q plot (normality/uniformity of residuals) --------------
+  if (any(c("all", "qq") %in% check)) {
+    dat$QQ <- switch(residual_type,
+      simulated = .safe(simulate_residuals(model, ...)),
+      .diag_qq(model, model_info = model_info, verbose = verbose)
+    )
+  }
+
+  # homogeneity of variance --------------
+  if (any(c("all", "homogeneity") %in% check)) {
+    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+  }
+
+  # Random Effects Q-Q plot (normality of BLUPs) --------------
+  if (any(c("all", "reqq") %in% check)) {
+    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+  }
+
+  # outliers --------------
+  if (any(c("all", "outliers") %in% check)) {
+    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    if (is.null(dat$OUTLIERS)) {
+      threshold <- NULL
+    } else {
+      threshold <- attributes(dat$OUTLIERS)$threshold$cook
+    }
+    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  }
+
+  # posterior predictive checks --------------
+  if (any(c("all", "pp_check") %in% check)) {
+    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+  }
+
+  # binned residuals for bernoulli/binomial --------------
+  if (isTRUE(model_info$is_binomial) && any(c("all", "binned_residuals") %in% check)) {
+    dat$BINNED_RESID <- .safe(binned_residuals(model, verbose = verbose, ...))
+  }
+
+  # misspecified dispersion and zero-inflation --------------
+  if (isTRUE(model_info$is_count) && any(c("all", "overdispersion") %in% check)) {
+    dat$OVERDISPERSION <- .diag_overdispersion(model)
   }
 
   dat <- insight::compact_list(dat)
