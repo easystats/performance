@@ -34,9 +34,9 @@ functions in the \strong{see} package. See also \code{vignette("DHARMa")}. There
 
 For certain models, resp. model from certain families, tests like
 \code{\link[=check_zeroinflation]{check_zeroinflation()}} or \code{\link[=check_overdispersion]{check_overdispersion()}} are based on
-\code{simulated_residuals()}. These are usually more accurate for such tests than
+simulated residuals. These are usually more accurate for such tests than
 the traditionally used Pearson residuals. However, when simulating from more
-complex model, such as mixed models or models with zero-inflation, there are
+complex models, such as mixed models or models with zero-inflation, there are
 several important considerations. \code{simulate_residuals()} relies on
 \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}, and additional arguments specified in \code{...}
 are passed further down to that function. The defaults in DHARMa are set on
