@@ -50,7 +50,7 @@ articles:
     navbar: ~
     contents:
       - check_model
-      - chek_outliers
+      - check_outliers
       - simulate_residuals
 
   - title: Model comparison and testing
