@@ -129,7 +129,7 @@ test_that("icc", {
 
 test_that("icc, glmmTMB 1.1.9+", {
   skip_on_cran()
-  skip_if_not_installed("glmmTMB", min_version = "1.1.9")
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.9")
   set.seed(101)
   dd <- data.frame(
     z = rnorm(1000),
