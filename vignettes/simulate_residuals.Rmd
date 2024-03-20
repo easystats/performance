@@ -97,7 +97,7 @@ The above three functions internally call `simulate_residuals()` for more comple
 
 Finally, you can even perform a visual check for the entire model, either by passing the model object directly, or the object returned from `simulate_residuals()`. 
 
-```{r, eval=packageVersion("see") > "0.8.2"}
+```{r, eval=can_evaluate && packageVersion("see") > "0.8.2"}
 check_model(simulated_residuals)
 ```
 
