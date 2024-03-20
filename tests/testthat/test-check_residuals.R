@@ -1,10 +1,22 @@
-test_that("check_singularity, lme4", {
+test_that("check_residuals", {
   skip_on_cran()
   skip_if_not_installed("DHARMa")
   set.seed(123)
   dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
   m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
   res <- simulate_residuals(m)
+  expect_identical(
+    capture.output(print(res)),
+    c(
+      "Simulated residuals from a model of class `glm` based on 250",
+      "  simulations. Use `check_residuals()` to check uniformity of residuals or",
+      "  `residuals()` to extract simulated residuals. It is recommended to refer",
+      "  to `?DHARMa::simulateResiudals` and `vignette(\"DHARMa\")` for more",
+      "  information about different settings in particular situations or for",
+      "  particular models."
+    )
+  )
+
   out <- check_residuals(res)
   expect_equal(out, 0.01884602, ignore_attr = TRUE, tolerance = 1e-4)
   expect_identical(

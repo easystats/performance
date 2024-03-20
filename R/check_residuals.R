@@ -19,7 +19,8 @@
 #'
 #' @inheritSection simulate_residuals Tests based on simulated residuals
 #'
-#' @seealso [`simulate_residuals()`] and [`check_predictions()`].
+#' @seealso [`simulate_residuals()`], [`check_zeroinflation()`],
+#' [`check_overdispersion()`] and [`check_predictions()`].
 #'
 #' @return The p-value of the test statistics.
 #'
