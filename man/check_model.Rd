@@ -212,12 +212,13 @@ inside the error bounds. See \code{\link[=binned_residuals]{binned_residuals()}}
 
 \section{Residuals for (Generalized) Linear Models}{
 
-Plots that check the normality of residuals (Q-Q plot) or the homogeneity of
-variance use standardized Pearson's residuals for generalized linear models,
-and standardized residuals for linear models. The plots for the normality of
-residuals (with overlayed normal curve) and for the linearity assumption use
-the default residuals for \code{lm} and \code{glm} (which are deviance residuals for
-\code{glm}).
+Plots that check the homogeneity of variance use standardized Pearson's
+residuals for generalized linear models, and standardized residuals for
+linear models. The plots for the normality of residuals (with overlayed
+normal curve) and for the linearity assumption use the default residuals
+for \code{lm} and \code{glm} (which are deviance residuals for \code{glm}). The Q-Q plots
+use simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}) for non-Gaussian
+models and standardized residuals for linear models.
 }
 
 \section{Troubleshooting}{

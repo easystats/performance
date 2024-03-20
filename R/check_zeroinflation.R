@@ -30,7 +30,7 @@
 #'
 #' @section Tests based on simulated residuals:
 #' For certain models, resp. model from certain families, tests are based on
-#' simulated residuals (see [`simulated_residual()`]). These are usually more
+#' simulated residuals (see [`simulate_residual()`]). These are usually more
 #' accurate for testing such models than the traditionally used Pearson residuals.
 #' However, when simulating from more complex models, such as mixed models or
 #' models with zero-inflation, there are several important considerations.
