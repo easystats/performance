@@ -44,3 +44,18 @@ reference:
   - title: "Sample Data"
     contents:
       - classify_distribution
+
+articles:
+  - title: Checking model assumptions and data properties
+    navbar: ~
+    contents:
+      - check_model
+      - chek_outliers
+      - simulate_residuals
+
+articles:
+  - title: Model comparison and testing
+    navbar: ~
+    contents:
+      - compare
+      - r2
