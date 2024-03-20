@@ -8,6 +8,13 @@
 #' @param x A model object.
 #' @param iterations Number of simulations to run.
 #' @param ... Arguments passed on to [`DHARMa::simulateResiduals()`].
+#' @param object A `performance_simres` object, as returned by `simulate_residuals()`.
+#' @param quantile_function A function to apply to the residuals. If `NULL`, the
+#' residuals are returned as is. If not `NULL`, the residuals are passed to this
+#' function. This is useful for returning normally distributed residuals, for
+#' example: `residuals(x, quantile_function = qnorm)`.
+#' @param outlier_values A vector of length 2, specifying the values to replace
+#' `-Inf` and `Inf` with, respectively.
 #'
 #' @return Simulated residuals, which can be further processed with
 #' [`check_residuals()`]. The returned object is of class `DHARMa` and
@@ -50,6 +57,9 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' simulate_residuals(m)
 #'
+#' # extract residuals
+#' head(residuals(simulate_residuals(m)))
+#'
 #' @export
 simulate_residuals <- function(x, iterations = 250, ...) {
   insight::check_if_installed("DHARMa")
@@ -90,6 +100,24 @@ print.performance_simres <- function(x, ...) {
 plot.performance_simres <- function(x, ...) {
   insight::check_if_installed("see", "for residual plots")
   NextMethod()
+}
+
+
+# methods --------------------------
+
+#' @rdname simulate_residuals
+#' @export
+residuals.performance_simres <- function(object, quantile_function = NULL, outlier_values = NULL, ...) {
+  if (is.null(quantile_function)) {
+    res <- object$scaledResiduals
+  } else {
+    res <- quantile_function(object$scaledResiduals)
+    if (!is.null(outlier_values)) {
+      res[res == -Inf] <- outlier_values[1]
+      res[res == Inf] <- outlier_values[2]
+    }
+  }
+  res
 }
 
 

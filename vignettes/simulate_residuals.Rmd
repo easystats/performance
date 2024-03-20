@@ -61,13 +61,18 @@ simulated_residuals <- simulate_residuals(model)
 simulated_residuals
 ```
 
+The raw residuals can be extracted using `residuals()`:
+
+```{r}
+head(residuals(simulated_residuals))
+```
+
+
 <!-- Aside -->
 Note that since this inherits the DHARMa class, all the methods implemented in DHARMa just work, including all the tests:
 
 ```{r}
 library(DHARMa)
-residuals(simulated_residuals)
-
 DHARMa::testUniformity(simulated_residuals, plot = FALSE)
 ```
 <!-- Aside -->
