@@ -40,7 +40,7 @@ where the residuals are not expected to be normally distributed.
 This function is a small wrapper around \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.
 It basically only sets \code{plot = FALSE} and adds an additional class attribute
 (\code{"performance_sim_res"}), which allows using the DHARMa object in own plotting
-functions in the \strong{see} package. See also \code{vignette("DHARMa")}. There is a
+functions from the \strong{see} package. See also \code{vignette("DHARMa")}. There is a
 \code{plot()} method to visualize the distribution of the residuals.
 }
 \section{Tests based on simulated residuals}{
