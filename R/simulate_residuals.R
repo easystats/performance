@@ -110,11 +110,24 @@ plot.performance_simres <- function(x, ...) {
 #' @rdname simulate_residuals
 #' @export
 residuals.performance_simres <- function(object, quantile_function = NULL, outlier_values = NULL, ...) {
+  # check for DHARMa argument names
+  dots <- list(...)
+  if (!is.null(dots$quantileFunction)) {
+    quantile_function <- dots$quantileFunction
+  }
+  if (!is.null(dots$outlierValues)) {
+    outlier_values <- dots$outlierValues
+  }
+
   if (is.null(quantile_function)) {
     res <- object$scaledResiduals
   } else {
     res <- quantile_function(object$scaledResiduals)
     if (!is.null(outlier_values)) {
+      # check for correct length of outlier_values
+      if (length(outlier_values) != 2) {
+        insight::format_error("`outlier_values` must be a vector of length 2.")
+      }
       res[res == -Inf] <- outlier_values[1]
       res[res == Inf] <- outlier_values[2]
     }
