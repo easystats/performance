@@ -52,8 +52,8 @@ test_that("check_residuals and simulate_residuals", {
   )
   # outlier_values works
   expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm))), 3L)
-  expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm, outlier_values = c(-100, 100)))), 0L)
-  expect_error(residuals(res, quantile_function = stats::qnorm, outlier_values = 1:3), regex = "`outlier_values` must be")
+  expect_identical(sum(is.infinite(residuals(res, quantile_function = stats::qnorm, outlier_values = c(-100, 100)))), 0L) # nolint
+  expect_error(residuals(res, quantile_function = stats::qnorm, outlier_values = 1:3), regex = "`outlier_values` must be") # nolint
 
   # check_residuals
   out <- check_residuals(res)
