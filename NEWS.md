@@ -1,4 +1,4 @@
-# performance 0.10.10
+# performance 0.11.0
 
 ## New supported models
 
