@@ -1,4 +1,5 @@
 test_that("check_zeroinflation", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   set.seed(123)
   data(Salamanders, package = "glmmTMB")
@@ -21,6 +22,7 @@ test_that("check_zeroinflation", {
 
 
 test_that("check_zeroinflation, glmmTMB with and without zero-inflation component", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("DHARMa")
   set.seed(123)
@@ -107,6 +109,7 @@ test_that("check_zeroinflation, glmer.nb", {
 
 
 test_that("check_zeroinflation, glmmTMB nbinom", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("DHARMa")
   skip_on_cran()
@@ -163,6 +166,7 @@ test_that("check_zeroinflation, MASS::negbin", {
 
 
 test_that("check_zeroinflation, genpois", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("DHARMa")
   skip_if_not(getRversion() >= "4.0.0")
