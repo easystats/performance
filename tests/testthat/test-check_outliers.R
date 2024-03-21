@@ -201,6 +201,12 @@ test_that("multiple methods which", {
 # We exclude method ics because it is too slow
 test_that("all methods which", {
   skip_if_not_installed("bigutilsr")
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("dbscan")
+  skip_if_not_installed("ICS")
+  skip_if_not_installed("ICSOutlier")
+  skip_if_not_installed("loo")
+
   expect_identical(
     which(check_outliers(mtcars,
       method = c(
@@ -224,7 +230,13 @@ test_that("all methods which", {
 
 test_that("multiple methods with ID", {
   skip_if_not_installed("bigutilsr")
-  data <- datawizard::rownames_as_column(mtcars, var = "car")
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("dbscan")
+  skip_if_not_installed("ICS")
+  skip_if_not_installed("ICSOutlier")
+  skip_if_not_installed("loo")
+
+    data <- datawizard::rownames_as_column(mtcars, var = "car")
   x <- attributes(check_outliers(data,
     method = c(
       "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
@@ -282,6 +294,7 @@ test_that("cook multiple methods which", {
 
 test_that("pareto which", {
   skip_if_not_installed("dbscan")
+  skip_if_not_installed("loo")
   skip_if_not_installed("rstanarm")
   set.seed(123)
   model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
@@ -295,6 +308,7 @@ test_that("pareto which", {
 
 test_that("pareto multiple methods which", {
   skip_if_not_installed("dbscan")
+  skip_if_not_installed("loo")
   skip_if_not_installed("rstanarm")
   set.seed(123)
   model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
