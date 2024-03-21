@@ -6,6 +6,7 @@ test_that("zscore negative threshold", {
 })
 
 test_that("lof illegal threshold", {
+  skip_if_not_installed("dbscan")
   expect_error(
     check_outliers(mtcars$mpg, method = "lof", threshold = -1),
     "The `threshold` argument"
@@ -84,6 +85,7 @@ test_that("mahalanobis_robust which", {
 })
 
 test_that("mcd which", {
+  skip_if_not_installed("MASS")
   # (not clear why method mcd needs a seed)
   set.seed(42)
   expect_identical(
