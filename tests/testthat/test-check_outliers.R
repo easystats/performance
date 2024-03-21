@@ -236,7 +236,7 @@ test_that("multiple methods with ID", {
   skip_if_not_installed("ICSOutlier")
   skip_if_not_installed("loo")
 
-    data <- datawizard::rownames_as_column(mtcars, var = "car")
+  data <- datawizard::rownames_as_column(mtcars, var = "car")
   x <- attributes(check_outliers(data,
     method = c(
       "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
