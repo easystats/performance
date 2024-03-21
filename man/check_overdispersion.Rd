@@ -95,7 +95,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE) && require("DHARMa", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(glmmTMB)
 data(Salamanders)

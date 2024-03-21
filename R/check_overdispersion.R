@@ -62,7 +62,7 @@
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
 #'
-#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)
+#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE) && require("DHARMa", quietly = TRUE)
 #'
 #' library(glmmTMB)
 #' data(Salamanders)
