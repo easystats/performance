@@ -95,18 +95,9 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE) && require("DHARMa", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
-library(glmmTMB)
-data(Salamanders)
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-check_overdispersion(m)
-
-m <- glmmTMB(
-  count ~ mined + spp + (1 | site),
-  family = poisson,
-  data = Salamanders
-)
 check_overdispersion(m)
 \dontshow{\}) # examplesIf}
 }
