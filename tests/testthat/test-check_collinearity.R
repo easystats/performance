@@ -1,6 +1,3 @@
-## FIXME: There seem to be some issues with glmmTMB 1.1.9 and win devel?
-skip_if(getRversion() > "4.3.3")
-
 # https://github.com/easystats/performance/pull/547
 test_that("check_collinearity, correct order in print", {
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
