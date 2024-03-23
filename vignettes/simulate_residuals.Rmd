@@ -19,11 +19,12 @@ library(knitr)
 library(performance)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
-  comment = ">",
+  comment = "#>",
   message = FALSE,
   warning = FALSE,
   out.width = "100%",
-  dpi = 450
+  dpi = 450,
+  tidy.opts = list(width.cutoff = 120)
 )
 options(digits = 2)
 
