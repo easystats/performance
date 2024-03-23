@@ -79,13 +79,13 @@ DHARMa::testUniformity(simulated_residuals, plot = FALSE)
 
 Finally, run specific checks on the simulated residuals:
 
-```{r}
+```{r message=TRUE}
 check_residuals(simulated_residuals)
 ```
 
 Further implemented checks are tests for overdispersion, outliers and zero-inflation.
 
-```{r}
+```{r message=TRUE}
 check_overdispersion(simulated_residuals)
 
 check_zeroinflation(simulated_residuals)
