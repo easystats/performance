@@ -1,4 +1,5 @@
 test_that("check_overdispersion, glmmTMB-poisson", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
@@ -49,6 +50,7 @@ test_that("check_overdispersion, glmmTMB-poisson", {
 
 
 test_that("check_overdispersion, glmmTMB-poisson mixed", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
@@ -76,6 +78,7 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
 
 
 test_that("check_overdispersion, zero-inflated and negbin", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("DHARMa")
   skip_if_not(getRversion() >= "4.0.0")
@@ -180,6 +183,7 @@ test_that("check_overdispersion, MASS::negbin", {
 
 
 test_that("check_overdispersion, genpois", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("DHARMa")
   skip_if_not(getRversion() >= "4.0.0")

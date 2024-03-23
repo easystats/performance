@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-pkgs <- c("DHARMa", "glmmTMB")
+pkgs <- c("DHARMa", "glmmTMB", "see")
 successfully_loaded <- vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE)
 can_evaluate <- all(successfully_loaded)
 
@@ -61,13 +61,18 @@ simulated_residuals <- simulate_residuals(model)
 simulated_residuals
 ```
 
+The raw residuals can be extracted using `residuals()`:
+
+```{r}
+head(residuals(simulated_residuals))
+```
+
+
 <!-- Aside -->
 Note that since this inherits the DHARMa class, all the methods implemented in DHARMa just work, including all the tests:
 
 ```{r}
 library(DHARMa)
-residuals(simulated_residuals)
-
 DHARMa::testUniformity(simulated_residuals, plot = FALSE)
 ```
 <!-- Aside -->
@@ -78,17 +83,26 @@ Finally, run specific checks on the simulated residuals:
 check_residuals(simulated_residuals)
 ```
 
-Or check the entire model. 
+Further implemented checks are tests for overdispersion, outliers and zero-inflation.
 
-```{r, eval=FALSE}
-# TODO (not implemented)
+```{r}
+check_overdispersion(simulated_residuals)
+
+check_zeroinflation(simulated_residuals)
+
+check_outliers(simulated_residuals)
+```
+
+The above three functions internally call `simulate_residuals()` for more complex models automatically, so you don't need to call `simulate_residuals()` yourself. Simulated residuals are usually more reliable than the standard residuals, especially for complex models.
+
+Finally, you can even perform a visual check for the entire model, either by passing the model object directly, or the object returned from `simulate_residuals()`. 
+
+```{r, eval=can_evaluate && packageVersion("see") > "0.8.2"}
 check_model(simulated_residuals)
 ```
 
-The `check_model()` function is the main reason we don't want to prematurely extract the residuals in `simulate_residuals()`, because if we do then the `simulated_residuals` won't contain the model fit (`fittedModel` in the output below), so we won't be able to do all of the checks we would want to do using the model (e.g., posterior predictive checks).
+The `check_model()` function is the main reason we don't want to prematurely extract the residuals in `simulate_residuals()`, because if we do then the simulated residual won't contain the model fit (`fittedModel` in the output below), so we won't be able to do all of the checks we would want to do using the model (e.g., posterior predictive checks).
 
 ```{r}
 str(simulated_residuals, max.level = 1)
 ```
-
-It would also mean we would need to reimplement some of the tests from DHARMa (e.g., `DHARMa::testOutliers()`) if we're planning to include those checks as well. We probably don't want to do that, since some of them are fairly involved rather than just being wrappers for tests supplied in base R (e.g., <https://github.com/florianhartig/DHARMa/blob/a04bdfeec75338279152dbc00c3a1825958a226a/DHARMa/R/tests.R#L172>) .

@@ -8,17 +8,25 @@
 #' @param x A model object.
 #' @param iterations Number of simulations to run.
 #' @param ... Arguments passed on to [`DHARMa::simulateResiduals()`].
+#' @param object A `performance_simres` object, as returned by `simulate_residuals()`.
+#' @param quantile_function A function to apply to the residuals. If `NULL`, the
+#' residuals are returned as is. If not `NULL`, the residuals are passed to this
+#' function. This is useful for returning normally distributed residuals, for
+#' example: `residuals(x, quantile_function = qnorm)`.
+#' @param outlier_values A vector of length 2, specifying the values to replace
+#' `-Inf` and `Inf` with, respectively.
 #'
 #' @return Simulated residuals, which can be further processed with
 #' [`check_residuals()`]. The returned object is of class `DHARMa` and
 #' `performance_simres`.
 #'
-#' @seealso [`check_residuals()`] and [`check_predictions()`].
+#' @seealso [`check_residuals()`], [`check_zeroinflation()`],
+#' [`check_overdispersion()`] and [`check_predictions()`].
 #'
 #' @details This function is a small wrapper around [`DHARMa::simulateResiduals()`].
 #' It basically only sets `plot = FALSE` and adds an additional class attribute
 #' (`"performance_sim_res"`), which allows using the DHARMa object in own plotting
-#' functions in the **see** package. See also `vignette("DHARMa")`. There is a
+#' functions from the **see** package. See also `vignette("DHARMa")`. There is a
 #' `plot()` method to visualize the distribution of the residuals.
 #'
 #' @section Tests based on simulated residuals:
@@ -50,6 +58,9 @@
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' simulate_residuals(m)
 #'
+#' # extract residuals
+#' head(residuals(simulate_residuals(m)))
+#'
 #' @export
 simulate_residuals <- function(x, iterations = 250, ...) {
   insight::check_if_installed("DHARMa")
@@ -78,9 +89,10 @@ print.performance_simres <- function(x, ...) {
   # DHARMa's method.
   msg <- paste0(
     "Simulated residuals from a model of class `", class(x$fittedModel)[1],
-    "` based on ", x$nSim, " simulations. Use `check_residuals()` to check ",
-    "uniformity of residuals. It is recommended to refer to `?DHARMa::simulateResiudals`",
-    " and `vignette(\"DHARMa\")` for more information about different settings",
+    "` based on ", x$nSim, " simulations. Use `check_residuals()` to check",
+    " uniformity of residuals or `residuals()` to extract simulated residuals.",
+    " It is recommended to refer to `?DHARMa::simulateResiudals` and",
+    " `vignette(\"DHARMa\")` for more information about different settings",
     " in particular situations or for particular models.\n"
   )
   cat(insight::format_message(msg))
@@ -90,6 +102,37 @@ print.performance_simres <- function(x, ...) {
 plot.performance_simres <- function(x, ...) {
   insight::check_if_installed("see", "for residual plots")
   NextMethod()
+}
+
+
+# methods --------------------------
+
+#' @rdname simulate_residuals
+#' @export
+residuals.performance_simres <- function(object, quantile_function = NULL, outlier_values = NULL, ...) {
+  # check for DHARMa argument names
+  dots <- list(...)
+  if (!is.null(dots$quantileFunction)) {
+    quantile_function <- dots$quantileFunction
+  }
+  if (!is.null(dots$outlierValues)) {
+    outlier_values <- dots$outlierValues
+  }
+
+  if (is.null(quantile_function)) {
+    res <- object$scaledResiduals
+  } else {
+    res <- quantile_function(object$scaledResiduals)
+    if (!is.null(outlier_values)) {
+      # check for correct length of outlier_values
+      if (length(outlier_values) != 2) {
+        insight::format_error("`outlier_values` must be a vector of length 2.")
+      }
+      res[res == -Inf] <- outlier_values[1]
+      res[res == Inf] <- outlier_values[2]
+    }
+  }
+  res
 }
 
 

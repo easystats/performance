@@ -79,7 +79,7 @@ negative binomial, see \emph{Gelman and Hill (2007), pages 115-116}).
 \section{Tests based on simulated residuals}{
 
 For certain models, resp. model from certain families, tests are based on
-simulated residuals (see \code{\link[=simulated_residual]{simulated_residual()}}). These are usually more
+simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}). These are usually more
 accurate for testing such models than the traditionally used Pearson residuals.
 However, when simulating from more complex models, such as mixed models or
 models with zero-inflation, there are several important considerations.
@@ -95,18 +95,9 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
-library(glmmTMB)
-data(Salamanders)
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-check_overdispersion(m)
-
-m <- glmmTMB(
-  count ~ mined + spp + (1 | site),
-  family = poisson,
-  data = Salamanders
-)
 check_overdispersion(m)
 \dontshow{\}) # examplesIf}
 }

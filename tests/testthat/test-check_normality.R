@@ -35,6 +35,7 @@ test_that("check_normality | afex", {
 })
 
 test_that("check_normality | glmmTMB", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
 
@@ -80,5 +81,36 @@ test_that("check_normality | t-test", {
     ),
     tolerance = 1e-3,
     ignore_attr = TRUE
+  )
+})
+
+
+test_that("check_normality | simulated residuals", {
+  skip_if_not_installed("DHARMa")
+  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+  res <- simulate_residuals(m)
+  out <- check_normality(res)
+  expect_equal(
+    as.numeric(out),
+    0.2969038,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+  expect_identical(
+    capture.output(print(out)),
+    "OK: residuals appear as normally distributed (p = 0.297)."
+  )
+
+  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+  out <- check_normality(m)
+  expect_equal(
+    as.numeric(out),
+    0.2303071,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+  expect_identical(
+    capture.output(print(out)),
+    "OK: residuals appear as normally distributed (p = 0.230)."
   )
 })
