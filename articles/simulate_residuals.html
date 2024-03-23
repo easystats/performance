@@ -144,59 +144,59 @@
 <code class="sourceCode R"><span><span class="va">simulated_residuals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_residuals.html">simulate_residuals</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">simulated_residuals</span></span></code></pre></div>
-<pre><code>&gt; Simulated residuals from a model of class `glmmTMB` based on 250
-&gt;   simulations. Use `check_residuals()` to check uniformity of residuals or
-&gt;   `residuals()` to extract simulated residuals. It is recommended to refer
-&gt;   to `?DHARMa::simulateResiudals` and `vignette("DHARMa")` for more
-&gt;   information about different settings in particular situations or for
-&gt;   particular models.</code></pre>
+<pre><code><span><span class="co">#&gt; Simulated residuals from a model of class `glmmTMB` based on 250</span></span>
+<span><span class="co">#&gt;   simulations. Use `check_residuals()` to check uniformity of residuals or</span></span>
+<span><span class="co">#&gt;   `residuals()` to extract simulated residuals. It is recommended to refer</span></span>
+<span><span class="co">#&gt;   to `?DHARMa::simulateResiudals` and `vignette("DHARMa")` for more</span></span>
+<span><span class="co">#&gt;   information about different settings in particular situations or for</span></span>
+<span><span class="co">#&gt;   particular models.</span></span></code></pre>
 <p>The raw residuals can be extracted using
 <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; [1] 0.15 0.73 0.45 0.50 0.44 0.22</code></pre>
+<pre><code><span><span class="co">#&gt; [1] 0.15 0.73 0.45 0.50 0.44 0.22</span></span></code></pre>
 <!-- Aside -->
 <p>Note that since this inherits the DHARMa class, all the methods
 implemented in DHARMa just work, including all the tests:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://florianhartig.github.io/DHARMa/" class="external-link">DHARMa</a></span><span class="op">)</span></span>
 <span><span class="fu">DHARMa</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DHARMa/man/testUniformity.html" class="external-link">testUniformity</a></span><span class="op">(</span><span class="va">simulated_residuals</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; 
-&gt;   Asymptotic one-sample Kolmogorov-Smirnov test
-&gt; 
-&gt; data:  simulationOutput$scaledResiduals
-&gt; D = 0.08, p-value = 2e-04
-&gt; alternative hypothesis: two-sided</code></pre>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Asymptotic one-sample Kolmogorov-Smirnov test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  simulationOutput$scaledResiduals</span></span>
+<span><span class="co">#&gt; D = 0.08, p-value = 2e-04</span></span>
+<span><span class="co">#&gt; alternative hypothesis: two-sided</span></span></code></pre>
 <!-- Aside -->
 <p>Finally, run specific checks on the simulated residuals:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_residuals.html">check_residuals</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Warning: Non-uniformity of simulated residuals detected (p &lt; .001).</code></pre>
+<pre><code><span><span class="co">#&gt; Warning: Non-uniformity of simulated residuals detected (p &lt; .001).</span></span></code></pre>
 <p>Further implemented checks are tests for overdispersion, outliers and
 zero-inflation.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; # Overdispersion test
-&gt; 
-&gt;  dispersion ratio = 1.742
-&gt;           p-value =   0.1</code></pre>
-<pre><code>&gt; No overdispersion detected.</code></pre>
+<pre><code><span><span class="co">#&gt; # Overdispersion test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  dispersion ratio = 1.742</span></span>
+<span><span class="co">#&gt;           p-value =   0.1</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; No overdispersion detected.</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; # Check for zero-inflation
-&gt; 
-&gt;    Observed zeros: 387
-&gt;   Predicted zeros: 322
-&gt;             Ratio: 0.83</code></pre>
-<pre><code>&gt; Model is underfitting zeros (probable zero-inflation) (p &lt; .001).</code></pre>
+<pre><code><span><span class="co">#&gt; # Check for zero-inflation</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    Observed zeros: 387</span></span>
+<span><span class="co">#&gt;   Predicted zeros: 322</span></span>
+<span><span class="co">#&gt;             Ratio: 0.83</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Model is underfitting zeros (probable zero-inflation) (p &lt; .001).</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_outliers.html">check_outliers</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; DHARMa:testOutliers with type = binomial may have inflated Type I error rates for integer-valued distributions. To get a more exact result, it is recommended to re-run testOutliers with type = 'bootstrap'. See ?testOutliers for details</code></pre>
-<pre><code>&gt; # Outliers detection
-&gt; 
-&gt;   Proportion of observed outliers: 2.33%
-&gt;   Proportion of expected outliers: 0.80%, 95% CI [1.31, 3.81]</code></pre>
-<pre><code>&gt; Outliers were detected (p &lt; .001).</code></pre>
+<pre><code><span><span class="co">#&gt; DHARMa:testOutliers with type = binomial may have inflated Type I error rates for integer-valued distributions. To get a more exact result, it is recommended to re-run testOutliers with type = 'bootstrap'. See ?testOutliers for details</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; # Outliers detection</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Proportion of observed outliers: 2.33%</span></span>
+<span><span class="co">#&gt;   Proportion of expected outliers: 0.80%, 95% CI [1.31, 3.81]</span></span></code></pre>
+<pre><code><span><span class="co">#&gt; Outliers were detected (p &lt; .001).</span></span></code></pre>
 <p>The above three functions internally call
 <code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code> for more complex models automatically,
 so you don’t need to call <code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code> yourself.
@@ -215,30 +215,30 @@ output below), so we won’t be able to do all of the checks we would want
 to do using the model (e.g., posterior predictive checks).</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">simulated_residuals</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; List of 17
-&gt;  $ fittedModel            :List of 7
-&gt;   ..- attr(*, "class")= chr "glmmTMB"
-&gt;  $ modelClass             : chr "glmmTMB"
-&gt;  $ additionalParameters   : list()
-&gt;  $ nObs                   : int 644
-&gt;  $ nSim                   : num 250
-&gt;  $ refit                  : logi FALSE
-&gt;  $ observedResponse       : int [1:644] 0 0 0 2 2 1 1 2 4 1 ...
-&gt;  $ integerResponse        : logi TRUE
-&gt;  $ problems               : list()
-&gt;  $ fittedPredictedResponse: num [1:644] 0.197 0.197 0.197 1.896 1.896 ...
-&gt;  $ fittedFixedEffects     : Named num [1:8] -1.625 2.264 -1.386 0.231 -0.77 ...
-&gt;   ..- attr(*, "names")= chr [1:8] "(Intercept)" "minedno" "sppPR" "sppDM" ...
-&gt;  $ fittedResiduals        : Named num [1:644] -0.2139 -0.7867 -0.0828 -0.2951 -0.2951 ...
-&gt;   ..- attr(*, "names")= chr [1:644] "1" "2" "3" "4" ...
-&gt;  $ method                 : chr [1:2] "PIT" "traditional"
-&gt;  $ simulatedResponse      : num [1:644, 1:250] 0 0 0 3 0 4 3 0 5 1 ...
-&gt;   ..- attr(*, "dimnames")=List of 2
-&gt;  $ scaledResiduals        : num [1:644] 0.155 0.731 0.448 0.498 0.437 ...
-&gt;  $ time                   : 'proc_time' Named num [1:5] 0.089 0.012 0.1 0 0
-&gt;   ..- attr(*, "names")= chr [1:5] "user.self" "sys.self" "elapsed" "user.child" ...
-&gt;  $ randomState            :List of 4
-&gt;  - attr(*, "class")= chr [1:3] "performance_simres" "see_performance_simres" "DHARMa"</code></pre>
+<pre><code><span><span class="co">#&gt; List of 17</span></span>
+<span><span class="co">#&gt;  $ fittedModel            :List of 7</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "class")= chr "glmmTMB"</span></span>
+<span><span class="co">#&gt;  $ modelClass             : chr "glmmTMB"</span></span>
+<span><span class="co">#&gt;  $ additionalParameters   : list()</span></span>
+<span><span class="co">#&gt;  $ nObs                   : int 644</span></span>
+<span><span class="co">#&gt;  $ nSim                   : num 250</span></span>
+<span><span class="co">#&gt;  $ refit                  : logi FALSE</span></span>
+<span><span class="co">#&gt;  $ observedResponse       : int [1:644] 0 0 0 2 2 1 1 2 4 1 ...</span></span>
+<span><span class="co">#&gt;  $ integerResponse        : logi TRUE</span></span>
+<span><span class="co">#&gt;  $ problems               : list()</span></span>
+<span><span class="co">#&gt;  $ fittedPredictedResponse: num [1:644] 0.197 0.197 0.197 1.896 1.896 ...</span></span>
+<span><span class="co">#&gt;  $ fittedFixedEffects     : Named num [1:8] -1.625 2.264 -1.386 0.231 -0.77 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:8] "(Intercept)" "minedno" "sppPR" "sppDM" ...</span></span>
+<span><span class="co">#&gt;  $ fittedResiduals        : Named num [1:644] -0.2139 -0.7867 -0.0828 -0.2951 -0.2951 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:644] "1" "2" "3" "4" ...</span></span>
+<span><span class="co">#&gt;  $ method                 : chr [1:2] "PIT" "traditional"</span></span>
+<span><span class="co">#&gt;  $ simulatedResponse      : num [1:644, 1:250] 0 0 0 3 0 4 3 0 5 1 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></span>
+<span><span class="co">#&gt;  $ scaledResiduals        : num [1:644] 0.155 0.731 0.448 0.498 0.437 ...</span></span>
+<span><span class="co">#&gt;  $ time                   : 'proc_time' Named num [1:5] 0.093 0.008 0.101 0 0</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "names")= chr [1:5] "user.self" "sys.self" "elapsed" "user.child" ...</span></span>
+<span><span class="co">#&gt;  $ randomState            :List of 4</span></span>
+<span><span class="co">#&gt;  - attr(*, "class")= chr [1:3] "performance_simres" "see_performance_simres" "DHARMa"</span></span></code></pre>
   </main>
 </div>
 
