@@ -15,9 +15,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9.9000/font.css" rel="stylesheet">
-<link href="../deps/JetBrains_Mono-0.4.9.9000/font.css" rel="stylesheet">
-<link href="../deps/Roboto_Slab-0.4.9.9000/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet">
+<link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Checking simulated residuals">
@@ -39,7 +39,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.9.10</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,83 +145,22 @@
 <span></span>
 <span><span class="va">simulated_residuals</span></span></code></pre></div>
 <pre><code>&gt; Simulated residuals from a model of class `glmmTMB` based on 250
-&gt;   simulations. Use `check_residuals()` to check uniformity of residuals.
-&gt;   It is recommended to refer to `?DHARMa::simulateResiudals` and
-&gt;   `vignette("DHARMa")` for more information about different settings in
-&gt;   particular situations or for particular models.</code></pre>
+&gt;   simulations. Use `check_residuals()` to check uniformity of residuals or
+&gt;   `residuals()` to extract simulated residuals. It is recommended to refer
+&gt;   to `?DHARMa::simulateResiudals` and `vignette("DHARMa")` for more
+&gt;   information about different settings in particular situations or for
+&gt;   particular models.</code></pre>
+<p>The raw residuals can be extracted using
+<code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; [1] 0.15 0.73 0.45 0.50 0.44 0.22</code></pre>
 <!-- Aside -->
 <p>Note that since this inherits the DHARMa class, all the methods
 implemented in DHARMa just work, including all the tests:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://florianhartig.github.io/DHARMa/" class="external-link">DHARMa</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt;   [1] 0.1547 0.7310 0.4478 0.4982 0.4370 0.2199 0.2841 0.5922 0.8039 0.3361
-&gt;  [11] 0.5732 0.1597 0.2666 0.0429 0.1451 0.2500 0.5718 0.3696 0.4393 0.4783
-&gt;  [21] 0.7523 0.4938 0.4435 0.7304 0.2698 0.6122 0.2703 0.9270 0.9537 0.0421
-&gt;  [31] 0.7398 0.3958 0.1189 0.7464 0.4525 0.2682 0.2926 0.6309 0.3963 0.4767
-&gt;  [41] 0.4738 0.6794 0.3183 0.4894 0.4394 0.3340 0.5449 0.9688 0.1406 0.9379
-&gt;  [51] 0.9042 0.8491 0.6873 0.7083 0.6224 0.3930 0.1976 0.1543 0.1760 0.7735
-&gt;  [61] 0.8875 0.3422 0.3614 0.9895 0.7541 0.7471 0.1952 0.5274 0.3777 0.3064
-&gt;  [71] 0.8051 0.5382 0.6347 0.0333 0.0474 0.4776 0.6775 0.9443 0.0746 0.1186
-&gt;  [81] 0.6452 0.0372 0.9932 0.7781 0.3113 0.1413 0.6404 0.3054 0.0657 0.1141
-&gt;  [91] 0.7815 0.5783 0.1966 0.6421 0.0247 0.9923 0.2765 0.4775 0.4554 0.0522
-&gt; [101] 0.8225 0.6054 0.3236 0.5213 0.3219 0.7754 0.3550 0.8931 0.6399 0.4563
-&gt; [111] 0.1092 0.0355 0.1831 0.6801 0.6140 0.7582 0.9684 0.1416 0.2629 0.3757
-&gt; [121] 0.1758 0.5710 0.2043 0.9452 0.2528 0.1312 0.9873 0.0987 0.3845 0.5220
-&gt; [131] 0.7135 0.1149 0.1415 0.1306 0.3032 0.9521 0.5260 0.1581 0.8663 0.6128
-&gt; [141] 0.8223 0.9464 0.0789 0.9964 0.9592 0.4661 0.3077 0.4405 0.4458 0.3547
-&gt; [151] 0.1020 0.1336 0.6275 0.7716 0.8759 0.0465 0.4188 0.6102 1.0000 0.7357
-&gt; [161] 0.5783 0.5875 0.9290 0.5822 0.6805 0.0666 0.4426 0.7626 0.3535 0.6381
-&gt; [171] 0.1048 0.3518 0.2807 0.3196 0.4202 0.1860 0.5440 0.4565 0.1692 0.4198
-&gt; [181] 0.7800 0.4583 0.3272 0.5962 0.1421 0.2218 0.1813 0.7208 0.8057 0.3246
-&gt; [191] 0.1639 0.9171 0.8936 0.0034 0.4228 0.0077 0.0183 0.3206 0.0621 0.7094
-&gt; [201] 0.1504 0.9938 0.6005 0.9873 0.4555 0.6201 0.4529 0.3151 0.9330 0.2517
-&gt; [211] 0.5248 0.9463 0.7776 0.1107 0.7407 0.7590 0.3459 0.4757 0.5825 0.0417
-&gt; [221] 0.5131 0.5098 0.4103 0.6009 0.5962 0.2458 0.6689 0.3984 0.8839 0.2036
-&gt; [231] 0.9614 1.0000 0.2211 0.6168 0.6297 0.3362 0.0913 0.7616 0.5377 0.7292
-&gt; [241] 0.1857 0.8514 0.0609 0.9391 0.1238 0.3601 0.7119 0.4149 0.5858 0.4684
-&gt; [251] 0.1838 0.5652 0.0188 0.9473 1.0000 0.2395 0.4358 0.5996 0.0609 0.0341
-&gt; [261] 0.3337 0.4157 0.1221 0.0988 0.7492 0.0850 0.8922 0.1300 0.1377 0.9617
-&gt; [271] 0.2461 0.8793 0.4714 0.4140 0.1892 0.2062 0.7608 1.0000 0.1955 0.7135
-&gt; [281] 0.2398 0.7805 0.9729 0.9261 0.9859 0.9751 0.5885 0.9860 0.2643 0.9925
-&gt; [291] 0.9820 0.6253 0.7932 0.6960 0.9516 0.0903 0.6123 0.8576 0.1840 0.9689
-&gt; [301] 0.1772 0.3510 0.3529 0.1430 0.0184 0.5027 0.8827 0.7802 0.7431 0.5548
-&gt; [311] 0.1249 0.1340 0.2392 0.2128 0.6754 0.4610 0.0044 0.8803 0.0500 0.5565
-&gt; [321] 0.5301 0.1092 0.8988 0.1746 0.3681 0.3828 0.8045 0.0603 0.7539 0.3344
-&gt; [331] 0.0908 0.1515 0.8717 0.1543 0.1728 0.3951 0.2109 0.3310 0.7963 0.5073
-&gt; [341] 0.8759 0.1535 0.5166 0.2588 0.3052 0.0425 0.8401 0.4993 0.0375 0.3324
-&gt; [351] 0.0123 0.0757 0.2171 0.3087 0.1977 0.3088 0.6282 0.0879 0.3700 0.1186
-&gt; [361] 0.3372 0.1661 0.3977 0.0260 0.6101 0.6605 0.4177 0.3584 0.2367 0.9042
-&gt; [371] 0.2076 0.0439 0.2440 0.0816 0.8967 0.1748 0.8897 0.4412 0.2369 0.5955
-&gt; [381] 0.0107 0.1178 0.2358 0.1298 0.0815 0.0642 0.4216 0.3680 0.8436 0.5073
-&gt; [391] 0.8774 0.0699 0.7659 0.5706 0.8004 0.3543 0.0096 0.8242 0.1282 0.6132
-&gt; [401] 0.1307 0.7182 0.6611 0.0062 0.0482 0.1569 0.8833 0.3311 0.0655 0.1690
-&gt; [411] 0.1605 0.1824 0.0830 0.7391 0.3143 0.4232 0.5699 0.5526 0.3818 0.1505
-&gt; [421] 0.8497 0.3586 0.3082 0.3624 0.9378 0.2641 0.0185 0.0051 0.2202 0.5974
-&gt; [431] 0.0567 0.0277 0.1656 0.0705 0.5866 0.2775 0.2090 0.2932 0.1174 0.6115
-&gt; [441] 0.9880 0.9706 0.0112 1.0000 0.9286 0.7929 0.9520 0.9531 0.8057 0.0083
-&gt; [451] 0.6820 0.7187 0.5198 0.0887 0.9382 0.4685 0.6431 0.1654 0.2913 0.3691
-&gt; [461] 0.1089 0.9944 0.2030 0.1173 0.5447 0.9430 0.1822 0.4065 0.8195 0.0362
-&gt; [471] 0.0707 0.3812 0.8439 0.1757 0.1949 0.3742 0.0949 0.0328 1.0000 0.6516
-&gt; [481] 0.7025 0.4406 0.5746 0.6234 0.9301 0.6030 0.8781 0.1870 0.8569 0.6329
-&gt; [491] 0.9686 0.7874 0.0179 0.0775 0.4064 0.7517 0.1742 0.3367 0.1152 0.4003
-&gt; [501] 0.1746 0.9965 0.6219 0.7831 0.6326 0.4188 0.9157 0.5710 0.2300 0.8169
-&gt; [511] 0.9776 0.4094 0.8004 0.6796 0.4045 0.0208 0.3720 0.0140 0.9026 0.4295
-&gt; [521] 0.0249 0.4438 0.5103 0.0102 0.8339 0.5356 0.9714 0.0112 0.4004 0.3283
-&gt; [531] 0.9634 0.2994 0.1739 0.0139 0.8668 0.0254 0.9761 0.8852 0.2868 0.0313
-&gt; [541] 0.2160 0.0016 0.3809 0.5597 0.5863 0.6724 0.3902 0.5443 0.1319 0.0478
-&gt; [551] 0.5081 0.0717 0.8374 0.9961 0.7786 0.3314 0.2834 0.0794 0.8836 0.1393
-&gt; [561] 0.9747 0.8610 0.3940 0.9019 0.5177 0.1271 0.4309 0.2075 0.6500 0.3827
-&gt; [571] 0.4314 0.8871 0.3042 0.0333 0.4506 0.3515 0.9915 0.4690 0.0643 0.1829
-&gt; [581] 0.0845 0.9641 0.0707 0.0978 0.4908 0.2428 0.8087 0.9178 0.3785 0.1779
-&gt; [591] 0.1460 0.6981 0.0302 0.7676 0.1747 0.9986 0.0368 0.6447 0.0874 0.7238
-&gt; [601] 0.4988 0.1580 0.1699 0.3880 0.8303 0.0072 0.4425 0.4299 0.3330 0.6560
-&gt; [611] 0.1278 0.1274 0.0527 0.8877 0.8575 0.5469 0.5336 0.4001 1.0000 0.0227
-&gt; [621] 1.0000 0.1375 0.7879 0.7142 0.1656 0.4081 0.4020 0.9025 0.0741 0.8585
-&gt; [631] 0.3880 0.4142 0.8797 0.9818 0.4868 0.2112 0.3765 0.5793 0.1273 0.1642
-&gt; [641] 0.8461 0.9683 0.0651 1.0000</code></pre>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">DHARMa</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DHARMa/man/testUniformity.html" class="external-link">testUniformity</a></span><span class="op">(</span><span class="va">simulated_residuals</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://florianhartig.github.io/DHARMa/" class="external-link">DHARMa</a></span><span class="op">)</span></span>
+<span><span class="fu">DHARMa</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DHARMa/man/testUniformity.html" class="external-link">testUniformity</a></span><span class="op">(</span><span class="va">simulated_residuals</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; 
 &gt;   Asymptotic one-sample Kolmogorov-Smirnov test
 &gt; 
@@ -233,18 +172,44 @@ implemented in DHARMa just work, including all the tests:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_residuals.html">check_residuals</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Warning: Non-uniformity of simulated residuals detected (p &lt; .001).</code></pre>
-<p>Or check the entire model.</p>
+<p>Further implemented checks are tests for overdispersion, outliers and
+zero-inflation.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># TODO (not implemented)</span></span>
-<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; # Overdispersion test
+&gt; 
+&gt;  dispersion ratio = 1.742
+&gt;           p-value =   0.1</code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; # Check for zero-inflation
+&gt; 
+&gt;    Observed zeros: 387
+&gt;   Predicted zeros: 322
+&gt;             Ratio: 0.83</code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_outliers.html">check_outliers</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; # Outliers detection
+&gt; 
+&gt;   Proportion of observed outliers: 2.33%
+&gt;   Proportion of expected outliers: 0.80%, 95% CI [1.31, 3.81]</code></pre>
+<p>The above three functions internally call
+<code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code> for more complex models automatically,
+so you don’t need to call <code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code> yourself.
+Simulated residuals are usually more reliable than the standard
+residuals, especially for complex models.</p>
+<p>Finally, you can even perform a visual check for the entire model,
+either by passing the model object directly, or the object returned from
+<code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code>.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">simulated_residuals</span><span class="op">)</span></span></code></pre></div>
 <p>The <code><a href="../reference/check_model.html">check_model()</a></code> function is the main reason we don’t
 want to prematurely extract the residuals in
-<code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code>, because if we do then the
-<code>simulated_residuals</code> won’t contain the model fit
-(<code>fittedModel</code> in the output below), so we won’t be able to
-do all of the checks we would want to do using the model (e.g.,
-posterior predictive checks).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code>, because if we do then the simulated
+residual won’t contain the model fit (<code>fittedModel</code> in the
+output below), so we won’t be able to do all of the checks we would want
+to do using the model (e.g., posterior predictive checks).</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">simulated_residuals</span>, max.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; List of 17
 &gt;  $ fittedModel            :List of 7
@@ -266,16 +231,10 @@ posterior predictive checks).</p>
 &gt;  $ simulatedResponse      : num [1:644, 1:250] 0 0 0 3 0 4 3 0 5 1 ...
 &gt;   ..- attr(*, "dimnames")=List of 2
 &gt;  $ scaledResiduals        : num [1:644] 0.155 0.731 0.448 0.498 0.437 ...
-&gt;  $ time                   : 'proc_time' Named num [1:5] 0.094 0 0.095 0 0
+&gt;  $ time                   : 'proc_time' Named num [1:5] 0.089 0.012 0.101 0 0
 &gt;   ..- attr(*, "names")= chr [1:5] "user.self" "sys.self" "elapsed" "user.child" ...
 &gt;  $ randomState            :List of 4
 &gt;  - attr(*, "class")= chr [1:3] "performance_simres" "see_performance_simres" "DHARMa"</code></pre>
-<p>It would also mean we would need to reimplement some of the tests
-from DHARMa (e.g., <code><a href="https://rdrr.io/pkg/DHARMa/man/testOutliers.html" class="external-link">DHARMa::testOutliers()</a></code>) if we’re
-planning to include those checks as well. We probably don’t want to do
-that, since some of them are fairly involved rather than just being
-wrappers for tests supplied in base R (e.g., <a href="https://github.com/florianhartig/DHARMa/blob/a04bdfeec75338279152dbc00c3a1825958a226a/DHARMa/R/tests.R#L172" class="external-link uri">https://github.com/florianhartig/DHARMa/blob/a04bdfeec75338279152dbc00c3a1825958a226a/DHARMa/R/tests.R#L172</a>)
-.</p>
   </main>
 </div>
 
