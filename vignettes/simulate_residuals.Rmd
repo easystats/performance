@@ -15,17 +15,17 @@ editor_options:
 ```{r , include=FALSE}
 library(knitr)
 library(performance)
-options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
+  dpi = 300,
+  out.width = "100%",
+  collapse = TRUE,
   comment = "#>",
-  message = FALSE,
-  warning = FALSE,
   fig.width = 7,
   fig.height = 5,
-  out.width = "100%",
-  dpi = 300,
-  tidy.opts = list(width.cutoff = 120)
+  warning = FALSE,
+  message = FALSE
 )
+options(knitr.kable.NA = "")
 options(digits = 2)
 
 pkgs <- c("DHARMa", "glmmTMB", "see")
