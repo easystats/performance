@@ -3,7 +3,7 @@ title: "Checking simulated residuals"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    fig_width: 10.08
+    fig_width: 10
     fig_height: 6
 tags: [r, performance]
 vignette: >
