@@ -16,7 +16,7 @@ editor_options:
 library(knitr)
 library(performance)
 knitr::opts_chunk$set(
-  dpi = 450,
+  dpi = 600,
   out.width = "100%",
   collapse = TRUE,
   comment = "#>",
