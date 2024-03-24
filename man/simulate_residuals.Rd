@@ -2,9 +2,12 @@
 % Please edit documentation in R/simulate_residuals.R
 \name{simulate_residuals}
 \alias{simulate_residuals}
+\alias{residuals.performance_simres}
 \title{Simulate randomized quantile residuals from a model}
 \usage{
 simulate_residuals(x, iterations = 250, ...)
+
+\method{residuals}{performance_simres}(object, quantile_function = NULL, outlier_values = NULL, ...)
 }
 \arguments{
 \item{x}{A model object.}
@@ -12,6 +15,16 @@ simulate_residuals(x, iterations = 250, ...)
 \item{iterations}{Number of simulations to run.}
 
 \item{...}{Arguments passed on to \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.}
+
+\item{object}{A \code{performance_simres} object, as returned by \code{simulate_residuals()}.}
+
+\item{quantile_function}{A function to apply to the residuals. If \code{NULL}, the
+residuals are returned as is. If not \code{NULL}, the residuals are passed to this
+function. This is useful for returning normally distributed residuals, for
+example: \code{residuals(x, quantile_function = qnorm)}.}
+
+\item{outlier_values}{A vector of length 2, specifying the values to replace
+\code{-Inf} and \code{Inf} with, respectively.}
 }
 \value{
 Simulated residuals, which can be further processed with
@@ -27,7 +40,7 @@ where the residuals are not expected to be normally distributed.
 This function is a small wrapper around \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}}.
 It basically only sets \code{plot = FALSE} and adds an additional class attribute
 (\code{"performance_sim_res"}), which allows using the DHARMa object in own plotting
-functions in the \strong{see} package. See also \code{vignette("DHARMa")}. There is a
+functions from the \strong{see} package. See also \code{vignette("DHARMa")}. There is a
 \code{plot()} method to visualize the distribution of the residuals.
 }
 \section{Tests based on simulated residuals}{
@@ -52,6 +65,9 @@ accurate results.
 \dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 simulate_residuals(m)
+
+# extract residuals
+head(residuals(simulate_residuals(m)))
 \dontshow{\}) # examplesIf}
 }
 \references{
@@ -64,5 +80,6 @@ of Computational and Graphical Statistics, 5(3), 236. \doi{10.2307/1390802}
 }
 }
 \seealso{
-\code{\link[=check_residuals]{check_residuals()}} and \code{\link[=check_predictions]{check_predictions()}}.
+\code{\link[=check_residuals]{check_residuals()}}, \code{\link[=check_zeroinflation]{check_zeroinflation()}},
+\code{\link[=check_overdispersion]{check_overdispersion()}} and \code{\link[=check_predictions]{check_predictions()}}.
 }

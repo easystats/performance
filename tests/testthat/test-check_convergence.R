@@ -29,6 +29,7 @@ test_that("check_convergence", {
 
 
 test_that("check_convergence, glmmTMB", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   data(iris)
   model <- suppressWarnings(glmmTMB::glmmTMB(

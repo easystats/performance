@@ -301,7 +301,7 @@
   d <- data.frame(Predicted = predicted)
 
   # residuals based on simulated residuals - but we want normally distributed residuals
-  d$Residuals <- stats::residuals(simres, quantileFunction = stats::qnorm, ...)
+  d$Residuals <- stats::residuals(simres, quantile_function = stats::qnorm, ...)
   d$Res2 <- d$Residuals^2
   d$StdRes <- insight::get_residuals(model, type = "pearson")
 

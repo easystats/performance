@@ -62,18 +62,9 @@
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
 #'
-#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)
-#'
-#' library(glmmTMB)
-#' data(Salamanders)
+#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB")
+#' data(Salamanders, package = "glmmTMB")
 #' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#' check_overdispersion(m)
-#'
-#' m <- glmmTMB(
-#'   count ~ mined + spp + (1 | site),
-#'   family = poisson,
-#'   data = Salamanders
-#' )
 #' check_overdispersion(m)
 #' @export
 check_overdispersion <- function(x, ...) {

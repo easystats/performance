@@ -92,6 +92,23 @@ check_normality.glm <- function(x, ...) {
   invisible(out)
 }
 
+# simulated residuals ----------
+
+#' @export
+check_normality.performance_simres <- function(x, ...) {
+  # check for normality of residuals
+  res <- stats::residuals(x, quantile_function = stats::qnorm)
+  p.val <- .check_normality(res[!is.infinite(res) & !is.na(res)], x)
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+
+  p.val
+}
+
+
 # numeric -------------------
 
 #' @export
