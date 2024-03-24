@@ -3,8 +3,6 @@ title: "Checking simulated residuals"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    fig_width: 10
-    fig_height: 6
 tags: [r, performance]
 vignette: >
   \usepackage[utf8]{inputenc}
@@ -22,8 +20,10 @@ knitr::opts_chunk$set(
   comment = "#>",
   message = FALSE,
   warning = FALSE,
+  fig.width = 7,
+  fig.height = 5,
   out.width = "100%",
-  dpi = 450,
+  dpi = 300,
   tidy.opts = list(width.cutoff = 120)
 )
 options(digits = 2)
