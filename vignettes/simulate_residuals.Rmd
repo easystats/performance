@@ -3,8 +3,6 @@ title: "Checking simulated residuals"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    fig_width: 10.08
-    fig_height: 6
 tags: [r, performance]
 vignette: >
   \usepackage[utf8]{inputenc}
@@ -17,7 +15,9 @@ editor_options:
 ```{r , include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(
-  dpi = 600,
+  dpi = 300,
+  fig.width = 7,
+  fig.height = 5,
   out.width = "100%",
   collapse = TRUE,
   comment = "#>",
@@ -95,7 +95,7 @@ The above three functions internally call `simulate_residuals()` for more comple
 
 Finally, you can even perform a visual check for the entire model, either by passing the model object directly, or the object returned from `simulate_residuals()`. 
 
-```{r, eval=can_evaluate && packageVersion("see") > "0.8.2"}
+```{r fig.height=12, fig.width=10}
 check_model(simulated_residuals)
 ```
 
