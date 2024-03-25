@@ -60,3 +60,6 @@ plot(check_normality(m), type = "pp")
 }
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+\code{\link[see:plot.see_check_normality]{see::plot.see_check_normality()}} for options to customize the plot.
+}
