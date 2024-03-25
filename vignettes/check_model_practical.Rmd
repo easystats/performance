@@ -135,7 +135,7 @@ model3 <- glmmTMB::glmmTMB(
 check_model(model3, dot_size = 1.2)
 ```
 
-Now we see that the plot showing _misspecified dispersion and zero-inflation_ suggests that the overdispersion is addressed properly. Let us check again:
+Now we see that the plot showing _misspecified dispersion and zero-inflation_ suggests that the overdispersion is better addressed than before. Let us check again:
 
 ```{r}
 check_overdispersion(model3)
