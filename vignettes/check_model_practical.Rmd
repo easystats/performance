@@ -120,7 +120,7 @@ check_zeroinflation(model2)
 
 Indeed, the overdispersion is still present.
 
-## Second attemot at improving the model fit
+## Second attempt at improving the model fit
 
 We can try to address this issue by fitting a negative binomial model instead of using a Poisson distribution.
 
