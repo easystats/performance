@@ -19,7 +19,7 @@ options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
   dpi = 300,
   fig.width = 7,
-  fig.height = 7,
+  fig.height = 6,
   out.width = "80%",
   out.height = "80%",
   comment = "#>",
