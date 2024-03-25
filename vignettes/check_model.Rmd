@@ -3,8 +3,6 @@ title: "Checking model assumption - linear models"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    fig_width: 10.08
-    fig_height: 6
 tags: [r, performance, r2]
 vignette: >
   \usepackage[utf8]{inputenc}
@@ -19,11 +17,15 @@ library(knitr)
 library(performance)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
-  comment = ">",
-  message = FALSE,
-  warning = FALSE,
+  dpi = 300,
+  fig.width = 8,
+  fig.height = 10,
   out.width = "100%",
-  dpi = 450
+  out.height = "100%",
+  comment = "#>",
+  collapse = TRUE,
+  message = FALSE,
+  warning = FALSE
 )
 options(digits = 2)
 
@@ -75,7 +77,7 @@ model_parameters(m1)
 
 There is nothing suspicious so far. Now let's start with model diagnostics. We use the `check_model()` function, which provides an overview with the most important and appropriate diagnostic plots for the model under investigation.
 
-```{r eval=all(successfully_loaded[c("see", "ggplot2")]), fig.height=11}
+```{r eval=all(successfully_loaded[c("see", "ggplot2")]), fig.height=12, fig.width=10}
 library(performance)
 check_model(m1)
 ```
