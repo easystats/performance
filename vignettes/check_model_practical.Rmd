@@ -46,7 +46,7 @@ This vignette shows how to use the *performance* package to check the fit of a m
 -   if necessary, fit another model that could potentially improve the fit
 -   compare the model fit indices and perform statistical tests to determine which model is the best fit
 
-![Workflow of the performance package](images/figure_workflow.png){width="100%"}
+![](images/figure_workflow.png){width="100%"}
 
 In the following, we will demonstrate this workflow using a model with a count response variable. We will fit a Poisson regression model to the Salamanders dataset from the *glmmTMB* package. The dataset contains counts of salamanders in different sites, along with information on the number of mines and the species of salamanders. We will check the model fit and assess the model fit indices.
 
