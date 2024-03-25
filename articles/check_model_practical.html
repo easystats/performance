@@ -199,7 +199,7 @@ which <a href="https://easystats.github.io/parameters/reference/p_function.html"
 you follow, our conclusions we draw from statistical models will be
 inaccurate if our modeling assumptions are a poor fit for the situation.
 Hence, checking model fit is essential.</p>
-<p>In <em>performance</em>, we can conducte a comprehensive visual
+<p>In <em>performance</em>, we can conduct a comprehensive visual
 inspection of our model fit using <code><a href="../reference/check_model.html">check_model()</a></code>. We won’t
 go into details of all the plots here, but you can find more information
 on all created diagnostic plots in the <a href="https://easystats.github.io/performance/articles/check_model.html">dedicated
@@ -240,7 +240,7 @@ beyond the visual inspection.</p>
 zero-inflation.</p>
 </div>
 <div class="section level3">
-<h3 id="first-attemot-at-improving-the-model-fit">First attemot at improving the model fit<a class="anchor" aria-label="anchor" href="#first-attemot-at-improving-the-model-fit"></a>
+<h3 id="first-attempt-at-improving-the-model-fit">First attempt at improving the model fit<a class="anchor" aria-label="anchor" href="#first-attempt-at-improving-the-model-fit"></a>
 </h3>
 <p>We can try to improve the model fit by fitting a model with
 zero-inflation component:</p>
@@ -254,7 +254,7 @@ zero-inflation component:</p>
 <span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model2</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
 <p>Looking at the above plots, the zero-inflation seems to be addressed
-properpy (see especially <em>posterior predictive checks</em> and
+properly (see especially <em>posterior predictive checks</em> and
 <em>uniformity of residuals</em>, the Q-Q plot). However, the
 overdispersion still could present. We can check for these problems
 using <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> and
