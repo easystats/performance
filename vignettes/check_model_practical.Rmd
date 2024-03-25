@@ -41,10 +41,10 @@ if (can_evaluate) {
 
 This vignette shows how to use the *performance* package to check the fit of a model, how to detect misspecification and how to improve your model. The basic workflow of the *performance* package can be summarized as follows:
 
--   fit a regression model
--   check the model fit and assess model fit indices
--   if necessary, fit another model that could potentially improve the fit
--   compare the model fit indices and perform statistical tests to determine which model is the best fit
+- fit a regression model
+- check the model fit and assess model fit indices
+- if necessary, fit another model that could potentially improve the fit
+- compare the model fit indices and perform statistical tests to determine which model is the best fit
 
 ![](images/figure_workflow.png){width="100%"}
 
