@@ -140,9 +140,7 @@ fit</li>
 <li>compare the model fit indices and perform statistical tests to
 determine which model is the best fit</li>
 </ul>
-<div class="float">
-<img src="images/figure_workflow.png" style="width:100.0%" alt="Workflow of the performance package"><div class="figcaption">Workflow of the performance package</div>
-</div>
+<p><img src="images/figure_workflow.png" style="width:75.0%"></p>
 <p>In the following, we will demonstrate this workflow using a model
 with a count response variable. We will fit a Poisson regression model
 to the Salamanders dataset from the <em>glmmTMB</em> package. The
@@ -193,7 +191,13 @@ distribution.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter            | Coefficient |       95% CI</span></span>
 <span><span class="co">#&gt; -------------------------------------------------</span></span>
-<span><span class="co">#&gt; SD (Intercept: site) |        0.58 | [0.38, 0.87]</span></span></code></pre></div>
+<span><span class="co">#&gt; SD (Intercept: site) |        0.58 | [0.38, 0.87]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed</span></span>
+<span><span class="co">#&gt;   using a Wald z-distribution approximation.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The model has a log- or logit-link. Consider using `exponentiate =</span></span>
+<span><span class="co">#&gt;   TRUE` to interpret coefficients as ratios.</span></span></code></pre></div>
 <p>We see a lot of statistically significant estimates here. No matter,
 which <a href="https://easystats.github.io/parameters/reference/p_function.html" class="external-link">philosophy</a>
 you follow, our conclusions we draw from statistical models will be
@@ -208,13 +212,14 @@ vignette</a>.</p>
 checks</em>, <em>dispersion and zero-inflation</em> as well as the Q-Q
 plot (<em>uniformity of residuals</em>).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model1</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model1</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `check_outliers()` does not yet support models of class `glmmTMB`.</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
 <p>Note that unlike <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, which is a base R function to
 create diagnostic plots, <code><a href="../reference/check_model.html">check_model()</a></code> relies on
 <em>simulated residuals</em> for the Q-Q plot, which is more accurate
 for non-Gaussian models. See <a href="https://easystats.github.io/performance/articles/simulate_residuals.html">this
-vignette</a> and the documentation of <code>simulated_residuals()</code>
+vignette</a> and the documentation of <code><a href="../reference/simulate_residuals.html">simulate_residuals()</a></code>
 for further details.</p>
 <p>The above plot suggests that we may have issues with overdispersion
 and/or zero-inflation. We can check for these problems using
@@ -229,13 +234,15 @@ beyond the visual inspection.</p>
 <span><span class="co">#&gt;        dispersion ratio =    2.324</span></span>
 <span><span class="co">#&gt;   Pearson's Chi-Squared = 1475.875</span></span>
 <span><span class="co">#&gt;                 p-value =  &lt; 0.001</span></span>
+<span><span class="co">#&gt; Overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
 <span><span class="co">#&gt;   Predicted zeros: 311</span></span>
-<span><span class="co">#&gt;             Ratio: 0.80</span></span></code></pre></div>
+<span><span class="co">#&gt;             Ratio: 0.80</span></span>
+<span><span class="co">#&gt; Model is underfitting zeros (probable zero-inflation).</span></span></code></pre></div>
 <p>As we can see, our model seems to suffer both from overdispersion and
 zero-inflation.</p>
 </div>
@@ -251,7 +258,8 @@ zero-inflation component:</p>
 <span>  family <span class="op">=</span> <span class="va">poisson</span>,</span>
 <span>  data <span class="op">=</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/glmmTMB/man/Salamanders.html" class="external-link">Salamanders</a></span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model2</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model2</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `check_outliers()` does not yet support models of class `glmmTMB`.</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
 <p>Looking at the above plots, the zero-inflation seems to be addressed
 properly (see especially <em>posterior predictive checks</em> and
@@ -265,17 +273,20 @@ using <code><a href="../reference/check_overdispersion.html">check_overdispersio
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 1.679</span></span>
 <span><span class="co">#&gt;           p-value = 0.008</span></span>
+<span><span class="co">#&gt; Overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
 <span><span class="co">#&gt;   Predicted zeros: 387</span></span>
-<span><span class="co">#&gt;             Ratio: 1.00</span></span></code></pre></div>
+<span><span class="co">#&gt;             Ratio: 1.00</span></span>
+<span><span class="co">#&gt; Model seems ok, ratio of observed and predicted zeros is within the</span></span>
+<span><span class="co">#&gt;   tolerance range (p &gt; .999).</span></span></code></pre></div>
 <p>Indeed, the overdispersion is still present.</p>
 </div>
 <div class="section level3">
-<h3 id="second-attemot-at-improving-the-model-fit">Second attemot at improving the model fit<a class="anchor" aria-label="anchor" href="#second-attemot-at-improving-the-model-fit"></a>
+<h3 id="second-attempt-at-improving-the-model-fit">Second attempt at improving the model fit<a class="anchor" aria-label="anchor" href="#second-attempt-at-improving-the-model-fit"></a>
 </h3>
 <p>We can try to address this issue by fitting a negative binomial model
 instead of using a Poisson distribution.</p>
@@ -286,7 +297,8 @@ instead of using a Poisson distribution.</p>
 <span>  family <span class="op">=</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">nbinom1</a></span>,</span>
 <span>  data <span class="op">=</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/glmmTMB/man/Salamanders.html" class="external-link">Salamanders</a></span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model3</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model3</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `check_outliers()` does not yet support models of class `glmmTMB`.</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-8-1.png" width="100%"></p>
 <p>Now we see that the plot showing <em>misspecified dispersion and
 zero-inflation</em> suggests that the overdispersion is addressed
@@ -297,13 +309,16 @@ properly. Let us check again:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 1.081</span></span>
 <span><span class="co">#&gt;           p-value =  0.54</span></span>
+<span><span class="co">#&gt; No overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
 <span><span class="co">#&gt;   Predicted zeros: 389</span></span>
-<span><span class="co">#&gt;             Ratio: 1.00</span></span></code></pre></div>
+<span><span class="co">#&gt;             Ratio: 1.00</span></span>
+<span><span class="co">#&gt; Model seems ok, ratio of observed and predicted zeros is within the</span></span>
+<span><span class="co">#&gt;   tolerance range (p &gt; .999).</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="comparing-model-fit-indices">Comparing model fit indices<a class="anchor" aria-label="anchor" href="#comparing-model-fit-indices"></a>
@@ -416,7 +431,10 @@ that the third model is significantly better than the second model.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter            | Coefficient |       95% CI</span></span>
 <span><span class="co">#&gt; -------------------------------------------------</span></span>
-<span><span class="co">#&gt; SD (Intercept: site) |        0.46 | [0.27, 0.76]</span></span></code></pre></div>
+<span><span class="co">#&gt; SD (Intercept: site) |        0.46 | [0.27, 0.76]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed</span></span>
+<span><span class="co">#&gt;   using a Wald z-distribution approximation.</span></span></code></pre></div>
 <p>Obviously, although we might have found the best fitting model,
 coefficients for the <em>zero-inflation</em> component of our model look
 rather spurious. We have <em>very</em> high coefficients here. We still
@@ -429,7 +447,8 @@ might find a better distributional family for our model, and try
 <span>  family <span class="op">=</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">nbinom2</a></span>,</span>
 <span>  data <span class="op">=</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/glmmTMB/man/Salamanders.html" class="external-link">Salamanders</a></span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model4</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model4</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; `check_outliers()` does not yet support models of class `glmmTMB`.</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-14-1.png" width="100%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -438,6 +457,7 @@ might find a better distributional family for our model, and try
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 0.958</span></span>
 <span><span class="co">#&gt;           p-value =  0.93</span></span>
+<span><span class="co">#&gt; No overdispersion detected.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
@@ -445,8 +465,12 @@ might find a better distributional family for our model, and try
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
 <span><span class="co">#&gt;   Predicted zeros: 386</span></span>
 <span><span class="co">#&gt;             Ratio: 1.00</span></span>
+<span><span class="co">#&gt; Model seems ok, ratio of observed and predicted zeros is within the</span></span>
+<span><span class="co">#&gt;   tolerance range (p = 0.952).</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/test_performance.html">test_likelihoodratio</a></span><span class="op">(</span><span class="va">model3</span>, <span class="va">model4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Some of the nested models seem to be identical and probably only vary in</span></span>
+<span><span class="co">#&gt;   their random effects.</span></span>
 <span><span class="co">#&gt; # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Name   |   Model | df | df_diff |  Chi2 |      p</span></span>
@@ -491,7 +515,10 @@ might find a better distributional family for our model, and try
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter            | Coefficient |       95% CI</span></span>
 <span><span class="co">#&gt; -------------------------------------------------</span></span>
-<span><span class="co">#&gt; SD (Intercept: site) |        0.38 | [0.17, 0.87]</span></span></code></pre></div>
+<span><span class="co">#&gt; SD (Intercept: site) |        0.38 | [0.17, 0.87]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed</span></span>
+<span><span class="co">#&gt;   using a Wald z-distribution approximation.</span></span></code></pre></div>
 <p>Based on these results, we might even go with
 <code>model4</code>.</p>
 </div>
