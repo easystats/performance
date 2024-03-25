@@ -111,7 +111,7 @@ model2 <- glmmTMB::glmmTMB(
 check_model(model2, dot_size = 1.2)
 ```
 
-Looking at the above plots, the zero-inflation seems to be addressed properly (see especially _posterior predictive checks_ and _uniformity of residuals_, the Q-Q plot). However, the overdispersion still could present. We can check for these problems using `check_overdispersion()` and `check_zeroinflation()` again.
+Looking at the above plots, the zero-inflation seems to be addressed properly (see especially _posterior predictive checks_ and _uniformity of residuals_, the Q-Q plot). However, the overdispersion still could be present. We can check for these problems using `check_overdispersion()` and `check_zeroinflation()` again.
 
 ```{r}
 check_overdispersion(model2)
