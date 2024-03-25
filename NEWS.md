@@ -1,3 +1,7 @@
+# performance 0.11.1
+
+* Improved documentation and new vignettes added.
+
 # performance 0.11.0
 
 ## New supported models
