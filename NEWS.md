@@ -58,7 +58,7 @@
   `performance_aic()`.
 
 * Improved plots for overdispersion-checks for negative-binomial models from
-  package *glmmTMB* (affects `check_overdispersion()` and `check_mnodel()`).
+  package *glmmTMB* (affects `check_overdispersion()` and `check_model()`).
 
 * Improved detection rates for singularity in `check_singularity()` for models
   from package *glmmTMB*.
