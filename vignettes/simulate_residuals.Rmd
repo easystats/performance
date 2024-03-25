@@ -3,6 +3,8 @@ title: "Checking simulated residuals"
 output: 
   rmarkdown::html_vignette:
     toc: true
+    fig_width: 10.08
+    fig_height: 6
 tags: [r, performance]
 vignette: >
   \usepackage[utf8]{inputenc}
@@ -14,14 +16,11 @@ editor_options:
 
 ```{r , include=FALSE}
 library(knitr)
-library(performance)
 knitr::opts_chunk$set(
   dpi = 600,
   out.width = "100%",
   collapse = TRUE,
   comment = "#>",
-  fig.width = 7,
-  fig.height = 5,
   warning = FALSE,
   message = FALSE
 )
@@ -45,18 +44,17 @@ The basic workflow for simulated residual checks using `simulate_residuals()` is
 First, fit a model:
 
 ```{r}
-library(glmmTMB)
-
-model <- glmmTMB(
+model <- glmmTMB::glmmTMB(
   count ~ mined + spp + (1 | site),
   family = poisson,
-  data = Salamanders
+  data = glmmTMB::Salamanders
 )
 ```
 
 Next, simulate residuals from the model:
 
 ```{r}
+library(performance)
 simulated_residuals <- simulate_residuals(model)
 
 simulated_residuals
@@ -73,7 +71,6 @@ head(residuals(simulated_residuals))
 Note that since this inherits the DHARMa class, all the methods implemented in DHARMa just work, including all the tests:
 
 ```{r}
-library(DHARMa)
 DHARMa::testUniformity(simulated_residuals, plot = FALSE)
 ```
 <!-- Aside -->
