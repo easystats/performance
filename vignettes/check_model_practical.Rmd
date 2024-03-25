@@ -3,8 +3,8 @@ title: "How to arrive at the best model fit"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    fig_width: 18
-    fig_height: 18
+    fig_width: 19
+    fig_height: 19
 tags: [r, performance]
 vignette: >
   \usepackage[utf8]{inputenc}
@@ -18,8 +18,8 @@ editor_options:
 library(knitr)
 knitr::opts_chunk$set(
   dpi = 600,
-  out.width = "90%",
-  out.height = "90%",
+  out.width = "100%",
+  out.height = "100%",
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
