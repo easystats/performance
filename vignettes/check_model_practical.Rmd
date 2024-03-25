@@ -3,8 +3,6 @@ title: "How to arrive at the best model fit"
 output: 
   rmarkdown::html_vignette:
     toc: true
-    fig_width: 12
-    fig_height: 12
 tags: [r, performance]
 vignette: >
   \usepackage[utf8]{inputenc}
@@ -17,7 +15,9 @@ editor_options:
 ```{r , include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(
-  dpi = 1200,
+  dpi = 300,
+  fig.width = 7,
+  fig.height = 5,
   out.width = "100%",
   out.height = "100%",
   collapse = TRUE,
@@ -81,7 +81,7 @@ In *performance*, we can conduct a comprehensive visual inspection of our model 
 
 For now, we want to focus on the _posterior predictive checks_, _dispersion and zero-inflation_ as well as the Q-Q plot (_uniformity of residuals_).
 
-```{r}
+```{r fig.height=12, fig.width=10}
 check_model(model1, dot_size = 1.2)
 ```
 
@@ -101,7 +101,7 @@ As we can see, our model seems to suffer both from overdispersion and zero-infla
 
 We can try to improve the model fit by fitting a model with zero-inflation component:
 
-```{r}
+```{r fig.height=12, fig.width=10}
 model2 <- glmmTMB::glmmTMB(
   count ~ mined + spp + (1 | site),
   ziformula = ~ mined + spp,
@@ -125,7 +125,7 @@ Indeed, the overdispersion is still present.
 
 We can try to address this issue by fitting a negative binomial model instead of using a Poisson distribution.
 
-```{r}
+```{r fig.height=12, fig.width=10}
 model3 <- glmmTMB::glmmTMB(
   count ~ mined + spp + (1 | site),
   ziformula = ~ mined + spp,
@@ -188,7 +188,7 @@ model_parameters(model3)
 
 Obviously, although we might have found the best fitting model, coefficients for the _zero-inflation_ component of our model look rather spurious. We have *very* high coefficients here. We still might find a better distributional family for our model, and try `nbinom2` now.
 
-```{r}
+```{r fig.height=12, fig.width=10}
 model4 <- glmmTMB::glmmTMB(
   count ~ mined + spp + (1 | site),
   ziformula = ~ mined + spp,
