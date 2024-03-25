@@ -18,10 +18,10 @@ library(performance)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
   dpi = 300,
-  fig.width = 8,
-  fig.height = 10,
-  out.width = "100%",
-  out.height = "100%",
+  fig.width = 7,
+  fig.height = 7,
+  out.width = "80%",
+  out.height = "80%",
   comment = "#>",
   collapse = TRUE,
   message = FALSE,
@@ -77,7 +77,7 @@ model_parameters(m1)
 
 There is nothing suspicious so far. Now let's start with model diagnostics. We use the `check_model()` function, which provides an overview with the most important and appropriate diagnostic plots for the model under investigation.
 
-```{r eval=all(successfully_loaded[c("see", "ggplot2")]), fig.height=12, fig.width=10}
+```{r eval=all(successfully_loaded[c("see", "ggplot2")]), fig.height=12, fig.width=10, out.width="100%", out.height="100%"}
 library(performance)
 check_model(m1)
 ```
