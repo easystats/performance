@@ -84,7 +84,7 @@ For now, we want to focus on the _posterior predictive checks_, _dispersion and 
 check_model(model1, dot_size = 1.2)
 ```
 
-Note that unlike `plot()`, which is a base R function to create diagnostic plots, `check_model()` relies on *simulated residuals* for the Q-Q plot, which is more accurate for non-Gaussian models. See [this vignette](https://easystats.github.io/performance/articles/simulate_residuals.html) and the documentation of `simulated_residuals()` for further details.
+Note that unlike `plot()`, which is a base R function to create diagnostic plots, `check_model()` relies on *simulated residuals* for the Q-Q plot, which is more accurate for non-Gaussian models. See [this vignette](https://easystats.github.io/performance/articles/simulate_residuals.html) and the documentation of `simulate_residuals()` for further details.
 
 The above plot suggests that we may have issues with overdispersion and/or zero-inflation. We can check for these problems using `check_overdispersion()` and `check_zeroinflation()`, which will perform statistical tests (based on simulated residuals). These tests can additionally be used beyond the visual inspection.
 
