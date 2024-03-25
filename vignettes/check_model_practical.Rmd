@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
-  message = FALSE
+  message = TRUE
 )
 options(knitr.kable.NA = "")
 options(digits = 2)
