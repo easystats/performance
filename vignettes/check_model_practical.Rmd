@@ -76,7 +76,7 @@ model_parameters(model1)
 
 We see a lot of statistically significant estimates here. No matter, which [philosophy](https://easystats.github.io/parameters/reference/p_function.html) you follow, our conclusions we draw from statistical models will be inaccurate if our modeling assumptions are a poor fit for the situation. Hence, checking model fit is essential.
 
-In *performance*, we can conducte a comprehensive visual inspection of our model fit using `check_model()`. We won't go into details of all the plots here, but you can find more information on all created diagnostic plots in the [dedicated vignette](https://easystats.github.io/performance/articles/check_model.html).
+In *performance*, we can conduct a comprehensive visual inspection of our model fit using `check_model()`. We won't go into details of all the plots here, but you can find more information on all created diagnostic plots in the [dedicated vignette](https://easystats.github.io/performance/articles/check_model.html).
 
 For now, we want to focus on the _posterior predictive checks_, _dispersion and zero-inflation_ as well as the Q-Q plot (_uniformity of residuals_).
 
@@ -96,7 +96,7 @@ check_zeroinflation(model1)
 
 As we can see, our model seems to suffer both from overdispersion and zero-inflation.
 
-## First attemot at improving the model fit
+## First attempt at improving the model fit
 
 We can try to improve the model fit by fitting a model with zero-inflation component:
 
@@ -110,7 +110,7 @@ model2 <- glmmTMB::glmmTMB(
 check_model(model2, dot_size = 1.2)
 ```
 
-Looking at the above plots, the zero-inflation seems to be addressed properpy (see especially _posterior predictive checks_ and _uniformity of residuals_, the Q-Q plot). However, the overdispersion still could present. We can check for these problems using `check_overdispersion()` and `check_zeroinflation()` again.
+Looking at the above plots, the zero-inflation seems to be addressed properly (see especially _posterior predictive checks_ and _uniformity of residuals_, the Q-Q plot). However, the overdispersion still could present. We can check for these problems using `check_overdispersion()` and `check_zeroinflation()` again.
 
 ```{r}
 check_overdispersion(model2)
