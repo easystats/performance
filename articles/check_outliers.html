@@ -457,32 +457,32 @@ thresholds.</p>
 <p><em>Summary of Statistical Outlier Detection Methods
 Recommendations</em></p>
 <div class="tabwid">
-<style>.cl-2a8e3414{}.cl-2a887254{font-family:'Latin Modern Roman';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-2a8ae8ae{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-2a8afb78{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2a8afb82{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-2a8afb83{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-2a8e3414">
+<style>.cl-dfa28a3c{}.cl-df9ca4f0{font-family:'Latin Modern Roman';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-df9f26da{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-df9f399a{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-df9f39a4{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-df9f39ae{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-dfa28a3c">
 <thead><tr style="overflow-wrap:break-word;">
-<th class="cl-2a8afb78"><p class="cl-2a8ae8ae"><span class="cl-2a887254">Statistical Test</span></p></th>
-<th class="cl-2a8afb78"><p class="cl-2a8ae8ae"><span class="cl-2a887254">Diagnosis Method</span></p></th>
-<th class="cl-2a8afb78"><p class="cl-2a8ae8ae"><span class="cl-2a887254">Recommended Threshold</span></p></th>
-<th class="cl-2a8afb78"><p class="cl-2a8ae8ae"><span class="cl-2a887254">Function Usage</span></p></th>
+<th class="cl-df9f399a"><p class="cl-df9f26da"><span class="cl-df9ca4f0">Statistical Test</span></p></th>
+<th class="cl-df9f399a"><p class="cl-df9f26da"><span class="cl-df9ca4f0">Diagnosis Method</span></p></th>
+<th class="cl-df9f399a"><p class="cl-df9f26da"><span class="cl-df9ca4f0">Recommended Threshold</span></p></th>
+<th class="cl-df9f399a"><p class="cl-df9f26da"><span class="cl-df9ca4f0">Function Usage</span></p></th>
 </tr></thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">Supported regression model</span></p></td>
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">**Model-based**: Cook (or Pareto for Bayesian models)</span></p></td>
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">_qf(0.5, ncol(x), nrow(x) - ncol(x))_ (or 0.7 for Pareto)</span></p></td>
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">_check_outliers(model, method = "cook")_</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">Supported regression model</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">**Model-based**: Cook (or Pareto for Bayesian models)</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">_qf(0.5, ncol(x), nrow(x) - ncol(x))_ (or 0.7 for Pareto)</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">_check_outliers(model, method = "cook")_</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">Structural Equation Modeling (or other unsupported model)</span></p></td>
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">**Multivariate**: Minimum Covariance Determinant (MCD)</span></p></td>
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">_qchisq(p = 1 - 0.001, df = ncol(x))_</span></p></td>
-<td class="cl-2a8afb82"><p class="cl-2a8ae8ae"><span class="cl-2a887254">_check_outliers(data, method = "mcd")_</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">Structural Equation Modeling (or other unsupported model)</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">**Multivariate**: Minimum Covariance Determinant (MCD)</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">_qchisq(p = 1 - 0.001, df = ncol(x))_</span></p></td>
+<td class="cl-df9f39a4"><p class="cl-df9f26da"><span class="cl-df9ca4f0">_check_outliers(data, method = "mcd")_</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-2a8afb83"><p class="cl-2a8ae8ae"><span class="cl-2a887254">Simple test with few variables (*t* test, correlation, etc.)</span></p></td>
-<td class="cl-2a8afb83"><p class="cl-2a8ae8ae"><span class="cl-2a887254">**Univariate**: robust *z* scores (MAD)</span></p></td>
-<td class="cl-2a8afb83"><p class="cl-2a8ae8ae"><span class="cl-2a887254">_qnorm(p = 1 - 0.001 / 2)_, ~ 3.29</span></p></td>
-<td class="cl-2a8afb83"><p class="cl-2a8ae8ae"><span class="cl-2a887254">_check_outliers(data, method = "zscore_robust")_</span></p></td>
+<td class="cl-df9f39ae"><p class="cl-df9f26da"><span class="cl-df9ca4f0">Simple test with few variables (*t* test, correlation, etc.)</span></p></td>
+<td class="cl-df9f39ae"><p class="cl-df9f26da"><span class="cl-df9ca4f0">**Univariate**: robust *z* scores (MAD)</span></p></td>
+<td class="cl-df9f39ae"><p class="cl-df9f26da"><span class="cl-df9ca4f0">_qnorm(p = 1 - 0.001 / 2)_, ~ 3.29</span></p></td>
+<td class="cl-df9f39ae"><p class="cl-df9f26da"><span class="cl-df9ca4f0">_check_outliers(data, method = "zscore_robust")_</span></p></td>
 </tr>
 </tbody>
 </table>

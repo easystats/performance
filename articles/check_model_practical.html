@@ -264,7 +264,7 @@ zero-inflation component:</p>
 <p>Looking at the above plots, the zero-inflation seems to be addressed
 properly (see especially <em>posterior predictive checks</em> and
 <em>uniformity of residuals</em>, the Q-Q plot). However, the
-overdispersion still could present. We can check for these problems
+overdispersion still could be present. We can check for these problems
 using <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> and
 <code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> again.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -301,8 +301,8 @@ instead of using a Poisson distribution.</p>
 <span><span class="co">#&gt; `check_outliers()` does not yet support models of class `glmmTMB`.</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-8-1.png" width="100%" height="100%"></p>
 <p>Now we see that the plot showing <em>misspecified dispersion and
-zero-inflation</em> suggests that the overdispersion is addressed
-properly. Let us check again:</p>
+zero-inflation</em> suggests that the overdispersion is better addressed
+than before. Let us check again:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
