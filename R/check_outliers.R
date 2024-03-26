@@ -47,6 +47,8 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
+#' @seealso [`see::plot.see_check_outliers()`] for options to customize the plot.
+#'
 #' @note There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 #'   implemented in the

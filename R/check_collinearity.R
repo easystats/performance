@@ -31,6 +31,8 @@
 #'   with other terms, and tolerance values (including confidence intervals),
 #'   where `tolerance = 1/vif`.
 #'
+#' @seealso [`see::plot.see_check_collinearity()`] for options to customize the plot.
+#'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation
 #' between predictors. What matters is the association between one or more

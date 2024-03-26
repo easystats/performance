@@ -117,7 +117,8 @@ Cambridge University Press.
 }
 }
 \seealso{
-\code{\link[=simulate_residuals]{simulate_residuals()}} and \code{\link[=check_residuals]{check_residuals()}}.
+\code{\link[=simulate_residuals]{simulate_residuals()}} and \code{\link[=check_residuals]{check_residuals()}}. See also
+\code{\link[see:print.see_performance_pp_check]{see::print.see_performance_pp_check()}} for options to customize the plot.
 
 Other functions to check model assumptions and and assess model quality: 
 \code{\link{check_autocorrelation}()},

@@ -62,5 +62,6 @@ check_residuals(res)
 }
 \seealso{
 \code{\link[=simulate_residuals]{simulate_residuals()}}, \code{\link[=check_zeroinflation]{check_zeroinflation()}},
-\code{\link[=check_overdispersion]{check_overdispersion()}} and \code{\link[=check_predictions]{check_predictions()}}.
+\code{\link[=check_overdispersion]{check_overdispersion()}} and \code{\link[=check_predictions]{check_predictions()}}. See also
+\code{\link[see:plot.see_performance_simres]{see::plot.see_performance_simres()}} for options to customize the plot.
 }
