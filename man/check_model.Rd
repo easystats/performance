@@ -17,6 +17,7 @@ check_model(x, ...)
   dot_alpha = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
+  base_size = 10,
   detrend = TRUE,
   show_dots = NULL,
   bandwidth = "nrd",
@@ -56,6 +57,8 @@ for dots, and third color for outliers or extreme values.}
 
 \item{theme}{String, indicating the name of the plot-theme. Must be in the
 format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
+
+\item{base_size}{Base font size for plots.}
 
 \item{detrend}{Logical. Should Q-Q/P-P plots be detrended? Defaults to
 \code{TRUE} for linear models or when \code{residual_type = "normal"}. Defaults to

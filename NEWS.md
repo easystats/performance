@@ -1,3 +1,7 @@
+# performance 0.11.1
+
+* `check_model()` gets a `base_size` argument, to set the base font size for plots. 
+
 # performance 0.11.0
 
 ## New supported models
