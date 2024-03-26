@@ -14,14 +14,13 @@ editor_options:
 
 ```{r , include=FALSE}
 library(knitr)
-library(performance)
 knitr::opts_chunk$set(
-  dpi = 600,
+  dpi = 300,
+  fig.width = 7,
+  fig.height = 5,
   out.width = "100%",
   collapse = TRUE,
   comment = "#>",
-  fig.width = 7,
-  fig.height = 5,
   warning = FALSE,
   message = FALSE
 )
@@ -45,18 +44,17 @@ The basic workflow for simulated residual checks using `simulate_residuals()` is
 First, fit a model:
 
 ```{r}
-library(glmmTMB)
-
-model <- glmmTMB(
+model <- glmmTMB::glmmTMB(
   count ~ mined + spp + (1 | site),
   family = poisson,
-  data = Salamanders
+  data = glmmTMB::Salamanders
 )
 ```
 
 Next, simulate residuals from the model:
 
 ```{r}
+library(performance)
 simulated_residuals <- simulate_residuals(model)
 
 simulated_residuals
@@ -73,7 +71,6 @@ head(residuals(simulated_residuals))
 Note that since this inherits the DHARMa class, all the methods implemented in DHARMa just work, including all the tests:
 
 ```{r}
-library(DHARMa)
 DHARMa::testUniformity(simulated_residuals, plot = FALSE)
 ```
 <!-- Aside -->
@@ -98,8 +95,8 @@ The above three functions internally call `simulate_residuals()` for more comple
 
 Finally, you can even perform a visual check for the entire model, either by passing the model object directly, or the object returned from `simulate_residuals()`. 
 
-```{r, eval=can_evaluate && packageVersion("see") > "0.8.2"}
-check_model(simulated_residuals)
+```{r fig.height=12, fig.width=10}
+check_model(simulated_residuals, dot_size = 1.5)
 ```
 
 The `check_model()` function is the main reason we don't want to prematurely extract the residuals in `simulate_residuals()`, because if we do then the simulated residual won't contain the model fit (`fittedModel` in the output below), so we won't be able to do all of the checks we would want to do using the model (e.g., posterior predictive checks).

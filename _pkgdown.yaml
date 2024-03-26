@@ -58,3 +58,8 @@ articles:
     contents:
       - compare
       - r2
+
+  - title: Case Studies
+    navbar: ~
+    contents:
+      - check_model_practical

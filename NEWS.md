@@ -1,3 +1,7 @@
+# performance 0.11.1
+
+* `check_model()` gets a `base_size` argument, to set the base font size for plots. 
+
 # performance 0.11.0
 
 ## New supported models
@@ -58,7 +62,7 @@
   `performance_aic()`.
 
 * Improved plots for overdispersion-checks for negative-binomial models from
-  package *glmmTMB* (affects `check_overdispersion()` and `check_mnodel()`).
+  package *glmmTMB* (affects `check_overdispersion()` and `check_model()`).
 
 * Improved detection rates for singularity in `check_singularity()` for models
   from package *glmmTMB*.

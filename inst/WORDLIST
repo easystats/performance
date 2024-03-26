@@ -253,6 +253,7 @@ discriminations
 doi
 easystats
 et
+equidispersion
 explicitely
 favour
 fixest
@@ -284,6 +285,7 @@ mfx
 mhurdle
 mis
 misspecification
+misspecified
 mlm
 mlogit
 modelfit
