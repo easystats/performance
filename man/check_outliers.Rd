@@ -392,6 +392,8 @@ association, 85(411), 633-639.
 }
 }
 \seealso{
+\code{\link[see:plot.see_check_outliers]{see::plot.see_check_outliers()}} for options to customize the plot.
+
 Other functions to check model assumptions and and assess model quality: 
 \code{\link{check_autocorrelation}()},
 \code{\link{check_collinearity}()},

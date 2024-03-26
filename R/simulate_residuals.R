@@ -21,7 +21,8 @@
 #' `performance_simres`.
 #'
 #' @seealso [`check_residuals()`], [`check_zeroinflation()`],
-#' [`check_overdispersion()`] and [`check_predictions()`].
+#' [`check_overdispersion()`] and [`check_predictions()`]. See also
+#' [`see::plot.see_performance_simres()`] for options to customize the plot.
 #'
 #' @details This function is a small wrapper around [`DHARMa::simulateResiduals()`].
 #' It basically only sets `plot = FALSE` and adds an additional class attribute
