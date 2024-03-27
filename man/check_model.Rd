@@ -9,20 +9,22 @@ check_model(x, ...)
 
 \method{check_model}{default}(
   x,
-  dot_size = 2,
-  line_size = 0.8,
   panel = TRUE,
   check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  dot_size = 2,
+  line_size = 0.8,
+  title_size = 12,
+  axis_title_size = base_size,
+  base_size = 10,
   alpha = 0.2,
   dot_alpha = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
-  base_size = 10,
-  detrend = TRUE,
-  show_dots = NULL,
-  bandwidth = "nrd",
-  type = "density",
-  residual_type = NULL,
   verbose = FALSE,
   ...
 )
@@ -32,8 +34,6 @@ check_model(x, ...)
 
 \item{...}{Arguments passed down to the individual check functions, especially
 to \code{check_predictions()} and \code{binned_residuals()}.}
-
-\item{dot_size, line_size}{Size of line and dot-geoms.}
 
 \item{panel}{Logical, if \code{TRUE}, plots are arranged as panels; else,
 single plots for each diagnostic are returned.}
@@ -48,28 +48,10 @@ effects and only available for mixed models. \code{"ncv"} is an alias for
 heteroscedasticity, as well as the linear relationship. By default, all
 possible checks are performed and plotted.}
 
-\item{alpha, dot_alpha}{The alpha level of the confidence bands and dot-geoms.
-Scalar from 0 to 1.}
-
-\item{colors}{Character vector with color codes (hex-format). Must be of
-length 3. First color is usually used for reference lines, second color
-for dots, and third color for outliers or extreme values.}
-
-\item{theme}{String, indicating the name of the plot-theme. Must be in the
-format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
-
-\item{base_size}{Base font size for plots.}
-
 \item{detrend}{Logical. Should Q-Q/P-P plots be detrended? Defaults to
 \code{TRUE} for linear models or when \code{residual_type = "normal"}. Defaults to
 \code{FALSE} for QQ plots based on simulated residuals (i.e. when
 \code{residual_type = "simulated"}).}
-
-\item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
-to \code{FALSE} for models with many observations, if generating the plot is too
-time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
-tries to guess whether performance will be poor due to a very large model
-and thus automatically shows or hides dots.}
 
 \item{bandwidth}{A character string indicating the smoothing bandwidth to
 be used. Unlike \code{stats::density()}, which used \code{"nrd0"} as default, the
@@ -90,6 +72,26 @@ models, the default is \code{"normal"}, which uses the default residuals from
 the model. Setting \code{residual_type = "normal"} for non-Gaussian models will
 use a half-normal Q-Q plot of the absolute value of the standardized deviance
 residuals.}
+
+\item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
+to \code{FALSE} for models with many observations, if generating the plot is too
+time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
+tries to guess whether performance will be poor due to a very large model
+and thus automatically shows or hides dots.}
+
+\item{dot_size, line_size}{Size of line and dot-geoms.}
+
+\item{base_size, title_size, axis_title_size}{Base font size for axis and plot titles.}
+
+\item{alpha, dot_alpha}{The alpha level of the confidence bands and dot-geoms.
+Scalar from 0 to 1.}
+
+\item{colors}{Character vector with color codes (hex-format). Must be of
+length 3. First color is usually used for reference lines, second color
+for dots, and third color for outliers or extreme values.}
+
+\item{theme}{String, indicating the name of the plot-theme. Must be in the
+format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
 
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 }
