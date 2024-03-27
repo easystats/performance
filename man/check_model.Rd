@@ -18,7 +18,8 @@ check_model(x, ...)
   show_dots = NULL,
   dot_size = 2,
   line_size = 0.8,
-  axis_title_size = base_size * 0.8,
+  title_size = 12,
+  axis_title_size = base_size,
   base_size = 10,
   alpha = 0.2,
   dot_alpha = 0.8,
@@ -80,7 +81,7 @@ and thus automatically shows or hides dots.}
 
 \item{dot_size, line_size}{Size of line and dot-geoms.}
 
-\item{base_size, axis_title_size}{Base font size for axis and plot titles.}
+\item{base_size, title_size, axis_title_size}{Base font size for axis and plot titles.}
 
 \item{alpha, dot_alpha}{The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.}

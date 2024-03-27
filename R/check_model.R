@@ -9,7 +9,7 @@
 #'
 #' @param x A model object.
 #' @param dot_size,line_size Size of line and dot-geoms.
-#' @param base_size,axis_title_size Base font size for axis and plot titles.
+#' @param base_size,title_size,axis_title_size Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
@@ -193,7 +193,8 @@ check_model.default <- function(x,
                                 show_dots = NULL,
                                 dot_size = 2,
                                 line_size = 0.8,
-                                axis_title_size = base_size * 0.8,
+                                title_size = 12,
+                                axis_title_size = base_size,
                                 base_size = 10,
                                 alpha = 0.2,
                                 dot_alpha = 0.8,
@@ -266,6 +267,7 @@ check_model.default <- function(x,
   attr(assumptions_data, "line_size") <- line_size
   attr(assumptions_data, "base_size") <- base_size
   attr(assumptions_data, "axis_title_size") <- axis_title_size
+  attr(assumptions_data, "title_size") <- title_size
   attr(assumptions_data, "check") <- check
   attr(assumptions_data, "alpha") <- alpha
   attr(assumptions_data, "dot_alpha") <- dot_alpha
