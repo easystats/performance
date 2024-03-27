@@ -14,7 +14,7 @@ multicollinearity)."><meta property="og:image" content="https://easystats.github
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,20 +103,22 @@ multicollinearity).</p>
 <span><span class="co"># S3 method for default</span></span>
 <span><span class="fu">check_model</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  dot_size <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  line_size <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  panel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  check <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  detrend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  bandwidth <span class="op">=</span> <span class="st">"nrd"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"density"</span>,</span>
+<span>  residual_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_dots <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dot_size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  line_size <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  title_size <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  axis_title_size <span class="op">=</span> <span class="va">base_size</span>,</span>
+<span>  base_size <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  dot_alpha <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#3aaf85"</span>, <span class="st">"#1b6ca8"</span>, <span class="st">"#cd201f"</span><span class="op">)</span>,</span>
 <span>  theme <span class="op">=</span> <span class="st">"see::theme_lucid"</span>,</span>
-<span>  base_size <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  detrend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  show_dots <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  bandwidth <span class="op">=</span> <span class="st">"nrd"</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"density"</span>,</span>
-<span>  residual_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -131,10 +133,6 @@ multicollinearity).</p>
 <dt>...</dt>
 <dd><p>Arguments passed down to the individual check functions, especially
 to <code><a href="check_predictions.html">check_predictions()</a></code> and <code><a href="binned_residuals.html">binned_residuals()</a></code>.</p></dd>
-
-
-<dt>dot_size, line_size</dt>
-<dd><p>Size of line and dot-geoms.</p></dd>
 
 
 <dt>panel</dt>
@@ -154,39 +152,11 @@ heteroscedasticity, as well as the linear relationship. By default, all
 possible checks are performed and plotted.</p></dd>
 
 
-<dt>alpha, dot_alpha</dt>
-<dd><p>The alpha level of the confidence bands and dot-geoms.
-Scalar from 0 to 1.</p></dd>
-
-
-<dt>colors</dt>
-<dd><p>Character vector with color codes (hex-format). Must be of
-length 3. First color is usually used for reference lines, second color
-for dots, and third color for outliers or extreme values.</p></dd>
-
-
-<dt>theme</dt>
-<dd><p>String, indicating the name of the plot-theme. Must be in the
-format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</code>).</p></dd>
-
-
-<dt>base_size</dt>
-<dd><p>Base font size for plots.</p></dd>
-
-
 <dt>detrend</dt>
 <dd><p>Logical. Should Q-Q/P-P plots be detrended? Defaults to
 <code>TRUE</code> for linear models or when <code>residual_type = "normal"</code>. Defaults to
 <code>FALSE</code> for QQ plots based on simulated residuals (i.e. when
 <code>residual_type = "simulated"</code>).</p></dd>
-
-
-<dt>show_dots</dt>
-<dd><p>Logical, if <code>TRUE</code>, will show data points in the plot. Set
-to <code>FALSE</code> for models with many observations, if generating the plot is too
-time-consuming. By default, <code>show_dots = NULL</code>. In this case <code>check_model()</code>
-tries to guess whether performance will be poor due to a very large model
-and thus automatically shows or hides dots.</p></dd>
 
 
 <dt>bandwidth</dt>
@@ -213,6 +183,38 @@ models, the default is <code>"normal"</code>, which uses the default residuals f
 the model. Setting <code>residual_type = "normal"</code> for non-Gaussian models will
 use a half-normal Q-Q plot of the absolute value of the standardized deviance
 residuals.</p></dd>
+
+
+<dt>show_dots</dt>
+<dd><p>Logical, if <code>TRUE</code>, will show data points in the plot. Set
+to <code>FALSE</code> for models with many observations, if generating the plot is too
+time-consuming. By default, <code>show_dots = NULL</code>. In this case <code>check_model()</code>
+tries to guess whether performance will be poor due to a very large model
+and thus automatically shows or hides dots.</p></dd>
+
+
+<dt>dot_size, line_size</dt>
+<dd><p>Size of line and dot-geoms.</p></dd>
+
+
+<dt>base_size, title_size, axis_title_size</dt>
+<dd><p>Base font size for axis and plot titles.</p></dd>
+
+
+<dt>alpha, dot_alpha</dt>
+<dd><p>The alpha level of the confidence bands and dot-geoms.
+Scalar from 0 to 1.</p></dd>
+
+
+<dt>colors</dt>
+<dd><p>Character vector with color codes (hex-format). Must be of
+length 3. First color is usually used for reference lines, second color
+for dots, and third color for outliers or extreme values.</p></dd>
+
+
+<dt>theme</dt>
+<dd><p>String, indicating the name of the plot-theme. Must be in the
+format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</code>).</p></dd>
 
 
 <dt>verbose</dt>
