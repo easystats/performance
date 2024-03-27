@@ -9,7 +9,7 @@
 #'
 #' @param x A model object.
 #' @param dot_size,line_size Size of line and dot-geoms.
-#' @param base_size Base font size for plots.
+#' @param base_size,axis_title_size Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
@@ -184,20 +184,21 @@ check_model <- function(x, ...) {
 #' @rdname check_model
 #' @export
 check_model.default <- function(x,
-                                dot_size = 2,
-                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
+                                detrend = TRUE,
+                                bandwidth = "nrd",
+                                type = "density",
+                                residual_type = NULL,
+                                show_dots = NULL,
+                                dot_size = 2,
+                                line_size = 0.8,
+                                axis_title_size = base_size * 0.8,
+                                base_size = 10,
                                 alpha = 0.2,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                base_size = 10,
-                                detrend = TRUE,
-                                show_dots = NULL,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
                                 verbose = FALSE,
                                 ...) {
   # check model formula
@@ -264,6 +265,7 @@ check_model.default <- function(x,
   attr(assumptions_data, "dot_size") <- dot_size
   attr(assumptions_data, "line_size") <- line_size
   attr(assumptions_data, "base_size") <- base_size
+  attr(assumptions_data, "axis_title_size") <- axis_title_size
   attr(assumptions_data, "check") <- check
   attr(assumptions_data, "alpha") <- alpha
   attr(assumptions_data, "dot_alpha") <- dot_alpha
@@ -303,21 +305,22 @@ plot.check_model <- function(x, ...) {
 
 #' @export
 check_model.stanreg <- function(x,
-                                dot_size = 2,
-                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
+                                detrend = TRUE,
+                                bandwidth = "nrd",
+                                type = "density",
+                                residual_type = NULL,
+                                show_dots = NULL,
+                                dot_size = 2,
+                                line_size = 0.8,
+                                axis_title_size = base_size * 0.8,
+                                base_size = 10,
                                 alpha = 0.2,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                base_size = 10,
-                                detrend = TRUE,
-                                show_dots = NULL,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
-                                verbose = TRUE,
+                                verbose = FALSE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
     dot_size = dot_size,
@@ -329,6 +332,7 @@ check_model.stanreg <- function(x,
     colors = colors,
     theme = theme,
     base_size = base_size,
+    axis_title_size = axis_title_size,
     detrend = detrend,
     show_dots = show_dots,
     bandwidth = bandwidth,
@@ -346,21 +350,22 @@ check_model.brmsfit <- check_model.stanreg
 
 #' @export
 check_model.model_fit <- function(x,
-                                  dot_size = 2,
-                                  line_size = 0.8,
                                   panel = TRUE,
                                   check = "all",
+                                  detrend = TRUE,
+                                  bandwidth = "nrd",
+                                  type = "density",
+                                  residual_type = NULL,
+                                  show_dots = NULL,
+                                  dot_size = 2,
+                                  line_size = 0.8,
+                                  axis_title_size = base_size * 0.8,
+                                  base_size = 10,
                                   alpha = 0.2,
                                   dot_alpha = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
-                                  base_size = 10,
-                                  detrend = TRUE,
-                                  show_dots = NULL,
-                                  bandwidth = "nrd",
-                                  type = "density",
-                                  residual_type = NULL,
-                                  verbose = TRUE,
+                                  verbose = FALSE,
                                   ...) {
   check_model(
     x$fit,
@@ -369,6 +374,7 @@ check_model.model_fit <- function(x,
     panel = panel,
     check = check,
     alpha = alpha,
+    axis_title_size = axis_title_size,
     dot_alpha = dot_alpha,
     colors = colors,
     theme = theme,
@@ -386,21 +392,22 @@ check_model.model_fit <- function(x,
 
 #' @export
 check_model.performance_simres <- function(x,
-                                           dot_size = 2,
-                                           line_size = 0.8,
                                            panel = TRUE,
                                            check = "all",
+                                           detrend = TRUE,
+                                           bandwidth = "nrd",
+                                           type = "density",
+                                           residual_type = NULL,
+                                           show_dots = NULL,
+                                           dot_size = 2,
+                                           line_size = 0.8,
+                                           axis_title_size = base_size * 0.8,
+                                           base_size = 10,
                                            alpha = 0.2,
                                            dot_alpha = 0.8,
                                            colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                            theme = "see::theme_lucid",
-                                           base_size = 10,
-                                           detrend = TRUE,
-                                           show_dots = NULL,
-                                           bandwidth = "nrd",
-                                           type = "density",
-                                           residual_type = NULL,
-                                           verbose = TRUE,
+                                           verbose = FALSE,
                                            ...) {
   check_model(
     x$fittedModel,
@@ -410,6 +417,7 @@ check_model.performance_simres <- function(x,
     check = check,
     alpha = alpha,
     dot_alpha = dot_alpha,
+    axis_title_size = axis_title_size,
     colors = colors,
     theme = theme,
     base_size = base_size,
