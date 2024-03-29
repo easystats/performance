@@ -170,7 +170,7 @@ check_predictions.stanreg <- function(object,
   }
 
   # bring data into shape, like we have for other models with `check_predictions()`
-  if (type == "density") {
+  if (type == "dens") {
     d_filter <- out[!out$is_y, ]
     d_filter <- datawizard::data_to_wide(
       d_filter,
@@ -180,7 +180,7 @@ check_predictions.stanreg <- function(object,
     )
     d_filter$y_id <- NULL
     colnames(d_filter) <- paste0("sim_", colnames(d_filter))
-    d_filter$y <- out$value[d$is_y, ]
+    d_filter$y <- out$value[out$is_y, ]
     out <- d_filter
   } else {
     colnames(out) <- c("x", "y", "CI_low", "Mean", "CI_high")
