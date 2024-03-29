@@ -128,6 +128,7 @@ check_predictions.default <- function(object,
   )
 }
 
+
 #' @export
 check_predictions.stanreg <- function(object,
                                       iterations = 50,
@@ -193,6 +194,10 @@ check_predictions.stanreg <- function(object,
   class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
   out
 }
+
+#' @export
+check_predictions.brmsfit <- check_predictions.stanreg
+
 
 #' @export
 check_predictions.BFBayesFactor <- function(object,
