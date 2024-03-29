@@ -161,6 +161,8 @@ check_predictions.stanreg <- function(object,
     "to create posterior prediction plots for Stan models"
   )
 
+  resp_string <- insight::find_terms(object)$response
+
   if (inherits(object, "brmsfit")) {
     out <- as.data.frame(bayesplot::pp_check(object, type = type, ndraws = iterations, ...)$data)
   } else {
