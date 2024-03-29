@@ -115,24 +115,55 @@ check_predictions.default <- function(object,
   # args
   type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
 
-  if (isTRUE(minfo$is_bayesian) && isFALSE(inherits(object, "BFBayesFactor"))) {
-    insight::check_if_installed(
-      "bayesplot",
-      "to create posterior prediction plots for Stan models"
-    )
-    bayesplot::pp_check(object)
+  pp_check.lm(
+    object,
+    iterations = iterations,
+    check_range = check_range,
+    re_formula = re_formula,
+    bandwidth = bandwidth,
+    type = type,
+    verbose = verbose,
+    model_info = minfo,
+    ...
+  )
+}
+
+#' @export
+check_predictions.stanreg <- function(object,
+                                      iterations = 50,
+                                      check_range = FALSE,
+                                      re_formula = NULL,
+                                      bandwidth = "nrd",
+                                      type = "density",
+                                      verbose = TRUE,
+                                      ...) {
+  # retrieve model information
+  minfo <- insight::model_info(object, verbose = FALSE)
+
+  # try to find sensible default for "type" argument
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
+  if (missing(type) && suggest_dots) {
+    type <- "discrete_interval"
+  }
+
+  # args
+  type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
+
+  # convert to type-argument for pp_check
+  type <- switch(type,
+    density = "density",
+    "bars"
+  )
+
+  insight::check_if_installed(
+    "bayesplot",
+    "to create posterior prediction plots for Stan models"
+  )
+
+  if (inherits(object, "brmsfit")) {
+    out <- bayesplot::pp_check(object, type = type, ndraws = iterations, ...)
   } else {
-    pp_check.lm(
-      object,
-      iterations = iterations,
-      check_range = check_range,
-      re_formula = re_formula,
-      bandwidth = bandwidth,
-      type = type,
-      verbose = verbose,
-      model_info = minfo,
-      ...
-    )
+    out <- bayesplot::pp_check(object, type = type, nreps = iterations, ...)
   }
 }
 
