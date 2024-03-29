@@ -185,6 +185,15 @@ check_predictions.stanreg <- function(object,
     out <- d_filter
   } else {
     colnames(out) <- c("x", "y", "CI_low", "Mean", "CI_high")
+    # sanity check, remove NA rows
+    out <- out[!is.na(out$Mean), ]
+    # to long, for plotting
+    out <- datawizard::data_to_long(
+      out,
+      select = c("y", "Mean"),
+      names_to = "Group",
+      values_to = "Count"
+    )
   }
 
   attr(out, "is_stan") <- TRUE
