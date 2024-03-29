@@ -171,7 +171,7 @@ check_predictions.stanreg <- function(object,
   }
 
   # bring data into shape, like we have for other models with `check_predictions()`
-  if (type == "dens") {
+  if (pp_type == "dens") {
     d_filter <- out[!out$is_y, ]
     d_filter <- datawizard::data_to_wide(
       d_filter,
