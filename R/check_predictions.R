@@ -162,15 +162,14 @@ check_predictions.stanreg <- function(object,
   )
 
   if (inherits(object, "brmsfit")) {
-    out <- as.data.frame(bayesplot::pp_check(object, type = type, ndraws = iterations, ...))
+    out <- as.data.frame(bayesplot::pp_check(object, type = type, ndraws = iterations, ...)$data)
   } else {
-    out <- as.data.frame(bayesplot::pp_check(object, type = type, nreps = iterations, ...))
+    out <- as.data.frame(bayesplot::pp_check(object, type = type, nreps = iterations, ...)$data)
   }
 
   # bring data into shape, like we have for other models with `check_predictions()`
   if (type == "density") {
-    d <- as.data.frame(out$data)
-    d_filter <- d[!d$is_y, ]
+    d_filter <- out[!out$is_y, ]
     d_filter <- datawizard::data_to_wide(
       d_filter,
       id_cols = "y_id",
@@ -179,7 +178,7 @@ check_predictions.stanreg <- function(object,
     )
     d_filter$y_id <- NULL
     colnames(d_filter) <- paste0("sim_", colnames(d_filter))
-    d_filter$y <- d$value[d$is_y, ]
+    d_filter$y <- out$value[d$is_y, ]
     out <- d_filter
   } else {
     colnames(out) <- c("x", "y", "CI_low", "Mean", "CI_high")
