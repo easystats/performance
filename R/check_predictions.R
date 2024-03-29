@@ -151,7 +151,7 @@ check_predictions.stanreg <- function(object,
   type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
 
   # convert to type-argument for pp_check
-  type <- switch(type,
+  pp_type <- switch(type,
     density = "dens",
     "bars"
   )
@@ -161,12 +161,13 @@ check_predictions.stanreg <- function(object,
     "to create posterior prediction plots for Stan models"
   )
 
+  # for plotting
   resp_string <- insight::find_terms(object)$response
 
   if (inherits(object, "brmsfit")) {
-    out <- as.data.frame(bayesplot::pp_check(object, type = type, ndraws = iterations, ...)$data)
+    out <- as.data.frame(bayesplot::pp_check(object, type = pp_type, ndraws = iterations, ...)$data)
   } else {
-    out <- as.data.frame(bayesplot::pp_check(object, type = type, nreps = iterations, ...)$data)
+    out <- as.data.frame(bayesplot::pp_check(object, type = pp_type, nreps = iterations, ...)$data)
   }
 
   # bring data into shape, like we have for other models with `check_predictions()`
