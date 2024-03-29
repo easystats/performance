@@ -161,10 +161,37 @@ check_predictions.stanreg <- function(object,
   )
 
   if (inherits(object, "brmsfit")) {
-    out <- bayesplot::pp_check(object, type = type, ndraws = iterations, ...)
+    out <- as.data.frame(bayesplot::pp_check(object, type = type, ndraws = iterations, ...))
   } else {
-    out <- bayesplot::pp_check(object, type = type, nreps = iterations, ...)
+    out <- as.data.frame(bayesplot::pp_check(object, type = type, nreps = iterations, ...))
   }
+
+  # bring data into shape, like we have for other models with `check_predictions()`
+  if (type == "density") {
+    d <- as.data.frame(out$data)
+    d_filter <- d[!d$is_y, ]
+    d_filter <- datawizard::data_to_wide(
+      d_filter,
+      id_cols = "y_id",
+      values_from = "value",
+      names_from = "rep_id"
+    )
+    d_filter$y_id <- NULL
+    colnames(d_filter) <- paste0("sim_", colnames(d_filter))
+    d_filter$y <- d$value[d$is_y, ]
+    out <- d_filter
+  } else {
+    colnames(out) <- c("x", "y", "CI_low", "Mean", "CI_high")
+  }
+
+  attr(out, "is_stan") <- TRUE
+  attr(out, "check_range") <- check_range
+  attr(out, "response_name") <- resp_string
+  attr(out, "bandwidth") <- bandwidth
+  attr(out, "model_info") <- minfo
+  attr(out, "type") <- type
+  class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
+  out
 }
 
 #' @export
