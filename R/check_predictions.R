@@ -152,7 +152,7 @@ check_predictions.stanreg <- function(object,
 
   # convert to type-argument for pp_check
   type <- switch(type,
-    density = "density",
+    density = "dens",
     "bars"
   )
 
