@@ -3,8 +3,6 @@
 \name{check_predictions}
 \alias{check_predictions}
 \alias{check_predictions.default}
-\alias{posterior_predictive_check}
-\alias{check_posterior_predictions}
 \title{Posterior predictive checks}
 \usage{
 check_predictions(object, ...)
@@ -19,10 +17,6 @@ check_predictions(object, ...)
   verbose = TRUE,
   ...
 )
-
-posterior_predictive_check(object, ...)
-
-check_posterior_predictions(object, ...)
 }
 \arguments{
 \item{object}{A statistical model.}
