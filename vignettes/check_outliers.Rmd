@@ -45,7 +45,11 @@ if (can_evaluate) {
 
 # Reuse of this Material
 
-> Note: This vignette is an extended write-up of the [JOSE paper](https://jose.theoj.org/papers/42749638170253bb2854649fb52bf4ca). This educational module can be freely reused for teaching purposes as long as the original JOSE paper and this vignette are cited or acknowledged. The raw code file, which can be adapted to other rmarkdown formats for teaching purposes, can be accessed [here](https://github.com/easystats/performance/blob/HEAD/vignettes/check_outliers.Rmd). To contribute to and improve this content directly, please submit a Pull Request at the *{performance}* package GitHub repository by following our usual contributing guidelines: https://easystats.github.io/performance/CONTRIBUTING.html. To report issues or problems, with this module, or seek support, please open an issue: https://github.com/easystats/performance/issues.
+> Note: This vignette is an extended write-up of the [Behavior Research Methods paper](https://doi.org/10.3758/s13428-024-02356-w). This educational module can be freely reused for teaching purposes as long as the original BRM paper is cited. The raw code file, which can be adapted to other rmarkdown formats for teaching purposes, can be accessed [here](https://github.com/easystats/performance/blob/HEAD/vignettes/check_outliers.Rmd). To contribute to and improve this content directly, please submit a Pull Request at the *{performance}* package GitHub repository by following our usual contributing guidelines: https://easystats.github.io/performance/CONTRIBUTING.html. To report issues or problems, with this module, or seek support, please open an issue: https://github.com/easystats/performance/issues.
+
+**Reference:**
+
+Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M., & Makowski, D. (2024). Check your outliers﻿! An introduction to identifying statistical outliers in R with easystats. *Behavior Research Methods*, 1-11. https://doi.org/10.3758/s13428-024-02356-w
 
 # Summary
 
