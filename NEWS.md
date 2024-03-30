@@ -1,8 +1,19 @@
 # performance 0.11.1
 
+## Breaking
+
+* Aliases `posterior_predictive_check()` and `check_posterior_predictions()` for
+  `check_predictions()` are deprecated.
+
+## General
+
 * Improved documentation and new vignettes added.
 
 * `check_model()` gets a `base_size` argument, to set the base font size for plots. 
+
+* `check_predictions()` for `stanreg` and `brmsfit` models now returns plots in
+  the usual style as for other models and no longer returns plots from
+  `bayesplot::pp_check()`.
 
 # performance 0.11.0
 
