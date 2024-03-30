@@ -417,12 +417,14 @@ pp_check.glmmTMB   <-
 
 # aliases --------------------------
 
+#' @rdname check_predictions
 #' @export
 posterior_predictive_check <- function(object, ...) {
   .Deprecated("check_predictions()")
   check_predictions(object, ...)
 }
 
+#' @rdname check_predictions
 #' @export
 check_posterior_predictions <- function(object, ...) {
   .Deprecated("check_predictions()")
