@@ -214,8 +214,11 @@ check_model.default <- function(x,
     residual_type <- ifelse(minfo$is_linear && !minfo$is_gam, "normal", "simulated")
   }
 
-  # catch models/families not supported by DHARMa
-  if (minfo$family == "quasipoisson") {
+  # catch models/families not supported by DHARMa - we need to add more
+  # exceptions here as they appear, but for now, `check_model()` also
+  # automatically falls back to normal Q-Q plot for all models not supported
+  # by DHARMa
+  if (minfo$family %in% c("quasipoisson", "quasibinomial")) {
     residual_type <- "normal"
   }
 
@@ -463,6 +466,13 @@ check_model.DHARMa <- check_model.performance_simres
       simulated = .safe(simulate_residuals(model, ...)),
       .diag_qq(model, model_info = model_info, verbose = verbose)
     )
+    # sanity check - model supported by DHARMa?
+    if (is.null(dat$QQ) && residual_type == "simulated") {
+      if (verbose) {
+        insight::format_alert("Cannot simulate residuals for this model. Using normal Q-Q plot instead.")
+      }
+      dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
+    }
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
@@ -524,6 +534,7 @@ check_model.DHARMa <- check_model.performance_simres
       simulated = .safe(simulate_residuals(model, ...)),
       .diag_qq(model, model_info = model_info, verbose = verbose)
     )
+    # sanity check - model supported by DHARMa?
     if (is.null(dat$QQ) && residual_type == "simulated") {
       if (verbose) {
         insight::format_alert("Cannot simulate residuals for this model. Using normal Q-Q plot instead.")
