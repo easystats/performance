@@ -103,7 +103,7 @@ test_that("`check_model()` no warnings for quasipoisson", {
   mock_data <- data.frame(x, y, z) |>
     # both should be whole numbers since they're counts
     datawizard::data_modify(y = round(y), z = round(z)) |>
-    datawizard::data_filter(!x < 0, !y < 0)
+    datawizard::data_filter(x >= 0, y >= 0)
   # Run model
   model1 <- glm(y ~ x + offset(log(z)), family = "quasipoisson", data = mock_data)
   expect_message(check_model(model1, verbose = TRUE), regex = "Not enough")
