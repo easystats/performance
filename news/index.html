@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,6 +96,11 @@
 <ul><li><p>Improved documentation and new vignettes added.</p></li>
 <li><p><code><a href="../reference/check_model.html">check_model()</a></code> gets a <code>base_size</code> argument, to set the base font size for plots.</p></li>
 <li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> for <code>stanreg</code> and <code>brmsfit</code> models now returns plots in the usual style as for other models and no longer returns plots from <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">bayesplot::pp_check()</a></code>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-11-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-11-1"></a></h3>
+<ul><li>
+<code><a href="../reference/check_model.html">check_model()</a></code> now falls back on normal Q-Q plots when a model is not supported by the DHARMa package and simulated residuals cannot be calculated.</li>
 </ul></div>
 </div>
     <div class="section level2">
