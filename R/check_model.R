@@ -251,8 +251,8 @@ check_model.default <- function(x,
   }
 
   # did Q-Q plot work with simulated residuals?
-  if (verbose && is.null(assumptions_data$QQ) && residual_type == "simulated") {
-    insight::format_warning(paste0(
+  if (is.null(assumptions_data$QQ) && residual_type == "simulated") {
+    insight::format_alert(paste0(
       "Cannot simulate residuals for models of class `",
       class(x)[1],
       "`. Please try `check_model(..., residual_type = \"normal\")` instead."
@@ -466,13 +466,6 @@ check_model.DHARMa <- check_model.performance_simres
       simulated = .safe(simulate_residuals(model, ...)),
       .diag_qq(model, model_info = model_info, verbose = verbose)
     )
-    # sanity check - model supported by DHARMa?
-    if (is.null(dat$QQ) && residual_type == "simulated") {
-      if (verbose) {
-        insight::format_alert("Cannot simulate residuals for this model. Using normal Q-Q plot instead.")
-      }
-      dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
-    }
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
@@ -534,13 +527,6 @@ check_model.DHARMa <- check_model.performance_simres
       simulated = .safe(simulate_residuals(model, ...)),
       .diag_qq(model, model_info = model_info, verbose = verbose)
     )
-    # sanity check - model supported by DHARMa?
-    if (is.null(dat$QQ) && residual_type == "simulated") {
-      if (verbose) {
-        insight::format_alert("Cannot simulate residuals for this model. Using normal Q-Q plot instead.")
-      }
-      dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
-    }
   }
 
   # homogeneity of variance --------------

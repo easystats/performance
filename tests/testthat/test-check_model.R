@@ -79,5 +79,5 @@ test_that("`check_model()` warnings for zero-infl", {
     art ~ fem + mar + kid5 + ment | kid5 + phd,
     data = bioChemists
   )
-  expect_message(expect_warning(check_model(model, verbose = TRUE), regex = "Cannot simulate"), regex = "Homogeneity")
+  expect_message(expect_message(check_model(model, verbose = TRUE), regex = "Cannot simulate"), regex = "Homogeneity")
 })
