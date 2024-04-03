@@ -213,6 +213,12 @@ check_model.default <- function(x,
   if (is.null(residual_type)) {
     residual_type <- ifelse(minfo$is_linear && !minfo$is_gam, "normal", "simulated")
   }
+
+  # catch models/families not supported by DHARMa
+  if (minfo$family == "quasipoisson") {
+    residual_type <- "normal"
+  }
+
   # set default for detrend
   if (missing(detrend)) {
     detrend <- residual_type == "normal"
@@ -518,6 +524,12 @@ check_model.DHARMa <- check_model.performance_simres
       simulated = .safe(simulate_residuals(model, ...)),
       .diag_qq(model, model_info = model_info, verbose = verbose)
     )
+    if (is.null(dat$QQ) && residual_type == "simulated") {
+      if (verbose) {
+        insight::format_alert("Cannot simulate residuals for this model. Using normal Q-Q plot instead.")
+      }
+      dat$QQ <- .diag_qq(model, model_info = model_info, verbose = verbose)
+    }
   }
 
   # homogeneity of variance --------------

@@ -15,6 +15,11 @@
   the usual style as for other models and no longer returns plots from
   `bayesplot::pp_check()`.
 
+## Bug fixes
+
+* `check_model()` now falls back on normal Q-Q plots when a model is not supported
+  by the DHARMa package and simulated residuals cannot be calculated.
+
 # performance 0.11.0
 
 ## New supported models
