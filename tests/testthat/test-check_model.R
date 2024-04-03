@@ -111,4 +111,5 @@ test_that("`check_model()` no warnings for quasipoisson", {
   # Run model
   model1 <- glm(y ~ x + offset(log(z)), family = "quasipoisson", data = mock_data)
   expect_message(check_model(model1, verbose = TRUE), regex = "Not enough")
+  expect_silent(check_model(model1))
 })
