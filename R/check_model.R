@@ -213,6 +213,15 @@ check_model.default <- function(x,
   if (is.null(residual_type)) {
     residual_type <- ifelse(minfo$is_linear && !minfo$is_gam, "normal", "simulated")
   }
+
+  # catch models/families not supported by DHARMa - we need to add more
+  # exceptions here as they appear, but for now, `check_model()` also
+  # automatically falls back to normal Q-Q plot for all models not supported
+  # by DHARMa
+  if (minfo$family %in% c("quasipoisson", "quasibinomial")) {
+    residual_type <- "normal"
+  }
+
   # set default for detrend
   if (missing(detrend)) {
     detrend <- residual_type == "normal"
@@ -242,8 +251,8 @@ check_model.default <- function(x,
   }
 
   # did Q-Q plot work with simulated residuals?
-  if (verbose && is.null(assumptions_data$QQ) && residual_type == "simulated") {
-    insight::format_warning(paste0(
+  if (is.null(assumptions_data$QQ) && residual_type == "simulated") {
+    insight::format_alert(paste0(
       "Cannot simulate residuals for models of class `",
       class(x)[1],
       "`. Please try `check_model(..., residual_type = \"normal\")` instead."

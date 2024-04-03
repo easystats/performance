@@ -536,7 +536,7 @@ plot.performance_pp_check <- function(x, ...) {
   # validation check, for mixed models, where re.form = NULL (default) might fail
   if (is.null(out) && insight::is_mixed_model(object) && !isTRUE(is.na(re_formula))) {
     if (verbose) {
-      insight::format_warning(
+      insight::format_alert(
         paste0(
           "Failed to compute posterior predictive checks with `re_formula=",
           deparse(re_formula),
