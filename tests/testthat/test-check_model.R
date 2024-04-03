@@ -81,3 +81,34 @@ test_that("`check_model()` warnings for zero-infl", {
   )
   expect_message(expect_message(check_model(model, verbose = TRUE), regex = "Cannot simulate"), regex = "Homogeneity")
 })
+
+
+test_that("`check_model()` no warnings for quasipoisson", {
+  set.seed(250419)
+
+  # Generate random x values
+  x <- rnorm(
+    n = 500,
+    mean = 5,
+    sd = 2
+  )
+
+  # Generate y values y = 5x + e
+  y <- 5 * x + rnorm(
+    n = 500,
+    mean = 5,
+    sd = 2
+  )
+
+  # Generate z as offset
+  z <- runif(500, min = 0, max = 6719)
+
+  mock_data <- data.frame(x, y, z) |>
+    # both should be whole numbers since they're counts
+    datawizard::data_modify(y = round(y), z = round(z)) |>
+    datawizard::data_filter(!x < 0, !y < 0)
+
+  # Run model
+  model1 <- glm(y ~ x + offset(log(z)), family = "quasipoisson", data = mock_data)
+  expect_message(check_model(model1, verbose = TRUE), regex = "Not enough")
+})
