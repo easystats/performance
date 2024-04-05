@@ -140,6 +140,20 @@ predictive accuracy and overfitting/type I error (<em>Bates et al. 2015</em>,
 <li><p>"keep it maximal", i.e. fit the most complex model consistent with the
 experimental design, removing only terms required to allow a non-singular
 fit (<em>Barr et al. 2013</em>)</p></li>
+<li><p>since version 1.1.9, the <strong>glmmTMB</strong> allows to use priors in a frequentist
+framework, too. One recommendation is to use a Gamma prior (<em>Chung et al. 2013</em>).
+The mean may vary from 1 to very large values (like <code>1e8</code>), and the shape
+parameter should be set to a value of 2.5. You can then <code><a href="https://rdrr.io/r/stats/update.html" class="external-link">update()</a></code> your model
+with the specified prior. In <strong>glmmTMB</strong>, the code would look like this:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># "model" is an object of class gmmmTMB</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>prior <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">prior =</span> <span class="st">"gamma(1, 2.5)"</span>, <span class="co"># mean can be 1, but even 1e8</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">class =</span> <span class="st">"ranef"</span> <span class="co"># for random effects</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>model_with_priors <span class="ot">&lt;-</span> <span class="fu">update</span>(model, <span class="at">priors =</span> prior)</span></code></pre><p></p></div>
+<p>Large values for the mean parameter of the Gamma prior have no large impact
+on the random effects variances in terms of a "bias". Thus, if <code>1</code> doesn't
+fix the singular fit, you can try larger values.</p></li>
 </ul><p>Note the different meaning between singularity and convergence: singularity
 indicates an issue with the "true" best estimate, i.e. whether the maximum
 likelihood estimation for the variance-covariance matrix of the random
@@ -155,9 +169,11 @@ arXiv:1506.04967, June 2015.</p></li>
 <li><p>Barr DJ, Levy R, Scheepers C, Tily HJ. Random effects structure for
 confirmatory hypothesis testing: Keep it maximal. Journal of Memory and
 Language, 68(3):255-278, April 2013.</p></li>
-<li><p>Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. Balancing type
-I error and power in linear mixed models. Journal of Memory and Language,
-94:305-315, 2017.</p></li>
+<li><p>Chung Y, Rabe-Hesketh S, Dorie V, Gelman A, and Liu J. 2013. "A Nondegenerate
+Penalized Likelihood Estimator for Variance Parameters in Multilevel Models."
+Psychometrika 78 (4): 685–709. <a href="https://doi.org/10.1007/s11336-013-9328-2" class="external-link">doi:10.1007/s11336-013-9328-2</a></p></li>
+<li><p>Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. Balancing type I error
+and power in linear mixed models. Journal of Memory and Language, 94:305-315, 2017.</p></li>
 <li><p>lme4 Reference Manual, <a href="https://cran.r-project.org/package=lme4" class="external-link">https://cran.r-project.org/package=lme4</a></p></li>
 </ul></div>
     <div class="section level2">
