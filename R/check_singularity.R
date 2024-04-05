@@ -36,22 +36,23 @@
 #' - "keep it maximal", i.e. fit the most complex model consistent with the
 #'   experimental design, removing only terms required to allow a non-singular
 #'   fit (_Barr et al. 2013_)
-#' - since version 1.1.9, the **glmmTMB** allows to use priors in a frequentist
-#'   framework, too. One recommendation is to use a Gamma prior (_Chung et al. 2013_).
-#'   The mean may vary from 1 to very large values (like `1e8`), and the shape
-#'   parameter should be set to a value of 2.5. You can then `update()` your model
-#'   with the specified prior. In **glmmTMB**, the code would look like this:
+#' - since version 1.1.9, the **glmmTMB** package allows to use priors in a
+#'   frequentist framework, too. One recommendation is to use a Gamma prior
+#'   (_Chung et al. 2013_). The mean may vary from 1 to very large values
+#'   (like `1e8`), and the shape parameter should be set to a value of 2.5. You
+#'   can then `update()` your model with the specified prior. In **glmmTMB**,
+#'   the code would look like this:
 #'   ```
 #'   # "model" is an object of class gmmmTMB
 #'   prior <- data.frame(
-#'     prior = "gamma(1, 2.5)", # mean can be 1, but even 1e8
-#'     class = "ranef" # for random effects
+#'     prior = "gamma(1, 2.5)",  # mean can be 1, but even 1e8
+#'     class = "ranef"           # for random effects
 #'   )
 #'   model_with_priors <- update(model, priors = prior)
 #'   ```
 #'   Large values for the mean parameter of the Gamma prior have no large impact
 #'   on the random effects variances in terms of a "bias". Thus, if `1` doesn't
-#'   fix the singular fit, you can try larger values.
+#'   fix the singular fit, you can safely try larger values.
 #'
 #' Note the different meaning between singularity and convergence: singularity
 #' indicates an issue with the "true" best estimate, i.e. whether the maximum
@@ -79,9 +80,8 @@
 #'
 #' - lme4 Reference Manual, <https://cran.r-project.org/package=lme4>
 #'
-#' @examplesIf require("lme4")
-#' library(lme4)
-#' data(sleepstudy)
+#' @examplesIf require("lme4") && require("glmmTMB")
+#' data(sleepstudy, package = "lme4")
 #' set.seed(123)
 #' sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
 #' sleepstudy$mysubgrp <- NA
@@ -91,14 +91,34 @@
 #'     sample(1:30, size = sum(filter_group), replace = TRUE)
 #' }
 #'
-#' model <- lmer(
+#' model <- lme4::lmer(
 #'   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
 #'   data = sleepstudy
 #' )
-#'
 #' check_singularity(model)
+#'
+#' # Fixing singularity issues using priors in glmmTMB
+#' # Example taken from `vignette("priors", package = "glmmTMB")`
+#' dat <- readRDS(system.file("vignette_data", "gophertortoise.rds",
+#'                package = "glmmTMB"))
+#' model <- glmmTMB::glmmTMB(
+#'   shells ~ prev + offset(log(Area)) + factor(year) + (1 | Site),
+#'   family = poisson,
+#'   data = dat
+#' )
+#' # singular fit
+#' check_singularity(model)
+#'
+#' # impose Gamma prior on random effects parameters
+#' prior <- data.frame(
+#'   prior = "gamma(1, 2.5)", # mean can be 1, but even 1e8
+#'   class = "ranef" # for random effects
+#' )
+#' model_with_priors <- update(model, priors = prior)
+#' # no singular fit
+#' check_singularity(model_with_priors)
+#'
 #' @export
-
 check_singularity <- function(x, tolerance = 1e-5, ...) {
   UseMethod("check_singularity")
 }
