@@ -40,7 +40,7 @@ cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
   # we need at least two columns for Cronach's Alpha
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
     if (verbose) {
-      insight::format_warning("Too few columns in `x` to compute Cronbach's Alpha.")
+      insight::format_alert("Too few columns in `x` to compute Cronbach's Alpha.")
     }
     return(NULL)
   }
@@ -68,7 +68,7 @@ cronbachs_alpha.parameters_pca <- function(x, verbose = TRUE, ...) {
     pca_data <- attr(x, "data")
     if (is.null(pca_data)) {
       if (verbose) {
-        insight::format_warning("Could not find data frame that was used for the PCA.")
+        insight::format_alert("Could not find data frame that was used for the PCA.")
       }
       return(NULL)
     }

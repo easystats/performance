@@ -117,7 +117,7 @@ print.check_homogeneity <- function(x, ...) {
   } else if (x < 0.05) {
     insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, x), "red")
   } else {
-    insight::print_color(sprintf("OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n", method.string, x), "green")
+    insight::print_color(sprintf("OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n", method.string, x), "green") # nolint
   }
   invisible(x)
 }
@@ -146,13 +146,13 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
     insight::format_error("Levene test is only aplicable to ANOVAs with between-subjects factors.")
   }
 
-  data <- x$data$long # Use this to also get id column
+  long_data <- x$data$long # Use this to also get id column
   dv <- attr(x, "dv")
   id <- attr(x, "id")
   between <- names(attr(x, "between"))
   is_covar <- vapply(attr(x, "between"), is.null, logical(1))
 
-  ag_data <- stats::aggregate(data[, dv], data[, c(between, id)], mean)
+  ag_data <- stats::aggregate(long_data[, dv], long_data[, c(between, id)], mean)
   colnames(ag_data)[length(c(between, id)) + 1] <- dv
 
   if (any(is_covar)) {
