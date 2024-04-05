@@ -36,6 +36,22 @@
 #' - "keep it maximal", i.e. fit the most complex model consistent with the
 #'   experimental design, removing only terms required to allow a non-singular
 #'   fit (_Barr et al. 2013_)
+#' - since version 1.1.9, the **glmmTMB** allows to use priors in a frequentist
+#'   framework, too. One recommendation is to use a Gamma prior (_Chung et al. 2013_).
+#'   The mean may vary from 1 to very large values (like `1e8`), and the shape
+#'   parameter should be set to a value of 2.5. You can then `update()` your model
+#'   with the specified prior. In **glmmTMB**, the code would look like this:
+#'   ```
+#'   # "model" is an object of class gmmmTMB
+#'   prior <- data.frame(
+#'     prior = "gamma(1, 2.5)", # mean can be 1, but even 1e8
+#'     class = "ranef" # for random effects
+#'   )
+#'   model_with_priors <- update(model, priors = prior)
+#'   ```
+#'   Large values for the mean parameter of the Gamma prior have no large impact
+#'   on the random effects variances in terms of a "bias". Thus, if `1` doesn't
+#'   fix the singular fit, you can try larger values.
 #'
 #' Note the different meaning between singularity and convergence: singularity
 #' indicates an issue with the "true" best estimate, i.e. whether the maximum
@@ -48,15 +64,18 @@
 #'
 #' @references
 #' - Bates D, Kliegl R, Vasishth S, Baayen H. Parsimonious Mixed Models.
-#'  arXiv:1506.04967, June 2015.
+#'   arXiv:1506.04967, June 2015.
 #'
 #' - Barr DJ, Levy R, Scheepers C, Tily HJ. Random effects structure for
-#'  confirmatory hypothesis testing: Keep it maximal. Journal of Memory and
-#'  Language, 68(3):255-278, April 2013.
+#'   confirmatory hypothesis testing: Keep it maximal. Journal of Memory and
+#'   Language, 68(3):255-278, April 2013.
 #'
-#' - Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. Balancing type
-#'  I error and power in linear mixed models. Journal of Memory and Language,
-#'  94:305-315, 2017.
+#' - Chung Y, Rabe-Hesketh S, Dorie V, Gelman A, and Liu J. 2013. "A Nondegenerate
+#'   Penalized Likelihood Estimator for Variance Parameters in Multilevel Models."
+#'   Psychometrika 78 (4): 685–709. \doi{10.1007/s11336-013-9328-2}
+#'
+#' - Matuschek H, Kliegl R, Vasishth S, Baayen H, Bates D. Balancing type I error
+#'   and power in linear mixed models. Journal of Memory and Language, 94:305-315, 2017.
 #'
 #' - lme4 Reference Manual, <https://cran.r-project.org/package=lme4>
 #'
