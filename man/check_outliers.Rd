@@ -5,6 +5,7 @@
 \alias{check_outliers.default}
 \alias{check_outliers.numeric}
 \alias{check_outliers.data.frame}
+\alias{check_outliers.performance_simres}
 \title{Outliers detection (check for influential observations)}
 \usage{
 check_outliers(x, ...)
@@ -14,19 +15,31 @@ check_outliers(x, ...)
   method = c("cook", "pareto"),
   threshold = NULL,
   ID = NULL,
+  verbose = TRUE,
   ...
 )
 
 \method{check_outliers}{numeric}(x, method = "zscore_robust", threshold = NULL, ...)
 
 \method{check_outliers}{data.frame}(x, method = "mahalanobis", threshold = NULL, ID = NULL, ...)
+
+\method{check_outliers}{performance_simres}(
+  x,
+  type = "default",
+  iterations = 100,
+  alternative = "two.sided",
+  ...
+)
 }
 \arguments{
-\item{x}{A model or a data.frame object.}
+\item{x}{A model, a data.frame, a \code{performance_simres} \code{\link[=simulate_residuals]{simulate_residuals()}}
+or a \code{DHARMa} object.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
 down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
-they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}.}
+they are  passed down to \code{\link[stats:mahalanobis]{stats::mahalanobis()}}. \code{percentage_central} can
+be specified when \code{method = "mcd"}. For objects of class \code{performance_simres}
+or \code{DHARMa}, further arguments are passed down to \code{DHARMa::testOutliers()}.}
 
 \item{method}{The outlier detection method(s). Can be \code{"all"} or some of
 \code{"cook"}, \code{"pareto"}, \code{"zscore"}, \code{"zscore_robust"}, \code{"iqr"}, \code{"ci"}, \code{"eti"},
@@ -40,6 +53,17 @@ considered as outlier. If \code{NULL}, default values will be used (see
 for any of the method run.}
 
 \item{ID}{Optional, to report an ID column along with the row number.}
+
+\item{verbose}{Toggle warnings.}
+
+\item{type}{Type of method to test for outliers. Can be one of \code{"default"},
+\code{"binomial"} or \code{"bootstrap"}. Only applies when \code{x} is an object returned
+by \code{simulate_residuals()} or of class \code{DHARMa}. See 'Details' in
+\code{?DHARMa::testOutliers} for a detailed description of the types.}
+
+\item{iterations}{Number of simulations to run.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing
@@ -189,6 +213,9 @@ calculates the mean and covariance matrix based on the most central subset of
 the data (by default, 66\\%), before computing the Mahalanobis Distance. This
 is deemed to be a more robust method of identifying and removing outliers
 than regular Mahalanobis distance.
+This method has a \code{percentage_central} argument that allows specifying
+the breakdown point (0.75, the default, is recommended by Leys et al. 2018,
+but a commonly used alternative is 0.50).
 \item \strong{Invariant Coordinate Selection (ICS)}:
 The outlier are detected using ICS, which by default uses an alpha threshold
 of 0.025 (corresponding to the 2.5\\% most extreme observations) as a cut-off
@@ -221,6 +248,19 @@ outliers. The default threshold of 0.025 will classify as outliers the
 observations located at \verb{qnorm(1-0.025) * SD)} of the log-transformed
 LOF distance. Requires the \strong{dbscan} package.
 }
+}
+
+\section{Methods for simulated residuals}{
+
+
+The approach for detecting outliers based on simulated residuals differs
+from the traditional methods and may not be detecting outliers as expected.
+Literally, this approach compares observed to simulated values. However, we
+do not know the deviation of the observed data to the model expectation, and
+thus, the term "outlier" should be taken with a grain of salt. It refers to
+"simulation outliers". Basically, the comparison tests whether on observed
+data point is outside the simulated range. It is strongly recommended to read
+the related documentations in the \strong{DHARMa} package, e.g. \code{?DHARMa::testOutliers}.
 }
 
 \section{Threshold specification}{
@@ -295,7 +335,7 @@ check_outliers(group_iris)
 \dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # You can also run all the methods
-check_outliers(data, method = "all")
+check_outliers(data, method = "all", verbose = FALSE)
 
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)
@@ -343,12 +383,17 @@ IEEE.
 (2021). performance: An R package for assessment, comparison and testing of
 statistical models. Journal of Open Source Software, 6(60), 3139.
 \doi{10.21105/joss.03139}
+\item Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M.,
+and Makowski, D. (2023). Check your outliers! An introduction to identifying
+statistical outliers in R with easystats. \doi{10.31234/osf.io/bu6nt}
 \item Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
 outliers and leverage points. Journal of the American Statistical
 association, 85(411), 633-639.
 }
 }
 \seealso{
+\code{\link[see:plot.see_check_outliers]{see::plot.see_check_outliers()}} for options to customize the plot.
+
 Other functions to check model assumptions and and assess model quality: 
 \code{\link{check_autocorrelation}()},
 \code{\link{check_collinearity}()},

@@ -31,9 +31,9 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
   if (insight::is_model(x)) {
     group <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
     if (is.null(group)) {
-      insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `group`.")
+      insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `group`.") # nolint
     }
-    data <- insight::get_data(x, source = "mf", verbose = FALSE)
+    my_data <- insight::get_data(x, source = "mf", verbose = FALSE)
     select <- insight::find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
   } else {
     if (inherits(select, "formula")) {
@@ -42,15 +42,15 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
     if (inherits(group, "formula")) {
       group <- all.vars(group)
     }
-    data <- x
+    my_data <- x
   }
 
-  unique_groups <- .n_unique(data[[group]])
+  unique_groups <- .n_unique(my_data[[group]])
   combinations <- expand.grid(select, group)
 
   result <- Map(function(predictor, id) {
     # demean predictor
-    d <- datawizard::demean(data, select = predictor, group = id, verbose = FALSE)
+    d <- datawizard::demean(my_data, select = predictor, group = id, verbose = FALSE)
 
     # get new names
     within_name <- paste0(predictor, "_within")

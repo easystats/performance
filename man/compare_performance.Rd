@@ -25,7 +25,8 @@ overall model performance. See 'Details'.}
 
 \item{estimator}{Only for linear models. Corresponds to the different
 estimators for the standard deviation of the errors. If \code{estimator = "ML"}
-(default), the scaling is done by n (the biased ML estimator), which is
+(default, except for \code{performance_aic()} when the model object is of class
+\code{lmerMod}), the scaling is done by \code{n} (the biased ML estimator), which is
 then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
 the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 

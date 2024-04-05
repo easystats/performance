@@ -67,7 +67,7 @@ check_sphericity.Anova.mlm <- function(x, ...) {
 
   p.val <- test[, 2]
 
-  # sanity check
+  # validation check
   if (is.null(p.val)) {
     p.val <- 1
   }

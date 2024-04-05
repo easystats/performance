@@ -47,14 +47,14 @@ check_clusterstructure <- function(x,
 
   H <- .clusterstructure_hopkins(x, distance = distance)
   if (H < 0.5) {
-    text <- paste0(
+    res_text <- paste0(
       "The dataset is suitable for clustering (Hopkins' H = ",
       insight::format_value(H),
       ").\n"
     )
     color <- "green"
   } else {
-    text <- paste0(
+    res_text <- paste0(
       "The dataset is not suitable for clustering (Hopkins' H = ",
       insight::format_value(H),
       ").\n"
@@ -67,7 +67,7 @@ check_clusterstructure <- function(x,
     dissimilarity_matrix = .clusterstructure_dm(x, distance = distance, method = "ward.D2")
   )
 
-  attr(out, "text") <- text
+  attr(out, "text") <- res_text
   attr(out, "color") <- color
   attr(out, "title") <- "Clustering tendency"
   class(out) <- c("see_check_clusterstructure", "check_clusterstructure", "easystats_check", class(out))
@@ -107,35 +107,32 @@ plot.check_clusterstructure <- function(x, ...) {
 
   n <- nrow(x) - 1
 
-  c <- apply(x, 2, min) # minimum value per column
+  cc <- apply(x, 2, min) # minimum value per column
   d <- apply(x, 2, max)
   p <- matrix(0, ncol = ncol(x), nrow = n) # n vectors of space
   for (i in seq_len(ncol(x))) {
-    p[, i] <- stats::runif(n, min = c[i], max = d[i])
+    p[, i] <- stats::runif(n, min = cc[i], max = d[i])
   }
   k <- round(stats::runif(n, 1, nrow(x)))
-  q <- as.matrix(x[k, ])
+  qq <- as.matrix(x[k, ])
   distp <- rep(0, nrow(x))
-  # distq=rep(0,nrow(x)-1)
   distq <- 0
   minp <- rep(0, n)
   minq <- rep(0, n)
   for (i in 1:n) {
     distp[1] <- stats::dist(rbind(p[i, ], x[1, ]), method = distance)
-    minqi <- stats::dist(rbind(q[i, ], x[1, ]), method = distance)
+    minqi <- stats::dist(rbind(qq[i, ], x[1, ]), method = distance)
     for (j in 2:nrow(x)) {
       distp[j] <- stats::dist(rbind(p[i, ], x[j, ]), method = distance)
-      error <- q[i, ] - x[j, ]
+      error <- qq[i, ] - x[j, ]
       if (sum(abs(error)) != 0) {
-        # distq[j]<-stats::dist(rbind(q[i,],x[j,]))
-        distq <- stats::dist(rbind(q[i, ], x[j, ]), method = distance)
+        distq <- stats::dist(rbind(qq[i, ], x[j, ]), method = distance)
         if (distq < minqi) {
           minqi <- distq
         }
       }
     }
     minp[i] <- min(distp)
-    # minq[i]<-apply(distq,1,min)
     minq[i] <- minqi
   }
   sum(minq) / (sum(minp) + sum(minq))

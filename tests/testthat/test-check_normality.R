@@ -19,9 +19,15 @@ test_that("check_normality | afex", {
     )
   }))
 
-  msg <- capture.output(pM <- check_normality(aM))
-  msg <- capture.output(pW <- check_normality(aW))
-  msg <- capture.output(pB <- check_normality(aB))
+  msg <- capture.output({
+    pM <- check_normality(aM)
+  })
+  msg <- capture.output({
+    pW <- check_normality(aW)
+  })
+  msg <- capture.output({
+    pB <- check_normality(aB)
+  })
 
   expect_equal(pM, 0.2054236, ignore_attr = TRUE, tolerance = 0.001)
   expect_equal(pW, 0.5496325, ignore_attr = TRUE, tolerance = 0.001)
@@ -29,6 +35,7 @@ test_that("check_normality | afex", {
 })
 
 test_that("check_normality | glmmTMB", {
+  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
 
@@ -40,12 +47,70 @@ test_that("check_normality | glmmTMB", {
   )
 
   out <- check_normality(m, effects = "random")
-  expect_equal(attributes(out)$re_groups, "site: (Intercept)")
+  expect_identical(attributes(out)$re_groups, "site: (Intercept)")
   expect_equal(as.vector(out), 0.698457693553405, tolerance = 1e-3)
 
   expect_message(
-    out <- check_normality(m, effects = "fixed"),
+    {
+      out <- check_normality(m, effects = "fixed")
+    },
     "for linear models"
   )
   expect_null(out)
+})
+
+
+test_that("check_normality | t-test", {
+  data(mtcars)
+  expect_error(
+    check_normality(t.test(mtcars$mpg, mtcars$hp, var.equal = FALSE)),
+    regex = "Discrete or character variables"
+  )
+  out <- t.test(mtcars$mpg, mtcars$hp, var.equal = TRUE)
+  expect_equal(
+    check_normality(out),
+    structure(
+      7.15789362314837e-12,
+      type = "residuals",
+      object_name = out,
+      effects = "fixed",
+      class = c(
+        "check_normality",
+        "see_check_normality", "numeric"
+      )
+    ),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("check_normality | simulated residuals", {
+  skip_if_not_installed("DHARMa")
+  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+  res <- simulate_residuals(m)
+  out <- check_normality(res)
+  expect_equal(
+    as.numeric(out),
+    0.2969038,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+  expect_identical(
+    capture.output(print(out)),
+    "OK: residuals appear as normally distributed (p = 0.297)."
+  )
+
+  m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
+  out <- check_normality(m)
+  expect_equal(
+    as.numeric(out),
+    0.2303071,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
+  expect_identical(
+    capture.output(print(out)),
+    "OK: residuals appear as normally distributed (p = 0.230)."
+  )
 })

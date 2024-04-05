@@ -38,6 +38,7 @@ test_that("icc, CI", {
 
 test_that("icc", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   m2 <- insight::download_model("stanreg_lmerMod_1")
@@ -54,6 +55,7 @@ test_that("icc", {
 
 test_that("icc", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   m3 <- insight::download_model("brms_mixed_1")
@@ -67,6 +69,7 @@ test_that("icc", {
 
 test_that("icc", {
   skip_on_cran()
+  skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr")
   m3 <- insight::download_model("brms_mixed_1")
@@ -87,12 +90,12 @@ test_that("icc", {
   skip_if_not_installed("lme4")
   data(sleepstudy, package = "lme4")
   set.seed(12345)
-  sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$grp <- sample.int(5, size = 180, replace = TRUE)
   sleepstudy$subgrp <- NA
   for (i in 1:5) {
     filter_group <- sleepstudy$grp == i
     sleepstudy$subgrp[filter_group] <-
-      sample(1:30, size = sum(filter_group), replace = TRUE)
+      sample.int(30, size = sum(filter_group), replace = TRUE)
   }
   model <- lme4::lmer(
     Reaction ~ Days + (1 | grp) + (1 | Subject),
@@ -121,4 +124,51 @@ test_that("icc", {
   out <- icc(m)
   expect_equal(out$ICC_adjusted, 0.9104331, tolerance = 0.01)
   expect_equal(out$ICC_unadjusted, 0.3109478, tolerance = 0.01)
+})
+
+
+test_that("icc, glmmTMB 1.1.9+", {
+  skip_on_cran()
+  skip_if_not_installed("glmmTMB", minimum_version = "1.1.9")
+  set.seed(101)
+  dd <- data.frame(
+    z = rnorm(1000),
+    x1 = 1:1000,
+    x2 = runif(1000, 0, 10),
+    re = rep(1:20, each = 50)
+  )
+  dd <- transform(dd, x3 = as.factor(ifelse(
+    x1 <= 500, "Low", sample(c("Middle", "High"), 1000, replace = TRUE)
+  )))
+  dd <- transform(dd, x4 = as.factor(ifelse(
+    x1 > 500, "High", sample(c("Absent", "Low"), 1000, replace = TRUE)
+  )))
+  dd <- transform(dd, z = z + re * 5)
+  expect_message({
+    mod_TMB <- glmmTMB::glmmTMB(
+      z ~ x1 + x2 + x3 + x4 + (1 | re),
+      data = dd,
+      start = list(theta = 3),
+      control = glmmTMB::glmmTMBControl(rank_check = "adjust")
+    )
+  })
+  expect_equal(
+    icc(mod_TMB),
+    data.frame(
+      ICC_adjusted = 0.995480998331767,
+      ICC_conditional = 0.244468078371849,
+      ICC_unadjusted = 0.244468078371849
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_equal(
+    r2(mod_TMB),
+    list(
+      R2_conditional = c(`Conditional R2` = 0.998890233308478),
+      R2_marginal = c(`Marginal R2` = 0.754422154936629)
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
 })

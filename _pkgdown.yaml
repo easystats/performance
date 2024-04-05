@@ -13,6 +13,7 @@ reference:
     contents:
       - binned_residuals
       - starts_with("check_")
+      - simulate_residuals
 
   - title: "Check Model Performance or Quality"
     contents:
@@ -43,3 +44,22 @@ reference:
   - title: "Sample Data"
     contents:
       - classify_distribution
+
+articles:
+  - title: Checking model assumptions and data properties
+    navbar: ~
+    contents:
+      - check_model
+      - check_outliers
+      - simulate_residuals
+
+  - title: Model comparison and testing
+    navbar: ~
+    contents:
+      - compare
+      - r2
+
+  - title: Case Studies
+    navbar: ~
+    contents:
+      - check_model_practical

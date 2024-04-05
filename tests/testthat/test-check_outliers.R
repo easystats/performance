@@ -6,6 +6,7 @@ test_that("zscore negative threshold", {
 })
 
 test_that("lof illegal threshold", {
+  skip_if_not_installed("dbscan")
   expect_error(
     check_outliers(mtcars$mpg, method = "lof", threshold = -1),
     "The `threshold` argument"
@@ -84,12 +85,22 @@ test_that("mahalanobis_robust which", {
 })
 
 test_that("mcd which", {
+  skip_if_not_installed("MASS")
   # (not clear why method mcd needs a seed)
   set.seed(42)
   expect_identical(
-    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45))),
+    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45, verbose = FALSE))),
     31L
   )
+  expect_warning(
+    {
+      out <- check_outliers(mtcars, method = "mcd")
+    },
+    regex = "The sample size is too small"
+  )
+  expect_identical(sum(out), 8L)
+  out <- check_outliers(mtcars, method = "mcd", percentage_central = 0.5, verbose = FALSE)
+  expect_identical(sum(out), 15L)
 })
 
 ## FIXME: Fails on CRAN/windows
@@ -190,6 +201,12 @@ test_that("multiple methods which", {
 # We exclude method ics because it is too slow
 test_that("all methods which", {
   skip_if_not_installed("bigutilsr")
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("dbscan")
+  skip_if_not_installed("ICS")
+  skip_if_not_installed("ICSOutlier")
+  skip_if_not_installed("loo")
+
   expect_identical(
     which(check_outliers(mtcars,
       method = c(
@@ -197,11 +214,12 @@ test_that("all methods which", {
         "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
       ),
       threshold = list(
-        "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-        "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-        "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-        "optics" = 14, "lof" = 0.005
-      )
+        zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
+        ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
+        mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
+        optics = 14, lof = 0.005
+      ),
+      verbose = FALSE
     )),
     as.integer(c(9, 15, 16, 19, 20, 28, 29, 31))
   )
@@ -212,6 +230,12 @@ test_that("all methods which", {
 
 test_that("multiple methods with ID", {
   skip_if_not_installed("bigutilsr")
+  skip_if_not_installed("MASS")
+  skip_if_not_installed("dbscan")
+  skip_if_not_installed("ICS")
+  skip_if_not_installed("ICSOutlier")
+  skip_if_not_installed("loo")
+
   data <- datawizard::rownames_as_column(mtcars, var = "car")
   x <- attributes(check_outliers(data,
     method = c(
@@ -219,12 +243,13 @@ test_that("multiple methods with ID", {
       "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
     ),
     threshold = list(
-      "zscore" = 2.2, "zscore_robust" = 2.2, "iqr" = 1.2,
-      "ci" = 0.95, "eti" = 0.95, "hdi" = 0.90, "bci" = 0.95,
-      "mahalanobis" = 20, "mahalanobis_robust" = 25, "mcd" = 25,
-      "optics" = 14, "lof" = 0.005
+      zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
+      ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
+      mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
+      optics = 14, lof = 0.005
     ),
-    ID = "car"
+    ID = "car",
+    verbose = FALSE
   ))
   expect_identical(
     x$outlier_var$zscore$mpg$car,
@@ -269,6 +294,7 @@ test_that("cook multiple methods which", {
 
 test_that("pareto which", {
   skip_if_not_installed("dbscan")
+  skip_if_not_installed("loo")
   skip_if_not_installed("rstanarm")
   set.seed(123)
   model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
@@ -282,6 +308,7 @@ test_that("pareto which", {
 
 test_that("pareto multiple methods which", {
   skip_if_not_installed("dbscan")
+  skip_if_not_installed("loo")
   skip_if_not_installed("rstanarm")
   set.seed(123)
   model <- rstanarm::stan_glm(mpg ~ qsec + wt, data = mtcars, refresh = 0)
@@ -316,5 +343,55 @@ test_that("cook multiple methods which", {
   expect_named(
     z$outlier_count,
     c("setosa", "versicolor", "virginica")
+  )
+})
+
+
+test_that("check_outliers with invald data", {
+  dd <- data.frame(y = as.difftime(0:5, units = "days"))
+  m1 <- lm(y ~ 1, data = dd)
+  expect_error(
+    expect_message(
+      check_outliers(m1),
+      regex = "Date variables are not supported"
+    ),
+    regex = "No numeric variables found"
+  )
+})
+
+
+test_that("check_outliers with DHARMa", {
+  skip_if_not_installed("DHARMa")
+  mt1 <- mtcars[, c(1, 3, 4)]
+  # create some fake outliers and attach outliers to main df
+  mt2 <- rbind(mt1, data.frame(
+    mpg = c(37, 40), disp = c(300, 400),
+    hp = c(110, 120)
+  ))
+  # fit model with outliers
+  model <- lm(disp ~ mpg + hp, data = mt2)
+  set.seed(123)
+  res <- simulate_residuals(model)
+  out <- check_outliers(res)
+  expect_equal(
+    out,
+    structure(
+      list(
+        Coefficient = 0.0294117647058824, Expected = 0.00796812749003984,
+        CI_low = 0.000744364234690261, CI_high = 0.153267669560318,
+        p_value = 0.238146844116552
+      ),
+      class = c("check_outliers_simres", "list")
+    ),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+  expect_identical(
+    capture.output(print(out)),
+    c(
+      "# Outliers detection", "", "  Proportion of observed outliers: 2.94%",
+      "  Proportion of expected outliers: 0.80%, 95% CI [0.07, 15.33]",
+      ""
+    )
   )
 })

@@ -1,0 +1,106 @@
+---
+title: "Checking simulated residuals"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+tags: [r, performance]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Checking simulated residuals}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r , include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  dpi = 300,
+  fig.width = 7,
+  fig.height = 5,
+  out.width = "100%",
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+options(knitr.kable.NA = "")
+options(digits = 2)
+
+pkgs <- c("DHARMa", "glmmTMB", "see")
+successfully_loaded <- vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE)
+can_evaluate <- all(successfully_loaded)
+
+if (can_evaluate) {
+  knitr::opts_chunk$set(eval = TRUE)
+  vapply(pkgs, require, FUN.VALUE = logical(1L), quietly = TRUE, character.only = TRUE)
+} else {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+The basic workflow for simulated residual checks using `simulate_residuals()` is as follows.
+
+First, fit a model:
+
+```{r}
+model <- glmmTMB::glmmTMB(
+  count ~ mined + spp + (1 | site),
+  family = poisson,
+  data = glmmTMB::Salamanders
+)
+```
+
+Next, simulate residuals from the model:
+
+```{r}
+library(performance)
+simulated_residuals <- simulate_residuals(model)
+
+simulated_residuals
+```
+
+The raw residuals can be extracted using `residuals()`:
+
+```{r}
+head(residuals(simulated_residuals))
+```
+
+
+<!-- Aside -->
+Note that since this inherits the DHARMa class, all the methods implemented in DHARMa just work, including all the tests:
+
+```{r}
+DHARMa::testUniformity(simulated_residuals, plot = FALSE)
+```
+<!-- Aside -->
+
+Finally, run specific checks on the simulated residuals:
+
+```{r message=TRUE}
+check_residuals(simulated_residuals)
+```
+
+Further implemented checks are tests for overdispersion, outliers and zero-inflation.
+
+```{r message=TRUE}
+check_overdispersion(simulated_residuals)
+
+check_zeroinflation(simulated_residuals)
+
+check_outliers(simulated_residuals)
+```
+
+The above three functions internally call `simulate_residuals()` for more complex models automatically, so you don't need to call `simulate_residuals()` yourself. Simulated residuals are usually more reliable than the standard residuals, especially for complex models.
+
+Finally, you can even perform a visual check for the entire model, either by passing the model object directly, or the object returned from `simulate_residuals()`. 
+
+```{r fig.height=12, fig.width=10}
+check_model(simulated_residuals, dot_size = 1.5)
+```
+
+The `check_model()` function is the main reason we don't want to prematurely extract the residuals in `simulate_residuals()`, because if we do then the simulated residual won't contain the model fit (`fittedModel` in the output below), so we won't be able to do all of the checks we would want to do using the model (e.g., posterior predictive checks).
+
+```{r}
+str(simulated_residuals, max.level = 1)
+```

@@ -22,6 +22,7 @@ indicative of a better fit.
 }
 \examples{
 \dontshow{if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 model <- suppressWarnings(rstanarm::stan_glm(
   mpg ~ wt + cyl,
   data = mtcars,
@@ -30,5 +31,6 @@ model <- suppressWarnings(rstanarm::stan_glm(
   refresh = 0
 ))
 looic(model)
+}
 \dontshow{\}) # examplesIf}
 }

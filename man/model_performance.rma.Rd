@@ -20,7 +20,8 @@ computed (some of \code{c("AIC", "BIC", "I2", "H2", "TAU2", "R2", "CochransQ", "
 
 \item{estimator}{Only for linear models. Corresponds to the different
 estimators for the standard deviation of the errors. If \code{estimator = "ML"}
-(default), the scaling is done by n (the biased ML estimator), which is
+(default, except for \code{performance_aic()} when the model object is of class
+\code{lmerMod}), the scaling is done by \code{n} (the biased ML estimator), which is
 then equivalent to using \code{AIC(logLik())}. Setting it to \code{"REML"} will give
 the same results as \code{AIC(logLik(..., REML = TRUE))}.}
 
@@ -34,13 +35,13 @@ A data frame (with one row) and one column per "index" (see
 }
 \description{
 Compute indices of model performance for meta-analysis model from the
-\pkg{metafor} package.
+\strong{metafor} package.
 }
 \details{
 \subsection{Indices of fit}{
 \itemize{
 \item \strong{AIC} Akaike's Information Criterion, see \code{?stats::AIC}
-\item \strong{BIC} {Bayesian Information Criterion, see \code{?stats::BIC}}
+\item \strong{BIC} Bayesian Information Criterion, see \code{?stats::BIC}
 \item \strong{I2}: For a random effects model, \code{I2} estimates (in
 percent) how much of the total variability in the effect size estimates
 can be attributed to heterogeneity among the true effects. For a

@@ -1,6 +1,153 @@
-# performance (development version)
+# performance 0.11.1
+
+## Breaking
+
+* Aliases `posterior_predictive_check()` and `check_posterior_predictions()` for
+  `check_predictions()` are deprecated.
 
 ## General
+
+* Improved documentation and new vignettes added.
+
+* `check_model()` gets a `base_size` argument, to set the base font size for plots. 
+
+* `check_predictions()` for `stanreg` and `brmsfit` models now returns plots in
+  the usual style as for other models and no longer returns plots from
+  `bayesplot::pp_check()`.
+
+## Bug fixes
+
+* `check_model()` now falls back on normal Q-Q plots when a model is not supported
+  by the DHARMa package and simulated residuals cannot be calculated.
+
+# performance 0.11.0
+
+## New supported models
+
+* Rudimentary support for models of class `serp` from package *serp*.
+
+## New functions
+
+* `simulate_residuals()` and `check_residuals()`, to simulate and check residuals
+  from generalized linear (mixed) models. Simulating residuals is based on the
+  DHARMa package, and objects returned by `simulate_residuals()` inherit from
+  the `DHARMa` class, and thus can be used with any functions from the *DHARMa*
+  package. However, there are also implementations in the *performance* package,
+  such as `check_overdispersion()`, `check_zeroinflation()`, `check_outliers()`
+  or `check_model()`.
+
+* Plots for `check_model()` have been improved. The Q-Q plots are now based
+  on simulated residuals from the DHARMa package for non-Gaussian models, thus
+  providing more accurate and informative plots. The half-normal QQ plot for
+  generalized linear models can still be obtained by setting the new argument
+  `residual_type = "normal"`.
+
+* Following functions now support simulated residuals (from `simulate_residuals()`)
+  resp. objects returned from `DHARMa::simulateResiduals()`:
+  - `check_overdispersion()`
+  - `check_zeroinflation()`
+  - `check_outliers()`
+  - `check_model()`
+
+## General
+
+* Improved error messages for `check_model()` when QQ-plots cannot be created.
+
+* `check_distribution()` is more stable for possibly sparse data.
+
+## Bug fixes
+
+* Fixed issue in `check_normality()` for t-tests.
+
+* Fixed issue in `check_itemscale()` for data frame inputs, when `factor_index`
+  was not a named vector.
+
+# performance 0.10.9
+
+## Changes
+
+* `r2()` for models of class `glmmTMB` without random effects now returns the
+  correct r-squared value for non-mixed models.
+
+* `check_itemscale()` now also accepts data frames as input. In this case,
+  `factor_index` must be specified, which must be a numeric vector of same
+  length as number of columns in `x`, where each element is the index of the
+  factor to which the respective column in `x`.
+
+* `check_itemscale()` gets a `print_html()` method.
+
+* Clarification in the documentation of the `estimator` argument for
+  `performance_aic()`.
+
+* Improved plots for overdispersion-checks for negative-binomial models from
+  package *glmmTMB* (affects `check_overdispersion()` and `check_model()`).
+
+* Improved detection rates for singularity in `check_singularity()` for models
+  from package *glmmTMB*.
+
+* For model of class `glmmTMB`, deviance residuals are now used in the
+  `check_model()` plot.
+
+* Improved (better to understand) error messages for `check_model()`,
+  `check_collinearity()` and `check_outliers()` for models with non-numeric
+  response variables.
+
+* `r2_kullback()` now gives an informative error for non-supported models.
+
+## Bug fixes
+
+* Fixed issue in `binned_residuals()` for models with binary outcome, where
+  in rare occasions empty bins could occur.
+
+* `performance_score()` should no longer fail for models where scoring rules
+  can't be calculated. Instead, an informative message is returned.
+
+* `check_outliers()` now properly accept the `percentage_central` argument when
+  using the `"mcd"` method.
+
+* Fixed edge cases in `check_collinearity()` and `check_outliers()` for models
+  with response variables of classes `Date`, `POSIXct`, `POSIXlt` or `difftime`.
+
+* Fixed issue with `check_model()` for models of package *quantreg*.
+
+# performance 0.10.8
+
+## Changes
+
+* Changed behaviour of `check_predictions()` for models from binomial family,
+  to get comparable plots for different ways of outcome specification. Now,
+  if the outcome is a proportion, or defined as matrix of trials and successes,
+  the produced plots are the same (because the models should be the same, too).
+
+## Bug fixes
+
+* Fixed CRAN check errors.
+
+* Fixed issue with `binned_residuals()` for models with binomial family, where
+  the outcome was a proportion.
+
+# performance 0.10.7
+
+## Breaking changes
+
+* `binned_residuals()` gains a few new arguments to control the residuals used
+  for the test, as well as different options to calculate confidence intervals
+  (namely, `ci_type`, `residuals`, `ci` and `iterations`). The default values
+  to compute binned residuals have changed. Default residuals are now "deviance"
+  residuals (and no longer "response" residuals). Default confidence intervals
+  are now "exact" intervals (and no longer based on Gaussian approximation).
+  Use `ci_type = "gaussian"` and `residuals = "response"` to get the old defaults.
+
+## Changes to functions
+
+* `binned_residuals()` - like `check_model()` - gains a `show_dots` argument to
+  show or hide data points that lie inside error bounds. This is particular
+  useful for models with many observations, where generating the plot would be
+  very slow.
+
+# performance 0.10.6
+
+## General 
 
 * Support for `nestedLogit` models.
 

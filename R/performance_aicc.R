@@ -14,7 +14,8 @@
 #' @param x A model object.
 #' @param estimator Only for linear models. Corresponds to the different
 #'   estimators for the standard deviation of the errors. If `estimator = "ML"`
-#'   (default), the scaling is done by n (the biased ML estimator), which is
+#'   (default, except for `performance_aic()` when the model object is of class
+#'   `lmerMod`), the scaling is done by `n` (the biased ML estimator), which is
 #'   then equivalent to using `AIC(logLik())`. Setting it to `"REML"` will give
 #'   the same results as `AIC(logLik(..., REML = TRUE))`.
 #' @param verbose Toggle warnings.
@@ -101,10 +102,15 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
 # mixed models ------------------------------------
 
 
+#' @rdname performance_aicc
 #' @export
 performance_aic.lmerMod <- function(x, estimator = "REML", verbose = TRUE, ...) {
   REML <- identical(estimator, "REML")
   if (isFALSE(list(...)$REML)) REML <- FALSE
+
+  if (isFALSE(as.logical(x@devcomp$dims[["REML"]])) && isTRUE(REML) && verbose) {
+    insight::format_alert("Model was not fitted with REML, however, `estimator = \"REML\"`. Set `estimator = \"ML\"` to obtain identical results as from `AIC()`.") # nolint
+  }
 
   .safe(
     stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose))
@@ -275,26 +281,17 @@ performance_aicc.rma <- function(x, ...) {
   tryCatch(
     {
       trans <- insight::find_transformation(x)
-
-      if (trans == "identity") {
-        .weighted_sum(log(insight::get_response(x)), w = model_weights)
-      } else if (trans == "log") {
-        .weighted_sum(log(1 / insight::get_response(x)), w = model_weights)
-      } else if (trans == "log1p") {
-        .weighted_sum(log(1 / (insight::get_response(x) + 1)), w = model_weights)
-      } else if (trans == "log2") {
-        .weighted_sum(log(1 / (insight::get_response(x) * log(2))), w = model_weights)
-      } else if (trans == "log10") {
-        .weighted_sum(log(1 / (insight::get_response(x) * log(10))), w = model_weights)
-      } else if (trans == "exp") {
-        .weighted_sum(insight::get_response(x), w = model_weights)
-      } else if (trans == "expm1") {
-        .weighted_sum((insight::get_response(x) - 1), w = model_weights)
-      } else if (trans == "sqrt") {
-        .weighted_sum(log(0.5 / sqrt(insight::get_response(x))), w = model_weights)
-      } else {
+      switch(trans,
+        identity = .weighted_sum(log(insight::get_response(x)), w = model_weights),
+        log = .weighted_sum(log(1 / insight::get_response(x)), w = model_weights),
+        log1p = .weighted_sum(log(1 / (insight::get_response(x) + 1)), w = model_weights),
+        log2 = .weighted_sum(log(1 / (insight::get_response(x) * log(2))), w = model_weights),
+        log10 = .weighted_sum(log(1 / (insight::get_response(x) * log(10))), w = model_weights),
+        exp = .weighted_sum(insight::get_response(x), w = model_weights),
+        expm1 = .weighted_sum((insight::get_response(x) - 1), w = model_weights),
+        sqrt = .weighted_sum(log(0.5 / sqrt(insight::get_response(x))), w = model_weights),
         .ll_jacobian_adjustment(x, model_weights)
-      }
+      )
     },
     error = function(e) {
       NULL

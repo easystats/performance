@@ -2,18 +2,35 @@
 % Please edit documentation in R/check_zeroinflation.R
 \name{check_zeroinflation}
 \alias{check_zeroinflation}
+\alias{check_zeroinflation.default}
+\alias{check_zeroinflation.performance_simres}
 \title{Check for zero-inflation in count models}
 \usage{
-check_zeroinflation(x, tolerance = 0.05)
+check_zeroinflation(x, ...)
+
+\method{check_zeroinflation}{default}(x, tolerance = 0.05, ...)
+
+\method{check_zeroinflation}{performance_simres}(
+  x,
+  tolerance = 0.1,
+  alternative = c("two.sided", "less", "greater"),
+  ...
+)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
 (package \strong{MASS}).}
 
+\item{...}{Arguments passed down to \code{\link[=simulate_residuals]{simulate_residuals()}}. This only applies
+for models with zero-inflation component, or for models of class \code{glmmTMB}
+from \code{nbinom1} or \code{nbinom2} family.}
+
 \item{tolerance}{The tolerance for the ratio of observed and predicted
 zeros to considered as over- or underfitting zeros. A ratio
 between 1 +/- \code{tolerance} is considered as OK, while a ratio
 beyond or below this threshold would indicate over- or underfitting.}
+
+\item{alternative}{A character string specifying the alternative hypothesis.}
 }
 \value{
 A list with information about the amount of predicted and observed
@@ -28,12 +45,46 @@ If the amount of observed zeros is larger than the amount of
 predicted zeros, the model is underfitting zeros, which indicates a
 zero-inflation in the data. In such cases, it is recommended to use
 negative binomial or zero-inflated models.
+
+In case of negative binomial models, models with zero-inflation component,
+or hurdle models, the results from \code{check_zeroinflation()} are based on
+\code{\link[=simulate_residuals]{simulate_residuals()}}, i.e. \code{check_zeroinflation(simulate_residuals(model))}
+is internally called if necessary.
 }
+\section{Tests based on simulated residuals}{
+
+For certain models, resp. model from certain families, tests are based on
+simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}). These are usually more
+accurate for testing such models than the traditionally used Pearson residuals.
+However, when simulating from more complex models, such as mixed models or
+models with zero-inflation, there are several important considerations.
+Arguments specified in \code{...} are passed to \code{\link[=simulate_residuals]{simulate_residuals()}}, which
+relies on \code{\link[DHARMa:simulateResiduals]{DHARMa::simulateResiduals()}} (and therefore, arguments in \code{...}
+are passed further down to \emph{DHARMa}). The defaults in DHARMa are set on the
+most conservative option that works for all models. However, in many cases,
+the help advises to use different settings in particular situations or for
+particular models. It is recommended to read the 'Details' in
+\code{?DHARMa::simulateResiduals} closely to understand the implications of the
+simulation process and which arguments should be modified to get the most
+accurate results.
+}
+
 \examples{
-\dontshow{if (require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("glmmTMB") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(m)
+
+# for models with zero-inflation component, it's better to carry out
+# the check for zero-inflation using simulated residuals
+m <- glmmTMB::glmmTMB(
+  count ~ spp + mined,
+  ziformula = ~ mined + spp,
+  family = poisson,
+  data = Salamanders
+)
+res <- simulate_residuals(m)
+check_zeroinflation(res)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

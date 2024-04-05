@@ -78,6 +78,9 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
 r2_mcfadden.clm <- r2_mcfadden.glm
 
 #' @export
+r2_mcfadden.serp <- r2_mcfadden.glm
+
+#' @export
 r2_mcfadden.cpglm <- r2_mcfadden.glm
 
 #' @export

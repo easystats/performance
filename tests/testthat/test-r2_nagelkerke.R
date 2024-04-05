@@ -4,6 +4,8 @@ test_that("r2_nagelkerke", {
   expect_equal(r2(model), list(R2_Tjur = c(`Tjur's R2` = 0.477692621360749)), tolerance = 1e-3, ignore_attr = TRUE)
 })
 
+skip_if_not_installed("withr")
+
 test_that("r2_nagelkerke", {
   skip_if_not_installed("MASS")
   withr::with_options(

@@ -160,6 +160,8 @@ Evolution (2010) 1:3–14.
 }
 }
 \seealso{
+\code{\link[see:plot.see_check_collinearity]{see::plot.see_check_collinearity()}} for options to customize the plot.
+
 Other functions to check model assumptions and and assess model quality: 
 \code{\link{check_autocorrelation}()},
 \code{\link{check_convergence}()},
