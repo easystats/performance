@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("logLik", {
   skip_if_not_installed("plm")
   skip_if_not_installed("withr")

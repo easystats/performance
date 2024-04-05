@@ -9,42 +9,54 @@
 #'
 #' @param x A model object.
 #' @param dot_size,line_size Size of line and dot-geoms.
+#' @param base_size,title_size,axis_title_size Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
-#'   and plotted. May be one or more of `"all"`, `"vif"`, `"qq"`, `"normality"`,
-#'   `"linearity"`, `"ncv"`, `"homogeneity"`, `"outliers"`, `"reqq"`, `"pp_check"`,
-#'   `"binned_residuals"` or `"overdispersion"`, Not that not all check apply
-#'   to all type of models (see 'Details'). `"reqq"` is a QQ-plot for random
-#'   effects and only available for mixed models. `"ncv"` is an alias for
-#'   `"linearity"`, and checks for non-constant variance, i.e. for
-#'   heteroscedasticity, as well as the linear relationship. By default, all
-#'   possible checks are performed and plotted.
+#' and plotted. May be one or more of `"all"`, `"vif"`, `"qq"`, `"normality"`,
+#' `"linearity"`, `"ncv"`, `"homogeneity"`, `"outliers"`, `"reqq"`, `"pp_check"`,
+#' `"binned_residuals"` or `"overdispersion"`. Note that not all check apply
+#' to all type of models (see 'Details'). `"reqq"` is a QQ-plot for random
+#' effects and only available for mixed models. `"ncv"` is an alias for
+#' `"linearity"`, and checks for non-constant variance, i.e. for
+#' heteroscedasticity, as well as the linear relationship. By default, all
+#' possible checks are performed and plotted.
 #' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
-#'   Scalar from 0 to 1.
+#' Scalar from 0 to 1.
 #' @param colors Character vector with color codes (hex-format). Must be of
-#'   length 3. First color is usually used for reference lines, second color
-#'   for dots, and third color for outliers or extreme values.
+#' length 3. First color is usually used for reference lines, second color
+#' for dots, and third color for outliers or extreme values.
 #' @param theme String, indicating the name of the plot-theme. Must be in the
-#'   format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
+#' format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
 #' @param detrend Logical. Should Q-Q/P-P plots be detrended? Defaults to
-#'   `TRUE`.
+#' `TRUE` for linear models or when `residual_type = "normal"`. Defaults to
+#' `FALSE` for QQ plots based on simulated residuals (i.e. when
+#' `residual_type = "simulated"`).
+#' @param residual_type Character, indicating the type of residuals to be used.
+#' For non-Gaussian models, the default is `"simulated"`, which uses simulated
+#' residuals. These are based on [`simulate_residuals()`] and thus uses the
+#' **DHARMa** package to return randomized quantile residuals. For Gaussian
+#' models, the default is `"normal"`, which uses the default residuals from
+#' the model. Setting `residual_type = "normal"` for non-Gaussian models will
+#' use a half-normal Q-Q plot of the absolute value of the standardized deviance
+#' residuals.
 #' @param show_dots Logical, if `TRUE`, will show data points in the plot. Set
-#'   to `FALSE` for models with many observations, if generating the plot is too
-#'   time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
-#'   tries to guess whether performance will be poor due to a very large model
-#'   and thus automatically shows or hides dots.
+#' to `FALSE` for models with many observations, if generating the plot is too
+#' time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
+#' tries to guess whether performance will be poor due to a very large model
+#' and thus automatically shows or hides dots.
 #' @param verbose If `FALSE` (default), suppress most warning messages.
-#' @param ... Currently not used.
+#' @param ... Arguments passed down to the individual check functions, especially
+#' to `check_predictions()` and `binned_residuals()`.
 #' @inheritParams check_predictions
 #'
 #' @return The data frame that is used for plotting.
 #'
 #' @note This function just prepares the data for plotting. To create the plots,
-#'   **see** needs to be installed. Furthermore, this function suppresses
-#'   all possible warnings. In case you observe suspicious plots, please refer
-#'   to the dedicated functions (like `check_collinearity()`,
-#'   `check_normality()` etc.) to get informative messages and warnings.
+#' **see** needs to be installed. Furthermore, this function suppresses
+#' all possible warnings. In case you observe suspicious plots, please refer
+#' to the dedicated functions (like `check_collinearity()`,
+#' `check_normality()` etc.) to get informative messages and warnings.
 #'
 #' @details For Bayesian models from packages **rstanarm** or **brms**,
 #' models will be "converted" to their frequentist counterpart, using
@@ -102,10 +114,20 @@
 #' normally distributed. Usually, dots should fall along the line. If there is
 #' some deviation (mostly at the tails), this indicates that the model doesn't
 #' predict the outcome well for that range that shows larger deviations from
-#' the line. For generalized linear models, a half-normal Q-Q plot of the
-#' absolute value of the standardized deviance residuals is shown, however, the
-#' interpretation of the plot remains the same. See [`check_normality()`] for
-#' further details.
+#' the line. For generalized linear models and when `residual_type = "normal"`,
+#' a half-normal Q-Q plot of the absolute value of the standardized deviance
+#' residuals is shown, however, the interpretation of the plot remains the same.
+#' See [`check_normality()`] for further details. Usually, for generalized linear
+#' (mixed) models, a test for uniformity of residuals based on simulated residuals
+#' is conducted (see next section).
+#'
+#' @section Uniformity of Residuals:
+#' Fore non-Gaussian models, when `residual_type = "simulated"` (the default
+#' for generalized linear (mixed) models), residuals are not expected to be
+#' normally distributed. In this case, the created Q-Q plot checks the uniformity
+#' of residuals. The interpretation of the plot is the same as for the normal
+#' Q-Q plot. See [`simulate_residuals()`] and [`check_residuals()`] for further
+#' details.
 #'
 #' @section Overdispersion:
 #' For count models, an *overdispersion plot* is shown. Overdispersion occurs
@@ -123,12 +145,13 @@
 #' inside the error bounds. See [`binned_residuals()`] for further details.
 #'
 #' @section Residuals for (Generalized) Linear Models:
-#' Plots that check the normality of residuals (QQ-plot) or the homogeneity of
-#' variance use standardized Pearson's residuals for generalized linear models,
-#' and standardized residuals for linear models. The plots for the normality of
-#' residuals (with overlayed normal curve) and for the linearity assumption use
-#' the default residuals for `lm` and `glm` (which are deviance
-#' residuals for `glm`).
+#' Plots that check the homogeneity of variance use standardized Pearson's
+#' residuals for generalized linear models, and standardized residuals for
+#' linear models. The plots for the normality of residuals (with overlayed
+#' normal curve) and for the linearity assumption use the default residuals
+#' for `lm` and `glm` (which are deviance residuals for `glm`). The Q-Q plots
+#' use simulated residuals (see [`simulate_residuals()`]) for non-Gaussian
+#' models and standardized residuals for linear models.
 #'
 #' @section Troubleshooting:
 #' For models with many observations, or for more complex models in general,
@@ -161,18 +184,22 @@ check_model <- function(x, ...) {
 #' @rdname check_model
 #' @export
 check_model.default <- function(x,
-                                dot_size = 2,
-                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
+                                detrend = TRUE,
+                                bandwidth = "nrd",
+                                type = "density",
+                                residual_type = NULL,
+                                show_dots = NULL,
+                                dot_size = 2,
+                                line_size = 0.8,
+                                title_size = 12,
+                                axis_title_size = base_size,
+                                base_size = 10,
                                 alpha = 0.2,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                detrend = TRUE,
-                                show_dots = NULL,
-                                bandwidth = "nrd",
-                                type = "density",
                                 verbose = FALSE,
                                 ...) {
   # check model formula
@@ -182,27 +209,58 @@ check_model.default <- function(x,
 
   minfo <- insight::model_info(x, verbose = FALSE)
 
-  ca <- tryCatch(
-    {
-      if (minfo$is_bayesian) {
-        suppressWarnings(.check_assumptions_stan(x))
-      } else if (minfo$is_linear) {
-        suppressWarnings(.check_assumptions_linear(x, minfo, verbose))
-      } else {
-        suppressWarnings(.check_assumptions_glm(x, minfo, verbose))
-      }
+  # set default for residual_type
+  if (is.null(residual_type)) {
+    residual_type <- ifelse(minfo$is_linear && !minfo$is_gam, "normal", "simulated")
+  }
+
+  # catch models/families not supported by DHARMa - we need to add more
+  # exceptions here as they appear, but for now, `check_model()` also
+  # automatically falls back to normal Q-Q plot for all models not supported
+  # by DHARMa
+  if (minfo$family %in% c("quasipoisson", "quasibinomial")) {
+    residual_type <- "normal"
+  }
+
+  # set default for detrend
+  if (missing(detrend)) {
+    detrend <- residual_type == "normal"
+  }
+
+  assumptions_data <- tryCatch(
+    if (minfo$is_bayesian) {
+      suppressWarnings(.check_assumptions_stan(x, ...))
+    } else if (minfo$is_linear) {
+      suppressWarnings(.check_assumptions_linear(x, minfo, check, residual_type, verbose, ...))
+    } else {
+      suppressWarnings(.check_assumptions_glm(x, minfo, check, residual_type, verbose, ...))
     },
     error = function(e) {
-      NULL
+      e
     }
   )
 
-  if (is.null(ca)) {
-    insight::format_error(paste0("`check_model()` not implemented for models of class `", class(x)[1], "` yet."))
+  if (inherits(assumptions_data, c("error", "simpleError"))) {
+    pattern <- "(\n|\\s{2,})"
+    replacement <- " "
+    cleaned_string <- gsub(pattern, replacement, assumptions_data$message)
+    insight::format_error(
+      paste("`check_model()` returned following error:", cleaned_string),
+      paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
+    )
+  }
+
+  # did Q-Q plot work with simulated residuals?
+  if (is.null(assumptions_data$QQ) && residual_type == "simulated") {
+    insight::format_alert(paste0(
+      "Cannot simulate residuals for models of class `",
+      class(x)[1],
+      "`. Please try `check_model(..., residual_type = \"normal\")` instead."
+    ))
   }
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial)
+  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -213,21 +271,25 @@ check_model.default <- function(x,
     show_dots <- is.null(n) || n <= 1e5
   }
 
-  attr(ca, "panel") <- panel
-  attr(ca, "dot_size") <- dot_size
-  attr(ca, "line_size") <- line_size
-  attr(ca, "check") <- check
-  attr(ca, "alpha") <- alpha
-  attr(ca, "dot_alpha") <- dot_alpha
-  attr(ca, "show_dots") <- isTRUE(show_dots)
-  attr(ca, "detrend") <- detrend
-  attr(ca, "colors") <- colors
-  attr(ca, "theme") <- theme
-  attr(ca, "model_info") <- minfo
-  attr(ca, "overdisp_type") <- list(...)$plot_type
-  attr(ca, "bandwidth") <- bandwidth
-  attr(ca, "type") <- type
-  ca
+  attr(assumptions_data, "panel") <- panel
+  attr(assumptions_data, "dot_size") <- dot_size
+  attr(assumptions_data, "line_size") <- line_size
+  attr(assumptions_data, "base_size") <- base_size
+  attr(assumptions_data, "axis_title_size") <- axis_title_size
+  attr(assumptions_data, "title_size") <- title_size
+  attr(assumptions_data, "check") <- check
+  attr(assumptions_data, "alpha") <- alpha
+  attr(assumptions_data, "dot_alpha") <- dot_alpha
+  attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
+  attr(assumptions_data, "detrend") <- detrend
+  attr(assumptions_data, "colors") <- colors
+  attr(assumptions_data, "theme") <- theme
+  attr(assumptions_data, "model_info") <- minfo
+  attr(assumptions_data, "overdisp_type") <- list(...)$plot_type
+  attr(assumptions_data, "bandwidth") <- bandwidth
+  attr(assumptions_data, "type") <- type
+  attr(assumptions_data, "model_class") <- class(x)[1]
+  assumptions_data
 }
 
 
@@ -254,19 +316,23 @@ plot.check_model <- function(x, ...) {
 
 #' @export
 check_model.stanreg <- function(x,
-                                dot_size = 2,
-                                line_size = 0.8,
                                 panel = TRUE,
                                 check = "all",
+                                detrend = TRUE,
+                                bandwidth = "nrd",
+                                type = "density",
+                                residual_type = NULL,
+                                show_dots = NULL,
+                                dot_size = 2,
+                                line_size = 0.8,
+                                title_size = 12,
+                                axis_title_size = base_size,
+                                base_size = 10,
                                 alpha = 0.2,
                                 dot_alpha = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
-                                detrend = FALSE,
-                                show_dots = NULL,
-                                bandwidth = "nrd",
-                                type = "density",
-                                verbose = TRUE,
+                                verbose = FALSE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
     dot_size = dot_size,
@@ -277,10 +343,13 @@ check_model.stanreg <- function(x,
     dot_alpha = dot_alpha,
     colors = colors,
     theme = theme,
+    base_size = base_size,
+    axis_title_size = axis_title_size,
     detrend = detrend,
     show_dots = show_dots,
     bandwidth = bandwidth,
     type = type,
+    residual_type = residual_type,
     verbose = verbose,
     ...
   )
@@ -293,19 +362,23 @@ check_model.brmsfit <- check_model.stanreg
 
 #' @export
 check_model.model_fit <- function(x,
-                                  dot_size = 2,
-                                  line_size = 0.8,
                                   panel = TRUE,
                                   check = "all",
+                                  detrend = TRUE,
+                                  bandwidth = "nrd",
+                                  type = "density",
+                                  residual_type = NULL,
+                                  show_dots = NULL,
+                                  dot_size = 2,
+                                  line_size = 0.8,
+                                  title_size = 12,
+                                  axis_title_size = base_size,
+                                  base_size = 10,
                                   alpha = 0.2,
                                   dot_alpha = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
-                                  detrend = FALSE,
-                                  show_dots = NULL,
-                                  bandwidth = "nrd",
-                                  type = "density",
-                                  verbose = TRUE,
+                                  verbose = FALSE,
                                   ...) {
   check_model(
     x$fit,
@@ -314,39 +387,122 @@ check_model.model_fit <- function(x,
     panel = panel,
     check = check,
     alpha = alpha,
+    axis_title_size = axis_title_size,
     dot_alpha = dot_alpha,
     colors = colors,
     theme = theme,
+    base_size = base_size,
     detrend = detrend,
     show_dots = show_dots,
     bandwidth = bandwidth,
     type = type,
+    residual_type = residual_type,
     verbose = verbose,
     ...
   )
 }
 
 
+#' @export
+check_model.performance_simres <- function(x,
+                                           panel = TRUE,
+                                           check = "all",
+                                           detrend = TRUE,
+                                           bandwidth = "nrd",
+                                           type = "density",
+                                           residual_type = NULL,
+                                           show_dots = NULL,
+                                           dot_size = 2,
+                                           line_size = 0.8,
+                                           title_size = 12,
+                                           axis_title_size = base_size,
+                                           base_size = 10,
+                                           alpha = 0.2,
+                                           dot_alpha = 0.8,
+                                           colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+                                           theme = "see::theme_lucid",
+                                           verbose = FALSE,
+                                           ...) {
+  check_model(
+    x$fittedModel,
+    dot_size = dot_size,
+    line_size = line_size,
+    panel = panel,
+    check = check,
+    alpha = alpha,
+    dot_alpha = dot_alpha,
+    axis_title_size = axis_title_size,
+    colors = colors,
+    theme = theme,
+    base_size = base_size,
+    detrend = detrend,
+    show_dots = show_dots,
+    bandwidth = bandwidth,
+    type = type,
+    residual_type = "simulated",
+    verbose = verbose,
+    ...
+  )
+}
+
+#' @export
+check_model.DHARMa <- check_model.performance_simres
+
+
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info, verbose = TRUE) {
+.check_assumptions_linear <- function(model, model_info, check = "all", residual_type = "normal", verbose = TRUE, ...) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, verbose = verbose)
-  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
-  dat$NORM <- .diag_norm(model, verbose = verbose)
-  dat$NCV <- .diag_ncv(model, verbose = verbose)
-  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
-  dat$OUTLIERS <- check_outliers(model, method = "cook")
-  if (!is.null(dat$OUTLIERS)) {
-    threshold <- attributes(dat$OUTLIERS)$threshold$cook
-  } else {
-    threshold <- NULL
+  # multicollinearity --------------
+  if (any(c("all", "vif") %in% check)) {
+    dat$VIF <- .diag_vif(model, verbose = verbose)
   }
-  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- .safe(check_predictions(model))
+
+  # Q-Q plot (normality/uniformity of residuals) --------------
+  if (any(c("all", "qq") %in% check)) {
+    dat$QQ <- switch(residual_type,
+      simulated = .safe(simulate_residuals(model, ...)),
+      .diag_qq(model, model_info = model_info, verbose = verbose)
+    )
+  }
+
+  # Random Effects Q-Q plot (normality of BLUPs) --------------
+  if (any(c("all", "reqq") %in% check)) {
+    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+  }
+
+  # normal-curve plot (normality of residuals) --------------
+  if (any(c("all", "normality") %in% check)) {
+    dat$NORM <- .diag_norm(model, verbose = verbose)
+  }
+
+  # non-constant variance (heteroskedasticity, liniearity) --------------
+  if (any(c("all", "ncv", "linearity") %in% check)) {
+    dat$NCV <- .diag_ncv(model, verbose = verbose)
+  }
+
+  # homogeneity of variance --------------
+  if (any(c("all", "homogeneity") %in% check)) {
+    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+  }
+
+  # outliers --------------
+  if (any(c("all", "outliers") %in% check)) {
+    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    if (is.null(dat$OUTLIERS)) {
+      threshold <- NULL
+    } else {
+      threshold <- attributes(dat$OUTLIERS)$threshold$cook
+    }
+    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  }
+
+  # posterior predictive checks --------------
+  if (any(c("all", "pp_check") %in% check)) {
+    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+  }
 
   dat <- insight::compact_list(dat)
   class(dat) <- c("check_model", "see_check_model")
@@ -357,25 +513,55 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info, verbose = TRUE) {
+.check_assumptions_glm <- function(model, model_info, check = "all", residual_type = "simulated", verbose = TRUE, ...) {
   dat <- list()
 
-  dat$VIF <- .diag_vif(model, verbose = verbose)
-  dat$QQ <- .diag_qq(model, verbose = verbose)
-  dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
-  dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
-  dat$OUTLIERS <- check_outliers(model, method = "cook")
-  if (!is.null(dat$OUTLIERS)) {
-    threshold <- attributes(dat$OUTLIERS)$threshold$cook
-  } else {
-    threshold <- NULL
+  # multicollinearity --------------
+  if (any(c("all", "vif") %in% check)) {
+    dat$VIF <- .diag_vif(model, verbose = verbose)
   }
-  dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
-  dat$PP_CHECK <- .safe(check_predictions(model))
-  if (isTRUE(model_info$is_binomial)) {
-    dat$BINNED_RESID <- binned_residuals(model)
+
+  # Q-Q plot (normality/uniformity of residuals) --------------
+  if (any(c("all", "qq") %in% check)) {
+    dat$QQ <- switch(residual_type,
+      simulated = .safe(simulate_residuals(model, ...)),
+      .diag_qq(model, model_info = model_info, verbose = verbose)
+    )
   }
-  if (isTRUE(model_info$is_count)) {
+
+  # homogeneity of variance --------------
+  if (any(c("all", "homogeneity") %in% check)) {
+    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+  }
+
+  # Random Effects Q-Q plot (normality of BLUPs) --------------
+  if (any(c("all", "reqq") %in% check)) {
+    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+  }
+
+  # outliers --------------
+  if (any(c("all", "outliers") %in% check)) {
+    dat$OUTLIERS <- .safe(check_outliers(model, method = "cook"))
+    if (is.null(dat$OUTLIERS)) {
+      threshold <- NULL
+    } else {
+      threshold <- attributes(dat$OUTLIERS)$threshold$cook
+    }
+    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+  }
+
+  # posterior predictive checks --------------
+  if (any(c("all", "pp_check") %in% check)) {
+    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+  }
+
+  # binned residuals for bernoulli/binomial --------------
+  if (isTRUE(model_info$is_binomial) && any(c("all", "binned_residuals") %in% check)) {
+    dat$BINNED_RESID <- .safe(binned_residuals(model, verbose = verbose, ...))
+  }
+
+  # misspecified dispersion and zero-inflation --------------
+  if (isTRUE(model_info$is_count) && any(c("all", "overdispersion") %in% check)) {
     dat$OVERDISPERSION <- .diag_overdispersion(model)
   }
 
@@ -388,7 +574,7 @@ check_model.model_fit <- function(x,
 
 # compile plots for checks of Bayesian models  ------------------------
 
-.check_assumptions_stan <- function(model) {
+.check_assumptions_stan <- function(model, ...) {
   if (inherits(model, "brmsfit")) {
     # check if brms can be loaded
 

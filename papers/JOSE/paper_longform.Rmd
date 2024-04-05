@@ -1,42 +1,48 @@
 ---
 title: "Check your outliers! An introduction to identifying statistical outliers in R with *easystats*"
-author:
+tags:
+  - R
+  - univariate outliers
+  - multivariate outliers
+  - robust detection methods
+  - easystats
+authors:
   - name: Rémi Thériault
-    affil: 1,*
     orcid: 0000-0003-4315-6788
+    affiliation: 1
   - name: Mattan S. Ben-Shachar
-    affil: 2
     orcid: 0000-0002-4287-4801
+    affiliation: 2
   - name: Indrajeet Patil
-    affil: 3
     orcid: 0000-0003-1995-6531
+    affiliation: 3
   - name: Daniel Lüdecke
-    affil: 4
     orcid: 0000-0002-8895-3206
+    affiliation: 4
   - name: Brenton M. Wiernik
-    affil: 5
     orcid: 0000-0001-9560-6336
+    affiliation: 5
   - name: Dominique Makowski
-    affil: 6
     orcid: 0000-0001-5375-9967
-affiliation:
-  - num: 1
-    address: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
-  - num: 2
-    address: Independent Researcher
-  - num: 3
-    address: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany 
-  - num: 4
-    address: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
-  - num: 5
-    address: Independent Researcher, Tampa, FL, USA
-  - num: 6
-    address: School of Psychology, University of Sussex, Brighton, UK
+    affiliation: 6
+affiliations:
+  - index: 1
+    name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
+  - index: 2
+    name: Independent Researcher
+  - index: 3
+    name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+  - index: 4
+    name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
+  - index: 5
+    name: Independent Researcher, Tampa, FL, USA
+  - index: 6
+    name: School of Psychology, University of Sussex, Brighton, UK
 correspondence: theriault.remi@courrier.uqam.ca.
-journal: "mathematics"
 type: article
 status: submit
-bibliography: mybibfile.bib
+date: 7 June 2023
+bibliography: paper.bib
 simplesummary: |
   The *{performance}* package from the *easystats* ecosystem makes it easy to 
   diagnose outliers in R and according to current best practices thanks to the 
@@ -45,7 +51,7 @@ abstract: |
   Beyond the challenge of keeping up-to-date with current best practices 
   regarding the diagnosis and treatment of outliers, an additional difficulty 
   arises concerning the mathematical implementation of the recommended methods. 
-  In this paper, we provide an overview of current recommandations and best
+  In this paper, we provide an overview of current recommendations and best
   practices and demonstrate how they can easily and conveniently be 
   implemented in the R statistical computing software, using the *{performance}*
   package of the *easystats* ecosystem. We cover univariate, multivariate, and 
@@ -53,7 +59,7 @@ abstract: |
   threshold, standard output, and plotting methods. We conclude with 
   recommendations on the handling of outliers: the different theoretical types 
   of outliers, whether to exclude or winsorize them, and the importance of 
-  transparency.
+    transparency.
 keywords: |
   univariate outliers; multivariate outliers; robust detection methods; R; easystats
 acknowledgement: |
@@ -90,7 +96,10 @@ abbreviations:
     long: invariant coordinate selection
   - short: OSF
     long: Open Science Framework
-output: rticles::mdpi_article
+output: 
+  rticles::joss_article:
+    journal: "JOSE"
+csl: apa.csl
 ---
 
 ```{r setup, include=FALSE}
@@ -107,9 +116,9 @@ library(see)
 library(datawizard)
 ```
 
-# Introduction
+# Statement of Need
 
-Real-life data often contain observations that can be considered *abnormal* when compared to the main population. The cause of it---be it because they belong to a different distribution (originating from a different generative process) or simply being extreme cases, statistically rare but not impossible---can be hard to assess, and the boundaries of "abnormal" are hard to define.
+Real-life data often contain observations that can be considered *abnormal* when compared to the main population. The cause of it---be it because they belong to a different distribution (originating from a different generative process) or simply being extreme cases, statistically rare but not impossible---can be hard to assess, and the boundaries of "abnormal" difficult to define.
 
 Nonetheless, the improper handling of these outliers can substantially affect statistical model estimations, biasing effect estimations and weakening the models' predictive performance.
 It is thus essential to address this problem in a thoughtful manner. Yet, despite the existence of established recommendations and guidelines, many researchers still do not treat outliers in a consistent manner, or do so using inappropriate strategies [@simmons2011false; @leys2013outliers].
@@ -155,10 +164,19 @@ data_clean <- data[-which(outliers), ]
 
 All `check_outliers()` output objects possess a `plot()` method, meaning it is also possible to visualize the outliers:
 
-```{r univariate, fig.cap = "Visual depiction of outliers using the robust z-score method."}
+```{r univariate, eval=FALSE}
 library(see)
 
 plot(outliers)
+```
+
+```{r univariate_implicit, fig.cap = "Visual depiction of outliers using the robust z-score method. The distance represents an aggregate score for variables mpg, cyl, disp, and hp.", echo=FALSE}
+library(see)
+
+plot(outliers) + 
+  ggplot2::theme(axis.text.x = ggplot2::element_text(
+    angle = 45, size = 7
+))
 ```
 
 Other univariate methods are available, such as using the interquartile range (IQR), or based on different intervals, such as the Highest Density Interval (HDI) or the Bias Corrected and Accelerated Interval (BCI). These methods are documented and described in the function's [help page](<https://easystats.github.io/performance/reference/check_outliers.html>).
@@ -173,11 +191,20 @@ One common approach for this is to compute multivariate distance metrics such as
 
 In *{performance}*'s `check_outliers()`, one can use this approach with `method = "mcd"`.^[Our default threshold for the MCD method is defined by `stats::qchisq(p = 1 - 0.001, df = ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
-```{r multivariate, fig.cap = "Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance."}
+```{r multivariate}
 outliers <- check_outliers(data, method = "mcd")
 outliers
+```
 
+```{r multivariate_plot, eval=FALSE}
 plot(outliers)
+```
+
+```{r multivariate_implicit, fig.cap = "Visual depiction of outliers using the Minimum Covariance Determinant (MCD) method, a robust version of the Mahalanobis distance. The distance represents the MCD scores for variables mpg, cyl, disp, and hp.", echo=FALSE}
+plot(outliers) + 
+  ggplot2::theme(axis.text.x = ggplot2::element_text(
+    angle = 45, size = 7
+))
 ```
 
 Other multivariate methods are available, such as another type of robust Mahalanobis distance that in this case relies on an orthogonalized Gnanadesikan-Kettenring pairwise estimator [@gnanadesikan1972robust]. These methods are documented and described in the function's [help page](https://easystats.github.io/performance/reference/check_outliers.html).
@@ -188,7 +215,7 @@ Working with regression models creates the possibility of using model-based SOD 
 
 In {performance}, two such model-based SOD methods are currently available: Cook's distance, for regular regression models, and Pareto, for Bayesian models. As such, `check_outliers()` can be applied directly on regression model objects, by simply specifying `method = "cook"` (or `method = "pareto"` for Bayesian models).^[Our default threshold for the Cook method is defined by `stats::qf(0.5, ncol(x), nrow(x) - ncol(x))`, which again is an approximation of the critical value for _p_ < .001 consistent with the thresholds of our other methods.]
 
-```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals)."}
+```{r model, fig.cap = "Visual depiction of outliers based on Cook's distance (leverage and standardized residuals), based on the fitted model."}
 model <- lm(disp ~ mpg * disp, data = data)
 outliers <- check_outliers(model, method = "cook")
 outliers
@@ -218,7 +245,7 @@ knitr::kable(
   caption = "Summary of Statistical Outlier Detection Methods Recommendations.", longtable = TRUE)
 ```
 
-### Cook's Distance vs. MCD
+## Cook's Distance vs. MCD
 
 @leys2018outliers report a preference for the MCD method over Cook's distance. This is because Cook's distance removes one observation at a time and checks its corresponding influence on the model each time [@cook1977detection], and flags any observation that has a large influence. In the view of these authors, when there are several outliers, the process of removing a single outlier at a time is problematic as the model remains "contaminated" or influenced by other possible outliers in the model, rendering this method suboptimal in the presence of multiple outliers.
 
@@ -242,7 +269,7 @@ which(outliers)
 
 In contrast, the model-based detection method displays the desired behaviour: it correctly flags the person who is very tall but very light, without flagging the person who is both tall and heavy.
 
-```{r model2, fig.cap = "The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation)."}
+```{r model2, fig.cap = "The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation), based on the fitted model."}
 outliers <- check_outliers(model, method = "cook")
 which(outliers)
 plot(outliers)
@@ -250,9 +277,9 @@ plot(outliers)
 
 Finally, unusual observations happen naturally: extreme observations are expected even when taken from a normal distribution. While statistical models can integrate this "expectation", multivariate outlier methods might be too conservative, flagging too many observations despite belonging to the right generative process. For these reasons, we believe that model-based methods are still preferable to the MCD when using supported regression models. Additionally, if the presence of multiple outliers is a significant concern, regression methods that are more robust to outliers should be considered---like _t_ regression or quantile regression---as they render their precise identification less critical [@mcelreath2020statistical].
 
-## Multiple Methods
+## Composite Outlier Score
 
-An alternative approach that is possible is to combine several methods, based on the assumption that different methods provide different angles of looking at the problem. By applying a variety of methods, one can hope to "triangulate" the true outliers (those consistently flagged by multiple methods) and thus attempt to minimize false positives.
+The *{performance}* package also offers an alternative, consensus-based approach that combines several methods, based on the assumption that different methods provide different angles of looking at a given problem. By applying a variety of methods, one can hope to "triangulate" the true outliers (those consistently flagged by multiple methods) and thus attempt to minimize false positives.
 
 In practice, this approach computes a composite outlier score, formed of the average of the binary (0 or 1) classification results of each method. It represents the probability that each observation is classified as an outlier by at least one method. The default decision rule classifies rows with composite outlier scores superior or equal to 0.5 as outlier observations (i.e., that were classified as outliers by at least half of the methods). In *{performance}*'s `check_outliers()`, one can use this approach by including all desired methods in the corresponding argument.
 
@@ -269,7 +296,7 @@ attributes(outliers)$outlier_var$zscore_robust
 
 An example sentence for reporting the usage of the composite method could be:
 
-> Based on a composite outlier score (see the 'check_outliers()' function in the 'performance' R package, [@ludecke2021performance]) obtained via the joint application of multiple outliers detection algorithms ((a) median absolute deviation (MAD)-based robust _z_ scores, [@leys2013outliers]; (b) Mahalanobis minimum covariance determinant (MCD), [@leys2019outliers]; and (c) Cook's distance, [@cook1977detection]), we excluded two participants that were classified as outliers by at least half of the methods used.
+> Based on a composite outlier score [see the 'check_outliers()' function in the 'performance' R package, @ludecke2021performance] obtained via the joint application of multiple outliers detection algorithms [(a) median absolute deviation (MAD)-based robust _z_ scores, @leys2013outliers; (b) Mahalanobis minimum covariance determinant (MCD), @leys2019outliers; and (c) Cook's distance, @cook1977detection], we excluded two participants that were classified as outliers by at least half of the methods used.
 
 # Handling Outliers
 
@@ -279,7 +306,7 @@ The above section demonstrated how to identify outliers using the `check_outlier
 
 @leys2019outliers distinguish between error outliers, interesting outliers, and random outliers. _Error outliers_ are likely due to human error and should be corrected before data analysis or outright removed since they are invalid observations. _Interesting outliers_ are not due to technical error and may be of theoretical interest; it might thus be relevant to investigate them further even though they should be removed from the current analysis of interest. _Random outliers_ are assumed to be due to chance alone and to belong to the correct distribution and, therefore, should be retained.
 
-It is recommended to _keep_ observations which are expected to be part of the distribution of interest, even if they are outliers [@leys2019outliers]. However, if it is suspected that the outliers belong to an alternative distribution, then those observations could have a large impact on the results and call into question their robustness, especially if significance is conditional on their inclusion.
+It is recommended to _keep_ observations which are expected to be part of the distribution of interest, even if they are outliers [@leys2019outliers]. However, if it is suspected that the outliers belong to an alternative distribution, then those observations could have a large impact on the results and call into question their robustness, especially if significance is conditional on their inclusion, so should be removed.
 
 On the other hand, there are also outliers that cannot be detected by statistical tools, but should be found and removed. For example, if we are studying the effects of X on Y among teenagers and we have one observation from a 20-year-old, this observation might not be a _statistical outlier_, but it is an outlier in the _context_ of our research, and should be discarded to allow for valid inferences.
 
@@ -302,9 +329,26 @@ winsorized_data[1501:1502, ]
 
 ## The Importance of Transparency
 
-Once again, it is a critical part of a sound outlier treatment that regardless of which SOD method used, it should be reported in a reproducible manner. Ideally, the handling of outliers should be specified *a priori* with as much detail as possible, and preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are often times hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified; (b) according to which method and criteria, (c) using which function of which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework (OSF), so that the exclusion criteria can be reproduced precisely.
+Once again, it is a critical part of a sound outlier treatment that regardless of which SOD method used, it should be reported in a reproducible manner. Ideally, the handling of outliers should be specified *a priori* with as much detail as possible, and preregistered, to limit researchers' degrees of freedom and therefore risks of false positives [@leys2019outliers]. This is especially true given that interesting outliers and random outliers are often times hard to distinguish in practice. Thus, researchers should always prioritize transparency and report all of the following information: (a) how many outliers were identified (including percentage); (b) according to which method and criteria, (c) using which function of which R package (if applicable), and (d) how they were handled (excluded or winsorized, if the latter, using what threshold). If at all possible, (e) the corresponding code script along with the data should be shared on a public repository like the Open Science Framework (OSF), so that the exclusion criteria can be reproduced precisely.
 
 # Conclusion
 
 In this paper, we have showed how to investigate outliers using the `check_outliers()` function of the *{performance}* package while following current good practices. However, best practice for outlier treatment does not stop at using appropriate statistical algorithms, but entails respecting existing recommendations, such as preregistration, reproducibility, consistency, transparency, and justification. Ideally, one would additionally also report the package, function, and threshold used (linking to the full code when possible). We hope that this paper and the accompanying `check_outlier()` function of *easystats* will help researchers engage in good research practices while providing a smooth outlier detection experience.
 
+### Contributions
+
+R.T. drafted the paper; all authors contributed to both the writing of the paper and the conception of the software.
+
+### Acknowledgements
+
+*{performance}* is part of the collaborative [*easystats*](https://github.com/easystats/easystats) ecosystem [@easystatspackage]. Thus, we thank all [members of easystats](https://github.com/orgs/easystats/people), contributors, and users alike.
+
+### Funding information
+
+This research received no external funding.
+
+### Competing Interests
+
+The authors declare no conflict of interest
+
+# References

@@ -136,7 +136,7 @@ r2_nakagawa <- function(model,
         # CI for marginal R2
         r2_ci_marginal <- as.vector(result$t[, 1])
         r2_ci_marginal <- r2_ci_marginal[!is.na(r2_ci_marginal)]
-        # sanity check
+        # validation check
         if (length(r2_ci_marginal) > 0) {
           r2_ci_marginal <- bayestestR::eti(r2_ci_marginal, ci = ci)
         } else {
@@ -146,7 +146,7 @@ r2_nakagawa <- function(model,
         # CI for unadjusted R2
         r2_ci_conditional <- as.vector(result$t[, 2])
         r2_ci_conditional <- r2_ci_conditional[!is.na(r2_ci_conditional)]
-        # sanity check
+        # validation check
         if (length(r2_ci_conditional) > 0) {
           r2_ci_conditional <- bayestestR::eti(r2_ci_conditional, ci = ci)
         } else {

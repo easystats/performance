@@ -63,7 +63,6 @@ r2_zeroinflated <- function(model, method = c("default", "correlation")) {
   k <- length(insight::find_parameters(model)[["conditional"]])
 
   y <- insight::get_response(model, verbose = FALSE)
-  # pred <- stats::predict(model, type = "response")
 
   var_fixed <- sum((stats::fitted(model) - mean(y))^2)
   var_resid <- sum(stats::residuals(model, type = "pearson")^2)

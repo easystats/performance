@@ -1,7 +1,7 @@
 #' Performance of Meta-Analysis Models
 #'
 #' Compute indices of model performance for meta-analysis model from the
-#' \pkg{metafor} package.
+#' **metafor** package.
 #'
 #' @param model A `rma` object as returned by `metafor::rma()`.
 #' @param metrics Can be `"all"` or a character vector of metrics to be
@@ -18,7 +18,7 @@
 #'
 #'   - **AIC** Akaike's Information Criterion, see `?stats::AIC`
 #'
-#'   - **BIC** {Bayesian Information Criterion, see `?stats::BIC`}
+#'   - **BIC** Bayesian Information Criterion, see `?stats::BIC`
 #'
 #'    - **I2**: For a random effects model, `I2` estimates (in
 #'    percent) how much of the total variability in the effect size estimates

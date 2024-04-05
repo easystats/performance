@@ -50,10 +50,10 @@ r2_loo <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
   loo_r2 <- structure(
     class = "r2_loo",
     lapply(loo_r2, ifelse(robust, stats::median, mean)),
-    "SE" = lapply(loo_r2, ifelse(robust, stats::mad, stats::sd)),
+    SE = lapply(loo_r2, ifelse(robust, stats::mad, stats::sd)),
     # "Estimates" = lapply(r2_bayesian, bayestestR::point_estimate, centrality = "all", dispersion = TRUE),
-    "CI" = lapply(loo_r2, bayestestR::hdi, ci = ci),
-    "robust" = robust
+    CI = lapply(loo_r2, bayestestR::hdi, ci = ci),
+    robust = robust
   )
   return(loo_r2)
 }
@@ -84,13 +84,13 @@ r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
         res <- insight::find_response(model)
         if (mi[[1]]$is_mixed) {
           br2_mv <- list(
-            "R2_loo" = rstantools::loo_R2(
+            R2_loo = rstantools::loo_R2(
               model,
               re.form = NULL,
               re_formula = NULL,
               summary = FALSE
             ),
-            "R2_loo_marginal" = rstantools::loo_R2(
+            R2_loo_marginal = rstantools::loo_R2(
               model,
               re.form = NA,
               re_formula = NA,
@@ -99,40 +99,38 @@ r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           )
           br2 <- lapply(seq_along(res), function(x) {
             list(
-              "R2_loo" = unname(as.vector(br2_mv$R2_loo[, x])),
-              "R2_loo_marginal" = unname(as.vector(br2_mv$R2_loo_marginal[, x]))
+              R2_loo = unname(as.vector(br2_mv$R2_loo[, x])),
+              R2_loo_marginal = unname(as.vector(br2_mv$R2_loo_marginal[, x]))
             )
           })
           names(br2) <- res
         } else {
-          br2_mv <- list("R2_loo" = rstantools::loo_R2(model, summary = FALSE))
+          br2_mv <- list(R2_loo = rstantools::loo_R2(model, summary = FALSE))
           br2 <- lapply(seq_along(res), function(x) {
-            list("R2_loo" = unname(as.vector(br2_mv$R2_loo[, x])))
+            list(R2_loo = unname(as.vector(br2_mv$R2_loo[, x])))
           })
           names(br2) <- res
         }
+      } else if (mi$is_mixed) {
+        br2 <- list(
+          R2_loo = as.vector(rstantools::loo_R2(
+            model,
+            re.form = NULL,
+            re_formula = NULL,
+            summary = FALSE
+          )),
+          R2_loo_marginal = as.vector(rstantools::loo_R2(
+            model,
+            re.form = NA,
+            re_formula = NA,
+            summary = FALSE
+          ))
+        )
+        names(br2$R2_loo) <- rep("Conditional R2_adjusted", length(br2$R2_loo))
+        names(br2$R2_loo_marginal) <- rep("Marginal R2_adjusted", length(br2$R2_loo))
       } else {
-        if (mi$is_mixed) {
-          br2 <- list(
-            "R2_loo" = as.vector(rstantools::loo_R2(
-              model,
-              re.form = NULL,
-              re_formula = NULL,
-              summary = FALSE
-            )),
-            "R2_loo_marginal" = as.vector(rstantools::loo_R2(
-              model,
-              re.form = NA,
-              re_formula = NA,
-              summary = FALSE
-            ))
-          )
-          names(br2$R2_loo) <- rep("Conditional R2_adjusted", length(br2$R2_loo))
-          names(br2$R2_loo_marginal) <- rep("Marginal R2_adjusted", length(br2$R2_loo))
-        } else {
-          br2 <- list("R2_loo" = as.vector(rstantools::loo_R2(model, summary = FALSE)))
-          names(br2$R2_loo) <- rep("R2_adjusted", length(br2$R2_loo))
-        }
+        br2 <- list(R2_loo = as.vector(rstantools::loo_R2(model, summary = FALSE)))
+        names(br2$R2_loo) <- rep("R2_adjusted", length(br2$R2_loo))
       }
 
       br2

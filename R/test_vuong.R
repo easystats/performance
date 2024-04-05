@@ -8,17 +8,17 @@ test_vuong <- function(..., verbose = TRUE) {
 #' @export
 test_vuong.default <- function(..., reference = 1, verbose = TRUE) {
   # Attribute class to list and get names from the global environment
-  objects <- insight::ellipsis_info(..., only_models = TRUE)
+  my_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
-  # Sanity checks (will throw error if non-valid objects)
-  objects <- .test_performance_checks(objects, verbose = verbose)
+  # validation checks (will throw error if non-valid objects)
+  my_objects <- .test_performance_checks(my_objects, verbose = verbose)
 
   # ensure proper object names
-  objects <- .check_objectnames(objects, sapply(match.call(expand.dots = FALSE)$`...`, as.character))
+  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
-    test_vuong(objects, reference = reference)
+  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+    test_vuong(my_objects, reference = reference)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
   }

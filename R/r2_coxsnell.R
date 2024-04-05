@@ -69,24 +69,49 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+  # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     return(NULL)
-  } else {
-    # if no deviance, return NA
-    if (is.null(model$deviance)) {
-      return(NULL)
-    }
-    r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)))
-    names(r2_coxsnell) <- "Cox & Snell's R2"
-    r2_coxsnell
   }
+  # if no deviance, return NULL
+  if (is.null(model$deviance)) {
+    return(NULL)
+  }
+  r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)))
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
 }
 
 #' @export
 r2_coxsnell.BBreg <- r2_coxsnell.glm
+
+
+#' @export
+r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
+  info <- list(...)$model_info
+  if (is.null(info)) {
+    info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
+  }
+  # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
+  if (info$is_binomial && !info$is_bernoulli) {
+    if (verbose) {
+      insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+    }
+    return(NULL)
+  }
+  dev <- stats::deviance(model)
+  # if no deviance, return NULL
+  if (is.null(dev)) {
+    return(NULL)
+  }
+  null_dev <- stats::deviance(insight::null_model(model))
+  r2_coxsnell <- (1 - exp((dev - null_dev) / insight::n_obs(model, disaggregate = TRUE)))
+  names(r2_coxsnell) <- "Cox & Snell's R2"
+  r2_coxsnell
+}
 
 
 #' @export
@@ -217,6 +242,9 @@ r2_coxsnell.clm <- function(model, ...) {
 
 #' @export
 r2_coxsnell.crch <- r2_coxsnell.clm
+
+#' @export
+r2_coxsnell.serp <- r2_coxsnell.clm
 
 #' @export
 r2_coxsnell.cpglm <- r2_coxsnell.clm

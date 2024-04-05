@@ -29,14 +29,11 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-pkgs <- c(
-  "effectsize", "BayesFactor", "lme4", "rstanarm"
-)
+pkgs <- c("effectsize", "lme4", "rstanarm")
 successfully_loaded <- sapply(pkgs, requireNamespace, quietly = TRUE)
 if (all(successfully_loaded)) {
   library(performance)
   library(effectsize)
-  library(BayesFactor)
   library(lme4)
   library(rstanarm)
 }
@@ -145,27 +142,6 @@ As discussed above, for mixed-effects models, there will be two components assoc
 model <- stan_lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris, refresh = 0)
 
 r2(model)
-```
-
-Let's look at another regression analysis carried out with `{BayesFactor}` package.
-
-```{r, eval=successfully_loaded["BayesFactor"] && utils::packageVersion("BayesFactor") >= package_version("0.9.12-4.3")}
-library(BayesFactor)
-data(puzzles)
-
-m1 <- anovaBF(extra ~ group + ID,
-  data = sleep,
-  whichRandom = "ID", progress = FALSE
-)
-
-r2(m1)
-
-m2 <- generalTestBF(RT ~ shape * color + ID,
-  data = puzzles, whichRandom = "ID",
-  neverExclude = "ID", progress = FALSE
-)
-
-r2(m2)
 ```
 
 # Comparing change in R2 using Cohen's *f*

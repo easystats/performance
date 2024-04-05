@@ -62,67 +62,47 @@ R2 takes both the fixed and random effects into account.
 returns a posterior sample of Bayesian R2 values.
 }
 \examples{
+\dontshow{if (require("rstanarm") && require("rstantools") && require("brms")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(performance)
-if (require("rstanarm") && require("rstantools")) {
-  model <- suppressWarnings(stan_glm(
-    mpg ~ wt + cyl,
-    data = mtcars,
-    chains = 1,
-    iter = 500,
-    refresh = 0,
-    show_messages = FALSE
-  ))
-  r2_bayes(model)
+\donttest{
+model <- suppressWarnings(rstanarm::stan_glm(
+  mpg ~ wt + cyl,
+  data = mtcars,
+  chains = 1,
+  iter = 500,
+  refresh = 0,
+  show_messages = FALSE
+))
+r2_bayes(model)
 
-  model <- suppressWarnings(stan_lmer(
-    Petal.Length ~ Petal.Width + (1 | Species),
-    data = iris,
-    chains = 1,
-    iter = 500,
-    refresh = 0
-  ))
-  r2_bayes(model)
-}
-
-if (require("BayesFactor")) {
-  BFM <- generalTestBF(mpg ~ qsec + gear, data = mtcars, progress = FALSE)
-  FM <- lmBF(mpg ~ qsec + gear, data = mtcars)
-
-  r2_bayes(FM)
-  r2_bayes(BFM[3])
-  r2_bayes(BFM, average = TRUE) # across all models
-
-  # with random effects:
-  mtcars$gear <- factor(mtcars$gear)
-  model <- lmBF(
-    mpg ~ hp + cyl + gear + gear:wt,
-    mtcars,
-    progress = FALSE,
-    whichRandom = c("gear", "gear:wt")
-  )
-
-  r2_bayes(model)
+model <- suppressWarnings(rstanarm::stan_lmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  chains = 1,
+  iter = 500,
+  refresh = 0
+))
+r2_bayes(model)
 }
 
 \donttest{
-if (require("brms")) {
-  model <- suppressWarnings(brms::brm(
-    mpg ~ wt + cyl,
-    data = mtcars,
-    silent = 2,
-    refresh = 0
-  ))
-  r2_bayes(model)
+model <- suppressWarnings(brms::brm(
+  mpg ~ wt + cyl,
+  data = mtcars,
+  silent = 2,
+  refresh = 0
+))
+r2_bayes(model)
 
-  model <- suppressWarnings(brms::brm(
-    Petal.Length ~ Petal.Width + (1 | Species),
-    data = iris,
-    silent = 2,
-    refresh = 0
-  ))
-  r2_bayes(model)
+model <- suppressWarnings(brms::brm(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  silent = 2,
+  refresh = 0
+))
+r2_bayes(model)
 }
-}
+\dontshow{\}) # examplesIf}
 }
 \references{
 Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).

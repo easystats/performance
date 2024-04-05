@@ -147,8 +147,8 @@ model <- stan_glmer(
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
 #> 
-#>   Conditional R2: 0.953 (95% CI [0.942, 0.963])
-#>      Marginal R2: 0.824 (95% CI [0.721, 0.899])
+#>   Conditional R2: 0.953 (95% CI [0.941, 0.963])
+#>      Marginal R2: 0.823 (95% CI [0.710, 0.898])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -422,12 +422,12 @@ lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
 
 test_performance(lm1, lm2, lm3, lm4)
-#> Name | Model |       BF | Omega2 | p (Omega2) |    LR | p (LR)
-#> --------------------------------------------------------------
-#> lm1  |    lm |          |        |            |       |       
-#> lm2  |    lm | 3.45e+26 |   0.69 |     < .001 | -6.25 | < .001
-#> lm3  |    lm | 4.69e+07 |   0.36 |     < .001 | -3.44 | < .001
-#> lm4  |    lm | 7.58e+29 |   0.73 |     < .001 | -7.77 | < .001
+#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
+#> ------------------------------------------------------------
+#> lm1  |    lm |        |        |            |       |       
+#> lm2  |    lm | > 1000 |   0.69 |     < .001 | -6.25 | < .001
+#> lm3  |    lm | > 1000 |   0.36 |     < .001 | -3.44 | < .001
+#> lm4  |    lm | > 1000 |   0.73 |     < .001 | -7.77 | < .001
 #> Each model is compared to lm1.
 
 test_bf(lm1, lm2, lm3, lm4)
@@ -465,7 +465,8 @@ Please follow contributing guidelines mentioned here:
 
 ## References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-gelman_data_2007" class="csl-entry">
 

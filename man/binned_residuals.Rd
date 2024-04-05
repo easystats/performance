@@ -4,7 +4,18 @@
 \alias{binned_residuals}
 \title{Binned residuals for binomial logistic regression}
 \usage{
-binned_residuals(model, term = NULL, n_bins = NULL, ...)
+binned_residuals(
+  model,
+  term = NULL,
+  n_bins = NULL,
+  show_dots = NULL,
+  ci = 0.95,
+  ci_type = c("exact", "gaussian", "boot"),
+  residuals = c("deviance", "pearson", "response"),
+  iterations = 1000,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A \code{glm}-object with \emph{binomial}-family.}
@@ -17,6 +28,31 @@ plotted.}
 \item{n_bins}{Numeric, the number of bins to divide the data. If
 \code{n_bins = NULL}, the square root of the number of observations is
 taken.}
+
+\item{show_dots}{Logical, if \code{TRUE}, will show data points in the plot. Set
+to \code{FALSE} for models with many observations, if generating the plot is too
+time-consuming. By default, \code{show_dots = NULL}. In this case \code{binned_residuals()}
+tries to guess whether performance will be poor due to a very large model
+and thus automatically shows or hides dots.}
+
+\item{ci}{Numeric, the confidence level for the error bounds.}
+
+\item{ci_type}{Character, the type of error bounds to calculate. Can be
+\code{"exact"} (default), \code{"gaussian"} or \code{"boot"}. \code{"exact"} calculates the
+error bounds based on the exact binomial distribution, using \code{\link[=binom.test]{binom.test()}}.
+\code{"gaussian"} uses the Gaussian approximation, while \code{"boot"} uses a simple
+bootstrap method, where confidence intervals are calculated based on the
+quantiles of the bootstrap distribution.}
+
+\item{residuals}{Character, the type of residuals to calculate. Can be
+\code{"deviance"} (default), \code{"pearson"} or \code{"response"}. It is recommended to
+use \code{"response"} only for those models where other residuals are not
+available.}
+
+\item{iterations}{Integer, the number of iterations to use for the
+bootstrap method. Only used if \code{ci_type = "boot"}.}
+
+\item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Currently not used.}
 }

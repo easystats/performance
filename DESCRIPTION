@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.10.5.6
+Version: 0.11.0.5
 Authors@R: 
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -33,16 +33,16 @@ Authors@R:
              role = c("aut", "ctb"),
              email = "brenton@wiernik.org",
              comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
+      person(given = "Rémi",
+             family = "Thériault",
+             role = c("aut", "ctb"),
+             email = "remi.theriault@mail.mcgill.ca",
+             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
       person(given = "Vincent",
              family = "Arel-Bundock", 
              email = "vincent.arel-bundock@umontreal.ca", 
              role = "ctb",
              comment = c(ORCID = "0000-0003-2042-7063")),
-      person(given = "Rémi",
-             family = "Thériault",
-             role = "ctb",
-             email = "remi.theriault@mail.mcgill.ca",
-             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
       person(given = "Martin",
              family = "Jullum",
              role = "rev"),
@@ -69,10 +69,9 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.13.1),
-    insight (>= 0.19.5),
-    datawizard (>= 0.9.0),
-    methods,
+    bayestestR (>= 0.13.2),
+    insight (>= 0.19.10),
+    datawizard (>= 0.10.0),
     stats,
     utils
 Suggests:
@@ -91,9 +90,12 @@ Suggests:
     correlation,
     cplm,
     dbscan,
+    DHARMa,
     estimatr,
     fixest,
+    flextable, 
     forecast,
+    ftExtra,
     gamm4,
     ggplot2,
     glmmTMB,
@@ -122,26 +124,28 @@ Suggests:
     nonnest2,
     ordinal,
     parallel,
-    parameters (>= 0.20.3),
+    parameters (>= 0.21.4),
     patchwork,
     pscl,
     psych,
+    quantreg,
     qqplotr (>= 0.0.6),
     randomForest,
+    rempsyc,
     rmarkdown,
     rstanarm,
     rstantools,
     sandwich,
-    see (>= 0.7.5),
+    see (>= 0.8.2),
     survey,
     survival,
-    testthat,
+    testthat (>= 3.2.1),
     tweedie,
     VGAM,
-    withr
+    withr (>= 3.0.0)
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.3.9000
+RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
@@ -150,4 +154,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/see, easystats/parameters, easystats/insight
+Remotes: easystats/see

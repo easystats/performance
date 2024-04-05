@@ -1,30 +1,38 @@
-#' @title Check overdispersion of GL(M)M's
+#' @title Check overdispersion (and underdispersion) of GL(M)M's
 #' @name check_overdispersion
 #'
 #' @description `check_overdispersion()` checks generalized linear (mixed)
-#'   models for overdispersion.
+#'   models for overdispersion (and underdispersion).
 #'
-#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`,
-#'    or `glm.nb` (package \pkg{MASS}).
-#' @param ... Currently not used.
+#' @param x Fitted model of class `merMod`, `glmmTMB`, `glm`, or `glm.nb`
+#'   (package **MASS**), or an object returned by `simulate_residuals()`.
+#'
+#' @inheritParams check_zeroinflation
 #'
 #' @return A list with results from the overdispersion test, like chi-squared
 #'   statistics, p-value or dispersion ratio.
 #'
 #' @details Overdispersion occurs when the observed variance is higher than the
-#'   variance of a theoretical model. For Poisson models, variance increases
-#'   with the mean and, therefore, variance usually (roughly) equals the mean
-#'   value. If the variance is much higher, the data are "overdispersed".
+#' variance of a theoretical model. For Poisson models, variance increases
+#' with the mean and, therefore, variance usually (roughly) equals the mean
+#' value. If the variance is much higher, the data are "overdispersed". A less
+#' common case is underdispersion, where the variance is much lower than the
+#' mean.
 #'
 #' @section Interpretation of the Dispersion Ratio:
 #' If the dispersion ratio is close to one, a Poisson model fits well to the
 #' data. Dispersion ratios larger than one indicate overdispersion, thus a
-#' negative binomial model or similar might fit better to the data. A p-value <
-#' .05 indicates overdispersion.
+#' negative binomial model or similar might fit better to the data. Dispersion
+#' ratios much smaller than one indicate underdispersion. A p-value < .05
+#' indicates either overdispersion or underdispersion (the first being more common).
 #'
 #' @section Overdispersion in Poisson Models:
 #' For Poisson models, the overdispersion test is based on the code from
 #' _Gelman and Hill (2007), page 115_.
+#'
+#' @section Overdispersion in Negative Binomial or Zero-Inflated Models:
+#' For negative binomial (mixed) models or models with zero-inflation component,
+#' the overdispersion test is based simulated residuals (see [`simulate_residuals()`]).
 #'
 #' @section Overdispersion in Mixed Models:
 #' For `merMod`- and `glmmTMB`-objects, `check_overdispersion()`
@@ -32,8 +40,12 @@
 #' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
 #' section *How can I deal with overdispersion in GLMMs?*. Note that this
 #' function only returns an *approximate* estimate of an overdispersion
-#' parameter, and is probably inaccurate for zero-inflated mixed models (fitted
-#' with `glmmTMB`).
+#' parameter. Using this approach would be inaccurate for zero-inflated or
+#' negative binomial mixed models (fitted with `glmmTMB`), thus, in such cases,
+#' the overdispersion test is based on [`simulate_residuals()`] (which is identical
+#' to `check_overdispersion(simulate_residuals(model))`).
+#'
+#' @inheritSection check_zeroinflation Tests based on simulated residuals
 #'
 #' @section How to fix Overdispersion:
 #' Overdispersion can be fixed by either modeling the dispersion parameter, or
@@ -50,18 +62,9 @@
 #'  multilevel/hierarchical models. Cambridge; New York: Cambridge University
 #'  Press.
 #'
-#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB", quietly = TRUE)
-#'
-#' library(glmmTMB)
-#' data(Salamanders)
+#' @examplesIf getRversion() >= "4.0.0" && require("glmmTMB")
+#' data(Salamanders, package = "glmmTMB")
 #' m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
-#' check_overdispersion(m)
-#'
-#' m <- glmmTMB(
-#'   count ~ mined + spp + (1 | site),
-#'   family = poisson,
-#'   data = Salamanders
-#' )
 #' check_overdispersion(m)
 #' @export
 check_overdispersion <- function(x, ...) {
@@ -113,7 +116,9 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   orig_x <- x
 
   x$dispersion_ratio <- sprintf("%.*f", digits, x$dispersion_ratio)
-  x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
+  if (!is.null(x$chisq_statistic)) {
+    x$chisq_statistic <- sprintf("%.*f", digits, x$chisq_statistic)
+  }
 
   x$p_value <- pval <- round(x$p_value, digits = digits)
   if (x$p_value < 0.001) x$p_value <- "< 0.001"
@@ -125,14 +130,21 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   )
 
   insight::print_color("# Overdispersion test\n\n", "blue")
-  cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
-  cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
-  cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+  if (is.null(x$chisq_statistic)) {
+    cat(sprintf(" dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
+    cat(sprintf("          p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+  } else {
+    cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
+    cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
+    cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+  }
 
   if (pval > 0.05) {
     message("No overdispersion detected.")
-  } else {
+  } else if (x$dispersion_ratio > 1) {
     message("Overdispersion detected.")
+  } else {
+    message("Underdispersion detected.")
   }
 
   invisible(orig_x)
@@ -144,8 +156,21 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
 #' @export
 check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
-  # check if we have poisson
+  # model info
   info <- insight::model_info(x)
+  obj_name <- insight::safe_deparse_symbol(substitute(x))
+
+  # for certain distributions, simulated residuals are more accurate
+  use_simulated <- info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
+
+  # model classes not supported in DHARMa
+  not_supported <- c("fixest", "glmx")
+
+  if (use_simulated && !inherits(x, not_supported)) {
+    return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
+  }
+
+  # check if we have poisson - need this for models not supported by DHARMa
   if (!info$is_count && !info$is_binomial) {
     insight::format_error(
       "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."
@@ -155,10 +180,6 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   # check for Bernoulli
   if (info$is_bernoulli) {
     insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
-  }
-
-  if (info$is_binomial) {
-    return(check_overdispersion.merMod(x, verbose = verbose, ...))
   }
 
   yhat <- stats::fitted(x)
@@ -179,7 +200,7 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "object_name") <- obj_name
 
   out
 }
@@ -219,38 +240,29 @@ check_overdispersion.model_fit <- check_overdispersion.poissonmfx
 # Overdispersion for mixed models ---------------------------
 
 #' @export
-check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
-  # check if we have poisson or binomial
+check_overdispersion.merMod <- function(x, ...) {
+  # for certain distributions, simulated residuals are more accurate
   info <- insight::model_info(x)
-  if (!info$is_count && !info$is_binomial) {
-    insight::format_error(
-      "Overdispersion checks can only be used for models from Poisson families or binomial families with trials > 1."
-    )
-  }
+  obj_name <- insight::safe_deparse_symbol(substitute(x))
 
-  # check for Bernoulli
-  if (info$is_bernoulli) {
-    insight::format_error("Overdispersion checks cannot be used for Bernoulli models.")
+  # for certain distributions, simulated residuals are more accurate
+  use_simulated <- info$family == "genpois" || info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin # nolint
+
+  if (use_simulated) {
+    return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
 
   rdf <- stats::df.residual(x)
   rp <- insight::get_residuals(x, type = "pearson")
+
+  # check if pearson residuals are available
   if (insight::is_empty_object(rp)) {
-    Pearson.chisq <- NA
-    prat <- NA
-    pval <- NA
-    rp <- NA
-    if (isTRUE(verbose)) {
-      insight::format_alert(
-        "Cannot test for overdispersion, because pearson residuals are not implemented for models with zero-inflation or variable dispersion.",
-        "Only the visual inspection using `plot(check_overdispersion(model))` is possible."
-      )
-    }
-  } else {
-    Pearson.chisq <- sum(rp^2)
-    prat <- Pearson.chisq / rdf
-    pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
+    return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))
   }
+
+  Pearson.chisq <- sum(rp^2)
+  prat <- Pearson.chisq / rdf
+  pval <- stats::pchisq(Pearson.chisq, df = rdf, lower.tail = FALSE)
 
   out <- list(
     chisq_statistic = Pearson.chisq,
@@ -260,7 +272,7 @@ check_overdispersion.merMod <- function(x, verbose = TRUE, ...) {
   )
 
   class(out) <- c("check_overdisp", "see_check_overdisp")
-  attr(out, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(out, "object_name") <- obj_name
 
   out
 }
@@ -270,3 +282,41 @@ check_overdispersion.negbin <- check_overdispersion.merMod
 
 #' @export
 check_overdispersion.glmmTMB <- check_overdispersion.merMod
+
+
+# simulated residuals -----------------------------
+
+#' @rdname check_overdispersion
+#' @export
+check_overdispersion.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
+  # match arguments
+  alternative <- match.arg(alternative)
+
+  # check for special arguments - we may pass "object_name" from other methods
+  dots <- list(...)
+  if (is.null(dots$object_name)) {
+    obj_name <- insight::safe_deparse_symbol(substitute(x))
+  } else {
+    obj_name <- dots$object_name
+  }
+
+  # statistics function
+  variance <- stats::sd(x$simulatedResponse)^2
+  dispersion <- function(i) stats::var(i - x$fittedPredictedResponse) / variance
+
+  # compute test results
+  result <- .simres_statistics(x, statistic_fun = dispersion, alternative = alternative)
+
+  out <- list(
+    dispersion_ratio = result$observed / mean(result$simulated),
+    p_value = result$p
+  )
+
+  class(out) <- c("check_overdisp", "see_check_overdisp")
+  attr(out, "object_name") <- obj_name
+
+  out
+}
+
+#' @export
+check_overdispersion.DHARMa <- check_overdispersion.performance_simres
