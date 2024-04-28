@@ -586,7 +586,7 @@ check_outliers.default <- function(x,
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
-  attr(outlier, "influential_obs") <- .influential_obs(x)
+  attr(outlier, "influential_obs") <- .influential_obs(x, threshold = unlist(thresholds))
   attr(outlier, "variables") <- "(Whole model)"
   attr(outlier, "raw_data") <- my_data
   attr(outlier, "outlier_var") <- outlier_var
