@@ -255,29 +255,29 @@
 #' @references
 #' - Archimbaud, A., Nordhausen, K., and Ruiz-Gazen, A. (2018). ICS for
 #' multivariate outlier detection with application to quality control.
-#' Computational Statistics and Data Analysis, 128, 184-199.
+#' *Computational Statistics and Data Analysis*, *128*, 184-199.
 #' \doi{10.1016/j.csda.2018.06.011}
 #'
 #' - Gnanadesikan, R., and Kettenring, J. R. (1972). Robust estimates, residuals,
-#' and outlier detection with multiresponse data. Biometrics, 81-124.
+#' and outlier detection with multiresponse data. *Biometrics*, 81-124.
 #'
 #' - Bollen, K. A., and Jackman, R. W. (1985). Regression diagnostics: An
-#' expository treatment of outliers and influential cases. Sociological Methods
-#' and Research, 13(4), 510-542.
+#' expository treatment of outliers and influential cases. *Sociological Methods
+#' and Research*, *13*(4), 510-542.
 #'
 #' - Cabana, E., Lillo, R. E., and Laniado, H. (2019). Multivariate outlier
 #' detection based on a robust Mahalanobis distance with shrinkage estimators.
 #' arXiv preprint arXiv:1904.02596.
 #'
 #' - Cook, R. D. (1977). Detection of influential observation in linear
-#' regression. Technometrics, 19(1), 15-18.
+#' regression. *Technometrics*, *19*(1), 15-18.
 #'
 #' - Iglewicz, B., and Hoaglin, D. C. (1993). How to detect and handle outliers
 #' (Vol. 16). Asq Press.
 #'
 #' - Leys, C., Klein, O., Dominicy, Y., and Ley, C. (2018). Detecting
-#' multivariate outliers: Use a robust variant of Mahalanobis distance. Journal
-#' of Experimental Social Psychology, 74, 150-156.
+#' multivariate outliers: Use a robust variant of Mahalanobis distance. *Journal
+#' of Experimental Social Psychology*, 74, 150-156.
 #'
 #' - Liu, F. T., Ting, K. M., and Zhou, Z. H. (2008, December). Isolation forest.
 #' In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
@@ -285,16 +285,17 @@
 #'
 #' - Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., and Makowski, D.
 #' (2021). performance: An R package for assessment, comparison and testing of
-#' statistical models. Journal of Open Source Software, 6(60), 3139.
+#' statistical models. *Journal of Open Source Software*, *6*(60), 3139.
 #' \doi{10.21105/joss.03139}
 #'
 #' - Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M.,
 #' and Makowski, D. (2023). Check your outliers! An introduction to identifying
-#' statistical outliers in R with easystats. \doi{10.31234/osf.io/bu6nt}
+#' statistical outliers in R with easystats. *Behavior Research Methods*, 1-11.
+#' \doi{10.3758/s13428-024-02356-w}
 #'
 #' - Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
-#' outliers and leverage points. Journal of the American Statistical
-#' association, 85(411), 633-639.
+#' outliers and leverage points. *Journal of the American Statistical
+#' association*, *85*(411), 633-639.
 #'
 #' @examples
 #' data <- mtcars # Size nrow(data) = 32
@@ -331,8 +332,9 @@
 #' # We can run the function stratified by groups using `{datawizard}` package:
 #' group_iris <- datawizard::data_group(iris, "Species")
 #' check_outliers(group_iris)
-#'
+#' # nolint start
 #' @examplesIf require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")
+#' # nolint end
 #' \donttest{
 #' # You can also run all the methods
 #' check_outliers(data, method = "all", verbose = FALSE)
@@ -586,7 +588,7 @@ check_outliers.default <- function(x,
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
-  attr(outlier, "influential_obs") <- .influential_obs(x)
+  attr(outlier, "influential_obs") <- .influential_obs(x, threshold = unlist(thresholds))
   attr(outlier, "variables") <- "(Whole model)"
   attr(outlier, "raw_data") <- my_data
   attr(outlier, "outlier_var") <- outlier_var
