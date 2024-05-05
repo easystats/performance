@@ -34,12 +34,11 @@ NULL
 #' This function uses an internal random forest model to classify the
 #' distribution from a model-family. Currently, following distributions are
 #' trained (i.e. results of `check_distribution()` may be one of the
-#' following): `"bernoulli"`, `"beta"`, `"beta-binomial"`,
-#' `"binomial"`, `"chi"`, `"exponential"`, `"F"`,
-#' `"gamma"`, `"lognormal"`, `"normal"`, `"negative
-#' binomial"`, `"negative binomial (zero-inflated)"`, `"pareto"`,
-#' `"poisson"`, `"poisson (zero-inflated)"`, `"uniform"` and
-#' `"weibull"`.
+#' following): `"bernoulli"`, `"beta"`, `"beta-binomial"`, `"binomial"`,
+#' `"cauchy"`, `"chi"`, `"exponential"`, `"F"`, `"gamma"`, `"half-cauchy"`,
+#' `"inverse-gamma"`, `"lognormal"`, `"normal"`, `"negative binomial"`,
+#' `"negative binomial (zero-inflated)"`, `"pareto"`, `"poisson"`,
+#' `"poisson (zero-inflated)"`, `"tweedie"`, `"uniform"` and `"weibull"`.
 #' \cr \cr
 #' Note the similarity between certain distributions according to shape, skewness,
 #' etc. Thus, the predicted distribution may not be perfectly representing the
@@ -222,6 +221,7 @@ check_distribution.numeric <- function(model) {
     Min = min(x),
     Max = max(x),
     Proportion_Positive = sum(x >= 0) / length(x),
+    Proportion_Zero = sum(x == 0) / length(x),
     Integer = all(.is_integer(x))
   )
 }
