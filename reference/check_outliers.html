@@ -28,7 +28,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -148,12 +148,12 @@ for a description of the methods.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model, a data.frame, a <code>performance_simres</code> <code><a href="simulate_residuals.html">simulate_residuals()</a></code>
 or a <code>DHARMa</code> object.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>When <code>method = "ics"</code>, further arguments in <code>...</code> are passed
 down to <code><a href="https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html" class="external-link">ICSOutlier::ics.outlier()</a></code>. When <code>method = "mahalanobis"</code>,
 they are  passed down to <code><a href="https://rdrr.io/r/stats/mahalanobis.html" class="external-link">stats::mahalanobis()</a></code>. <code>percentage_central</code> can
@@ -161,14 +161,14 @@ be specified when <code>method = "mcd"</code>. For objects of class <code>perfor
 or <code>DHARMa</code>, further arguments are passed down to <code><a href="https://rdrr.io/pkg/DHARMa/man/testOutliers.html" class="external-link">DHARMa::testOutliers()</a></code>.</p></dd>
 
 
-<dt>method</dt>
+<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>The outlier detection method(s). Can be <code>"all"</code> or some of
 <code>"cook"</code>, <code>"pareto"</code>, <code>"zscore"</code>, <code>"zscore_robust"</code>, <code>"iqr"</code>, <code>"ci"</code>, <code>"eti"</code>,
 <code>"hdi"</code>, <code>"bci"</code>, <code>"mahalanobis"</code>, <code>"mahalanobis_robust"</code>, <code>"mcd"</code>, <code>"ics"</code>,
 <code>"optics"</code> or <code>"lof"</code>.</p></dd>
 
 
-<dt>threshold</dt>
+<dt id="arg-threshold">threshold<a class="anchor" aria-label="anchor" href="#arg-threshold"></a></dt>
 <dd><p>A list containing the threshold values for each method (e.g.
 <code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is
 considered as outlier. If <code>NULL</code>, default values will be used (see
@@ -176,26 +176,26 @@ considered as outlier. If <code>NULL</code>, default values will be used (see
 for any of the method run.</p></dd>
 
 
-<dt>ID</dt>
+<dt id="arg-id">ID<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>Optional, to report an ID column along with the row number.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
 
 
-<dt>type</dt>
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>Type of method to test for outliers. Can be one of <code>"default"</code>,
 <code>"binomial"</code> or <code>"bootstrap"</code>. Only applies when <code>x</code> is an object returned
 by <code><a href="simulate_residuals.html">simulate_residuals()</a></code> or of class <code>DHARMa</code>. See 'Details' in
 <code><a href="https://rdrr.io/pkg/DHARMa/man/testOutliers.html" class="external-link">?DHARMa::testOutliers</a></code> for a detailed description of the types.</p></dd>
 
 
-<dt>iterations</dt>
+<dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of simulations to run.</p></dd>
 
 
-<dt>alternative</dt>
+<dt id="arg-alternative">alternative<a class="anchor" aria-label="anchor" href="#arg-alternative"></a></dt>
 <dd><p>A character string specifying the alternative hypothesis.</p></dd>
 
 </dl></div>

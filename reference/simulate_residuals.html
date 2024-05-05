@@ -14,7 +14,7 @@ where the residuals are not expected to be normally distributed."><meta property
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ where the residuals are not expected to be normally distributed."><meta property
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -105,30 +105,30 @@ where the residuals are not expected to be normally distributed.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model object.</p></dd>
 
 
-<dt>iterations</dt>
+<dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of simulations to run.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed on to <code><a href="https://rdrr.io/pkg/DHARMa/man/simulateResiduals.html" class="external-link">DHARMa::simulateResiduals()</a></code>.</p></dd>
 
 
-<dt>object</dt>
+<dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>A <code>performance_simres</code> object, as returned by <code>simulate_residuals()</code>.</p></dd>
 
 
-<dt>quantile_function</dt>
+<dt id="arg-quantile-function">quantile_function<a class="anchor" aria-label="anchor" href="#arg-quantile-function"></a></dt>
 <dd><p>A function to apply to the residuals. If <code>NULL</code>, the
 residuals are returned as is. If not <code>NULL</code>, the residuals are passed to this
 function. This is useful for returning normally distributed residuals, for
 example: <code>residuals(x, quantile_function = qnorm)</code>.</p></dd>
 
 
-<dt>outlier_values</dt>
+<dt id="arg-outlier-values">outlier_values<a class="anchor" aria-label="anchor" href="#arg-outlier-values"></a></dt>
 <dd><p>A vector of length 2, specifying the values to replace
 <code>-Inf</code> and <code>Inf</code> with, respectively.</p></dd>
 

@@ -12,7 +12,7 @@ mixed effects models with complex random effects structures."><meta property="og
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ mixed effects models with complex random effects structures."><meta property="og
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -108,17 +108,17 @@ mixed effects models with complex random effects structures.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>model</dt>
+    <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A mixed effects model.</p></dd>
 
 
-<dt>by_group</dt>
+<dt id="arg-by-group">by_group<a class="anchor" aria-label="anchor" href="#arg-by-group"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, returns the explained variance
 at different levels (if there are multiple levels). This is essentially
 similar to the variance reduction approach by <em>Hox (2010), pp. 69-78</em>.</p></dd>
 
 
-<dt>tolerance</dt>
+<dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
 <dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
 or not. Indicates up to which value the convergence result is accepted. When
@@ -127,18 +127,18 @@ can't be computed (and thus, the conditional r-squared is <code>NA</code>),
 decrease the tolerance-level. See also <code><a href="check_singularity.html">check_singularity()</a></code>.</p></dd>
 
 
-<dt>ci</dt>
+<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Confidence resp. credible interval level. For <code><a href="icc.html">icc()</a></code> and <code><a href="r2.html">r2()</a></code>,
 confidence intervals are based on bootstrapped samples from the ICC resp.
 R2 value. See <code>iterations</code>.</p></dd>
 
 
-<dt>iterations</dt>
+<dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.</p></dd>
 
 
-<dt>ci_method</dt>
+<dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
 <dd><p>Character string, indicating the bootstrap-method. Should
 be <code>NULL</code> (default), in which case <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code> is used for
 bootstrapped confidence intervals. However, if bootstrapped intervals cannot
@@ -151,11 +151,11 @@ However, these intervals are rather inaccurate and often too narrow. It is
 recommended to calculate bootstrapped confidence intervals for mixed models.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed down to <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
 
 </dl></div>

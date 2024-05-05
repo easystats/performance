@@ -12,7 +12,7 @@ over- or underfitting zeros in the outcome."><meta property="og:image" content="
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ over- or underfitting zeros in the outcome."><meta property="og:image" content="
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -110,25 +110,25 @@ over- or underfitting zeros in the outcome.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>Fitted model of class <code>merMod</code>, <code>glmmTMB</code>, <code>glm</code>, or <code>glm.nb</code>
 (package <strong>MASS</strong>).</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed down to <code><a href="simulate_residuals.html">simulate_residuals()</a></code>. This only applies
 for models with zero-inflation component, or for models of class <code>glmmTMB</code>
 from <code>nbinom1</code> or <code>nbinom2</code> family.</p></dd>
 
 
-<dt>tolerance</dt>
+<dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
 <dd><p>The tolerance for the ratio of observed and predicted
 zeros to considered as over- or underfitting zeros. A ratio
 between 1 +/- <code>tolerance</code> is considered as OK, while a ratio
 beyond or below this threshold would indicate over- or underfitting.</p></dd>
 
 
-<dt>alternative</dt>
+<dt id="arg-alternative">alternative<a class="anchor" aria-label="anchor" href="#arg-alternative"></a></dt>
 <dd><p>A character string specifying the alternative hypothesis.</p></dd>
 
 </dl></div>

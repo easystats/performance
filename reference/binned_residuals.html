@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -107,24 +107,24 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>model</dt>
+    <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A <code>glm</code>-object with <em>binomial</em>-family.</p></dd>
 
 
-<dt>term</dt>
+<dt id="arg-term">term<a class="anchor" aria-label="anchor" href="#arg-term"></a></dt>
 <dd><p>Name of independent variable from <code>x</code>. If not <code>NULL</code>,
 average residuals for the categories of <code>term</code> are plotted; else,
 average residuals for the estimated probabilities of the response are
 plotted.</p></dd>
 
 
-<dt>n_bins</dt>
+<dt id="arg-n-bins">n_bins<a class="anchor" aria-label="anchor" href="#arg-n-bins"></a></dt>
 <dd><p>Numeric, the number of bins to divide the data. If
 <code>n_bins = NULL</code>, the square root of the number of observations is
 taken.</p></dd>
 
 
-<dt>show_dots</dt>
+<dt id="arg-show-dots">show_dots<a class="anchor" aria-label="anchor" href="#arg-show-dots"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, will show data points in the plot. Set
 to <code>FALSE</code> for models with many observations, if generating the plot is too
 time-consuming. By default, <code>show_dots = NULL</code>. In this case <code>binned_residuals()</code>
@@ -132,11 +132,11 @@ tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.</p></dd>
 
 
-<dt>ci</dt>
+<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Numeric, the confidence level for the error bounds.</p></dd>
 
 
-<dt>ci_type</dt>
+<dt id="arg-ci-type">ci_type<a class="anchor" aria-label="anchor" href="#arg-ci-type"></a></dt>
 <dd><p>Character, the type of error bounds to calculate. Can be
 <code>"exact"</code> (default), <code>"gaussian"</code> or <code>"boot"</code>. <code>"exact"</code> calculates the
 error bounds based on the exact binomial distribution, using <code><a href="https://rdrr.io/r/stats/binom.test.html" class="external-link">binom.test()</a></code>.
@@ -145,23 +145,23 @@ bootstrap method, where confidence intervals are calculated based on the
 quantiles of the bootstrap distribution.</p></dd>
 
 
-<dt>residuals</dt>
+<dt id="arg-residuals">residuals<a class="anchor" aria-label="anchor" href="#arg-residuals"></a></dt>
 <dd><p>Character, the type of residuals to calculate. Can be
 <code>"deviance"</code> (default), <code>"pearson"</code> or <code>"response"</code>. It is recommended to
 use <code>"response"</code> only for those models where other residuals are not
 available.</p></dd>
 
 
-<dt>iterations</dt>
+<dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Integer, the number of iterations to use for the
 bootstrap method. Only used if <code>ci_type = "boot"</code>.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Currently not used.</p></dd>
 
 </dl></div>

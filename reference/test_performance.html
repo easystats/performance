@@ -28,7 +28,7 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -136,24 +136,24 @@ and their interpretation.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>...</dt>
+    <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Multiple model objects.</p></dd>
 
 
-<dt>reference</dt>
+<dt id="arg-reference">reference<a class="anchor" aria-label="anchor" href="#arg-reference"></a></dt>
 <dd><p>This only applies when models are non-nested, and determines
 which model should be taken as a reference, against which all the other
 models are tested.</p></dd>
 
 
-<dt>text_length</dt>
+<dt id="arg-text-length">text_length<a class="anchor" aria-label="anchor" href="#arg-text-length"></a></dt>
 <dd><p>Numeric, length (number of chars) of output lines.
 <code>test_bf()</code> describes models by their formulas, which can lead to
 overly long lines in the output. <code>text_length</code> fixes the length of
 lines to a specified limit.</p></dd>
 
 
-<dt>estimator</dt>
+<dt id="arg-estimator">estimator<a class="anchor" aria-label="anchor" href="#arg-estimator"></a></dt>
 <dd><p>Applied when comparing regression models using
 <code>test_likelihoodratio()</code>. Corresponds to the different estimators for
 the standard deviation of the errors. Defaults to <code>"OLS"</code> for linear models,
@@ -161,7 +161,7 @@ the standard deviation of the errors. Defaults to <code>"OLS"</code> for linear 
 linear mixed models when these have the same fixed effects. See 'Details'.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warning and messages.</p></dd>
 
 </dl></div>

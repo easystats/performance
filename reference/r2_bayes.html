@@ -16,7 +16,7 @@ r2_posterior() returns a posterior sample of Bayesian R2 values."><meta property
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,7 +53,7 @@ r2_posterior() returns a posterior sample of Bayesian R2 values."><meta property
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -116,34 +116,34 @@ only (marginal R2). While <code>r2_bayes()</code> returns a single R2 value,
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>model</dt>
+    <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A Bayesian regression model (from <strong>brms</strong>,
 <strong>rstanarm</strong>, <strong>BayesFactor</strong>, etc).</p></dd>
 
 
-<dt>robust</dt>
+<dt id="arg-robust">robust<a class="anchor" aria-label="anchor" href="#arg-robust"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
 calculate the central tendency of the variances.</p></dd>
 
 
-<dt>ci</dt>
+<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Value or vector of probability of the CI (between 0 and 1) to be
 estimated.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle off warnings.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to <code>r2_posterior()</code>.</p></dd>
 
 
-<dt>average</dt>
+<dt id="arg-average">average<a class="anchor" aria-label="anchor" href="#arg-average"></a></dt>
 <dd><p>Compute model-averaged index? See <code><a href="https://easystats.github.io/bayestestR/reference/weighted_posteriors.html" class="external-link">bayestestR::weighted_posteriors()</a></code>.</p></dd>
 
 
-<dt>prior_odds</dt>
+<dt id="arg-prior-odds">prior_odds<a class="anchor" aria-label="anchor" href="#arg-prior-odds"></a></dt>
 <dd><p>Optional vector of prior odds for the models compared to
 the first model (or the denominator, for <code>BFBayesFactor</code> objects). For
 <code>data.frame</code>s, this will be used as the basis of weighting.</p></dd>

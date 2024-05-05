@@ -12,7 +12,7 @@ based on response and predictions of a binomial model."><meta property="og:image
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ based on response and predictions of a binomial model."><meta property="og:image
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -99,22 +99,22 @@ based on response and predictions of a binomial model.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A numeric vector, representing the outcome (0/1), or a model with
 binomial outcome.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>One or more models with binomial outcome. In this case,
 <code>new_data</code> is ignored.</p></dd>
 
 
-<dt>predictions</dt>
+<dt id="arg-predictions">predictions<a class="anchor" aria-label="anchor" href="#arg-predictions"></a></dt>
 <dd><p>If <code>x</code> is numeric, a numeric vector of same length
 as <code>x</code>, representing the actual predicted values.</p></dd>
 
 
-<dt>new_data</dt>
+<dt id="arg-new-data">new_data<a class="anchor" aria-label="anchor" href="#arg-new-data"></a></dt>
 <dd><p>If <code>x</code> is a model, a data frame that is passed to
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> as <code>newdata</code>-argument. If <code>NULL</code>, the ROC for
 the full model is calculated.</p></dd>

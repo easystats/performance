@@ -14,7 +14,7 @@ multicollinearity)."><meta property="og:image" content="https://easystats.github
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ multicollinearity)."><meta property="og:image" content="https://easystats.github
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -125,21 +125,21 @@ multicollinearity).</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>x</dt>
+    <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model object.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed down to the individual check functions, especially
 to <code><a href="check_predictions.html">check_predictions()</a></code> and <code><a href="binned_residuals.html">binned_residuals()</a></code>.</p></dd>
 
 
-<dt>panel</dt>
+<dt id="arg-panel">panel<a class="anchor" aria-label="anchor" href="#arg-panel"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, plots are arranged as panels; else,
 single plots for each diagnostic are returned.</p></dd>
 
 
-<dt>check</dt>
+<dt id="arg-check">check<a class="anchor" aria-label="anchor" href="#arg-check"></a></dt>
 <dd><p>Character vector, indicating which checks for should be performed
 and plotted. May be one or more of <code>"all"</code>, <code>"vif"</code>, <code>"qq"</code>, <code>"normality"</code>,
 <code>"linearity"</code>, <code>"ncv"</code>, <code>"homogeneity"</code>, <code>"outliers"</code>, <code>"reqq"</code>, <code>"pp_check"</code>,
@@ -151,14 +151,14 @@ heteroscedasticity, as well as the linear relationship. By default, all
 possible checks are performed and plotted.</p></dd>
 
 
-<dt>detrend</dt>
+<dt id="arg-detrend">detrend<a class="anchor" aria-label="anchor" href="#arg-detrend"></a></dt>
 <dd><p>Logical. Should Q-Q/P-P plots be detrended? Defaults to
 <code>TRUE</code> for linear models or when <code>residual_type = "normal"</code>. Defaults to
 <code>FALSE</code> for QQ plots based on simulated residuals (i.e. when
 <code>residual_type = "simulated"</code>).</p></dd>
 
 
-<dt>bandwidth</dt>
+<dt id="arg-bandwidth">bandwidth<a class="anchor" aria-label="anchor" href="#arg-bandwidth"></a></dt>
 <dd><p>A character string indicating the smoothing bandwidth to
 be used. Unlike <code><a href="https://rdrr.io/r/stats/density.html" class="external-link">stats::density()</a></code>, which used <code>"nrd0"</code> as default, the
 default used here is <code>"nrd"</code> (which seems to give more plausible results
@@ -166,14 +166,14 @@ for non-Gaussian models). When problems with plotting occur, try to change
 to a different value.</p></dd>
 
 
-<dt>type</dt>
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>Plot type for the posterior predictive checks plot. Can be <code>"density"</code>,
 <code>"discrete_dots"</code>, <code>"discrete_interval"</code> or <code>"discrete_both"</code> (the <code>discrete_*</code>
 options are appropriate for models with discrete - binary, integer or ordinal
 etc. - outcomes).</p></dd>
 
 
-<dt>residual_type</dt>
+<dt id="arg-residual-type">residual_type<a class="anchor" aria-label="anchor" href="#arg-residual-type"></a></dt>
 <dd><p>Character, indicating the type of residuals to be used.
 For non-Gaussian models, the default is <code>"simulated"</code>, which uses simulated
 residuals. These are based on <code><a href="simulate_residuals.html">simulate_residuals()</a></code> and thus uses the
@@ -184,7 +184,7 @@ use a half-normal Q-Q plot of the absolute value of the standardized deviance
 residuals.</p></dd>
 
 
-<dt>show_dots</dt>
+<dt id="arg-show-dots">show_dots<a class="anchor" aria-label="anchor" href="#arg-show-dots"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, will show data points in the plot. Set
 to <code>FALSE</code> for models with many observations, if generating the plot is too
 time-consuming. By default, <code>show_dots = NULL</code>. In this case <code>check_model()</code>
@@ -192,31 +192,31 @@ tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.</p></dd>
 
 
-<dt>dot_size, line_size</dt>
+<dt id="arg-dot-size-line-size">dot_size, line_size<a class="anchor" aria-label="anchor" href="#arg-dot-size-line-size"></a></dt>
 <dd><p>Size of line and dot-geoms.</p></dd>
 
 
-<dt>base_size, title_size, axis_title_size</dt>
+<dt id="arg-base-size-title-size-axis-title-size">base_size, title_size, axis_title_size<a class="anchor" aria-label="anchor" href="#arg-base-size-title-size-axis-title-size"></a></dt>
 <dd><p>Base font size for axis and plot titles.</p></dd>
 
 
-<dt>alpha, dot_alpha</dt>
+<dt id="arg-alpha-dot-alpha">alpha, dot_alpha<a class="anchor" aria-label="anchor" href="#arg-alpha-dot-alpha"></a></dt>
 <dd><p>The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.</p></dd>
 
 
-<dt>colors</dt>
+<dt id="arg-colors">colors<a class="anchor" aria-label="anchor" href="#arg-colors"></a></dt>
 <dd><p>Character vector with color codes (hex-format). Must be of
 length 3. First color is usually used for reference lines, second color
 for dots, and third color for outliers or extreme values.</p></dd>
 
 
-<dt>theme</dt>
+<dt id="arg-theme">theme<a class="anchor" aria-label="anchor" href="#arg-theme"></a></dt>
 <dd><p>String, indicating the name of the plot-theme. Must be in the
 format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</code>).</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>If <code>FALSE</code> (default), suppress most warning messages.</p></dd>
 
 </dl></div>

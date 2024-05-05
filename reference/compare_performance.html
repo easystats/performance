@@ -14,7 +14,7 @@ indices across models."><meta property="og:image" content="https://easystats.git
     
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ indices across models."><meta property="og:image" content="https://easystats.git
      
     easystats
   </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--easystats">
+  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
     <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
     <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
@@ -108,23 +108,23 @@ indices across models.</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>...</dt>
+    <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Multiple model objects (also of different classes).</p></dd>
 
 
-<dt>metrics</dt>
+<dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
 <dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
 metrics to be computed. See related
 <code><a href="model_performance.html">documentation()</a></code> of object's class for
 details.</p></dd>
 
 
-<dt>rank</dt>
+<dt id="arg-rank">rank<a class="anchor" aria-label="anchor" href="#arg-rank"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, models are ranked according to 'best'
 overall model performance. See 'Details'.</p></dd>
 
 
-<dt>estimator</dt>
+<dt id="arg-estimator">estimator<a class="anchor" aria-label="anchor" href="#arg-estimator"></a></dt>
 <dd><p>Only for linear models. Corresponds to the different
 estimators for the standard deviation of the errors. If <code>estimator = "ML"</code>
 (default, except for <code><a href="performance_aicc.html">performance_aic()</a></code> when the model object is of class
@@ -133,7 +133,7 @@ then equivalent to using <code>AIC(logLik())</code>. Setting it to <code>"REML"<
 the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
 
 
-<dt>verbose</dt>
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
 
 </dl></div>
