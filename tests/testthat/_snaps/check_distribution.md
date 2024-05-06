@@ -9,13 +9,13 @@
       
        Distribution Probability
              cauchy         94%
+              gamma          3%
           lognormal          3%
-            weibull          3%
       
       Predicted Distribution of Response
       
-        Distribution Probability
-           lognormal         47%
-               gamma         44%
-       beta-binomial          3%
+       Distribution Probability
+          lognormal         53%
+              gamma         44%
+        exponential          3%
 
