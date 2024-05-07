@@ -192,23 +192,40 @@ check_distribution.numeric <- function(model) {
   # validation check, remove missings
   x <- x[!is.na(x)]
 
-  # this might fail, so we wrap in ".safe()"
-  map_est <- .safe(mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")))
+  mode <- NULL
+  # find mode for integer, or MAP for distributions
+  if (all(.is_integer(x))) {
+    mode <- datawizard::distribution_mode(x)
+  } else {
+    # this might fail, so we wrap in ".safe()"
+    mode <- tryCatch(
+      as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+      error = function(e) NULL
+    )
+    if (is.null(mode)) {
+      mode <- tryCatch(
+        as.numeric(bayestestR::map_estimate(x, bw = "kernel")),
+        error = function(e) NULL
+      )
+    }
+  }
 
-  if (is.null(map_est)) {
-    map_est <- mean(x) - datawizard::distribution_mode(x)
+  if (is.null(mode)) {
+    mean_mode_diff <- mean(x) - datawizard::distribution_mode(x)
     msg <- "Could not accurately estimate the mode."
     if (!is.null(type)) {
       msg <- paste(msg, "Predicted distribution of the", type, "may be less accurate.")
     }
     insight::format_alert(msg)
+  } else {
+    mean_mode_diff <- .safe(mean(x) - mode)
   }
 
   data.frame(
     SD = stats::sd(x),
     MAD = stats::mad(x, constant = 1),
     Mean_Median_Distance = mean(x) - stats::median(x),
-    Mean_Mode_Distance = map_est,
+    Mean_Mode_Distance = mean_mode_diff,
     SD_MAD_Distance = stats::sd(x) - stats::mad(x, constant = 1),
     Var_Mean_Distance = stats::var(x) - mean(x),
     Range_SD = diff(range(x)) / stats::sd(x),

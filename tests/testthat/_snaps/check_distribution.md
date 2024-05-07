@@ -7,15 +7,14 @@
       
       Predicted Distribution of Residuals
       
-       Distribution Probability
-             cauchy         94%
-              gamma          3%
-          lognormal          3%
+                     Distribution Probability
+                           cauchy         91%
+                            gamma          6%
+       neg. binomial (zero-infl.)          3%
       
       Predicted Distribution of Response
       
        Distribution Probability
-          lognormal         53%
-              gamma         44%
-        exponential          3%
+          lognormal         66%
+              gamma         34%
 

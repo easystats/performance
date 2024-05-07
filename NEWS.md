@@ -15,6 +15,9 @@
   the usual style as for other models and no longer returns plots from
   `bayesplot::pp_check()`.
 
+* Updated the trained model that is used to prediction distributions in
+  `check_distribution()`.
+
 ## Bug fixes
 
 * `check_model()` now falls back on normal Q-Q plots when a model is not supported

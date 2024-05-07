@@ -134,18 +134,22 @@ for (di in seq_along(distrs)) {
     # x_scaled <- parameters::normalize(x, verbose = FALSE)
 
     if (length(x) >= 10) {
-      mode <- tryCatch(
-        bayestestR::map_estimate(x, bw = "nrd0"),
-        error = function(e) NULL
-      )
-      if (is.null(mode)) {
+      if (all(.is.integer(x))) {
+        mode <- datawizard::distribution_mode(x)
+      } else {
         mode <- tryCatch(
-          bayestestR::map_estimate(x, bw = "kernel"),
+          as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
           error = function(e) NULL
         )
-      }
-      if (is.null(mode)) {
-        mode <- datawizard::distribution_mode(x)
+        if (is.null(mode)) {
+          mode <- tryCatch(
+            as.numeric(bayestestR::map_estimate(x, bw = "kernel")),
+            error = function(e) NULL
+          )
+        }
+        if (is.null(mode)) {
+          mode <- datawizard::distribution_mode(x)
+        }
       }
       # Extract features
       data <- data.frame(
