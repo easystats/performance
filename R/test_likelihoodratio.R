@@ -97,7 +97,6 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
 }
 
 
-
 # other classes ---------------------------
 
 #' @export
