@@ -11,7 +11,7 @@
 #' number of square shaped blocks along the diagonal.
 #'
 #' @param x A data frame.
-#' @param standardize Standardize the dataframe before clustering (default).
+#' @param standardize Standardize the data frame before clustering (default).
 #' @param distance Distance method used. Other methods than "euclidean"
 #'   (default) are exploratory in the context of clustering tendency. See
 #'   [stats::dist()] for list of available methods.
