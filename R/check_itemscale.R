@@ -66,7 +66,6 @@
 #' )
 #' @export
 check_itemscale <- function(x, factor_index = NULL) {
-  # check for valid input
   if (!inherits(x, c("parameters_pca", "data.frame"))) {
     insight::format_error(
       "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, or a data frame." # nolint

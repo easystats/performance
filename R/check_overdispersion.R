@@ -77,7 +77,6 @@ check_overdispersion <- function(x, ...) {
 
 #' @export
 check_overdispersion.default <- function(x, ...) {
-  # check for valid input
   .is_model_valid(x)
   insight::format_error(
     paste0("`check_overdisperion()` not yet implemented for models of class `", class(x)[1], "`.")

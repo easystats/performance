@@ -100,7 +100,6 @@ check_predictions.default <- function(object,
                                       type = "density",
                                       verbose = TRUE,
                                       ...) {
-  # check for valid input
   .is_model_valid(object)
 
   # retrieve model information

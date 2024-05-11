@@ -29,7 +29,6 @@ check_autocorrelation <- function(x, ...) {
 #' @rdname check_autocorrelation
 #' @export
 check_autocorrelation.default <- function(x, nsim = 1000, ...) {
-  # check for valid input
   .is_model_valid(x)
 
   .residuals <- stats::residuals(x)

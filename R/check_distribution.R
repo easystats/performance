@@ -66,7 +66,6 @@ check_distribution <- function(model) {
 
 #' @export
 check_distribution.default <- function(model) {
-  # check for valid input
   .is_model_valid(model)
 
   insight::check_if_installed("randomForest")
