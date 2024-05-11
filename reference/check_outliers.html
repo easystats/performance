@@ -287,7 +287,7 @@ the median (which are robust measures of dispersion and centrality). The
 default threshold to classify outliers is 1.959 (<code>threshold = list("zscore" = 1.959)</code>),
 corresponding to the 2.5% (<code>qnorm(0.975)</code>) most extreme observations
 (assuming the data is normally distributed). Importantly, the Z-score
-method is univariate: it is computed column by column. If a dataframe is
+method is univariate: it is computed column by column. If a data frame is
 passed, the Z-score is calculated for each variable separately, and the
 maximum (absolute) Z-score is kept for each observations. Thus, all
 observations that are extreme on at least one variable might be detected
@@ -498,7 +498,7 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span> <span class="co"># The object is a binary vector...</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span>
-<span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="op">!</span><span class="va">outliers_list</span>, <span class="op">]</span> <span class="co"># And can be used to filter a dataframe</span></span></span>
+<span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="op">!</span><span class="va">outliers_list</span>, <span class="op">]</span> <span class="co"># And can be used to filter a data frame</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">)</span> <span class="co"># New size, 28 (4 outliers removed)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
 <span class="r-in"><span></span></span>
@@ -518,7 +518,7 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For dataframes ------------------------------------------------------</span></span></span>
-<span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on dataframes</span></span></span>
+<span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on data frames</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (31.264).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
