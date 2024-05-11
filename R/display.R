@@ -44,12 +44,3 @@ display.compare_performance <- display.performance_model
 
 #' @export
 display.check_itemscale <- display.performance_model
-
-
-
-
-# Reexports models ------------------------
-
-#' @importFrom insight display
-#' @export
-insight::display
