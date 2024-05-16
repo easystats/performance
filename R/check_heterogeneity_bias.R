@@ -31,6 +31,7 @@
 check_heterogeneity_bias <- function(x, select = NULL, by = NULL, group = NULL) {
   ## TODO: deprecate later
   if (!is.null(group)) {
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
     by <- group
   }
   if (insight::is_model(x)) {
