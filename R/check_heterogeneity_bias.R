@@ -8,9 +8,10 @@
 #' @param select Character vector (or formula) with names of variables to select
 #'   that should be checked. If `x` is a mixed model object, this argument
 #'   will be ignored.
-#' @param group Character vector (or formula) with the name of the variable that
+#' @param by Character vector (or formula) with the name of the variable that
 #'   indicates the group- or cluster-ID. If `x` is a model object, this
 #'   argument will be ignored.
+#' @param group Deprecated. Use `by` instead.
 #'
 #' @seealso
 #' For further details, read the vignette
@@ -25,13 +26,18 @@
 #' @examples
 #' data(iris)
 #' iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
-#' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
+#' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
-check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
+check_heterogeneity_bias <- function(x, select = NULL, by = NULL, group = NULL) {
+  ## TODO: deprecate later
+  if (!is.null(group)) {
+    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
+    by <- group
+  }
   if (insight::is_model(x)) {
-    group <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
-    if (is.null(group)) {
-      insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `group`.") # nolint
+    by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
+    if (is.null(by)) {
+      insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `by`.") # nolint
     }
     my_data <- insight::get_data(x, source = "mf", verbose = FALSE)
     select <- insight::find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
@@ -39,17 +45,19 @@ check_heterogeneity_bias <- function(x, select = NULL, group = NULL) {
     if (inherits(select, "formula")) {
       select <- all.vars(select)
     }
-    if (inherits(group, "formula")) {
-      group <- all.vars(group)
+    if (inherits(by, "formula")) {
+      by <- all.vars(by)
     }
     my_data <- x
   }
 
-  unique_groups <- .n_unique(my_data[[group]])
-  combinations <- expand.grid(select, group)
+  unique_groups <- .n_unique(my_data[[by]])
+  combinations <- expand.grid(select, by)
 
   result <- Map(function(predictor, id) {
     # demean predictor
+
+    ## FIXME: update argument name later!
     d <- datawizard::demean(my_data, select = predictor, group = id, verbose = FALSE)
 
     # get new names
