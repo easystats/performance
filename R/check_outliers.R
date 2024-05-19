@@ -948,7 +948,7 @@ check_outliers.data.frame <- function(x,
   outlier_count <- lapply(outlier_count, function(x) {
     num.df <- x[!names(x) %in% c("Row", ID)]
     if (isTRUE(nrow(num.df) >= 1)) {
-      num.df <- datawizard::change_code(
+      num.df <- datawizard::recode_values(
         num.df,
         recode = list(`2` = "(Multivariate)")
       )

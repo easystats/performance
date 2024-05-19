@@ -57,8 +57,7 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, group = NULL) 
   result <- Map(function(predictor, id) {
     # demean predictor
 
-    ## FIXME: update argument name later!
-    d <- datawizard::demean(my_data, select = predictor, group = id, verbose = FALSE)
+    d <- datawizard::demean(my_data, select = predictor, by = id, verbose = FALSE)
 
     # get new names
     within_name <- paste0(predictor, "_within")
