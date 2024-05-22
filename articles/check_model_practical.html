@@ -7,12 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="performance">
 <title>How to arrive at the best model fit • performance</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet">
@@ -26,119 +20,71 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="@easystats4u">
 <meta name="twitter:site" content="@easystats4u">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
-
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.8</small>
-
-    
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html" aria-label="Reference">
-    <span class="fa fa fa fa-file-code"></span>
-     
-    Reference
-  </a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
-    <span class="fa fa fa fa-book-reader"></span>
-     
-    Articles
-  </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
-    <a class="dropdown-item" href="../articles/check_model.html">Checking model assumption - linear models</a>
-    <a class="dropdown-item" href="../articles/check_outliers.html">Checking outliers with *performance*</a>
-    <a class="dropdown-item" href="../articles/simulate_residuals.html">Checking simulated residuals</a>
-    <a class="dropdown-item" href="../articles/compare.html">Compare, Test, and Select Models</a>
-    <a class="dropdown-item" href="../articles/r2.html">R-squared (R2)</a>
-    <a class="dropdown-item" href="../articles/check_model_practical.html">How to arrive at the best model fit</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/check_model.html">Checking model assumption - linear models</a></li>
+    <li><a class="dropdown-item" href="../articles/check_outliers.html">Checking outliers with *performance*</a></li>
+    <li><a class="dropdown-item" href="../articles/simulate_residuals.html">Checking simulated residuals</a></li>
+    <li><a class="dropdown-item" href="../articles/compare.html">Compare, Test, and Select Models</a></li>
+    <li><a class="dropdown-item" href="../articles/r2.html">R-squared (R2)</a></li>
+    <li><a class="dropdown-item" href="../articles/check_model_practical.html">How to arrive at the best model fit</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html" aria-label="News">
-    <span class="fa fa fa fa-newspaper"></span>
-     
-    News
-  </a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html" aria-label="News"><span class="fa fa-newspaper"></span> News</a></li>
       </ul>
 <ul class="navbar-nav">
-<li><form class="form-inline" role="search">
-<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats" aria-label="easystats">
-    <span class="fab fa fab fa-r-project"></span>
-     
-    easystats
-  </a>
-  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
-    <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/insight/">insight</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a>
-    <a class="dropdown-item" href="https://easystats.github.io/performance/">performance</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-easystats" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="easystats"><span class="fa fab fa-r-project"></span> easystats</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-easystats">
+<li><a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/insight/">insight</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a></li>
+    <li><a class="dropdown-item" href="https://easystats.github.io/performance/">performance</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/performance/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<li class="nav-item"><a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/easystats/performance/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
-
-    
   </div>
 </nav><div class="container template-article">
-
 
 
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>How to arrive at the best model fit</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/vignettes/check_model_practical.Rmd" class="external-link"><code>vignettes/check_model_practical.Rmd</code></a></small>
+                        <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/vignettes/check_model_practical.Rmd" class="external-link"><code>vignettes/check_model_practical.Rmd</code></a></small>
       <div class="d-none name"><code>check_model_practical.Rmd</code></div>
     </div>
-
-    
-    
-<p>This vignette shows how to use the <em>performance</em> package to
-check the fit of a model, how to detect misspecification and how to
-improve your model. The basic workflow of the <em>performance</em>
-package can be summarized as follows:</p>
+        <p>This vignette shows how to use the <em>performance</em>
+package to check the fit of a model, how to detect misspecification and
+how to improve your model. The basic workflow of the
+<em>performance</em> package can be summarized as follows:</p>
 <ul>
 <li>fit a regression model</li>
 <li>check the model fit and assess model fit indices</li>
@@ -241,8 +187,9 @@ beyond the visual inspection.</p>
 <span><span class="co">#&gt;        dispersion ratio =    2.324</span></span>
 <span><span class="co">#&gt;   Pearson's Chi-Squared = 1475.875</span></span>
 <span><span class="co">#&gt;                 p-value =  &lt; 0.001</span></span>
-<span><span class="co">#&gt; Overdispersion detected.</span></span>
-<span></span>
+<span><span class="co">#&gt; Overdispersion detected.</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -258,7 +205,7 @@ zero-inflation.</p>
 </h3>
 <p>We can try to improve the model fit by fitting a model with
 zero-inflation component:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">count</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="va">spp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">site</span><span class="op">)</span>,</span>
 <span>  ziformula <span class="op">=</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="va">spp</span>,</span>
@@ -274,14 +221,15 @@ properly (see especially <em>posterior predictive checks</em> and
 overdispersion still could be present. We can check for these problems
 using <code><a href="../reference/check_overdispersion.html">check_overdispersion()</a></code> and
 <code><a href="../reference/check_zeroinflation.html">check_zeroinflation()</a></code> again.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 1.679</span></span>
 <span><span class="co">#&gt;           p-value = 0.008</span></span>
-<span><span class="co">#&gt; Overdispersion detected.</span></span>
-<span></span>
+<span><span class="co">#&gt; Overdispersion detected.</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -297,7 +245,7 @@ using <code><a href="../reference/check_overdispersion.html">check_overdispersio
 </h3>
 <p>We can try to address this issue by fitting a negative binomial model
 instead of using a Poisson distribution.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model3</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">count</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="va">spp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">site</span><span class="op">)</span>,</span>
 <span>  ziformula <span class="op">=</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="va">spp</span>,</span>
@@ -310,14 +258,15 @@ instead of using a Poisson distribution.</p>
 <p>Now we see that the plot showing <em>misspecified dispersion and
 zero-inflation</em> suggests that the overdispersion is better addressed
 than before. Let us check again:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 1.081</span></span>
 <span><span class="co">#&gt;           p-value =  0.54</span></span>
-<span><span class="co">#&gt; No overdispersion detected.</span></span>
-<span></span>
+<span><span class="co">#&gt; No overdispersion detected.</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -336,7 +285,7 @@ models. For our purpose, we rely on the Akaike Information Criterion
 Information Criterion (BIC), and the Proper Scoring Rules. We can
 compare the models using <code><a href="../reference/compare_performance.html">compare_performance()</a></code> and
 <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compare_performance.html">compare_performance</a></span><span class="op">(</span></span>
 <span>  <span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AIC"</span>, <span class="st">"AICc"</span>, <span class="st">"BIC"</span>, <span class="st">"SCORE"</span><span class="op">)</span></span>
@@ -348,8 +297,9 @@ compare the models using <code><a href="../reference/compare_performance.html">c
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; model1 | glmmTMB | 1962.8 (&lt;.001) | 1963.1 (&lt;.001) | 2003.0 (&lt;.001) |    -1.457 |           0.032</span></span>
 <span><span class="co">#&gt; model2 | glmmTMB | 1785.5 (&lt;.001) | 1786.5 (&lt;.001) | 1861.4 (&lt;.001) |    -1.328 |           0.032</span></span>
-<span><span class="co">#&gt; model3 | glmmTMB | 1653.7 (&gt;.999) | 1654.8 (&gt;.999) | 1734.1 (&gt;.999) |    -1.275 |           0.032</span></span>
-<span></span>
+<span><span class="co">#&gt; model3 | glmmTMB | 1653.7 (&gt;.999) | 1654.8 (&gt;.999) | 1734.1 (&gt;.999) |    -1.275 |           0.032</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-10-1.png" width="100%" height="100%"></p>
 <p>The weighted AIC and BIC range from 0 to 1, indicating better model
@@ -369,7 +319,7 @@ best fit using <code><a href="../reference/test_performance.html">test_performan
 test based on the model family. You can also call the different tests,
 like <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code>, <code><a href="../reference/test_performance.html">test_bf()</a></code>,
 <code><a href="../reference/test_performance.html">test_wald()</a></code> or <code><a href="../reference/test_performance.html">test_vuong()</a></code> directly.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Name   |   Model |     BF</span></span>
 <span><span class="co">#&gt; -------------------------</span></span>
@@ -382,14 +332,15 @@ factor (based on BIC comparison) to compare the models. And second, that
 both the second and third model seem to be significantly better than the
 first model.</p>
 <p>Now we compare the second against the third model</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Name   |   Model |     BF</span></span>
 <span><span class="co">#&gt; -------------------------</span></span>
 <span><span class="co">#&gt; model2 | glmmTMB |       </span></span>
 <span><span class="co">#&gt; model3 | glmmTMB | &gt; 1000</span></span>
-<span><span class="co">#&gt; Models were detected as nested (in terms of fixed parameters) and are compared in sequential order.</span></span>
-<span></span>
+<span><span class="co">#&gt; Models were detected as nested (in terms of fixed parameters) and are compared in sequential order.</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/test_performance.html">test_likelihoodratio</a></span><span class="op">(</span><span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Likelihood-Ratio-Test (LRT) for Model Comparison (ML-estimator)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -400,7 +351,7 @@ first model.</p>
 <p>We see that both the Bayes factor and likelihood ratio test suggest
 that the third model is significantly better than the second model.</p>
 <p>What does this mean for our inference?</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects (Count Model)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -447,7 +398,7 @@ coefficients for the <em>zero-inflation</em> component of our model look
 rather spurious. We have <em>very</em> high coefficients here. We still
 might find a better distributional family for our model, and try
 <code>nbinom2</code> now.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model4</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">count</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="va">spp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">site</span><span class="op">)</span>,</span>
 <span>  ziformula <span class="op">=</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="va">spp</span>,</span>
@@ -457,15 +408,16 @@ might find a better distributional family for our model, and try
 <span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">model4</span>, dot_size <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; `check_outliers()` does not yet support models of class `glmmTMB`.</span></span></code></pre></div>
 <p><img src="check_model_practical_files/figure-html/unnamed-chunk-14-1.png" width="100%" height="100%"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  dispersion ratio = 0.958</span></span>
 <span><span class="co">#&gt;           p-value =  0.93</span></span>
-<span><span class="co">#&gt; No overdispersion detected.</span></span>
-<span></span>
+<span><span class="co">#&gt; No overdispersion detected.</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -473,8 +425,9 @@ might find a better distributional family for our model, and try
 <span><span class="co">#&gt;   Predicted zeros: 386</span></span>
 <span><span class="co">#&gt;             Ratio: 1.00</span></span>
 <span><span class="co">#&gt; Model seems ok, ratio of observed and predicted zeros is within the</span></span>
-<span><span class="co">#&gt;   tolerance range (p = 0.952).</span></span>
-<span></span>
+<span><span class="co">#&gt;   tolerance range (p = 0.952).</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/test_performance.html">test_likelihoodratio</a></span><span class="op">(</span><span class="va">model3</span>, <span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Some of the nested models seem to be identical and probably only vary in</span></span>
 <span><span class="co">#&gt;   their random effects.</span></span>
@@ -483,8 +436,9 @@ might find a better distributional family for our model, and try
 <span><span class="co">#&gt; Name   |   Model | df | df_diff |  Chi2 |      p</span></span>
 <span><span class="co">#&gt; ------------------------------------------------</span></span>
 <span><span class="co">#&gt; model3 | glmmTMB | 18 |         |       |       </span></span>
-<span><span class="co">#&gt; model4 | glmmTMB | 18 |       0 | 16.64 | &lt; .001</span></span>
-<span></span>
+<span><span class="co">#&gt; model4 | glmmTMB | 18 |       0 | 16.64 | &lt; .001</span></span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects (Count Model)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -545,26 +499,16 @@ perform statistical tests to determine which model is the best fit. We
 hope this vignette has been helpful in guiding you through this
 process.</p>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
-
-
-
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
-
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
     </footer>
 </div>
-
-  
-
-  
-
   </body>
 </html>

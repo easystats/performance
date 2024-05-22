@@ -6,98 +6,52 @@ models supported by insight::get_variance(). For models fitted with the
 brms-package, icc() might fail due to the large variety of
 models and families supported by the brms-package. In such cases, an
 alternative to the ICC is the variance_decomposition(), which is based
-on the posterior predictive distribution (see 'Details')."><title>Intraclass Correlation Coefficient (ICC) — icc • performance</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Intraclass Correlation Coefficient (ICC) — icc"><meta property="og:description" content="This function calculates the intraclass-correlation coefficient (ICC) -
+on the posterior predictive distribution (see 'Details')."><title>Intraclass Correlation Coefficient (ICC) — icc • performance</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet"><link href="../deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet"><link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet"><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Intraclass Correlation Coefficient (ICC) — icc"><meta property="og:description" content="This function calculates the intraclass-correlation coefficient (ICC) -
 sometimes also called variance partition coefficient (VPC) or
 repeatability - for mixed effects models. The ICC can be calculated for all
 models supported by insight::get_variance(). For models fitted with the
 brms-package, icc() might fail due to the large variety of
 models and families supported by the brms-package. In such cases, an
 alternative to the ICC is the variance_decomposition(), which is based
-on the posterior predictive distribution (see 'Details')."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--></head><body>
+on the posterior predictive distribution (see 'Details')."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
-
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.8</small>
-
-    
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html" aria-label="Reference">
-    <span class="fa fa fa fa-file-code"></span>
-     
-    Reference
-  </a>
-</li>
+      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--articles" aria-label="Articles">
-    <span class="fa fa fa fa-book-reader"></span>
-     
-    Articles
-  </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--articles">
-    <a class="dropdown-item" href="../articles/check_model.html">Checking model assumption - linear models</a>
-    <a class="dropdown-item" href="../articles/check_outliers.html">Checking outliers with *performance*</a>
-    <a class="dropdown-item" href="../articles/simulate_residuals.html">Checking simulated residuals</a>
-    <a class="dropdown-item" href="../articles/compare.html">Compare, Test, and Select Models</a>
-    <a class="dropdown-item" href="../articles/r2.html">R-squared (R2)</a>
-    <a class="dropdown-item" href="../articles/check_model_practical.html">How to arrive at the best model fit</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html" aria-label="News">
-    <span class="fa fa fa fa-newspaper"></span>
-     
-    News
-  </a>
-</li>
-      </ul><ul class="navbar-nav"><li><form class="form-inline" role="search">
-<input type="search" class="form-control" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/check_model.html">Checking model assumption - linear models</a></li>
+    <li><a class="dropdown-item" href="../articles/check_outliers.html">Checking outliers with *performance*</a></li>
+    <li><a class="dropdown-item" href="../articles/simulate_residuals.html">Checking simulated residuals</a></li>
+    <li><a class="dropdown-item" href="../articles/compare.html">Compare, Test, and Select Models</a></li>
+    <li><a class="dropdown-item" href="../articles/r2.html">R-squared (R2)</a></li>
+    <li><a class="dropdown-item" href="../articles/check_model_practical.html">How to arrive at the best model fit</a></li>
+  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html" aria-label="News"><span class="fa fa-newspaper"></span> News</a></li>
+      </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--easystats" aria-label="easystats">
-    <span class="fab fa fab fa-r-project"></span>
-     
-    easystats
-  </a>
-  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown--easystats">
-    <a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/insight/">insight</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a>
-    <a class="dropdown-item" href="https://easystats.github.io/performance/">performance</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a>
-    <a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a>
-  </div>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/performance/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-easystats" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="easystats"><span class="fa fab fa-r-project"></span> easystats</button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-easystats"><li><a class="external-link dropdown-item" href="https://easystats.github.io/bayestestR/">bayestestR</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/correlation/">correlation</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/datawizard/">datawizard</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/easystats/">easystats</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/effectsize/">effectsize</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/insight/">insight</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/modelbased/">modelbased</a></li>
+    <li><a class="dropdown-item" href="https://easystats.github.io/performance/">performance</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/parameters/">parameters</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/report/">report</a></li>
+    <li><a class="external-link dropdown-item" href="https://easystats.github.io/see/">see</a></li>
+  </ul></li>
+<li class="nav-item"><a class="external-link nav-link" href="http://twitter.com/easystats4u" aria-label="Twitter"><span class="fa fa-twitter"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/easystats/performance/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
-
-    
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -106,7 +60,6 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/HEAD/R/icc.R" class="external-link"><code>R/icc.R</code></a></small>
       <div class="d-none name"><code>icc.Rd</code></div>
     </div>
-
     <div class="ref-description section level2">
     <p>This function calculates the intraclass-correlation coefficient (ICC) -
 sometimes also called <em>variance partition coefficient</em> (VPC) or
@@ -117,7 +70,6 @@ models and families supported by the <strong>brms</strong>-package. In such case
 alternative to the ICC is the <code>variance_decomposition()</code>, which is based
 on the posterior predictive distribution (see 'Details').</p>
     </div>
-
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">icc</span><span class="op">(</span></span>
@@ -133,37 +85,26 @@ on the posterior predictive distribution (see 'Details').</p>
 <span></span>
 <span><span class="fu">variance_decomposition</span><span class="op">(</span><span class="va">model</span>, re_formula <span class="op">=</span> <span class="cn">NULL</span>, robust <span class="op">=</span> <span class="cn">TRUE</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
-
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A (Bayesian) mixed effects model.</p></dd>
-
-
 <dt id="arg-by-group">by_group<a class="anchor" aria-label="anchor" href="#arg-by-group"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
 components for each random-effects level (if there are multiple levels).
 See 'Details'.</p></dd>
-
-
 <dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
 <dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See <code><a href="check_singularity.html">performance::check_singularity()</a></code>.</p></dd>
-
-
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Confidence resp. credible interval level. For <code>icc()</code> and <code><a href="r2.html">r2()</a></code>,
 confidence intervals are based on bootstrapped samples from the ICC resp.
 R2 value. See <code>iterations</code>.</p></dd>
-
-
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.</p></dd>
-
-
 <dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
 <dd><p>Character string, indicating the bootstrap-method. Should
 be <code>NULL</code> (default), in which case <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code> is used for
@@ -175,44 +116,30 @@ of the model. There is also an option <code>ci_method = "analytical"</code>, whi
 to calculate analytical confidence assuming a chi-squared distribution.
 However, these intervals are rather inaccurate and often too narrow. It is
 recommended to calculate bootstrapped confidence intervals for mixed models.</p></dd>
-
-
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed down to <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
-
-
 <dt id="arg-re-formula">re_formula<a class="anchor" aria-label="anchor" href="#arg-re-formula"></a></dt>
 <dd><p>Formula containing group-level effects to be considered in
 the prediction. If <code>NULL</code> (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
 to calculate the variance decomposition for this group-level. See 'Details'
 and <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">?brms::posterior_predict</a></code>.</p></dd>
-
-
 <dt id="arg-robust">robust<a class="anchor" aria-label="anchor" href="#arg-robust"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
 calculate the central tendency of the variances.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    
-
 <p>A list with two values, the adjusted ICC and the unadjusted ICC. For
 <code>variance_decomposition()</code>, a list with two values, the decomposed
 ICC as well as the credible intervals for this ICC.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    
 <div class="section">
 <h3 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a></h3>
-
-
 <p>The ICC can be interpreted as "the proportion of the variance explained by
 the grouping structure in the population". The grouping structure entails
 that measurements are organized into groups (e.g., test scores in a school
@@ -230,11 +157,8 @@ zero (or very close to zero) means the observations within clusters are no
 more similar than observations from different clusters, and setting it as a
 random factor might not be necessary.</p>
 </div>
-
 <div class="section">
 <h3 id="difference-with-r-">Difference with R2<a class="anchor" aria-label="anchor" href="#difference-with-r-"></a></h3>
-
-
 <p>The coefficient of determination R2 (that can be computed with <code><a href="r2.html">r2()</a></code>)
 quantifies the proportion of variance explained by a statistical model, but
 its definition in mixed model is complex (hence, different methods to compute
@@ -245,21 +169,15 @@ variance that can be attributed to the random effects. In simple cases, the
 ICC corresponds to the difference between the <em>conditional R2</em> and the
 <em>marginal R2</em> (see <code><a href="r2_nakagawa.html">r2_nakagawa()</a></code>).</p>
 </div>
-
 <div class="section">
 <h3 id="calculation">Calculation<a class="anchor" aria-label="anchor" href="#calculation"></a></h3>
-
-
 <p>The ICC is calculated by dividing the random effect variance,
 σ<sup>2</sup><sub>i</sub>, by
 the total variance, i.e. the sum of the random effect variance and the
 residual variance, σ<sup>2</sup><sub>ε</sub>.</p>
 </div>
-
 <div class="section">
 <h3 id="adjusted-and-unadjusted-icc">Adjusted and unadjusted ICC<a class="anchor" aria-label="anchor" href="#adjusted-and-unadjusted-icc"></a></h3>
-
-
 <p><code>icc()</code> calculates an adjusted and an unadjusted ICC, which both take all
 sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
 the <em>adjusted ICC</em> only relates to the random effects, the <em>unadjusted ICC</em>
@@ -273,11 +191,8 @@ levels) and is applicable for models with other distributions than Gaussian.
 For more details on the computation of the variances, see
 <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>.</p>
 </div>
-
 <div class="section">
 <h3 id="icc-for-unconditional-and-conditional-models">ICC for unconditional and conditional models<a class="anchor" aria-label="anchor" href="#icc-for-unconditional-and-conditional-models"></a></h3>
-
-
 <p>Usually, the ICC is calculated for the null model ("unconditional model").
 However, according to <em>Raudenbush and Bryk (2002)</em> or
 <em>Rabe-Hesketh and Skrondal (2012)</em> it is also feasible to compute the
@@ -285,22 +200,16 @@ ICC for full models with covariates ("conditional models") and compare how
 much, e.g., a level-2 variable explains the portion of variation in the
 grouping structure (random intercept).</p>
 </div>
-
 <div class="section">
 <h3 id="icc-for-specific-group-levels">ICC for specific group-levels<a class="anchor" aria-label="anchor" href="#icc-for-specific-group-levels"></a></h3>
-
-
 <p>The proportion of variance for specific levels related to the overall model
 can be computed by setting <code>by_group = TRUE</code>. The reported ICC is
 the variance for each (random effect) group compared to the total
 variance of the model. For mixed models with a simple random intercept,
 this is identical to the classical (adjusted) ICC.</p>
 </div>
-
 <div class="section">
 <h3 id="variance-decomposition-for-brms-models">Variance decomposition for brms-models<a class="anchor" aria-label="anchor" href="#variance-decomposition-for-brms-models"></a></h3>
-
-
 <p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to the large
 variety of models and families supported by the <strong>brms</strong> package. In such
 cases, <code>variance_decomposition()</code> is an alternative ICC measure. The function
@@ -319,11 +228,9 @@ terms via the <code>re_formula</code>-argument.</p>
 very large, the variance ratio in the output makes no sense, e.g. because
 it is negative. In such cases, it might help to use <code>robust = TRUE</code>.</p>
 </div>
-
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    
 <ul><li><p>Hox, J. J. (2010). Multilevel analysis: techniques and applications
 (2nd ed). New York: Routledge.</p></li>
 <li><p>Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
@@ -337,7 +244,6 @@ Publication.</p></li>
 applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 Publications.</p></li>
 </ul></div>
-
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
@@ -371,23 +277,14 @@ Publications.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> grp        | 0.001</span>
 </code></pre></div>
     </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
-
-
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
-
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
     </footer></div>
-
-  
-
-  
-
   </body></html>
 
