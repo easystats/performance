@@ -109,7 +109,7 @@
 #'  default threshold to classify outliers is 1.959 (`threshold = list("zscore" = 1.959)`),
 #'  corresponding to the 2.5% (`qnorm(0.975)`) most extreme observations
 #'  (assuming the data is normally distributed). Importantly, the Z-score
-#'  method is univariate: it is computed column by column. If a dataframe is
+#'  method is univariate: it is computed column by column. If a data frame is
 #'  passed, the Z-score is calculated for each variable separately, and the
 #'  maximum (absolute) Z-score is kept for each observations. Thus, all
 #'  observations that are extreme on at least one variable might be detected
@@ -304,14 +304,14 @@
 #' outliers_list <- check_outliers(data$mpg) # Find outliers
 #' outliers_list # Show the row index of the outliers
 #' as.numeric(outliers_list) # The object is a binary vector...
-#' filtered_data <- data[!outliers_list, ] # And can be used to filter a dataframe
+#' filtered_data <- data[!outliers_list, ] # And can be used to filter a data frame
 #' nrow(filtered_data) # New size, 28 (4 outliers removed)
 #'
 #' # Find all observations beyond +/- 2 SD
 #' check_outliers(data$mpg, method = "zscore", threshold = 2)
 #'
 #' # For dataframes ------------------------------------------------------
-#' check_outliers(data) # It works the same way on dataframes
+#' check_outliers(data) # It works the same way on data frames
 #'
 #' # You can also use multiple methods at once
 #' outliers_list <- check_outliers(data, method = c(
@@ -948,7 +948,7 @@ check_outliers.data.frame <- function(x,
   outlier_count <- lapply(outlier_count, function(x) {
     num.df <- x[!names(x) %in% c("Row", ID)]
     if (isTRUE(nrow(num.df) >= 1)) {
-      num.df <- datawizard::change_code(
+      num.df <- datawizard::recode_values(
         num.df,
         recode = list(`2` = "(Multivariate)")
       )

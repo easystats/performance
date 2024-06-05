@@ -25,7 +25,6 @@ mae <- performance_mae
 
 #' @export
 performance_mae.default <- function(model, verbose = TRUE, ...) {
-  # check for valid input
   .is_model_valid(model)
 
   pred <- .safe(insight::get_predicted(model, ci = NULL, verbose = verbose, ...))

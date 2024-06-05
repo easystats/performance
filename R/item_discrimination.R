@@ -16,8 +16,8 @@
 #' This function calculates the item discriminations (corrected item-total
 #' correlations for each item of `x` with the remaining items) for each item
 #' of a scale. The absolute value of the item discrimination indices should be
-#' above 0.2. An index between 0.2 and 0.4 is considered as "fair", while a
-#' satisfactory index ranges from 0.4 to 0.7. Items with low discrimination
+#' above `0.2`. An index between `0.2` and `0.4` is considered as "fair", while a
+#' satisfactory index ranges from `0.4` to `0.7`. Items with low discrimination
 #' indices are often ambiguously worded and should be examined. Items with
 #' negative indices should be examined to determine why a negative value was
 #' obtained (e.g. reversed answer categories regarding positive and negative

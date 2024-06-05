@@ -11,7 +11,7 @@ model_performance.bife <- function(model, metrics = "all", verbose = TRUE, ...) 
     metrics <- c("AIC", "R2")
   }
 
-  # check for valid input
+
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   info <- insight::model_info(model)

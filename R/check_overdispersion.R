@@ -77,7 +77,6 @@ check_overdispersion <- function(x, ...) {
 
 #' @export
 check_overdispersion.default <- function(x, ...) {
-  # check for valid input
   .is_model_valid(x)
   insight::format_error(
     paste0("`check_overdisperion()` not yet implemented for models of class `", class(x)[1], "`.")
@@ -289,7 +288,6 @@ check_overdispersion.glmmTMB <- check_overdispersion.merMod
 #' @rdname check_overdispersion
 #' @export
 check_overdispersion.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
-  # match arguments
   alternative <- match.arg(alternative)
 
   # check for special arguments - we may pass "object_name" from other methods

@@ -134,12 +134,29 @@ for (di in seq_along(distrs)) {
     # x_scaled <- parameters::normalize(x, verbose = FALSE)
 
     if (length(x) >= 10) {
+      if (all(.is.integer(x))) {
+        mode <- datawizard::distribution_mode(x)
+      } else {
+        mode <- tryCatch(
+          as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+          error = function(e) NULL
+        )
+        if (is.null(mode)) {
+          mode <- tryCatch(
+            as.numeric(bayestestR::map_estimate(x, bw = "kernel")),
+            error = function(e) NULL
+          )
+        }
+        if (is.null(mode)) {
+          mode <- datawizard::distribution_mode(x)
+        }
+      }
       # Extract features
       data <- data.frame(
         "SD" = sd(x),
         "MAD" = mad(x, constant = 1),
         "Mean_Median_Distance" = mean(x) - median(x),
-        "Mean_Mode_Distance" = mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+        "Mean_Mode_Distance" = mean(x) - as.numeric(mode),
         "SD_MAD_Distance" = sd(x) - mad(x, constant = 1),
         "Var_Mean_Distance" = var(x) - mean(x),
         "Range_SD" = diff(range(x)) / sd(x),
@@ -152,8 +169,8 @@ for (di in seq_along(distrs)) {
         "Min" = min(x),
         "Max" = max(x),
         "Proportion_Positive" = sum(x >= 0) / length(x),
-        "Integer" = all(.is.integer(x))
-        # "Proportion_Zero" = sum(x == 0) / length(x)
+        "Integer" = all(.is.integer(x)),
+        "Proportion_Zero" = sum(x == 0) / length(x)
         # "Proportion_Minimum" = sum(x == min(x)) / length(x),
         # "Proportion_Maximum" = sum(x == max(x)) / length(x)
       )

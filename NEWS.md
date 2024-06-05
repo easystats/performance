@@ -5,6 +5,10 @@
 * Aliases `posterior_predictive_check()` and `check_posterior_predictions()` for
   `check_predictions()` are deprecated.
 
+* Arguments named `group` or `group_by` will be deprecated in a future release.
+  Please use `by` instead. This affects `check_heterogeneity_bias()` in
+  *performance*.
+
 ## General
 
 * Improved documentation and new vignettes added.
@@ -14,6 +18,9 @@
 * `check_predictions()` for `stanreg` and `brmsfit` models now returns plots in
   the usual style as for other models and no longer returns plots from
   `bayesplot::pp_check()`.
+
+* Updated the trained model that is used to prediction distributions in
+  `check_distribution()`.
 
 ## Bug fixes
 

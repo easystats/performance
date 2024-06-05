@@ -1,6 +1,5 @@
 #' @export
 model_performance.default <- function(model, metrics = "all", verbose = TRUE, ...) {
-  # check for valid input
   .is_model_valid(model)
 
   if (any(tolower(metrics) == "log_loss")) {
@@ -16,7 +15,7 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
 
-  # check for valid input
+
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   if (!insight::is_model(model) || !insight::is_model_supported(model)) {
@@ -32,7 +31,6 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
 
 
 .check_bad_metrics <- function(metrics, all_metrics, verbose = TRUE) {
-  # check for valid input
   bad_metrics <- which(!metrics %in% all_metrics)
   if (length(bad_metrics)) {
     if (verbose) {

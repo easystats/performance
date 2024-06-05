@@ -86,7 +86,6 @@ binned_residuals <- function(model,
                              iterations = 1000,
                              verbose = TRUE,
                              ...) {
-  # match arguments
   ci_type <- match.arg(ci_type)
   residuals <- match.arg(residuals)
 

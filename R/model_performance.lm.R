@@ -58,7 +58,7 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
     insight::formula_ok(model)
   }
 
-  # check for valid input
+
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
   info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
 

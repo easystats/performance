@@ -57,7 +57,7 @@ model_performance.merMod <- function(model,
     metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE")
   }
 
-  # check for valid input
+
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   # check model formula
