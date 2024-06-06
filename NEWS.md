@@ -1,4 +1,4 @@
-# performance 0.11.1
+# performance 0.12.0
 
 ## Breaking
 
