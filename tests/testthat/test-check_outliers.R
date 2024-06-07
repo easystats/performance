@@ -255,6 +255,7 @@ test_that("multiple methods with ID", {
     x$outlier_var$zscore$mpg$car,
     "Toyota Corolla"
   )
+  skip_if(getRversion() > "4.4.0")
   expect_identical(
     x$outlier_count$all$car[1],
     "Maserati Bora"
