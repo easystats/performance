@@ -3,7 +3,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -52,21 +52,21 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.11.1" id="performance-0111">performance 0.11.1<a class="anchor" aria-label="anchor" href="#performance-0111"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.12.0" id="performance-0120">performance 0.12.0<a class="anchor" aria-label="anchor" href="#performance-0120"></a></h2><p class="text-muted">CRAN release: 2024-06-08</p>
 <div class="section level3">
-<h3 id="breaking-0-11-1">Breaking<a class="anchor" aria-label="anchor" href="#breaking-0-11-1"></a></h3>
+<h3 id="breaking-0-12-0">Breaking<a class="anchor" aria-label="anchor" href="#breaking-0-12-0"></a></h3>
 <ul><li><p>Aliases <code><a href="../reference/check_predictions.html">posterior_predictive_check()</a></code> and <code><a href="../reference/check_predictions.html">check_posterior_predictions()</a></code> for <code><a href="../reference/check_predictions.html">check_predictions()</a></code> are deprecated.</p></li>
 <li><p>Arguments named <code>group</code> or <code>group_by</code> will be deprecated in a future release. Please use <code>by</code> instead. This affects <code><a href="../reference/check_heterogeneity_bias.html">check_heterogeneity_bias()</a></code> in <em>performance</em>.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="general-0-11-1">General<a class="anchor" aria-label="anchor" href="#general-0-11-1"></a></h3>
+<h3 id="general-0-12-0">General<a class="anchor" aria-label="anchor" href="#general-0-12-0"></a></h3>
 <ul><li><p>Improved documentation and new vignettes added.</p></li>
 <li><p><code><a href="../reference/check_model.html">check_model()</a></code> gets a <code>base_size</code> argument, to set the base font size for plots.</p></li>
 <li><p><code><a href="../reference/check_predictions.html">check_predictions()</a></code> for <code>stanreg</code> and <code>brmsfit</code> models now returns plots in the usual style as for other models and no longer returns plots from <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">bayesplot::pp_check()</a></code>.</p></li>
 <li><p>Updated the trained model that is used to prediction distributions in <code><a href="../reference/check_distribution.html">check_distribution()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-11-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-11-1"></a></h3>
+<h3 id="bug-fixes-0-12-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-12-0"></a></h3>
 <ul><li>
 <code><a href="../reference/check_model.html">check_model()</a></code> now falls back on normal Q-Q plots when a model is not supported by the DHARMa package and simulated residuals cannot be calculated.</li>
 </ul></div>
