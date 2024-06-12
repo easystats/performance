@@ -53,7 +53,7 @@
 #' @export
 r2_nakagawa <- function(model,
                         by_group = FALSE,
-                        tolerance = 1e-5,
+                        tolerance = 1e-8,
                         ci = NULL,
                         iterations = 100,
                         ci_method = NULL,
