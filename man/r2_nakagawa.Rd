@@ -7,7 +7,7 @@
 r2_nakagawa(
   model,
   by_group = FALSE,
-  tolerance = 1e-05,
+  tolerance = 1e-08,
   ci = NULL,
   iterations = 100,
   ci_method = NULL,
