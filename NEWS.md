@@ -1,3 +1,11 @@
+# performance 0.12.1
+
+## General
+
+* `icc()` and `r2_nakagawa()` get a `null_model` argument. This can be useful
+  when computing R2 or ICC for mixed models, where the internal computation of
+  the null model fails.
+
 # performance 0.12.0
 
 ## Breaking

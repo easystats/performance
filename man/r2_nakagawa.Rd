@@ -11,6 +11,7 @@ r2_nakagawa(
   ci = NULL,
   iterations = 100,
   ci_method = NULL,
+  null_model = NULL,
   verbose = TRUE,
   ...
 )
@@ -46,6 +47,10 @@ of the model. There is also an option \code{ci_method = "analytical"}, which tri
 to calculate analytical confidence assuming a chi-squared distribution.
 However, these intervals are rather inaccurate and often too narrow. It is
 recommended to calculate bootstrapped confidence intervals for mixed models.}
+
+\item{null_model}{Optional, a null model to compute the random effect variances.
+Should only be used if calculation of r-squared or ICC fails when \code{null_model}
+is not specified.}
 
 \item{verbose}{Toggle warnings and messages.}
 

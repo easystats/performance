@@ -57,6 +57,7 @@ r2_nakagawa <- function(model,
                         ci = NULL,
                         iterations = 100,
                         ci_method = NULL,
+                        null_model = NULL,
                         verbose = TRUE,
                         ...) {
   # calculate random effect variances
@@ -64,6 +65,7 @@ r2_nakagawa <- function(model,
     model,
     tolerance,
     components = c("var.fixed", "var.residual"),
+    null_model = null_model,
     name_fun = "r2()",
     name_full = "r-squared"
   )
@@ -85,7 +87,9 @@ r2_nakagawa <- function(model,
     }
 
     # null-model
-    null_model <- insight::null_model(model)
+    if (is.null(null_model)) {
+      null_model <- insight::null_model(model)
+    }
     vars_null <- insight::get_variance(null_model, tolerance = tolerance)
 
     # names of group levels
