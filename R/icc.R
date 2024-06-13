@@ -34,9 +34,11 @@
 #' However, these intervals are rather inaccurate and often too narrow. It is
 #' recommended to calculate bootstrapped confidence intervals for mixed models.
 #' @param verbose Toggle warnings and messages.
-#' @param null_model Optional, a null model to compute the random effect variances.
-#' Should only be used if calculation of r-squared or ICC fails when `null_model`
-#' is not specified.
+#' @param null_model Optional, a null model to compute the random effect variances,
+#' which is passed to [`insight::get_variance()`]. Usually only required if
+#' calculation of r-squared or ICC fails when `null_model` is not specified. If
+#' calculating the null model takes longer and you already have fit the null
+#' model, you can pass it here, too, to speed up the process.
 #' @param ... Arguments passed down to `lme4::bootMer()` or `boot::boot()`
 #' for bootstrapped ICC or R2.
 #'
@@ -173,6 +175,7 @@ icc <- function(model,
                 iterations = 100,
                 ci_method = NULL,
                 null_model = NULL,
+                approximation = "lognormal",
                 verbose = TRUE,
                 ...) {
   # special handling for smicd::semLme()
@@ -201,7 +204,12 @@ icc <- function(model,
   }
 
   # calculate random effect variances
-  vars <- .compute_random_vars(model, tolerance, null_model = null_model)
+  vars <- .compute_random_vars(
+    model,
+    tolerance = tolerance,
+    null_model = null_model,
+    approximation = approximation
+  )
 
   # return if ICC couldn't be computed
   if (is.null(vars) || all(is.na(vars))) {
@@ -535,6 +543,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
                                  name_fun = "icc()",
                                  name_full = "ICC",
                                  null_model = null_model,
+                                 approximation = "lognormal",
                                  verbose = TRUE) {
   vars <- tryCatch(
     insight::get_variance(model,
@@ -542,6 +551,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
       name_full = name_full,
       tolerance = tolerance,
       null_model = null_model,
+      approximation = approximation,
       verbose = verbose
     ),
     error = function(e) {

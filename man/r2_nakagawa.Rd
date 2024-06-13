@@ -12,6 +12,7 @@ r2_nakagawa(
   iterations = 100,
   ci_method = NULL,
   null_model = NULL,
+  approximation = "lognormal",
   verbose = TRUE,
   ...
 )
@@ -48,9 +49,15 @@ to calculate analytical confidence assuming a chi-squared distribution.
 However, these intervals are rather inaccurate and often too narrow. It is
 recommended to calculate bootstrapped confidence intervals for mixed models.}
 
-\item{null_model}{Optional, a null model to compute the random effect variances.
-Should only be used if calculation of r-squared or ICC fails when \code{null_model}
-is not specified.}
+\item{null_model}{Optional, a null model to compute the random effect variances,
+which is passed to \code{\link[insight:get_variance]{insight::get_variance()}}. Usually only required if
+calculation of r-squared or ICC fails when \code{null_model} is not specified. If
+calculating the null model takes longer and you already have fit the null
+model, you can pass it here, too, to speed up the process.}
+
+\item{approximation}{Character string, indicating the approximation method
+for the distribution-specific (residual) variance. Can be \code{"lognormal"}
+(default), \code{"delta"} or \code{"trigamma"}. See \emph{Nakagawa et al. 2017} for details.}
 
 \item{verbose}{Toggle warnings and messages.}
 
