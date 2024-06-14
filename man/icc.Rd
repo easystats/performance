@@ -85,7 +85,7 @@ ICC as well as the credible intervals for this ICC.
 This function calculates the intraclass-correlation coefficient (ICC) -
 sometimes also called \emph{variance partition coefficient} (VPC) or
 \emph{repeatability} - for mixed effects models. The ICC can be calculated for all
-models supported by \code{insight::get_variance()}. For models fitted with the
+models supported by \code{\link[insight:get_variance]{insight::get_variance()}}. For models fitted with the
 \strong{brms}-package, \code{icc()} might fail due to the large variety of
 models and families supported by the \strong{brms}-package. In such cases, an
 alternative to the ICC is the \code{variance_decomposition()}, which is based
@@ -190,6 +190,36 @@ very large, the variance ratio in the output makes no sense, e.g. because
 it is negative. In such cases, it might help to use \code{robust = TRUE}.
 }
 }
+\section{Supported models and model families}{
+
+The single variance components that are required to calculate the marginal
+and conditional r-squared values are calculated using the \code{\link[insight:get_variance]{insight::get_variance()}}
+function. The results are validated against the solutions provided by
+\emph{Nakagawa et al. (2017)}, in particular examples shown in the Supplement 2
+of the paper. Other model families are validated against results from the
+*\emph{MuMIn}+ package. This means that the r-squared values returned by \code{r2_nakagawa()}
+should be accurate and reliable for following mixed models or model families:
+\itemize{
+\item Bernoulli (logistic) regression
+\item Binomial regression (with other than binary outcomes)
+\item Poisson and Quasi-Poisson regression
+\item Negative binomial regression (including nbinom1 and nbinom2 families)
+\item Gaussian regression (linear models)
+\item Gamma regression
+\item Tweedie regression
+\item Beta regression
+\item Ordered beta regression
+}
+
+Following model families are not yet validated, but should work:
+\itemize{
+\item Zero-inflated and hurdle models
+\item Beta-binomial regression
+\item Compound Poisson regression
+\item Generalized Poisson regression
+}
+}
+
 \examples{
 \dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)

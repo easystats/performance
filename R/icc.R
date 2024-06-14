@@ -3,7 +3,7 @@
 #' This function calculates the intraclass-correlation coefficient (ICC) -
 #' sometimes also called *variance partition coefficient* (VPC) or
 #' *repeatability* - for mixed effects models. The ICC can be calculated for all
-#' models supported by `insight::get_variance()`. For models fitted with the
+#' models supported by [`insight::get_variance()`]. For models fitted with the
 #' **brms**-package, `icc()` might fail due to the large variety of
 #' models and families supported by the **brms**-package. In such cases, an
 #' alternative to the ICC is the `variance_decomposition()`, which is based
@@ -62,6 +62,8 @@
 #'  - Raudenbush, S. W., and Bryk, A. S. (2002). Hierarchical linear models:
 #'    applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 #'    Publications.
+#'
+#' @inheritSection r2_nakagawa Supported models and model families
 #'
 #' @details
 #' ## Interpretation

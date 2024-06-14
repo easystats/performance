@@ -18,6 +18,32 @@
 #'
 #' @return A list with the conditional and marginal R2 values.
 #'
+#' @section Supported models and model families:
+#' The single variance components that are required to calculate the marginal
+#' and conditional r-squared values are calculated using the [`insight::get_variance()`]
+#' function. The results are validated against the solutions provided by
+#' _Nakagawa et al. (2017)_, in particular examples shown in the Supplement 2
+#' of the paper. Other model families are validated against results from the
+#' **MuMIn*+ package. This means that the r-squared values returned by `r2_nakagawa()`
+#' should be accurate and reliable for following mixed models or model families:
+#'
+#' - Bernoulli (logistic) regression
+#' - Binomial regression (with other than binary outcomes)
+#' - Poisson and Quasi-Poisson regression
+#' - Negative binomial regression (including nbinom1 and nbinom2 families)
+#' - Gaussian regression (linear models)
+#' - Gamma regression
+#' - Tweedie regression
+#' - Beta regression
+#' - Ordered beta regression
+#'
+#' Following model families are not yet validated, but should work:
+#'
+#' - Zero-inflated and hurdle models
+#' - Beta-binomial regression
+#' - Compound Poisson regression
+#' - Generalized Poisson regression
+#'
 #' @details
 #' Marginal and conditional r-squared values for mixed models are calculated
 #' based on _Nakagawa et al. (2017)_. For more details on the computation of
