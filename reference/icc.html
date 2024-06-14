@@ -310,6 +310,30 @@ it is negative. In such cases, it might help to use <code>robust = TRUE</code>.<
 
     </div>
     <div class="section level2">
+    <h2 id="supported-models-and-model-families">Supported models and model families<a class="anchor" aria-label="anchor" href="#supported-models-and-model-families"></a></h2>
+
+
+<p>The single variance components that are required to calculate the marginal
+and conditional r-squared values are calculated using the <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">insight::get_variance()</a></code>
+function. The results are validated against the solutions provided by
+<em>Nakagawa et al. (2017)</em>, in particular examples shown in the Supplement 2
+of the paper. Other model families are validated against results from the
+*<em>MuMIn</em>+ package. This means that the r-squared values returned by <code><a href="r2_nakagawa.html">r2_nakagawa()</a></code>
+should be accurate and reliable for following mixed models or model families:</p><ul><li><p>Bernoulli (logistic) regression</p></li>
+<li><p>Binomial regression (with other than binary outcomes)</p></li>
+<li><p>Poisson and Quasi-Poisson regression</p></li>
+<li><p>Negative binomial regression (including nbinom1 and nbinom2 families)</p></li>
+<li><p>Gaussian regression (linear models)</p></li>
+<li><p>Gamma regression</p></li>
+<li><p>Tweedie regression</p></li>
+<li><p>Beta regression</p></li>
+<li><p>Ordered beta regression</p></li>
+</ul><p>Following model families are not yet validated, but should work:</p><ul><li><p>Zero-inflated and hurdle models</p></li>
+<li><p>Beta-binomial regression</p></li>
+<li><p>Compound Poisson regression</p></li>
+<li><p>Generalized Poisson regression</p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
 
 <ul><li><p>Hox, J. J. (2010). Multilevel analysis: techniques and applications
