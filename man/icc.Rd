@@ -197,7 +197,7 @@ and conditional r-squared values are calculated using the \code{\link[insight:ge
 function. The results are validated against the solutions provided by
 \emph{Nakagawa et al. (2017)}, in particular examples shown in the Supplement 2
 of the paper. Other model families are validated against results from the
-*\emph{MuMIn}+ package. This means that the r-squared values returned by \code{r2_nakagawa()}
+\strong{MuMIn} package. This means that the r-squared values returned by \code{r2_nakagawa()}
 should be accurate and reliable for following mixed models or model families:
 \itemize{
 \item Bernoulli (logistic) regression

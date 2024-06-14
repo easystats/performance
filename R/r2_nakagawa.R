@@ -24,7 +24,7 @@
 #' function. The results are validated against the solutions provided by
 #' _Nakagawa et al. (2017)_, in particular examples shown in the Supplement 2
 #' of the paper. Other model families are validated against results from the
-#' **MuMIn*+ package. This means that the r-squared values returned by `r2_nakagawa()`
+#' **MuMIn** package. This means that the r-squared values returned by `r2_nakagawa()`
 #' should be accurate and reliable for following mixed models or model families:
 #'
 #' - Bernoulli (logistic) regression
