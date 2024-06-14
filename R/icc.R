@@ -542,7 +542,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
                                  components = c("var.fixed", "var.random", "var.residual"),
                                  name_fun = "icc()",
                                  name_full = "ICC",
-                                 null_model = null_model,
+                                 null_model = NULL,
                                  approximation = "lognormal",
                                  verbose = TRUE) {
   vars <- tryCatch(
