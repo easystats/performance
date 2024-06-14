@@ -56,8 +56,11 @@ calculating the null model takes longer and you already have fit the null
 model, you can pass it here, too, to speed up the process.}
 
 \item{approximation}{Character string, indicating the approximation method
-for the distribution-specific (residual) variance. Can be \code{"lognormal"}
-(default), \code{"delta"} or \code{"trigamma"}. See \emph{Nakagawa et al. 2017} for details.}
+for the distribution-specific (observation level, or residual) variance. Only
+applies to non-Gaussian models. Can be \code{"lognormal"} (default), \code{"delta"} or
+\code{"trigamma"}. For binomial models, the default is the \emph{theoretical} distribution
+specific variance, however, it can also be \code{"observation_level"}. See
+\emph{Nakagawa et al. 2017}, in particular supplement 2, for details.}
 
 \item{verbose}{Toggle warnings and messages.}
 
@@ -73,7 +76,7 @@ mixed effects models with complex random effects structures.
 \details{
 Marginal and conditional r-squared values for mixed models are calculated
 based on \emph{Nakagawa et al. (2017)}. For more details on the computation of
-the variances, see \code{?insight::get_variance}. The random effect variances are
+the variances, see \code{\link[insight:get_variance]{insight::get_variance()}}. The random effect variances are
 actually the mean random effect variances, thus the r-squared value is also
 appropriate for mixed models with random slopes or nested random effects
 (see \emph{Johnson, 2014}).

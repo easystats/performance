@@ -21,7 +21,7 @@
 #' @details
 #' Marginal and conditional r-squared values for mixed models are calculated
 #' based on _Nakagawa et al. (2017)_. For more details on the computation of
-#' the variances, see `?insight::get_variance`. The random effect variances are
+#' the variances, see [`insight::get_variance()`]. The random effect variances are
 #' actually the mean random effect variances, thus the r-squared value is also
 #' appropriate for mixed models with random slopes or nested random effects
 #' (see _Johnson, 2014_).
