@@ -5,12 +5,19 @@ indices across models."><meta property="og:description" content="compare_perform
 performance for different models at once and hence allows comparison of
 indices across models."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -48,6 +55,8 @@ indices across models."><meta property="og:image" content="https://easystats.git
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -56,11 +65,13 @@ indices across models."><meta property="og:image" content="https://easystats.git
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/compare_performance.R" class="external-link"><code>R/compare_performance.R</code></a></small>
       <div class="d-none name"><code>compare_performance.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p><code>compare_performance()</code> computes indices of model
 performance for different models at once and hence allows comparison of
 indices across models.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compare_performance</span><span class="op">(</span></span>
@@ -71,18 +82,27 @@ indices across models.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Multiple model objects (also of different classes).</p></dd>
+
+
 <dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
 <dd><p>Can be <code>"all"</code>, <code>"common"</code> or a character vector of
 metrics to be computed. See related
 <code><a href="model_performance.html">documentation()</a></code> of object's class for
 details.</p></dd>
+
+
 <dt id="arg-rank">rank<a class="anchor" aria-label="anchor" href="#arg-rank"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, models are ranked according to 'best'
 overall model performance. See 'Details'.</p></dd>
+
+
 <dt id="arg-estimator">estimator<a class="anchor" aria-label="anchor" href="#arg-estimator"></a></dt>
 <dd><p>Only for linear models. Corresponds to the different
 estimators for the standard deviation of the errors. If <code>estimator = "ML"</code>
@@ -90,8 +110,11 @@ estimators for the standard deviation of the errors. If <code>estimator = "ML"</
 <code>lmerMod</code>), the scaling is done by <code>n</code> (the biased ML estimator), which is
 then equivalent to using <code>AIC(logLik())</code>. Setting it to <code>"REML"</code> will give
 the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -100,6 +123,7 @@ the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+
 <div class="section">
 <h3 id="model-weights">Model Weights<a class="anchor" aria-label="anchor" href="#model-weights"></a></h3>
 <p>When information criteria (IC) are requested in <code>metrics</code> (i.e., any of <code>"all"</code>,
@@ -111,6 +135,7 @@ smallest IC value in the model set (Burnham and Anderson, 2002).
 For LOOIC, weights are computed as "stacking weights" using
 <code><a href="https://mc-stan.org/loo/reference/loo_model_weights.html" class="external-link">loo::stacking_weights()</a></code>.</p>
 </div>
+
 <div class="section">
 <h3 id="ranking-models">Ranking Models<a class="anchor" aria-label="anchor" href="#ranking-models"></a></h3>
 <p>When <code>rank = TRUE</code>, a new column <code>Performance_Score</code> is returned.
@@ -134,6 +159,7 @@ Hence, points closer to the center indicate worse fit indices
 (see <a href="https://easystats.github.io/see/articles/performance.html" class="external-link">online-documentation</a>
 for more details).</p>
 </div>
+
 <div class="section">
 <h3 id="reml-versus-ml-estimator">REML versus ML estimator<a class="anchor" aria-label="anchor" href="#reml-versus-ml-estimator"></a></h3>
 <p>By default, <code>estimator = "ML"</code>, which means that values from information
@@ -146,6 +172,7 @@ however, this is usually not the case for nested models, which is a
 prerequisite for the LRT). Set <code>estimator = "REML"</code> explicitly return the
 same (AIC/...) values as from the defaults in <code>AIC.merMod()</code>.</p>
 </div>
+
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -157,6 +184,7 @@ same (AIC/...) values as from the defaults in <code>AIC.merMod()</code>.</p>
 <em>Model selection and multimodel inference: A practical information-theoretic approach</em> (2nd ed.).
 Springer-Verlag. <a href="https://doi.org/10.1007/b97636" class="external-link">doi:10.1007/b97636</a></p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span></span></span>
@@ -197,12 +225,21 @@ Springer-Verlag. <a href="https://doi.org/10.1007/b97636" class="external-link">
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

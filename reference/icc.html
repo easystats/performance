@@ -15,12 +15,19 @@ models and families supported by the brms-package. In such cases, an
 alternative to the ICC is the variance_decomposition(), which is based
 on the posterior predictive distribution (see 'Details')."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -58,6 +65,8 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -66,6 +75,7 @@ on the posterior predictive distribution (see 'Details')."><meta property="og:im
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/icc.R" class="external-link"><code>R/icc.R</code></a></small>
       <div class="d-none name"><code>icc.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This function calculates the intraclass-correlation coefficient (ICC) -
 sometimes also called <em>variance partition coefficient</em> (VPC) or
@@ -76,6 +86,7 @@ models and families supported by the <strong>brms</strong>-package. In such case
 alternative to the ICC is the <code>variance_decomposition()</code>, which is based
 on the posterior predictive distribution (see 'Details').</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">icc</span><span class="op">(</span></span>
@@ -93,26 +104,39 @@ on the posterior predictive distribution (see 'Details').</p>
 <span></span>
 <span><span class="fu">variance_decomposition</span><span class="op">(</span><span class="va">model</span>, re_formula <span class="op">=</span> <span class="cn">NULL</span>, robust <span class="op">=</span> <span class="cn">TRUE</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A (Bayesian) mixed effects model.</p></dd>
+
+
 <dt id="arg-by-group">by_group<a class="anchor" aria-label="anchor" href="#arg-by-group"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, <code>icc()</code> returns the variance
 components for each random-effects level (if there are multiple levels).
 See 'Details'.</p></dd>
+
+
 <dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
 <dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See <code><a href="check_singularity.html">performance::check_singularity()</a></code>.</p></dd>
+
+
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Confidence resp. credible interval level. For <code>icc()</code> and <code><a href="r2.html">r2()</a></code>,
 confidence intervals are based on bootstrapped samples from the ICC resp.
 R2 value. See <code>iterations</code>.</p></dd>
+
+
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.</p></dd>
+
+
 <dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
 <dd><p>Character string, indicating the bootstrap-method. Should
 be <code>NULL</code> (default), in which case <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code> is used for
@@ -124,29 +148,45 @@ of the model. There is also an option <code>ci_method = "analytical"</code>, whi
 to calculate analytical confidence assuming a chi-squared distribution.
 However, these intervals are rather inaccurate and often too narrow. It is
 recommended to calculate bootstrapped confidence intervals for mixed models.</p></dd>
+
+
 <dt id="arg-null-model">null_model<a class="anchor" aria-label="anchor" href="#arg-null-model"></a></dt>
 <dd><p>Optional, a null model to compute the random effect variances,
 which is passed to <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">insight::get_variance()</a></code>. Usually only required if
 calculation of r-squared or ICC fails when <code>null_model</code> is not specified. If
 calculating the null model takes longer and you already have fit the null
 model, you can pass it here, too, to speed up the process.</p></dd>
+
+
 <dt id="arg-approximation">approximation<a class="anchor" aria-label="anchor" href="#arg-approximation"></a></dt>
 <dd><p>Character string, indicating the approximation method
-for the distribution-specific (residual) variance. Can be <code>"lognormal"</code>
-(default), <code>"delta"</code> or <code>"trigamma"</code>. See <em>Nakagawa et al. 2017</em> for details.</p></dd>
+for the distribution-specific (observation level, or residual) variance. Only
+applies to non-Gaussian models. Can be <code>"lognormal"</code> (default), <code>"delta"</code> or
+<code>"trigamma"</code>. For binomial models, the default is the <em>theoretical</em> distribution
+specific variance, however, it can also be <code>"observation_level"</code>. See
+<em>Nakagawa et al. 2017</em>, in particular supplement 2, for details.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed down to <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
+
+
 <dt id="arg-re-formula">re_formula<a class="anchor" aria-label="anchor" href="#arg-re-formula"></a></dt>
 <dd><p>Formula containing group-level effects to be considered in
 the prediction. If <code>NULL</code> (default), include all group-level effects.
 Else, for instance for nested models, name a specific group-level effect
 to calculate the variance decomposition for this group-level. See 'Details'
 and <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">?brms::posterior_predict</a></code>.</p></dd>
+
+
 <dt id="arg-robust">robust<a class="anchor" aria-label="anchor" href="#arg-robust"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, the median instead of mean is used to
 calculate the central tendency of the variances.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -156,8 +196,11 @@ ICC as well as the credible intervals for this ICC.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+
 <div class="section">
 <h3 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a></h3>
+
+
 <p>The ICC can be interpreted as "the proportion of the variance explained by
 the grouping structure in the population". The grouping structure entails
 that measurements are organized into groups (e.g., test scores in a school
@@ -175,8 +218,11 @@ zero (or very close to zero) means the observations within clusters are no
 more similar than observations from different clusters, and setting it as a
 random factor might not be necessary.</p>
 </div>
+
 <div class="section">
 <h3 id="difference-with-r-">Difference with R2<a class="anchor" aria-label="anchor" href="#difference-with-r-"></a></h3>
+
+
 <p>The coefficient of determination R2 (that can be computed with <code><a href="r2.html">r2()</a></code>)
 quantifies the proportion of variance explained by a statistical model, but
 its definition in mixed model is complex (hence, different methods to compute
@@ -187,15 +233,21 @@ variance that can be attributed to the random effects. In simple cases, the
 ICC corresponds to the difference between the <em>conditional R2</em> and the
 <em>marginal R2</em> (see <code><a href="r2_nakagawa.html">r2_nakagawa()</a></code>).</p>
 </div>
+
 <div class="section">
 <h3 id="calculation">Calculation<a class="anchor" aria-label="anchor" href="#calculation"></a></h3>
+
+
 <p>The ICC is calculated by dividing the random effect variance,
 σ<sup>2</sup><sub>i</sub>, by
 the total variance, i.e. the sum of the random effect variance and the
 residual variance, σ<sup>2</sup><sub>ε</sub>.</p>
 </div>
+
 <div class="section">
 <h3 id="adjusted-and-unadjusted-icc">Adjusted and unadjusted ICC<a class="anchor" aria-label="anchor" href="#adjusted-and-unadjusted-icc"></a></h3>
+
+
 <p><code>icc()</code> calculates an adjusted and an unadjusted ICC, which both take all
 sources of uncertainty (i.e. of <em>all random effects</em>) into account. While
 the <em>adjusted ICC</em> only relates to the random effects, the <em>unadjusted ICC</em>
@@ -209,8 +261,11 @@ levels) and is applicable for models with other distributions than Gaussian.
 For more details on the computation of the variances, see
 <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>.</p>
 </div>
+
 <div class="section">
 <h3 id="icc-for-unconditional-and-conditional-models">ICC for unconditional and conditional models<a class="anchor" aria-label="anchor" href="#icc-for-unconditional-and-conditional-models"></a></h3>
+
+
 <p>Usually, the ICC is calculated for the null model ("unconditional model").
 However, according to <em>Raudenbush and Bryk (2002)</em> or
 <em>Rabe-Hesketh and Skrondal (2012)</em> it is also feasible to compute the
@@ -218,16 +273,22 @@ ICC for full models with covariates ("conditional models") and compare how
 much, e.g., a level-2 variable explains the portion of variation in the
 grouping structure (random intercept).</p>
 </div>
+
 <div class="section">
 <h3 id="icc-for-specific-group-levels">ICC for specific group-levels<a class="anchor" aria-label="anchor" href="#icc-for-specific-group-levels"></a></h3>
+
+
 <p>The proportion of variance for specific levels related to the overall model
 can be computed by setting <code>by_group = TRUE</code>. The reported ICC is
 the variance for each (random effect) group compared to the total
 variance of the model. For mixed models with a simple random intercept,
 this is identical to the classical (adjusted) ICC.</p>
 </div>
+
 <div class="section">
 <h3 id="variance-decomposition-for-brms-models">Variance decomposition for brms-models<a class="anchor" aria-label="anchor" href="#variance-decomposition-for-brms-models"></a></h3>
+
+
 <p>If <code>model</code> is of class <code>brmsfit</code>, <code>icc()</code> might fail due to the large
 variety of models and families supported by the <strong>brms</strong> package. In such
 cases, <code>variance_decomposition()</code> is an alternative ICC measure. The function
@@ -246,9 +307,11 @@ terms via the <code>re_formula</code>-argument.</p>
 very large, the variance ratio in the output makes no sense, e.g. because
 it is negative. In such cases, it might help to use <code>robust = TRUE</code>.</p>
 </div>
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Hox, J. J. (2010). Multilevel analysis: techniques and applications
 (2nd ed). New York: Routledge.</p></li>
 <li><p>Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
@@ -262,6 +325,7 @@ Publication.</p></li>
 applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 Publications.</p></li>
 </ul></div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
@@ -286,6 +350,7 @@ Publications.</p></li>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">sleepstudy</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">icc</span><span class="op">(</span><span class="va">model</span>, by_group <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> boundary (singular) fit: see help('isSingular')</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># ICC by Group</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Group      |   ICC</span>
@@ -297,12 +362,21 @@ Publications.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

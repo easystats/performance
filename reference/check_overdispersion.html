@@ -3,12 +3,19 @@
 models for overdispersion (and underdispersion)."><meta property="og:description" content="check_overdispersion() checks generalized linear (mixed)
 models for overdispersion (and underdispersion)."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -46,6 +53,8 @@ models for overdispersion (and underdispersion)."><meta property="og:image" cont
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -54,10 +63,12 @@ models for overdispersion (and underdispersion)."><meta property="og:image" cont
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/check_overdispersion.R" class="external-link"><code>R/check_overdispersion.R</code></a></small>
       <div class="d-none name"><code>check_overdispersion.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p><code>check_overdispersion()</code> checks generalized linear (mixed)
 models for overdispersion (and underdispersion).</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_overdispersion</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -65,17 +76,25 @@ models for overdispersion (and underdispersion).</p>
 <span><span class="co"># S3 method for class 'performance_simres'</span></span>
 <span><span class="fu">check_overdispersion</span><span class="op">(</span><span class="va">x</span>, alternative <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"less"</span>, <span class="st">"greater"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>Fitted model of class <code>merMod</code>, <code>glmmTMB</code>, <code>glm</code>, or <code>glm.nb</code>
 (package <strong>MASS</strong>), or an object returned by <code><a href="simulate_residuals.html">simulate_residuals()</a></code>.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed down to <code><a href="simulate_residuals.html">simulate_residuals()</a></code>. This only applies
 for models with zero-inflation component, or for models of class <code>glmmTMB</code>
 from <code>nbinom1</code> or <code>nbinom2</code> family.</p></dd>
+
+
 <dt id="arg-alternative">alternative<a class="anchor" aria-label="anchor" href="#arg-alternative"></a></dt>
 <dd><p>A character string specifying the alternative hypothesis.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -93,6 +112,8 @@ mean.</p>
     </div>
     <div class="section level2">
     <h2 id="interpretation-of-the-dispersion-ratio">Interpretation of the Dispersion Ratio<a class="anchor" aria-label="anchor" href="#interpretation-of-the-dispersion-ratio"></a></h2>
+
+
 <p>If the dispersion ratio is close to one, a Poisson model fits well to the
 data. Dispersion ratios larger than one indicate overdispersion, thus a
 negative binomial model or similar might fit better to the data. Dispersion
@@ -101,16 +122,22 @@ indicates either overdispersion or underdispersion (the first being more common)
     </div>
     <div class="section level2">
     <h2 id="overdispersion-in-poisson-models">Overdispersion in Poisson Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-poisson-models"></a></h2>
+
+
 <p>For Poisson models, the overdispersion test is based on the code from
 <em>Gelman and Hill (2007), page 115</em>.</p>
     </div>
     <div class="section level2">
     <h2 id="overdispersion-in-negative-binomial-or-zero-inflated-models">Overdispersion in Negative Binomial or Zero-Inflated Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-negative-binomial-or-zero-inflated-models"></a></h2>
+
+
 <p>For negative binomial (mixed) models or models with zero-inflation component,
 the overdispersion test is based simulated residuals (see <code><a href="simulate_residuals.html">simulate_residuals()</a></code>).</p>
     </div>
     <div class="section level2">
     <h2 id="overdispersion-in-mixed-models">Overdispersion in Mixed Models<a class="anchor" aria-label="anchor" href="#overdispersion-in-mixed-models"></a></h2>
+
+
 <p>For <code>merMod</code>- and <code>glmmTMB</code>-objects, <code>check_overdispersion()</code>
 is based on the code in the
 <a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html" class="external-link">GLMM FAQ</a>,
@@ -123,12 +150,16 @@ to <code>check_overdispersion(simulate_residuals(model))</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="how-to-fix-overdispersion">How to fix Overdispersion<a class="anchor" aria-label="anchor" href="#how-to-fix-overdispersion"></a></h2>
+
+
 <p>Overdispersion can be fixed by either modeling the dispersion parameter, or
 by choosing a different distributional family (like Quasi-Poisson, or
 negative binomial, see <em>Gelman and Hill (2007), pages 115-116</em>).</p>
     </div>
     <div class="section level2">
     <h2 id="tests-based-on-simulated-residuals">Tests based on simulated residuals<a class="anchor" aria-label="anchor" href="#tests-based-on-simulated-residuals"></a></h2>
+
+
 <p>For certain models, resp. model from certain families, tests are based on
 simulated residuals (see <code><a href="simulate_residuals.html">simulate_residuals()</a></code>). These are usually more
 accurate for testing such models than the traditionally used Pearson residuals.
@@ -146,6 +177,7 @@ accurate results.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Bolker B et al. (2017):
 <a href="http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html" class="external-link">GLMM FAQ.</a></p></li>
 <li><p>Gelman, A., and Hill, J. (2007). Data analysis using regression and
@@ -166,6 +198,7 @@ Press.</p></li>
 <code><a href="check_singularity.html">check_singularity</a>()</code>,
 <code><a href="check_zeroinflation.html">check_zeroinflation</a>()</code></p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Salamanders</span>, package <span class="op">=</span> <span class="st">"glmmTMB"</span><span class="op">)</span></span></span>
@@ -182,12 +215,21 @@ Press.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

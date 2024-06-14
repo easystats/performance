@@ -19,12 +19,19 @@ score is superior or equal to 0.5 (i.e., that were classified as outliers
 by at least half of the methods). See the Details section below
 for a description of the methods.'><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -62,6 +69,8 @@ for a description of the methods.'><meta property="og:image" content="https://ea
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -70,6 +79,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/check_outliers.R" class="external-link"><code>R/check_outliers.R</code></a></small>
       <div class="d-none name"><code>check_outliers.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Checks for and locates influential observations (i.e.,
 "outliers") via several distance and/or clustering methods. If several
@@ -82,6 +92,7 @@ score is superior or equal to 0.5 (i.e., that were classified as outliers
 by at least half of the methods). See the <strong>Details</strong> section below
 for a description of the methods.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -111,41 +122,61 @@ for a description of the methods.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model, a data.frame, a <code>performance_simres</code> <code><a href="simulate_residuals.html">simulate_residuals()</a></code>
 or a <code>DHARMa</code> object.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>When <code>method = "ics"</code>, further arguments in <code>...</code> are passed
 down to <code><a href="https://rdrr.io/pkg/ICSOutlier/man/ics.outlier.html" class="external-link">ICSOutlier::ics.outlier()</a></code>. When <code>method = "mahalanobis"</code>,
 they are  passed down to <code><a href="https://rdrr.io/r/stats/mahalanobis.html" class="external-link">stats::mahalanobis()</a></code>. <code>percentage_central</code> can
 be specified when <code>method = "mcd"</code>. For objects of class <code>performance_simres</code>
 or <code>DHARMa</code>, further arguments are passed down to <code><a href="https://rdrr.io/pkg/DHARMa/man/testOutliers.html" class="external-link">DHARMa::testOutliers()</a></code>.</p></dd>
+
+
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>The outlier detection method(s). Can be <code>"all"</code> or some of
 <code>"cook"</code>, <code>"pareto"</code>, <code>"zscore"</code>, <code>"zscore_robust"</code>, <code>"iqr"</code>, <code>"ci"</code>, <code>"eti"</code>,
 <code>"hdi"</code>, <code>"bci"</code>, <code>"mahalanobis"</code>, <code>"mahalanobis_robust"</code>, <code>"mcd"</code>, <code>"ics"</code>,
 <code>"optics"</code> or <code>"lof"</code>.</p></dd>
+
+
 <dt id="arg-threshold">threshold<a class="anchor" aria-label="anchor" href="#arg-threshold"></a></dt>
 <dd><p>A list containing the threshold values for each method (e.g.
 <code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is
 considered as outlier. If <code>NULL</code>, default values will be used (see
 'Details'). If a numeric value is given, it will be used as the threshold
 for any of the method run.</p></dd>
+
+
 <dt id="arg-id">ID<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>Optional, to report an ID column along with the row number.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings.</p></dd>
+
+
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
 <dd><p>Type of method to test for outliers. Can be one of <code>"default"</code>,
 <code>"binomial"</code> or <code>"bootstrap"</code>. Only applies when <code>x</code> is an object returned
 by <code><a href="simulate_residuals.html">simulate_residuals()</a></code> or of class <code>DHARMa</code>. See 'Details' in
 <code><a href="https://rdrr.io/pkg/DHARMa/man/testOutliers.html" class="external-link">?DHARMa::testOutliers</a></code> for a detailed description of the types.</p></dd>
+
+
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of simulations to run.</p></dd>
+
+
 <dt id="arg-alternative">alternative<a class="anchor" aria-label="anchor" href="#arg-alternative"></a></dt>
 <dd><p>A character string specifying the alternative hypothesis.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -187,6 +218,8 @@ to range from 0 to 1.</p>
     </div>
     <div class="section level2">
     <h2 id="model-specific-methods">Model-specific methods<a class="anchor" aria-label="anchor" href="#model-specific-methods"></a></h2>
+
+
 <ul><li><p><strong>Cook's Distance</strong>:
 Among outlier detection methods, Cook's distance and leverage are less
 common than the basic Mahalanobis distance, but still used. Cook's distance
@@ -208,6 +241,8 @@ threshold used by <code>performance</code>).</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="univariate-methods">Univariate methods<a class="anchor" aria-label="anchor" href="#univariate-methods"></a></h2>
+
+
 <ul><li><p><strong>Z-scores</strong> <code>("zscore", "zscore_robust")</code>:
 The Z-score, or standard score, is a way of describing a data point as
 deviance from a central value, in terms of standard deviations from the mean
@@ -251,6 +286,8 @@ divided by two, to “standardize” it and facilitate interpretation.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="multivariate-methods">Multivariate methods<a class="anchor" aria-label="anchor" href="#multivariate-methods"></a></h2>
+
+
 <ul><li><p><strong>Mahalanobis Distance</strong>:
 Mahalanobis distance (Mahalanobis, 1930) is often used for multivariate
 outliers detection as this distance takes into account the shape of the
@@ -314,6 +351,9 @@ LOF distance. Requires the <strong>dbscan</strong> package.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="methods-for-simulated-residuals">Methods for simulated residuals<a class="anchor" aria-label="anchor" href="#methods-for-simulated-residuals"></a></h2>
+
+
+
 <p>The approach for detecting outliers based on simulated residuals differs
 from the traditional methods and may not be detecting outliers as expected.
 Literally, this approach compares observed to simulated values. However, we
@@ -325,6 +365,9 @@ the related documentations in the <strong>DHARMa</strong> package, e.g. <code><a
     </div>
     <div class="section level2">
     <h2 id="threshold-specification">Threshold specification<a class="anchor" aria-label="anchor" href="#threshold-specification"></a></h2>
+
+
+
 <p>Default thresholds are currently specified as follows:</p>
 <p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">list</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="at">zscore =</span> stats<span class="sc">::</span><span class="fu">qnorm</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span> <span class="sc">/</span> <span class="dv">2</span>),</span>
@@ -346,6 +389,8 @@ the related documentations in the <strong>DHARMa</strong> package, e.g. <code><a
     </div>
     <div class="section level2">
     <h2 id="meta-analysis-models">Meta-analysis models<a class="anchor" aria-label="anchor" href="#meta-analysis-models"></a></h2>
+
+
 <p>For meta-analysis models (e.g. objects of class <code>rma</code> from the <em>metafor</em>
 package or <code>metagen</code> from package <em>meta</em>), studies are defined as outliers
 when their confidence interval lies outside the confidence interval of the
@@ -353,6 +398,7 @@ pooled effect.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Archimbaud, A., Nordhausen, K., and Ruiz-Gazen, A. (2018). ICS for
 multivariate outlier detection with application to quality control.
 <em>Computational Statistics and Data Analysis</em>, <em>128</em>, 184-199.
@@ -402,6 +448,7 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
 <code><a href="check_singularity.html">check_singularity</a>()</code>,
 <code><a href="check_zeroinflation.html">check_zeroinflation</a>()</code></p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="co"># Size nrow(data) = 32</span></span></span>
@@ -571,12 +618,21 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

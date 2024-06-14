@@ -19,12 +19,19 @@ tests are and what they do in order to prevent their misinterpretation. See
 the Details section for more information regarding the different tests
 and their interpretation.'><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -62,6 +69,8 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -70,6 +79,7 @@ and their interpretation.'><meta property="og:image" content="https://easystats.
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/test_bf.R" class="external-link"><code>R/test_bf.R</code></a>, <a href="https://github.com/easystats/performance/blob/main/R/test_likelihoodratio.R" class="external-link"><code>R/test_likelihoodratio.R</code></a>, <a href="https://github.com/easystats/performance/blob/main/R/test_performance.R" class="external-link"><code>R/test_performance.R</code></a>, and 2 more</small>
       <div class="d-none name"><code>test_performance.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Testing whether models are "different" in terms of accuracy or explanatory
 power is a delicate and often complex procedure, with many limitations and
@@ -82,6 +92,7 @@ tests are and what they do in order to prevent their misinterpretation. See
 the <em>Details</em> section for more information regarding the different tests
 and their interpretation.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">test_bf</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
@@ -99,27 +110,39 @@ and their interpretation.</p>
 <span></span>
 <span><span class="fu">test_wald</span><span class="op">(</span><span class="va">...</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Multiple model objects.</p></dd>
+
+
 <dt id="arg-reference">reference<a class="anchor" aria-label="anchor" href="#arg-reference"></a></dt>
 <dd><p>This only applies when models are non-nested, and determines
 which model should be taken as a reference, against which all the other
 models are tested.</p></dd>
+
+
 <dt id="arg-text-length">text_length<a class="anchor" aria-label="anchor" href="#arg-text-length"></a></dt>
 <dd><p>Numeric, length (number of chars) of output lines.
 <code>test_bf()</code> describes models by their formulas, which can lead to
 overly long lines in the output. <code>text_length</code> fixes the length of
 lines to a specified limit.</p></dd>
+
+
 <dt id="arg-estimator">estimator<a class="anchor" aria-label="anchor" href="#arg-estimator"></a></dt>
 <dd><p>Applied when comparing regression models using
 <code>test_likelihoodratio()</code>. Corresponds to the different estimators for
 the standard deviation of the errors. Defaults to <code>"OLS"</code> for linear models,
 <code>"ML"</code> for all other models (including mixed models), or <code>"REML"</code> for
 linear mixed models when these have the same fixed effects. See 'Details'.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warning and messages.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -127,8 +150,11 @@ linear mixed models when these have the same fixed effects. See 'Details'.</p></
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+
 <div class="section">
 <h3 id="nested-vs-non-nested-models">Nested vs. Non-nested Models<a class="anchor" aria-label="anchor" href="#nested-vs-non-nested-models"></a></h3>
+
+
 <p>Model's "nesting" is an important concept of models comparison. Indeed, many
 tests only make sense when the models are <em>"nested",</em> i.e., when their
 predictors are nested. This means that all the <em>fixed effects</em> predictors of
@@ -153,8 +179,11 @@ other requirements have often to be the fulfilled. For instance, outcome
 variables (the response) must be the same. You cannot meaningfully test
 whether apples are significantly different from oranges!</p>
 </div>
+
 <div class="section">
 <h3 id="estimator-of-the-standard-deviation">Estimator of the standard deviation<a class="anchor" aria-label="anchor" href="#estimator-of-the-standard-deviation"></a></h3>
+
+
 <p>The estimator is relevant when comparing regression models using
 <code>test_likelihoodratio()</code>. If <code>estimator = "OLS"</code>, then it uses the same
 method as <code>anova(..., test = "LRT")</code> implemented in base R, i.e., scaling
@@ -168,8 +197,11 @@ Gaussian errors. For <code>estimator = "REML"</code>, the LRT is based on the RE
 log-likelihoods of the models. Note that not all types of estimators are
 available for all model classes.</p>
 </div>
+
 <div class="section">
 <h3 id="reml-versus-ml-estimator">REML versus ML estimator<a class="anchor" aria-label="anchor" href="#reml-versus-ml-estimator"></a></h3>
+
+
 <p>When <code>estimator = "ML"</code>, which is the default for linear mixed models (unless
 they share the same fixed effects), values from information criteria (AIC,
 AICc) are based on the ML-estimator, while the default behaviour of <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC()</a></code>
@@ -182,8 +214,10 @@ LRT, <code>test_likelihoodratio()</code> checks if a comparison based on REML fi
 indeed valid, and if so, uses REML as default (else, ML is the default).
 Set the <code>estimator</code> argument explicitely to override the default behaviour.</p>
 </div>
+
 <div class="section">
 <h3 id="tests-description">Tests Description<a class="anchor" aria-label="anchor" href="#tests-description"></a></h3>
+
 <ul><li><p><strong>Bayes factor for Model Comparison</strong> - <code>test_bf()</code>: If all
 models were fit from the same data, the returned <code>BF</code> shows the Bayes
 Factor (see <code><a href="https://easystats.github.io/bayestestR/reference/bayesfactor_models.html" class="external-link">bayestestR::bayesfactor_models()</a></code>) for each model against
@@ -232,9 +266,11 @@ LRT. The code for this function is adapted from the <strong>nonnest2</strong>
 package, and all credit go to their authors.</p></li>
 </ul></li>
 </ul></div>
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Vuong, Q. H. (1989). Likelihood ratio tests for model selection and
 non-nested hypotheses. Econometrica, 57, 307-333.</p></li>
 <li><p>Merkle, E. C., You, D., &amp; Preacher, K. (2016). Testing non-nested
@@ -245,6 +281,7 @@ structural equation models. Psychological Methods, 21, 151-163.</p></li>
     <div class="dont-index"><p><code><a href="compare_performance.html">compare_performance()</a></code> to compare the performance indices of
 many different models.</p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Nested Models</span></span></span>
@@ -388,12 +425,21 @@ many different models.</p></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

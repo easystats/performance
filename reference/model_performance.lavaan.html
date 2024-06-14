@@ -3,12 +3,19 @@
 lavaan package."><meta property="og:description" content="Compute indices of model performance for SEM or CFA models from the
 lavaan package."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -46,6 +53,8 @@ lavaan package."><meta property="og:image" content="https://easystats.github.io/
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -54,19 +63,26 @@ lavaan package."><meta property="og:image" content="https://easystats.github.io/
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/model_performance.lavaan.R" class="external-link"><code>R/model_performance.lavaan.R</code></a></small>
       <div class="d-none name"><code>model_performance.lavaan.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Compute indices of model performance for SEM or CFA models from the
 <strong>lavaan</strong> package.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'lavaan'</span></span>
 <span><span class="fu"><a href="model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">model</span>, metrics <span class="op">=</span> <span class="st">"all"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A <strong>lavaan</strong> model.</p></dd>
+
+
 <dt id="arg-metrics">metrics<a class="anchor" aria-label="anchor" href="#arg-metrics"></a></dt>
 <dd><p>Can be <code>"all"</code> or a character vector of metrics to be
 computed (some of <code>"Chi2"</code>, <code>"Chi2_df"</code>, <code>"p_Chi2"</code>, <code>"Baseline"</code>,
@@ -74,10 +90,15 @@ computed (some of <code>"Chi2"</code>, <code>"Chi2_df"</code>, <code>"p_Chi2"</c
 <code>"CFI"</code>, <code>"RMSEA"</code>, <code>"RMSEA_CI_low"</code>, <code>"RMSEA_CI_high"</code>, <code>"p_RMSEA"</code>,
 <code>"RMR"</code>, <code>"SRMR"</code>, <code>"RFI"</code>, <code>"PNFI"</code>, <code>"IFI"</code>, <code>"RNI"</code>, <code>"Loglikelihood"</code>,
 <code>"AIC"</code>, <code>"BIC"</code>, and <code>"BIC_adjusted"</code>.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle off warnings.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -86,8 +107,10 @@ computed (some of <code>"Chi2"</code>, <code>"Chi2_df"</code>, <code>"p_Chi2"</c
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+
 <div class="section">
 <h3 id="indices-of-fit">Indices of fit<a class="anchor" aria-label="anchor" href="#indices-of-fit"></a></h3>
+
 <ul><li><p><strong>Chisq</strong>: The model Chi-squared assesses overall fit and the
 discrepancy between the sample and fitted covariance matrices. Its p-value
 should be &gt; .05 (i.e., the hypothesis of a perfect fit cannot be
@@ -124,6 +147,7 @@ Index (NFI) for sample size and degrees of freedom (Bollen's, 1989). Over
 commonly agreed-upon cutoff value for an acceptable model for this index.
 Should be &gt; 0.50.</p></li>
 </ul></div>
+
 <p>See the documentation for <code><a href="https://rdrr.io/pkg/lavaan/man/fitMeasures.html" class="external-link">?lavaan::fitmeasures</a></code>.</p>
 <div class="section">
 <h3 id="what-to-report">What to report<a class="anchor" aria-label="anchor" href="#what-to-report"></a></h3>
@@ -131,9 +155,11 @@ Should be &gt; 0.50.</p></li>
 reported: The model <strong>chi-square</strong>, the <strong>RMSEA</strong>, the <strong>CFI</strong>
 and the <strong>SRMR</strong>.</p>
 </div>
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Byrne, B. M. (1994). Structural equation modeling with EQS and
 EQS/Windows. Thousand Oaks, CA: Sage Publications.</p></li>
 <li><p>Tucker, L. R., and Lewis, C. (1973). The reliability coefficient for
@@ -147,6 +173,7 @@ fit indexes. Structural Equation Modeling, 6, 56-83.</p></li>
 <li><p>Kline, R. B. (2015). Principles and practice of structural equation
 modeling. Guilford publications.</p></li>
 </ul></div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Confirmatory Factor Analysis (CFA) ---------</span></span></span>
@@ -165,12 +192,21 @@ modeling. Guilford publications.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

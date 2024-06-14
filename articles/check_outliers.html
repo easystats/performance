@@ -23,12 +23,19 @@
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
@@ -77,6 +84,8 @@
 </li>
       </ul>
 </div>
+
+
   </div>
 </nav><div class="container template-article">
 
@@ -86,10 +95,15 @@
 <script src="check_outliers_files/tabwid-1.1.3/tabwid.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Checking outliers with *performance*</h1>
-                        <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/vignettes/check_outliers.Rmd" class="external-link"><code>vignettes/check_outliers.Rmd</code></a></small>
+            
+      
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/vignettes/check_outliers.Rmd" class="external-link"><code>vignettes/check_outliers.Rmd</code></a></small>
       <div class="d-none name"><code>check_outliers.Rmd</code></div>
     </div>
-        <div class="section level2">
+
+    
+    
+<div class="section level2">
 <h2 id="reuse-of-this-material">Reuse of this Material<a class="anchor" aria-label="anchor" href="#reuse-of-this-material"></a>
 </h2>
 <blockquote>
@@ -423,32 +437,32 @@ thresholds.</p>
 <p><em>Summary of Statistical Outlier Detection Methods
 Recommendations</em></p>
 <div class="tabwid">
-<style>.cl-47a72202{}.cl-47a18090{font-family:'Latin Modern Roman';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-47a180a4{font-family:'Latin Modern Roman';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-47a180a5{font-family:'Latin Modern Roman';font-size:11pt;font-weight:normal;font-style:italic;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-47a3ee3e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-47a4019e{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-47a401a8{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-47a401b2{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-47a72202">
+<style>.cl-f54e989e{}.cl-f548f1aa{font-family:'Latin Modern Roman';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-f548f1be{font-family:'Latin Modern Roman';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-f548f1bf{font-family:'Latin Modern Roman';font-size:11pt;font-weight:normal;font-style:italic;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-f54b62fa{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 2;background-color:transparent;}.cl-f54b7538{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0.75pt solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-f54b7542{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-f54b754c{width:2.25in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-f54e989e">
 <thead><tr style="overflow-wrap:break-word;">
-<th class="cl-47a4019e"><p class="cl-47a3ee3e"><span class="cl-47a18090">Statistical Test</span></p></th>
-<th class="cl-47a4019e"><p class="cl-47a3ee3e"><span class="cl-47a18090">Diagnosis Method</span></p></th>
-<th class="cl-47a4019e"><p class="cl-47a3ee3e"><span class="cl-47a18090">Recommended Threshold</span></p></th>
-<th class="cl-47a4019e"><p class="cl-47a3ee3e"><span class="cl-47a18090">Function Usage</span></p></th>
+<th class="cl-f54b7538"><p class="cl-f54b62fa"><span class="cl-f548f1aa">Statistical Test</span></p></th>
+<th class="cl-f54b7538"><p class="cl-f54b62fa"><span class="cl-f548f1aa">Diagnosis Method</span></p></th>
+<th class="cl-f54b7538"><p class="cl-f54b62fa"><span class="cl-f548f1aa">Recommended Threshold</span></p></th>
+<th class="cl-f54b7538"><p class="cl-f54b62fa"><span class="cl-f548f1aa">Function Usage</span></p></th>
 </tr></thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a18090">Supported</span><span class="cl-47a18090"> </span><span class="cl-47a18090">regression</span><span class="cl-47a18090"> </span><span class="cl-47a18090">model</span></p></td>
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a180a4">Model-based</span><span class="cl-47a18090">:</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Cook</span><span class="cl-47a18090"> </span><span class="cl-47a18090">(or</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Pareto</span><span class="cl-47a18090"> </span><span class="cl-47a18090">for</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Bayesian</span><span class="cl-47a18090"> </span><span class="cl-47a18090">models)</span></p></td>
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a180a5">qf(0.5,</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">ncol(x),</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">nrow(x)</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">-</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">ncol(x))</span><span class="cl-47a18090"> </span><span class="cl-47a18090">(or</span><span class="cl-47a18090"> </span><span class="cl-47a18090">0.7</span><span class="cl-47a18090"> </span><span class="cl-47a18090">for</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Pareto)</span></p></td>
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a180a5">check_outliers(model,</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">method</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">=</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">“</span><span class="cl-47a180a5">cook</span><span class="cl-47a180a5">”</span><span class="cl-47a180a5">)</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1aa">Supported</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">regression</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">model</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1be">Model-based</span><span class="cl-f548f1aa">:</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Cook</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">(or</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Pareto</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">for</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Bayesian</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">models)</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1bf">qf(0.5,</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">ncol(x),</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">nrow(x)</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">-</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">ncol(x))</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">(or</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">0.7</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">for</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Pareto)</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1bf">check_outliers(model,</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">method</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">=</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">“</span><span class="cl-f548f1bf">cook</span><span class="cl-f548f1bf">”</span><span class="cl-f548f1bf">)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a18090">Structural</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Equation</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Modeling</span><span class="cl-47a18090"> </span><span class="cl-47a18090">(or</span><span class="cl-47a18090"> </span><span class="cl-47a18090">other</span><span class="cl-47a18090"> </span><span class="cl-47a18090">unsupported</span><span class="cl-47a18090"> </span><span class="cl-47a18090">model)</span></p></td>
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a180a4">Multivariate</span><span class="cl-47a18090">:</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Minimum</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Covariance</span><span class="cl-47a18090"> </span><span class="cl-47a18090">Determinant</span><span class="cl-47a18090"> </span><span class="cl-47a18090">(MCD)</span></p></td>
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a180a5">qchisq(p</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">=</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">1</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">-</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">0.001,</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">df</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">=</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">ncol(x))</span></p></td>
-<td class="cl-47a401a8"><p class="cl-47a3ee3e"><span class="cl-47a180a5">check_outliers(data,</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">method</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">=</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">“</span><span class="cl-47a180a5">mcd</span><span class="cl-47a180a5">”</span><span class="cl-47a180a5">)</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1aa">Structural</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Equation</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Modeling</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">(or</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">other</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">unsupported</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">model)</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1be">Multivariate</span><span class="cl-f548f1aa">:</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Minimum</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Covariance</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">Determinant</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">(MCD)</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1bf">qchisq(p</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">=</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">1</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">-</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">0.001,</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">df</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">=</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">ncol(x))</span></p></td>
+<td class="cl-f54b7542"><p class="cl-f54b62fa"><span class="cl-f548f1bf">check_outliers(data,</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">method</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">=</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">“</span><span class="cl-f548f1bf">mcd</span><span class="cl-f548f1bf">”</span><span class="cl-f548f1bf">)</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-47a401b2"><p class="cl-47a3ee3e"><span class="cl-47a18090">Simple</span><span class="cl-47a18090"> </span><span class="cl-47a18090">test</span><span class="cl-47a18090"> </span><span class="cl-47a18090">with</span><span class="cl-47a18090"> </span><span class="cl-47a18090">few</span><span class="cl-47a18090"> </span><span class="cl-47a18090">variables</span><span class="cl-47a18090"> </span><span class="cl-47a18090">(</span><span class="cl-47a180a5">t</span><span class="cl-47a18090"> </span><span class="cl-47a18090">test,</span><span class="cl-47a18090"> </span><span class="cl-47a18090">correlation,</span><span class="cl-47a18090"> </span><span class="cl-47a18090">etc.)</span></p></td>
-<td class="cl-47a401b2"><p class="cl-47a3ee3e"><span class="cl-47a180a4">Univariate</span><span class="cl-47a18090">:</span><span class="cl-47a18090"> </span><span class="cl-47a18090">robust</span><span class="cl-47a18090"> </span><span class="cl-47a180a5">z</span><span class="cl-47a18090"> </span><span class="cl-47a18090">scores</span><span class="cl-47a18090"> </span><span class="cl-47a18090">(MAD)</span></p></td>
-<td class="cl-47a401b2"><p class="cl-47a3ee3e"><span class="cl-47a180a5">qnorm(p</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">=</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">1</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">-</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">0.001</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">/</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">2)</span><span class="cl-47a18090">,</span><span class="cl-47a18090"> </span><span class="cl-47a18090">~</span><span class="cl-47a18090"> </span><span class="cl-47a18090">3.29</span></p></td>
-<td class="cl-47a401b2"><p class="cl-47a3ee3e"><span class="cl-47a180a5">check_outliers(data,</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">method</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">=</span><span class="cl-47a180a5"> </span><span class="cl-47a180a5">“</span><span class="cl-47a180a5">zscore_robust</span><span class="cl-47a180a5">”</span><span class="cl-47a180a5">)</span></p></td>
+<td class="cl-f54b754c"><p class="cl-f54b62fa"><span class="cl-f548f1aa">Simple</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">test</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">with</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">few</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">variables</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">(</span><span class="cl-f548f1bf">t</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">test,</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">correlation,</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">etc.)</span></p></td>
+<td class="cl-f54b754c"><p class="cl-f54b62fa"><span class="cl-f548f1be">Univariate</span><span class="cl-f548f1aa">:</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">robust</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1bf">z</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">scores</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">(MAD)</span></p></td>
+<td class="cl-f54b754c"><p class="cl-f54b62fa"><span class="cl-f548f1bf">qnorm(p</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">=</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">1</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">-</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">0.001</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">/</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">2)</span><span class="cl-f548f1aa">,</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">~</span><span class="cl-f548f1aa"> </span><span class="cl-f548f1aa">3.29</span></p></td>
+<td class="cl-f54b754c"><p class="cl-f54b62fa"><span class="cl-f548f1bf">check_outliers(data,</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">method</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">=</span><span class="cl-f548f1bf"> </span><span class="cl-f548f1bf">“</span><span class="cl-f548f1bf">zscore_robust</span><span class="cl-f548f1bf">”</span><span class="cl-f548f1bf">)</span></p></td>
 </tr>
 </tbody>
 </table>
@@ -789,13 +803,23 @@ Review</em> 2 (1): 20–54. <a href="https://doi.org/10.3758/BF03214411" class="
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
+
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer>
 </div>
+
+
+
+
+
   </body>
 </html>

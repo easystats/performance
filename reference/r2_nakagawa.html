@@ -3,12 +3,19 @@
 mixed effects models with complex random effects structures."><meta property="og:description" content="Compute the marginal and conditional r-squared value for
 mixed effects models with complex random effects structures."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -46,6 +53,8 @@ mixed effects models with complex random effects structures."><meta property="og
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -54,10 +63,12 @@ mixed effects models with complex random effects structures."><meta property="og
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/r2_nakagawa.R" class="external-link"><code>R/r2_nakagawa.R</code></a></small>
       <div class="d-none name"><code>r2_nakagawa.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Compute the <em>marginal</em> and <em>conditional</em> r-squared value for
 mixed effects models with complex random effects structures.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">r2_nakagawa</span><span class="op">(</span></span>
@@ -73,14 +84,21 @@ mixed effects models with complex random effects structures.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A mixed effects model.</p></dd>
+
+
 <dt id="arg-by-group">by_group<a class="anchor" aria-label="anchor" href="#arg-by-group"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, returns the explained variance
 at different levels (if there are multiple levels). This is essentially
 similar to the variance reduction approach by <em>Hox (2010), pp. 69-78</em>.</p></dd>
+
+
 <dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
 <dd><p>Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
@@ -88,13 +106,19 @@ or not. Indicates up to which value the convergence result is accepted. When
 <code>r2_nakagawa()</code> returns a warning, stating that random effect variances
 can't be computed (and thus, the conditional r-squared is <code>NA</code>),
 decrease the tolerance-level. See also <code><a href="check_singularity.html">check_singularity()</a></code>.</p></dd>
+
+
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Confidence resp. credible interval level. For <code><a href="icc.html">icc()</a></code> and <code><a href="r2.html">r2()</a></code>,
 confidence intervals are based on bootstrapped samples from the ICC resp.
 R2 value. See <code>iterations</code>.</p></dd>
+
+
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of bootstrap-replicates when computing confidence
 intervals for the ICC or R2.</p></dd>
+
+
 <dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
 <dd><p>Character string, indicating the bootstrap-method. Should
 be <code>NULL</code> (default), in which case <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code> is used for
@@ -106,20 +130,32 @@ of the model. There is also an option <code>ci_method = "analytical"</code>, whi
 to calculate analytical confidence assuming a chi-squared distribution.
 However, these intervals are rather inaccurate and often too narrow. It is
 recommended to calculate bootstrapped confidence intervals for mixed models.</p></dd>
+
+
 <dt id="arg-null-model">null_model<a class="anchor" aria-label="anchor" href="#arg-null-model"></a></dt>
 <dd><p>Optional, a null model to compute the random effect variances,
 which is passed to <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">insight::get_variance()</a></code>. Usually only required if
 calculation of r-squared or ICC fails when <code>null_model</code> is not specified. If
 calculating the null model takes longer and you already have fit the null
 model, you can pass it here, too, to speed up the process.</p></dd>
+
+
 <dt id="arg-approximation">approximation<a class="anchor" aria-label="anchor" href="#arg-approximation"></a></dt>
 <dd><p>Character string, indicating the approximation method
-for the distribution-specific (residual) variance. Can be <code>"lognormal"</code>
-(default), <code>"delta"</code> or <code>"trigamma"</code>. See <em>Nakagawa et al. 2017</em> for details.</p></dd>
+for the distribution-specific (observation level, or residual) variance. Only
+applies to non-Gaussian models. Can be <code>"lognormal"</code> (default), <code>"delta"</code> or
+<code>"trigamma"</code>. For binomial models, the default is the <em>theoretical</em> distribution
+specific variance, however, it can also be <code>"observation_level"</code>. See
+<em>Nakagawa et al. 2017</em>, in particular supplement 2, for details.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Toggle warnings and messages.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed down to <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -129,7 +165,7 @@ for the distribution-specific (residual) variance. Can be <code>"lognormal"</cod
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Marginal and conditional r-squared values for mixed models are calculated
 based on <em>Nakagawa et al. (2017)</em>. For more details on the computation of
-the variances, see <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">?insight::get_variance</a></code>. The random effect variances are
+the variances, see <code><a href="https://easystats.github.io/insight/reference/get_variance.html" class="external-link">insight::get_variance()</a></code>. The random effect variances are
 actually the mean random effect variances, thus the r-squared value is also
 appropriate for mixed models with random slopes or nested random effects
 (see <em>Johnson, 2014</em>).</p><ul><li><p><strong>Conditional R2</strong>: takes both the fixed and random effects into account.</p></li>
@@ -139,6 +175,7 @@ marginal R2 from the conditional R2 or by computing the <code><a href="icc.html"
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Hox, J. J. (2010). Multilevel analysis: techniques and applications
 (2nd ed). New York: Routledge.</p></li>
 <li><p>Johnson, P. C. D. (2014). Extension of Nakagawa and Schielzeth’s R2 GLMM
@@ -152,6 +189,7 @@ coefficient of determination R2 and intra-class correlation coefficient from
 generalized linear mixed-effects models revisited and expanded. Journal of
 The Royal Society Interface, 14(134), 20170213.</p></li>
 </ul></div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
@@ -172,12 +210,21 @@ The Royal Society Interface, 14(134), 20170213.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

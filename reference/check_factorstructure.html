@@ -7,12 +7,19 @@ running the Bartlett's Test of Sphericity and the Kaiser, Meyer, Olkin (KMO)
 Measure of Sampling Adequacy (MSA). See details below for more information
 about the interpretation and meaning of each test."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -50,6 +57,8 @@ about the interpretation and meaning of each test."><meta property="og:image" co
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -58,12 +67,14 @@ about the interpretation and meaning of each test."><meta property="og:image" co
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/check_factorstructure.R" class="external-link"><code>R/check_factorstructure.R</code></a></small>
       <div class="d-none name"><code>check_factorstructure.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This checks whether the data is appropriate for Factor Analysis (FA) by
 running the Bartlett's Test of Sphericity and the Kaiser, Meyer, Olkin (KMO)
 Measure of Sampling Adequacy (MSA). See <strong>details</strong> below for more information
 about the interpretation and meaning of each test.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_factorstructure</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -72,16 +83,24 @@ about the interpretation and meaning of each test.</p>
 <span></span>
 <span><span class="fu">check_sphericity_bartlett</span><span class="op">(</span><span class="va">x</span>, n <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A data frame or a correlation matrix. If the latter is passed, <code>n</code>
 must be provided.</p></dd>
+
+
 <dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>If a correlation matrix was passed, the number of observations must
 be specified.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -89,8 +108,11 @@ be specified.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+
 <div class="section">
 <h3 id="bartlett-s-test-of-sphericity">Bartlett's Test of Sphericity<a class="anchor" aria-label="anchor" href="#bartlett-s-test-of-sphericity"></a></h3>
+
+
 <p>Bartlett's (1951) test of sphericity tests whether a matrix (of correlations)
 is significantly different from an identity matrix (filled with 0). It tests
 whether the correlation coefficients are all 0. The test computes the
@@ -103,8 +125,11 @@ the test is testing a pretty extreme scenario (that all correlations are non-sig
 As the sample size increases, this test tends to be always significant, which
 makes it not particularly useful or informative in well-powered studies.</p>
 </div>
+
 <div class="section">
 <h3 id="kaiser-meyer-olkin-kmo-">Kaiser, Meyer, Olkin (KMO)<a class="anchor" aria-label="anchor" href="#kaiser-meyer-olkin-kmo-"></a></h3>
+
+
 <p><em>(Measure of Sampling Adequacy (MSA) for Factor Analysis.)</em></p>
 <p>Kaiser (1970) introduced a Measure of Sampling Adequacy (MSA), later modified
 by Kaiser and Rice (1974). The Kaiser-Meyer-Olkin (KMO) statistic, which can
@@ -127,6 +152,7 @@ between 0.7 and 0.8 are good.</p>
 exclusion them from the analysis (note that you would need to re-compute the
 KMO indices as they are dependent on the whole dataset).</p>
 </div>
+
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -146,6 +172,7 @@ Psychometrika, 39(1), 31-36.</p></li>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="check_clusterstructure.html">check_clusterstructure()</a></code>.</p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span></span></span>
@@ -170,12 +197,21 @@ Psychometrika, 39(1), 31-36.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

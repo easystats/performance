@@ -5,12 +5,19 @@ parameters::principal_components()."><meta property="og:description" content="Co
 applied to (sub)scales, which items were extracted using
 parameters::principal_components()."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -48,6 +55,8 @@ parameters::principal_components()."><meta property="og:image" content="https://
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -56,24 +65,32 @@ parameters::principal_components()."><meta property="og:image" content="https://
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/check_itemscale.R" class="external-link"><code>R/check_itemscale.R</code></a></small>
       <div class="d-none name"><code>check_itemscale.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Compute various measures of internal consistencies
 applied to (sub)scales, which items were extracted using
 <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::principal_components()</a></code>.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_itemscale</span><span class="op">(</span><span class="va">x</span>, factor_index <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An object of class <code>parameters_pca</code>, as returned by
 <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::principal_components()</a></code>, or a data frame.</p></dd>
+
+
 <dt id="arg-factor-index">factor_index<a class="anchor" aria-label="anchor" href="#arg-factor-index"></a></dt>
 <dd><p>If <code>x</code> is a data frame, <code>factor_index</code> must be specified.
 It must be a numeric vector of same length as number of columns in <code>x</code>, where
 each element is the index of the factor to which the respective column in <code>x</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -92,6 +109,7 @@ and calculates the above mentioned measures.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+
 <ul><li><p><em>Item difficulty</em> should range between 0.2 and 0.8. Ideal value
 is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See
 <code><a href="item_difficulty.html">item_difficulty()</a></code> for details.</p></li>
@@ -106,10 +124,12 @@ acceptability. Satisfactory range lies between 0.2 and 0.4. See also
 </ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Briggs SR, Cheek JM (1986) The role of factor analysis in the development
 and evaluation of personality scales. Journal of Personality, 54(1),
 106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x</p></li>
 </ul></div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># data generation from '?prcomp', slightly modified</span></span></span>
@@ -232,12 +252,21 @@ and evaluation of personality scales. Journal of Personality, 54(1),
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

@@ -5,12 +5,19 @@ where the residuals are not expected to be normally distributed."><meta property
 checking the uniformity of residuals, in particular for non-Gaussian models,
 where the residuals are not expected to be normally distributed."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -48,6 +55,8 @@ where the residuals are not expected to be normally distributed."><meta property
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -56,11 +65,13 @@ where the residuals are not expected to be normally distributed."><meta property
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/simulate_residuals.R" class="external-link"><code>R/simulate_residuals.R</code></a></small>
       <div class="d-none name"><code>simulate_residuals.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>Returns simulated residuals from a model. This is useful for
 checking the uniformity of residuals, in particular for non-Gaussian models,
 where the residuals are not expected to be normally distributed.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">simulate_residuals</span><span class="op">(</span><span class="va">x</span>, iterations <span class="op">=</span> <span class="fl">250</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -68,24 +79,38 @@ where the residuals are not expected to be normally distributed.</p>
 <span><span class="co"># S3 method for class 'performance_simres'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">object</span>, quantile_function <span class="op">=</span> <span class="cn">NULL</span>, outlier_values <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model object.</p></dd>
+
+
 <dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
 <dd><p>Number of simulations to run.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed on to <code><a href="https://rdrr.io/pkg/DHARMa/man/simulateResiduals.html" class="external-link">DHARMa::simulateResiduals()</a></code>.</p></dd>
+
+
 <dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>A <code>performance_simres</code> object, as returned by <code>simulate_residuals()</code>.</p></dd>
+
+
 <dt id="arg-quantile-function">quantile_function<a class="anchor" aria-label="anchor" href="#arg-quantile-function"></a></dt>
 <dd><p>A function to apply to the residuals. If <code>NULL</code>, the
 residuals are returned as is. If not <code>NULL</code>, the residuals are passed to this
 function. This is useful for returning normally distributed residuals, for
 example: <code>residuals(x, quantile_function = qnorm)</code>.</p></dd>
+
+
 <dt id="arg-outlier-values">outlier_values<a class="anchor" aria-label="anchor" href="#arg-outlier-values"></a></dt>
 <dd><p>A vector of length 2, specifying the values to replace
 <code>-Inf</code> and <code>Inf</code> with, respectively.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -103,6 +128,8 @@ functions from the <strong>see</strong> package. See also <code>vignette("DHARMa
     </div>
     <div class="section level2">
     <h2 id="tests-based-on-simulated-residuals">Tests based on simulated residuals<a class="anchor" aria-label="anchor" href="#tests-based-on-simulated-residuals"></a></h2>
+
+
 <p>For certain models, resp. model from certain families, tests like
 <code><a href="check_zeroinflation.html">check_zeroinflation()</a></code> or <code><a href="check_overdispersion.html">check_overdispersion()</a></code> are based on
 simulated residuals. These are usually more accurate for such tests than
@@ -120,6 +147,7 @@ accurate results.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Hartig, F., &amp; Lohse, L. (2022). DHARMa: Residual Diagnostics for Hierarchical
 (Multi-Level / Mixed) Regression Models (Version 0.4.5). Retrieved from
 https://CRAN.R-project.org/package=DHARMa</p></li>
@@ -132,6 +160,7 @@ of Computational and Graphical Statistics, 5(3), 236. <a href="https://doi.org/1
 <code><a href="check_overdispersion.html">check_overdispersion()</a></code> and <code><a href="check_predictions.html">check_predictions()</a></code>. See also
 <code><a href="https://easystats.github.io/see/reference/plot.see_performance_simres.html" class="external-link">see::plot.see_performance_simres()</a></code> for options to customize the plot.</p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
@@ -150,12 +179,21 @@ of Computational and Graphical Statistics, 5(3), 236. <a href="https://doi.org/1
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 

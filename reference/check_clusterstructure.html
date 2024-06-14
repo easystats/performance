@@ -17,12 +17,19 @@ investigating the heatmap of the ordered dissimilarity matrix. Following
 this, one can potentially detect the clustering tendency by counting the
 number of square shaped blocks along the diagonal."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
+
+
     <nav class="navbar navbar-expand-lg fixed-top " aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">performance</a>
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.2</small>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="nav-item dropdown">
@@ -60,6 +67,8 @@ number of square shaped blocks along the diagonal."><meta property="og:image" co
     <li><button class="dropdown-item" data-bs-theme-value="auto"><span class="fa fa-adjust"></span> Auto</button></li>
   </ul></li>
       </ul></div>
+
+
   </div>
 </nav><div class="container template-reference-topic">
 <div class="row">
@@ -68,6 +77,7 @@ number of square shaped blocks along the diagonal."><meta property="og:image" co
       <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/check_clusterstructure.R" class="external-link"><code>R/check_clusterstructure.R</code></a></small>
       <div class="d-none name"><code>check_clusterstructure.Rd</code></div>
     </div>
+
     <div class="ref-description section level2">
     <p>This checks whether the data is appropriate for clustering using the Hopkins'
 H statistic of given data. If the value of Hopkins statistic is close to 0
@@ -79,22 +89,33 @@ investigating the heatmap of the ordered dissimilarity matrix. Following
 this, one can potentially detect the clustering tendency by counting the
 number of square shaped blocks along the diagonal.</p>
     </div>
+
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_clusterstructure</span><span class="op">(</span><span class="va">x</span>, standardize <span class="op">=</span> <span class="cn">TRUE</span>, distance <span class="op">=</span> <span class="st">"euclidean"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+
+
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt id="arg-standardize">standardize<a class="anchor" aria-label="anchor" href="#arg-standardize"></a></dt>
 <dd><p>Standardize the data frame before clustering (default).</p></dd>
+
+
 <dt id="arg-distance">distance<a class="anchor" aria-label="anchor" href="#arg-distance"></a></dt>
 <dd><p>Distance method used. Other methods than "euclidean"
 (default) are exploratory in the context of clustering tendency. See
 <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist()</a></code> for list of available methods.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Arguments passed to or from other methods.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -102,6 +123,7 @@ number of square shaped blocks along the diagonal.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
 <ul><li><p>Lawson, R. G., &amp; Jurs, P. C. (1990). New index for clustering
 tendency and its application to chemical problems. Journal of chemical
 information and computer sciences, 30(1), 36-41.</p></li>
@@ -114,6 +136,7 @@ Joint Conference on Neural Networks. IJCNN02 (3), 2225-2230. IEEE.</p></li>
     <div class="dont-index"><p><code><a href="check_factorstructure.html">check_kmo()</a></code>, <code><a href="check_factorstructure.html">check_sphericity_bartlett()</a></code> and
 <code><a href="check_factorstructure.html">check_factorstructure()</a></code>.</p></div>
     </div>
+
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
@@ -130,12 +153,21 @@ Joint Conference on Neural Networks. IJCNN02 (3), 2225-2230. IEEE.</p></li>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
+
+
     <footer><div class="pkgdown-footer-left">
   <p>Developed by <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, Philip Waggoner, <a href="https://wiernik.org/" class="external-link">Brenton M. Wiernik</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
+
 <div class="pkgdown-footer-right">
   <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
+
     </footer></div>
+
+
+
+
+
   </body></html>
 
