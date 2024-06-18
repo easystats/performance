@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +67,7 @@
 <h3 id="general-0-12-1">General<a class="anchor" aria-label="anchor" href="#general-0-12-1"></a></h3>
 <ul><li><p><code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> get a <code>null_model</code> argument. This can be useful when computing R2 or ICC for mixed models, where the internal computation of the null model fails, or when you already have fit the null model and want to save time.</p></li>
 <li><p><code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> get a <code>approximation</code> argument indicating the approximation method for the distribution-specific (residual) variance. See Nakagawa et al. 2017 for details.</p></li>
+<li><p><code><a href="../reference/icc.html">icc()</a></code> and <code><a href="../reference/r2_nakagawa.html">r2_nakagawa()</a></code> get a <code>model_component</code> argument indicating the component for zero-inflation or hurdle models.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
