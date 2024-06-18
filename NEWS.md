@@ -11,6 +11,9 @@
   approximation method for the distribution-specific (residual) variance. See
   Nakagawa et al. 2017 for details.
 
+* `icc()` and `r2_nakagawa()` get a `model_component` argument indicating the 
+  component for zero-inflation or hurdle models.
+
 # performance 0.12.0
 
 ## Breaking

@@ -85,6 +85,7 @@ r2_nakagawa <- function(model,
                         ci_method = NULL,
                         null_model = NULL,
                         approximation = "lognormal",
+                        model_component = NULL,
                         verbose = TRUE,
                         ...) {
   # calculate random effect variances
@@ -95,7 +96,8 @@ r2_nakagawa <- function(model,
     null_model = null_model,
     approximation = approximation,
     name_fun = "r2()",
-    name_full = "r-squared"
+    name_full = "r-squared",
+    model_component = model_component
   )
 
   # return if R2 couldn't be computed

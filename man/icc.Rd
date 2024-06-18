@@ -14,6 +14,7 @@ icc(
   ci_method = NULL,
   null_model = NULL,
   approximation = "lognormal",
+  model_component = NULL,
   verbose = TRUE,
   ...
 )
@@ -62,6 +63,11 @@ applies to non-Gaussian models. Can be \code{"lognormal"} (default), \code{"delt
 \code{"trigamma"}. For binomial models, the default is the \emph{theoretical} distribution
 specific variance, however, it can also be \code{"observation_level"}. See
 \emph{Nakagawa et al. 2017}, in particular supplement 2, for details.}
+
+\item{model_component}{For models that can have a zero-inflation component,
+specify for which component variances should be returned. If \code{NULL} or \code{"full"}
+(the default), both the conditional and the zero-inflation component are taken
+into account. If \code{"conditional"}, only the conditional component is considered.}
 
 \item{verbose}{Toggle warnings and messages.}
 

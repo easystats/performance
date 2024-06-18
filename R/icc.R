@@ -178,6 +178,7 @@ icc <- function(model,
                 ci_method = NULL,
                 null_model = NULL,
                 approximation = "lognormal",
+                model_component = NULL,
                 verbose = TRUE,
                 ...) {
   # special handling for smicd::semLme()
@@ -210,7 +211,8 @@ icc <- function(model,
     model,
     tolerance = tolerance,
     null_model = null_model,
-    approximation = approximation
+    approximation = approximation,
+    model_component = model_component
   )
 
   # return if ICC couldn't be computed
@@ -545,6 +547,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
                                  name_fun = "icc()",
                                  name_full = "ICC",
                                  null_model = NULL,
+                                 model_component = NULL,
                                  approximation = "lognormal",
                                  verbose = TRUE) {
   vars <- tryCatch(
@@ -554,6 +557,7 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
       tolerance = tolerance,
       null_model = null_model,
       approximation = approximation,
+      model_component = model_component,
       verbose = verbose
     ),
     error = function(e) {
