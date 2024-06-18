@@ -97,7 +97,8 @@ r2_nakagawa <- function(model,
     approximation = approximation,
     name_fun = "r2()",
     name_full = "r-squared",
-    model_component = model_component
+    model_component = model_component,
+    verbose = verbose
   )
 
   # return if R2 couldn't be computed

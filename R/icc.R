@@ -212,7 +212,8 @@ icc <- function(model,
     tolerance = tolerance,
     null_model = null_model,
     approximation = approximation,
-    model_component = model_component
+    model_component = model_component,
+    verbose = verbose
   )
 
   # return if ICC couldn't be computed
