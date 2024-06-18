@@ -1,3 +1,19 @@
+# performance 0.12.1
+
+## General
+
+* `icc()` and `r2_nakagawa()` get a `null_model` argument. This can be useful
+  when computing R2 or ICC for mixed models, where the internal computation of
+  the null model fails, or when you already have fit the null model and want
+  to save time.
+
+* `icc()` and `r2_nakagawa()` get a `approximation` argument indicating the 
+  approximation method for the distribution-specific (residual) variance. See
+  Nakagawa et al. 2017 for details.
+
+* `icc()` and `r2_nakagawa()` get a `model_component` argument indicating the 
+  component for zero-inflation or hurdle models.
+
 # performance 0.12.0
 
 ## Breaking

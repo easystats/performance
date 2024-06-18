@@ -45,8 +45,8 @@ test_that("icc", {
   expect_equal(
     icc(m2),
     data.frame(
-      ICC_adjusted = 0.399303562702568, ICC_conditional = 0.216907586891627,
-      ICC_unadjusted = 0.216907586891627
+      ICC_adjusted = 0.40579, ICC_conditional = 0.21881,
+      ICC_unadjusted = 0.21881
     ),
     tolerance = 1e-2,
     ignore_attr = TRUE

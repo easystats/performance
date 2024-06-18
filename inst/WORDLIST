@@ -147,6 +147,7 @@ Michalos
 Moosbrugger
 Mora
 Multicollinearity
+MuMIn
 NFI
 NNFI
 Nagelkerke
@@ -298,6 +299,7 @@ multicollinearity
 multimodel
 multiresponse
 multivariable
+nbinom
 nd
 nonnest
 overfitted

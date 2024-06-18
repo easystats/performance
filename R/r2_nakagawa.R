@@ -18,10 +18,36 @@
 #'
 #' @return A list with the conditional and marginal R2 values.
 #'
+#' @section Supported models and model families:
+#' The single variance components that are required to calculate the marginal
+#' and conditional r-squared values are calculated using the [`insight::get_variance()`]
+#' function. The results are validated against the solutions provided by
+#' _Nakagawa et al. (2017)_, in particular examples shown in the Supplement 2
+#' of the paper. Other model families are validated against results from the
+#' **MuMIn** package. This means that the r-squared values returned by `r2_nakagawa()`
+#' should be accurate and reliable for following mixed models or model families:
+#'
+#' - Bernoulli (logistic) regression
+#' - Binomial regression (with other than binary outcomes)
+#' - Poisson and Quasi-Poisson regression
+#' - Negative binomial regression (including nbinom1 and nbinom2 families)
+#' - Gaussian regression (linear models)
+#' - Gamma regression
+#' - Tweedie regression
+#' - Beta regression
+#' - Ordered beta regression
+#'
+#' Following model families are not yet validated, but should work:
+#'
+#' - Zero-inflated and hurdle models
+#' - Beta-binomial regression
+#' - Compound Poisson regression
+#' - Generalized Poisson regression
+#'
 #' @details
 #' Marginal and conditional r-squared values for mixed models are calculated
 #' based on _Nakagawa et al. (2017)_. For more details on the computation of
-#' the variances, see `?insight::get_variance`. The random effect variances are
+#' the variances, see [`insight::get_variance()`]. The random effect variances are
 #' actually the mean random effect variances, thus the r-squared value is also
 #' appropriate for mixed models with random slopes or nested random effects
 #' (see _Johnson, 2014_).
@@ -53,10 +79,13 @@
 #' @export
 r2_nakagawa <- function(model,
                         by_group = FALSE,
-                        tolerance = 1e-5,
+                        tolerance = 1e-8,
                         ci = NULL,
                         iterations = 100,
                         ci_method = NULL,
+                        null_model = NULL,
+                        approximation = "lognormal",
+                        model_component = NULL,
                         verbose = TRUE,
                         ...) {
   # calculate random effect variances
@@ -64,8 +93,11 @@ r2_nakagawa <- function(model,
     model,
     tolerance,
     components = c("var.fixed", "var.residual"),
+    null_model = null_model,
+    approximation = approximation,
     name_fun = "r2()",
-    name_full = "r-squared"
+    name_full = "r-squared",
+    model_component = model_component
   )
 
   # return if R2 couldn't be computed
@@ -85,7 +117,9 @@ r2_nakagawa <- function(model,
     }
 
     # null-model
-    null_model <- insight::null_model(model)
+    if (is.null(null_model)) {
+      null_model <- insight::null_model(model)
+    }
     vars_null <- insight::get_variance(null_model, tolerance = tolerance)
 
     # names of group levels

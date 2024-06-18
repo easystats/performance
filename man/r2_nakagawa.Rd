@@ -7,10 +7,13 @@
 r2_nakagawa(
   model,
   by_group = FALSE,
-  tolerance = 1e-05,
+  tolerance = 1e-08,
   ci = NULL,
   iterations = 100,
   ci_method = NULL,
+  null_model = NULL,
+  approximation = "lognormal",
+  model_component = NULL,
   verbose = TRUE,
   ...
 )
@@ -47,6 +50,24 @@ to calculate analytical confidence assuming a chi-squared distribution.
 However, these intervals are rather inaccurate and often too narrow. It is
 recommended to calculate bootstrapped confidence intervals for mixed models.}
 
+\item{null_model}{Optional, a null model to compute the random effect variances,
+which is passed to \code{\link[insight:get_variance]{insight::get_variance()}}. Usually only required if
+calculation of r-squared or ICC fails when \code{null_model} is not specified. If
+calculating the null model takes longer and you already have fit the null
+model, you can pass it here, too, to speed up the process.}
+
+\item{approximation}{Character string, indicating the approximation method
+for the distribution-specific (observation level, or residual) variance. Only
+applies to non-Gaussian models. Can be \code{"lognormal"} (default), \code{"delta"} or
+\code{"trigamma"}. For binomial models, the default is the \emph{theoretical} distribution
+specific variance, however, it can also be \code{"observation_level"}. See
+\emph{Nakagawa et al. 2017}, in particular supplement 2, for details.}
+
+\item{model_component}{For models that can have a zero-inflation component,
+specify for which component variances should be returned. If \code{NULL} or \code{"full"}
+(the default), both the conditional and the zero-inflation component are taken
+into account. If \code{"conditional"}, only the conditional component is considered.}
+
 \item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
@@ -61,7 +82,7 @@ mixed effects models with complex random effects structures.
 \details{
 Marginal and conditional r-squared values for mixed models are calculated
 based on \emph{Nakagawa et al. (2017)}. For more details on the computation of
-the variances, see \code{?insight::get_variance}. The random effect variances are
+the variances, see \code{\link[insight:get_variance]{insight::get_variance()}}. The random effect variances are
 actually the mean random effect variances, thus the r-squared value is also
 appropriate for mixed models with random slopes or nested random effects
 (see \emph{Johnson, 2014}).
@@ -73,6 +94,36 @@ appropriate for mixed models with random slopes or nested random effects
 The contribution of random effects can be deduced by subtracting the
 marginal R2 from the conditional R2 or by computing the \code{\link[=icc]{icc()}}.
 }
+\section{Supported models and model families}{
+
+The single variance components that are required to calculate the marginal
+and conditional r-squared values are calculated using the \code{\link[insight:get_variance]{insight::get_variance()}}
+function. The results are validated against the solutions provided by
+\emph{Nakagawa et al. (2017)}, in particular examples shown in the Supplement 2
+of the paper. Other model families are validated against results from the
+\strong{MuMIn} package. This means that the r-squared values returned by \code{r2_nakagawa()}
+should be accurate and reliable for following mixed models or model families:
+\itemize{
+\item Bernoulli (logistic) regression
+\item Binomial regression (with other than binary outcomes)
+\item Poisson and Quasi-Poisson regression
+\item Negative binomial regression (including nbinom1 and nbinom2 families)
+\item Gaussian regression (linear models)
+\item Gamma regression
+\item Tweedie regression
+\item Beta regression
+\item Ordered beta regression
+}
+
+Following model families are not yet validated, but should work:
+\itemize{
+\item Zero-inflated and hurdle models
+\item Beta-binomial regression
+\item Compound Poisson regression
+\item Generalized Poisson regression
+}
+}
+
 \examples{
 \dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)

@@ -3,7 +3,7 @@
 #' This function calculates the intraclass-correlation coefficient (ICC) -
 #' sometimes also called *variance partition coefficient* (VPC) or
 #' *repeatability* - for mixed effects models. The ICC can be calculated for all
-#' models supported by `insight::get_variance()`. For models fitted with the
+#' models supported by [`insight::get_variance()`]. For models fitted with the
 #' **brms**-package, `icc()` might fail due to the large variety of
 #' models and families supported by the **brms**-package. In such cases, an
 #' alternative to the ICC is the `variance_decomposition()`, which is based
@@ -11,31 +11,36 @@
 #'
 #' @param model A (Bayesian) mixed effects model.
 #' @param re_formula Formula containing group-level effects to be considered in
-#'   the prediction. If `NULL` (default), include all group-level effects.
-#'   Else, for instance for nested models, name a specific group-level effect
-#'   to calculate the variance decomposition for this group-level. See 'Details'
-#'   and `?brms::posterior_predict`.
+#' the prediction. If `NULL` (default), include all group-level effects.
+#' Else, for instance for nested models, name a specific group-level effect
+#' to calculate the variance decomposition for this group-level. See 'Details'
+#' and `?brms::posterior_predict`.
 #' @param ci Confidence resp. credible interval level. For `icc()` and `r2()`,
-#'   confidence intervals are based on bootstrapped samples from the ICC resp.
-#'   R2 value. See `iterations`.
+#' confidence intervals are based on bootstrapped samples from the ICC resp.
+#' R2 value. See `iterations`.
 #' @param by_group Logical, if `TRUE`, `icc()` returns the variance
-#'   components for each random-effects level (if there are multiple levels).
-#'   See 'Details'.
+#' components for each random-effects level (if there are multiple levels).
+#' See 'Details'.
 #' @param iterations Number of bootstrap-replicates when computing confidence
-#'   intervals for the ICC or R2.
+#' intervals for the ICC or R2.
 #' @param ci_method Character string, indicating the bootstrap-method. Should
-#'   be `NULL` (default), in which case `lme4::bootMer()` is used for
-#'   bootstrapped confidence intervals. However, if bootstrapped intervals cannot
-#'   be calculated this was, try `ci_method = "boot"`, which falls back to
-#'   `boot::boot()`. This may successfully return bootstrapped confidence intervals,
-#'   but bootstrapped samples may not be appropriate for the multilevel structure
-#'   of the model. There is also an option `ci_method = "analytical"`, which tries
-#'   to calculate analytical confidence assuming a chi-squared distribution.
-#'   However, these intervals are rather inaccurate and often too narrow. It is
-#'   recommended to calculate bootstrapped confidence intervals for mixed models.
+#' be `NULL` (default), in which case `lme4::bootMer()` is used for
+#' bootstrapped confidence intervals. However, if bootstrapped intervals cannot
+#' be calculated this was, try `ci_method = "boot"`, which falls back to
+#' `boot::boot()`. This may successfully return bootstrapped confidence intervals,
+#' but bootstrapped samples may not be appropriate for the multilevel structure
+#' of the model. There is also an option `ci_method = "analytical"`, which tries
+#' to calculate analytical confidence assuming a chi-squared distribution.
+#' However, these intervals are rather inaccurate and often too narrow. It is
+#' recommended to calculate bootstrapped confidence intervals for mixed models.
 #' @param verbose Toggle warnings and messages.
+#' @param null_model Optional, a null model to compute the random effect variances,
+#' which is passed to [`insight::get_variance()`]. Usually only required if
+#' calculation of r-squared or ICC fails when `null_model` is not specified. If
+#' calculating the null model takes longer and you already have fit the null
+#' model, you can pass it here, too, to speed up the process.
 #' @param ... Arguments passed down to `lme4::bootMer()` or `boot::boot()`
-#'   for bootstrapped ICC or R2.
+#' for bootstrapped ICC or R2.
 #'
 #' @inheritParams r2_bayes
 #' @inheritParams insight::get_variance
@@ -57,6 +62,8 @@
 #'  - Raudenbush, S. W., and Bryk, A. S. (2002). Hierarchical linear models:
 #'    applications and data analysis methods (2nd ed). Thousand Oaks: Sage
 #'    Publications.
+#'
+#' @inheritSection r2_nakagawa Supported models and model families
 #'
 #' @details
 #' ## Interpretation
@@ -169,6 +176,9 @@ icc <- function(model,
                 ci = NULL,
                 iterations = 100,
                 ci_method = NULL,
+                null_model = NULL,
+                approximation = "lognormal",
+                model_component = NULL,
                 verbose = TRUE,
                 ...) {
   # special handling for smicd::semLme()
@@ -197,7 +207,13 @@ icc <- function(model,
   }
 
   # calculate random effect variances
-  vars <- .compute_random_vars(model, tolerance)
+  vars <- .compute_random_vars(
+    model,
+    tolerance = tolerance,
+    null_model = null_model,
+    approximation = approximation,
+    model_component = model_component
+  )
 
   # return if ICC couldn't be computed
   if (is.null(vars) || all(is.na(vars))) {
@@ -530,12 +546,18 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
                                  components = c("var.fixed", "var.random", "var.residual"),
                                  name_fun = "icc()",
                                  name_full = "ICC",
+                                 null_model = NULL,
+                                 model_component = NULL,
+                                 approximation = "lognormal",
                                  verbose = TRUE) {
   vars <- tryCatch(
     insight::get_variance(model,
       name_fun = name_fun,
       name_full = name_full,
       tolerance = tolerance,
+      null_model = null_model,
+      approximation = approximation,
+      model_component = model_component,
       verbose = verbose
     ),
     error = function(e) {
