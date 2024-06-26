@@ -43,6 +43,18 @@
 #' - Beta-binomial regression
 #' - Compound Poisson regression
 #' - Generalized Poisson regression
+#' - Log-normal regression
+#'
+#' Extracting variance components for models with zero-inflation part is not
+#' straightforward, because it is not definitely clear how the distribution-specific
+#' variance should be calculated. Therefore, it is recommended to carefully
+#' inspect the results, and probably validate against other models, e.g. Bayesian
+#' models (although results may be only roughly comparable).
+#'
+#' Log-normal regressions (e.g. `lognormal()` family in **glmmTMB** or `gaussian("log")`)
+#' often have a very low fixed effects variance (if they were calculated as
+#' suggested by _Nakagawa et al. 2017_). This results in very low ICC or
+#' r-squared values, which may not be meaningful.
 #'
 #' @details
 #' Marginal and conditional r-squared values for mixed models are calculated
