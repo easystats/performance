@@ -204,7 +204,17 @@ should be accurate and reliable for following mixed models or model families:</p
 <li><p>Beta-binomial regression</p></li>
 <li><p>Compound Poisson regression</p></li>
 <li><p>Generalized Poisson regression</p></li>
-</ul></div>
+<li><p>Log-normal regression</p></li>
+</ul><p>Extracting variance components for models with zero-inflation part is not
+straightforward, because it is not definitely clear how the distribution-specific
+variance should be calculated. Therefore, it is recommended to carefully
+inspect the results, and probably validate against other models, e.g. Bayesian
+models (although results may be only roughly comparable).</p>
+<p>Log-normal regressions (e.g. <code><a href="https://rdrr.io/pkg/glmmTMB/man/nbinom2.html" class="external-link">lognormal()</a></code> family in <strong>glmmTMB</strong> or <code>gaussian("log")</code>)
+often have a very low fixed effects variance (if they were calculated as
+suggested by <em>Nakagawa et al. 2017</em>). This results in very low ICC or
+r-squared values, which may not be meaningful.</p>
+    </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
 
