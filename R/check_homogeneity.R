@@ -70,14 +70,14 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
     )
 
     if (is.null(check)) {
-      insight::print_color("'check_homogeneity()' cannot perform check for normality. Please specify the 'method'-argument for the test of equal variances.\n", "red")
+      insight::print_color("'check_homogeneity()' cannot perform check for normality. Please specify the 'method'-argument for the test of equal variances.\n", "red") # nolint
       return(NULL)
     }
 
     method <- ifelse(check < 0.05, "fligner", "bartlett")
   }
 
-  if (method == "fligner") {
+  if (method == "fligner") { # nolint
     r <- stats::fligner.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "bartlett") {
@@ -157,7 +157,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
 
   if (any(is_covar)) {
     insight::format_alert(
-      "Levene's test is not appropriate with quantitative explanatory variables. Testing assumption of homogeneity among factor groups only."
+      "Levene's test is not appropriate with quantitative explanatory variables. Testing assumption of homogeneity among factor groups only." # nolint
     )
     # ## TODO maybe add as option?
     # warning("Testing assumption of homogeneity on residualzied data among factor groups only.", call. = FALSE)
