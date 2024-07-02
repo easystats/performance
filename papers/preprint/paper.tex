@@ -1,0 +1,987 @@
+%Version 2.1 April 2023
+% See section 11 of the User Manual for version history
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[sn-basic, lineno,pdflatex]{sn-jnl}
+
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
+
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithm}%
+\usepackage{algorithmicx}%
+\usepackage{algpseudocode}%
+\usepackage{listings}%
+%%%%
+
+%%%%%=============================================================================%%%%
+%%%%  Remarks: This template is provided to aid authors with the preparation
+%%%%  of original research articles intended for submission to journals published
+%%%%  by Springer Nature. The guidance has been prepared in partnership with
+%%%%  production teams to conform to Springer Nature technical requirements.
+%%%%  Editorial and presentation requirements differ among journal portfolios and
+%%%%  research disciplines. You may find sections in this template are irrelevant
+%%%%  to your work and are empowered to omit any such section if allowed by the
+%%%%  journal you intend to submit to. The submission guidelines and policies
+%%%%  of the journal take precedence. A detailed User Manual is available in the
+%%%%  template package for technical guidance.
+%%%%%=============================================================================%%%%
+
+
+
+\raggedbottom
+
+
+
+% Pandoc syntax highlighting
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+
+% tightlist command for lists without linebreak
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% From pandoc table feature
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+
+
+
+
+\begin{document}
+
+
+\title[Check your outliers]{Check your outliers! An introduction to
+identifying statistical outliers in R with \emph{easystats}}
+
+%%=============================================================%%
+%% Prefix	-> \pfx{Dr}
+%% GivenName	-> \fnm{Joergen W.}
+%% Particle	-> \spfx{van der} -> surname prefix
+%% FamilyName	-> \sur{Ploeg}
+%% Suffix	-> \sfx{IV}
+%% NatureName	-> \tanm{Poet Laureate} -> Title after name
+%% Degrees	-> \dgr{MSc, PhD}
+%% \author*[1,2]{\pfx{Dr} \fnm{Joergen W.} \spfx{van der} \sur{Ploeg} \sfx{IV} \tanm{Poet Laureate}
+%%                 \dgr{MSc, PhD}}\email{iauthor@gmail.com}
+%%=============================================================%%
+
+\author*[1]{\fnm{Rémi} \sur{Thériault} }\email{\href{mailto:theriault.remi@courrier.uqam.ca}{\nolinkurl{theriault.remi@courrier.uqam.ca}}}
+
+\author[2]{\fnm{Mattan} \spfx{S.} \sur{Ben-Shachar} }
+
+\author[3]{\fnm{Indrajeet} \sur{Patil} }
+
+\author[4]{\fnm{Daniel} \sur{Lüdecke} }
+
+\author[5]{\fnm{Brenton} \spfx{M.} \sur{Wiernik} }
+
+\author[6]{\fnm{Dominique} \sur{Makowski} }
+
+
+
+  \affil[1]{\orgname{Department of Psychology, Université du Québec à
+Montréal, Montréal, Québec, Canada}}
+  \affil[2]{\orgname{Independent Researcher, Ramat Gan, Israel}}
+  \affil[3]{\orgname{Center for Humans and Machines, Max Planck
+Institute for Human Development, Berlin, Germany}}
+  \affil[4]{\orgname{Institute of Medical Sociology, University Medical
+Center Hamburg-Eppendorf, Germany}}
+  \affil[5]{\orgname{Independent Researcher, Tampa, FL, USA}}
+  \affil[6]{\orgname{School of Psychology, University of Sussex,
+Brighton, UK}}
+
+\abstract{Beyond the challenge of keeping up-to-date with current best
+practices regarding the diagnosis and treatment of outliers, an
+additional difficulty arises concerning the mathematical implementation
+of the recommended methods. Here, we provide an overview of current
+recommendations and best practices and demonstrate how they can easily
+and conveniently be implemented in the R statistical computing software,
+using the \emph{\{performance\}} package of the \emph{easystats}
+ecosystem. We cover univariate, multivariate, and model-based
+statistical outlier detection methods, their recommended threshold,
+standard output, and plotting methods. We conclude by reviewing the
+different theoretical types of outliers, whether to exclude or winsorize
+them, and the importance of transparency. A preprint of this paper is
+available at: \url{https://doi.org/10.31234/osf.io/bu6nt}.}
+
+\keywords{univariate outliers; multivariate outliers; robust detection
+methods; R; easystats}
+
+
+
+\maketitle
+
+\section{Introduction}\label{introduction}
+
+Real-life data often contain observations that can be considered
+\emph{abnormal} when compared to the main population. The cause of it
+can be hard to assess and the boundaries of ``abnormal'' difficult to
+define---they may belong to a different distribution (originating from a
+different generative process) or simply be extreme cases, statistically
+rare but not impossible.
+
+Nonetheless, the improper handling of these outliers can substantially
+affect statistical model estimations, biasing effect estimations and
+weakening the models' predictive performance. It is thus essential to
+address this problem in a thoughtful manner. Yet, despite the existence
+of established recommendations and guidelines, many researchers still do
+not treat outliers in a consistent manner, or do so using inappropriate
+strategies \citep{simmons2011false, leys2013outliers}.
+
+One possible reason is that researchers are not aware of the existing
+recommendations, or do not know how to implement them using their
+analysis software. In this paper, we show how to follow current best
+practices for automatic and reproducible statistical outlier detection
+(SOD) using R and the \emph{\{performance\}} package
+\citep{ludecke2021performance}, which is part of the \emph{easystats}
+ecosystem of packages that build an R framework for easy statistical
+modeling, visualization, and reporting \citep{easystatspackage}.
+Installation instructions can be found on
+\href{https://github.com/easystats/performance}{GitHub} or its
+\href{https://easystats.github.io/performance/}{website}, and its list
+of dependencies on
+\href{https://cran.r-project.org/package=performance}{CRAN}.
+
+The instructional materials that follow are aimed at an audience of
+researchers who want to follow good practices, and are appropriate for
+advanced undergraduate students, graduate students, professors, or
+professionals having to deal with the nuances of outlier treatment.
+
+\section{Identifying Outliers}\label{identifying-outliers}
+
+Although many researchers attempt to identify outliers with measures
+based on the mean (e.g., \emph{z} scores), those methods are problematic
+because the mean and standard deviation themselves are not robust to the
+influence of outliers and those methods also assume normally distributed
+data (i.e., a Gaussian distribution). Therefore, current guidelines
+recommend using robust methods to identify outliers, such as those
+relying on the median as opposed to the mean
+\citep{leys2019outliers, leys2013outliers, leys2018outliers}.
+
+Nonetheless, which exact outlier method to use depends on many factors.
+In some cases, eye-gauging odd observations can be an appropriate
+solution, though many researchers will favour algorithmic solutions to
+detect potential outliers, for example, based on a continuous value
+expressing the observation stands out from the others.
+
+One of the factors to consider when selecting an algorithmic outlier
+detection method is the statistical test of interest. Identifying
+observations the regression model does not fit well can help find
+information relevant to our specific research context. This approach,
+known as model-based outliers detection (as outliers are extracted after
+the statistical model has been fit), can be contrasted with
+distribution-based outliers detection, which is based on the distance
+between an observation and the ``center'' of its population. Various
+quantification strategies of this distance exist for the latter, both
+univariate (involving only one variable at a time) or multivariate
+(involving multiple variables).
+
+When no method is readily available to detect model-based outliers, such
+as for structural equation modelling (SEM), looking for multivariate
+outliers may be of relevance. For simple tests (\emph{t} tests or
+correlations) that compare values of the same variable, it can be
+appropriate to check for univariate outliers. However, univariate
+methods can give false positives since \emph{t} tests and correlations,
+ultimately, are also models/multivariable statistics. They are in this
+sense more limited, but we show them nonetheless for educational
+purposes.
+
+Importantly, whatever approach researchers choose remains a subjective
+decision, which usage (and rationale) must be transparently documented
+and reproducible \citep{leys2019outliers}. Researchers should commit
+(ideally in a preregistration) to an outlier treatment method before
+collecting the data. They should report in the paper their decisions and
+details of their methods, as well as any deviation from their original
+plan. These transparency practices can help reduce false positives due
+to excessive researchers' degrees of freedom (i.e., choice flexibility
+throughout the analysis). In the following section, we will go through
+each of the mentioned methods and provide examples on how to implement
+them with R.
+
+\subsection{Univariate Outliers}\label{univariate-outliers}
+
+Researchers frequently attempt to identify outliers using measures of
+deviation from the center of a variable's distribution. One of the most
+popular such procedure is the \emph{z} score transformation, which
+computes the distance in standard deviation (SD) from the mean. However,
+as mentioned earlier, this popular method is not robust. Therefore, for
+univariate outliers, it is recommended to use the median along with the
+Median Absolute Deviation (MAD), which are more robust than the
+interquartile range or the mean and its standard deviation
+\citep{leys2019outliers, leys2013outliers}.
+
+Researchers can identify outliers based on robust (i.e., MAD-based)
+\emph{z} scores using the \texttt{check\_outliers()} function of the
+\emph{\{performance\}} package, by specifying
+\texttt{method\ =\ "zscore\_robust"}.\footnote{Note that
+  \texttt{check\_outliers()} only checks numeric variables.} Although
+\citet{leys2013outliers} suggest a default threshold of 2.5 and
+\citet{leys2019outliers} a threshold of 3, \emph{\{performance\}} uses
+by default a less conservative threshold of
+\textasciitilde3.29.\footnote{3.29 is an approximation of the two-tailed
+  critical value for \emph{p} \textless{} .001, obtained through
+  \texttt{qnorm(p\ =\ 1\ -\ 0.001\ /\ 2)}. We chose this threshold for
+  consistency with the thresholds of all our other methods.} That is,
+data points will be flagged as outliers if they go beyond +/-
+\textasciitilde3.29 MAD. Users can adjust this threshold using the
+\texttt{threshold} argument.
+
+Below we provide example code using the \texttt{mtcars} dataset, which
+was extracted from the 1974 \emph{Motor Trend} US magazine. The dataset
+contains fuel consumption and 10 characteristics of automobile design
+and performance for 32 different car models (see \texttt{?mtcars} for
+details). We chose this dataset because it is accessible from base R and
+familiar to many R users. We might want to conduct specific statistical
+analyses on this data set, say, \emph{t} tests or structural equation
+modelling, but first, we want to check for outliers that may influence
+those test results.
+
+Because the automobile names are stored as column names in
+\texttt{mtcars}, we first have to convert them to an ID column to
+benefit from the \texttt{check\_outliers()} ID argument. Furthermore, we
+only really need a couple columns for this demonstration, so we choose
+the first four (\texttt{mpg} = Miles/(US) gallon; \texttt{cyl} = Number
+of cylinders; \texttt{disp} = Displacement; \texttt{hp} = Gross
+horsepower). Finally, because there are no outliers in this dataset, we
+add two artificial outliers before running our function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(performance)}
+
+\CommentTok{\# Create some artificial outliers and an ID column}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(mtcars[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{4}\NormalTok{], }\DecValTok{42}\NormalTok{, }\DecValTok{55}\NormalTok{)}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{cbind}\NormalTok{(}\AttributeTok{car =} \FunctionTok{row.names}\NormalTok{(data), data)}
+
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"zscore\_robust"}\NormalTok{, }\AttributeTok{ID =} \StringTok{"car"}\NormalTok{)}
+\NormalTok{outliers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> 2 outliers detected: cases 33, 34.
+#> - Based on the following method and threshold: zscore_robust (3.291).
+#> - For variables: mpg, cyl, disp, hp.
+#> 
+#> -----------------------------------------------------------------------------
+#>  
+#> The following observations were considered outliers for two or more
+#>   variables by at least one of the selected methods:
+#> 
+#>   Row car n_Zscore_robust
+#> 1  33  33               2
+#> 2  34  34               2
+#> 
+#> -----------------------------------------------------------------------------
+#> Outliers per variable (zscore_robust): 
+#> 
+#> $mpg
+#>    Row car Distance_Zscore_robust
+#> 33  33  33               3.709699
+#> 34  34  34               5.848328
+#> 
+#> $cyl
+#>    Row car Distance_Zscore_robust
+#> 33  33  33               12.14083
+#> 34  34  34               16.52502
+\end{verbatim}
+
+What we see is that \texttt{check\_outliers()} with the robust \emph{z}
+score method detected two outliers: cases 33 and 34, which were the
+observations we added ourselves. They were flagged for two variables
+specifically: \texttt{mpg} (Miles/(US) gallon) and \texttt{cyl} (Number
+of cylinders), and the output provides their exact \emph{z} score for
+those variables.
+
+We describe how to deal with those cases in more details later in the
+paper, but should we want to exclude these detected outliers from the
+main dataset, we can extract row numbers using \texttt{which()} on the
+output object, which can then be used for indexing:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{which}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> [1] 33 34
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data\_clean }\OtherTok{\textless{}{-}}\NormalTok{ data[}\SpecialCharTok{{-}}\FunctionTok{which}\NormalTok{(outliers), ]}
+\end{Highlighting}
+\end{Shaded}
+
+All \texttt{check\_outliers()} output objects possess a \texttt{plot()}
+method, meaning it is also possible to visualize all observations in a
+way that highlights the outliers using the generic \texttt{plot()}
+function on the resulting outlier object after loading the \{see\}
+package (Figure 1).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(see)}
+
+\FunctionTok{plot}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{Figure 1}
+
+\emph{Visual depiction of outliers using the robust z-score method}
+
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/univariate_implicit-1} \caption{Note. The distance represents an aggregate score for variables mpg, cyl, disp, and hp.}\label{fig:univariate_implicit}
+\end{figure}
+
+Other univariate methods are available, such as using the interquartile
+range (IQR), or based on different intervals, such as the Highest
+Density Interval (HDI) or the Bias Corrected and Accelerated Interval
+(BCI). These methods are documented and described in the function's
+\href{https://easystats.github.io/performance/reference/check_outliers.html}{help
+page}.
+
+\subsection{Multivariate Outliers}\label{multivariate-outliers}
+
+Univariate outliers can be useful when the focus is on a particular
+variable, for instance the reaction time, as extreme values might be
+indicative of inattention or non-task-related behavior\footnote{ Note
+  that they might not be the optimal way of treating reaction time
+  outliers \citep{ratcliff1993methods, van1995statistical}}.
+
+However, in many scenarios, variables of a data set are not independent,
+and an abnormal observation will impact multiple dimensions. For
+instance, a participant giving random answers to a questionnaire. In
+this case, computing the \emph{z} score for each of the questions might
+not lead to satisfactory results. Instead, one might want to look at
+these variables together.
+
+One common approach for this is to compute multivariate distance metrics
+such as the Mahalanobis distance. Although the Mahalanobis distance is
+very popular, just like the regular \emph{z} scores method, it is not
+robust and is heavily influenced by the outliers themselves. Therefore,
+for multivariate outliers, it is recommended to use the Minimum
+Covariance Determinant, a robust version of the Mahalanobis distance
+\citep[MCD,][]{leys2018outliers, leys2019outliers}.
+
+In \emph{\{performance\}}'s \texttt{check\_outliers()}, one can use this
+approach with \texttt{method\ =\ "mcd"}.\footnote{Our default threshold
+  for the MCD method is defined by
+  \texttt{stats::qchisq(p\ =\ 1\ -\ 0.001,\ df\ =\ ncol(x))}, which
+  again is an approximation of the critical value for \emph{p}
+  \textless{} .001 consistent with the thresholds of our other methods.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"mcd"}\NormalTok{)}
+\NormalTok{outliers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> 2 outliers detected: cases 33, 34.
+#> - Based on the following method and threshold: mcd (20).
+#> - For variables: mpg, cyl, disp, hp.
+\end{verbatim}
+
+Here, we detected 9 multivariate outliers (i.e,. when looking at all
+variables of our dataset together). We can see the result in Figure 2.
+
+\textbf{Figure 2}
+
+\emph{Visual depiction of outliers using the Minimum Covariance
+Determinant (MCD) method}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/multivariate_implicit-1} \caption{Note. The Minimum Covariance Determinant (MCD) method is a robust version of the Mahalanobis distance. The distance represents the MCD scores for variables mpg, cyl, disp, and hp.}\label{fig:multivariate_implicit}
+\end{figure}
+
+Other multivariate methods are available, such as another type of robust
+Mahalanobis distance that in this case relies on an orthogonalized
+Gnanadesikan-Kettenring pairwise estimator
+\citep{gnanadesikan1972robust}. These methods are documented and
+described in the function's
+\href{https://easystats.github.io/performance/reference/check_outliers.html}{help
+page}.
+
+\subsection{Model-Based Outliers}\label{model-based-outliers}
+
+Working with regression models creates the possibility of using
+model-based SOD methods. These methods rely on the concept of
+\emph{leverage}, that is, how much influence a given observation can
+have on the model estimates. If few observations have a relatively
+strong leverage/influence on the model, one can suspect that the model's
+estimates are biased by these observations, in which case flagging them
+as outliers could prove helpful (see next section, ``Handling
+Outliers'').
+
+In \{performance\}, two such model-based SOD methods are currently
+available: Cook's distance, for regular regression models, and Pareto,
+for Bayesian models. As such, \texttt{check\_outliers()} can be applied
+directly on regression model objects, by simply specifying
+\texttt{method\ =\ "cook"} (or \texttt{method\ =\ "pareto"} for Bayesian
+models).\footnote{Our default threshold for the Cook method is defined
+  by \texttt{stats::qf(0.5,\ ncol(x),\ nrow(x)\ -\ ncol(x))}, which
+  again is an approximation of the critical value for \emph{p}
+  \textless{} .001 consistent with the thresholds of our other methods.}
+
+Currently, most lm models are supported (with the exception of
+\texttt{glmmTMB}, \texttt{lmrob}, and \texttt{glmrob} models), as long
+as they are supported by the underlying functions
+\texttt{stats::cooks.distance()} (or \texttt{loo::pareto\_k\_values()})
+and \texttt{insight::get\_data()} (for a full list of the 225 models
+currently supported by the \texttt{insight} package, see
+\url{https://easystats.github.io/insight/\#list-of-supported-models-by-class}).
+Also note that although \texttt{check\_outliers()} supports the pipe
+operators (\texttt{\textbar{}\textgreater{}} or
+\texttt{\%\textgreater{}\%}), it does not support \texttt{tidymodels} at
+this time. We show a demo below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(disp }\SpecialCharTok{\textasciitilde{}}\NormalTok{ mpg }\SpecialCharTok{*}\NormalTok{ disp, }\AttributeTok{data =}\NormalTok{ data)}
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(model, }\AttributeTok{method =} \StringTok{"cook"}\NormalTok{)}
+\NormalTok{outliers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> 1 outlier detected: case 34.
+#> - Based on the following method and threshold: cook (0.708).
+#> - For variable: (Whole model).
+\end{verbatim}
+
+Using the model-based outlier detection method, we identified a single
+outlier. We can see the result in Figure 3.
+
+\textbf{Figure 3}
+
+\emph{Visual depiction of outliers based on Cook's distance (leverage
+and standardized residuals)}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/model_fig-1} \caption{Note. This is based on the fitted model.}\label{fig:model_fig}
+\end{figure}
+
+Table 1 below summarizes which methods to use in which cases, and with
+what threshold. The recommended thresholds are the default thresholds.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2735}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2466}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2601}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2197}}@{}}
+\caption{Summary of Statistical Outlier Detection Methods
+Recommendations}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Statistical Test
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Diagnosis Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recommended Threshold
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Function Usage
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Statistical Test
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Diagnosis Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recommended Threshold
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Function Usage
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Supported regression model & \textbf{Model-based}: Cook (or Pareto for
+Bayesian models) & \emph{qf(0.5, ncol(x), nrow(x) - ncol(x))} (or 0.7
+for Pareto) & \emph{check\_outliers(model, method = ``cook'')} \\
+& & & \\
+Structural Equation Modeling (or other unsupported model) &
+\textbf{Multivariate}: Minimum Covariance Determinant (MCD) &
+\emph{qchisq(p = 1 - 0.001, df = ncol(x))} & \emph{check\_outliers(data,
+method = ``mcd'')} \\
+& & & \\
+Simple test with few variables (\emph{t} test, correlation, etc.) &
+\textbf{Univariate}: robust \emph{z} scores (MAD) & \emph{qnorm(p = 1 -
+0.001 / 2)}, \textasciitilde{} 3.29 & \emph{check\_outliers(data, method
+= ``zscore\_robust'')} \\
+\end{longtable}
+
+\subsection{Cook's Distance vs.~MCD}\label{cooks-distance-vs.-mcd}
+
+\citet{leys2018outliers} report a preference for the MCD method over
+Cook's distance. This is because Cook's distance removes one observation
+at a time and checks its corresponding influence on the model each time
+\citep{cook1977detection}, and flags any observation that has a large
+influence. In the view of these authors, when there are several
+outliers, the process of removing a single outlier at a time is
+problematic as the model remains ``contaminated'' or influenced by other
+possible outliers in the model, rendering this method suboptimal in the
+presence of multiple outliers.
+
+However, distribution-based approaches are not a silver bullet either,
+and there are cases where the usage of methods agnostic to theoretical
+and statistical models of interest might be problematic. For example, a
+very tall person would be expected to also be much heavier than average,
+but that would still fit with the expected association between height
+and weight (i.e., it would be in line with a model such as
+\texttt{weight\ \textasciitilde{}\ height}). In contrast, using
+multivariate outlier detection methods there may flag this person as
+being an outlier---being unusual on two variables, height and
+weight---even though the pattern fits perfectly with our predictions.
+
+In the example below, we plot the raw data \citep[using the
+\emph{\{rempsyc\}} package,][]{theriault2023rempsyc} and see two
+possible outliers (Figure 4). The first one falls along the regression
+line, and is therefore ``in line'' with our hypothesis. The second one
+clearly diverges from the regression line, and therefore we can conclude
+that this outlier may have a disproportionate influence on our model.
+
+\textbf{Figure 4}
+
+\emph{Scatter plot of height and weight}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ women[}\FunctionTok{rep}\NormalTok{(}\FunctionTok{seq\_len}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(women)), }\AttributeTok{each =} \DecValTok{100}\NormalTok{), ]}
+\NormalTok{data }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(data, }\FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{258}\NormalTok{), }\FunctionTok{c}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{200}\NormalTok{))}
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(weight }\SpecialCharTok{\textasciitilde{}}\NormalTok{ height, data)}
+\NormalTok{rempsyc}\SpecialCharTok{::}\FunctionTok{nice\_scatter}\NormalTok{(data, }\StringTok{"height"}\NormalTok{, }\StringTok{"weight"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/scatter-1} \caption{Note. The scatter plot of height and weight contains two extreme observations: one model-consistent (top-right) and the other, model-inconsistent (i.e., an outlier; bottom-right).}\label{fig:scatter}
+\end{figure}
+
+Using either the \emph{z}-score or MCD methods, our model-consistent
+observation will be incorrectly flagged as an outlier or influential
+observation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(model, }\AttributeTok{method =} \FunctionTok{c}\NormalTok{(}\StringTok{"zscore\_robust"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{))}
+\FunctionTok{which}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> [1] 1501 1502
+\end{verbatim}
+
+In contrast, the model-based detection method displays the desired
+behaviour: it correctly flags the person who is very tall but very
+light, without flagging the person who is both tall and heavy (Figure
+5).
+
+\textbf{Figure 5}
+
+\emph{Visual depiction of outliers based on Cook's distance (leverage
+and standardized residuals)}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(model, }\AttributeTok{method =} \StringTok{"cook"}\NormalTok{)}
+\FunctionTok{which}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> [1] 1502
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\includegraphics[width=1\linewidth]{paper_files/figure-latex/model3-1} \caption{Note. The leverage method (Cook's distance) correctly distinguishes the true outlier from the model-consistent extreme observation), based on the fitted model.}\label{fig:model3}
+\end{figure}
+
+Finally, unusual observations happen naturally: extreme observations are
+expected even when taken from a normal distribution. While statistical
+models can integrate this ``expectation'', multivariate outlier methods
+might be too conservative, flagging too many observations despite
+belonging to the right generative process. For these reasons, we believe
+that model-based methods are still preferable to the MCD when using
+supported regression models. Additionally, if the presence of multiple
+outliers is a significant concern, regression methods that are more
+robust to outliers should be considered---like \emph{t} regression or
+quantile regression---as they render their precise identification less
+critical \citep{mcelreath2020statistical}.
+
+\subsection{Composite Outlier Score}\label{composite-outlier-score}
+
+The \emph{\{performance\}} package also offers an alternative,
+consensus-based approach that combines several methods, based on the
+assumption that different methods provide different angles of looking at
+a given problem. By applying a variety of methods, one can hope to
+``triangulate'' the true outliers (those consistently flagged by
+multiple methods) and thus attempt to minimize false positives.
+
+In practice, this approach computes a composite outlier score, formed of
+the average of the binary (0 or 1) classification results of each
+method. It represents the probability that each observation is
+classified as an outlier by at least one method. The default decision
+rule classifies rows with composite outlier scores superior or equal to
+0.5 as outlier observations (i.e., that were classified as outliers by
+at least half of the methods). In \emph{\{performance\}}'s
+\texttt{check\_outliers()}, one can use this approach by including all
+desired methods in the corresponding argument.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{outliers }\OtherTok{\textless{}{-}} \FunctionTok{check\_outliers}\NormalTok{(model, }\AttributeTok{method =} \FunctionTok{c}\NormalTok{(}\StringTok{"zscore\_robust"}\NormalTok{, }\StringTok{"mcd"}\NormalTok{, }\StringTok{"cook"}\NormalTok{))}
+\FunctionTok{which}\NormalTok{(outliers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> [1] 1501 1502
+\end{verbatim}
+
+Outliers (counts or per variables) for individual methods can then be
+obtained through attributes. For example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{attributes}\NormalTok{(outliers)}\SpecialCharTok{$}\NormalTok{outlier\_var}\SpecialCharTok{$}\NormalTok{zscore\_robust}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#> $weight
+#>       Row Distance_Zscore_robust
+#> 1501 1501               6.913530
+#> 1502 1502               3.653492
+#> 
+#> $height
+#>       Row Distance_Zscore_robust
+#> 1501 1501               5.901794
+#> 1502 1502               5.901794
+\end{verbatim}
+
+An example sentence for reporting the usage of the composite method
+could be:
+
+\begin{quote}
+Based on a composite outlier score \citep[see the `check\_outliers()'
+function in the `performance' R package,][]{ludecke2021performance}
+obtained via the joint application of multiple outliers detection
+algorithms \citetext{\citealp[(a) median absolute deviation (MAD)-based
+robust \emph{z} scores,][]{leys2013outliers}; \citealp[(b) Mahalanobis
+minimum covariance determinant (MCD),][]{leys2019outliers}; \citealp[and
+(c) Cook's distance,][]{cook1977detection}}, we excluded two
+participants that were classified as outliers by at least half of the
+methods used.
+\end{quote}
+
+\section{Handling Outliers}\label{handling-outliers}
+
+The above section demonstrated how to identify outliers using the
+\texttt{check\_outliers()} function in the \emph{\{performance\}}
+package. But what should we do with these outliers once identified?
+Although it is common to automatically discard any observation that has
+been marked as ``an outlier'' as if it might infect the rest of the data
+with its statistical ailment, we believe that the use of SOD methods is
+but one step in the get-to-know-your-data pipeline; a researcher or
+analyst's \emph{domain knowledge} must be involved in the decision of
+how to deal with observations marked as outliers by means of SOD.
+Indeed, automatic tools can help detect outliers, but they are nowhere
+near perfect. Although they can be useful to flag suspect data, they can
+have misses and false alarms, and they cannot replace human eyes and
+proper vigilance from the researcher.
+
+For example, in the case of reaction time analysis,
+\citet{miller2023outlier} systematically compared 58 SOD procedures in
+simulations using large datasets of real reaction times. He concluded
+that regardless of the selected procedure, the exclusion of outliers
+(reaction times too slow or too fast) generally did more harm than good
+compared to retaining them. He thus recommends only excluding reaction
+times that are clearly invalid, such as those under a fixed threshold,
+e.g., 150 ms, which is close to the minimal physiological limit for
+reacting to a visual stimulus. Setting an upper limit on very long times
+(e.g., 3 to 5 seconds, depending on the experimental task) to remove
+potential sparse artifacts, can also improve model convergence and
+fitting.
+
+\citet{miller2023outlier} also suggests that it is generally better to
+assess outliers within specific experimental conditions or groups (a
+condition-specific strategy), rather than across the entire dataset at
+once (a pooled strategy), particularly in the case of reaction times.
+Additionally, common procedures such as statistical transformations
+(e.g.~log-transformation) reportedly offer at best no benefit (being
+instead potentially detrimental) to statistical power
+\citep{schramm2019reaction}. Given the specific shape of a typical
+reaction distribution, treating them with bespoke models that take into
+account its skewness (thus reframing the notion of outliers and
+integrating the longer right tail of the distribution) should be
+considered. Examples of such models---referred to as sequential sampling
+models or evidence accumulation models---include Wald models
+\citep{anders2016shifted}, log-normal race models
+\citep{rouder2015lognormal}, Linear Ballistic Accumulators
+\citep{brown2008simplest}, and Drift Diffusion Models
+\citep{ratcliff2016diffusion}.
+
+Thus, when manually inspecting data for outliers, it can be helpful to
+think of outliers as belonging to different types of outliers, or
+categories, which can help decide what to do with a given outlier.
+
+\subsection{Error, Interesting, and Random
+Outliers}\label{error-interesting-and-random-outliers}
+
+\citet{leys2019outliers} distinguish between error outliers, interesting
+outliers, and random outliers. \emph{Error outliers} are likely due to
+human error and should be corrected before data analysis or outright
+removed since they are invalid observations (e.g., physiologically
+implausible reaction times). \emph{Interesting outliers} are not due to
+technical error and may be of theoretical interest; it might thus be
+relevant to investigate them further even though they should be removed
+from the current analysis of interest. \emph{Random outliers} are
+assumed to be due to chance alone and to belong to the correct
+distribution and, therefore, should be retained.
+
+It is recommended to \emph{keep} observations which are expected to be
+part of the distribution of interest, even if they are outliers
+\citep{leys2019outliers}. However, if it is suspected that the outliers
+belong to an alternative distribution, then those observations could
+have a large impact on the results and call into question their
+robustness, especially if significance is conditional on their
+inclusion, so should be removed.
+
+We should also keep in mind that there might be error outliers that are
+not detected by statistical tools, but should nonetheless be found and
+removed. For example, if we are studying the effects of X on Y among
+teenagers and we have one observation from a 20-year-old, this
+observation might not be a \emph{statistical outlier}, but it is an
+outlier in the \emph{context} of our research, and should be discarded.
+We could call these observations \emph{undetected} error outliers, in
+the sense that although they do not statistically stand out, they do not
+belong to the theoretical or empirical distribution of interest (e.g.,
+teenagers). In this way, we should not blindly rely on statistical
+outlier detection methods; doing our due diligence to investigate
+undetected error outliers relative to our specific research question is
+also essential for valid inferences.
+
+\subsection{Winsorization}\label{winsorization}
+
+\emph{Removing} outliers that do not belong to the distribution of
+interest can in this case be a valid strategy, and ideally one would
+report results with and without outliers to see the extent of their
+impact on results. This approach however can reduce statistical power.
+Therefore, some propose a \emph{recoding} approach, namely,
+winsorization: bringing outliers back within acceptable limits
+\citep[e.g., 3 MADs,][]{tukey1963less}. However, if possible, it is
+recommended to collect enough data so that even after removing outliers,
+there is still sufficient statistical power without having to resort to
+winsorization \citep{leys2019outliers}.
+
+The \emph{easystats} ecosystem makes it easy to incorporate this step
+into your workflow through the \texttt{winsorize()} function of
+\emph{\{datawizard\}}, a lightweight R package to facilitate data
+wrangling and statistical transformations \citep{patil2022datawizard}.
+This procedure will bring back univariate outliers within the limits of
+`acceptable' values, based either on the percentile, the \emph{z} score,
+or its robust alternative based on the MAD. For example, let's say we
+want to winsorize the two outliers identified before:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data[}\DecValTok{1501}\SpecialCharTok{:}\DecValTok{1502}\NormalTok{, ]  }\CommentTok{\# See outliers rows}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#>      height weight
+#> 1501    100    258
+#> 1502    100    200
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Winsorizing using the MAD}
+\FunctionTok{library}\NormalTok{(datawizard)}
+\NormalTok{winsorized\_data }\OtherTok{\textless{}{-}} \FunctionTok{winsorize}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"zscore"}\NormalTok{, }\AttributeTok{robust =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{threshold =} \DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# Values \textgreater{} +/{-} MAD have been winsorized}
+\NormalTok{winsorized\_data[}\DecValTok{1501}\SpecialCharTok{:}\DecValTok{1502}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+#>       height   weight
+#> 1501 82.7912 188.3736
+#> 1502 82.7912 188.3736
+\end{verbatim}
+
+\subsection{The Importance of
+Transparency}\label{the-importance-of-transparency}
+
+Finally, it is a critical part of a sound outlier treatment that
+regardless of which SOD method used, it should be reported in a
+reproducible manner. Ideally, the handling of outliers should be
+specified \emph{a priori} with as much detail as possible, and
+preregistered, to limit researchers' degrees of freedom and therefore
+risks of false positives \citep{leys2019outliers}. This is especially
+true given that interesting outliers and random outliers are often times
+hard to distinguish in practice. Thus, researchers should always
+prioritize transparency and report all of the following information: (a)
+how many outliers were identified (including percentage); (b) according
+to which method and criteria, (c) using which function of which R
+package (if applicable), and (d) how they were handled (excluded or
+winsorized, if the latter, using what threshold). If at all possible,
+(e) the corresponding code script along with the data should be shared
+on a public repository like the Open Science Framework (OSF), so that
+the exclusion criteria can be reproduced precisely.
+
+\section{Conclusion}\label{conclusion}
+
+In this paper, we have shown how to investigate outliers using the
+\texttt{check\_outliers()} function of the \emph{\{performance\}}
+package while following current good practices. However, best practice
+for outlier treatment does not stop at using appropriate statistical
+algorithms, but entails respecting existing recommendations, such as
+preregistration, reproducibility, consistency, transparency, and
+justification. Ideally, one would additionally also report the package,
+function, and threshold used (linking to the full code when possible).
+We hope that this paper and the accompanying \texttt{check\_outlier()}
+function of \emph{easystats} will help researchers engage in good
+research practices while providing a smooth outlier detection
+experience.
+
+\section{Declarations}\label{declarations}
+
+\subsection{Funding information}\label{funding-information}
+
+This research received no external funding.
+
+\subsection{Competing Interests}\label{competing-interests}
+
+The authors declare no conflict of interest
+
+\subsection{Availability of data and materials (data
+transparency)}\label{availability-of-data-and-materials-data-transparency}
+
+This paper first appeared as a preprint
+(\url{https://doi.org/10.31234/osf.io/bu6nt}) and is also available as
+an online vignette at:
+\url{https://easystats.github.io/performance/articles/check_outliers}.
+All data used in this paper uses data included with base R.
+
+\subsection{Code availability}\label{code-availability}
+
+The performance package is available at the package official website
+(\url{https://easystats.github.io/performance}), on CRAN
+(\url{https://cran.r-project.org/package=performance}), and on the
+R-Universe (\url{https://easystats.r-universe.dev/performance}). The
+source code is available on GitHub
+(\url{https://github.com/easystats/performance/}), and the package can
+be installed from CRAN with \texttt{install.packages("performance")}.
+
+\subsection{Contributions}\label{contributions}
+
+RT: Writing- Original draft preparation, Writing- Reviewing and Editing,
+Software. MSB-S, IP, DL, BMW, and DM: Writing- Reviewing and Editing,
+Software.
+
+\subsection{Acknowledgements}\label{acknowledgements}
+
+\emph{\{performance\}} is part of the collaborative
+\href{https://github.com/easystats/easystats}{\emph{easystats}}
+ecosystem \citep{easystatspackage}. Thus, we thank all
+\href{https://github.com/orgs/easystats/people}{members of easystats},
+contributors, and users alike.
+
+\renewcommand\refname{References}
+\bibliography{paper.bib}
+
+
+\end{document}
