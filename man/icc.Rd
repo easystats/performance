@@ -57,18 +57,6 @@ calculation of r-squared or ICC fails when \code{null_model} is not specified. I
 calculating the null model takes longer and you already have fit the null
 model, you can pass it here, too, to speed up the process.}
 
-\item{approximation}{Character string, indicating the approximation method
-for the distribution-specific (observation level, or residual) variance. Only
-applies to non-Gaussian models. Can be \code{"lognormal"} (default), \code{"delta"} or
-\code{"trigamma"}. For binomial models, the default is the \emph{theoretical} distribution
-specific variance, however, it can also be \code{"observation_level"}. See
-\emph{Nakagawa et al. 2017}, in particular supplement 2, for details.}
-
-\item{model_component}{For models that can have a zero-inflation component,
-specify for which component variances should be returned. If \code{NULL} or \code{"full"}
-(the default), both the conditional and the zero-inflation component are taken
-into account. If \code{"conditional"}, only the conditional component is considered.}
-
 \item{verbose}{Toggle warnings and messages.}
 
 \item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
