@@ -376,14 +376,15 @@ _Removing_ outliers that do not belong to the distribution of interest can in th
 The _easystats_ ecosystem makes it easy to incorporate this step into your workflow through the `winsorize()` function of *{datawizard}*, a lightweight R package to facilitate data wrangling and statistical transformations [@patil2022datawizard]. This procedure will bring back univariate outliers within the limits of 'acceptable' values, based either on the percentile, the _z_ score, or its robust alternative based on the MAD. For example, let's say we want to winsorize the univariate outlier identified before:
 
 ```{r winsorization}
-data[1501:1502, ]  # See outliers rows
+data[33:34, 2:3] # See outliers rows
 
 # Winsorizing using the MAD
 library(datawizard)
-winsorized_data <- winsorize(data, method = "zscore", robust = TRUE, threshold = 3)
+winsorized_data <- winsorize(data, method = "zscore", 
+                             robust = TRUE, threshold = 3)
 
-# Values > +/- MAD have been winsorized
-winsorized_data[1501:1502, ]
+# Outlier values > +/- MAD have been winsorized
+winsorized_data[33:34, 2:3]
 ```
 
 ## The Importance of Transparency

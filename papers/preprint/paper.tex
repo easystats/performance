@@ -875,31 +875,32 @@ want to winsorize the univariate outlier identified before:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{data[}\DecValTok{1501}\SpecialCharTok{:}\DecValTok{1502}\NormalTok{, ]  }\CommentTok{\# See outliers rows}
+\NormalTok{data[}\DecValTok{33}\SpecialCharTok{:}\DecValTok{34}\NormalTok{, }\DecValTok{2}\SpecialCharTok{:}\DecValTok{3}\NormalTok{] }\CommentTok{\# See outliers rows}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-#>       car mpg cyl disp hp
-#> NA   <NA>  NA  NA   NA NA
-#> NA.1 <NA>  NA  NA   NA NA
+#>    mpg cyl
+#> 33  12  12
+#> 34  55  55
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Winsorizing using the MAD}
 \FunctionTok{library}\NormalTok{(datawizard)}
-\NormalTok{winsorized\_data }\OtherTok{\textless{}{-}} \FunctionTok{winsorize}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"zscore"}\NormalTok{, }\AttributeTok{robust =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{threshold =} \DecValTok{3}\NormalTok{)}
+\NormalTok{winsorized\_data }\OtherTok{\textless{}{-}} \FunctionTok{winsorize}\NormalTok{(data, }\AttributeTok{method =} \StringTok{"zscore"}\NormalTok{, }
+                             \AttributeTok{robust =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{threshold =} \DecValTok{3}\NormalTok{)}
 
-\CommentTok{\# Values \textgreater{} +/{-} MAD have been winsorized}
-\NormalTok{winsorized\_data[}\DecValTok{1501}\SpecialCharTok{:}\DecValTok{1502}\NormalTok{, ]}
+\CommentTok{\# Outlier values \textgreater{} +/{-} MAD have been winsorized}
+\NormalTok{winsorized\_data[}\DecValTok{33}\SpecialCharTok{:}\DecValTok{34}\NormalTok{, }\DecValTok{2}\SpecialCharTok{:}\DecValTok{3}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-#>       car mpg cyl disp hp
-#> NA   <NA>  NA  NA   NA NA
-#> NA.1 <NA>  NA  NA   NA NA
+#>         mpg     cyl
+#> 33 12.00000 12.0000
+#> 34 36.32403 14.8956
 \end{verbatim}
 
 \subsection{The Importance of
