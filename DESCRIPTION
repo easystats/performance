@@ -93,10 +93,9 @@ Suggests:
     DHARMa,
     estimatr,
     fixest,
-    flextable, 
     forecast,
-    ftExtra,
     gamm4,
+    geomtextpath,
     ggplot2,
     glmmTMB,
     graphics,
@@ -131,7 +130,6 @@ Suggests:
     quantreg,
     qqplotr (>= 0.0.6),
     randomForest,
-    rempsyc,
     rmarkdown,
     rstanarm,
     rstantools,
@@ -145,7 +143,7 @@ Suggests:
     withr (>= 3.0.0)
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Config/testthat/parallel: true
