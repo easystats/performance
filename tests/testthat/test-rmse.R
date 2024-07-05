@@ -16,3 +16,18 @@ test_that("rmse", {
   )
   expect_equal(cp$RMSE, c(47.4489, 47.39881, 47.38701, 47.41375, 47.39979, 47.38705), tolerance = 1e-3)
 })
+
+test_that("rmse, ci", {
+  data(mtcars)
+  model <- lm(mpg ~ hp + gear, data = mtcars)
+  # analytical
+  out <- performance_rmse(model, ci = 0.95, ci_method = "analytical")
+  expect_equal(out$CI_low, 2.30486, tolerance = 1e-4)
+  expect_equal(out$CI_high, 3.79093, tolerance = 1e-4)
+
+  # bootstrapped
+  set.seed(123)
+  out <- performance_rmse(model, ci = 0.95, ci_method = "boot")
+  expect_equal(out$CI_low, 1.9494, tolerance = 1e-4)
+  expect_equal(out$CI_high, 3.38406, tolerance = 1e-4)
+})
