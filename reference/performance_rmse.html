@@ -9,7 +9,7 @@ including Bayesian regression models."><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,15 +18,7 @@ including Bayesian regression models."><meta property="og:image" content="https:
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html" aria-label="Reference"><span class="fa fa-file-code"></span> Reference</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/check_model.html">Checking model assumption - linear models</a></li>
-    <li><a class="dropdown-item" href="../articles/check_outliers.html">Checking outliers with *performance*</a></li>
-    <li><a class="dropdown-item" href="../articles/simulate_residuals.html">Checking simulated residuals</a></li>
-    <li><a class="dropdown-item" href="../articles/compare.html">Compare, Test, and Select Models</a></li>
-    <li><a class="dropdown-item" href="../articles/r2.html">R-squared (R2)</a></li>
-    <li><a class="dropdown-item" href="../articles/check_model_practical.html">How to arrive at the best model fit</a></li>
-  </ul></li>
+<li class="nav-item"><a class="nav-link" href="../articles/index.html" aria-label="Articles"><span class="fa fa-book-reader"></span> Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html" aria-label="News"><span class="fa fa-newspaper"></span> News</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -71,9 +63,25 @@ including Bayesian regression models.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">performance_rmse</span><span class="op">(</span><span class="va">model</span>, normalized <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">performance_rmse</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  normalized <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  ci_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">rmse</span><span class="op">(</span><span class="va">model</span>, normalized <span class="op">=</span> <span class="cn">FALSE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">rmse</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  normalized <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  ci_method <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -88,8 +96,38 @@ including Bayesian regression models.</p>
 <dd><p>Logical, use <code>TRUE</code> if normalized rmse should be returned.</p></dd>
 
 
+<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
+<dd><p>Confidence resp. credible interval level. For <code><a href="icc.html">icc()</a></code>, <code><a href="r2.html">r2()</a></code>, and
+<code>rmse()</code>, confidence intervals are based on bootstrapped samples from the
+ICC, R2 or RMSE value. See <code>iterations</code>.</p></dd>
+
+
+<dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
+<dd><p>Number of bootstrap-replicates when computing confidence
+intervals for the ICC, R2, RMSE etc.</p></dd>
+
+
+<dt id="arg-ci-method">ci_method<a class="anchor" aria-label="anchor" href="#arg-ci-method"></a></dt>
+<dd><p>Character string, indicating the bootstrap-method. Should
+be <code>NULL</code> (default), in which case <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code> is used for bootstrapped
+confidence intervals. However, if bootstrapped intervals cannot be calculated
+this way, try <code>ci_method = "boot"</code>, which falls back to <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>. This
+may successfully return bootstrapped confidence intervals, but bootstrapped
+samples may not be appropriate for the multilevel structure of the model.
+There is also an option <code>ci_method = "analytical"</code>, which tries to calculate
+analytical confidence assuming a chi-squared distribution. However, these
+intervals are rather inaccurate and often too narrow. It is recommended to
+calculate bootstrapped confidence intervals for mixed models.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Toggle off warnings.</p></dd>
+<dd><p>Toggle warnings and messages.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Arguments passed down to <code><a href="https://rdrr.io/pkg/lme4/man/bootMer.html" class="external-link">lme4::bootMer()</a></code> or <code><a href="https://rdrr.io/pkg/boot/man/boot.html" class="external-link">boot::boot()</a></code>
+for bootstrapped ICC, R2, RMSE etc.; for <code><a href="icc.html">variance_decomposition()</a></code>,
+arguments are passed down to <code><a href="https://mc-stan.org/rstantools/reference/posterior_predict.html" class="external-link">brms::posterior_predict()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
