@@ -1,5 +1,7 @@
-#' Intraclass Correlation Coefficient (ICC)
+#' @title Intraclass Correlation Coefficient (ICC)
+#' @name icc
 #'
+#' @description
 #' This function calculates the intraclass-correlation coefficient (ICC) -
 #' sometimes also called *variance partition coefficient* (VPC) or
 #' *repeatability* - for mixed effects models. The ICC can be calculated for all
@@ -15,24 +17,23 @@
 #' Else, for instance for nested models, name a specific group-level effect
 #' to calculate the variance decomposition for this group-level. See 'Details'
 #' and `?brms::posterior_predict`.
-#' @param ci Confidence resp. credible interval level. For `icc()` and `r2()`,
-#' confidence intervals are based on bootstrapped samples from the ICC resp.
-#' R2 value. See `iterations`.
-#' @param by_group Logical, if `TRUE`, `icc()` returns the variance
-#' components for each random-effects level (if there are multiple levels).
-#' See 'Details'.
+#' @param ci Confidence resp. credible interval level. For `icc()`, `r2()`, and
+#' `rmse()`, confidence intervals are based on bootstrapped samples from the
+#' ICC, R2 or RMSE value. See `iterations`.
+#' @param by_group Logical, if `TRUE`, `icc()` returns the variance components
+#' for each random-effects level (if there are multiple levels). See 'Details'.
 #' @param iterations Number of bootstrap-replicates when computing confidence
-#' intervals for the ICC or R2.
+#' intervals for the ICC, R2, RMSE etc.
 #' @param ci_method Character string, indicating the bootstrap-method. Should
-#' be `NULL` (default), in which case `lme4::bootMer()` is used for
-#' bootstrapped confidence intervals. However, if bootstrapped intervals cannot
-#' be calculated this was, try `ci_method = "boot"`, which falls back to
-#' `boot::boot()`. This may successfully return bootstrapped confidence intervals,
-#' but bootstrapped samples may not be appropriate for the multilevel structure
-#' of the model. There is also an option `ci_method = "analytical"`, which tries
-#' to calculate analytical confidence assuming a chi-squared distribution.
-#' However, these intervals are rather inaccurate and often too narrow. It is
-#' recommended to calculate bootstrapped confidence intervals for mixed models.
+#' be `NULL` (default), in which case `lme4::bootMer()` is used for bootstrapped
+#' confidence intervals. However, if bootstrapped intervals cannot be calculated
+#' this way, try `ci_method = "boot"`, which falls back to `boot::boot()`. This
+#' may successfully return bootstrapped confidence intervals, but bootstrapped
+#' samples may not be appropriate for the multilevel structure of the model.
+#' There is also an option `ci_method = "analytical"`, which tries to calculate
+#' analytical confidence assuming a chi-squared distribution. However, these
+#' intervals are rather inaccurate and often too narrow. It is recommended to
+#' calculate bootstrapped confidence intervals for mixed models.
 #' @param verbose Toggle warnings and messages.
 #' @param null_model Optional, a null model to compute the random effect variances,
 #' which is passed to [`insight::get_variance()`]. Usually only required if
@@ -40,7 +41,8 @@
 #' calculating the null model takes longer and you already have fit the null
 #' model, you can pass it here, too, to speed up the process.
 #' @param ... Arguments passed down to `lme4::bootMer()` or `boot::boot()`
-#' for bootstrapped ICC or R2.
+#' for bootstrapped ICC, R2, RMSE etc.; for `variance_decomposition()`,
+#' arguments are passed down to `brms::posterior_predict()`.
 #'
 #' @inheritParams r2_bayes
 #' @inheritParams insight::get_variance
@@ -321,8 +323,6 @@ icc <- function(model,
 
 
 
-#' @param ... Arguments passed down to `brms::posterior_predict()`.
-#' @inheritParams icc
 #' @rdname icc
 #' @export
 variance_decomposition <- function(model,
