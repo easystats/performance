@@ -529,7 +529,7 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
       out <- r2_zeroinflated(model)
     } else if (info$is_beta) {
       # beta-regression
-      out <- r2_ferarri(model)
+      out <- r2_ferrari(model)
     } else {
       insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
     }
