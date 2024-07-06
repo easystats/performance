@@ -28,7 +28,22 @@ r2_ferrari.default <- function(model, ...) {
   # coefficients, but remove phi parameter
   x <- stats::coef(model)
   x <- x[names(x) != "(phi)"]
+  .r2_ferrari(model, x)
+}
 
+#' @export
+r2_ferrari.glmmTMB <- function(model, ...) {
+  insight::check_if_installed("lme4")
+  # coefficients, but remove phi parameter
+  x <- .collapse_cond(lme4::fixef(model))
+  x <- x[names(x) != "(phi)"]
+  .r2_ferrari(model, x)
+}
+
+
+# helper -----------------------------
+
+.r2_ferrari <- function(model, x) {
   # model matrix, check dimensions / length
   mm <- insight::get_modelmatrix(model)
 
@@ -39,7 +54,7 @@ r2_ferrari.default <- function(model, ...) {
 
   # linear predictor for the mean
   eta <- as.vector(x %*% t(mm))
-  y <- insight::get_response(m)
+  y <- insight::get_response(model)
 
   ferrari <- stats::cor(eta, insight::link_function(model)(y))^2
   out <- list(R2 = c(`Ferrari's R2` = ferrari))
