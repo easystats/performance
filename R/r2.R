@@ -527,6 +527,9 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     } else if (info$is_zero_inflated) {
       # zero-inflated models use the default method
       out <- r2_zeroinflated(model)
+    } else if (info$is_beta) {
+      # beta-regression
+      out <- r2_ferrari(model)
     } else {
       insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
     }
