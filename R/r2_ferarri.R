@@ -5,6 +5,9 @@
 #' beta-regression models).
 #'
 #' @param model Generalized linear, in particular beta-regression model.
+#' @param correct_bounds Logical, whether to correct the bounds of the response
+#' variable to avoid 0 and 1. If `TRUE`, the response variable is normalized
+#' and "compressed", i.e. zeros and ones are excluded.
 #' @param ... Currently not used.
 #'
 #' @return A list with the pseudo R2 value.
@@ -23,12 +26,18 @@ r2_ferrari <- function(model, ...) {
   UseMethod("r2_ferrari")
 }
 
+#' @rdname r2_ferrari
 #' @export
-r2_ferrari.default <- function(model, ...) {
+r2_ferrari.default <- function(model, correct_bounds = FALSE, ...) {
   # on the reponse scale, beta regression link doesn't workd
   predictions <- stats::predict(model, type = "response")
   eta <- insight::link_function(model)(predictions)
   y <- insight::get_response(model)
+
+  # for ordered beta, fix 0 and 1 to specific bounds
+  if (correct_bounds) {
+    y <- datawizard::normalize(y, include_bounds = FALSE)
+  }
 
   ferrari <- stats::cor(eta, insight::link_function(model)(y))^2
   out <- list(R2 = c(`Ferrari's R2` = ferrari))

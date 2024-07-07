@@ -527,6 +527,9 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     } else if (info$is_zero_inflated) {
       # zero-inflated models use the default method
       out <- r2_zeroinflated(model)
+    } else if (info$is_orderedbeta) {
+      # ordered-beta-regression
+      out <- r2_ferrari(model, correct_bounds = TRUE)
     } else if (info$is_beta) {
       # beta-regression
       out <- r2_ferrari(model)

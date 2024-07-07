@@ -2,14 +2,21 @@
 % Please edit documentation in R/r2_ferarri.R
 \name{r2_ferrari}
 \alias{r2_ferrari}
+\alias{r2_ferrari.default}
 \title{Ferrari's and Cribari-Neto's R2}
 \usage{
 r2_ferrari(model, ...)
+
+\method{r2_ferrari}{default}(model, correct_bounds = FALSE, ...)
 }
 \arguments{
 \item{model}{Generalized linear, in particular beta-regression model.}
 
 \item{...}{Currently not used.}
+
+\item{correct_bounds}{Logical, whether to correct the bounds of the response
+variable to avoid 0 and 1. If \code{TRUE}, the response variable is normalized
+and "compressed", i.e. zeros and ones are excluded.}
 }
 \value{
 A list with the pseudo R2 value.
