@@ -531,7 +531,13 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
       # beta-regression
       out <- r2_ferrari(model)
     } else {
-      insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
+      insight::format_error(paste0(
+        "`r2()` does not support models of class `glmmTMB` without random effects and from ",
+        info$family,
+        "-family with ",
+        info$link_function,
+        "-link-function."
+      ))
     }
   }
   out

@@ -25,35 +25,9 @@ r2_ferrari <- function(model, ...) {
 
 #' @export
 r2_ferrari.default <- function(model, ...) {
-  # coefficients, but remove phi parameter
-  x <- stats::coef(model)
-  x <- x[names(x) != "(phi)"]
-  .r2_ferrari(model, x)
-}
-
-#' @export
-r2_ferrari.glmmTMB <- function(model, ...) {
-  insight::check_if_installed("lme4")
-  # coefficients, but remove phi parameter
-  x <- .collapse_cond(lme4::fixef(model))
-  x <- x[names(x) != "(phi)"]
-  .r2_ferrari(model, x)
-}
-
-
-# helper -----------------------------
-
-.r2_ferrari <- function(model, x) {
-  # model matrix, check dimensions / length
-  mm <- insight::get_modelmatrix(model)
-
-  if (length(x) != ncol(mm)) {
-    insight::format_warning("Model matrix and coefficients do not match.")
-    return(NULL)
-  }
-
-  # linear predictor for the mean
-  eta <- as.vector(x %*% t(mm))
+  # on the reponse scale, beta regression link doesn't workd
+  predictions <- stats::predict(model, type = "response")
+  eta <- insight::link_function(model)(predictions)
   y <- insight::get_response(model)
 
   ferrari <- stats::cor(eta, insight::link_function(model)(y))^2
@@ -62,3 +36,37 @@ r2_ferrari.glmmTMB <- function(model, ...) {
   attr(out, "model_type") <- "Generalized Linear"
   structure(class = "r2_generic", out)
 }
+
+
+# helper -----------------------------
+
+# .r2_ferrari <- function(model, x) {
+#   if (inherits(model, "glmmTMB")) {
+#     insight::check_if_installed("lme4")
+#     # coefficients, but remove phi parameter
+#     x <- .collapse_cond(lme4::fixef(model))
+#     x <- x[names(x) != "(phi)"]
+#   } else {
+#     # coefficients, but remove phi parameter
+#     x <- stats::coef(model)
+#     x <- x[names(x) != "(phi)"]
+#   }
+
+#   # model matrix, check dimensions / length
+#   mm <- insight::get_modelmatrix(model)
+
+#   if (length(x) != ncol(mm)) {
+#     insight::format_warning("Model matrix and coefficients do not match.")
+#     return(NULL)
+#   }
+
+#   # linear predictor for the mean
+#   eta <- as.vector(x %*% t(mm))
+#   y <- insight::get_response(model)
+
+#   ferrari <- stats::cor(eta, insight::link_function(model)(y))^2
+#   out <- list(R2 = c(`Ferrari's R2` = ferrari))
+
+#   attr(out, "model_type") <- "Generalized Linear"
+#   structure(class = "r2_generic", out)
+# }
