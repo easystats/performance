@@ -291,6 +291,12 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
       insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     out <- NULL
+  } else if (info$is_orderedbeta) {
+    # ordered-beta-regression
+    out <- r2_ferrari(model, correct_bounds = TRUE)
+  } else if (info$is_beta) {
+    # beta-regression
+    out <- r2_ferrari(model)
   } else {
     out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
