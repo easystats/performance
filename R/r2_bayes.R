@@ -1,34 +1,35 @@
 #' @title Bayesian R2
 #' @name r2_bayes
 #'
-#' @description Compute R2 for Bayesian models. For mixed models (including a
-#'   random part), it additionally computes the R2 related to the fixed effects
-#'   only (marginal R2). While `r2_bayes()` returns a single R2 value,
-#'   `r2_posterior()` returns a posterior sample of Bayesian R2 values.
+#' @description
+#' Compute R2 for Bayesian models. For mixed models (including a random part),
+#' it additionally computes the R2 related to the fixed effects only (marginal
+#' R2). While `r2_bayes()` returns a single R2 value, `r2_posterior()` returns a
+#' posterior sample of Bayesian R2 values.
 #'
 #' @param model A Bayesian regression model (from **brms**,
-#'   **rstanarm**, **BayesFactor**, etc).
+#' **rstanarm**, **BayesFactor**, etc).
 #' @param robust Logical, if `TRUE`, the median instead of mean is used to
-#'   calculate the central tendency of the variances.
+#' calculate the central tendency of the variances.
 #' @param ci Value or vector of probability of the CI (between 0 and 1) to be
-#'   estimated.
+#' estimated.
 #' @param ... Arguments passed to `r2_posterior()`.
 #' @inheritParams model_performance.lm
 #'
 #' @return A list with the Bayesian R2 value. For mixed models, a list with the
-#'   Bayesian R2 value and the marginal Bayesian R2 value. The standard errors
-#'   and credible intervals for the R2 values are saved as attributes.
+#' Bayesian R2 value and the marginal Bayesian R2 value. The standard errors and
+#' credible intervals for the R2 values are saved as attributes.
 #'
-#' @details `r2_bayes()` returns an "unadjusted" R2 value. See
-#'   [r2_loo()] to calculate a LOO-adjusted R2, which comes
-#'   conceptually closer to an adjusted R2 measure.
+#' @details
+#' `r2_bayes()` returns an "unadjusted" R2 value. See [r2_loo()] to calculate a
+#' LOO-adjusted R2, which comes conceptually closer to an adjusted R2 measure.
 #'
-#'   For mixed models, the conditional and marginal R2 are returned. The marginal
-#'   R2 considers only the variance of the fixed effects, while the conditional
-#'   R2 takes both the fixed and random effects into account.
+#' For mixed models, the conditional and marginal R2 are returned. The marginal
+#' R2 considers only the variance of the fixed effects, while the conditional R2
+#' takes both the fixed and random effects into account.
 #'
-#'   `r2_posterior()` is the actual workhorse for `r2_bayes()` and
-#'   returns a posterior sample of Bayesian R2 values.
+#' `r2_posterior()` is the actual workhorse for `r2_bayes()` and returns a
+#' posterior sample of Bayesian R2 values.
 #'
 #' @examplesIf require("rstanarm") && require("rstantools") && require("brms")
 #' library(performance)
@@ -71,8 +72,8 @@
 #' r2_bayes(model)
 #' }
 #' @references
-#' Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018).
-#' R-squared for Bayesian regression models. The American Statistician, 1–6.
+#' Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for
+#' Bayesian regression models. The American Statistician, 1–6.
 #' \doi{10.1080/00031305.2018.1549100}
 #' @export
 r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {

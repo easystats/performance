@@ -23,14 +23,15 @@
 #'   - Mixed models: [Nakagawa's R2][r2_nakagawa]
 #'   - Bayesian models: [R2 bayes][r2_bayes]
 #'
-#' @note If there is no `r2()`-method defined for the given model class,
-#'   `r2()` tries to return a "generic" r-quared value, calculated as following:
-#'   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
+#' @note
+#' If there is no `r2()`-method defined for the given model class, `r2()` tries
+#' to return a "generic" r-quared value, calculated as following:
+#' `1-sum((y-y_hat)^2)/sum((y-y_bar)^2)`
 #'
-#' @seealso [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`],
-#'   [`r2_loo()`], [`r2_mcfadden()`], [`r2_nagelkerke()`],
-#'   [`r2_nakagawa()`], [`r2_tjur()`], [`r2_xu()`] and
-#'   [`r2_zeroinflated()`].
+#' @seealso
+#' [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`], [`r2_loo()`],
+#' [`r2_mcfadden()`], [`r2_nagelkerke()`], [`r2_nakagawa()`], [`r2_tjur()`],
+#' [`r2_xu()`] and [`r2_zeroinflated()`].
 #'
 #' @examplesIf require("lme4")
 #' # Pseudo r-quared for GLM
