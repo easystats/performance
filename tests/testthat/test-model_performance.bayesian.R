@@ -37,7 +37,7 @@ test_that("model_performance.brmsfit", {
   skip_if_not_installed("httr")
   set.seed(333)
 
-  model <- tryCatch(insight::download_model("brms_1"), error = function(e) NULL)
+  model <- insight::download_model("brms_1")
   skip_if(is.null(model))
   expect_message({
     perf <- model_performance(model)
@@ -50,7 +50,7 @@ test_that("model_performance.brmsfit", {
     "RMSE", "Sigma"
   ))
 
-  model <- tryCatch(insight::download_model("brms_mixed_4"), error = function(e) NULL)
+  model <- insight::download_model("brms_mixed_4")
   skip_if(is.null(model))
   expect_message({
     perf <- model_performance(model)
@@ -63,7 +63,7 @@ test_that("model_performance.brmsfit", {
     "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
   ))
 
-  model <- tryCatch(insight::download_model("brms_ordinal_1"), error = function(e) NULL)
+  model <- insight::download_model("brms_ordinal_1")
   skip_if(is.null(model))
   perf <- suppressWarnings(model_performance(model))
   expect_equal(perf$R2, 0.8760015, tolerance = 1e-3)
