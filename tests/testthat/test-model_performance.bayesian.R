@@ -4,7 +4,7 @@ test_that("model_performance.stanreg", {
   skip_if_offline()
   skip_if_not_installed("httr")
   set.seed(333)
-  model <- tryCatch(insight::download_model("stanreg_lm_1"), error = function(e) NULL)
+  model <- insight::download_model("stanreg_lm_1")
   skip_if(is.null(model))
   perf <- model_performance(model)
 
