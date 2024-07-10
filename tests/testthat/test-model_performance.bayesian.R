@@ -12,7 +12,7 @@ test_that("model_performance.stanreg", {
   expect_equal(perf$R2_adjusted, 0.7162912, tolerance = 1e-3)
   expect_equal(perf$ELPD, -83.49838, tolerance = 1e-3)
 
-  model <- tryCatch(insight::download_model("stanreg_lm_2"), error = function(e) NULL)
+  model <- insight::download_model("stanreg_lm_2")
   skip_if(is.null(model))
   perf <- model_performance(model)
 
@@ -20,7 +20,7 @@ test_that("model_performance.stanreg", {
   expect_equal(perf$R2_adjusted, 0.7979026, tolerance = 1e-3)
   expect_equal(perf$ELPD, -78.38735, tolerance = 1e-3)
 
-  model <- tryCatch(insight::download_model("stanreg_lmerMod_1"), error = function(e) NULL)
+  model <- insight::download_model("stanreg_lmerMod_1")
   skip_if(is.null(model))
   perf <- model_performance(model)
 
