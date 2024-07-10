@@ -2,7 +2,7 @@ Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
 Version: 0.12.0.8
-Authors@R: 
+Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
              role = c("aut", "cre"),
@@ -39,8 +39,8 @@ Authors@R:
              email = "remi.theriault@mail.mcgill.ca",
              comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
       person(given = "Vincent",
-             family = "Arel-Bundock", 
-             email = "vincent.arel-bundock@umontreal.ca", 
+             family = "Arel-Bundock",
+             email = "vincent.arel-bundock@umontreal.ca",
              role = "ctb",
              comment = c(ORCID = "0000-0003-2042-7063")),
       person(given = "Martin",
@@ -48,9 +48,9 @@ Authors@R:
              role = "rev"),
       person(given = "gjo11",
              role = "rev"),
-      person("Etienne", 
-             "Bacher", , 
-             "etienne.bacher@protonmail.com", 
+      person("Etienne",
+             "Bacher", ,
+             "etienne.bacher@protonmail.com",
              role = "ctb",
              comment = c(ORCID = "0000-0002-9271-5075")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
@@ -93,7 +93,7 @@ Suggests:
     DHARMa,
     estimatr,
     fixest,
-    flextable, 
+    flextable,
     forecast,
     ftExtra,
     gamm4,
@@ -101,7 +101,7 @@ Suggests:
     glmmTMB,
     graphics,
     Hmisc,
-    httr,
+    httr2,
     ICS,
     ICSOutlier,
     ISLR,

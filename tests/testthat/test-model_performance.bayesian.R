@@ -2,7 +2,7 @@ test_that("model_performance.stanreg", {
   skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
-  skip_if_not_installed("httr")
+  skip_if_not_installed("httr2")
   set.seed(333)
   model <- insight::download_model("stanreg_lm_1")
   skip_if(is.null(model))
@@ -34,7 +34,7 @@ test_that("model_performance.brmsfit", {
   skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
-  skip_if_not_installed("httr")
+  skip_if_not_installed("httr2")
   set.seed(333)
 
   model <- insight::download_model("brms_1")

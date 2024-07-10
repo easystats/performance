@@ -2,7 +2,7 @@ test_that("model_performance.merMod", {
   skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
-  skip_if_not_installed("httr")
+  skip_if_not_installed("httr2")
 
   model <- insight::download_model("lmerMod_1")
   expect_equal(model_performance(model, estimator = "ML")$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
