@@ -281,7 +281,11 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 .boot_r2_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
-  vars <- .compute_random_vars(fit, tolerance, verbose = FALSE)
+  vars <- .compute_random_vars(
+    fit,
+    tolerance,
+    verbose = isTRUE(getOption("easystats_erros", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }
@@ -298,7 +302,11 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
 # bootstrapping using "lme4::bootMer"
 .boot_r2_fun_lme4 <- function(model) {
-  vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
+  vars <- .compute_random_vars(
+    model,
+    tolerance = 1e-10,
+    verbose = isTRUE(getOption("easystats_erros", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }
