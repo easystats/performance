@@ -90,7 +90,7 @@
 <img src="logo.png" class="logo" alt=""><h1 id="performance-">performance <a class="anchor" aria-label="anchor" href="#performance-"></a>
 </h1>
 </div>
-<p><a href="https://doi.org/10.21105/joss.03139" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.03139/status.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=performance" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/performance" alt="downloads"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/performance" alt="total"></a> <a href="https://CRAN.R-project.org/package=performance" class="external-link"><img src="https://tinyverse.netlify.com/badge/performance" alt="status"></a></p>
+<p><a href="https://doi.org/10.21105/joss.03139" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.03139/status.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=performance" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/performance" alt="downloads"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/performance" alt="total"></a></p>
 <p><strong><em>Test if your model is a good model!</em></strong></p>
 <p>A crucial aspect when building regression models is to evaluate the quality of modelfit. It is important to investigate how well models fit to the data and which fit indices to report. Functions to create diagnostic plots or to compute fit measures do exist, however, mostly spread over different packages. There is no unique and consistent approach to assess the model quality for different kind of models.</p>
 <p>The primary goal of the <strong>performance</strong> package is to fill this gap and to provide utilities for computing <strong>indices of model quality</strong> and <strong>goodness of fit</strong>. These include measures like r-squared (R2), root mean squared error (RMSE) or intraclass correlation coefficient (ICC) , but also functions to check (mixed) models for overdispersion, zero-inflation, convergence or singularity.</p>
@@ -139,13 +139,13 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"performance"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; To cite package 'performance' in publications use:</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;   Lüdecke et al., (2021). performance: An R Package for Assessment, Comparison and</span></span>
 <span><span class="co">#&gt;   Testing of Statistical Models. Journal of Open Source Software, 6(60), 3139.</span></span>
 <span><span class="co">#&gt;   https://doi.org/10.21105/joss.03139</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;   @Article{,</span></span>
 <span><span class="co">#&gt;     title = {{performance}: An {R} Package for Assessment, Comparison and Testing of Statistical Models},</span></span>
 <span><span class="co">#&gt;     author = {Daniel Lüdecke and Mattan S. Ben-Shachar and Indrajeet Patil and Philip Waggoner and Dominique Makowski},</span></span>
@@ -206,15 +206,15 @@
 <span></span>
 <span><span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Bayesian R2 with Compatibility Interval</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;   Conditional R2: 0.953 (95% CI [0.942, 0.964])</span></span>
-<span><span class="co">#&gt;      Marginal R2: 0.824 (95% CI [0.720, 0.898])</span></span>
+<span><span class="co">#&gt;      Marginal R2: 0.826 (95% CI [0.724, 0.900])</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # R2 for Mixed Models</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;   Conditional R2: 0.799</span></span>
 <span><span class="co">#&gt;      Marginal R2: 0.279</span></span></code></pre></div>
 </div>
@@ -228,7 +228,7 @@
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/icc.html">icc</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Intraclass Correlation Coefficient</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;     Adjusted ICC: 0.722</span></span>
 <span><span class="co">#&gt;   Unadjusted ICC: 0.521</span></span></code></pre></div>
 <p>…and models of class <code>brmsfit</code>.</p>
@@ -239,9 +239,9 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/icc.html">icc</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Intraclass Correlation Coefficient</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     Adjusted ICC: 0.930</span></span>
-<span><span class="co">#&gt;   Unadjusted ICC: 0.771</span></span></code></pre></div>
+<span><span class="co">#&gt;</span></span>
+<span><span class="co">#&gt;     Adjusted ICC: 0.941</span></span>
+<span><span class="co">#&gt;   Unadjusted ICC: 0.779</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -257,7 +257,7 @@
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">Salamanders</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;        dispersion ratio =    2.946</span></span>
 <span><span class="co">#&gt;   Pearson's Chi-Squared = 1873.710</span></span>
 <span><span class="co">#&gt;                 p-value =  &lt; 0.001</span></span></code></pre></div>
@@ -272,7 +272,7 @@
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">spp</span> <span class="op">+</span> <span class="va">mined</span>, family <span class="op">=</span> <span class="va">poisson</span>, data <span class="op">=</span> <span class="va">Salamanders</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/check_zeroinflation.html">check_zeroinflation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Check for zero-inflation</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;    Observed zeros: 387</span></span>
 <span><span class="co">#&gt;   Predicted zeros: 298</span></span>
 <span><span class="co">#&gt;             Ratio: 0.77</span></span></code></pre></div>
@@ -342,7 +342,7 @@
 <code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Indices of model performance</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; AIC     |    AICc |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; 156.010 | 157.492 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568</span></span></code></pre></div>
@@ -354,7 +354,7 @@
 <code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">mpg</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Indices of model performance</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; AIC    |   AICc |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP</span></span>
 <span><span class="co">#&gt; -----------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; 31.298 | 32.155 | 35.695 |     0.478 | 0.359 | 1.000 |    0.395 |   -14.903 |           0.095 | 0.743</span></span></code></pre></div>
@@ -367,7 +367,7 @@
 <span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/model_performance.html">model_performance</a></span><span class="op">(</span><span class="va">m3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Indices of model performance</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; AIC      |     AICc |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma</span></span>
 <span><span class="co">#&gt; ----------------------------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; 1755.628 | 1756.114 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592</span></span></code></pre></div>
@@ -385,12 +385,12 @@
 <span></span>
 <span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Comparison of Model Performance Indices</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Name |   Model |  AIC (weights) | AICc (weights) |  BIC (weights) |   RMSE |  Sigma | Score_log | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.) |   ICC | Nagelkerke's R2</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; m1   |      lm |  156.0 (&lt;.001) |  157.5 (&lt;.001) |  161.9 (&lt;.001) |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |                </span></span>
-<span><span class="co">#&gt; m2   |     glm |   31.3 (&gt;.999) |   32.2 (&gt;.999) |   35.7 (&gt;.999) |  0.359 |  1.000 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |                </span></span>
-<span><span class="co">#&gt; m3   | lmerMod | 1764.0 (&lt;.001) | 1764.5 (&lt;.001) | 1783.1 (&lt;.001) | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |                </span></span>
+<span><span class="co">#&gt; m1   |      lm |  156.0 (&lt;.001) |  157.5 (&lt;.001) |  161.9 (&lt;.001) |  2.444 |  2.568 |           |                 | 0.830 |     0.819 |           |          |       |            |            |       |</span></span>
+<span><span class="co">#&gt; m2   |     glm |   31.3 (&gt;.999) |   32.2 (&gt;.999) |   35.7 (&gt;.999) |  0.359 |  1.000 |   -14.903 |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |            |       |</span></span>
+<span><span class="co">#&gt; m3   | lmerMod | 1764.0 (&lt;.001) | 1764.5 (&lt;.001) | 1783.1 (&lt;.001) | 23.438 | 25.592 |           |                 |       |           |           |          |       |      0.799 |      0.279 | 0.722 |</span></span>
 <span><span class="co">#&gt; m4   |     glm |   56.8 (&lt;.001) |   76.8 (&lt;.001) |   57.7 (&lt;.001) |  3.043 |  1.000 |    -2.598 |           0.324 |       |           |           |          |       |            |            |       |           0.657</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="general-index-of-model-performance">General index of model performance<a class="anchor" aria-label="anchor" href="#general-index-of-model-performance"></a>
@@ -399,7 +399,7 @@
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/compare_performance.html">compare_performance</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span>, <span class="va">m3</span>, <span class="va">m4</span>, rank <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Comparison of Model Performance Indices</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; Name |   Model |   RMSE |  Sigma | AIC weights | AICc weights | BIC weights | Performance-Score</span></span>
 <span><span class="co">#&gt; -----------------------------------------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; m2   |     glm |  0.359 |  1.000 |       1.000 |        1.000 |       1.000 |           100.00%</span></span>
@@ -432,7 +432,7 @@
 <span><span class="fu"><a href="reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; lm1  |    lm |        |        |            |       |       </span></span>
+<span><span class="co">#&gt; lm1  |    lm |        |        |            |       |</span></span>
 <span><span class="co">#&gt; lm2  |    lm | &gt; 1000 |   0.69 |     &lt; .001 | -6.25 | &lt; .001</span></span>
 <span><span class="co">#&gt; lm3  |    lm | &gt; 1000 |   0.36 |     &lt; .001 | -3.44 | &lt; .001</span></span>
 <span><span class="co">#&gt; lm4  |    lm | &gt; 1000 |   0.73 |     &lt; .001 | -7.77 | &lt; .001</span></span>
@@ -440,12 +440,12 @@
 <span></span>
 <span><span class="fu"><a href="reference/test_performance.html">test_bf</a></span><span class="op">(</span><span class="va">lm1</span>, <span class="va">lm2</span>, <span class="va">lm3</span>, <span class="va">lm4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Bayes Factors for Model Comparison</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt;       Model                                                    BF</span></span>
 <span><span class="co">#&gt; [lm2] Species + Petal.Length                             3.45e+26</span></span>
 <span><span class="co">#&gt; [lm3] Species * Sepal.Width                              4.69e+07</span></span>
 <span><span class="co">#&gt; [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.58e+29</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;</span></span>
 <span><span class="co">#&gt; * Against Denominator: [lm1] Species</span></span>
 <span><span class="co">#&gt; *   Bayes Factor Type: BIC approximation</span></span></code></pre></div>
 </div>
