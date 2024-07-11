@@ -284,7 +284,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   vars <- .compute_random_vars(
     fit,
     tolerance,
-    verbose = isTRUE(getOption("easystats_erros", FALSE))
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
   )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
@@ -305,7 +305,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   vars <- .compute_random_vars(
     model,
     tolerance = 1e-10,
-    verbose = isTRUE(getOption("easystats_erros", FALSE))
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
   )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
