@@ -27,6 +27,9 @@
   variable that was named like a valid R function name (e.g., `lm(log(lapply) ~ x)`,
   when data contained a variable named `lapply`).
 
+* Fixed issue in `check_predictions()` for linear models when response was
+  transformed as ratio (e.g. `lm(succes/trials ~ x)`).
+
 # performance 0.12.0
 
 ## Breaking
