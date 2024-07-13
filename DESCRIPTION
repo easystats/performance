@@ -131,6 +131,7 @@ Suggests:
     quantreg,
     qqplotr (>= 0.0.6),
     randomForest,
+    RcppEigen,
     rempsyc,
     rmarkdown,
     rstanarm,
