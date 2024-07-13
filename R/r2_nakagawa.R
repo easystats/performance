@@ -131,7 +131,8 @@ r2_nakagawa <- function(model,
 
     # null-model
     if (is.null(null_model)) {
-      null_model <- insight::null_model(model, verbose = isTRUE(getOption("easystats_errors", FALSE)))
+      null_model <- insight::null_model(model, verbose = isTRUE(getOption("easystats_errors", FALSE))
+)
     }
     vars_null <- insight::get_variance(null_model, tolerance = tolerance)
 
