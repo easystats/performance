@@ -79,7 +79,7 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     metrics <- c("LOOIC", "WAIC", "R2", "RMSE")
   }
 
-  # check for valid input
+
   metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
 
   algorithm <- insight::find_algorithm(model)
@@ -232,7 +232,7 @@ model_performance.BFBayesFactor <- function(model,
     metrics <- all_metrics
   }
 
-  # check for valid input
+
   metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
 
   # check for valid BFBayesFactor object

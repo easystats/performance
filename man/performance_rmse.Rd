@@ -5,16 +5,54 @@
 \alias{rmse}
 \title{Root Mean Squared Error}
 \usage{
-performance_rmse(model, normalized = FALSE, verbose = TRUE)
+performance_rmse(
+  model,
+  normalized = FALSE,
+  ci = NULL,
+  iterations = 100,
+  ci_method = NULL,
+  verbose = TRUE,
+  ...
+)
 
-rmse(model, normalized = FALSE, verbose = TRUE)
+rmse(
+  model,
+  normalized = FALSE,
+  ci = NULL,
+  iterations = 100,
+  ci_method = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A model.}
 
 \item{normalized}{Logical, use \code{TRUE} if normalized rmse should be returned.}
 
-\item{verbose}{Toggle off warnings.}
+\item{ci}{Confidence resp. credible interval level. For \code{icc()}, \code{r2()}, and
+\code{rmse()}, confidence intervals are based on bootstrapped samples from the
+ICC, R2 or RMSE value. See \code{iterations}.}
+
+\item{iterations}{Number of bootstrap-replicates when computing confidence
+intervals for the ICC, R2, RMSE etc.}
+
+\item{ci_method}{Character string, indicating the bootstrap-method. Should
+be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for bootstrapped
+confidence intervals. However, if bootstrapped intervals cannot be calculated
+this way, try \code{ci_method = "boot"}, which falls back to \code{boot::boot()}. This
+may successfully return bootstrapped confidence intervals, but bootstrapped
+samples may not be appropriate for the multilevel structure of the model.
+There is also an option \code{ci_method = "analytical"}, which tries to calculate
+analytical confidence assuming a chi-squared distribution. However, these
+intervals are rather inaccurate and often too narrow. It is recommended to
+calculate bootstrapped confidence intervals for mixed models.}
+
+\item{verbose}{Toggle warnings and messages.}
+
+\item{...}{Arguments passed down to \code{lme4::bootMer()} or \code{boot::boot()}
+for bootstrapped ICC, R2, RMSE etc.; for \code{variance_decomposition()},
+arguments are passed down to \code{brms::posterior_predict()}.}
 }
 \value{
 Numeric, the root mean squared error.

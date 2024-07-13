@@ -145,7 +145,6 @@ multicollinearity <- check_collinearity
 #' @rdname check_collinearity
 #' @export
 check_collinearity.default <- function(x, ci = 0.95, verbose = TRUE, ...) {
-  # check for valid input
   .is_model_valid(x)
   .check_collinearity(x, component = "conditional", ci = ci, verbose = verbose)
 }

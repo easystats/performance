@@ -36,7 +36,7 @@
 #'    or mixed effects model.
 #'
 #'    - **CochransQ (QE)**: Test for (residual) Heterogeneity. Without
-#'    moderators in the model, this is simply Cochran's Q-test.
+#'    moderators in the model, this is simply Cochran's *Q*-test.
 #'
 #'    - **Omnibus (QM)**: Omnibus test of parameters.
 #'

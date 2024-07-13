@@ -94,8 +94,11 @@ check_singularity(model)
 
 # Fixing singularity issues using priors in glmmTMB
 # Example taken from `vignette("priors", package = "glmmTMB")`
-dat <- readRDS(system.file("vignette_data", "gophertortoise.rds",
-               package = "glmmTMB"))
+dat <- readRDS(system.file(
+  "vignette_data",
+  "gophertortoise.rds",
+  package = "glmmTMB"
+))
 model <- glmmTMB::glmmTMB(
   shells ~ prev + offset(log(Area)) + factor(year) + (1 | Site),
   family = poisson,

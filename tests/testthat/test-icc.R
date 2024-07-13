@@ -40,13 +40,13 @@ test_that("icc", {
   skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
-  skip_if_not_installed("httr")
+  skip_if_not_installed("httr2")
   m2 <- insight::download_model("stanreg_lmerMod_1")
   expect_equal(
     icc(m2),
     data.frame(
-      ICC_adjusted = 0.399303562702568, ICC_conditional = 0.216907586891627,
-      ICC_unadjusted = 0.216907586891627
+      ICC_adjusted = 0.40579, ICC_conditional = 0.21881,
+      ICC_unadjusted = 0.21881
     ),
     tolerance = 1e-2,
     ignore_attr = TRUE
@@ -57,7 +57,7 @@ test_that("icc", {
   skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
-  skip_if_not_installed("httr")
+  skip_if_not_installed("httr2")
   m3 <- insight::download_model("brms_mixed_1")
   set.seed(123)
   expect_equal(
@@ -71,7 +71,7 @@ test_that("icc", {
   skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
-  skip_if_not_installed("httr")
+  skip_if_not_installed("httr2")
   m3 <- insight::download_model("brms_mixed_1")
   set.seed(123)
   expect_equal(

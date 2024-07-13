@@ -1,9 +1,36 @@
-# performance 0.11.1
+# performance 0.12.1
+
+## General
+
+* `icc()` and `r2_nakagawa()` get a `null_model` argument. This can be useful
+  when computing R2 or ICC for mixed models, where the internal computation of
+  the null model fails, or when you already have fit the null model and want
+  to save time.
+
+* `icc()` and `r2_nakagawa()` get a `approximation` argument indicating the 
+  approximation method for the distribution-specific (residual) variance. See
+  Nakagawa et al. 2017 for details.
+
+* `icc()` and `r2_nakagawa()` get a `model_component` argument indicating the 
+  component for zero-inflation or hurdle models.
+
+* `performance_rmse()` (resp. `rmse()`) can now compute analytical and 
+  bootstrapped confidence intervals. The function gains following new arguments:
+  `ci`, `ci_method` and `iterations`.
+
+* New function `r2_ferrari()` to compute Ferrari & Cribari-Neto's R2 for 
+  generalized linear models, in particular beta-regression.
+
+# performance 0.12.0
 
 ## Breaking
 
 * Aliases `posterior_predictive_check()` and `check_posterior_predictions()` for
   `check_predictions()` are deprecated.
+
+* Arguments named `group` or `group_by` will be deprecated in a future release.
+  Please use `by` instead. This affects `check_heterogeneity_bias()` in
+  *performance*.
 
 ## General
 
@@ -14,6 +41,9 @@
 * `check_predictions()` for `stanreg` and `brmsfit` models now returns plots in
   the usual style as for other models and no longer returns plots from
   `bayesplot::pp_check()`.
+
+* Updated the trained model that is used to prediction distributions in
+  `check_distribution()`.
 
 ## Bug fixes
 

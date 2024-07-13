@@ -18,10 +18,48 @@
 #'
 #' @return A list with the conditional and marginal R2 values.
 #'
+#' @section Supported models and model families:
+#' The single variance components that are required to calculate the marginal
+#' and conditional r-squared values are calculated using the [`insight::get_variance()`]
+#' function. The results are validated against the solutions provided by
+#' _Nakagawa et al. (2017)_, in particular examples shown in the Supplement 2
+#' of the paper. Other model families are validated against results from the
+#' **MuMIn** package. This means that the r-squared values returned by `r2_nakagawa()`
+#' should be accurate and reliable for following mixed models or model families:
+#'
+#' - Bernoulli (logistic) regression
+#' - Binomial regression (with other than binary outcomes)
+#' - Poisson and Quasi-Poisson regression
+#' - Negative binomial regression (including nbinom1 and nbinom2 families)
+#' - Gaussian regression (linear models)
+#' - Gamma regression
+#' - Tweedie regression
+#' - Beta regression
+#' - Ordered beta regression
+#'
+#' Following model families are not yet validated, but should work:
+#'
+#' - Zero-inflated and hurdle models
+#' - Beta-binomial regression
+#' - Compound Poisson regression
+#' - Generalized Poisson regression
+#' - Log-normal regression
+#'
+#' Extracting variance components for models with zero-inflation part is not
+#' straightforward, because it is not definitely clear how the distribution-specific
+#' variance should be calculated. Therefore, it is recommended to carefully
+#' inspect the results, and probably validate against other models, e.g. Bayesian
+#' models (although results may be only roughly comparable).
+#'
+#' Log-normal regressions (e.g. `lognormal()` family in **glmmTMB** or `gaussian("log")`)
+#' often have a very low fixed effects variance (if they were calculated as
+#' suggested by _Nakagawa et al. 2017_). This results in very low ICC or
+#' r-squared values, which may not be meaningful.
+#'
 #' @details
 #' Marginal and conditional r-squared values for mixed models are calculated
 #' based on _Nakagawa et al. (2017)_. For more details on the computation of
-#' the variances, see `?insight::get_variance`. The random effect variances are
+#' the variances, see [`insight::get_variance()`]. The random effect variances are
 #' actually the mean random effect variances, thus the r-squared value is also
 #' appropriate for mixed models with random slopes or nested random effects
 #' (see _Johnson, 2014_).
@@ -53,10 +91,13 @@
 #' @export
 r2_nakagawa <- function(model,
                         by_group = FALSE,
-                        tolerance = 1e-5,
+                        tolerance = 1e-8,
                         ci = NULL,
                         iterations = 100,
                         ci_method = NULL,
+                        null_model = NULL,
+                        approximation = "lognormal",
+                        model_component = NULL,
                         verbose = TRUE,
                         ...) {
   # calculate random effect variances
@@ -64,8 +105,12 @@ r2_nakagawa <- function(model,
     model,
     tolerance,
     components = c("var.fixed", "var.residual"),
+    null_model = null_model,
+    approximation = approximation,
     name_fun = "r2()",
-    name_full = "r-squared"
+    name_full = "r-squared",
+    model_component = model_component,
+    verbose = verbose
   )
 
   # return if R2 couldn't be computed
@@ -85,7 +130,9 @@ r2_nakagawa <- function(model,
     }
 
     # null-model
-    null_model <- insight::null_model(model)
+    if (is.null(null_model)) {
+      null_model <- insight::null_model(model)
+    }
     vars_null <- insight::get_variance(null_model, tolerance = tolerance)
 
     # names of group levels
@@ -107,7 +154,7 @@ r2_nakagawa <- function(model,
     if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
       if (verbose) {
         # if no random effect variance, return simple R2
-        insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red")
+        insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red") # nolint
       }
       r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.residual)
       r2_conditional <- NA
@@ -125,11 +172,11 @@ r2_nakagawa <- function(model,
       # this is experimental!
       if (identical(ci_method, "analytical")) {
         result <- .safe(.analytical_icc_ci(model, ci, fun = "r2_nakagawa"))
-        if (!is.null(result)) {
+        if (is.null(result)) {
+          r2_ci_marginal <- r2_ci_conditional <- NA
+        } else {
           r2_ci_marginal <- result$R2_marginal
           r2_ci_conditional <- result$R2_conditional
-        } else {
-          r2_ci_marginal <- r2_ci_conditional <- NA
         }
       } else {
         result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, ci_method, ...)
@@ -219,7 +266,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   }
 
   # separate lines for multiple R2
-  out <- paste0(out, collapse = "\n")
+  out <- paste(out, collapse = "\n")
 
   cat(out)
   cat("\n")
@@ -234,7 +281,11 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 .boot_r2_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
-  vars <- .compute_random_vars(fit, tolerance, verbose = FALSE)
+  vars <- .compute_random_vars(
+    fit,
+    tolerance,
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }
@@ -251,7 +302,11 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
 # bootstrapping using "lme4::bootMer"
 .boot_r2_fun_lme4 <- function(model) {
-  vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
+  vars <- .compute_random_vars(
+    model,
+    tolerance = 1e-10,
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }

@@ -4,7 +4,7 @@
 \alias{check_heterogeneity_bias}
 \title{Check model predictor for heterogeneity bias}
 \usage{
-check_heterogeneity_bias(x, select = NULL, group = NULL)
+check_heterogeneity_bias(x, select = NULL, by = NULL, group = NULL)
 }
 \arguments{
 \item{x}{A data frame or a mixed model object.}
@@ -13,9 +13,11 @@ check_heterogeneity_bias(x, select = NULL, group = NULL)
 that should be checked. If \code{x} is a mixed model object, this argument
 will be ignored.}
 
-\item{group}{Character vector (or formula) with the name of the variable that
+\item{by}{Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID. If \code{x} is a model object, this
 argument will be ignored.}
+
+\item{group}{Deprecated. Use \code{by} instead.}
 }
 \description{
 \code{check_heterogeneity_bias()} checks if model predictors or variables may
@@ -25,7 +27,7 @@ between-effect (\emph{Bell and Jones, 2015}).
 \examples{
 data(iris)
 iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
-check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), group = "ID")
+check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 }
 \references{
 \itemize{

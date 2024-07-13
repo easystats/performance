@@ -120,7 +120,6 @@ check_zeroinflation.performance_simres <- function(x,
                                                    tolerance = 0.1,
                                                    alternative = c("two.sided", "less", "greater"),
                                                    ...) {
-  # match arguments
   alternative <- match.arg(alternative)
 
   # compute test results

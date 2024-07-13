@@ -39,6 +39,7 @@ Chisq
 CochransQ
 CompQuadForm
 Concurvity
+Cribari
 Cronbach's
 Crujeiras
 Csaki
@@ -147,12 +148,15 @@ Michalos
 Moosbrugger
 Mora
 Multicollinearity
+MuMIn
 NFI
 NNFI
 Nagelkerke
 Nagelkerke's
 Nakagawa
 Nakagawa's
+Neto
+Neto's
 Nondegenerate
 Nordhausen
 Normed
@@ -298,6 +302,7 @@ multicollinearity
 multimodel
 multiresponse
 multivariable
+nbinom
 nd
 nonnest
 overfitted

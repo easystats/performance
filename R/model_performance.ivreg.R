@@ -24,7 +24,7 @@ model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...)
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
 
-  # check for valid input
+
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   # the lm-method does not accept ivreg-specific metrics

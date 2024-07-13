@@ -34,12 +34,11 @@ NULL
 #' This function uses an internal random forest model to classify the
 #' distribution from a model-family. Currently, following distributions are
 #' trained (i.e. results of `check_distribution()` may be one of the
-#' following): `"bernoulli"`, `"beta"`, `"beta-binomial"`,
-#' `"binomial"`, `"chi"`, `"exponential"`, `"F"`,
-#' `"gamma"`, `"lognormal"`, `"normal"`, `"negative
-#' binomial"`, `"negative binomial (zero-inflated)"`, `"pareto"`,
-#' `"poisson"`, `"poisson (zero-inflated)"`, `"uniform"` and
-#' `"weibull"`.
+#' following): `"bernoulli"`, `"beta"`, `"beta-binomial"`, `"binomial"`,
+#' `"cauchy"`, `"chi"`, `"exponential"`, `"F"`, `"gamma"`, `"half-cauchy"`,
+#' `"inverse-gamma"`, `"lognormal"`, `"normal"`, `"negative binomial"`,
+#' `"negative binomial (zero-inflated)"`, `"pareto"`, `"poisson"`,
+#' `"poisson (zero-inflated)"`, `"tweedie"`, `"uniform"` and `"weibull"`.
 #' \cr \cr
 #' Note the similarity between certain distributions according to shape, skewness,
 #' etc. Thus, the predicted distribution may not be perfectly representing the
@@ -67,7 +66,6 @@ check_distribution <- function(model) {
 
 #' @export
 check_distribution.default <- function(model) {
-  # check for valid input
   .is_model_valid(model)
 
   insight::check_if_installed("randomForest")
@@ -193,23 +191,40 @@ check_distribution.numeric <- function(model) {
   # validation check, remove missings
   x <- x[!is.na(x)]
 
-  # this might fail, so we wrap in ".safe()"
-  map_est <- .safe(mean(x) - as.numeric(bayestestR::map_estimate(x, bw = "nrd0")))
+  mode_value <- NULL
+  # find mode for integer, or MAP for distributions
+  if (all(.is_integer(x))) {
+    mode_value <- datawizard::distribution_mode(x)
+  } else {
+    # this might fail, so we wrap in ".safe()"
+    mode_value <- tryCatch(
+      as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
+      error = function(e) NULL
+    )
+    if (is.null(mode_value)) {
+      mode_value <- tryCatch(
+        as.numeric(bayestestR::map_estimate(x, bw = "kernel")),
+        error = function(e) NULL
+      )
+    }
+  }
 
-  if (is.null(map_est)) {
-    map_est <- mean(x) - datawizard::distribution_mode(x)
+  if (is.null(mode_value)) {
+    mean_mode_diff <- mean(x) - datawizard::distribution_mode(x)
     msg <- "Could not accurately estimate the mode."
     if (!is.null(type)) {
       msg <- paste(msg, "Predicted distribution of the", type, "may be less accurate.")
     }
     insight::format_alert(msg)
+  } else {
+    mean_mode_diff <- .safe(mean(x) - mode_value)
   }
 
   data.frame(
     SD = stats::sd(x),
     MAD = stats::mad(x, constant = 1),
     Mean_Median_Distance = mean(x) - stats::median(x),
-    Mean_Mode_Distance = map_est,
+    Mean_Mode_Distance = mean_mode_diff,
     SD_MAD_Distance = stats::sd(x) - stats::mad(x, constant = 1),
     Var_Mean_Distance = stats::var(x) - mean(x),
     Range_SD = diff(range(x)) / stats::sd(x),
@@ -222,6 +237,7 @@ check_distribution.numeric <- function(model) {
     Min = min(x),
     Max = max(x),
     Proportion_Positive = sum(x >= 0) / length(x),
+    Proportion_Zero = sum(x == 0) / length(x),
     Integer = all(.is_integer(x))
   )
 }
