@@ -510,7 +510,7 @@ plot.performance_pp_check <- function(x, ...) {
     if (is.null(plus_minus)) {
       plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))))
     }
-    if (is.null(plus_minus)) {
+    if (is.null(plus_minus) || !is.numeric(plus_minus)) {
       sims[] <- lapply(sims, exp)
     } else {
       sims[] <- lapply(sims, function(i) exp(i) - plus_minus)
