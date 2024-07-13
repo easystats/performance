@@ -14,6 +14,13 @@
 * `icc()` and `r2_nakagawa()` get a `model_component` argument indicating the 
   component for zero-inflation or hurdle models.
 
+* `performance_rmse()` (resp. `rmse()`) can now compute analytical and 
+  bootstrapped confidence intervals. The function gains following new arguments:
+  `ci`, `ci_method` and `iterations`.
+
+* New function `r2_ferrari()` to compute Ferrari & Cribari-Neto's R2 for 
+  generalized linear models, in particular beta-regression.
+
 # performance 0.12.0
 
 ## Breaking

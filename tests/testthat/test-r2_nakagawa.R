@@ -1,3 +1,4 @@
+skip_on_os("mac")
 skip_if_not_installed("lme4")
 
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)

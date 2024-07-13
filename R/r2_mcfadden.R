@@ -63,15 +63,16 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     return(NULL)
-  } else {
-    l_null <- insight::get_loglikelihood(stats::update(model, ~1))
-    .r2_mcfadden(model, l_null)
   }
+
+  l_null <- insight::get_loglikelihood(stats::update(model, ~1))
+  .r2_mcfadden(model, l_null)
 }
 
 #' @export

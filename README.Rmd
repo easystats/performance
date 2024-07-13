@@ -26,7 +26,7 @@ library(performance)
 ```
 
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03139/status.svg)](https://doi.org/10.21105/joss.03139)
-[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/) [![status](https://tinyverse.netlify.com/badge/performance)](https://CRAN.R-project.org/package=performance)
+[![downloads](http://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance) [![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
 
 ***Test if your model is a good model!***
 
@@ -145,7 +145,7 @@ icc(model)
 ```
 
 ...and models of class `brmsfit`.
- 
+
 ```{r, echo=FALSE, eval=curl::has_internet()}
 model <- insight::download_model("brms_mixed_1")
 ```
@@ -224,7 +224,7 @@ model <- lmer(
 check_singularity(model)
 ```
 
-Remedies to cure issues with singular fits can be found [here](https://easystats.github.io/performance/reference/check_singularity.html). 
+Remedies to cure issues with singular fits can be found [here](https://easystats.github.io/performance/reference/check_singularity.html).
 
 #### Check for heteroskedasticity
 

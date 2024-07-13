@@ -23,14 +23,15 @@
 #'   - Mixed models: [Nakagawa's R2][r2_nakagawa]
 #'   - Bayesian models: [R2 bayes][r2_bayes]
 #'
-#' @note If there is no `r2()`-method defined for the given model class,
-#'   `r2()` tries to return a "generic" r-quared value, calculated as following:
-#'   `1-sum((y-y_hat)^2)/sum((y-y_bar)^2))`
+#' @note
+#' If there is no `r2()`-method defined for the given model class, `r2()` tries
+#' to return a "generic" r-quared value, calculated as following:
+#' `1-sum((y-y_hat)^2)/sum((y-y_bar)^2)`
 #'
-#' @seealso [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`],
-#'   [`r2_loo()`], [`r2_mcfadden()`], [`r2_nagelkerke()`],
-#'   [`r2_nakagawa()`], [`r2_tjur()`], [`r2_xu()`] and
-#'   [`r2_zeroinflated()`].
+#' @seealso
+#' [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`], [`r2_loo()`],
+#' [`r2_mcfadden()`], [`r2_nagelkerke()`], [`r2_nakagawa()`], [`r2_tjur()`],
+#' [`r2_xu()`] and [`r2_zeroinflated()`].
 #'
 #' @examplesIf require("lme4")
 #' # Pseudo r-quared for GLM
@@ -291,6 +292,12 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
       insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
     out <- NULL
+  } else if (info$is_orderedbeta) {
+    # ordered-beta-regression
+    out <- r2_ferrari(model, correct_bounds = TRUE)
+  } else if (info$is_beta) {
+    # beta-regression
+    out <- r2_ferrari(model)
   } else {
     out <- list(R2_Nagelkerke = r2_nagelkerke(model, ...))
     names(out$R2_Nagelkerke) <- "Nagelkerke's R2"
@@ -527,8 +534,20 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     } else if (info$is_zero_inflated) {
       # zero-inflated models use the default method
       out <- r2_zeroinflated(model)
+    } else if (info$is_orderedbeta) {
+      # ordered-beta-regression
+      out <- r2_ferrari(model, correct_bounds = TRUE)
+    } else if (info$is_beta) {
+      # beta-regression
+      out <- r2_ferrari(model)
     } else {
-      insight::format_error("`r2()` does not support models of class `glmmTMB` without random effects and this link-function.") # nolint
+      insight::format_error(paste0(
+        "`r2()` does not support models of class `glmmTMB` without random effects and from ",
+        info$family,
+        "-family with ",
+        info$link_function,
+        "-link-function."
+      ))
     }
   }
   out

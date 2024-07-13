@@ -32,23 +32,23 @@ or not. Indicates up to which value the convergence result is accepted. When
 can't be computed (and thus, the conditional r-squared is \code{NA}),
 decrease the tolerance-level. See also \code{\link[=check_singularity]{check_singularity()}}.}
 
-\item{ci}{Confidence resp. credible interval level. For \code{icc()} and \code{r2()},
-confidence intervals are based on bootstrapped samples from the ICC resp.
-R2 value. See \code{iterations}.}
+\item{ci}{Confidence resp. credible interval level. For \code{icc()}, \code{r2()}, and
+\code{rmse()}, confidence intervals are based on bootstrapped samples from the
+ICC, R2 or RMSE value. See \code{iterations}.}
 
 \item{iterations}{Number of bootstrap-replicates when computing confidence
-intervals for the ICC or R2.}
+intervals for the ICC, R2, RMSE etc.}
 
 \item{ci_method}{Character string, indicating the bootstrap-method. Should
-be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for
-bootstrapped confidence intervals. However, if bootstrapped intervals cannot
-be calculated this was, try \code{ci_method = "boot"}, which falls back to
-\code{boot::boot()}. This may successfully return bootstrapped confidence intervals,
-but bootstrapped samples may not be appropriate for the multilevel structure
-of the model. There is also an option \code{ci_method = "analytical"}, which tries
-to calculate analytical confidence assuming a chi-squared distribution.
-However, these intervals are rather inaccurate and often too narrow. It is
-recommended to calculate bootstrapped confidence intervals for mixed models.}
+be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for bootstrapped
+confidence intervals. However, if bootstrapped intervals cannot be calculated
+this way, try \code{ci_method = "boot"}, which falls back to \code{boot::boot()}. This
+may successfully return bootstrapped confidence intervals, but bootstrapped
+samples may not be appropriate for the multilevel structure of the model.
+There is also an option \code{ci_method = "analytical"}, which tries to calculate
+analytical confidence assuming a chi-squared distribution. However, these
+intervals are rather inaccurate and often too narrow. It is recommended to
+calculate bootstrapped confidence intervals for mixed models.}
 
 \item{null_model}{Optional, a null model to compute the random effect variances,
 which is passed to \code{\link[insight:get_variance]{insight::get_variance()}}. Usually only required if
@@ -70,7 +70,9 @@ into account. If \code{"conditional"}, only the conditional component is conside
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
+\item{...}{Arguments passed down to \code{lme4::bootMer()} or \code{boot::boot()}
+for bootstrapped ICC, R2, RMSE etc.; for \code{variance_decomposition()},
+arguments are passed down to \code{brms::posterior_predict()}.}
 }
 \value{
 A list with the conditional and marginal R2 values.
@@ -121,7 +123,19 @@ Following model families are not yet validated, but should work:
 \item Beta-binomial regression
 \item Compound Poisson regression
 \item Generalized Poisson regression
+\item Log-normal regression
 }
+
+Extracting variance components for models with zero-inflation part is not
+straightforward, because it is not definitely clear how the distribution-specific
+variance should be calculated. Therefore, it is recommended to carefully
+inspect the results, and probably validate against other models, e.g. Bayesian
+models (although results may be only roughly comparable).
+
+Log-normal regressions (e.g. \code{lognormal()} family in \strong{glmmTMB} or \code{gaussian("log")})
+often have a very low fixed effects variance (if they were calculated as
+suggested by \emph{Nakagawa et al. 2017}). This results in very low ICC or
+r-squared values, which may not be meaningful.
 }
 
 \examples{
