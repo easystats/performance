@@ -12,7 +12,9 @@ mae(model, ...)
 \arguments{
 \item{model}{A model.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Arguments passed down to \code{lme4::bootMer()} or \code{boot::boot()}
+for bootstrapped ICC, R2, RMSE etc.; for \code{variance_decomposition()},
+arguments are passed down to \code{brms::posterior_predict()}.}
 }
 \value{
 Numeric, the mean absolute error of \code{model}.

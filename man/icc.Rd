@@ -12,6 +12,9 @@ icc(
   ci = NULL,
   iterations = 100,
   ci_method = NULL,
+  null_model = NULL,
+  approximation = "lognormal",
+  model_component = NULL,
   verbose = TRUE,
   ...
 )
@@ -21,36 +24,55 @@ variance_decomposition(model, re_formula = NULL, robust = TRUE, ci = 0.95, ...)
 \arguments{
 \item{model}{A (Bayesian) mixed effects model.}
 
-\item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance
-components for each random-effects level (if there are multiple levels).
-See 'Details'.}
+\item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance components
+for each random-effects level (if there are multiple levels). See 'Details'.}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See \code{\link[performance:check_singularity]{performance::check_singularity()}}.}
 
-\item{ci}{Confidence resp. credible interval level. For \code{icc()} and \code{r2()},
-confidence intervals are based on bootstrapped samples from the ICC resp.
-R2 value. See \code{iterations}.}
+\item{ci}{Confidence resp. credible interval level. For \code{icc()}, \code{r2()}, and
+\code{rmse()}, confidence intervals are based on bootstrapped samples from the
+ICC, R2 or RMSE value. See \code{iterations}.}
 
 \item{iterations}{Number of bootstrap-replicates when computing confidence
-intervals for the ICC or R2.}
+intervals for the ICC, R2, RMSE etc.}
 
 \item{ci_method}{Character string, indicating the bootstrap-method. Should
-be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for
-bootstrapped confidence intervals. However, if bootstrapped intervals cannot
-be calculated this was, try \code{ci_method = "boot"}, which falls back to
-\code{boot::boot()}. This may successfully return bootstrapped confidence intervals,
-but bootstrapped samples may not be appropriate for the multilevel structure
-of the model. There is also an option \code{ci_method = "analytical"}, which tries
-to calculate analytical confidence assuming a chi-squared distribution.
-However, these intervals are rather inaccurate and often too narrow. It is
-recommended to calculate bootstrapped confidence intervals for mixed models.}
+be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for bootstrapped
+confidence intervals. However, if bootstrapped intervals cannot be calculated
+this way, try \code{ci_method = "boot"}, which falls back to \code{boot::boot()}. This
+may successfully return bootstrapped confidence intervals, but bootstrapped
+samples may not be appropriate for the multilevel structure of the model.
+There is also an option \code{ci_method = "analytical"}, which tries to calculate
+analytical confidence assuming a chi-squared distribution. However, these
+intervals are rather inaccurate and often too narrow. It is recommended to
+calculate bootstrapped confidence intervals for mixed models.}
+
+\item{null_model}{Optional, a null model to compute the random effect variances,
+which is passed to \code{\link[insight:get_variance]{insight::get_variance()}}. Usually only required if
+calculation of r-squared or ICC fails when \code{null_model} is not specified. If
+calculating the null model takes longer and you already have fit the null
+model, you can pass it here, too, to speed up the process.}
+
+\item{approximation}{Character string, indicating the approximation method
+for the distribution-specific (observation level, or residual) variance. Only
+applies to non-Gaussian models. Can be \code{"lognormal"} (default), \code{"delta"} or
+\code{"trigamma"}. For binomial models, the default is the \emph{theoretical} distribution
+specific variance, however, it can also be \code{"observation_level"}. See
+\emph{Nakagawa et al. 2017}, in particular supplement 2, for details.}
+
+\item{model_component}{For models that can have a zero-inflation component,
+specify for which component variances should be returned. If \code{NULL} or \code{"full"}
+(the default), both the conditional and the zero-inflation component are taken
+into account. If \code{"conditional"}, only the conditional component is considered.}
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
+\item{...}{Arguments passed down to \code{lme4::bootMer()} or \code{boot::boot()}
+for bootstrapped ICC, R2, RMSE etc.; for \code{variance_decomposition()},
+arguments are passed down to \code{brms::posterior_predict()}.}
 
 \item{re_formula}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
@@ -70,7 +92,7 @@ ICC as well as the credible intervals for this ICC.
 This function calculates the intraclass-correlation coefficient (ICC) -
 sometimes also called \emph{variance partition coefficient} (VPC) or
 \emph{repeatability} - for mixed effects models. The ICC can be calculated for all
-models supported by \code{insight::get_variance()}. For models fitted with the
+models supported by \code{\link[insight:get_variance]{insight::get_variance()}}. For models fitted with the
 \strong{brms}-package, \code{icc()} might fail due to the large variety of
 models and families supported by the \strong{brms}-package. In such cases, an
 alternative to the ICC is the \code{variance_decomposition()}, which is based
@@ -175,6 +197,48 @@ very large, the variance ratio in the output makes no sense, e.g. because
 it is negative. In such cases, it might help to use \code{robust = TRUE}.
 }
 }
+\section{Supported models and model families}{
+
+The single variance components that are required to calculate the marginal
+and conditional r-squared values are calculated using the \code{\link[insight:get_variance]{insight::get_variance()}}
+function. The results are validated against the solutions provided by
+\emph{Nakagawa et al. (2017)}, in particular examples shown in the Supplement 2
+of the paper. Other model families are validated against results from the
+\strong{MuMIn} package. This means that the r-squared values returned by \code{r2_nakagawa()}
+should be accurate and reliable for following mixed models or model families:
+\itemize{
+\item Bernoulli (logistic) regression
+\item Binomial regression (with other than binary outcomes)
+\item Poisson and Quasi-Poisson regression
+\item Negative binomial regression (including nbinom1 and nbinom2 families)
+\item Gaussian regression (linear models)
+\item Gamma regression
+\item Tweedie regression
+\item Beta regression
+\item Ordered beta regression
+}
+
+Following model families are not yet validated, but should work:
+\itemize{
+\item Zero-inflated and hurdle models
+\item Beta-binomial regression
+\item Compound Poisson regression
+\item Generalized Poisson regression
+\item Log-normal regression
+}
+
+Extracting variance components for models with zero-inflation part is not
+straightforward, because it is not definitely clear how the distribution-specific
+variance should be calculated. Therefore, it is recommended to carefully
+inspect the results, and probably validate against other models, e.g. Bayesian
+models (although results may be only roughly comparable).
+
+Log-normal regressions (e.g. \code{lognormal()} family in \strong{glmmTMB} or \code{gaussian("log")})
+often have a very low fixed effects variance (if they were calculated as
+suggested by \emph{Nakagawa et al. 2017}). This results in very low ICC or
+r-squared values, which may not be meaningful.
+}
+
 \examples{
 \dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)

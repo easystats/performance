@@ -50,7 +50,7 @@
 #' exclusion them from the analysis (note that you would need to re-compute the
 #' KMO indices as they are dependent on the whole dataset).
 #'
-#' @param x A dataframe or a correlation matrix. If the latter is passed, `n`
+#' @param x A data frame or a correlation matrix. If the latter is passed, `n`
 #'   must be provided.
 #' @param n If a correlation matrix was passed, the number of observations must
 #'   be specified.

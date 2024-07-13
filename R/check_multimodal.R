@@ -58,10 +58,10 @@ check_multimodal.data.frame <- function(x, ...) {
   rez$p <- 1 - stats::pchisq(rez$Chisq, df = rez$df)
 
   # Text
-  text <- "The parametric mixture modelling test suggests that "
+  msg <- "The parametric mixture modelling test suggests that "
   if (rez$p < 0.05) {
-    text <- paste0(
-      text,
+    msg <- paste0(
+      msg,
       "the multivariate distribution is significantly multimodal (Chi2(",
       insight::format_value(rez$df, protect_integers = TRUE),
       ") = ",
@@ -70,8 +70,8 @@ check_multimodal.data.frame <- function(x, ...) {
     )
     color <- "green"
   } else {
-    text <- paste0(
-      text,
+    msg <- paste0(
+      msg,
       "the hypothesis of a multimodal multivariate distribution cannot be rejected (Chi2(",
       insight::format_value(rez$df, protect_integers = TRUE),
       ") = ",
@@ -82,7 +82,7 @@ check_multimodal.data.frame <- function(x, ...) {
   }
 
 
-  attr(rez, "text") <- insight::format_message(text)
+  attr(rez, "text") <- insight::format_message(msg)
   attr(rez, "color") <- color
   attr(rez, "title") <- "Is the data multimodal?"
   class(rez) <- c("easystats_check", class(rez))
@@ -99,19 +99,19 @@ check_multimodal.numeric <- function(x, ...) {
   rez <- multimode::modetest(x, mod0 = 1, method = "ACR")
   rez <- list(p = rez$p.value, excess_mass = rez$statistic)
 
-  text <- "The Ameijeiras-Alonso et al. (2018) excess mass test suggests that "
+  msg <- "The Ameijeiras-Alonso et al. (2018) excess mass test suggests that "
 
   if (rez$p < 0.05) {
-    text <- paste0(
-      text,
+    msg <- paste0(
+      msg,
       "the distribution is significantly multimodal (excess mass = ",
       insight::format_value(rez$excess_mass),
       ", ", insight::format_p(rez$p), ").\n"
     )
     color <- "green"
   } else {
-    text <- paste0(
-      text,
+    msg <- paste0(
+      msg,
       "the hypothesis of a multimodal distribution cannot be rejected (excess mass = ",
       insight::format_value(rez$excess_mass),
       ", ", insight::format_p(rez$p), ").\n"
@@ -119,7 +119,7 @@ check_multimodal.numeric <- function(x, ...) {
     color <- "yellow"
   }
 
-  attr(rez, "text") <- insight::format_message(text)
+  attr(rez, "text") <- insight::format_message(msg)
   attr(rez, "color") <- color
   attr(rez, "title") <- "Is the variable multimodal?"
   class(rez) <- c("easystats_check", class(rez))

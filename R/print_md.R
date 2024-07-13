@@ -113,15 +113,3 @@ print_md.check_itemscale <- function(x, digits = 2, ...) {
     align = "firstleft"
   )
 }
-
-
-# Reexports models ------------------------
-
-#' @importFrom insight print_md
-#' @export
-insight::print_md
-
-
-#' @importFrom insight print_html
-#' @export
-insight::print_html

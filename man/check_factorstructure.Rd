@@ -13,7 +13,7 @@ check_kmo(x, n = NULL, ...)
 check_sphericity_bartlett(x, n = NULL, ...)
 }
 \arguments{
-\item{x}{A dataframe or a correlation matrix. If the latter is passed, \code{n}
+\item{x}{A data frame or a correlation matrix. If the latter is passed, \code{n}
 must be provided.}
 
 \item{n}{If a correlation matrix was passed, the number of observations must

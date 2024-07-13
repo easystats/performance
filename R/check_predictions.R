@@ -100,7 +100,6 @@ check_predictions.default <- function(object,
                                       type = "density",
                                       verbose = TRUE,
                                       ...) {
-  # check for valid input
   .is_model_valid(object)
 
   # retrieve model information
@@ -223,7 +222,9 @@ check_predictions.BFBayesFactor <- function(object,
   if (isTRUE(is.na(re_formula))) {
     yy <- everything_we_need[["y_pred_marginal"]]
   } else {
-    if (!is.null(re_formula)) warning("re_formula can only be NULL or NA", call. = FALSE)
+    if (!is.null(re_formula)) {
+      insight::format_warning("`re_formula` can only be `NULL` or `NA`.")
+    }
     yy <- everything_we_need[["y_pred"]]
   }
 

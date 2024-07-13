@@ -55,7 +55,7 @@ estimates to the amount of sampling variability.
 \item \strong{TAU2}: The amount of (residual) heterogeneity in the random
 or mixed effects model.
 \item \strong{CochransQ (QE)}: Test for (residual) Heterogeneity. Without
-moderators in the model, this is simply Cochran's Q-test.
+moderators in the model, this is simply Cochran's \emph{Q}-test.
 \item \strong{Omnibus (QM)}: Omnibus test of parameters.
 \item \strong{R2}: Pseudo-R2-statistic, which indicates the amount of
 heterogeneity accounted for by the moderators included in a fixed-effects

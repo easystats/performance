@@ -82,7 +82,6 @@ test_that("check_predictions, glmmTMB", {
 
 
 test_that("check_predictions, glm, binomial", {
-  skip_if(packageVersion("insight") <= "0.19.6")
   data(mtcars)
   set.seed(1)
   tot <- rep(10, 100)

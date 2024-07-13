@@ -49,9 +49,9 @@ determination, value for different model objects. Depending on the model,
 R2, pseudo-R2, or marginal / adjusted R2 values are returned.
 }
 \note{
-If there is no \code{r2()}-method defined for the given model class,
-\code{r2()} tries to return a "generic" r-quared value, calculated as following:
-\verb{1-sum((y-y_hat)^2)/sum((y-y_bar)^2))}
+If there is no \code{r2()}-method defined for the given model class, \code{r2()} tries
+to return a "generic" r-quared value, calculated as following:
+\code{1-sum((y-y_hat)^2)/sum((y-y_bar)^2)}
 }
 \examples{
 \dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -68,8 +68,7 @@ r2(model)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=r2_bayes]{r2_bayes()}}, \code{\link[=r2_coxsnell]{r2_coxsnell()}}, \code{\link[=r2_kullback]{r2_kullback()}},
-\code{\link[=r2_loo]{r2_loo()}}, \code{\link[=r2_mcfadden]{r2_mcfadden()}}, \code{\link[=r2_nagelkerke]{r2_nagelkerke()}},
-\code{\link[=r2_nakagawa]{r2_nakagawa()}}, \code{\link[=r2_tjur]{r2_tjur()}}, \code{\link[=r2_xu]{r2_xu()}} and
-\code{\link[=r2_zeroinflated]{r2_zeroinflated()}}.
+\code{\link[=r2_bayes]{r2_bayes()}}, \code{\link[=r2_coxsnell]{r2_coxsnell()}}, \code{\link[=r2_kullback]{r2_kullback()}}, \code{\link[=r2_loo]{r2_loo()}},
+\code{\link[=r2_mcfadden]{r2_mcfadden()}}, \code{\link[=r2_nagelkerke]{r2_nagelkerke()}}, \code{\link[=r2_nakagawa]{r2_nakagawa()}}, \code{\link[=r2_tjur]{r2_tjur()}},
+\code{\link[=r2_xu]{r2_xu()}} and \code{\link[=r2_zeroinflated]{r2_zeroinflated()}}.
 }

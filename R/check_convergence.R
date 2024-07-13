@@ -76,7 +76,6 @@ check_convergence <- function(x, tolerance = 0.001, ...) {
 
 #' @export
 check_convergence.default <- function(x, tolerance = 0.001, ...) {
-  # check for valid input
   .is_model_valid(x)
   message(sprintf("`check_convergence()` does not work for models of class '%s'.", class(x)[1]))
 }

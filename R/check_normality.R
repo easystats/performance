@@ -55,7 +55,6 @@ check_normality <- function(x, ...) {
 
 #' @export
 check_normality.default <- function(x, ...) {
-  # check for valid input
   .is_model_valid(x)
 
   if (!insight::model_info(x)$is_linear) {

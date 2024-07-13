@@ -150,7 +150,7 @@ the median (which are robust measures of dispersion and centrality). The
 default threshold to classify outliers is 1.959 (\code{threshold = list("zscore" = 1.959)}),
 corresponding to the 2.5\% (\code{qnorm(0.975)}) most extreme observations
 (assuming the data is normally distributed). Importantly, the Z-score
-method is univariate: it is computed column by column. If a dataframe is
+method is univariate: it is computed column by column. If a data frame is
 passed, the Z-score is calculated for each variable separately, and the
 maximum (absolute) Z-score is kept for each observations. Thus, all
 observations that are extreme on at least one variable might be detected
@@ -303,14 +303,14 @@ data <- mtcars # Size nrow(data) = 32
 outliers_list <- check_outliers(data$mpg) # Find outliers
 outliers_list # Show the row index of the outliers
 as.numeric(outliers_list) # The object is a binary vector...
-filtered_data <- data[!outliers_list, ] # And can be used to filter a dataframe
+filtered_data <- data[!outliers_list, ] # And can be used to filter a data frame
 nrow(filtered_data) # New size, 28 (4 outliers removed)
 
 # Find all observations beyond +/- 2 SD
 check_outliers(data$mpg, method = "zscore", threshold = 2)
 
 # For dataframes ------------------------------------------------------
-check_outliers(data) # It works the same way on dataframes
+check_outliers(data) # It works the same way on data frames
 
 # You can also use multiple methods at once
 outliers_list <- check_outliers(data, method = c(
@@ -331,8 +331,9 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 # We can run the function stratified by groups using `{datawizard}` package:
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
-
+# nolint start
 \dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# nolint end
 \donttest{
 # You can also run all the methods
 check_outliers(data, method = "all", verbose = FALSE)
@@ -359,36 +360,37 @@ insight::get_data(model)[outliers_list, ] # Show outliers data
 \itemize{
 \item Archimbaud, A., Nordhausen, K., and Ruiz-Gazen, A. (2018). ICS for
 multivariate outlier detection with application to quality control.
-Computational Statistics and Data Analysis, 128, 184-199.
+\emph{Computational Statistics and Data Analysis}, \emph{128}, 184-199.
 \doi{10.1016/j.csda.2018.06.011}
 \item Gnanadesikan, R., and Kettenring, J. R. (1972). Robust estimates, residuals,
-and outlier detection with multiresponse data. Biometrics, 81-124.
+and outlier detection with multiresponse data. \emph{Biometrics}, 81-124.
 \item Bollen, K. A., and Jackman, R. W. (1985). Regression diagnostics: An
-expository treatment of outliers and influential cases. Sociological Methods
-and Research, 13(4), 510-542.
+expository treatment of outliers and influential cases. \emph{Sociological Methods
+and Research}, \emph{13}(4), 510-542.
 \item Cabana, E., Lillo, R. E., and Laniado, H. (2019). Multivariate outlier
 detection based on a robust Mahalanobis distance with shrinkage estimators.
 arXiv preprint arXiv:1904.02596.
 \item Cook, R. D. (1977). Detection of influential observation in linear
-regression. Technometrics, 19(1), 15-18.
+regression. \emph{Technometrics}, \emph{19}(1), 15-18.
 \item Iglewicz, B., and Hoaglin, D. C. (1993). How to detect and handle outliers
 (Vol. 16). Asq Press.
 \item Leys, C., Klein, O., Dominicy, Y., and Ley, C. (2018). Detecting
-multivariate outliers: Use a robust variant of Mahalanobis distance. Journal
-of Experimental Social Psychology, 74, 150-156.
+multivariate outliers: Use a robust variant of Mahalanobis distance. \emph{Journal
+of Experimental Social Psychology}, 74, 150-156.
 \item Liu, F. T., Ting, K. M., and Zhou, Z. H. (2008, December). Isolation forest.
 In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
 IEEE.
 \item Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., and Makowski, D.
 (2021). performance: An R package for assessment, comparison and testing of
-statistical models. Journal of Open Source Software, 6(60), 3139.
+statistical models. \emph{Journal of Open Source Software}, \emph{6}(60), 3139.
 \doi{10.21105/joss.03139}
 \item Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M.,
 and Makowski, D. (2023). Check your outliers! An introduction to identifying
-statistical outliers in R with easystats. \doi{10.31234/osf.io/bu6nt}
+statistical outliers in R with easystats. \emph{Behavior Research Methods}, 1-11.
+\doi{10.3758/s13428-024-02356-w}
 \item Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
-outliers and leverage points. Journal of the American Statistical
-association, 85(411), 633-639.
+outliers and leverage points. \emph{Journal of the American Statistical
+association}, \emph{85}(411), 633-639.
 }
 }
 \seealso{

@@ -69,7 +69,7 @@ performance_cv <- function(model,
       test_pred <- insight::get_predicted(model, ci = NULL, data = data)
       test_resd <- test_resp - test_pred
     } else if (method == "holdout") {
-      train_i <- sample(seq_len(nrow(model_data)), size = round((1 - prop) * nrow(model_data)), replace = FALSE)
+      train_i <- sample.int(nrow(model_data), size = round((1 - prop) * nrow(model_data)), replace = FALSE)
       model_upd <- stats::update(model, data = model_data[train_i, ])
       test_resp <- model_data[-train_i, resp.name]
       test_pred <- insight::get_predicted(model_upd, ci = NULL, data = model_data[-train_i, ])
