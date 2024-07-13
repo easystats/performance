@@ -1,8 +1,8 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.12.0.4
-Authors@R: 
+Version: 0.12.0.9
+Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
              role = c("aut", "cre"),
@@ -39,8 +39,8 @@ Authors@R:
              email = "remi.theriault@mail.mcgill.ca",
              comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
       person(given = "Vincent",
-             family = "Arel-Bundock", 
-             email = "vincent.arel-bundock@umontreal.ca", 
+             family = "Arel-Bundock",
+             email = "vincent.arel-bundock@umontreal.ca",
              role = "ctb",
              comment = c(ORCID = "0000-0003-2042-7063")),
       person(given = "Martin",
@@ -48,9 +48,9 @@ Authors@R:
              role = "rev"),
       person(given = "gjo11",
              role = "rev"),
-      person("Etienne", 
-             "Bacher", , 
-             "etienne.bacher@protonmail.com", 
+      person("Etienne",
+             "Bacher", ,
+             "etienne.bacher@protonmail.com",
              role = "ctb",
              comment = c(ORCID = "0000-0002-9271-5075")))
 Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
@@ -70,8 +70,8 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.2),
-    insight (>= 0.20.1),
-    datawizard (>= 0.11.0),
+    insight (>= 0.20.2),
+    datawizard (>= 0.10.0),
     stats,
     utils
 Suggests:
@@ -93,6 +93,7 @@ Suggests:
     DHARMa,
     estimatr,
     fixest,
+    flextable,
     forecast,
     gamm4,
     geomtextpath,
@@ -100,7 +101,7 @@ Suggests:
     glmmTMB,
     graphics,
     Hmisc,
-    httr,
+    httr2,
     ICS,
     ICSOutlier,
     ISLR,
@@ -130,6 +131,8 @@ Suggests:
     quantreg,
     qqplotr (>= 0.0.6),
     randomForest,
+    RcppEigen,
+    rempsyc,
     rmarkdown,
     rstanarm,
     rstantools,
@@ -152,4 +155,3 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/insight

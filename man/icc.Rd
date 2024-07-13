@@ -24,32 +24,31 @@ variance_decomposition(model, re_formula = NULL, robust = TRUE, ci = 0.95, ...)
 \arguments{
 \item{model}{A (Bayesian) mixed effects model.}
 
-\item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance
-components for each random-effects level (if there are multiple levels).
-See 'Details'.}
+\item{by_group}{Logical, if \code{TRUE}, \code{icc()} returns the variance components
+for each random-effects level (if there are multiple levels). See 'Details'.}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances or not. Indicates up to which
 value the convergence result is accepted. The larger tolerance is, the
 stricter the test will be. See \code{\link[performance:check_singularity]{performance::check_singularity()}}.}
 
-\item{ci}{Confidence resp. credible interval level. For \code{icc()} and \code{r2()},
-confidence intervals are based on bootstrapped samples from the ICC resp.
-R2 value. See \code{iterations}.}
+\item{ci}{Confidence resp. credible interval level. For \code{icc()}, \code{r2()}, and
+\code{rmse()}, confidence intervals are based on bootstrapped samples from the
+ICC, R2 or RMSE value. See \code{iterations}.}
 
 \item{iterations}{Number of bootstrap-replicates when computing confidence
-intervals for the ICC or R2.}
+intervals for the ICC, R2, RMSE etc.}
 
 \item{ci_method}{Character string, indicating the bootstrap-method. Should
-be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for
-bootstrapped confidence intervals. However, if bootstrapped intervals cannot
-be calculated this was, try \code{ci_method = "boot"}, which falls back to
-\code{boot::boot()}. This may successfully return bootstrapped confidence intervals,
-but bootstrapped samples may not be appropriate for the multilevel structure
-of the model. There is also an option \code{ci_method = "analytical"}, which tries
-to calculate analytical confidence assuming a chi-squared distribution.
-However, these intervals are rather inaccurate and often too narrow. It is
-recommended to calculate bootstrapped confidence intervals for mixed models.}
+be \code{NULL} (default), in which case \code{lme4::bootMer()} is used for bootstrapped
+confidence intervals. However, if bootstrapped intervals cannot be calculated
+this way, try \code{ci_method = "boot"}, which falls back to \code{boot::boot()}. This
+may successfully return bootstrapped confidence intervals, but bootstrapped
+samples may not be appropriate for the multilevel structure of the model.
+There is also an option \code{ci_method = "analytical"}, which tries to calculate
+analytical confidence assuming a chi-squared distribution. However, these
+intervals are rather inaccurate and often too narrow. It is recommended to
+calculate bootstrapped confidence intervals for mixed models.}
 
 \item{null_model}{Optional, a null model to compute the random effect variances,
 which is passed to \code{\link[insight:get_variance]{insight::get_variance()}}. Usually only required if
@@ -59,7 +58,9 @@ model, you can pass it here, too, to speed up the process.}
 
 \item{verbose}{Toggle warnings and messages.}
 
-\item{...}{Arguments passed down to \code{brms::posterior_predict()}.}
+\item{...}{Arguments passed down to \code{lme4::bootMer()} or \code{boot::boot()}
+for bootstrapped ICC, R2, RMSE etc.; for \code{variance_decomposition()},
+arguments are passed down to \code{brms::posterior_predict()}.}
 
 \item{re_formula}{Formula containing group-level effects to be considered in
 the prediction. If \code{NULL} (default), include all group-level effects.
