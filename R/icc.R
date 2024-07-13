@@ -249,7 +249,12 @@ icc <- function(model,
     # iccs between groups
     # n_grps <- length(vars$var.intercept)
     # level_combinations <- utils::combn(1:n_grps, m = n_grps - 1, simplify = FALSE)
-    # icc_grp <- sapply(level_combinations, function(v) vars$var.intercept[v[1]] / (vars$var.intercept[v[1]] + vars$var.intercept[v[2]]))
+    # icc_grp <- sapply(
+    #   level_combinations,
+    #   function(v) {
+    #     vars$var.intercept[v[1]] / (vars$var.intercept[v[1]] + vars$var.intercept[v[2]])
+    #   }
+    # )
     #
     # out2 <- data.frame(
     #   Group1 = group_names[sapply(level_combinations, function(i) i[1])],
