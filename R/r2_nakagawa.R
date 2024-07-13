@@ -139,8 +139,7 @@ r2_nakagawa <- function(model,
     vars_null <- insight::get_variance(
       null_model,
       tolerance = tolerance,
-      verbose <- isTRUE(getOption("easystats_errors", FALSE))
-
+      verbose = isTRUE(getOption("easystats_errors", FALSE))
     )
 
     # names of group levels
