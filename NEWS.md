@@ -7,19 +7,25 @@
   the null model fails, or when you already have fit the null model and want
   to save time.
 
-* `icc()` and `r2_nakagawa()` get a `approximation` argument indicating the 
+* `icc()` and `r2_nakagawa()` get a `approximation` argument indicating the
   approximation method for the distribution-specific (residual) variance. See
   Nakagawa et al. 2017 for details.
 
-* `icc()` and `r2_nakagawa()` get a `model_component` argument indicating the 
+* `icc()` and `r2_nakagawa()` get a `model_component` argument indicating the
   component for zero-inflation or hurdle models.
 
-* `performance_rmse()` (resp. `rmse()`) can now compute analytical and 
+* `performance_rmse()` (resp. `rmse()`) can now compute analytical and
   bootstrapped confidence intervals. The function gains following new arguments:
   `ci`, `ci_method` and `iterations`.
 
-* New function `r2_ferrari()` to compute Ferrari & Cribari-Neto's R2 for 
+* New function `r2_ferrari()` to compute Ferrari & Cribari-Neto's R2 for
   generalized linear models, in particular beta-regression.
+
+## Bug fixes
+
+* Fixed issue in `check_model()` when model contained a transformed response
+  variable that was named like a valid R function name (e.g., `lm(log(lapply) ~ x)`,
+  when data contained a variable named `lapply`).
 
 # performance 0.12.0
 
@@ -36,7 +42,7 @@
 
 * Improved documentation and new vignettes added.
 
-* `check_model()` gets a `base_size` argument, to set the base font size for plots. 
+* `check_model()` gets a `base_size` argument, to set the base font size for plots.
 
 * `check_predictions()` for `stanreg` and `brmsfit` models now returns plots in
   the usual style as for other models and no longer returns plots from
@@ -177,7 +183,7 @@
 
 # performance 0.10.6
 
-## General 
+## General
 
 * Support for `nestedLogit` models.
 
@@ -250,7 +256,7 @@
 
 * `model_performance()`, `check_overdispersion()`, `check_outliers()` and `r2()`
   now work with objects of class `fixest_multi` (@etiennebacher, #554).
-  
+
 * `model_performance()` can now return the "Weak instruments" statistic and
   p-value for models of class `ivreg` with `metrics = "weak_instruments"`
   (@etiennebacher, #560).
@@ -322,8 +328,8 @@
 
 * Fixed issues in `check_model()` for models with convergence issues that lead
   to `NA` values in residuals.
-  
-* Fixed bug in `check_outliers` whereby passing multiple elements to the 
+
+* Fixed bug in `check_outliers` whereby passing multiple elements to the
   threshold list generated an error (#496).
 
 * `test_wald()` now warns the user about inappropriate F test and calls
@@ -351,16 +357,16 @@
 * `check_normality()`, `check_homogeneity()` and `check_symmetry()` now works
   for `htest` objects.
 
-* Print method for `check_outliers()` changed significantly: now states the 
-  methods, thresholds, and variables used, reports outliers per variable (for 
-  univariate methods) as well as any observation flagged for several 
-  variables/methods. Includes a new optional ID argument to add along the 
+* Print method for `check_outliers()` changed significantly: now states the
+  methods, thresholds, and variables used, reports outliers per variable (for
+  univariate methods) as well as any observation flagged for several
+  variables/methods. Includes a new optional ID argument to add along the
   row number in the output (@rempsyc #443).
 
-* `check_outliers()` now uses more conventional outlier thresholds. The `IQR` 
+* `check_outliers()` now uses more conventional outlier thresholds. The `IQR`
   and confidence interval methods now gain improved distance scores that
   are continuous instead of discrete.
-  
+
 ## Bug Fixes
 
 * Fixed wrong *z*-score values when using a vector instead of a data frame in
@@ -383,7 +389,7 @@
 
 ## Changes to functions
 
-* `check_model()` gains a `show_dots` argument, to show or hide data points. 
+* `check_model()` gains a `show_dots` argument, to show or hide data points.
   This is particular useful for models with many observations, where generating
   the plot would be very slow.
 
@@ -923,4 +929,3 @@
 * Fixed issue in `check_heteroscedasticity()` for *aov* objects.
 
 * Fixed issues for *lmrob* and *glmrob* objects.
-
