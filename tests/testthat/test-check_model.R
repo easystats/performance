@@ -108,3 +108,13 @@ test_that("`check_model()` no warnings for quasipoisson", {
   expect_message(check_model(model1, verbose = TRUE), regex = "Not enough")
   expect_silent(check_model(model1))
 })
+
+
+test_that("`check_model()` with transformed response when named as function", {
+  data(mtcars)
+  # rename variable, so it equals to a valid R function
+  mtcars$rt <- mtcars$mpg
+  model <- lm(log(rt) ~ disp, data = mtcars)
+  out <- check_predictions(model)
+  expect_s3_class(out, "performance_pp_check")
+})
