@@ -21,6 +21,8 @@
 * New function `r2_ferrari()` to compute Ferrari & Cribari-Neto's R2 for
   generalized linear models, in particular beta-regression.
 
+* Improved documentation of some functions.
+
 ## Bug fixes
 
 * Fixed issue in `check_model()` when model contained a transformed response

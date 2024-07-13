@@ -21,12 +21,20 @@
 #' credible intervals for the R2 values are saved as attributes.
 #'
 #' @details
-#' `r2_bayes()` returns an "unadjusted" R2 value. See [r2_loo()] to calculate a
+#' `r2_bayes()` returns an "unadjusted" R2 value. See [`r2_loo()`] to calculate a
 #' LOO-adjusted R2, which comes conceptually closer to an adjusted R2 measure.
 #'
 #' For mixed models, the conditional and marginal R2 are returned. The marginal
 #' R2 considers only the variance of the fixed effects, while the conditional R2
-#' takes both the fixed and random effects into account.
+#' takes both the fixed and random effects into account. Technically, since
+#' `r2_bayes()` relies on [`rstantools::bayes_R2()`], the "marginal" R2 calls
+#' `bayes_R2(re.form = NA)`, while the "conditional" R2 calls
+#' `bayes_R2(re.form = NULL)`. The `re.form` argument is passed to
+#' [`rstantools::posterior_epred()`], which is internally called in `bayes_R2()`.
+#'
+#' Note that for "marginal" and "conditional", we refer to the wording suggested
+#' by _Nakagawa et al. 2017_. Thus, we don't use the term "marginal" in the sense
+#' that the random effects are integrated out, but are "ignored".
 #'
 #' `r2_posterior()` is the actual workhorse for `r2_bayes()` and returns a
 #' posterior sample of Bayesian R2 values.
@@ -72,9 +80,13 @@
 #' r2_bayes(model)
 #' }
 #' @references
-#' Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for
-#' Bayesian regression models. The American Statistician, 1–6.
-#' \doi{10.1080/00031305.2018.1549100}
+#' - Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for
+#'   Bayesian regression models. The American Statistician, 1–6.
+#'   \doi{10.1080/00031305.2018.1549100}
+#' - Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
+#'   coefficient of determination R2 and intra-class correlation coefficient from
+#'   generalized linear mixed-effects models revisited and expanded. Journal of
+#'   The Royal Society Interface, 14(134), 20170213.
 #' @export
 r2_bayes <- function(model, robust = TRUE, ci = 0.95, verbose = TRUE, ...) {
   r2_bayesian <- r2_posterior(model, verbose = verbose, ...)
