@@ -154,7 +154,7 @@ r2_nakagawa <- function(model,
     if (insight::is_empty_object(vars$var.random) || is.na(vars$var.random)) {
       if (verbose) {
         # if no random effect variance, return simple R2
-        insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red")
+        insight::print_color("Random effect variances not available. Returned R2 does not account for random effects.\n", "red") # nolint
       }
       r2_marginal <- vars$var.fixed / (vars$var.fixed + vars$var.residual)
       r2_conditional <- NA
@@ -172,11 +172,11 @@ r2_nakagawa <- function(model,
       # this is experimental!
       if (identical(ci_method, "analytical")) {
         result <- .safe(.analytical_icc_ci(model, ci, fun = "r2_nakagawa"))
-        if (!is.null(result)) {
+        if (is.null(result)) {
+          r2_ci_marginal <- r2_ci_conditional <- NA
+        } else {
           r2_ci_marginal <- result$R2_marginal
           r2_ci_conditional <- result$R2_conditional
-        } else {
-          r2_ci_marginal <- r2_ci_conditional <- NA
         }
       } else {
         result <- .bootstrap_r2_nakagawa(model, iterations, tolerance, ci_method, ...)
@@ -266,7 +266,7 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   }
 
   # separate lines for multiple R2
-  out <- paste0(out, collapse = "\n")
+  out <- paste(out, collapse = "\n")
 
   cat(out)
   cat("\n")
@@ -281,7 +281,11 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 .boot_r2_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
-  vars <- .compute_random_vars(fit, tolerance, verbose = FALSE)
+  vars <- .compute_random_vars(
+    fit,
+    tolerance,
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }
@@ -298,7 +302,11 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
 
 # bootstrapping using "lme4::bootMer"
 .boot_r2_fun_lme4 <- function(model) {
-  vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
+  vars <- .compute_random_vars(
+    model,
+    tolerance = 1e-10,
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }

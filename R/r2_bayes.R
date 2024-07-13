@@ -31,7 +31,7 @@
 #' `r2_posterior()` is the actual workhorse for `r2_bayes()` and returns a
 #' posterior sample of Bayesian R2 values.
 #'
-#' @examplesIf require("rstanarm") && require("rstantools") && require("brms")
+#' @examplesIf require("rstanarm") && require("rstantools") && require("brms") && require("RcppEigen")
 #' library(performance)
 #' \donttest{
 #' model <- suppressWarnings(rstanarm::stan_glm(

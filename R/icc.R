@@ -249,7 +249,12 @@ icc <- function(model,
     # iccs between groups
     # n_grps <- length(vars$var.intercept)
     # level_combinations <- utils::combn(1:n_grps, m = n_grps - 1, simplify = FALSE)
-    # icc_grp <- sapply(level_combinations, function(v) vars$var.intercept[v[1]] / (vars$var.intercept[v[1]] + vars$var.intercept[v[2]]))
+    # icc_grp <- sapply(
+    #   level_combinations,
+    #   function(v) {
+    #     vars$var.intercept[v[1]] / (vars$var.intercept[v[1]] + vars$var.intercept[v[2]])
+    #   }
+    # )
     #
     # out2 <- data.frame(
     #   Group1 = group_names[sapply(level_combinations, function(i) i[1])],
@@ -275,11 +280,11 @@ icc <- function(model,
       # this is experimental!
       if (identical(ci_method, "analytical")) {
         result <- .safe(.analytical_icc_ci(model, ci))
-        if (!is.null(result)) {
+        if (is.null(result)) {
+          icc_ci_adjusted <- icc_ci_unadjusted <- NA
+        } else {
           icc_ci_adjusted <- result$ICC_adjusted
           icc_ci_unadjusted <- result$ICC_unadjusted
-        } else {
-          icc_ci_adjusted <- icc_ci_unadjusted <- NA
         }
       } else {
         result <- .bootstrap_icc(model, iterations, tolerance, ci_method, ...)
@@ -428,7 +433,7 @@ print.icc <- function(x, digits = 3, ...) {
   }
 
   # separate lines for multiple R2
-  out <- paste0(out, collapse = "\n")
+  out <- paste(out, collapse = "\n")
 
   cat(out)
   cat("\n")
@@ -591,7 +596,11 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 .boot_icc_fun <- function(data, indices, model, tolerance) {
   d <- data[indices, ] # allows boot to select sample
   fit <- suppressWarnings(suppressMessages(stats::update(model, data = d)))
-  vars <- .compute_random_vars(fit, tolerance, verbose = FALSE)
+  vars <- .compute_random_vars(
+    fit,
+    tolerance,
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }
@@ -604,7 +613,11 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
 # bootstrapping using "lme4::bootMer"
 .boot_icc_fun_lme4 <- function(model) {
-  vars <- .compute_random_vars(model, tolerance = 1e-05, verbose = FALSE)
+  vars <- .compute_random_vars(
+    model,
+    tolerance = 1e-10,
+    verbose = isTRUE(getOption("easystats_errors", FALSE))
+  )
   if (is.null(vars) || all(is.na(vars))) {
     return(c(NA, NA))
   }
@@ -685,10 +698,10 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   }
 
   model_rank <- tryCatch(
-    if (!is.null(model$rank)) {
-      model$rank - df_int
-    } else {
+    if (is.null(model$rank)) {
       insight::n_parameters(model) - df_int
+    } else {
+      model$rank - df_int
     },
     error = function(e) insight::n_parameters(model) - df_int
   )

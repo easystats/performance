@@ -1,7 +1,7 @@
 skip_on_cran()
 skip_if_not_installed("withr")
 withr::with_options(
-  list(easystats_erros = TRUE),
+  list(easystats_errors = TRUE),
   test_that(".safe works with options", {
     expect_error(performance:::.safe(mean(fd)), regex = "object 'fd' not found")
     expect_identical(performance:::.safe(mean(fd), 1L), 1L)

@@ -191,25 +191,25 @@ check_distribution.numeric <- function(model) {
   # validation check, remove missings
   x <- x[!is.na(x)]
 
-  mode <- NULL
+  mode_value <- NULL
   # find mode for integer, or MAP for distributions
   if (all(.is_integer(x))) {
-    mode <- datawizard::distribution_mode(x)
+    mode_value <- datawizard::distribution_mode(x)
   } else {
     # this might fail, so we wrap in ".safe()"
-    mode <- tryCatch(
+    mode_value <- tryCatch(
       as.numeric(bayestestR::map_estimate(x, bw = "nrd0")),
       error = function(e) NULL
     )
-    if (is.null(mode)) {
-      mode <- tryCatch(
+    if (is.null(mode_value)) {
+      mode_value <- tryCatch(
         as.numeric(bayestestR::map_estimate(x, bw = "kernel")),
         error = function(e) NULL
       )
     }
   }
 
-  if (is.null(mode)) {
+  if (is.null(mode_value)) {
     mean_mode_diff <- mean(x) - datawizard::distribution_mode(x)
     msg <- "Could not accurately estimate the mode."
     if (!is.null(type)) {
@@ -217,7 +217,7 @@ check_distribution.numeric <- function(model) {
     }
     insight::format_alert(msg)
   } else {
-    mean_mode_diff <- .safe(mean(x) - mode)
+    mean_mode_diff <- .safe(mean(x) - mode_value)
   }
 
   data.frame(
