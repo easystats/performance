@@ -165,7 +165,7 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
     between <- between[!is_covar]
   }
 
-  form <- stats::formula(paste0(dv, "~", paste0(between, collapse = "*")))
+  form <- stats::formula(paste0(dv, "~", paste(between, collapse = "*")))
   test <- car::leveneTest(form, ag_data, center = mean, ...)
 
   p.val <- test[1, "Pr(>F)"]

@@ -275,11 +275,11 @@ icc <- function(model,
       # this is experimental!
       if (identical(ci_method, "analytical")) {
         result <- .safe(.analytical_icc_ci(model, ci))
-        if (!is.null(result)) {
+        if (is.null(result)) {
+          icc_ci_adjusted <- icc_ci_unadjusted <- NA
+        } else {
           icc_ci_adjusted <- result$ICC_adjusted
           icc_ci_unadjusted <- result$ICC_unadjusted
-        } else {
-          icc_ci_adjusted <- icc_ci_unadjusted <- NA
         }
       } else {
         result <- .bootstrap_icc(model, iterations, tolerance, ci_method, ...)
@@ -428,7 +428,7 @@ print.icc <- function(x, digits = 3, ...) {
   }
 
   # separate lines for multiple R2
-  out <- paste0(out, collapse = "\n")
+  out <- paste(out, collapse = "\n")
 
   cat(out)
   cat("\n")
@@ -693,10 +693,10 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
   }
 
   model_rank <- tryCatch(
-    if (!is.null(model$rank)) {
-      model$rank - df_int
-    } else {
+    if (is.null(model$rank)) {
       insight::n_parameters(model) - df_int
+    } else {
+      model$rank - df_int
     },
     error = function(e) insight::n_parameters(model) - df_int
   )
