@@ -131,6 +131,7 @@ test_that("check_predictions, glm, binomial", {
 
 
 test_that("check_predictions, lm, ratio-response", {
+  skip_if_not_installed("lme4")
   data(cbpp, package = "lme4")
   model1 <- lm(I(incidence / size) ~ period, data = cbpp)
   set.seed(123)
