@@ -70,7 +70,7 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.2),
-    insight (>= 0.20.1),
+    insight (>= 0.20.2),
     datawizard (>= 0.10.0),
     stats,
     utils
@@ -154,4 +154,3 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/insight
