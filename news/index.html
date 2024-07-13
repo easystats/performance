@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,8 @@
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-12-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-12-1"></a></h3>
-<ul><li>Fixed issue in <code><a href="../reference/check_model.html">check_model()</a></code> when model contained a transformed response variable that was named like a valid R function name (e.g., <code>lm(log(lapply) ~ x)</code>, when data contained a variable named <code>lapply</code>).</li>
+<ul><li><p>Fixed issue in <code><a href="../reference/check_model.html">check_model()</a></code> when model contained a transformed response variable that was named like a valid R function name (e.g., <code>lm(log(lapply) ~ x)</code>, when data contained a variable named <code>lapply</code>).</p></li>
+<li><p>Fixed issue in <code><a href="../reference/check_predictions.html">check_predictions()</a></code> for linear models when response was transformed as ratio (e.g. <code>lm(succes/trials ~ x)</code>).</p></li>
 </ul></div>
 </div>
     <div class="section level2">
