@@ -197,20 +197,38 @@ r2_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
           names(br2) <- res
         }
       } else if (mi$is_mixed) {
-        br2 <- list(
-          R2_Bayes = as.vector(rstantools::bayes_R2(
+        if (inherits(model, "stanreg")) {
+          pred_cond <- rstanarm::posterior_epred(
             model,
             re.form = NULL,
             re_formula = NULL,
-            summary = FALSE
-          )),
-          R2_Bayes_marginal = as.vector(rstantools::bayes_R2(
+          )
+          pred_marginal <- rstanarm::posterior_epred(
             model,
             re.form = NA,
             re_formula = NA,
-            summary = FALSE
-          ))
-        )
+          )
+          y <- insight::get_response(model)
+          br2 <- list(
+            R2_Bayes = as.vector(rstantools::bayes_R2(pred_cond, y = y)),
+            R2_Bayes_marginal = as.vector(rstantools::bayes_R2(pred_marginal, y = y))
+          )
+        } else {
+          br2 <- list(
+            R2_Bayes = as.vector(rstantools::bayes_R2(
+              model,
+              re.form = NULL,
+              re_formula = NULL,
+              summary = FALSE
+            )),
+            R2_Bayes_marginal = as.vector(rstantools::bayes_R2(
+              model,
+              re.form = NA,
+              re_formula = NA,
+              summary = FALSE
+            ))
+          )
+        }
         names(br2$R2_Bayes) <- rep("Conditional R2", length(br2$R2_Bayes))
         names(br2$R2_Bayes_marginal) <- rep("Marginal R2", length(br2$R2_Bayes))
       } else {
