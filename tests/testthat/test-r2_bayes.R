@@ -29,3 +29,17 @@ test_that("r2_BayesFactor", {
   expect_equal(r_CI$CI_low, 0.27, tolerance = 0.05)
   expect_equal(r_CI$CI_high, 0.54, tolerance = 0.05)
 })
+
+test_that("r2_bayes", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("rstanarm")
+  skip_if_not_installed("rstantools")
+  model <- insight::download_model("stanreg_lmerMod_1")
+  set.seed(123)
+  out <- r2_bayes(model)
+  expect_equal(out$R2_Bayes, 0.642, tolerance = 1e-3)
+  expect_equal(out$R2_Bayes_marginal, 0.58534, tolerance = 1e-3)
+})

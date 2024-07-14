@@ -128,3 +128,18 @@ test_that("check_predictions, glm, binomial", {
   expect_equal(head(out4$sim_1), c(0, 0, 0, 1, 0, 1), tolerance = 1e-4)
   expect_true(attributes(out4)$model_info$is_bernoulli)
 })
+
+
+test_that("check_predictions, lm, ratio-response", {
+  skip_if_not_installed("lme4")
+  data(cbpp, package = "lme4")
+  model1 <- lm(I(incidence / size) ~ period, data = cbpp)
+  set.seed(123)
+  out <- check_predictions(model1)
+  expect_equal(
+    head(out$y),
+    c(0.14286, 0.25, 0.44444, 0, 0.13636, 0.05556),
+    ignore_attr = TRUE,
+    tolerance = 1e-4
+  )
+})
