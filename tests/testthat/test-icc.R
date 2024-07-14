@@ -1,13 +1,12 @@
 skip_on_os("mac")
+skip_on_cran()
 
 test_that("icc", {
-  skip_on_cran()
   m0 <- lm(Sepal.Length ~ Petal.Length, data = iris)
   expect_warning(expect_null(icc(m0)))
 })
 
 test_that("icc", {
-  skip_on_cran()
   skip_if_not_installed("lme4")
   m1 <- lme4::lmer(Sepal.Length ~ Petal.Length + (1 | Species), data = iris)
   expect_equal(
@@ -25,7 +24,6 @@ test_that("icc", {
 # bootstrapped CIs ------------
 
 test_that("icc, CI", {
-  skip_on_cran()
   skip_if_not_installed("lme4")
   data(sleepstudy, package = "lme4")
   m <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
@@ -37,7 +35,6 @@ test_that("icc, CI", {
 
 
 test_that("icc", {
-  skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
@@ -54,7 +51,6 @@ test_that("icc", {
 })
 
 test_that("icc", {
-  skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
@@ -68,7 +64,6 @@ test_that("icc", {
 })
 
 test_that("icc", {
-  skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
@@ -86,7 +81,6 @@ test_that("icc", {
 })
 
 test_that("icc", {
-  skip_on_cran()
   skip_if_not_installed("lme4")
   data(sleepstudy, package = "lme4")
   set.seed(12345)
@@ -117,7 +111,6 @@ test_that("icc", {
 
 
 test_that("icc", {
-  skip_on_cran()
   skip_if_not_installed("nlme")
   skip_if_not_installed("lme4")
   m <- nlme::lme(Sepal.Length ~ Petal.Length, random = ~ 1 | Species, data = iris)
@@ -128,7 +121,6 @@ test_that("icc", {
 
 
 test_that("icc, glmmTMB 1.1.9+", {
-  skip_on_cran()
   skip_if_not_installed("glmmTMB", minimum_version = "1.1.9")
   set.seed(101)
   dd <- data.frame(

@@ -21,11 +21,18 @@
 * New function `r2_ferrari()` to compute Ferrari & Cribari-Neto's R2 for
   generalized linear models, in particular beta-regression.
 
+* Improved documentation of some functions.
+
 ## Bug fixes
 
 * Fixed issue in `check_model()` when model contained a transformed response
   variable that was named like a valid R function name (e.g., `lm(log(lapply) ~ x)`,
   when data contained a variable named `lapply`).
+
+* Fixed issue in `check_predictions()` for linear models when response was
+  transformed as ratio (e.g. `lm(succes/trials ~ x)`).
+
+* Fixed issue in `r2_bayes()` for mixed models from *rstanarm*.
 
 # performance 0.12.0
 
