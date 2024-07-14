@@ -32,6 +32,8 @@
 * Fixed issue in `check_predictions()` for linear models when response was
   transformed as ratio (e.g. `lm(succes/trials ~ x)`).
 
+* Fixed issue in `r2_bayes()` for mixed models from *rstanarm*.
+
 # performance 0.12.0
 
 ## Breaking
