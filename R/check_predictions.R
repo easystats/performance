@@ -303,8 +303,16 @@ pp_check.lm <- function(object,
   pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
 
   # check for transformed response, and backtransform simulations
-  if (!is.null(resp_string) && grepl(paste0(pattern, "\\("), resp_string)) {
+  if (!is.null(resp_string) && length(resp_string) == 1 && grepl(paste0(pattern, "\\("), resp_string)) {
     out <- .backtransform_sims(out, resp_string)
+  }
+
+  # sanity check - do we have a ratio or similar?
+  if (is.data.frame(response)) {
+    # get response data, evaluate formula
+    response <- eval(str2lang(insight::find_response(object)),
+      envir = insight::get_response(object)
+    )
   }
 
   out$y <- response
