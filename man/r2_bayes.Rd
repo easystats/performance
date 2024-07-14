@@ -55,13 +55,21 @@ LOO-adjusted R2, which comes conceptually closer to an adjusted R2 measure.
 
 For mixed models, the conditional and marginal R2 are returned. The marginal
 R2 considers only the variance of the fixed effects, while the conditional R2
-takes both the fixed and random effects into account.
+takes both the fixed and random effects into account. Technically, since
+\code{r2_bayes()} relies on \code{\link[rstantools:bayes_R2]{rstantools::bayes_R2()}}, the "marginal" R2 calls
+\code{bayes_R2(re.form = NA)}, while the "conditional" R2 calls
+\code{bayes_R2(re.form = NULL)}. The \code{re.form} argument is passed to
+\code{\link[rstantools:posterior_epred]{rstantools::posterior_epred()}}, which is internally called in \code{bayes_R2()}.
+
+Note that for "marginal" and "conditional", we refer to the wording suggested
+by \emph{Nakagawa et al. 2017}. Thus, we don't use the term "marginal" in the sense
+that the random effects are integrated out, but are "ignored".
 
 \code{r2_posterior()} is the actual workhorse for \code{r2_bayes()} and returns a
 posterior sample of Bayesian R2 values.
 }
 \examples{
-\dontshow{if (require("rstanarm") && require("rstantools") && require("brms")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm") && require("rstantools") && require("brms") && require("RcppEigen")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(performance)
 \donttest{
 model <- suppressWarnings(rstanarm::stan_glm(
@@ -104,7 +112,13 @@ r2_bayes(model)
 \dontshow{\}) # examplesIf}
 }
 \references{
-Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for
+\itemize{
+\item Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for
 Bayesian regression models. The American Statistician, 1–6.
 \doi{10.1080/00031305.2018.1549100}
+\item Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
+coefficient of determination R2 and intra-class correlation coefficient from
+generalized linear mixed-effects models revisited and expanded. Journal of
+The Royal Society Interface, 14(134), 20170213.
+}
 }
