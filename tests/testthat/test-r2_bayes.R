@@ -32,9 +32,11 @@ test_that("r2_BayesFactor", {
 
 test_that("r2_bayes", {
   skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("rstantools")
-  skip_if_not_installed("httr2")
   model <- insight::download_model("stanreg_lmerMod_1")
   set.seed(123)
   out <- r2_bayes(model)

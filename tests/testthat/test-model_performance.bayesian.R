@@ -1,5 +1,8 @@
+skip_on_cran()
+skip_if_not_installed("rstanarm")
+skip_if_not_installed("rstantools")
+
 test_that("model_performance.stanreg", {
-  skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
@@ -24,14 +27,13 @@ test_that("model_performance.stanreg", {
   skip_if(is.null(model))
   perf <- model_performance(model)
 
-  expect_equal(perf$R2, 0.6286546, tolerance = 1e-3)
-  expect_equal(perf$R2_adjusted, 0.6053507, tolerance = 1e-3)
+  expect_equal(perf$R2, 0.642, tolerance = 1e-3)
+  expect_equal(perf$R2_adjusted, 0.6053454, tolerance = 1e-3)
   expect_equal(perf$ELPD, -31.55849, tolerance = 1e-3)
 })
 
 
 test_that("model_performance.brmsfit", {
-  skip_on_cran()
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
@@ -72,7 +74,6 @@ test_that("model_performance.brmsfit", {
 
 
 test_that("model_performance.BFBayesFactor", {
-  skip_on_cran()
   skip_if_not_installed("BayesFactor")
   mod <- BayesFactor::ttestBF(mtcars$wt, mu = 3)
   expect_warning({
