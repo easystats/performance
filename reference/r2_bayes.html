@@ -13,7 +13,7 @@ posterior sample of Bayesian R2 values."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,16 +132,28 @@ credible intervals for the R2 values are saved as attributes.</p>
 LOO-adjusted R2, which comes conceptually closer to an adjusted R2 measure.</p>
 <p>For mixed models, the conditional and marginal R2 are returned. The marginal
 R2 considers only the variance of the fixed effects, while the conditional R2
-takes both the fixed and random effects into account.</p>
+takes both the fixed and random effects into account. Technically, since
+<code>r2_bayes()</code> relies on <code><a href="https://mc-stan.org/rstantools/reference/bayes_R2.html" class="external-link">rstantools::bayes_R2()</a></code>, the "marginal" R2 calls
+<code>bayes_R2(re.form = NA)</code>, while the "conditional" R2 calls
+<code>bayes_R2(re.form = NULL)</code>. The <code>re.form</code> argument is passed to
+<code><a href="https://mc-stan.org/rstantools/reference/posterior_epred.html" class="external-link">rstantools::posterior_epred()</a></code>, which is internally called in <code><a href="https://mc-stan.org/rstantools/reference/bayes_R2.html" class="external-link">bayes_R2()</a></code>.</p>
+<p>Note that for "marginal" and "conditional", we refer to the wording suggested
+by <em>Nakagawa et al. 2017</em>. Thus, we don't use the term "marginal" in the sense
+that the random effects are integrated out, but are "ignored".</p>
 <p><code>r2_posterior()</code> is the actual workhorse for <code>r2_bayes()</code> and returns a
 posterior sample of Bayesian R2 values.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for
+
+<ul><li><p>Gelman, A., Goodrich, B., Gabry, J., and Vehtari, A. (2018). R-squared for
 Bayesian regression models. The American Statistician, 1–6.
-<a href="https://doi.org/10.1080/00031305.2018.1549100" class="external-link">doi:10.1080/00031305.2018.1549100</a></p>
-    </div>
+<a href="https://doi.org/10.1080/00031305.2018.1549100" class="external-link">doi:10.1080/00031305.2018.1549100</a></p></li>
+<li><p>Nakagawa, S., Johnson, P. C. D., and Schielzeth, H. (2017). The
+coefficient of determination R2 and intra-class correlation coefficient from
+generalized linear mixed-effects models revisited and expanded. Journal of
+The Royal Society Interface, 14(134), 20170213.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -170,8 +182,8 @@ Bayesian regression models. The American Statistician, 1–6.
 <span class="r-in"><span><span class="fu">r2_bayes</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Bayesian R2 with Compatibility Interval</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.953 (95% CI [0.941, 0.962])</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Marginal R2: 0.821 (95% CI [0.715, 0.896])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.954 (95% CI [0.951, 0.957])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Marginal R2: 0.387 (95% CI [0.174, 0.611])</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
