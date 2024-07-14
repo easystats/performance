@@ -18,7 +18,7 @@ test_that("logLik", {
   m1 <- lm(y ~ x1 + x2, data = ddta)
   l1 <- logLik(m1)
 
-  m2 <- plm(
+  m2 <- plm::plm(
     y ~ x1 + x2,
     data = ddta,
     model = "pooling",
