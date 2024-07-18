@@ -1,3 +1,8 @@
+# performance 0.12.2
+
+Patch release, to ensure that _performance_ runs with older version of
+_datawizard_ on Mac OSX with R (old-release).
+
 # performance 0.12.1
 
 ## General
