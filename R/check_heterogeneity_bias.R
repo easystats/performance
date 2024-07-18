@@ -23,17 +23,20 @@
 #'   Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
 #'   Research and Methods, 3(1), 133–153.
 #'
-#' @examples
+#' @examplesIf insight::check_if_installed("datawizard", minimum_version = "0.12.0", quietly = TRUE)
 #' data(iris)
 #' iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
 check_heterogeneity_bias <- function(x, select = NULL, by = NULL, group = NULL) {
+  insight::check_if_installed("datawizard", minimum_version = "0.12.0")
+
   ## TODO: deprecate later
   if (!is.null(group)) {
     insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
     by <- group
   }
+
   if (insight::is_model(x)) {
     by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
     if (is.null(by)) {
