@@ -12,14 +12,15 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script src="../lightswitch.js"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="R-squared (R2)">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="R-squared (R2)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,12 +97,10 @@
 <div class="section level2">
 <h2 id="what-is-the-r2">What is the R2?<a class="anchor" aria-label="anchor" href="#what-is-the-r2"></a>
 </h2>
-<p>The <strong>coefficient of determination</strong>, denoted
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-and pronounced “R squared”, typically corresponds the proportion of the
-variance in the dependent variable (the response) that is
-<em>explained</em> (i.e., predicted) by the independent variables (the
-predictors).</p>
+<p>The <strong>coefficient of determination</strong>, denoted <span class="math inline">R^2</span> and pronounced “R squared”, typically
+corresponds the proportion of the variance in the dependent variable
+(the response) that is <em>explained</em> (i.e., predicted) by the
+independent variables (the predictors).</p>
 <p>It is an “absolute” index of <em>goodness-of-fit</em>, ranging from 0
 to 1 (often expressed in percentage), and can be used for model
 performance assessment or models comparison.</p>
@@ -109,52 +108,38 @@ performance assessment or models comparison.</p>
 <div class="section level2">
 <h2 id="different-types-of-r2">Different types of R2<a class="anchor" aria-label="anchor" href="#different-types-of-r2"></a>
 </h2>
-<p>As models become more complex, the computation of an
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-becomes increasingly less straightforward.</p>
+<p>As models become more complex, the computation of an <span class="math inline">R^2</span> becomes increasingly less
+straightforward.</p>
 <p>Currently, depending on the context of the regression model object,
 one can choose from the following measures supported in
 <a href="https://easystats.github.io/performance/">performance</a>:</p>
 <ul>
-<li>Bayesian
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>Bayesian <span class="math inline">R^2</span>
 </li>
-<li>Cox &amp; Snell’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>Cox &amp; Snell’s <span class="math inline">R^2</span>
 </li>
-<li>Efron’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>Efron’s <span class="math inline">R^2</span>
 </li>
-<li>Kullback-Leibler
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>Kullback-Leibler <span class="math inline">R^2</span>
 </li>
-<li>LOO-adjusted
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>LOO-adjusted <span class="math inline">R^2</span>
 </li>
-<li>McFadden’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>McFadden’s <span class="math inline">R^2</span>
 </li>
-<li>McKelvey &amp; Zavoinas
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>McKelvey &amp; Zavoinas <span class="math inline">R^2</span>
 </li>
-<li>Nagelkerke’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>Nagelkerke’s <span class="math inline">R^2</span>
 </li>
-<li>Nakagawa’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-for mixed models</li>
-<li>Somers’
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mrow><mi>x</mi><mi>y</mi></mrow></msub><annotation encoding="application/x-tex">D_{xy}</annotation></semantics></math>
-rank correlation for binary outcomes</li>
-<li>Tjur’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-- coefficient of determination (D)</li>
-<li>Xu’
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-(Omega-squared)</li>
+<li>Nakagawa’s <span class="math inline">R^2</span> for mixed
+models</li>
+<li>Somers’ <span class="math inline">D_{xy}</span> rank correlation for
+binary outcomes</li>
+<li>Tjur’s <span class="math inline">R^2</span> - coefficient of
+determination (D)</li>
+<li>Xu’ <span class="math inline">R^2</span> (Omega-squared)</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-for models with zero-inflation</li>
+<span class="math inline">R^2</span> for models with
+zero-inflation</li>
 </ul>
 <p><em>TO BE COMPLETED.</em></p>
 <p>Before we begin, let’s first load the package.</p>
@@ -175,12 +160,10 @@ for models with zero-inflation</li>
 <h2 id="r2-for-glm">R2 for <code>glm</code><a class="anchor" aria-label="anchor" href="#r2-for-glm"></a>
 </h2>
 <p>In the context of a generalized linear model (e.g., a logistic model
-which outcome is binary),
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-doesn’t measure the percentage of <em>“explained variance”</em>, as this
-concept doesn’t apply. However, the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>s
-that have been adapted for GLMs have retained the name of “R2”, mostly
+which outcome is binary), <span class="math inline">R^2</span> doesn’t
+measure the percentage of <em>“explained variance”</em>, as this concept
+doesn’t apply. However, the <span class="math inline">R^2</span>s that
+have been adapted for GLMs have retained the name of “R2”, mostly
 because of the similar properties (the range, the sensitivity, and the
 interpretation as the amount of explanatory power).</p>
 </div>
@@ -191,20 +174,16 @@ interpretation as the amount of explanatory power).</p>
 <h3 id="marginal-vs--conditional-r2">Marginal vs. Conditional R2<a class="anchor" aria-label="anchor" href="#marginal-vs--conditional-r2"></a>
 </h3>
 <p>For mixed models, <code>performance</code> will return two different
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>s:</p>
+<span class="math inline">R^2</span>s:</p>
 <ul>
-<li>The <strong>conditional</strong>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>The <strong>conditional</strong> <span class="math inline">R^2</span>
 </li>
-<li>The <strong>marginal</strong>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<li>The <strong>marginal</strong> <span class="math inline">R^2</span>
 </li>
 </ul>
-<p>The marginal
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-considers only the variance of the <strong>fixed effects</strong>
-(without the random effects), while the conditional
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+<p>The marginal <span class="math inline">R^2</span> considers only the
+variance of the <strong>fixed effects</strong> (without the random
+effects), while the conditional <span class="math inline">R^2</span>
 takes <em>both</em> the <strong>fixed and random effects</strong> into
 account (i.e., the total model).</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
@@ -217,11 +196,9 @@ account (i.e., the total model).</p>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="er">&gt;</span> </span>
 <span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.933</span></span>
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="sc">&gt;</span>      Marginal R2<span class="sc">:</span> <span class="fl">0.303</span></span></code></pre></div>
-<p>Note that <code>r2</code> functions only return the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-values. We would encourage users to instead always use the
-<code>model_performance</code> function to get a more comprehensive set
-of indices of model fit.</p>
+<p>Note that <code>r2</code> functions only return the <span class="math inline">R^2</span> values. We would encourage users to
+instead always use the <code>model_performance</code> function to get a
+more comprehensive set of indices of model fit.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">model_performance</span>(model)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="sc">&gt;</span> <span class="co"># Indices of model performance</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="er">&gt;</span> </span>
@@ -243,8 +220,7 @@ this family of functions and will only talk about this measure.</p>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="er">&gt;</span> </span>
 <span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="er">&gt;</span>   Conditional R2<span class="sc">:</span> <span class="fl">0.816</span> (<span class="dv">95</span>% CI [<span class="fl">0.704</span>, <span class="fl">0.897</span>])</span></code></pre></div>
 <p>As discussed above, for mixed-effects models, there will be two
-components associated with
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>.</p>
+components associated with <span class="math inline">R^2</span>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># defining a Bayesian mixed-effects model</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">stan_lmer</span>(Petal.Length <span class="sc">~</span> Petal.Width <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Species), <span class="at">data =</span> iris, <span class="at">refresh =</span> <span class="dv">0</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
@@ -257,18 +233,15 @@ components associated with
 <div class="section level2">
 <h2 id="comparing-change-in-r2-using-cohens-f">Comparing change in R2 using Cohen’s <em>f</em><a class="anchor" aria-label="anchor" href="#comparing-change-in-r2-using-cohens-f"></a>
 </h2>
-<p>Cohen’s
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
-(of <a href="https://easystats.github.io/effectsize/articles/anovaES.html" class="external-link">ANOVA
+<p>Cohen’s <span class="math inline">f</span> (of <a href="https://easystats.github.io/effectsize/articles/anovaES.html" class="external-link">ANOVA
 fame</a>) can be used as a measure of effect size in the context of
 sequential multiple regression (i.e., <a href="https://easystats.github.io/performance/reference/test_performance.html"><strong>nested
 models</strong></a>). That is, when comparing two models, we can examine
-the ratio between the increase in
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+the ratio between the increase in <span class="math inline">R^2</span>
 and the unexplained variance:</p>
-<p><span class="math display">$$
+<p><span class="math display">
 f^{2}={R_{AB}^{2}-R_{A}^{2} \over 1-R_{AB}^{2}}
-$$</span></p>
+</span></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">data</span>(hardlyworking)</span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(salary <span class="sc">~</span> xtra_hours, <span class="at">data =</span> hardlyworking)</span>
@@ -286,9 +259,7 @@ details and references in the functions that compute them <a href="https://easys
 <div class="section level2">
 <h2 id="interpretation">Interpretation<a class="anchor" aria-label="anchor" href="#interpretation"></a>
 </h2>
-<p>If you want to know about how to <em>interpret</em> these
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-values, see these <a href="https://easystats.github.io/effectsize/reference/interpret_r2.html" class="external-link"><strong>interpretation
+<p>If you want to know about how to <em>interpret</em> these <span class="math inline">R^2</span> values, see these <a href="https://easystats.github.io/effectsize/reference/interpret_r2.html" class="external-link"><strong>interpretation
 guidelines</strong></a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
