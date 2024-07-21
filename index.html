@@ -208,8 +208,8 @@
 <span><span class="fu"><a href="reference/r2.html">r2</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Bayesian R2 with Compatibility Interval</span></span>
 <span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt;   Conditional R2: 0.953 (95% CI [0.942, 0.964])</span></span>
-<span><span class="co">#&gt;      Marginal R2: 0.826 (95% CI [0.724, 0.900])</span></span>
+<span><span class="co">#&gt;   Conditional R2: 0.954 (95% CI [0.951, 0.957])</span></span>
+<span><span class="co">#&gt;      Marginal R2: 0.414 (95% CI [0.204, 0.644])</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span></span>
