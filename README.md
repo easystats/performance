@@ -146,8 +146,8 @@ model <- stan_glmer(
 r2(model)
 #> # Bayesian R2 with Compatibility Interval
 #>
-#>   Conditional R2: 0.953 (95% CI [0.942, 0.964])
-#>      Marginal R2: 0.826 (95% CI [0.724, 0.900])
+#>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
+#>      Marginal R2: 0.414 (95% CI [0.204, 0.644])
 
 library(lme4)
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
