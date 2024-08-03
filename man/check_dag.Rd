@@ -19,7 +19,8 @@ as.dag(x, ...)
 \arguments{
 \item{...}{One or more formulas, which are converted into \strong{dagitty} syntax.
 First element may also be model object. If a model objects is provided, its
-formula is used as first formula. See 'Details'.}
+formula is used as first formula, and all independent variables will be used
+for the \code{adjusted} argument. See 'Details' and 'Examples'.}
 
 \item{outcome}{Name of the dependent variable (outcome), as character string.
 Must be a valid name from the formulas. If not set, the first dependent
@@ -31,7 +32,8 @@ Must be a valid name from the formulas. If not set, the first independent
 variable from the formulas is used.}
 
 \item{adjusted}{A character vector with names of variables that are adjusted
-for in the model.}
+for in the model. If a model object is provided in \code{...}, any values in
+\code{adjusted} will be overwritten by the model's independent variables.}
 
 \item{latent}{A character vector with names of latent variables in the model.}
 
@@ -99,5 +101,17 @@ dag
 
 # Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"
 ggdag::ggdag_status(dag)
+
+# Using a model object to extract information about outcome,
+# exposure and adjusted variables
+data(mtcars)
+m <- lm(mpg ~ wt + gear + disp + cyl, data = mtcars)
+dag <- check_dag(
+  m,
+  wt ~ disp + cyl,
+  wt ~ am
+)
+dag
+plot(dag)
 \dontshow{\}) # examplesIf}
 }

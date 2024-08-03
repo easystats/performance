@@ -30,6 +30,7 @@
       Model is correctly specified.
       - Outcome: y
       - Exposure: x
+      - Adjustment: b
       
       All minimal sufficient adjustments to estimate the direct effect were done.
       
@@ -38,6 +39,7 @@
       Model is correctly specified.
       - Outcome: y
       - Exposure: x
+      - Adjustment: b
       
       All minimal sufficient adjustments to estimate the total effect were done.
       
@@ -76,6 +78,7 @@
       Incorrectly adjusted!
       - Outcome: y
       - Exposure: x
+      - Adjustment: c
       
       To estimate the direct effect, also adjust for `b` and `c`.
       Currently, the model currently only adjusts for `c`.
@@ -85,8 +88,33 @@
       Incorrectly adjusted!
       - Outcome: y
       - Exposure: x
+      - Adjustment: c
       
       To estimate the total effect, also adjust for `b` and `c`.
       Currently, the model currently only adjusts for `c`.
+      
+
+---
+
+    Code
+      print(dag)
+    Output
+      # Correct adjustments for identifying direct effects
+      
+      Model is correctly specified.
+      - Outcome: mpg
+      - Exposure: wt
+      - Adjustments: cyl, disp and gear
+      
+      All minimal sufficient adjustments to estimate the direct effect were done.
+      
+      # Correct adjustments for identifying total effects
+      
+      Model is correctly specified.
+      - Outcome: mpg
+      - Exposure: wt
+      - Adjustments: cyl, disp and gear
+      
+      All minimal sufficient adjustments to estimate the total effect were done.
       
 

@@ -12,7 +12,8 @@
 #'
 #' @param ... One or more formulas, which are converted into **dagitty** syntax.
 #' First element may also be model object. If a model objects is provided, its
-#' formula is used as first formula. See 'Details'.
+#' formula is used as first formula, and all independent variables will be used
+#' for the `adjusted` argument. See 'Details' and 'Examples'.
 #' @param outcome Name of the dependent variable (outcome), as character string.
 #' Must be a valid name from the formulas. If not set, the first dependent
 #' variable from the formulas is used.
@@ -21,7 +22,8 @@
 #' Must be a valid name from the formulas. If not set, the first independent
 #' variable from the formulas is used.
 #' @param adjusted A character vector with names of variables that are adjusted
-#' for in the model.
+#' for in the model. If a model object is provided in `...`, any values in
+#' `adjusted` will be overwritten by the model's independent variables.
 #' @param latent A character vector with names of latent variables in the model.
 #' @param effect Character string, indicating which effect to check. Can be
 #' `"all"` (default), `"total"`, or `"direct"`.
@@ -74,6 +76,18 @@
 #'
 #' # Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"
 #' ggdag::ggdag_status(dag)
+#'
+#' # Using a model object to extract information about outcome,
+#' # exposure and adjusted variables
+#' data(mtcars)
+#' m <- lm(mpg ~ wt + gear + disp + cyl, data = mtcars)
+#' dag <- check_dag(
+#'   m,
+#'   wt ~ disp + cyl,
+#'   wt ~ am
+#' )
+#' dag
+#' plot(dag)
 #' @export
 check_dag <- function(...,
                       outcome = NULL,
@@ -124,6 +138,11 @@ check_dag.default <- function(...,
     formulas[[1]] <- stats::as.formula(
       paste(vars$response, "~", paste(vars$conditional, collapse = "+"))
     )
+    # if we have a model, we *always* overwrite adjusted
+    if (!is.null(adjusted)) {
+      insight::format_alert("The `adjusted` argument will be overwritten by all independent variables from the model.") # nolint
+    }
+    adjusted <- vars$conditional
   }
 
   # if outcome is not set, use first dependent variable
@@ -229,6 +248,16 @@ print.check_dag <- function(x, ...) {
       "\n- Exposure", ifelse(length(attributes(x)$exposure) > 1, "s", ""),
       ": ", datawizard::text_concatenate(attributes(x)$exposure)
     )
+
+    # add information on adjustments
+    if (!is.null(out$current_adjustments)) {
+      exposure_outcome_text <- paste0(
+        exposure_outcome_text,
+        "\n- Adjustment",
+        ifelse(length(out$current_adjustments) > 1, "s", ""),
+        ": ", datawizard::text_concatenate(out$current_adjustments)
+      )
+    }
 
     # build message with check results for effects -----------------------
 

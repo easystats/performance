@@ -31,6 +31,15 @@ test_that("check_dag", {
     adjusted = "c"
   )
   expect_snapshot(print(dag))
+  data(mtcars)
+  m <- lm(mpg ~ wt + gear + disp + cyl, data = mtcars)
+  dag <- check_dag(
+    m,
+    wt ~ disp + cyl,
+    wt ~ am
+  )
+  dag
+  expect_snapshot(print(dag))
 })
 
 test_that("check_dag, cylic error", {
