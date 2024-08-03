@@ -99,7 +99,6 @@ Suggests:
     ftExtra,
     gamm4,
     ggdag,
-    ggplot2,
     glmmTMB,
     graphics,
     Hmisc,

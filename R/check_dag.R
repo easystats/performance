@@ -269,3 +269,9 @@ print.check_dag <- function(x, ...) {
     }
   }
 }
+
+#' @export
+plot.check_dag <- function(x, ...) {
+  insight::check_if_installed("see", "to plot DAG")
+  NextMethod()
+}
