@@ -1,7 +1,74 @@
 #' @title Check correct model adjustment for identifying causal effects
 #' @name check_dag
 #'
-#' @description Check correct model adjustment for identifying causal effects.
+#' @description `check_dag()` checks if a model is correctly adjusted for
+#' identifying causal effects. It returns a **dagitty** object that can be
+#' visualized with `plot()`. `check_dag()` is a convenient wrapper around
+#' `ggdag::dagify()`, which used `dagitty::adjustmentSets()` and
+#' `dagitty::adjustedNodes()` to check if the model is correctly adjusted for
+#' identifying causal (direct and total) effects of a given exposure on the
+#' outcome.
+#'
+#' @param ... One or more formulas, which are converted into **dagitty** syntax.
+#' First element may also be model object. If a model objects is provided, its
+#' formula is used as first formula. See 'Details'.
+#' @param outcome Name of the dependent variable (outcome), as character string.
+#' Must be a valid name from the formulas. If not set, the first dependent
+#' variable from the formulas is used.
+#' @param exposure Name of the exposure variable (as character string), for
+#' which the direct and total causal effect on the `outcome` should be checked.
+#' Must be a valid name from the formulas. If not set, the first independent
+#' variable from the formulas is used.
+#' @param adjusted A character vector with names of variables that are adjusted
+#' for in the model.
+#' @param latent A character vector with names of latent variables in the model.
+#' @param effect Character string, indicating which effect to check. Can be
+#' `"all"` (default), `"total"`, or `"direct"`.
+#' @param x An object of class `check_dag`, as returned by `check_dag()`.
+#'
+#' @details
+#' The formulas have following syntax:
+#'
+#' - One-directed paths: On the *left-hand-side* is the name of the variables
+#'   where causal effects point to (direction of the arrows, in dagitty-language).
+#'   On the *right-hand-side* are all variables where causal effects are assumed
+#'   to come from. For example, the formula `Y ~ X1 + X2`, paths directed from
+#'   both `X1` and `X2` to `Y` are assumed.
+#'
+#' - Bi-directed paths: Use `~~` to indicate bi-directed paths. For example,
+#'   `Y ~~ X` indicates that the path between `Y` and `X` is bi-directed, and
+#'   the arrow points in both directions.
+#'
+#' @return An object of class `check_dag`, which can be visualized with `plot()`.
+#' The returned object also inherits from class `dagitty` and thus can be used
+#' with all functions from the **ggdag** and **dagitty** packages.
+#'
+#' @examplesIf require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE)
+#' # no adjustment needed
+#' check_dag(
+#'   y ~ x + b,
+#'   outcome = "y",
+#'   exposure = "x"
+#' )
+#'
+#' # incorrect adjustment
+#' dag <- check_dag(
+#'   y ~ x + b + c,
+#'   x ~ b,
+#'   outcome = "y",
+#'   exposure = "x"
+#' )
+#' dag
+#' plot(dag)
+#'
+#' # After adjusting for `b`, the model is correctly specified
+#' check_dag(
+#'   y ~ x + b + c,
+#'   x ~ b,
+#'   outcome = "y",
+#'   exposure = "x",
+#'   adjusted = "b"
+#' )
 #'
 #' @export
 check_dag <- function(...,
@@ -10,6 +77,28 @@ check_dag <- function(...,
                       adjusted = NULL,
                       latent = NULL,
                       effect = c("all", "total", "direct")) {
+  UseMethod("check_dag")
+}
+
+
+#' @export
+check_dag.dagitty <- function(...,
+                              outcome = NULL,
+                              exposure = NULL,
+                              adjusted = NULL,
+                              latent = NULL,
+                              effect = c("all", "total", "direct")) {
+  insight::format_error("This function is not yet implemented.")
+}
+
+
+#' @export
+check_dag.default <- function(...,
+                              outcome = NULL,
+                              exposure = NULL,
+                              adjusted = NULL,
+                              latent = NULL,
+                              effect = c("all", "total", "direct")) {
   insight::check_if_installed(
     c("ggdag", "dagitty"),
     reason = "to check correct adjustments for identifying causal effects."
@@ -57,6 +146,13 @@ check_dag <- function(...,
     dag <- .adjust_dag(dag, adjusted)
   }
 
+  .finalize_dag(dag, effect, outcome, exposure)
+}
+
+
+# helper ----------------------------------------------------------------------
+
+.finalize_dag <- function(dag, effect, outcome, exposure) {
   # data for checking effects
   checks <- lapply(c("direct", "total"), function(x) {
     adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
@@ -80,8 +176,6 @@ check_dag <- function(...,
   dag
 }
 
-
-# helper ----------------------------------------------------------------------
 
 .adjust_dag <- function(dag, adjusted) {
   for (i in adjusted) {
@@ -166,7 +260,9 @@ print.check_dag <- function(x, ...) {
     }
 
     if (effect %in% c("all", i)) {
-      cat(insight::print_color(insight::format_message(paste0("# Correct adjustments for identifying {.i ", i, "} effects\n\n")), "blue"))
+      cat(insight::print_color(insight::format_message(
+        paste0("# Correct adjustments for identifying {.i ", i, "} effects\n\n")
+      ), "blue"))
       cat(msg)
       cat("\n\n")
     }
@@ -211,7 +307,7 @@ plot.check_dag <- function(x, size_point = 15, colors = NULL, which = "all", ...
       ggplot2::aes(
         xend = .data$xend,
         yend = .data$yend,
-        edge_alpha = .data$adjusted,
+        edge_alpha = .data$adjusted
       )
     ) +
     ggdag::scale_adjusted() +
@@ -227,7 +323,7 @@ plot.check_dag <- function(x, size_point = 15, colors = NULL, which = "all", ...
       ggplot2::aes(
         xend = .data$xend,
         yend = .data$yend,
-        edge_alpha = .data$adjusted,
+        edge_alpha = .data$adjusted
       )
     ) +
     ggdag::scale_adjusted() +
