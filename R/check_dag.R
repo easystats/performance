@@ -230,7 +230,9 @@ print.check_dag <- function(x, ...) {
       msg <- paste0(
         insight::color_text("Incorrectly adjusted!", "red"),
         exposure_outcome_text,
-        "\n\nTo estimate the ", i, " effect, do *not* adjust for: ",
+        "\n\nTo estimate the ", i, " effect, do ",
+        insight::color_text("not", "italic"),
+        " adjust for: ",
         datawizard::text_concatenate(out$current_adjustments),
         "."
       )
@@ -239,7 +241,9 @@ print.check_dag <- function(x, ...) {
       msg <- paste0(
         insight::color_text("Incorrectly adjusted!", "red"),
         exposure_outcome_text,
-        "\n\nTo estimate the ", i, " effect, *also* adjust for: ",
+        "\n\nTo estimate the ", i, " effect, ",
+        insight::color_text("also", "italic"),
+        " adjust for: ",
         insight::color_text(datawizard::text_concatenate(out$minimal_adjustments), "yellow"),
         "."
       )
