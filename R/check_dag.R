@@ -61,7 +61,7 @@ check_dag <- function(...,
   # data for checking effects
   checks <- lapply(c("direct", "total"), function(x) {
     adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
-    adjustment_nodes <- unlist(dagitty::adjustedNodes(dagitty::adjustmentSets(dag, effect = x)), use.names = FALSE)
+    adjustment_nodes <- unlist(dagitty::adjustedNodes(dag), use.names = FALSE)
     list(
       adjustment_not_needed = is.null(adjustment_set) && is.null(adjustment_nodes),
       incorrectly_adjusted = is.null(adjustment_set) && !is.null(adjustment_nodes),
@@ -84,7 +84,6 @@ check_dag <- function(...,
 
 #' @export
 print.check_dag <- function(x, ...) {
-  insight::check_if_installed("dagitty")
   effect <- attributes(x)$effect
 
   for (i in c("direct", "total")) {
@@ -105,7 +104,7 @@ print.check_dag <- function(x, ...) {
         attributes(x)$outcome,
         "."
       )
-    } else if (out$incorrectly_adjusted) {
+    } else if (isTRUE(out$incorrectly_adjusted)) {
       # Scenario 2: incorrectly adjusted, adjustments where none is allowed
       msg <- paste0(
         "Incorrectly adjusted! To estimate the ", i, " effect of ",
@@ -125,10 +124,16 @@ print.check_dag <- function(x, ...) {
         attributes(x)$outcome,
         " are following variables: ",
         datawizard::text_concatenate(out$minimal_adjustments),
-        ". However, the model currently only adjusts for ",
-        datawizard::text_concatenate(out$current_adjustments),
-        "."
+        ". "
       )
+      if (is.null(out$current_adjustments)) {
+        msg <- paste0(msg, "However, the model adjusts for no variable.")
+      } else {
+        msg <- paste0(
+          msg, "However, the model currently only adjusts for ",
+          datawizard::text_concatenate(out$current_adjustments), "."
+        )
+      }
     } else {
       # Scenario 4: correct adjustment
       msg <- paste0(
