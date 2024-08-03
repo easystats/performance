@@ -43,6 +43,7 @@ Cribari
 Cronbach's
 Crujeiras
 Csaki
+DAGs
 DBSCAN
 DOI
 Datenerhebung
@@ -162,6 +163,7 @@ Nordhausen
 Normed
 ORCID
 OSF
+OSX
 Olkin
 PNFI
 Pek
@@ -251,6 +253,7 @@ brmsfit
 cauchy
 clusterable
 concurvity
+dagitty
 datawizard
 dbscan
 der
@@ -267,6 +270,7 @@ fixest
 fpsyg
 gam
 geoms
+ggdag
 ggplot
 gjo
 glm
