@@ -150,13 +150,13 @@ check_dag.default <- function(...,
     dag <- .adjust_dag(dag, adjusted)
   }
 
-  .finalize_dag(dag, effect, outcome, exposure)
+  .finalize_dag(dag, effect, outcome, exposure, adjusted)
 }
 
 
 # helper ----------------------------------------------------------------------
 
-.finalize_dag <- function(dag, effect, outcome, exposure) {
+.finalize_dag <- function(dag, effect, outcome, exposure, adjusted) {
   # data for checking effects
   checks <- lapply(c("direct", "total"), function(x) {
     adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
@@ -172,6 +172,7 @@ check_dag.default <- function(...,
   attr(dag, "effect") <- effect
   attr(dag, "outcome") <- outcome
   attr(dag, "exposure") <- exposure
+  attr(dag, "adjusted") <- adjusted
   attr(dag, "check_direct") <- insight::compact_list(checks[[1]])
   attr(dag, "check_total") <- insight::compact_list(checks[[2]])
 
