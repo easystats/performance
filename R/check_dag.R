@@ -137,7 +137,7 @@ print.check_dag <- function(x, ...) {
         ". "
       )
       if (is.null(out$current_adjustments)) {
-        msg <- paste0(msg, "However, the model adjusts for no variable.")
+        msg <- paste0(msg, "However, the model does not adjusts for any variables.")
       } else {
         msg <- paste0(
           msg, "However, the model currently only adjusts for ",
