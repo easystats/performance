@@ -157,6 +157,17 @@ check_dag.default <- function(...,
 # helper ----------------------------------------------------------------------
 
 .finalize_dag <- function(dag, effect, outcome, exposure, adjusted) {
+  # check for cyclic DAG
+  cycles <- unlist(dagitty::findCycle(dag))
+
+  # stop if cyclic
+  if (!is.null(cycles)) {
+    insight::format_error(paste0(
+      "Model is cyclic. Causal effects can't be determined for cyclic models. Please remove cycles from the model. To do so, check following variables: ", # nolint
+      datawizard::text_concatenate(unique(cycles))
+    ))
+  }
+
   # data for checking effects
   checks <- lapply(c("direct", "total"), function(x) {
     adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
