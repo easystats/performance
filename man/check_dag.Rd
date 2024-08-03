@@ -2,6 +2,7 @@
 % Please edit documentation in R/check_dag.R
 \name{check_dag}
 \alias{check_dag}
+\alias{as.dag.check_dag}
 \title{Check correct model adjustment for identifying causal effects}
 \usage{
 check_dag(
@@ -9,8 +10,11 @@ check_dag(
   outcome = NULL,
   exposure = NULL,
   adjusted = NULL,
+  latent = NULL,
   effect = c("all", "total", "direct")
 )
+
+as.dag.check_dag(x, ...)
 }
 \description{
 Check correct model adjustment for identifying causal effects.

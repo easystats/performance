@@ -8,6 +8,7 @@ check_dag <- function(...,
                       outcome = NULL,
                       exposure = NULL,
                       adjusted = NULL,
+                      latent = NULL,
                       effect = c("all", "total", "direct")) {
   insight::check_if_installed(
     c("ggdag", "dagitty"),
@@ -48,7 +49,7 @@ check_dag <- function(...,
   }
 
   # convert to dag
-  dag_args <- c(formulas, list(exposure = exposure, outcome = outcome))
+  dag_args <- c(formulas, list(exposure = exposure, outcome = outcome, latent = latent))
   dag <- do.call(ggdag::dagify, dag_args)
 
   # add adjustments
@@ -91,6 +92,13 @@ check_dag <- function(...,
 
 
 # methods --------------------------------------------------------------------
+
+#' @rdname check_dag
+#' @export
+as.dag.check_dag <- function(x, ...) {
+  cat(as.character(x))
+}
+
 
 #' @export
 print.check_dag <- function(x, ...) {
