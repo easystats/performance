@@ -103,12 +103,20 @@ print.check_dag <- function(x, ...) {
       out <- attributes(x)$check_total
     }
 
+    exposure_outcome_text <- paste0(
+      "\n- Outcome: ", attributes(x)$outcome,
+      "\n- Exposure", ifelse(length(attributes(x)$exposure) > 1, "s", ""),
+      ": ", datawizard::text_concatenate(attributes(x)$exposure)
+    )
+
     # build message with check results for effects -----------------------
 
     if (isTRUE(out$adjustment_not_needed)) {
       # Scenario 1: no adjustment needed
       msg <- paste0(
-        "Model is correctly specified. No adjustment is necessary for estimating the ", i, " effect of ",
+        insight::color_text("Model is correctly specified.", "green"),
+        exposure_outcome_text,
+        "\n\nNo adjustment needed to estimate the ", i, " effect of ",
         datawizard::text_concatenate(attributes(x)$exposure),
         " on ",
         attributes(x)$outcome,
@@ -117,48 +125,52 @@ print.check_dag <- function(x, ...) {
     } else if (isTRUE(out$incorrectly_adjusted)) {
       # Scenario 2: incorrectly adjusted, adjustments where none is allowed
       msg <- paste0(
-        "Incorrectly adjusted! To estimate the ", i, " effect of ",
-        datawizard::text_concatenate(attributes(x)$exposure),
-        " on ",
-        attributes(x)$outcome,
-        ", do *not* adjust for following variables: ",
+        insight::color_text("Incorrectly adjusted!", "red"),
+        exposure_outcome_text,
+        "\n\nTo estimate the ", i, " effect, do *not* adjust for: ",
         datawizard::text_concatenate(out$current_adjustments),
         "."
       )
     } else if (length(out$current_adjustments) != length(out$minimal_adjustment)) {
       # Scenario 3: missing adjustments
       msg <- paste0(
-        "Incorrectly adjusted! The minimal sufficient adjustments for estimating the ", i, " effect of ",
-        datawizard::text_concatenate(attributes(x)$exposure),
-        " on ",
-        attributes(x)$outcome,
-        " are following variables: ",
-        datawizard::text_concatenate(out$minimal_adjustments),
-        ". "
+        insight::color_text("Incorrectly adjusted!", "red"),
+        exposure_outcome_text,
+        "\n\nTo estimate the ", i, " effect, *also* adjust for: ",
+        insight::color_text(datawizard::text_concatenate(out$minimal_adjustments), "yellow"),
+        "."
       )
       if (is.null(out$current_adjustments)) {
-        msg <- paste0(msg, "However, the model does not adjusts for any variables.")
+        msg <- paste0(msg, "\nCurrently, the model does not adjust for any variables.")
       } else {
         msg <- paste0(
-          msg, "However, the model currently only adjusts for ",
-          datawizard::text_concatenate(out$current_adjustments), "."
+          msg, "\nCurrently, the model currently only adjusts for ",
+          insight::color_text(datawizard::text_concatenate(out$current_adjustments), "yellow"), "."
         )
       }
     } else {
       # Scenario 4: correct adjustment
       msg <- paste0(
-        "Model is correctly specified. All minimal sufficient adjustments for estimating the ", i, " effect of ",
-        datawizard::text_concatenate(attributes(x)$exposure),
-        " on ",
-        attributes(x)$outcome,
-        " were done."
+        insight::color_text("Model is correctly specified.", "green"),
+        exposure_outcome_text,
+        "\n\nAll minimal sufficient adjustments to estimate the ", i, " effect were done."
       )
     }
 
     if (effect %in% c("all", i)) {
       cat(insight::print_color(insight::format_message(paste0("# Correct adjustments for identifying {.i ", i, "} effects\n\n")), "blue"))
-      cat(insight::format_message(msg))
+      cat(msg)
       cat("\n\n")
     }
   }
+}
+
+
+#' @export
+plot.check_dag <- function(x, ...) {
+  insight::check_if_installed(c("ggdag", "ggplot2"))
+  p1 <- ggdag::ggdag_status(x, text = FALSE, use_labels = "name", stylized = TRUE, shadow = TRUE) +
+    ggplot2::guides(color = "none") +
+    ggdag::theme_dag()
+  p1
 }
