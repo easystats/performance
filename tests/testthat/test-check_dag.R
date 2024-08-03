@@ -45,4 +45,5 @@ test_that("check_dag, cylic error", {
       adjusted = "c"
     ),
     regex = "Model is cyclic"
+  )
 })
