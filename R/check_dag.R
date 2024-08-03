@@ -169,6 +169,18 @@ print.check_dag <- function(x, ...) {
 #' @export
 plot.check_dag <- function(x, ...) {
   insight::check_if_installed(c("ggdag", "ggplot2"))
+  p1 <- suppressWarnings(ggdag::ggdag_adjust(x, stylized = TRUE))
+  p2 <- suppressWarnings(ggdag::ggdag_adjustment_set(shadow = TRUE, stylized = TRUE))
+
+  # tweak data
+  p1$data$type <- as.character(p1$data$adjusted)
+  p1$data$type[p1$data$name == attributes(x)$outcome] <- "outcome"
+  p1$data$type[p1$data$name %in% attributes(x)$exposure] <- "exposure"
+
+  p1$data$type <- as.character(p2$data$adjusted)
+  p2$data$type[p2$data$name == attributes(x)$outcome] <- "outcome"
+  p2$data$type[p2$data$name %in% attributes(x)$exposure] <- "exposure"
+
   p1 <- ggdag::ggdag_status(x, text = FALSE, use_labels = "name", stylized = TRUE, shadow = TRUE) +
     ggplot2::guides(color = "none") +
     ggdag::theme_dag()
