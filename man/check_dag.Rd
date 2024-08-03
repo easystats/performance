@@ -52,7 +52,8 @@ visualized with \code{plot()}. \code{check_dag()} is a convenient wrapper around
 \code{ggdag::dagify()}, which used \code{dagitty::adjustmentSets()} and
 \code{dagitty::adjustedNodes()} to check if the model is correctly adjusted for
 identifying causal (direct and total) effects of a given exposure on the
-outcome.
+outcome. \code{as.dag()} is a small convenient function to return the dagitty-string,
+which can be used for the online-tool from the dagitty-website.
 }
 \details{
 The formulas have following syntax:
