@@ -63,14 +63,17 @@
 #' plot(dag)
 #'
 #' # After adjusting for `b`, the model is correctly specified
-#' check_dag(
+#' dag <- check_dag(
 #'   y ~ x + b + c,
 #'   x ~ b,
 #'   outcome = "y",
 #'   exposure = "x",
 #'   adjusted = "b"
 #' )
+#' dag
 #'
+#' # Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"
+#' ggdag::ggdag_status(dag)
 #' @export
 check_dag <- function(...,
                       outcome = NULL,
