@@ -168,21 +168,47 @@ print.check_dag <- function(x, ...) {
 
 #' @export
 plot.check_dag <- function(x, ...) {
-  insight::check_if_installed(c("ggdag", "ggplot2"))
+  .data <- NULL
+  insight::check_if_installed(c("ggdag", "ggplot2", "see"))
   p1 <- suppressWarnings(ggdag::ggdag_adjust(x, stylized = TRUE))
-  p2 <- suppressWarnings(ggdag::ggdag_adjustment_set(shadow = TRUE, stylized = TRUE))
+  p2 <- suppressWarnings(ggdag::ggdag_adjustment_set(x, shadow = TRUE, stylized = TRUE))
 
   # tweak data
   p1$data$type <- as.character(p1$data$adjusted)
   p1$data$type[p1$data$name == attributes(x)$outcome] <- "outcome"
   p1$data$type[p1$data$name %in% attributes(x)$exposure] <- "exposure"
 
-  p1$data$type <- as.character(p2$data$adjusted)
+  p2$data$type <- as.character(p2$data$adjusted)
   p2$data$type[p2$data$name == attributes(x)$outcome] <- "outcome"
   p2$data$type[p2$data$name %in% attributes(x)$exposure] <- "exposure"
 
-  p1 <- ggdag::ggdag_status(x, text = FALSE, use_labels = "name", stylized = TRUE, shadow = TRUE) +
-    ggplot2::guides(color = "none") +
-    ggdag::theme_dag()
-  p1
+  plot1 <- ggplot2::ggplot(p1$data, ggplot2::aes(x = .data$x, y = .data$y)) +
+    see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = 15) +
+    ggdag::geom_dag_edges(
+      ggplot2::aes(
+        xend = .data$xend,
+        yend = .data$yend,
+        edge_alpha = .data$adjusted,
+      )
+    ) +
+    ggdag::scale_adjusted() +
+    ggdag::geom_dag_label(ggplot2::aes(label = .data$name)) +
+    ggdag::theme_dag() +
+    see::scale_fill_metro()
+
+  plot2 <- ggplot2::ggplot(p2$data, ggplot2::aes(x = .data$x, y = .data$y)) +
+    see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = 15) +
+    ggdag::geom_dag_edges(
+      ggplot2::aes(
+        xend = .data$xend,
+        yend = .data$yend,
+        edge_alpha = .data$adjusted,
+      )
+    ) +
+    ggdag::scale_adjusted() +
+    ggdag::geom_dag_label(ggplot2::aes(label = .data$name)) +
+    ggdag::theme_dag() +
+    see::scale_fill_metro()
+
+  see::plots(plot1, plot2, n_rows = 1, tags = c("Current model", "Required adjustements"))
 }
