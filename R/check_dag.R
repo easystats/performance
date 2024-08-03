@@ -205,7 +205,10 @@ check_dag.default <- function(...,
 
 #' @rdname check_dag
 #' @export
-as.dag.check_dag <- function(x, ...) {
+as.dag <- function(x, ...) {
+  if (!inherits(x, "check_dag")) {
+    insight::format_error("Input is not of class `check_dag.")
+  }
   cat(as.character(x))
 }
 

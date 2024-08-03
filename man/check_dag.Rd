@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_dag.R
 \name{check_dag}
 \alias{check_dag}
-\alias{as.dag.check_dag}
+\alias{as.dag}
 \title{Check correct model adjustment for identifying causal effects}
 \usage{
 check_dag(
@@ -14,7 +14,7 @@ check_dag(
   effect = c("all", "total", "direct")
 )
 
-as.dag.check_dag(x, ...)
+as.dag(x, ...)
 }
 \arguments{
 \item{...}{One or more formulas, which are converted into \strong{dagitty} syntax.
