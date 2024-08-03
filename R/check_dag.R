@@ -53,9 +53,7 @@ check_dag <- function(...,
 
   # add adjustments
   if (!is.null(adjusted)) {
-    for (i in adjusted) {
-      dag <- gsub(paste0("\n", i, "\n"), paste0("\n", i, " [adjusted]\n"), dag)
-    }
+    dag <- .adjust_dag(dag, adjusted)
   }
 
   # data for checking effects
@@ -81,6 +79,18 @@ check_dag <- function(...,
   dag
 }
 
+
+# helper ----------------------------------------------------------------------
+
+.adjust_dag <- function(dag, adjusted) {
+  for (i in adjusted) {
+    dag <- gsub(paste0("\n", i, "\n"), paste0("\n", i, " [adjusted]\n"), dag)
+  }
+  dag
+}
+
+
+# methods --------------------------------------------------------------------
 
 #' @export
 print.check_dag <- function(x, ...) {
