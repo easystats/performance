@@ -167,9 +167,11 @@ print.check_dag <- function(x, ...) {
 
 
 #' @export
-plot.check_dag <- function(x, ...) {
+plot.check_dag <- function(x, size_point = 15, which = "all", ...) {
   .data <- NULL
   insight::check_if_installed(c("ggdag", "ggplot2", "see"))
+  which <- match.arg(which, choices = c("all", "current", "required"))
+
   p1 <- suppressWarnings(ggdag::ggdag_adjust(x, stylized = TRUE))
   p2 <- suppressWarnings(ggdag::ggdag_adjustment_set(x, shadow = TRUE, stylized = TRUE))
 
@@ -186,7 +188,7 @@ plot.check_dag <- function(x, ...) {
   names(point_colors) <- c("unadjusted", "exposure", "outcome", "adjusted")
 
   plot1 <- ggplot2::ggplot(p1$data, ggplot2::aes(x = .data$x, y = .data$y)) +
-    see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = 15) +
+    see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = size_point) +
     ggdag::geom_dag_edges(
       ggplot2::aes(
         xend = .data$xend,
@@ -199,10 +201,10 @@ plot.check_dag <- function(x, ...) {
     ggdag::theme_dag() +
     ggplot2::scale_fill_manual(values = point_colors) +
     ggplot2::ggtitle("Current model") +
-    ggplot2::theme(legend.position = "bottom")
+    ggplot2::guides(edge_alpha = "none")
 
   plot2 <- ggplot2::ggplot(p2$data, ggplot2::aes(x = .data$x, y = .data$y)) +
-    see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = 15) +
+    see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = size_point) +
     ggdag::geom_dag_edges(
       ggplot2::aes(
         xend = .data$xend,
@@ -215,7 +217,16 @@ plot.check_dag <- function(x, ...) {
     ggdag::theme_dag() +
     ggplot2::scale_fill_manual(values = point_colors) +
     ggplot2::ggtitle("Required model") +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::guides(edge_alpha = "none")
 
+  if (which == "all") {
+    # fix legends
+    plot2 <- plot2 + ggplot2::theme(legend.position = "none")
+    # plot
     see::plots(plot1, plot2, n_rows = 1)
+  } else if (which == "current") {
+    plot1
+  } else {
+    plot2
+  }
 }
