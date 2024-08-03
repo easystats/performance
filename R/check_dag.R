@@ -182,6 +182,9 @@ plot.check_dag <- function(x, ...) {
   p2$data$type[p2$data$name == attributes(x)$outcome] <- "outcome"
   p2$data$type[p2$data$name %in% attributes(x)$exposure] <- "exposure"
 
+  point_colors <- see::metro_colors(c("red", "teal", "yellow", "blue grey"))
+  names(point_colors) <- c("unadjusted", "exposure", "outcome", "adjusted")
+
   plot1 <- ggplot2::ggplot(p1$data, ggplot2::aes(x = .data$x, y = .data$y)) +
     see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = 15) +
     ggdag::geom_dag_edges(
@@ -194,7 +197,9 @@ plot.check_dag <- function(x, ...) {
     ggdag::scale_adjusted() +
     ggdag::geom_dag_label(ggplot2::aes(label = .data$name)) +
     ggdag::theme_dag() +
-    see::scale_fill_metro()
+    ggplot2::scale_fill_manual(values = point_colors) +
+    ggplot2::ggtitle("Current model") +
+    ggplot2::theme(legend.position = "bottom")
 
   plot2 <- ggplot2::ggplot(p2$data, ggplot2::aes(x = .data$x, y = .data$y)) +
     see::geom_point_borderless(ggplot2::aes(fill = .data$type), size = 15) +
@@ -208,7 +213,9 @@ plot.check_dag <- function(x, ...) {
     ggdag::scale_adjusted() +
     ggdag::geom_dag_label(ggplot2::aes(label = .data$name)) +
     ggdag::theme_dag() +
-    see::scale_fill_metro()
+    ggplot2::scale_fill_manual(values = point_colors) +
+    ggplot2::ggtitle("Required model") +
+    ggplot2::theme(legend.position = "none")
 
-  see::plots(plot1, plot2, n_rows = 1, tags = c("Current model", "Required adjustements"))
+    see::plots(plot1, plot2, n_rows = 1)
 }
