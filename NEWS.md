@@ -1,3 +1,9 @@
+# performance 0.12.3
+
+## New functions
+
+* `check_dag()`, to check DAGs for correct adjustment sets.
+
 # performance 0.12.2
 
 Patch release, to ensure that _performance_ runs with older version of
