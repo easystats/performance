@@ -32,3 +32,17 @@ test_that("check_dag", {
   )
   expect_snapshot(print(dag))
 })
+
+test_that("check_dag, cylic error", {
+  expect_error(
+    check_dag(
+      y ~ x + b + c + d,
+      x ~ c + d,
+      b ~ x,
+      b ~ y,
+      outcome = "y",
+      exposure = "x",
+      adjusted = "c"
+    ),
+    regex = "Model is cyclic"
+})
