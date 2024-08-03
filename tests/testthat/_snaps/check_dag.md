@@ -9,7 +9,7 @@
       - Outcome: y
       - Exposure: x
       
-      No adjustment needed to estimate the direct effect of x on y.
+      No adjustment needed to estimate the direct effect of `x` on `y`.
       
       # Correct adjustments for identifying total effects
       
@@ -17,7 +17,7 @@
       - Outcome: y
       - Exposure: x
       
-      No adjustment needed to estimate the total effect of x on y.
+      No adjustment needed to estimate the total effect of `x` on `y`.
       
 
 ---
@@ -53,7 +53,7 @@
       - Outcome: y
       - Exposure: x
       
-      To estimate the direct effect, also adjust for: b.
+      To estimate the direct effect, also adjust for `b`.
       Currently, the model does not adjust for any variables.
       
       # Correct adjustments for identifying total effects
@@ -62,7 +62,7 @@
       - Outcome: y
       - Exposure: x
       
-      To estimate the total effect, also adjust for: b.
+      To estimate the total effect, also adjust for `b`.
       Currently, the model does not adjust for any variables.
       
 
@@ -77,8 +77,8 @@
       - Outcome: y
       - Exposure: x
       
-      To estimate the direct effect, also adjust for: b and c.
-      Currently, the model currently only adjusts for c.
+      To estimate the direct effect, also adjust for `b` and `c`.
+      Currently, the model currently only adjusts for `c`.
       
       # Correct adjustments for identifying total effects
       
@@ -86,7 +86,7 @@
       - Outcome: y
       - Exposure: x
       
-      To estimate the total effect, also adjust for: b and c.
-      Currently, the model currently only adjusts for c.
+      To estimate the total effect, also adjust for `b` and `c`.
+      Currently, the model currently only adjusts for `c`.
       
 

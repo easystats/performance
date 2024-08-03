@@ -238,10 +238,10 @@ print.check_dag <- function(x, ...) {
         insight::color_text("Model is correctly specified.", "green"),
         exposure_outcome_text,
         "\n\nNo adjustment needed to estimate the ", i, " effect of ",
-        datawizard::text_concatenate(attributes(x)$exposure),
-        " on ",
+        datawizard::text_concatenate(attributes(x)$exposure, enclose = "`"),
+        " on `",
         attributes(x)$outcome,
-        "."
+        "`."
       )
     } else if (isTRUE(out$incorrectly_adjusted)) {
       # Scenario 2: incorrectly adjusted, adjustments where none is allowed
@@ -250,8 +250,8 @@ print.check_dag <- function(x, ...) {
         exposure_outcome_text,
         "\n\nTo estimate the ", i, " effect, do ",
         insight::color_text("not", "italic"),
-        " adjust for: ",
-        datawizard::text_concatenate(out$current_adjustments),
+        " adjust for ",
+        datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
         "."
       )
     } else if (length(out$current_adjustments) != length(out$minimal_adjustment)) {
@@ -261,8 +261,8 @@ print.check_dag <- function(x, ...) {
         exposure_outcome_text,
         "\n\nTo estimate the ", i, " effect, ",
         insight::color_text("also", "italic"),
-        " adjust for: ",
-        insight::color_text(datawizard::text_concatenate(out$minimal_adjustments), "yellow"),
+        " adjust for ",
+        insight::color_text(datawizard::text_concatenate(out$minimal_adjustments, enclose = "`"), "yellow"),
         "."
       )
       if (is.null(out$current_adjustments)) {
@@ -270,7 +270,7 @@ print.check_dag <- function(x, ...) {
       } else {
         msg <- paste0(
           msg, "\nCurrently, the model currently only adjusts for ",
-          insight::color_text(datawizard::text_concatenate(out$current_adjustments), "yellow"), "."
+          insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "yellow"), "."
         )
       }
     } else {
