@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.12.2
+Version: 0.12.2.1
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -89,6 +89,7 @@ Suggests:
     CompQuadForm,
     correlation,
     cplm,
+    dagitty,
     dbscan,
     DHARMa,
     estimatr,
@@ -97,7 +98,7 @@ Suggests:
     forecast,
     ftExtra,
     gamm4,
-    ggplot2,
+    ggdag,
     glmmTMB,
     graphics,
     Hmisc,
@@ -155,3 +156,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
+Remotes: easystats/see#352
