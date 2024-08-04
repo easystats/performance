@@ -75,13 +75,13 @@
       
       Incorrectly adjusted!
       To estimate the direct effect, also adjust for `b` and `c`.
-      Currently, the model currently only adjusts for `c`.
+      Currently, the model only adjusts for `c`.
       
       Identification of total effects
       
       Incorrectly adjusted!
       To estimate the total effect, also adjust for `b` and `c`.
-      Currently, the model currently only adjusts for `c`.
+      Currently, the model only adjusts for `c`.
       
 
 ---
@@ -98,13 +98,13 @@
       
       Incorrectly adjusted!
       To estimate the direct effect, also adjust for `b` and `c`.
-      Currently, the model currently only adjusts for `c`.
+      Currently, the model only adjusts for `c`.
       
       Identification of total effects
       
       Incorrectly adjusted!
       To estimate the total effect, also adjust for `b` and `c`.
-      Currently, the model currently only adjusts for `c`.
+      Currently, the model only adjusts for `c`.
       
 
 ---

@@ -335,7 +335,7 @@ print.check_dag <- function(x, ...) {
         msg <- paste0(msg, "\nCurrently, the model does not adjust for any variables.")
       } else {
         msg <- paste0(
-          msg, "\nCurrently, the model currently only adjusts for ",
+          msg, "\nCurrently, the model only adjusts for ",
           insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "yellow"), "."
         )
       }
