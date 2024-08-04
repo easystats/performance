@@ -11,7 +11,8 @@ check_dag(
   exposure = NULL,
   adjusted = NULL,
   latent = NULL,
-  effect = c("all", "total", "direct")
+  effect = c("all", "total", "direct"),
+  coords = NULL
 )
 
 as.dag(x, ...)
@@ -39,6 +40,11 @@ for in the model. If a model object is provided in \code{...}, any values in
 
 \item{effect}{Character string, indicating which effect to check. Can be
 \code{"all"} (default), \code{"total"}, or \code{"direct"}.}
+
+\item{coords}{A list with two elements, \code{x} and \code{y}, which both are named
+vectors of numerics. The names correspond to the variable names in the DAG,
+and the values for \code{x} and \code{y} indicate the x/y coordinates in the plot.
+See 'Examples'.}
 
 \item{x}{An object of class \code{check_dag}, as returned by \code{check_dag()}.}
 }
@@ -122,6 +128,21 @@ dag <- check_dag(
   adjusted = "b"
 )
 dag
+
+# use specific layout for the DAG
+dag <- check_dag(
+  score ~ exp + b + c,
+  exp ~ b,
+  outcome = "score",
+  exposure = "exp",
+  coords = list(
+    # x-coordinates for all nodes
+    x = c(score = 5, exp = 4, b = 3, c = 3),
+    # y-coordinates for all nodes
+    y = c(score = 3, exp = 3, b = 2, c = 4)
+  )
+)
+plot(dag)
 
 # Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"
 ggdag::ggdag_status(dag)

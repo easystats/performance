@@ -31,6 +31,10 @@
 #' @param latent A character vector with names of latent variables in the model.
 #' @param effect Character string, indicating which effect to check. Can be
 #' `"all"` (default), `"total"`, or `"direct"`.
+#' @param coords A list with two elements, `x` and `y`, which both are named
+#' vectors of numerics. The names correspond to the variable names in the DAG,
+#' and the values for `x` and `y` indicate the x/y coordinates in the plot.
+#' See 'Examples'.
 #' @param x An object of class `check_dag`, as returned by `check_dag()`.
 #'
 #' @section Specifying the DAG formulas:
@@ -103,6 +107,21 @@
 #' )
 #' dag
 #'
+#' # use specific layout for the DAG
+#' dag <- check_dag(
+#'   score ~ exp + b + c,
+#'   exp ~ b,
+#'   outcome = "score",
+#'   exposure = "exp",
+#'   coords = list(
+#'     # x-coordinates for all nodes
+#'     x = c(score = 5, exp = 4, b = 3, c = 3),
+#'     # y-coordinates for all nodes
+#'     y = c(score = 3, exp = 3, b = 2, c = 4)
+#'   )
+#' )
+#' plot(dag)
+#'
 #' # Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"
 #' ggdag::ggdag_status(dag)
 #'
@@ -123,29 +142,8 @@ check_dag <- function(...,
                       exposure = NULL,
                       adjusted = NULL,
                       latent = NULL,
-                      effect = c("all", "total", "direct")) {
-  UseMethod("check_dag")
-}
-
-
-#' @export
-check_dag.dagitty <- function(...,
-                              outcome = NULL,
-                              exposure = NULL,
-                              adjusted = NULL,
-                              latent = NULL,
-                              effect = c("all", "total", "direct")) {
-  insight::format_error("This function is not yet implemented.")
-}
-
-
-#' @export
-check_dag.default <- function(...,
-                              outcome = NULL,
-                              exposure = NULL,
-                              adjusted = NULL,
-                              latent = NULL,
-                              effect = c("all", "total", "direct")) {
+                      effect = c("all", "total", "direct"),
+                      coords = NULL) {
   insight::check_if_installed(
     c("ggdag", "dagitty"),
     reason = "to check correct adjustments for identifying causal effects."
@@ -190,7 +188,12 @@ check_dag.default <- function(...,
   }
 
   # convert to dag
-  dag_args <- c(formulas, list(exposure = exposure, outcome = outcome, latent = latent))
+  dag_args <- c(formulas, list(
+    exposure = exposure,
+    outcome = outcome,
+    latent = latent,
+    coords = coords
+  ))
   dag <- do.call(ggdag::dagify, dag_args)
 
   # add adjustments
