@@ -1,14 +1,18 @@
 #' @title Check correct model adjustment for identifying causal effects
 #' @name check_dag
 #'
-#' @description `check_dag()` checks if a model is correctly adjusted for
-#' identifying causal effects. It returns a **dagitty** object that can be
-#' visualized with `plot()`. `check_dag()` is a convenient wrapper around
-#' `ggdag::dagify()`, which used `dagitty::adjustmentSets()` and
-#' `dagitty::adjustedNodes()` to check if the model is correctly adjusted for
-#' identifying causal (direct and total) effects of a given exposure on the
-#' outcome. `as.dag()` is a small convenient function to return the dagitty-string,
-#' which can be used for the online-tool from the dagitty-website.
+#' @description The purpose of `check_dag()` is to build, check and visualize
+#' your model based on directed acyclic graphs (DAG). The function checks if a
+#' model is correctly adjusted for identifying specific relationships of
+#' variables, especiall directed (maybe also "causal") effects for given
+#' exposures on an outcome. It returns a **dagitty** object that can be
+#' visualized with `plot()`.
+#'
+#' `check_dag()` is a convenient wrapper around `ggdag::dagify()`,
+#' `dagitty::adjustmentSets()` and `dagitty::adjustedNodes()` to check correct
+#' adjustment sets. `as.dag()` is a small convenient function to return the
+#' dagitty-string, which can be used for the online-tool from the
+#' dagitty-website.
 #'
 #' @param ... One or more formulas, which are converted into **dagitty** syntax.
 #' First element may also be model object. If a model objects is provided, its
@@ -29,7 +33,8 @@
 #' `"all"` (default), `"total"`, or `"direct"`.
 #' @param x An object of class `check_dag`, as returned by `check_dag()`.
 #'
-#' @details
+#' @section Specifying the DAG formulas:
+#'
 #' The formulas have following syntax:
 #'
 #' - One-directed paths: On the *left-hand-side* is the name of the variables
@@ -40,11 +45,35 @@
 #'
 #' - Bi-directed paths: Use `~~` to indicate bi-directed paths. For example,
 #'   `Y ~~ X` indicates that the path between `Y` and `X` is bi-directed, and
-#'   the arrow points in both directions.
+#'   the arrow points in both directions. Bi-directed paths often indicate
+#'   unmeasured cause, or umeasured confounding, of the two involved variables.
+#'
+#' @section Why are DAGs important - the Table 2 fallacy:
+#'
+#' Correctly thinking about and identifying the relationships between variables
+#' is important when it comes to reporting coefficients from regression models
+#' that mutually adjust for "confounders" or include covariates. Different
+#' coefficients might have different interpretations, depending on their
+#' relationship to other variables in the model. Sometimes, a regression
+#' coefficient represents the direct effect of an exposure on an outcome, but
+#' sometimes it must be interpreted as total effect, due to the involvement
+#' of mediating effects. This problem is also called "Table 2 fallacy"
+#' (_Westreich and Greenland 2013_). DAG helps visualizing and thereby focusing
+#' the relationships of variables in a regression model to detect missing
+#' adjustments or over-adjustment.
 #'
 #' @return An object of class `check_dag`, which can be visualized with `plot()`.
 #' The returned object also inherits from class `dagitty` and thus can be used
 #' with all functions from the **ggdag** and **dagitty** packages.
+#'
+#' @references
+#' - Rohrer, J. M. (2018). Thinking clearly about correlations and causation:
+#'   Graphical causal models for observational data. Advances in Methods and
+#'   Practices in Psychological Science, 1(1), 27–42. \doi{10.1177/2515245917745629}
+#'
+#' - Westreich, D., & Greenland, S. (2013). The Table 2 Fallacy: Presenting and
+#'   Interpreting Confounder and Modifier Coefficients. American Journal of
+#'   Epidemiology, 177(4), 292–298. \doi{10.1093/aje/kws412}
 #'
 #' @examplesIf require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE)
 #' # no adjustment needed
@@ -203,6 +232,7 @@ check_dag.default <- function(...,
   attr(dag, "outcome") <- outcome
   attr(dag, "exposure") <- exposure
   attr(dag, "adjusted") <- adjusted
+  attr(dag, "adjustment_sets") <- checks[[1]]$current_adjustments
   attr(dag, "check_direct") <- insight::compact_list(checks[[1]])
   attr(dag, "check_total") <- insight::compact_list(checks[[2]])
 
@@ -236,27 +266,34 @@ as.dag <- function(x, ...) {
 print.check_dag <- function(x, ...) {
   effect <- attributes(x)$effect
 
+  # header
+  cat(insight::print_color("# Check for correct adjustment sets", "blue"))
+
+  # model specification
+  exposure_outcome_text <- paste0(
+    "\n- Outcome: ", attributes(x)$outcome,
+    "\n- Exposure", ifelse(length(attributes(x)$exposure) > 1, "s", ""),
+    ": ", datawizard::text_concatenate(attributes(x)$exposure)
+  )
+
+  # add information on adjustments
+  if (!is.null(attributes(x)$adjustment_sets)) {
+    exposure_outcome_text <- paste0(
+      exposure_outcome_text,
+      "\n- Adjustment",
+      ifelse(length(attributes(x)$adjustment_sets) > 1, "s", ""),
+      ": ", datawizard::text_concatenate(attributes(x)$adjustment_sets)
+    )
+  }
+
+  cat(exposure_outcome_text)
+  cat("\n\n")
+
   for (i in c("direct", "total")) {
     if (i == "direct") {
       out <- attributes(x)$check_direct
     } else {
       out <- attributes(x)$check_total
-    }
-
-    exposure_outcome_text <- paste0(
-      "\n- Outcome: ", attributes(x)$outcome,
-      "\n- Exposure", ifelse(length(attributes(x)$exposure) > 1, "s", ""),
-      ": ", datawizard::text_concatenate(attributes(x)$exposure)
-    )
-
-    # add information on adjustments
-    if (!is.null(out$current_adjustments)) {
-      exposure_outcome_text <- paste0(
-        exposure_outcome_text,
-        "\n- Adjustment",
-        ifelse(length(out$current_adjustments) > 1, "s", ""),
-        ": ", datawizard::text_concatenate(out$current_adjustments)
-      )
     }
 
     # build message with check results for effects -----------------------
@@ -265,8 +302,7 @@ print.check_dag <- function(x, ...) {
       # Scenario 1: no adjustment needed
       msg <- paste0(
         insight::color_text("Model is correctly specified.", "green"),
-        exposure_outcome_text,
-        "\n\nNo adjustment needed to estimate the ", i, " effect of ",
+        "\nNo adjustment needed to estimate the ", i, " effect of ",
         datawizard::text_concatenate(attributes(x)$exposure, enclose = "`"),
         " on `",
         attributes(x)$outcome,
@@ -276,8 +312,7 @@ print.check_dag <- function(x, ...) {
       # Scenario 2: incorrectly adjusted, adjustments where none is allowed
       msg <- paste0(
         insight::color_text("Incorrectly adjusted!", "red"),
-        exposure_outcome_text,
-        "\n\nTo estimate the ", i, " effect, do ",
+        "\nTo estimate the ", i, " effect, do ",
         insight::color_text("not", "italic"),
         " adjust for ",
         datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
@@ -287,8 +322,7 @@ print.check_dag <- function(x, ...) {
       # Scenario 3: missing adjustments
       msg <- paste0(
         insight::color_text("Incorrectly adjusted!", "red"),
-        exposure_outcome_text,
-        "\n\nTo estimate the ", i, " effect, ",
+        "\nTo estimate the ", i, " effect, ",
         insight::color_text("also", "italic"),
         " adjust for ",
         insight::color_text(datawizard::text_concatenate(out$minimal_adjustments, enclose = "`"), "yellow"),
@@ -306,14 +340,13 @@ print.check_dag <- function(x, ...) {
       # Scenario 4: correct adjustment
       msg <- paste0(
         insight::color_text("Model is correctly specified.", "green"),
-        exposure_outcome_text,
-        "\n\nAll minimal sufficient adjustments to estimate the ", i, " effect were done."
+        "\nAll minimal sufficient adjustments to estimate the ", i, " effect were done."
       )
     }
 
     if (effect %in% c("all", i)) {
       cat(insight::print_color(insight::format_message(
-        paste0("# Correct adjustments for identifying {.i ", i, "} effects\n\n")
+        paste0("Identification of {.i ", i, "} effects\n\n")
       ), "blue"))
       cat(msg)
       cat("\n\n")

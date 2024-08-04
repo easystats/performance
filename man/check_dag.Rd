@@ -48,16 +48,22 @@ The returned object also inherits from class \code{dagitty} and thus can be used
 with all functions from the \strong{ggdag} and \strong{dagitty} packages.
 }
 \description{
-\code{check_dag()} checks if a model is correctly adjusted for
-identifying causal effects. It returns a \strong{dagitty} object that can be
-visualized with \code{plot()}. \code{check_dag()} is a convenient wrapper around
-\code{ggdag::dagify()}, which used \code{dagitty::adjustmentSets()} and
-\code{dagitty::adjustedNodes()} to check if the model is correctly adjusted for
-identifying causal (direct and total) effects of a given exposure on the
-outcome. \code{as.dag()} is a small convenient function to return the dagitty-string,
-which can be used for the online-tool from the dagitty-website.
+The purpose of \code{check_dag()} is to build, check and visualize
+your model based on directed acyclic graphs (DAG). The function checks if a
+model is correctly adjusted for identifying specific relationships of
+variables, especiall directed (maybe also "causal") effects for given
+exposures on an outcome. It returns a \strong{dagitty} object that can be
+visualized with \code{plot()}.
+
+\code{check_dag()} is a convenient wrapper around \code{ggdag::dagify()},
+\code{dagitty::adjustmentSets()} and \code{dagitty::adjustedNodes()} to check correct
+adjustment sets. \code{as.dag()} is a small convenient function to return the
+dagitty-string, which can be used for the online-tool from the
+dagitty-website.
 }
-\details{
+\section{Specifying the DAG formulas}{
+
+
 The formulas have following syntax:
 \itemize{
 \item One-directed paths: On the \emph{left-hand-side} is the name of the variables
@@ -67,9 +73,27 @@ to come from. For example, the formula \code{Y ~ X1 + X2}, paths directed from
 both \code{X1} and \code{X2} to \code{Y} are assumed.
 \item Bi-directed paths: Use \verb{~~} to indicate bi-directed paths. For example,
 \code{Y ~~ X} indicates that the path between \code{Y} and \code{X} is bi-directed, and
-the arrow points in both directions.
+the arrow points in both directions. Bi-directed paths often indicate
+unmeasured cause, or umeasured confounding, of the two involved variables.
 }
 }
+
+\section{Why are DAGs important - the Table 2 fallacy}{
+
+
+Correctly thinking about and identifying the relationships between variables
+is important when it comes to reporting coefficients from regression models
+that mutually adjust for "confounders" or include covariates. Different
+coefficients might have different interpretations, depending on their
+relationship to other variables in the model. Sometimes, a regression
+coefficient represents the direct effect of an exposure on an outcome, but
+sometimes it must be interpreted as total effect, due to the involvement
+of mediating effects. This problem is also called "Table 2 fallacy"
+(\emph{Westreich and Greenland 2013}). DAG helps visualizing and thereby focusing
+the relationships of variables in a regression model to detect missing
+adjustments or over-adjustment.
+}
+
 \examples{
 \dontshow{if (require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # no adjustment needed
@@ -114,4 +138,14 @@ dag <- check_dag(
 dag
 plot(dag)
 \dontshow{\}) # examplesIf}
+}
+\references{
+\itemize{
+\item Rohrer, J. M. (2018). Thinking clearly about correlations and causation:
+Graphical causal models for observational data. Advances in Methods and
+Practices in Psychological Science, 1(1), 27–42. \doi{10.1177/2515245917745629}
+\item Westreich, D., & Greenland, S. (2013). The Table 2 Fallacy: Presenting and
+Interpreting Confounder and Modifier Coefficients. American Journal of
+Epidemiology, 177(4), 292–298. \doi{10.1093/aje/kws412}
+}
 }

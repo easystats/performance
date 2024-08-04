@@ -31,6 +31,15 @@ test_that("check_dag", {
     adjusted = "c"
   )
   expect_snapshot(print(dag))
+  dag <- check_dag(
+    y ~ x + b + c + d,
+    x ~ b,
+    x ~ c,
+    outcome = "y",
+    exposure = "x",
+    adjusted = "c"
+  )
+  expect_snapshot(print(dag))
   data(mtcars)
   m <- lm(mpg ~ wt + gear + disp + cyl, data = mtcars)
   dag <- check_dag(

@@ -3,20 +3,18 @@
     Code
       print(dag)
     Output
-      # Correct adjustments for identifying direct effects
-      
-      Model is correctly specified.
+      # Check for correct adjustment sets
       - Outcome: y
       - Exposure: x
       
+      Identification of direct effects
+      
+      Model is correctly specified.
       No adjustment needed to estimate the direct effect of `x` on `y`.
       
-      # Correct adjustments for identifying total effects
+      Identification of total effects
       
       Model is correctly specified.
-      - Outcome: y
-      - Exposure: x
-      
       No adjustment needed to estimate the total effect of `x` on `y`.
       
 
@@ -25,22 +23,19 @@
     Code
       print(dag)
     Output
-      # Correct adjustments for identifying direct effects
-      
-      Model is correctly specified.
+      # Check for correct adjustment sets
       - Outcome: y
       - Exposure: x
       - Adjustment: b
       
+      Identification of direct effects
+      
+      Model is correctly specified.
       All minimal sufficient adjustments to estimate the direct effect were done.
       
-      # Correct adjustments for identifying total effects
+      Identification of total effects
       
       Model is correctly specified.
-      - Outcome: y
-      - Exposure: x
-      - Adjustment: b
-      
       All minimal sufficient adjustments to estimate the total effect were done.
       
 
@@ -49,21 +44,19 @@
     Code
       print(dag)
     Output
-      # Correct adjustments for identifying direct effects
-      
-      Incorrectly adjusted!
+      # Check for correct adjustment sets
       - Outcome: y
       - Exposure: x
       
+      Identification of direct effects
+      
+      Incorrectly adjusted!
       To estimate the direct effect, also adjust for `b`.
       Currently, the model does not adjust for any variables.
       
-      # Correct adjustments for identifying total effects
+      Identification of total effects
       
       Incorrectly adjusted!
-      - Outcome: y
-      - Exposure: x
-      
       To estimate the total effect, also adjust for `b`.
       Currently, the model does not adjust for any variables.
       
@@ -73,23 +66,20 @@
     Code
       print(dag)
     Output
-      # Correct adjustments for identifying direct effects
-      
-      Incorrectly adjusted!
+      # Check for correct adjustment sets
       - Outcome: y
       - Exposure: x
       - Adjustment: c
       
+      Identification of direct effects
+      
+      Incorrectly adjusted!
       To estimate the direct effect, also adjust for `b` and `c`.
       Currently, the model currently only adjusts for `c`.
       
-      # Correct adjustments for identifying total effects
+      Identification of total effects
       
       Incorrectly adjusted!
-      - Outcome: y
-      - Exposure: x
-      - Adjustment: c
-      
       To estimate the total effect, also adjust for `b` and `c`.
       Currently, the model currently only adjusts for `c`.
       
@@ -99,22 +89,42 @@
     Code
       print(dag)
     Output
-      # Correct adjustments for identifying direct effects
+      # Check for correct adjustment sets
+      - Outcome: y
+      - Exposure: x
+      - Adjustment: c
       
-      Model is correctly specified.
+      Identification of direct effects
+      
+      Incorrectly adjusted!
+      To estimate the direct effect, also adjust for `b` and `c`.
+      Currently, the model currently only adjusts for `c`.
+      
+      Identification of total effects
+      
+      Incorrectly adjusted!
+      To estimate the total effect, also adjust for `b` and `c`.
+      Currently, the model currently only adjusts for `c`.
+      
+
+---
+
+    Code
+      print(dag)
+    Output
+      # Check for correct adjustment sets
       - Outcome: mpg
       - Exposure: wt
       - Adjustments: cyl, disp and gear
       
+      Identification of direct effects
+      
+      Model is correctly specified.
       All minimal sufficient adjustments to estimate the direct effect were done.
       
-      # Correct adjustments for identifying total effects
+      Identification of total effects
       
       Model is correctly specified.
-      - Outcome: mpg
-      - Exposure: wt
-      - Adjustments: cyl, disp and gear
-      
       All minimal sufficient adjustments to estimate the total effect were done.
       
 
