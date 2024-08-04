@@ -4,7 +4,7 @@
 #' @description The purpose of `check_dag()` is to build, check and visualize
 #' your model based on directed acyclic graphs (DAG). The function checks if a
 #' model is correctly adjusted for identifying specific relationships of
-#' variables, especiall directed (maybe also "causal") effects for given
+#' variables, especially directed (maybe also "causal") effects for given
 #' exposures on an outcome. It returns a **dagitty** object that can be
 #' visualized with `plot()`.
 #'
@@ -46,7 +46,7 @@
 #' - Bi-directed paths: Use `~~` to indicate bi-directed paths. For example,
 #'   `Y ~~ X` indicates that the path between `Y` and `X` is bi-directed, and
 #'   the arrow points in both directions. Bi-directed paths often indicate
-#'   unmeasured cause, or umeasured confounding, of the two involved variables.
+#'   unmeasured cause, or unmeasured confounding, of the two involved variables.
 #'
 #' @section Why are DAGs important - the Table 2 fallacy:
 #'
@@ -236,7 +236,7 @@ check_dag.default <- function(...,
   attr(dag, "check_direct") <- insight::compact_list(checks[[1]])
   attr(dag, "check_total") <- insight::compact_list(checks[[2]])
 
-  class(dag) <- c(c("check_dag",  "see_check_dag"), class(dag))
+  class(dag) <- c(c("check_dag", "see_check_dag"), class(dag))
 
   dag
 }

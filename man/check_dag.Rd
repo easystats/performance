@@ -51,7 +51,7 @@ with all functions from the \strong{ggdag} and \strong{dagitty} packages.
 The purpose of \code{check_dag()} is to build, check and visualize
 your model based on directed acyclic graphs (DAG). The function checks if a
 model is correctly adjusted for identifying specific relationships of
-variables, especiall directed (maybe also "causal") effects for given
+variables, especially directed (maybe also "causal") effects for given
 exposures on an outcome. It returns a \strong{dagitty} object that can be
 visualized with \code{plot()}.
 
@@ -74,7 +74,7 @@ both \code{X1} and \code{X2} to \code{Y} are assumed.
 \item Bi-directed paths: Use \verb{~~} to indicate bi-directed paths. For example,
 \code{Y ~~ X} indicates that the path between \code{Y} and \code{X} is bi-directed, and
 the arrow points in both directions. Bi-directed paths often indicate
-unmeasured cause, or umeasured confounding, of the two involved variables.
+unmeasured cause, or unmeasured confounding, of the two involved variables.
 }
 }
 
