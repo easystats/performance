@@ -128,3 +128,54 @@
       All minimal sufficient adjustments to estimate the total effect were done.
       
 
+# check_dag, multiple adjustment sets
+
+    Code
+      print(dag)
+    Output
+      # Check for correct adjustment sets
+      - Outcome: exam
+      - Exposure: podcast
+      
+      Identification of direct effects
+      
+      Incorrectly adjusted!
+      To estimate the direct effect, also adjust for one of the following sets:
+      - alertness, prepared
+      - alertness, skills_course
+      - mood, prepared
+      - mood, skills_course.
+      Currently, the model does not adjust for any variables.
+      
+      Identification of total effects
+      
+      Incorrectly adjusted!
+      To estimate the total effect, also adjust for one of the following sets:
+      - alertness, prepared
+      - alertness, skills_course
+      - mood, prepared
+      - mood, skills_course.
+      Currently, the model does not adjust for any variables.
+      
+
+---
+
+    Code
+      print(dag)
+    Output
+      # Check for correct adjustment sets
+      - Outcome: exam
+      - Exposure: podcast
+      - Adjustments: alertness and prepared
+      
+      Identification of direct effects
+      
+      Model is correctly specified.
+      All minimal sufficient adjustments to estimate the direct effect were done.
+      
+      Identification of total effects
+      
+      Model is correctly specified.
+      All minimal sufficient adjustments to estimate the total effect were done.
+      
+

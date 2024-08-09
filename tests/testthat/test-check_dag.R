@@ -47,7 +47,6 @@ test_that("check_dag", {
     wt ~ disp + cyl,
     wt ~ am
   )
-  dag
   expect_snapshot(print(dag))
 })
 
@@ -64,4 +63,31 @@ test_that("check_dag, cylic error", {
     ),
     regex = "Model is cyclic"
   )
+})
+
+
+test_that("check_dag, multiple adjustment sets", {
+  dag <- check_dag(
+    podcast ~ mood + humor + skills_course,
+    alertness ~ mood,
+    mood ~ humor,
+    prepared ~ skills_course,
+    exam ~ alertness + prepared,
+    coords = ggdag::time_ordered_coords(),
+    exposure = "podcast",
+    outcome = "exam"
+  )
+  expect_snapshot(print(dag))
+  dag <- check_dag(
+    podcast ~ mood + humor + skills_course,
+    alertness ~ mood,
+    mood ~ humor,
+    prepared ~ skills_course,
+    exam ~ alertness + prepared,
+    adjusted = c("alertness", "prepared"),
+    exposure = "podcast",
+    outcome = "exam",
+    coords = ggdag::time_ordered_coords()
+  )
+  expect_snapshot(print(dag))
 })
