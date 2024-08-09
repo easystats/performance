@@ -307,7 +307,7 @@ print.check_dag <- function(x, ...) {
     # options for minimal adjustements, so we check here if any of the minimal
     # adjustements are currently sufficient
     missing_adjustments <- vapply(out$minimal_adjustments, function(i) {
-      !is.null(out$current_adjustments) && all(out$current_adjustments %in% i)
+      !is.null(out$current_adjustments) && all(i %in% out$current_adjustments)
     }, logical(1))
 
     # build message with check results for effects -----------------------
