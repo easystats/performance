@@ -66,6 +66,7 @@
 #' to remove cycles from the model.
 #'
 #' @section Direct and total effects:
+#'
 #' The direct effect of an exposure on an outcome is the effect that is not
 #' mediated by any other variable in the model. The total effect is the sum of
 #' the direct and indirect effects. The function checks if the model is correctly
@@ -413,7 +414,7 @@ print.check_dag <- function(x, ...) {
 
   if (effect %in% c("all", i)) {
     cat(insight::print_color(insight::format_message(
-      paste0("Identification of {.i ", i, "} effects\n\n")
+      paste0("Identification of ", i, " effects\n\n")
     ), "blue"))
     cat(msg)
     cat("\n\n")

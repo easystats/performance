@@ -7,7 +7,7 @@
       - Outcome: y
       - Exposure: x
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Model is correctly specified.
       No adjustment needed to estimate the direct and total effect of `x` on `y`.
@@ -23,7 +23,7 @@
       - Exposure: x
       - Adjustment: b
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Model is correctly specified.
       All minimal sufficient adjustments to estimate the direct and total effect were done.
@@ -38,7 +38,7 @@
       - Outcome: y
       - Exposure: x
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Incorrectly adjusted!
       To estimate the direct and total effect, at least adjust for `b`.
@@ -55,7 +55,7 @@
       - Exposure: x
       - Adjustment: c
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Incorrectly adjusted!
       To estimate the direct and total effect, at least adjust for `b` and `c`.
@@ -72,7 +72,7 @@
       - Exposure: x
       - Adjustment: c
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Incorrectly adjusted!
       To estimate the direct and total effect, at least adjust for `b` and `c`.
@@ -89,7 +89,7 @@
       - Exposure: wt
       - Adjustments: cyl, disp and gear
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Model is correctly specified.
       All minimal sufficient adjustments to estimate the direct and total effect were done.
@@ -104,7 +104,7 @@
       - Outcome: exam
       - Exposure: podcast
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Incorrectly adjusted!
       To estimate the direct and total effect, at least adjust for one of the following sets:
@@ -125,7 +125,7 @@
       - Exposure: podcast
       - Adjustments: alertness and prepared
       
-      Identification of {.i direct and total} effects
+      Identification of direct and total effects
       
       Model is correctly specified.
       All minimal sufficient adjustments to estimate the direct and total effect were done.
