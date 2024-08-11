@@ -322,94 +322,99 @@ print.check_dag <- function(x, ...) {
     } else {
       out <- attributes(x)$check_total
     }
-
-    # missing adjustements - minimal_adjustment can be a list of different
-    # options for minimal adjustements, so we check here if any of the minimal
-    # adjustements are currently sufficient
-    missing_adjustments <- vapply(out$minimal_adjustments, function(i) {
-      !is.null(out$current_adjustments) && all(i %in% out$current_adjustments)
-    }, logical(1))
-
-    # build message with check results for effects -----------------------
-
-    if (isTRUE(out$adjustment_not_needed)) {
-      # Scenario 1: no adjustment needed
-      msg <- paste0(
-        insight::color_text("Model is correctly specified.", "green"),
-        "\nNo adjustment needed to estimate the ", i, " effect of ",
-        datawizard::text_concatenate(attributes(x)$exposure, enclose = "`"),
-        " on `",
-        attributes(x)$outcome,
-        "`."
-      )
-    } else if (isTRUE(out$incorrectly_adjusted)) {
-      # Scenario 2: incorrectly adjusted, adjustments where none is allowed
-      msg <- paste0(
-        insight::color_text("Incorrectly adjusted!", "red"),
-        "\nTo estimate the ", i, " effect, do ",
-        insight::color_text("not", "italic"),
-        " adjust for ",
-        datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
-        "."
-      )
-    } else if (!any(missing_adjustments)) { # nolint
-      # Scenario 3: missing adjustments
-      msg <- paste0(
-        insight::color_text("Incorrectly adjusted!", "red"),
-        "\nTo estimate the ", i, " effect, ",
-        insight::color_text("also", "italic"),
-        " adjust for "
-      )
-      # we may have multiple valid adjustment sets - handle this here
-      if (length(out$minimal_adjustments) > 1) {
-        msg <- paste0(
-          msg,
-          "one of the following sets:\n",
-          insight::color_text(
-            paste(
-              "-",
-              unlist(lapply(out$minimal_adjustments, paste, collapse = ", "), use.names = FALSE),
-              collapse = "\n"
-            ),
-            "yellow"
-          ),
-          "."
-        )
-      } else {
-        msg <- paste0(
-          msg,
-          insight::color_text(datawizard::text_concatenate(
-            unlist(out$minimal_adjustments, use.names = FALSE),
-            enclose = "`"
-          ), "yellow"),
-          "."
-        )
-      }
-      if (is.null(out$current_adjustments)) {
-        msg <- paste0(msg, "\nCurrently, the model does not adjust for any variables.")
-      } else {
-        msg <- paste0(
-          msg, "\nCurrently, the model only adjusts for ",
-          insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "yellow"), "."
-        )
-      }
-    } else {
-      # Scenario 4: correct adjustment
-      msg <- paste0(
-        insight::color_text("Model is correctly specified.", "green"),
-        "\nAll minimal sufficient adjustments to estimate the ", i, " effect were done."
-      )
-    }
-
-    if (effect %in% c("all", i)) {
-      cat(insight::print_color(insight::format_message(
-        paste0("Identification of {.i ", i, "} effects\n\n")
-      ), "blue"))
-      cat(msg)
-      cat("\n\n")
-    }
+    .print_dag_results(out, x, i, effect)
   }
 }
+
+
+.print_dag_results <- function(out, x, i, effect) {
+  # missing adjustements - minimal_adjustment can be a list of different
+  # options for minimal adjustements, so we check here if any of the minimal
+  # adjustments are currently sufficient
+  sufficient_adjustments <- vapply(out$minimal_adjustments, function(min_adj) {
+    !is.null(out$current_adjustments) && all(min_adj %in% out$current_adjustments)
+  }, logical(1))
+
+  # build message with check results for effects -----------------------
+
+  if (isTRUE(out$adjustment_not_needed)) {
+    # Scenario 1: no adjustment needed
+    msg <- paste0(
+      insight::color_text("Model is correctly specified.", "green"),
+      "\nNo adjustment needed to estimate the ", i, " effect of ",
+      datawizard::text_concatenate(attributes(x)$exposure, enclose = "`"),
+      " on `",
+      attributes(x)$outcome,
+      "`."
+    )
+  } else if (isTRUE(out$incorrectly_adjusted)) {
+    # Scenario 2: incorrectly adjusted, adjustments where none is allowed
+    msg <- paste0(
+      insight::color_text("Incorrectly adjusted!", "red"),
+      "\nTo estimate the ", i, " effect, do ",
+      insight::color_text("not", "italic"),
+      " adjust for ",
+      datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
+      "."
+    )
+  } else if (any(sufficient_adjustments)) {
+    # Scenario 3: correct adjustment
+    msg <- paste0(
+      insight::color_text("Model is correctly specified.", "green"),
+      "\nAll minimal sufficient adjustments to estimate the ", i, " effect were done."
+    )
+  } else {
+    # Scenario 4: missing adjustments
+    msg <- paste0(
+      insight::color_text("Incorrectly adjusted!", "red"),
+      "\nTo estimate the ", i, " effect, ",
+      insight::color_text("at least", "italic"),
+      " adjust for "
+    )
+    # we may have multiple valid adjustment sets - handle this here
+    if (length(out$minimal_adjustments) > 1) {
+      msg <- paste0(
+        msg,
+        "one of the following sets:\n",
+        insight::color_text(
+          paste(
+            "-",
+            unlist(lapply(out$minimal_adjustments, paste, collapse = ", "), use.names = FALSE),
+            collapse = "\n"
+          ),
+          "yellow"
+        ),
+        "."
+      )
+    } else {
+      msg <- paste0(
+        msg,
+        insight::color_text(datawizard::text_concatenate(
+          unlist(out$minimal_adjustments, use.names = FALSE),
+          enclose = "`"
+        ), "yellow"),
+        "."
+      )
+    }
+    if (is.null(out$current_adjustments)) {
+      msg <- paste0(msg, "\nCurrently, the model does not adjust for any variables.")
+    } else {
+      msg <- paste0(
+        msg, "\nCurrently, the model only adjusts for ",
+        insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "yellow"), "."
+      )
+    }
+  }
+
+  if (effect %in% c("all", i)) {
+    cat(insight::print_color(insight::format_message(
+      paste0("Identification of {.i ", i, "} effects\n\n")
+    ), "blue"))
+    cat(msg)
+    cat("\n\n")
+  }
+}
+
 
 #' @export
 plot.check_dag <- function(x, ...) {
