@@ -7,15 +7,10 @@
       - Outcome: y
       - Exposure: x
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Model is correctly specified.
-      No adjustment needed to estimate the direct effect of `x` on `y`.
-      
-      Identification of total effects
-      
-      Model is correctly specified.
-      No adjustment needed to estimate the total effect of `x` on `y`.
+      No adjustment needed to estimate the direct and total effect of `x` on `y`.
       
 
 ---
@@ -28,15 +23,10 @@
       - Exposure: x
       - Adjustment: b
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Model is correctly specified.
-      All minimal sufficient adjustments to estimate the direct effect were done.
-      
-      Identification of total effects
-      
-      Model is correctly specified.
-      All minimal sufficient adjustments to estimate the total effect were done.
+      All minimal sufficient adjustments to estimate the direct and total effect were done.
       
 
 ---
@@ -48,16 +38,10 @@
       - Outcome: y
       - Exposure: x
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Incorrectly adjusted!
-      To estimate the direct effect, also adjust for `b`.
-      Currently, the model does not adjust for any variables.
-      
-      Identification of total effects
-      
-      Incorrectly adjusted!
-      To estimate the total effect, also adjust for `b`.
+      To estimate the direct and total effect, at least adjust for `b`.
       Currently, the model does not adjust for any variables.
       
 
@@ -71,16 +55,10 @@
       - Exposure: x
       - Adjustment: c
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Incorrectly adjusted!
-      To estimate the direct effect, also adjust for `b` and `c`.
-      Currently, the model only adjusts for `c`.
-      
-      Identification of total effects
-      
-      Incorrectly adjusted!
-      To estimate the total effect, also adjust for `b` and `c`.
+      To estimate the direct and total effect, at least adjust for `b` and `c`.
       Currently, the model only adjusts for `c`.
       
 
@@ -94,16 +72,10 @@
       - Exposure: x
       - Adjustment: c
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Incorrectly adjusted!
-      To estimate the direct effect, also adjust for `b` and `c`.
-      Currently, the model only adjusts for `c`.
-      
-      Identification of total effects
-      
-      Incorrectly adjusted!
-      To estimate the total effect, also adjust for `b` and `c`.
+      To estimate the direct and total effect, at least adjust for `b` and `c`.
       Currently, the model only adjusts for `c`.
       
 
@@ -117,15 +89,10 @@
       - Exposure: wt
       - Adjustments: cyl, disp and gear
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Model is correctly specified.
-      All minimal sufficient adjustments to estimate the direct effect were done.
-      
-      Identification of total effects
-      
-      Model is correctly specified.
-      All minimal sufficient adjustments to estimate the total effect were done.
+      All minimal sufficient adjustments to estimate the direct and total effect were done.
       
 
 # check_dag, multiple adjustment sets
@@ -137,20 +104,10 @@
       - Outcome: exam
       - Exposure: podcast
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Incorrectly adjusted!
-      To estimate the direct effect, also adjust for one of the following sets:
-      - alertness, prepared
-      - alertness, skills_course
-      - mood, prepared
-      - mood, skills_course.
-      Currently, the model does not adjust for any variables.
-      
-      Identification of total effects
-      
-      Incorrectly adjusted!
-      To estimate the total effect, also adjust for one of the following sets:
+      To estimate the direct and total effect, at least adjust for one of the following sets:
       - alertness, prepared
       - alertness, skills_course
       - mood, prepared
@@ -168,14 +125,9 @@
       - Exposure: podcast
       - Adjustments: alertness and prepared
       
-      Identification of direct effects
+      Identification of {.i direct and total} effects
       
       Model is correctly specified.
-      All minimal sufficient adjustments to estimate the direct effect were done.
-      
-      Identification of total effects
-      
-      Model is correctly specified.
-      All minimal sufficient adjustments to estimate the total effect were done.
+      All minimal sufficient adjustments to estimate the direct and total effect were done.
       
 
