@@ -5,8 +5,10 @@
 #' your model based on directed acyclic graphs (DAG). The function checks if a
 #' model is correctly adjusted for identifying specific relationships of
 #' variables, especially directed (maybe also "causal") effects for given
-#' exposures on an outcome. It returns a **dagitty** object that can be
-#' visualized with `plot()`.
+#' exposures on an outcome. In case of incorrect adjustments, the function
+#' suggest the minimal required variables that should be adjusted for (sometimes
+#' also called "controlled for"), i.e. that need to be included in the model.
+#'  It returns a **dagitty** object that can be visualized with `plot()`.
 #'
 #' `check_dag()` is a convenient wrapper around `ggdag::dagify()`,
 #' `dagitty::adjustmentSets()` and `dagitty::adjustedNodes()` to check correct
@@ -51,6 +53,24 @@
 #'   `Y ~~ X` indicates that the path between `Y` and `X` is bi-directed, and
 #'   the arrow points in both directions. Bi-directed paths often indicate
 #'   unmeasured cause, or unmeasured confounding, of the two involved variables.
+#'
+#' @section Minimally required adjustments:
+#'
+#' The function checks if the model is correctly adjusted for identifying the
+#' direct and total effects of the exposure on the outcome. If the model is
+#' correctly specified, no adjustment is needed to estimate the direct effect.
+#' If the model is not correctly specified, the function suggests the minimal
+#' required variables that should be adjusted for. The function distinguishes
+#' between direct and total effects, and checks if the model is correctly
+#' adjusted for both. If the model is cyclic, the function stops and suggests
+#' to remove cycles from the model.
+#'
+#' @section Direct and total effects:
+#' The direct effect of an exposure on an outcome is the effect that is not
+#' mediated by any other variable in the model. The total effect is the sum of
+#' the direct and indirect effects. The function checks if the model is correctly
+#' adjusted for identifying the direct and total effects of the exposure on the
+#' outcome.
 #'
 #' @section Why are DAGs important - the Table 2 fallacy:
 #'
@@ -332,7 +352,7 @@ print.check_dag <- function(x, ...) {
         datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
         "."
       )
-    } else if (!any(missing_adjustments)) {
+    } else if (!any(missing_adjustments)) { # nolint
       # Scenario 3: missing adjustments
       msg <- paste0(
         insight::color_text("Incorrectly adjusted!", "red"),
