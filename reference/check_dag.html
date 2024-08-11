@@ -31,7 +31,7 @@ dagitty-website.'><meta property="og:image" content="https://easystats.github.io
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -198,6 +198,7 @@ to remove cycles from the model.</p>
     <h2 id="direct-and-total-effects">Direct and total effects<a class="anchor" aria-label="anchor" href="#direct-and-total-effects"></a></h2>
 
 
+
 <p>The direct effect of an exposure on an outcome is the effect that is not
 mediated by any other variable in the model. The total effect is the sum of
 the direct and indirect effects. The function checks if the model is correctly
@@ -244,15 +245,10 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">direct</span><span style="color: #0000BB;"> effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> No adjustment needed to estimate the direct effect of `x` on `y`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">total</span><span style="color: #0000BB;"> effects</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> No adjustment needed to estimate the total effect of `x` on `y`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> No adjustment needed to estimate the direct and total effect of `x` on `y`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># incorrect adjustment</span></span></span>
@@ -267,16 +263,10 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">direct</span><span style="color: #0000BB;"> effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Incorrectly adjusted!</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To estimate the direct effect, <span style="font-style: italic;">also</span> adjust for <span style="color: #BBBB00;">`b`</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Currently, the model does not adjust for any variables.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">total</span><span style="color: #0000BB;"> effects</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Incorrectly adjusted!</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> To estimate the total effect, <span style="font-style: italic;">also</span> adjust for <span style="color: #BBBB00;">`b`</span>.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To estimate the direct and total effect, <span style="font-style: italic;">at least</span> adjust for <span style="color: #BBBB00;">`b`</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Currently, the model does not adjust for any variables.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
@@ -296,15 +286,10 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustment: b</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">direct</span><span style="color: #0000BB;"> effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct effect were done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">total</span><span style="color: #0000BB;"> effects</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the total effect were done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># use specific layout for the DAG</span></span></span>
@@ -342,15 +327,10 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: wt</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustments: cyl, disp and gear</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">direct</span><span style="color: #0000BB;"> effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct effect were done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of </span><span style="color: #0000BB; font-style: italic;">total</span><span style="color: #0000BB;"> effects</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the total effect were done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="check_dag-4.png" alt="" width="700" height="433"></span>
