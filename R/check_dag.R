@@ -316,16 +316,21 @@ print.check_dag <- function(x, ...) {
   cat(exposure_outcome_text)
   cat("\n\n")
 
-  for (i in c("direct", "total")) {
-    if (i == "direct") {
-      out <- attributes(x)$check_direct
-    } else {
-      out <- attributes(x)$check_total
+  # minimal adjustment sets for direct and total effect identical?
+  # Then print only once
+  if (identical(attributes(x)$check_direct$minimal_adjustments, attributes(x)$check_total$minimal_adjustments)) {
+    .print_dag_results(attributes(x)$check_direct, x, "direct and total", "all")
+  } else {
+    for (i in c("direct", "total")) {
+      if (i == "direct") {
+        out <- attributes(x)$check_direct
+      } else {
+        out <- attributes(x)$check_total
+      }
+      .print_dag_results(out, x, i, effect)
     }
-    .print_dag_results(out, x, i, effect)
   }
 }
-
 
 .print_dag_results <- function(out, x, i, effect) {
   # missing adjustements - minimal_adjustment can be a list of different
