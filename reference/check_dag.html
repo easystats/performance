@@ -4,24 +4,30 @@ your model based on directed acyclic graphs (DAG). The function checks if a
 model is correctly adjusted for identifying specific relationships of
 variables, especially directed (maybe also "causal") effects for given
 exposures on an outcome. In case of incorrect adjustments, the function
-suggest the minimal required variables that should be adjusted for (sometimes
-also called "controlled for"), i.e. that need to be included in the model.
-It returns a dagitty object that can be visualized with plot().
+suggests the minimal required variables that should be adjusted for (sometimes
+also called "controlled for"), i.e. variables that at least need to be
+included in the model. Depending on the goal of the analysis, it is still
+possible to add more variables to the model than just the minimally required
+adjustment sets.
 check_dag() is a convenient wrapper around ggdag::dagify(),
 dagitty::adjustmentSets() and dagitty::adjustedNodes() to check correct
-adjustment sets. as.dag() is a small convenient function to return the
+adjustment sets. It returns a dagitty object that can be visualized with
+plot(). as.dag() is a small convenient function to return the
 dagitty-string, which can be used for the online-tool from the
 dagitty-website.'><meta property="og:description" content='The purpose of check_dag() is to build, check and visualize
 your model based on directed acyclic graphs (DAG). The function checks if a
 model is correctly adjusted for identifying specific relationships of
 variables, especially directed (maybe also "causal") effects for given
 exposures on an outcome. In case of incorrect adjustments, the function
-suggest the minimal required variables that should be adjusted for (sometimes
-also called "controlled for"), i.e. that need to be included in the model.
-It returns a dagitty object that can be visualized with plot().
+suggests the minimal required variables that should be adjusted for (sometimes
+also called "controlled for"), i.e. variables that at least need to be
+included in the model. Depending on the goal of the analysis, it is still
+possible to add more variables to the model than just the minimally required
+adjustment sets.
 check_dag() is a convenient wrapper around ggdag::dagify(),
 dagitty::adjustmentSets() and dagitty::adjustedNodes() to check correct
-adjustment sets. as.dag() is a small convenient function to return the
+adjustment sets. It returns a dagitty object that can be visualized with
+plot(). as.dag() is a small convenient function to return the
 dagitty-string, which can be used for the online-tool from the
 dagitty-website.'><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -31,7 +37,7 @@ dagitty-website.'><meta property="og:image" content="https://easystats.github.io
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,12 +90,15 @@ your model based on directed acyclic graphs (DAG). The function checks if a
 model is correctly adjusted for identifying specific relationships of
 variables, especially directed (maybe also "causal") effects for given
 exposures on an outcome. In case of incorrect adjustments, the function
-suggest the minimal required variables that should be adjusted for (sometimes
-also called "controlled for"), i.e. that need to be included in the model.
-It returns a <strong>dagitty</strong> object that can be visualized with <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
+suggests the minimal required variables that should be adjusted for (sometimes
+also called "controlled for"), i.e. variables that <em>at least</em> need to be
+included in the model. Depending on the goal of the analysis, it is still
+possible to add more variables to the model than just the minimally required
+adjustment sets.</p>
 <p><code>check_dag()</code> is a convenient wrapper around <code><a href="https://r-causal.github.io/ggdag/reference/dagify.html" class="external-link">ggdag::dagify()</a></code>,
 <code><a href="https://rdrr.io/pkg/dagitty/man/adjustmentSets.html" class="external-link">dagitty::adjustmentSets()</a></code> and <code><a href="https://rdrr.io/pkg/dagitty/man/VariableStatus.html" class="external-link">dagitty::adjustedNodes()</a></code> to check correct
-adjustment sets. <code>as.dag()</code> is a small convenient function to return the
+adjustment sets. It returns a <strong>dagitty</strong> object that can be visualized with
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. <code>as.dag()</code> is a small convenient function to return the
 dagitty-string, which can be used for the online-tool from the
 dagitty-website.</p>
     </div>
@@ -188,7 +197,7 @@ unmeasured cause, or unmeasured confounding, of the two involved variables.</p><
 <p>The function checks if the model is correctly adjusted for identifying the
 direct and total effects of the exposure on the outcome. If the model is
 correctly specified, no adjustment is needed to estimate the direct effect.
-If the model is not correctly specified, the function suggests the minimal
+If the model is not correctly specified, the function suggests the minimally
 required variables that should be adjusted for. The function distinguishes
 between direct and total effects, and checks if the model is correctly
 adjusted for both. If the model is cyclic, the function stops and suggests
