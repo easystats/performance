@@ -91,3 +91,45 @@ test_that("check_dag, multiple adjustment sets", {
   )
   expect_snapshot(print(dag))
 })
+
+
+test_that("check_dag, different adjustements for total and direct", {
+  dag <- check_dag(
+    outcome ~ exposure + x1 + x2,
+    x2 ~ exposure,
+    exposure ~ x1,
+    outcome = "outcome",
+    exposure = "exposure"
+  )
+  expect_snapshot(print(dag))
+
+  dag <- check_dag(
+    outcome ~ exposure + x1 + x2,
+    x2 ~ exposure,
+    exposure ~ x1,
+    adjusted = "x1",
+    outcome = "outcome",
+    exposure = "exposure"
+  )
+  expect_snapshot(print(dag))
+
+  dag <- check_dag(
+    outcome ~ exposure + x1 + x2,
+    x2 ~ exposure,
+    exposure ~ x1,
+    adjusted = "x2",
+    outcome = "outcome",
+    exposure = "exposure"
+  )
+  expect_snapshot(print(dag))
+
+  dag <- check_dag(
+    outcome ~ exposure + x1 + x2,
+    x2 ~ exposure,
+    exposure ~ x1,
+    adjusted = c("x1", "x2"),
+    outcome = "outcome",
+    exposure = "exposure"
+  )
+  expect_snapshot(print(dag))
+})

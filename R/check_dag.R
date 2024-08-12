@@ -6,13 +6,16 @@
 #' model is correctly adjusted for identifying specific relationships of
 #' variables, especially directed (maybe also "causal") effects for given
 #' exposures on an outcome. In case of incorrect adjustments, the function
-#' suggest the minimal required variables that should be adjusted for (sometimes
-#' also called "controlled for"), i.e. that need to be included in the model.
-#'  It returns a **dagitty** object that can be visualized with `plot()`.
+#' suggests the minimal required variables that should be adjusted for (sometimes
+#' also called "controlled for"), i.e. variables that *at least* need to be
+#' included in the model. Depending on the goal of the analysis, it is still
+#' possible to add more variables to the model than just the minimally required
+#' adjustment sets.
 #'
 #' `check_dag()` is a convenient wrapper around `ggdag::dagify()`,
 #' `dagitty::adjustmentSets()` and `dagitty::adjustedNodes()` to check correct
-#' adjustment sets. `as.dag()` is a small convenient function to return the
+#' adjustment sets. It returns a **dagitty** object that can be visualized with
+#' `plot()`. `as.dag()` is a small convenient function to return the
 #' dagitty-string, which can be used for the online-tool from the
 #' dagitty-website.
 #'
@@ -59,7 +62,7 @@
 #' The function checks if the model is correctly adjusted for identifying the
 #' direct and total effects of the exposure on the outcome. If the model is
 #' correctly specified, no adjustment is needed to estimate the direct effect.
-#' If the model is not correctly specified, the function suggests the minimal
+#' If the model is not correctly specified, the function suggests the minimally
 #' required variables that should be adjusted for. The function distinguishes
 #' between direct and total effects, and checks if the model is correctly
 #' adjusted for both. If the model is cyclic, the function stops and suggests
