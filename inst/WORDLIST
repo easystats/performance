@@ -39,10 +39,12 @@ Chisq
 CochransQ
 CompQuadForm
 Concurvity
+Confounder
 Cribari
 Cronbach's
 Crujeiras
 Csaki
+DAGs
 DBSCAN
 DOI
 Datenerhebung
@@ -162,6 +164,7 @@ Nordhausen
 Normed
 ORCID
 OSF
+OSX
 Olkin
 PNFI
 Pek
@@ -180,6 +183,7 @@ Raudenbush
 Raykov
 Revelle
 Rodríguez
+Rohrer
 Rousseeuw
 Routledge
 SEM
@@ -222,6 +226,7 @@ Vuong
 Vuong's
 WAIC
 Weisberg
+Westreich
 Windmeijer
 Winsorization
 Witten
@@ -232,6 +237,7 @@ Zavoinas
 Zhou
 Zomeren
 Zuur
+acyclic
 afex
 al
 analyse
@@ -250,7 +256,10 @@ brms
 brmsfit
 cauchy
 clusterable
+confounder
+confounders
 concurvity
+dagitty
 datawizard
 dbscan
 der
@@ -267,6 +276,7 @@ fixest
 fpsyg
 gam
 geoms
+ggdag
 ggplot
 gjo
 glm
