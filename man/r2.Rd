@@ -3,12 +3,15 @@
 \name{r2}
 \alias{r2}
 \alias{r2.default}
+\alias{r2.mlm}
 \alias{r2.merMod}
 \title{Compute the model's R2}
 \usage{
 r2(model, ...)
 
 \method{r2}{default}(model, ci = NULL, verbose = TRUE, ...)
+
+\method{r2}{mlm}(model, multivariate = FALSE, ...)
 
 \method{r2}{merMod}(model, ci = NULL, tolerance = 1e-05, ...)
 }
@@ -22,6 +25,9 @@ confidence intervals for R2 are calculated.}
 
 \item{verbose}{Logical. Should details about R2 and CI methods be given
 (\code{TRUE}) or not (\code{FALSE})?}
+
+\item{multivariate}{Logical. Should R2 reported to be by response (FALSE)
+or across responses as computed by \code{\link{r2_mlm}} (TRUE).}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
@@ -70,5 +76,5 @@ r2(model)
 \seealso{
 \code{\link[=r2_bayes]{r2_bayes()}}, \code{\link[=r2_coxsnell]{r2_coxsnell()}}, \code{\link[=r2_kullback]{r2_kullback()}}, \code{\link[=r2_loo]{r2_loo()}},
 \code{\link[=r2_mcfadden]{r2_mcfadden()}}, \code{\link[=r2_nagelkerke]{r2_nagelkerke()}}, \code{\link[=r2_nakagawa]{r2_nakagawa()}}, \code{\link[=r2_tjur]{r2_tjur()}},
-\code{\link[=r2_xu]{r2_xu()}} and \code{\link[=r2_zeroinflated]{r2_zeroinflated()}}.
+\code{\link[=r2_xu]{r2_xu()}}, \code{\link[=r2_zeroinflated]{r2_zeroinflated()}}, and \code{\link[=r2_mlm]{r2_mlm()}}.
 }
