@@ -20,23 +20,24 @@ Calculates two multivariate R2 values for multivariate linear regression.
 \details{
 The two indexes returned summarize model fit for the set of predictors
 given the system of responses. As compared to the default
-\link[=r2]{r2} index, the indexes returned provide a single
-fit value for all responses.
+\link[=r2]{r2} index for multivariate linear models, the indexes
+returned by this function provide a single fit value collapsed across
+all responses.
 
 The two returned indexes were proposed by \emph{Van den Burg and Lewis (1988)}
-as an extension of \emph{Cramer and Nicewander (1979)}. Of the numerous indexes
-proposed across these two papers, and number of other metrics proposed
-elsewhere, only two metrics, the \eqn{R_{xy}} and \eqn{P_{xy}}, are
-recommended for use by \emph{Azen and Budescu (2006)}.
+as an extension of the metrics proposed by \emph{Cramer and Nicewander (1979)}.
+Of the numerous indexes proposed across these two papers, only two metrics,
+the \eqn{R_{xy}} and \eqn{P_{xy}}, are recommended for use
+by \emph{Azen and Budescu (2006)}.
 
 For a multivariate linear regression with \eqn{p} predictors and
-\eqn{q} responses where \eqn{p > q}, \eqn{R_{xy}} index is
+\eqn{q} responses where \eqn{p > q}, the \eqn{R_{xy}} index is
 computed as:
 
 \deqn{R_{xy} = 1 - \prod_{i=1}^p (1 - \rho_i^2)}
 
 Where \eqn{\rho} is a canonical variate from a
-\link[=cancor]{canonical correlations} between the predictors and responses.
+\link[=cancor]{canonical correlation} between the predictors and responses.
 This metric is symmetric and its value does not change when the roles of
 the variables as predictors or responses are swapped.
 

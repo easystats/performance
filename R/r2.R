@@ -10,8 +10,9 @@
 #' (`TRUE`) or not (`FALSE`)?
 #' @param ci Confidence interval level, as scalar. If `NULL` (default), no
 #' confidence intervals for R2 are calculated.
-#' @param multivariate Logical. Should R2 reported to be by response (FALSE)
-#' or across responses as computed by [`r2_mlm`] (TRUE).
+#' @param multivariate Logical. Should R2 reported be by separated by
+#' response (FALSE) or combined across responses as computed by
+#' [`r2_mlm`] (TRUE).
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'

@@ -10,14 +10,15 @@
 #' @details
 #' The two indexes returned summarize model fit for the set of predictors
 #' given the system of responses. As compared to the default
-#' [r2][performance::r2] index, the indexes returned provide a single
-#' fit value for all responses.
+#' [r2][performance::r2] index for multivariate linear models, the indexes
+#' returned by this function provide a single fit value collapsed across
+#' all responses.
 #'
 #' The two returned indexes were proposed by *Van den Burg and Lewis (1988)*
-#' as an extension of *Cramer and Nicewander (1979)*. Of the numerous indexes
-#' proposed across these two papers, and number of other metrics proposed
-#' elsewhere, only two metrics, the \eqn{R_{xy}} and \eqn{P_{xy}}, are
-#' recommended for use by *Azen and Budescu (2006)*.
+#' as an extension of the metrics proposed by *Cramer and Nicewander (1979)*.
+#' Of the numerous indexes proposed across these two papers, only two metrics,
+#' the \eqn{R_{xy}} and \eqn{P_{xy}}, are recommended for use
+#' by *Azen and Budescu (2006)*.
 #'
 #' For a multivariate linear regression with \eqn{p} predictors and
 #' \eqn{q} responses where \eqn{p > q}, the \eqn{R_{xy}} index is
