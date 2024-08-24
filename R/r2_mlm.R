@@ -44,7 +44,6 @@
 #'
 #' @examples
 #' model <- lm(cbind(qsec, drat) ~ wt + mpg + cyl, data = mtcars)
-#' r2(model)
 #' r2_mlm(model)
 #'
 #' model_swap <- lm(cbind(wt, mpg, cyl) ~ qsec + drat, data = mtcars)
@@ -77,9 +76,9 @@ r2_mlm.mlm <- function(model, verbose = TRUE, ...) {
 
   resid_cov <- stats::cov(residuals(model))
   resp_cov <- stats::cov(insight::get_response(model))
-  q <- ncol(insight::get_response(model))
-  V_xy <- q - sum(diag(solve(resp_cov) %*% resid_cov))
-  P_xy <- V_xy/q
+  qq <- ncol(insight::get_response(model))
+  V_xy <- qq - sum(diag(solve(resp_cov) %*% resid_cov))
+  P_xy <- V_xy / qq
 
   c(
     "Symmetric Rxy" = R_xy,

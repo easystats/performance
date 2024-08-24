@@ -52,7 +52,6 @@ depending on which variables are considered predictors versus responses.
 }
 \examples{
 model <- lm(cbind(qsec, drat) ~ wt + mpg + cyl, data = mtcars)
-r2(model)
 r2_mlm(model)
 
 model_swap <- lm(cbind(wt, mpg, cyl) ~ qsec + drat, data = mtcars)

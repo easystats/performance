@@ -70,17 +70,28 @@ print.r2_mlm <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
   is_multivar_r2 <- all(names(x) == c("Symmetric Rxy", "Asymmetric Pxy"))
   if (!is.null(model_type) && !is_multivar_r2) {
-    insight::print_color(sprintf("# R2 for %s Regression\n\n", model_type), "blue")
+    insight::print_color(
+      sprintf("# R2 for %s Regression\n\n", model_type),
+      "blue"
+    )
   } else if (!is.null(model_type) && is_multivar_r2) {
-    insight::print_color(sprintf("# Multivariate R2 for %s Regression\n", model_type), "blue")
+    insight::print_color(
+      sprintf("# Multivariate R2 for %s Regression\n", model_type),
+      "blue"
+    )
   } else {
     insight::print_color("# R2\n\n", "blue")
   }
 
-  if (!is_multivar_r2) {
+  if (is_multivar_r2) {
+    cat(sprintf(" Symmetric Rxy: %.*f", digits, x[["Symmetric Rxy"]]))
+    cat("\n")
+    cat(sprintf("Asymmetric Pxy: %.*f", digits, x[["Asymmetric Pxy"]]))
+    cat("\n\n")
+  } else {
     for (i in names(x)) {
       insight::print_color(sprintf("## %s\n", i), "cyan")
-      out <- paste0(
+      out <- paste(
         c(
           sprintf("        R2: %.*f", digits, x[[i]]$R2),
           sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
@@ -90,11 +101,6 @@ print.r2_mlm <- function(x, digits = 3, ...) {
       cat(out)
       cat("\n\n")
     }
-  } else {
-    cat(sprintf(" Symmetric Rxy: %.*f", digits, x[["Symmetric Rxy"]]))
-    cat("\n")
-    cat(sprintf("Asymmetric Pxy: %.*f", digits, x[["Asymmetric Pxy"]]))
-    cat("\n\n")
   }
   invisible(x)
 }

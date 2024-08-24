@@ -10,9 +10,9 @@
 #' (`TRUE`) or not (`FALSE`)?
 #' @param ci Confidence interval level, as scalar. If `NULL` (default), no
 #' confidence intervals for R2 are calculated.
-#' @param multivariate Logical. Should R2 reported be by separated by
-#' response (FALSE) or combined across responses as computed by
-#' [`r2_mlm`] (TRUE).
+#' @param multivariate Logical. Should multiple R2 values be reported as
+#' separated by response (FALSE) or should a single R2 be reported as
+#' combined across responses computed by [`r2_mlm`] (TRUE).
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'
@@ -250,9 +250,11 @@ r2.aov <- function(model, ci = NULL, ...) {
 
 #' @rdname r2
 #' @export
-r2.mlm <- function(model, multivariate = FALSE, ...) {
+r2.mlm <- function(model, multivariate = TRUE, ...) {
 
-  if (!multivariate) {
+  if (multivariate) {
+    out <- r2_mlm(model)
+  } else {
     model_summary <- summary(model)
 
     out <- lapply(names(model_summary), function(i) {
@@ -268,8 +270,6 @@ r2.mlm <- function(model, multivariate = FALSE, ...) {
     })
 
     names(out) <- names(model_summary)
-  } else {
-    out <- r2_mlm(model)
   }
 
   attr(out, "model_type") <- "Multivariate Linear"

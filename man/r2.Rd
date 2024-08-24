@@ -11,7 +11,7 @@ r2(model, ...)
 
 \method{r2}{default}(model, ci = NULL, verbose = TRUE, ...)
 
-\method{r2}{mlm}(model, multivariate = FALSE, ...)
+\method{r2}{mlm}(model, multivariate = TRUE, ...)
 
 \method{r2}{merMod}(model, ci = NULL, tolerance = 1e-05, ...)
 }
@@ -26,9 +26,9 @@ confidence intervals for R2 are calculated.}
 \item{verbose}{Logical. Should details about R2 and CI methods be given
 (\code{TRUE}) or not (\code{FALSE})?}
 
-\item{multivariate}{Logical. Should R2 reported be by separated by
-response (FALSE) or combined across responses as computed by
-\code{\link{r2_mlm}} (TRUE).}
+\item{multivariate}{Logical. Should multiple R2 values be reported as
+separated by response (FALSE) or should a single R2 be reported as
+combined across responses computed by \code{\link{r2_mlm}} (TRUE).}
 
 \item{tolerance}{Tolerance for singularity check of random effects, to decide
 whether to compute random effect variances for the conditional r-squared
