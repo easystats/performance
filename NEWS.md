@@ -7,7 +7,7 @@
 ## Changes
 
 * `check_heterogeneity_bias()` gets a `nested` argument. Furthermore, `by` can
-  specifiy more than one variable, meaning that nested or cross-classified
+  specify more than one variable, meaning that nested or cross-classified
   model designs can also be tested for heterogeneity bias.
 
 # performance 0.12.2
