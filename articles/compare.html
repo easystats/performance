@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -119,7 +119,7 @@ term for indices of fit).</p>
 <span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <caption>Indices of model performance</caption>
-<thead><tr>
+<thead><tr class="header">
 <th align="left">AIC</th>
 <th align="center">AICc</th>
 <th align="center">BIC</th>
@@ -128,7 +128,7 @@ term for indices of fit).</p>
 <th align="center">RMSE</th>
 <th align="center">Sigma</th>
 </tr></thead>
-<tbody><tr>
+<tbody><tr class="odd">
 <td align="left">160.04</td>
 <td align="center">160.20</td>
 <td align="center">169.07</td>
@@ -157,7 +157,7 @@ function.</p>
 <col width="6%">
 <col width="7%">
 </colgroup>
-<thead><tr>
+<thead><tr class="header">
 <th align="left">Name</th>
 <th align="center">Model</th>
 <th align="center">AIC (weights)</th>
@@ -169,7 +169,7 @@ function.</p>
 <th align="center">Sigma</th>
 </tr></thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td align="left">model1</td>
 <td align="center">lm</td>
 <td align="center">160.0 (&gt;.999)</td>
@@ -180,7 +180,7 @@ function.</p>
 <td align="center">0.40</td>
 <td align="center">0.41</td>
 </tr>
-<tr>
+<tr class="even">
 <td align="left">model2</td>
 <td align="center">lm</td>
 <td align="center">208.2 (&lt;.001)</td>
@@ -191,7 +191,7 @@ function.</p>
 <td align="center">0.47</td>
 <td align="center">0.48</td>
 </tr>
-<tr>
+<tr class="odd">
 <td align="left">model3</td>
 <td align="center">lm</td>
 <td align="center">372.0 (&lt;.001)</td>
@@ -233,7 +233,7 @@ Factors</a> (in Bayesian framework).</p>
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/test_performance.html">test_performance</a></span><span class="op">(</span><span class="va">model1</span>, <span class="va">model2</span>, <span class="va">model3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
-<thead><tr>
+<thead><tr class="header">
 <th align="left">Name</th>
 <th align="right">Model</th>
 <th align="right">BF</th>
@@ -243,7 +243,7 @@ Factors</a> (in Bayesian framework).</p>
 <th align="right">p (LR)</th>
 </tr></thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td align="left">model1</td>
 <td align="right">lm</td>
 <td align="right"></td>
@@ -252,7 +252,7 @@ Factors</a> (in Bayesian framework).</p>
 <td align="right"></td>
 <td align="right"></td>
 </tr>
-<tr>
+<tr class="even">
 <td align="left">model2</td>
 <td align="right">lm</td>
 <td align="right">&lt; 0.001</td>
@@ -261,7 +261,7 @@ Factors</a> (in Bayesian framework).</p>
 <td align="right">4.57</td>
 <td align="right">&lt; .001</td>
 </tr>
-<tr>
+<tr class="odd">
 <td align="left">model3</td>
 <td align="right">lm</td>
 <td align="right">&lt; 0.001</td>
@@ -311,7 +311,7 @@ regression models we just compared:</p>
 <col width="5%">
 <col width="6%">
 </colgroup>
-<thead><tr>
+<thead><tr class="header">
 <th align="left">Name</th>
 <th align="center">Model</th>
 <th align="center">ELPD</th>
@@ -325,7 +325,7 @@ regression models we just compared:</p>
 <th align="center">Sigma</th>
 </tr></thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td align="left">model1</td>
 <td align="center">stanreg</td>
 <td align="center">-80.02</td>
@@ -338,7 +338,7 @@ regression models we just compared:</p>
 <td align="center">0.40</td>
 <td align="center">0.41</td>
 </tr>
-<tr>
+<tr class="even">
 <td align="left">model2</td>
 <td align="center">stanreg</td>
 <td align="center">-104.22</td>
@@ -351,7 +351,7 @@ regression models we just compared:</p>
 <td align="center">0.47</td>
 <td align="center">0.48</td>
 </tr>
-<tr>
+<tr class="odd">
 <td align="left">model3</td>
 <td align="center">stanreg</td>
 <td align="center">-185.70</td>
