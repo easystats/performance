@@ -9,8 +9,24 @@
 #'   that should be checked. If `x` is a mixed model object, this argument
 #'   will be ignored.
 #' @param by Character vector (or formula) with the name of the variable that
-#'   indicates the group- or cluster-ID. If `x` is a model object, this
-#'   argument will be ignored.
+#'   indicates the group- or cluster-ID. For cross-classified or nested designs,
+#'   `by` can also identify two or more variables as group- or cluster-IDs. If
+#'   the data is nested and should be treated as such, set `nested = TRUE`. Else,
+#'   if `by` defines two or more variables and `nested = FALSE`, a cross-classified
+#'   design is assumed. If `x` is a model object, this argument will be ignored.
+#'
+#'   For nested designs, `by` can be:
+#'   - a character vector with the name of the variable that indicates the
+#'     levels, ordered from *highest* level to *lowest* (e.g.
+#'     `by = c("L4", "L3", "L2")`.
+#'   - a character vector with variable names in the format `by = "L4/L3/L2"`,
+#'     where the levels are separated by `/`.
+#'
+#'   See also section _De-meaning for cross-classified designs_ and
+#'   _De-meaning for nested designs_ below.
+#' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
+#'   the data is treated as cross-classified. Only applies if `by` contains more
+#'   than one variable.
 #' @param group Deprecated. Use `by` instead.
 #'
 #' @seealso
@@ -28,7 +44,7 @@
 #' iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
-check_heterogeneity_bias <- function(x, select = NULL, by = NULL, group = NULL) {
+check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE, group = NULL) {
   insight::check_if_installed("datawizard", minimum_version = "0.12.0")
 
   ## TODO: deprecate later
@@ -54,8 +70,14 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, group = NULL) 
     my_data <- x
   }
 
-  unique_groups <- .n_unique(my_data[[by]])
-  combinations <- expand.grid(select, by)
+  # for nested designs?
+  if (nested) {
+    # separate level-indicators with "/", as supported by datawizard
+    by <- paste(by, collapse = "/")
+  }
+
+  # create all combinations that should be checked
+  combinations <- expand.grid(select, by[1])
 
   result <- Map(function(predictor, id) {
     # demean predictor
@@ -72,7 +94,7 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, group = NULL) 
     } else {
       NULL
     }
-  }, as.character(combinations[[1]]), as.character(combinations[[2]]))
+  }, as.character(combinations[[1]]), by)
 
   out <- unlist(insight::compact_list(result), use.names = FALSE)
 
