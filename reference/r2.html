@@ -11,7 +11,7 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.2.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,6 +71,9 @@ R2, pseudo-R2, or marginal / adjusted R2 values are returned.</p>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for class 'mlm'</span></span>
+<span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, multivariate <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for class 'merMod'</span></span>
 <span><span class="fu">r2</span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="cn">NULL</span>, tolerance <span class="op">=</span> <span class="fl">1e-05</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -95,6 +98,12 @@ confidence intervals for R2 are calculated.</p></dd>
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical. Should details about R2 and CI methods be given
 (<code>TRUE</code>) or not (<code>FALSE</code>)?</p></dd>
+
+
+<dt id="arg-multivariate">multivariate<a class="anchor" aria-label="anchor" href="#arg-multivariate"></a></dt>
+<dd><p>Logical. Should multiple R2 values be reported as
+separated by response (FALSE) or should a single R2 be reported as
+combined across responses computed by <code><a href="r2_mlm.html">r2_mlm</a></code> (TRUE).</p></dd>
 
 
 <dt id="arg-tolerance">tolerance<a class="anchor" aria-label="anchor" href="#arg-tolerance"></a></dt>
@@ -127,7 +136,7 @@ to return a "generic" r-quared value, calculated as following:
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="r2_bayes.html">r2_bayes()</a></code>, <code><a href="r2_coxsnell.html">r2_coxsnell()</a></code>, <code><a href="r2_kullback.html">r2_kullback()</a></code>, <code><a href="r2_loo.html">r2_loo()</a></code>,
 <code><a href="r2_mcfadden.html">r2_mcfadden()</a></code>, <code><a href="r2_nagelkerke.html">r2_nagelkerke()</a></code>, <code><a href="r2_nakagawa.html">r2_nakagawa()</a></code>, <code><a href="r2_tjur.html">r2_tjur()</a></code>,
-<code><a href="r2_xu.html">r2_xu()</a></code> and <code><a href="r2_zeroinflated.html">r2_zeroinflated()</a></code>.</p></div>
+<code><a href="r2_xu.html">r2_xu()</a></code>, <code><a href="r2_zeroinflated.html">r2_zeroinflated()</a></code>, and <code><a href="r2_mlm.html">r2_mlm()</a></code>.</p></div>
     </div>
 
     <div class="section level2">
