@@ -126,7 +126,10 @@ print.r2_bayes <- function(x, digits = 3, ...) {
       ci = attributes(x)$CI$R2_Bayes_marginal$CI,
       digits = digits
     )
-    out <- paste0(c(out, sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_Bayes_marginal, r2_marginal_ci)), collapse = "\n")
+    out <- paste(c(
+      out,
+      sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_Bayes_marginal, r2_marginal_ci)
+    ), collapse = "\n")
   }
 
   cat(out)
@@ -155,7 +158,10 @@ print.r2_loo <- function(x, digits = 3, ...) {
       ci = attributes(x)$CI$R2_loo_marginal$CI,
       digits = digits
     )
-    out <- paste0(c(out, sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_loo_marginal, r2_marginal_ci)), collapse = "\n")
+    out <- paste(c(
+      out,
+      sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_loo_marginal, r2_marginal_ci)
+    ), collapse = "\n")
   }
 
   cat(out)
