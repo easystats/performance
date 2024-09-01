@@ -73,9 +73,9 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.13.2),
-    insight (>= 0.20.2),
-    datawizard (>= 0.10.0),
+    bayestestR (>= 0.14.0),
+    insight (>= 0.20.3),
+    datawizard (>= 0.12.2),
     stats,
     utils
 Suggests:
