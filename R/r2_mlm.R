@@ -53,7 +53,7 @@
 #' - Azen, R., & Budescu, D. V. (2006). Comparing predictors in
 #'   multivariate regression models: An extension of dominance analysis.
 #'   Journal of Educational and Behavioral Statistics, 31(2), 157-180.
-#'-  Cramer, E. M., & Nicewander, W. A. (1979). Some symmetric,
+#' -  Cramer, E. M., & Nicewander, W. A. (1979). Some symmetric,
 #'   invariant measures of multivariate association. Psychometrika, 44, 43-54.
 #' - Van den Burg, W., & Lewis, C. (1988). Some properties of two
 #'   measures of multivariate association. Psychometrika, 53, 109-122.
@@ -73,7 +73,7 @@ r2_mlm.mlm <- function(model, verbose = TRUE, ...) {
     insight::get_predictors(model),
     insight::get_response(model)
   )$cor^2
-  R_xy  <- 1 - Reduce(`*`, rho2_vec, 1)
+  R_xy <- 1 - Reduce(`*`, rho2_vec, 1)
 
   resid_cov <- stats::cov(residuals(model))
   resp_cov <- stats::cov(insight::get_response(model))

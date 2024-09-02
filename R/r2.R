@@ -251,7 +251,6 @@ r2.aov <- function(model, ci = NULL, ...) {
 #' @rdname r2
 #' @export
 r2.mlm <- function(model, multivariate = TRUE, ...) {
-
   if (multivariate) {
     out <- r2_mlm(model)
   } else {
