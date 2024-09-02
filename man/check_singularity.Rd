@@ -92,7 +92,7 @@ model <- lme4::lmer(
 )
 check_singularity(model)
 
-\dontru{
+\dontrun{
 # Fixing singularity issues using priors in glmmTMB
 # Example taken from `vignette("priors", package = "glmmTMB")`
 dat <- readRDS(system.file(
