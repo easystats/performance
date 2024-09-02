@@ -92,6 +92,7 @@ model <- lme4::lmer(
 )
 check_singularity(model)
 
+\dontru{
 # Fixing singularity issues using priors in glmmTMB
 # Example taken from `vignette("priors", package = "glmmTMB")`
 dat <- readRDS(system.file(
@@ -115,6 +116,7 @@ prior <- data.frame(
 model_with_priors <- update(model, priors = prior)
 # no singular fit
 check_singularity(model_with_priors)
+}
 \dontshow{\}) # examplesIf}
 }
 \references{

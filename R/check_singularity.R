@@ -97,6 +97,7 @@
 #' )
 #' check_singularity(model)
 #'
+#' \dontru{
 #' # Fixing singularity issues using priors in glmmTMB
 #' # Example taken from `vignette("priors", package = "glmmTMB")`
 #' dat <- readRDS(system.file(
@@ -120,7 +121,7 @@
 #' model_with_priors <- update(model, priors = prior)
 #' # no singular fit
 #' check_singularity(model_with_priors)
-#'
+#' }
 #' @export
 check_singularity <- function(x, tolerance = 1e-5, ...) {
   UseMethod("check_singularity")
