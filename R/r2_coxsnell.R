@@ -8,12 +8,12 @@
 #' @param ... Currently not used.
 #'
 #' @details
-#' This index was proposed by *Cox and Snell (1989, pp. 208-9)* and,
-#' apparently independently, by *Magee (1990)*; but had been suggested
-#' earlier for binary response models by *Maddala (1983)*. However, this
-#' index achieves a maximum of less than 1 for discrete models (i.e. models
-#' whose likelihood is a product of probabilities) which have a maximum of 1,
-#' instead of densities, which can become infinite *(Nagelkerke, 1991)*.
+#' This index was proposed by *Cox and Snell (1989, pp. 208-9)* and, apparently
+#' independently, by *Magee (1990)*; but had been suggested earlier for binary
+#' response models by *Maddala (1983)*. However, this index achieves a maximum
+#' of less than 1 for discrete models (i.e. models whose likelihood is a product
+#' of probabilities) which have a maximum of 1, instead of densities, which can
+#' become infinite *(Nagelkerke, 1991)*.
 #'
 #' @return A named vector with the R2 value.
 #'
@@ -24,12 +24,12 @@
 #' @references
 #' - Cox, D. R., Snell, E. J. (1989). Analysis of binary data (Vol. 32).
 #'   Monographs on Statistics and Applied Probability.
-#' - Magee, L. (1990). R 2 measures based on Wald and likelihood ratio
-#'   joint significance tests. The American Statistician, 44(3), 250-253.
+#' - Magee, L. (1990). R 2 measures based on Wald and likelihood ratio joint
+#'   significance tests. The American Statistician, 44(3), 250-253.
 #' - Maddala, G. S. (1986). Limited-dependent and qualitative variables in
 #'   econometrics (No. 3). Cambridge university press.
-#' - Nagelkerke, N. J. (1991). A note on a general definition of the
-#'   coefficient of determination. Biometrika, 78(3), 691-692.
+#' - Nagelkerke, N. J. (1991). A note on a general definition of the coefficient
+#'   of determination. Biometrika, 78(3), 691-692.
 #'
 #' @export
 r2_coxsnell <- function(model, ...) {

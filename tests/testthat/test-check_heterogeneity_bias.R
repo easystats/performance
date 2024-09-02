@@ -32,3 +32,19 @@ test_that("check_heterogeneity_bias", {
     "Possible heterogeneity bias due to following predictors: Petal\\.Length, Petal\\.Width, Species"
   )
 })
+
+test_that("check_heterogeneity_bias", {
+  skip_if_not_installed("datawizard", minimum_version = "0.12.3")
+  data(efc, package = "datawizard")
+  dat <- na.omit(efc)
+  dat$e42dep <- factor(dat$e42dep)
+  dat$c172code <- factor(dat$c172code)
+
+  out <- check_heterogeneity_bias(
+    dat,
+    select = "c12hour",
+    by = c("e42dep", "c172code"),
+    nested = TRUE
+  )
+  expect_equal(out, "c12hour", ignore_attr = TRUE)
+})

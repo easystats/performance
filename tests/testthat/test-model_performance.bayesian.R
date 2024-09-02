@@ -60,7 +60,7 @@ test_that("model_performance.brmsfit", {
   expect_equal(perf$R2, 0.954538, tolerance = 1e-3)
   expect_equal(perf$R2_adjusted, 0.9529004, tolerance = 1e-3)
   expect_equal(perf$ELPD, -70.40493, tolerance = 1e-3)
-  expect_identical(colnames(perf), c(
+  expect_named(perf, c(
     "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_marginal",
     "R2_adjusted", "R2_adjusted_marginal", "ICC", "RMSE", "Sigma"
   ))
