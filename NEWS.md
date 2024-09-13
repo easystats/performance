@@ -1,3 +1,12 @@
+# performance 0.12.4
+
+## Changes
+
+* `check_dag()` now also checks for colliders, and suggests removing it in the
+  printed output.
+
+* Minor revisions to the printed output of `check_dag()`.
+
 # performance 0.12.3
 
 ## New functions

@@ -247,11 +247,29 @@ check_dag <- function(...,
   checks <- lapply(c("direct", "total"), function(x) {
     adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
     adjustment_nodes <- unlist(dagitty::adjustedNodes(dag), use.names = FALSE)
+    minimal_adjustments <- as.list(dagitty::adjustmentSets(dag, effect = x))
+    collider <- adjustment_nodes[vapply(adjustment_nodes, ggdag::is_collider, logical(1), .dag = dag)]
+    if (!length(collider)) {
+      # if we don't have colliders, set to NULL
+      collider <- NULL
+    } else {
+      # if we *have* colliders, remove them from minimal adjustments
+      minimal_adjustments <- lapply(minimal_adjustments, function(ma) {
+        setdiff(ma, collider)
+      })
+    }
     list(
-      adjustment_not_needed = is.null(adjustment_set) && is.null(adjustment_nodes),
-      incorrectly_adjusted = is.null(adjustment_set) && !is.null(adjustment_nodes),
+      # no adjustment needed when
+      # - required and current adjustment sets are NULL
+      # - AND we have no collider in current adjustments
+      adjustment_not_needed = is.null(adjustment_set) && is.null(adjustment_nodes) && is.null(collider),
+      # incorrect adjustment when
+      # - required is NULL and current adjustment not NULL
+      # - OR we have a collider in current adjustments
+      incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) || (!is.null(collider) && collider %in% adjustment_nodes),
       current_adjustments = adjustment_nodes,
-      minimal_adjustments = as.list(dagitty::adjustmentSets(dag, effect = x))
+      minimal_adjustments = minimal_adjustments,
+      collider = collider
     )
   })
 
@@ -260,6 +278,10 @@ check_dag <- function(...,
   attr(dag, "exposure") <- exposure
   attr(dag, "adjusted") <- adjusted
   attr(dag, "adjustment_sets") <- checks[[1]]$current_adjustments
+  attr(dag, "collider") <- checks[[1]]$collider
+  # remove collider from sub-attributes
+  checks[[1]]$collider <- NULL
+  checks[[2]]$collider <- NULL
   attr(dag, "check_direct") <- insight::compact_list(checks[[1]])
   attr(dag, "check_total") <- insight::compact_list(checks[[2]])
 
@@ -296,6 +318,7 @@ as.dag <- function(x, ...) {
 #' @export
 print.check_dag <- function(x, ...) {
   effect <- attributes(x)$effect
+  collider <- attributes(x)$collider
 
   # header
   cat(insight::print_color("# Check for correct adjustment sets", "blue"))
@@ -317,6 +340,16 @@ print.check_dag <- function(x, ...) {
     )
   }
 
+  # add information on colliders
+  if (!is.null(collider)) {
+    exposure_outcome_text <- paste0(
+      exposure_outcome_text,
+      "\n- Collider",
+      ifelse(length(collider) > 1, "s", ""),
+      ": ", insight::color_text(datawizard::text_concatenate(collider), "cyan")
+    )
+  }
+
   cat(exposure_outcome_text)
   cat("\n\n")
 
@@ -331,12 +364,12 @@ print.check_dag <- function(x, ...) {
       } else {
         out <- attributes(x)$check_total
       }
-      .print_dag_results(out, x, i, effect)
+      .print_dag_results(out, x, i, effect, collider)
     }
   }
 }
 
-.print_dag_results <- function(out, x, i, effect) {
+.print_dag_results <- function(out, x, i, effect, collider = NULL) {
   # missing adjustements - minimal_adjustment can be a list of different
   # options for minimal adjustements, so we check here if any of the minimal
   # adjustments are currently sufficient
@@ -356,8 +389,18 @@ print.check_dag <- function(x, ...) {
       attributes(x)$outcome,
       "`."
     )
+  } else if (!is.null(collider)) {
+    # Scenario 2: adjusted for (downstream) collider
+    msg <- paste0(
+      insight::color_text("Incorrectly adjusted!", "red"),
+      "\nYour model adjusts for a (downstream) collider, ",
+      insight::color_text(datawizard::text_concatenate(collider, enclose = "`"), "cyan"),
+      ". To estimate the ", i, " effect, do ",
+      insight::color_text("not", "italic"),
+      " adjust for it, to avoid collider-bias."
+    )
   } else if (isTRUE(out$incorrectly_adjusted)) {
-    # Scenario 2: incorrectly adjusted, adjustments where none is allowed
+    # Scenario 3: incorrectly adjusted, adjustments where none is allowed
     msg <- paste0(
       insight::color_text("Incorrectly adjusted!", "red"),
       "\nTo estimate the ", i, " effect, do ",
@@ -367,13 +410,13 @@ print.check_dag <- function(x, ...) {
       "."
     )
   } else if (any(sufficient_adjustments)) {
-    # Scenario 3: correct adjustment
+    # Scenario 4: correct adjustment
     msg <- paste0(
       insight::color_text("Model is correctly specified.", "green"),
       "\nAll minimal sufficient adjustments to estimate the ", i, " effect were done."
     )
   } else {
-    # Scenario 4: missing adjustments
+    # Scenario 5: missing adjustments
     msg <- paste0(
       insight::color_text("Incorrectly adjusted!", "red"),
       "\nTo estimate the ", i, " effect, ",
@@ -395,6 +438,7 @@ print.check_dag <- function(x, ...) {
         ),
         "."
       )
+      current_str <- "\nCurrently"
     } else {
       msg <- paste0(
         msg,
@@ -404,14 +448,25 @@ print.check_dag <- function(x, ...) {
         ), "yellow"),
         "."
       )
+      current_str <- " Currently"
     }
     if (is.null(out$current_adjustments)) {
-      msg <- paste0(msg, "\nCurrently, the model does not adjust for any variables.")
+      msg <- paste0(msg, current_str, ", the model does not adjust for any variables.")
     } else {
       msg <- paste0(
-        msg, "\nCurrently, the model only adjusts for ",
-        insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "yellow"), "."
+        msg, current_str, ", the model only adjusts for ",
+        datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
+        "."
       )
+      # check if we could identify missing variables, and if so, add them to the message
+      missing_vars <- setdiff(unlist(out$minimal_adjustments), out$current_adjustments)
+      if (length(missing_vars) > 0) {
+        msg <- paste0(
+          msg, " You possibly also need to adjust for ",
+          insight::color_text(datawizard::text_concatenate(missing_vars, enclose = "`"), "yellow"),
+          " to block biasing paths."
+        )
+      }
     }
   }
 
