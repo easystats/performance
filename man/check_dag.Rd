@@ -100,6 +100,13 @@ required variables that should be adjusted for. The function distinguishes
 between direct and total effects, and checks if the model is correctly
 adjusted for both. If the model is cyclic, the function stops and suggests
 to remove cycles from the model.
+
+Note that it sometimes could be necessary to try out different combinations
+of suggested adjustments, because \code{check_dag()} can not always detect whether
+\emph{at least} one of several variables is required, or whether adjustments should
+be done for \emph{all} listed variables. It can be useful to copy the dagitty-code
+(using \code{as.dag()}, which prints the dagitty-string into the console) into
+the dagitty-website and play around with different adjustments.
 }
 
 \section{Direct and total effects}{

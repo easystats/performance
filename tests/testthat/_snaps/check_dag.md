@@ -227,7 +227,7 @@
       Identification of total effects
       
       Incorrectly adjusted!
-      To estimate the total effect, do not adjust for `x1` and `x2`.
+      To estimate the total effect, do not adjust for some or all of `x1` and `x2`.
       
 
 # check_dag, collider bias
@@ -265,11 +265,11 @@
       Identification of direct effects
       
       Incorrectly adjusted!
-      Your model adjusts for a collider, `sm_h_total_kid`. To estimate the direct effect, do not adjust for it, to avoid collider-bias.
+      Your model adjusts for a potential collider. To estimate the direct effect, do not adjust for `sm_h_total_kid` to avoid collider-bias. It is recommended to double-check for the collider-bias on the dagitty-website.
       
       Identification of total effects
       
       Incorrectly adjusted!
-      Your model adjusts for a collider, `sm_h_total_kid`. To estimate the total effect, do not adjust for it, to avoid collider-bias.
+      Your model adjusts for a potential collider. To estimate the total effect, do not adjust for `sm_h_total_kid` to avoid collider-bias. It is recommended to double-check for the collider-bias on the dagitty-website.
       
 

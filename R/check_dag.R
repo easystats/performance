@@ -68,6 +68,13 @@
 #' adjusted for both. If the model is cyclic, the function stops and suggests
 #' to remove cycles from the model.
 #'
+#' Note that it sometimes could be necessary to try out different combinations
+#' of suggested adjustments, because `check_dag()` can not always detect whether
+#' _at least_ one of several variables is required, or whether adjustments should
+#' be done for _all_ listed variables. It can be useful to copy the dagitty-code
+#' (using `as.dag()`, which prints the dagitty-string into the console) into
+#' the dagitty-website and play around with different adjustments.
+#'
 #' @section Direct and total effects:
 #'
 #' The direct effect of an exposure on an outcome is the effect that is not
@@ -393,11 +400,11 @@ print.check_dag <- function(x, ...) {
     # Scenario 2: adjusted for collider
     msg <- paste0(
       insight::color_text("Incorrectly adjusted!", "red"),
-      "\nYour model adjusts for a collider, ",
-      insight::color_text(datawizard::text_concatenate(collider, enclose = "`"), "cyan"),
-      ". To estimate the ", i, " effect, do ",
+      "\nYour model adjusts for a potential collider. To estimate the ", i, " effect, do ",
       insight::color_text("not", "italic"),
-      " adjust for it, to avoid collider-bias."
+      " adjust for ",
+      insight::color_text(datawizard::text_concatenate(collider, enclose = "`"), "cyan"),
+      " to avoid collider-bias. It is recommended to double-check for the collider-bias on the dagitty-website."
     )
   } else if (isTRUE(out$incorrectly_adjusted)) {
     # Scenario 3: incorrectly adjusted, adjustments where none is allowed
@@ -406,6 +413,7 @@ print.check_dag <- function(x, ...) {
       "\nTo estimate the ", i, " effect, do ",
       insight::color_text("not", "italic"),
       " adjust for ",
+      ifelse(length(out$current_adjustments) > 1, "some or all of ", ""),
       insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "red"),
       "."
     )
