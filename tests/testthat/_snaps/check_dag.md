@@ -88,8 +88,8 @@
       
       Identification of direct and total effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the direct and total effect of `wt` on `mpg`.
+      Incorrectly adjusted!
+      To estimate the direct and total effect, do not adjust for `cyl`, `disp` and `gear`.
       
 
 # check_dag, multiple adjustment sets
@@ -155,13 +155,13 @@
       
       Identification of direct effects
       
-      Incorrectly adjusted!
-      To estimate the direct effect, do not adjust for `x1`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct effect of `exposure` on `outcome`.
       
       Identification of total effects
       
-      Incorrectly adjusted!
-      To estimate the total effect, do not adjust for `x1`.
+      Model is correctly specified.
+      No adjustment needed to estimate the total effect of `exposure` on `outcome`.
       
 
 ---
@@ -176,13 +176,13 @@
       
       Identification of direct effects
       
-      Incorrectly adjusted!
-      To estimate the direct effect, do not adjust for `x2`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct effect of `exposure` on `outcome`.
       
       Identification of total effects
       
-      Incorrectly adjusted!
-      To estimate the total effect, do not adjust for `x2`.
+      Model is correctly specified.
+      No adjustment needed to estimate the total effect of `exposure` on `outcome`.
       
 
 ---
@@ -197,13 +197,13 @@
       
       Identification of direct effects
       
-      Incorrectly adjusted!
-      To estimate the direct effect, do not adjust for `x1` and `x2`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct effect of `exposure` on `outcome`.
       
       Identification of total effects
       
-      Incorrectly adjusted!
-      To estimate the total effect, do not adjust for `x1` and `x2`.
+      Model is correctly specified.
+      No adjustment needed to estimate the total effect of `exposure` on `outcome`.
       
 
 # check_dag, collider bias

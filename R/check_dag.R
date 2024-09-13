@@ -262,13 +262,22 @@ check_dag <- function(...,
         setdiff(ma, collider)
       })
     }
+    # these are required. we make sure that both sets include the exposure
+    # so we can correctly compare required and current sets
+    all_required_adjustments <- sort(unique(c(exposure, adjustment_set)))
+    # this is what we have and which are allow
+    all_allowed_adjustments <- unique(setdiff(c(exposure, adjustment_nodes), collider))
     list(
-      adjustment_not_needed = (is.null(adjustment_set) && is.null(adjustment_nodes) ||
-        (identical(sort(unique(adjustment_set)), sort(unique(setdiff(c(exposure, adjustment_nodes), collider)))))) &&
-        is.null(collider),
-      incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) ||
-        (!identical(sort(unique(adjustment_set)), sort(unique(setdiff(c(exposure, adjustment_nodes), collider))))) ||
-        (!is.null(collider) && collider %in% adjustment_nodes),
+      # no adjustment needed when
+      # - required and current adjustment sets are NULL
+      # - OR required and current adjustments are identical
+      # - AND we have no collider in current adjustments
+      adjustment_not_needed = ((is.null(adjustment_set) && is.null(adjustment_nodes)) || identical(all_required_adjustments, all_allowed_adjustments)) && is.null(collider),
+      # incorrect adjustment when
+      # - required is NULL and current adjustment not NULL
+      # - OR required and current adjustments are *not* identical
+      # - OR we have a collider in current adjustments
+      incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) || !identical(all_required_adjustments, all_allowed_adjustments) || (!is.null(collider) && collider %in% adjustment_nodes),
       current_adjustments = adjustment_nodes,
       minimal_adjustments = minimal_adjustments,
       collider = collider
