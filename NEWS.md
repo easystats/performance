@@ -1,3 +1,9 @@
+# performance 0.12.4
+
+## Changes
+
+* Minor revisions to the printed output of `check_dag()`.
+
 # performance 0.12.3
 
 ## New functions
