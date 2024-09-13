@@ -37,7 +37,7 @@ dagitty-website.'><meta property="og:image" content="https://easystats.github.io
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@ dagitty-website.'><meta property="og:image" content="https://easystats.github.io
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Check correct model adjustment for identifying causal effects</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/v0.12.3/R/check_dag.R" class="external-link"><code>R/check_dag.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/check_dag.R" class="external-link"><code>R/check_dag.R</code></a></small>
       <div class="d-none name"><code>check_dag.Rd</code></div>
     </div>
 
@@ -244,13 +244,21 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># require("ggdag", quietly = TRUE) &amp;&amp; require("dagitty", quietly = TRUE) &amp;&amp; require("see", quietly = TRUE) &amp;&amp; packageVersion("see") &gt; "0.8.5"</span></span></span>
-<span class="r-in"><span><span class="co"># no adjustment needed</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># no adjustment needed</span></span></span>
 <span class="r-in"><span><span class="fu">check_dag</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b</span>,</span></span>
 <span class="r-in"><span>  outcome <span class="op">=</span> <span class="st">"y"</span>,</span></span>
 <span class="r-in"><span>  exposure <span class="op">=</span> <span class="st">"x"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> No adjustment needed to estimate the direct and total effect of `x` on `y`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># incorrect adjustment</span></span></span>
 <span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu">check_dag</span><span class="op">(</span></span></span>
@@ -260,7 +268,17 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-in"><span>  exposure <span class="op">=</span> <span class="st">"x"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dag</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Incorrectly adjusted!</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> To estimate the direct and total effect, <span style="font-style: italic;">at least</span> adjust for <span style="color: #BBBB00;">`b`</span>. Currently, the model does not adjust for any variables.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="check_dag-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># After adjusting for `b`, the model is correctly specified</span></span></span>
 <span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu">check_dag</span><span class="op">(</span></span></span>
@@ -271,6 +289,16 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-in"><span>  adjusted <span class="op">=</span> <span class="st">"b"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dag</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustment: b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># use specific layout for the DAG</span></span></span>
 <span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu">check_dag</span><span class="op">(</span></span></span>
@@ -286,9 +314,11 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="check_dag-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"</span></span></span>
 <span class="r-in"><span><span class="fu">ggdag</span><span class="fu">::</span><span class="fu"><a href="https://r-causal.github.io/ggdag/reference/status.html" class="external-link">ggdag_status</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="check_dag-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using a model object to extract information about outcome,</span></span></span>
 <span class="r-in"><span><span class="co"># exposure and adjusted variables</span></span></span>
@@ -300,8 +330,18 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-in"><span>  <span class="va">wt</span> <span class="op">~</span> <span class="va">am</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dag</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: mpg</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: wt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustments: cyl, disp and gear</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-plt img"><img src="check_dag-4.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

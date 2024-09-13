@@ -9,7 +9,7 @@ beta-regression models)."><meta property="og:image" content="https://easystats.g
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@ beta-regression models)."><meta property="og:image" content="https://easystats.g
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Ferrari's and Cribari-Neto's R2</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/v0.12.3/R/r2_ferarri.R" class="external-link"><code>R/r2_ferarri.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/r2_ferarri.R" class="external-link"><code>R/r2_ferarri.R</code></a></small>
       <div class="d-none name"><code>r2_ferrari.Rd</code></div>
     </div>
 
@@ -102,7 +102,7 @@ and Proportions. Journal of Applied Statistics, 31(7), 799–815.
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"GasolineYield"</span>, package <span class="op">=</span> <span class="st">"betareg"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">betareg</span><span class="fu">::</span><span class="fu"><a href="https://betareg.R-Forge.R-project.org/man/betareg.html" class="external-link">betareg</a></span><span class="op">(</span><span class="va">yield</span> <span class="op">~</span> <span class="va">batch</span> <span class="op">+</span> <span class="va">temp</span>, data <span class="op">=</span> <span class="va">GasolineYield</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">betareg</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/betareg/man/betareg.html" class="external-link">betareg</a></span><span class="op">(</span><span class="va">yield</span> <span class="op">~</span> <span class="va">batch</span> <span class="op">+</span> <span class="va">temp</span>, data <span class="op">=</span> <span class="va">GasolineYield</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">r2_ferrari</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># R2 for Generalized Linear Regression</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Ferrari's R2: 0.962</span>
