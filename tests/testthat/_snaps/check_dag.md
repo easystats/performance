@@ -26,7 +26,7 @@
       Identification of direct and total effects
       
       Model is correctly specified.
-      No adjustment needed to estimate the direct and total effect of `x` on `y`.
+      All minimal sufficient adjustments to estimate the direct and total effect were done.
       
 
 ---
@@ -56,8 +56,8 @@
       
       Identification of direct and total effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the direct and total effect of `x` on `y`.
+      Incorrectly adjusted!
+      To estimate the direct and total effect, at least adjust for `b` and `c`. Currently, the model only adjusts for `c`. You possibly also need to adjust for `b` to block biasing paths.
       
 
 ---
@@ -72,8 +72,8 @@
       
       Identification of direct and total effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the direct and total effect of `x` on `y`.
+      Incorrectly adjusted!
+      To estimate the direct and total effect, at least adjust for `b` and `c`. Currently, the model only adjusts for `c`. You possibly also need to adjust for `b` to block biasing paths.
       
 
 ---
@@ -89,7 +89,7 @@
       Identification of direct and total effects
       
       Model is correctly specified.
-      No adjustment needed to estimate the direct and total effect of `wt` on `mpg`.
+      All minimal sufficient adjustments to estimate the direct and total effect were done.
       
 
 # check_dag, multiple adjustment sets
@@ -120,7 +120,7 @@
       Identification of direct and total effects
       
       Model is correctly specified.
-      No adjustment needed to estimate the direct and total effect of `podcast` on `exam`.
+      All minimal sufficient adjustments to estimate the direct and total effect were done.
       
 
 # check_dag, different adjustements for total and direct
@@ -155,13 +155,13 @@
       
       Identification of direct effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the direct effect of `exposure` on `outcome`.
+      Incorrectly adjusted!
+      To estimate the direct effect, at least adjust for `x1` and `x2`. Currently, the model only adjusts for `x1`. You possibly also need to adjust for `x2` to block biasing paths.
       
       Identification of total effects
       
       Model is correctly specified.
-      No adjustment needed to estimate the total effect of `exposure` on `outcome`.
+      All minimal sufficient adjustments to estimate the total effect were done.
       
 
 ---
@@ -176,13 +176,13 @@
       
       Identification of direct effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the direct effect of `exposure` on `outcome`.
+      Incorrectly adjusted!
+      To estimate the direct effect, at least adjust for `x1` and `x2`. Currently, the model only adjusts for `x2`. You possibly also need to adjust for `x1` to block biasing paths.
       
       Identification of total effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the total effect of `exposure` on `outcome`.
+      Incorrectly adjusted!
+      To estimate the total effect, at least adjust for . Currently, the model only adjusts for `x2`.
       
 
 ---
@@ -198,12 +198,12 @@
       Identification of direct effects
       
       Model is correctly specified.
-      No adjustment needed to estimate the direct effect of `exposure` on `outcome`.
+      All minimal sufficient adjustments to estimate the direct effect were done.
       
       Identification of total effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the total effect of `exposure` on `outcome`.
+      Incorrectly adjusted!
+      To estimate the total effect, at least adjust for . Currently, the model only adjusts for `x1` and `x2`.
       
 
 # check_dag, collider bias
@@ -218,13 +218,13 @@
       
       Identification of direct effects
       
-      Model is correctly specified.
-      No adjustment needed to estimate the direct effect of `agegroup` on `SMD_ICD11`.
+      Incorrectly adjusted!
+      To estimate the direct effect, at least adjust for `edgroup3`, `gender_kid`, `pss4_kid_sum_2sd`, `residence` and `sm_h_total_kid`. Currently, the model only adjusts for `edgroup3`, `gender_kid`, `pss4_kid_sum_2sd` and `residence`. You possibly also need to adjust for `sm_h_total_kid` to block biasing paths.
       
       Identification of total effects
       
       Model is correctly specified.
-      No adjustment needed to estimate the total effect of `agegroup` on `SMD_ICD11`.
+      All minimal sufficient adjustments to estimate the total effect were done.
       
 
 ---

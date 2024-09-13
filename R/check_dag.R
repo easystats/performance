@@ -270,9 +270,8 @@ check_dag <- function(...,
     list(
       # no adjustment needed when
       # - required and current adjustment sets are NULL
-      # - OR required and current adjustments are identical
       # - AND we have no collider in current adjustments
-      adjustment_not_needed = ((is.null(adjustment_set) && is.null(adjustment_nodes)) || identical(all_required_adjustments, all_allowed_adjustments)) && is.null(collider),
+      adjustment_not_needed = is.null(adjustment_set) && is.null(adjustment_nodes) && is.null(collider),
       # incorrect adjustment when
       # - required is NULL and current adjustment not NULL
       # - OR required and current adjustments are *not* identical
