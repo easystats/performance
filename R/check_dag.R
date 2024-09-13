@@ -266,7 +266,7 @@ check_dag <- function(...,
     # so we can correctly compare required and current sets
     all_required_adjustments <- sort(unique(c(exposure, adjustment_set)))
     # this is what we have and which are allow
-    all_allowed_adjustments <- unique(setdiff(c(exposure, adjustment_nodes), collider))
+    all_allowed_adjustments <- sort(unique(setdiff(c(exposure, adjustment_nodes), collider)))
     list(
       # no adjustment needed when
       # - required and current adjustment sets are NULL

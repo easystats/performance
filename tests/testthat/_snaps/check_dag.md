@@ -25,8 +25,8 @@
       
       Identification of direct and total effects
       
-      Incorrectly adjusted!
-      To estimate the direct and total effect, do not adjust for `b`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct and total effect of `x` on `y`.
       
 
 ---
@@ -56,8 +56,8 @@
       
       Identification of direct and total effects
       
-      Incorrectly adjusted!
-      To estimate the direct and total effect, do not adjust for `c`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct and total effect of `x` on `y`.
       
 
 ---
@@ -72,8 +72,8 @@
       
       Identification of direct and total effects
       
-      Incorrectly adjusted!
-      To estimate the direct and total effect, do not adjust for `c`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct and total effect of `x` on `y`.
       
 
 ---
@@ -88,8 +88,8 @@
       
       Identification of direct and total effects
       
-      Incorrectly adjusted!
-      To estimate the direct and total effect, do not adjust for `cyl`, `disp` and `gear`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct and total effect of `wt` on `mpg`.
       
 
 # check_dag, multiple adjustment sets
@@ -119,8 +119,8 @@
       
       Identification of direct and total effects
       
-      Incorrectly adjusted!
-      To estimate the direct and total effect, do not adjust for `alertness` and `prepared`.
+      Model is correctly specified.
+      No adjustment needed to estimate the direct and total effect of `podcast` on `exam`.
       
 
 # check_dag, different adjustements for total and direct
