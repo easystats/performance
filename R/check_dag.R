@@ -274,9 +274,8 @@ check_dag <- function(...,
       adjustment_not_needed = is.null(adjustment_set) && is.null(adjustment_nodes) && is.null(collider),
       # incorrect adjustment when
       # - required is NULL and current adjustment not NULL
-      # - OR required and current adjustments are *not* identical
       # - OR we have a collider in current adjustments
-      incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) || !identical(all_required_adjustments, all_allowed_adjustments) || (!is.null(collider) && collider %in% adjustment_nodes),
+      incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) || (!is.null(collider) && collider %in% adjustment_nodes),
       current_adjustments = adjustment_nodes,
       minimal_adjustments = minimal_adjustments,
       collider = collider
