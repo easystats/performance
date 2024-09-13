@@ -447,6 +447,7 @@ print.check_dag <- function(x, ...) {
         ),
         "."
       )
+      current_str <- "\nCurrently"
     } else {
       msg <- paste0(
         msg,
@@ -456,12 +457,13 @@ print.check_dag <- function(x, ...) {
         ), "yellow"),
         "."
       )
+      current_str <- " Currently"
     }
     if (is.null(out$current_adjustments)) {
-      msg <- paste0(msg, " Currently, the model does not adjust for any variables.")
+      msg <- paste0(msg, current_str, ", the model does not adjust for any variables.")
     } else {
       msg <- paste0(
-        msg, " Currently, the model only adjusts for ",
+        msg, current_str, ", the model only adjusts for ",
         datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
         "."
       )

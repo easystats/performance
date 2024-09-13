@@ -108,7 +108,8 @@
       - alertness, prepared
       - alertness, skills_course
       - mood, prepared
-      - mood, skills_course. Currently, the model does not adjust for any variables.
+      - mood, skills_course.
+      Currently, the model does not adjust for any variables.
       
 
 ---
