@@ -128,6 +128,25 @@
       All minimal sufficient adjustments to estimate the direct and total effect were done.
       
 
+---
+
+    Code
+      print(dag)
+    Output
+      # Check for correct adjustment sets
+      - Outcome: exam
+      - Exposure: podcast
+      - Adjustment: alertness
+      
+      Identification of direct and total effects
+      
+      Incorrectly adjusted!
+      To estimate the direct and total effect, at least adjust for one of the following sets:
+      - alertness, prepared
+      - alertness, skills_course.
+      Currently, the model only adjusts for `alertness`. You possibly also need to adjust for `prepared` and `skills_course` to block biasing paths.
+      
+
 # check_dag, different adjustements for total and direct
 
     Code

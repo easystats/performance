@@ -406,7 +406,7 @@ print.check_dag <- function(x, ...) {
       "\nTo estimate the ", i, " effect, do ",
       insight::color_text("not", "italic"),
       " adjust for ",
-      datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
+      insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "red"),
       "."
     )
   } else if (any(sufficient_adjustments)) {
@@ -463,7 +463,7 @@ print.check_dag <- function(x, ...) {
       if (length(missing_vars) > 0) {
         msg <- paste0(
           msg, " You possibly also need to adjust for ",
-          insight::color_text(datawizard::text_concatenate(missing_vars, enclose = "`"), "yellow"),
+          insight::color_text(datawizard::text_concatenate(missing_vars, enclose = "`"), "green"),
           " to block biasing paths."
         )
       }

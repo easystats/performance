@@ -90,6 +90,18 @@ test_that("check_dag, multiple adjustment sets", {
     coords = ggdag::time_ordered_coords()
   )
   expect_snapshot(print(dag))
+  dag <- check_dag(
+    podcast ~ mood + humor + skills_course,
+    alertness ~ mood,
+    mood ~ humor,
+    prepared ~ skills_course,
+    exam ~ alertness + prepared,
+    coords = ggdag::time_ordered_coords(),
+    adjusted = "alertness",
+    exposure = "podcast",
+    outcome = "exam"
+  )
+  expect_snapshot(print(dag))
 })
 
 
