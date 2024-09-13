@@ -406,12 +406,22 @@ print.check_dag <- function(x, ...) {
       )
     }
     if (is.null(out$current_adjustments)) {
-      msg <- paste0(msg, "\nCurrently, the model does not adjust for any variables.")
+      msg <- paste0(msg, " Currently, the model does not adjust for any variables.")
     } else {
       msg <- paste0(
-        msg, "\nCurrently, the model only adjusts for ",
-        insight::color_text(datawizard::text_concatenate(out$current_adjustments, enclose = "`"), "yellow"), "."
+        msg, " Currently, the model only adjusts for ",
+        datawizard::text_concatenate(out$current_adjustments, enclose = "`"),
+        "."
       )
+      # check if we could identify missing variables, and if so, add them to the message
+      missing_vars <- setdiff(unlist(out$minimal_adjustments), out$current_adjustments)
+      if (length(missing_vars) > 0) {
+        msg <- paste0(
+          msg, " You possibly also need to adjust for ",
+          insight::color_text(datawizard::text_concatenate(missing_vars, enclose = "`"), "yellow"),
+          " to block biasing paths."
+        )
+      }
     }
   }
 
