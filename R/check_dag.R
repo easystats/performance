@@ -245,11 +245,7 @@ check_dag <- function(...,
 
   # data for checking effects
   checks <- lapply(c("direct", "total"), function(x) {
-    if(is.null(adjusted)) {
-      adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
-    } else {
-      adjustment_set <- adjusted
-    }
+    adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
     adjustment_nodes <- unlist(dagitty::adjustedNodes(dag), use.names = FALSE)
     minimal_adjustments <- as.list(dagitty::adjustmentSets(dag, effect = x))
     collider <- adjustment_nodes[vapply(adjustment_nodes, ggdag::is_collider, logical(1), .dag = dag)]
@@ -262,11 +258,6 @@ check_dag <- function(...,
         setdiff(ma, collider)
       })
     }
-    # these are required. we make sure that both sets include the exposure
-    # so we can correctly compare required and current sets
-    all_required_adjustments <- sort(unique(c(exposure, adjustment_set)))
-    # this is what we have and which are allow
-    all_allowed_adjustments <- sort(unique(setdiff(c(exposure, adjustment_nodes), collider)))
     list(
       # no adjustment needed when
       # - required and current adjustment sets are NULL

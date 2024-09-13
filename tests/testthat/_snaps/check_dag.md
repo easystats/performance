@@ -187,7 +187,7 @@
       Identification of total effects
       
       Incorrectly adjusted!
-      To estimate the total effect, at least adjust for . Currently, the model only adjusts for `x2`.
+      To estimate the total effect, do not adjust for `x2`.
       
 
 ---
@@ -208,7 +208,7 @@
       Identification of total effects
       
       Incorrectly adjusted!
-      To estimate the total effect, at least adjust for . Currently, the model only adjusts for `x1` and `x2`.
+      To estimate the total effect, do not adjust for `x1` and `x2`.
       
 
 # check_dag, collider bias
