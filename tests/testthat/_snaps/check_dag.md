@@ -265,11 +265,11 @@
       Identification of direct effects
       
       Incorrectly adjusted!
-      Your model adjusts for a (downstream) collider, `sm_h_total_kid`. To estimate the direct effect, do not adjust for it, to avoid collider-bias.
+      Your model adjusts for a collider, `sm_h_total_kid`. To estimate the direct effect, do not adjust for it, to avoid collider-bias.
       
       Identification of total effects
       
       Incorrectly adjusted!
-      Your model adjusts for a (downstream) collider, `sm_h_total_kid`. To estimate the total effect, do not adjust for it, to avoid collider-bias.
+      Your model adjusts for a collider, `sm_h_total_kid`. To estimate the total effect, do not adjust for it, to avoid collider-bias.
       
 

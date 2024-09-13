@@ -248,7 +248,7 @@ check_dag <- function(...,
     adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
     adjustment_nodes <- unlist(dagitty::adjustedNodes(dag), use.names = FALSE)
     minimal_adjustments <- as.list(dagitty::adjustmentSets(dag, effect = x))
-    collider <- adjustment_nodes[vapply(adjustment_nodes, ggdag::is_collider, logical(1), .dag = dag)]
+    collider <- adjustment_nodes[vapply(adjustment_nodes, ggdag::is_collider, logical(1), .dag = dag, downstream = FALSE)]
     if (!length(collider)) {
       # if we don't have colliders, set to NULL
       collider <- NULL
@@ -356,7 +356,7 @@ print.check_dag <- function(x, ...) {
   # minimal adjustment sets for direct and total effect identical?
   # Then print only once
   if (identical(attributes(x)$check_direct$minimal_adjustments, attributes(x)$check_total$minimal_adjustments)) {
-    .print_dag_results(attributes(x)$check_direct, x, "direct and total", "all")
+    .print_dag_results(attributes(x)$check_direct, x, "direct and total", "all", collider)
   } else {
     for (i in c("direct", "total")) {
       if (i == "direct") {
@@ -390,10 +390,10 @@ print.check_dag <- function(x, ...) {
       "`."
     )
   } else if (!is.null(collider)) {
-    # Scenario 2: adjusted for (downstream) collider
+    # Scenario 2: adjusted for collider
     msg <- paste0(
       insight::color_text("Incorrectly adjusted!", "red"),
-      "\nYour model adjusts for a (downstream) collider, ",
+      "\nYour model adjusts for a collider, ",
       insight::color_text(datawizard::text_concatenate(collider, enclose = "`"), "cyan"),
       ". To estimate the ", i, " effect, do ",
       insight::color_text("not", "italic"),
