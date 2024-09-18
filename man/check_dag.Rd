@@ -173,7 +173,14 @@ check_dag(
   exposure = ~x,
   adjusted = ~ b + c
 )
-dag
+
+# if not provided, "outcome" is taken from first formula, same for "exposure"
+# thus, we can simplify the above expression to
+check_dag(
+  y ~ x + b + c,
+  x ~ b,
+  adjusted = ~ b + c
+)
 
 # use specific layout for the DAG
 dag <- check_dag(

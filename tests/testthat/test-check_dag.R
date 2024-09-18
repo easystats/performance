@@ -185,4 +185,10 @@ test_that("check_dag, formula-interface", {
     adjusted = ~ b + c
   )
   expect_identical(attributes(dag)$adjusted, c("b", "c"))
+  dag2 <- check_dag(
+    y ~ x + b + c,
+    x ~ b,
+    adjusted = ~ b + c
+  )
+  expect_identical(dag, dag2)
 })
