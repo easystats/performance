@@ -37,7 +37,7 @@ dagitty-website.'><meta property="og:image" content="https://easystats.github.io
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -325,11 +325,18 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="va">dag</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># if not provided, "outcome" is taken from first formula, same for "exposure"</span></span></span>
+<span class="r-in"><span><span class="co"># thus, we can simplify the above expression to</span></span></span>
+<span class="r-in"><span><span class="fu">check_dag</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span>,</span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">~</span> <span class="va">b</span>,</span></span>
+<span class="r-in"><span>  adjusted <span class="op">=</span> <span class="op">~</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustment: b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustments: b and c</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
