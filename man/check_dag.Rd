@@ -33,9 +33,9 @@ should be checked. Must be a valid name from the formulas provided in \code{...}
 If not set, the first independent variable from the formulas is used.}
 
 \item{adjusted}{A character vector or formula with names of variables that
-are adjusted for in the model. If a model object is provided in \code{...}, any
-values in \code{adjusted} will be overwritten by the model's independent
-variables.}
+are adjusted for in the model, e.g. \code{adjusted = c("x1", "x2")} or
+\code{adjusted = ~ x1 + x2}. If a model object is provided in \code{...}, any values in
+\code{adjusted} will be overwritten by the model's independent variables.}
 
 \item{latent}{A character vector with names of latent variables in the model.}
 

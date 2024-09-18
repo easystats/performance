@@ -31,9 +31,9 @@
 #' should be checked. Must be a valid name from the formulas provided in `...`.
 #' If not set, the first independent variable from the formulas is used.
 #' @param adjusted A character vector or formula with names of variables that
-#' are adjusted for in the model. If a model object is provided in `...`, any
-#' values in `adjusted` will be overwritten by the model's independent
-#' variables.
+#' are adjusted for in the model, e.g. `adjusted = c("x1", "x2")` or
+#' `adjusted = ~ x1 + x2`. If a model object is provided in `...`, any values in
+#' `adjusted` will be overwritten by the model's independent variables.
 #' @param latent A character vector with names of latent variables in the model.
 #' @param effect Character string, indicating which effect to check. Can be
 #' `"all"` (default), `"total"`, or `"direct"`.
