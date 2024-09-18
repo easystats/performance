@@ -146,6 +146,7 @@ test_that("check_dag, different adjustements for total and direct", {
   expect_snapshot(print(dag))
 })
 
+
 test_that("check_dag, collider bias", {
   dag <- check_dag(
     SMD_ICD11 ~ agegroup + gender_kid + edgroup3 + residence + pss4_kid_sum_2sd + sm_h_total_kid,
@@ -172,4 +173,16 @@ test_that("check_dag, collider bias", {
     exposure = "agegroup"
   )
   expect_snapshot(print(dag))
+})
+
+
+test_that("check_dag, formula-interface", {
+  dag <- check_dag(
+    y ~ x + b + c,
+    x ~ b,
+    outcome = ~y,
+    exposure = ~x,
+    adjusted = ~ b + c
+  )
+  expect_identical(attributes(dag)$adjusted, c("b", "c"))
 })

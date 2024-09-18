@@ -23,16 +23,17 @@
 #' First element may also be model object. If a model objects is provided, its
 #' formula is used as first formula, and all independent variables will be used
 #' for the `adjusted` argument. See 'Details' and 'Examples'.
-#' @param outcome Name of the dependent variable (outcome), as character string.
-#' Must be a valid name from the formulas. If not set, the first dependent
-#' variable from the formulas is used.
-#' @param exposure Name of the exposure variable (as character string), for
-#' which the direct and total causal effect on the `outcome` should be checked.
-#' Must be a valid name from the formulas. If not set, the first independent
-#' variable from the formulas is used.
-#' @param adjusted A character vector with names of variables that are adjusted
-#' for in the model. If a model object is provided in `...`, any values in
-#' `adjusted` will be overwritten by the model's independent variables.
+#' @param outcome Name of the dependent variable (outcome), as character string
+#' or as formula. Must be a valid name from the formulas provided in `...`. If
+#' not set, the first dependent variable from the formulas is used.
+#' @param exposure Name of the exposure variable (as character string or
+#' formula), for which the direct and total causal effect on the `outcome`
+#' should be checked. Must be a valid name from the formulas provided in `...`.
+#' If not set, the first independent variable from the formulas is used.
+#' @param adjusted A character vector or formula with names of variables that
+#' are adjusted for in the model. If a model object is provided in `...`, any
+#' values in `adjusted` will be overwritten by the model's independent
+#' variables.
 #' @param latent A character vector with names of latent variables in the model.
 #' @param effect Character string, indicating which effect to check. Can be
 #' `"all"` (default), `"total"`, or `"direct"`.
@@ -138,6 +139,16 @@
 #' )
 #' dag
 #'
+#' # using formula interface for arguments "outcome", "exposure" and "adjusted"
+#' check_dag(
+#'   y ~ x + b + c,
+#'   x ~ b,
+#'   outcome = ~y,
+#'   exposure = ~x,
+#'   adjusted = ~ b + c
+#' )
+#' dag
+#'
 #' # use specific layout for the DAG
 #' dag <- check_dag(
 #'   score ~ exp + b + c,
@@ -216,6 +227,18 @@ check_dag <- function(...,
       component = "conditional",
       flatten = FALSE
     )$conditional[1]
+  }
+
+  # handle formula interface - if "outcome", "exposure" or "adjusted" are
+  # provided as formulas, convert to character here
+  if (inherits(outcome, "formula")) {
+    outcome <- all.vars(outcome)
+  }
+  if (inherits(exposure, "formula")) {
+    exposure <- all.vars(exposure)
+  }
+  if (inherits(adjusted, "formula")) {
+    adjusted <- all.vars(adjusted)
   }
 
   # convert to dag

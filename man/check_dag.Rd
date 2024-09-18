@@ -23,18 +23,19 @@ First element may also be model object. If a model objects is provided, its
 formula is used as first formula, and all independent variables will be used
 for the \code{adjusted} argument. See 'Details' and 'Examples'.}
 
-\item{outcome}{Name of the dependent variable (outcome), as character string.
-Must be a valid name from the formulas. If not set, the first dependent
-variable from the formulas is used.}
+\item{outcome}{Name of the dependent variable (outcome), as character string
+or as formula. Must be a valid name from the formulas provided in \code{...}. If
+not set, the first dependent variable from the formulas is used.}
 
-\item{exposure}{Name of the exposure variable (as character string), for
-which the direct and total causal effect on the \code{outcome} should be checked.
-Must be a valid name from the formulas. If not set, the first independent
-variable from the formulas is used.}
+\item{exposure}{Name of the exposure variable (as character string or
+formula), for which the direct and total causal effect on the \code{outcome}
+should be checked. Must be a valid name from the formulas provided in \code{...}.
+If not set, the first independent variable from the formulas is used.}
 
-\item{adjusted}{A character vector with names of variables that are adjusted
-for in the model. If a model object is provided in \code{...}, any values in
-\code{adjusted} will be overwritten by the model's independent variables.}
+\item{adjusted}{A character vector or formula with names of variables that
+are adjusted for in the model. If a model object is provided in \code{...}, any
+values in \code{adjusted} will be overwritten by the model's independent
+variables.}
 
 \item{latent}{A character vector with names of latent variables in the model.}
 
@@ -161,6 +162,16 @@ dag <- check_dag(
   outcome = "y",
   exposure = "x",
   adjusted = "b"
+)
+dag
+
+# using formula interface for arguments "outcome", "exposure" and "adjusted"
+check_dag(
+  y ~ x + b + c,
+  x ~ b,
+  outcome = ~y,
+  exposure = ~x,
+  adjusted = ~ b + c
 )
 dag
 
