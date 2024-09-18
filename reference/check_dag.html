@@ -130,21 +130,22 @@ for the <code>adjusted</code> argument. See 'Details' and 'Examples'.</p></dd>
 
 
 <dt id="arg-outcome">outcome<a class="anchor" aria-label="anchor" href="#arg-outcome"></a></dt>
-<dd><p>Name of the dependent variable (outcome), as character string.
-Must be a valid name from the formulas. If not set, the first dependent
-variable from the formulas is used.</p></dd>
+<dd><p>Name of the dependent variable (outcome), as character string
+or as formula. Must be a valid name from the formulas provided in <code>...</code>. If
+not set, the first dependent variable from the formulas is used.</p></dd>
 
 
 <dt id="arg-exposure">exposure<a class="anchor" aria-label="anchor" href="#arg-exposure"></a></dt>
-<dd><p>Name of the exposure variable (as character string), for
-which the direct and total causal effect on the <code>outcome</code> should be checked.
-Must be a valid name from the formulas. If not set, the first independent
-variable from the formulas is used.</p></dd>
+<dd><p>Name of the exposure variable (as character string or
+formula), for which the direct and total causal effect on the <code>outcome</code>
+should be checked. Must be a valid name from the formulas provided in <code>...</code>.
+If not set, the first independent variable from the formulas is used.</p></dd>
 
 
 <dt id="arg-adjusted">adjusted<a class="anchor" aria-label="anchor" href="#arg-adjusted"></a></dt>
-<dd><p>A character vector with names of variables that are adjusted
-for in the model. If a model object is provided in <code>...</code>, any values in
+<dd><p>A character vector or formula with names of variables that
+are adjusted for in the model, e.g. <code>adjusted = c("x1", "x2")</code> or
+<code>adjusted = ~ x1 + x2</code>. If a model object is provided in <code>...</code>, any values in
 <code>adjusted</code> will be overwritten by the model's independent variables.</p></dd>
 
 
@@ -294,6 +295,36 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-in"><span>  exposure <span class="op">=</span> <span class="st">"x"</span>,</span></span>
 <span class="r-in"><span>  adjusted <span class="op">=</span> <span class="st">"b"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dag</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustment: b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># using formula interface for arguments "outcome", "exposure" and "adjusted"</span></span></span>
+<span class="r-in"><span><span class="fu">check_dag</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span>,</span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">~</span> <span class="va">b</span>,</span></span>
+<span class="r-in"><span>  outcome <span class="op">=</span> <span class="op">~</span><span class="va">y</span>,</span></span>
+<span class="r-in"><span>  exposure <span class="op">=</span> <span class="op">~</span><span class="va">x</span>,</span></span>
+<span class="r-in"><span>  adjusted <span class="op">=</span> <span class="op">~</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Exposure: x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Adjustments: b and c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Identification of direct and total effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">Model is correctly specified.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">dag</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Check for correct adjustment sets</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Outcome: y</span>
