@@ -4,7 +4,13 @@
 \alias{check_heterogeneity_bias}
 \title{Check model predictor for heterogeneity bias}
 \usage{
-check_heterogeneity_bias(x, select = NULL, by = NULL, group = NULL)
+check_heterogeneity_bias(
+  x,
+  select = NULL,
+  by = NULL,
+  nested = FALSE,
+  group = NULL
+)
 }
 \arguments{
 \item{x}{A data frame or a mixed model object.}
@@ -14,8 +20,27 @@ that should be checked. If \code{x} is a mixed model object, this argument
 will be ignored.}
 
 \item{by}{Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID. If \code{x} is a model object, this
-argument will be ignored.}
+indicates the group- or cluster-ID. For cross-classified or nested designs,
+\code{by} can also identify two or more variables as group- or cluster-IDs. If
+the data is nested and should be treated as such, set \code{nested = TRUE}. Else,
+if \code{by} defines two or more variables and \code{nested = FALSE}, a cross-classified
+design is assumed. If \code{x} is a model object, this argument will be ignored.
+
+For nested designs, \code{by} can be:
+\itemize{
+\item a character vector with the name of the variable that indicates the
+levels, ordered from \emph{highest} level to \emph{lowest} (e.g.
+\code{by = c("L4", "L3", "L2")}.
+\item a character vector with variable names in the format \code{by = "L4/L3/L2"},
+where the levels are separated by \code{/}.
+}
+
+See also section \emph{De-meaning for cross-classified designs} and
+\emph{De-meaning for nested designs} below.}
+
+\item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
+the data is treated as cross-classified. Only applies if \code{by} contains more
+than one variable.}
 
 \item{group}{Deprecated. Use \code{by} instead.}
 }

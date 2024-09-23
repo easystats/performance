@@ -68,23 +68,39 @@ print.r2_pseudo <- function(x, digits = 3, ...) {
 #' @export
 print.r2_mlm <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
-  if (!is.null(model_type)) {
-    insight::print_color(sprintf("# R2 for %s Regression\n\n", model_type), "blue")
+  is_multivar_r2 <- all(names(x) == c("Symmetric Rxy", "Asymmetric Pxy"))
+  if (!is.null(model_type) && !is_multivar_r2) {
+    insight::print_color(
+      sprintf("# R2 for %s Regression\n\n", model_type),
+      "blue"
+    )
+  } else if (!is.null(model_type) && is_multivar_r2) {
+    insight::print_color(
+      sprintf("# Multivariate R2 for %s Regression\n", model_type),
+      "blue"
+    )
   } else {
     insight::print_color("# R2\n\n", "blue")
   }
 
-  for (i in names(x)) {
-    insight::print_color(sprintf("## %s\n", i), "cyan")
-    out <- paste0(
-      c(
-        sprintf("        R2: %.*f", digits, x[[i]]$R2),
-        sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
-      ),
-      collapse = "\n"
-    )
-    cat(out)
+  if (is_multivar_r2) {
+    cat(sprintf(" Symmetric Rxy: %.*f", digits, x[["Symmetric Rxy"]]))
+    cat("\n")
+    cat(sprintf("Asymmetric Pxy: %.*f", digits, x[["Asymmetric Pxy"]]))
     cat("\n\n")
+  } else {
+    for (i in names(x)) {
+      insight::print_color(sprintf("## %s\n", i), "cyan")
+      out <- paste(
+        c(
+          sprintf("        R2: %.*f", digits, x[[i]]$R2),
+          sprintf("   adj. R2: %.*f", digits, x[[i]]$R2_adjusted)
+        ),
+        collapse = "\n"
+      )
+      cat(out)
+      cat("\n\n")
+    }
   }
   invisible(x)
 }
@@ -110,7 +126,10 @@ print.r2_bayes <- function(x, digits = 3, ...) {
       ci = attributes(x)$CI$R2_Bayes_marginal$CI,
       digits = digits
     )
-    out <- paste0(c(out, sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_Bayes_marginal, r2_marginal_ci)), collapse = "\n")
+    out <- paste(c(
+      out,
+      sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_Bayes_marginal, r2_marginal_ci)
+    ), collapse = "\n")
   }
 
   cat(out)
@@ -139,7 +158,10 @@ print.r2_loo <- function(x, digits = 3, ...) {
       ci = attributes(x)$CI$R2_loo_marginal$CI,
       digits = digits
     )
-    out <- paste0(c(out, sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_loo_marginal, r2_marginal_ci)), collapse = "\n")
+    out <- paste(c(
+      out,
+      sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_loo_marginal, r2_marginal_ci)
+    ), collapse = "\n")
   }
 
   cat(out)

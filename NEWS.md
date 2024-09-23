@@ -1,3 +1,24 @@
+# performance 0.12.4
+
+## Changes
+
+* `check_dag()` now also checks for colliders, and suggests removing it in the
+  printed output.
+
+* Minor revisions to the printed output of `check_dag()`.
+
+# performance 0.12.3
+
+## New functions
+
+* `check_dag()`, to check DAGs for correct adjustment sets.
+
+## Changes
+
+* `check_heterogeneity_bias()` gets a `nested` argument. Furthermore, `by` can
+  specify more than one variable, meaning that nested or cross-classified
+  model designs can also be tested for heterogeneity bias.
+
 # performance 0.12.2
 
 Patch release, to ensure that _performance_ runs with older version of
