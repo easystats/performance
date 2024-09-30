@@ -46,7 +46,7 @@ skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
   test_that("r2 glmmTMB, no ranef", {
-    skip_if_not_installed("glmmTMB")
+    skip_if_not_installed("glmmTMB", minimum_version = "1.1.10")
     data(Owls, package = "glmmTMB")
     # linear ---------------------------------------------------------------
     m <- glmmTMB::glmmTMB(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
