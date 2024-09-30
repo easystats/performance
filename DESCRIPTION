@@ -103,7 +103,7 @@ Suggests:
     ftExtra,
     gamm4,
     ggdag,
-    glmmTMB,
+    glmmTMB (>= 1.1.10),
     graphics,
     Hmisc,
     httr2,
