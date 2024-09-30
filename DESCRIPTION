@@ -48,9 +48,9 @@ Authors@R:
              role = "rev"),
       person(given = "gjo11",
              role = "rev"),
-      person("Etienne",
-             "Bacher", ,
-             "etienne.bacher@protonmail.com",
+      person(given = "Etienne",
+             family = "Bacher", ,
+             email = "etienne.bacher@protonmail.com",
              role = "ctb",
              comment = c(ORCID = "0000-0002-9271-5075")),
       person(given = "Joseph",
@@ -160,4 +160,3 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/insight, easystats/bayestestR, easystats/see, easystats/parameters
