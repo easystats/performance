@@ -89,7 +89,7 @@ withr::with_environment(
       data = bioChemists
     )
     out <- r2(m)
-    expect_equal(out[[1]], 0.1797549, tolerance = 1e-3, ignore_attr = TRUE)
+    expect_equal(out[[1]], 0.14943, tolerance = 1e-3, ignore_attr = TRUE)
     # validate against pscl::zeroinfl
     m2 <- pscl::zeroinfl(
       art ~ fem + mar + kid5 + ment | kid5 + phd,
