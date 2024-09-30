@@ -7,6 +7,10 @@
 
 * Minor revisions to the printed output of `check_dag()`.
 
+## Bug fixes
+
+* Fixed failing tests that broke due to changes in latest *glmmTMB* update.
+
 # performance 0.12.3
 
 ## New functions
