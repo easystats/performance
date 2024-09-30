@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.12.3.3
+Version: 0.12.3.4
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -103,7 +103,7 @@ Suggests:
     ftExtra,
     gamm4,
     ggdag,
-    glmmTMB,
+    glmmTMB (>= 1.1.10),
     graphics,
     Hmisc,
     httr2,
@@ -160,3 +160,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
+Remotes: easystats/insight, easystats/bayestestR, easystats/see, easystats/parameters
