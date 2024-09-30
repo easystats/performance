@@ -46,7 +46,6 @@ skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
   test_that("r2 glmmTMB, no ranef", {
-    skip_if(getRversion() > "4.3.3")
     skip_if_not_installed("glmmTMB")
     data(Owls, package = "glmmTMB")
     # linear ---------------------------------------------------------------
