@@ -42,9 +42,18 @@ are adjusted for in the model, e.g. \code{adjusted = c("x1", "x2")} or
 \item{effect}{Character string, indicating which effect to check. Can be
 \code{"all"} (default), \code{"total"}, or \code{"direct"}.}
 
-\item{coords}{A list with two elements, \code{x} and \code{y}, which both are named
-vectors of numerics. The names correspond to the variable names in the DAG,
-and the values for \code{x} and \code{y} indicate the x/y coordinates in the plot.
+\item{coords}{Coordinates of the variables when plotting the DAG. The
+coordinates can be provided in three different ways:
+\itemize{
+\item a list with two elements, \code{x} and \code{y}, which both are named vectors of
+numerics. The names correspond to the variable names in the DAG, and the
+values for \code{x} and \code{y} indicate the x/y coordinates in the plot.
+\item a list with elements that correspond to the variables in the DAG. Each
+element is a numeric vector of length two with x- and y-coordinate.
+\item a data frame with three columns: \code{x}, \code{y} and \code{name} (which contains the
+variable names).
+}
+
 See 'Examples'.}
 
 \item{x}{An object of class \code{check_dag}, as returned by \code{check_dag()}.}
@@ -137,7 +146,7 @@ adjustments or over-adjustment.
 }
 
 \examples{
-\dontshow{if (require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE) && packageVersion("see") > "0.8.5") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # no adjustment needed
 check_dag(
   y ~ x + b,
@@ -193,6 +202,22 @@ dag <- check_dag(
     x = c(score = 5, exp = 4, b = 3, c = 3),
     # y-coordinates for all nodes
     y = c(score = 3, exp = 3, b = 2, c = 4)
+  )
+)
+plot(dag)
+
+# alternative way of providing the coordinates
+dag <- check_dag(
+  score ~ exp + b + c,
+  exp ~ b,
+  outcome = "score",
+  exposure = "exp",
+  coords = list(
+    # x/y coordinates for each node
+    score = c(5, 3),
+    exp = c(4, 3),
+    b = c(3, 2),
+    c = c(3, 4)
   )
 )
 plot(dag)
