@@ -39,7 +39,7 @@
 #'   Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
 #'   Research and Methods, 3(1), 133–153.
 #'
-#' @examplesIf insight::check_if_installed("datawizard", minimum_version = "0.12.0", quietly = TRUE)
+#' @examplesIf
 #' data(iris)
 #' iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")

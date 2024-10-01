@@ -1,5 +1,4 @@
 test_that("check_heterogeneity_bias", {
-  skip_if_not_installed("datawizard", minimum_version = "0.12.0")
   data(iris)
   set.seed(123)
   iris$ID <- sample.int(4, nrow(iris), replace = TRUE) # fake-ID
