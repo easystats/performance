@@ -265,7 +265,7 @@ performance_aicc.rma <- function(x, ...) {
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
   if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
-    adjustment <- .safe(.ll_analytic_adjustment(model, insight::get_weights(model, na_rm = TRUE)))
+    adjustment <- .safe(.ll_analytic_adjustment(model, insight::get_weights(model, remove_na = TRUE)))
     if (!is.null(adjustment)) {
       ic <- ic - 2 * adjustment
     }
