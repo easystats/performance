@@ -382,7 +382,10 @@ check_dag <- function(...,
   #   x = c(score = 5, exp = 4, b = 3, c = 3),
   #   y = c(score = 3, exp = 3, b = 2, c = 4)
   # )
-  if (!is.null(coords) && !is.data.frame(coords) && (length(coords) != 2 || !identical(names(coords), c("x", "y")))) { # nolint
+  #
+  # we have to check that it's not a data frame and that it is a list -
+  # values like `ggdag::time_ordered_coords()` returns a function, not a list
+  if (!is.null(coords) && !is.data.frame(coords) && is.list(coords) && (length(coords) != 2 || !identical(names(coords), c("x", "y")))) { # nolint
     # transform list into data frame, split x and y coordinates into columns
     coords <- datawizard::rownames_as_column(
       stats::setNames(as.data.frame(do.call(rbind, coords)), c("x", "y")),
