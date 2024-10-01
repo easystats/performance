@@ -37,9 +37,17 @@
 #' @param latent A character vector with names of latent variables in the model.
 #' @param effect Character string, indicating which effect to check. Can be
 #' `"all"` (default), `"total"`, or `"direct"`.
-#' @param coords A list with two elements, `x` and `y`, which both are named
-#' vectors of numerics. The names correspond to the variable names in the DAG,
-#' and the values for `x` and `y` indicate the x/y coordinates in the plot.
+#' @param coords Coordinates of the variables when plotting the DAG. The
+#' coordinates can be provided in three different ways:
+#'
+#' - a list with two elements, `x` and `y`, which both are named vectors of
+#'   numerics. The names correspond to the variable names in the DAG, and the
+#'   values for `x` and `y` indicate the x/y coordinates in the plot.
+#' - a list with elements that correspond to the variables in the DAG. Each
+#'   element is a numeric vector of length two with x- and y-coordinate.
+#' - a data frame with three columns: `x`, `y` and `name` (which contains the
+#'   variable names).
+#'
 #' See 'Examples'.
 #' @param x An object of class `check_dag`, as returned by `check_dag()`.
 #'
@@ -171,6 +179,22 @@
 #' )
 #' plot(dag)
 #'
+#' # alternative way of providing the coordinates
+#' dag <- check_dag(
+#'   score ~ exp + b + c,
+#'   exp ~ b,
+#'   outcome = "score",
+#'   exposure = "exp",
+#'   coords = list(
+#'     # x/y coordinates for each node
+#'     score = c(5, 3),
+#'     exp = c(4, 3),
+#'     b = c(3, 2),
+#'     c = c(3, 4)
+#'   )
+#' )
+#' plot(dag)
+#'
 #' # Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"
 #' ggdag::ggdag_status(dag)
 #'
@@ -247,6 +271,9 @@ check_dag <- function(...,
   if (inherits(adjusted, "formula")) {
     adjusted <- all.vars(adjusted)
   }
+
+  # process coords-argument
+  coords <- .process_coords(coords)
 
   # convert to dag
   dag_args <- c(formulas, list(
@@ -337,6 +364,35 @@ check_dag <- function(...,
     dag <- gsub(paste0("\n", i, " [pos="), paste0("\n", i, " [adjusted,pos="), dag, fixed = TRUE)
   }
   dag
+}
+
+
+.process_coords <- function(coords) {
+  # check if the coords are not provided as list with x/y elements, but instead
+  # x/y coordinates for each element. This means, "coords" is provided as
+  #
+  # coords <- list(
+  #   score = c(5, 3),
+  #   exp = c(4, 3),
+  #   b = c(3, 2),
+  #   c = c(3, 4)
+  # )
+  #
+  # but we want
+  #
+  # coords = list(
+  #   x = c(score = 5, exp = 4, b = 3, c = 3),
+  #   y = c(score = 3, exp = 3, b = 2, c = 4)
+  # )
+  if (!is.null(coords) && (length(coords) != 2 || !identical(names(coords), c("x", "y")))) {
+    # transform list, so we split x and y coordinates. we now have all
+    # x- and y- coordinates in a separate row
+    out <- t(do.call(rbind, coords))
+    # add back to list and name elements
+    coords <- list(out[1, ], out[2, ])
+    names(coords) <- c("x", "y")
+  }
+  coords
 }
 
 
