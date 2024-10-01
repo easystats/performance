@@ -50,11 +50,9 @@ cause a heterogeneity bias, i.e. if variables have a within- and/or
 between-effect (\emph{Bell and Jones, 2015}).
 }
 \examples{
-\dontshow{if () (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(iris)
 iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
-\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{
