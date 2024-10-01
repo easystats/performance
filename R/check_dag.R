@@ -369,7 +369,7 @@ check_dag <- function(...,
 
 .process_coords <- function(coords) {
   # check if the coords are not provided as list with x/y elements, but instead
-  # x/y coordinates for each element. This means, "coords" is provided as
+  # as list x/y coordinates for each element. This means, "coords" is provided as
   #
   # coords <- list(
   #   score = c(5, 3),
@@ -384,7 +384,7 @@ check_dag <- function(...,
   #   x = c(score = 5, exp = 4, b = 3, c = 3),
   #   y = c(score = 3, exp = 3, b = 2, c = 4)
   # )
-  if (!is.null(coords) && (length(coords) != 2 || !identical(names(coords), c("x", "y")))) {
+  if (!is.null(coords) && !is.data.frame(coords) && (length(coords) != 2 || !identical(names(coords), c("x", "y")))) { # nolint
     # transform list into data frame, split x and y coordinates into columns
     coords <- datawizard::rownames_as_column(
       stats::setNames(as.data.frame(do.call(rbind, coords)), c("x", "y")),
