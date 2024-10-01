@@ -159,10 +159,15 @@ are adjusted for in the model, e.g. <code>adjusted = c("x1", "x2")</code> or
 
 
 <dt id="arg-coords">coords<a class="anchor" aria-label="anchor" href="#arg-coords"></a></dt>
-<dd><p>A list with two elements, <code>x</code> and <code>y</code>, which both are named
-vectors of numerics. The names correspond to the variable names in the DAG,
-and the values for <code>x</code> and <code>y</code> indicate the x/y coordinates in the plot.
-See 'Examples'.</p></dd>
+<dd><p>Coordinates of the variables when plotting the DAG. The
+coordinates can be provided in three different ways:</p><ul><li><p>a list with two elements, <code>x</code> and <code>y</code>, which both are named vectors of
+numerics. The names correspond to the variable names in the DAG, and the
+values for <code>x</code> and <code>y</code> indicate the x/y coordinates in the plot.</p></li>
+<li><p>a list with elements that correspond to the variables in the DAG. Each
+element is a numeric vector of length two with x- and y-coordinate.</p></li>
+<li><p>a data frame with three columns: <code>x</code>, <code>y</code> and <code>name</code> (which contains the
+variable names).</p></li>
+</ul><p>See 'Examples'.</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
@@ -360,9 +365,26 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="check_dag-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># alternative way of providing the coordinates</span></span></span>
+<span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu">check_dag</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">score</span> <span class="op">~</span> <span class="va">exp</span> <span class="op">+</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span>,</span></span>
+<span class="r-in"><span>  <span class="va">exp</span> <span class="op">~</span> <span class="va">b</span>,</span></span>
+<span class="r-in"><span>  outcome <span class="op">=</span> <span class="st">"score"</span>,</span></span>
+<span class="r-in"><span>  exposure <span class="op">=</span> <span class="st">"exp"</span>,</span></span>
+<span class="r-in"><span>  coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="co"># x/y coordinates for each node</span></span></span>
+<span class="r-in"><span>    score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    exp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="check_dag-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Objects returned by `check_dag()` can be used with "ggdag" or "dagitty"</span></span></span>
 <span class="r-in"><span><span class="fu">ggdag</span><span class="fu">::</span><span class="fu"><a href="https://r-causal.github.io/ggdag/reference/status.html" class="external-link">ggdag_status</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="check_dag-3.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="check_dag-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Using a model object to extract information about outcome,</span></span></span>
 <span class="r-in"><span><span class="co"># exposure and adjusted variables</span></span></span>
@@ -385,7 +407,7 @@ Epidemiology, 177(4), 292–298. <a href="https://doi.org/10.1093/aje/kws412" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> All minimal sufficient adjustments to estimate the direct and total effect were done.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="check_dag-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="check_dag-5.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
