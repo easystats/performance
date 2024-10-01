@@ -74,8 +74,8 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.14.0),
-    insight (>= 0.20.3),
-    datawizard (>= 0.12.2),
+    insight (>= 0.20.4),
+    datawizard (>= 0.12.3),
     stats,
     utils
 Suggests:
