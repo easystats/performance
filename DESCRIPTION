@@ -160,4 +160,3 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: glmmTMB/glmmTMB/glmmTMB#1102
