@@ -111,22 +111,22 @@ test_that("check_zeroinflation, glmmTMB nbinom", {
   skip_if_not_installed("DHARMa")
   skip_on_cran()
 
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    family = glmmTMB::nbinom1(),
+    data = Salamanders
+  )
   set.seed(1234)
-  dat <- DHARMa::createData(sampleSize = 1000)
-  fit <- suppressWarnings(glmmTMB::glmmTMB(
-    observedResponse ~ Environment1 + (1 | group),
-    data = dat,
-    family = glmmTMB::nbinom1()
-  ))
   expect_equal(
-    check_zeroinflation(fit),
+    check_zeroinflation(m),
     structure(
       list(
-        predicted.zeros = 462,
-        observed.zeros = 482L,
-        ratio = 0.95850622406639,
+        predicted.zeros = 389,
+        observed.zeros = 387L,
+        ratio = 1.00635658914729,
         tolerance = 0.1,
-        p.value = 0.776
+        p.value = 0.944
       ),
       class = "check_zi"
     ),

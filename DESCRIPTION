@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.12.4.1
+Version: 0.12.4.2
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -95,7 +95,7 @@ Suggests:
     cplm,
     dagitty,
     dbscan,
-    DHARMa,
+    DHARMa (>= 0.4.7),
     estimatr,
     fixest,
     flextable,
@@ -129,7 +129,7 @@ Suggests:
     nonnest2,
     ordinal,
     parallel,
-    parameters (>= 0.21.6),
+    parameters (>= 0.22.0),
     patchwork,
     pscl,
     psych,
