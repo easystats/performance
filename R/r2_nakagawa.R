@@ -30,7 +30,7 @@
 #' - Bernoulli (logistic) regression
 #' - Binomial regression (with other than binary outcomes)
 #' - Poisson and Quasi-Poisson regression
-#' - Negative binomial regression (including nbinom1 and nbinom2 families)
+#' - Negative binomial regression (including nbinom1, nbinom2 and nbinom12 families)
 #' - Gaussian regression (linear models)
 #' - Gamma regression
 #' - Tweedie regression
@@ -44,6 +44,7 @@
 #' - Compound Poisson regression
 #' - Generalized Poisson regression
 #' - Log-normal regression
+#' - Skew-normal regression
 #'
 #' Extracting variance components for models with zero-inflation part is not
 #' straightforward, because it is not definitely clear how the distribution-specific

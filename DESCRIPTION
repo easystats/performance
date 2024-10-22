@@ -1,28 +1,28 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.12.3.3
+Version: 0.12.4.2
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
              role = c("aut", "cre"),
              email = "d.luedecke@uke.de",
-             comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
+             comment = c(ORCID = "0000-0002-8895-3206")),
       person(given = "Dominique",
              family = "Makowski",
              role = c("aut", "ctb"),
              email = "dom.makowski@gmail.com",
-             comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
+             comment = c(ORCID = "0000-0001-5375-9967")),
      person(given = "Mattan S.",
              family = "Ben-Shachar",
              role = c("aut", "ctb"),
              email = "matanshm@post.bgu.ac.il",
-             comment = c(ORCID = "0000-0002-4287-4801", Twitter = "@mattansb")),
+             comment = c(ORCID = "0000-0002-4287-4801")),
       person(given = "Indrajeet",
              family = "Patil",
              role = c("aut", "ctb"),
              email = "patilindrajeet.science@gmail.com",
-             comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
+             comment = c(ORCID = "0000-0003-1995-6531")),
       person(given = "Philip",
              family = "Waggoner",
              role = c("aut", "ctb"),
@@ -32,12 +32,12 @@ Authors@R:
              family = "Wiernik",
              role = c("aut", "ctb"),
              email = "brenton@wiernik.org",
-             comment = c(ORCID = "0000-0001-9560-6336", Twitter = "@bmwiernik")),
+             comment = c(ORCID = "0000-0001-9560-6336")),
       person(given = "Rémi",
              family = "Thériault",
              role = c("aut", "ctb"),
              email = "remi.theriault@mail.mcgill.ca",
-             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")),
+             comment = c(ORCID = "0000-0003-4315-6788")),
       person(given = "Vincent",
              family = "Arel-Bundock",
              email = "vincent.arel-bundock@umontreal.ca",
@@ -48,9 +48,9 @@ Authors@R:
              role = "rev"),
       person(given = "gjo11",
              role = "rev"),
-      person("Etienne",
-             "Bacher", ,
-             "etienne.bacher@protonmail.com",
+      person(given = "Etienne",
+             family = "Bacher", ,
+             email = "etienne.bacher@protonmail.com",
              role = "ctb",
              comment = c(ORCID = "0000-0002-9271-5075")),
       person(given = "Joseph",
@@ -73,9 +73,9 @@ BugReports: https://github.com/easystats/performance/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.13.2),
-    insight (>= 0.20.2),
-    datawizard (>= 0.10.0),
+    bayestestR (>= 0.15.0),
+    insight (>= 0.20.5),
+    datawizard (>= 0.13.0),
     stats,
     utils
 Suggests:
@@ -95,7 +95,7 @@ Suggests:
     cplm,
     dagitty,
     dbscan,
-    DHARMa,
+    DHARMa (>= 0.4.7),
     estimatr,
     fixest,
     flextable,
@@ -103,7 +103,7 @@ Suggests:
     ftExtra,
     gamm4,
     ggdag,
-    glmmTMB,
+    glmmTMB (>= 1.1.10),
     graphics,
     Hmisc,
     httr2,
@@ -129,7 +129,7 @@ Suggests:
     nonnest2,
     ordinal,
     parallel,
-    parameters (>= 0.21.6),
+    parameters (>= 0.22.0),
     patchwork,
     pscl,
     psych,
@@ -142,7 +142,7 @@ Suggests:
     rstanarm,
     rstantools,
     sandwich,
-    see (>= 0.8.2),
+    see (>= 0.9.0),
     survey,
     survival,
     testthat (>= 3.2.1),
@@ -160,3 +160,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
+Remotes: easystats/insight

@@ -35,7 +35,6 @@ test_that("check_predictions", {
 
 
 test_that("check_predictions, glmmTMB", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   data(mtcars)
   model <- glmmTMB::glmmTMB(vs ~ disp, data = mtcars, family = binomial())

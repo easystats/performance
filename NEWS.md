@@ -1,3 +1,13 @@
+# performance 0.12.5
+
+## Breaking changes
+
+* Deprecated arguments and alias-function-names have been removed.
+
+## Changes
+
+* Increased accuracy for `check_convergence()` for *glmmTMB* models.
+
 # performance 0.12.4
 
 ## Changes
@@ -6,6 +16,10 @@
   printed output.
 
 * Minor revisions to the printed output of `check_dag()`.
+
+## Bug fixes
+
+* Fixed failing tests that broke due to changes in latest *glmmTMB* update.
 
 # performance 0.12.3
 

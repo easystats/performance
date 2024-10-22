@@ -52,7 +52,6 @@ test_that("`check_model()` works for quantreg", {
 })
 
 test_that("`check_model()` warnings for tweedie", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("lme4")
   data(sleepstudy, package = "lme4")

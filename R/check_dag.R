@@ -37,9 +37,17 @@
 #' @param latent A character vector with names of latent variables in the model.
 #' @param effect Character string, indicating which effect to check. Can be
 #' `"all"` (default), `"total"`, or `"direct"`.
-#' @param coords A list with two elements, `x` and `y`, which both are named
-#' vectors of numerics. The names correspond to the variable names in the DAG,
-#' and the values for `x` and `y` indicate the x/y coordinates in the plot.
+#' @param coords Coordinates of the variables when plotting the DAG. The
+#' coordinates can be provided in three different ways:
+#'
+#' - a list with two elements, `x` and `y`, which both are named vectors of
+#'   numerics. The names correspond to the variable names in the DAG, and the
+#'   values for `x` and `y` indicate the x/y coordinates in the plot.
+#' - a list with elements that correspond to the variables in the DAG. Each
+#'   element is a numeric vector of length two with x- and y-coordinate.
+#' - a data frame with three columns: `x`, `y` and `name` (which contains the
+#'   variable names).
+#'
 #' See 'Examples'.
 #' @param x An object of class `check_dag`, as returned by `check_dag()`.
 #'
@@ -111,7 +119,7 @@
 #'   Interpreting Confounder and Modifier Coefficients. American Journal of
 #'   Epidemiology, 177(4), 292–298. \doi{10.1093/aje/kws412}
 #'
-#' @examplesIf require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE) && packageVersion("see") > "0.8.5"
+#' @examplesIf require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE)
 #' # no adjustment needed
 #' check_dag(
 #'   y ~ x + b,
@@ -167,6 +175,22 @@
 #'     x = c(score = 5, exp = 4, b = 3, c = 3),
 #'     # y-coordinates for all nodes
 #'     y = c(score = 3, exp = 3, b = 2, c = 4)
+#'   )
+#' )
+#' plot(dag)
+#'
+#' # alternative way of providing the coordinates
+#' dag <- check_dag(
+#'   score ~ exp + b + c,
+#'   exp ~ b,
+#'   outcome = "score",
+#'   exposure = "exp",
+#'   coords = list(
+#'     # x/y coordinates for each node
+#'     score = c(5, 3),
+#'     exp = c(4, 3),
+#'     b = c(3, 2),
+#'     c = c(3, 4)
 #'   )
 #' )
 #' plot(dag)
@@ -248,6 +272,9 @@ check_dag <- function(...,
     adjusted <- all.vars(adjusted)
   }
 
+  # process coords-argument
+  coords <- .process_coords(coords)
+
   # convert to dag
   dag_args <- c(formulas, list(
     exposure = exposure,
@@ -285,15 +312,13 @@ check_dag <- function(...,
     adjustment_set <- unlist(dagitty::adjustmentSets(dag, effect = x), use.names = FALSE)
     adjustment_nodes <- unlist(dagitty::adjustedNodes(dag), use.names = FALSE)
     minimal_adjustments <- as.list(dagitty::adjustmentSets(dag, effect = x))
-    collider <- adjustment_nodes[vapply(adjustment_nodes, ggdag::is_collider, logical(1), .dag = dag, downstream = FALSE)]
-    if (!length(collider)) {
+    collider <- adjustment_nodes[vapply(adjustment_nodes, ggdag::is_collider, logical(1), .dag = dag, downstream = FALSE)] # nolint
+    if (length(collider)) {
+      # if we *have* colliders, remove them from minimal adjustments
+      minimal_adjustments <- lapply(minimal_adjustments, setdiff, y = collider)
+    } else {
       # if we don't have colliders, set to NULL
       collider <- NULL
-    } else {
-      # if we *have* colliders, remove them from minimal adjustments
-      minimal_adjustments <- lapply(minimal_adjustments, function(ma) {
-        setdiff(ma, collider)
-      })
     }
     list(
       # no adjustment needed when
@@ -303,7 +328,7 @@ check_dag <- function(...,
       # incorrect adjustment when
       # - required is NULL and current adjustment not NULL
       # - OR we have a collider in current adjustments
-      incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) || (!is.null(collider) && collider %in% adjustment_nodes),
+      incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) || (!is.null(collider) && collider %in% adjustment_nodes), # nolint
       current_adjustments = adjustment_nodes,
       minimal_adjustments = minimal_adjustments,
       collider = collider
@@ -337,6 +362,39 @@ check_dag <- function(...,
     dag <- gsub(paste0("\n", i, " [pos="), paste0("\n", i, " [adjusted,pos="), dag, fixed = TRUE)
   }
   dag
+}
+
+
+.process_coords <- function(coords) {
+  # check if the coords are not provided as list with x/y elements, but instead
+  # as list x/y coordinates for each element. This means, "coords" is provided as
+  #
+  # coords <- list(
+  #   score = c(5, 3),
+  #   exp = c(4, 3),
+  #   b = c(3, 2),
+  #   c = c(3, 4)
+  # )
+  #
+  # but we want
+  #
+  # coords = list(
+  #   x = c(score = 5, exp = 4, b = 3, c = 3),
+  #   y = c(score = 3, exp = 3, b = 2, c = 4)
+  # )
+  #
+  # we have to check that it's not a data frame and that it is a list -
+  # values like `ggdag::time_ordered_coords()` returns a function, not a list
+  if (!is.null(coords) && !is.data.frame(coords) && is.list(coords) && (length(coords) != 2 || !identical(names(coords), c("x", "y")))) { # nolint
+    # transform list into data frame, split x and y coordinates into columns
+    coords <- datawizard::rownames_as_column(
+      stats::setNames(as.data.frame(do.call(rbind, coords)), c("x", "y")),
+      "name"
+    )
+    # reorder
+    coords <- coords[c("x", "y", "name")]
+  }
+  coords
 }
 
 

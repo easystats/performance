@@ -4,13 +4,7 @@
 \alias{check_heterogeneity_bias}
 \title{Check model predictor for heterogeneity bias}
 \usage{
-check_heterogeneity_bias(
-  x,
-  select = NULL,
-  by = NULL,
-  nested = FALSE,
-  group = NULL
-)
+check_heterogeneity_bias(x, select = NULL, by = NULL, nested = FALSE)
 }
 \arguments{
 \item{x}{A data frame or a mixed model object.}
@@ -41,8 +35,6 @@ See also section \emph{De-meaning for cross-classified designs} and
 \item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
 the data is treated as cross-classified. Only applies if \code{by} contains more
 than one variable.}
-
-\item{group}{Deprecated. Use \code{by} instead.}
 }
 \description{
 \code{check_heterogeneity_bias()} checks if model predictors or variables may
@@ -50,11 +42,9 @@ cause a heterogeneity bias, i.e. if variables have a within- and/or
 between-effect (\emph{Bell and Jones, 2015}).
 }
 \examples{
-\dontshow{if (insight::check_if_installed("datawizard", minimum_version = "0.12.0", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(iris)
 iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
-\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

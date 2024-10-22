@@ -27,7 +27,6 @@
 #' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
 #'   the data is treated as cross-classified. Only applies if `by` contains more
 #'   than one variable.
-#' @param group Deprecated. Use `by` instead.
 #'
 #' @seealso
 #' For further details, read the vignette
@@ -39,19 +38,13 @@
 #'   Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
 #'   Research and Methods, 3(1), 133–153.
 #'
-#' @examplesIf insight::check_if_installed("datawizard", minimum_version = "0.12.0", quietly = TRUE)
+#' @examples
 #' data(iris)
 #' iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
-check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE, group = NULL) {
+check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE) {
   insight::check_if_installed("datawizard", minimum_version = "0.12.0")
-
-  ## TODO: deprecate later
-  if (!is.null(group)) {
-    insight::format_warning("Argument `group` is deprecated and will be removed in a future release. Please use `by` instead.") # nolint
-    by <- group
-  }
 
   if (insight::is_model(x)) {
     by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)

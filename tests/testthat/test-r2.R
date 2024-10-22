@@ -46,8 +46,7 @@ skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
   test_that("r2 glmmTMB, no ranef", {
-    skip_if(getRversion() > "4.3.3")
-    skip_if_not_installed("glmmTMB")
+    skip_if_not_installed("glmmTMB", minimum_version = "1.1.10")
     data(Owls, package = "glmmTMB")
     # linear ---------------------------------------------------------------
     m <- glmmTMB::glmmTMB(NegPerChick ~ BroodSize + ArrivalTime, data = Owls)
@@ -80,6 +79,7 @@ withr::with_environment(
     out2 <- r2(m2)
     expect_equal(out[[1]], out2[[1]], tolerance = 1e-3, ignore_attr = TRUE)
     # zero-inflated --------------------------------------------------------------
+    skip_if_not(packageVersion("glmmTMB") > "1.1.10")
     skip_if_not_installed("pscl")
     data(bioChemists, package = "pscl")
     m <- glmmTMB::glmmTMB(

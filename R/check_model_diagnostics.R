@@ -478,7 +478,7 @@
   if (!is.na(match(faminfo$family, c("binomial", "poisson", "truncated_poisson")))) {
     return(1)
   }
-  betad <- model$fit$par["betad"]
+  betad <- model$fit$par["betadisp"]
   switch(faminfo$family,
     gaussian = exp(0.5 * betad),
     Gamma = exp(-0.5 * betad),

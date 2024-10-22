@@ -29,7 +29,7 @@ test_that("check_singularity", {
     newparam = list(
       beta = 0,
       theta = rep(0, 21),
-      betad = 0
+      betadisp = 0
     )
   )[[1]]
   expect_warning(expect_warning({
