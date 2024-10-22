@@ -28,6 +28,9 @@
 #' scale. To get back to the original scale, the likelihood of the model is
 #' multiplied by the Jacobian/derivative of the transformation.
 #'
+#' In case it is not possible to return the corrected AIC value, a waring
+#' is given that the corrected log-likelihood value could not be computed.
+#'
 #' @references
 #' - Akaike, H. (1973) Information theory as an extension of the maximum
 #' likelihood principle. In: Second International Symposium on Information
@@ -52,6 +55,13 @@
 #' # performance_aic() correctly detects transformed response and
 #' # returns corrected AIC
 #' performance_aic(model)
+#'
+#' \dontrun{
+#' # there are a few exceptions where the corrected log-likelihood values
+#' # cannot be returned. The following exampe gives a warning.
+#' model <- lm(1 / mpg ~ factor(cyl), mtcars)
+#' performance_aic(model)
+#' }
 #' @export
 performance_aicc <- function(x, ...) {
   UseMethod("performance_aicc")
