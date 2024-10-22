@@ -65,9 +65,10 @@
 #' @export
 simulate_residuals <- function(x, iterations = 250, ...) {
   insight::check_if_installed("DHARMa")
-  # TODO (low priority): Note that DHARMa::simulateResiduals(x, ...) does its own checks for whether
-  # or not the model passed to it is supported, do we want to use this or do our
-  # own checks so we can supply our own error message?
+  # TODO (low priority): Note that DHARMa::simulateResiduals(x, ...) does its
+  # own checks for whether or not the model passed to it is supported, do we
+  # want to use this or do our own checks so we can supply our own error
+  # message?
   if (iterations < 2) {
     insight::format_error("`iterations` must be at least 2.")
   }
