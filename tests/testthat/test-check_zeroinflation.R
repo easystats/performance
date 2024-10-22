@@ -122,11 +122,11 @@ test_that("check_zeroinflation, glmmTMB nbinom", {
     check_zeroinflation(fit),
     structure(
       list(
-        predicted.zeros = 462,
-        observed.zeros = 482L,
-        ratio = 0.95850622406639,
+        predicted.zeros = 424,
+        observed.zeros = 401L,
+        ratio = 1.05636907730673,
         tolerance = 0.1,
-        p.value = 0.776
+        p.value = 0.784
       ),
       class = "check_zi"
     ),
