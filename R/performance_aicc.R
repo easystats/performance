@@ -28,7 +28,7 @@
 #' scale. To get back to the original scale, the likelihood of the model is
 #' multiplied by the Jacobian/derivative of the transformation.
 #'
-#' In case it is not possible to return the corrected AIC value, a waring
+#' In case it is not possible to return the corrected AIC value, a warning
 #' is given that the corrected log-likelihood value could not be computed.
 #'
 #' @references
