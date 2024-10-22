@@ -4,13 +4,7 @@
 \alias{check_heterogeneity_bias}
 \title{Check model predictor for heterogeneity bias}
 \usage{
-check_heterogeneity_bias(
-  x,
-  select = NULL,
-  by = NULL,
-  nested = FALSE,
-  group = NULL
-)
+check_heterogeneity_bias(x, select = NULL, by = NULL, nested = FALSE)
 }
 \arguments{
 \item{x}{A data frame or a mixed model object.}
@@ -41,8 +35,6 @@ See also section \emph{De-meaning for cross-classified designs} and
 \item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
 the data is treated as cross-classified. Only applies if \code{by} contains more
 than one variable.}
-
-\item{group}{Deprecated. Use \code{by} instead.}
 }
 \description{
 \code{check_heterogeneity_bias()} checks if model predictors or variables may

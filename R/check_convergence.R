@@ -98,9 +98,10 @@ check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
 
 
 #' @export
-check_convergence.glmmTMB <- function(x, ...) {
+check_convergence.glmmTMB <- function(x, tolerance = 0.001, ...) {
   # https://github.com/glmmTMB/glmmTMB/issues/275
-  isTRUE(x$sdr$pdHess)
+  # https://stackoverflow.com/q/79110546/2094622
+  isTRUE(all.equal(x$fit$convergence, 0, tolerance = tolerance)) && isTRUE(x$sdr$pdHess)
 }
 
 
