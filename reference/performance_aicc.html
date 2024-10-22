@@ -19,7 +19,7 @@ incorporates a correction for small sample sizes."><meta property="og:image" con
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,7 +124,7 @@ the same results as <code>AIC(logLik(..., REML = TRUE))</code>.</p></dd>
 unlike <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::AIC()</a></code>, returns the "corrected" AIC value on the original
 scale. To get back to the original scale, the likelihood of the model is
 multiplied by the Jacobian/derivative of the transformation.</p>
-<p>In case it is not possible to return the corrected AIC value, a waring
+<p>In case it is not possible to return the corrected AIC value, a warning
 is given that the corrected log-likelihood value could not be computed.</p>
     </div>
     <div class="section level2">

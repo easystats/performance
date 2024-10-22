@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,17 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.12.5" id="performance-0125">performance 0.12.5<a class="anchor" aria-label="anchor" href="#performance-0125"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-12-5">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-5"></a></h3>
+<ul><li>Deprecated arguments and alias-function-names have been removed.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-0-12-5">Changes<a class="anchor" aria-label="anchor" href="#changes-0-12-5"></a></h3>
+<ul><li>Increased accuracy for <code><a href="../reference/check_convergence.html">check_convergence()</a></code> for <em>glmmTMB</em> models.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.12.4" id="performance-0124">performance 0.12.4<a class="anchor" aria-label="anchor" href="#performance-0124"></a></h2><p class="text-muted">CRAN release: 2024-10-18</p>
 <div class="section level3">
@@ -104,7 +115,7 @@
 <h2 class="pkg-version" data-toc-text="0.12.0" id="performance-0120">performance 0.12.0<a class="anchor" aria-label="anchor" href="#performance-0120"></a></h2><p class="text-muted">CRAN release: 2024-06-08</p>
 <div class="section level3">
 <h3 id="breaking-0-12-0">Breaking<a class="anchor" aria-label="anchor" href="#breaking-0-12-0"></a></h3>
-<ul><li><p>Aliases <code><a href="../reference/check_predictions.html">posterior_predictive_check()</a></code> and <code><a href="../reference/check_predictions.html">check_posterior_predictions()</a></code> for <code><a href="../reference/check_predictions.html">check_predictions()</a></code> are deprecated.</p></li>
+<ul><li><p>Aliases <code>posterior_predictive_check()</code> and <code>check_posterior_predictions()</code> for <code><a href="../reference/check_predictions.html">check_predictions()</a></code> are deprecated.</p></li>
 <li><p>Arguments named <code>group</code> or <code>group_by</code> will be deprecated in a future release. Please use <code>by</code> instead. This affects <code><a href="../reference/check_heterogeneity_bias.html">check_heterogeneity_bias()</a></code> in <em>performance</em>.</p></li>
 </ul></div>
 <div class="section level3">
@@ -429,7 +440,7 @@
 <div class="section level3">
 <h3 id="general-0-8-0">General<a class="anchor" aria-label="anchor" href="#general-0-8-0"></a></h3>
 <ul><li><p>Minor revisions to wording for messages from some of the check-functions.</p></li>
-<li><p><code><a href="../reference/check_predictions.html">posterior_predictive_check()</a></code> and <code><a href="../reference/check_predictions.html">check_predictions()</a></code> were added as aliases for <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">pp_check()</a></code>.</p></li>
+<li><p><code>posterior_predictive_check()</code> and <code><a href="../reference/check_predictions.html">check_predictions()</a></code> were added as aliases for <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">pp_check()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="new-functions-0-8-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-8-0"></a></h3>

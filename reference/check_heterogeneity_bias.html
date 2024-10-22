@@ -11,7 +11,7 @@ between-effect (Bell and Jones, 2015)."><meta property="og:image" content="https
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,13 +66,7 @@ between-effect (<em>Bell and Jones, 2015</em>).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_heterogeneity_bias</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  select <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  nested <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  group <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_heterogeneity_bias</span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span>, nested <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -109,10 +103,6 @@ where the levels are separated by <code>/</code>.</p></li>
 <dd><p>Logical, if <code>TRUE</code>, the data is treated as nested. If <code>FALSE</code>,
 the data is treated as cross-classified. Only applies if <code>by</code> contains more
 than one variable.</p></dd>
-
-
-<dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>Deprecated. Use <code>by</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">
