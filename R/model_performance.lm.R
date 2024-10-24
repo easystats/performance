@@ -3,10 +3,10 @@
 #' Compute indices of model performance for regression models.
 #'
 #' @param model A model.
-#' @param metrics Can be `"all"`, `"common"` or a character vector of
-#'   metrics to be computed (one or more of `"AIC"`, `"AICc"`, `"BIC"`, `"R2"`,
-#'   `"R2_adj"`, `"RMSE"`, `"SIGMA"`, `"LOGLOSS"`, `"PCP"`, `"SCORE"`).
-#'   `"common"` will compute AIC, BIC, R2 and RMSE.
+#' @param metrics Can be `"all"`, `"common"` or a character vector of metrics to
+#'   be computed (one or more of `"AIC"`, `"AICc"`, `"BIC"`, `"R2"`, `"R2_adj"`,
+#'   `"RMSE"`, `"SIGMA"`, `"LOGLOSS"`, `"PCP"`, `"SCORE"`). `"common"` will
+#'   compute AIC, BIC, R2 and RMSE.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -208,6 +208,18 @@ model_performance.lm_robust <- model_performance.lm
 
 #' @export
 model_performance.multinom <- model_performance.lm
+
+#' @export
+model_performance.multinom_weightit <- model_performance.lm
+
+#' @export
+model_performance.ordinal_weightit <- model_performance.lm
+
+#' @export
+model_performance.coxph_weightit <- model_performance.lm
+
+#' @export
+model_performance.glm_weightit <- model_performance.lm
 
 #' @export
 model_performance.plm <- model_performance.lm

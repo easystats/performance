@@ -1,3 +1,38 @@
+# performance 0.12.5
+
+## Breaking changes
+
+* Deprecated arguments and alias-function-names have been removed.
+
+## Changes
+
+* Increased accuracy for `check_convergence()` for *glmmTMB* models.
+
+# performance 0.12.4
+
+## Changes
+
+* `check_dag()` now also checks for colliders, and suggests removing it in the
+  printed output.
+
+* Minor revisions to the printed output of `check_dag()`.
+
+## Bug fixes
+
+* Fixed failing tests that broke due to changes in latest *glmmTMB* update.
+
+# performance 0.12.3
+
+## New functions
+
+* `check_dag()`, to check DAGs for correct adjustment sets.
+
+## Changes
+
+* `check_heterogeneity_bias()` gets a `nested` argument. Furthermore, `by` can
+  specify more than one variable, meaning that nested or cross-classified
+  model designs can also be tested for heterogeneity bias.
+
 # performance 0.12.2
 
 Patch release, to ensure that _performance_ runs with older version of

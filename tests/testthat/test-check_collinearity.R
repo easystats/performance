@@ -24,7 +24,6 @@ test_that("check_collinearity, correct order in print", {
 
 
 test_that("check_collinearity", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
 
@@ -51,7 +50,6 @@ test_that("check_collinearity", {
 
 
 test_that("check_collinearity", {
-  skip_if(getRversion() > "4.3.3")
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
 

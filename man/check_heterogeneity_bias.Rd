@@ -4,7 +4,7 @@
 \alias{check_heterogeneity_bias}
 \title{Check model predictor for heterogeneity bias}
 \usage{
-check_heterogeneity_bias(x, select = NULL, by = NULL, group = NULL)
+check_heterogeneity_bias(x, select = NULL, by = NULL, nested = FALSE)
 }
 \arguments{
 \item{x}{A data frame or a mixed model object.}
@@ -14,10 +14,27 @@ that should be checked. If \code{x} is a mixed model object, this argument
 will be ignored.}
 
 \item{by}{Character vector (or formula) with the name of the variable that
-indicates the group- or cluster-ID. If \code{x} is a model object, this
-argument will be ignored.}
+indicates the group- or cluster-ID. For cross-classified or nested designs,
+\code{by} can also identify two or more variables as group- or cluster-IDs. If
+the data is nested and should be treated as such, set \code{nested = TRUE}. Else,
+if \code{by} defines two or more variables and \code{nested = FALSE}, a cross-classified
+design is assumed. If \code{x} is a model object, this argument will be ignored.
 
-\item{group}{Deprecated. Use \code{by} instead.}
+For nested designs, \code{by} can be:
+\itemize{
+\item a character vector with the name of the variable that indicates the
+levels, ordered from \emph{highest} level to \emph{lowest} (e.g.
+\code{by = c("L4", "L3", "L2")}.
+\item a character vector with variable names in the format \code{by = "L4/L3/L2"},
+where the levels are separated by \code{/}.
+}
+
+See also section \emph{De-meaning for cross-classified designs} and
+\emph{De-meaning for nested designs} below.}
+
+\item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
+the data is treated as cross-classified. Only applies if \code{by} contains more
+than one variable.}
 }
 \description{
 \code{check_heterogeneity_bias()} checks if model predictors or variables may
@@ -25,11 +42,9 @@ cause a heterogeneity bias, i.e. if variables have a within- and/or
 between-effect (\emph{Bell and Jones, 2015}).
 }
 \examples{
-\dontshow{if (insight::check_if_installed("datawizard", minimum_version = "0.12.0", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 data(iris)
 iris$ID <- sample(1:4, nrow(iris), replace = TRUE) # fake-ID
 check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
-\dontshow{\}) # examplesIf}
 }
 \references{
 \itemize{

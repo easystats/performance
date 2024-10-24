@@ -10,6 +10,9 @@
 #' (`TRUE`) or not (`FALSE`)?
 #' @param ci Confidence interval level, as scalar. If `NULL` (default), no
 #' confidence intervals for R2 are calculated.
+#' @param multivariate Logical. Should multiple R2 values be reported as
+#' separated by response (FALSE) or should a single R2 be reported as
+#' combined across responses computed by [`r2_mlm`] (TRUE).
 #' @param ... Arguments passed down to the related r2-methods.
 #' @inheritParams r2_nakagawa
 #'
@@ -31,7 +34,7 @@
 #' @seealso
 #' [`r2_bayes()`], [`r2_coxsnell()`], [`r2_kullback()`], [`r2_loo()`],
 #' [`r2_mcfadden()`], [`r2_nagelkerke()`], [`r2_nakagawa()`], [`r2_tjur()`],
-#' [`r2_xu()`] and [`r2_zeroinflated()`].
+#' [`r2_xu()`], [`r2_zeroinflated()`], and [`r2_mlm()`].
 #'
 #' @examplesIf require("lme4")
 #' # Pseudo r-quared for GLM
@@ -245,24 +248,28 @@ r2.aov <- function(model, ci = NULL, ...) {
   structure(class = "r2_generic", out)
 }
 
-
+#' @rdname r2
 #' @export
-r2.mlm <- function(model, ...) {
-  model_summary <- summary(model)
+r2.mlm <- function(model, multivariate = TRUE, ...) {
+  if (multivariate) {
+    out <- r2_mlm(model)
+  } else {
+    model_summary <- summary(model)
 
-  out <- lapply(names(model_summary), function(i) {
-    tmp <- list(
-      R2 = model_summary[[i]]$r.squared,
-      R2_adjusted = model_summary[[i]]$adj.r.squared,
-      Response = sub("Response ", "", i, fixed = TRUE)
-    )
-    names(tmp$R2) <- "R2"
-    names(tmp$R2_adjusted) <- "adjusted R2"
-    names(tmp$Response) <- "Response"
-    tmp
-  })
+    out <- lapply(names(model_summary), function(i) {
+      tmp <- list(
+        R2 = model_summary[[i]]$r.squared,
+        R2_adjusted = model_summary[[i]]$adj.r.squared,
+        Response = sub("Response ", "", i, fixed = TRUE)
+      )
+      names(tmp$R2) <- "R2"
+      names(tmp$R2_adjusted) <- "adjusted R2"
+      names(tmp$Response) <- "Response"
+      tmp
+    })
 
-  names(out) <- names(model_summary)
+    names(out) <- names(model_summary)
+  }
 
   attr(out, "model_type") <- "Multivariate Linear"
   structure(class = "r2_mlm", out)

@@ -111,7 +111,7 @@ should be accurate and reliable for following mixed models or model families:
 \item Bernoulli (logistic) regression
 \item Binomial regression (with other than binary outcomes)
 \item Poisson and Quasi-Poisson regression
-\item Negative binomial regression (including nbinom1 and nbinom2 families)
+\item Negative binomial regression (including nbinom1, nbinom2 and nbinom12 families)
 \item Gaussian regression (linear models)
 \item Gamma regression
 \item Tweedie regression
@@ -126,6 +126,7 @@ Following model families are not yet validated, but should work:
 \item Compound Poisson regression
 \item Generalized Poisson regression
 \item Log-normal regression
+\item Skew-normal regression
 }
 
 Extracting variance components for models with zero-inflation part is not
