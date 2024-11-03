@@ -161,3 +161,4 @@ Config/Needs/website:
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
 Remotes: easystats/insight
+Remotes: easystats/insight
