@@ -9,7 +9,7 @@
 #' classified by the model as having a higher probability of being "condition 1" than
 #' a randomly chosen "condition 2" observation.
 #'
-#' Applying `as.data.frame()` to the ouput returns a data frame containing the following:
+#' Applying `as.data.frame()` to the output returns a data frame containing the following:
 #' - `Sensitivity` (that actually corresponds to `1 - Specificity`): It is the False Positive Rate.
 #' - `Sensitivity`: It is the True Positive Rate, which is the proportion of correctly classified "condition 1" observations.
 #'

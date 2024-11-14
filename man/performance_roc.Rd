@@ -34,7 +34,7 @@ to the probability that a randomly chosen observation of "condition 1" is correc
 classified by the model as having a higher probability of being "condition 1" than
 a randomly chosen "condition 2" observation.
 
-Applying \code{as.data.frame()} to the ouput returns a data frame containing the following:
+Applying \code{as.data.frame()} to the output returns a data frame containing the following:
 \itemize{
 \item \code{Sensitivity} (that actually corresponds to \code{1 - Specificity}): It is the False Positive Rate.
 \item \code{Sensitivity}: It is the True Positive Rate, which is the proportion of correctly classified "condition 1" observations.
