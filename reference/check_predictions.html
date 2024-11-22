@@ -7,8 +7,8 @@ simulated data&quot; (Gelman et al. 2014, p. 169).
 performance provides posterior predictive check methods for a variety
 of frequentist models (e.g., lm, merMod, glmmTMB, ...). For Bayesian
 models, the model is passed to bayesplot::pp_check().
-If check_model() doesn't work as expected, try setting verbose = TRUE
-to get hints about possible problems."><meta property="og:description" content="Posterior predictive checks mean &quot;simulating replicated data
+If check_predictions() doesn't work as expected, try setting
+verbose = TRUE to get hints about possible problems."><meta property="og:description" content="Posterior predictive checks mean &quot;simulating replicated data
 under the fitted model and then comparing these to the observed data&quot;
 (Gelman and Hill, 2007, p. 158). Posterior predictive checks
 can be used to &quot;look for systematic discrepancies between real and
@@ -16,8 +16,8 @@ simulated data&quot; (Gelman et al. 2014, p. 169).
 performance provides posterior predictive check methods for a variety
 of frequentist models (e.g., lm, merMod, glmmTMB, ...). For Bayesian
 models, the model is passed to bayesplot::pp_check().
-If check_model() doesn't work as expected, try setting verbose = TRUE
-to get hints about possible problems."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
+If check_predictions() doesn't work as expected, try setting
+verbose = TRUE to get hints about possible problems."><meta property="og:image" content="https://easystats.github.io/performance/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -81,8 +81,8 @@ simulated data" (<em>Gelman et al. 2014, p. 169</em>).</p>
 <p><strong>performance</strong> provides posterior predictive check methods for a variety
 of frequentist models (e.g., <code>lm</code>, <code>merMod</code>, <code>glmmTMB</code>, ...). For Bayesian
 models, the model is passed to <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">bayesplot::pp_check()</a></code>.</p>
-<p>If <code><a href="check_model.html">check_model()</a></code> doesn't work as expected, try setting <code>verbose = TRUE</code>
-to get hints about possible problems.</p>
+<p>If <code>check_predictions()</code> doesn't work as expected, try setting
+<code>verbose = TRUE</code> to get hints about possible problems.</p>
     </div>
 
     <div class="section level2">
@@ -172,8 +172,8 @@ model (b) is likely to be preferred over model (a).</p>
 <code>check_predictions()</code>. On R 3.6.0 and higher, if <strong>bayesplot</strong> (or a
 package that imports <strong>bayesplot</strong> such as <strong>rstanarm</strong> or <strong>brms</strong>)
 is loaded, <code><a href="https://mc-stan.org/bayesplot/reference/pp_check.html" class="external-link">pp_check()</a></code> is also available as an alias for <code>check_predictions()</code>.</p>
-<p>If <code><a href="check_model.html">check_model()</a></code> doesn't work as expected, try setting <code>verbose = TRUE</code> to
-get hints about possible problems.</p>
+<p>If <code>check_predictions()</code> doesn't work as expected, try setting <code>verbose = TRUE</code>
+to get hints about possible problems.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
