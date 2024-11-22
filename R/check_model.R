@@ -501,7 +501,7 @@ check_model.DHARMa <- check_model.performance_simres
 
   # posterior predictive checks --------------
   if (any(c("all", "pp_check") %in% check)) {
-    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+    dat$PP_CHECK <- .safe(check_predictions(model, verbose = verbose, ...))
   }
 
   dat <- insight::compact_list(dat)
@@ -552,7 +552,7 @@ check_model.DHARMa <- check_model.performance_simres
 
   # posterior predictive checks --------------
   if (any(c("all", "pp_check") %in% check)) {
-    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+    dat$PP_CHECK <- .safe(check_predictions(model, verbose = verbose, ...))
   }
 
   # binned residuals for bernoulli/binomial --------------

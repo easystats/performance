@@ -102,11 +102,13 @@ check_predictions.default <- function(object,
                                       ...) {
   .is_model_valid(object)
   # check_predictions() can't handle exotic formula notation
-  insight::formula_ok(
-    object,
-    action = "error",
-    prefix_msg = "Posterior predictive checks failed due to an incompatible model formula." # nolint
-  )
+  if (verbose) {
+    insight::formula_ok(
+      object,
+      action = "error",
+      prefix_msg = "Posterior predictive checks failed due to an incompatible model formula." # nolint
+    )
+  }
 
   # retrieve model information
   minfo <- insight::model_info(object, verbose = FALSE)
