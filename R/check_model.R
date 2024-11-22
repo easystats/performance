@@ -2,10 +2,12 @@
 #' @name check_model
 #'
 #' @description
-#'
 #' Visual check of various model assumptions (normality of residuals, normality
 #' of random effects, linear relationship, homogeneity of variance,
 #' multicollinearity).
+#'
+#' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
+#' get hints about possible problems.
 #'
 #' @param x A model object.
 #' @param dot_size,line_size Size of line and dot-geoms.
@@ -160,6 +162,9 @@
 #' such cases, setting the argument `show_dots = FALSE` might help. Furthermore,
 #' look at the `check` argument and see if some of the model checks could be
 #' skipped, which also increases performance.
+#'
+#' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
+#' get hints about possible problems.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'

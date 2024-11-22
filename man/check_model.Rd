@@ -102,6 +102,9 @@ The data frame that is used for plotting.
 Visual check of various model assumptions (normality of residuals, normality
 of random effects, linear relationship, homogeneity of variance,
 multicollinearity).
+
+If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
+get hints about possible problems.
 }
 \details{
 For Bayesian models from packages \strong{rstanarm} or \strong{brms},
@@ -234,6 +237,9 @@ underlying graphic engine becomes slow for plotting many data points. In
 such cases, setting the argument \code{show_dots = FALSE} might help. Furthermore,
 look at the \code{check} argument and see if some of the model checks could be
 skipped, which also increases performance.
+
+If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
+get hints about possible problems.
 }
 
 \examples{

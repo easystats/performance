@@ -64,8 +64,8 @@ simulated data" (\emph{Gelman et al. 2014, p. 169}).
 of frequentist models (e.g., \code{lm}, \code{merMod}, \code{glmmTMB}, ...). For Bayesian
 models, the model is passed to \code{\link[bayesplot:pp_check]{bayesplot::pp_check()}}.
 
-If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE}
-to get hints about possible problems.
+If \code{check_predictions()} doesn't work as expected, try setting
+\code{verbose = TRUE} to get hints about possible problems.
 }
 \details{
 An example how posterior predictive checks can also be used for model
@@ -82,8 +82,8 @@ Every model object that has a \code{simulate()}-method should work with
 package that imports \strong{bayesplot} such as \strong{rstanarm} or \strong{brms})
 is loaded, \code{pp_check()} is also available as an alias for \code{check_predictions()}.
 
-If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
-get hints about possible problems.
+If \code{check_predictions()} doesn't work as expected, try setting \code{verbose = TRUE}
+to get hints about possible problems.
 }
 \examples{
 \dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
