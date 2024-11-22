@@ -63,6 +63,9 @@ simulated data" (\emph{Gelman et al. 2014, p. 169}).
 \strong{performance} provides posterior predictive check methods for a variety
 of frequentist models (e.g., \code{lm}, \code{merMod}, \code{glmmTMB}, ...). For Bayesian
 models, the model is passed to \code{\link[bayesplot:pp_check]{bayesplot::pp_check()}}.
+
+If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE}
+to get hints about possible problems.
 }
 \details{
 An example how posterior predictive checks can also be used for model
@@ -78,6 +81,9 @@ Every model object that has a \code{simulate()}-method should work with
 \code{check_predictions()}. On R 3.6.0 and higher, if \strong{bayesplot} (or a
 package that imports \strong{bayesplot} such as \strong{rstanarm} or \strong{brms})
 is loaded, \code{pp_check()} is also available as an alias for \code{check_predictions()}.
+
+If \code{check_model()} doesn't work as expected, try setting \code{verbose = TRUE} to
+get hints about possible problems.
 }
 \examples{
 \dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
