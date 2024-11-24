@@ -16,13 +16,13 @@ check_model(x, ...)
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
-  dot_size = 2,
-  line_size = 0.8,
-  title_size = 12,
-  axis_title_size = base_size,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
   base_size = 10,
   alpha = 0.2,
-  dot_alpha = 0.8,
+  alpha_dot = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
   theme = "see::theme_lucid",
   verbose = FALSE,
@@ -79,11 +79,11 @@ time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_mo
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
 
-\item{dot_size, line_size}{Size of line and dot-geoms.}
+\item{size_dot, size_line}{Size of line and dot-geoms.}
 
-\item{base_size, title_size, axis_title_size}{Base font size for axis and plot titles.}
+\item{base_size, size_title, size_axis_title}{Base font size for axis and plot titles.}
 
-\item{alpha, dot_alpha}{The alpha level of the confidence bands and dot-geoms.
+\item{alpha, alpha_dot}{The alpha level of the confidence bands and dot-geoms.
 Scalar from 0 to 1.}
 
 \item{colors}{Character vector with color codes (hex-format). Must be of

@@ -10,8 +10,8 @@
 #' get hints about possible problems.
 #'
 #' @param x A model object.
-#' @param dot_size,line_size Size of line and dot-geoms.
-#' @param base_size,title_size,axis_title_size Base font size for axis and plot titles.
+#' @param size_dot,size_line Size of line and dot-geoms.
+#' @param base_size,size_title,size_axis_title Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
@@ -23,7 +23,7 @@
 #' `"linearity"`, and checks for non-constant variance, i.e. for
 #' heteroscedasticity, as well as the linear relationship. By default, all
 #' possible checks are performed and plotted.
-#' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
+#' @param alpha,alpha_dot The alpha level of the confidence bands and dot-geoms.
 #' Scalar from 0 to 1.
 #' @param colors Character vector with color codes (hex-format). Must be of
 #' length 3. First color is usually used for reference lines, second color
@@ -196,13 +196,13 @@ check_model.default <- function(x,
                                 type = "density",
                                 residual_type = NULL,
                                 show_dots = NULL,
-                                dot_size = 2,
-                                line_size = 0.8,
-                                title_size = 12,
-                                axis_title_size = base_size,
+                                size_dot = 2,
+                                size_line = 0.8,
+                                size_title = 12,
+                                size_axis_title = base_size,
                                 base_size = 10,
                                 alpha = 0.2,
-                                dot_alpha = 0.8,
+                                alpha_dot = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 verbose = FALSE,
@@ -277,14 +277,14 @@ check_model.default <- function(x,
   }
 
   attr(assumptions_data, "panel") <- panel
-  attr(assumptions_data, "dot_size") <- dot_size
-  attr(assumptions_data, "line_size") <- line_size
+  attr(assumptions_data, "dot_size") <- size_dot
+  attr(assumptions_data, "line_size") <- size_line
   attr(assumptions_data, "base_size") <- base_size
-  attr(assumptions_data, "axis_title_size") <- axis_title_size
-  attr(assumptions_data, "title_size") <- title_size
+  attr(assumptions_data, "axis_title_size") <- size_axis_title
+  attr(assumptions_data, "title_size") <- size_title
   attr(assumptions_data, "check") <- check
   attr(assumptions_data, "alpha") <- alpha
-  attr(assumptions_data, "dot_alpha") <- dot_alpha
+  attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
@@ -328,28 +328,28 @@ check_model.stanreg <- function(x,
                                 type = "density",
                                 residual_type = NULL,
                                 show_dots = NULL,
-                                dot_size = 2,
-                                line_size = 0.8,
-                                title_size = 12,
-                                axis_title_size = base_size,
+                                size_dot = 2,
+                                size_line = 0.8,
+                                size_title = 12,
+                                size_axis_title = base_size,
                                 base_size = 10,
                                 alpha = 0.2,
-                                dot_alpha = 0.8,
+                                alpha_dot = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 verbose = FALSE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
-    dot_size = dot_size,
-    line_size = line_size,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    dot_alpha = dot_alpha,
+    alpha_dot = alpha_dot,
     colors = colors,
     theme = theme,
     base_size = base_size,
-    axis_title_size = axis_title_size,
+    size_axis_title = size_axis_title,
     detrend = detrend,
     show_dots = show_dots,
     bandwidth = bandwidth,
@@ -374,26 +374,26 @@ check_model.model_fit <- function(x,
                                   type = "density",
                                   residual_type = NULL,
                                   show_dots = NULL,
-                                  dot_size = 2,
-                                  line_size = 0.8,
-                                  title_size = 12,
-                                  axis_title_size = base_size,
+                                  size_dot = 2,
+                                  size_line = 0.8,
+                                  size_title = 12,
+                                  size_axis_title = base_size,
                                   base_size = 10,
                                   alpha = 0.2,
-                                  dot_alpha = 0.8,
+                                  alpha_dot = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
                                   verbose = FALSE,
                                   ...) {
   check_model(
     x$fit,
-    dot_size = dot_size,
-    line_size = line_size,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    axis_title_size = axis_title_size,
-    dot_alpha = dot_alpha,
+    size_axis_title = size_axis_title,
+    alpha_dot = alpha_dot,
     colors = colors,
     theme = theme,
     base_size = base_size,
@@ -417,26 +417,26 @@ check_model.performance_simres <- function(x,
                                            type = "density",
                                            residual_type = NULL,
                                            show_dots = NULL,
-                                           dot_size = 2,
-                                           line_size = 0.8,
-                                           title_size = 12,
-                                           axis_title_size = base_size,
+                                           size_dot = 2,
+                                           size_line = 0.8,
+                                           size_title = 12,
+                                           size_axis_title = base_size,
                                            base_size = 10,
                                            alpha = 0.2,
-                                           dot_alpha = 0.8,
+                                           alpha_dot = 0.8,
                                            colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                            theme = "see::theme_lucid",
                                            verbose = FALSE,
                                            ...) {
   check_model(
     x$fittedModel,
-    dot_size = dot_size,
-    line_size = line_size,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    dot_alpha = dot_alpha,
-    axis_title_size = axis_title_size,
+    alpha_dot = alpha_dot,
+    size_axis_title = size_axis_title,
     colors = colors,
     theme = theme,
     base_size = base_size,
