@@ -462,35 +462,35 @@ check_model.DHARMa <- check_model.performance_simres
 
   # multicollinearity --------------
   if (any(c("all", "vif") %in% check)) {
-    dat$VIF <- .diag_vif(model, verbose = verbose)
+    dat$VIF <- .model_diagnostic_vif(model, verbose = verbose)
   }
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
     dat$QQ <- switch(residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
-      .diag_qq(model, model_info = model_info, verbose = verbose)
+      .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
   }
 
   # normal-curve plot (normality of residuals) --------------
   if (any(c("all", "normality") %in% check)) {
-    dat$NORM <- .diag_norm(model, verbose = verbose)
+    dat$NORM <- .model_diagnostic_normality(model, verbose = verbose)
   }
 
   # non-constant variance (heteroskedasticity, liniearity) --------------
   if (any(c("all", "ncv", "linearity") %in% check)) {
-    dat$NCV <- .diag_ncv(model, verbose = verbose)
+    dat$NCV <- .model_diagnostic_ncv(model, verbose = verbose)
   }
 
   # homogeneity of variance --------------
   if (any(c("all", "homogeneity") %in% check)) {
-    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+    dat$HOMOGENEITY <- .model_diagnostic_homogeneity(model, verbose = verbose)
   }
 
   # outliers --------------
@@ -501,7 +501,7 @@ check_model.DHARMa <- check_model.performance_simres
     } else {
       threshold <- attributes(dat$OUTLIERS)$threshold$cook
     }
-    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -523,25 +523,25 @@ check_model.DHARMa <- check_model.performance_simres
 
   # multicollinearity --------------
   if (any(c("all", "vif") %in% check)) {
-    dat$VIF <- .diag_vif(model, verbose = verbose)
+    dat$VIF <- .model_diagnostic_vif(model, verbose = verbose)
   }
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
     dat$QQ <- switch(residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
-      .diag_qq(model, model_info = model_info, verbose = verbose)
+      .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
   }
 
   # homogeneity of variance --------------
   if (any(c("all", "homogeneity") %in% check)) {
-    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+    dat$HOMOGENEITY <- .model_diagnostic_homogeneity(model, verbose = verbose)
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
   }
 
   # outliers --------------
@@ -552,7 +552,7 @@ check_model.DHARMa <- check_model.performance_simres
     } else {
       threshold <- attributes(dat$OUTLIERS)$threshold$cook
     }
-    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
@@ -567,7 +567,7 @@ check_model.DHARMa <- check_model.performance_simres
 
   # misspecified dispersion and zero-inflation --------------
   if (isTRUE(model_info$is_count) && any(c("all", "overdispersion") %in% check)) {
-    dat$OVERDISPERSION <- .diag_overdispersion(model)
+    dat$OVERDISPERSION <- .model_diagnostic_overdispersion(model)
   }
 
   dat <- insight::compact_list(dat)
