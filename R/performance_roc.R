@@ -1,8 +1,21 @@
 #' @title Simple ROC curve
 #' @name performance_roc
 #'
-#' @description This function calculates a simple ROC curves of x/y coordinates
-#' based on response and predictions of a binomial model.
+#' @description
+#' This function calculates a simple ROC curves of x/y coordinates based on
+#' response and predictions of a binomial model.
+#'
+#' It returns the area under the curve (AUC) as a percentage, which corresponds
+#' to the probability that a randomly chosen observation of "condition 1" is
+#' correctly classified by the model as having a higher probability of being
+#' "condition 1" than a randomly chosen "condition 2" observation.
+#'
+#' Applying `as.data.frame()` to the output returns a data frame containing the
+#' following:
+#' - `Sensitivity` (that actually corresponds to `1 - Specificity`): It is the
+#'   False Positive Rate.
+#' - `Sensitivity`: It is the True Positive Rate, which is the proportion of
+#'   correctly classified "condition 1" observations.
 #'
 #' It returns the area under the curve (AUC) as a percentage, which corresponds
 #' to the probability that a randomly chosen observation of "condition 1" is correctly
