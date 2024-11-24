@@ -378,38 +378,16 @@ check_outliers.default <- function(x,
   # Check args
   if (all(method == "all")) {
     method <- c(
-      "zscore_robust",
-      "iqr",
-      "ci",
-      "cook",
-      "pareto",
-      "mahalanobis",
-      "mahalanobis_robust",
-      "mcd",
-      "ics",
-      "optics",
-      "lof"
+      "zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis",
+      "mahalanobis_robust", "mcd", "ics", "optics", "lof"
     )
   }
 
   method <- match.arg(
     method,
     c(
-      "zscore",
-      "zscore_robust",
-      "iqr",
-      "ci",
-      "hdi",
-      "eti",
-      "bci",
-      "cook",
-      "pareto",
-      "mahalanobis",
-      "mahalanobis_robust",
-      "mcd",
-      "ics",
-      "optics",
-      "lof"
+      "zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook",
+      "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof"
     ),
     several.ok = TRUE
   )
@@ -427,8 +405,13 @@ check_outliers.default <- function(x,
     )
   }
 
-  # Remove non-numerics
-  my_data <- datawizard::data_select(my_data, select = is.numeric, verbose = FALSE)
+  # Remove non-numerics, but only check predictors
+  model_predictors <- unique(insight::find_predictors(model, flatten = TRUE))
+  my_data <- datawizard::data_select(
+    my_data[model_predictors],
+    select = is.numeric,
+    verbose = FALSE
+  )
 
   # check if any data left
   if (is.null(my_data) || ncol(my_data) == 0) {
