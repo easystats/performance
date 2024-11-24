@@ -101,7 +101,7 @@ plot.check_overdisp <- function(x, ...) {
     }
   }
   if (!is.null(model)) {
-    x <- .diag_overdispersion(model)
+    x <- .model_diagnostic_overdispersion(model)
     class(x) <- c("see_check_overdisp", "data.frame")
     attr(x, "colors") <- list(...)$colors
     attr(x, "line_size") <- list(...)$size_line
