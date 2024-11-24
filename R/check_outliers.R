@@ -498,7 +498,7 @@ check_outliers.default <- function(x,
   }
 
   # Pareto
-  if ("pareto" %in% method && m_info(x)$is_bayesian) {
+  if ("pareto" %in% method && m_info$is_bayesian) {
     data_pareto <- .check_outliers_pareto(
       x,
       threshold = thresholds$pareto
