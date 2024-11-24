@@ -1,6 +1,6 @@
 ---
 title: "Checking model assumption - linear models"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
 tags: [r, performance, r2]
@@ -8,7 +8,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
   %\VignetteIndexEntry{Checking model assumption - linear models}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -213,6 +213,8 @@ There are several ways to address heteroscedasticity.
 2. The heteroscedasticity can be modeled directly, e.g. using package **glmmTMB** and the dispersion formula, to estimate the dispersion parameter and account for heteroscedasticity (see _Brooks et al. 2017_).
 
 3. Transforming the response variable, for instance, taking the `log()`, may also help to avoid issues with heteroscedasticity.
+
+4. Weighting observations is another remedy against heteroscedasticity, in particular the method of [weighted least squares](https://online.stat.psu.edu/stat501/lesson/13/13.1).
 
 ## Influential observations - outliers
 
