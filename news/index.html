@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,6 +63,11 @@
 <div class="section level3">
 <h3 id="changes-0-12-5">Changes<a class="anchor" aria-label="anchor" href="#changes-0-12-5"></a></h3>
 <ul><li>Increased accuracy for <code><a href="../reference/check_convergence.html">check_convergence()</a></code> for <em>glmmTMB</em> models.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-12-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-12-5"></a></h3>
+<ul><li>
+<code><a href="../reference/check_outliers.html">check_outliers()</a></code> did not warn that no numeric variables were found when only the response variable was numeric, but all relevant predictors were not.</li>
 </ul></div>
 </div>
     <div class="section level2">
