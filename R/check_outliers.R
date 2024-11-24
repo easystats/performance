@@ -406,7 +406,7 @@ check_outliers.default <- function(x,
   }
 
   # Remove non-numerics, but only check predictors
-  model_predictors <- unique(insight::find_predictors(model, flatten = TRUE))
+  model_predictors <- unique(insight::find_predictors(x, flatten = TRUE))
   my_data <- datawizard::data_select(
     my_data[model_predictors],
     select = is.numeric,
