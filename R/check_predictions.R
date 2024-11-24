@@ -11,6 +11,9 @@
 #'   of frequentist models (e.g., `lm`, `merMod`, `glmmTMB`, ...). For Bayesian
 #'   models, the model is passed to [`bayesplot::pp_check()`].
 #'
+#'   If `check_predictions()` doesn't work as expected, try setting
+#'   `verbose = TRUE` to get hints about possible problems.
+#'
 #' @param object A statistical model.
 #' @param iterations The number of draws to simulate/bootstrap.
 #' @param check_range Logical, if `TRUE`, includes a plot with the minimum
@@ -52,6 +55,9 @@
 #' `check_predictions()`. On R 3.6.0 and higher, if **bayesplot** (or a
 #' package that imports **bayesplot** such as **rstanarm** or **brms**)
 #' is loaded, `pp_check()` is also available as an alias for `check_predictions()`.
+#'
+#' If `check_predictions()` doesn't work as expected, try setting `verbose = TRUE`
+#' to get hints about possible problems.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -101,6 +107,14 @@ check_predictions.default <- function(object,
                                       verbose = TRUE,
                                       ...) {
   .is_model_valid(object)
+  # check_predictions() can't handle exotic formula notation
+  if (verbose) {
+    insight::formula_ok(
+      object,
+      action = "error",
+      prefix_msg = "Posterior predictive checks failed due to an incompatible model formula." # nolint
+    )
+  }
 
   # retrieve model information
   minfo <- insight::model_info(object, verbose = FALSE)

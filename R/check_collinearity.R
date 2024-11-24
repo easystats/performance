@@ -451,7 +451,7 @@ check_collinearity.zerocount <- function(x,
     insight::format_alert("Model has no intercept. VIFs may not be sensible.")
   }
 
-  f <- insight::find_formula(x)
+  f <- insight::find_formula(x, verbose = FALSE)
 
   # hurdle or zeroinfl model can have no zero-inflation formula, in which case
   # we have the same formula as for conditional formula part

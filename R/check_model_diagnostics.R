@@ -1,6 +1,6 @@
 # prepare data for VIF plot ----------------------------------
 
-.diag_vif <- function(model, verbose = TRUE) {
+.model_diagnostic_vif <- function(model, verbose = TRUE) {
   out <- check_collinearity(model, verbose = verbose)
   dat <- insight::compact_list(out)
   if (is.null(dat)) {
@@ -35,7 +35,7 @@
 
 # prepare data for QQ plot ----------------------------------
 
-.diag_qq <- function(model, model_info = NULL, verbose = TRUE) {
+.model_diagnostic_qq <- function(model, model_info = NULL, verbose = TRUE) {
   if (inherits(model, c("lme", "lmerMod", "merMod", "gam"))) {
     res_ <- stats::residuals(model)
   } else if (inherits(model, "geeglm")) {
@@ -98,7 +98,7 @@
 
 # prepare data for random effects QQ plot ----------------------------------
 
-.diag_reqq <- function(model, level = 0.95, model_info = NULL, verbose = TRUE) {
+.model_diagnostic_ranef_qq <- function(model, level = 0.95, model_info = NULL, verbose = TRUE) {
   # check if we have mixed model
   if (is.null(model_info) || !model_info$is_mixed) {
     return(NULL)
@@ -161,7 +161,7 @@
 
 # prepare data for normality of residuals plot ----------------------------------
 
-.diag_norm <- function(model, verbose = TRUE) {
+.model_diagnostic_normality <- function(model, verbose = TRUE) {
   r <- try(as.numeric(stats::residuals(model)), silent = TRUE)
 
   if (inherits(r, "try-error")) {
@@ -181,7 +181,7 @@
 
 # prepare data for influential obs plot ----------------------------------
 
-.diag_influential_obs <- function(model, threshold = NULL) {
+.model_diagnostic_outlier <- function(model, threshold = NULL) {
   s <- summary(model)
 
   if (inherits(model, "lm", which = TRUE) == 1) {
@@ -220,7 +220,7 @@
 
 # prepare data for non-constant variance plot ----------------------------------
 
-.diag_ncv <- function(model, verbose = TRUE) {
+.model_diagnostic_ncv <- function(model, verbose = TRUE) {
   ncv <- tryCatch(
     data.frame(
       x = as.numeric(stats::fitted(model)),
@@ -248,7 +248,7 @@
 
 # prepare data for homogeneity of variance plot ----------------------------------
 
-.diag_homogeneity <- function(model, verbose = TRUE) {
+.model_diagnostic_homogeneity <- function(model, verbose = TRUE) {
   faminfo <- insight::model_info(model)
   r <- tryCatch(
     if (inherits(model, "merMod")) {
@@ -377,8 +377,7 @@
 
 
 
-.diag_overdispersion <- function(model, ...) {
-
+.model_diagnostic_overdispersion <- function(model, ...) {
   ## TODO: remove this code later -it's just to test the ".new_diag_overdispersion"
   ## function. Set options(performance_new_overdispersion = TRUE) to use the new
   ## function.

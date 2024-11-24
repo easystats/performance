@@ -17,6 +17,13 @@ test_that("compare_performance", {
     )
   )
 
+  # table split
+  expect_snapshot(print(compare_performance(lm1, lm2, lm3)))
+  expect_snapshot(print(compare_performance(lm1, lm2, lm3), table_width = Inf))
+  # vertical layout
+  expect_snapshot(print(compare_performance(lm1, lm2, lm3), layout = "vertical"))
+  expect_snapshot(print(compare_performance(lm1, lm2, lm3, lm4), layout = "vertical", table_width = 50))
+
   expect_silent(expect_identical(
     colnames(compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)),
     c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")

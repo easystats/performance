@@ -2,14 +2,16 @@
 #' @name check_model
 #'
 #' @description
-#'
 #' Visual check of various model assumptions (normality of residuals, normality
 #' of random effects, linear relationship, homogeneity of variance,
 #' multicollinearity).
 #'
+#' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
+#' get hints about possible problems.
+#'
 #' @param x A model object.
-#' @param dot_size,line_size Size of line and dot-geoms.
-#' @param base_size,title_size,axis_title_size Base font size for axis and plot titles.
+#' @param size_dot,size_line Size of line and dot-geoms.
+#' @param base_size,size_title,size_axis_title Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
 #' single plots for each diagnostic are returned.
 #' @param check Character vector, indicating which checks for should be performed
@@ -21,7 +23,7 @@
 #' `"linearity"`, and checks for non-constant variance, i.e. for
 #' heteroscedasticity, as well as the linear relationship. By default, all
 #' possible checks are performed and plotted.
-#' @param alpha,dot_alpha The alpha level of the confidence bands and dot-geoms.
+#' @param alpha,alpha_dot The alpha level of the confidence bands and dot-geoms.
 #' Scalar from 0 to 1.
 #' @param colors Character vector with color codes (hex-format). Must be of
 #' length 3. First color is usually used for reference lines, second color
@@ -161,6 +163,9 @@
 #' look at the `check` argument and see if some of the model checks could be
 #' skipped, which also increases performance.
 #'
+#' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
+#' get hints about possible problems.
+#'
 #' @family functions to check model assumptions and and assess model quality
 #'
 #' @examplesIf require("lme4")
@@ -191,13 +196,13 @@ check_model.default <- function(x,
                                 type = "density",
                                 residual_type = NULL,
                                 show_dots = NULL,
-                                dot_size = 2,
-                                line_size = 0.8,
-                                title_size = 12,
-                                axis_title_size = base_size,
+                                size_dot = 2,
+                                size_line = 0.8,
+                                size_title = 12,
+                                size_axis_title = base_size,
                                 base_size = 10,
                                 alpha = 0.2,
-                                dot_alpha = 0.8,
+                                alpha_dot = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 verbose = FALSE,
@@ -272,14 +277,14 @@ check_model.default <- function(x,
   }
 
   attr(assumptions_data, "panel") <- panel
-  attr(assumptions_data, "dot_size") <- dot_size
-  attr(assumptions_data, "line_size") <- line_size
+  attr(assumptions_data, "dot_size") <- size_dot
+  attr(assumptions_data, "line_size") <- size_line
   attr(assumptions_data, "base_size") <- base_size
-  attr(assumptions_data, "axis_title_size") <- axis_title_size
-  attr(assumptions_data, "title_size") <- title_size
+  attr(assumptions_data, "axis_title_size") <- size_axis_title
+  attr(assumptions_data, "title_size") <- size_title
   attr(assumptions_data, "check") <- check
   attr(assumptions_data, "alpha") <- alpha
-  attr(assumptions_data, "dot_alpha") <- dot_alpha
+  attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
@@ -323,28 +328,28 @@ check_model.stanreg <- function(x,
                                 type = "density",
                                 residual_type = NULL,
                                 show_dots = NULL,
-                                dot_size = 2,
-                                line_size = 0.8,
-                                title_size = 12,
-                                axis_title_size = base_size,
+                                size_dot = 2,
+                                size_line = 0.8,
+                                size_title = 12,
+                                size_axis_title = base_size,
                                 base_size = 10,
                                 alpha = 0.2,
-                                dot_alpha = 0.8,
+                                alpha_dot = 0.8,
                                 colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                 theme = "see::theme_lucid",
                                 verbose = FALSE,
                                 ...) {
   check_model(bayestestR::bayesian_as_frequentist(x),
-    dot_size = dot_size,
-    line_size = line_size,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    dot_alpha = dot_alpha,
+    alpha_dot = alpha_dot,
     colors = colors,
     theme = theme,
     base_size = base_size,
-    axis_title_size = axis_title_size,
+    size_axis_title = size_axis_title,
     detrend = detrend,
     show_dots = show_dots,
     bandwidth = bandwidth,
@@ -369,26 +374,26 @@ check_model.model_fit <- function(x,
                                   type = "density",
                                   residual_type = NULL,
                                   show_dots = NULL,
-                                  dot_size = 2,
-                                  line_size = 0.8,
-                                  title_size = 12,
-                                  axis_title_size = base_size,
+                                  size_dot = 2,
+                                  size_line = 0.8,
+                                  size_title = 12,
+                                  size_axis_title = base_size,
                                   base_size = 10,
                                   alpha = 0.2,
-                                  dot_alpha = 0.8,
+                                  alpha_dot = 0.8,
                                   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                   theme = "see::theme_lucid",
                                   verbose = FALSE,
                                   ...) {
   check_model(
     x$fit,
-    dot_size = dot_size,
-    line_size = line_size,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    axis_title_size = axis_title_size,
-    dot_alpha = dot_alpha,
+    size_axis_title = size_axis_title,
+    alpha_dot = alpha_dot,
     colors = colors,
     theme = theme,
     base_size = base_size,
@@ -412,26 +417,26 @@ check_model.performance_simres <- function(x,
                                            type = "density",
                                            residual_type = NULL,
                                            show_dots = NULL,
-                                           dot_size = 2,
-                                           line_size = 0.8,
-                                           title_size = 12,
-                                           axis_title_size = base_size,
+                                           size_dot = 2,
+                                           size_line = 0.8,
+                                           size_title = 12,
+                                           size_axis_title = base_size,
                                            base_size = 10,
                                            alpha = 0.2,
-                                           dot_alpha = 0.8,
+                                           alpha_dot = 0.8,
                                            colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
                                            theme = "see::theme_lucid",
                                            verbose = FALSE,
                                            ...) {
   check_model(
     x$fittedModel,
-    dot_size = dot_size,
-    line_size = line_size,
+    size_dot = size_dot,
+    size_line = size_line,
     panel = panel,
     check = check,
     alpha = alpha,
-    dot_alpha = dot_alpha,
-    axis_title_size = axis_title_size,
+    alpha_dot = alpha_dot,
+    size_axis_title = size_axis_title,
     colors = colors,
     theme = theme,
     base_size = base_size,
@@ -457,35 +462,35 @@ check_model.DHARMa <- check_model.performance_simres
 
   # multicollinearity --------------
   if (any(c("all", "vif") %in% check)) {
-    dat$VIF <- .diag_vif(model, verbose = verbose)
+    dat$VIF <- .model_diagnostic_vif(model, verbose = verbose)
   }
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
     dat$QQ <- switch(residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
-      .diag_qq(model, model_info = model_info, verbose = verbose)
+      .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
   }
 
   # normal-curve plot (normality of residuals) --------------
   if (any(c("all", "normality") %in% check)) {
-    dat$NORM <- .diag_norm(model, verbose = verbose)
+    dat$NORM <- .model_diagnostic_normality(model, verbose = verbose)
   }
 
   # non-constant variance (heteroskedasticity, liniearity) --------------
   if (any(c("all", "ncv", "linearity") %in% check)) {
-    dat$NCV <- .diag_ncv(model, verbose = verbose)
+    dat$NCV <- .model_diagnostic_ncv(model, verbose = verbose)
   }
 
   # homogeneity of variance --------------
   if (any(c("all", "homogeneity") %in% check)) {
-    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+    dat$HOMOGENEITY <- .model_diagnostic_homogeneity(model, verbose = verbose)
   }
 
   # outliers --------------
@@ -496,12 +501,12 @@ check_model.DHARMa <- check_model.performance_simres
     } else {
       threshold <- attributes(dat$OUTLIERS)$threshold$cook
     }
-    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
   if (any(c("all", "pp_check") %in% check)) {
-    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+    dat$PP_CHECK <- .safe(check_predictions(model, verbose = verbose, ...))
   }
 
   dat <- insight::compact_list(dat)
@@ -518,25 +523,25 @@ check_model.DHARMa <- check_model.performance_simres
 
   # multicollinearity --------------
   if (any(c("all", "vif") %in% check)) {
-    dat$VIF <- .diag_vif(model, verbose = verbose)
+    dat$VIF <- .model_diagnostic_vif(model, verbose = verbose)
   }
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
     dat$QQ <- switch(residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
-      .diag_qq(model, model_info = model_info, verbose = verbose)
+      .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
   }
 
   # homogeneity of variance --------------
   if (any(c("all", "homogeneity") %in% check)) {
-    dat$HOMOGENEITY <- .diag_homogeneity(model, verbose = verbose)
+    dat$HOMOGENEITY <- .model_diagnostic_homogeneity(model, verbose = verbose)
   }
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .diag_reqq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
   }
 
   # outliers --------------
@@ -547,12 +552,12 @@ check_model.DHARMa <- check_model.performance_simres
     } else {
       threshold <- attributes(dat$OUTLIERS)$threshold$cook
     }
-    dat$INFLUENTIAL <- .influential_obs(model, threshold = threshold)
+    dat$INFLUENTIAL <- .safe(.model_diagnostic_outlier(model, threshold = threshold))
   }
 
   # posterior predictive checks --------------
   if (any(c("all", "pp_check") %in% check)) {
-    dat$PP_CHECK <- .safe(check_predictions(model, ...))
+    dat$PP_CHECK <- .safe(check_predictions(model, verbose = verbose, ...))
   }
 
   # binned residuals for bernoulli/binomial --------------
@@ -562,7 +567,7 @@ check_model.DHARMa <- check_model.performance_simres
 
   # misspecified dispersion and zero-inflation --------------
   if (isTRUE(model_info$is_count) && any(c("all", "overdispersion") %in% check)) {
-    dat$OVERDISPERSION <- .diag_overdispersion(model)
+    dat$OVERDISPERSION <- .model_diagnostic_overdispersion(model)
   }
 
   dat <- insight::compact_list(dat)
