@@ -197,5 +197,5 @@ as.numeric.performance_roc <- function(x, ...) {
   if (inherits(x, "model_fit")) {
     x <- x$fit
   }
-  inherits(x, c("glm", "glmerMod", "logitor", "logitmfx", "probitmfx"))
+  inherits(x, c("glm", "glmerMod", "logitor", "logitmfx", "probitmfx", "glmmTMB"))
 }
