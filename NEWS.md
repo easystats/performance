@@ -4,6 +4,11 @@
 
 * Deprecated arguments and alias-function-names have been removed.
 
+* Argument names in `check_model()` that refer to plot-aesthetics (like
+  `dot_size`) are now harmonized across *easystats* packages, meaning that
+  these have been renamed. They now follow the pattern `aesthetic_type`, e.g.
+  `size_dot` (instead of `dot_size`).
+
 ## Changes
 
 * Increased accuracy for `check_convergence()` for *glmmTMB* models.

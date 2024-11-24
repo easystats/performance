@@ -588,7 +588,7 @@ check_outliers.default <- function(x,
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
-  attr(outlier, "influential_obs") <- .influential_obs(x, threshold = unlist(thresholds))
+  attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(x, threshold = unlist(thresholds))) # nolint
   attr(outlier, "variables") <- "(Whole model)"
   attr(outlier, "raw_data") <- my_data
   attr(outlier, "outlier_var") <- outlier_var
@@ -2032,14 +2032,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     data_lof = out,
     threshold_lof = threshold
   )
-}
-
-
-
-# influential observations data --------
-
-.influential_obs <- function(x, threshold = NULL) {
-  .safe(.diag_influential_obs(x, threshold = threshold))
 }
 
 
