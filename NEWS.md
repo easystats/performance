@@ -13,6 +13,11 @@
 
 * Increased accuracy for `check_convergence()` for *glmmTMB* models.
 
+## Bug fixes
+
+* `check_outliers()` did not warn that no numeric variables were found when only
+  the response variable was numeric, but all relevant predictors were not.
+
 # performance 0.12.4
 
 ## Changes
