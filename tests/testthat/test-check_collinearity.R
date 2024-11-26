@@ -218,3 +218,17 @@ test_that("check_collinearity, invalid data", {
   m1 <- lm(y ~ 1, data = dd)
   expect_error(check_collinearity(m1), "Can't extract variance-covariance matrix")
 })
+
+test_that("check_collinearity, glmmTMB hurdle w/o zi", {
+  skip_if_not_installed("glmmTMB")
+  data(Salamanders, package = "glmmTMB")
+  mod_trunc_error <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    data = Salamanders[Salamanders$count > 0, , drop = FALSE],
+    family = glmmTMB::truncated_nbinom2(),
+    ziformula = ~ 0,
+    dispformula = ~ 1
+  )
+  out <- check_collinearity(mod_trunc_error)
+  expect_equal(out$VIF, c(1.03414, 1.03414), tolerance = 1e-3)
+})
