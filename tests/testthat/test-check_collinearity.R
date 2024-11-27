@@ -216,7 +216,7 @@ test_that("check_collinearity, hurdle/zi models w/o zi-formula", {
 test_that("check_collinearity, invalid data", {
   dd <- data.frame(y = as.difftime(0:5, units = "days"))
   m1 <- lm(y ~ 1, data = dd)
-  expect_error(check_collinearity(m1), "Can't extract variance-covariance matrix")
+  expect_message(check_collinearity(m1), "Could not extract the variance-covariance")
 })
 
 test_that("check_collinearity, glmmTMB hurdle w/o zi", {

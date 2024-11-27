@@ -40,7 +40,7 @@ test_that("`check_outliers()` works if convergence issues", {
 test_that("`check_model()` for invalid models", {
   dd <- data.frame(y = as.difftime(0:5, units = "days"))
   m1 <- lm(y ~ 1, data = dd)
-  expect_error(check_model(m1))
+  expect_message(check_model(m1), regex = "Date variables are not")
 })
 
 test_that("`check_model()` works for quantreg", {
