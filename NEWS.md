@@ -18,6 +18,9 @@
 * `check_outliers()` did not warn that no numeric variables were found when only
   the response variable was numeric, but all relevant predictors were not.
 
+* `check_collinearity()` did not work for glmmTMB models when zero-inflation
+  component was set to `~0`.
+
 # performance 0.12.4
 
 ## Changes
