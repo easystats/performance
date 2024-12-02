@@ -378,41 +378,22 @@ check_outliers.default <- function(x,
   # Check args
   if (all(method == "all")) {
     method <- c(
-      "zscore_robust",
-      "iqr",
-      "ci",
-      "cook",
-      "pareto",
-      "mahalanobis",
-      "mahalanobis_robust",
-      "mcd",
-      "ics",
-      "optics",
-      "lof"
+      "zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis",
+      "mahalanobis_robust", "mcd", "ics", "optics", "lof"
     )
   }
 
   method <- match.arg(
     method,
     c(
-      "zscore",
-      "zscore_robust",
-      "iqr",
-      "ci",
-      "hdi",
-      "eti",
-      "bci",
-      "cook",
-      "pareto",
-      "mahalanobis",
-      "mahalanobis_robust",
-      "mcd",
-      "ics",
-      "optics",
-      "lof"
+      "zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook",
+      "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof"
     ),
     several.ok = TRUE
   )
+
+  # Get model information
+  m_info <- insight::model_info(x)
 
   # Get data
   my_data <- insight::get_data(x, verbose = FALSE)
@@ -427,8 +408,17 @@ check_outliers.default <- function(x,
     )
   }
 
-  # Remove non-numerics
-  my_data <- datawizard::data_select(my_data, select = is.numeric, verbose = FALSE)
+  # Remove non-numerics, but in case of binomial, only check predictors
+  if (m_info$is_binomial) {
+    model_predictors <- unique(insight::find_predictors(x, flatten = TRUE))
+  } else {
+    model_predictors <- colnames(my_data)
+  }
+  my_data <- datawizard::data_select(
+    my_data[model_predictors],
+    select = is.numeric,
+    verbose = FALSE
+  )
 
   # check if any data left
   if (is.null(my_data) || ncol(my_data) == 0) {
@@ -468,7 +458,7 @@ check_outliers.default <- function(x,
   }
 
   # Cook
-  if ("cook" %in% method && !insight::model_info(x)$is_bayesian && !inherits(x, "bife")) {
+  if ("cook" %in% method && !m_info$is_bayesian && !inherits(x, "bife")) {
     data_cook <- .check_outliers_cook(
       x,
       threshold = thresholds$cook
@@ -508,7 +498,7 @@ check_outliers.default <- function(x,
   }
 
   # Pareto
-  if ("pareto" %in% method && insight::model_info(x)$is_bayesian) {
+  if ("pareto" %in% method && m_info$is_bayesian) {
     data_pareto <- .check_outliers_pareto(
       x,
       threshold = thresholds$pareto
