@@ -198,7 +198,8 @@
 #'  extreme values), this algorithm functions in a different manner and won't
 #'  always detect outliers. Note that `method = "optics"` requires the
 #'  **dbscan** package to be installed, and that it takes some time to compute
-#'  the results.
+#'  the results. Additionally, the `optics_xi` (default to 0.05) is passed to
+#'  the [dbscan::extractXi()] function to further refine the cluster selection.
 #'
 #'  - **Local Outlier Factor**:
 #'  Based on a K nearest neighbors algorithm, LOF compares the local density of
@@ -242,6 +243,7 @@
 #'   mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
 #'   ics = 0.001,
 #'   optics = 2 * ncol(x),
+#'   optics_xi = 0.05,
 #'   lof = 0.001
 #' )
 #' ```
@@ -890,7 +892,12 @@ check_outliers.data.frame <- function(x,
     )
   }
 
-  thresholds <- thresholds[names(thresholds) %in% method]
+  # Keep only relevant threshold
+  valid <- method
+  if("optics" %in% valid) {
+    valid <- c(valid, "optics_xi")
+  }
+  thresholds <- thresholds[names(thresholds) %in% valid]
 
   out.meta <- .check_outliers.data.frame_method(x, method, thresholds, ID, ID.names, ...)
   out <- out.meta$out
@@ -1207,7 +1214,8 @@ check_outliers.data.frame <- function(x,
     out <- c(out, .check_outliers_optics(
       x,
       threshold = thresholds$optics,
-      ID.names = ID.names
+      ID.names = ID.names,
+      xi = thresholds$optics_xi
     ))
 
     count.table <- datawizard::data_filter(
@@ -1506,38 +1514,23 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 .check_outliers_thresholds_nowarn <- function(x) {
-  zscore <- stats::qnorm(p = 1 - 0.001 / 2)
-  zscore_robust <- stats::qnorm(p = 1 - 0.001 / 2)
-  iqr <- 1.7
-  ci <- 1 - 0.001
-  eti <- 1 - 0.001
-  hdi <- 1 - 0.001
-  bci <- 1 - 0.001
-  cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
-  pareto <- 0.7
-  mahalanobis_value <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  mahalanobis_robust <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  mcd <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  ics <- 0.001
-  optics <- 2 * ncol(x)
-  lof <- 0.001
-
   list(
-    zscore = zscore,
-    zscore_robust = zscore_robust,
-    iqr = iqr,
-    ci = ci,
-    hdi = hdi,
-    eti = eti,
-    bci = bci,
-    cook = cook,
-    pareto = pareto,
-    mahalanobis = mahalanobis_value,
-    mahalanobis_robust = mahalanobis_robust,
-    mcd = mcd,
-    ics = ics,
-    optics = optics,
-    lof = lof
+    zscore = stats::qnorm(p = 1 - 0.001 / 2),
+    zscore_robust = stats::qnorm(p = 1 - 0.001 / 2),
+    iqr = 1.7,
+    ci = 1 - 0.001,
+    hdi = 1 - 0.001,
+    eti = 1 - 0.001,
+    bci = 1 - 0.001,
+    cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+    pareto = 0.7,
+    mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+    mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+    mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+    ics = 0.001,
+    optics = 2 * ncol(x),
+    optics_xi = 0.05,
+    lof = 0.001
   )
 }
 
@@ -1929,7 +1922,8 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 .check_outliers_optics <- function(x,
                                    threshold = NULL,
-                                   ID.names = NULL) {
+                                   ID.names = NULL,
+                                   xi = 0.05) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
@@ -1940,7 +1934,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
   # Compute
   rez <- dbscan::optics(x, minPts = threshold)
-  rez <- dbscan::extractXi(rez, xi = 0.05) # TODO: find automatic way of setting xi
+  rez <- dbscan::extractXi(rez, xi = xi) # TODO: find automatic way of setting xi
 
   out$Distance_OPTICS <- rez$coredist
 
