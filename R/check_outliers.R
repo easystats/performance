@@ -883,6 +883,13 @@ check_outliers.data.frame <- function(x,
   } else if (is.numeric(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
+    # need to fix this manually - "optics" automatically includes method
+    # "optics_xi", which is allowed to range between 0 and 1 - since values
+    # for "optics" can be > 1, it might overwrite "optics_xi" with an invalid
+    # value...
+    if (thresholds$optics_xi > 1) {
+      thresholds$optics_xi <- 0.05
+    }
   } else {
     insight::format_error(
       paste(
