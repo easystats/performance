@@ -198,7 +198,7 @@ plot.check_collinearity <- function(x, ...) {
   x <- insight::format_table(x)
   x <- datawizard::data_rename(
     x,
-    pattern = "SE_factor",
+    select = "SE_factor",
     replacement = "Increased SE",
     verbose = FALSE
   )
