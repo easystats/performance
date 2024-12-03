@@ -12,7 +12,7 @@
 
   dat <- datawizard::data_select(
     dat,
-    select = c(x = "Term", y = "VIF", facet = "Component", group = "group")
+    select = c(x = "Term", y = "VIF", facet = "Component", group = "group"),
     verbose = FALSE
   )
 
