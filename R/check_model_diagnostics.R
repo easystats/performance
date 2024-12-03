@@ -10,16 +10,9 @@
   dat$group[dat$VIF >= 5 & dat$VIF < 10] <- "moderate"
   dat$group[dat$VIF >= 10] <- "high"
 
-  dat <- datawizard::data_rename(
-    dat,
-    c("Term", "VIF", "SE_factor", "Component"),
-    c("x", "y", "se", "facet"),
-    verbose = FALSE
-  )
-
   dat <- datawizard::data_select(
     dat,
-    c("x", "y", "facet", "group"),
+    select = c(x = "Term", y = "VIF", facet = "Component", group = "group")
     verbose = FALSE
   )
 
