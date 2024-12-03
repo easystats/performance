@@ -519,7 +519,7 @@ check_collinearity.zerocount <- function(x,
   if (!is.null(insight::find_interactions(x)) && any(result > 10) && isTRUE(verbose)) {
     insight::format_alert(
       "Model has interaction terms. VIFs might be inflated.",
-      "You may check multicollinearity among predictors of a model without interaction terms."
+      "Try to center the variables used for the interaction, or check multicollinearity among predictors of a model without interaction terms." # nolint
     )
   }
 
