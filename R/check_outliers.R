@@ -903,6 +903,7 @@ check_outliers.data.frame <- function(x,
   valid <- method
   if("optics" %in% valid) {
     valid <- c(valid, "optics_xi")
+    method <- c(method, "optics_xi")
   }
   thresholds <- thresholds[names(thresholds) %in% valid]
 
