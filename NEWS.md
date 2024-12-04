@@ -2,6 +2,9 @@
 
 ## Breaking changes
 
+* `check_outliers()` with `method = "optics"` now returns a further refined
+  cluster selection, by passing the `optics_xi` argument to `dbscan::extractXi()`.
+
 * Deprecated arguments and alias-function-names have been removed.
 
 * Argument names in `check_model()` that refer to plot-aesthetics (like
