@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,8 @@
 <h2 class="pkg-version" data-toc-text="0.12.5" id="performance-0125">performance 0.12.5<a class="anchor" aria-label="anchor" href="#performance-0125"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-12-5">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-5"></a></h3>
-<ul><li><p>Deprecated arguments and alias-function-names have been removed.</p></li>
+<ul><li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> with <code>method = "optics"</code> now returns a further refined cluster selection, by passing the <code>optics_xi</code> argument to <code><a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">dbscan::extractXi()</a></code>.</p></li>
+<li><p>Deprecated arguments and alias-function-names have been removed.</p></li>
 <li><p>Argument names in <code><a href="../reference/check_model.html">check_model()</a></code> that refer to plot-aesthetics (like <code>dot_size</code>) are now harmonized across <em>easystats</em> packages, meaning that these have been renamed. They now follow the pattern <code>aesthetic_type</code>, e.g. <code>size_dot</code> (instead of <code>dot_size</code>).</p></li>
 </ul></div>
 <div class="section level3">

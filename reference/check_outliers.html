@@ -25,7 +25,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -329,7 +329,8 @@ detect several outliers (as these are usually defined as a percentage of
 extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that <code>method = "optics"</code> requires the
 <strong>dbscan</strong> package to be installed, and that it takes some time to compute
-the results.</p></li>
+the results. Additionally, the <code>optics_xi</code> (default to 0.05) is passed to
+the <code><a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">dbscan::extractXi()</a></code> function to further refine the cluster selection.</p></li>
 <li><p><strong>Local Outlier Factor</strong>:
 Based on a K nearest neighbors algorithm, LOF compares the local density of
 a point to the local densities of its neighbors instead of computing a
@@ -376,8 +377,9 @@ the related documentations in the <strong>DHARMa</strong> package, e.g. <code><a
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  <span class="at">mcd =</span> stats<span class="sc">::</span><span class="fu">qchisq</span>(<span class="at">p =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.001</span>, <span class="at">df =</span> <span class="fu">ncol</span>(x)),</span>
 <span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="at">ics =</span> <span class="fl">0.001</span>,</span>
 <span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>  <span class="at">optics =</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">ncol</span>(x),</span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="at">lof =</span> <span class="fl">0.001</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>)</span></code></pre><p></p></div>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="at">optics_xi =</span> <span class="fl">0.05</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>  <span class="at">lof =</span> <span class="fl">0.001</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>)</span></code></pre><p></p></div>
     </div>
     <div class="section level2">
     <h2 id="meta-analysis-models">Meta-analysis models<a class="anchor" aria-label="anchor" href="#meta-analysis-models"></a></h2>
@@ -542,7 +544,7 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following methods and thresholds: zscore_robust (3.291),</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  iqr (2), ci (1), cook (1), pareto (0.7), mahalanobis (31.264),</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  mahalanobis_robust (31.264), mcd (31.264), ics (0.001), optics (22), lof</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (0.001).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  (0.05), optics_xi (0.001).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Note: Outliers were classified as such by</span> <span style="color: #BBBB00;">at least half of the selected methods. </span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
