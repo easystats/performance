@@ -19,7 +19,7 @@ intervals for VIF and tolerance are based on Marcoulides et al.
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -194,6 +194,13 @@ interaction is also called "inessential ill-conditioning", which leads to
 inflated VIF values that are typically seen for models with interaction
 terms <em>(Francoeur 2013)</em>. Centering interaction terms can resolve this
 issue <em>(Kim and Jung 2024)</em>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="multicollinearity-and-polynomial-terms">Multicollinearity and Polynomial Terms<a class="anchor" aria-label="anchor" href="#multicollinearity-and-polynomial-terms"></a></h2>
+
+
+<p>Polynomial transformations are considered a single term and thus VIFs are
+not calculated between them.</p>
     </div>
     <div class="section level2">
     <h2 id="concurvity-for-smooth-terms-in-generalized-additive-models">Concurvity for Smooth Terms in Generalized Additive Models<a class="anchor" aria-label="anchor" href="#concurvity-for-smooth-terms-in-generalized-additive-models"></a></h2>
