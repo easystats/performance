@@ -76,6 +76,10 @@
 #' terms _(Francoeur 2013)_. Centering interaction terms can resolve this
 #' issue _(Kim and Jung 2024)_.
 #'
+#' @section Multicollinearity and Polynomial Terms:
+#' Polynomial transformations are considered a single term and thus VIFs are
+#' not calculated between them.
+#'
 #' @section Concurvity for Smooth Terms in Generalized Additive Models:
 #' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
 #' considered as a collinearity check for smooth terms in GAMs."Concurvity
