@@ -198,7 +198,8 @@
 #'  extreme values), this algorithm functions in a different manner and won't
 #'  always detect outliers. Note that `method = "optics"` requires the
 #'  **dbscan** package to be installed, and that it takes some time to compute
-#'  the results.
+#'  the results. Additionally, the `optics_xi` (default to 0.05) is passed to
+#'  the [dbscan::extractXi()] function to further refine the cluster selection.
 #'
 #'  - **Local Outlier Factor**:
 #'  Based on a K nearest neighbors algorithm, LOF compares the local density of
@@ -242,6 +243,7 @@
 #'   mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
 #'   ics = 0.001,
 #'   optics = 2 * ncol(x),
+#'   optics_xi = 0.05,
 #'   lof = 0.001
 #' )
 #' ```
@@ -378,41 +380,22 @@ check_outliers.default <- function(x,
   # Check args
   if (all(method == "all")) {
     method <- c(
-      "zscore_robust",
-      "iqr",
-      "ci",
-      "cook",
-      "pareto",
-      "mahalanobis",
-      "mahalanobis_robust",
-      "mcd",
-      "ics",
-      "optics",
-      "lof"
+      "zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis",
+      "mahalanobis_robust", "mcd", "ics", "optics", "lof"
     )
   }
 
   method <- match.arg(
     method,
     c(
-      "zscore",
-      "zscore_robust",
-      "iqr",
-      "ci",
-      "hdi",
-      "eti",
-      "bci",
-      "cook",
-      "pareto",
-      "mahalanobis",
-      "mahalanobis_robust",
-      "mcd",
-      "ics",
-      "optics",
-      "lof"
+      "zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook",
+      "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof"
     ),
     several.ok = TRUE
   )
+
+  # Get model information
+  m_info <- insight::model_info(x)
 
   # Get data
   my_data <- insight::get_data(x, verbose = FALSE)
@@ -427,8 +410,17 @@ check_outliers.default <- function(x,
     )
   }
 
-  # Remove non-numerics
-  my_data <- datawizard::data_select(my_data, select = is.numeric, verbose = FALSE)
+  # Remove non-numerics, but in case of binomial, only check predictors
+  if (m_info$is_binomial) {
+    model_predictors <- unique(insight::find_predictors(x, flatten = TRUE))
+  } else {
+    model_predictors <- colnames(my_data)
+  }
+  my_data <- datawizard::data_select(
+    my_data[model_predictors],
+    select = is.numeric,
+    verbose = FALSE
+  )
 
   # check if any data left
   if (is.null(my_data) || ncol(my_data) == 0) {
@@ -468,7 +460,7 @@ check_outliers.default <- function(x,
   }
 
   # Cook
-  if ("cook" %in% method && !insight::model_info(x)$is_bayesian && !inherits(x, "bife")) {
+  if ("cook" %in% method && !m_info$is_bayesian && !inherits(x, "bife")) {
     data_cook <- .check_outliers_cook(
       x,
       threshold = thresholds$cook
@@ -508,7 +500,7 @@ check_outliers.default <- function(x,
   }
 
   # Pareto
-  if ("pareto" %in% method && insight::model_info(x)$is_bayesian) {
+  if ("pareto" %in% method && m_info$is_bayesian) {
     data_pareto <- .check_outliers_pareto(
       x,
       threshold = thresholds$pareto
@@ -891,6 +883,13 @@ check_outliers.data.frame <- function(x,
   } else if (is.numeric(threshold)) {
     thresholds <- .check_outliers_thresholds(x)
     thresholds <- lapply(thresholds, function(x) threshold)
+    # need to fix this manually - "optics" automatically includes method
+    # "optics_xi", which is allowed to range between 0 and 1 - since values
+    # for "optics" can be > 1, it might overwrite "optics_xi" with an invalid
+    # value...
+    if (thresholds$optics_xi > 1) {
+      thresholds$optics_xi <- 0.05
+    }
   } else {
     insight::format_error(
       paste(
@@ -900,7 +899,13 @@ check_outliers.data.frame <- function(x,
     )
   }
 
-  thresholds <- thresholds[names(thresholds) %in% method]
+  # Keep only relevant threshold
+  valid <- method
+  if("optics" %in% valid) {
+    valid <- c(valid, "optics_xi")
+    method <- c(method, "optics_xi")
+  }
+  thresholds <- thresholds[names(thresholds) %in% valid]
 
   out.meta <- .check_outliers.data.frame_method(x, method, thresholds, ID, ID.names, ...)
   out <- out.meta$out
@@ -1217,7 +1222,8 @@ check_outliers.data.frame <- function(x,
     out <- c(out, .check_outliers_optics(
       x,
       threshold = thresholds$optics,
-      ID.names = ID.names
+      ID.names = ID.names,
+      xi = thresholds$optics_xi
     ))
 
     count.table <- datawizard::data_filter(
@@ -1516,38 +1522,23 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 .check_outliers_thresholds_nowarn <- function(x) {
-  zscore <- stats::qnorm(p = 1 - 0.001 / 2)
-  zscore_robust <- stats::qnorm(p = 1 - 0.001 / 2)
-  iqr <- 1.7
-  ci <- 1 - 0.001
-  eti <- 1 - 0.001
-  hdi <- 1 - 0.001
-  bci <- 1 - 0.001
-  cook <- stats::qf(0.5, ncol(x), nrow(x) - ncol(x))
-  pareto <- 0.7
-  mahalanobis_value <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  mahalanobis_robust <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  mcd <- stats::qchisq(p = 1 - 0.001, df = ncol(x))
-  ics <- 0.001
-  optics <- 2 * ncol(x)
-  lof <- 0.001
-
   list(
-    zscore = zscore,
-    zscore_robust = zscore_robust,
-    iqr = iqr,
-    ci = ci,
-    hdi = hdi,
-    eti = eti,
-    bci = bci,
-    cook = cook,
-    pareto = pareto,
-    mahalanobis = mahalanobis_value,
-    mahalanobis_robust = mahalanobis_robust,
-    mcd = mcd,
-    ics = ics,
-    optics = optics,
-    lof = lof
+    zscore = stats::qnorm(p = 1 - 0.001 / 2),
+    zscore_robust = stats::qnorm(p = 1 - 0.001 / 2),
+    iqr = 1.7,
+    ci = 1 - 0.001,
+    hdi = 1 - 0.001,
+    eti = 1 - 0.001,
+    bci = 1 - 0.001,
+    cook = stats::qf(0.5, ncol(x), nrow(x) - ncol(x)),
+    pareto = 0.7,
+    mahalanobis = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+    mahalanobis_robust = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+    mcd = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+    ics = 0.001,
+    optics = 2 * ncol(x),
+    optics_xi = 0.05,
+    lof = 0.001
   )
 }
 
@@ -1939,7 +1930,8 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 .check_outliers_optics <- function(x,
                                    threshold = NULL,
-                                   ID.names = NULL) {
+                                   ID.names = NULL,
+                                   xi = 0.05) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
@@ -1950,7 +1942,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
   # Compute
   rez <- dbscan::optics(x, minPts = threshold)
-  rez <- dbscan::extractXi(rez, xi = 0.05) # TODO: find automatic way of setting xi
+  rez <- dbscan::extractXi(rez, xi = xi) # TODO: find automatic way of setting xi
 
   out$Distance_OPTICS <- rez$coredist
 

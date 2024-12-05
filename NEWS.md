@@ -2,6 +2,9 @@
 
 ## Breaking changes
 
+* `check_outliers()` with `method = "optics"` now returns a further refined
+  cluster selection, by passing the `optics_xi` argument to `dbscan::extractXi()`.
+
 * Deprecated arguments and alias-function-names have been removed.
 
 * Argument names in `check_model()` that refer to plot-aesthetics (like
@@ -12,6 +15,11 @@
 ## Changes
 
 * Increased accuracy for `check_convergence()` for *glmmTMB* models.
+
+## Bug fixes
+
+* `check_outliers()` did not warn that no numeric variables were found when only
+  the response variable was numeric, but all relevant predictors were not.
 
 # performance 0.12.4
 
