@@ -70,7 +70,7 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+  if (info$is_binomial && !info$is_betabinomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
@@ -96,7 +96,7 @@ r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli) {
+  if (info$is_binomial && !info$is_bernoulli && !info$is_betabinomial) {
     if (verbose) {
       insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
