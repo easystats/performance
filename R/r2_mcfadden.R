@@ -64,7 +64,7 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
 
-  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+  if (info$is_binomial && !info$is_betabinomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
       insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
@@ -98,6 +98,9 @@ r2_mcfadden.brmultinom <- r2_mcfadden.glm
 
 #' @export
 r2_mcfadden.censReg <- r2_mcfadden.glm
+
+#' @export
+r2_mcfadden.glmmTMB <- r2_mcfadden.glm
 
 #' @export
 r2_mcfadden.truncreg <- r2_mcfadden.glm

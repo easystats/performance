@@ -526,6 +526,9 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
       attr(out, "model_type") <- "Logistic"
       names(out$R2_Tjur) <- "Tjur's R2"
       class(out) <- c("r2_pseudo", class(out))
+    } else if (info$is_betabinomial) {
+      # betabinomial default to mcfadden, see pscl:::pR2Work
+      out <- r2_mcfadden(model)
     } else if (info$is_binomial && !info$is_bernoulli) {
       # currently, non-bernoulli binomial models are not supported
       if (verbose) {
