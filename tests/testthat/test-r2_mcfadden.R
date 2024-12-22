@@ -37,7 +37,7 @@ test_that("r2_mcfadden, glmmTMB-beta-binomial", {
     newdata = dd,
     newparams = list(beta = c(0,1), betadisp = -1),
     weights = rep(10, nrow(dd)),
-    family = "betabinomial"
+    family = glmmTMB::betabinomial()
   )[[1]]
   dd$success <- round(runif(nrow(dd), 0, dd$y))
 
@@ -45,7 +45,7 @@ test_that("r2_mcfadden, glmmTMB-beta-binomial", {
     y/10 ~ 1 + x,
     data = dd,
     weights = rep(10, nrow(dd)),
-    family = "betabinomial"
+    family = glmmTMB::betabinomial()
   )
   out1 <- r2(m)
   out2 <- r2_mcfadden(m)
@@ -56,7 +56,7 @@ test_that("r2_mcfadden, glmmTMB-beta-binomial", {
     cbind(y, success) ~ 1 + x,
     data = dd,
     weights = rep(10, nrow(dd)),
-    family = "betabinomial"
+    family = glmmTMB::betabinomial()
   )
   expect_warning(r2(m), regex = "calculate accurate")
   expect_warning(r2_mcfadden(m), regex = "calculate accurate")
