@@ -23,6 +23,12 @@ test_that("check_collinearity, correct order in print", {
 })
 
 
+test_that("check_collinearity, interaction", {
+  m <- lm(mpg ~ wt * cyl, data = mtcars)
+  expect_message(check_collinearity(m), regex = "Model has interaction terms")
+})
+
+
 test_that("check_collinearity", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")

@@ -250,7 +250,7 @@ Our model clearly suffers from multicollinearity, as all predictors have high VI
 
 ### How to fix this?
 
-Usually, predictors with (very) high VIF values should be removed from the model to fix multicollinearity. Some caution is needed for interaction terms. If interaction terms are included in a model, high VIF values are expected. This portion of multicollinearity among the component terms of an interaction is also called "inessential ill-conditioning", which leads to inflated VIF values that are typically seen for models with interaction terms _(Francoeur 2013)_. In such cases, re-fit your model without interaction terms and check this model for collinearity among predictors.
+Usually, predictors with (very) high VIF values should be removed from the model to fix multicollinearity. Some caution is needed for interaction terms. If interaction terms are included in a model, high VIF values are expected. This portion of multicollinearity among the component terms of an interaction is also called "inessential ill-conditioning", which leads to inflated VIF values that are typically seen for models with interaction terms _(Francoeur 2013)_. In such cases, try centering the involved interaction terms, which can reduce multicollinearity _(Kim and Jung 2024)_, or re-fit your model without interaction terms and check this model for collinearity among predictors.
 
 ## Normality of residuals
 
@@ -292,6 +292,8 @@ Gelman A, Greenland S. Are confidence intervals better termed "uncertainty inter
 Gelman A, and Hill J. Data analysis using regression and multilevel/hierarchical models. Cambridge; New York. Cambridge University Press, 2007
 
 James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.).An introduction to statistical learning: with applications in R. New York: Springer, 2013
+
+Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis with causal graphs. British Journal of Mathematical and Statistical Psychology, 00, 1–14.
 
 Leys C, Delacre M, Mora YL, Lakens D, Ley C. How to Classify, Detect, and Manage Univariate and Multivariate Outliers, With Emphasis on Pre-Registration. International Review of Social Psychology, 2019
 
