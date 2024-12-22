@@ -26,3 +26,38 @@ test_that("r2_mcfadden", {
     }
   )
 })
+
+
+test_that("r2_mcfadden, glmmTMB-beta-binomial", {
+  skip_if_not_installed("glmmTMB")
+  set.seed(101)
+  dd <- data.frame(x = rnorm(200))
+  dd$y <- glmmTMB::simulate_new(
+    ~ 1 + x,
+    newdata = dd,
+    newparams = list(beta = c(0,1), betadisp = -1),
+    weights = rep(10, nrow(dd)),
+    family = "betabinomial"
+  )[[1]]
+  dd$success <- round(runif(nrow(dd), 0, dd$y))
+
+  m <- glmmTMB::glmmTMB(
+    y/10 ~ 1 + x,
+    data = dd,
+    weights = rep(10, nrow(dd)),
+    family = "betabinomial"
+  )
+  out1 <- r2(m)
+  out2 <- r2_mcfadden(m)
+  expect_equal(out1$R2, out2$R2, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out1$R2, 0.06892733, tolerance = 1e-4, ignore_attr = TRUE)
+
+  m <- glmmTMB::glmmTMB(
+    cbind(y, success) ~ 1 + x,
+    data = dd,
+    weights = rep(10, nrow(dd)),
+    family = "betabinomial"
+  )
+  expect_warning(r2(m), regex = "calculate accurate")
+  expect_warning(r2_mcfadden(m), regex = "calculate accurate")
+})
