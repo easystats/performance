@@ -44,11 +44,12 @@ withr::with_environment(
         family = glmmTMB::betabinomial()
       )[[1]]
       dd$success <- round(runif(nrow(dd), 0, dd$y))
+      d <<- dd
 
       m <- glmmTMB::glmmTMB(
         y/10 ~ 1 + x,
-        data = dd,
-        weights = rep(10, nrow(dd)),
+        data = d,
+        weights = rep(10, nrow(d)),
         family = glmmTMB::betabinomial()
       )
       out1 <- r2(m)
@@ -58,8 +59,8 @@ withr::with_environment(
 
       m <- glmmTMB::glmmTMB(
         cbind(y, success) ~ 1 + x,
-        data = dd,
-        weights = rep(10, nrow(dd)),
+        data = d,
+        weights = rep(10, nrow(d)),
         family = glmmTMB::betabinomial()
       )
       expect_warning(r2(m), regex = "calculate accurate")
