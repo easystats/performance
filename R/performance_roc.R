@@ -124,15 +124,15 @@ print.performance_roc <- function(x, ...) {
 
 
 #' @export
-as.numeric.performance_roc <- function(x, ...) {
+as.double.performance_roc <- function(x, ...) {
   if (length(unique(x$Model)) == 1) {
     auc <- bayestestR::area_under_curve(x$Specificity, x$Sensitivity)
   } else {
     dat <- split(x, f = x$Model)
 
-    auc <- c()
+    auc <- numeric(length(dat))
     for (i in seq_along(dat)) {
-      auc <- c(auc, bayestestR::area_under_curve(dat[[i]]$Specificity, dat[[i]]$Sensitivity))
+      auc[i] <- bayestestR::area_under_curve(dat[[i]]$Specificity, dat[[i]]$Sensitivity)
     }
   }
   auc
