@@ -115,6 +115,12 @@ terms \emph{(Francoeur 2013)}. Centering interaction terms can resolve this
 issue \emph{(Kim and Jung 2024)}.
 }
 
+\section{Multicollinearity and Polynomial Terms}{
+
+Polynomial transformations are considered a single term and thus VIFs are
+not calculated between them.
+}
+
 \section{Concurvity for Smooth Terms in Generalized Additive Models}{
 
 \code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be

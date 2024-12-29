@@ -63,10 +63,18 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+  matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
 
-  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+  if (info$is_binomial && !info$is_betabinomial && !info$is_bernoulli && class(model)[1] %in% c("glm", "glmmTMB")) {
     if (verbose) {
       insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+    }
+    return(NULL)
+  }
+  # currently, beta-binomial models without proportion response are not supported
+  if (info$is_betabinomial && matrix_response) {
+    if (verbose) {
+      insight::format_warning("Can't calculate accurate R2 for beta-binomial models with matrix-response formulation.")
     }
     return(NULL)
   }
@@ -98,6 +106,9 @@ r2_mcfadden.brmultinom <- r2_mcfadden.glm
 
 #' @export
 r2_mcfadden.censReg <- r2_mcfadden.glm
+
+#' @export
+r2_mcfadden.glmmTMB <- r2_mcfadden.glm
 
 #' @export
 r2_mcfadden.truncreg <- r2_mcfadden.glm
