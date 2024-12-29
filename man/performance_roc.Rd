@@ -59,6 +59,7 @@ train_data <- iris[-folds, ]
 
 model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
 as.data.frame(performance_roc(model, new_data = test_data))
+as.numeric(performance_roc(model))
 
 roc <- performance_roc(model, new_data = test_data)
 area_under_curve(roc$Specificity, roc$Sensitivity)

@@ -599,7 +599,7 @@ as.data.frame.check_outliers <- function(x, ...) {
 }
 
 #' @export
-as.numeric.check_outliers <- function(x, ...) {
+as.double.check_outliers <- function(x, ...) {
   attributes(x)$data$Outlier
 }
 
