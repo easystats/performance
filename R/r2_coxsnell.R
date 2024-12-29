@@ -69,10 +69,19 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+  matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+  if (info$is_binomial && !info$is_betabinomial && !info$is_bernoulli && class(model)[1] %in% c("glm", "glmmTMB")) {
     if (verbose) {
       insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+    }
+    return(NULL)
+  }
+  # currently, beta-binomial models without proportion response are not supported
+  if (info$is_betabinomial && matrix_response) {
+    if (verbose) {
+      insight::format_warning("Can't calculate accurate R2 for beta-binomial models with matrix-response formulation.")
     }
     return(NULL)
   }
@@ -96,7 +105,7 @@ r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli) {
+  if (info$is_binomial && !info$is_bernoulli && !info$is_betabinomial) {
     if (verbose) {
       insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }

@@ -516,6 +516,7 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     }
     # calculate r2 for non-mixed glmmTMB models here -------------------------
     info <- insight::model_info(model, verbose = FALSE)
+    matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
 
     if (info$is_linear) {
       # for linear models, use the manual calculation
@@ -526,6 +527,17 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
       attr(out, "model_type") <- "Logistic"
       names(out$R2_Tjur) <- "Tjur's R2"
       class(out) <- c("r2_pseudo", class(out))
+    } else if (info$is_betabinomial) {
+      # currently, beta-binomial models without proportion response are not supported
+      if (matrix_response) {
+        if (verbose) {
+          insight::format_warning("Can't calculate accurate R2 for beta-binomial models with matrix-response formulation.")
+        }
+        out <- NULL
+      } else {
+        # betabinomial default to mcfadden, see pscl:::pR2Work
+        out <- r2_mcfadden(model)
+      }
     } else if (info$is_binomial && !info$is_bernoulli) {
       # currently, non-bernoulli binomial models are not supported
       if (verbose) {

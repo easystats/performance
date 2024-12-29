@@ -76,6 +76,10 @@
 #' terms _(Francoeur 2013)_. Centering interaction terms can resolve this
 #' issue _(Kim and Jung 2024)_.
 #'
+#' @section Multicollinearity and Polynomial Terms:
+#' Polynomial transformations are considered a single term and thus VIFs are
+#' not calculated between them.
+#'
 #' @section Concurvity for Smooth Terms in Generalized Additive Models:
 #' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
 #' considered as a collinearity check for smooth terms in GAMs."Concurvity
@@ -198,7 +202,7 @@ plot.check_collinearity <- function(x, ...) {
   x <- insight::format_table(x)
   x <- datawizard::data_rename(
     x,
-    pattern = "SE_factor",
+    select = "SE_factor",
     replacement = "Increased SE",
     verbose = FALSE
   )
@@ -410,7 +414,7 @@ check_collinearity.zerocount <- function(x,
 
 
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
-  v <- insight::get_varcov(x, component = component, verbose = FALSE)
+  v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
 
   # sanity check
   if (is.null(v)) {
@@ -519,7 +523,7 @@ check_collinearity.zerocount <- function(x,
   if (!is.null(insight::find_interactions(x)) && any(result > 10) && isTRUE(verbose)) {
     insight::format_alert(
       "Model has interaction terms. VIFs might be inflated.",
-      "You may check multicollinearity among predictors of a model without interaction terms."
+      "Try to center the variables used for the interaction, or check multicollinearity among predictors of a model without interaction terms." # nolint
     )
   }
 
