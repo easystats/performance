@@ -406,3 +406,10 @@ test_that("check_outliers with DHARMa", {
     )
   )
 })
+
+
+test_that("check_outliers with DHARMa", {
+  data(mtcars)
+  out <- check_outliers(mtcars$mpg, method = "zscore", threshold = 2)
+  expect_equal(which(as.numeric(out) == 1), c(18, 20))
+})
