@@ -22,8 +22,6 @@ r2_nagelkerke <- function(model, ...) {
 }
 
 
-
-
 # helper ---------------------------
 
 
@@ -45,9 +43,6 @@ r2_nagelkerke <- function(model, ...) {
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
-
-
-
 
 
 # Nagelkerke's R2 based on Cox&Snell's R2 ----------------
@@ -143,7 +138,6 @@ r2_nagelkerke.bife <- function(model, ...) {
 }
 
 
-
 # mfx models ---------------------
 
 
@@ -169,8 +163,6 @@ r2_nagelkerke.negbinirr <- r2_nagelkerke.logitmfx
 
 #' @export
 r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
-
-
 
 
 # Nagelkerke's R2 based on LogLik ----------------
@@ -224,7 +216,6 @@ r2_nagelkerke.truncreg <- r2_nagelkerke.clm
 
 #' @export
 r2_nagelkerke.DirichletRegModel <- r2_coxsnell.clm
-
 
 
 # Nagelkerke's R2 based on LogLik stored in model object ----------------

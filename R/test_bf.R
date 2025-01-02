@@ -30,7 +30,6 @@ test_bf.default <- function(..., reference = 1, text_length = NULL) {
 }
 
 
-
 #' @export
 test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) {
   if (.test_bf_areAllBayesian(objects) == "mixed") {
@@ -77,7 +76,6 @@ test_bf.ListModels <- function(objects, reference = 1, text_length = NULL, ...) 
   class(rez) <- c("bayesfactor_models", "see_bayesfactor_models", class(rez))
   rez
 }
-
 
 
 # Helpers -----------------------------------------------------------------

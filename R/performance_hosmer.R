@@ -63,7 +63,6 @@ performance_hosmer <- function(model, n_bins = 10) {
 }
 
 
-
 # methods ---------------------------------
 
 #' @export

@@ -90,7 +90,6 @@ performance_roc <- function(x, ..., predictions, new_data) {
 }
 
 
-
 # methods -----------------------------
 
 #' @export
@@ -159,7 +158,6 @@ as.double.performance_roc <- function(x, ...) {
 }
 
 
-
 .performance_roc_model <- function(x, new_data, model_name = "Model 1") {
   predictions <- stats::predict(x, newdata = new_data, type = "response")
   if (is.null(new_data)) new_data <- insight::get_data(x, verbose = FALSE)
@@ -177,7 +175,6 @@ as.double.performance_roc <- function(x, ...) {
 }
 
 
-
 .performance_roc_models <- function(x, names) {
   l <- lapply(seq_along(x), function(i) {
     if (.valid_roc_models(x[[i]])) {
@@ -188,7 +185,6 @@ as.double.performance_roc <- function(x, ...) {
   })
   do.call(rbind, l)
 }
-
 
 
 # add supported glm models here

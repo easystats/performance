@@ -59,7 +59,6 @@ performance_logloss.brmsfit <- function(model, verbose = TRUE, ...) {
 }
 
 
-
 # mfx models -------------------------------
 
 #' @export

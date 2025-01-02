@@ -25,7 +25,6 @@
 }
 
 
-
 # prepare data for QQ plot ----------------------------------
 
 .model_diagnostic_qq <- function(model, model_info = NULL, verbose = TRUE) {
@@ -86,7 +85,6 @@
 
   data.frame(x = fitted_, y = res_)
 }
-
 
 
 # prepare data for random effects QQ plot ----------------------------------
@@ -151,7 +149,6 @@
 }
 
 
-
 # prepare data for normality of residuals plot ----------------------------------
 
 .model_diagnostic_normality <- function(model, verbose = TRUE) {
@@ -169,7 +166,6 @@
   dat$curve <- stats::dnorm(seq(min(dat$x), max(dat$x), length.out = nrow(dat)), mean(r), stats::sd(r))
   dat
 }
-
 
 
 # prepare data for influential obs plot ----------------------------------
@@ -210,7 +206,6 @@
 }
 
 
-
 # prepare data for non-constant variance plot ----------------------------------
 
 .model_diagnostic_ncv <- function(model, verbose = TRUE) {
@@ -236,7 +231,6 @@
 
   ncv
 }
-
 
 
 # prepare data for homogeneity of variance plot ----------------------------------
@@ -281,7 +275,6 @@
     y = sqrt(abs(r))
   )
 }
-
 
 
 # prepare data for homogeneity of variance plot ----------------------------------
@@ -357,7 +350,6 @@
 
   d
 }
-
 
 
 .model_diagnostic_overdispersion <- function(model, ...) {

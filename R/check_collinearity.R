@@ -148,7 +148,6 @@ check_collinearity <- function(x, ...) {
 multicollinearity <- check_collinearity
 
 
-
 # default ------------------------------
 
 #' @rdname check_collinearity
@@ -157,7 +156,6 @@ check_collinearity.default <- function(x, ci = 0.95, verbose = TRUE, ...) {
   .is_model_valid(x)
   .check_collinearity(x, component = "conditional", ci = ci, verbose = verbose)
 }
-
 
 
 # methods -------------------------------------------
@@ -225,7 +223,6 @@ plot.check_collinearity <- function(x, ...) {
     print.data.frame(x[high_vif, ], row.names = FALSE)
   }
 }
-
 
 
 # other classes ----------------------------------
@@ -303,7 +300,6 @@ check_collinearity.betaor <- check_collinearity.logitor
 check_collinearity.betamfx <- check_collinearity.logitor
 
 
-
 # zi-models -------------------------------------
 
 #' @rdname check_collinearity
@@ -362,7 +358,6 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 # utilities ---------------------------------
 
 .check_collinearity_zi_model <- function(x, component, ci = 0.95, verbose = TRUE) {
@@ -410,7 +405,6 @@ check_collinearity.zerocount <- function(x,
     .check_collinearity(x, component, ci = ci, verbose = verbose)
   }
 }
-
 
 
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
@@ -586,7 +580,6 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 .term_assignments <- function(x, component, verbose = TRUE) {
   tryCatch(
     {
@@ -622,7 +615,6 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 .find_term_assignment <- function(x, component, verbose = TRUE) {
   pred <- insight::find_predictors(x)[[component]]
 
@@ -655,7 +647,6 @@ check_collinearity.zerocount <- function(x,
     parms
   )])
 }
-
 
 
 .zi_term_assignment <- function(x, component = "zero_inflated", verbose = TRUE) {

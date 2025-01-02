@@ -29,7 +29,6 @@ r2_mcfadden <- function(model, ...) {
 }
 
 
-
 # helper -----------------------
 
 
@@ -47,11 +46,6 @@ r2_mcfadden <- function(model, ...) {
   attr(out, "model_type") <- "Generalized Linear"
   structure(class = "r2_generic", out)
 }
-
-
-
-
-
 
 
 # r2 via loglik and update --------------------------
@@ -132,9 +126,6 @@ r2_mcfadden.mblogit <- function(model, ...) {
 }
 
 
-
-
-
 # mfx models ---------------------
 
 
@@ -162,7 +153,6 @@ r2_mcfadden.probitmfx <- r2_mcfadden.logitmfx
 r2_mcfadden.negbinmfx <- r2_mcfadden.logitmfx
 
 
-
 # special models -------------------------------------------
 
 
@@ -182,7 +172,6 @@ r2_mcfadden.clm2 <- function(model, ...) {
   l_null <- insight::get_loglikelihood(stats::update(model, location = ~1, scale = ~1))
   .r2_mcfadden(model, l_null)
 }
-
 
 
 #' @export

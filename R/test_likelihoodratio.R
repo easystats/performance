@@ -16,7 +16,6 @@ test_likelihoodratio <- function(..., estimator = "ML", verbose = TRUE) {
 test_lrt <- test_likelihoodratio
 
 
-
 # default --------------------
 
 #' @export
@@ -53,7 +52,6 @@ test_likelihoodratio.default <- function(..., estimator = "OLS", verbose = TRUE)
     )
   }
 }
-
 
 
 # methods ------------------------------

@@ -24,14 +24,12 @@ check_sphericity <- function(x, ...) {
 }
 
 
-
 # default --------------------------
 
 #' @export
 check_sphericity.default <- function(x, ...) {
   insight::format_error(paste0("Test not supported yet for object of class `", class(x)[1], "`."))
 }
-
 
 
 # methods ------------------------------
@@ -55,7 +53,6 @@ print.check_sphericity <- function(x, ...) {
   }
   invisible(x)
 }
-
 
 
 # other classes ------------------

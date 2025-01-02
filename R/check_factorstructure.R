@@ -114,9 +114,6 @@ check_factorstructure <- function(x, n = NULL, ...) {
 }
 
 
-
-
-
 #' @rdname check_factorstructure
 #' @export
 check_kmo <- function(x, n = NULL, ...) {
@@ -169,9 +166,6 @@ check_kmo <- function(x, n = NULL, ...) {
 }
 
 
-
-
-
 #' @rdname check_factorstructure
 #' @export
 check_sphericity_bartlett <- function(x, n = NULL, ...) {
@@ -211,7 +205,6 @@ check_sphericity_bartlett <- function(x, n = NULL, ...) {
 
   out
 }
-
 
 
 # Helpers -----------------------------------------------------------------

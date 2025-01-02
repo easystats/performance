@@ -59,7 +59,6 @@ r2_coxsnell <- function(model, ...) {
 }
 
 
-
 # r2-coxsnell based on model information ---------------------------
 
 
@@ -168,7 +167,6 @@ r2_coxsnell.bife <- function(model, ...) {
 }
 
 
-
 # mfx models ---------------------
 
 
@@ -196,8 +194,6 @@ r2_coxsnell.negbinirr <- r2_coxsnell.logitmfx
 r2_coxsnell.negbinmfx <- r2_coxsnell.logitmfx
 
 
-
-
 # r2-coxsnell based on loglik stored in model object ---------------------------
 
 
@@ -215,7 +211,6 @@ r2_coxsnell.svycoxph <- function(model, ...) {
   l_base <- model$ll[1]
   .r2_coxsnell(model, l_base)
 }
-
 
 
 # r2-coxsnell based on loglik of null-model (update) ---------------------------
