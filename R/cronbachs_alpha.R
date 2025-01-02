@@ -31,7 +31,6 @@ cronbachs_alpha <- function(x, ...) {
 }
 
 
-
 #' @export
 cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
   # remove missings
@@ -50,12 +49,10 @@ cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 cronbachs_alpha.matrix <- function(x, verbose = TRUE, ...) {
   cronbachs_alpha(as.data.frame(x), verbose = verbose, ...)
 }
-
 
 
 #' @export

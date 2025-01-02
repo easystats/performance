@@ -46,6 +46,7 @@
 #'
 #' model <- glm(y ~ Sepal.Length + Sepal.Width, data = train_data, family = "binomial")
 #' as.data.frame(performance_roc(model, new_data = test_data))
+#' as.numeric(performance_roc(model))
 #'
 #' roc <- performance_roc(model, new_data = test_data)
 #' area_under_curve(roc$Specificity, roc$Sensitivity)
@@ -89,7 +90,6 @@ performance_roc <- function(x, ..., predictions, new_data) {
 }
 
 
-
 # methods -----------------------------
 
 #' @export
@@ -122,6 +122,21 @@ print.performance_roc <- function(x, ...) {
 }
 
 
+#' @export
+as.double.performance_roc <- function(x, ...) {
+  if (length(unique(x$Model)) == 1) {
+    auc <- bayestestR::area_under_curve(x$Specificity, x$Sensitivity)
+  } else {
+    dat <- split(x, f = x$Model)
+
+    auc <- numeric(length(dat))
+    for (i in seq_along(dat)) {
+      auc[i] <- bayestestR::area_under_curve(dat[[i]]$Specificity, dat[[i]]$Sensitivity)
+    }
+  }
+  auc
+}
+
 
 # utilities ---------------------------
 
@@ -143,7 +158,6 @@ print.performance_roc <- function(x, ...) {
 }
 
 
-
 .performance_roc_model <- function(x, new_data, model_name = "Model 1") {
   predictions <- stats::predict(x, newdata = new_data, type = "response")
   if (is.null(new_data)) new_data <- insight::get_data(x, verbose = FALSE)
@@ -161,7 +175,6 @@ print.performance_roc <- function(x, ...) {
 }
 
 
-
 .performance_roc_models <- function(x, names) {
   l <- lapply(seq_along(x), function(i) {
     if (.valid_roc_models(x[[i]])) {
@@ -174,12 +187,11 @@ print.performance_roc <- function(x, ...) {
 }
 
 
-
 # add supported glm models here
 
 .valid_roc_models <- function(x) {
   if (inherits(x, "model_fit")) {
     x <- x$fit
   }
-  inherits(x, c("glm", "glmerMod", "logitor", "logitmfx", "probitmfx"))
+  inherits(x, c("glm", "glmerMod", "logitor", "logitmfx", "probitmfx", "glmmTMB"))
 }

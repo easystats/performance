@@ -327,7 +327,6 @@ r2.nestedLogit <- function(model, ci = NULL, verbose = TRUE, ...) {
 }
 
 
-
 # mfx models ---------------------
 
 
@@ -364,8 +363,6 @@ r2.betaor <- r2.logitmfx
 r2.model_fit <- r2.logitmfx
 
 
-
-
 # Cox & Snell R2 ---------------------
 
 
@@ -382,8 +379,6 @@ r2.crch <- r2.BBreg
 
 #' @export
 r2.bayesx <- r2.BBreg
-
-
 
 
 # Nagelkerke R2 ----------------------
@@ -441,9 +436,6 @@ r2.mblogit <- function(model, ...) {
 }
 
 
-
-
-
 # McFadden ----------------------
 
 
@@ -456,8 +448,6 @@ r2.multinom <- function(model, ...) {
 
 #' @export
 r2.mlogit <- r2.multinom
-
-
 
 
 # Zeroinflated R2 ------------------
@@ -598,7 +588,6 @@ r2.wbm <- function(model, tolerance = 1e-5, ...) {
 }
 
 
-
 #' @export
 r2.sem <- function(model, ...) {
   r2_conditional <- model$r2c
@@ -615,7 +604,6 @@ r2.sem <- function(model, ...) {
     )
   )
 }
-
 
 
 # Bayes R2 ------------------------
@@ -676,7 +664,6 @@ r2.rma <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.feis <- function(model, ...) {
   out <- list(
@@ -687,7 +674,6 @@ r2.feis <- function(model, ...) {
   attr(out, "model_type") <- "Fixed Effects Individual Slope"
   structure(class = "r2_generic", out)
 }
-
 
 
 #' @export
@@ -726,7 +712,6 @@ r2.fixest_multi <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.felm <- function(model, ...) {
   model_summary <- summary(model)
@@ -740,8 +725,6 @@ r2.felm <- function(model, ...) {
 }
 
 
-
-
 #' @export
 r2.iv_robust <- function(model, ...) {
   out <- list(
@@ -752,7 +735,6 @@ r2.iv_robust <- function(model, ...) {
   attr(out, "model_type") <- "Two-Stage Least Squares Instrumental-Variable"
   structure(class = "r2_generic", out)
 }
-
 
 
 #' @export
@@ -768,7 +750,6 @@ r2.ivreg <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.bigglm <- function(model, ...) {
   out <- list(R2_CoxSnell = summary(model)$rsq)
@@ -776,7 +757,6 @@ r2.bigglm <- function(model, ...) {
   class(out) <- c("r2_pseudo", class(out))
   out
 }
-
 
 
 #' @export
@@ -800,7 +780,6 @@ r2.biglm <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.lmrob <- function(model, ...) {
   model_summary <- summary(model)
@@ -815,7 +794,6 @@ r2.lmrob <- function(model, ...) {
 
 #' @export
 r2.complmrob <- r2.lmrob
-
 
 
 #' @export
@@ -834,7 +812,6 @@ r2.Arima <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.plm <- function(model, ...) {
   model_summary <- summary(model)
@@ -846,7 +823,6 @@ r2.plm <- function(model, ...) {
   attr(out, "model_type") <- "Panel Data"
   structure(class = "r2_generic", out)
 }
-
 
 
 #' @export
@@ -865,7 +841,6 @@ r2.selection <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.svyglm <- function(model, ...) {
   rsq <- (model$null.deviance - model$deviance) / model$null.deviance
@@ -881,7 +856,6 @@ r2.svyglm <- function(model, ...) {
 }
 
 
-
 #' @export
 r2.vglm <- function(model, ...) {
   out <- list(R2_McKelvey = r2_mckelvey(model))
@@ -894,7 +868,6 @@ r2.vglm <- function(model, ...) {
 r2.vgam <- r2.vglm
 
 
-
 #' @export
 r2.DirichletRegModel <- function(model, ...) {
   out <- list(R2_Nagelkerke = r2_nagelkerke(model))
@@ -902,9 +875,6 @@ r2.DirichletRegModel <- function(model, ...) {
   class(out) <- c("r2_pseudo", class(out))
   out
 }
-
-
-
 
 
 # helper -------------------

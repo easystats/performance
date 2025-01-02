@@ -36,7 +36,6 @@ check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "au
 }
 
 
-
 # default -------------------------
 
 #' @export
@@ -105,7 +104,6 @@ check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "leve
 }
 
 
-
 # methods -----------------------
 
 #' @export
@@ -128,7 +126,6 @@ plot.check_homogeneity <- function(x, ...) {
   insight::check_if_installed("see", "for homogeneity plots")
   NextMethod()
 }
-
 
 
 # other classes -----------------------------

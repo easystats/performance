@@ -235,7 +235,6 @@ r2_nakagawa <- function(model,
 }
 
 
-
 # methods ------
 
 #' @export
@@ -280,7 +279,6 @@ print.r2_nakagawa <- function(x, digits = 3, ...) {
   cat("\n")
   invisible(x)
 }
-
 
 
 # bootstrapping --------------

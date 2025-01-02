@@ -54,7 +54,6 @@ test_that("check_collinearity", {
 })
 
 
-
 test_that("check_collinearity", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
@@ -232,8 +231,8 @@ test_that("check_collinearity, glmmTMB hurdle w/o zi", {
     count ~ spp + mined + (1 | site),
     data = Salamanders[Salamanders$count > 0, , drop = FALSE],
     family = glmmTMB::truncated_nbinom2(),
-    ziformula = ~ 0,
-    dispformula = ~ 1
+    ziformula = ~0,
+    dispformula = ~1
   )
   out <- check_collinearity(mod_trunc_error)
   expect_equal(out$VIF, c(1.03414, 1.03414), tolerance = 1e-3)

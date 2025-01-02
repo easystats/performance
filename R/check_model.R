@@ -183,7 +183,6 @@ check_model <- function(x, ...) {
 }
 
 
-
 # default ----------------------------
 
 #' @rdname check_model
@@ -311,7 +310,6 @@ plot.check_model <- function(x, ...) {
   insight::check_if_installed("see", "for model diagnostic plots")
   NextMethod()
 }
-
 
 
 # other classes ---------------------------
@@ -454,7 +452,6 @@ check_model.performance_simres <- function(x,
 check_model.DHARMa <- check_model.performance_simres
 
 
-
 # compile plots for checks of linear models  ------------------------
 
 .check_assumptions_linear <- function(model, model_info, check = "all", residual_type = "normal", verbose = TRUE, ...) {
@@ -515,7 +512,6 @@ check_model.DHARMa <- check_model.performance_simres
 }
 
 
-
 # compile plots for checks of generalized linear models  ------------------------
 
 .check_assumptions_glm <- function(model, model_info, check = "all", residual_type = "simulated", verbose = TRUE, ...) {
@@ -574,7 +570,6 @@ check_model.DHARMa <- check_model.performance_simres
   class(dat) <- c("check_model", "see_check_model")
   dat
 }
-
 
 
 # compile plots for checks of Bayesian models  ------------------------

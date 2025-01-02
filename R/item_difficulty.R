@@ -82,7 +82,6 @@ item_difficulty <- function(x, maximum_value = NULL) {
 }
 
 
-
 # methods --------------------------------------
 
 #' @export

@@ -19,6 +19,11 @@
 * `r2()` and `r2_mcfadden()` now support beta-binomial (non-mixed) models from
   package *glmmTMB*.
 
+* An `as.numeric()` resp. `as.double()` method for objects of class
+  `performance_roc` was added.
+
+* Improved documentation for `performance_roc()`.
+
 ## Bug fixes
 
 * `check_outliers()` did not warn that no numeric variables were found when only

@@ -41,7 +41,6 @@ model_performance <- function(model, ...) {
 performance <- model_performance
 
 
-
 # methods --------------------------------
 
 #' @export

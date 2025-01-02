@@ -303,7 +303,6 @@ r2_posterior.BFBayesFactor <- function(model,
 }
 
 
-
 #' @keywords internal
 .r2_posterior_model_average <- function(model, prior_odds = NULL, verbose = TRUE) {
   insight::check_if_installed("BayesFactor")
@@ -361,7 +360,6 @@ r2_posterior.BFBayesFactor <- function(model,
 }
 
 
-
 #' @export
 as.data.frame.r2_bayes <- function(x, ...) {
   out <- data.frame(
@@ -393,7 +391,6 @@ as.data.frame.r2_bayes <- function(x, ...) {
   out$Effectsize <- "Bayesian R-squared"
   out
 }
-
 
 
 # Utils -------------------------------------------------------------------

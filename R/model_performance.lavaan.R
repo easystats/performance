@@ -149,7 +149,6 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
 }
 
 
-
 #' @export
 model_performance.blavaan <- function(model, metrics = "all", verbose = TRUE, ...) {
   insight::check_if_installed(c("lavaan", "blavaan"))

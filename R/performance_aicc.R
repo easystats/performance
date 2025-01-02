@@ -140,7 +140,6 @@ performance_aic.vgam <- function(x, ...) {
 performance_aic.vglm <- performance_aic.vgam
 
 
-
 # Survey models --------------------------------------
 
 #' @export
@@ -151,7 +150,6 @@ performance_aic.svyglm <- function(x, ...) {
 
 #' @export
 performance_aic.svycoxph <- performance_aic.svyglm
-
 
 
 # mfx models --------------------------------------

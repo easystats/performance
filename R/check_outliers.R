@@ -590,7 +590,6 @@ check_outliers.default <- function(x,
 }
 
 
-
 # Methods -----------------------------------------------------------------
 
 #' @export
@@ -599,7 +598,7 @@ as.data.frame.check_outliers <- function(x, ...) {
 }
 
 #' @export
-as.numeric.check_outliers <- function(x, ...) {
+as.double.check_outliers <- function(x, ...) {
   attributes(x)$data$Outlier
 }
 
@@ -824,7 +823,6 @@ print.check_outliers_simres <- function(x, digits = 2, ...) {
 }
 
 
-
 # other classes -------------------------
 
 #' @rdname check_outliers
@@ -841,7 +839,6 @@ check_outliers.numeric <- function(x,
     ...
   )
 }
-
 
 
 #' @rdname check_outliers
@@ -901,7 +898,7 @@ check_outliers.data.frame <- function(x,
 
   # Keep only relevant threshold
   valid <- method
-  if("optics" %in% valid) {
+  if ("optics" %in% valid) {
     valid <- c(valid, "optics_xi")
     method <- c(method, "optics_xi")
   }
@@ -1377,7 +1374,6 @@ check_outliers.BFBayesFactor <- function(x,
 }
 
 
-
 #' @export
 check_outliers.gls <- function(x,
                                method = "pareto",
@@ -1514,7 +1510,6 @@ check_outliers.performance_simres <- function(x, type = "default", iterations = 
 check_outliers.DHARMa <- check_outliers.performance_simres
 
 
-
 # Thresholds --------------------------------------------------------------
 
 .check_outliers_thresholds <- function(x) {
@@ -1541,7 +1536,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     lof = 0.001
   )
 }
-
 
 
 # utilities --------------------
@@ -1602,7 +1596,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-
 .check_outliers_iqr <- function(x,
                                 threshold = 1.7,
                                 method = "tukey",
@@ -1652,7 +1645,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     threshold_iqr = threshold
   )
 }
-
 
 
 .check_outliers_ci <- function(x,
@@ -1705,7 +1697,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-
 .check_outliers_cook <- function(x,
                                  threshold = NULL,
                                  ID.names = NULL) {
@@ -1722,7 +1713,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     threshold_cook = threshold
   )
 }
-
 
 
 .check_outliers_pareto <- function(x, threshold = 0.7) {
@@ -1742,7 +1732,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     threshold_pareto = threshold
   )
 }
-
 
 
 .check_outliers_mahalanobis <- function(x,
@@ -1774,7 +1763,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-
 # Bigutils not yet fully available on CRAN
 .check_outliers_mahalanobis_robust <- function(x,
                                                threshold = stats::qchisq(
@@ -1803,7 +1791,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     threshold_mahalanobis_robust = threshold
   )
 }
-
 
 
 .check_outliers_mcd <- function(x,
@@ -1847,7 +1834,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     threshold_mcd = threshold
   )
 }
-
 
 
 .check_outliers_ics <- function(x,
@@ -1927,7 +1913,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-
 .check_outliers_optics <- function(x,
                                    threshold = NULL,
                                    ID.names = NULL,
@@ -1993,7 +1978,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 # }
 
 
-
 .check_outliers_lof <- function(x,
                                 threshold = 0.001,
                                 ID.names = NULL) {
@@ -2025,7 +2009,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     threshold_lof = threshold
   )
 }
-
 
 
 # Non-supported model classes ---------------------------------------

@@ -263,7 +263,6 @@ check_predictions.lme <- function(object, ...) {
 }
 
 
-
 # pp-check functions -------------------------------------
 
 pp_check.lm <- function(object,
@@ -418,7 +417,6 @@ pp_check.glmmTMB   <-
   pp_check.wbm     <-
   pp_check.lm
 # styler: on
-
 
 
 #' @rawNamespace

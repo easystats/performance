@@ -39,9 +39,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 }
 
 
-
-
-
 # -------------------------------------------------------------------------
 # Utils -------------------------------------------------------------------
 # -------------------------------------------------------------------------
@@ -185,10 +182,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
 }
 
 
-
-
-
-
 # Compute lambda (Eq 3.6) -------------------------------------------------
 # -------------------------------------------------------------------------
 
@@ -222,9 +215,6 @@ test_vuong.ListNonNestedRegressions <- function(objects, reference = 1, ...) {
   # Discard imaginary part, as it only occurs for tiny eigenvalues?
   Re(lamstar)
 }
-
-
-
 
 
 # Compute AB (Eq 2.1 and 2.2) ---------------------------------------------

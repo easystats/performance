@@ -39,7 +39,7 @@ withr::with_environment(
       dd$y <- glmmTMB::simulate_new(
         ~ 1 + x,
         newdata = dd,
-        newparams = list(beta = c(0,1), betadisp = -1),
+        newparams = list(beta = c(0, 1), betadisp = -1),
         weights = rep(10, nrow(dd)),
         family = glmmTMB::betabinomial()
       )[[1]]
@@ -47,7 +47,7 @@ withr::with_environment(
       d <<- dd
 
       m <- glmmTMB::glmmTMB(
-        y/10 ~ 1 + x,
+        y / 10 ~ 1 + x,
         data = d,
         weights = rep(10, nrow(d)),
         family = glmmTMB::betabinomial()

@@ -50,7 +50,6 @@ check_normality <- function(x, ...) {
 }
 
 
-
 # default -------------------------
 
 #' @export
@@ -184,7 +183,6 @@ print.check_normality <- function(x, ...) {
 }
 
 
-
 # other classes --------------------
 
 # mixed models ---------------------
@@ -274,7 +272,6 @@ check_normality.afex_aov <- function(x, ...) {
 
 #' @export
 check_normality.BFBayesFactor <- check_normality.afex_aov
-
 
 
 # helper ---------------------

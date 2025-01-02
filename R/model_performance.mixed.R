@@ -138,7 +138,6 @@ model_performance.mixed <- model_performance.merMod
 model_performance.glmmTMB <- model_performance.merMod
 
 
-
 #' @export
 model_performance.mixor <- function(model,
                                     metrics = "all",
