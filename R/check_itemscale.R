@@ -137,7 +137,6 @@ check_itemscale <- function(x, factor_index = NULL) {
 }
 
 
-
 # methods -------------------------------------
 
 #' @export
@@ -159,7 +158,8 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     digits = digits,
     format = "text",
     missing = "<NA>",
-    zap_small = TRUE
+    zap_small = TRUE,
+    ...
   ))
 }
 

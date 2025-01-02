@@ -166,7 +166,6 @@ r2_loo_posterior.BFBayesFactor <- function(model, verbose = TRUE, ...) {
 }
 
 
-
 #' @export
 as.data.frame.r2_loo <- function(x, ...) {
   out <- data.frame(

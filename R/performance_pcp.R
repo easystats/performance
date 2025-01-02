@@ -84,7 +84,6 @@ performance_pcp <- function(model,
 }
 
 
-
 # methods ----------------------------------
 
 #' @export
@@ -124,7 +123,6 @@ as.data.frame.performance_pcp <- function(x, row.names = NULL, ...) {
     ...
   )
 }
-
 
 
 # utilities --------------------------------------

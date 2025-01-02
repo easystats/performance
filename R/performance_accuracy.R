@@ -234,7 +234,6 @@ print.performance_accuracy <- function(x, ...) {
 }
 
 
-
 # utilities ------------------------
 
 .crossv_kfold <- function(model_data, k = 5) {

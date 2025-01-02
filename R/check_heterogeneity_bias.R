@@ -102,8 +102,6 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE
 }
 
 
-
-
 #' @export
 print.check_heterogeneity_bias <- function(x, ...) {
   cat("Possible heterogeneity bias due to following predictors: ")

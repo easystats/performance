@@ -50,7 +50,6 @@ check_normality <- function(x, ...) {
 }
 
 
-
 # default -------------------------
 
 #' @export
@@ -184,7 +183,6 @@ print.check_normality <- function(x, ...) {
 }
 
 
-
 # other classes --------------------
 
 # mixed models ---------------------
@@ -231,7 +229,7 @@ check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
           p.val <- c(p.val, .check_normality(re[[i]][[j]], x, "random effects"))
         }
       }
-      attr(p.val, "re_qq") <- .diag_reqq(x, level = 0.95, model_info = info)
+      attr(p.val, "re_qq") <- .model_diagnostic_ranef_qq(x, level = 0.95, model_info = info)
       attr(p.val, "type") <- "random effects"
       attr(p.val, "re_groups") <- re_groups
     }
@@ -274,7 +272,6 @@ check_normality.afex_aov <- function(x, ...) {
 
 #' @export
 check_normality.BFBayesFactor <- check_normality.afex_aov
-
 
 
 # helper ---------------------

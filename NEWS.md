@@ -2,11 +2,35 @@
 
 ## Breaking changes
 
+* `check_outliers()` with `method = "optics"` now returns a further refined
+  cluster selection, by passing the `optics_xi` argument to `dbscan::extractXi()`.
+
 * Deprecated arguments and alias-function-names have been removed.
+
+* Argument names in `check_model()` that refer to plot-aesthetics (like
+  `dot_size`) are now harmonized across *easystats* packages, meaning that
+  these have been renamed. They now follow the pattern `aesthetic_type`, e.g.
+  `size_dot` (instead of `dot_size`).
 
 ## Changes
 
 * Increased accuracy for `check_convergence()` for *glmmTMB* models.
+
+* `r2()` and `r2_mcfadden()` now support beta-binomial (non-mixed) models from
+  package *glmmTMB*.
+
+* An `as.numeric()` resp. `as.double()` method for objects of class
+  `performance_roc` was added.
+
+* Improved documentation for `performance_roc()`.
+
+## Bug fixes
+
+* `check_outliers()` did not warn that no numeric variables were found when only
+  the response variable was numeric, but all relevant predictors were not.
+
+* `check_collinearity()` did not work for glmmTMB models when zero-inflation
+  component was set to `~0`.
 
 # performance 0.12.4
 

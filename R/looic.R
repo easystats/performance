@@ -69,7 +69,6 @@ looic <- function(model, verbose = TRUE) {
 }
 
 
-
 # methods --------------------------
 
 #' @export

@@ -25,7 +25,6 @@ check_concurvity.gam <- function(x, ...) {
 }
 
 
-
 # methods ---------------------------------
 
 #' @export

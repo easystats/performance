@@ -327,7 +327,6 @@ icc <- function(model,
 }
 
 
-
 #' @rdname icc
 #' @export
 variance_decomposition <- function(model,
@@ -397,7 +396,6 @@ variance_decomposition <- function(model,
 
   result
 }
-
 
 
 # methods ------------------------------
@@ -542,7 +540,6 @@ print.icc_decomposed <- function(x, digits = 2, ...) {
 
   invisible(x)
 }
-
 
 
 # helper -----------------

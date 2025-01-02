@@ -91,7 +91,6 @@ check_multimodal.data.frame <- function(x, ...) {
 }
 
 
-
 #' @export
 check_multimodal.numeric <- function(x, ...) {
   insight::check_if_installed("multimode")

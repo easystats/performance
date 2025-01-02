@@ -52,7 +52,6 @@ print.r2_generic <- function(x, digits = 3, ...) {
 }
 
 
-
 #' @export
 print.r2_pseudo <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")
@@ -62,7 +61,6 @@ print.r2_pseudo <- function(x, digits = 3, ...) {
   cat(sprintf("  %s: %.*f\n", names(x[[1]]), digits, x[[1]]))
   invisible(x)
 }
-
 
 
 #' @export
@@ -106,7 +104,6 @@ print.r2_mlm <- function(x, digits = 3, ...) {
 }
 
 
-
 #' @export
 print.r2_bayes <- function(x, digits = 3, ...) {
   insight::print_color("# Bayesian R2 with Compatibility Interval\n\n", "blue")
@@ -138,7 +135,6 @@ print.r2_bayes <- function(x, digits = 3, ...) {
 }
 
 
-
 #' @export
 print.r2_loo <- function(x, digits = 3, ...) {
   insight::print_color("# LOO-adjusted R2 with Compatibility Interval\n\n", "blue")
@@ -168,7 +164,6 @@ print.r2_loo <- function(x, digits = 3, ...) {
   cat("\n")
   invisible(x)
 }
-
 
 
 #' @export

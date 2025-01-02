@@ -230,7 +230,6 @@ test_performance <- function(..., reference = 1, verbose = TRUE) {
 }
 
 
-
 # default --------------------------------
 
 #' @export
@@ -251,7 +250,6 @@ test_performance.default <- function(..., reference = 1, include_formula = FALSE
     insight::format_error("The models cannot be compared for some reason :/")
   }
 }
-
 
 
 # methods ------------------------------
@@ -313,7 +311,6 @@ display.test_performance <- function(object, format = "markdown", digits = 2, ..
     print_html(x = object, digits = digits, ...)
   }
 }
-
 
 
 # other classes -----------------------------------
@@ -406,7 +403,6 @@ test_performance.ListNonNestedRegressions <- function(objects,
 }
 
 
-
 # TESTS IMPLEMENTED IN OTHER PACKAGES
 
 # # Non-nested
@@ -414,7 +410,6 @@ test_performance.ListNonNestedRegressions <- function(objects,
 # lmtest::jtest(m2, m3)
 # lmtest::encomptest(m2, m3)
 # nonnest2::icci(m2, m3)
-
 
 
 # Helpers -----------------------------------------------------------------
@@ -430,7 +425,6 @@ test_performance.ListNonNestedRegressions <- function(objects,
   row.names(out) <- NULL
   out
 }
-
 
 
 .test_performance_checks <- function(objects, multiple = TRUE, same_response = TRUE, verbose = TRUE) {
@@ -470,7 +464,6 @@ test_performance.ListNonNestedRegressions <- function(objects,
 
   objects
 }
-
 
 
 .check_objectnames <- function(objects, dot_names) {

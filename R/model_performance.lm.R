@@ -283,8 +283,6 @@ model_performance.nestedLogit <- function(model, metrics = "all", verbose = TRUE
 }
 
 
-
-
 # mfx models -------------------------------
 
 #' @export
@@ -318,9 +316,6 @@ model_performance.betamfx <- model_performance.logitor
 
 #' @export
 model_performance.model_fit <- model_performance.logitor
-
-
-
 
 
 # other models -------------------------------

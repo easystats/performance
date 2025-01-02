@@ -29,7 +29,6 @@ performance_mse <- function(model, ...) {
 mse <- performance_mse
 
 
-
 #' @export
 performance_mse.default <- function(model, verbose = TRUE, ...) {
   res <- .safe(insight::get_residuals(model, verbose = verbose, type = "response", ...))
@@ -60,8 +59,6 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
 
   mean(res^2, na.rm = TRUE)
 }
-
-
 
 
 # mfx models -------------------------------

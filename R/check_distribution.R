@@ -61,7 +61,6 @@ check_distribution <- function(model) {
 }
 
 
-
 # default -----------------------------
 
 #' @export
@@ -104,7 +103,6 @@ check_distribution.default <- function(model) {
 
   out
 }
-
 
 
 # methods --------------------------
@@ -160,7 +158,6 @@ plot.check_distribution_numeric <- function(x, ...) {
 }
 
 
-
 # other classes -------------------
 
 #' @export
@@ -182,7 +179,6 @@ check_distribution.numeric <- function(model) {
 
   out
 }
-
 
 
 # utilities -----------------------------
@@ -241,7 +237,6 @@ check_distribution.numeric <- function(model) {
     Integer = all(.is_integer(x))
   )
 }
-
 
 
 .is_integer <- function(x) {

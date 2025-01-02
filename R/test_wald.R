@@ -25,7 +25,6 @@ test_wald.default <- function(..., verbose = TRUE) {
 }
 
 
-
 #' @export
 test_wald.ListNestedRegressions <- function(objects, verbose = TRUE, ...) {
   # for binomial models, only chisq-test

@@ -48,7 +48,6 @@ test_that("fixest: model_performance", {
 })
 
 
-
 test_that("fixest_multi: r2", {
   skip_if_not_installed("fixest")
   fixest::setFixest_nthreads(1)

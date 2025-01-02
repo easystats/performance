@@ -72,7 +72,6 @@ check_overdispersion <- function(x, ...) {
 }
 
 
-
 # default -----------------------
 
 #' @export
@@ -82,7 +81,6 @@ check_overdispersion.default <- function(x, ...) {
     paste0("`check_overdisperion()` not yet implemented for models of class `", class(x)[1], "`.")
   )
 }
-
 
 
 # Methods -----------------------------
@@ -101,7 +99,7 @@ plot.check_overdisp <- function(x, ...) {
     }
   }
   if (!is.null(model)) {
-    x <- .diag_overdispersion(model)
+    x <- .model_diagnostic_overdispersion(model)
     class(x) <- c("see_check_overdisp", "data.frame")
     attr(x, "colors") <- list(...)$colors
     attr(x, "line_size") <- list(...)$size_line
@@ -148,7 +146,6 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
   invisible(orig_x)
 }
-
 
 
 # Overdispersion for classical models -----------------------------

@@ -29,7 +29,6 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
 }
 
 
-
 .check_bad_metrics <- function(metrics, all_metrics, verbose = TRUE) {
   bad_metrics <- which(!metrics %in% all_metrics)
   if (length(bad_metrics)) {
