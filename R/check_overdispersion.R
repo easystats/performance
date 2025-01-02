@@ -72,7 +72,6 @@ check_overdispersion <- function(x, ...) {
 }
 
 
-
 # default -----------------------
 
 #' @export
@@ -82,7 +81,6 @@ check_overdispersion.default <- function(x, ...) {
     paste0("`check_overdisperion()` not yet implemented for models of class `", class(x)[1], "`.")
   )
 }
-
 
 
 # Methods -----------------------------
@@ -148,7 +146,6 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
   invisible(orig_x)
 }
-
 
 
 # Overdispersion for classical models -----------------------------

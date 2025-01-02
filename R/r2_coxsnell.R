@@ -59,7 +59,6 @@ r2_coxsnell <- function(model, ...) {
 }
 
 
-
 # r2-coxsnell based on model information ---------------------------
 
 
@@ -69,10 +68,19 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(info)) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
+  matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
+
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
+  if (info$is_binomial && !info$is_betabinomial && !info$is_bernoulli && class(model)[1] %in% c("glm", "glmmTMB")) {
     if (verbose) {
       insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+    }
+    return(NULL)
+  }
+  # currently, beta-binomial models without proportion response are not supported
+  if (info$is_betabinomial && matrix_response) {
+    if (verbose) {
+      insight::format_warning("Can't calculate accurate R2 for beta-binomial models with matrix-response formulation.")
     }
     return(NULL)
   }
@@ -96,7 +104,7 @@ r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
     info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
   }
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_bernoulli) {
+  if (info$is_binomial && !info$is_bernoulli && !info$is_betabinomial) {
     if (verbose) {
       insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
     }
@@ -159,7 +167,6 @@ r2_coxsnell.bife <- function(model, ...) {
 }
 
 
-
 # mfx models ---------------------
 
 
@@ -187,8 +194,6 @@ r2_coxsnell.negbinirr <- r2_coxsnell.logitmfx
 r2_coxsnell.negbinmfx <- r2_coxsnell.logitmfx
 
 
-
-
 # r2-coxsnell based on loglik stored in model object ---------------------------
 
 
@@ -206,7 +211,6 @@ r2_coxsnell.svycoxph <- function(model, ...) {
   l_base <- model$ll[1]
   .r2_coxsnell(model, l_base)
 }
-
 
 
 # r2-coxsnell based on loglik of null-model (update) ---------------------------

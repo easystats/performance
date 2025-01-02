@@ -146,7 +146,6 @@ performance_score <- function(model, verbose = TRUE, ...) {
 }
 
 
-
 # methods -----------------------------------
 
 #' @export
@@ -184,7 +183,6 @@ print.performance_score <- function(x, ...) {
 }
 
 
-
 # utilities ---------------------------------
 
 .dispersion_parameter <- function(model, minfo) {
@@ -201,7 +199,6 @@ print.performance_score <- function(x, ...) {
     .safe(sum(stats::residuals(model, type = "pearson")^2) / stats::df.residual(model), 0)
   }
 }
-
 
 
 .predict_score_y <- function(model) {

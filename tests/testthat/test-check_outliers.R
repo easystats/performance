@@ -361,6 +361,16 @@ test_that("check_outliers with invald data", {
 })
 
 
+test_that("check_outliers on numeric data only", {
+  data(mtcars)
+  # all predictors categorical
+  mtcars$wt <- as.factor(mtcars$wt)
+  mtcars$mpg <- as.factor(mtcars$mpg)
+  model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+  expect_error(check_outliers(model), regex = "No numeric")
+})
+
+
 test_that("check_outliers with DHARMa", {
   skip_if_not_installed("DHARMa")
   mt1 <- mtcars[, c(1, 3, 4)]
@@ -395,4 +405,11 @@ test_that("check_outliers with DHARMa", {
       ""
     )
   )
+})
+
+
+test_that("check_outliers with DHARMa", {
+  data(mtcars)
+  out <- check_outliers(mtcars$mpg, method = "zscore", threshold = 2)
+  expect_equal(which(as.numeric(out) == 1), c(18, 20))
 })

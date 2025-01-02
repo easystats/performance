@@ -49,7 +49,6 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
 }
 
 
-
 # methods ------------------------------
 
 #' @export
@@ -79,7 +78,6 @@ print.check_autocorrelation <- function(x, ...) {
   }
   invisible(x)
 }
-
 
 
 # utilities -------------------------------

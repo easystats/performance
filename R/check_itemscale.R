@@ -137,7 +137,6 @@ check_itemscale <- function(x, factor_index = NULL) {
 }
 
 
-
 # methods -------------------------------------
 
 #' @export

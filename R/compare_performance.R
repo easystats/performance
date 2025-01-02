@@ -203,7 +203,6 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 }
 
 
-
 # methods ----------------------------
 
 #' @export
@@ -235,7 +234,6 @@ plot.compare_performance <- function(x, ...) {
   insight::check_if_installed("see", "for model comparison plots")
   NextMethod()
 }
-
 
 
 # utilities ------------------------------

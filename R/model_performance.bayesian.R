@@ -281,7 +281,6 @@ model_performance.BFBayesFactor <- function(model,
 }
 
 
-
 # helper -------------------
 
 

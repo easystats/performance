@@ -10,16 +10,9 @@
   dat$group[dat$VIF >= 5 & dat$VIF < 10] <- "moderate"
   dat$group[dat$VIF >= 10] <- "high"
 
-  dat <- datawizard::data_rename(
-    dat,
-    c("Term", "VIF", "SE_factor", "Component"),
-    c("x", "y", "se", "facet"),
-    verbose = FALSE
-  )
-
   dat <- datawizard::data_select(
     dat,
-    c("x", "y", "facet", "group"),
+    select = c(x = "Term", y = "VIF", facet = "Component", group = "group"),
     verbose = FALSE
   )
 
@@ -30,7 +23,6 @@
   attr(dat, "CI") <- attributes(out)$CI
   dat
 }
-
 
 
 # prepare data for QQ plot ----------------------------------
@@ -95,7 +87,6 @@
 }
 
 
-
 # prepare data for random effects QQ plot ----------------------------------
 
 .model_diagnostic_ranef_qq <- function(model, level = 0.95, model_info = NULL, verbose = TRUE) {
@@ -158,7 +149,6 @@
 }
 
 
-
 # prepare data for normality of residuals plot ----------------------------------
 
 .model_diagnostic_normality <- function(model, verbose = TRUE) {
@@ -176,7 +166,6 @@
   dat$curve <- stats::dnorm(seq(min(dat$x), max(dat$x), length.out = nrow(dat)), mean(r), stats::sd(r))
   dat
 }
-
 
 
 # prepare data for influential obs plot ----------------------------------
@@ -217,7 +206,6 @@
 }
 
 
-
 # prepare data for non-constant variance plot ----------------------------------
 
 .model_diagnostic_ncv <- function(model, verbose = TRUE) {
@@ -243,7 +231,6 @@
 
   ncv
 }
-
 
 
 # prepare data for homogeneity of variance plot ----------------------------------
@@ -288,7 +275,6 @@
     y = sqrt(abs(r))
   )
 }
-
 
 
 # prepare data for homogeneity of variance plot ----------------------------------
@@ -374,7 +360,6 @@
 
   d
 }
-
 
 
 .model_diagnostic_overdispersion <- function(model, ...) {

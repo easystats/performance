@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.12.4.7
+Version: 0.12.4.16
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -74,7 +74,7 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.15.0),
-    insight (>= 0.20.5),
+    insight (>= 1.0.0),
     datawizard (>= 0.13.0),
     stats,
     utils
@@ -160,4 +160,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/insight
+Remotes: easystats/datawizard, easystats/see, easystats/insight

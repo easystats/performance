@@ -111,7 +111,14 @@ If interaction terms are included in a model, high VIF values are expected.
 This portion of multicollinearity among the component terms of an
 interaction is also called "inessential ill-conditioning", which leads to
 inflated VIF values that are typically seen for models with interaction
-terms \emph{(Francoeur 2013)}.
+terms \emph{(Francoeur 2013)}. Centering interaction terms can resolve this
+issue \emph{(Kim and Jung 2024)}.
+}
+
+\section{Multicollinearity and Polynomial Terms}{
+
+Polynomial transformations are considered a single term and thus VIFs are
+not calculated between them.
 }
 
 \section{Concurvity for Smooth Terms in Generalized Additive Models}{
@@ -144,9 +151,12 @@ plot(x)
 \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
 Clusters. Open Journal of Statistics, 03(06), 24-44.
-\item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
-An introduction to statistical learning: with applications in R. New York:
+\item James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013). An
+introduction to statistical learning: with applications in R. New York:
 Springer.
+\item Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis with
+causal graphs. British Journal of Mathematical and Statistical Psychology,
+00, 1–14.
 \item Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
 Inflation Factors in Regression Models Using Latent Variable Modeling
 Methods. Educational and Psychological Measurement, 79(5), 874–882.

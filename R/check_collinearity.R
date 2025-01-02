@@ -73,7 +73,12 @@
 #' This portion of multicollinearity among the component terms of an
 #' interaction is also called "inessential ill-conditioning", which leads to
 #' inflated VIF values that are typically seen for models with interaction
-#' terms _(Francoeur 2013)_.
+#' terms _(Francoeur 2013)_. Centering interaction terms can resolve this
+#' issue _(Kim and Jung 2024)_.
+#'
+#' @section Multicollinearity and Polynomial Terms:
+#' Polynomial transformations are considered a single term and thus VIFs are
+#' not calculated between them.
 #'
 #' @section Concurvity for Smooth Terms in Generalized Additive Models:
 #' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
@@ -91,26 +96,30 @@
 #' @references
 #'
 #' - Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
-#' Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
-#' Clusters. Open Journal of Statistics, 03(06), 24-44.
+#'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
+#'   Clusters. Open Journal of Statistics, 03(06), 24-44.
 #'
-#' - James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013).
-#' An introduction to statistical learning: with applications in R. New York:
-#' Springer.
+#' - James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.). (2013). An
+#'   introduction to statistical learning: with applications in R. New York:
+#'   Springer.
+#'
+#' - Kim, Y., & Jung, G. (2024). Understanding linear interaction analysis with
+#'   causal graphs. British Journal of Mathematical and Statistical Psychology,
+#'   00, 1–14.
 #'
 #' - Marcoulides, K. M., and Raykov, T. (2019). Evaluation of Variance
-#' Inflation Factors in Regression Models Using Latent Variable Modeling
-#' Methods. Educational and Psychological Measurement, 79(5), 874–882.
+#'   Inflation Factors in Regression Models Using Latent Variable Modeling
+#'   Methods. Educational and Psychological Measurement, 79(5), 874–882.
 #'
 #' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
-#' examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
+#'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
 #' - Vanhove, J. (2019). Collinearity isn't a disease that needs curing.
-#' [webpage](https://janhove.github.io/posts/2019-09-11-collinearity/)
+#'   [webpage](https://janhove.github.io/posts/2019-09-11-collinearity/)
 #'
 #' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
-#' common statistical problems: Data exploration. Methods in Ecology and
-#' Evolution (2010) 1:3–14.
+#'   common statistical problems: Data exploration. Methods in Ecology and
+#'   Evolution (2010) 1:3–14.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -139,7 +148,6 @@ check_collinearity <- function(x, ...) {
 multicollinearity <- check_collinearity
 
 
-
 # default ------------------------------
 
 #' @rdname check_collinearity
@@ -148,7 +156,6 @@ check_collinearity.default <- function(x, ci = 0.95, verbose = TRUE, ...) {
   .is_model_valid(x)
   .check_collinearity(x, component = "conditional", ci = ci, verbose = verbose)
 }
-
 
 
 # methods -------------------------------------------
@@ -193,7 +200,7 @@ plot.check_collinearity <- function(x, ...) {
   x <- insight::format_table(x)
   x <- datawizard::data_rename(
     x,
-    pattern = "SE_factor",
+    select = "SE_factor",
     replacement = "Increased SE",
     verbose = FALSE
   )
@@ -216,7 +223,6 @@ plot.check_collinearity <- function(x, ...) {
     print.data.frame(x[high_vif, ], row.names = FALSE)
   }
 }
-
 
 
 # other classes ----------------------------------
@@ -294,7 +300,6 @@ check_collinearity.betaor <- check_collinearity.logitor
 check_collinearity.betamfx <- check_collinearity.logitor
 
 
-
 # zi-models -------------------------------------
 
 #' @rdname check_collinearity
@@ -353,7 +358,6 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 # utilities ---------------------------------
 
 .check_collinearity_zi_model <- function(x, component, ci = 0.95, verbose = TRUE) {
@@ -403,9 +407,8 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 .check_collinearity <- function(x, component, ci = 0.95, verbose = TRUE) {
-  v <- insight::get_varcov(x, component = component, verbose = FALSE)
+  v <- .safe(insight::get_varcov(x, component = component, verbose = FALSE))
 
   # sanity check
   if (is.null(v)) {
@@ -514,7 +517,7 @@ check_collinearity.zerocount <- function(x,
   if (!is.null(insight::find_interactions(x)) && any(result > 10) && isTRUE(verbose)) {
     insight::format_alert(
       "Model has interaction terms. VIFs might be inflated.",
-      "You may check multicollinearity among predictors of a model without interaction terms."
+      "Try to center the variables used for the interaction, or check multicollinearity among predictors of a model without interaction terms." # nolint
     )
   }
 
@@ -577,7 +580,6 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 .term_assignments <- function(x, component, verbose = TRUE) {
   tryCatch(
     {
@@ -613,7 +615,6 @@ check_collinearity.zerocount <- function(x,
 }
 
 
-
 .find_term_assignment <- function(x, component, verbose = TRUE) {
   pred <- insight::find_predictors(x)[[component]]
 
@@ -646,7 +647,6 @@ check_collinearity.zerocount <- function(x,
     parms
   )])
 }
-
 
 
 .zi_term_assignment <- function(x, component = "zero_inflated", verbose = TRUE) {

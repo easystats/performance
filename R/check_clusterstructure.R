@@ -75,7 +75,6 @@ check_clusterstructure <- function(x,
 }
 
 
-
 #' @export
 plot.check_clusterstructure <- function(x, ...) {
   # Can be reimplemented with ggplot in see
@@ -88,14 +87,12 @@ plot.check_clusterstructure <- function(x, ...) {
 }
 
 
-
 #' @keywords internal
 .clusterstructure_dm <- function(x, distance = "euclidean", method = "ward.D2") {
   d <- stats::dist(x, method = distance)
   hc <- stats::hclust(d, method = method)
   as.matrix(d)[hc$order, hc$order]
 }
-
 
 
 #' @keywords internal

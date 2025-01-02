@@ -79,7 +79,6 @@ check_heteroscedasticity.default <- function(x, ...) {
 }
 
 
-
 # methods -----------------------
 
 #' @export
@@ -110,7 +109,6 @@ plot.check_heteroscedasticity <- function(x, ...) {
   insight::check_if_installed("see", "for residual plots")
   NextMethod()
 }
-
 
 
 # utilities -----------------------

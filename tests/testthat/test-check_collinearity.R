@@ -23,6 +23,12 @@ test_that("check_collinearity, correct order in print", {
 })
 
 
+test_that("check_collinearity, interaction", {
+  m <- lm(mpg ~ wt * cyl, data = mtcars)
+  expect_message(check_collinearity(m), regex = "Model has interaction terms")
+})
+
+
 test_that("check_collinearity", {
   skip_if_not_installed("glmmTMB")
   skip_if_not(getRversion() >= "4.0.0")
@@ -46,7 +52,6 @@ test_that("check_collinearity", {
   )
   expect_null(check_collinearity(m1, verbose = FALSE, component = "zero_inflated"))
 })
-
 
 
 test_that("check_collinearity", {
@@ -216,5 +221,19 @@ test_that("check_collinearity, hurdle/zi models w/o zi-formula", {
 test_that("check_collinearity, invalid data", {
   dd <- data.frame(y = as.difftime(0:5, units = "days"))
   m1 <- lm(y ~ 1, data = dd)
-  expect_error(check_collinearity(m1), "Can't extract variance-covariance matrix")
+  expect_message(check_collinearity(m1), "Could not extract the variance-covariance")
+})
+
+test_that("check_collinearity, glmmTMB hurdle w/o zi", {
+  skip_if_not_installed("glmmTMB")
+  data(Salamanders, package = "glmmTMB")
+  mod_trunc_error <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    data = Salamanders[Salamanders$count > 0, , drop = FALSE],
+    family = glmmTMB::truncated_nbinom2(),
+    ziformula = ~0,
+    dispformula = ~1
+  )
+  out <- check_collinearity(mod_trunc_error)
+  expect_equal(out$VIF, c(1.03414, 1.03414), tolerance = 1e-3)
 })
