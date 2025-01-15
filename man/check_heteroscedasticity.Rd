@@ -36,10 +36,10 @@ m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_heteroscedasticity(m)
 
 # plot results
-if (require("see")) {
-  x <- check_heteroscedasticity(m)
-  plot(x)
-}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+x <- check_heteroscedasticity(m)
+plot(x)
+\dontshow{\}) # examplesIf}
 }
 \references{
 Breusch, T. S., and Pagan, A. R. (1979) A simple test for heteroscedasticity

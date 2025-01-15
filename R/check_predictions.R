@@ -75,7 +75,7 @@
 #' - Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
 #'   Cambridge University Press.
 #'
-#' @examplesIf require("see")
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' # linear model
 #' model <- lm(mpg ~ disp, data = mtcars)
 #' check_predictions(model)

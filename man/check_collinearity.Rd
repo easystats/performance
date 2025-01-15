@@ -140,7 +140,7 @@ increasing lack of identifiability. The \emph{VIF proportion} column equals the
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)
 
-\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # plot results
 x <- check_collinearity(m)
 plot(x)

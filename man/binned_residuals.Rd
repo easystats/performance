@@ -93,13 +93,12 @@ result
 # look at the data frame
 as.data.frame(result)
 
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # plot
-if (require("see")) {
-  plot(result, show_dots = TRUE)
+plot(result, show_dots = TRUE)
 }
-}
-
+\dontshow{\}) # examplesIf}
 }
 \references{
 Gelman, A., and Hill, J. (2007). Data analysis using regression and

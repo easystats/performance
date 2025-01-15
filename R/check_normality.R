@@ -29,7 +29,7 @@
 #' standardized deviance residuals is shown (in line with changes in
 #' `plot.lm()` for R 4.3+).
 #'
-#' @examplesIf require("see")
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_normality(m)
 #'
