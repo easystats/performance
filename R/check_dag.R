@@ -119,7 +119,7 @@
 #'   Interpreting Confounder and Modifier Coefficients. American Journal of
 #'   Epidemiology, 177(4), 292–298. \doi{10.1093/aje/kws412}
 #'
-#' @examplesIf insight::check_if_installed(c("ggdag", "dagitty", "see"), quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("ggdag", "dagitty", "see"), quietly = TRUE))
 #' # no adjustment needed
 #' check_dag(
 #'   y ~ x + b,

@@ -335,7 +335,7 @@
 #' group_iris <- datawizard::data_group(iris, "Species")
 #' check_outliers(group_iris)
 #' # nolint start
-#' @examplesIf insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE))
 #' # nolint end
 #' \donttest{
 #' # You can also run all the methods

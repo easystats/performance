@@ -47,12 +47,12 @@ NULL
 #' There is a `plot()` method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
-#' @examplesIf insight::check_if_installed(c("lme4", "parameters", "randomForest"), quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("lme4", "parameters", "randomForest"), quietly = TRUE))
 #' data(sleepstudy, package = "lme4")
 #' model <<- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 #' check_distribution(model)
 #'
-#' @examplesIf insight::check_if_installed(c("see", "patchwork", "randomForest"), quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("see", "patchwork", "randomForest"), quietly = TRUE))
 #' plot(check_distribution(model))
 #'
 #' @export
