@@ -174,7 +174,7 @@ test_that("check_overdispersion, MASS::negbin", {
   expect_message(capture.output(print(out)), "Underdispersion detected")
 
   # check that plot works
-  skip_if_not_installed("see")
+  skip_if_not_installed("see", minimum_version = "0.9.1")
   expect_s3_class(plot(out), "ggplot")
 })
 

@@ -334,7 +334,7 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
 # nolint start
-\dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # nolint end
 \donttest{
 # You can also run all the methods

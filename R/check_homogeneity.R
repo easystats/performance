@@ -26,10 +26,9 @@
 #' check_homogeneity(model)
 #'
 #' # plot results
-#' if (require("see")) {
-#'   result <- check_homogeneity(model)
-#'   plot(result)
-#' }
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
+#' result <- check_homogeneity(model)
+#' plot(result)
 #' @export
 check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
   UseMethod("check_homogeneity")

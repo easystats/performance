@@ -43,7 +43,7 @@ standardized residuals, are used for the test. There is also a
 implemented in the \href{https://easystats.github.io/see/}{\strong{see}-package}.
 }
 \examples{
-\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_normality(m)
 

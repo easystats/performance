@@ -68,11 +68,10 @@
 #' # look at the data frame
 #' as.data.frame(result)
 #'
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' \donttest{
 #' # plot
-#' if (require("see")) {
-#'   plot(result, show_dots = TRUE)
-#' }
+#' plot(result, show_dots = TRUE)
 #' }
 #'
 #' @export
