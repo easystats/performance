@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.4.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,22 +54,22 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.12.5" id="performance-0125">performance 0.12.5<a class="anchor" aria-label="anchor" href="#performance-0125"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.13.0" id="performance-0130">performance 0.13.0<a class="anchor" aria-label="anchor" href="#performance-0130"></a></h2>
 <div class="section level3">
-<h3 id="breaking-changes-0-12-5">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-12-5"></a></h3>
+<h3 id="breaking-changes-0-13-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-13-0"></a></h3>
 <ul><li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> with <code>method = "optics"</code> now returns a further refined cluster selection, by passing the <code>optics_xi</code> argument to <code><a href="https://rdrr.io/pkg/dbscan/man/optics.html" class="external-link">dbscan::extractXi()</a></code>.</p></li>
 <li><p>Deprecated arguments and alias-function-names have been removed.</p></li>
 <li><p>Argument names in <code><a href="../reference/check_model.html">check_model()</a></code> that refer to plot-aesthetics (like <code>dot_size</code>) are now harmonized across <em>easystats</em> packages, meaning that these have been renamed. They now follow the pattern <code>aesthetic_type</code>, e.g. <code>size_dot</code> (instead of <code>dot_size</code>).</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="changes-0-12-5">Changes<a class="anchor" aria-label="anchor" href="#changes-0-12-5"></a></h3>
+<h3 id="changes-0-13-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-13-0"></a></h3>
 <ul><li><p>Increased accuracy for <code><a href="../reference/check_convergence.html">check_convergence()</a></code> for <em>glmmTMB</em> models.</p></li>
 <li><p><code><a href="../reference/r2.html">r2()</a></code> and <code><a href="../reference/r2_mcfadden.html">r2_mcfadden()</a></code> now support beta-binomial (non-mixed) models from package <em>glmmTMB</em>.</p></li>
 <li><p>An <code><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric()</a></code> resp. <code><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double()</a></code> method for objects of class <code>performance_roc</code> was added.</p></li>
 <li><p>Improved documentation for <code><a href="../reference/performance_roc.html">performance_roc()</a></code>.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-12-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-12-5"></a></h3>
+<h3 id="bug-fixes-0-13-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-13-0"></a></h3>
 <ul><li><p><code><a href="../reference/check_outliers.html">check_outliers()</a></code> did not warn that no numeric variables were found when only the response variable was numeric, but all relevant predictors were not.</p></li>
 <li><p><code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> did not work for glmmTMB models when zero-inflation component was set to <code>~0</code>.</p></li>
 </ul></div>
