@@ -56,7 +56,7 @@ residual spatial and temporal autocorrelation."><meta property="og:image" conten
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Check uniformity of simulated residuals</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/v0.13.0/R/check_residuals.R" class="external-link"><code>R/check_residuals.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/check_residuals.R" class="external-link"><code>R/check_residuals.R</code></a></small>
       <div class="d-none name"><code>check_residuals.Rd</code></div>
     </div>
 
@@ -137,7 +137,7 @@ accurate results.</p>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">observedResponse</span> <span class="op">~</span> <span class="va">Environment1</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="simulate_residuals.html">simulate_residuals</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">check_residuals</span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Warning: Non-uniformity of simulated residuals detected (p &lt; .001).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">Warning: Non-uniformity of simulated residuals detected (p = 0.021).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
