@@ -38,45 +38,49 @@ check_reliability.default <- function(x, ...) {
 
 #' @export
 check_reliability.estimate_grouplevel <- function(x, ...) {
-
   coefname <- attributes(x)$coef_name
   dispname <- names(x)[grep("SE|SD|MAD", names(x))]
 
   # Sanity checks
-  if(length(unique(x$Level)) <= 3) {
-    warning(paste0("The number of random levels (N = ",
-                   length(unique(x$Level)),
-                   ") might be too low to reliably estimate the variability."))
+  if (length(unique(x$Level)) <= 3) {
+    insight::format_alert(paste0(
+      "The number of random levels (N = ",
+      length(unique(x$Level)),
+      ") might be too low to reliably estimate the variability."
+    ))
   }
 
-  if(length(dispname) == 0) {
-    stop(paste0("This function requires an index of variability of each random ",
-    "effect (e.g., SE) but none was found. Try running check_reliability() on the",
-    " output of modelbased::estimate_grouplevel(model), and make sure the latter ",
-    "returns a table with an index of dispersion."))
+  if (length(dispname) == 0) {
+    insight::format_error(paste0(
+      "This function requires an index of variability of each random ",
+      "effect (e.g., SE) but none was found. Try running check_reliability() on the",
+      " output of modelbased::estimate_grouplevel(model), and make sure the latter ",
+      "returns a table with an index of dispersion."
+    ))
   }
 
-  if(length(dispname) > 1) {
-    warning(paste0("Multiple indices of variability were found (",
-                   paste(dispname, collapse = ", "),
-                   "). Using the first one."))
+  if (length(dispname) > 1) {
+    insight::format_alert(paste0(
+      "Multiple indices of variability were found (",
+      paste(dispname, collapse = ", "),
+      "). Using the first one."
+    ))
     dispname <- dispname[1]
   }
-
 
   # Compute reliability
   if (!"Component" %in% names(x)) x$Component <- "TEMP"
 
   reliability <- data.frame()
-  for(c in unique(x$Component)) {
-    for(g in unique(x$Group)) {
-      for(p in unique(x$Parameter)) {
-        d <- x[x$Component == c & x$Group == g & x$Parameter == p,]
+  for (comp in unique(x$Component)) {
+    for (grp in unique(x$Group)) {
+      for (param in unique(x$Parameter)) {
+        d <- x[x$Component == comp & x$Group == grp & x$Parameter == param, ]
         rez <- data.frame(
-          Component = c,
-          Group = g,
-          Parameter = p,
-          Variability = sd(d[[coefname]]),
+          Component = comp,
+          Group = grp,
+          Parameter = param,
+          Variability = stats::sd(d[[coefname]]),
           Uncertainty = mean(d[[dispname]])
         )
         rez$Reliability <- rez$Variability / rez$Uncertainty
@@ -87,7 +91,7 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   }
 
   # Clean-up output
-  if(length(unique(reliability$Component)) == 1 && unique(reliability$Component) == "TEMP") {
+  if (length(unique(reliability$Component)) == 1 && unique(reliability$Component) == "TEMP") {
     reliability$Component <- NULL
   }
 
