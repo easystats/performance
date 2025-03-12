@@ -40,9 +40,9 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   dispname <- names(x)[grep("SE|SD|MAD", names(x))]
 
   # Sanity checks
-  if (length(unique(x$Level)) <= 3) {
+  if (insight::n_unique(x$Level) <= 3) {
     insight::format_alert(paste0(
-      "The number of random levels (N = ",
+      "The number of random effects group levels (N=",
       insight::n_unique(x$Level),
       ") might be too low to reliably estimate the variability."
     ))
@@ -51,8 +51,8 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   if (length(dispname) == 0) {
     insight::format_error(paste0(
       "This function requires an index of variability of each random ",
-      "effect (e.g., SE) but none was found. Try running `check_reliability()` on the",
-      " output of `modelbased::estimate_grouplevel(model)`, and make sure the latter ",
+      "effect (e.g., SE) but none was found. Try running `check_reliability()` on the ",
+      "output of `modelbased::estimate_grouplevel(model)`, and make sure the latter ",
       "returns a table with an index of dispersion."
     ))
   }
