@@ -89,6 +89,9 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
         # Alternative: average of level-specific reliability
         rez$Reliability2 <- mean(d[[coefname]]^2 / (d[[coefname]]^2 + d[[dispname]]^2))
 
+        # Alternative 2: like hlmer?
+        rez$Reliability3 <- rez$Variability / (rez$Variability + rez$Uncertainty^2)
+
         # TODO: we probably need to pick one reliability index
 
         reliability <- rbind(reliability, rez)
