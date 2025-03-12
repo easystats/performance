@@ -74,6 +74,8 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
     for (grp in unique(x$Group)) {
       for (param in unique(x$Parameter)) {
         d <- x[x$Component == comp & x$Group == grp & x$Parameter == param, ]
+
+        # Raw Signal-to-Noise Ratio
         rez <- data.frame(
           Component = comp,
           Group = grp,
@@ -82,6 +84,11 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
           Uncertainty = mean(d[[dispname]])
         )
         rez$Reliability <- rez$Variability / rez$Uncertainty
+
+        # Alternative: average of level-specific reliability
+        rez$Reliability2 <- mean(d[[coefname]]^2 / (d[[coefname]]^2 + d[[dispname]]^2))
+
+        # TODO: we probably need to pick one reliability index
 
         reliability <- rbind(reliability, rez)
       }
