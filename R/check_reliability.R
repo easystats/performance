@@ -30,6 +30,7 @@ check_reliability <- function(x, ...) {
 
 #' @export
 check_reliability.default <- function(x, ...) {
+  insight::check_if_installed("modelbased", minimum_version = "0.10.0")
   check_reliability(modelbased::estimate_grouplevel(x, ...), ...)
 }
 
