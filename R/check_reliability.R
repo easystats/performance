@@ -38,7 +38,7 @@ check_reliability.default <- function(x, ...) {
 #' @export
 check_reliability.estimate_grouplevel <- function(x, ...) {
   coefname <- attributes(x)$coef_name
-  dispname <- names(x)[grep("SE|SD|MAD", names(x))]
+  dispname <- grep("SE|SD|MAD", colnames(x), value = TRUE)
 
   # Sanity checks
   if (insight::n_unique(x$Level) <= 3) {
