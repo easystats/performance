@@ -28,8 +28,6 @@ check_reliability <- function(x, ...) {
 }
 
 
-
-
 #' @export
 check_reliability.default <- function(x, ...) {
   check_reliability(modelbased::estimate_grouplevel(x, ...), ...)
@@ -45,7 +43,7 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   if (length(unique(x$Level)) <= 3) {
     insight::format_alert(paste0(
       "The number of random levels (N = ",
-      length(unique(x$Level)),
+      insight::n_unique(x$Level),
       ") might be too low to reliably estimate the variability."
     ))
   }
@@ -53,8 +51,8 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   if (length(dispname) == 0) {
     insight::format_error(paste0(
       "This function requires an index of variability of each random ",
-      "effect (e.g., SE) but none was found. Try running check_reliability() on the",
-      " output of modelbased::estimate_grouplevel(model), and make sure the latter ",
+      "effect (e.g., SE) but none was found. Try running `check_reliability()` on the",
+      " output of `modelbased::estimate_grouplevel(model)`, and make sure the latter ",
       "returns a table with an index of dispersion."
     ))
   }
@@ -62,7 +60,7 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   if (length(dispname) > 1) {
     insight::format_alert(paste0(
       "Multiple indices of variability were found (",
-      paste(dispname, collapse = ", "),
+      toString(dispname),
       "). Using the first one."
     ))
     dispname <- dispname[1]
@@ -91,7 +89,7 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   }
 
   # Clean-up output
-  if (length(unique(reliability$Component)) == 1 && unique(reliability$Component) == "TEMP") {
+  if (insight::n_unique(reliability$Component) == 1 && unique(reliability$Component) == "TEMP") {
     reliability$Component <- NULL
   }
 
