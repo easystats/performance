@@ -101,6 +101,12 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
   if (!"Component" %in% names(x)) x$Component <- "TEMP"
 
   reliability <- data.frame()
+
+  ## TODO: need to decide on which indices we want to use.
+
+  # we need these nested loops only if we need to calculate the reliability
+  # index for the different random effects parameters. If we want an "overall"
+  # reliability index, we can simply call ".expected_reliability()".
   for (comp in unique(x$Component)) {
     for (grp in unique(x$Group)) {
       for (param in unique(x$Parameter)) {
