@@ -1,5 +1,4 @@
 test_that("check_reliability - frequentist", {
-
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
 
@@ -16,7 +15,6 @@ test_that("check_reliability - frequentist", {
 })
 
 test_that("check_reliability - Bayesian", {
-
   skip_if_offline()
   skip_if_not_installed("curl")
   skip_if_not_installed("httr2")
