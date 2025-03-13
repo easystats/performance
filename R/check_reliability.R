@@ -2,7 +2,8 @@
 #'
 #' @description TODO: Add description.
 #'
-#' @param x A model object.
+#' @param x A model object (or from [`modelbased::estimate_grouplevel()`]).
+#' @param n_trials to do...
 #' @param ... Currently not used.
 #'
 #
@@ -35,6 +36,7 @@ check_reliability.default <- function(x, ...) {
 }
 
 
+#' @rdname check_reliability
 #' @export
 check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
   coefname <- attributes(x)$coef_name

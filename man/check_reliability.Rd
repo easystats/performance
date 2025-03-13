@@ -2,14 +2,19 @@
 % Please edit documentation in R/check_reliability.R
 \name{check_reliability}
 \alias{check_reliability}
+\alias{check_reliability.estimate_grouplevel}
 \title{Variability-Over-Uncertainty Ratio (D-vour) for Random Effects Reliability}
 \usage{
 check_reliability(x, ...)
+
+\method{check_reliability}{estimate_grouplevel}(x, n_trials = NULL, ...)
 }
 \arguments{
-\item{x}{A model object.}
+\item{x}{A model object (or from \code{\link[modelbased:estimate_grouplevel]{modelbased::estimate_grouplevel()}}).}
 
 \item{...}{Currently not used.}
+
+\item{n_trials}{to do...}
 }
 \description{
 TODO: Add description.
