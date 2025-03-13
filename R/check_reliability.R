@@ -61,9 +61,13 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
         lapply(model_data[random_slopes], unique),
         use.names = FALSE
       )))
-      gamma2 <- .safe(.extract_reliability_gamma(model))
-      gamma_overall <- .safe(.extract_reliability_gamma2(model))
     }
+  }
+
+  # if we have number of trials, we can calculate gamma
+  if (!is.null(n_trials)) {
+    gamma2 <- .safe(.extract_reliability_gamma(model))
+    gamma_overall <- .safe(.extract_reliability_gamma2(model))
   }
 
   # Sanity checks
