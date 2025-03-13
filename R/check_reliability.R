@@ -62,6 +62,7 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
         use.names = FALSE
       )))
       gamma2 <- .safe(.extract_reliability_gamma(model))
+      gamma_overall <- .safe(.extract_reliability_gamma2(model))
     }
   }
 
@@ -126,6 +127,12 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
           rez$Reliability4 <- .expected_reliability(n_trials, gamma2)
         }
 
+        # Alternative 4: the index from the paper, but using overall
+        # random effects variances...
+        if (!is.null(n_trials) && !is.null(gamma_overall)) {
+          rez$Reliability5 <- .expected_reliability(n_trials, gamma_overall)
+        }
+
         # TODO: we probably need to pick one reliability index
 
         reliability <- rbind(reliability, rez)
@@ -144,9 +151,19 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
 
 # helper functions -----------------------------------
 
+# this uses Tau, but might not be suitable for random slopes models?
 .extract_reliability_gamma <- function(model) {
   v <- insight::get_variance(model)
-  var_between <- v$var.intercept
+  var_between <- v$var.intercept # tau, between subject variance
+  var_within <- v$var.residual # within subject variance
+  var_between / var_within
+}
+
+# this calcualtes random effects variances, taking the variation
+# of random slopes into account, too
+.extract_reliability_gamma2 <- function(model) {
+  v <- insight::get_variance(model)
+  var_between <- v$var.random # overall between subject variance?
   var_within <- v$var.residual
   var_between / var_within
 }
