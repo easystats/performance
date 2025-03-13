@@ -36,9 +36,26 @@ check_reliability.default <- function(x, ...) {
 
 
 #' @export
-check_reliability.estimate_grouplevel <- function(x, ...) {
+check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
   coefname <- attributes(x)$coef_name
   dispname <- grep("SE|SD|MAD", colnames(x), value = TRUE)
+
+  # extract model information, to get number of trials
+  model <- attributes(x)$model
+  model_data <- insight::get_data(model)
+
+  # if number of trials not yet specified, define it by number of values from
+  # random slopes. this is assumed to be the number of trials
+  if (is.null(n_trials)) {
+    # find random slopes
+    random_slopes <- unique(unlist(insight::find_random_slopes(model), use.names = FALSE))
+    # if we have any, get data and count unique values for number of trials,
+    # and extract random effects variances to calculate gamma-squared
+    if (!is.null(random_slopes)) {
+      n_trials <- .safe(unlist(sapply(model_data[random_slopes], unique), use.names = FALSE))
+      gamma2 <- .safe(.extract_reliability_gamma(model))
+    }
+  }
 
   # Sanity checks
   if (insight::n_unique(x$Level) <= 3) {
@@ -87,10 +104,19 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
         rez$Reliability <- rez$Variability / rez$Uncertainty
 
         # Alternative: average of level-specific reliability
+        # suggested by @DominiqueMakowski, to have this index bound to 0-1
         rez$Reliability2 <- mean(d[[coefname]]^2 / (d[[coefname]]^2 + d[[dispname]]^2))
 
         # Alternative 2: like hlmer?
+        # Suggested by @strengejacke, to have this index bound to 0-1, but using
+        # SD^2 (i.e. Variability^2) is actually the "tau" value from the Rouders
+        # paper https://journals.sagepub.com/doi/10.1177/09637214231220923
         rez$Reliability3 <- rez$Variability^2 / (rez$Variability^2 + rez$Uncertainty^2)
+
+        # Alternative 3: the index from the paper?
+        if (!is.null(n_trials) && !is.null(gamma2)) {
+          rez$Reliability4 <- .expected_reliability(n_trials, gamma2)
+        }
 
         # TODO: we probably need to pick one reliability index
 
@@ -105,4 +131,20 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
   }
 
   reliability
+}
+
+
+# helper functions -----------------------------------
+
+.extract_reliability_gamma <- function(model) {
+  v <- insight::get_variance(model)
+  var_between <- v$var.intercept
+  var_within <- v$var.residual
+  var_between / var_within
+}
+
+  # see https://journals.sagepub.com/doi/10.1177/09637214231220923
+.expected_reliability <- function(n_trials, gamma) {
+  # it's actually gamma-squared,
+  gamma / (gamma + (2 / n_trials))
 }
