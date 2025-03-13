@@ -151,7 +151,7 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
   var_between / var_within
 }
 
-  # see https://journals.sagepub.com/doi/10.1177/09637214231220923
+# see https://journals.sagepub.com/doi/10.1177/09637214231220923
 .expected_reliability <- function(n_trials, gamma) {
   # it's actually gamma-squared,
   gamma / (gamma + (2 / n_trials))
