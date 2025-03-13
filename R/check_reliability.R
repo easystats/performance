@@ -153,6 +153,8 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
 
 # see https://journals.sagepub.com/doi/10.1177/09637214231220923
 .expected_reliability <- function(n_trials, gamma) {
-  # it's actually gamma-squared,
+  # it's actually gamma-squared. See note 4 in the paper. The equation is 2 / L
+  # for trials with contrasts, and 1 / L for tasks without contrasts. Need to
+  # check which is more appropriate, but using 2 / L seems more conservative
   gamma / (gamma + (2 / n_trials))
 }
