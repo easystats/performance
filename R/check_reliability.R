@@ -50,11 +50,17 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
   # random slopes. this is assumed to be the number of trials
   if (is.null(n_trials)) {
     # find random slopes
-    random_slopes <- unique(unlist(insight::find_random_slopes(model), use.names = FALSE))
+    random_slopes <- unique(unlist(
+      insight::find_random_slopes(model),
+      use.names = FALSE
+    ))
     # if we have any, get data and count unique values for number of trials,
     # and extract random effects variances to calculate gamma-squared
     if (!is.null(random_slopes)) {
-      n_trials <- .safe(unlist(sapply(model_data[random_slopes], unique), use.names = FALSE))
+      n_trials <- .safe(insight::n_unique(unlist(
+        lapply(model_data[random_slopes], unique),
+        use.names = FALSE
+      )))
       gamma2 <- .safe(.extract_reliability_gamma(model))
     }
   }
