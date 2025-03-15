@@ -123,7 +123,7 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
         # E(r) = gamma2 / (gamma2 + 2/L)" (or 1/L for non-contrast tasks, see annotation 4)
 
         # Extract variances
-        if(param %in% c("(Intercept)")) {
+        if(param %in% c("(Intercept)", "Intercept")) {
           var_between <- v$var.intercept[grp]
         } else {
           var_between <- v$var.slope[paste0(grp, ".", param)]
@@ -144,7 +144,7 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
 
         # Alternative 1: average of level-specific reliability
         # Inspired by the hlmer package (R version of HLM7 by Raudenbush et al., 2014)
-        rez$Dvour2 <- mean(d[[coefname]]^2 / (d[[coefname]]^2 + d[[dispname]]^2))
+        # rez$Dvour2 <- mean(d[[coefname]]^2 / (d[[coefname]]^2 + d[[dispname]]^2))
 
         reliability <- rbind(reliability, rez)
       }
