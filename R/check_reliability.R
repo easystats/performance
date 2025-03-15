@@ -1,4 +1,4 @@
-#' Variability-Over-Uncertainty Ratio (D-vour) for Random Effects Reliability
+#' Variability-Over-Uncertainty Ratio (d-vour) for Random Effects Reliability
 #'
 #' @description TODO: Add description.
 #'
@@ -9,6 +9,12 @@
 #
 #'
 #' @details TODO: Add details.
+#'
+#' Intepretation: d-vour corresponds to: between-groups variability /  (between-groups variability + within-group variability)
+#' A d-vour of 3/4 (0.75) means that there is 3 times more variability between groups than within groups (3/1),
+#' and a d-vour of less than 0.5 means that there is more variability within groups than between groups (which is
+#' bad if the goal is to analyze group-level effects).
+#'
 #'
 #' @references TODO.
 #'
@@ -47,8 +53,6 @@ check_reliability.default <- function(x, ...) {
 #' @rdname check_reliability
 #' @export
 check_reliability.estimate_grouplevel <- function(x, ...) {
-
-  # x <- modelbased::estimate_grouplevel(m)
 
   coefname <- attributes(x)$coef_name
   dispname <- grep("SE|SD|MAD", colnames(x), value = TRUE)
@@ -108,10 +112,7 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
         rez <- data.frame(
           Component = comp,
           Group = grp,
-          Parameter = param,
-          N = random[[grp]],
-          Variability = stats::sd(d[[coefname]]),
-          Uncertainty = mean(d[[dispname]])
+          Parameter = param
         )
 
 
@@ -122,16 +123,22 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
         # trial noise. Let gamma2 denote this ratio. With it, the reliability coefficient follows (eq. 1):
         # E(r) = gamma2 / (gamma2 + 2/L)" (or 1/L for non-contrast tasks, see annotation 4)
 
+        # Number of trials per group
+        L <- random[[grp]]
+
         # Extract variances
         if(param %in% c("(Intercept)", "Intercept")) {
           var_between <- v$var.intercept[grp]
         } else {
           var_between <- v$var.slope[paste0(grp, ".", param)]
         }
-        rez$Reliability <- var_between / (var_between + v$var.residual)
 
+        # Non-adjusted index
+        # rez$Reliability <- var_between / (var_between + v$var.residual)
+
+        # Adjusted index:
         # Rouder & Mehrvarz suggest 1/L for non-contrast tasks and 2/L for contrast tasks.
-        rez$Reliability_adjusted <- var_between / (var_between + v$var.residual + 1 / rez$N)
+        rez$Reliability <- var_between / (var_between + v$var.residual + 1 / L)
 
         # The parameter γ is the signal-to-noise standard-deviation ratio. It is often convenient for
         # communication as standard deviations are sometimes more convenient than variances.
@@ -140,7 +147,10 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
         # d-vour ------------------------------------------------------------------
         # Variability-Over-Uncertainty Ratio (d-vour)
         # This index is based on the information contained in the group-level estimates.
-        rez$Dvour <- rez$Variability^2 / (rez$Variability^2 + rez$Uncertainty^2)
+        var_between <- stats::sd(d[[coefname]])  # Variability
+        var_within <- mean(d[[dispname]])  # Average Uncertainty
+
+        rez$Dvour <- var_between^2 / (var_between^2 + var_within^2)
 
         # Alternative 1: average of level-specific reliability
         # Inspired by the hlmer package (R version of HLM7 by Raudenbush et al., 2014)

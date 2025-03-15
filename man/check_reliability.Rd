@@ -3,11 +3,11 @@
 \name{check_reliability}
 \alias{check_reliability}
 \alias{check_reliability.estimate_grouplevel}
-\title{Variability-Over-Uncertainty Ratio (D-vour) for Random Effects Reliability}
+\title{Variability-Over-Uncertainty Ratio (d-vour) for Random Effects Reliability}
 \usage{
 check_reliability(x, ...)
 
-\method{check_reliability}{estimate_grouplevel}(x, n_trials = NULL, ...)
+\method{check_reliability}{estimate_grouplevel}(x, ...)
 }
 \arguments{
 \item{x}{A model object (or from \code{\link[modelbased:estimate_grouplevel]{modelbased::estimate_grouplevel()}}).}
@@ -21,15 +21,29 @@ TODO: Add description.
 }
 \details{
 TODO: Add details.
+
+Intepretation: d-vour corresponds to: between-groups variability /  (between-groups variability + within-group variability)
+A d-vour of 3/4 (0.75) means that there is 3 times more variability between groups than within groups (3/1),
+and a d-vour of less than 0.5 means that there is more variability within groups than between groups (which is
+bad if the goal is to analyze group-level effects).
 }
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-# Add groups to the data
-data <- iris
-data$Place <- as.factor(rep(c("P1", "P2", "P3", "P4", "P5", "P6"), each = 25))
+\dontshow{if (require("lme4") & require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+df <- read.csv("https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv")
 
-# lme4
-m <- lme4::lmer(Sepal.Width ~ Petal.Width + (Petal.Width | Place), data = data)
+m <- lme4::lmer(RT ~ (1 | Participant), data = df)
+check_reliability(m)
+m <- glmmTMB::glmmTMB(RT ~ (1 | Participant), data = df)
+check_reliability(m)
+
+m <- lme4::lmer(RT ~ (1 | Participant) + (1 | Trial), data = df)
+check_reliability(m)
+m <- glmmTMB::glmmTMB(RT ~ (1 | Participant) + (1 | Trial), data = df)
+check_reliability(m)
+
+m <- lme4::lmer(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
+check_reliability(m)
+m <- glmmTMB::glmmTMB(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
 check_reliability(m)
 \dontshow{\}) # examplesIf}
 }
