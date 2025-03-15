@@ -14,15 +14,23 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examplesIf require("lme4")
-#' # Add groups to the data
-#' data <- iris
-#' data$Place <- as.factor(rep(c("P1", "P2", "P3", "P4", "P5", "P6"), each = 25))
+#' @examplesIf require("lme4") & require("glmmTMB")
+#' df <- read.csv("https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv")
 #'
-#' # lme4
-#' m <- lme4::lmer(Sepal.Width ~ Petal.Width + (Petal.Width | Place), data = data)
+#' m <- lme4::lmer(RT ~ (1 | Participant), data = df)
+#' check_reliability(m)
+#' m <- glmmTMB::glmmTMB(RT ~ (1 | Participant), data = df)
 #' check_reliability(m)
 #'
+#' m <- lme4::lmer(RT ~ (1 | Participant) + (1 | Trial), data = df)
+#' check_reliability(m)
+#' m <- glmmTMB::glmmTMB(RT ~ (1 | Participant) + (1 | Trial), data = df)
+#' check_reliability(m)
+#'
+#' m <- lme4::lmer(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
+#' check_reliability(m)
+#' m <- glmmTMB::glmmTMB(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
+#' check_reliability(m)
 #' @export
 check_reliability <- function(x, ...) {
   UseMethod("check_reliability")
@@ -38,37 +46,20 @@ check_reliability.default <- function(x, ...) {
 
 #' @rdname check_reliability
 #' @export
-check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
+check_reliability.estimate_grouplevel <- function(x, ...) {
+
+  # x <- modelbased::estimate_grouplevel(m)
+
   coefname <- attributes(x)$coef_name
   dispname <- grep("SE|SD|MAD", colnames(x), value = TRUE)
 
-  # extract model information, to get number of trials
+  # Extract model information
   model <- attributes(x)$model
-  model_data <- insight::get_data(model)
 
-  # if number of trials not yet specified, define it by number of values from
-  # random slopes. this is assumed to be the number of trials
-  if (is.null(n_trials)) {
-    # find random slopes
-    random_slopes <- unique(unlist(
-      insight::find_random_slopes(model),
-      use.names = FALSE
-    ))
-    # if we have any, get data and count unique values for number of trials,
-    # and extract random effects variances to calculate gamma-squared
-    if (!is.null(random_slopes)) {
-      n_trials <- .safe(insight::n_unique(unlist(
-        lapply(model_data[random_slopes], unique),
-        use.names = FALSE
-      )))
-    }
-  }
+  # Find how many observations per random effect (n-trials)
+  random <- lapply(insight::get_random(model), function(x) min(table(x)))
+  v <- insight::get_variance(model) # Extract variance components
 
-  # if we have number of trials, we can calculate gamma
-  if (!is.null(n_trials)) {
-    gamma2 <- .safe(.extract_reliability_gamma(model))
-    gamma_overall <- .safe(.extract_reliability_gamma2(model))
-  }
 
   # Sanity checks
   if (insight::n_unique(x$Level) <= 3) {
@@ -102,7 +93,7 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
 
   reliability <- data.frame()
 
-  ## TODO: need to decide on which indices we want to use.
+  # TODO: need to decide on which indices we want to use.
 
   # we need these nested loops only if we need to calculate the reliability
   # index for the different random effects parameters. If we want an "overall"
@@ -111,39 +102,49 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
     for (grp in unique(x$Group)) {
       for (param in unique(x$Parameter)) {
         d <- x[x$Component == comp & x$Group == grp & x$Parameter == param, ]
+        if(nrow(d) == 0) next
 
-        # Raw Signal-to-Noise Ratio
+        # Store group-level results
         rez <- data.frame(
           Component = comp,
           Group = grp,
           Parameter = param,
+          N = random[[grp]],
           Variability = stats::sd(d[[coefname]]),
           Uncertainty = mean(d[[dispname]])
         )
-        rez$Reliability <- rez$Variability / rez$Uncertainty
 
-        # Alternative: average of level-specific reliability
-        # suggested by @DominiqueMakowski, to have this index bound to 0-1
-        rez$Reliability2 <- mean(d[[coefname]]^2 / (d[[coefname]]^2 + d[[dispname]]^2))
 
-        # Alternative 2: like hlmer?
-        # Suggested by @strengejacke, to have this index bound to 0-1, but using
-        # SD^2 (i.e. Variability^2) is actually the "tau" value from the Rouders
-        # paper https://journals.sagepub.com/doi/10.1177/09637214231220923
-        rez$Reliability3 <- rez$Variability^2 / (rez$Variability^2 + rez$Uncertainty^2)
+        # Rouder (2024) --------------------------------------------------------
+        # Based on Rouder's (2024) paper https://journals.sagepub.com/doi/10.1177/09637214231220923
+        # "What part of reliability is invariant to trial size? Consider the ratio sigma_B^2 / sigma_W^2.
+        # This is a signal-to-noise variance ratio - it is how much more variable people are relative to
+        # trial noise. Let gamma2 denote this ratio. With it, the reliability coefficient follows (eq. 1):
+        # E(r) = gamma2 / (gamma2 + 2/L)" (or 1/L for non-contrast tasks, see annotation 4)
 
-        # Alternative 3: the index from the paper?
-        if (!is.null(n_trials) && !is.null(gamma2)) {
-          rez$Reliability4 <- .expected_reliability(n_trials, gamma2)
+        # Extract variances
+        if(param %in% c("(Intercept)")) {
+          var_between <- v$var.intercept[grp]
+        } else {
+          var_between <- v$var.slope[paste0(grp, ".", param)]
         }
+        rez$Reliability <- var_between / (var_between + v$var.residual)
 
-        # Alternative 4: the index from the paper, but using overall
-        # random effects variances...
-        if (!is.null(n_trials) && !is.null(gamma_overall)) {
-          rez$Reliability5 <- .expected_reliability(n_trials, gamma_overall)
-        }
+        # Rouder & Mehrvarz suggest 1/L for non-contrast tasks and 2/L for contrast tasks.
+        rez$Reliability_adjusted <- var_between / (var_between + v$var.residual + 1 / rez$N)
 
-        # TODO: we probably need to pick one reliability index
+        # The parameter γ is the signal-to-noise standard-deviation ratio. It is often convenient for
+        # communication as standard deviations are sometimes more convenient than variances.
+        # rez$Reliability_adjusted <- sqrt(rez$Reliability_adjusted)
+
+        # d-vour ------------------------------------------------------------------
+        # Variability-Over-Uncertainty Ratio (d-vour)
+        # This index is based on the information contained in the group-level estimates.
+        rez$Dvour <- rez$Variability^2 / (rez$Variability^2 + rez$Uncertainty^2)
+
+        # Alternative 1: average of level-specific reliability
+        # Inspired by the hlmer package (R version of HLM7 by Raudenbush et al., 2014)
+        rez$Dvour2 <- mean(d[[coefname]]^2 / (d[[coefname]]^2 + d[[dispname]]^2))
 
         reliability <- rbind(reliability, rez)
       }
@@ -156,32 +157,4 @@ check_reliability.estimate_grouplevel <- function(x, n_trials = NULL, ...) {
   }
 
   reliability
-}
-
-
-# helper functions -----------------------------------
-
-# this uses Tau, but might not be suitable for random slopes models?
-.extract_reliability_gamma <- function(model) {
-  v <- insight::get_variance(model)
-  var_between <- v$var.intercept # tau, between subject variance
-  var_within <- v$var.residual # within subject variance
-  var_between / var_within
-}
-
-# this calcualtes random effects variances, taking the variation
-# of random slopes into account, too
-.extract_reliability_gamma2 <- function(model) {
-  v <- insight::get_variance(model)
-  var_between <- v$var.random # overall between subject variance?
-  var_within <- v$var.residual
-  var_between / var_within
-}
-
-# see https://journals.sagepub.com/doi/10.1177/09637214231220923
-.expected_reliability <- function(n_trials, gamma) {
-  # it's actually gamma-squared. See note 4 in the paper. The equation is 2 / L
-  # for trials with contrasts, and 1 / L for tasks without contrasts. Need to
-  # check which is more appropriate, but using 2 / L seems more conservative
-  gamma / (gamma + (2 / n_trials))
 }
