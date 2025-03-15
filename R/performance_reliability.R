@@ -1,9 +1,10 @@
-#' Variability-Over-Uncertainty Ratio (d-vour) for Random Effects Reliability
+#' Random Effects Reliability
+#'
+#' Variability-Over-Uncertainty Ratio (d-vour).
 #'
 #' @description TODO: Add description.
 #'
 #' @param x A model object (or from [`modelbased::estimate_grouplevel()`]).
-#' @param n_trials to do...
 #' @param ... Currently not used.
 #'
 #
@@ -18,52 +19,117 @@
 #'
 #' @references TODO.
 #'
-#' @family functions to check model assumptions and and assess model quality
 #'
-#' @examplesIf require("lme4") & require("glmmTMB")
+#' @examplesIf require("lme4") && require("glmmTMB")
 #' df <- read.csv("https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv")
 #'
 #' m <- lme4::lmer(RT ~ (1 | Participant), data = df)
-#' check_reliability(m)
+#' performance_reliability(m)
+#' performance_dvour(m)
 #' m <- glmmTMB::glmmTMB(RT ~ (1 | Participant), data = df)
-#' check_reliability(m)
+#' performance_reliability(m)
+#' performance_dvour(m)
 #'
 #' m <- lme4::lmer(RT ~ (1 | Participant) + (1 | Trial), data = df)
-#' check_reliability(m)
+#' performance_reliability(m)
+#' performance_dvour(m)
 #' m <- glmmTMB::glmmTMB(RT ~ (1 | Participant) + (1 | Trial), data = df)
-#' check_reliability(m)
+#' performance_reliability(m)
+#' performance_dvour(m)
 #'
 #' m <- lme4::lmer(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
-#' check_reliability(m)
+#' performance_reliability(m)
+#' performance_dvour(m)
 #' m <- glmmTMB::glmmTMB(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
-#' check_reliability(m)
+#' performance_reliability(m)
+#' performance_dvour(m)
 #' @export
-check_reliability <- function(x, ...) {
-  UseMethod("check_reliability")
+performance_reliability <- function(x, ...) {
+  UseMethod("performance_reliability")
 }
 
 
 #' @export
-check_reliability.default <- function(x, ...) {
+performance_reliability.default <- function(x, ...) {
+  # Find how many observations per random effect (n-trials)
+  random <- lapply(insight::get_random(x), function(z) min(table(z)))
+  v <- insight::get_variance(x) # Extract variance components
+
+  params <- as.data.frame(parameters::parameters(x, effects = "random", group_level = TRUE))
+
+  reliability <- data.frame()
+  for (grp in unique(params$Group)) {
+    for (param in unique(params$Parameter)) {
+      # Store group-level results
+      rez <- data.frame(
+        Group = grp,
+        Parameter = param
+      )
+
+
+      # Based on Rouder's (2024) paper https://journals.sagepub.com/doi/10.1177/09637214231220923
+      # "What part of reliability is invariant to trial size? Consider the ratio sigma_B^2 / sigma_W^2.
+      # This is a signal-to-noise variance ratio - it is how much more variable people are relative to
+      # trial noise. Let gamma2 denote this ratio. With it, the reliability coefficient follows (eq. 1):
+      # E(r) = gamma2 / (gamma2 + 2/L)" (or 1/L for non-contrast tasks, see annotation 4)
+
+      # Number of trials per group
+      L <- random[[grp]]
+
+      # Extract variances
+      if(param %in% c("(Intercept)", "Intercept")) {
+        var_between <- v$var.intercept[grp]
+      } else {
+        var_between <- v$var.slope[paste0(grp, ".", param)]
+      }
+
+      # Non-adjusted index
+      # rez$Reliability <- var_between / (var_between + v$var.residual)
+
+      # Adjusted index:
+      # Rouder & Mehrvarz suggest 1/L for non-contrast tasks and 2/L for contrast tasks.
+      rez$Reliability <- var_between / (var_between + v$var.residual + 1 / L)
+
+      # The parameter γ is the signal-to-noise standard-deviation ratio. It is often convenient for
+      # communication as standard deviations are sometimes more convenient than variances.
+      # rez$Reliability_adjusted <- sqrt(rez$Reliability_adjusted)
+
+      reliability <- rbind(reliability, rez)
+    }
+  }
+
+  reliability
+}
+
+
+
+
+
+
+
+# d-vour ------------------------------------------------------------------
+
+
+
+#' @rdname performance_reliability
+#' @export
+performance_dvour <- function(x, ...) {
+  UseMethod("performance_dvour")
+}
+
+
+#' @export
+performance_dvour.default <- function(x, ...) {
   insight::check_if_installed("modelbased", minimum_version = "0.10.0")
-  check_reliability(modelbased::estimate_grouplevel(x, ...), ...)
+  performance_dvour(modelbased::estimate_grouplevel(x, ...), ...)
 }
 
 
-#' @rdname check_reliability
 #' @export
-check_reliability.estimate_grouplevel <- function(x, ...) {
+performance_dvour.estimate_grouplevel <- function(x, ...) {
 
   coefname <- attributes(x)$coef_name
   dispname <- grep("SE|SD|MAD", colnames(x), value = TRUE)
-
-  # Extract model information
-  model <- attributes(x)$model
-
-  # Find how many observations per random effect (n-trials)
-  random <- lapply(insight::get_random(model), function(x) min(table(x)))
-  v <- insight::get_variance(model) # Extract variance components
-
 
   # Sanity checks
   if (insight::n_unique(x$Level) <= 3) {
@@ -97,11 +163,6 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
 
   reliability <- data.frame()
 
-  # TODO: need to decide on which indices we want to use.
-
-  # we need these nested loops only if we need to calculate the reliability
-  # index for the different random effects parameters. If we want an "overall"
-  # reliability index, we can simply call ".expected_reliability()".
   for (comp in unique(x$Component)) {
     for (grp in unique(x$Group)) {
       for (param in unique(x$Parameter)) {
@@ -115,42 +176,12 @@ check_reliability.estimate_grouplevel <- function(x, ...) {
           Parameter = param
         )
 
-
-        # Rouder (2024) --------------------------------------------------------
-        # Based on Rouder's (2024) paper https://journals.sagepub.com/doi/10.1177/09637214231220923
-        # "What part of reliability is invariant to trial size? Consider the ratio sigma_B^2 / sigma_W^2.
-        # This is a signal-to-noise variance ratio - it is how much more variable people are relative to
-        # trial noise. Let gamma2 denote this ratio. With it, the reliability coefficient follows (eq. 1):
-        # E(r) = gamma2 / (gamma2 + 2/L)" (or 1/L for non-contrast tasks, see annotation 4)
-
-        # Number of trials per group
-        L <- random[[grp]]
-
-        # Extract variances
-        if(param %in% c("(Intercept)", "Intercept")) {
-          var_between <- v$var.intercept[grp]
-        } else {
-          var_between <- v$var.slope[paste0(grp, ".", param)]
-        }
-
-        # Non-adjusted index
-        # rez$Reliability <- var_between / (var_between + v$var.residual)
-
-        # Adjusted index:
-        # Rouder & Mehrvarz suggest 1/L for non-contrast tasks and 2/L for contrast tasks.
-        rez$Reliability <- var_between / (var_between + v$var.residual + 1 / L)
-
-        # The parameter γ is the signal-to-noise standard-deviation ratio. It is often convenient for
-        # communication as standard deviations are sometimes more convenient than variances.
-        # rez$Reliability_adjusted <- sqrt(rez$Reliability_adjusted)
-
-        # d-vour ------------------------------------------------------------------
         # Variability-Over-Uncertainty Ratio (d-vour)
         # This index is based on the information contained in the group-level estimates.
         var_between <- stats::sd(d[[coefname]])  # Variability
         var_within <- mean(d[[dispname]])  # Average Uncertainty
 
-        rez$Dvour <- var_between^2 / (var_between^2 + var_within^2)
+        rez$D_vour <- var_between^2 / (var_between^2 + var_within^2)
 
         # Alternative 1: average of level-specific reliability
         # Inspired by the hlmer package (R version of HLM7 by Raudenbush et al., 2014)

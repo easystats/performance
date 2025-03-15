@@ -145,7 +145,6 @@ Other functions to check model assumptions and and assess model quality:
 \code{\link{check_outliers}()},
 \code{\link{check_overdispersion}()},
 \code{\link{check_predictions}()},
-\code{\link{check_reliability}()},
 \code{\link{check_zeroinflation}()}
 }
 \concept{functions to check model assumptions and and assess model quality}
