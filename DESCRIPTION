@@ -138,6 +138,7 @@ Suggests:
     qqplotr (>= 0.0.6),
     randomForest,
     RcppEigen,
+    reformulas,
     rempsyc,
     rmarkdown,
     rstanarm,
