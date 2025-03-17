@@ -64,11 +64,17 @@ performance_reliability.default <- function(x, ...) {
   random <- lapply(insight::get_random(x), function(z) min(table(z)))
   v <- insight::get_variance(x) # Extract variance components
 
-  params <- as.data.frame(parameters::parameters(
+  original_params <- parameters::parameters(
     x,
     effects = "random",
     group_level = TRUE
-  ))
+  )
+  params <- as.data.frame(original_params)
+
+  # bayesian model? if yes, copy clean parameter names
+  if (isTRUE(insight::model_info(x)$is_bayesian)) {
+    params$Parameter <- attributes(original_params)$pretty_labels
+  }
 
   reliability <- data.frame()
   for (grp in unique(params$Group)) {
