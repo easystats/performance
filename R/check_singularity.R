@@ -154,7 +154,7 @@ check_singularity.merMod <- function(x, tolerance = 1e-5, check = "model", ...) 
 
   switch(check,
     model = any(unlist(result, use.names = FALSE)),
-    insight::compalist(result)
+    insight::compact_list(result)
   )
 }
 
@@ -187,7 +187,7 @@ check_singularity.glmmTMB <- function(x, tolerance = 1e-5, check = "model", ...)
 
   switch(check,
     model = any(unlist(result, use.names = FALSE)),
-    insight::compalist(result)
+    insight::compact_list(result)
   )
 }
 
