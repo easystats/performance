@@ -11,11 +11,12 @@
 #'
 #' @details TODO: Add details.
 #'
-#' Intepretation: d-vour corresponds to: between-groups variability /  (between-groups variability + within-group variability)
-#' A d-vour of 3/4 (0.75) means that there is 3 times more variability between groups than within groups (3/1),
-#' and a d-vour of less than 0.5 means that there is more variability within groups than between groups (which is
-#' bad if the goal is to analyze group-level effects).
-#'
+#' Interpretation: d-vour corresponds to: between-groups variability /
+#' (between-groups variability + within-group variability) A d-vour of 3/4
+#' (0.75) means that there is 3 times more variability between groups than
+#' within groups (3/1), and a d-vour of less than 0.5 means that there is more
+#' variability within groups than between groups (which is bad if the goal is to
+#' analyze group-level effects).
 #'
 #' @references TODO.
 #'
@@ -26,6 +27,7 @@
 #' m <- lme4::lmer(RT ~ (1 | Participant), data = df)
 #' performance_reliability(m)
 #' performance_dvour(m)
+#'
 #' m <- glmmTMB::glmmTMB(RT ~ (1 | Participant), data = df)
 #' performance_reliability(m)
 #' performance_dvour(m)
@@ -33,6 +35,7 @@
 #' m <- lme4::lmer(RT ~ (1 | Participant) + (1 | Trial), data = df)
 #' performance_reliability(m)
 #' performance_dvour(m)
+#'
 #' m <- glmmTMB::glmmTMB(RT ~ (1 | Participant) + (1 | Trial), data = df)
 #' performance_reliability(m)
 #' performance_dvour(m)
@@ -40,6 +43,7 @@
 #' m <- lme4::lmer(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
 #' performance_reliability(m)
 #' performance_dvour(m)
+#'
 #' m <- glmmTMB::glmmTMB(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
 #' performance_reliability(m)
 #' performance_dvour(m)
@@ -51,11 +55,20 @@ performance_reliability <- function(x, ...) {
 
 #' @export
 performance_reliability.default <- function(x, ...) {
+  # sanity check
+  if (!insight::is_model(x)) {
+    insight::format_error("`x` must be a regression model object.")
+  }
+
   # Find how many observations per random effect (n-trials)
   random <- lapply(insight::get_random(x), function(z) min(table(z)))
   v <- insight::get_variance(x) # Extract variance components
 
-  params <- as.data.frame(parameters::parameters(x, effects = "random", group_level = TRUE))
+  params <- as.data.frame(parameters::parameters(
+    x,
+    effects = "random",
+    group_level = TRUE
+  ))
 
   reliability <- data.frame()
   for (grp in unique(params$Group)) {
@@ -77,7 +90,7 @@ performance_reliability.default <- function(x, ...) {
       L <- random[[grp]]
 
       # Extract variances
-      if(param %in% c("(Intercept)", "Intercept")) {
+      if (param %in% c("(Intercept)", "Intercept")) {
         var_between <- v$var.intercept[grp]
       } else {
         var_between <- v$var.slope[paste0(grp, ".", param)]
@@ -102,13 +115,7 @@ performance_reliability.default <- function(x, ...) {
 }
 
 
-
-
-
-
-
 # d-vour ------------------------------------------------------------------
-
 
 
 #' @rdname performance_reliability
@@ -127,7 +134,6 @@ performance_dvour.default <- function(x, ...) {
 
 #' @export
 performance_dvour.estimate_grouplevel <- function(x, ...) {
-
   coefname <- attributes(x)$coef_name
   dispname <- grep("SE|SD|MAD", colnames(x), value = TRUE)
 
@@ -167,7 +173,7 @@ performance_dvour.estimate_grouplevel <- function(x, ...) {
     for (grp in unique(x$Group)) {
       for (param in unique(x$Parameter)) {
         d <- x[x$Component == comp & x$Group == grp & x$Parameter == param, ]
-        if(nrow(d) == 0) next
+        if (nrow(d) == 0) next
 
         # Store group-level results
         rez <- data.frame(
@@ -178,8 +184,8 @@ performance_dvour.estimate_grouplevel <- function(x, ...) {
 
         # Variability-Over-Uncertainty Ratio (d-vour)
         # This index is based on the information contained in the group-level estimates.
-        var_between <- stats::sd(d[[coefname]])  # Variability
-        var_within <- mean(d[[dispname]])  # Average Uncertainty
+        var_between <- stats::sd(d[[coefname]]) # Variability
+        var_within <- mean(d[[dispname]]) # Average Uncertainty
 
         rez$D_vour <- var_between^2 / (var_between^2 + var_within^2)
 
