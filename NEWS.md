@@ -1,3 +1,13 @@
+# performance (devel)
+
+## Changes
+
+* Singularity checks with `check_singularity()` are now more efficient and also
+  include the random effects for the dispersion component (from package *glmmTMB*).
+  Furthermore, a `check` argument allows to check for general singularity (for
+  the full model), or can return singularity checks for each random effects term
+  separately.
+
 # performance 0.13.0
 
 ## Breaking changes
