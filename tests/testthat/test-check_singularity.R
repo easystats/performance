@@ -23,7 +23,6 @@ test_that("check_singularity, lme4", {
     out,
     c(`mysubgrp:mygrp` = TRUE, Subject = FALSE, mygrp = FALSE)
   )
-
 })
 
 
@@ -50,8 +49,8 @@ test_that("check_singularity", {
     count ~ spp + mined + (1 | site),
     data = Salamanders[Salamanders$count > 0, , drop = FALSE],
     family = glmmTMB::truncated_nbinom2(),
-    ziformula = ~spp + (1 | site),
-    dispformula = ~spp + (1 | site)
+    ziformula = ~ spp + (1 | site),
+    dispformula = ~ spp + (1 | site)
   )
   out <- check_singularity(m, check = "terms")
   expect_identical(

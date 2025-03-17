@@ -261,6 +261,7 @@ brms
 brmsfit
 cauchy
 clusterable
+codecov
 confounder
 confounders
 concurvity
