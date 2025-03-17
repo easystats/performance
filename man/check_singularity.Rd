@@ -2,9 +2,12 @@
 % Please edit documentation in R/check_singularity.R
 \name{check_singularity}
 \alias{check_singularity}
+\alias{check_singularity.glmmTMB}
 \title{Check mixed models for boundary fits}
 \usage{
 check_singularity(x, tolerance = 1e-05, ...)
+
+\method{check_singularity}{glmmTMB}(x, tolerance = 1e-05, check = "model", ...)
 }
 \arguments{
 \item{x}{A mixed model.}
@@ -14,6 +17,9 @@ accepted. The larger \code{tolerance} is, the stricter the test
 will be.}
 
 \item{...}{Currently not used.}
+
+\item{check}{Indicates whether singularity check should be carried out for
+the full model (\code{"model"}, the default), or per random effects term (\code{"terms"}).}
 }
 \value{
 \code{TRUE} if the model fit is singular.
@@ -90,7 +96,10 @@ model <- lme4::lmer(
   Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
   data = sleepstudy
 )
+# any singular fits?
 check_singularity(model)
+# singular fit for which particular random effects terms?
+check_singularity(model, check = "terms")
 
 \dontrun{
 # Fixing singularity issues using priors in glmmTMB
