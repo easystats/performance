@@ -205,7 +205,7 @@ performance_dvour.estimate_grouplevel <- function(x, ...) {
   }
 
   # Clean-up output
-  if (insight::n_unique(reliability$Component) == 1 && unique(reliability$Component) == "TEMP") {
+  if (insight::has_single_value(reliability$Component) && unique(reliability$Component) == "TEMP") {
     reliability$Component <- NULL
   }
 
