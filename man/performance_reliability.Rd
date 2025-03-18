@@ -24,7 +24,7 @@ and the predictors to the effect of some experimental condition.
 The conceptually related functions are implemented, \code{performance_reliability()},
 based on Rouder & Mehrvarz (2024), and \code{performance_dvour()} (d-vour), based
 on the Variability-Over-Uncertainty Ratio between random effects coefficient
-variability and their assocaited uncertainty.
+variability and their associated uncertainty.
 }
 \details{
 \subsection{Reliability (Signal-to-Noise Ratio)}{
