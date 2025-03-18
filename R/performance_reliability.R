@@ -7,9 +7,9 @@
 #' and the predictors to the effect of some experimental condition.
 #'
 #' The conceptually related functions are implemented, `performance_reliability()`,
-#' based on Rouder & Mehrvarz (2024), and `performance_dvour()` (d-vour), based on the
-#' Variability-Over-Uncertainty Ratio between random effects coefficient variability
-#' and their assocaited uncertainty.
+#' based on Rouder & Mehrvarz (2024), and `performance_dvour()` (d-vour), based
+#' on the Variability-Over-Uncertainty Ratio between random effects coefficient
+#' variability and their assocaited uncertainty.
 #'
 #'
 #' @param x A model object.
@@ -18,16 +18,22 @@
 #
 #'
 #' @details
+#'
 #' ## Reliability (Signal-to-Noise Ratio)
-#' `performance_reliability()` estimates the reliability of random effects (intercepts and slopes)
-#' in mixed-effects models using variance decomposition. This method follows the **hierarchical modeling**
-#' framework of Rouder & Mehrvarz (2024), defining reliability as the **signal-to-noise variance ratio**:
+#'
+#' `performance_reliability()` estimates the reliability of random effects
+#' (intercepts and slopes) in mixed-effects models using variance decomposition.
+#' This method follows the **hierarchical modeling** framework of Rouder &
+#' Mehrvarz (2024), defining reliability as the **signal-to-noise variance
+#' ratio**:
 #'
 #' \deqn{\gamma^2 = \frac{\sigma_B^2}{\sigma_B^2 + \sigma_W^2}}
 #'
 #' where:
-#' - \eqn{\sigma_B^2} is the **between-subject variance** (i.e., variability across groups).
-#' - \eqn{\sigma_W^2} is the **within-subject variance** (i.e., trial-level measurement noise).
+#' - \eqn{\sigma_B^2} is the **between-subject variance** (i.e., variability
+#'   across groups).
+#' - \eqn{\sigma_W^2} is the **within-subject variance** (i.e., trial-level
+#'   measurement noise).
 #'
 #' This metric quantifies **how much observed variability is due to actual differences between groups**,
 #' rather than measurement error or within-group fluctuations.
@@ -41,30 +47,40 @@
 #'
 #'
 #' ## Variability-Over-Uncertainty Ratio (d-vour)
-#' `performance_dvour()` computes an alternative reliability measure based on the **ratio of observed variability
-#' to uncertainty in random effect estimates**. This is defined as:
+#'
+#' `performance_dvour()` computes an alternative reliability measure based on
+#' the **ratio of observed variability to uncertainty in random effect
+#' estimates**. This is defined as:
 #'
 #' \deqn{\text{D-vour} = \frac{\sigma_B^2}{\sigma_B^2 + \mu_{\text{SE}}^2}}
 #'
 #' where:
-#' - \eqn{\sigma_B^2} is the **between-group variability** (computed as the SD of the random effect estimates).
-#' - \eqn{\mu_{\text{SE}}^2} is the **mean squared uncertainty** in random effect estimates (i.e., the average uncertainty).
+#' - \eqn{\sigma_B^2} is the **between-group variability** (computed as the SD
+#'   of the random effect estimates).
+#' - \eqn{\mu_{\text{SE}}^2} is the **mean squared uncertainty** in random
+#'   effect estimates (i.e., the average uncertainty).
 #'
 #'
 #' ### Interpretation:
-#' - **D-vour > 0.75**: Strong group-level effects (between-group variance is at least 3× greater than uncertainty).
-#' - **D-vour ≈ 0.5**: Within-group and between-group variability are similar; random effect estimates should be used with caution.
-#' - **D-vour < 0.5**: Measurement noise dominates; random effect estimates are probably unreliable.
 #'
-#' While d-vour shares some similarity to Rouder's Reliability, it does not explicitly model
-#' within-group trial-level noise and is only based on the random effect estimates, and can thus
-#' be not very accurate when there is not a lot of random factor groups.
+#' - **D-vour > 0.75**: Strong group-level effects (between-group variance is at
+#'   least 3× greater than uncertainty).
+#' - **D-vour ≈ 0.5**: Within-group and between-group variability are similar;
+#'   random effect estimates should be used with caution.
+#' - **D-vour < 0.5**: Measurement noise dominates; random effect estimates are
+#'   probably unreliable.
+#'
+#' While d-vour shares some similarity to Rouder's Reliability, it does not
+#' explicitly model within-group trial-level noise and is only based on the
+#' random effect estimates, and can thus be not very accurate when there is not
+#' a lot of random factor groups.
 #'
 #' @references TODO.
 #'
 #'
-#' @examplesIf require("lme4") && require("glmmTMB")
-#' df <- read.csv("https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv")
+#' @examplesIf all(insight::check_if_installed(c("lme4", "glmmTMB"), quietly = TRUE))
+#' url <- "https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv"
+#' df <- read.csv(url)
 #'
 #' m <- lme4::lmer(RT ~ (1 | Participant), data = df)
 #' performance_reliability(m)
@@ -82,11 +98,17 @@
 #' performance_reliability(m)
 #' performance_dvour(m)
 #'
-#' m <- lme4::lmer(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
+#' m <- lme4::lmer(
+#'   RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
+#'   data = df
+#' )
 #' performance_reliability(m)
 #' performance_dvour(m)
 #'
-#' m <- glmmTMB::glmmTMB(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
+#' m <- glmmTMB::glmmTMB(
+#'   RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
+#'   data = df
+#' )
 #' performance_reliability(m)
 #' performance_dvour(m)
 #' @export
@@ -129,10 +151,12 @@ performance_reliability.default <- function(x, ...) {
 
 
       # Based on Rouder's (2024) paper https://journals.sagepub.com/doi/10.1177/09637214231220923
-      # "What part of reliability is invariant to trial size? Consider the ratio sigma_B^2 / sigma_W^2.
-      # This is a signal-to-noise variance ratio - it is how much more variable people are relative to
-      # trial noise. Let gamma2 denote this ratio. With it, the reliability coefficient follows (eq. 1):
-      # E(r) = gamma2 / (gamma2 + 2/L)" (or 1/L for non-contrast tasks, see annotation 4)
+      # "What part of reliability is invariant to trial size? Consider the ratio
+      # sigma_B^2 / sigma_W^2. This is a signal-to-noise variance ratio - it is
+      # how much more variable people are relative to trial noise. Let gamma2
+      # denote this ratio. With it, the reliability coefficient follows (eq. 1):
+      # E(r) = gamma2 / (gamma2 + 2/L)" (or 1/L for non-contrast tasks, see
+      # annotation 4)
 
       # Number of trials per group
       L <- random[[grp]]
@@ -151,8 +175,9 @@ performance_reliability.default <- function(x, ...) {
       # Rouder & Mehrvarz suggest 1/L for non-contrast tasks and 2/L for contrast tasks.
       rez$Reliability <- var_between / (var_between + v$var.residual + 1 / L)
 
-      # The parameter γ is the signal-to-noise standard-deviation ratio. It is often convenient for
-      # communication as standard deviations are sometimes more convenient than variances.
+      # The parameter γ is the signal-to-noise standard-deviation ratio. It is
+      # often convenient for communication as standard deviations are sometimes
+      # more convenient than variances.
       # rez$Reliability_adjusted <- sqrt(rez$Reliability_adjusted)
 
       reliability <- rbind(reliability, rez)

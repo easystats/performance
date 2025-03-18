@@ -22,23 +22,27 @@ to assess whether there the predictors yield consistent group-level variability.
 and the predictors to the effect of some experimental condition.
 
 The conceptually related functions are implemented, \code{performance_reliability()},
-based on Rouder & Mehrvarz (2024), and \code{performance_dvour()} (d-vour), based on the
-Variability-Over-Uncertainty Ratio between random effects coefficient variability
-and their assocaited uncertainty.
+based on Rouder & Mehrvarz (2024), and \code{performance_dvour()} (d-vour), based
+on the Variability-Over-Uncertainty Ratio between random effects coefficient
+variability and their assocaited uncertainty.
 }
 \details{
 \subsection{Reliability (Signal-to-Noise Ratio)}{
 
-\code{performance_reliability()} estimates the reliability of random effects (intercepts and slopes)
-in mixed-effects models using variance decomposition. This method follows the \strong{hierarchical modeling}
-framework of Rouder & Mehrvarz (2024), defining reliability as the \strong{signal-to-noise variance ratio}:
+\code{performance_reliability()} estimates the reliability of random effects
+(intercepts and slopes) in mixed-effects models using variance decomposition.
+This method follows the \strong{hierarchical modeling} framework of Rouder &
+Mehrvarz (2024), defining reliability as the \strong{signal-to-noise variance
+ratio}:
 
 \deqn{\gamma^2 = \frac{\sigma_B^2}{\sigma_B^2 + \sigma_W^2}}
 
 where:
 \itemize{
-\item \eqn{\sigma_B^2} is the \strong{between-subject variance} (i.e., variability across groups).
-\item \eqn{\sigma_W^2} is the \strong{within-subject variance} (i.e., trial-level measurement noise).
+\item \eqn{\sigma_B^2} is the \strong{between-subject variance} (i.e., variability
+across groups).
+\item \eqn{\sigma_W^2} is the \strong{within-subject variance} (i.e., trial-level
+measurement noise).
 }
 
 This metric quantifies \strong{how much observed variability is due to actual differences between groups},
@@ -54,33 +58,41 @@ that Rouder (2024) recommends 2/L to adjust for contrast effects).
 
 \subsection{Variability-Over-Uncertainty Ratio (d-vour)}{
 
-\code{performance_dvour()} computes an alternative reliability measure based on the \strong{ratio of observed variability
-to uncertainty in random effect estimates}. This is defined as:
+\code{performance_dvour()} computes an alternative reliability measure based on
+the \strong{ratio of observed variability to uncertainty in random effect
+estimates}. This is defined as:
 
 \deqn{\text{D-vour} = \frac{\sigma_B^2}{\sigma_B^2 + \mu_{\text{SE}}^2}}
 
 where:
 \itemize{
-\item \eqn{\sigma_B^2} is the \strong{between-group variability} (computed as the SD of the random effect estimates).
-\item \eqn{\mu_{\text{SE}}^2} is the \strong{mean squared uncertainty} in random effect estimates (i.e., the average uncertainty).
+\item \eqn{\sigma_B^2} is the \strong{between-group variability} (computed as the SD
+of the random effect estimates).
+\item \eqn{\mu_{\text{SE}}^2} is the \strong{mean squared uncertainty} in random
+effect estimates (i.e., the average uncertainty).
 }
 \subsection{Interpretation:}{
 \itemize{
-\item \strong{D-vour > 0.75}: Strong group-level effects (between-group variance is at least 3× greater than uncertainty).
-\item \strong{D-vour ≈ 0.5}: Within-group and between-group variability are similar; effect may be unstable.
-\item \strong{D-vour < 0.5}: Measurement noise dominates; effects should be interpreted with caution.
+\item \strong{D-vour > 0.75}: Strong group-level effects (between-group variance is at
+least 3× greater than uncertainty).
+\item \strong{D-vour ≈ 0.5}: Within-group and between-group variability are similar;
+random effect estimates should be used with caution.
+\item \strong{D-vour < 0.5}: Measurement noise dominates; random effect estimates are
+probably unreliable.
 }
 
-While d-vour shares some similarity to Rouder's Reliability, it does not explicitly model
-within-group trial-level noise and is only based on the random effect estimates, and can thus
-be not very accurate when there is not a lot of random factor groups.
+While d-vour shares some similarity to Rouder's Reliability, it does not
+explicitly model within-group trial-level noise and is only based on the
+random effect estimates, and can thus be not very accurate when there is not
+a lot of random factor groups.
 }
 
 }
 }
 \examples{
-\dontshow{if (require("lme4") && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-df <- read.csv("https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv")
+\dontshow{if (all(insight::check_if_installed(c("lme4", "glmmTMB"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+url <- "https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv"
+df <- read.csv(url)
 
 m <- lme4::lmer(RT ~ (1 | Participant), data = df)
 performance_reliability(m)
@@ -98,11 +110,17 @@ m <- glmmTMB::glmmTMB(RT ~ (1 | Participant) + (1 | Trial), data = df)
 performance_reliability(m)
 performance_dvour(m)
 
-m <- lme4::lmer(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
+m <- lme4::lmer(
+  RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
+  data = df
+)
 performance_reliability(m)
 performance_dvour(m)
 
-m <- glmmTMB::glmmTMB(RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial), data = df)
+m <- glmmTMB::glmmTMB(
+  RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
+  data = df
+)
 performance_reliability(m)
 performance_dvour(m)
 \dontshow{\}) # examplesIf}
