@@ -64,8 +64,8 @@
 #' ### Interpretation:
 #'
 #' - **D-vour > 0.75**: Strong group-level effects (between-group variance is at
-#'   least 3× greater than uncertainty).
-#' - **D-vour ≈ 0.5**: Within-group and between-group variability are similar;
+#'   least 3 times greater than uncertainty).
+#' - **D-vour ~ 0.5**: Within-group and between-group variability are similar;
 #'   random effect estimates should be used with caution.
 #' - **D-vour < 0.5**: Measurement noise dominates; random effect estimates are
 #'   probably unreliable.

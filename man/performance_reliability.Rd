@@ -74,8 +74,8 @@ effect estimates (i.e., the average uncertainty).
 \subsection{Interpretation:}{
 \itemize{
 \item \strong{D-vour > 0.75}: Strong group-level effects (between-group variance is at
-least 3× greater than uncertainty).
-\item \strong{D-vour ≈ 0.5}: Within-group and between-group variability are similar;
+least 3 times greater than uncertainty).
+\item \strong{D-vour ~ 0.5}: Within-group and between-group variability are similar;
 random effect estimates should be used with caution.
 \item \strong{D-vour < 0.5}: Measurement noise dominates; random effect estimates are
 probably unreliable.
