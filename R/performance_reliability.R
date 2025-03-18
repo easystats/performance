@@ -1,22 +1,64 @@
 #' Random Effects Reliability
 #'
-#' Variability-Over-Uncertainty Ratio (d-vour).
+#' @description These functions provide information about the reliability of
+#' group-level estimates (i.e., random effects) in mixed models. They are useful
+#' to assess whether there the predictors yield consistent group-level variability.
+#' "Group-level" can refer, for instance, to different participants in a study,
+#' and the predictors to the effect of some experimental condition.
 #'
-#' @description TODO: Add description.
+#' The conceptually related functions are implemented, `performance_reliability()`,
+#' based on Rouder & Mehrvarz (2024), and `performance_dvour()` (d-vour), based on the
+#' Variability-Over-Uncertainty Ratio between random effects coefficient variability
+#' and their assocaited uncertainty.
 #'
-#' @param x A model object (or from [`modelbased::estimate_grouplevel()`]).
+#'
+#' @param x A model object.
 #' @param ... Currently not used.
 #'
 #
 #'
-#' @details TODO: Add details.
+#' @details
+#' ## Reliability (Signal-to-Noise Ratio)
+#' `performance_reliability()` estimates the reliability of random effects (intercepts and slopes)
+#' in mixed-effects models using variance decomposition. This method follows the **hierarchical modeling**
+#' framework of Rouder & Mehrvarz (2024), defining reliability as the **signal-to-noise variance ratio**:
 #'
-#' Interpretation: d-vour corresponds to: between-groups variability /
-#' (between-groups variability + within-group variability) A d-vour of 3/4
-#' (0.75) means that there is 3 times more variability between groups than
-#' within groups (3/1), and a d-vour of less than 0.5 means that there is more
-#' variability within groups than between groups (which is bad if the goal is to
-#' analyze group-level effects).
+#' \deqn{\gamma^2 = \frac{\sigma_B^2}{\sigma_B^2 + \sigma_W^2}}
+#'
+#' where:
+#' - \eqn{\sigma_B^2} is the **between-subject variance** (i.e., variability across groups).
+#' - \eqn{\sigma_W^2} is the **within-subject variance** (i.e., trial-level measurement noise).
+#'
+#' This metric quantifies **how much observed variability is due to actual differences between groups**,
+#' rather than measurement error or within-group fluctuations.
+#'
+#' To account for **trial count (\eqn{L})**, reliability is adjusted following:
+#'
+#' \deqn{E(r) = \frac{\gamma^2}{\gamma^2 + 1/L}}
+#'
+#' where \eqn{L} is the number of **observations per random effect level** (note
+#' that Rouder (2024) recommends 2/L to adjust for contrast effects).
+#'
+#'
+#' ## Variability-Over-Uncertainty Ratio (d-vour)
+#' `performance_dvour()` computes an alternative reliability measure based on the **ratio of observed variability
+#' to uncertainty in random effect estimates**. This is defined as:
+#'
+#' \deqn{\text{D-vour} = \frac{\sigma_B^2}{\sigma_B^2 + \mu_{\text{SE}}^2}}
+#'
+#' where:
+#' - \eqn{\sigma_B^2} is the **between-group variability** (computed as the SD of the random effect estimates).
+#' - \eqn{\mu_{\text{SE}}^2} is the **mean squared uncertainty** in random effect estimates (i.e., the average uncertainty).
+#'
+#'
+#' ### Interpretation:
+#' - **D-vour > 0.75**: Strong group-level effects (between-group variance is at least 3× greater than uncertainty).
+#' - **D-vour ≈ 0.5**: Within-group and between-group variability are similar; random effect estimates should be used with caution.
+#' - **D-vour < 0.5**: Measurement noise dominates; random effect estimates are probably unreliable.
+#'
+#' While d-vour shares some similarity to Rouder's Reliability, it does not explicitly model
+#' within-group trial-level noise and is only based on the random effect estimates, and can thus
+#' be not very accurate when there is not a lot of random factor groups.
 #'
 #' @references TODO.
 #'
