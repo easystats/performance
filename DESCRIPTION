@@ -126,6 +126,7 @@ Suggests:
     multimode,
     nestedLogit,
     nlme,
+    nnet,
     nonnest2,
     ordinal,
     parallel,
