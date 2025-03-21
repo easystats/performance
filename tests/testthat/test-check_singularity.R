@@ -45,13 +45,13 @@ test_that("check_singularity", {
   expect_true(check_singularity(m2))
 
   data(Salamanders, package = "glmmTMB")
-  m <- glmmTMB::glmmTMB(
+  m <- suppressWarnings(glmmTMB::glmmTMB(
     count ~ spp + mined + (1 | site),
     data = Salamanders[Salamanders$count > 0, , drop = FALSE],
     family = glmmTMB::truncated_nbinom2(),
     ziformula = ~ spp + (1 | site),
     dispformula = ~ spp + (1 | site)
-  )
+  ))
   out <- check_singularity(m, check = "terms")
   expect_identical(
     out,
