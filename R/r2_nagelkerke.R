@@ -170,22 +170,19 @@ r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
 
 #' @export
 r2_nagelkerke.multinom <- function(model, ...) {
-  base_model <- .get_basemodel(model, trace = FALSE)
-  l_base <- insight::get_loglikelihood(base_model)
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm2 <- function(model, ...) {
-  base_model <- .get_basemodel(model, location = ~1, scale = ~1)
-  l_base <- insight::get_loglikelihood(base_model)
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   .r2_nagelkerke(model, l_base)
 }
 
 #' @export
 r2_nagelkerke.clm <- function(model, ...) {
-  base_model <- .get_basemodel(model)
-  l_base <- insight::get_loglikelihood(base_model)
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
     return(NULL)
@@ -261,20 +258,4 @@ r2_nagelkerke.mblogit <- function(model, ...) {
   r2_nagelkerke <- s$sumstat["Nagelkerke"]
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
-}
-
-
-# helper -------------------------------
-
-.get_basemodel <- function(model, ...) {
-  model_data <- insight::get_data(model, source = "environment", verbose = FALSE)
-  model_predictors <- insight::find_variables(
-    model,
-    effects = "all",
-    components = "all",
-    flatten = TRUE
-  )
-  cols <- intersect(colnames(model_data), model_predictors)
-  d <- model_data[cols]
-  stats::update(model, ~1, data = d[stats::complete.cases(d), ], ...)
 }

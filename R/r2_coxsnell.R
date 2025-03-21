@@ -218,29 +218,19 @@ r2_coxsnell.svycoxph <- function(model, ...) {
 
 #' @export
 r2_coxsnell.multinom <- function(model, ...) {
-  base_model <- .get_basemodel(model, trace = FALSE)
-  l_base <- insight::get_loglikelihood(base_model)
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
   .r2_coxsnell(model, l_base)
 }
 
 #' @export
-r2_coxsnell.clm2 <- function(model, ...) {
-  base_model <- .get_basemodel(model, scale = ~1, location = ~1)
-  l_base <- insight::get_loglikelihood(base_model)
-  .r2_coxsnell(model, l_base)
-}
+r2_coxsnell.clm2 <- r2_coxsnell.multinom
 
 #' @export
-r2_coxsnell.bayesx <- function(model, ...) {
-  base_model <- .get_basemodel(model)
-  l_base <- insight::get_loglikelihood(base_model)
-  .r2_coxsnell(model, l_base)
-}
+r2_coxsnell.bayesx <- r2_coxsnell.multinom
 
 #' @export
 r2_coxsnell.clm <- function(model, ...) {
-  base_model <- .get_basemodel(model, trace = FALSE)
-  l_base <- insight::get_loglikelihood(base_model)
+  l_base <- insight::get_loglikelihood(insight::null_model(model))
 
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
