@@ -275,5 +275,6 @@ r2_nagelkerke.mblogit <- function(model, ...) {
     flatten = TRUE
   )
   cols <- intersect(colnames(model_data), model_predictors)
-  stats::update(model, ~1, data = model_data[cols], ...)
+  d <- model_data[cols]
+  stats::update(model, ~1, data = d[stats::complete.cases(d), ], ...)
 }
