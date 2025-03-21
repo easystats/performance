@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.13.0.1
+Version: 0.13.0.2
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -127,6 +127,7 @@ Suggests:
     multimode,
     nestedLogit,
     nlme,
+    nnet,
     nonnest2,
     ordinal,
     parallel,
@@ -162,3 +163,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
+Remotes: easystats/insight

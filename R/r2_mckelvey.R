@@ -74,13 +74,8 @@ r2_mckelvey.default <- function(model) {
 }
 
 
-.null_model <- function(model) {
-  stats::update(model, ~1)
-}
-
-
 .get_poisson_variance <- function(model) {
-  mu <- exp(stats::coef(.null_model(model)))
+  mu <- exp(stats::coef(insight::null_model(model)))
   if (is.na(mu)) {
     return(0)
   }
