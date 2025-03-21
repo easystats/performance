@@ -5,11 +5,11 @@
 # check-standard.yaml is likely a better choice.
 # usethis::use_github_action("check-standard") will install it.
 on:
-  pull_request:
+  push:
     branches: [main, master]
 
 name: R-CMD-check
 
 jobs:
   R-CMD-check:
-    uses: easystats/workflows/.github/workflows/R-CMD-check.yaml@main
+    uses: easystats/workflows/.github/workflows/R-CMD-check-main.yaml@main
