@@ -8,6 +8,14 @@
   the full model), or can return singularity checks for each random effects term
   separately.
 
+## Bug fixes
+
+* Fixed issue with wrong computation of pseudo-R2 for some models where the
+  base-model (null model) was updated using the original data, which could
+  include missing values. Now the model frame is used, ensuring the correct
+  number of observations in the returned base-model, thus calculating the correct
+  log-likelihood and returning the correct pseudo-R2.
+
 # performance 0.13.0
 
 ## Breaking changes
