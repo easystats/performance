@@ -73,11 +73,8 @@ r2_mcfadden.glm <- function(model, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  l_null <- insight::get_loglikelihood(stats::update(
-    model,
-    ~1,
-    data = insight::get_data(model, source = "mf")
-  ))
+  base_model <- .get_basemodel(model)
+  l_null <- insight::get_loglikelihood(base_model)
   .r2_mcfadden(model, l_null)
 }
 
@@ -166,35 +163,24 @@ r2_mcfadden.vglm <- function(model, ...) {
     insight::format_error("Can't get log-likelihood when `summ` is not zero.")
   }
 
-  l_null <- insight::get_loglikelihood(stats::update(
-    model,
-    ~1,
-    data = insight::get_data(model, source = "mf")
-  ))
+  base_model <- .get_basemodel(model)
+  l_null <- insight::get_loglikelihood(base_model)
   .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
 r2_mcfadden.clm2 <- function(model, ...) {
-  l_null <- insight::get_loglikelihood(stats::update(
-    model,
-    location = ~1,
-    scale = ~1,
-    data = insight::get_data(model, source = "mf")
-  ))
+  base_model <- .get_basemodel(model, location = ~1, scale = ~1)
+  l_null <- insight::get_loglikelihood(base_model)
   .r2_mcfadden(model, l_null)
 }
 
 
 #' @export
 r2_mcfadden.multinom <- function(model, ...) {
-  l_null <- insight::get_loglikelihood(stats::update(
-    model,
-    ~1,
-    trace = FALSE,
-    data = insight::get_data(model, source = "mf")
-  ))
+  base_model <- .get_basemodel(model, trace = FALSE)
+  l_null <- insight::get_loglikelihood(base_model)
   .r2_mcfadden(model, l_null)
 }
 

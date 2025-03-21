@@ -218,45 +218,30 @@ r2_coxsnell.svycoxph <- function(model, ...) {
 
 #' @export
 r2_coxsnell.multinom <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(
-    model,
-    ~1,
-    trace = FALSE,
-    data = insight::get_data(model, source = "mf")
-  ))
+  base_model <- .get_basemodel(model, trace = FALSE)
+  l_base <- insight::get_loglikelihood(base_model)
   .r2_coxsnell(model, l_base)
 }
 
 #' @export
 r2_coxsnell.clm2 <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(
-    model,
-    location = ~1,
-    scale = ~1,
-    data = insight::get_data(model, source = "mf")
-  ))
+  base_model <- .get_basemodel(model, scale = ~1, location = ~1)
+  l_base <- insight::get_loglikelihood(base_model)
   .r2_coxsnell(model, l_base)
 }
 
 #' @export
 r2_coxsnell.bayesx <- function(model, ...) {
-  junk <- utils::capture.output(
-    l_base <- insight::get_loglikelihood(stats::update(
-      model,
-      ~1,
-      data = insight::get_data(model, source = "mf")
-    ))
-  )
+  base_model <- .get_basemodel(model)
+  l_base <- insight::get_loglikelihood(base_model)
   .r2_coxsnell(model, l_base)
 }
 
 #' @export
 r2_coxsnell.clm <- function(model, ...) {
-  l_base <- insight::get_loglikelihood(stats::update(
-    model,
-    ~1,
-    data = insight::get_data(model, source = "mf")
-  ))
+  base_model <- .get_basemodel(model, trace = FALSE)
+  l_base <- insight::get_loglikelihood(base_model)
+
   # if no loglik, return NA
   if (length(as.numeric(l_base)) == 0) {
     return(NULL)
