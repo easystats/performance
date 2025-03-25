@@ -189,9 +189,9 @@ print.check_normality <- function(x, ...) {
 
 #' @rdname check_normality
 #' @export
-check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
+check_normality.merMod <- function(x, effects = "fixed", ...) {
   # args
-  effects <- match.arg(effects)
+  effects <- insight::validate_argument(effects, c("fixed", "random"))
   info <- insight::model_info(x)
 
   # valid model?

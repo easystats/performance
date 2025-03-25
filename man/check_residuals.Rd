@@ -7,7 +7,7 @@
 \usage{
 check_residuals(x, ...)
 
-\method{check_residuals}{default}(x, alternative = c("two.sided", "less", "greater"), ...)
+\method{check_residuals}{default}(x, alternative = "two.sided", ...)
 }
 \arguments{
 \item{x}{An object returned by \code{\link[=simulate_residuals]{simulate_residuals()}} or
@@ -16,7 +16,8 @@ check_residuals(x, ...)
 \item{...}{Passed down to \code{\link[stats:ks.test]{stats::ks.test()}}.}
 
 \item{alternative}{A character string specifying the alternative hypothesis.
-See \code{\link[stats:ks.test]{stats::ks.test()}} for details.}
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}. See
+\code{\link[stats:ks.test]{stats::ks.test()}} for details.}
 }
 \value{
 The p-value of the test statistics.

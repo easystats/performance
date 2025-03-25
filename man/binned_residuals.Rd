@@ -10,8 +10,8 @@ binned_residuals(
   n_bins = NULL,
   show_dots = NULL,
   ci = 0.95,
-  ci_type = c("exact", "gaussian", "boot"),
-  residuals = c("deviance", "pearson", "response"),
+  ci_type = "exact",
+  residuals = "deviance",
   iterations = 1000,
   verbose = TRUE,
   ...

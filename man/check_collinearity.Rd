@@ -14,13 +14,7 @@ multicollinearity(x, ...)
 
 \method{check_collinearity}{default}(x, ci = 0.95, verbose = TRUE, ...)
 
-\method{check_collinearity}{glmmTMB}(
-  x,
-  component = c("all", "conditional", "count", "zi", "zero_inflated"),
-  ci = 0.95,
-  verbose = TRUE,
-  ...
-)
+\method{check_collinearity}{glmmTMB}(x, component = "all", ci = 0.95, verbose = TRUE, ...)
 
 check_concurvity(x, ...)
 }

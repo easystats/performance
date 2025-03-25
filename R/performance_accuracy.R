@@ -14,21 +14,19 @@
 #' @param verbose Toggle warnings.
 #' @inheritParams performance_pcp
 #'
-#' @return A list with three values: The `Accuracy` of the model
-#'   predictions, i.e. the proportion of accurately predicted values from the
-#'   model, its standard error, `SE`, and the `Method` used to compute
-#'   the accuracy.
+#' @return A list with three values: The `Accuracy` of the model predictions,
+#' i.e. the proportion of accurately predicted values from the model, its
+#' standard error, `SE`, and the `Method` used to compute the accuracy.
 #'
 #' @details For linear models, the accuracy is the correlation coefficient
-#'    between the actual and the predicted value of the outcome. For
-#'    logistic regression models, the accuracy corresponds to the
-#'    AUC-value, calculated with the `bayestestR::auc()`-function.
-#'    \cr \cr
-#'    The accuracy is the mean value of multiple correlation resp.
-#'    AUC-values, which are either computed with cross-validation
-#'    or non-parametric bootstrapping (see argument `method`).
-#'    The standard error is the standard deviation of the computed
-#'    correlation resp. AUC-values.
+#' between the actual and the predicted value of the outcome. For logistic
+#' regression models, the accuracy corresponds to the AUC-value, calculated with
+#' the [`bayestestR::auc()`]-function.
+#'
+#' The accuracy is the mean value of multiple correlation resp. AUC-values,
+#' which are either computed with cross-validation or non-parametric
+#' bootstrapping (see argument `method`). The standard error is the standard
+#' deviation of the computed correlation resp. AUC-values.
 #'
 #' @examples
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
@@ -38,12 +36,12 @@
 #' performance_accuracy(model)
 #' @export
 performance_accuracy <- function(model,
-                                 method = c("cv", "boot"),
+                                 method = "cv",
                                  k = 5,
                                  n = 1000,
                                  ci = 0.95,
                                  verbose = TRUE) {
-  method <- match.arg(method)
+  method <- insight::validate_argument(method, c("cv", "boot"))
 
   # get formula from model fit
   formula <- stats::formula(model)

@@ -7,7 +7,7 @@
 \usage{
 check_normality(x, ...)
 
-\method{check_normality}{merMod}(x, effects = c("fixed", "random"), ...)
+\method{check_normality}{merMod}(x, effects = "fixed", ...)
 }
 \arguments{
 \item{x}{A model object.}

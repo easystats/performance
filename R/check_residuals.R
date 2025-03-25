@@ -8,7 +8,8 @@
 #' @param x An object returned by [`simulate_residuals()`] or
 #' [`DHARMa::simulateResiduals()`].
 #' @param alternative A character string specifying the alternative hypothesis.
-#' See [`stats::ks.test()`] for details.
+#' Can be one of `"two.sided"`, `"less"`, or `"greater"`. See
+#' [`stats::ks.test()`] for details.
 #' @param ... Passed down to [`stats::ks.test()`].
 #'
 #' @details Uniformity of residuals is checked using a Kolmogorov-Smirnov test.
@@ -38,7 +39,7 @@ check_residuals <- function(x, ...) {
 
 #' @rdname check_residuals
 #' @export
-check_residuals.default <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
+check_residuals.default <- function(x, alternative = "two.sided", ...) {
   if (insight::is_model(x)) {
     check_residuals(simulate_residuals(x, ...), alternative = alternative)
   } else {
@@ -47,8 +48,11 @@ check_residuals.default <- function(x, alternative = c("two.sided", "less", "gre
 }
 
 #' @export
-check_residuals.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
-  alternative <- match.arg(alternative)
+check_residuals.performance_simres <- function(x, alternative = "two.sided", ...) {
+  alternative <- insight::validate_argument(
+    alternative,
+    c("two.sided", "less", "greater")
+  )
   ts_test <- suppressWarnings(
     stats::ks.test(
       stats::residuals(x),

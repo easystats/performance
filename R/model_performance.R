@@ -45,7 +45,10 @@ performance <- model_performance
 
 #' @export
 print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(
+    layout,
+    c("horizontal", "vertical")
+  )
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
   # switch to vertical layout

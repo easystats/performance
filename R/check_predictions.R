@@ -126,7 +126,10 @@ check_predictions.default <- function(object,
   }
 
   # args
-  type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
+  type <- insight::validate_argument(
+    type,
+    c("density", "discrete_dots", "discrete_interval", "discrete_both")
+  )
 
   pp_check.lm(
     object,
@@ -161,7 +164,10 @@ check_predictions.stanreg <- function(object,
   }
 
   # args
-  type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
+  type <- insight::validate_argument(
+    type,
+    c("density", "discrete_dots", "discrete_interval", "discrete_both")
+  )
 
   # convert to type-argument for pp_check
   pp_type <- switch(type,

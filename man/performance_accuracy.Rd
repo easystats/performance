@@ -6,7 +6,7 @@
 \usage{
 performance_accuracy(
   model,
-  method = c("cv", "boot"),
+  method = "cv",
   k = 5,
   n = 1000,
   ci = 0.95,
@@ -30,10 +30,9 @@ compute the accuracy values.}
 \item{verbose}{Toggle warnings.}
 }
 \value{
-A list with three values: The \code{Accuracy} of the model
-predictions, i.e. the proportion of accurately predicted values from the
-model, its standard error, \code{SE}, and the \code{Method} used to compute
-the accuracy.
+A list with three values: The \code{Accuracy} of the model predictions,
+i.e. the proportion of accurately predicted values from the model, its
+standard error, \code{SE}, and the \code{Method} used to compute the accuracy.
 }
 \description{
 This function calculates the predictive accuracy of linear
@@ -41,15 +40,14 @@ or logistic regression models.
 }
 \details{
 For linear models, the accuracy is the correlation coefficient
-between the actual and the predicted value of the outcome. For
-logistic regression models, the accuracy corresponds to the
-AUC-value, calculated with the \code{bayestestR::auc()}-function.
-\cr \cr
-The accuracy is the mean value of multiple correlation resp.
-AUC-values, which are either computed with cross-validation
-or non-parametric bootstrapping (see argument \code{method}).
-The standard error is the standard deviation of the computed
-correlation resp. AUC-values.
+between the actual and the predicted value of the outcome. For logistic
+regression models, the accuracy corresponds to the AUC-value, calculated with
+the \code{\link[bayestestR:area_under_curve]{bayestestR::auc()}}-function.
+
+The accuracy is the mean value of multiple correlation resp. AUC-values,
+which are either computed with cross-validation or non-parametric
+bootstrapping (see argument \code{method}). The standard error is the standard
+deviation of the computed correlation resp. AUC-values.
 }
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)

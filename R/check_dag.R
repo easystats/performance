@@ -215,14 +215,17 @@ check_dag <- function(...,
                       exposure = NULL,
                       adjusted = NULL,
                       latent = NULL,
-                      effect = c("all", "total", "direct"),
+                      effect = "all",
                       coords = NULL) {
   insight::check_if_installed(
     c("ggdag", "dagitty"),
     reason = "to check correct adjustments for identifying causal effects."
   )
 
-  effect <- match.arg(effect)
+  effect <- insight::validate_argument(
+    effect,
+    c("all", "total", "direct")
+  )
 
   # retrieve formulas
   formulas <- list(...)

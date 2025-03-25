@@ -6,16 +6,16 @@
 #' effects models.
 #'
 #' @param model A model.
-#' @param method Indicates the method to calculate R2. See 'Details'. May be
-#'   abbreviated.
+#'
+#' @param method Indicates the method to calculate R2. Can be `"default"` or
+#' `"correlation"`. See 'Details'. May be abbreviated.
 #'
 #' @return For the default-method, a list with the R2 and adjusted R2 values.
-#'   For `method = "correlation"`, a named numeric vector with the
-#'   correlation-based R2 value.
+#' For `method = "correlation"`, a named numeric vector with the
+#' correlation-based R2 value.
 #'
-#' @details
-#' The default-method calculates an R2 value based on the residual variance
-#' divided by the total variance. For `method = "correlation"`, R2 is a
+#' @details The default-method calculates an R2 value based on the residual
+#' variance divided by the total variance. For `method = "correlation"`, R2 is a
 #' correlation-based measure, which is rather crude. It simply computes the
 #' squared correlation between the model's actual and predicted response.
 #'
@@ -32,8 +32,8 @@
 #' }
 #' }
 #' @export
-r2_zeroinflated <- function(model, method = c("default", "correlation")) {
-  method <- match.arg(method)
+r2_zeroinflated <- function(model, method = "default") {
+  method <- insight::validate_argument(method, c("default", "correlation"))
 
   mi <- insight::model_info(model, verbose = FALSE)
   if (!mi$is_zero_inflated) {

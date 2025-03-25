@@ -1489,8 +1489,8 @@ check_outliers.metabin <- check_outliers.metagen
 #' @rdname check_outliers
 #' @export
 check_outliers.performance_simres <- function(x, type = "default", iterations = 100, alternative = "two.sided", ...) {
-  type <- match.arg(type, c("default", "binomial", "bootstrap"))
-  alternative <- match.arg(alternative, c("two.sided", "greater", "less"))
+  type <- insight::validate_argument(type, c("default", "binomial", "bootstrap"))
+  alternative <- insight::validate_argument(alternative, c("two.sided", "greater", "less"))
 
   insight::check_if_installed("DHARMa")
   result <- DHARMa::testOutliers(x, type = type, nBoot = iterations, alternative = alternative, plot = FALSE, ...)

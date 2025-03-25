@@ -5,7 +5,7 @@ print_md.performance_model <- function(x,
                                        caption = "Indices of model performance",
                                        layout = "horizontal",
                                        ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   formatted_table <- format(
     x = x,
     digits = digits,
@@ -37,7 +37,7 @@ print_md.compare_performance <- function(x,
                                          caption = "Comparison of Model Performance Indices",
                                          layout = "horizontal",
                                          ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   .print_md_compare_performance(x, digits = digits, caption = caption, layout = layout, format = "markdown", ...)
 }
 
@@ -48,7 +48,7 @@ print_html.compare_performance <- function(x,
                                            caption = "Comparison of Model Performance Indices",
                                            layout = "horizontal",
                                            ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   .print_md_compare_performance(x, digits = digits, caption = caption, layout = layout, format = "html", ...)
 }
 
@@ -83,7 +83,7 @@ print_md.check_itemscale <- function(x, digits = 2, ...) {
                                           layout = "horizontal",
                                           format = "markdown",
                                           ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   formatted_table <- format(x = x, digits = digits, format = format, ...)
 
   if ("Performance_Score" %in% colnames(x)) {
