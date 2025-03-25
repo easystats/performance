@@ -9,7 +9,7 @@ effects models."><meta property="og:image" content="https://easystats.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@ effects models.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">r2_zeroinflated</span><span class="op">(</span><span class="va">model</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"correlation"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">r2_zeroinflated</span><span class="op">(</span><span class="va">model</span>, method <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -75,8 +75,8 @@ effects models.</p>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Indicates the method to calculate R2. See 'Details'. May be
-abbreviated.</p></dd>
+<dd><p>Indicates the method to calculate R2. Can be <code>"default"</code> or
+<code>"correlation"</code>. See 'Details'. May be abbreviated.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -87,8 +87,8 @@ correlation-based R2 value.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The default-method calculates an R2 value based on the residual variance
-divided by the total variance. For <code>method = "correlation"</code>, R2 is a
+    <p>The default-method calculates an R2 value based on the residual
+variance divided by the total variance. For <code>method = "correlation"</code>, R2 is a
 correlation-based measure, which is rather crude. It simply computes the
 squared correlation between the model's actual and predicted response.</p>
     </div>
