@@ -18,6 +18,20 @@ test_that("performance_reliability - frequentist", {
 })
 
 
+test_that("performance_reliability - Bayesian", {
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("brms")
+
+  m <- insight::download_model("brms_mixed_10")
+  skip_if(is.null(m))
+  out <- performance_reliability(m)
+  expect_identical(dim(out), c(2L, 3L))
+  expect_equal(out$Reliability, c(0.97116, 0.80915), tolerance = 1e-3)
+})
+
+
 ## FIXME: doesn't work yet for Bayesian models
 
 # test_that("performance_reliability - Bayesian", {

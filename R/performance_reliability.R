@@ -184,6 +184,11 @@ performance_reliability.default <- function(x, ...) {
     }
   }
 
+  # clean for brms
+  if (inherits(x, "brmsfit")) {
+    reliability <- reliability[!is.na(reliability$Reliability), ]
+  }
+
   reliability
 }
 
