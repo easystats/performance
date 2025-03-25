@@ -305,55 +305,70 @@ check_collinearity.betamfx <- check_collinearity.logitor
 #' @rdname check_collinearity
 #' @export
 check_collinearity.glmmTMB <- function(x,
-                                       component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                       component = "all",
                                        ci = 0.95,
                                        verbose = TRUE,
                                        ...) {
-  component <- match.arg(component)
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
 check_collinearity.MixMod <- function(x,
-                                      component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                      component = "all",
                                       ci = 0.95,
                                       verbose = TRUE,
                                       ...) {
-  component <- match.arg(component)
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
 check_collinearity.hurdle <- function(x,
-                                      component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                      component = "all",
                                       ci = 0.95,
                                       verbose = verbose,
                                       ...) {
-  component <- match.arg(component)
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
 check_collinearity.zeroinfl <- function(x,
-                                        component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                        component = "all",
                                         ci = 0.95,
                                         verbose = verbose,
                                         ...) {
-  component <- match.arg(component)
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 
 
 #' @export
 check_collinearity.zerocount <- function(x,
-                                         component = c("all", "conditional", "count", "zi", "zero_inflated"),
+                                         component = "all",
                                          ci = 0.95,
                                          verbose = verbose,
                                          ...) {
-  component <- match.arg(component)
+  component <- insight::validate_argument(
+    component,
+    c("all", "conditional", "count", "zi", "zero_inflated")
+  )
   .check_collinearity_zi_model(x, component, ci = ci, verbose = verbose)
 }
 

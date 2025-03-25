@@ -7,7 +7,7 @@
 \usage{
 check_overdispersion(x, ...)
 
-\method{check_overdispersion}{performance_simres}(x, alternative = c("two.sided", "less", "greater"), ...)
+\method{check_overdispersion}{performance_simres}(x, alternative = "two.sided", ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
@@ -17,7 +17,8 @@ check_overdispersion(x, ...)
 for models with zero-inflation component, or for models of class \code{glmmTMB}
 from \code{nbinom1} or \code{nbinom2} family.}
 
-\item{alternative}{A character string specifying the alternative hypothesis.}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }
 \value{
 A list with results from the overdispersion test, like chi-squared

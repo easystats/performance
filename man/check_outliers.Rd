@@ -63,7 +63,8 @@ by \code{simulate_residuals()} or of class \code{DHARMa}. See 'Details' in
 
 \item{iterations}{Number of simulations to run.}
 
-\item{alternative}{A character string specifying the alternative hypothesis.}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing

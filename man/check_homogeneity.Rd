@@ -5,7 +5,7 @@
 \alias{check_homogeneity.afex_aov}
 \title{Check model for homogeneity of variances}
 \usage{
-check_homogeneity(x, method = c("bartlett", "fligner", "levene", "auto"), ...)
+check_homogeneity(x, method = "bartlett", ...)
 
 \method{check_homogeneity}{afex_aov}(x, method = "levene", ...)
 }

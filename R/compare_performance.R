@@ -207,7 +207,7 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
 
 #' @export
 print.compare_performance <- function(x, digits = 3, layout = "horizontal", ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   table_caption <- c("# Comparison of Model Performance Indices", "blue")
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 

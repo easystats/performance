@@ -30,7 +30,7 @@
 #' result <- check_homogeneity(model)
 #' plot(result)
 #' @export
-check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
+check_homogeneity <- function(x, method = "bartlett", ...) {
   UseMethod("check_homogeneity")
 }
 
@@ -38,8 +38,11 @@ check_homogeneity <- function(x, method = c("bartlett", "fligner", "levene", "au
 # default -------------------------
 
 #' @export
-check_homogeneity.default <- function(x, method = c("bartlett", "fligner", "levene", "auto"), ...) {
-  method <- match.arg(method)
+check_homogeneity.default <- function(x, method = "bartlett", ...) {
+  method <- insight::validate_argument(
+    method,
+    c("bartlett", "fligner", "levene", "auto")
+  )
 
   resp <- insight::find_response(x)
   pred <- insight::find_predictors(x, component = "conditional", flatten = TRUE)
