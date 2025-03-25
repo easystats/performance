@@ -37,7 +37,7 @@
 #' @export
 performance_cv <- function(model,
                            data = NULL,
-                           method = c("holdout", "k_fold", "loo"),
+                           method = "holdout",
                            metrics = "all",
                            prop = 0.30,
                            k = 5,
@@ -53,7 +53,7 @@ performance_cv <- function(model,
     metrics[metrics == "DEVIANCE"] <- "Deviance"
   }
   if (is.null(data)) {
-    method <- match.arg(method, choices = c("holdout", "k_fold", "loo"))
+    method <- insight::validate_argument(method, c("holdout", "k_fold", "loo"))
   }
   if (!is.null(data) && inherits(model, "BFBayesFactor")) {
     insight::format_error("Models of class 'BFBayesFactor' not yet supported.")

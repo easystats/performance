@@ -11,7 +11,7 @@ check_dag(
   exposure = NULL,
   adjusted = NULL,
   latent = NULL,
-  effect = c("all", "total", "direct"),
+  effect = "all",
   coords = NULL
 )
 
