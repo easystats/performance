@@ -5,8 +5,10 @@
 #' Calculates R2 for models with zero-inflation component, including mixed
 #' effects models.
 #'
-#' @param model A model. @param method Indicates the method to calculate R2. Can
-#' be `"default"` or `"correlation"`. See 'Details'. May be abbreviated.
+#' @param model A model.
+#'
+#' @param method Indicates the method to calculate R2. Can be `"default"` or
+#' `"correlation"`. See 'Details'. May be abbreviated.
 #'
 #' @return For the default-method, a list with the R2 and adjusted R2 values.
 #' For `method = "correlation"`, a named numeric vector with the

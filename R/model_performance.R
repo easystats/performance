@@ -47,7 +47,7 @@ performance <- model_performance
 print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
   layout <- insight::validate_argument(
     layout,
-    choices = c("horizontal", "vertical")
+    c("horizontal", "vertical")
   )
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
