@@ -126,9 +126,9 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
     out <- data.frame(
-      Deviance = devs,
       df = dfs,
       df_diff = dfs_diff,
+      deviance = devs,
       Chi2 = chi2,
       p = p,
       stringsAsFactors = FALSE
