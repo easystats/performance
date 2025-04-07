@@ -7,9 +7,10 @@
 #' and the predictors to the effect of some experimental condition.
 #'
 #' The conceptually related functions are implemented, `performance_reliability()`,
-#' based on Rouder & Mehrvarz (2024), and `performance_dvour()` (d-vour), based
-#' on the Variability-Over-Uncertainty Ratio between random effects coefficient
-#' variability and their associated uncertainty.
+#' based on Rouder & Mehrvarz (2024) that uses estimated model variances, and
+#' `performance_dvour()` (d-vour), which corresponds to the Variability-Over-Uncertainty
+#' Ratio ("vour") between random effects coefficient variability and their associated
+#' uncertainty.
 #'
 #'
 #' @param x A model object.
@@ -48,8 +49,8 @@
 #'
 #' ## Variability-Over-Uncertainty Ratio (d-vour)
 #'
-#' `performance_dvour()` computes an alternative reliability measure based on
-#' the **ratio of observed variability to uncertainty in random effect
+#' `performance_dvour()` computes an alternative reliability measure corresponding
+#' to the normalized **ratio of observed variability to uncertainty in random effect
 #' estimates**. This is defined as:
 #'
 #' \deqn{\text{D-vour} = \frac{\sigma_B^2}{\sigma_B^2 + \mu_{\text{SE}}^2}}
@@ -59,7 +60,6 @@
 #'   of the random effect estimates).
 #' - \eqn{\mu_{\text{SE}}^2} is the **mean squared uncertainty** in random
 #'   effect estimates (i.e., the average uncertainty).
-#'
 #'
 #' ### Interpretation:
 #'
@@ -72,10 +72,15 @@
 #'
 #' While d-vour shares some similarity to Rouder's Reliability, it does not
 #' explicitly model within-group trial-level noise and is only based on the
-#' random effect estimates, and can thus be not very accurate when there is not
-#' a lot of random factor groups.
+#' random effect estimates, and can thus be not accurate when there is not
+#' a lot of random factor groups (the reliability of this index -
+#' the meta-reliability - depends on the number of groups).
 #'
-#' @references TODO.
+#' @references
+#' - Rouder, J. N., Pena, A. L., Mehrvarz, M., & Vandekerckhove, J. (2024). On Cronbach’s merger: Why experiments may not be suitable for measuring individual differences.
+#' - Rouder, J. N., & Mehrvarz, M. (2024). Hierarchical-model insights for planning and interpreting individual-difference studies of cognitive abilities. Current Directions in Psychological Science, 33(2), 128-135.
+#' - Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2021). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological methods, 26(1), 74.
+#' - Williams, D. R., Martin, S. R., DeBolt, M., Oakes, L., & Rast, P. (2020). A fine-tooth comb for measurement reliability: Predicting true score and error variance in hierarchical models.
 #'
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "glmmTMB"), quietly = TRUE))
