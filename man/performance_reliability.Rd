@@ -26,6 +26,10 @@ based on Rouder & Mehrvarz (2024) that uses estimated model variances, and
 \code{performance_dvour()} (d-vour), which corresponds to the Variability-Over-Uncertainty
 Ratio ("vour") between random effects coefficient variability and their associated
 uncertainty.
+
+\strong{Note}: \code{performance_reliability()} requires to recompute the model to estimate
+some of the variances of interest, which does not make it very usable with Bayesian
+models. Please get in touch if you have would like to help addressing this.
 }
 \details{
 \subsection{Reliability (Signal-to-Noise Ratio)}{

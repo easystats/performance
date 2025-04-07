@@ -12,6 +12,11 @@
 #' Ratio ("vour") between random effects coefficient variability and their associated
 #' uncertainty.
 #'
+#' **Note**: `performance_reliability()` requires to recompute the model to estimate
+#' some of the variances of interest, which does not make it very usable with Bayesian
+#' models. Please get in touch if you have would like to help addressing this.
+#'
+#'
 #'
 #' @param x A model object.
 #' @param ... Currently not used.
