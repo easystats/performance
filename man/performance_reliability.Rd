@@ -17,19 +17,20 @@ performance_dvour(x, ...)
 \description{
 These functions provide information about the reliability of
 group-level estimates (i.e., random effects) in mixed models. They are useful
-to assess whether there the predictors yield consistent group-level variability.
-"Group-level" can refer, for instance, to different participants in a study,
-and the predictors to the effect of some experimental condition.
+to assess whether there the predictors yield consistent group-level
+variability. "Group-level" can refer, for instance, to different participants
+in a study, and the predictors to the effect of some experimental condition.
 
-The conceptually related functions are implemented, \code{performance_reliability()},
-based on Rouder & Mehrvarz (2024) that uses estimated model variances, and
-\code{performance_dvour()} (d-vour), which corresponds to the Variability-Over-Uncertainty
-Ratio ("vour") between random effects coefficient variability and their associated
-uncertainty.
+The conceptually related functions are implemented,
+\code{performance_reliability()}, based on Rouder & Mehrvarz (2024) that uses
+estimated model variances, and \code{performance_dvour()} (d-vour), which
+corresponds to the Variability-Over-Uncertainty Ratio ("vour") between random
+effects coefficient variability and their associated uncertainty.
 
-\strong{Note}: \code{performance_reliability()} requires to recompute the model to estimate
-some of the variances of interest, which does not make it very usable with Bayesian
-models. Please get in touch if you have would like to help addressing this.
+\strong{Note}: \code{performance_reliability()} requires to recompute the model to
+estimate some of the variances of interest, which does not make it very
+usable with Bayesian models. Please get in touch if you have would like to
+help addressing this.
 }
 \details{
 \subsection{Reliability (Signal-to-Noise Ratio)}{
@@ -50,8 +51,9 @@ across groups).
 measurement noise).
 }
 
-This metric quantifies \strong{how much observed variability is due to actual differences between groups},
-rather than measurement error or within-group fluctuations.
+This metric quantifies \strong{how much observed variability is due to actual
+differences between groups}, rather than measurement error or within-group
+fluctuations.
 
 To account for \strong{trial count (\eqn{L})}, reliability is adjusted following:
 
@@ -133,9 +135,17 @@ performance_dvour(m)
 }
 \references{
 \itemize{
-\item Rouder, J. N., Pena, A. L., Mehrvarz, M., & Vandekerckhove, J. (2024). On Cronbach’s merger: Why experiments may not be suitable for measuring individual differences.
-\item Rouder, J. N., & Mehrvarz, M. (2024). Hierarchical-model insights for planning and interpreting individual-difference studies of cognitive abilities. Current Directions in Psychological Science, 33(2), 128-135.
-\item Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2021). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological methods, 26(1), 74.
-\item Williams, D. R., Martin, S. R., DeBolt, M., Oakes, L., & Rast, P. (2020). A fine-tooth comb for measurement reliability: Predicting true score and error variance in hierarchical models.
+\item Rouder, J. N., Pena, A. L., Mehrvarz, M., & Vandekerckhove, J. (2024). On
+Cronbach’s merger: Why experiments may not be suitable for measuring
+individual differences.
+\item Rouder, J. N., & Mehrvarz, M. (2024). Hierarchical-model insights for
+planning and interpreting individual-difference studies of cognitive
+abilities. Current Directions in Psychological Science, 33(2), 128-135.
+\item Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2021). Beneath the
+surface: Unearthing within-person variability and mean relations with
+Bayesian mixed models. Psychological methods, 26(1), 74.
+\item Williams, D. R., Martin, S. R., DeBolt, M., Oakes, L., & Rast, P. (2020). A
+fine-tooth comb for measurement reliability: Predicting true score and
+error variance in hierarchical models.
 }
 }

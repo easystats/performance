@@ -2,26 +2,23 @@
 #'
 #' @description These functions provide information about the reliability of
 #' group-level estimates (i.e., random effects) in mixed models. They are useful
-#' to assess whether there the predictors yield consistent group-level variability.
-#' "Group-level" can refer, for instance, to different participants in a study,
-#' and the predictors to the effect of some experimental condition.
+#' to assess whether there the predictors yield consistent group-level
+#' variability. "Group-level" can refer, for instance, to different participants
+#' in a study, and the predictors to the effect of some experimental condition.
 #'
-#' The conceptually related functions are implemented, `performance_reliability()`,
-#' based on Rouder & Mehrvarz (2024) that uses estimated model variances, and
-#' `performance_dvour()` (d-vour), which corresponds to the Variability-Over-Uncertainty
-#' Ratio ("vour") between random effects coefficient variability and their associated
-#' uncertainty.
+#' The conceptually related functions are implemented,
+#' `performance_reliability()`, based on Rouder & Mehrvarz (2024) that uses
+#' estimated model variances, and `performance_dvour()` (d-vour), which
+#' corresponds to the Variability-Over-Uncertainty Ratio ("vour") between random
+#' effects coefficient variability and their associated uncertainty.
 #'
-#' **Note**: `performance_reliability()` requires to recompute the model to estimate
-#' some of the variances of interest, which does not make it very usable with Bayesian
-#' models. Please get in touch if you have would like to help addressing this.
-#'
-#'
+#' **Note**: `performance_reliability()` requires to recompute the model to
+#' estimate some of the variances of interest, which does not make it very
+#' usable with Bayesian models. Please get in touch if you have would like to
+#' help addressing this.
 #'
 #' @param x A model object.
 #' @param ... Currently not used.
-#'
-#
 #'
 #' @details
 #'
@@ -41,8 +38,9 @@
 #' - \eqn{\sigma_W^2} is the **within-subject variance** (i.e., trial-level
 #'   measurement noise).
 #'
-#' This metric quantifies **how much observed variability is due to actual differences between groups**,
-#' rather than measurement error or within-group fluctuations.
+#' This metric quantifies **how much observed variability is due to actual
+#' differences between groups**, rather than measurement error or within-group
+#' fluctuations.
 #'
 #' To account for **trial count (\eqn{L})**, reliability is adjusted following:
 #'
@@ -50,7 +48,6 @@
 #'
 #' where \eqn{L} is the number of **observations per random effect level** (note
 #' that Rouder (2024) recommends 2/L to adjust for contrast effects).
-#'
 #'
 #' ## Variability-Over-Uncertainty Ratio (d-vour)
 #'
@@ -82,11 +79,18 @@
 #' the meta-reliability - depends on the number of groups).
 #'
 #' @references
-#' - Rouder, J. N., Pena, A. L., Mehrvarz, M., & Vandekerckhove, J. (2024). On Cronbach’s merger: Why experiments may not be suitable for measuring individual differences.
-#' - Rouder, J. N., & Mehrvarz, M. (2024). Hierarchical-model insights for planning and interpreting individual-difference studies of cognitive abilities. Current Directions in Psychological Science, 33(2), 128-135.
-#' - Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2021). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological methods, 26(1), 74.
-#' - Williams, D. R., Martin, S. R., DeBolt, M., Oakes, L., & Rast, P. (2020). A fine-tooth comb for measurement reliability: Predicting true score and error variance in hierarchical models.
-#'
+#' - Rouder, J. N., Pena, A. L., Mehrvarz, M., & Vandekerckhove, J. (2024). On
+#'   Cronbach’s merger: Why experiments may not be suitable for measuring
+#'   individual differences.
+#' - Rouder, J. N., & Mehrvarz, M. (2024). Hierarchical-model insights for
+#'   planning and interpreting individual-difference studies of cognitive
+#'   abilities. Current Directions in Psychological Science, 33(2), 128-135.
+#' - Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2021). Beneath the
+#'   surface: Unearthing within-person variability and mean relations with
+#'   Bayesian mixed models. Psychological methods, 26(1), 74.
+#' - Williams, D. R., Martin, S. R., DeBolt, M., Oakes, L., & Rast, P. (2020). A
+#'   fine-tooth comb for measurement reliability: Predicting true score and
+#'   error variance in hierarchical models.
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "glmmTMB"), quietly = TRUE))
 #' url <- "https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv"
