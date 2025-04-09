@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.13.0.5
+Version: 0.13.0.6
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -57,7 +57,7 @@ Authors@R:
              family = "Luchman",
              role = "ctb",
              comment = c(ORCID = "0000-0002-8886-9717")))
-Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+Maintainer: Daniel Lüdecke <officialeasystats@gmail.com>
 Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's 'base' or 'stats' packages.
     These include e.g. measures like r-squared, intraclass correlation
