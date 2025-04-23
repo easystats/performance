@@ -1,5 +1,11 @@
 # performance (devel)
 
+## New functions
+
+* New functions `performance_reliability()` and `performance_dvour()`. These
+  functions provide information about the reliability of group-level estimates
+  (i.e., random effects) in mixed models.
+
 ## Changes
 
 * Singularity checks with `check_singularity()` are now more efficient and also
