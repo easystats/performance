@@ -30,7 +30,7 @@ where the levels are separated by \code{/}.
 }
 
 See also section \emph{De-meaning for cross-classified designs} and
-\emph{De-meaning for nested designs} below.}
+\emph{De-meaning for nested designs} in \code{\link[datawizard:demean]{datawizard::demean()}}.}
 
 \item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
 the data is treated as cross-classified. Only applies if \code{by} contains more
@@ -38,8 +38,8 @@ than one variable.}
 }
 \description{
 \code{check_heterogeneity_bias()} checks if model predictors or variables may
-cause a heterogeneity bias, i.e. if variables have a within- and/or
-between-effect (\emph{Bell and Jones, 2015}).
+cause a heterogeneity bias, i.e. if variables have any within-group variance
+(\emph{Bell and Jones, 2015}).
 }
 \examples{
 data(iris)

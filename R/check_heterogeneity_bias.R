@@ -1,8 +1,8 @@
 #' Check model predictor for heterogeneity bias
 #'
 #' `check_heterogeneity_bias()` checks if model predictors or variables may
-#' cause a heterogeneity bias, i.e. if variables have a within- and/or
-#' between-effect (_Bell and Jones, 2015_).
+#' cause a heterogeneity bias, i.e. if variables have any within-group variance
+#' (_Bell and Jones, 2015_).
 #'
 #' @param x A data frame or a mixed model object.
 #' @param select Character vector (or formula) with names of variables to select
@@ -23,7 +23,8 @@
 #'     where the levels are separated by `/`.
 #'
 #'   See also section _De-meaning for cross-classified designs_ and
-#'   _De-meaning for nested designs_ below.
+#'   _De-meaning for nested designs_ in [`datawizard::demean()`].
+#'
 #' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
 #'   the data is treated as cross-classified. Only applies if `by` contains more
 #'   than one variable.
