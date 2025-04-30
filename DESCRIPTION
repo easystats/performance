@@ -93,6 +93,7 @@ Suggests:
     CompQuadForm,
     correlation,
     cplm,
+    curl,
     dagitty,
     dbscan,
     DHARMa (>= 0.4.7),
