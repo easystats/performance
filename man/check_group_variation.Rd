@@ -9,7 +9,7 @@ check_group_variation(
   select = NULL,
   by = NULL,
   nested = FALSE,
-  tolerance = 1e-05
+  tolerance = 1e-04
 )
 }
 \arguments{
@@ -32,14 +32,15 @@ levels, ordered from \emph{highest} level to \emph{lowest} (e.g.
 \code{by = c("L4", "L3", "L2")}.
 \item a character vector with variable names in the format \code{by = "L4/L3/L2"},
 where the levels are separated by \code{/}.
-}
-
-See also section \emph{De-meaning for cross-classified designs} and
-\emph{De-meaning for nested designs} in \code{\link[datawizard:demean]{datawizard::demean()}}.}
+}}
 
 \item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
 the data is treated as cross-classified. Only applies if \code{by} contains more
 than one variable.}
+
+\item{tolerance}{The amount of variation (calculated by \code{var()}, i.e. the
+variance of a variable) that is tolerated to indicate no within- or
+between-effect.}
 }
 \value{
 A list with at most three elements, \code{within}, \code{between}, and \code{both},
@@ -49,6 +50,13 @@ effects.
 \description{
 \code{check_group_variation()} checks if variables a within- and/or between-effect,
 i.e. if they vary within or between certain groups.
+}
+\details{
+This function calls \code{\link[datawizard:demean]{datawizard::demean()}} to calculate the within- and
+between-effects of variables specified in \code{select}, based on the groups
+indicated in \code{by}. Then, the variance for each variable's within- and
+between-effect is calculated. If the variance is larger than \code{tolerance},
+a within- or between-effect is detected.
 }
 \examples{
 set.seed(1234)

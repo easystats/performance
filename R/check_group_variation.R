@@ -19,12 +19,19 @@
 #'     `by = c("L4", "L3", "L2")`.
 #'   - a character vector with variable names in the format `by = "L4/L3/L2"`,
 #'     where the levels are separated by `/`.
-#'
-#'   See also section _De-meaning for cross-classified designs_ and
-#'   _De-meaning for nested designs_ in [`datawizard::demean()`].
 #' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
 #'   the data is treated as cross-classified. Only applies if `by` contains more
 #'   than one variable.
+#' @param tolerance The amount of variation (calculated by `var()`, i.e. the
+#' variance of a variable) that is tolerated to indicate no within- or
+#' between-effect.
+#'
+#' @details
+#' This function calls [`datawizard::demean()`] to calculate the within- and
+#' between-effects of variables specified in `select`, based on the groups
+#' indicated in `by`. Then, the variance for each variable's within- and
+#' between-effect is calculated. If the variance is larger than `tolerance`,
+#' a within- or between-effect is detected.
 #'
 #' @return A list with at most three elements, `within`, `between`, and `both`,
 #' where each element contains the name of variables that have one of these
@@ -45,7 +52,7 @@
 #'   by = "id"
 #' )
 #' @export
-check_group_variation <- function(x, select = NULL, by = NULL, nested = FALSE, tolerance = 1e-5) {
+check_group_variation <- function(x, select = NULL, by = NULL, nested = FALSE, tolerance = 1e-4) {
   insight::check_if_installed("datawizard", minimum_version = "0.12.0")
 
   if (inherits(select, "formula")) {
