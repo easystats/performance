@@ -22,6 +22,8 @@
   number of observations in the returned base-model, thus calculating the correct
   log-likelihood and returning the correct pseudo-R2.
 
+* Fixed examples in `check_outliers()`.
+
 # performance 0.13.0
 
 ## Breaking changes
