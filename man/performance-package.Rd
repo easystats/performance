@@ -34,7 +34,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Daniel Lüdecke \email{d.luedecke@uke.de} (\href{https://orcid.org/0000-0002-8895-3206}{ORCID})
+\strong{Maintainer}: Daniel Lüdecke \email{officialeasystats@gmail.com} (\href{https://orcid.org/0000-0002-8895-3206}{ORCID})
 
 Authors:
 \itemize{

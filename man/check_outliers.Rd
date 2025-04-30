@@ -303,17 +303,16 @@ pooled effect.
 data <- mtcars # Size nrow(data) = 32
 
 # For single variables ------------------------------------------------------
-outliers_list <- check_outliers(data$mpg) # Find outliers
+# Find all observations beyond +/- 2 SD
+outliers_list <- check_outliers(data$mpg, method = "zscore", threshold = 2)
 outliers_list # Show the row index of the outliers
 as.numeric(outliers_list) # The object is a binary vector...
 filtered_data <- data[!outliers_list, ] # And can be used to filter a data frame
-nrow(filtered_data) # New size, 28 (4 outliers removed)
+nrow(filtered_data) # New size, 30 (2 outliers removed)
 
-# Find all observations beyond +/- 2 SD
-check_outliers(data$mpg, method = "zscore", threshold = 2)
 
 # For dataframes ------------------------------------------------------
-check_outliers(data) # It works the same way on data frames
+check_outliers(data, threshold = 2) # It works the same way on data frames
 
 # You can also use multiple methods at once
 outliers_list <- check_outliers(data, method = c(
