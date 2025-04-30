@@ -69,7 +69,7 @@ dat <- data.frame(
 )
 check_group_variation(
   dat,
-  select = c("between_num", "innen_num", "within_num", "both_num"),
+  select = c("between_num", "within1_num", "within2_num", "both_num"),
   by = "id"
 )
 }
