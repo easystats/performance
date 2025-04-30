@@ -16,7 +16,8 @@ check_group_variation(
 \item{x}{A data frame.}
 
 \item{select}{Character vector (or formula) with names of variables to select
-that should be checked.}
+that should be checked. If \code{NULL}, selects all variables (except those in
+\code{by}).}
 
 \item{by}{Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID. For cross-classified or nested designs,

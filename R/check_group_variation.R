@@ -5,7 +5,8 @@
 #'
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
-#'   that should be checked.
+#'   that should be checked. If `NULL`, selects all variables (except those in
+#'   `by`).
 #' @param by Character vector (or formula) with the name of the variable that
 #'   indicates the group- or cluster-ID. For cross-classified or nested designs,
 #'   `by` can also identify two or more variables as group- or cluster-IDs. If
@@ -62,6 +63,19 @@ check_group_variation <- function(x, select = NULL, by = NULL, nested = FALSE, t
     by <- all.vars(by)
   }
   my_data <- x
+
+  # sanity check
+  if (is.null(by)) {
+    insight::format_error("Please provide the group variable using `by`.")
+  }
+  if (!all(by %in% colnames(x))) {
+    insight::format_error("The variable(s) speciefied in `by` were not found in the data.")
+  }
+
+  # select all, if not given
+  if (is.null(select)) {
+    select <- setdiff(colnames(x), by)
+  }
 
   # for nested designs?
   if (nested) {
