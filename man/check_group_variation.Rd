@@ -41,6 +41,11 @@ See also section \emph{De-meaning for cross-classified designs} and
 the data is treated as cross-classified. Only applies if \code{by} contains more
 than one variable.}
 }
+\value{
+A list with at most three elements, \code{within}, \code{between}, and \code{both},
+where each element contains the name of variables that have one of these
+effects.
+}
 \description{
 \code{check_group_variation()} checks if variables a within- and/or between-effect,
 i.e. if they vary within or between certain groups.

@@ -26,6 +26,10 @@
 #'   the data is treated as cross-classified. Only applies if `by` contains more
 #'   than one variable.
 #'
+#' @return A list with at most three elements, `within`, `between`, and `both`,
+#' where each element contains the name of variables that have one of these
+#' effects.
+#'
 #' @examples
 #' set.seed(1234)
 #' dat <- data.frame(
