@@ -1,6 +1,6 @@
 pandoc: 3.6.4
-pkgdown: 2.1.1.9000
-pkgdown_sha: 62d5c5a0fc12899aae97f6ce14018d2784bf308b
+pkgdown: 2.1.2.9000
+pkgdown_sha: 99457e7fa7f36696ae743b06aca59c0fdd97a7d6
 articles:
   check_model_practical: check_model_practical.html
   check_model: check_model.html
@@ -8,7 +8,7 @@ articles:
   compare: compare.html
   r2: r2.html
   simulate_residuals: simulate_residuals.html
-last_built: 2025-04-22T10:43Z
+last_built: 2025-04-30T12:12Z
 urls:
   reference: https://easystats.github.io/performance/reference
   article: https://easystats.github.io/performance/articles

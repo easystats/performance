@@ -25,7 +25,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -449,21 +449,9 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="co"># Size nrow(data) = 32</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For single variables ------------------------------------------------------</span></span></span>
-<span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span> <span class="co"># Find outliers</span></span></span>
-<span class="r-in"><span><span class="va">outliers_list</span> <span class="co"># Show the row index of the outliers</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: zscore_robust (3.291).</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variable: data$mpg</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span> <span class="co"># The object is a binary vector...</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span>
-<span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="op">!</span><span class="va">outliers_list</span>, <span class="op">]</span> <span class="co"># And can be used to filter a data frame</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">)</span> <span class="co"># New size, 28 (4 outliers removed)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 32</span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Find all observations beyond +/- 2 SD</span></span></span>
-<span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span>, method <span class="op">=</span> <span class="st">"zscore"</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">mpg</span>, method <span class="op">=</span> <span class="st">"zscore"</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">outliers_list</span> <span class="co"># Show the row index of the outliers</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">2 outliers detected: cases 18, 20.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following method and threshold: zscore (2).</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variable: data$mpg.</span></span>
@@ -476,14 +464,20 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18  18        2.042389</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20  20        2.291272</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outliers_list</span><span class="op">)</span> <span class="co"># The object is a binary vector...</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0</span>
+<span class="r-in"><span><span class="va">filtered_data</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">[</span><span class="op">!</span><span class="va">outliers_list</span>, <span class="op">]</span> <span class="co"># And can be used to filter a data frame</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">filtered_data</span><span class="op">)</span> <span class="co"># New size, 30 (2 outliers removed)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 30</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For dataframes ------------------------------------------------------</span></span></span>
-<span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span><span class="op">)</span> <span class="co"># It works the same way on data frames</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">OK: No outliers detected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- Based on the following method and threshold: mahalanobis (31.264).</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span><span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="co"># It works the same way on data frames</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">32 outliers detected: cases 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">  32.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- Based on the following method and threshold: mahalanobis (2).</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">- For variables: mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb.</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># You can also use multiple methods at once</span></span></span>
 <span class="r-in"><span><span class="va">outliers_list</span> <span class="op">&lt;-</span> <span class="fu">check_outliers</span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
@@ -620,7 +614,7 @@ association</em>, <em>85</em>(411), 633-639.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.9000.</p>
 </div>
 
     </footer></div>
