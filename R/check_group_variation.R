@@ -62,7 +62,6 @@ check_group_variation <- function(x, select = NULL, by = NULL, nested = FALSE, t
   if (inherits(by, "formula")) {
     by <- all.vars(by)
   }
-  my_data <- x
 
   # sanity check
   if (is.null(by)) {
@@ -91,7 +90,7 @@ check_group_variation <- function(x, select = NULL, by = NULL, nested = FALSE, t
 
   for (predictor in combinations[[1]]) {
     # demean predictor
-    d <- datawizard::demean(my_data, select = predictor, by = by, verbose = FALSE, add_attributes = FALSE)
+    d <- datawizard::demean(x, select = predictor, by = by, verbose = FALSE, add_attributes = FALSE)
 
     # get new names
     within_name <- paste0(predictor, "_within")

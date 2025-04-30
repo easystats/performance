@@ -64,6 +64,19 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE
     my_data <- x
   }
 
+  # sanity check
+  if (is.null(by)) {
+    insight::format_error("Please provide the group variable using `by`.")
+  }
+  if (!all(by %in% colnames(my_data))) {
+    insight::format_error("The variable(s) speciefied in `by` were not found in the data.")
+  }
+
+  # select all, if not given
+  if (is.null(select)) {
+    select <- setdiff(colnames(my_data), by)
+  }
+
   # for nested designs?
   if (nested) {
     # separate level-indicators with "/", as supported by datawizard
