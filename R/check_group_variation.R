@@ -53,7 +53,8 @@
 #'   by = "id"
 #' )
 #' @export
-check_group_variation <- function(x, select = NULL, by = NULL, nested = FALSE, tolerance = 1e-4) {
+check_group_variation <- function(x, select = NULL, by = NULL,
+                                  tolerance = 1e-4, only_balanced = TRUE) {
   insight::check_if_installed("datawizard", minimum_version = "0.12.0")
 
   if (inherits(select, "formula")) {
@@ -76,57 +77,88 @@ check_group_variation <- function(x, select = NULL, by = NULL, nested = FALSE, t
     select <- setdiff(colnames(x), by)
   }
 
-  # for nested designs?
-  if (nested) {
-    # separate level-indicators with "/", as supported by datawizard
-    by <- paste(by, collapse = "/")
-  }
-
   # create all combinations that should be checked
-  combinations <- expand.grid(select, by[1])
+  combinations <- expand.grid(variable = select, group = by, stringsAsFactors = FALSE)
+  combinations <- combinations[combinations$variable != combinations$group, ]
+  combinations$type <- NA_character_
 
   # initialize lists
-  list_within <- list_between <- list_both <- NULL
-
-  for (predictor in combinations[[1]]) {
-    # demean predictor
-    d <- datawizard::demean(x, select = predictor, by = by, verbose = FALSE, add_attributes = FALSE)
-
-    # get new names
-    within_name <- paste0(predictor, "_within")
-    between_name <- paste0(predictor, "_between")
-
-    if (var(d[[within_name]], na.rm = TRUE) > tolerance && var(d[[between_name]], na.rm = TRUE) > tolerance) {
-      list_both <- c(list_both, predictor)
-    } else if (var(d[[within_name]], na.rm = TRUE) > tolerance) {
-      list_within <- c(list_within, predictor)
-    } else if (var(d[[between_name]], na.rm = TRUE) > tolerance) {
-      list_between <- c(list_between, predictor)
-    }
+  for (i in seq_len(nrow(combinations))) {
+    combinations[i,"type"] <-
+      .check_nested(x, combinations[i,"group"], combinations[i,"variable"],
+                    tolerance = tolerance,
+                    only_balanced = only_balanced)
   }
 
-  out <- insight::compact_list(list(
-    within = list_within,
-    between = list_between,
-    both = list_both
-  ))
 
-  if (is.null(out)) {
-    insight::format_alert("No predictors found that either have within or between group variation.")
-    return(invisible(NULL))
-  }
-
-  class(out) <- c("check_group_variation", class(out))
-
-  out
+  combinations <- datawizard::data_relocate(combinations, select = "group", before = "variable")
+  class(combinations) <- c("check_group_variation", class(combinations))
+  combinations
 }
 
 
 #' @export
 print.check_group_variation <- function(x, ...) {
-  out <- as.data.frame(lapply(as.data.frame(do.call(cbind, x)), function(i) {
-    i[duplicated(i)] <- NA_character_
-    i
-  }))
-  cat(insight::export_table(out, caption = c("Check group variation", "blue")))
+  if (insight::n_unique(x$group) > 1L) {
+    cat(insight::export_table(x, caption = c("Check group variation", "blue"), by = "group"))
+  } else {
+    x_new <- x
+    x_new$group <- NULL
+    cat(insight::export_table(x_new, caption = c(sprintf("Check %s variation", x$group[1]), "blue")))
+  }
+
+  return(invisible(x))
+}
+
+
+# utils -------------------------------------------------------------
+
+.check_nested <- function(data, by, predictor, ...) {
+  UseMethod(".check_nested", data[[predictor]])
+}
+
+.check_nested.numeric <- function(data, by, predictor, tolerance = 1e-05, ...) {
+  # demean predictor
+  d <- datawizard::demean(data, select = predictor, by = by, verbose = FALSE, add_attributes = FALSE)
+
+  # get new names
+  within_name <- paste0(predictor, "_within")
+  between_name <- paste0(predictor, "_between")
+
+  is_between <- var(d[[between_name]], na.rm = TRUE) > tolerance
+  is_within <- var(d[[within_name]], na.rm = TRUE) > tolerance
+  is_both <- is_between && is_within
+
+  if (is_both) return("both")
+  if (is_between) return("between")
+  if (is_within) return("within")
+  NULL
+}
+
+.check_nested.default <- function(data, by, predictor, only_balanced = TRUE, ...) {
+  f <- data[[by]]
+  variable <- data[[predictor]]
+
+  oo <- complete.cases(f, variable)
+  f <- as.factor(f[oo])
+  variable <- variable[oo]
+
+  n_uniques <- tapply(variable, f, insight::n_unique)
+  is_between <- all(n_uniques == 1L)
+  if (is_between) return("between")
+
+  if (!insight::has_single_value(is_between)) return("both")
+
+  variable_levels <- unique(variable)
+  has_all <- tapply(variable, f, function(v) all(variable_levels %in% v))
+  if (!all(has_all)) return("both")
+
+  if (only_balanced) {
+    tab <- table(variable, f)
+    is_balanced <- all(apply(tab, 2, insight::has_single_value))
+    if (!is_balanced) {
+      return("both")
+    }
+  }
+  return("within")
 }
