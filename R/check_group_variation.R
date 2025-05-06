@@ -53,8 +53,13 @@
 #'   by = "id"
 #' )
 #' @export
-check_group_variation <- function(x, select = NULL, by = NULL,
-                                  tolerance = 1e-4, only_balanced = TRUE) {
+check_group_variation <- function(
+  x,
+  select = NULL,
+  by = NULL,
+  tolerance = 1e-4,
+  only_balanced = TRUE
+) {
   insight::check_if_installed("datawizard", minimum_version = "0.12.0")
 
   if (inherits(select, "formula")) {
@@ -69,7 +74,9 @@ check_group_variation <- function(x, select = NULL, by = NULL,
     insight::format_error("Please provide the group variable using `by`.")
   }
   if (!all(by %in% colnames(x))) {
-    insight::format_error("The variable(s) speciefied in `by` were not found in the data.")
+    insight::format_error(
+      "The variable(s) speciefied in `by` were not found in the data."
+    )
   }
 
   # select all, if not given
@@ -78,20 +85,30 @@ check_group_variation <- function(x, select = NULL, by = NULL,
   }
 
   # create all combinations that should be checked
-  combinations <- expand.grid(variable = select, group = by, stringsAsFactors = FALSE)
+  combinations <- expand.grid(
+    variable = select,
+    group = by,
+    stringsAsFactors = FALSE
+  )
   combinations <- combinations[combinations$variable != combinations$group, ]
   combinations$type <- NA_character_
 
   # initialize lists
   for (i in seq_len(nrow(combinations))) {
-    combinations[i,"type"] <-
-      .check_nested(x, combinations[i,"group"], combinations[i,"variable"],
-                    tolerance = tolerance,
-                    only_balanced = only_balanced)
+    combinations[i, "type"] <- .check_nested(
+      x,
+      combinations[i, "group"],
+      combinations[i, "variable"],
+      tolerance = tolerance,
+      only_balanced = only_balanced
+    )
   }
 
-
-  combinations <- datawizard::data_relocate(combinations, select = "group", before = "variable")
+  combinations <- datawizard::data_relocate(
+    combinations,
+    select = "group",
+    before = "variable"
+  )
   class(combinations) <- c("check_group_variation", class(combinations))
   combinations
 }
@@ -100,11 +117,18 @@ check_group_variation <- function(x, select = NULL, by = NULL,
 #' @export
 print.check_group_variation <- function(x, ...) {
   if (insight::n_unique(x$group) > 1L) {
-    cat(insight::export_table(x, caption = c("Check group variation", "blue"), by = "group"))
+    cat(insight::export_table(
+      x,
+      caption = c("Check group variation", "blue"),
+      by = "group"
+    ))
   } else {
     x_new <- x
     x_new$group <- NULL
-    cat(insight::export_table(x_new, caption = c(sprintf("Check %s variation", x$group[1]), "blue")))
+    cat(insight::export_table(
+      x_new,
+      caption = c(sprintf("Check %s variation", x$group[1]), "blue")
+    ))
   }
 
   return(invisible(x))
@@ -117,9 +141,16 @@ print.check_group_variation <- function(x, ...) {
   UseMethod(".check_nested", data[[predictor]])
 }
 
+
 .check_nested.numeric <- function(data, by, predictor, tolerance = 1e-05, ...) {
   # demean predictor
-  d <- datawizard::demean(data, select = predictor, by = by, verbose = FALSE, add_attributes = FALSE)
+  d <- datawizard::demean(
+    data,
+    select = predictor,
+    by = by,
+    verbose = FALSE,
+    add_attributes = FALSE
+  )
 
   # get new names
   within_name <- paste0(predictor, "_within")
@@ -135,26 +166,27 @@ print.check_group_variation <- function(x, ...) {
   NULL
 }
 
+
 .check_nested.default <- function(data, by, predictor, only_balanced = TRUE, ...) {
-  f <- data[[by]]
+  group <- data[[by]]
   variable <- data[[predictor]]
 
-  oo <- complete.cases(f, variable)
-  f <- as.factor(f[oo])
-  variable <- variable[oo]
+  complete <- stats::complete.cases(group, variable)
+  group <- as.factor(group[complete])
+  variable <- variable[complete]
 
-  n_uniques <- tapply(variable, f, insight::n_unique)
+  n_uniques <- tapply(variable, group, insight::n_unique)
   is_between <- all(n_uniques == 1L)
   if (is_between) return("between")
 
   if (!insight::has_single_value(is_between)) return("both")
 
   variable_levels <- unique(variable)
-  has_all <- tapply(variable, f, function(v) all(variable_levels %in% v))
+  has_all <- tapply(variable, group, function(v) all(variable_levels %in% v))
   if (!all(has_all)) return("both")
 
   if (only_balanced) {
-    tab <- table(variable, f)
+    tab <- table(variable, group)
     is_balanced <- all(apply(tab, 2, insight::has_single_value))
     if (!is_balanced) {
       return("both")
