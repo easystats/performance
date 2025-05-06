@@ -20,9 +20,7 @@
 #'     `by = c("L4", "L3", "L2")`.
 #'   - a character vector with variable names in the format `by = "L4/L3/L2"`,
 #'     where the levels are separated by `/`.
-#' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
-#'   the data is treated as cross-classified. Only applies if `by` contains more
-#'   than one variable.
+#' @param only_balanced ...
 #' @param tolerance The amount of variation (calculated by `var()`, i.e. the
 #' variance of a variable) that is tolerated to indicate no within- or
 #' between-effect.
@@ -53,13 +51,11 @@
 #'   by = "id"
 #' )
 #' @export
-check_group_variation <- function(
-  x,
-  select = NULL,
-  by = NULL,
-  tolerance = 1e-4,
-  only_balanced = TRUE
-) {
+check_group_variation <- function(x,
+                                  select = NULL,
+                                  by = NULL,
+                                  tolerance = 1e-4,
+                                  only_balanced = TRUE) {
   insight::check_if_installed("datawizard", minimum_version = "0.12.0")
 
   if (inherits(select, "formula")) {

@@ -8,8 +8,8 @@ check_group_variation(
   x,
   select = NULL,
   by = NULL,
-  nested = FALSE,
-  tolerance = 1e-04
+  tolerance = 1e-04,
+  only_balanced = TRUE
 )
 }
 \arguments{
@@ -35,13 +35,11 @@ levels, ordered from \emph{highest} level to \emph{lowest} (e.g.
 where the levels are separated by \code{/}.
 }}
 
-\item{nested}{Logical, if \code{TRUE}, the data is treated as nested. If \code{FALSE},
-the data is treated as cross-classified. Only applies if \code{by} contains more
-than one variable.}
-
 \item{tolerance}{The amount of variation (calculated by \code{var()}, i.e. the
 variance of a variable) that is tolerated to indicate no within- or
 between-effect.}
+
+\item{only_balanced}{...}
 }
 \value{
 A list with at most three elements, \code{within}, \code{between}, and \code{both},
