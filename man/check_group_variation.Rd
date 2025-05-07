@@ -8,9 +8,10 @@ check_group_variation(
   x,
   select = NULL,
   by = NULL,
+  include_by = FALSE,
   numeric_as_factor = FALSE,
   num_tolerance = 1e-04,
-  fct_tolerance = "vary"
+  fct_tolerance = "crossed"
 )
 }
 \arguments{
@@ -23,6 +24,9 @@ that should be checked. If \code{NULL}, selects all variables (except those in
 \item{by}{Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID. For cross-classified or nested designs,
 \code{by} can also identify two or more variables as group- or cluster-IDs.}
+
+\item{include_by}{When there is more than one grouping variable, should they
+be check against each other?}
 
 \item{numeric_as_factor}{Should numeric variables be tested as factors?}
 

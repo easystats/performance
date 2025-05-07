@@ -165,8 +165,8 @@ print.check_group_variation <- function(x, ...) {
   within_name <- paste0(predictor, "_within")
   between_name <- paste0(predictor, "_between")
 
-  is_between <- var(d[[between_name]], na.rm = TRUE) > num_tolerance
-  is_within <- var(d[[within_name]], na.rm = TRUE) > num_tolerance
+  is_between <- stats::var(d[[between_name]], na.rm = TRUE) > num_tolerance
+  is_within <- stats::var(d[[within_name]], na.rm = TRUE) > num_tolerance
   is_both <- is_between && is_within
 
   if (is_both) {
@@ -206,8 +206,8 @@ print.check_group_variation <- function(x, ...) {
     f1 <- as.factor(variable)
     f2 <- as.factor(group)
     k <- length(levels(f1))
-    sm <- as(
-      new("ngTMatrix",
+    sm <- methods::as(
+      methods::new("ngTMatrix",
         i = as.integer(f2) - 1L,
         j = as.integer(f1) - 1L,
         Dim = c(length(levels(f2)), k)
