@@ -151,7 +151,11 @@ performance_reliability.default <- function(x, ...) {
 
   # bayesian model? if yes, copy clean parameter names
   if (isTRUE(insight::model_info(x)$is_bayesian)) {
-    params$Parameter <- attributes(original_params)$pretty_labels
+    if (inherits(x, "brmsfit")) {
+      params$Parameter <- gsub("(.*)\\[(.*),(.*)\\]", "\\3", params$Parameter)
+    } else if (inherits(x, c("stanreg", "stanfit"))) {
+      params$Parameter <- gsub("b\\[(.*)\\s(.*)", "\\1", params$Parameter)
+    }
   }
 
   reliability <- data.frame()
