@@ -8,8 +8,9 @@ check_group_variation(
   x,
   select = NULL,
   by = NULL,
-  tolerance = 1e-04,
-  only_balanced = TRUE
+  numeric_as_factor = FALSE,
+  num_tolerance = 1e-04,
+  fct_tolerance = "vary"
 )
 }
 \arguments{
@@ -21,54 +22,56 @@ that should be checked. If \code{NULL}, selects all variables (except those in
 
 \item{by}{Character vector (or formula) with the name of the variable that
 indicates the group- or cluster-ID. For cross-classified or nested designs,
-\code{by} can also identify two or more variables as group- or cluster-IDs. If
-the data is nested and should be treated as such, set \code{nested = TRUE}. Else,
-if \code{by} defines two or more variables and \code{nested = FALSE}, a cross-classified
-design is assumed.
+\code{by} can also identify two or more variables as group- or cluster-IDs.}
 
-For nested designs, \code{by} can be:
-\itemize{
-\item a character vector with the name of the variable that indicates the
-levels, ordered from \emph{highest} level to \emph{lowest} (e.g.
-\code{by = c("L4", "L3", "L2")}.
-\item a character vector with variable names in the format \code{by = "L4/L3/L2"},
-where the levels are separated by \code{/}.
-}}
+\item{numeric_as_factor}{Should numeric variables be tested as factors?}
 
-\item{tolerance}{The amount of variation (calculated by \code{var()}, i.e. the
+\item{num_tolerance}{The amount of variation (calculated by \code{var()}, i.e. the
 variance of a variable) that is tolerated to indicate no within- or
 between-effect.}
 
-\item{only_balanced}{...}
+\item{fct_tolerance}{How should a non-numeric variable be identified as
+varying only "within" a grouping variable? Options are:
+\itemize{
+\item \code{"crossed"} - if all groups have all unique values of X.
+\item \code{"balanced"} - if all groups have all unique values of X, \emph{with equal frequency}.
+}}
 }
 \value{
-A list with at most three elements, \code{within}, \code{between}, and \code{both},
-where each element contains the name of variables that have one of these
-effects.
+A data frame with group, variable, and type columns.
 }
 \description{
 \code{check_group_variation()} checks if variables a within- and/or between-effect,
 i.e. if they vary within or between certain groups.
 }
 \details{
-This function calls \code{\link[datawizard:demean]{datawizard::demean()}} to calculate the within- and
-between-effects of variables specified in \code{select}, based on the groups
-indicated in \code{by}. Then, the variance for each variable's within- and
-between-effect is calculated. If the variance is larger than \code{tolerance},
-a within- or between-effect is detected.
+This function attempt to identify the hierarchical design of a dataset with
+respect to grouping variables (\code{by}).
+\subsection{Numeric variables}{
+
+Numeric variables are portioned via \code{\link[datawizard:demean]{datawizard::demean()}} to their within-
+and between-group components. Then, the variance for each variable's within-
+and between-group component is calculated. Variable with within-group
+variance larger than \code{num_tolerance} are labeled as \emph{within}, variable with
+between-group variance larger than \code{num_tolerance} are labeled as \emph{between},
+and variables with both variances larger than \code{num_tolerance} are labeled as
+\emph{both}.
+\cr\cr
+Setting \code{numeric_as_factor = TRUE} causes numeric variables to be tested
+using the following criteria.
 }
-\examples{
-set.seed(1234)
-dat <- data.frame(
-  id = rep(letters, each = 3),
-  between_num = rep(rnorm(26), each = 3),
-  within1_num = rep(rnorm(3), times = 26),
-  within2_num = rep(rnorm(3), times = 26),
-  both_num = rnorm(3 * 26)
-)
-check_group_variation(
-  dat,
-  select = c("between_num", "within1_num", "within2_num", "both_num"),
-  by = "id"
-)
+
+\subsection{Non-numeric variables}{
+
+These variables can have one of the following 4 labels:
+\itemize{
+\item \emph{between} - the variable is fixed (has exactly one unique, constant value) for each group.
+\item \emph{nested} - the variable varies within each group, with each group having their own set of
+unique levels of the variable.
+\item \emph{within} - the variable is \emph{crossed} with the grouping variable - each value appear
+within each group. The \code{fct_tolerance} argument controls if full balance is also required.
+\item \emph{both} - the variable is partially nested within the grouping variable (or, when
+\code{fct_tolerance = "balanced"} the variable is fully crossed, but not perfectly balanced).
+}
+}
 }
