@@ -3,6 +3,8 @@
 #' `check_heterogeneity_bias()` checks if model predictors or variables may
 #' cause a heterogeneity bias, i.e. if variables have any within-group variance
 #' (_Bell and Jones, 2015_).
+#' \cr\cr
+#' **We recommend using [check_group_variation()] instead, for a more detailed and flexible examination of group-wise variability.**
 #'
 #' @param x A data frame or a mixed model object.
 #' @param select Character vector (or formula) with names of variables to select
@@ -33,6 +35,8 @@
 #' For further details, read the vignette
 #' <https://easystats.github.io/parameters/articles/demean.html> and also
 #' see documentation for [`datawizard::demean()`].
+#' \cr\cr
+#' For a more detailed and flexible examination of group-wise variability, see [`check_group_variation()`].
 #'
 #' @references
 #' - Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects

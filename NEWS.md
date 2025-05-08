@@ -2,6 +2,9 @@
 
 ## New functions
 
+* New function `check_group_variation()` to check within-/between-group variability. 
+  (This function will replace `check_heterogeneity_bias()` in future releases.)
+
 * New functions `performance_reliability()` and `performance_dvour()`. These
   functions provide information about the reliability of group-level estimates
   (i.e., random effects) in mixed models.
