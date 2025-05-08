@@ -123,11 +123,3 @@ print.check_heterogeneity_bias <- function(x, ...) {
 }
 
 
-#' @keywords internal
-.n_unique <- function(x, na.rm = TRUE) {
-  if (is.null(x)) {
-    return(0)
-  }
-  if (isTRUE(na.rm)) x <- x[!is.na(x)]
-  length(unique(x))
-}
