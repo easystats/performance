@@ -1,10 +1,13 @@
-#' Check model predictor for heterogeneity bias
+#' @title Check model predictor for heterogeneity bias
+#' @name check_heterogeneity_bias
 #'
+#' @description
 #' `check_heterogeneity_bias()` checks if model predictors or variables may
 #' cause a heterogeneity bias, i.e. if variables have any within-group variance
 #' (_Bell and Jones, 2015_).
-#' \cr\cr
-#' **We recommend using [check_group_variation()] instead, for a more detailed and flexible examination of group-wise variability.**
+#'
+#' **We recommend using [check_group_variation()] instead, for a more detailed
+#' and flexible examination of group-wise variability.**
 #'
 #' @param x A data frame or a mixed model object.
 #' @param select Character vector (or formula) with names of variables to select
@@ -35,8 +38,9 @@
 #' For further details, read the vignette
 #' <https://easystats.github.io/parameters/articles/demean.html> and also
 #' see documentation for [`datawizard::demean()`].
-#' \cr\cr
-#' For a more detailed and flexible examination of group-wise variability, see [`check_group_variation()`].
+#'
+#' For a more detailed and flexible examination of group-wise variability, see
+#' [`check_group_variation()`].
 #'
 #' @references
 #' - Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
@@ -49,6 +53,8 @@
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
 check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE) {
+  insight::format_alert("`check_heterogeneity_bias()` is deprecated. Please use `check_group_variation()` instead.")
+
   if (insight::is_model(x)) {
     by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
     if (is.null(by)) {
@@ -125,5 +131,3 @@ print.check_heterogeneity_bias <- function(x, ...) {
   cat("\n")
   invisible(x)
 }
-
-

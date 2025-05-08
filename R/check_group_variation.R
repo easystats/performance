@@ -97,7 +97,7 @@
 #'
 #' check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
 #'
-#' @examplesIf insight::check_if_installed("lme4", stop = FALSE)
+#' @examplesIf insight::check_if_installed("lme4", quietly = TRUE)
 #'
 #' data(sleepstudy, package = "lme4")
 #' check_group_variation(sleepstudy, select = "Days", by = "Subject")

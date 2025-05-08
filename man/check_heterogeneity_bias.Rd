@@ -40,8 +40,9 @@ than one variable.}
 \code{check_heterogeneity_bias()} checks if model predictors or variables may
 cause a heterogeneity bias, i.e. if variables have any within-group variance
 (\emph{Bell and Jones, 2015}).
-\cr\cr
-\strong{We recommend using \code{\link[=check_group_variation]{check_group_variation()}} instead, for a more detailed and flexible examination of group-wise variability.}
+
+\strong{We recommend using \code{\link[=check_group_variation]{check_group_variation()}} instead, for a more detailed
+and flexible examination of group-wise variability.}
 }
 \examples{
 data(iris)
@@ -59,6 +60,7 @@ Research and Methods, 3(1), 133–153.
 For further details, read the vignette
 \url{https://easystats.github.io/parameters/articles/demean.html} and also
 see documentation for \code{\link[datawizard:demean]{datawizard::demean()}}.
-\cr\cr
-For a more detailed and flexible examination of group-wise variability, see \code{\link[=check_group_variation]{check_group_variation()}}.
+
+For a more detailed and flexible examination of group-wise variability, see
+\code{\link[=check_group_variation]{check_group_variation()}}.
 }
