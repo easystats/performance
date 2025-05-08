@@ -120,7 +120,7 @@ egsingle <- data.frame(
 
 check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
 
-\dontshow{if (insight::check_if_installed("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("lme4", stop = FALSE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 data(sleepstudy, package = "lme4")
 check_group_variation(sleepstudy, select = "Days", by = c("Subject"))
