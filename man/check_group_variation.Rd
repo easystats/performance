@@ -22,7 +22,7 @@ check_group_variation(x, ...)
 )
 }
 \arguments{
-\item{x}{A data frame or a mixed model. See details.}
+\item{x}{A data frame or a mixed model. See details and examples.}
 
 \item{...}{Arguments passed to other methods}
 
@@ -55,8 +55,10 @@ frequency}.
 A data frame with group, variable, and type columns.
 }
 \description{
-\code{check_group_variation()} checks if variables a within- and/or between-effect,
-i.e. if they vary within or between certain groups.
+Checks if variables vary within and/or between levels of grouping variables.
+This function can be used to infer the hierarchical structure of a given
+dataset, or detect any predictors that might cause heterogeneity bias (\emph{Bell
+and Jones, 2015}).
 }
 \details{
 This function attempt to identify the hierarchical design of a dataset with
@@ -93,13 +95,50 @@ within each group. The \code{tolerance_factor} argument controls if full balance
 }
 }
 \examples{
-set.seed(123)
-dat <- data.frame(
-  id = rep(letters, each = 2),
-  between = rep(rnorm(26), each = 2),
-  within = rep(rnorm(2), times = 26),
-  both = rnorm(52)
-)
-check_group_variation(dat, by = "id")
 
+data(npk)
+check_group_variation(npk, by = "block")
+
+data(iris)
+check_group_variation(iris, by = "Species")
+
+data(ChickWeight)
+check_group_variation(ChickWeight, by = c("Chick"))
+
+# A subset of mlmRev::egsingle
+egsingle <- data.frame(
+  schoolid = factor(rep(c("2020", "2820"), times = c(18, 6))),
+  lowinc = rep(c(TRUE, FALSE), times = c(18, 6)),
+  childid = factor(rep(c("288643371", "292020281", "292020361", "295341521"), each = 6)),
+  female = rep(c(TRUE, FALSE), each = 12),
+  year = rep(1:6, times = 4),
+  math = c(-3.068, -1.13, -0.921, 0.463, 0.021, 2.035,
+           -2.732, -2.097, -0.988, 0.227, 0.403, 1.623,
+           -2.732, -1.898, -0.921, 0.587, 1.578, 2.3,
+           -2.288, -2.162, -1.631, -1.555, -0.725, 0.097)
+)
+
+check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
+
+\dontshow{if (insight::check_if_installed("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+data(sleepstudy, package = "lme4")
+check_group_variation(sleepstudy, select = "Days", by = c("Subject"))
+
+# Or
+mod <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+check_group_variation(mod)
+\dontshow{\}) # examplesIf}
+}
+\references{
+\itemize{
+\item Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
+Modeling of Time-Series Cross-Sectional and Panel Data. Political Science
+Research and Methods, 3(1), 133–153.
+}
+}
+\seealso{
+For further details, read the vignette
+\url{https://easystats.github.io/parameters/articles/demean.html} and also
+see documentation for \code{\link[datawizard:demean]{datawizard::demean()}}.
 }
