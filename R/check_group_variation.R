@@ -295,13 +295,7 @@ print_html.check_group_variation <- function(x, ...) {
   complete <- stats::complete.cases(group, variable)
   group <- droplevels(as.factor(group[complete]))
   variable <- variable[complete]
-
-  # Is the variable fixed for each group?
-  n_uniques <- tapply(variable, group, insight::n_unique)
-  is_between <- all(n_uniques == 1L)
-  if (is_between) {
-    return("between")
-  }
+  nested <- FALSE
 
   # Is the variable nested within each group?
   if (insight::check_if_installed("Matrix", reason = "for checking nested designs")) {
@@ -317,33 +311,40 @@ print_html.check_group_variation <- function(x, ...) {
       "CsparseMatrix"
     )
     if (all(sm@p[2:(k + 1L)] - sm@p[1:k] <= 1L)) {
-      return("nested")
+      nested <- TRUE
     }
+  }
+
+  # Is the variable fixed for each group?
+  n_uniques <- tapply(variable, group, insight::n_unique)
+  is_between <- all(n_uniques == 1L)
+  if (is_between) {
+    return(ifelse(nested, "between (nested)", "between"))
   }
 
   # If each group has a different number of unique values,
   # then it is partially nested/crossed.
   if (!insight::has_single_value(n_uniques)) {
-    return("both")
+    return(ifelse(nested, "both (nested)", "both"))
   }
 
   # Is the variable crossed?
   variable_levels <- unique(variable)
   has_all <- tapply(variable, group, function(v) all(variable_levels %in% v))
   if (!all(has_all)) {
-    return("both")
+    return(ifelse(nested, "both (nested)", "both"))
   }
 
   if (tolerance_factor == "crossed") {
-    return("within")
+    return(ifelse(nested, "within (nested)", "within"))
   }
 
   # Is the variable crossed and balanced?
   tab <- table(variable, group)
   is_balanced <- all(apply(tab, 2, insight::has_single_value))
   if (!is_balanced) {
-    return("both")
+    return(ifelse(nested, "both (nested)", "both"))
   }
 
-  return("within")
+  ifelse(nested, "within (nested)", "within")
 }
