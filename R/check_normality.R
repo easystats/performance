@@ -59,7 +59,7 @@ check_normality.default <- function(x, ...) {
   if (!insight::model_info(x)$is_linear) {
     insight::format_alert(
       "Checking normality of residuals is only appropriate for linear models.",
-      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether residuals follow a uniform distribution." #nolint
+      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." #nolint
     )
     return(NULL)
   }

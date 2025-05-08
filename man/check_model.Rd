@@ -232,8 +232,8 @@ residuals for generalized linear models, and standardized residuals for
 linear models. The plots for the normality of residuals (with overlayed
 normal curve) and for the linearity assumption use the default residuals
 for \code{lm} and \code{glm} (which are deviance residuals for \code{glm}). The Q-Q plots
-use simulated residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}) for non-Gaussian
-models and standardized residuals for linear models.
+use simulated quantile residuals (see \code{\link[=simulate_residuals]{simulate_residuals()}}) for
+non-Gaussian models and standardized residuals for linear models.
 }
 
 \section{Troubleshooting}{
