@@ -34,11 +34,9 @@ test_that("check_group_variation-1", {
   set.seed(111)
   dat <- data.frame(
     id = rep(letters, each = 2),
-
     between_num = rep(rnorm(26), each = 2),
     within_num = rep(rnorm(2), times = 26),
     both_num = rnorm(52),
-
     between_fac = rep(LETTERS, each = 2),
     within_fac = rep(LETTERS[1:2], times = 26),
     both_fac = sample(LETTERS[1:5], size = 52, replace = TRUE)
