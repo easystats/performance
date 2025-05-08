@@ -2,31 +2,29 @@
 
 ## New functions
 
-* New function `check_group_variation()` to check within-/between-group variability. 
-  (This function will replace `check_heterogeneity_bias()` in future releases.)
+* New function `check_group_variation()` to check within-/between-group
+  variability (this function will replace `check_heterogeneity_bias()` in
+  future releases.)
 
 * New functions `performance_reliability()` and `performance_dvour()`. These
   functions provide information about the reliability of group-level estimates
   (i.e., random effects) in mixed models.
 
-* `check_group_variation()` to check whether variables have a within- or between-
-  group variation (or both).
-
 ## Changes
 
 * Singularity checks with `check_singularity()` are now more efficient and also
-  include the random effects for the dispersion component (from package *glmmTMB*).
-  Furthermore, a `check` argument allows to check for general singularity (for
-  the full model), or can return singularity checks for each random effects term
-  separately.
+  include the random effects for the dispersion component (from package
+  *glmmTMB*). Furthermore, a `check` argument allows to check for general
+  singularity (for the full model), or can return singularity checks for each
+  random effects term separately.
 
 ## Bug fixes
 
 * Fixed issue with wrong computation of pseudo-R2 for some models where the
   base-model (null model) was updated using the original data, which could
   include missing values. Now the model frame is used, ensuring the correct
-  number of observations in the returned base-model, thus calculating the correct
-  log-likelihood and returning the correct pseudo-R2.
+  number of observations in the returned base-model, thus calculating the
+  correct log-likelihood and returning the correct pseudo-R2.
 
 * Fixed examples in `check_outliers()`.
 
@@ -35,7 +33,8 @@
 ## Breaking changes
 
 * `check_outliers()` with `method = "optics"` now returns a further refined
-  cluster selection, by passing the `optics_xi` argument to `dbscan::extractXi()`.
+  cluster selection, by passing the `optics_xi` argument to
+  `dbscan::extractXi()`.
 
 * Deprecated arguments and alias-function-names have been removed.
 
