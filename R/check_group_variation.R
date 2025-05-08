@@ -5,22 +5,22 @@
 #'
 #' @param x A data frame.
 #' @param select Character vector (or formula) with names of variables to select
-#'   that should be checked. If `NULL`, selects all variables (except those in
-#'   `by`).
+#' that should be checked. If `NULL`, selects all variables (except those in
+#' `by`).
 #' @param by Character vector (or formula) with the name of the variable that
-#'   indicates the group- or cluster-ID. For cross-classified or nested designs,
-#'   `by` can also identify two or more variables as group- or cluster-IDs.
+#' indicates the group- or cluster-ID. For cross-classified or nested designs,
+#' `by` can also identify two or more variables as group- or cluster-IDs.
 #' @param include_by When there is more than one grouping variable, should they
-#'   be check against each other?
+#' be check against each other?
 #' @param numeric_as_factor Should numeric variables be tested as factors?
-#' @param num_tolerance The amount of variation (calculated by `var()`, i.e. the
-#' variance of a variable) that is tolerated to indicate no within- or
+#' @param tolerance_numeric The amount of variation (calculated by `var()`, i.e.
+#' the variance of a variable) that is tolerated to indicate no within- or
 #' between-effect.
-#' @param fct_tolerance How should a non-numeric variable be identified as
-#'   varying only "within" a grouping variable? Options are:
-#'   - `"crossed"` - if all groups have all unique values of X.
-#'   - `"balanced"` - if all groups have all unique values of X, _with equal frequency_.
-
+#' @param tolerance_factor How should a non-numeric variable be identified as
+#' varying only "within" a grouping variable? Options are:
+#' - `"crossed"` - if all groups have all unique values of X.
+#' - `"balanced"` - if all groups have all unique values of X, _with equal
+#'   frequency_.
 #'
 #' @details
 #' This function attempt to identify the hierarchical design of a dataset with
@@ -30,11 +30,11 @@
 #' Numeric variables are portioned via [`datawizard::demean()`] to their within-
 #' and between-group components. Then, the variance for each variable's within-
 #' and between-group component is calculated. Variable with within-group
-#' variance larger than `num_tolerance` are labeled as _within_, variable with
-#' between-group variance larger than `num_tolerance` are labeled as _between_,
-#' and variables with both variances larger than `num_tolerance` are labeled as
+#' variance larger than `tolerance_numeric` are labeled as _within_, variable with
+#' between-group variance larger than `tolerance_numeric` are labeled as _between_,
+#' and variables with both variances larger than `tolerance_numeric` are labeled as
 #' _both_.
-#' \cr\cr
+#'
 #' Setting `numeric_as_factor = TRUE` causes numeric variables to be tested
 #' using the following criteria.
 #'
@@ -44,23 +44,30 @@
 #' - _nested_ - the variable varies within each group, with each group having their own set of
 #'   unique levels of the variable.
 #' - _within_ - the variable is _crossed_ with the grouping variable - each value appear
-#'   within each group. The `fct_tolerance` argument controls if full balance is also required.
+#'   within each group. The `tolerance_factor` argument controls if full balance is also required.
 #' - _both_ - the variable is partially nested within the grouping variable (or, when
-#'   `fct_tolerance = "balanced"` the variable is fully crossed, but not perfectly balanced).
+#'   `tolerance_factor = "balanced"` the variable is fully crossed, but not perfectly balanced).
 #'
 #' @return A data frame with group, variable, and type columns.
 #'
 #' @examples
+#' set.seed(123)
+#' dat <- data.frame(
+#'   id = rep(letters, each = 2),
+#'   between = rep(rnorm(26), each = 2),
+#'   within = rep(rnorm(2), times = 26),
+#'   both = rnorm(52)
+#' )
+#' check_group_variation(dat, by = "id")
+#'
 #' @export
 check_group_variation <- function(x,
                                   select = NULL,
                                   by = NULL,
                                   include_by = FALSE,
                                   numeric_as_factor = FALSE,
-                                  num_tolerance = 1e-4,
-                                  fct_tolerance = "crossed") {
-  insight::check_if_installed("datawizard", minimum_version = "0.12.0")
-
+                                  tolerance_numeric = 1e-4,
+                                  tolerance_factor = "crossed") {
   if (inherits(select, "formula")) {
     select <- all.vars(select)
   }
@@ -74,7 +81,7 @@ check_group_variation <- function(x,
   }
   if (!all(by %in% colnames(x))) {
     insight::format_error(
-      "The variable(s) speciefied in `by` were not found in the data."
+      "The variable(s) specified in `by` were not found in the data."
     )
   }
 
@@ -106,8 +113,8 @@ check_group_variation <- function(x,
       x,
       combinations[i, "group"],
       combinations[i, "variable"],
-      num_tolerance = num_tolerance,
-      fct_tolerance = fct_tolerance
+      tolerance_numeric = tolerance_numeric,
+      tolerance_factor = tolerance_factor
     )
   }
 
@@ -125,18 +132,36 @@ check_group_variation <- function(x,
 print.check_group_variation <- function(x, ...) {
   x_orig <- x
 
-  cap <- "Check group variation"
-  by <- "group"
-
   if (insight::n_unique(x$group) == 1L) {
     x$group <- NULL
-    cap <- sprintf("Check %s variation", x_orig$group[1])
-    by <- NULL
+    caption <- c(sprintf("Check %s variation", x_orig$group[1]), "blue")
+  } else {
+    caption <- as.list(sprintf("Check %s variation", unique(x$group)))
+    x <- split(x, factor(x$group, levels = unique(x$group)))
+    x[] <- lapply(x, function(i) {
+      i$group <- NULL
+      i
+    })
   }
 
-  cat(insight::export_table(x, caption = c(cap, "blue"), by = by, ...))
+  cat(insight::export_table(x, caption = caption, ...))
 
-  return(invisible(x_orig))
+  invisible(x_orig)
+}
+
+
+#' @export
+print_html.check_group_variation <- function(x, ...) {
+  x_orig <- x
+  caption <- "Check group variation"
+
+  if (insight::n_unique(x$group) == 1L) {
+    x$group <- by <- NULL
+  } else {
+    by <- "group"
+  }
+
+  insight::export_table(x, caption = caption, by = by, format = "html", ...)
 }
 
 
@@ -151,7 +176,7 @@ print.check_group_variation <- function(x, ...) {
 }
 
 
-.check_nested.numeric <- function(data, by, predictor, num_tolerance = 1e-05, ...) {
+.check_nested.numeric <- function(data, by, predictor, tolerance_numeric = 1e-05, ...) {
   # demean predictor
   d <- datawizard::demean(
     data,
@@ -165,8 +190,8 @@ print.check_group_variation <- function(x, ...) {
   within_name <- paste0(predictor, "_within")
   between_name <- paste0(predictor, "_between")
 
-  is_between <- stats::var(d[[between_name]], na.rm = TRUE) > num_tolerance
-  is_within <- stats::var(d[[within_name]], na.rm = TRUE) > num_tolerance
+  is_between <- stats::var(d[[between_name]], na.rm = TRUE) > tolerance_numeric
+  is_within <- stats::var(d[[within_name]], na.rm = TRUE) > tolerance_numeric
   is_both <- is_between && is_within
 
   if (is_both) {
@@ -183,8 +208,11 @@ print.check_group_variation <- function(x, ...) {
 }
 
 
-.check_nested.default <- function(data, by, predictor, fct_tolerance = c("crossed", "balanced"), ...) {
-  fct_tolerance <- match.arg(fct_tolerance)
+.check_nested.default <- function(data, by, predictor, tolerance_factor = "crossed", ...) {
+  tolerance_factor <- insight::validate_argument(
+    tolerance_factor,
+    c("crossed", "balanced")
+  )
 
   group <- data[[by]]
   variable <- data[[predictor]]
@@ -205,7 +233,7 @@ print.check_group_variation <- function(x, ...) {
     # code from lme4::isNested
     f1 <- as.factor(variable)
     f2 <- as.factor(group)
-    k <- length(levels(f1))
+    k <- nlevels(f1)
     sm <- methods::as(
       methods::new("ngTMatrix",
         i = as.integer(f2) - 1L,
@@ -232,7 +260,7 @@ print.check_group_variation <- function(x, ...) {
     return("both")
   }
 
-  if (fct_tolerance == "crossed") {
+  if (tolerance_factor == "crossed") {
     return("within")
   }
 

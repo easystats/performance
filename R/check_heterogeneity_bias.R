@@ -45,8 +45,6 @@
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
 check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE) {
-  insight::check_if_installed("datawizard", minimum_version = "0.12.0")
-
   if (insight::is_model(x)) {
     by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
     if (is.null(by)) {
