@@ -212,3 +212,37 @@ test_that("check_group_variation, models", {
     ignore_attr = TRUE
   )
 })
+
+test_that("check_group_variation, numeric_as_factor", {
+  egsingle <- data.frame(
+    schoolid = rep(c(2020, 2820), times = c(18, 6)),
+    lowinc = rep(c(TRUE, FALSE), times = c(18, 6)),
+    childid = factor(rep(
+      c("288643371", "292020281", "292020361", "295341521"),
+      each = 6
+    )),
+    female = rep(c(TRUE, FALSE), each = 12),
+    year = rep(1:6, times = 4),
+    math = c(
+      -3.068, -1.13, -0.921, 0.463, 0.021, 2.035,
+      -2.732, -2.097, -0.988, 0.227, 0.403, 1.623,
+      -2.732, -1.898, -0.921, 0.587, 1.578, 2.3,
+      -2.288, -2.162, -1.631, -1.555, -0.725, 0.097
+    )
+  )
+
+  out1 <- check_group_variation(egsingle, by = c("schoolid", "childid"))
+  out2 <- check_group_variation(
+    egsingle,
+    by = c("schoolid", "childid"),
+    numeric_as_factor = TRUE
+  )
+  expect_identical(
+    out1$type,
+    c("between (nested)", "both", "within", "both", "between", "between", "within", "both")
+  )
+  expect_identical(
+    out2$type,
+    c("between (nested)", "both", "within", "both (nested)", "between", "between", "within", "both")
+  )
+})
