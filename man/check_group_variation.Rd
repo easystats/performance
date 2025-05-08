@@ -62,19 +62,18 @@ and Jones, 2015}).
 }
 \details{
 This function attempt to identify the hierarchical design of a dataset with
-respect to grouping variables (\code{by}).
-
-If \code{x} is a (mixed effect) model, the variability of the fixed effects
-predictors are checked with respect to the random grouping variables.
+respect to grouping variables (\code{by}). If \code{x} is a (mixed effect) model, the
+variability of the fixed effects predictors are checked with respect to the
+random grouping variables.
 \subsection{Numeric variables}{
 
 Numeric variables are portioned via \code{\link[datawizard:demean]{datawizard::demean()}} to their within-
 and between-group components. Then, the variance for each variable's within-
-and between-group component is calculated. Variable with within-group
-variance larger than \code{tolerance_numeric} are labeled as \emph{within}, variable with
-between-group variance larger than \code{tolerance_numeric} are labeled as \emph{between},
-and variables with both variances larger than \code{tolerance_numeric} are labeled as
-\emph{both}.
+and between-group component is calculated. Variables with within-group
+variance larger than \code{tolerance_numeric} are labeled as \emph{within}, variables
+with a between-group variance larger than \code{tolerance_numeric} are labeled as
+\emph{between}, and variables with both variances larger than \code{tolerance_numeric}
+are labeled as \emph{both}.
 
 Setting \code{numeric_as_factor = TRUE} causes numeric variables to be tested
 using the following criteria.
@@ -82,16 +81,26 @@ using the following criteria.
 
 \subsection{Non-numeric variables}{
 
-These variables can have one of the following 4 labels:
+These variables can have one of the following three labels:
 \itemize{
 \item \emph{between} - the variable is fixed (has exactly one unique, constant value) for each group.
-\item \emph{nested} - the variable varies within each group, with each group having their own set of
-unique levels of the variable.
 \item \emph{within} - the variable is \emph{crossed} with the grouping variable - each value appear
 within each group. The \code{tolerance_factor} argument controls if full balance is also required.
 \item \emph{both} - the variable is partially nested within the grouping variable (or, when
 \code{tolerance_factor = "balanced"} the variable is fully crossed, but not perfectly balanced).
 }
+
+Additionally, if variables are nested within the groups (i.e. variables vary
+within each group indicated in \code{by}, with each group having their own set of
+unique levels of the variable), a \emph{nested} label is added,
+}
+
+\subsection{Heterogeneity bias}{
+
+Variables that vary both within and between groups can cause a heterogeneity
+bias (\emph{Bell and Jones, 2015}). It is recommended to center (person-mean
+centering) those variables to avoid this bias. See \code{\link[datawizard:demean]{datawizard::demean()}}
+for further details.
 }
 }
 \examples{
