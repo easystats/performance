@@ -116,7 +116,6 @@
 #'
 #' @export
 check_group_variation <- function(x, ...) {
-  insight::check_if_installed("datawizard", minimum_version = "0.12.0")
   UseMethod("check_group_variation")
 }
 
