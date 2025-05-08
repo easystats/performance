@@ -95,7 +95,6 @@ within each group. The \code{tolerance_factor} argument controls if full balance
 }
 }
 \examples{
-
 data(npk)
 check_group_variation(npk, by = "block")
 

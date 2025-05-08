@@ -1,5 +1,7 @@
-#' Check variables for within- and/or between-group variation
+#' @title Check variables for within- and/or between-group variation
+#' @name check_group_variation
 #'
+#' @description
 #' Checks if variables vary within and/or between levels of grouping variables.
 #' This function can be used to infer the hierarchical structure of a given
 #' dataset, or detect any predictors that might cause heterogeneity bias (_Bell
@@ -67,7 +69,6 @@
 #'   Research and Methods, 3(1), 133–153.
 #'
 #' @examples
-#'
 #' data(npk)
 #' check_group_variation(npk, by = "block")
 #'
