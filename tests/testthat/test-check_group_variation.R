@@ -89,8 +89,9 @@ test_that("check_group_variation-2", {
 
   skip_if_not_installed("parameters")
   data(qol_cancer, package = "parameters")
+  d <- qol_cancer
   out <- check_group_variation(
-    qol_cancer,
+    d,
     select = c("age", "phq4", "QoL", "education"),
     by = "ID"
   )
@@ -104,25 +105,25 @@ test_that("check_group_variation-2", {
     ignore_attr = TRUE
   )
 
-  data(qol_cancer, package = "parameters")
-  qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
+  d <- qol_cancer
+  d <- datawizard::demean(d, select = "phq4", by = "ID")
   expect_error(
     check_group_variation(
-      qol_cancer,
+      d,
       select = c("phq4", "phq4_within", "phq4_between"),
       by = "ID"
     ),
     regex = "One or more"
   )
 
-  data(qol_cancer, package = "parameters")
-  qol_cancer <- datawizard::demean(qol_cancer, select = "phq4", by = "ID")
-  qol_cancer <- datawizard::data_rename(
-    qol_cancer,
+  d <- qol_cancer
+  d <- datawizard::demean(d, select = "phq4", by = "ID")
+  d <- datawizard::data_rename(
+    d,
     select = c(phq4w = "phq4_within", phq4b = "phq4_between")
   )
   out <- check_group_variation(
-    qol_cancer,
+    d,
     select = c("age", "phq4", "QoL", "education", "phq4w", "phq4b"),
     by = "ID"
   )
