@@ -138,53 +138,78 @@ test_that("check_group_variation-2", {
 })
 
 
-test_that("check_heterogeneity_bias", {
-  skip_if_not_installed("datawizard")
+test_that("check_group_variation, multiple by", {
+  egsingle <- data.frame(
+    schoolid = factor(rep(c("2020", "2820"), times = c(18, 6))),
+    lowinc = rep(c(TRUE, FALSE), times = c(18, 6)),
+    childid = factor(rep(
+      c("288643371", "292020281", "292020361", "295341521"),
+      each = 6
+    )),
+    female = rep(c(TRUE, FALSE), each = 12),
+    year = rep(1:6, times = 4),
+    math = c(
+      -3.068, -1.13, -0.921, 0.463, 0.021, 2.035,
+      -2.732, -2.097, -0.988, 0.227, 0.403, 1.623,
+      -2.732, -1.898, -0.921, 0.587, 1.578, 2.3,
+      -2.288, -2.162, -1.631, -1.555, -0.725, 0.097
+    )
+  )
+
+  out <- check_group_variation(egsingle, by = c("schoolid", "childid"))
+  expect_equal(
+    out,
+    data.frame(
+      group = c("schoolid", "schoolid", "schoolid", "schoolid", "childid", "childid", "childid", "childid"),
+      variable = c("lowinc", "female", "year", "math", "lowinc", "female", "year", "math"),
+      type = c("between (nested)", "both", "within", "both", "between", "between", "within", "both")
+    ),
+    ignore_attr = TRUE
+  )
+
+  out <- check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
+  expect_equal(
+    out,
+    data.frame(
+      group = c(
+        "schoolid", "schoolid", "schoolid", "schoolid", "schoolid",
+        "childid", "childid", "childid", "childid", "childid"
+      ),
+      variable = c(
+        "childid", "lowinc", "female", "year", "math",
+        "schoolid", "lowinc", "female", "year", "math"
+      ),
+      type = c(
+        "both (nested)", "between (nested)", "both", "within", "both",
+        "between", "between", "between", "within", "both"
+      )
+    ),
+    ignore_attr = TRUE
+  )
+})
+
+
+test_that("check_group_variation, models", {
   data(iris)
   set.seed(123)
   iris$ID <- sample.int(4, nrow(iris), replace = TRUE) # fake-ID
-  out <- check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
-  expect_equal(out, c("Sepal.Length", "Petal.Length"), ignore_attr = TRUE)
-  expect_output(print(out), "Possible heterogeneity bias due to following predictors: Sepal\\.Length, Petal\\.Length")
-
-  out <- check_heterogeneity_bias(iris, select = ~ Sepal.Length + Petal.Length, by = ~ID)
-  expect_equal(out, c("Sepal.Length", "Petal.Length"), ignore_attr = TRUE)
-  expect_output(print(out), "Possible heterogeneity bias due to following predictors: Sepal\\.Length, Petal\\.Length")
-
   m <- lm(Sepal.Length ~ Petal.Length + Petal.Width + Species + ID, data = iris)
   expect_error(
-    check_heterogeneity_bias(m, select = c("Sepal.Length", "Petal.Length"), by = "ID"),
+    check_group_variation(m, select = c("Sepal.Length", "Petal.Length"), by = "ID"),
     regex = "no mixed model"
   )
 
   skip_if_not_installed("lme4")
-  m <- lme4::lmer(Sepal.Length ~ Petal.Length + Petal.Width + Species + (1 | ID), data = iris)
-  out <- check_heterogeneity_bias(m, select = c("Sepal.Length", "Petal.Length"), by = "ID")
-  expect_equal(out, c("Petal.Length", "Petal.Width", "Species"), ignore_attr = TRUE)
-  expect_output(
-    print(out),
-    "Possible heterogeneity bias due to following predictors: Petal\\.Length, Petal\\.Width, Species"
+  data(sleepstudy, package = "lme4")
+  mod <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  out <- check_group_variation(mod)
+  expect_equal(
+    out,
+    data.frame(
+      group = "Subject",
+      variable = "Days",
+      type = "within"
+    ),
+    ignore_attr = TRUE
   )
-  out <- check_heterogeneity_bias(m, select = ~ Sepal.Length + Petal.Length, by = ~ID)
-  expect_equal(out, c("Petal.Length", "Petal.Width", "Species"), ignore_attr = TRUE)
-  expect_output(
-    print(out),
-    "Possible heterogeneity bias due to following predictors: Petal\\.Length, Petal\\.Width, Species"
-  )
-})
-
-test_that("check_heterogeneity_bias", {
-  skip_if_not_installed("datawizard", minimum_version = "0.12.3")
-  data(efc, package = "datawizard")
-  dat <- na.omit(efc)
-  dat$e42dep <- factor(dat$e42dep)
-  dat$c172code <- factor(dat$c172code)
-
-  out <- check_heterogeneity_bias(
-    dat,
-    select = "c12hour",
-    by = c("e42dep", "c172code"),
-    nested = TRUE
-  )
-  expect_equal(out, "c12hour", ignore_attr = TRUE)
 })
