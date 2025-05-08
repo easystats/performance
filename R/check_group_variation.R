@@ -28,7 +28,7 @@
 #' @details
 #' This function attempt to identify the hierarchical design of a dataset with
 #' respect to grouping variables (`by`).
-#' \cr\cr
+#'
 #' If `x` is a (mixed effect) model, the variability of the fixed effects
 #' predictors are checked with respect to the random grouping variables.
 #'
@@ -75,27 +75,31 @@
 #' check_group_variation(iris, by = "Species")
 #'
 #' data(ChickWeight)
-#' check_group_variation(ChickWeight, by = c("Chick"))
+#' check_group_variation(ChickWeight, by = "Chick")
 #'
 #' # A subset of mlmRev::egsingle
 #' egsingle <- data.frame(
 #'   schoolid = factor(rep(c("2020", "2820"), times = c(18, 6))),
 #'   lowinc = rep(c(TRUE, FALSE), times = c(18, 6)),
-#'   childid = factor(rep(c("288643371", "292020281", "292020361", "295341521"), each = 6)),
+#'   childid = factor(rep(
+#'     c("288643371", "292020281", "292020361", "295341521"),
+#'     each = 6
+#'   )),
 #'   female = rep(c(TRUE, FALSE), each = 12),
 #'   year = rep(1:6, times = 4),
-#'   math = c(-3.068, -1.13, -0.921, 0.463, 0.021, 2.035,
-#'            -2.732, -2.097, -0.988, 0.227, 0.403, 1.623,
-#'            -2.732, -1.898, -0.921, 0.587, 1.578, 2.3,
-#'            -2.288, -2.162, -1.631, -1.555, -0.725, 0.097)
+#'   math = c(
+#'     -3.068, -1.13, -0.921, 0.463, 0.021, 2.035,
+#'     -2.732, -2.097, -0.988, 0.227, 0.403, 1.623,
+#'     -2.732, -1.898, -0.921, 0.587, 1.578, 2.3,
+#'     -2.288, -2.162, -1.631, -1.555, -0.725, 0.097
+#'   )
 #' )
 #'
 #' check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
 #'
 #' @examplesIf insight::check_if_installed("lme4")
-#'
 #' data(sleepstudy, package = "lme4")
-#' check_group_variation(sleepstudy, select = "Days", by = c("Subject"))
+#' check_group_variation(sleepstudy, select = "Days", by = "Subject")
 #'
 #' # Or
 #' mod <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
@@ -107,11 +111,12 @@ check_group_variation <- function(x, ...) {
   UseMethod("check_group_variation")
 }
 
+
 #' @rdname check_group_variation
 #' @export
 check_group_variation.default <- function(x, ...) {
   if (!insight::is_model(x)) {
-    insight::format_error("x must be a data frame or mixed model")
+    insight::format_error("`x` must be a data frame or mixed model.")
   }
 
   by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
@@ -123,6 +128,7 @@ check_group_variation.default <- function(x, ...) {
 
   check_group_variation(my_data, select = select, by = by, ...)
 }
+
 
 #' @rdname check_group_variation
 #' @export
@@ -193,6 +199,8 @@ check_group_variation.data.frame <- function(x,
   combinations
 }
 
+
+# methods -------------------------------------------------------------
 
 #' @export
 print.check_group_variation <- function(x, ...) {
