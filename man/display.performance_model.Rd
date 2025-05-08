@@ -6,9 +6,15 @@
 \alias{print_md.compare_performance}
 \title{Print tables in different output formats}
 \usage{
-\method{display}{performance_model}(object, format = "markdown", digits = 2, caption = NULL, ...)
+display.performance_model(
+  object,
+  format = "markdown",
+  digits = 2,
+  caption = NULL,
+  ...
+)
 
-\method{print_md}{performance_model}(
+print_md.performance_model(
   x,
   digits = 2,
   caption = "Indices of model performance",
@@ -16,7 +22,7 @@
   ...
 )
 
-\method{print_md}{compare_performance}(
+print_md.compare_performance(
   x,
   digits = 2,
   caption = "Comparison of Model Performance Indices",

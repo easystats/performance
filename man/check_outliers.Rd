@@ -203,7 +203,7 @@ minus a coefficient times the MAD method (Leys et al., 2013).
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:covrob_ogk]{bigutilsr::dist_ogk()}}
+1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:dist_ogk]{bigutilsr::dist_ogk()}}
 function.
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that
@@ -238,7 +238,7 @@ extreme values), this algorithm functions in a different manner and won't
 always detect outliers. Note that \code{method = "optics"} requires the
 \strong{dbscan} package to be installed, and that it takes some time to compute
 the results. Additionally, the \code{optics_xi} (default to 0.05) is passed to
-the \code{\link[dbscan:optics]{dbscan::extractXi()}} function to further refine the cluster selection.
+the \code{\link[dbscan:extractXi]{dbscan::extractXi()}} function to further refine the cluster selection.
 \item \strong{Local Outlier Factor}:
 Based on a K nearest neighbors algorithm, LOF compares the local density of
 a point to the local densities of its neighbors instead of computing a
