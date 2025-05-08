@@ -2,20 +2,29 @@
 % Please edit documentation in R/check_group_variation.R
 \name{check_group_variation}
 \alias{check_group_variation}
+\alias{check_group_variation.default}
+\alias{check_group_variation.data.frame}
 \title{Check variables for within- and/or between-group variation}
 \usage{
-check_group_variation(
+check_group_variation(x, ...)
+
+\method{check_group_variation}{default}(x, ...)
+
+\method{check_group_variation}{data.frame}(
   x,
   select = NULL,
   by = NULL,
   include_by = FALSE,
   numeric_as_factor = FALSE,
   tolerance_numeric = 1e-04,
-  tolerance_factor = "crossed"
+  tolerance_factor = "crossed",
+  ...
 )
 }
 \arguments{
-\item{x}{A data frame.}
+\item{x}{A data frame or a mixed model. See details.}
+
+\item{...}{Arguments passed to other methods}
 
 \item{select}{Character vector (or formula) with names of variables to select
 that should be checked. If \code{NULL}, selects all variables (except those in
@@ -52,6 +61,9 @@ i.e. if they vary within or between certain groups.
 \details{
 This function attempt to identify the hierarchical design of a dataset with
 respect to grouping variables (\code{by}).
+\cr\cr
+If \code{x} is a (mixed effect) model, the variability of the fixed effects
+predictors are checked with respect to the random grouping variables.
 \subsection{Numeric variables}{
 
 Numeric variables are portioned via \code{\link[datawizard:demean]{datawizard::demean()}} to their within-

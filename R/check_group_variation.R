@@ -3,7 +3,7 @@
 #' `check_group_variation()` checks if variables a within- and/or between-effect,
 #' i.e. if they vary within or between certain groups.
 #'
-#' @param x A data frame.
+#' @param x A data frame or a mixed model. See details.
 #' @param select Character vector (or formula) with names of variables to select
 #' that should be checked. If `NULL`, selects all variables (except those in
 #' `by`).
@@ -21,10 +21,14 @@
 #' - `"crossed"` - if all groups have all unique values of X.
 #' - `"balanced"` - if all groups have all unique values of X, _with equal
 #'   frequency_.
+#' @param ... Arguments passed to other methods
 #'
 #' @details
 #' This function attempt to identify the hierarchical design of a dataset with
 #' respect to grouping variables (`by`).
+#' \cr\cr
+#' If `x` is a (mixed effect) model, the variability of the fixed effects
+#' predictors are checked with respect to the random grouping variables.
 #'
 #' ## Numeric variables
 #' Numeric variables are portioned via [`datawizard::demean()`] to their within-
@@ -61,13 +65,38 @@
 #' check_group_variation(dat, by = "id")
 #'
 #' @export
-check_group_variation <- function(x,
-                                  select = NULL,
-                                  by = NULL,
-                                  include_by = FALSE,
-                                  numeric_as_factor = FALSE,
-                                  tolerance_numeric = 1e-4,
-                                  tolerance_factor = "crossed") {
+check_group_variation <- function(x, ...) {
+  insight::check_if_installed("datawizard", minimum_version = "0.12.0")
+  UseMethod("check_group_variation")
+}
+
+#' @rdname check_group_variation
+#' @export
+check_group_variation.default <- function(x, ...) {
+  if (!insight::is_model(x)) {
+    insight::format_error("x must be a data frame or mixed model")
+  }
+
+  by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
+  if (is.null(by)) {
+    insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `by`.")
+  }
+  my_data <- insight::get_data(x, source = "mf", verbose = FALSE)
+  select <- insight::find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
+
+  check_group_variation(my_data, select = select, by = by, ...)
+}
+
+#' @rdname check_group_variation
+#' @export
+check_group_variation.data.frame <- function(x,
+                                             select = NULL,
+                                             by = NULL,
+                                             include_by = FALSE,
+                                             numeric_as_factor = FALSE,
+                                             tolerance_numeric = 1e-4,
+                                             tolerance_factor = "crossed",
+                                             ...) {
   if (inherits(select, "formula")) {
     select <- all.vars(select)
   }
@@ -137,6 +166,7 @@ print.check_group_variation <- function(x, ...) {
     caption <- c(sprintf("Check %s variation", x_orig$group[1]), "blue")
   } else {
     caption <- as.list(sprintf("Check %s variation", unique(x$group)))
+    caption <- lapply(caption, append, "blue")
     x <- split(x, factor(x$group, levels = unique(x$group)))
     x[] <- lapply(x, function(i) {
       i$group <- NULL
@@ -218,7 +248,7 @@ print_html.check_group_variation <- function(x, ...) {
   variable <- data[[predictor]]
 
   complete <- stats::complete.cases(group, variable)
-  group <- as.factor(group[complete])
+  group <- droplevels(as.factor(group[complete]))
   variable <- variable[complete]
 
   # Is the variable fixed for each group?
@@ -232,13 +262,12 @@ print_html.check_group_variation <- function(x, ...) {
   if (insight::check_if_installed("Matrix", reason = "for checking nested designs")) {
     # code from lme4::isNested
     f1 <- as.factor(variable)
-    f2 <- as.factor(group)
     k <- nlevels(f1)
     sm <- methods::as(
       methods::new("ngTMatrix",
-        i = as.integer(f2) - 1L,
+        i = as.integer(group) - 1L,
         j = as.integer(f1) - 1L,
-        Dim = c(length(levels(f2)), k)
+        Dim = c(length(levels(group)), k)
       ),
       "CsparseMatrix"
     )
