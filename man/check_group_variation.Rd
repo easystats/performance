@@ -58,7 +58,8 @@ A data frame with group, variable, and type columns.
 Checks if variables vary within and/or between levels of grouping variables.
 This function can be used to infer the hierarchical structure of a given
 dataset, or detect any predictors that might cause heterogeneity bias (\emph{Bell
-and Jones, 2015}).
+and Jones, 2015}). Use \code{summary()} on the output if you are mainly interested
+if and which predictors are possibly affected by heterogeneity bias.
 }
 \details{
 This function attempt to identify the hierarchical design of a dataset with
@@ -83,11 +84,14 @@ using the following criteria.
 
 These variables can have one of the following three labels:
 \itemize{
-\item \emph{between} - the variable is fixed (has exactly one unique, constant value) for each group.
-\item \emph{within} - the variable is \emph{crossed} with the grouping variable - each value appear
-within each group. The \code{tolerance_factor} argument controls if full balance is also required.
-\item \emph{both} - the variable is partially nested within the grouping variable (or, when
-\code{tolerance_factor = "balanced"} the variable is fully crossed, but not perfectly balanced).
+\item \emph{between} - the variable is fixed (has exactly one unique, constant value)
+for each group.
+\item \emph{within} - the variable is \emph{crossed} with the grouping variable - each
+value appear within each group. The \code{tolerance_factor} argument controls if
+full balance is also required.
+\item \emph{both} - the variable is partially nested within the grouping variable (or,
+when \code{tolerance_factor = "balanced"} the variable is fully crossed, but not
+perfectly balanced).
 }
 
 Additionally, if variables are nested within the groups (i.e. variables vary
@@ -100,7 +104,8 @@ unique levels of the variable), a \emph{nested} label is added,
 Variables that vary both within and between groups can cause a heterogeneity
 bias (\emph{Bell and Jones, 2015}). It is recommended to center (person-mean
 centering) those variables to avoid this bias. See \code{\link[datawizard:demean]{datawizard::demean()}}
-for further details.
+for further details. Use \code{summary()} to get a short text result that indicates
+if and which predictors are possibly affected by heterogeneity bias.
 }
 }
 \examples{
@@ -140,7 +145,10 @@ check_group_variation(sleepstudy, select = "Days", by = "Subject")
 
 # Or
 mod <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-check_group_variation(mod)
+result <- check_group_variation(mod)
+result
+
+summary(result)
 \dontshow{\}) # examplesIf}
 }
 \references{

@@ -5,7 +5,8 @@
 #' Checks if variables vary within and/or between levels of grouping variables.
 #' This function can be used to infer the hierarchical structure of a given
 #' dataset, or detect any predictors that might cause heterogeneity bias (_Bell
-#' and Jones, 2015_).
+#' and Jones, 2015_). Use `summary()` on the output if you are mainly interested
+#' if and which predictors are possibly affected by heterogeneity bias.
 #'
 #' @param x A data frame or a mixed model. See details and examples.
 #' @param select Character vector (or formula) with names of variables to select
@@ -47,11 +48,14 @@
 #'
 #' ## Non-numeric variables
 #' These variables can have one of the following three labels:
-#' - _between_ - the variable is fixed (has exactly one unique, constant value) for each group.
-#' - _within_ - the variable is _crossed_ with the grouping variable - each value appear
-#'   within each group. The `tolerance_factor` argument controls if full balance is also required.
-#' - _both_ - the variable is partially nested within the grouping variable (or, when
-#'   `tolerance_factor = "balanced"` the variable is fully crossed, but not perfectly balanced).
+#' - _between_ - the variable is fixed (has exactly one unique, constant value)
+#'   for each group.
+#' - _within_ - the variable is _crossed_ with the grouping variable - each
+#'   value appear within each group. The `tolerance_factor` argument controls if
+#'   full balance is also required.
+#' - _both_ - the variable is partially nested within the grouping variable (or,
+#'   when `tolerance_factor = "balanced"` the variable is fully crossed, but not
+#'   perfectly balanced).
 #'
 #' Additionally, if variables are nested within the groups (i.e. variables vary
 #' within each group indicated in `by`, with each group having their own set of
@@ -61,7 +65,8 @@
 #' Variables that vary both within and between groups can cause a heterogeneity
 #' bias (_Bell and Jones, 2015_). It is recommended to center (person-mean
 #' centering) those variables to avoid this bias. See [`datawizard::demean()`]
-#' for further details.
+#' for further details. Use `summary()` to get a short text result that indicates
+#' if and which predictors are possibly affected by heterogeneity bias.
 #'
 #' @return A data frame with group, variable, and type columns.
 #'
@@ -112,7 +117,10 @@
 #'
 #' # Or
 #' mod <- lme4::lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
-#' check_group_variation(mod)
+#' result <- check_group_variation(mod)
+#' result
+#'
+#' summary(result)
 #'
 #' @export
 check_group_variation <- function(x, ...) {
@@ -245,6 +253,24 @@ print_html.check_group_variation <- function(x, ...) {
   }
 
   insight::export_table(x, caption = caption, by = by, format = "html", ...)
+}
+
+
+#' @export
+summary.check_group_variation <- function(x, ...) {
+  result <- unique(x$variable[startsWith(x$type, "both")])
+
+  if (length(result)) {
+    insight::format_alert(paste(
+      "Possible heterogeneity bias due to following predictors:",
+      insight::color_text(toString(result), "red")
+    ))
+  } else {
+    insight::format_alert(insight::color_text(
+      "No predictor found that could cause heterogeneity bias.",
+      "green"
+    ))
+  }
 }
 
 
