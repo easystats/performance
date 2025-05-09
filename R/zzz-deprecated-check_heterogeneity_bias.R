@@ -1,4 +1,4 @@
-#' @title Check model predictor for heterogeneity bias
+#' @title Check model predictor for heterogeneity bias *(Deprecated)*
 #' @name check_heterogeneity_bias
 #'
 #' @description

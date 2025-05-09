@@ -2,7 +2,7 @@
 % Please edit documentation in R/zzz-deprecated-check_heterogeneity_bias.R
 \name{check_heterogeneity_bias}
 \alias{check_heterogeneity_bias}
-\title{Check model predictor for heterogeneity bias}
+\title{Check model predictor for heterogeneity bias \emph{(Deprecated)}}
 \usage{
 check_heterogeneity_bias(x, select = NULL, by = NULL, nested = FALSE)
 }
