@@ -50,16 +50,14 @@
 #' These variables can have one of the following three labels:
 #' - _between_ - the variable is fixed (has exactly one unique, constant value)
 #'   for each group.
+#' - _nested_ - the variable vary within each group, with each group having
+#'   their own set of unique levels of the variable.
 #' - _within_ - the variable is _crossed_ with the grouping variable - each
 #'   value appear within each group. The `tolerance_factor` argument controls if
 #'   full balance is also required.
 #' - _both_ - the variable is partially nested within the grouping variable (or,
 #'   when `tolerance_factor = "balanced"` the variable is fully crossed, but not
 #'   perfectly balanced).
-#'
-#' Additionally, if variables are nested within the groups (i.e. variables vary
-#' within each group indicated in `by`, with each group having their own set of
-#' unique levels of the variable), a _nested_ label is added,
 #'
 #' ## Heterogeneity bias
 #' Variables that vary both within and between groups can cause a heterogeneity
@@ -271,6 +269,7 @@ summary.check_group_variation <- function(x, ...) {
       "green"
     ))
   }
+  invisible(result)
 }
 
 
@@ -329,7 +328,13 @@ summary.check_group_variation <- function(x, ...) {
   complete <- stats::complete.cases(group, variable)
   group <- droplevels(as.factor(group[complete]))
   variable <- variable[complete]
-  nested <- FALSE
+
+  # Is the variable fixed for each group?
+  n_uniques <- tapply(variable, group, insight::n_unique)
+  is_between <- all(n_uniques == 1L)
+  if (is_between) {
+    return("between")
+  }
 
   # Is the variable nested within each group?
   if (insight::check_if_installed("Matrix", reason = "for checking nested designs")) {
@@ -345,40 +350,33 @@ summary.check_group_variation <- function(x, ...) {
       "CsparseMatrix"
     )
     if (all(sm@p[2:(k + 1L)] - sm@p[1:k] <= 1L)) {
-      nested <- TRUE
+      return("nested")
     }
-  }
-
-  # Is the variable fixed for each group?
-  n_uniques <- tapply(variable, group, insight::n_unique)
-  is_between <- all(n_uniques == 1L)
-  if (is_between) {
-    return(ifelse(nested, "between (nested)", "between"))
   }
 
   # If each group has a different number of unique values,
   # then it is partially nested/crossed.
   if (!insight::has_single_value(n_uniques)) {
-    return(ifelse(nested, "both (nested)", "both"))
+    return("both")
   }
 
   # Is the variable crossed?
   variable_levels <- unique(variable)
   has_all <- tapply(variable, group, function(v) all(variable_levels %in% v))
   if (!all(has_all)) {
-    return(ifelse(nested, "both (nested)", "both"))
+    return("both")
   }
 
   if (tolerance_factor == "crossed") {
-    return(ifelse(nested, "within (nested)", "within"))
+    return("within")
   }
 
   # Is the variable crossed and balanced?
   tab <- table(variable, group)
   is_balanced <- all(apply(tab, 2, insight::has_single_value))
-  if (!is_balanced) {
-    return(ifelse(nested, "both (nested)", "both"))
+  if (is_balanced) {
+    return("within")
   }
 
-  ifelse(nested, "within (nested)", "within")
+  return("both")
 }

@@ -86,6 +86,8 @@ These variables can have one of the following three labels:
 \itemize{
 \item \emph{between} - the variable is fixed (has exactly one unique, constant value)
 for each group.
+\item \emph{nested} - the variable vary within each group, with each group having
+their own set of unique levels of the variable.
 \item \emph{within} - the variable is \emph{crossed} with the grouping variable - each
 value appear within each group. The \code{tolerance_factor} argument controls if
 full balance is also required.
@@ -93,10 +95,6 @@ full balance is also required.
 when \code{tolerance_factor = "balanced"} the variable is fully crossed, but not
 perfectly balanced).
 }
-
-Additionally, if variables are nested within the groups (i.e. variables vary
-within each group indicated in \code{by}, with each group having their own set of
-unique levels of the variable), a \emph{nested} label is added,
 }
 
 \subsection{Heterogeneity bias}{

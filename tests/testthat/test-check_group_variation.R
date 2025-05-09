@@ -1,35 +1,25 @@
 test_that("check_group_variation-1", {
-  skip_if_not_installed("lme4")
-  set.seed(11)
+
   group <- rep(LETTERS[1:3], each = 3)
   variable1 <- rep(letters[1:3], each = 3)
+  variable1b <- rep(letters[1:2], times = c(6, 3))
   variable2 <- rep(letters[1:3], times = 3)
   variable3 <- letters[1:9]
   variable4 <- c(letters[1:5], letters[1:4])
 
-  d <- data.frame(group, variable1, variable2, variable3, variable4)
+  d <- data.frame(group, variable1, variable1b, variable2, variable3, variable4)
   out <- check_group_variation(d, by = "group")
 
-  out2 <- c(
-    variable1 = lme4::isNested(variable1, group),
-    variable2 = lme4::isNested(variable2, group),
-    variable3 = lme4::isNested(variable3, group),
-    variable4 = lme4::isNested(variable4, group)
-  )
   expect_equal(
     out,
     data.frame(
-      group = c("group", "group", "group", "group"),
-      variable = c("variable1", "variable2", "variable3", "variable4"),
-      type = c("between (nested)", "within", "both (nested)", "both")
+      group = c("group", "group", "group", "group", "group"),
+      variable = c("variable1", "variable1b", "variable2", "variable3", "variable4"),
+      type = c("between", "between", "within", "nested", "both")
     ),
     ignore_attr = TRUE
   )
-  expect_equal(
-    endsWith(out$type, "(nested)"),
-    out2,
-    ignore_attr = TRUE
-  )
+
 
   set.seed(111)
   dat <- data.frame(
@@ -59,7 +49,7 @@ test_that("check_group_variation-1", {
     data.frame(
       group = c("id", "id", "id", "id", "id", "id"),
       variable = c("between_num", "within_num", "both_num", "between_fac", "within_fac", "both_fac"),
-      type = c("between", "within", "both", "between (nested)", "within", "both")
+      type = c("between", "within", "both", "between", "within", "both")
     ),
     ignore_attr = TRUE
   )
@@ -161,7 +151,7 @@ test_that("check_group_variation, multiple by", {
     data.frame(
       group = c("schoolid", "schoolid", "schoolid", "schoolid", "childid", "childid", "childid", "childid"),
       variable = c("lowinc", "female", "year", "math", "lowinc", "female", "year", "math"),
-      type = c("between (nested)", "both", "within", "both", "between", "between", "within", "both")
+      type = c("between", "both", "within", "both", "between", "between", "within", "both")
     ),
     ignore_attr = TRUE
   )
@@ -179,7 +169,7 @@ test_that("check_group_variation, multiple by", {
         "schoolid", "lowinc", "female", "year", "math"
       ),
       type = c(
-        "both (nested)", "between (nested)", "both", "within", "both",
+        "nested", "between", "both", "within", "both",
         "between", "between", "between", "within", "both"
       )
     ),
@@ -239,10 +229,10 @@ test_that("check_group_variation, numeric_as_factor", {
   )
   expect_identical(
     out1$type,
-    c("between (nested)", "both", "within", "both", "between", "between", "within", "both")
+    c("between", "both", "within", "both", "between", "between", "within", "both")
   )
   expect_identical(
     out2$type,
-    c("between (nested)", "both", "within", "both (nested)", "between", "between", "within", "both")
+    c("between", "both", "within", "nested", "between", "between", "within", "both")
   )
 })
