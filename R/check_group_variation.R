@@ -265,22 +265,42 @@ print_html.check_group_variation <- function(x, ...) {
 
 
 #' @export
-summary.check_group_variation <- function(object, ...) {
-  # TODO if more than one group, show which group(s)
-  result <- unique(object$Variable[startsWith(object$Variation, "both")])
+#' @rdname check_group_variation
+#' @param object result from `check_group_variation()`
+#' @param flatten Logical, if `TRUE`, the values are returned as character vector, not as list. Duplicated values are removed.
+summary.check_group_variation <- function(object, flatten = FALSE, ...) {
 
-  if (length(result)) {
-    insight::format_alert(paste(
-      "Possible heterogeneity bias due to following predictors:",
-      insight::color_text(toString(result), "red")
+  i <- which(object$Variation %in% "both")
+
+  if (length(i)) {
+    object <- object[i,,drop = FALSE]
+
+    result <- split(object$Variable, object$Group)
+    if (length(result) > 1L) {
+
+      txt <- paste0("- ", names(result), ": ", sapply(result, paste0, collapse = ", "), collapse = "\n")
+    } else {
+      txt <- paste0("- ", paste0(result[[1]], collapse = ", "))
+    }
+
+    insight::format_alert(paste0(
+      "Possible heterogeneity bias due to following predictors:\n",
+      insight::color_text(txt, "red")
     ))
+
+    if (flatten) {
+      return(invisible(unique(unlist(result, use.names = FALSE))))
+    } else {
+      return(invisible(result))
+    }
+
   } else {
     insight::format_alert(insight::color_text(
       "No predictor found that could cause heterogeneity bias.",
       "green"
     ))
+    return(invisible(NULL))
   }
-  invisible(result)
 }
 
 

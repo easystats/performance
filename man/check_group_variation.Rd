@@ -21,6 +21,8 @@ check_group_variation(x, ...)
   tolerance_factor = "crossed",
   ...
 )
+
+\method{summary}{check_group_variation}(object, flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A data frame or a mixed model. See details and examples.}
@@ -51,6 +53,10 @@ varying only "within" a grouping variable? Options are:
 \item \code{"balanced"} - if all groups have all unique values of X, \emph{with equal
 frequency}.
 }}
+
+\item{object}{result from \code{check_group_variation()}}
+
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character vector, not as list. Duplicated values are removed.}
 }
 \value{
 A data frame with Group, Variable, Variation and Design columns.
