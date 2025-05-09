@@ -252,4 +252,3 @@ test_that("check_group_variation, numeric_as_factor", {
     c("nested", NA, "crossed", "nested", NA, NA, "crossed", NA)
   )
 })
-

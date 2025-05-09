@@ -269,15 +269,13 @@ print_html.check_group_variation <- function(x, ...) {
 #' @param object result from `check_group_variation()`
 #' @param flatten Logical, if `TRUE`, the values are returned as character vector, not as list. Duplicated values are removed.
 summary.check_group_variation <- function(object, flatten = FALSE, ...) {
-
   i <- which(object$Variation %in% "both")
 
   if (length(i)) {
-    object <- object[i,,drop = FALSE]
+    object <- object[i, , drop = FALSE]
 
     result <- split(object$Variable, object$Group)
     if (length(result) > 1L) {
-
       txt <- paste0("- ", names(result), ": ", sapply(result, paste0, collapse = ", "), collapse = "\n")
     } else {
       txt <- paste0("- ", paste0(result[[1]], collapse = ", "))
@@ -293,7 +291,6 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
     } else {
       return(invisible(result))
     }
-
   } else {
     insight::format_alert(insight::color_text(
       "No predictor found that could cause heterogeneity bias.",
