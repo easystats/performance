@@ -3,7 +3,7 @@
 #'
 #' @description
 #' Checks if variables vary within and/or between levels of grouping variables.
-#' This function can be used to infer the hierarchical structure of a given
+#' This function can be used to infer the hierarchical Design of a given
 #' dataset, or detect any predictors that might cause heterogeneity bias (_Bell
 #' and Jones, 2015_). Use `summary()` on the output if you are mainly interested
 #' if and which predictors are possibly affected by heterogeneity bias.
@@ -57,8 +57,9 @@
 #'   when `tolerance_factor = "balanced"` the variable is fully crossed, but not
 #'   perfectly balanced).
 #'
-#' Additionally, non-numeric variables can have a nested or crossed structure
-#' related to the group variables. This is indicated in the column `Structure`.
+#' Additionally, the design of non-numeric variables is also checked to see if
+#' they are nested within the groups or is they are crossed. This is indicated
+#' in the column `Design`.
 #'
 #' ## Heterogeneity bias
 #' Variables that vary both within and between groups can cause a heterogeneity
@@ -67,7 +68,7 @@
 #' for further details. Use `summary()` to get a short text result that indicates
 #' if and which predictors are possibly affected by heterogeneity bias.
 #'
-#' @return A data frame with Group, Variable, Variation and Structure columns.
+#' @return A data frame with Group, Variable, Variation and Design columns.
 #'
 #' @seealso
 #' For further details, read the vignette
@@ -200,11 +201,11 @@ check_group_variation.data.frame <- function(x,
   )
   combinations <- combinations[combinations$Variable != combinations$Group, ]
   combinations$Variation <- NA_character_
-  combinations$Structure <- NA_character_
+  combinations$Design <- NA_character_
 
   # initialize lists
   for (i in seq_len(nrow(combinations))) {
-    combinations[i, c("Variation", "Structure")] <- .check_nested(
+    combinations[i, c("Variation", "Design")] <- .check_nested(
       x,
       combinations[i, "Group"],
       combinations[i, "Variable"],
@@ -288,7 +289,7 @@ summary.check_group_variation <- function(object, ...) {
 #' @keywords internals
 .check_nested <- function(data, by, predictor, ...) {
   if (insight::n_unique(data[[predictor]]) == 1L) {
-    return(c(NA_character_, NA_character_))
+    return(NA_character_)
   }
 
   UseMethod(".check_nested", data[[predictor]])

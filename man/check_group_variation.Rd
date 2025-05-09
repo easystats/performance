@@ -4,6 +4,7 @@
 \alias{check_group_variation}
 \alias{check_group_variation.default}
 \alias{check_group_variation.data.frame}
+\alias{summary.check_group_variation}
 \title{Check variables for within- and/or between-group variation}
 \usage{
 check_group_variation(x, ...)
@@ -52,11 +53,11 @@ frequency}.
 }}
 }
 \value{
-A data frame with Group, Variable, Variation and Structure columns.
+A data frame with Group, Variable, Variation and Design columns.
 }
 \description{
 Checks if variables vary within and/or between levels of grouping variables.
-This function can be used to infer the hierarchical structure of a given
+This function can be used to infer the hierarchical Design of a given
 dataset, or detect any predictors that might cause heterogeneity bias (\emph{Bell
 and Jones, 2015}). Use \code{summary()} on the output if you are mainly interested
 if and which predictors are possibly affected by heterogeneity bias.
@@ -94,8 +95,9 @@ when \code{tolerance_factor = "balanced"} the variable is fully crossed, but not
 perfectly balanced).
 }
 
-Additionally, non-numeric variables can have a nested or crossed structure
-related to the group variables. This is indicated in the column \code{Structure}.
+Additionally, the design of non-numeric variables is also checked to see if
+they are nested within the groups or is they are crossed. This is indicated
+in the column \code{Design}.
 }
 
 \subsection{Heterogeneity bias}{
