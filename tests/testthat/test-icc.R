@@ -39,6 +39,7 @@ test_that("icc", {
   skip_if_offline()
   skip_if_not_installed("httr2")
   m2 <- insight::download_model("stanreg_lmerMod_1")
+  skip_if(is.null(m2))
   expect_equal(
     icc(m2),
     data.frame(
@@ -55,6 +56,7 @@ test_that("icc", {
   skip_if_offline()
   skip_if_not_installed("httr2")
   m3 <- insight::download_model("brms_mixed_1")
+  skip_if(is.null(m3))
   set.seed(123)
   expect_equal(
     variance_decomposition(m3)$ICC_decomposed,
@@ -68,6 +70,7 @@ test_that("icc", {
   skip_if_offline()
   skip_if_not_installed("httr2")
   m3 <- insight::download_model("brms_mixed_1")
+  skip_if(is.null(m3))
   set.seed(123)
   expect_equal(
     icc(m3),

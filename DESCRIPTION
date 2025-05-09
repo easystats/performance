@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.13.0.7
+Version: 0.13.0.8
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -77,6 +77,7 @@ Imports:
     insight (>= 1.2.0),
     datawizard (>= 1.0.2),
     stats,
+    methods,
     utils
 Suggests:
     AER,
@@ -93,6 +94,7 @@ Suggests:
     CompQuadForm,
     correlation,
     cplm,
+    curl,
     dagitty,
     dbscan,
     DHARMa (>= 0.4.7),
