@@ -135,7 +135,14 @@ egsingle <- data.frame(
   )
 )
 
-check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
+result <- check_group_variation(
+  egsingle,
+  by = c("schoolid", "childid"),
+  include_by = TRUE
+)
+result
+
+summary(result)
 
 \dontshow{if (insight::check_if_installed("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 

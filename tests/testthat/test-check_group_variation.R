@@ -1,5 +1,4 @@
 test_that("check_group_variation-1", {
-
   group <- rep(LETTERS[1:3], each = 3)
   variable1 <- rep(letters[1:3], each = 3)
   variable1b <- rep(letters[1:2], times = c(6, 3))

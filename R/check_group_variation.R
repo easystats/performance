@@ -107,7 +107,14 @@
 #'   )
 #' )
 #'
-#' check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
+#' result <- check_group_variation(
+#'   egsingle,
+#'   by = c("schoolid", "childid"),
+#'   include_by = TRUE
+#' )
+#' result
+#'
+#' summary(result)
 #'
 #' @examplesIf insight::check_if_installed("lme4", quietly = TRUE)
 #'
@@ -247,12 +254,12 @@ print_html.check_group_variation <- function(x, ...) {
   caption <- "Check group variation"
 
   if (insight::n_unique(x$group) == 1L) {
-    x$group <- by <- NULL
+    x$group <- group_by <- NULL
   } else {
-    by <- "group"
+    group_by <- "group"
   }
 
-  insight::export_table(x, caption = caption, by = by, format = "html", ...)
+  insight::export_table(x, caption = caption, by = group_by, format = "html", ...)
 }
 
 
@@ -342,9 +349,9 @@ summary.check_group_variation <- function(object, ...) {
     k <- nlevels(f1)
     sm <- methods::as(
       methods::new("ngTMatrix",
-                   i = as.integer(group) - 1L,
-                   j = as.integer(f1) - 1L,
-                   Dim = c(length(levels(group)), k)
+        i = as.integer(group) - 1L,
+        j = as.integer(f1) - 1L,
+        Dim = c(nlevels(group), k)
       ),
       "CsparseMatrix"
     )
@@ -384,5 +391,5 @@ summary.check_group_variation <- function(object, ...) {
     return(c("within", "crossed"))
   }
 
-  return(c("both", "crossed"))
+  c("both", "crossed")
 }
