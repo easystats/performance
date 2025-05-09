@@ -58,7 +58,8 @@ check_normality.default <- function(x, ...) {
 
   if (!insight::model_info(x)$is_linear) {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
+      "Checking normality of residuals is only appropriate for linear models.",
+      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." #nolint
     )
     return(NULL)
   }
@@ -86,8 +87,8 @@ check_normality.glm <- function(x, ...) {
   class(out) <- unique(c("check_normality", "see_check_normality", class(out)))
 
   insight::format_alert(
-    "There's no formal statistical test for normality for generalized linear model.",
-    "Instead, please use `simulate_residuals()` and `check_residuals()` to check for uniformity of residuals."
+    "Generalized linear model residuals are not expected to follow a normal distribution.",
+    "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." #nolint
   )
   invisible(out)
 }
@@ -197,7 +198,8 @@ check_normality.merMod <- function(x, effects = "fixed", ...) {
   # valid model?
   if (!info$is_linear && effects == "fixed") {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
+      "Checking normality of residuals is only appropriate for linear models.",
+      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." #nolint
     )
     return(NULL)
   }
