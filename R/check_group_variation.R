@@ -186,19 +186,20 @@ check_group_variation.data.frame <- function(x,
 
   # create all combinations that should be checked
   combinations <- expand.grid(
-    variable = select,
-    group = by,
+    Variable = select,
+    Group = by,
     stringsAsFactors = FALSE
   )
-  combinations <- combinations[combinations$variable != combinations$group, ]
-  combinations$type <- NA_character_
+  combinations <- combinations[combinations$Variable != combinations$Group, ]
+  combinations$Variation <- NA_character_
+  combinations$Structure <- NA_character_
 
   # initialize lists
   for (i in seq_len(nrow(combinations))) {
-    combinations[i, "type"] <- .check_nested(
+    combinations[i, c("Variation", "Structure")] <- .check_nested(
       x,
-      combinations[i, "group"],
-      combinations[i, "variable"],
+      combinations[i, "Group"],
+      combinations[i, "Variable"],
       tolerance_numeric = tolerance_numeric,
       tolerance_factor = tolerance_factor
     )
@@ -206,8 +207,8 @@ check_group_variation.data.frame <- function(x,
 
   combinations <- datawizard::data_relocate(
     combinations,
-    select = "group",
-    before = "variable"
+    select = "Group",
+    before = "Variable"
   )
   class(combinations) <- c("check_group_variation", class(combinations))
   combinations
@@ -220,15 +221,15 @@ check_group_variation.data.frame <- function(x,
 print.check_group_variation <- function(x, ...) {
   x_orig <- x
 
-  if (insight::n_unique(x$group) == 1L) {
-    x$group <- NULL
-    caption <- c(sprintf("Check %s variation", x_orig$group[1]), "blue")
+  if (insight::n_unique(x$Group) == 1L) {
+    x$Group <- NULL
+    caption <- c(sprintf("Check %s variation", x_orig$Group[1]), "blue")
   } else {
-    caption <- as.list(sprintf("Check %s variation", unique(x$group)))
+    caption <- as.list(sprintf("Check %s variation", unique(x$Group)))
     caption <- lapply(caption, append, "blue")
-    x <- split(x, factor(x$group, levels = unique(x$group)))
+    x <- split(x, factor(x$Group, levels = unique(x$Group)))
     x[] <- lapply(x, function(i) {
-      i$group <- NULL
+      i$Group <- NULL
       i
     })
   }
@@ -256,7 +257,8 @@ print_html.check_group_variation <- function(x, ...) {
 
 #' @export
 summary.check_group_variation <- function(object, ...) {
-  result <- unique(object$variable[startsWith(object$type, "both")])
+  # TODO if more than one group, show which group(s)
+  result <- unique(object$Variable[startsWith(object$Variation, "both")])
 
   if (length(result)) {
     insight::format_alert(paste(
@@ -275,15 +277,16 @@ summary.check_group_variation <- function(object, ...) {
 
 # utils -------------------------------------------------------------
 
+#' @keywords internals
 .check_nested <- function(data, by, predictor, ...) {
   if (insight::n_unique(data[[predictor]]) == 1L) {
-    return(NA_character_)
+    return(c(NA_character_, NA_character_))
   }
 
   UseMethod(".check_nested", data[[predictor]])
 }
 
-
+#' @keywords internals
 .check_nested.numeric <- function(data, by, predictor, tolerance_numeric = 1e-05, ...) {
   # demean predictor
   d <- datawizard::demean(
@@ -303,19 +306,19 @@ summary.check_group_variation <- function(object, ...) {
   is_both <- is_between && is_within
 
   if (is_both) {
-    return("both")
+    return(c("both", NA_character_))
   }
   if (is_between) {
-    return("between")
+    return(c("between", NA_character_))
   }
   if (is_within) {
-    return("within")
+    return(c("within", NA_character_))
   }
 
   NA_character_
 }
 
-
+#' @keywords internals
 .check_nested.default <- function(data, by, predictor, tolerance_factor = "crossed", ...) {
   tolerance_factor <- insight::validate_argument(
     tolerance_factor,
@@ -329,12 +332,7 @@ summary.check_group_variation <- function(object, ...) {
   group <- droplevels(as.factor(group[complete]))
   variable <- variable[complete]
 
-  # Is the variable fixed for each group?
-  n_uniques <- tapply(variable, group, insight::n_unique)
-  is_between <- all(n_uniques == 1L)
-  if (is_between) {
-    return("between")
-  }
+  struct <- NA_character_
 
   # Is the variable nested within each group?
   if (insight::check_if_installed("Matrix", reason = "for checking nested designs")) {
@@ -343,40 +341,47 @@ summary.check_group_variation <- function(object, ...) {
     k <- nlevels(f1)
     sm <- methods::as(
       methods::new("ngTMatrix",
-        i = as.integer(group) - 1L,
-        j = as.integer(f1) - 1L,
-        Dim = c(length(levels(group)), k)
+                   i = as.integer(group) - 1L,
+                   j = as.integer(f1) - 1L,
+                   Dim = c(length(levels(group)), k)
       ),
       "CsparseMatrix"
     )
     if (all(sm@p[2:(k + 1L)] - sm@p[1:k] <= 1L)) {
-      return("nested")
+      struct <- "nested"
     }
+  }
+
+  # Is the variable fixed for each group?
+  n_uniques <- tapply(variable, group, insight::n_unique)
+  is_between <- all(n_uniques == 1L)
+  if (is_between) {
+    return(c("between", struct))
   }
 
   # If each group has a different number of unique values,
   # then it is partially nested/crossed.
   if (!insight::has_single_value(n_uniques)) {
-    return("both")
+    return(c("both", struct))
   }
 
   # Is the variable crossed?
   variable_levels <- unique(variable)
   has_all <- tapply(variable, group, function(v) all(variable_levels %in% v))
   if (!all(has_all)) {
-    return("both")
+    return(c("both", struct))
   }
 
   if (tolerance_factor == "crossed") {
-    return("within")
+    return(c("within", "crossed"))
   }
 
   # Is the variable crossed and balanced?
   tab <- table(variable, group)
   is_balanced <- all(apply(tab, 2, insight::has_single_value))
   if (is_balanced) {
-    return("within")
+    return(c("within", "crossed"))
   }
 
-  return("both")
+  return(c("both", "crossed"))
 }
