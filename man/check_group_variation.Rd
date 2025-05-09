@@ -4,6 +4,7 @@
 \alias{check_group_variation}
 \alias{check_group_variation.default}
 \alias{check_group_variation.data.frame}
+\alias{summary.check_group_variation}
 \title{Check variables for within- and/or between-group variation}
 \usage{
 check_group_variation(x, ...)
@@ -20,6 +21,8 @@ check_group_variation(x, ...)
   tolerance_factor = "crossed",
   ...
 )
+
+\method{summary}{check_group_variation}(object, flatten = FALSE, ...)
 }
 \arguments{
 \item{x}{A data frame or a mixed model. See details and examples.}
@@ -50,13 +53,17 @@ varying only "within" a grouping variable? Options are:
 \item \code{"balanced"} - if all groups have all unique values of X, \emph{with equal
 frequency}.
 }}
+
+\item{object}{result from \code{check_group_variation()}}
+
+\item{flatten}{Logical, if \code{TRUE}, the values are returned as character vector, not as list. Duplicated values are removed.}
 }
 \value{
-A data frame with group, variable, and type columns.
+A data frame with Group, Variable, Variation and Design columns.
 }
 \description{
 Checks if variables vary within and/or between levels of grouping variables.
-This function can be used to infer the hierarchical structure of a given
+This function can be used to infer the hierarchical Design of a given
 dataset, or detect any predictors that might cause heterogeneity bias (\emph{Bell
 and Jones, 2015}). Use \code{summary()} on the output if you are mainly interested
 if and which predictors are possibly affected by heterogeneity bias.
@@ -94,9 +101,9 @@ when \code{tolerance_factor = "balanced"} the variable is fully crossed, but not
 perfectly balanced).
 }
 
-Additionally, if variables are nested within the groups (i.e. variables vary
-within each group indicated in \code{by}, with each group having their own set of
-unique levels of the variable), a \emph{nested} label is added,
+Additionally, the design of non-numeric variables is also checked to see if
+they are nested within the groups or is they are crossed. This is indicated
+in the column \code{Design}.
 }
 
 \subsection{Heterogeneity bias}{
@@ -136,7 +143,14 @@ egsingle <- data.frame(
   )
 )
 
-check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
+result <- check_group_variation(
+  egsingle,
+  by = c("schoolid", "childid"),
+  include_by = TRUE
+)
+result
+
+summary(result)
 
 \dontshow{if (insight::check_if_installed("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 

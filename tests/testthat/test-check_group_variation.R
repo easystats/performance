@@ -1,35 +1,26 @@
 test_that("check_group_variation-1", {
-  skip_if_not_installed("lme4")
-  set.seed(11)
   group <- rep(LETTERS[1:3], each = 3)
+  constant <- "a"
   variable1 <- rep(letters[1:3], each = 3)
+  variable1b <- rep(letters[1:2], times = c(6, 3))
   variable2 <- rep(letters[1:3], times = 3)
   variable3 <- letters[1:9]
   variable4 <- c(letters[1:5], letters[1:4])
 
-  d <- data.frame(group, variable1, variable2, variable3, variable4)
+  d <- data.frame(group, constant, variable1, variable1b, variable2, variable3, variable4)
   out <- check_group_variation(d, by = "group")
 
-  out2 <- c(
-    variable1 = lme4::isNested(variable1, group),
-    variable2 = lme4::isNested(variable2, group),
-    variable3 = lme4::isNested(variable3, group),
-    variable4 = lme4::isNested(variable4, group)
-  )
   expect_equal(
     out,
     data.frame(
-      group = c("group", "group", "group", "group"),
-      variable = c("variable1", "variable2", "variable3", "variable4"),
-      type = c("between (nested)", "within", "both (nested)", "both")
+      Group = rep("group", 6),
+      Variable = c("constant", "variable1", "variable1b", "variable2", "variable3", "variable4"),
+      Variation = c(NA, "between", "between", "within", "both", "both"),
+      Design = c(NA, "nested", NA, "crossed", "nested", NA)
     ),
     ignore_attr = TRUE
   )
-  expect_equal(
-    endsWith(out$type, "(nested)"),
-    out2,
-    ignore_attr = TRUE
-  )
+
 
   set.seed(111)
   dat <- data.frame(
@@ -57,9 +48,10 @@ test_that("check_group_variation-1", {
   expect_equal(
     out,
     data.frame(
-      group = c("id", "id", "id", "id", "id", "id"),
-      variable = c("between_num", "within_num", "both_num", "between_fac", "within_fac", "both_fac"),
-      type = c("between", "within", "both", "between (nested)", "within", "both")
+      Group = c("id", "id", "id", "id", "id", "id"),
+      Variable = c("between_num", "within_num", "both_num", "between_fac", "within_fac", "both_fac"),
+      Variation = c("between", "within", "both", "between", "within", "both"),
+      Design = c(NA, NA, NA, "nested", "crossed", NA)
     ),
     ignore_attr = TRUE
   )
@@ -78,9 +70,10 @@ test_that("check_group_variation-2", {
   expect_equal(
     out,
     data.frame(
-      group = c("ID", "ID"),
-      variable = c("Sepal.Length", "Petal.Length"),
-      type = c("both", "both")
+      Group = c("ID", "ID"),
+      Variable = c("Sepal.Length", "Petal.Length"),
+      Variation = c("both", "both"),
+      Design = c(NA_character_)
     ),
     ignore_attr = TRUE
   )
@@ -96,9 +89,10 @@ test_that("check_group_variation-2", {
   expect_equal(
     out,
     data.frame(
-      group = c("ID", "ID", "ID", "ID"),
-      variable = c("age", "phq4", "QoL", "education"),
-      type = c("between", "both", "both", "between")
+      Group = c("ID", "ID", "ID", "ID"),
+      Variable = c("age", "phq4", "QoL", "education"),
+      Variation = c("between", "both", "both", "between"),
+      Design = c(NA_character_)
     ),
     ignore_attr = TRUE
   )
@@ -128,9 +122,10 @@ test_that("check_group_variation-2", {
   expect_equal(
     out,
     data.frame(
-      group = c("ID", "ID", "ID", "ID", "ID", "ID"),
-      variable = c("age", "phq4", "QoL", "education", "phq4w", "phq4b"),
-      type = c("between", "both", "both", "between", "within", "between")
+      Group = c("ID", "ID", "ID", "ID", "ID", "ID"),
+      Variable = c("age", "phq4", "QoL", "education", "phq4w", "phq4b"),
+      Variation = c("between", "both", "both", "between", "within", "between"),
+      Design = c(NA_character_)
     ),
     ignore_attr = TRUE
   )
@@ -159,9 +154,10 @@ test_that("check_group_variation, multiple by", {
   expect_equal(
     out,
     data.frame(
-      group = c("schoolid", "schoolid", "schoolid", "schoolid", "childid", "childid", "childid", "childid"),
-      variable = c("lowinc", "female", "year", "math", "lowinc", "female", "year", "math"),
-      type = c("between (nested)", "both", "within", "both", "between", "between", "within", "both")
+      Group = c("schoolid", "schoolid", "schoolid", "schoolid", "childid", "childid", "childid", "childid"),
+      Variable = c("lowinc", "female", "year", "math", "lowinc", "female", "year", "math"),
+      Variation = c("between", "both", "within", "both", "between", "between", "within", "both"),
+      Design = c("nested", rep(NA_character_, 7))
     ),
     ignore_attr = TRUE
   )
@@ -170,18 +166,19 @@ test_that("check_group_variation, multiple by", {
   expect_equal(
     out,
     data.frame(
-      group = c(
+      Group = c(
         "schoolid", "schoolid", "schoolid", "schoolid", "schoolid",
         "childid", "childid", "childid", "childid", "childid"
       ),
-      variable = c(
+      Variable = c(
         "childid", "lowinc", "female", "year", "math",
         "schoolid", "lowinc", "female", "year", "math"
       ),
-      type = c(
-        "both (nested)", "between (nested)", "both", "within", "both",
+      Variation = c(
+        "both", "between", "both", "within", "both",
         "between", "between", "between", "within", "both"
-      )
+      ),
+      Design = c("nested", "nested", rep(NA_character_, 8))
     ),
     ignore_attr = TRUE
   )
@@ -205,9 +202,10 @@ test_that("check_group_variation, models", {
   expect_equal(
     out,
     data.frame(
-      group = "Subject",
-      variable = "Days",
-      type = "within"
+      Group = "Subject",
+      Variable = "Days",
+      Variation = "within",
+      Design = NA_character_
     ),
     ignore_attr = TRUE
   )
@@ -238,11 +236,19 @@ test_that("check_group_variation, numeric_as_factor", {
     numeric_as_factor = TRUE
   )
   expect_identical(
-    out1$type,
-    c("between (nested)", "both", "within", "both", "between", "between", "within", "both")
+    out1$Variation,
+    c("between", "both", "within", "both", "between", "between", "within", "both")
   )
   expect_identical(
-    out2$type,
-    c("between (nested)", "both", "within", "both (nested)", "between", "between", "within", "both")
+    out2$Variation,
+    c("between", "both", "within", "both", "between", "between", "within", "both")
+  )
+  expect_identical(
+    out1$Design,
+    c("nested", NA, NA, NA, NA, NA, NA, NA)
+  )
+  expect_identical(
+    out2$Design,
+    c("nested", NA, "crossed", "nested", NA, NA, "crossed", NA)
   )
 })

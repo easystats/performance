@@ -3,7 +3,7 @@
 #'
 #' @description
 #' Checks if variables vary within and/or between levels of grouping variables.
-#' This function can be used to infer the hierarchical structure of a given
+#' This function can be used to infer the hierarchical Design of a given
 #' dataset, or detect any predictors that might cause heterogeneity bias (_Bell
 #' and Jones, 2015_). Use `summary()` on the output if you are mainly interested
 #' if and which predictors are possibly affected by heterogeneity bias.
@@ -57,9 +57,9 @@
 #'   when `tolerance_factor = "balanced"` the variable is fully crossed, but not
 #'   perfectly balanced).
 #'
-#' Additionally, if variables are nested within the groups (i.e. variables vary
-#' within each group indicated in `by`, with each group having their own set of
-#' unique levels of the variable), a _nested_ label is added,
+#' Additionally, the design of non-numeric variables is also checked to see if
+#' they are nested within the groups or is they are crossed. This is indicated
+#' in the column `Design`.
 #'
 #' ## Heterogeneity bias
 #' Variables that vary both within and between groups can cause a heterogeneity
@@ -68,7 +68,7 @@
 #' for further details. Use `summary()` to get a short text result that indicates
 #' if and which predictors are possibly affected by heterogeneity bias.
 #'
-#' @return A data frame with group, variable, and type columns.
+#' @return A data frame with Group, Variable, Variation and Design columns.
 #'
 #' @seealso
 #' For further details, read the vignette
@@ -108,7 +108,14 @@
 #'   )
 #' )
 #'
-#' check_group_variation(egsingle, by = c("schoolid", "childid"), include_by = TRUE)
+#' result <- check_group_variation(
+#'   egsingle,
+#'   by = c("schoolid", "childid"),
+#'   include_by = TRUE
+#' )
+#' result
+#'
+#' summary(result)
 #'
 #' @examplesIf insight::check_if_installed("lme4", quietly = TRUE)
 #'
@@ -188,19 +195,20 @@ check_group_variation.data.frame <- function(x,
 
   # create all combinations that should be checked
   combinations <- expand.grid(
-    variable = select,
-    group = by,
+    Variable = select,
+    Group = by,
     stringsAsFactors = FALSE
   )
-  combinations <- combinations[combinations$variable != combinations$group, ]
-  combinations$type <- NA_character_
+  combinations <- combinations[combinations$Variable != combinations$Group, ]
+  combinations$Variation <- NA_character_
+  combinations$Design <- NA_character_
 
   # initialize lists
   for (i in seq_len(nrow(combinations))) {
-    combinations[i, "type"] <- .check_nested(
+    combinations[i, c("Variation", "Design")] <- .check_nested(
       x,
-      combinations[i, "group"],
-      combinations[i, "variable"],
+      combinations[i, "Group"],
+      combinations[i, "Variable"],
       tolerance_numeric = tolerance_numeric,
       tolerance_factor = tolerance_factor
     )
@@ -208,8 +216,8 @@ check_group_variation.data.frame <- function(x,
 
   combinations <- datawizard::data_relocate(
     combinations,
-    select = "group",
-    before = "variable"
+    select = "Group",
+    before = "Variable"
   )
   class(combinations) <- c("check_group_variation", class(combinations))
   combinations
@@ -222,15 +230,15 @@ check_group_variation.data.frame <- function(x,
 print.check_group_variation <- function(x, ...) {
   x_orig <- x
 
-  if (insight::n_unique(x$group) == 1L) {
-    x$group <- NULL
-    caption <- c(sprintf("Check %s variation", x_orig$group[1]), "blue")
+  if (insight::n_unique(x$Group) == 1L) {
+    x$Group <- NULL
+    caption <- c(sprintf("Check %s variation", x_orig$Group[1]), "blue")
   } else {
-    caption <- as.list(sprintf("Check %s variation", unique(x$group)))
+    caption <- as.list(sprintf("Check %s variation", unique(x$Group)))
     caption <- lapply(caption, append, "blue")
-    x <- split(x, factor(x$group, levels = unique(x$group)))
+    x <- split(x, factor(x$Group, levels = unique(x$Group)))
     x[] <- lapply(x, function(i) {
-      i$group <- NULL
+      i$Group <- NULL
       i
     })
   }
@@ -247,35 +255,55 @@ print_html.check_group_variation <- function(x, ...) {
   caption <- "Check group variation"
 
   if (insight::n_unique(x$group) == 1L) {
-    x$group <- by <- NULL
+    x$group <- group_by <- NULL
   } else {
-    by <- "group"
+    group_by <- "group"
   }
 
-  insight::export_table(x, caption = caption, by = by, format = "html", ...)
+  insight::export_table(x, caption = caption, by = group_by, format = "html", ...)
 }
 
 
 #' @export
-summary.check_group_variation <- function(x, ...) {
-  result <- unique(x$variable[startsWith(x$type, "both")])
+#' @rdname check_group_variation
+#' @param object result from `check_group_variation()`
+#' @param flatten Logical, if `TRUE`, the values are returned as character vector, not as list. Duplicated values are removed.
+summary.check_group_variation <- function(object, flatten = FALSE, ...) {
+  i <- which(object$Variation %in% "both")
 
-  if (length(result)) {
-    insight::format_alert(paste(
-      "Possible heterogeneity bias due to following predictors:",
-      insight::color_text(toString(result), "red")
+  if (length(i)) {
+    object <- object[i, , drop = FALSE]
+
+    result <- split(object$Variable, object$Group)
+    if (length(result) > 1L) {
+      txt <- paste0("- ", names(result), ": ", sapply(result, paste0, collapse = ", "), collapse = "\n")
+    } else {
+      txt <- paste0("- ", paste0(result[[1]], collapse = ", "))
+    }
+
+    insight::format_alert(paste0(
+      "Possible heterogeneity bias due to following predictors:\n",
+      insight::color_text(txt, "red")
     ))
+
+    if (flatten) {
+      return(invisible(unique(unlist(result, use.names = FALSE))))
+    } else {
+      return(invisible(result))
+    }
   } else {
     insight::format_alert(insight::color_text(
       "No predictor found that could cause heterogeneity bias.",
       "green"
     ))
+    return(invisible(NULL))
   }
 }
 
 
 # utils -------------------------------------------------------------
 
+#' @keywords internals
 .check_nested <- function(data, by, predictor, ...) {
   if (insight::n_unique(data[[predictor]]) == 1L) {
     return(NA_character_)
@@ -284,7 +312,7 @@ summary.check_group_variation <- function(x, ...) {
   UseMethod(".check_nested", data[[predictor]])
 }
 
-
+#' @keywords internals
 .check_nested.numeric <- function(data, by, predictor, tolerance_numeric = 1e-05, ...) {
   # demean predictor
   d <- datawizard::demean(
@@ -304,19 +332,19 @@ summary.check_group_variation <- function(x, ...) {
   is_both <- is_between && is_within
 
   if (is_both) {
-    return("both")
+    return(c("both", NA_character_))
   }
   if (is_between) {
-    return("between")
+    return(c("between", NA_character_))
   }
   if (is_within) {
-    return("within")
+    return(c("within", NA_character_))
   }
 
   NA_character_
 }
 
-
+#' @keywords internals
 .check_nested.default <- function(data, by, predictor, tolerance_factor = "crossed", ...) {
   tolerance_factor <- insight::validate_argument(
     tolerance_factor,
@@ -329,7 +357,8 @@ summary.check_group_variation <- function(x, ...) {
   complete <- stats::complete.cases(group, variable)
   group <- droplevels(as.factor(group[complete]))
   variable <- variable[complete]
-  nested <- FALSE
+
+  struct <- NA_character_
 
   # Is the variable nested within each group?
   if (insight::check_if_installed("Matrix", reason = "for checking nested designs")) {
@@ -340,12 +369,12 @@ summary.check_group_variation <- function(x, ...) {
       methods::new("ngTMatrix",
         i = as.integer(group) - 1L,
         j = as.integer(f1) - 1L,
-        Dim = c(length(levels(group)), k)
+        Dim = c(nlevels(group), k)
       ),
       "CsparseMatrix"
     )
     if (all(sm@p[2:(k + 1L)] - sm@p[1:k] <= 1L)) {
-      nested <- TRUE
+      struct <- "nested"
     }
   }
 
@@ -353,32 +382,32 @@ summary.check_group_variation <- function(x, ...) {
   n_uniques <- tapply(variable, group, insight::n_unique)
   is_between <- all(n_uniques == 1L)
   if (is_between) {
-    return(ifelse(nested, "between (nested)", "between"))
+    return(c("between", struct))
   }
 
   # If each group has a different number of unique values,
   # then it is partially nested/crossed.
   if (!insight::has_single_value(n_uniques)) {
-    return(ifelse(nested, "both (nested)", "both"))
+    return(c("both", struct))
   }
 
   # Is the variable crossed?
   variable_levels <- unique(variable)
   has_all <- tapply(variable, group, function(v) all(variable_levels %in% v))
   if (!all(has_all)) {
-    return(ifelse(nested, "both (nested)", "both"))
+    return(c("both", struct))
   }
 
   if (tolerance_factor == "crossed") {
-    return(ifelse(nested, "within (nested)", "within"))
+    return(c("within", "crossed"))
   }
 
   # Is the variable crossed and balanced?
   tab <- table(variable, group)
   is_balanced <- all(apply(tab, 2, insight::has_single_value))
-  if (!is_balanced) {
-    return(ifelse(nested, "both (nested)", "both"))
+  if (is_balanced) {
+    return(c("within", "crossed"))
   }
 
-  ifelse(nested, "within (nested)", "within")
+  c("both", "crossed")
 }
