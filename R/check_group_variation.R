@@ -255,8 +255,8 @@ print_html.check_group_variation <- function(x, ...) {
 
 
 #' @export
-summary.check_group_variation <- function(x, ...) {
-  result <- unique(x$variable[startsWith(x$type, "both")])
+summary.check_group_variation <- function(object, ...) {
+  result <- unique(object$variable[startsWith(object$type, "both")])
 
   if (length(result)) {
     insight::format_alert(paste(
