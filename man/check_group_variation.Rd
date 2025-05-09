@@ -52,7 +52,7 @@ frequency}.
 }}
 }
 \value{
-A data frame with group, variable, and type columns.
+A data frame with Group, Variable, Variation and Structure columns.
 }
 \description{
 Checks if variables vary within and/or between levels of grouping variables.
@@ -86,8 +86,6 @@ These variables can have one of the following three labels:
 \itemize{
 \item \emph{between} - the variable is fixed (has exactly one unique, constant value)
 for each group.
-\item \emph{nested} - the variable vary within each group, with each group having
-their own set of unique levels of the variable.
 \item \emph{within} - the variable is \emph{crossed} with the grouping variable - each
 value appear within each group. The \code{tolerance_factor} argument controls if
 full balance is also required.
@@ -95,6 +93,9 @@ full balance is also required.
 when \code{tolerance_factor = "balanced"} the variable is fully crossed, but not
 perfectly balanced).
 }
+
+Additionally, non-numeric variables can have a nested or crossed structure
+related to the group variables. This is indicated in the column \code{Structure}.
 }
 
 \subsection{Heterogeneity bias}{

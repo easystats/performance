@@ -203,7 +203,7 @@ minus a coefficient times the MAD method (Leys et al., 2013).
 \item \strong{Robust Mahalanobis Distance}:
 A robust version of Mahalanobis distance using an Orthogonalized
 Gnanadesikan-Kettenring pairwise estimator (Gnanadesikan and Kettenring,
-1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:dist_ogk]{bigutilsr::dist_ogk()}}
+1972). Requires the \strong{bigutilsr} package. See the \code{\link[bigutilsr:covrob_ogk]{bigutilsr::dist_ogk()}}
 function.
 \item \strong{Minimum Covariance Determinant (MCD)}:
 Another robust version of Mahalanobis. Leys et al. (2018) argue that

@@ -50,14 +50,15 @@
 #' These variables can have one of the following three labels:
 #' - _between_ - the variable is fixed (has exactly one unique, constant value)
 #'   for each group.
-#' - _nested_ - the variable vary within each group, with each group having
-#'   their own set of unique levels of the variable.
 #' - _within_ - the variable is _crossed_ with the grouping variable - each
 #'   value appear within each group. The `tolerance_factor` argument controls if
 #'   full balance is also required.
 #' - _both_ - the variable is partially nested within the grouping variable (or,
 #'   when `tolerance_factor = "balanced"` the variable is fully crossed, but not
 #'   perfectly balanced).
+#'
+#' Additionally, non-numeric variables can have a nested or crossed structure
+#' related to the group variables. This is indicated in the column `Structure`.
 #'
 #' ## Heterogeneity bias
 #' Variables that vary both within and between groups can cause a heterogeneity
@@ -66,7 +67,7 @@
 #' for further details. Use `summary()` to get a short text result that indicates
 #' if and which predictors are possibly affected by heterogeneity bias.
 #'
-#' @return A data frame with group, variable, and type columns.
+#' @return A data frame with Group, Variable, Variation and Structure columns.
 #'
 #' @seealso
 #' For further details, read the vignette
