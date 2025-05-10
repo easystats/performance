@@ -5,15 +5,18 @@ test_that("model_performance.merMod", {
   skip_if_not_installed("httr2")
 
   model <- insight::download_model("lmerMod_1")
+  skip_if(is.null(model))
   expect_equal(model_performance(model, estimator = "ML")$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
   expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
 
   model <- insight::download_model("merMod_1")
+  skip_if(is.null(model))
   expect_equal(model_performance(model)$AIC, AIC(model), tolerance = 0.01)
   expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
   expect_equal(model_performance(model)$AIC, 23.58593, tolerance = 0.01)
 
   model <- insight::download_model("merMod_2")
+  skip_if(is.null(model))
   expect_equal(model_performance(model)$AIC, 21.4729, tolerance = 0.01)
 })
 
