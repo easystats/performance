@@ -127,14 +127,13 @@ be check against each other?</p></dd>
 
 
 <dt id="arg-tolerance-numeric">tolerance_numeric<a class="anchor" aria-label="anchor" href="#arg-tolerance-numeric"></a></dt>
-<dd><p>The amount of variation (calculated by <code><a href="https://rdrr.io/r/stats/cor.html" class="external-link">var()</a></code>, i.e.
-the variance of a variable) that is tolerated to indicate no within- or
-between-effect.</p></dd>
+<dd><p>The minimal percent of variation (observed <a href="icc.html">icc</a>)
+that is tolerated to indicate no within- or no between-effect.</p></dd>
 
 
 <dt id="arg-tolerance-factor">tolerance_factor<a class="anchor" aria-label="anchor" href="#arg-tolerance-factor"></a></dt>
 <dd><p>How should a non-numeric variable be identified as
-varying only "within" a grouping variable? Options are:</p><ul><li><p><code>"crossed"</code> - if all groups have all unique values of X.</p></li>
+varying <em>only</em> "within" a grouping variable? Options are:</p><ul><li><p><code>"crossed"</code> - if all groups have all unique values of X.</p></li>
 <li><p><code>"balanced"</code> - if all groups have all unique values of X, <em>with equal
 frequency</em>.</p></li>
 </ul></dd>
@@ -154,20 +153,24 @@ frequency</em>.</p></li>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function attempt to identify the hierarchical design of a dataset with
-respect to grouping variables (<code>by</code>). If <code>x</code> is a (mixed effect) model, the
-variability of the fixed effects predictors are checked with respect to the
-random grouping variables.</p><div class="section">
+    <p>This function attempt to identify the variability of a set of variables
+(<code>select</code>) with respect to one or more grouping variables (<code>by</code>). If <code>x</code> is a
+(mixed effect) model, the variability of the fixed effects predictors are
+checked with respect to the random grouping variables.
+<br><br>
+Generally, a variable is considered to vary <em>between</em> groups if is correlated
+with those groups, and to vary <em>within</em> groups if it not a constant within at
+least one group.</p><div class="section">
 <h3 id="numeric-variables">Numeric variables<a class="anchor" aria-label="anchor" href="#numeric-variables"></a></h3>
 
 
-<p>Numeric variables are portioned via <code><a href="https://easystats.github.io/datawizard/reference/demean.html" class="external-link">datawizard::demean()</a></code> to their within-
-and between-group components. Then, the variance for each variable's within-
-and between-group component is calculated. Variables with within-group
-variance larger than <code>tolerance_numeric</code> are labeled as <em>within</em>, variables
-with a between-group variance larger than <code>tolerance_numeric</code> are labeled as
-<em>between</em>, and variables with both variances larger than <code>tolerance_numeric</code>
-are labeled as <em>both</em>.</p>
+<p>Numeric variables are partitioned via <code><a href="https://easystats.github.io/datawizard/reference/demean.html" class="external-link">datawizard::demean()</a></code> to their
+within- and between-group components. Then, the variance for each of these
+two component is calculated. Variables with within-group variance larger than
+<code>tolerance_numeric</code> are labeled as <em>within</em>, variables with a between-group
+variance larger than <code>tolerance_numeric</code> are labeled as <em>between</em>, and
+variables with both variances larger than <code>tolerance_numeric</code> are labeled as
+<em>both</em>.</p>
 <p>Setting <code>numeric_as_factor = TRUE</code> causes numeric variables to be tested
 using the following criteria.</p>
 </div>
@@ -176,17 +179,18 @@ using the following criteria.</p>
 <h3 id="non-numeric-variables">Non-numeric variables<a class="anchor" aria-label="anchor" href="#non-numeric-variables"></a></h3>
 
 
-<p>These variables can have one of the following three labels:</p><ul><li><p><em>between</em> - the variable is fixed (has exactly one unique, constant value)
-for each group.</p></li>
-<li><p><em>within</em> - the variable is <em>crossed</em> with the grouping variable - each
-value appear within each group. The <code>tolerance_factor</code> argument controls if
-full balance is also required.</p></li>
-<li><p><em>both</em> - the variable is partially nested within the grouping variable (or,
-when <code>tolerance_factor = "balanced"</code> the variable is fully crossed, but not
+<p>These variables can have one of the following three labels:</p><ul><li><p><em>between</em> - the variable is correlated with the groups, <em>and</em> is fixed
+within each group (each group has exactly one unique, constant value)</p></li>
+<li><p><em>within</em> - the variable is <em>crossed</em> with the grouping variable, such that
+all possible values appear within each group. The <code>tolerance_factor</code>
+argument controls if full balance is also required.</p></li>
+<li><p><em>both</em> - the variable is correlated with the groups, but also varies within
+each group but is not fully crossed (or, when
+<code>tolerance_factor = "balanced"</code> the variable is fully crossed, but not
 perfectly balanced).</p></li>
 </ul><p>Additionally, the design of non-numeric variables is also checked to see if
-they are nested within the groups or is they are crossed. This is indicated
-in the column <code>Design</code>.</p>
+they are <em>nested</em> within the groups or is they are <em>crossed</em>. This is
+indicated by the <code>Design</code> column.</p>
 </div>
 
 <div class="section">
@@ -196,8 +200,9 @@ in the column <code>Design</code>.</p>
 <p>Variables that vary both within and between groups can cause a heterogeneity
 bias (<em>Bell and Jones, 2015</em>). It is recommended to center (person-mean
 centering) those variables to avoid this bias. See <code><a href="https://easystats.github.io/datawizard/reference/demean.html" class="external-link">datawizard::demean()</a></code>
-for further details. Use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> to get a short text result that indicates
-if and which predictors are possibly affected by heterogeneity bias.</p>
+for further details. Use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> to get a short text result that
+indicates if and which predictors are possibly affected by heterogeneity
+bias.</p>
 </div>
 
     </div>
