@@ -18,55 +18,60 @@
 #' @param include_by When there is more than one grouping variable, should they
 #' be check against each other?
 #' @param numeric_as_factor Should numeric variables be tested as factors?
-#' @param tolerance_numeric The amount of variation (calculated by `var()`, i.e.
-#' the variance of a variable) that is tolerated to indicate no within- or
-#' between-effect.
+#' @param tolerance_numeric The minimal percent of variation (observed [icc])
+#'   that is tolerated to indicate no within- or no between-effect.
 #' @param tolerance_factor How should a non-numeric variable be identified as
-#' varying only "within" a grouping variable? Options are:
+#' varying _only_ "within" a grouping variable? Options are:
 #' - `"crossed"` - if all groups have all unique values of X.
 #' - `"balanced"` - if all groups have all unique values of X, _with equal
 #'   frequency_.
 #' @param ... Arguments passed to other methods
 #'
 #' @details
-#' This function attempt to identify the hierarchical design of a dataset with
-#' respect to grouping variables (`by`). If `x` is a (mixed effect) model, the
-#' variability of the fixed effects predictors are checked with respect to the
-#' random grouping variables.
+#' This function attempt to identify the variability of a set of variables
+#' (`select`) with respect to one or more grouping variables (`by`). If `x` is a
+#' (mixed effect) model, the variability of the fixed effects predictors are
+#' checked with respect to the random grouping variables.
+#' \cr\cr
+#' Generally, a variable is considered to vary _between_ groups if is correlated
+#' with those groups, and to vary _within_ groups if it not a constant within at
+#' least one group.
 #'
 #' ## Numeric variables
-#' Numeric variables are portioned via [`datawizard::demean()`] to their within-
-#' and between-group components. Then, the variance for each variable's within-
-#' and between-group component is calculated. Variables with within-group
-#' variance larger than `tolerance_numeric` are labeled as _within_, variables
-#' with a between-group variance larger than `tolerance_numeric` are labeled as
-#' _between_, and variables with both variances larger than `tolerance_numeric`
-#' are labeled as _both_.
+#' Numeric variables are partitioned via [`datawizard::demean()`] to their
+#' within- and between-group components. Then, the variance for each of these
+#' two component is calculated. Variables with within-group variance larger than
+#' `tolerance_numeric` are labeled as _within_, variables with a between-group
+#' variance larger than `tolerance_numeric` are labeled as _between_, and
+#' variables with both variances larger than `tolerance_numeric` are labeled as
+#' _both_.
 #'
 #' Setting `numeric_as_factor = TRUE` causes numeric variables to be tested
 #' using the following criteria.
 #'
 #' ## Non-numeric variables
 #' These variables can have one of the following three labels:
-#' - _between_ - the variable is fixed (has exactly one unique, constant value)
-#'   for each group.
-#' - _within_ - the variable is _crossed_ with the grouping variable - each
-#'   value appear within each group. The `tolerance_factor` argument controls if
-#'   full balance is also required.
-#' - _both_ - the variable is partially nested within the grouping variable (or,
-#'   when `tolerance_factor = "balanced"` the variable is fully crossed, but not
+#' - _between_ - the variable is correlated with the groups, _and_ is fixed
+#'   within each group (each group has exactly one unique, constant value)
+#' - _within_ - the variable is _crossed_ with the grouping variable, such that
+#'   all possible values appear within each group. The `tolerance_factor`
+#'   argument controls if full balance is also required.
+#' - _both_ - the variable is correlated with the groups, but also varies within
+#'   each group but is not fully crossed (or, when
+#'   `tolerance_factor = "balanced"` the variable is fully crossed, but not
 #'   perfectly balanced).
 #'
 #' Additionally, the design of non-numeric variables is also checked to see if
-#' they are nested within the groups or is they are crossed. This is indicated
-#' in the column `Design`.
+#' they are _nested_ within the groups or is they are _crossed_. This is
+#' indicated by the `Design` column.
 #'
 #' ## Heterogeneity bias
 #' Variables that vary both within and between groups can cause a heterogeneity
 #' bias (_Bell and Jones, 2015_). It is recommended to center (person-mean
 #' centering) those variables to avoid this bias. See [`datawizard::demean()`]
-#' for further details. Use `summary()` to get a short text result that indicates
-#' if and which predictors are possibly affected by heterogeneity bias.
+#' for further details. Use `summary()` to get a short text result that
+#' indicates if and which predictors are possibly affected by heterogeneity
+#' bias.
 #'
 #' @return A data frame with Group, Variable, Variation and Design columns.
 #'
@@ -327,8 +332,12 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
   within_name <- paste0(predictor, "_within")
   between_name <- paste0(predictor, "_between")
 
-  is_between <- stats::var(d[[between_name]], na.rm = TRUE) > tolerance_numeric
-  is_within <- stats::var(d[[within_name]], na.rm = TRUE) > tolerance_numeric
+  var_between <- stats::var(d[[between_name]], na.rm = TRUE)
+  var_within <- stats::var(d[[within_name]], na.rm = TRUE)
+  icc <- var_between / (var_between + var_within)
+
+  is_between <- icc > tolerance_numeric
+  is_within <- (1 - icc) > tolerance_numeric
   is_both <- is_between && is_within
 
   if (is_both) {
