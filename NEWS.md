@@ -1,5 +1,12 @@
 # performance (devel)
 
+## Breaking Changes
+
+* The `"Increased SE"` column in the output of `check_collinearity()` was renamed
+  into `"adj. VIF"` (=adjusted VIF). Furthermore, the computation of the adjusted
+  VIF now correctly accounts for the numbers of levels (i.e. degrees of freedom)
+  for factors.
+
 ## New functions
 
 * New function `check_group_variation()` to check within-/between-group
