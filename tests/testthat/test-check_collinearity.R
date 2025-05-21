@@ -237,3 +237,25 @@ test_that("check_collinearity, glmmTMB hurdle w/o zi", {
   out <- check_collinearity(mod_trunc_error)
   expect_equal(out$VIF, c(1.03414, 1.03414), tolerance = 1e-3)
 })
+
+
+test_that("check_collinearity, validate adjusted vif against car", {
+  data(mtcars)
+  mod <- lm(mpg ~ cyl + hp + am, data = mtcars)
+  out1 <- car::vif(mod)
+  out2 <- check_collinearity(mod)
+  expect_equal(out1, out2$VIF, tolerance = 1e-3, ignore_attr = TRUE)
+
+  mod <- lm(mpg ~ as.factor(cyl) + hp + gear, data = mtcars)
+  out1 <- car::vif(mod)
+  out2 <- check_collinearity(mod)
+  expect_equal(out1[, 1], out2$VIF, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out1[, 3], out2$VIF_adjusted, tolerance = 1e-3, ignore_attr = TRUE)
+
+  mtcars$gear <- factor(mtcars$gear)
+  mod <- lm(mpg ~ as.factor(cyl) + hp + gear, data = mtcars)
+  out1 <- car::vif(mod)
+  out2 <- check_collinearity(mod)
+  expect_equal(out1[, 1], out2$VIF, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out1[, 3], out2$VIF_adjusted, tolerance = 1e-3, ignore_attr = TRUE)
+})

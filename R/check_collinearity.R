@@ -31,6 +31,13 @@
 #'
 #' @seealso [`see::plot.see_check_collinearity()`] for options to customize the plot.
 #'
+#' @details
+#' `check_collinearity()` calculates the generalized variance inflation factor
+#' (Fox & Monette 1992), which also returns valid results for categorical
+#' variables. Additionally, for categorical variabes with more than two levels,
+#' the adjusted VIF is returned (which is `VIF^(1/(2*<nlevels>)`, see Fox &
+#' Monette 1992).
+#'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation
 #' between predictors. What matters is the association between one or more
@@ -201,8 +208,8 @@ plot.check_collinearity <- function(x, ...) {
   x <- insight::format_table(x)
   x <- datawizard::data_rename(
     x,
-    select = "SE_factor",
-    replacement = "Increased SE",
+    select = c("SE_factor", "VIF_adjusted"),
+    replacement = c("Increased SE", "VIF (adj.)"),
     verbose = FALSE
   )
 
@@ -546,6 +553,7 @@ check_collinearity.zerocount <- function(x,
       VIF = result,
       VIF_CI_low = 1 / (1 - conf_ints$CI_low),
       VIF_CI_high = 1 / (1 - conf_ints$CI_high),
+      VIF_adjusted = .adjusted_vif(x, result, model_terms),
       SE_factor = sqrt(result),
       Tolerance = 1 / result,
       Tolerance_CI_low = 1 - conf_ints$CI_high,
@@ -599,6 +607,31 @@ check_collinearity.zerocount <- function(x,
     ci_lo <- ci_up <- NA
   }
   list(CI_low = ci_lo, CI_high = ci_up)
+}
+
+
+.adjusted_vif <- function(x, result, model_terms) {
+  tryCatch(
+    {
+      # get data from model frame, so we know which variables are factors
+      d <- insight::get_data(x, source = "mf", verbose = FALSE)
+      # degrees of freedom per variable - init to 1
+      dof <- rep_len(1, length(model_terms))
+      # find factors, which were converted inside formula. we need to convert
+      # these into real factors now, to determine their number of levels
+      factors <- attributes(d)$factors
+      d[factors] <- lapply(d[factors], as.factor)
+      # add factors from data frame
+      factors <- unique(c(factors, colnames(d)[vapply(d, is.factor, logical(1))]))
+      # find position of factors in model terms
+      pos <- match(factors, insight::clean_names(model_terms))
+      # copy df for factors
+      dof[pos] <- vapply(d[factors], nlevels, numeric(1)) - 1
+      # finally, calculate adjusted vif
+      result^(1 / (2 * dof))
+    },
+    error = function(e) NULL
+  )
 }
 
 

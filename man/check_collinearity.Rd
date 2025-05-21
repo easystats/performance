@@ -51,6 +51,13 @@ considered as a collinearity check for smooth terms in GAMs. Confidence
 intervals for VIF and tolerance are based on Marcoulides et al. (2019,
 Appendix B).
 }
+\details{
+\code{check_collinearity()} calculates the generalized variance inflation factor
+(Fox & Monette 1992), which also returns valid results for categorical
+variables. Additionally, for categorical variabes with more than two levels,
+the adjusted VIF is returned (which is \verb{VIF^(1/(2*<nlevels>)}, see Fox &
+Monette 1992).
+}
 \note{
 The code to compute the confidence intervals for the VIF and tolerance
 values was adapted from the Appendix B from the Marcoulides et al. paper.
