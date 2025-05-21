@@ -238,7 +238,6 @@ test_that("check_collinearity, glmmTMB hurdle w/o zi", {
   expect_equal(out$VIF, c(1.03414, 1.03414), tolerance = 1e-3)
 })
 
-
 test_that("check_collinearity, validate adjusted vif against car", {
   skip_if_not_installed("car")
   data(mtcars)
