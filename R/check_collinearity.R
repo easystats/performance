@@ -544,12 +544,12 @@ check_collinearity.zerocount <- function(x,
     data.frame(
       Term = model_terms,
       VIF = result,
-      VIF_CI_low = 1 / (1 - conf_ints[1]),
-      VIF_CI_high = 1 / (1 - conf_ints[2]),
+      VIF_CI_low = 1 / (1 - conf_ints$CI_low),
+      VIF_CI_high = 1 / (1 - conf_ints$CI_high),
       SE_factor = sqrt(result),
       Tolerance = 1 / result,
-      Tolerance_CI_low = 1 - conf_ints[2],
-      Tolerance_CI_high = 1 - conf_ints[1],
+      Tolerance_CI_low = 1 - conf_ints$CI_high,
+      Tolerance_CI_high = 1 - conf_ints$CI_low,
       stringsAsFactors = FALSE
     ),
     column = "Term"
@@ -567,10 +567,10 @@ check_collinearity.zerocount <- function(x,
   )
 
   attr(out, "CI") <- data.frame(
-    VIF_CI_low = 1 / (1 - conf_ints[1]),
-    VIF_CI_high = 1 / (1 - conf_ints[2]),
-    Tolerance_CI_low = 1 - conf_ints[2],
-    Tolerance_CI_high = 1 - conf_ints[1],
+    VIF_CI_low = 1 / (1 - conf_ints$CI_low),
+    VIF_CI_high = 1 / (1 - conf_ints$CI_high),
+    Tolerance_CI_low = 1 - conf_ints$CI_high,
+    Tolerance_CI_high = 1 - conf_ints$CI_low,
     stringsAsFactors = FALSE
   )
 
@@ -580,6 +580,7 @@ check_collinearity.zerocount <- function(x,
 
 
 .vif_ci <- function(x, result, ci) {
+  browser()
   # CIs, see Appendix B 10.1177/0013164418817803
   r <- 1 - (1 / result)
   n <- insight::n_obs(x)
@@ -598,7 +599,7 @@ check_collinearity.zerocount <- function(x,
   } else {
     ci_lo <- ci_up <- NA
   }
-  c(ci_lo, ci_up)
+  list(CI_low = ci_lo, CI_high = ci_up)
 }
 
 
