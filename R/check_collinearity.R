@@ -25,9 +25,10 @@
 #'
 #' @return A data frame with information about name of the model term, the
 #' (generalized) variance inflation factor and associated confidence intervals,
-#' the factor by which the standard error is increased due to possible
-#' correlation with other terms, and tolerance values (including confidence
-#' intervals), where `tolerance = 1/vif`.
+#' the adjusted VIF, which is the factor by which the standard error is
+#' increased due to possible correlation with other terms (inflation due to
+#' collinearity), and tolerance values (including confidence intervals), where
+#' `tolerance = 1/vif`.
 #'
 #' @seealso [`see::plot.see_check_collinearity()`] for options to customize the plot.
 #'
@@ -66,7 +67,7 @@
 #' correlation of that predictor with other predictors. A value between 5 and
 #' 10 indicates a moderate correlation, while VIF values larger than 10 are a
 #' sign for high, not tolerable correlation of model predictors (_James et al.
-#' 2013_). The *Increased SE* column in the output indicates how much larger
+#' 2013_). The *adjusted VIF* column in the output indicates how much larger
 #' the standard error is due to the association with other predictors
 #' conditional on the remaining variables in the model. Note that these
 #' thresholds, although commonly used, are also criticized for being too high.
@@ -208,8 +209,8 @@ plot.check_collinearity <- function(x, ...) {
   x <- insight::format_table(x)
   x <- datawizard::data_rename(
     x,
-    select = c("SE_factor", "VIF_adjusted"),
-    replacement = c("Increased SE", "VIF (adj.)"),
+    select = "SE_factor",
+    replacement = "adj. VIF",
     verbose = FALSE
   )
 
@@ -553,8 +554,7 @@ check_collinearity.zerocount <- function(x,
       VIF = result,
       VIF_CI_low = 1 / (1 - conf_ints$CI_low),
       VIF_CI_high = 1 / (1 - conf_ints$CI_high),
-      VIF_adjusted = .adjusted_vif(x, result, model_terms),
-      SE_factor = sqrt(result),
+      SE_factor = .adjusted_vif(x, result, model_terms),
       Tolerance = 1 / result,
       Tolerance_CI_low = 1 - conf_ints$CI_high,
       Tolerance_CI_high = 1 - conf_ints$CI_low,
@@ -568,7 +568,7 @@ check_collinearity.zerocount <- function(x,
     data.frame(
       Term = model_terms,
       VIF = result,
-      SE_factor = sqrt(result),
+      SE_factor = .adjusted_vif(x, result, model_terms),
       stringsAsFactors = FALSE
     ),
     column = "Term"
@@ -630,7 +630,7 @@ check_collinearity.zerocount <- function(x,
       # finally, calculate adjusted vif
       result^(1 / (2 * dof))
     },
-    error = function(e) NULL
+    error = function(e) sqrt(result)
   )
 }
 

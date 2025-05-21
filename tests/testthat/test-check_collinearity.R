@@ -9,15 +9,15 @@ test_that("check_collinearity, correct order in print", {
       "",
       "Low Correlation",
       "",
-      " Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI",
-      " gear 1.53 [1.19,  2.51]         1.24      0.65     [0.40, 0.84]",
+      " Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI",
+      " gear 1.53 [1.19,  2.51]     1.24      0.65     [0.40, 0.84]",
       "",
       "Moderate Correlation",
       "",
-      " Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI",
-      "   wt 5.05 [3.21,  8.41]         2.25      0.20     [0.12, 0.31]",
-      "  cyl 5.41 [3.42,  9.04]         2.33      0.18     [0.11, 0.29]",
-      " disp 9.97 [6.08, 16.85]         3.16      0.10     [0.06, 0.16]"
+      " Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI",
+      "   wt 5.05 [3.21,  8.41]     2.25      0.20     [0.12, 0.31]",
+      "  cyl 5.41 [3.42,  9.04]     2.33      0.18     [0.11, 0.29]",
+      " disp 9.97 [6.08, 16.85]     3.16      0.10     [0.06, 0.16]"
     )
   )
 })
