@@ -2,34 +2,32 @@
 #' @name check_collinearity
 #'
 #' @description
+#' `check_collinearity()` checks regression models for multicollinearity by
+#' calculating the (generalized) variance inflation factor (VIF, Fox & Monette
+#' 1992). `multicollinearity()` is an alias for `check_collinearity()`.
+#' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#' considered as a collinearity check for smooth terms in GAMs. Confidence
+#' intervals for VIF and tolerance are based on Marcoulides et al. (2019,
+#' Appendix B).
 #'
-#'  `check_collinearity()` checks regression models for
-#'  multicollinearity by calculating the variance inflation factor (VIF).
-#'  `multicollinearity()` is an alias for `check_collinearity()`.
-#'  `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
-#'  considered as a collinearity check for smooth terms in GAMs. Confidence
-#'  intervals for VIF and tolerance are based on Marcoulides et al.
-#'  (2019, Appendix B).
-#'
-#' @param x A model object (that should at least respond to `vcov()`,
-#'  and if possible, also to `model.matrix()` - however, it also should
-#'  work without `model.matrix()`).
+#' @param x A model object (that should at least respond to `vcov()`, and if
+#' possible, also to `model.matrix()` - however, it also should work without
+#' `model.matrix()`).
 #' @param component For models with zero-inflation component, multicollinearity
-#'  can be checked for the conditional model (count component,
-#'  `component = "conditional"` or `component = "count"`),
-#'  zero-inflation component (`component = "zero_inflated"` or
-#'  `component = "zi"`) or both components (`component = "all"`).
-#'  Following model-classes are currently supported: `hurdle`,
-#'  `zeroinfl`, `zerocount`, `MixMod` and `glmmTMB`.
+#' can be checked for the conditional model (count component, `component =
+#' "conditional"` or `component = "count"`), zero-inflation component
+#' (`component = "zero_inflated"` or `component = "zi"`) or both components
+#' (`component = "all"`). Following model-classes are currently supported:
+#' `hurdle`, `zeroinfl`, `zerocount`, `MixMod` and `glmmTMB`.
 #' @param ci Confidence Interval (CI) level for VIF and tolerance values.
 #' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with information about name of the model term, the
-#'   variance inflation factor and associated confidence intervals, the factor
-#'   by which the standard error is increased due to possible correlation
-#'   with other terms, and tolerance values (including confidence intervals),
-#'   where `tolerance = 1/vif`.
+#' (generalized) variance inflation factor and associated confidence intervals,
+#' the factor by which the standard error is increased due to possible
+#' correlation with other terms, and tolerance values (including confidence
+#' intervals), where `tolerance = 1/vif`.
 #'
 #' @seealso [`see::plot.see_check_collinearity()`] for options to customize the plot.
 #'
@@ -94,6 +92,9 @@
 #' 1 (total lack of identifiability).
 #'
 #' @references
+#'
+#' - Fox, J., & Monette, G. (1992). Generalized Collinearity Diagnostics.
+#'   Journal of the American Statistical Association, 87(417), 178–183.
 #'
 #' - Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 #'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
