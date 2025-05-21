@@ -240,6 +240,7 @@ test_that("check_collinearity, glmmTMB hurdle w/o zi", {
 
 
 test_that("check_collinearity, validate adjusted vif against car", {
+  skip_if_not_installed("car")
   data(mtcars)
   mod <- lm(mpg ~ cyl + hp + am, data = mtcars)
   out1 <- car::vif(mod)
