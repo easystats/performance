@@ -536,36 +536,19 @@ check_collinearity.zerocount <- function(x,
     )
   }
 
-  # CIs, see Appendix B 10.1177/0013164418817803
-  r <- 1 - (1 / result)
-  n <- insight::n_obs(x)
-  p <- insight::n_parameters(x)
-
   # check if CIs are requested
-  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
-    ci_lvl <- (1 + ci) / 2
-
-    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
-    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
-    se_log <- se / (r * (1 - r))
-    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
-    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
-    ci_lo <- stats::plogis(ci_log_lo)
-    ci_up <- stats::plogis(ci_log_up)
-  } else {
-    ci_lo <- ci_up <- NA
-  }
+  conf_ints <- .vif_ci(x, result, ci)
 
   out <- insight::text_remove_backticks(
     data.frame(
       Term = model_terms,
       VIF = result,
-      VIF_CI_low = 1 / (1 - ci_lo),
-      VIF_CI_high = 1 / (1 - ci_up),
+      VIF_CI_low = 1 / (1 - conf_ints[1]),
+      VIF_CI_high = 1 / (1 - conf_ints[2]),
       SE_factor = sqrt(result),
       Tolerance = 1 / result,
-      Tolerance_CI_low = 1 - ci_up,
-      Tolerance_CI_high = 1 - ci_lo,
+      Tolerance_CI_low = 1 - conf_ints[2],
+      Tolerance_CI_high = 1 - conf_ints[1],
       stringsAsFactors = FALSE
     ),
     column = "Term"
@@ -583,15 +566,38 @@ check_collinearity.zerocount <- function(x,
   )
 
   attr(out, "CI") <- data.frame(
-    VIF_CI_low = 1 / (1 - ci_lo),
-    VIF_CI_high = 1 / (1 - ci_up),
-    Tolerance_CI_low = 1 - ci_up,
-    Tolerance_CI_high = 1 - ci_lo,
+    VIF_CI_low = 1 / (1 - conf_ints[1]),
+    VIF_CI_high = 1 / (1 - conf_ints[2]),
+    Tolerance_CI_low = 1 - conf_ints[2],
+    Tolerance_CI_high = 1 - conf_ints[1],
     stringsAsFactors = FALSE
   )
 
   class(out) <- c("check_collinearity", "see_check_collinearity", "data.frame")
   out
+}
+
+
+.vif_ci <- function(x, result, ci) {
+  # CIs, see Appendix B 10.1177/0013164418817803
+  r <- 1 - (1 / result)
+  n <- insight::n_obs(x)
+  p <- insight::n_parameters(x)
+
+  if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
+    ci_lvl <- (1 + ci) / 2
+
+    logis_r <- stats::qlogis(r) # see Raykov & Marcoulides (2011, ch. 7) for details.
+    se <- sqrt((1 - r^2)^2 * (n - p - 1)^2 / ((n^2 - 1) * (n + 3)))
+    se_log <- se / (r * (1 - r))
+    ci_log_lo <- logis_r - stats::qnorm(ci_lvl) * se_log
+    ci_log_up <- logis_r + stats::qnorm(ci_lvl) * se_log
+    ci_lo <- stats::plogis(ci_log_lo)
+    ci_up <- stats::plogis(ci_log_up)
+  } else {
+    ci_lo <- ci_up <- NA
+  }
+  c(ci_lo, ci_up)
 }
 
 
