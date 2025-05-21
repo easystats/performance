@@ -580,7 +580,6 @@ check_collinearity.zerocount <- function(x,
 
 
 .vif_ci <- function(x, result, ci) {
-  browser()
   # CIs, see Appendix B 10.1177/0013164418817803
   r <- 1 - (1 / result)
   n <- insight::n_obs(x)
