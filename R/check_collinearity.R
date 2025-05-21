@@ -35,9 +35,9 @@
 #' @details
 #' `check_collinearity()` calculates the generalized variance inflation factor
 #' (Fox & Monette 1992), which also returns valid results for categorical
-#' variables. Additionally, for categorical variabes with more than two levels,
-#' the adjusted VIF is returned (which is `VIF^(1/(2*<nlevels>)`, see Fox &
-#' Monette 1992).
+#' variables. The *adjusted* VIF is calculated as `VIF^(1/(2*<nlevels>)` (Fox &
+#' Monette 1992), which is identical to the square root of the VIF for numeric
+#' predictors, or for categorical variabes with two levels.
 #'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation

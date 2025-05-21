@@ -38,9 +38,10 @@ can be checked for the conditional model (count component, \code{component = "co
 \value{
 A data frame with information about name of the model term, the
 (generalized) variance inflation factor and associated confidence intervals,
-the factor by which the standard error is increased due to possible
-correlation with other terms, and tolerance values (including confidence
-intervals), where \code{tolerance = 1/vif}.
+the adjusted VIF, which is the factor by which the standard error is
+increased due to possible correlation with other terms (inflation due to
+collinearity), and tolerance values (including confidence intervals), where
+\code{tolerance = 1/vif}.
 }
 \description{
 \code{check_collinearity()} checks regression models for multicollinearity by
@@ -54,9 +55,9 @@ Appendix B).
 \details{
 \code{check_collinearity()} calculates the generalized variance inflation factor
 (Fox & Monette 1992), which also returns valid results for categorical
-variables. Additionally, for categorical variabes with more than two levels,
-the adjusted VIF is returned (which is \verb{VIF^(1/(2*<nlevels>)}, see Fox &
-Monette 1992).
+variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<nlevels>)} (Fox &
+Monette 1992), which is identical to the square root of the VIF for numeric
+predictors, or for categorical variabes with two levels.
 }
 \note{
 The code to compute the confidence intervals for the VIF and tolerance
@@ -96,7 +97,7 @@ multicollinearity of model terms. A VIF less than 5 indicates a low
 correlation of that predictor with other predictors. A value between 5 and
 10 indicates a moderate correlation, while VIF values larger than 10 are a
 sign for high, not tolerable correlation of model predictors (\emph{James et al.
-2013}). The \emph{Increased SE} column in the output indicates how much larger
+2013}). The \emph{adjusted VIF} column in the output indicates how much larger
 the standard error is due to the association with other predictors
 conditional on the remaining variables in the model. Note that these
 thresholds, although commonly used, are also criticized for being too high.
