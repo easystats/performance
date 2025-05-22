@@ -24,7 +24,7 @@ test_that("performance_reliability - Bayesian", {
   skip_if_not_installed("httr2")
   skip_if_not_installed("brms")
 
-  m <- insight::download_model("brms_mixed_10")
+  m <- suppressWarnings(insight::download_model("brms_mixed_10"))
   skip_if(is.null(m))
   out <- performance_reliability(m)
   expect_identical(dim(out), c(2L, 3L))
