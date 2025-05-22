@@ -112,6 +112,7 @@
 #' performance_reliability(m)
 #' performance_dvour(m)
 #'
+#' \donttest{
 #' m <- lme4::lmer(
 #'   RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
 #'   data = df
@@ -125,6 +126,7 @@
 #' )
 #' performance_reliability(m)
 #' performance_dvour(m)
+#' }
 #' @export
 performance_reliability <- function(x, ...) {
   UseMethod("performance_reliability")

@@ -118,6 +118,7 @@ m <- glmmTMB::glmmTMB(RT ~ (1 | Participant) + (1 | Trial), data = df)
 performance_reliability(m)
 performance_dvour(m)
 
+\donttest{
 m <- lme4::lmer(
   RT ~ Illusion_Difference + (Illusion_Difference | Participant) + (1 | Trial),
   data = df
@@ -131,6 +132,7 @@ m <- glmmTMB::glmmTMB(
 )
 performance_reliability(m)
 performance_dvour(m)
+}
 \dontshow{\}) # examplesIf}
 }
 \references{
