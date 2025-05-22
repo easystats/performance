@@ -2,36 +2,42 @@
 #' @name check_collinearity
 #'
 #' @description
+#' `check_collinearity()` checks regression models for multicollinearity by
+#' calculating the (generalized) variance inflation factor (VIF, Fox & Monette
+#' 1992). `multicollinearity()` is an alias for `check_collinearity()`.
+#' `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
+#' considered as a collinearity check for smooth terms in GAMs. Confidence
+#' intervals for VIF and tolerance are based on Marcoulides et al. (2019,
+#' Appendix B).
 #'
-#'  `check_collinearity()` checks regression models for
-#'  multicollinearity by calculating the variance inflation factor (VIF).
-#'  `multicollinearity()` is an alias for `check_collinearity()`.
-#'  `check_concurvity()` is a wrapper around `mgcv::concurvity()`, and can be
-#'  considered as a collinearity check for smooth terms in GAMs. Confidence
-#'  intervals for VIF and tolerance are based on Marcoulides et al.
-#'  (2019, Appendix B).
-#'
-#' @param x A model object (that should at least respond to `vcov()`,
-#'  and if possible, also to `model.matrix()` - however, it also should
-#'  work without `model.matrix()`).
+#' @param x A model object (that should at least respond to `vcov()`, and if
+#' possible, also to `model.matrix()` - however, it also should work without
+#' `model.matrix()`).
 #' @param component For models with zero-inflation component, multicollinearity
-#'  can be checked for the conditional model (count component,
-#'  `component = "conditional"` or `component = "count"`),
-#'  zero-inflation component (`component = "zero_inflated"` or
-#'  `component = "zi"`) or both components (`component = "all"`).
-#'  Following model-classes are currently supported: `hurdle`,
-#'  `zeroinfl`, `zerocount`, `MixMod` and `glmmTMB`.
+#' can be checked for the conditional model (count component, `component =
+#' "conditional"` or `component = "count"`), zero-inflation component
+#' (`component = "zero_inflated"` or `component = "zi"`) or both components
+#' (`component = "all"`). Following model-classes are currently supported:
+#' `hurdle`, `zeroinfl`, `zerocount`, `MixMod` and `glmmTMB`.
 #' @param ci Confidence Interval (CI) level for VIF and tolerance values.
 #' @param verbose Toggle off warnings or messages.
 #' @param ... Currently not used.
 #'
 #' @return A data frame with information about name of the model term, the
-#'   variance inflation factor and associated confidence intervals, the factor
-#'   by which the standard error is increased due to possible correlation
-#'   with other terms, and tolerance values (including confidence intervals),
-#'   where `tolerance = 1/vif`.
+#' (generalized) variance inflation factor and associated confidence intervals,
+#' the adjusted VIF, which is the factor by which the standard error is
+#' increased due to possible correlation with other terms (inflation due to
+#' collinearity), and tolerance values (including confidence intervals), where
+#' `tolerance = 1/vif`.
 #'
 #' @seealso [`see::plot.see_check_collinearity()`] for options to customize the plot.
+#'
+#' @details
+#' `check_collinearity()` calculates the generalized variance inflation factor
+#' (Fox & Monette 1992), which also returns valid results for categorical
+#' variables. The *adjusted* VIF is calculated as `VIF^(1/(2*<nlevels>)` (Fox &
+#' Monette 1992), which is identical to the square root of the VIF for numeric
+#' predictors, or for categorical variables with two levels.
 #'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation
@@ -61,7 +67,7 @@
 #' correlation of that predictor with other predictors. A value between 5 and
 #' 10 indicates a moderate correlation, while VIF values larger than 10 are a
 #' sign for high, not tolerable correlation of model predictors (_James et al.
-#' 2013_). The *Increased SE* column in the output indicates how much larger
+#' 2013_). The *adjusted VIF* column in the output indicates how much larger
 #' the standard error is due to the association with other predictors
 #' conditional on the remaining variables in the model. Note that these
 #' thresholds, although commonly used, are also criticized for being too high.
@@ -94,6 +100,9 @@
 #' 1 (total lack of identifiability).
 #'
 #' @references
+#'
+#' - Fox, J., & Monette, G. (1992). Generalized Collinearity Diagnostics.
+#'   Journal of the American Statistical Association, 87(417), 178–183.
 #'
 #' - Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 #'   Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
@@ -201,7 +210,7 @@ plot.check_collinearity <- function(x, ...) {
   x <- datawizard::data_rename(
     x,
     select = "SE_factor",
-    replacement = "Increased SE",
+    replacement = "adj. VIF",
     verbose = FALSE
   )
 
@@ -536,12 +545,54 @@ check_collinearity.zerocount <- function(x,
     )
   }
 
+  # check if CIs are requested
+  conf_ints <- .vif_ci(x, result, ci)
+
+  out <- insight::text_remove_backticks(
+    data.frame(
+      Term = model_terms,
+      VIF = result,
+      VIF_CI_low = 1 / (1 - conf_ints$CI_low),
+      VIF_CI_high = 1 / (1 - conf_ints$CI_high),
+      SE_factor = .adjusted_vif(x, result, model_terms),
+      Tolerance = 1 / result,
+      Tolerance_CI_low = 1 - conf_ints$CI_high,
+      Tolerance_CI_high = 1 - conf_ints$CI_low,
+      stringsAsFactors = FALSE
+    ),
+    column = "Term"
+  )
+  attr(out, "ci") <- ci
+
+  attr(out, "data") <- insight::text_remove_backticks(
+    data.frame(
+      Term = model_terms,
+      VIF = result,
+      SE_factor = .adjusted_vif(x, result, model_terms),
+      stringsAsFactors = FALSE
+    ),
+    column = "Term"
+  )
+
+  attr(out, "CI") <- data.frame(
+    VIF_CI_low = 1 / (1 - conf_ints$CI_low),
+    VIF_CI_high = 1 / (1 - conf_ints$CI_high),
+    Tolerance_CI_low = 1 - conf_ints$CI_high,
+    Tolerance_CI_high = 1 - conf_ints$CI_low,
+    stringsAsFactors = FALSE
+  )
+
+  class(out) <- c("check_collinearity", "see_check_collinearity", "data.frame")
+  out
+}
+
+
+.vif_ci <- function(x, result, ci) {
   # CIs, see Appendix B 10.1177/0013164418817803
   r <- 1 - (1 / result)
   n <- insight::n_obs(x)
   p <- insight::n_parameters(x)
 
-  # check if CIs are requested
   if (!is.null(ci) && !is.na(ci) && is.numeric(ci)) {
     ci_lvl <- (1 + ci) / 2
 
@@ -555,43 +606,32 @@ check_collinearity.zerocount <- function(x,
   } else {
     ci_lo <- ci_up <- NA
   }
+  list(CI_low = ci_lo, CI_high = ci_up)
+}
 
-  out <- insight::text_remove_backticks(
-    data.frame(
-      Term = model_terms,
-      VIF = result,
-      VIF_CI_low = 1 / (1 - ci_lo),
-      VIF_CI_high = 1 / (1 - ci_up),
-      SE_factor = sqrt(result),
-      Tolerance = 1 / result,
-      Tolerance_CI_low = 1 - ci_up,
-      Tolerance_CI_high = 1 - ci_lo,
-      stringsAsFactors = FALSE
-    ),
-    column = "Term"
+
+.adjusted_vif <- function(x, result, model_terms) {
+  tryCatch(
+    {
+      # get data from model frame, so we know which variables are factors
+      d <- insight::get_data(x, source = "mf", verbose = FALSE)
+      # degrees of freedom per variable - init to 1
+      dof <- rep_len(1, length(model_terms))
+      # find factors, which were converted inside formula. we need to convert
+      # these into real factors now, to determine their number of levels
+      factors <- attributes(d)$factors
+      d[factors] <- lapply(d[factors], as.factor)
+      # add factors from data frame
+      factors <- unique(c(factors, colnames(d)[vapply(d, is.factor, logical(1))]))
+      # find position of factors in model terms
+      pos <- match(factors, insight::clean_names(model_terms))
+      # copy df for factors
+      dof[pos] <- vapply(d[factors], nlevels, numeric(1)) - 1
+      # finally, calculate adjusted vif
+      result^(1 / (2 * dof))
+    },
+    error = function(e) sqrt(result)
   )
-  attr(out, "ci") <- ci
-
-  attr(out, "data") <- insight::text_remove_backticks(
-    data.frame(
-      Term = model_terms,
-      VIF = result,
-      SE_factor = sqrt(result),
-      stringsAsFactors = FALSE
-    ),
-    column = "Term"
-  )
-
-  attr(out, "CI") <- data.frame(
-    VIF_CI_low = 1 / (1 - ci_lo),
-    VIF_CI_high = 1 / (1 - ci_up),
-    Tolerance_CI_low = 1 - ci_up,
-    Tolerance_CI_high = 1 - ci_lo,
-    stringsAsFactors = FALSE
-  )
-
-  class(out) <- c("check_collinearity", "see_check_collinearity", "data.frame")
-  out
 }
 
 
