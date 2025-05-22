@@ -2,9 +2,9 @@
 #'
 #' @description These functions provide information about the reliability of
 #' group-level estimates (i.e., random effects) in mixed models. They are useful
-#' to assess whether there the predictors yield consistent group-level
-#' variability. "Group-level" can refer, for instance, to different participants
-#' in a study, and the predictors to the effect of some experimental condition.
+#' to assess whether the predictors yield consistent group-level variability.
+#' "Group-level" can refer, for instance, to different participants in a study,
+#' and the predictors to the effect of some experimental condition.
 #'
 #' The conceptually related functions are implemented,
 #' `performance_reliability()`, based on Rouder & Mehrvarz (2024) that uses
@@ -144,11 +144,7 @@ performance_reliability.default <- function(x, ...) {
   random <- lapply(insight::get_random(x), function(z) min(table(z)))
   v <- insight::get_variance(x) # Extract variance components
 
-  original_params <- parameters::parameters(
-    x,
-    effects = "random",
-    group_level = TRUE
-  )
+  original_params <- parameters::parameters(x, effects = "grouplevel", verbose = FALSE)
   params <- as.data.frame(original_params)
 
   # bayesian model? if yes, copy clean parameter names
@@ -168,7 +164,6 @@ performance_reliability.default <- function(x, ...) {
         Group = grp,
         Parameter = param
       )
-
 
       # Based on Rouder's (2024) paper https://journals.sagepub.com/doi/10.1177/09637214231220923
       # "What part of reliability is invariant to trial size? Consider the ratio
@@ -204,12 +199,8 @@ performance_reliability.default <- function(x, ...) {
     }
   }
 
-  # clean for brms
-  if (inherits(x, "brmsfit")) {
-    reliability <- reliability[!is.na(reliability$Reliability), ]
-  }
-
-  reliability
+  # clean
+  reliability[!is.na(reliability$Reliability), ]
 }
 
 

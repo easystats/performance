@@ -17,9 +17,9 @@ performance_dvour(x, ...)
 \description{
 These functions provide information about the reliability of
 group-level estimates (i.e., random effects) in mixed models. They are useful
-to assess whether there the predictors yield consistent group-level
-variability. "Group-level" can refer, for instance, to different participants
-in a study, and the predictors to the effect of some experimental condition.
+to assess whether the predictors yield consistent group-level variability.
+"Group-level" can refer, for instance, to different participants in a study,
+and the predictors to the effect of some experimental condition.
 
 The conceptually related functions are implemented,
 \code{performance_reliability()}, based on Rouder & Mehrvarz (2024) that uses
