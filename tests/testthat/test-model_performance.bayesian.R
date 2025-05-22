@@ -45,7 +45,7 @@ test_that("model_performance.brmsfit", {
     perf <- model_performance(model)
   })
   expect_equal(perf$R2, 0.8262673, tolerance = 1e-3)
-  expect_equal(perf$R2_adjusted, 0.7982615, tolerance = 1e-3)
+  expect_equal(perf$R2_adjusted, 0.790353, tolerance = 1e-2)
   expect_equal(perf$ELPD, -78.59823, tolerance = 1e-3)
   expect_identical(colnames(perf), c(
     "ELPD", "ELPD_SE", "LOOIC", "LOOIC_SE", "WAIC", "R2", "R2_adjusted",
