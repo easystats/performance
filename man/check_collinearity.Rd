@@ -57,7 +57,7 @@ Appendix B).
 (Fox & Monette 1992), which also returns valid results for categorical
 variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<nlevels>)} (Fox &
 Monette 1992), which is identical to the square root of the VIF for numeric
-predictors, or for categorical variabes with two levels.
+predictors, or for categorical variables with two levels.
 }
 \note{
 The code to compute the confidence intervals for the VIF and tolerance

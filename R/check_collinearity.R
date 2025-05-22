@@ -37,7 +37,7 @@
 #' (Fox & Monette 1992), which also returns valid results for categorical
 #' variables. The *adjusted* VIF is calculated as `VIF^(1/(2*<nlevels>)` (Fox &
 #' Monette 1992), which is identical to the square root of the VIF for numeric
-#' predictors, or for categorical variabes with two levels.
+#' predictors, or for categorical variables with two levels.
 #'
 #' @section Multicollinearity:
 #' Multicollinearity should not be confused with a raw strong correlation
