@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,27 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.14.0" id="performance-0140">performance 0.14.0<a class="anchor" aria-label="anchor" href="#performance-0140"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-14-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-14-0"></a></h3>
+<ul><li>The <code>"Increased SE"</code> column in the output of <code><a href="../reference/check_collinearity.html">check_collinearity()</a></code> was renamed into <code>"adj. VIF"</code> (=adjusted VIF). Furthermore, the computation of the adjusted VIF now correctly accounts for the numbers of levels (i.e. degrees of freedom) for factors.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-functions-0-14-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-14-0"></a></h3>
+<ul><li><p>New function <code><a href="../reference/check_group_variation.html">check_group_variation()</a></code> to check within-/between-group variability (this function will replace <code><a href="../reference/check_heterogeneity_bias.html">check_heterogeneity_bias()</a></code> in future releases.)</p></li>
+<li><p>New functions <code><a href="../reference/performance_reliability.html">performance_reliability()</a></code> and <code><a href="../reference/performance_reliability.html">performance_dvour()</a></code>. These functions provide information about the reliability of group-level estimates (i.e., random effects) in mixed models.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-0-14-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-14-0"></a></h3>
+<ul><li>Singularity checks with <code><a href="../reference/check_singularity.html">check_singularity()</a></code> are now more efficient and also include the random effects for the dispersion component (from package <em>glmmTMB</em>). Furthermore, a <code>check</code> argument allows to check for general singularity (for the full model), or can return singularity checks for each random effects term separately.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-14-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-14-0"></a></h3>
+<ul><li><p>Fixed issue with wrong computation of pseudo-R2 for some models where the base-model (null model) was updated using the original data, which could include missing values. Now the model frame is used, ensuring the correct number of observations in the returned base-model, thus calculating the correct log-likelihood and returning the correct pseudo-R2.</p></li>
+<li><p>Fixed examples in <code><a href="../reference/check_outliers.html">check_outliers()</a></code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.13.0" id="performance-0130">performance 0.13.0<a class="anchor" aria-label="anchor" href="#performance-0130"></a></h2><p class="text-muted">CRAN release: 2025-01-15</p>
 <div class="section level3">
