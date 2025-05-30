@@ -76,7 +76,7 @@ print.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, ...) {
   }
 
   # value formatting
-  x$p <- insight::format_p(x$p, p_digits = p_digits, name = NULL, ...)
+  x$p <- insight::format_p(x$p, digits = p_digits, name = NULL, ...)
 
   if (is.null(attributes(x)$estimator)) {
     estimator_string <- ""
