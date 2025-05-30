@@ -1,3 +1,10 @@
+# performance (devel)
+
+## Changes
+
+* Formatting of p-values in `test_likelihoodratio()` is now consistent with
+  formatted p-values from other functions.
+
 # performance 0.14.0
 
 ## Breaking Changes
