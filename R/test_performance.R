@@ -264,9 +264,9 @@ plot.test_performance <- function(x, ...) {
 
 
 #' @export
-format.test_performance <- function(x, digits = 2, p_digits = 3, ...) {
+format.test_performance <- function(x, digits = 2, ...) {
   # Format cols and names
-  out <- insight::format_table(x, digits = digits, p_digits = p_digits, exact = FALSE, ...)
+  out <- insight::format_table(x, digits = digits, exact = FALSE, ...)
 
   if (isTRUE(attributes(x)$is_nested)) {
     footer <- paste0(
@@ -285,30 +285,30 @@ format.test_performance <- function(x, digits = 2, p_digits = 3, ...) {
 
 
 #' @export
-print.test_performance <- function(x, digits = 2, p_digits = 3, ...) {
-  out <- insight::export_table(format(x, digits = digits, p_digits = p_digits, ...), ...)
+print.test_performance <- function(x, digits = 2, ...) {
+  out <- insight::export_table(format(x, digits = digits, ...), ...)
   cat(out)
 }
 
 
 #' @export
-print_md.test_performance <- function(x, digits = 2, p_digits = 3, ...) {
-  insight::export_table(format(x, digits = digits, p_digits = p_digits, ...), format = "markdown", ...)
+print_md.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "markdown", ...)
 }
 
 
 #' @export
-print_html.test_performance <- function(x, digits = 2, p_digits = 3, ...) {
-  insight::export_table(format(x, digits = digits, p_digits = p_digits, ...), format = "html", ...)
+print_html.test_performance <- function(x, digits = 2, ...) {
+  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
 }
 
 
 #' @export
-display.test_performance <- function(object, format = "markdown", digits = 2, p_digits = 3, ...) {
+display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
   if (format == "markdown") {
-    print_md(x = object, digits = digits, p_digits = p_digits, ...)
+    print_md(x = object, digits = digits, ...)
   } else {
-    print_html(x = object, digits = digits, p_digits = p_digits, ...)
+    print_html(x = object, digits = digits, ...)
   }
 }
 
