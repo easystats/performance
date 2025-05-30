@@ -66,7 +66,7 @@ plot.test_likelihoodratio <- function(x, ...) {
 
 
 #' @export
-print.test_likelihoodratio <- function(x, digits = 2, ...) {
+print.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, ...) {
   # Footer
   if ("LogLik" %in% names(x)) {
     best <- which.max(x$LogLik)
@@ -76,7 +76,7 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
   }
 
   # value formatting
-  x$p <- insight::format_p(x$p, name = NULL)
+  x$p <- insight::format_p(x$p, p_digits = p_digits, name = NULL, ...)
 
   if (is.null(attributes(x)$estimator)) {
     estimator_string <- ""
