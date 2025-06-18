@@ -34,5 +34,5 @@ test_that("check_residuals.psych", {
   data(Harman.5, package = "psych")
   pc <- psych::principal(Harman.5, 2, rotate = "varimax")
   out <- check_residuals(pc)
-  expect_equal(as.vector(out), 0.9137001, tolerance = 1e.4)
+  expect_equal(as.vector(out), 0.9137001, tolerance = 1e-4)
 })
