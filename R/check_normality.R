@@ -75,6 +75,28 @@ check_normality.default <- function(x, ...) {
   p.val
 }
 
+# PCA / FA ---------------
+
+#' @export
+check_normality.parameters_efa <- function(x, ...) {
+  # check for normality of residuals
+  p.val <- .check_normality(insight::get_residuals(x), x)
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  attr(p.val, "is_fa") <- TRUE
+  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+
+  p.val
+}
+
+#' @export
+check_normality.fa <- check_normality.parameters_efa
+
+#' @export
+check_normality.principal <- check_normality.parameters_efa
+
 # glm ---------------
 
 #' @export
@@ -180,6 +202,21 @@ print.check_normality <- function(x, ...) {
       }
     }
   }
+
+  # add FA / PCA information
+  if (isTRUE(attributes(x)$is_fa)) {
+    res <- insight::get_residuals(attributes(x)$data)
+    lge_resid_tot <- sum(abs(res) > 0.05)
+    lge_resid_pct <- lge_resid_tot / length(res)
+    cat(paste0(
+      "\nAbsolute residuals > 0.05 = ",
+      lge_resid_tot,
+      " (",
+      insight::format_percent(lge_resid_pct),
+      ")\n"
+    ))
+  }
+
   invisible(x)
 }
 

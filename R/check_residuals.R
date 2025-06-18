@@ -66,6 +66,19 @@ check_residuals.default <- function(x, alternative = "two.sided",
   }
 }
 
+
+#' @export
+check_residuals.fa <- function(x, ...) {
+  check_normality(x, ...)
+}
+
+#' @export
+check_residuals.principal <- check_residuals.fa
+
+#' @export
+check_residuals.parameters_efa <- check_residuals.fa
+
+
 #' @export
 check_residuals.performance_simres <- function(x, alternative = "two.sided",
                                                distribution = "punif", ...) {
