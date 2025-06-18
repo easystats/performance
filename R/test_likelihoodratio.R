@@ -73,7 +73,7 @@ print.test_likelihoodratio <- function(x, digits = 2, ...) {
 
 
 #' @export
-format.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, ...) {
+format.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, format = "text", ...) {
   # Footer
   if ("LogLik" %in% names(x)) {
     best <- which.max(x$LogLik)
@@ -91,21 +91,27 @@ format.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, ...) {
     estimator_string <- sprintf(" (%s-estimator)", toupper(attributes(x)$estimator))
   }
 
+  if (format == "text") {
+    caption <- c(paste0("# Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string), "blue")
+  } else {
+    caption <- paste0("Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string)
+  }
+
   attr(x, "table_footer") <- footer
-  attr(x, "table_caption") <- c(paste0("# Likelihood-Ratio-Test (LRT) for Model Comparison", estimator_string), "blue")
+  attr(x, "table_caption") <- caption
   x
 }
 
 
 #' @export
 print_md.test_likelihoodratio <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "markdown", ...)
+  insight::export_table(format(x, digits = digits, format = "markdown", ...), format = "markdown", ...)
 }
 
 
 #' @export
 print_html.test_likelihoodratio <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
+  insight::export_table(format(x, digits = digits, format = "html", ...), format = "html", ...)
 }
 
 
