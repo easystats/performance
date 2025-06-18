@@ -71,7 +71,7 @@ License: GPL-3
 URL: https://easystats.github.io/performance/
 BugReports: https://github.com/easystats/performance/issues
 Depends:
-    R (>= 3.6)
+    R (>= 4.0)
 Imports:
     bayestestR (>= 0.16.0),
     insight (>= 1.3.0),
@@ -98,6 +98,7 @@ Suggests:
     dagitty,
     dbscan,
     DHARMa (>= 0.4.7),
+    discovr,
     estimatr,
     fixest,
     flextable,
