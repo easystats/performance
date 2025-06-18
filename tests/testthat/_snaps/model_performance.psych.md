@@ -89,7 +89,7 @@
     Output
       # Indices of model performance
       
-      Chi2(167) | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |      RMSEA  CI |       BIC
+      Chi2(167) | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |   RMSEA 90% CI |       BIC
       ------------------------------------------------------------------------------------------
       267.210   |   < .001 | 0.013 |          0.015 | 0.991 | 0.015 | [0.012, 0.019] | -1044.082
 
