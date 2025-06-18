@@ -33,7 +33,7 @@ help addressing this.'><meta property="og:image" content="https://easystats.gith
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -224,8 +224,6 @@ error variance in hierarchical models.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">RT</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Participant</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Trial</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">performance_reliability</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Cannot extract confidence intervals for random variance parameters from</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   models with more than one grouping factor.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         Group   Parameter Reliability</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 Participant (Intercept)  0.15386342</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       Trial (Intercept)  0.00588784</span>
@@ -257,8 +255,6 @@ error variance in hierarchical models.</p></li>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">df</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">performance_reliability</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Cannot extract confidence intervals for random variance parameters from</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   models with more than one grouping factor.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         Group           Parameter Reliability</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 Participant         (Intercept) 0.218590368</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 Participant Illusion_Difference 0.166705433</span>
