@@ -24,8 +24,8 @@ model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
     Chi2 = ifelse(is.null(model$STATISTIC), NA_real_, model$STATISTIC),
     Chi2_df = ifelse(is.null(model$dof), NA_real_, model$dof),
     p_Chi2 = ifelse(is.null(model$PVAL), NA_real_, model$PVAL),
-    RMSA = model$rms,
-    RMSA_corrected = model$crms,
+    RMSA = ifelse(is.null(model$rms), NA_real_, model$rms),
+    RMSA_corrected = ifelse(is.null(model$crms), NA_real_, model$crms),
     TLI = ifelse(is.null(model$TLI), NA_real_, model$TLI),
     RMSEA = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[1]),
     RMSEA_CI_low = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[2]),
@@ -36,7 +36,10 @@ model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (all(metrics == "all")) {
     metrics <- names(out)
   }
+
+  # clean up
   out <- out[, metrics]
+  out <- datawizard::remove_empty_columns(out)
 
   class(out) <- c("performance_fa", "performance_model", class(out))
   out
