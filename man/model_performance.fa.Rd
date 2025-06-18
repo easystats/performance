@@ -7,7 +7,9 @@
 \method{model_performance}{fa}(model, metrics = "all", verbose = TRUE, ...)
 }
 \arguments{
-\item{model}{A \strong{lavaan} model.}
+\item{model}{A model object of class \code{fa} (e.g., from \code{psych::fa()}),
+\code{principal} (e.g., from \code{psych::principal()}), or from
+\code{parameters::factor_analysis()}.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed
 (some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"RMSA"}, \code{"RMSA_corrected"},

@@ -3,15 +3,17 @@
 #' Compute indices of model performance for models from the **psych** package,
 #' and for `parameters::factor_analysis()`.
 #'
-#' @param model A **lavaan** model.
+#' @param model A model object of class `fa` (e.g., from `psych::fa()`),
+#' `principal` (e.g., from `psych::principal()`), or from
+#' `parameters::factor_analysis()`.
 #' @param metrics Can be `"all"` or a character vector of metrics to be computed
-#'   (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"RMSA"`, `"RMSA_corrected"`,
-#'   `"TLI"`, `"RMSEA"`, `"RMSEA_CI_low"`, `"RMSEA_CI_high"`, and `"BIC"`.
+#' (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"RMSA"`, `"RMSA_corrected"`,
+#' `"TLI"`, `"RMSEA"`, `"RMSEA_CI_low"`, `"RMSEA_CI_high"`, and `"BIC"`.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @return A data frame (with one row) and one column per "index" (see
-#'   `metrics`).
+#' `metrics`).
 #'
 #' @examplesIf all(insight::check_if_installed(c("psych", "GPArotation", "psychTools"), quietly = TRUE))
 #' out <- psych::fa(psychTools::bfi[, 1:25], 5)
