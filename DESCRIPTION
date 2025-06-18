@@ -138,6 +138,7 @@ Suggests:
     patchwork,
     pscl,
     psych,
+    psychTools,
     quantreg,
     qqplotr (>= 0.0.6),
     randomForest,
