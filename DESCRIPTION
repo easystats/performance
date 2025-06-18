@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.14.0.2
+Version: 0.14.0.3
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -165,3 +165,4 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
+Remotes: easystats/insight, easystats/parameters

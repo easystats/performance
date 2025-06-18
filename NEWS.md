@@ -5,6 +5,9 @@
 * Formatting of p-values in `test_likelihoodratio()` is now consistent with
   formatted p-values from other functions.
 
+* Added following methods for for `psych::fa()`, `psych::principal()` and
+ `parameters::factor_analysis()`: `check_normality()`,
+
 # performance 0.14.0
 
 ## Breaking Changes

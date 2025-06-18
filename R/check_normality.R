@@ -75,6 +75,27 @@ check_normality.default <- function(x, ...) {
   p.val
 }
 
+# PCA / FA ---------------
+
+#' @export
+check_normality.parameters_efa <- function(x, ...) {
+  # check for normality of residuals
+  p.val <- .check_normality(insight::get_residuals(x), x)
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+
+  p.val
+}
+
+#' @export
+check_normality.fa <- check_normality.parameters_efa
+
+#' @export
+check_normality.principal <- check_normality.parameters_efa
+
 # glm ---------------
 
 #' @export
