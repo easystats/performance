@@ -28,6 +28,7 @@ model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
     RMSA_corrected = ifelse(is.null(model$crms), NA_real_, model$crms),
     TLI = ifelse(is.null(model$TLI), NA_real_, model$TLI),
     RMSEA = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[1]),
+    RMSEA_CI = ifelse(is.null(model$RMSEA), NA_real_, 0.9),
     RMSEA_CI_low = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[2]),
     RMSEA_CI_high = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[3]),
     BIC = ifelse(is.null(model$BIC), NA_real_, model$BIC)
