@@ -21,16 +21,16 @@
 #' @export
 model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
   out <- data.frame(
-    Chi2 = model$STATISTIC,
-    Chi2_df = model$dof,
-    p_Chi2 = model$PVAL,
+    Chi2 = ifelse(is.null(model$STATISTIC), NA_real_, model$STATISTIC),
+    Chi2_df = ifelse(is.null(model$dof), NA_real_, model$dof),
+    p_Chi2 = ifelse(is.null(model$PVAL), NA_real_, model$PVAL),
     RMSA = model$rms,
     RMSA_corrected = model$crms,
-    TLI = model$TLI,
-    RMSEA = model$RMSEA[1],
-    RMSEA_CI_low = model$RMSEA[2],
-    RMSEA_CI_high = model$RMSEA[3],
-    BIC = model$BIC
+    TLI = ifelse(is.null(model$TLI), NA_real_, model$TLI),
+    RMSEA = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[1]),
+    RMSEA_CI_low = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[2]),
+    RMSEA_CI_high = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[3]),
+    BIC = ifelse(is.null(model$BIC), NA_real_, model$BIC)
   )
 
   if (all(metrics == "all")) {
