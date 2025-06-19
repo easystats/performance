@@ -81,7 +81,7 @@ item_omega.data.frame <- function(x,
   # remove missings
   .data <- stats::na.omit(x)
 
-  # we need at least two columns for Cronach's Alpha
+  # we need at least two columns for Cronbach's Alpha
   if (is.null(ncol(.data)) || ncol(.data) < 2) {
     if (verbose) {
       insight::format_alert(
