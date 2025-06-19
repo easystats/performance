@@ -14,6 +14,17 @@
 #' @param rotation Rotation to be applied. Defaults to `"oblimin"`. Further
 #' options are `"simplimax"`, `"Promax"`, `"cluster"` and `"target"`. See
 #' `?psych::omega` for details.
+#' @param factor_method The factoring method to be used. Passed to the `fm`
+#' argument in `psych::omega()`. Defaults to `"minres"` (minimum residual).
+#' Other options include `"ml"` (maximum likelihood), `"pa"` (principal axis),
+#' etc.
+#' @param poly_cor Logical, if `TRUE`, polychoric correlations will be computed
+#' (by passing `poly = TRUE` to `psych::omega()`). Defaults to `FALSE`.
+#' @param item_direction A vector of item keys indicating the direction of
+#' scoring for items. E.g., `c(1, 1, -1, 1)` for four items where the third item
+#' is reverse-scored. Passed to the `key` argument in `psych::omega()`. Defaults
+#' to `NULL`.
+#' @param verbose Logical, if `TRUE` (default), messages are printed.
 #' @param ... Additional arguments passed to [`psych::omega()`].
 #'
 #' @return A data frames containing the reliability coefficients. Use `summary()`
@@ -57,13 +68,14 @@ item_omega <- function(x, ...) {
 
 #' @rdname item_omega
 #' @export
-item_omega.data.frame <- function(
-  x,
-  n = "auto",
-  rotation = "oblimin",
-  verbose = TRUE,
-  ...
-) {
+item_omega.data.frame <- function(x,
+                                  n = "auto",
+                                  rotation = "oblimin",
+                                  factor_method = "minres",
+                                  poly_cor = FALSE,
+                                  item_direction = NULL,
+                                  verbose = TRUE,
+                                  ...) {
   insight::check_if_installed(c("psych", "parameters"))
 
   # remove missings
@@ -87,6 +99,9 @@ item_omega.data.frame <- function(
     .data,
     nfactors = n,
     rotation = rotation,
+    fm = factor_method,
+    poly = poly_cor,
+    key = item_direction,
     plot = FALSE,
     ...
   )
@@ -99,6 +114,9 @@ item_omega.data.frame <- function(
 
   attr(out, "model") <- model
   attr(out, "rotation") <- rotation
+  attr(out, "factor_method") <- factor_method
+  attr(out, "poly_cor") <- poly_cor
+  attr(out, "item_direction") <- item_direction
   attr(out, "n") <- n
 
   class(out) <- c("item_omega", "data.frame")

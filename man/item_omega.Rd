@@ -7,7 +7,16 @@
 \usage{
 item_omega(x, ...)
 
-\method{item_omega}{data.frame}(x, n = "auto", rotation = "oblimin", verbose = TRUE, ...)
+\method{item_omega}{data.frame}(
+  x,
+  n = "auto",
+  rotation = "oblimin",
+  factor_method = "minres",
+  poly_cor = FALSE,
+  item_direction = NULL,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{A matrix or a data frame.}
@@ -19,6 +28,21 @@ item_omega(x, ...)
 \item{rotation}{Rotation to be applied. Defaults to \code{"oblimin"}. Further
 options are \code{"simplimax"}, \code{"Promax"}, \code{"cluster"} and \code{"target"}. See
 \code{?psych::omega} for details.}
+
+\item{factor_method}{The factoring method to be used. Passed to the \code{fm}
+argument in \code{psych::omega()}. Defaults to \code{"minres"} (minimum residual).
+Other options include \code{"ml"} (maximum likelihood), \code{"pa"} (principal axis),
+etc.}
+
+\item{poly_cor}{Logical, if \code{TRUE}, polychoric correlations will be computed
+(by passing \code{poly = TRUE} to \code{psych::omega()}). Defaults to \code{FALSE}.}
+
+\item{item_direction}{A vector of item keys indicating the direction of
+scoring for items. E.g., \code{c(1, 1, -1, 1)} for four items where the third item
+is reverse-scored. Passed to the \code{key} argument in \code{psych::omega()}. Defaults
+to \code{NULL}.}
+
+\item{verbose}{Logical, if \code{TRUE} (default), messages are printed.}
 }
 \value{
 A data frames containing the reliability coefficients. Use \code{summary()}
