@@ -1,5 +1,9 @@
 # performance (devel)
 
+## New functions
+
+* `item_omega()`, to calculate the McDonald's Omega reliability coefficient.
+
 ## Changes
 
 * Formatting of p-values in `test_likelihoodratio()` is now consistent with
