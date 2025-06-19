@@ -9,6 +9,8 @@
 #'
 #' @return The Cronbach's Alpha value for `x`.
 #'
+#' @note `item_alpha()` is an alias for `cronbachs_alpha()`.
+#'
 #' @details The Cronbach's Alpha value for `x`. A value closer to 1
 #'    indicates greater internal consistency, where usually following
 #'    rule of thumb is applied to interpret the results:
@@ -29,6 +31,11 @@
 cronbachs_alpha <- function(x, ...) {
   UseMethod("cronbachs_alpha")
 }
+
+
+#' @rdname cronbachs_alpha
+#' @export
+item_alpha <- cronbachs_alpha
 
 
 #' @export
