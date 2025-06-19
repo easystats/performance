@@ -36,7 +36,8 @@
 #' the reliability coefficients. The original object returned by `psych::omega()`
 #' is saved as `$model` attribute. Further information are accessible via the
 #' `summary()` and `parameters::model_parameters()` methods. Use `as.numeric()`
-#' to return the reliability coefficients as (named) numeric vector.
+#' to return the reliability coefficients as (named) numeric vector. Detailed
+#' information can be found in the docs of `?psych::omega`.
 #'
 #' @references
 #' - Bland, J. M., & Altman, D. G. (1997). Statistics notes: Cronbach's alpha.

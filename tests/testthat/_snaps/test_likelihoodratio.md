@@ -13,7 +13,7 @@
 ---
 
     Code
-      insight::print_md(test_likelihoodratio(m1, m2), p_digits = 3)
+      print_md(test_likelihoodratio(m1, m2), p_digits = 3)
     Output
       [1] "Table: Likelihood-Ratio-Test (LRT) for Model Comparison (OLS-estimator)"
       [2] ""                                                                       

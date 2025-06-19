@@ -63,7 +63,8 @@ on the factor structure specified.
 the reliability coefficients. The original object returned by \code{psych::omega()}
 is saved as \verb{$model} attribute. Further information are accessible via the
 \code{summary()} and \code{parameters::model_parameters()} methods. Use \code{as.numeric()}
-to return the reliability coefficients as (named) numeric vector.
+to return the reliability coefficients as (named) numeric vector. Detailed
+information can be found in the docs of \code{?psych::omega}.
 }
 \examples{
 \dontshow{if (insight::check_if_installed("parameters", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
