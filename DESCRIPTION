@@ -107,6 +107,7 @@ Suggests:
     gamm4,
     ggdag,
     glmmTMB (>= 1.1.10),
+    GPArotation,
     graphics,
     Hmisc,
     httr2,
