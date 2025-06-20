@@ -53,3 +53,16 @@ model_performance.principal <- model_performance.fa
 model_performance.parameters_efa <- function(model, metrics = "all", verbose = TRUE, ...) {
   model_performance(attributes(model)$model, metrics = metrics, verbose = verbose, ...)
 }
+
+#' @export
+model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...) {
+
+  class(out) <- c("performance_fa", "performance_model", class(out))
+  out
+}
+
+#' @export
+model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...) {
+  x <- attributes(model)$model
+  model_performance(x, metrics = metrics, verbose = verbose, ...)
+}
