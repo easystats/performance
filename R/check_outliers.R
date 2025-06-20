@@ -633,9 +633,13 @@ print.check_outliers <- function(x, ...) {
   vars <- toString(attr(x, "variables"))
   vars.outliers <- attr(x, "outlier_var")
 
-  var.plural <- ifelse(length(attr(x, "variables")) > 1,
-    "variables", "variable"
-  )
+  if (identical(method, "Residual check")) {
+    var.plural <- "correlation between"
+  } else {
+    var.plural <- ifelse(length(attr(x, "variables")) > 1,
+      "variables", "variable"
+    )
+  }
   method.plural <- ifelse(length(thresholds) > 1,
     "methods and thresholds",
     "method and threshold"
@@ -896,7 +900,7 @@ check_outliers.item_omega <- check_outliers.parameters_efa
   outlier <- tmp
 
   # Attributes
-  class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
+  class(outlier) <- c("check_outliers", class(outlier))
   attr(outlier, "threshold") <- threshold
   attr(outlier, "method") <- "Residual check"
   attr(outlier, "text_size") <- 3
