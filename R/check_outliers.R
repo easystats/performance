@@ -836,6 +836,9 @@ check_outliers.fa <- function(x, threshold = NULL, ...) {
   .psych_outliers(x, threshold = threshold, model_resid = x$residual)
 }
 
+#' @export
+check_outliers.psych <- check_outliers.fa
+
 
 #' @export
 check_outliers.omega <- function(x, threshold = NULL, ...) {
@@ -853,6 +856,7 @@ check_outliers.item_omega <- function(x, threshold = NULL, ...) {
 check_outliers.parameters_efa <- function(x, threshold = NULL, ...) {
   check_outliers(attributes(model)$model, threshold = threshold, ...)
 }
+
 
 #' @export
 check_outliers.item_omega <- check_outliers.parameters_efa
