@@ -63,6 +63,7 @@ test_that("test_likelihoodratio - lme4 ML", {
   t1 <- test_lrt(m1, m2, m3)
   t2 <- suppressMessages(anova(m1, m2, m3))
   expect_equal(attributes(t1)$estimator, "ml")
+  expect_equal(t1$deviance, c(202.2215, 116.9578, 116.1164), tolerance = 1e-3)
   expect_equal(t1$Chi2, c(NA, 85.26365, 0.84141), tolerance = 1e-3)
   expect_equal(t1$p, c(NA, 0, 0.35899), tolerance = 1e-3)
   # close, but not the same
@@ -80,6 +81,7 @@ test_that("test_likelihoodratio - lme4 OLS", {
 test_that("test_likelihoodratio - lme4 REML", {
   expect_warning(t3 <- test_lrt(m1, m2, m3, estimator = "REML"))
   expect_equal(attributes(t3)$estimator, "reml")
+  expect_equal(t3$deviance, c(210.9834, 121.6540, 124.5104), tolerance = 1e-3)
   expect_equal(t3$Chi2, c(NA, 89.32933, 2.85635), tolerance = 1e-3)
   expect_equal(t3$p, c(NA, 0, 0.09101), tolerance = 1e-3)
 })
@@ -91,6 +93,7 @@ m3 <- glm(am ~ mpg + hp + vs, data = mtcars, family = binomial())
 test_that("test_likelihoodratio - glm", {
   t1 <- anova(m1, m2, m3, test = "LRT")
   t2 <- test_lrt(m1, m2, m3)
+  expect_equal(t1$`Resid. Dev`, t2$deviance, tolerance = 1e-3)
   expect_equal(t1$`Pr(>Chi)`, t2$p, tolerance = 1e-3)
   expect_equal(t1$Deviance, t2$Chi2, tolerance = 1e-3)
   expect_equal(attributes(t2)$estimator, "ml")
