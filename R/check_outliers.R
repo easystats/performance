@@ -854,7 +854,7 @@ check_outliers.omega <- function(x, threshold = NULL, ...) {
 
 #' @export
 check_outliers.parameters_efa <- function(x, threshold = NULL, ...) {
-  check_outliers(attributes(model)$model, threshold = threshold, ...)
+  check_outliers(attributes(x)$model, threshold = threshold, ...)
 }
 
 
