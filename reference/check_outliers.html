@@ -25,7 +25,7 @@ for a description of the methods.'><meta property="og:image" content="https://ea
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,7 +121,9 @@ for a description of the methods.</p>
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>A model, a data.frame, a <code>performance_simres</code> <code><a href="simulate_residuals.html">simulate_residuals()</a></code>
-or a <code>DHARMa</code> object.</p></dd>
+or a <code>DHARMa</code> object, or an EFA/PCA/Omega object returned by the <strong>psych</strong>
+package, or an object returned by <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::factor_analysis()</a></code> or
+<code><a href="item_omega.html">item_omega()</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -143,8 +145,9 @@ or <code>DHARMa</code>, further arguments are passed down to <code><a href="http
 <dd><p>A list containing the threshold values for each method (e.g.
 <code>list('mahalanobis' = 7, 'cook' = 1)</code>), above which an observation is
 considered as outlier. If <code>NULL</code>, default values will be used (see
-'Details'). If a numeric value is given, it will be used as the threshold
-for any of the method run.</p></dd>
+'Details'). If a numeric value is given, it will be used as the threshold for
+any of the method run. For EFA/PCA/Omega, indicates the threshold for
+correlation of residuals (by default, 0.05).</p></dd>
 
 
 <dt id="arg-id">ID<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
@@ -176,9 +179,9 @@ Can be one of <code>"two.sided"</code>, <code>"less"</code>, or <code>"greater"<
     <p>A logical vector of the detected outliers with a nice printing
 method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
-considered as outlier can be recovered with the <a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a>
-function. Note that the function will (silently) return a vector of <code>FALSE</code>
-for non-supported data types such as character strings.</p>
+considered as outlier can be recovered with the <a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a> function.
+Note that the function will (silently) return a vector of <code>FALSE</code> for
+non-supported data types such as character strings.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -186,8 +189,8 @@ for non-supported data types such as character strings.</p>
 Most methods rely on the computation of some distance metric, and the
 observations greater than a certain threshold are considered outliers.
 Importantly, outliers detection methods are meant to provide information to
-consider for the researcher, rather than to be an automatized procedure
-which mindless application is a substitute for thinking.</p>
+consider for the researcher, rather than to be an automatized procedure which
+mindless application is a substitute for thinking.</p>
 <p>An <strong>example sentence</strong> for reporting the usage of the composite method
 could be:</p>
 <p><em>"Based on a composite outlier score (see the 'check_outliers' function
@@ -204,10 +207,9 @@ that were classified as outliers by at least half of the methods used."</em></p>
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     <p>There is also a
 <a href="https://easystats.github.io/see/articles/performance.html" class="external-link"><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>-method</a>
-implemented in the
-<a href="https://easystats.github.io/see/" class="external-link"><span class="pkg">see</span>-package</a>. <strong>Please
-note</strong> that the range of the distance-values along the y-axis is re-scaled
-to range from 0 to 1.</p>
+implemented in the <a href="https://easystats.github.io/see/" class="external-link"><strong>see</strong> package</a>.
+<strong>Please note</strong> that the range of the distance-values along the y-axis is
+re-scaled to range from 0 to 1.</p>
     </div>
     <div class="section level2">
     <h2 id="model-specific-methods">Model-specific methods<a class="anchor" aria-label="anchor" href="#model-specific-methods"></a></h2>
