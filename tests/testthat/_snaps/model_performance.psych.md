@@ -104,3 +104,39 @@
       --------------------------
       4.119   |    0.042 | 0.035
 
+---
+
+    Code
+      print(out, table_width = Inf)
+    Output
+      # Indices of model performance
+      
+      Model             |    Chi2 | df | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |   RMSEA 90% CI |     BIC |    R2 | Correlation
+      -------------------------------------------------------------------------------------------------------------------------------------
+      3-factor solution |  31.796 | 25 |   0.164  | 0.015 |          0.023 |       | 0.087 | [0.000, 0.181] | -54.848 |       |            
+      g-model           | 264.781 | 44 |   < .001 | 0.393 |          0.440 | 0.195 | 0.395 | [0.356, 0.450] | 112.289 | 0.761 |       0.873
+      
+      Compare the model fit of the 3-factor solution with the g-only model.
+        If the g-model has smaller RMSA and RMSEA then your items are more
+        likely to describe a single unidimensional construct. If the 3-factor
+        model has smaller RMSA and RMSEA then your construct is more likely to
+        be made up of 3 sub-constructs.
+
+---
+
+    Code
+      print(out, table_width = Inf)
+    Output
+      # Indices of model performance
+      
+      Model             |    Chi2 | df | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |   RMSEA 90% CI |     BIC |    R2 | Correlation
+      -------------------------------------------------------------------------------------------------------------------------------------
+      3-factor solution |  31.796 | 25 |   0.164  | 0.015 |          0.023 |       | 0.087 | [0.000, 0.181] | -54.848 |       |            
+      g-model           | 264.781 | 44 |   < .001 | 0.393 |          0.440 | 0.195 | 0.395 | [0.356, 0.450] | 112.289 | 0.761 |       0.873
+      
+      Compare the model fit of the 3-factor solution with the g-only model.
+        If the g-model has smaller RMSA and RMSEA then your items are more
+        likely to describe a single unidimensional construct. If the 3-factor
+        model has smaller RMSA and RMSEA then your construct is more likely to
+        be made up of 3 sub-constructs.
+

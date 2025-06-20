@@ -132,7 +132,7 @@ print.performance_omega <- function(x, ...) {
   n <- attr(x, "n", exact = TRUE)
   insight::print_color(
     insight::format_message(sprintf(
-      "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model has smaller RMSA and RMSEA then your items are more likely describe a single unidimensional construct. If the %i-factor model has smaller RMSA and RMSEA then your construct is more likely to be made up of %i sub-constructs.",
+      "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model has smaller RMSA and RMSEA then your items are more likely to describe a single unidimensional construct. If the %i-factor model has smaller RMSA and RMSEA then your construct is more likely to be made up of %i sub-constructs.",
       n, n, n
     )),
     "yellow"
