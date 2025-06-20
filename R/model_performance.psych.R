@@ -69,7 +69,7 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
   out <- do.call(rbind, lapply(list(model$schmid, model$gstats), function(stats) {
     data.frame(
       Chi2 = ifelse(is.null(stats$STATISTIC), NA_real_, stats$STATISTIC),
-      Chi2_df = ifelse(is.null(stats$dof), NA_real_, stats$dof),
+      df = ifelse(is.null(stats$dof), NA_real_, stats$dof),
       p_Chi2 = ifelse(is.null(stats$PVAL), NA_real_, stats$PVAL),
       RMSA = ifelse(is.null(stats$rms), NA_real_, stats$rms),
       RMSA_corrected = ifelse(is.null(stats$crms), NA_real_, stats$crms),
