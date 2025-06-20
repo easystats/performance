@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.14.0.3
+Version: 0.14.0.4
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -107,6 +107,7 @@ Suggests:
     gamm4,
     ggdag,
     glmmTMB (>= 1.1.10),
+    GPArotation,
     graphics,
     Hmisc,
     httr2,

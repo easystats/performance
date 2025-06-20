@@ -113,5 +113,5 @@ test_that("test_likelihoodratio - print p-digits", {
   m2 <- lm(mpg ~ hp * as.factor(gear), data = mtcars)
 
   expect_snapshot(test_likelihoodratio(m1, m2))
-  expect_snapshot(insight::print_md(test_likelihoodratio(m1, m2), p_digits = 3))
+  expect_snapshot(print_md(test_likelihoodratio(m1, m2), p_digits = 3))
 })

@@ -2,9 +2,12 @@
 % Please edit documentation in R/cronbachs_alpha.R
 \name{cronbachs_alpha}
 \alias{cronbachs_alpha}
+\alias{item_alpha}
 \title{Cronbach's Alpha for Items or Scales}
 \usage{
 cronbachs_alpha(x, ...)
+
+item_alpha(x, ...)
 }
 \arguments{
 \item{x}{A matrix or a data frame.}
@@ -27,6 +30,9 @@ rule of thumb is applied to interpret the results:
 0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
 0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
 and everything > 0.8 is good or excellent.
+}
+\note{
+\code{item_alpha()} is an alias for \code{cronbachs_alpha()}.
 }
 \examples{
 data(mtcars)

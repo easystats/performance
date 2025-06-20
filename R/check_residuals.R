@@ -78,6 +78,15 @@ check_residuals.principal <- check_residuals.fa
 #' @export
 check_residuals.parameters_efa <- check_residuals.fa
 
+#' @export
+check_residuals.omega <- check_residuals.fa
+
+#' @export
+check_residuals.item_omega <- function(x, ...) {
+  model <- attributes(x)$model
+  check_residuals(model, ...)
+}
+
 
 #' @export
 check_residuals.performance_simres <- function(x, alternative = "two.sided",

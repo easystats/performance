@@ -97,6 +97,16 @@ check_normality.fa <- check_normality.parameters_efa
 #' @export
 check_normality.principal <- check_normality.parameters_efa
 
+#' @export
+check_normality.omega <- check_normality.parameters_efa
+
+#' @export
+check_normality.item_omega <- function(x, ...) {
+  model <- attributes(x)$model
+  check_normality(model, ...)
+}
+
+
 # glm ---------------
 
 #' @export

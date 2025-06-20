@@ -9,11 +9,12 @@
 \arguments{
 \item{model}{A model object of class \code{fa} (e.g., from \code{psych::fa()}),
 \code{principal} (e.g., from \code{psych::principal()}), or from
-\code{parameters::factor_analysis()}.}
+\code{parameters::factor_analysis()} or \code{item_omega()}.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed
-(some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"p_Chi2"}, \code{"RMSA"}, \code{"RMSA_corrected"},
-\code{"TLI"}, \code{"RMSEA"}, \code{"RMSEA_CI_low"}, \code{"RMSEA_CI_high"}, and \code{"BIC"}.}
+(some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"df"}, \code{"p_Chi2"}, \code{"RMSA"}, \code{"RMSA_corrected"},
+\code{"TLI"}, \code{"RMSEA"}, \code{"RMSEA_CI_low"}, \code{"RMSEA_CI_high"}, and \code{"BIC"}. For
+omega-models, can also include \code{"R2"} and \code{"Correlation"}.}
 
 \item{verbose}{Toggle off warnings.}
 
@@ -25,7 +26,12 @@ A data frame (with one row) and one column per "index" (see
 }
 \description{
 Compute indices of model performance for models from the \strong{psych} package,
-and for \code{parameters::factor_analysis()}.
+and for \code{parameters::factor_analysis()} and \code{item_omega()}.
+}
+\details{
+For omega-models, the columns \code{R2} and \code{Correlation} are measures of factor
+score adequacy. \code{R2} refers to the multiple R square of scores with factors,
+while \code{Correlation} indicates the correlation of scores with factors.
 }
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("psych", "GPArotation", "psychTools"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

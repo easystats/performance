@@ -1,12 +1,16 @@
 # performance (devel)
 
+## New functions
+
+* `item_omega()`, to calculate the McDonald's Omega reliability coefficient.
+
 ## Changes
 
 * Formatting of p-values in `test_likelihoodratio()` is now consistent with
   formatted p-values from other functions.
 
-* Added following methods for `psych::fa()`, `psych::principal()` and
- `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, and `model_performance()`.
+* Added following methods for `psych::fa()`, `psych::principal()`, `item_omega()`,
+  `psych::omega()`, and `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, and `model_performance()`.
 
 # performance 0.14.0
 

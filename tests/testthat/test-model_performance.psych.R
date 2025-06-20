@@ -1,6 +1,7 @@
 skip_on_cran()
 skip_if_not_installed("psych")
 skip_if_not_installed("parameters")
+skip_if_not_installed("GPArotation")
 
 test_that("model_performance.psych", {
   raq_items <- as.data.frame(discovr::raq)
@@ -27,6 +28,16 @@ test_that("model_performance.psych", {
   pc <- psych::principal(Harman.5, 2, rotate = "varimax")
   out <- model_performance(pc)
   expect_snapshot(print(out))
+
+  # Omega
+  data(mtcars)
+  m <- psych::omega(mtcars, nfactors = 3, plot = FALSE)
+  out <- model_performance(m)
+  expect_snapshot(print(out, table_width = Inf))
+
+  m <- item_omega(mtcars, n = 3)
+  out <- model_performance(m)
+  expect_snapshot(print(out, table_width = Inf))
 })
 
 
