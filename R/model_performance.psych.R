@@ -1,16 +1,22 @@
 #' Performance of FA / PCA models
 #'
 #' Compute indices of model performance for models from the **psych** package,
-#' and for `parameters::factor_analysis()`.
+#' and for `parameters::factor_analysis()` and `item_omega()`.
 #'
 #' @param model A model object of class `fa` (e.g., from `psych::fa()`),
 #' `principal` (e.g., from `psych::principal()`), or from
-#' `parameters::factor_analysis()`.
+#' `parameters::factor_analysis()` or `item_omega()`.
 #' @param metrics Can be `"all"` or a character vector of metrics to be computed
-#' (some of `"Chi2"`, `"Chi2_df"`, `"p_Chi2"`, `"RMSA"`, `"RMSA_corrected"`,
-#' `"TLI"`, `"RMSEA"`, `"RMSEA_CI_low"`, `"RMSEA_CI_high"`, and `"BIC"`.
+#' (some of `"Chi2"`, `"Chi2_df"`, `"df"`, `"p_Chi2"`, `"RMSA"`, `"RMSA_corrected"`,
+#' `"TLI"`, `"RMSEA"`, `"RMSEA_CI_low"`, `"RMSEA_CI_high"`, and `"BIC"`. For
+#' omega-models, can also include `"R2"` and `"Correlation"`.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
+#'
+#' @details
+#' For omega-models, the columns `R2` and `Correlation` are measures of factor
+#' score adequacy. `R2` refers to the multiple R square of scores with factors,
+#' while `Correlation` indicates the correlation of scores with factors.
 #'
 #' @return A data frame (with one row) and one column per "index" (see
 #' `metrics`).
