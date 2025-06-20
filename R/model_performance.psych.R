@@ -56,8 +56,43 @@ model_performance.parameters_efa <- function(model, metrics = "all", verbose = T
 
 #' @export
 model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...) {
+  # number of factors?
+  n_factors <- ifelse(is.null(model$Call$nfactors), 3, model$Call$nfactors)
 
-  class(out) <- c("performance_fa", "performance_model", class(out))
+  # generate statistics for n-factor solution and g-model
+  out <- do.call(rbind, lapply(list(model$schmid, model$gstats), function(stats) {
+    data.frame(
+      Chi2 = ifelse(is.null(stats$STATISTIC), NA_real_, stats$STATISTIC),
+      Chi2_df = ifelse(is.null(stats$dof), NA_real_, stats$dof),
+      p_Chi2 = ifelse(is.null(stats$PVAL), NA_real_, stats$PVAL),
+      RMSA = ifelse(is.null(stats$rms), NA_real_, stats$rms),
+      RMSA_corrected = ifelse(is.null(stats$crms), NA_real_, stats$crms),
+      TLI = ifelse(is.null(stats$TLI), NA_real_, stats$TLI),
+      RMSEA = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[1]),
+      RMSEA_CI = ifelse(is.null(stats$RMSEA), NA_real_, 0.9),
+      RMSEA_CI_low = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[2]),
+      RMSEA_CI_high = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[3]),
+      BIC = ifelse(is.null(stats$BIC), NA_real_, stats$BIC)
+    )
+  }))
+
+  # bind first column, to indicate component
+  out <- cbind(
+    data.frame(Model = c(sprintf("%i-factor solution", n_factors), "g-model")),
+    out
+  )
+
+  if (all(metrics == "all")) {
+    metrics <- names(out)
+  }
+
+  # clean up
+  out <- out[, metrics]
+  out <- datawizard::remove_empty_columns(out)
+
+  attr(out, "n") <- n_factors
+  attr(out, "model") <- model
+  class(out) <- unique(c("performance_omega", "performance_fa", "performance_model", class(out)))
   out
 }
 
@@ -65,4 +100,20 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
 model_performance.item_omega <- function(model, metrics = "all", verbose = TRUE, ...) {
   x <- attributes(model)$model
   model_performance(x, metrics = metrics, verbose = verbose, ...)
+}
+
+
+# methods ----------------------------------
+
+#' @export
+print.performance_omega <- function(x, ...) {
+  print.performance_model(x, ...)
+  n <- attr(x, "n", exact = TRUE)
+  insight::print_color(
+    insight::format_message(sprintf(
+      "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model is better your items likely describe a single unidimensional construct. If the %i-factor model has better fit then your construct is likely made up of %i sub-constructs.",
+      n, n, n
+    )),
+    "yellow"
+  )
 }
