@@ -62,7 +62,7 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
 }
 
 #' @export
-model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...) {
+model_performance.item_omega <- function(model, metrics = "all", verbose = TRUE, ...) {
   x <- attributes(model)$model
   model_performance(x, metrics = metrics, verbose = verbose, ...)
 }
