@@ -37,5 +37,8 @@ while \code{Correlation} indicates the correlation of scores with factors.
 \dontshow{if (all(insight::check_if_installed(c("psych", "GPArotation", "psychTools"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 out <- psych::fa(psychTools::bfi[, 1:25], 5)
 model_performance(out)
+
+out <- item_omega(mtcars, n = 3)
+model_performance(out)
 \dontshow{\}) # examplesIf}
 }

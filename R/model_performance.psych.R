@@ -24,6 +24,9 @@
 #' @examplesIf all(insight::check_if_installed(c("psych", "GPArotation", "psychTools"), quietly = TRUE))
 #' out <- psych::fa(psychTools::bfi[, 1:25], 5)
 #' model_performance(out)
+#'
+#' out <- item_omega(mtcars, n = 3)
+#' model_performance(out)
 #' @export
 model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
   out <- data.frame(
