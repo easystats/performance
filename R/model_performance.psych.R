@@ -7,9 +7,9 @@
 #' `principal` (e.g., from `psych::principal()`), or from
 #' `parameters::factor_analysis()` or `item_omega()`.
 #' @param metrics Can be `"all"` or a character vector of metrics to be computed
-#' (some of `"Chi2"`, `"Chi2_df"`, `"df"`, `"p_Chi2"`, `"RMSA"`, `"RMSA_corrected"`,
-#' `"TLI"`, `"RMSEA"`, `"RMSEA_CI_low"`, `"RMSEA_CI_high"`, and `"BIC"`. For
-#' omega-models, can also include `"R2"` and `"Correlation"`.
+#' (some of `"Chi2"`, `"Chi2_df"`, `"df"`, `"p_Chi2"`, `"RMSA"`,
+#' `"RMSA_corrected"`, `"TLI"`, `"RMSEA"`, and `"BIC"`. For omega-models, can
+#' also include `"R2"` and `"Correlation"`.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -42,6 +42,11 @@ model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
 
   if (all(metrics == "all")) {
     metrics <- names(out)
+  }
+
+  # if RMSEA is not requested, also remove CI columns
+  if (!("RMSEA" %in% metrics)) {
+    metrics <- metrics[!metrics %in% c("RMSEA_CI", "RMSEA_CI_low", "RMSEA_CI_high")]
   }
 
   # clean up
@@ -86,7 +91,7 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
       RMSEA_CI_high = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[3]),
       BIC = ifelse(is.null(stats$BIC), NA_real_, stats$BIC),
       R2 = ifelse(is.null(stats$R2), NA_real_, stats$R2),
-      Correlation = ifelse(is.null(stats$R2), NA_real_, sqrt(stats$R2))
+      Correlation = ifelse(is.null(stats$R2), NA_real_, sqrt(abs(stats$R2)))
     )
   }))
 
@@ -98,6 +103,11 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
 
   if (all(metrics == "all")) {
     metrics <- names(out)
+  }
+
+  # if RMSEA is not requested, also remove CI columns
+  if (!("RMSEA" %in% metrics)) {
+    metrics <- metrics[!metrics %in% c("RMSEA_CI", "RMSEA_CI_low", "RMSEA_CI_high")]
   }
 
   # clean up
@@ -122,7 +132,7 @@ print.performance_omega <- function(x, ...) {
   n <- attr(x, "n", exact = TRUE)
   insight::print_color(
     insight::format_message(sprintf(
-      "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model is better your items likely describe a single unidimensional construct. If the %i-factor model has better fit then your construct is likely made up of %i sub-constructs.",
+      "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model has smaller RMSA and RMSEA then your items are more likely describe a single unidimensional construct. If the %i-factor model has smaller RMSA and RMSEA then your construct is more likely to be made up of %i sub-constructs.",
       n, n, n
     )),
     "yellow"
