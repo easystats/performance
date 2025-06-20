@@ -56,8 +56,14 @@ model_performance.parameters_efa <- function(model, metrics = "all", verbose = T
 
 #' @export
 model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...) {
-  # number of factors?
-  n_factors <- ifelse(is.null(model$Call$nfactors), 3, model$Call$nfactors)
+  # extract model object from item_omega
+  if (inherits(model, "item_omega")) {
+    n_factors <- attr(model, "n", exact = TRUE)
+    model <- attributes(model)$model
+  } else {
+    # number of factors?
+    n_factors <- ifelse(is.null(model$Call$nfactors), 3, model$Call$nfactors)
+  }
 
   # generate statistics for n-factor solution and g-model
   out <- do.call(rbind, lapply(list(model$schmid, model$gstats), function(stats) {
@@ -97,10 +103,7 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
 }
 
 #' @export
-model_performance.item_omega <- function(model, metrics = "all", verbose = TRUE, ...) {
-  x <- attributes(model)$model
-  model_performance(x, metrics = metrics, verbose = verbose, ...)
-}
+model_performance.item_omega <- model_performance.omega
 
 
 # methods ----------------------------------
