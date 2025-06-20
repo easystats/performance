@@ -78,7 +78,9 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
       RMSEA_CI = ifelse(is.null(stats$RMSEA), NA_real_, 0.9),
       RMSEA_CI_low = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[2]),
       RMSEA_CI_high = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[3]),
-      BIC = ifelse(is.null(stats$BIC), NA_real_, stats$BIC)
+      BIC = ifelse(is.null(stats$BIC), NA_real_, stats$BIC),
+      R2 = ifelse(is.null(stats$R2), NA_real_, stats$R2),
+      Correlation = ifelse(is.null(stats$R2), NA_real_, sqrt(stats$R2))
     )
   }))
 
