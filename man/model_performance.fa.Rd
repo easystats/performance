@@ -12,9 +12,9 @@
 \code{parameters::factor_analysis()} or \code{item_omega()}.}
 
 \item{metrics}{Can be \code{"all"} or a character vector of metrics to be computed
-(some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"df"}, \code{"p_Chi2"}, \code{"RMSA"}, \code{"RMSA_corrected"},
-\code{"TLI"}, \code{"RMSEA"}, \code{"RMSEA_CI_low"}, \code{"RMSEA_CI_high"}, and \code{"BIC"}. For
-omega-models, can also include \code{"R2"} and \code{"Correlation"}.}
+(some of \code{"Chi2"}, \code{"Chi2_df"}, \code{"df"}, \code{"p_Chi2"}, \code{"RMSA"},
+\code{"RMSA_corrected"}, \code{"TLI"}, \code{"RMSEA"}, and \code{"BIC"}. For omega-models, can
+also include \code{"R2"} and \code{"Correlation"}.}
 
 \item{verbose}{Toggle off warnings.}
 

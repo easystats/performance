@@ -591,15 +591,18 @@ check_outliers.default <- function(x,
 
 # Methods -----------------------------------------------------------------
 
+
 #' @export
 as.data.frame.check_outliers <- function(x, ...) {
   attributes(x)$data
 }
 
+
 #' @export
 as.double.check_outliers <- function(x, ...) {
   attributes(x)$data$Outlier
 }
+
 
 #' @export
 print.check_outliers <- function(x, ...) {
@@ -704,6 +707,7 @@ print.check_outliers <- function(x, ...) {
   invisible(x)
 }
 
+
 #' @export
 print.check_outliers_metafor <- function(x, ...) {
   outliers <- which(x)
@@ -737,6 +741,7 @@ print.check_outliers_metafor <- function(x, ...) {
   }
   invisible(x)
 }
+
 
 #' @export
 print.check_outliers_metagen <- function(x, ...) {
@@ -793,11 +798,13 @@ print.check_outliers_metagen <- function(x, ...) {
   invisible(x)
 }
 
+
 #' @export
 plot.check_outliers <- function(x, ...) {
   insight::check_if_installed("see", "to plot outliers")
   NextMethod()
 }
+
 
 #' @export
 print.check_outliers_simres <- function(x, digits = 2, ...) {
@@ -823,6 +830,84 @@ print.check_outliers_simres <- function(x, digits = 2, ...) {
 
 
 # other classes -------------------------
+
+#' @export
+check_outliers.fa <- function(x, threshold = NULL, ...) {
+  .psych_outliers(x, threshold = threshold, model_resid = x$residual)
+}
+
+
+#' @export
+check_outliers.omega <- function(x, threshold = NULL, ...) {
+  .psych_outliers(x, threshold = threshold, model_resid = x$stats$residual)
+}
+
+
+#' @export
+check_outliers.item_omega <- function(x, threshold = NULL, ...) {
+  .psych_outliers(x, threshold = threshold, model_resid = x$stats$residual)
+}
+
+
+#' @export
+check_outliers.parameters_efa <- function(x, threshold = NULL, ...) {
+  check_outliers(attributes(model)$model, threshold = threshold, ...)
+}
+
+#' @export
+check_outliers.item_omega <- check_outliers.parameters_efa
+
+
+.psych_outliers <- function(x, threshold = NULL, model_resid = NULL) {
+  # set threshold
+  if (is.null(threshold)) {
+    threshold <- 0.05
+  }
+
+  # extract simple residuals
+  simple_res <- insight::get_residuals(x)
+
+  # exctract residuals matrix
+  model_resid[upper.tri(model_resid)] <- NA
+  diag(model_resid) <- NA
+
+  # determine outliers
+  outlier <- NULL
+  for (i in 1:nrow(model_resid)) {
+    for (j in 1:ncol(model_resid)) {
+      res <- model_resid[i, j]
+      if (!is.na(res) && abs(res) > threshold) {
+        outlier <- c(outlier, stats::setNames(
+          res, paste(row.names(model_resid)[j], row.names(model_resid)[i], sep = "/")
+        ))
+      }
+    }
+  }
+
+  # save name pairs
+  variables <- names(outlier)
+  if (is.null(variables)) {
+    variables <- row.names(model_resid)
+  }
+
+  # flag residuals
+  tmp <- rep_len(FALSE, length.out = length(simple_res))
+  if (!is.null(outlier) && !is.null(simple_res)) {
+    tmp[match(round(outlier, 6), round(simple_res, 6))] <- TRUE
+  }
+  outlier <- tmp
+
+  # Attributes
+  class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
+  attr(outlier, "threshold") <- threshold
+  attr(outlier, "method") <- "Residual check"
+  attr(outlier, "text_size") <- 3
+  attr(outlier, "variables") <- variables
+  attr(outlier, "outlier_var") <- variables
+
+  outlier
+}
+
 
 #' @rdname check_outliers
 #' @export
@@ -974,6 +1059,7 @@ check_outliers.data.frame <- function(x,
   attr(outlier, "outlier_count") <- outlier_count
   outlier
 }
+
 
 .check_outliers.data.frame_method <- function(x, method, thresholds, ID, ID.names, ...) {
   # Clean up per-variable list of outliers
@@ -1270,6 +1356,7 @@ check_outliers.data.frame <- function(x,
   out.meta
 }
 
+
 #' @export
 check_outliers.grouped_df <- function(x,
                                       method = "mahalanobis",
@@ -1354,6 +1441,7 @@ check_outliers.grouped_df <- function(x,
   out
 }
 
+
 #' @export
 check_outliers.BFBayesFactor <- function(x,
                                          ID = NULL,
@@ -1404,6 +1492,7 @@ check_outliers.lme <- check_outliers.gls
 #' @export
 check_outliers.fixest <- check_outliers.gls
 
+
 #' @export
 check_outliers.fixest_multi <- function(x,
                                         method = "pareto",
@@ -1412,6 +1501,7 @@ check_outliers.fixest_multi <- function(x,
                                         ...) {
   lapply(x, check_outliers.fixest)
 }
+
 
 #' @export
 check_outliers.geeglm <- check_outliers.gls
@@ -1447,6 +1537,7 @@ check_outliers.rma <- function(x, ...) {
 
 #' @export
 check_outliers.rma.uni <- check_outliers.rma
+
 
 #' @export
 check_outliers.metagen <- function(x, ...) {
@@ -1511,9 +1602,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 # Thresholds --------------------------------------------------------------
 
+
 .check_outliers_thresholds <- function(x) {
   suppressWarnings(.check_outliers_thresholds_nowarn(x))
 }
+
 
 .check_outliers_thresholds_nowarn <- function(x) {
   list(
