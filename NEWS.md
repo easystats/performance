@@ -10,7 +10,7 @@
   formatted p-values from other functions.
 
 * Added following methods for `psych::fa()`, `psych::principal()`, `item_omega()`,
-  `psych::omega()`, and `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, and `model_performance()`.
+  `psych::omega()`, and `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, and `check_outliers()`, `model_performance()`.
 
 # performance 0.14.0
 

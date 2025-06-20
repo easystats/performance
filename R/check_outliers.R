@@ -13,16 +13,19 @@
 #'   for a description of the methods.
 #'
 #' @param x A model, a data.frame, a `performance_simres` [`simulate_residuals()`]
-#' or a `DHARMa` object.
+#' or a `DHARMa` object, or an EFA/PCA/Omega object returned by the **psych**
+#' package, or an object returned by `parameters::factor_analysis()` or
+#' `item_omega()`.
 #' @param method The outlier detection method(s). Can be `"all"` or some of
-#'   `"cook"`, `"pareto"`, `"zscore"`, `"zscore_robust"`, `"iqr"`, `"ci"`, `"eti"`,
-#'   `"hdi"`, `"bci"`, `"mahalanobis"`, `"mahalanobis_robust"`, `"mcd"`, `"ics"`,
-#'   `"optics"` or `"lof"`.
+#' `"cook"`, `"pareto"`, `"zscore"`, `"zscore_robust"`, `"iqr"`, `"ci"`, `"eti"`,
+#' `"hdi"`, `"bci"`, `"mahalanobis"`, `"mahalanobis_robust"`, `"mcd"`, `"ics"`,
+#' `"optics"` or `"lof"`.
 #' @param threshold A list containing the threshold values for each method (e.g.
-#'   `list('mahalanobis' = 7, 'cook' = 1)`), above which an observation is
-#'   considered as outlier. If `NULL`, default values will be used (see
-#'   'Details'). If a numeric value is given, it will be used as the threshold
-#'   for any of the method run.
+#' `list('mahalanobis' = 7, 'cook' = 1)`), above which an observation is
+#' considered as outlier. If `NULL`, default values will be used (see
+#' 'Details'). If a numeric value is given, it will be used as the threshold for
+#' any of the method run. For EFA/PCA/Omega, indicates the threshold for
+#' correlation of residuals (by default, 0.05).
 #' @param ID Optional, to report an ID column along with the row number.
 #' @param type Type of method to test for outliers. Can be one of `"default"`,
 #' `"binomial"` or `"bootstrap"`. Only applies when `x` is an object returned
@@ -39,29 +42,28 @@
 #' @inheritParams simulate_residuals
 #'
 #' @return A logical vector of the detected outliers with a nice printing
-#'   method: a check (message) on whether outliers were detected or not. The
-#'   information on the distance measure and whether or not an observation is
-#'   considered as outlier can be recovered with the [as.data.frame]
-#'   function. Note that the function will (silently) return a vector of `FALSE`
-#'   for non-supported data types such as character strings.
+#' method: a check (message) on whether outliers were detected or not. The
+#' information on the distance measure and whether or not an observation is
+#' considered as outlier can be recovered with the [as.data.frame] function.
+#' Note that the function will (silently) return a vector of `FALSE` for
+#' non-supported data types such as character strings.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
 #' @seealso [`see::plot.see_check_outliers()`] for options to customize the plot.
 #'
 #' @note There is also a
-#'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
-#'   implemented in the
-#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}. **Please
-#'   note** that the range of the distance-values along the y-axis is re-scaled
-#'   to range from 0 to 1.
+#' [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' implemented in the [**see** package](https://easystats.github.io/see/).
+#' **Please note** that the range of the distance-values along the y-axis is
+#' re-scaled to range from 0 to 1.
 #'
 #' @details Outliers can be defined as particularly influential observations.
-#'   Most methods rely on the computation of some distance metric, and the
-#'   observations greater than a certain threshold are considered outliers.
-#'   Importantly, outliers detection methods are meant to provide information to
-#'   consider for the researcher, rather than to be an automatized procedure
-#'   which mindless application is a substitute for thinking.
+#' Most methods rely on the computation of some distance metric, and the
+#' observations greater than a certain threshold are considered outliers.
+#' Importantly, outliers detection methods are meant to provide information to
+#' consider for the researcher, rather than to be an automatized procedure which
+#' mindless application is a substitute for thinking.
 #'
 #' An **example sentence** for reporting the usage of the composite method
 #' could be:
@@ -591,15 +593,18 @@ check_outliers.default <- function(x,
 
 # Methods -----------------------------------------------------------------
 
+
 #' @export
 as.data.frame.check_outliers <- function(x, ...) {
   attributes(x)$data
 }
 
+
 #' @export
 as.double.check_outliers <- function(x, ...) {
   attributes(x)$data$Outlier
 }
+
 
 #' @export
 print.check_outliers <- function(x, ...) {
@@ -630,9 +635,13 @@ print.check_outliers <- function(x, ...) {
   vars <- toString(attr(x, "variables"))
   vars.outliers <- attr(x, "outlier_var")
 
-  var.plural <- ifelse(length(attr(x, "variables")) > 1,
-    "variables", "variable"
-  )
+  if (identical(method, "Residual check")) {
+    var.plural <- "correlation between"
+  } else {
+    var.plural <- ifelse(length(attr(x, "variables")) > 1,
+      "variables", "variable"
+    )
+  }
   method.plural <- ifelse(length(thresholds) > 1,
     "methods and thresholds",
     "method and threshold"
@@ -704,6 +713,7 @@ print.check_outliers <- function(x, ...) {
   invisible(x)
 }
 
+
 #' @export
 print.check_outliers_metafor <- function(x, ...) {
   outliers <- which(x)
@@ -737,6 +747,7 @@ print.check_outliers_metafor <- function(x, ...) {
   }
   invisible(x)
 }
+
 
 #' @export
 print.check_outliers_metagen <- function(x, ...) {
@@ -793,11 +804,13 @@ print.check_outliers_metagen <- function(x, ...) {
   invisible(x)
 }
 
+
 #' @export
 plot.check_outliers <- function(x, ...) {
   insight::check_if_installed("see", "to plot outliers")
   NextMethod()
 }
+
 
 #' @export
 print.check_outliers_simres <- function(x, digits = 2, ...) {
@@ -823,6 +836,84 @@ print.check_outliers_simres <- function(x, digits = 2, ...) {
 
 
 # other classes -------------------------
+
+#' @export
+check_outliers.fa <- function(x, threshold = NULL, ...) {
+  .psych_outliers(x, threshold = threshold, model_resid = x$residual)
+}
+
+#' @export
+check_outliers.psych <- check_outliers.fa
+
+
+#' @export
+check_outliers.omega <- function(x, threshold = NULL, ...) {
+  .psych_outliers(x, threshold = threshold, model_resid = x$stats$residual)
+}
+
+
+#' @export
+check_outliers.parameters_efa <- function(x, threshold = NULL, ...) {
+  check_outliers(attributes(model)$model, threshold = threshold, ...)
+}
+
+
+#' @export
+check_outliers.item_omega <- check_outliers.parameters_efa
+
+
+.psych_outliers <- function(x, threshold = NULL, model_resid = NULL) {
+  # set threshold
+  if (is.null(threshold)) {
+    threshold <- 0.05
+  }
+
+  # extract simple residuals
+  simple_res <- insight::get_residuals(x)
+
+  # exctract residuals matrix
+  model_resid[upper.tri(model_resid)] <- NA
+  diag(model_resid) <- NA
+
+  # extract names for all correlation pairs
+  pair_names <- NULL
+  for (j in 1:nrow(model_resid)) {
+    for (i in 1:ncol(model_resid)) {
+      if (!is.na(model_resid[j, i])) {
+        pair_names <- c(
+          pair_names,
+          paste(row.names(model_resid)[j], row.names(model_resid)[i], sep = "/")
+        )
+      }
+    }
+  }
+
+  # determine outliers
+  outlier <- !is.na(simple_res) & abs(simple_res) > threshold
+  outlier_names <- pair_names[outlier]
+
+  # save name pairs
+  if (is.null(outlier_names)) {
+    outlier_names <- row.names(model_resid)
+  }
+
+  my_df <- data.frame(
+    Variable = pair_names,
+    Outlier = as.numeric(outlier)
+  )
+
+  # Attributes
+  class(outlier) <- c("check_outliers", class(outlier))
+  attr(outlier, "threshold") <- threshold
+  attr(outlier, "method") <- "Residual check"
+  attr(outlier, "text_size") <- 3
+  attr(outlier, "data") <- my_df
+  attr(outlier, "variables") <- outlier_names
+  attr(outlier, "outlier_var") <- outlier_names
+
+  outlier
+}
+
 
 #' @rdname check_outliers
 #' @export
@@ -974,6 +1065,7 @@ check_outliers.data.frame <- function(x,
   attr(outlier, "outlier_count") <- outlier_count
   outlier
 }
+
 
 .check_outliers.data.frame_method <- function(x, method, thresholds, ID, ID.names, ...) {
   # Clean up per-variable list of outliers
@@ -1270,6 +1362,7 @@ check_outliers.data.frame <- function(x,
   out.meta
 }
 
+
 #' @export
 check_outliers.grouped_df <- function(x,
                                       method = "mahalanobis",
@@ -1354,6 +1447,7 @@ check_outliers.grouped_df <- function(x,
   out
 }
 
+
 #' @export
 check_outliers.BFBayesFactor <- function(x,
                                          ID = NULL,
@@ -1404,6 +1498,7 @@ check_outliers.lme <- check_outliers.gls
 #' @export
 check_outliers.fixest <- check_outliers.gls
 
+
 #' @export
 check_outliers.fixest_multi <- function(x,
                                         method = "pareto",
@@ -1412,6 +1507,7 @@ check_outliers.fixest_multi <- function(x,
                                         ...) {
   lapply(x, check_outliers.fixest)
 }
+
 
 #' @export
 check_outliers.geeglm <- check_outliers.gls
@@ -1447,6 +1543,7 @@ check_outliers.rma <- function(x, ...) {
 
 #' @export
 check_outliers.rma.uni <- check_outliers.rma
+
 
 #' @export
 check_outliers.metagen <- function(x, ...) {
@@ -1511,9 +1608,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 # Thresholds --------------------------------------------------------------
 
+
 .check_outliers_thresholds <- function(x) {
   suppressWarnings(.check_outliers_thresholds_nowarn(x))
 }
+
 
 .check_outliers_thresholds_nowarn <- function(x) {
   list(
