@@ -13,16 +13,19 @@
 #'   for a description of the methods.
 #'
 #' @param x A model, a data.frame, a `performance_simres` [`simulate_residuals()`]
-#' or a `DHARMa` object.
+#' or a `DHARMa` object, or an EFA/PCA/Omega object returned by the **psych**
+#' package, or an object returned by `parameters::factor_analysis()` or
+#' `item_omega()`.
 #' @param method The outlier detection method(s). Can be `"all"` or some of
-#'   `"cook"`, `"pareto"`, `"zscore"`, `"zscore_robust"`, `"iqr"`, `"ci"`, `"eti"`,
-#'   `"hdi"`, `"bci"`, `"mahalanobis"`, `"mahalanobis_robust"`, `"mcd"`, `"ics"`,
-#'   `"optics"` or `"lof"`.
+#' `"cook"`, `"pareto"`, `"zscore"`, `"zscore_robust"`, `"iqr"`, `"ci"`, `"eti"`,
+#' `"hdi"`, `"bci"`, `"mahalanobis"`, `"mahalanobis_robust"`, `"mcd"`, `"ics"`,
+#' `"optics"` or `"lof"`.
 #' @param threshold A list containing the threshold values for each method (e.g.
-#'   `list('mahalanobis' = 7, 'cook' = 1)`), above which an observation is
-#'   considered as outlier. If `NULL`, default values will be used (see
-#'   'Details'). If a numeric value is given, it will be used as the threshold
-#'   for any of the method run.
+#' `list('mahalanobis' = 7, 'cook' = 1)`), above which an observation is
+#' considered as outlier. If `NULL`, default values will be used (see
+#' 'Details'). If a numeric value is given, it will be used as the threshold for
+#' any of the method run. For EFA/PCA/Omega, indicates the threshold for
+#' correlation of residuals (by default, 0.05).
 #' @param ID Optional, to report an ID column along with the row number.
 #' @param type Type of method to test for outliers. Can be one of `"default"`,
 #' `"binomial"` or `"bootstrap"`. Only applies when `x` is an object returned
@@ -39,29 +42,28 @@
 #' @inheritParams simulate_residuals
 #'
 #' @return A logical vector of the detected outliers with a nice printing
-#'   method: a check (message) on whether outliers were detected or not. The
-#'   information on the distance measure and whether or not an observation is
-#'   considered as outlier can be recovered with the [as.data.frame]
-#'   function. Note that the function will (silently) return a vector of `FALSE`
-#'   for non-supported data types such as character strings.
+#' method: a check (message) on whether outliers were detected or not. The
+#' information on the distance measure and whether or not an observation is
+#' considered as outlier can be recovered with the [as.data.frame] function.
+#' Note that the function will (silently) return a vector of `FALSE` for
+#' non-supported data types such as character strings.
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
 #' @seealso [`see::plot.see_check_outliers()`] for options to customize the plot.
 #'
 #' @note There is also a
-#'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
-#'   implemented in the
-#'   \href{https://easystats.github.io/see/}{\pkg{see}-package}. **Please
-#'   note** that the range of the distance-values along the y-axis is re-scaled
-#'   to range from 0 to 1.
+#' [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
+#' implemented in the [**see** package](https://easystats.github.io/see/).
+#' **Please note** that the range of the distance-values along the y-axis is
+#' re-scaled to range from 0 to 1.
 #'
 #' @details Outliers can be defined as particularly influential observations.
-#'   Most methods rely on the computation of some distance metric, and the
-#'   observations greater than a certain threshold are considered outliers.
-#'   Importantly, outliers detection methods are meant to provide information to
-#'   consider for the researcher, rather than to be an automatized procedure
-#'   which mindless application is a substitute for thinking.
+#' Most methods rely on the computation of some distance metric, and the
+#' observations greater than a certain threshold are considered outliers.
+#' Importantly, outliers detection methods are meant to provide information to
+#' consider for the researcher, rather than to be an automatized procedure which
+#' mindless application is a substitute for thinking.
 #'
 #' An **example sentence** for reporting the usage of the composite method
 #' could be:
