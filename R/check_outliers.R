@@ -873,39 +873,41 @@ check_outliers.item_omega <- check_outliers.parameters_efa
   model_resid[upper.tri(model_resid)] <- NA
   diag(model_resid) <- NA
 
-  # determine outliers
-  outlier <- NULL
-  for (i in 1:nrow(model_resid)) {
-    for (j in 1:ncol(model_resid)) {
-      res <- model_resid[i, j]
-      if (!is.na(res) && abs(res) > threshold) {
-        outlier <- c(outlier, stats::setNames(
-          res, paste(row.names(model_resid)[j], row.names(model_resid)[i], sep = "/")
-        ))
+  # extract names for all correlation pairs
+  pair_names <- NULL
+  for (j in 1:nrow(model_resid)) {
+    for (i in 1:ncol(model_resid)) {
+      if (!is.na(model_resid[j, i])) {
+        pair_names <- c(
+          pair_names,
+          paste(row.names(model_resid)[j], row.names(model_resid)[i], sep = "/")
+        )
       }
     }
   }
 
+  # determine outliers
+  outlier <- !is.na(simple_res) & abs(simple_res) > threshold
+  outlier_names <- pair_names[outlier]
+
   # save name pairs
-  variables <- names(outlier)
-  if (is.null(variables)) {
-    variables <- row.names(model_resid)
+  if (is.null(outlier_names)) {
+    outlier_names <- row.names(model_resid)
   }
 
-  # flag residuals
-  tmp <- rep_len(FALSE, length.out = length(simple_res))
-  if (!is.null(outlier) && !is.null(simple_res)) {
-    tmp[match(round(outlier, 6), round(simple_res, 6))] <- TRUE
-  }
-  outlier <- tmp
+  my_df <- data.frame(
+    Variable = pair_names,
+    Outlier = as.numeric(outlier)
+  )
 
   # Attributes
   class(outlier) <- c("check_outliers", class(outlier))
   attr(outlier, "threshold") <- threshold
   attr(outlier, "method") <- "Residual check"
   attr(outlier, "text_size") <- 3
-  attr(outlier, "variables") <- variables
-  attr(outlier, "outlier_var") <- variables
+  attr(outlier, "data") <- my_df
+  attr(outlier, "variables") <- outlier_names
+  attr(outlier, "outlier_var") <- outlier_names
 
   outlier
 }

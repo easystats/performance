@@ -408,8 +408,21 @@ test_that("check_outliers with DHARMa", {
 })
 
 
-test_that("check_outliers with DHARMa", {
+test_that("check_outliers numeric, z-score", {
   data(mtcars)
   out <- check_outliers(mtcars$mpg, method = "zscore", threshold = 2)
   expect_equal(which(as.numeric(out) == 1), c(18, 20))
+})
+
+
+test_that("check_outliers with psych", {
+  skip_if_not_installed("psych")
+  data(Harman.5, package = "psych")
+  pc <- psych::principal(Harman.5, 2, rotate = "varimax")
+  out <- check_outliers(pc)
+  expect_equal(which(as.numeric(out) == 1), 5)
+  out <- check_outliers(pc, threshold = 0.1)
+  expect_equal(which(as.numeric(out) == 1), integer(0))
+  out <- check_outliers(pc, threshold = 0.02)
+  expect_equal(which(as.numeric(out) == 1), c(3, 5, 6, 8))
 })
