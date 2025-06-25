@@ -365,23 +365,37 @@ pp_check.lm <- function(object,
 }
 
 
-pp_check.glm <- function(object,
-                         iterations = 50,
-                         check_range = FALSE,
-                         re_formula = NULL,
-                         bandwidth = "nrd",
-                         type = "density",
-                         verbose = TRUE,
-                         model_info = NULL,
-                         ...) {
+pp_check.glm <- function(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  model_info = NULL,
+  ...
+) {
   # we need the formula and the response values to check for matrix responses
   # or proportions in binomial models
   model_response <- insight::find_response(object, combine = TRUE)
   response_values <- insight::get_response(object)
 
   # if we have no matrix-response, continue here...
-  if (!grepl("^cbind\\((.*)\\)", model_response) && !is.matrix(response_values)) {
-    return(pp_check.lm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
+  if (
+    !grepl("^cbind\\((.*)\\)", model_response) && !is.matrix(response_values)
+  ) {
+    return(pp_check.lm(
+      object,
+      iterations,
+      check_range,
+      re_formula,
+      bandwidth,
+      type,
+      verbose,
+      model_info,
+      ...
+    ))
   }
 
   # else, process matrix response. for matrix response models, we compute
@@ -390,8 +404,17 @@ pp_check.glm <- function(object,
 
   out <- tryCatch(
     {
-      matrix_sim <- stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
-      as.data.frame(sapply(matrix_sim, function(i) i[, 1] / rowSums(i, na.rm = TRUE), simplify = TRUE))
+      matrix_sim <- stats::simulate(
+        object,
+        nsim = iterations,
+        re.form = re_formula,
+        ...
+      )
+      as.data.frame(sapply(
+        matrix_sim,
+        function(i) i[, 1] / rowSums(i, na.rm = TRUE),
+        simplify = TRUE
+      ))
     },
     error = function(e) {
       NULL
@@ -409,8 +432,12 @@ pp_check.glm <- function(object,
   }
 
   # get response data, and response term
-  response <- eval(str2lang(insight::find_response(object)),
-    envir = insight::get_response(object)
+  response <- .safe(
+    eval(
+      str2lang(insight::find_response(object)),
+      envir = insight::get_response(object)
+    ),
+    insight::get_response(object)
   )
   resp_string <- insight::find_terms(object)$response
 
@@ -428,7 +455,11 @@ pp_check.glm <- function(object,
   attr(out, "bandwidth") <- bandwidth
   attr(out, "model_info") <- minfo
   attr(out, "type") <- type
-  class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
+  class(out) <- c(
+    "performance_pp_check",
+    "see_performance_pp_check",
+    class(out)
+  )
   out
 }
 
