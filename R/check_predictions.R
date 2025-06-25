@@ -310,7 +310,7 @@ pp_check.lm <- function(object,
           i <- i[, 1] / rowSums(i, na.rm = TRUE)
         } else {
           # if not, we just take the first column
-          i[, 1]
+          i <- i[, 1]
         }
       }
       # and return as a vector
