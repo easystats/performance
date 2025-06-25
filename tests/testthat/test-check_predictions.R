@@ -149,13 +149,13 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
   skip_if_not_installed("lme4")
 
   data("cbpp", package = "lme4")
-  m1 <- glmmTMB(
+  m1 <- glmmTMB::glmmTMB(
     incidence / size ~ period + herd,
     weights = size,
     family = binomial,
     data = cbpp
   )
-  m2 <- glmmTMB(
+  m2 <- glmmTMB::glmmTMB(
     cbind(incidence, size - incidence) ~ period + herd,
     weights = NULL,
     family = binomial,
