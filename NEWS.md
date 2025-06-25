@@ -12,6 +12,11 @@
 * Added following methods for `psych::fa()`, `psych::principal()`, `item_omega()`,
   `psych::omega()`, and `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, and `check_outliers()`, `model_performance()`.
 
+## Bug fixes
+
+* Fixed issue in `check_predictions()` for models with a response defined as
+  proportion.
+
 # performance 0.14.0
 
 ## Breaking Changes
