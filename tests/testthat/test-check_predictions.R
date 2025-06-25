@@ -142,3 +142,33 @@ test_that("check_predictions, lm, ratio-response", {
     tolerance = 1e-4
   )
 })
+
+
+test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("lme4")
+
+  data("cbpp", package = "lme4")
+  m1 <- glmmTMB(
+    incidence / size ~ period + herd,
+    weights = size,
+    family = binomial,
+    data = cbpp
+  )
+  m2 <- glmmTMB(
+    cbind(incidence, size - incidence) ~ period + herd,
+    weights = NULL,
+    family = binomial,
+    data = cbpp
+  )
+
+  set.seed(123)
+  out1 <- check_predictions(m1)
+
+  set.seed(123)
+  out2 <- check_predictions(m2)
+
+  expect_equal(out1$y, out2$y, tolerance = 1e-4)
+  expect_equal(out1$sim_1, out2$sim_1, tolerance = 1e-4)
+  expect_equal(out1$sim_16, out2$sim_16, tolerance = 1e-4)
+})

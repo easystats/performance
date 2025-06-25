@@ -280,8 +280,9 @@ pp_check.lm <- function(object,
                         verbose = TRUE,
                         model_info = NULL,
                         ...) {
+  model_response <- insight::find_response(object, combine = TRUE)
   # if we have a matrix-response, continue here...
-  if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
+  if (grepl("^cbind\\((.*)\\)", model_response)) {
     return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 
@@ -300,9 +301,19 @@ pp_check.lm <- function(object,
 
   # glmmTMB returns column matrix for bernoulli
   if (inherits(object, "glmmTMB") && minfo$is_binomial && !is.null(out)) {
+    proportion_response <- grepl("/", model_response, fixed = TRUE)
     out <- as.data.frame(lapply(out, function(i) {
       if (is.matrix(i)) {
-        i[, 1]
+        # do we have a response defined as proportions?
+        if (proportion_response) {
+          # if so, calculate the proportions
+          i <- i[, 1] / rowSums(i, na.rm = TRUE)
+          # and return as a vector
+          as.vector(i)
+        } else {
+          # if not, we just take the first column
+          i[, 1]
+        }
       } else {
         i
       }
