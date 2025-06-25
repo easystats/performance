@@ -14,8 +14,8 @@
 
 ## Bug fixes
 
-* Fixed issue in `check_predictions()` for models with a response defined as
-  proportion.
+* Fixed issue in `check_predictions()` for binomial models with a response
+  defined as proportion or matrix of successes and trials.
 
 # performance 0.14.0
 
