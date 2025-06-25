@@ -162,13 +162,27 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
     data = cbpp
   )
 
+  cbpp <- transform(cbpp, prop = incidence/size)
+  m3 <- glmmTMB::glmmTMB(
+    prop ~ period + herd,
+    weights = size,
+    family = binomial,
+    data = cbpp
+  )
+
   set.seed(123)
   out1 <- check_predictions(m1)
 
   set.seed(123)
   out2 <- check_predictions(m2)
 
+  set.seed(123)
+  out3 <- check_predictions(m3)
+
   expect_equal(out1$y, out2$y, tolerance = 1e-4)
   expect_equal(out1$sim_1, out2$sim_1, tolerance = 1e-4)
   expect_equal(out1$sim_16, out2$sim_16, tolerance = 1e-4)
+  expect_equal(out1$y, out3$y, tolerance = 1e-4)
+  expect_equal(out1$sim_1, out3$sim_1, tolerance = 1e-4)
+  expect_equal(out1$sim_16, out3$sim_16, tolerance = 1e-4)
 })

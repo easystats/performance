@@ -301,7 +301,14 @@ pp_check.lm <- function(object,
 
   # glmmTMB returns column matrix for bernoulli
   if (inherits(object, "glmmTMB") && minfo$is_binomial && !is.null(out)) {
-    proportion_response <- grepl("/", model_response, fixed = TRUE)
+    # check if we have a response defined as proportions. in that case, we
+    # have to handle the results from `simulate()` differently. We have a
+    # proportion response if the formula contains a `/` in the response,
+    # or if the response is a non-integer numeric vector between 0 and 1.
+    response_values <- insight::get_response(object)
+    proportion_response <- grepl("/", model_response, fixed = TRUE) ||
+      (!is.null(response_values) && !all(.is_integer(response_values)))
+
     out <- as.data.frame(lapply(out, function(i) {
       if (is.matrix(i)) {
         # do we have a response defined as proportions?
