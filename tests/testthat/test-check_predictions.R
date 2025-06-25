@@ -176,8 +176,8 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
 
   m4 <- glmmTMB::glmmTMB(
     X ~ period + herd,
-    weights = size,
     family = binomial,
+    weights = NULL,
     data = cbpp
   )
 
