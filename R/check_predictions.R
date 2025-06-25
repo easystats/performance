@@ -280,9 +280,13 @@ pp_check.lm <- function(object,
                         verbose = TRUE,
                         model_info = NULL,
                         ...) {
+  # we need the formula and the response values to check for matrix responses
+  # or proportions in binomial models
   model_response <- insight::find_response(object, combine = TRUE)
+  response_values <- insight::get_response(object)
+
   # if we have a matrix-response, continue here...
-  if (grepl("^cbind\\((.*)\\)", model_response)) {
+  if (grepl("^cbind\\((.*)\\)", model_response) || is.matrix(response_values)) {
     return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 
@@ -305,7 +309,6 @@ pp_check.lm <- function(object,
     # have to handle the results from `simulate()` differently. We have a
     # proportion response if the formula contains a `/` in the response,
     # or if the response is a non-integer numeric vector between 0 and 1.
-    response_values <- insight::get_response(object)
     proportion_response <- grepl("/", model_response, fixed = TRUE) ||
       (!is.null(response_values) && !all(.is_integer(response_values)))
 
@@ -371,8 +374,13 @@ pp_check.glm <- function(object,
                          verbose = TRUE,
                          model_info = NULL,
                          ...) {
+  # we need the formula and the response values to check for matrix responses
+  # or proportions in binomial models
+  model_response <- insight::find_response(object, combine = TRUE)
+  response_values <- insight::get_response(object)
+
   # if we have no matrix-response, continue here...
-  if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
+  if (!grepl("^cbind\\((.*)\\)", model_response) && !is.matrix(response_values)) {
     return(pp_check.lm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 

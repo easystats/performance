@@ -155,6 +155,7 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
     family = binomial,
     data = cbpp
   )
+
   m2 <- glmmTMB::glmmTMB(
     cbind(incidence, size - incidence) ~ period + herd,
     weights = NULL,
@@ -170,6 +171,16 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
     data = cbpp
   )
 
+  X <- with(cbpp, cbind(incidence, size -  incidence))
+  cbpp$X <- X
+
+  m4 <- glmmTMB::glmmTMB(
+    X ~ period + herd,
+    weights = size,
+    family = binomial,
+    data = cbpp
+  )
+
   set.seed(123)
   out1 <- check_predictions(m1)
 
@@ -179,10 +190,16 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
   set.seed(123)
   out3 <- check_predictions(m3)
 
+  set.seed(123)
+  out4 <- check_predictions(m4)
+
   expect_equal(out1$y, out2$y, tolerance = 1e-4)
   expect_equal(out1$sim_1, out2$sim_1, tolerance = 1e-4)
   expect_equal(out1$sim_16, out2$sim_16, tolerance = 1e-4)
   expect_equal(out1$y, out3$y, tolerance = 1e-4)
   expect_equal(out1$sim_1, out3$sim_1, tolerance = 1e-4)
   expect_equal(out1$sim_16, out3$sim_16, tolerance = 1e-4)
+  expect_equal(out1$y, out4$y, tolerance = 1e-4)
+  expect_equal(out1$sim_1, out4$sim_1, tolerance = 1e-4)
+  expect_equal(out1$sim_16, out4$sim_16, tolerance = 1e-4)
 })
