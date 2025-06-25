@@ -308,15 +308,13 @@ pp_check.lm <- function(object,
         if (proportion_response) {
           # if so, calculate the proportions
           i <- i[, 1] / rowSums(i, na.rm = TRUE)
-          # and return as a vector
-          as.vector(i)
         } else {
           # if not, we just take the first column
           i[, 1]
         }
-      } else {
-        i
       }
+      # and return as a vector
+      as.vector(i)
     }))
   }
 
