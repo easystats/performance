@@ -382,9 +382,7 @@ pp_check.glm <- function(
   response_values <- insight::get_response(object)
 
   # if we have no matrix-response, continue here...
-  if (
-    !grepl("^cbind\\((.*)\\)", model_response) && !is.matrix(response_values)
-  ) {
+  if (!grepl("^cbind\\((.*)\\)", model_response) && !is.matrix(response_values)) {
     return(pp_check.lm(
       object,
       iterations,
