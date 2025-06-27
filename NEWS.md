@@ -6,6 +6,9 @@
 
 ## Changes
 
+* `check_itemscale()` got some new features:
+  - Works now with factor analysis results, from `parameters::factor_analysis()`.
+
 * Formatting of p-values in `test_likelihoodratio()` is now consistent with
   formatted p-values from other functions.
 

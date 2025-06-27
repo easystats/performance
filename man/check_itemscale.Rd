@@ -8,7 +8,8 @@ check_itemscale(x, factor_index = NULL)
 }
 \arguments{
 \item{x}{An object of class \code{parameters_pca}, as returned by
-\code{\link[parameters:principal_components]{parameters::principal_components()}}, or a data frame.}
+\code{\link[parameters:principal_components]{parameters::principal_components()}}, of class \code{parameters_efa}, as
+returned by \code{\link[parameters:principal_components]{parameters::factor_analysis()}}, or a data frame.}
 
 \item{factor_index}{If \code{x} is a data frame, \code{factor_index} must be specified.
 It must be a numeric vector of same length as number of columns in \code{x}, where
@@ -21,16 +22,17 @@ consistencies of each subscale.
 \description{
 Compute various measures of internal consistencies
 applied to (sub)scales, which items were extracted using
-\code{parameters::principal_components()}.
+\code{parameters::principal_components()} or \code{parameters::factor_analysis()}.
 }
 \details{
-\code{check_itemscale()} calculates various measures of internal
-consistencies, such as Cronbach's alpha, item difficulty or discrimination
-etc. on subscales which were built from several items. Subscales are
-retrieved from the results of \code{\link[parameters:principal_components]{parameters::principal_components()}}, i.e.
-based on how many components were extracted from the PCA,
-\code{check_itemscale()} retrieves those variables that belong to a component
-and calculates the above mentioned measures.
+\code{check_itemscale()} calculates various measures of internal consistencies,
+such as Cronbach's alpha, item difficulty or discrimination etc. on subscales
+which were built from several items. Subscales are retrieved from the results
+of \code{\link[parameters:principal_components]{parameters::principal_components()}} or
+\code{\link[parameters:principal_components]{parameters::factor_analysis()}}, i.e. based on how many components were
+extracted from the PCA, respectively how many factors were extracted from the
+factor analysis. \code{check_itemscale()} retrieves those variables that belong to
+a component and calculates the above mentioned measures.
 }
 \note{
 \itemize{

@@ -3,26 +3,28 @@
 #'
 #' @description Compute various measures of internal consistencies
 #' applied to (sub)scales, which items were extracted using
-#' `parameters::principal_components()`.
+#' `parameters::principal_components()` or `parameters::factor_analysis()`.
 #'
 #' @param x An object of class `parameters_pca`, as returned by
-#' [`parameters::principal_components()`], or a data frame.
+#' [`parameters::principal_components()`], of class `parameters_efa`, as
+#' returned by [`parameters::factor_analysis()`], or a data frame.
 #' @param factor_index If `x` is a data frame, `factor_index` must be specified.
 #' It must be a numeric vector of same length as number of columns in `x`, where
 #' each element is the index of the factor to which the respective column in `x`.
 #'
 #' @return A list of data frames, with related measures of internal
-#'   consistencies of each subscale.
+#' consistencies of each subscale.
 #'
 #' @details
 #'
-#' `check_itemscale()` calculates various measures of internal
-#' consistencies, such as Cronbach's alpha, item difficulty or discrimination
-#' etc. on subscales which were built from several items. Subscales are
-#' retrieved from the results of [`parameters::principal_components()`], i.e.
-#' based on how many components were extracted from the PCA,
-#' `check_itemscale()` retrieves those variables that belong to a component
-#' and calculates the above mentioned measures.
+#' `check_itemscale()` calculates various measures of internal consistencies,
+#' such as Cronbach's alpha, item difficulty or discrimination etc. on subscales
+#' which were built from several items. Subscales are retrieved from the results
+#' of [`parameters::principal_components()`] or
+#' [`parameters::factor_analysis()`], i.e. based on how many components were
+#' extracted from the PCA, respectively how many factors were extracted from the
+#' factor analysis. `check_itemscale()` retrieves those variables that belong to
+#' a component and calculates the above mentioned measures.
 #'
 #' @note
 #' - *Item difficulty* should range between 0.2 and 0.8. Ideal value
@@ -66,14 +68,14 @@
 #' )
 #' @export
 check_itemscale <- function(x, factor_index = NULL) {
-  if (!inherits(x, c("parameters_pca", "data.frame"))) {
+  if (!inherits(x, c("parameters_pca", "parameters_efa", "data.frame"))) {
     insight::format_error(
-      "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, or a data frame." # nolint
+      "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, an object of class `parameters_efa`, as returned by `parameters::factor_analysis()`, or a data frame." # nolint
     )
   }
 
   # if data frame, we need `factor_index`
-  if (inherits(x, "data.frame") && !inherits(x, "parameters_pca")) {
+  if (inherits(x, "data.frame") && !inherits(x, c("parameters_pca", "parameters_efa"))) {
     if (is.null(factor_index)) {
       insight::format_error("If `x` is a data frame, `factor_index` must be specified.")
     }
@@ -89,12 +91,12 @@ check_itemscale <- function(x, factor_index = NULL) {
   }
 
   # factor_index must be a named vector (column names as names)
-  if (!is.null(factor_index) && is.null(names(factor_index)) && !inherits(x, "parameters_pca")) {
+  if (!is.null(factor_index) && is.null(names(factor_index)) && !inherits(x, c("parameters_pca", "parameters_efa"))) {
     factor_index <- stats::setNames(factor_index, colnames(x))
   }
 
   # assign data and factor index
-  if (inherits(x, "parameters_pca")) {
+  if (inherits(x, c("parameters_pca", "parameters_efa"))) {
     insight::check_if_installed("parameters")
     dataset <- attributes(x)$dataset
     subscales <- parameters::closest_component(x)
