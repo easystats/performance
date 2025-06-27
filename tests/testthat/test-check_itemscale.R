@@ -83,3 +83,11 @@ test_that("check_itemscale for FA", {
     tolerance = 1e-4
   )
 })
+
+
+test_that("print_md check_itemscale for FA", {
+  skip_if_not_installed("parameters")
+  f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
+  out <- check_itemscale(f)
+  expect_snapshot(print_md(out))
+})

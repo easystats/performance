@@ -20,6 +20,9 @@
 * Fixed issue in `check_predictions()` for binomial models with a response
   defined as proportion or matrix of successes and trials.
 
+* `print_md()` for objects returned by `check_itemscale()` now include the footer
+  with information about Cronbach's alpha and mean inter-item correlation.
+
 # performance 0.14.0
 
 ## Breaking Changes
