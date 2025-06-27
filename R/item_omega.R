@@ -153,7 +153,7 @@ item_omega.matrix <- function(x,
   }
 
   item_omega(
-    as.data.frame(x),
+    x,
     n = n,
     rotation = rotation,
     factor_method = factor_method,
