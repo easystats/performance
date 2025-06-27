@@ -34,39 +34,30 @@ test_that("item_omega", {
   skip_if_not_installed("correlation")
   skip_if_not_installed("discovr")
 
-  # text matrix n_obs
-  williams <- as.data.frame(discovr::williams)
-  williams$ID <- NULL
-  n <- 28
-  r <- correlation::correlation(williams[1:n])
+  raq_items <- as.data.frame(discovr::raq)
+  raq_items$id <- NULL
 
-  # create r-matrix
-  r_mat <- matrix(0, nrow = n, ncol = n)
-  diag(r_mat) <- 1
-  r_mat[lower.tri(r_mat)] <- r$r
-  r_mat[upper.tri(r_mat)] <- r$r
+  raq_poly <- correlation::correlation(raq_items, method = "polychoric")
+  raq_poly_mtx <- as.matrix(raq_poly) # store correlation matrix
 
-  # create n-matrix
-  n_mat <- matrix(0, nrow = n, ncol = n)
-  diag(n_mat) <- 1
-  n_mat[lower.tri(n_mat)] <- r$n_Obs
-  n_mat[upper.tri(n_mat)] <- r$n_Obs
-
-  out <- suppressWarnings(factor_analysis(r_mat, n_obs = n_mat, n = 2))
-  expect_identical(dim(out), c(28L, 5L))
-  expect_named(
-    out,
-    c("Variable", "MR1", "MR2", "Complexity", "Uniqueness")
+  # needs n_obs
+  expect_error(
+    item_omega(raq_poly_mtx, n = 4),
+    regex = "You provided a square matrix"
   )
 
-  n_mat <- matrix(0, nrow = n - 2, ncol = n - 2)
-  diag(n_mat) <- 1
-  n_mat[lower.tri(n_mat)] <- r$n_Obs[1:325]
-  n_mat[upper.tri(n_mat)] <- r$n_Obs[1:325]
+  out1 <- item_omega(raq_poly_mtx, n = 4, n_obs = 2571)
+  expect_identical(dim(out1), c(5, 2L))
+  expect_equal(
+    out1$Coefficient,
+    c(0.87548, 0.89137, 0.67522, 0.74806, 0.90264),
+    tolerance = 1e-3
+  )
 
-  # matrix dimensions do not match
-  expect_error(
-    suppressWarnings(factor_analysis(r_mat, n_obs = n_mat, n = 2)),
-    regex = "The provided"
+  out2 <- item_omega(as.matrix(raq_items), n = 4)
+  expect_equal(
+    out2$Coefficient,
+    c(0.86042, 0.87407, 0.66302, 0.7473, 0.88722),
+    tolerance = 1e-3
   )
 })
