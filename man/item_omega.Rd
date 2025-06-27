@@ -3,6 +3,7 @@
 \name{item_omega}
 \alias{item_omega}
 \alias{item_omega.data.frame}
+\alias{item_omega.matrix}
 \title{McDonald's Omega for Items or Scales}
 \usage{
 item_omega(x, ...)
@@ -12,6 +13,18 @@ item_omega(x, ...)
   n = "auto",
   rotation = "oblimin",
   factor_method = "minres",
+  poly_cor = FALSE,
+  item_direction = NULL,
+  verbose = TRUE,
+  ...
+)
+
+\method{item_omega}{matrix}(
+  x,
+  n = "auto",
+  rotation = "oblimin",
+  factor_method = "minres",
+  n_obs = NULL,
   poly_cor = FALSE,
   item_direction = NULL,
   verbose = TRUE,
@@ -43,6 +56,9 @@ is reverse-scored. Passed to the \code{key} argument in \code{psych::omega()}. D
 to \code{NULL}.}
 
 \item{verbose}{Logical, if \code{TRUE} (default), messages are printed.}
+
+\item{n_obs}{Number of observations in the original data set if \code{x} is a
+correlation matrix. Required to compute correct fit indices.}
 }
 \value{
 A data frames containing the reliability coefficients. Use \code{summary()}
