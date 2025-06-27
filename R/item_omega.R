@@ -140,7 +140,7 @@ item_omega.matrix <- function(x,
                               ...) {
  # check if we have a square matrix. in this case, we assume that
   # the user wants to do a factor analysis on the correlation matrix
-  if ((dim(x)[1] == dim(x)[2]) && is.null(n_obs)) {
+  if ((nrow(x) == ncol(x)) && is.null(n_obs)) {
     insight::format_error(
       "You provided a square matrix, which is assumed to be a correlation matrix. Please specify the number of observations with `n_obs`. If your matrix is not a correlation matrix, please provide a data frame instead."
     )
