@@ -138,7 +138,14 @@ item_omega.matrix <- function(x,
                               item_direction = NULL,
                               verbose = TRUE,
                               ...) {
- # check if we have a square matrix. in this case, we assume that
+  # validate n_obs
+  if (!is.null(n_obs) && (!is.numeric(n_obs) || n_obs <= 0 || n_obs %% 1 != 0)) {
+    insight::format_error(
+      "`n_obs` must be either NULL or a positive integer. Please provide a valid value."
+    )
+  }
+
+  # check if we have a square matrix. in this case, we assume that
   # the user wants to do a factor analysis on the correlation matrix
   if ((nrow(x) == ncol(x)) && is.null(n_obs)) {
     insight::format_error(
