@@ -47,7 +47,7 @@ test_that("item_omega", {
   )
 
   out1 <- item_omega(raq_poly_mtx, n = 4, n_obs = 2571)
-  expect_identical(dim(out1), c(5, 2L))
+  expect_identical(dim(out1), c(5L, 2L))
   expect_equal(
     out1$Coefficient,
     c(0.87548, 0.89137, 0.67522, 0.74806, 0.90264),
