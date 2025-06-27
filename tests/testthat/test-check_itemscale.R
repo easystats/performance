@@ -71,3 +71,15 @@ test_that("check_itemscale", {
     regex = "`x` must be an object of class"
   )
 })
+
+
+test_that("check_itemscale for FA", {
+  skip_if_not_installed("parameters")
+  f <- parameters::factor_analysis(mtcars, n = 2, standardize = FALSE)
+  out <- check_itemscale(f)
+  expect_equal(
+    out[[1]]$Mean,
+    c(20.09062, 6.1875, 230.72188, 146.6875, 3.59656, 3.21725, 0.4375),
+    tolerance = 1e-4
+  )
+})
