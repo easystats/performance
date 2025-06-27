@@ -19,7 +19,7 @@ on the factor structure specified."><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,19 @@ on the factor structure specified.</p>
 <span>  item_direction <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'matrix'</span></span>
+<span><span class="fu">item_omega</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  n <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  rotation <span class="op">=</span> <span class="st">"oblimin"</span>,</span>
+<span>  factor_method <span class="op">=</span> <span class="st">"minres"</span>,</span>
+<span>  n_obs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  poly_cor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  item_direction <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -136,6 +149,11 @@ to <code>NULL</code>.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> (default), messages are printed.</p></dd>
+
+
+<dt id="arg-n-obs">n_obs<a class="anchor" aria-label="anchor" href="#arg-n-obs"></a></dt>
+<dd><p>Number of observations in the original data set if <code>x</code> is a
+correlation matrix. Required to compute correct fit indices.</p></dd>
 
 </dl></div>
     <div class="section level2">
