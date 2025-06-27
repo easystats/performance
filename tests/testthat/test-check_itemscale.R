@@ -75,11 +75,11 @@ test_that("check_itemscale", {
 
 test_that("check_itemscale for FA", {
   skip_if_not_installed("parameters")
-  f <- parameters::factor_analysis(mtcars, n = 2, standardize = FALSE)
+  f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
   out <- check_itemscale(f)
   expect_equal(
     out[[1]]$Mean,
-    c(20.09062, 6.1875, 230.72188, 146.6875, 3.59656, 3.21725, 0.4375),
+    c(20.09062, 6.1875, 146.6875, 17.84875, 0.4375, 2.8125),
     tolerance = 1e-4
   )
 })
