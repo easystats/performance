@@ -75,8 +75,11 @@ check_itemscale <- function(x, factor_index = NULL, reverse_items = NULL) {
     )
   }
 
+  # save information
+  is_pca_or_efa <- inherits(x, c("parameters_pca", "parameters_efa"))
+
   # if data frame, we need `factor_index`
-  if (inherits(x, "data.frame") && !inherits(x, c("parameters_pca", "parameters_efa"))) {
+  if (inherits(x, "data.frame") && !is_pca_or_efa) {
     if (is.null(factor_index)) {
       insight::format_error("If `x` is a data frame, `factor_index` must be specified.")
     }
@@ -92,12 +95,12 @@ check_itemscale <- function(x, factor_index = NULL, reverse_items = NULL) {
   }
 
   # factor_index must be a named vector (column names as names)
-  if (!is.null(factor_index) && is.null(names(factor_index)) && !inherits(x, c("parameters_pca", "parameters_efa"))) {
+  if (!is.null(factor_index) && is.null(names(factor_index)) && !is_pca_or_efa) {
     factor_index <- stats::setNames(factor_index, colnames(x))
   }
 
   # assign data and factor index
-  if (inherits(x, c("parameters_pca", "parameters_efa"))) {
+  if (is_pca_or_efa) {
     insight::check_if_installed("parameters")
     dataset <- attributes(x)$dataset
     subscales <- parameters::closest_component(x)
