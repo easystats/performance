@@ -105,6 +105,13 @@ item_omega.data.frame <- function(x,
         "The `reverse_items` argument only works with data frames, not matrices."
       )
     }
+    # check if the object has an attribute "reverse_items" - if so, warn that
+    # we don't want to "double reverse" items
+    if ("reverse_items" %in% names(attributes(.data))) {
+      insight::format_warning(
+        "It seem that items have already been reversed in this data set. Make sure that you do not reverse them again."
+      )
+    }
     # numeric indices should be replaced by their column names
     if (is.numeric(reverse_items)) {
       reverse_items <- colnames(.data)[reverse_items]
