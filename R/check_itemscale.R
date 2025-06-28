@@ -11,6 +11,7 @@
 #' @param factor_index If `x` is a data frame, `factor_index` must be specified.
 #' It must be a numeric vector of same length as number of columns in `x`, where
 #' each element is the index of the factor to which the respective column in `x`.
+#' @inheritParams item_omega
 #'
 #' @return A list of data frames, with related measures of internal
 #' consistencies of each subscale.
@@ -67,7 +68,7 @@
 #'   factor_index = parameters::closest_component(pca)
 #' )
 #' @export
-check_itemscale <- function(x, factor_index = NULL) {
+check_itemscale <- function(x, factor_index = NULL, reverse_items = NULL) {
   if (!inherits(x, c("parameters_pca", "parameters_efa", "data.frame"))) {
     insight::format_error(
       "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, an object of class `parameters_efa`, as returned by `parameters::factor_analysis()`, or a data frame." # nolint
@@ -103,6 +104,19 @@ check_itemscale <- function(x, factor_index = NULL) {
   } else {
     dataset <- x
     subscales <- factor_index
+  }
+
+  # should some items be reversed?
+  if (!is.null(reverse_items)) {
+    # numeric indices should be replaced by their column names
+    if (is.numeric(reverse_items)) {
+      reverse_items <- colnames(dataset)[reverse_items]
+    }
+    if (verbose) {
+      insight::format_message("Reversing items: ", toString(reverse_items))
+    }
+    # reverse the items
+    dataset <- datawizard::reverse_scale(dataset, reverse_items, verbose = verbose)
   }
 
   out <- lapply(sort(unique(subscales)), function(.subscale) {
