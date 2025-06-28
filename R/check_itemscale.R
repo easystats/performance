@@ -116,7 +116,7 @@ check_itemscale <- function(x,
   if (!is.null(reverse_items)) {
     # check if the object has an attribute "reverse_items" - if so, warn that
     # we don't want to "double reverse" items
-    if ("reverse_items" %in% names(attributes(.data))) {
+    if ("reverse_items" %in% names(attributes(x))) {
       insight::format_warning(
         "It seem that items have already been reversed in this data set. Make sure that you do not reverse them again."
       )
