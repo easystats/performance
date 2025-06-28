@@ -20,10 +20,10 @@
 #' etc.
 #' @param poly_cor Logical, if `TRUE`, polychoric correlations will be computed
 #' (by passing `poly = TRUE` to `psych::omega()`). Defaults to `FALSE`.
-#' @param item_direction A vector of item keys indicating the direction of
-#' scoring for items. E.g., `c(1, 1, -1, 1)` for four items where the third item
-#' is reverse-scored. Passed to the `key` argument in `psych::omega()`. Defaults
-#' to `NULL`.
+#' @param reverse_items Character vector of variable names or numeric indices
+#' indicating their column positions in `x` that should be reversed before
+#' computing the reliability coefficients. If `NULL` (default), no items are
+#' reversed.
 #' @param verbose Logical, if `TRUE` (default), messages are printed.
 #' @param ... Additional arguments passed to [`psych::omega()`].
 #'
@@ -74,7 +74,7 @@ item_omega.data.frame <- function(x,
                                   rotation = "oblimin",
                                   factor_method = "minres",
                                   poly_cor = FALSE,
-                                  item_direction = NULL,
+                                  reverse_items = NULL,
                                   verbose = TRUE,
                                   ...) {
   insight::check_if_installed(c("psych", "parameters"))
@@ -95,6 +95,19 @@ item_omega.data.frame <- function(x,
   # determine number of factors
   n <- .get_n_factors(.data, n = n, rotation = rotation)
 
+  # define keys for omega
+  if (!is.null(reverse_items)) {
+    # numeric indices should be replaced by their column names
+    if (is.numeric(reverse_items)) {
+      reverse_items <- colnames(.data)[reverse_items]
+    }
+    if (verbose) {
+      insight::format_message("Reversing items: ", toString(reverse_items))
+    }
+    # reverse the items
+    .data <- datawizard::reverse_scale(.data, reverse_items, verbose = verbose)
+  }
+
   # calculate omega
   model <- psych::omega(
     .data,
@@ -102,7 +115,7 @@ item_omega.data.frame <- function(x,
     rotation = rotation,
     fm = factor_method,
     poly = poly_cor,
-    key = item_direction,
+    key = NULL,
     plot = FALSE,
     ...
   )
