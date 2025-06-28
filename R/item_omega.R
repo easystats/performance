@@ -18,6 +18,8 @@
 #' argument in `psych::omega()`. Defaults to `"minres"` (minimum residual).
 #' Other options include `"ml"` (maximum likelihood), `"pa"` (principal axis),
 #' etc.
+#' @param n_obs Number of observations in the original data set if `x` is a
+#' correlation matrix. Required to compute correct fit indices.
 #' @param poly_cor Logical, if `TRUE`, polychoric correlations will be computed
 #' (by passing `poly = TRUE` to `psych::omega()`). Defaults to `FALSE`.
 #' @param reverse_items Character vector of variable names or numeric indices
@@ -138,9 +140,49 @@ item_omega.data.frame <- function(x,
 }
 
 
+#' @rdname item_omega
 #' @export
-item_omega.matrix <- function(x, n, rotation = "oblimin", verbose = TRUE, ...) {
-  item_omega(as.data.frame(x), n = n, rotation = rotation, verbose = verbose, ...)
+item_omega.matrix <- function(x,
+                              n = "auto",
+                              rotation = "oblimin",
+                              factor_method = "minres",
+                              n_obs = NULL,
+                              poly_cor = FALSE,
+                              item_direction = NULL,
+                              verbose = TRUE,
+                              ...) {
+  # validate n_obs
+  if (!is.null(n_obs) && (!is.numeric(n_obs) || n_obs <= 0 || n_obs %% 1 != 0)) {
+    insight::format_error(
+      "`n_obs` must be either NULL or a positive integer. Please provide a valid value."
+    )
+  }
+
+  # check if we have a square matrix. in this case, we assume that
+  # the user wants to do a factor analysis on the correlation matrix
+  if ((nrow(x) == ncol(x)) && is.null(n_obs)) {
+    insight::format_error(
+      "You provided a square matrix, which is assumed to be a correlation matrix. Please specify the number of observations with `n_obs`. If your matrix is not a correlation matrix, please provide a data frame instead."
+    )
+  }
+
+  # the default n.obs argument in `psych::fa()` is `NA`, so we change
+  # our default `NULL` to `NA` to avoid errors
+  if (is.null(n_obs)) {
+    n_obs <- NA
+  }
+
+  item_omega.data.frame(
+    x,
+    n = n,
+    rotation = rotation,
+    factor_method = factor_method,
+    n.obs = n_obs,
+    poly_cor = poly_cor,
+    item_direction = item_direction,
+    verbose = verbose,
+    ...
+  )
 }
 
 
