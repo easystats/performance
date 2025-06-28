@@ -95,7 +95,7 @@ item_omega.data.frame <- function(x,
   # determine number of factors
   n <- .get_n_factors(.data, n = n, rotation = rotation)
 
-  # define keys for omega
+  # should some items be reversed?
   if (!is.null(reverse_items)) {
     # numeric indices should be replaced by their column names
     if (is.numeric(reverse_items)) {
