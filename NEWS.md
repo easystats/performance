@@ -8,6 +8,7 @@
 
 * `check_itemscale()` got some new features:
   - Works now with factor analysis results, from `parameters::factor_analysis()`.
+  - A new argument `reverse_items`, to reverse-code items on the fly.
 
 * Formatting of p-values in `test_likelihoodratio()` is now consistent with
   formatted p-values from other functions.
