@@ -99,6 +99,12 @@ item_omega.data.frame <- function(x,
 
   # should some items be reversed?
   if (!is.null(reverse_items)) {
+    # only works for data frames, not matrices
+    if (!is.data.frame(x)) {
+      insight::format_error(
+        "The `reverse_items` argument only works with data frames, not matrices."
+      )
+    }
     # numeric indices should be replaced by their column names
     if (is.numeric(reverse_items)) {
       reverse_items <- colnames(.data)[reverse_items]
@@ -132,7 +138,7 @@ item_omega.data.frame <- function(x,
   attr(out, "rotation") <- rotation
   attr(out, "factor_method") <- factor_method
   attr(out, "poly_cor") <- poly_cor
-  attr(out, "item_direction") <- item_direction
+  attr(out, "reverse_items") <- reverse_items
   attr(out, "n") <- n
 
   class(out) <- c("item_omega", "data.frame")
@@ -148,7 +154,7 @@ item_omega.matrix <- function(x,
                               factor_method = "minres",
                               n_obs = NULL,
                               poly_cor = FALSE,
-                              item_direction = NULL,
+                              reverse_items = NULL,
                               verbose = TRUE,
                               ...) {
   # validate n_obs
@@ -179,7 +185,7 @@ item_omega.matrix <- function(x,
     factor_method = factor_method,
     n.obs = n_obs,
     poly_cor = poly_cor,
-    item_direction = item_direction,
+    reverse_items = reverse_items,
     verbose = verbose,
     ...
   )

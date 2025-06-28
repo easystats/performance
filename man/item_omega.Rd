@@ -26,7 +26,7 @@ item_omega(x, ...)
   factor_method = "minres",
   n_obs = NULL,
   poly_cor = FALSE,
-  item_direction = NULL,
+  reverse_items = NULL,
   verbose = TRUE,
   ...
 )
