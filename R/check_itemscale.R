@@ -68,7 +68,10 @@
 #'   factor_index = parameters::closest_component(pca)
 #' )
 #' @export
-check_itemscale <- function(x, factor_index = NULL, reverse_items = NULL) {
+check_itemscale <- function(x,
+                            factor_index = NULL,
+                            reverse_items = NULL,
+                            verbose = TRUE) {
   if (!inherits(x, c("parameters_pca", "parameters_efa", "data.frame"))) {
     insight::format_error(
       "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, an object of class `parameters_efa`, as returned by `parameters::factor_analysis()`, or a data frame." # nolint
@@ -116,7 +119,7 @@ check_itemscale <- function(x, factor_index = NULL, reverse_items = NULL) {
       reverse_items <- colnames(dataset)[reverse_items]
     }
     if (verbose) {
-      insight::format_message("Reversing items: ", toString(reverse_items))
+      insight::format_alert("Reversing items: ", toString(reverse_items))
     }
     # reverse the items
     dataset <- datawizard::reverse_scale(dataset, reverse_items, verbose = verbose)

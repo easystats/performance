@@ -102,7 +102,7 @@ item_omega.data.frame <- function(x,
       reverse_items <- colnames(.data)[reverse_items]
     }
     if (verbose) {
-      insight::format_message("Reversing items: ", toString(reverse_items))
+      insight::format_alert("Reversing items: ", toString(reverse_items))
     }
     # reverse the items
     .data <- datawizard::reverse_scale(.data, reverse_items, verbose = verbose)
