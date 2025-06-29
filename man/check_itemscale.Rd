@@ -4,7 +4,7 @@
 \alias{check_itemscale}
 \title{Describe Properties of Item Scales}
 \usage{
-check_itemscale(x, factor_index = NULL, reverse_items = NULL, verbose = TRUE)
+check_itemscale(x, factor_index = NULL)
 }
 \arguments{
 \item{x}{An object of class \code{parameters_pca}, as returned by
@@ -14,13 +14,6 @@ returned by \code{\link[parameters:principal_components]{parameters::factor_anal
 \item{factor_index}{If \code{x} is a data frame, \code{factor_index} must be specified.
 It must be a numeric vector of same length as number of columns in \code{x}, where
 each element is the index of the factor to which the respective column in \code{x}.}
-
-\item{reverse_items}{Character vector of variable names or numeric indices
-indicating their column positions in \code{x} that should be reversed before
-computing the reliability coefficients. If \code{NULL} (default), no items are
-reversed.}
-
-\item{verbose}{Logical, if \code{TRUE} (default), messages are printed.}
 }
 \value{
 A list of data frames, with related measures of internal

@@ -22,10 +22,6 @@
 #' correlation matrix. Required to compute correct fit indices.
 #' @param poly_cor Logical, if `TRUE`, polychoric correlations will be computed
 #' (by passing `poly = TRUE` to `psych::omega()`). Defaults to `FALSE`.
-#' @param reverse_items Character vector of variable names or numeric indices
-#' indicating their column positions in `x` that should be reversed before
-#' computing the reliability coefficients. If `NULL` (default), no items are
-#' reversed.
 #' @param verbose Logical, if `TRUE` (default), messages are printed.
 #' @param ... Additional arguments passed to [`psych::omega()`].
 #'
@@ -76,7 +72,6 @@ item_omega.data.frame <- function(x,
                                   rotation = "oblimin",
                                   factor_method = "minres",
                                   poly_cor = FALSE,
-                                  reverse_items = NULL,
                                   verbose = TRUE,
                                   ...) {
   insight::check_if_installed(c("psych", "parameters"))
@@ -96,32 +91,6 @@ item_omega.data.frame <- function(x,
 
   # determine number of factors
   n <- .get_n_factors(.data, n = n, rotation = rotation)
-
-  # should some items be reversed?
-  if (!is.null(reverse_items)) {
-    # only works for data frames, not matrices
-    if (!is.data.frame(x)) {
-      insight::format_error(
-        "The `reverse_items` argument only works with data frames, not matrices."
-      )
-    }
-    # check if the object has an attribute "reverse_items" - if so, warn that
-    # we don't want to "double reverse" items
-    if ("reverse_items" %in% names(attributes(x))) {
-      insight::format_warning(
-        "It seem that items have already been reversed in this data set. Make sure that you do not reverse them again."
-      )
-    }
-    # numeric indices should be replaced by their column names
-    if (is.numeric(reverse_items)) {
-      reverse_items <- colnames(.data)[reverse_items]
-    }
-    if (verbose) {
-      insight::format_alert("Reversing items: ", toString(reverse_items))
-    }
-    # reverse the items
-    .data <- datawizard::reverse_scale(.data, reverse_items, verbose = verbose)
-  }
 
   # calculate omega
   model <- psych::omega(
@@ -145,7 +114,6 @@ item_omega.data.frame <- function(x,
   attr(out, "rotation") <- rotation
   attr(out, "factor_method") <- factor_method
   attr(out, "poly_cor") <- poly_cor
-  attr(out, "reverse_items") <- reverse_items
   attr(out, "n") <- n
 
   class(out) <- c("item_omega", "data.frame")
@@ -161,7 +129,6 @@ item_omega.matrix <- function(x,
                               factor_method = "minres",
                               n_obs = NULL,
                               poly_cor = FALSE,
-                              reverse_items = NULL,
                               verbose = TRUE,
                               ...) {
   # validate n_obs
@@ -192,7 +159,6 @@ item_omega.matrix <- function(x,
     factor_method = factor_method,
     n.obs = n_obs,
     poly_cor = poly_cor,
-    reverse_items = reverse_items,
     verbose = verbose,
     ...
   )

@@ -23,21 +23,6 @@ test_that("item_omega", {
 
   expect_snapshot(parameters::model_parameters(omega))
   expect_snapshot(summary(omega))
-
-  # reverse items
-  omega2 <- item_omega(mtcars, n = 3, reverse_items = c("gear", "carb", "cyl"))
-  expect_equal(
-    as.numeric(omega),
-    as.numeric(omega2),
-    tolerance = 1e-3
-  )
-
-  # warning if items not found
-  expect_warning(
-    item_omega(mtcars, n = 3, reverse_items = c("gear", "carb", "cyl", "not_found")),
-    "Following (variables)",
-    fixed = TRUE
-  )
 })
 
 

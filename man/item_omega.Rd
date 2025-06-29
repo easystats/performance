@@ -14,7 +14,6 @@ item_omega(x, ...)
   rotation = "oblimin",
   factor_method = "minres",
   poly_cor = FALSE,
-  reverse_items = NULL,
   verbose = TRUE,
   ...
 )
@@ -26,7 +25,6 @@ item_omega(x, ...)
   factor_method = "minres",
   n_obs = NULL,
   poly_cor = FALSE,
-  reverse_items = NULL,
   verbose = TRUE,
   ...
 )
@@ -49,11 +47,6 @@ etc.}
 
 \item{poly_cor}{Logical, if \code{TRUE}, polychoric correlations will be computed
 (by passing \code{poly = TRUE} to \code{psych::omega()}). Defaults to \code{FALSE}.}
-
-\item{reverse_items}{Character vector of variable names or numeric indices
-indicating their column positions in \code{x} that should be reversed before
-computing the reliability coefficients. If \code{NULL} (default), no items are
-reversed.}
 
 \item{verbose}{Logical, if \code{TRUE} (default), messages are printed.}
 

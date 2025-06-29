@@ -41,33 +41,6 @@ test_that("check_itemscale", {
     ignore_attr = TRUE
   )
 
-  # reverse items
-  expect_message(
-    {
-      out_r <- check_itemscale(d, comp, reverse_items = c("a", "b"))
-    },
-    regex = "Reversing items: a, b",
-    fixed = TRUE
-  )
-  expect_length(out_r, 2L)
-  d_reversed <- datawizard::reverse_scale(d, c("a", "b"))
-  expect_equal(
-    out_r[[1]]$Mean,
-    vapply(d_reversed[out_r[[1]]$Item], mean, numeric(1)),
-    tolerance = 1e-4,
-    ignore_attr = TRUE
-  )
-
-  # warnings
-  expect_warning(
-    check_itemscale(d, comp, reverse_items = c("a", "xxx")),
-    regex = "Following variable(s)",
-    fixed = TRUE
-  )
-
-  expect_silent(check_itemscale(d, comp, reverse_items = c("a", "xxx"), verbose = FALSE))
-  expect_silent(check_itemscale(d, comp, reverse_items = c("a", "b"), verbose = FALSE))
-
   # factor_index as none-named vector
   out3 <- check_itemscale(d, factor_index = c(2, 1, 2, 2, 1, 1))
   expect_equal(
