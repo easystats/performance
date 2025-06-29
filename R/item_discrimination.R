@@ -6,8 +6,8 @@
 #'
 #' @param x A matrix or a data frame.
 #' @param standardize Logical, if `TRUE`, the data frame's vectors will be
-#'   standardized. Recommended when the variables have different measures /
-#'   scales.
+#' standardized. Recommended when the variables have different measures /
+#' scales.
 #' @param verbose Toggle warnings and messages.
 #'
 #' @return A data frame with the item discrimination (*corrected item-total

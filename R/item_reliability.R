@@ -9,14 +9,14 @@
 #' standardized. Recommended when the variables have different measures /
 #' scales.
 #' @param digits Amount of digits for returned values.
+#' @param verbose Toggle warnings and messages.
 #'
-#' @return A data frame with the corrected item-total correlations (*item
-#' discrimination*, column `item_discrimination`) and Cronbach's Alpha (if item
-#' deleted, column `alpha_if_deleted`) for each item of the scale, or `NULL` if
-#' data frame had too less columns.
+#' @return A data frame with the corrected item-total correlations
+#' (*item discrimination*, column `item_discrimination`) and Cronbach's Alpha
+#' (if item deleted, column `alpha_if_deleted`) for each item of the scale, or
+#' `NULL` if data frame had too less columns.
 #'
 #' @details
-#'
 #' This function calculates the item discriminations (corrected item-total
 #' correlations for each item of `x` with the remaining items) and the
 #' Cronbach's alpha for each item, if it was deleted from the scale. The
