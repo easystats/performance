@@ -2,6 +2,7 @@ test_that("item_omega", {
   skip_if_not_installed("psych")
   skip_if_not_installed("parameters")
   skip_if_not_installed("GPArotation")
+  skip_if_not_installed("knitr")
 
   data(mtcars)
   omega <- item_omega(mtcars, n = 3)
@@ -26,7 +27,7 @@ test_that("item_omega", {
 })
 
 
-test_that("item_omega", {
+test_that("item_omega-2", {
   skip_on_cran()
   skip_if_not_installed("psych")
   skip_if_not_installed("parameters")

@@ -18,19 +18,17 @@
     Code
       print_md(omega)
     Output
-      [1] "Table: Reliability Coefficients"     
-      [2] ""                                    
-      [3] "|Statistic            | Coefficient|"
-      [4] "|:--------------------|-----------:|"
-      [5] "|Alpha                |        0.88|"
-      [6] "|G.6                  |        0.97|"
-      [7] "|Omega (hierarchical) |        0.57|"
-      [8] "|Omega (asymptotic H) |        0.58|"
-      [9] "|Omega (total)        |        0.97|"
-      attr(,"format")
-      [1] "pipe"
-      attr(,"class")
-      [1] "knitr_kable" "character"  
+      
+      
+      Table: Reliability Coefficients
+      
+      |Statistic            | Coefficient|
+      |:--------------------|-----------:|
+      |Alpha                |        0.88|
+      |G.6                  |        0.97|
+      |Omega (hierarchical) |        0.57|
+      |Omega (asymptotic H) |        0.58|
+      |Omega (total)        |        0.97|
 
 ---
 
