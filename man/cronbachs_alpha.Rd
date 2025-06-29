@@ -25,11 +25,13 @@ for tests or item-scales of questionnaires.
 The Cronbach's Alpha value for \code{x}. A value closer to 1
 indicates greater internal consistency, where usually following
 rule of thumb is applied to interpret the results:
-\ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
-0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
-0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
-0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
-and everything > 0.8 is good or excellent.
+\itemize{
+\item \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
+\item 0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
+\item 0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
+\item 0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
+\item and everything > 0.8 is good or excellent.
+}
 }
 \note{
 \code{item_alpha()} is an alias for \code{cronbachs_alpha()}.

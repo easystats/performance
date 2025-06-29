@@ -7,7 +7,7 @@
 #'
 #' @param x An object of class `parameters_pca`, as returned by
 #' [`parameters::principal_components()`], of class `parameters_efa`, as
-#' returned by [`parameters::factor_analysis()`], or a data frame.
+#' returned by `parameters::factor_analysis()`, or a data frame.
 #' @param factor_index If `x` is a data frame, `factor_index` must be specified.
 #' It must be a numeric vector of same length as number of columns in `x`, where
 #' each element is the index of the factor to which the respective column in `x`.
@@ -20,20 +20,21 @@
 #' `check_itemscale()` calculates various measures of internal consistencies,
 #' such as Cronbach's alpha, item difficulty or discrimination etc. on subscales
 #' which were built from several items. Subscales are retrieved from the results
-#' of [`parameters::principal_components()`] or
-#' [`parameters::factor_analysis()`], i.e. based on how many components were
-#' extracted from the PCA, respectively how many factors were extracted from the
-#' factor analysis. `check_itemscale()` retrieves those variables that belong to
-#' a component and calculates the above mentioned measures.
+#' of [`parameters::principal_components()`] or `parameters::factor_analysis()`,
+#' i.e. based on how many components were extracted from the PCA, respectively
+#' how many factors were extracted from the factor analysis. `check_itemscale()`
+#' retrieves those variables that belong to a component and calculates the above
+#' mentioned measures.
 #'
 #' @note
 #' - *Item difficulty* should range between 0.2 and 0.8. Ideal value
 #'   is `p+(1-p)/2` (which mostly is between 0.5 and 0.8). See
 #'   [`item_difficulty()`] for details.
 #'
-#' - For *item discrimination*, acceptable values are 0.20 or higher;
-#'   the closer to 1.00 the better. See [`item_reliability()`] for more
-#'   details.
+#' - For *item discrimination*, also known as *corrected item-total correlations*,
+#'   acceptable values are 0.20 or higher; the closer to 1.00 the better. See
+#'   [`item_reliability()`] for more details. If an item discrimination is
+#'   negativ, the corresponding item probably need to be reverse coded.
 #'
 #' - In case the total *Cronbach's alpha* value is below the acceptable
 #'   cut-off of 0.7 (mostly if an index has few items), the

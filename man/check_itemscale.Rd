@@ -9,7 +9,7 @@ check_itemscale(x, factor_index = NULL)
 \arguments{
 \item{x}{An object of class \code{parameters_pca}, as returned by
 \code{\link[parameters:principal_components]{parameters::principal_components()}}, of class \code{parameters_efa}, as
-returned by \code{\link[parameters:principal_components]{parameters::factor_analysis()}}, or a data frame.}
+returned by \code{parameters::factor_analysis()}, or a data frame.}
 
 \item{factor_index}{If \code{x} is a data frame, \code{factor_index} must be specified.
 It must be a numeric vector of same length as number of columns in \code{x}, where
@@ -28,20 +28,21 @@ applied to (sub)scales, which items were extracted using
 \code{check_itemscale()} calculates various measures of internal consistencies,
 such as Cronbach's alpha, item difficulty or discrimination etc. on subscales
 which were built from several items. Subscales are retrieved from the results
-of \code{\link[parameters:principal_components]{parameters::principal_components()}} or
-\code{\link[parameters:principal_components]{parameters::factor_analysis()}}, i.e. based on how many components were
-extracted from the PCA, respectively how many factors were extracted from the
-factor analysis. \code{check_itemscale()} retrieves those variables that belong to
-a component and calculates the above mentioned measures.
+of \code{\link[parameters:principal_components]{parameters::principal_components()}} or \code{parameters::factor_analysis()},
+i.e. based on how many components were extracted from the PCA, respectively
+how many factors were extracted from the factor analysis. \code{check_itemscale()}
+retrieves those variables that belong to a component and calculates the above
+mentioned measures.
 }
 \note{
 \itemize{
 \item \emph{Item difficulty} should range between 0.2 and 0.8. Ideal value
 is \code{p+(1-p)/2} (which mostly is between 0.5 and 0.8). See
 \code{\link[=item_difficulty]{item_difficulty()}} for details.
-\item For \emph{item discrimination}, acceptable values are 0.20 or higher;
-the closer to 1.00 the better. See \code{\link[=item_reliability]{item_reliability()}} for more
-details.
+\item For \emph{item discrimination}, also known as \emph{corrected item-total correlations},
+acceptable values are 0.20 or higher; the closer to 1.00 the better. See
+\code{\link[=item_reliability]{item_reliability()}} for more details. If an item discrimination is
+negativ, the corresponding item probably need to be reverse coded.
 \item In case the total \emph{Cronbach's alpha} value is below the acceptable
 cut-off of 0.7 (mostly if an index has few items), the
 \emph{mean inter-item-correlation} is an alternative measure to indicate

@@ -2,9 +2,9 @@
 % Please edit documentation in R/item_discrimination.R
 \name{item_discrimination}
 \alias{item_discrimination}
-\title{Discrimination of Questionnaire Items}
+\title{Discrimination of Questionnaire Items (Corrected Item-Total Correlation)}
 \usage{
-item_discrimination(x, standardize = FALSE)
+item_discrimination(x, standardize = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{x}{A matrix or a data frame.}
@@ -12,6 +12,8 @@ item_discrimination(x, standardize = FALSE)
 \item{standardize}{Logical, if \code{TRUE}, the data frame's vectors will be
 standardized. Recommended when the variables have different measures /
 scales.}
+
+\item{verbose}{Toggle warnings and messages.}
 }
 \value{
 A data frame with the item discrimination (\emph{corrected item-total

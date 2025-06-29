@@ -12,13 +12,13 @@
 #' @note `item_alpha()` is an alias for `cronbachs_alpha()`.
 #'
 #' @details The Cronbach's Alpha value for `x`. A value closer to 1
-#'    indicates greater internal consistency, where usually following
-#'    rule of thumb is applied to interpret the results:
-#'    \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
-#'    0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
-#'    0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
-#'    0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
-#'    and everything > 0.8 is good or excellent.
+#' indicates greater internal consistency, where usually following
+#' rule of thumb is applied to interpret the results:
+#' - \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
+#' - 0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
+#' - 0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
+#' - 0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
+#' - and everything > 0.8 is good or excellent.
 #'
 #' @references Bland, J. M., and Altman, D. G. Statistics notes: Cronbach's
 #'   alpha. BMJ 1997;314:572. 10.1136/bmj.314.7080.572
