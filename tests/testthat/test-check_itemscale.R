@@ -1,5 +1,7 @@
 test_that("check_itemscale", {
   skip_if_not_installed("parameters")
+  skip_if_not_installed("psych")
+  skip_if_not_installed("GPArotation")
 
   set.seed(123)
   d <- data.frame(
@@ -76,6 +78,9 @@ test_that("check_itemscale", {
 
 test_that("check_itemscale for FA", {
   skip_if_not_installed("parameters")
+  skip_if_not_installed("psych")
+  skip_if_not_installed("GPArotation")
+
   f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
   out <- check_itemscale(f)
   expect_equal(
@@ -88,6 +93,9 @@ test_that("check_itemscale for FA", {
 
 test_that("print_md check_itemscale for FA", {
   skip_if_not_installed("parameters")
+  skip_if_not_installed("psych")
+  skip_if_not_installed("GPArotation")
+
   f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
   out <- check_itemscale(f)
   expect_snapshot(print_md(out))
