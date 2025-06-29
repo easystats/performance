@@ -1,5 +1,7 @@
 test_that("check_itemscale", {
   skip_if_not_installed("parameters")
+  skip_if_not_installed("psych")
+  skip_if_not_installed("GPArotation")
 
   set.seed(123)
   d <- data.frame(
@@ -40,6 +42,7 @@ test_that("check_itemscale", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
+
   # factor_index as none-named vector
   out3 <- check_itemscale(d, factor_index = c(2, 1, 2, 2, 1, 1))
   expect_equal(
@@ -70,4 +73,31 @@ test_that("check_itemscale", {
     check_itemscale(iris$Species),
     regex = "`x` must be an object of class"
   )
+})
+
+
+test_that("check_itemscale for FA", {
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("psych")
+  skip_if_not_installed("GPArotation")
+
+  f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
+  out <- check_itemscale(f)
+  expect_equal(
+    out[[1]]$Mean,
+    c(20.09062, 6.1875, 146.6875, 17.84875, 0.4375, 2.8125),
+    tolerance = 1e-4
+  )
+})
+
+
+test_that("print_md check_itemscale for FA", {
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("psych")
+  skip_if_not_installed("GPArotation")
+  skip_if_not_installed("knitr")
+
+  f <- parameters::factor_analysis(mtcars, n = 2, rotation = "oblimin", standardize = FALSE)
+  out <- check_itemscale(f)
+  expect_snapshot(print_md(out))
 })

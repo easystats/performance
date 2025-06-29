@@ -14,7 +14,6 @@ item_omega(x, ...)
   rotation = "oblimin",
   factor_method = "minres",
   poly_cor = FALSE,
-  item_direction = NULL,
   verbose = TRUE,
   ...
 )
@@ -26,7 +25,6 @@ item_omega(x, ...)
   factor_method = "minres",
   n_obs = NULL,
   poly_cor = FALSE,
-  item_direction = NULL,
   verbose = TRUE,
   ...
 )
@@ -49,11 +47,6 @@ etc.}
 
 \item{poly_cor}{Logical, if \code{TRUE}, polychoric correlations will be computed
 (by passing \code{poly = TRUE} to \code{psych::omega()}). Defaults to \code{FALSE}.}
-
-\item{item_direction}{A vector of item keys indicating the direction of
-scoring for items. E.g., \code{c(1, 1, -1, 1)} for four items where the third item
-is reverse-scored. Passed to the \code{key} argument in \code{psych::omega()}. Defaults
-to \code{NULL}.}
 
 \item{verbose}{Logical, if \code{TRUE} (default), messages are printed.}
 

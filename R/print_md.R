@@ -55,17 +55,22 @@ print_html.compare_performance <- function(x,
 
 #' @export
 print_md.check_itemscale <- function(x, digits = 2, ...) {
+  captions <- lapply(seq_along(x), function(i) {
+    sprintf("Component %i", i)
+  })
+
+  footers <- lapply(seq_along(x), function(i) {
+    sprintf(
+      "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+      attributes(x[[i]])$item_intercorrelation,
+      attributes(x[[i]])$cronbachs_alpha
+    )
+  })
+
   insight::export_table(
-    lapply(seq_along(x), function(i) {
-      out <- x[[i]]
-      attr(out, "caption") <- sprintf("Component %i", i)
-      attr(out, "footer") <- sprintf(
-        "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-        attributes(out)$item_intercorrelation,
-        attributes(out)$cronbachs_alpha
-      )
-      out
-    }),
+    x,
+    caption = captions,
+    footer = footers,
     digits = digits,
     format = "markdown",
     missing = "<NA>",

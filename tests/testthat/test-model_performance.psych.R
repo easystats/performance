@@ -12,6 +12,7 @@ test_that("model_performance.psych", {
       n = 4,
       scores = "tenBerge",
       cor = "poly",
+      rotation = "none",
       standardize = FALSE
   )
 

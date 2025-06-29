@@ -108,6 +108,7 @@ test_that("test_likelihoodratio - lm", {
 })
 
 test_that("test_likelihoodratio - print p-digits", {
+  skip_if_not_installed("knitr")
   data(mtcars)
   m1 <- lm(mpg ~ hp, data = mtcars)
   m2 <- lm(mpg ~ hp * as.factor(gear), data = mtcars)
