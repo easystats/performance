@@ -99,7 +99,6 @@ item_omega.data.frame <- function(x,
     rotation = rotation,
     fm = factor_method,
     poly = poly_cor,
-    key = NULL,
     plot = FALSE,
     ...
   )
