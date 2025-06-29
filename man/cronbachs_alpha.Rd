@@ -3,11 +3,14 @@
 \name{cronbachs_alpha}
 \alias{cronbachs_alpha}
 \alias{item_alpha}
+\alias{cronbachs_alpha.data.frame}
 \title{Cronbach's Alpha for Items or Scales}
 \usage{
 cronbachs_alpha(x, ...)
 
 item_alpha(x, ...)
+
+\method{cronbachs_alpha}{data.frame}(x, verbose = TRUE, ...)
 }
 \arguments{
 \item{x}{A matrix or a data frame, or an object of class \code{parameters_pca},

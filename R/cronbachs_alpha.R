@@ -43,6 +43,7 @@ cronbachs_alpha <- function(x, ...) {
 item_alpha <- cronbachs_alpha
 
 
+#' @rdname cronbachs_alpha
 #' @export
 cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
   # remove missings
