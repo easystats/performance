@@ -32,7 +32,8 @@ satisfactory index ranges from \code{0.4} to \code{0.7}. Items with low discrimi
 indices are often ambiguously worded and should be examined. Items with
 negative indices should be examined to determine why a negative value was
 obtained (e.g. reversed answer categories regarding positive and negative
-poles).
+poles - in such cases, use \code{\link[datawizard:reverse]{datawizard::reverse()}} to reverse-code items
+in advance).
 }
 \examples{
 data(mtcars)

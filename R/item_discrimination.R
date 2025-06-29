@@ -22,7 +22,8 @@
 #' indices are often ambiguously worded and should be examined. Items with
 #' negative indices should be examined to determine why a negative value was
 #' obtained (e.g. reversed answer categories regarding positive and negative
-#' poles).
+#' poles - in such cases, use [`datawizard::reverse()`] to reverse-code items
+#' in advance).
 #'
 #' @references
 #' - Kelava A, Moosbrugger H (2020). Deskriptivstatistische Itemanalyse und
@@ -61,7 +62,7 @@ item_discrimination <- function(x, standardize = FALSE, verbose = TRUE) {
   # check for negative discrimination values. Tell user that item might need
   # to be reverse coded
   if (any(id < 0) && verbose) {
-    insight::format_alert("Some of the values are negative. Maybe affected items need to be reverse-coded.")
+    insight::format_alert("Some of the values are negative. Maybe affected items need to be reverse-coded, e.g. using `datawizard::reverse()`.")
   }
 
   out <- data.frame(

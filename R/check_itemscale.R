@@ -16,7 +16,6 @@
 #' consistencies of each subscale.
 #'
 #' @details
-#'
 #' `check_itemscale()` calculates various measures of internal consistencies,
 #' such as Cronbach's alpha, item difficulty or discrimination etc. on subscales
 #' which were built from several items. Subscales are retrieved from the results
@@ -34,7 +33,8 @@
 #' - For *item discrimination*, also known as *corrected item-total correlations*,
 #'   acceptable values are 0.20 or higher; the closer to 1.00 the better. See
 #'   [`item_reliability()`] for more details. If an item discrimination is
-#'   negativ, the corresponding item probably need to be reverse coded.
+#'   negativ, the corresponding item probably need to be reverse-coded (which
+#'   can be done with [`datawizard::reverse()`]).
 #'
 #' - In case the total *Cronbach's alpha* value is below the acceptable
 #'   cut-off of 0.7 (mostly if an index has few items), the
