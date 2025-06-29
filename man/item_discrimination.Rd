@@ -2,9 +2,12 @@
 % Please edit documentation in R/item_discrimination.R
 \name{item_discrimination}
 \alias{item_discrimination}
+\alias{item_totalcor}
 \title{Discrimination of Questionnaire Items (Corrected Item-Total Correlation)}
 \usage{
 item_discrimination(x, standardize = FALSE, verbose = TRUE)
+
+item_totalcor(x, standardize = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{x}{A matrix or a data frame.}
@@ -20,8 +23,10 @@ A data frame with the item discrimination (\emph{corrected item-total
 correlations}) for each item of the scale.
 }
 \description{
-Compute various measures of internal consistencies
-for tests or item-scales of questionnaires.
+Compute various measures of internal consistencies for tests or
+item-scales of questionnaires. \code{item_discrimination()} calculates the
+corrected item-total correlations for each item of \code{x} with the remaining
+items. \code{item_totalcor()} is an alias for \code{item_discrimination()}.
 }
 \details{
 This function calculates the item discriminations (corrected item-total

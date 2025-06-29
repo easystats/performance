@@ -1,8 +1,10 @@
 #' @title Discrimination of Questionnaire Items (Corrected Item-Total Correlation)
 #' @name item_discrimination
 #'
-#' @description Compute various measures of internal consistencies
-#' for tests or item-scales of questionnaires.
+#' @description Compute various measures of internal consistencies for tests or
+#' item-scales of questionnaires. `item_discrimination()` calculates the
+#' corrected item-total correlations for each item of `x` with the remaining
+#' items. `item_totalcor()` is an alias for `item_discrimination()`.
 #'
 #' @param x A matrix or a data frame.
 #' @param standardize Logical, if `TRUE`, the data frame's vectors will be
@@ -11,7 +13,7 @@
 #' @param verbose Toggle warnings and messages.
 #'
 #' @return A data frame with the item discrimination (*corrected item-total
-#'   correlations*) for each item of the scale.
+#' correlations*) for each item of the scale.
 #'
 #' @details
 #' This function calculates the item discriminations (corrected item-total
@@ -75,6 +77,7 @@ item_discrimination <- function(x, standardize = FALSE, verbose = TRUE) {
   out
 }
 
+#' @rdname item_discrimination
 #' @export
 item_totalcor <- item_discrimination
 

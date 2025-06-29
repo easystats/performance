@@ -10,16 +10,22 @@ cronbachs_alpha(x, ...)
 item_alpha(x, ...)
 }
 \arguments{
-\item{x}{A matrix or a data frame.}
+\item{x}{A matrix or a data frame, or an object of class \code{parameters_pca},
+as returned by \code{\link[parameters:principal_components]{parameters::principal_components()}}, or an object of class
+\code{parameters_efa}, as returned by \code{parameters::factor_analysis()}.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle warnings and messages.}
 }
 \value{
 The Cronbach's Alpha value for \code{x}.
 }
 \description{
-Compute various measures of internal consistencies
-for tests or item-scales of questionnaires.
+Compute various measures of internal consistencies for tests or
+item-scales of questionnaires. \code{cronbachs_alpha()} calculates the Cronbach's
+Alpha value for all variables in \code{x}. \code{item_alpha()} is an alias for
+\code{cronbachs_alpha()}.
 }
 \details{
 The Cronbach's Alpha value for \code{x}. A value closer to 1

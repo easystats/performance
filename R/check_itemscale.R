@@ -33,7 +33,7 @@
 #' - For *item discrimination*, also known as *corrected item-total correlations*,
 #'   acceptable values are 0.20 or higher; the closer to 1.00 the better. See
 #'   [`item_reliability()`] for more details. If an item discrimination is
-#'   negativ, the corresponding item probably need to be reverse-coded (which
+#'   negative, the corresponding item probably need to be reverse-coded (which
 #'   can be done with [`datawizard::reverse()`]).
 #'
 #' - In case the total *Cronbach's alpha* value is below the acceptable

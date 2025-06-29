@@ -42,7 +42,7 @@ is \code{p+(1-p)/2} (which mostly is between 0.5 and 0.8). See
 \item For \emph{item discrimination}, also known as \emph{corrected item-total correlations},
 acceptable values are 0.20 or higher; the closer to 1.00 the better. See
 \code{\link[=item_reliability]{item_reliability()}} for more details. If an item discrimination is
-negativ, the corresponding item probably need to be reverse-coded (which
+negative, the corresponding item probably need to be reverse-coded (which
 can be done with \code{\link[datawizard:reverse]{datawizard::reverse()}}).
 \item In case the total \emph{Cronbach's alpha} value is below the acceptable
 cut-off of 0.7 (mostly if an index has few items), the
