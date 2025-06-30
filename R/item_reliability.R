@@ -178,7 +178,3 @@ print_html.item_reliability <- function(x, ...) {
     zap_small = TRUE
   )
 }
-
-
-#' @export
-display.item_reliability <- display.performance_model

@@ -112,35 +112,26 @@ item_totalcor <- function(x, standardize = FALSE, corrected = FALSE, verbose = T
 
 #' @export
 print.item_discrimination <- function(x, ...) {
-  out <- insight::format_table(x, ...)
-  # set correct caption
-  if (colnames(out)[2] == "Discrimination") {
-    caption <- c("Item Discrimination", "blue")
-  } else {
-    colnames(out)[2] <- "Total Correlation"
-    caption <- c("Item-Total Correlation", "blue")
-  }
-  cat(insight::export_table(out, caption = caption, ...))
+  cat(.print_item_discrimination(x, format = "text", ...))
   invisible(x)
 }
 
 
 #' @export
 print_md.item_discrimination <- function(x, ...) {
-  out <- insight::format_table(x, ...)
-  # set correct caption
-  if (colnames(out)[2] == "Discrimination") {
-    caption <- "Item Discrimination"
-  } else {
-    colnames(out)[2] <- "Total Correlation"
-    caption <- "Item-Total Correlation"
-  }
-  insight::export_table(out, caption = caption, format = "markdown", ...)
+  .print_item_discrimination(x, format = "markdown", ...)
 }
 
 
 #' @export
 print_html.item_discrimination <- function(x, ...) {
+  .print_item_discrimination(x, format = "html", ...)
+}
+
+
+# helper ---------------------------------------
+
+.print_item_discrimination <- function(x, format = "markdown", ...) {
   out <- insight::format_table(x, ...)
   # set correct caption
   if (colnames(out)[2] == "Discrimination") {
@@ -149,9 +140,5 @@ print_html.item_discrimination <- function(x, ...) {
     colnames(out)[2] <- "Total Correlation"
     caption <- "Item-Total Correlation"
   }
-  insight::export_table(out, caption = caption, format = "html", ...)
+  insight::export_table(out, caption = caption, format = format, ...)
 }
-
-
-#' @export
-display.item_discrimination <- display.performance_model
