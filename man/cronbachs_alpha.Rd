@@ -3,33 +3,44 @@
 \name{cronbachs_alpha}
 \alias{cronbachs_alpha}
 \alias{item_alpha}
+\alias{cronbachs_alpha.data.frame}
 \title{Cronbach's Alpha for Items or Scales}
 \usage{
 cronbachs_alpha(x, ...)
 
 item_alpha(x, ...)
+
+\method{cronbachs_alpha}{data.frame}(x, verbose = TRUE, ...)
 }
 \arguments{
-\item{x}{A matrix or a data frame.}
+\item{x}{A matrix or a data frame, or an object of class \code{parameters_pca},
+as returned by \code{\link[parameters:principal_components]{parameters::principal_components()}}, or an object of class
+\code{parameters_efa}, as returned by \code{parameters::factor_analysis()}.}
 
 \item{...}{Currently not used.}
+
+\item{verbose}{Toggle warnings and messages.}
 }
 \value{
 The Cronbach's Alpha value for \code{x}.
 }
 \description{
-Compute various measures of internal consistencies
-for tests or item-scales of questionnaires.
+Compute various measures of internal consistencies for tests or
+item-scales of questionnaires. \code{cronbachs_alpha()} calculates the Cronbach's
+Alpha value for all variables in \code{x}. \code{item_alpha()} is an alias for
+\code{cronbachs_alpha()}.
 }
 \details{
 The Cronbach's Alpha value for \code{x}. A value closer to 1
 indicates greater internal consistency, where usually following
 rule of thumb is applied to interpret the results:
-\ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
-0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
-0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
-0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
-and everything > 0.8 is good or excellent.
+\itemize{
+\item \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
+\item 0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
+\item 0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
+\item 0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
+\item and everything > 0.8 is good or excellent.
+}
 }
 \note{
 \code{item_alpha()} is an alias for \code{cronbachs_alpha()}.

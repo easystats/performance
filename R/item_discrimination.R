@@ -1,16 +1,19 @@
-#' @title Discrimination of Questionnaire Items
+#' @title Discrimination of Questionnaire Items (Corrected Item-Total Correlation)
 #' @name item_discrimination
 #'
-#' @description Compute various measures of internal consistencies
-#'    for tests or item-scales of questionnaires.
+#' @description Compute various measures of internal consistencies for tests or
+#' item-scales of questionnaires. `item_discrimination()` calculates the
+#' corrected item-total correlations for each item of `x` with the remaining
+#' items. `item_totalcor()` is an alias for `item_discrimination()`.
 #'
 #' @param x A matrix or a data frame.
 #' @param standardize Logical, if `TRUE`, the data frame's vectors will be
-#'   standardized. Recommended when the variables have different measures /
-#'   scales.
+#' standardized. Recommended when the variables have different measures /
+#' scales.
+#' @param verbose Toggle warnings and messages.
 #'
 #' @return A data frame with the item discrimination (*corrected item-total
-#'   correlations*) for each item of the scale.
+#' correlations*) for each item of the scale.
 #'
 #' @details
 #' This function calculates the item discriminations (corrected item-total
@@ -21,7 +24,8 @@
 #' indices are often ambiguously worded and should be examined. Items with
 #' negative indices should be examined to determine why a negative value was
 #' obtained (e.g. reversed answer categories regarding positive and negative
-#' poles).
+#' poles - in such cases, use [`datawizard::reverse()`] to reverse-code items
+#' in advance).
 #'
 #' @references
 #' - Kelava A, Moosbrugger H (2020). Deskriptivstatistische Itemanalyse und
@@ -33,7 +37,7 @@
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_discrimination(x)
 #' @export
-item_discrimination <- function(x, standardize = FALSE) {
+item_discrimination <- function(x, standardize = FALSE, verbose = TRUE) {
   # check param
   if (!is.matrix(x) && !is.data.frame(x)) {
     insight::format_alert("`x` needs to be a data frame or matrix.")
@@ -57,6 +61,12 @@ item_discrimination <- function(x, standardize = FALSE) {
     stats::cor(x[, i], rowSums(x[, -i]), use = "pairwise.complete.obs")
   }, numeric(1))
 
+  # check for negative discrimination values. Tell user that item might need
+  # to be reverse coded
+  if (any(id < 0) && verbose) {
+    insight::format_alert("Some of the values are negative. Maybe affected items need to be reverse-coded, e.g. using `datawizard::reverse()`.")
+  }
+
   out <- data.frame(
     Item = df.names,
     Discrimination = id,
@@ -66,6 +76,10 @@ item_discrimination <- function(x, standardize = FALSE) {
   class(out) <- c("item_discrimination", "data.frame")
   out
 }
+
+#' @rdname item_discrimination
+#' @export
+item_totalcor <- item_discrimination
 
 # methods --------------------------------------
 

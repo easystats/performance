@@ -1,10 +1,15 @@
 #' @title Cronbach's Alpha for Items or Scales
 #' @name cronbachs_alpha
 #'
-#' @description Compute various measures of internal consistencies
-#'    for tests or item-scales of questionnaires.
+#' @description Compute various measures of internal consistencies for tests or
+#' item-scales of questionnaires. `cronbachs_alpha()` calculates the Cronbach's
+#' Alpha value for all variables in `x`. `item_alpha()` is an alias for
+#' `cronbachs_alpha()`.
 #'
-#' @param x A matrix or a data frame.
+#' @param x A matrix or a data frame, or an object of class `parameters_pca`,
+#' as returned by [`parameters::principal_components()`], or an object of class
+#' `parameters_efa`, as returned by `parameters::factor_analysis()`.
+#' @param verbose Toggle warnings and messages.
 #' @param ... Currently not used.
 #'
 #' @return The Cronbach's Alpha value for `x`.
@@ -12,13 +17,13 @@
 #' @note `item_alpha()` is an alias for `cronbachs_alpha()`.
 #'
 #' @details The Cronbach's Alpha value for `x`. A value closer to 1
-#'    indicates greater internal consistency, where usually following
-#'    rule of thumb is applied to interpret the results:
-#'    \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
-#'    0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
-#'    0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
-#'    0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
-#'    and everything > 0.8 is good or excellent.
+#' indicates greater internal consistency, where usually following
+#' rule of thumb is applied to interpret the results:
+#' - \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.5 is unacceptable,
+#' - 0.5 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.6 is poor,
+#' - 0.6 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.7 is questionable,
+#' - 0.7 < \ifelse{html}{\out{&alpha;}}{\eqn{\alpha}{alpha}} < 0.8 is acceptable,
+#' - and everything > 0.8 is good or excellent.
 #'
 #' @references Bland, J. M., and Altman, D. G. Statistics notes: Cronbach's
 #'   alpha. BMJ 1997;314:572. 10.1136/bmj.314.7080.572
@@ -38,6 +43,7 @@ cronbachs_alpha <- function(x, ...) {
 item_alpha <- cronbachs_alpha
 
 
+#' @rdname cronbachs_alpha
 #' @export
 cronbachs_alpha.data.frame <- function(x, verbose = TRUE, ...) {
   # remove missings
@@ -98,3 +104,7 @@ cronbachs_alpha.parameters_pca <- function(x, verbose = TRUE, ...) {
   names(cronb) <- paste0("PC", unique_factors)
   unlist(cronb)
 }
+
+
+#' @export
+cronbachs_alpha.parameters_efa <- cronbachs_alpha.parameters_pca

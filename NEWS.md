@@ -6,16 +6,29 @@
 
 ## Changes
 
+* `check_itemscale()` now work with factor analysis results, from
+  `parameters::factor_analysis()`.
+
+* `cronbachs_alpha()` now work with factor analysis results, from
+  `parameters::factor_analysis()`.
+
 * Formatting of p-values in `test_likelihoodratio()` is now consistent with
   formatted p-values from other functions.
 
 * Added following methods for `psych::fa()`, `psych::principal()`, `item_omega()`,
-  `psych::omega()`, and `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, and `check_outliers()`, `model_performance()`.
+  `psych::omega()`, and `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, `check_outliers()`, and `model_performance()`.
+
+* `item_alpha()` was added as an alias for `cronbachs_alpha()`.
+
+* `item_totalcor()` was added as an alias for `item_discrimination()`.
 
 ## Bug fixes
 
 * Fixed issue in `check_predictions()` for binomial models with a response
   defined as proportion or matrix of successes and trials.
+
+* `print_md()` for objects returned by `check_itemscale()` now include the footer
+  with information about Cronbach's alpha and mean inter-item correlation.
 
 # performance 0.14.0
 
