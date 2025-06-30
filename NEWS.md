@@ -7,7 +7,7 @@
 * `item_totalcor()` calculates the total correlation of an item with the
   sum of all other items in a scale. If `corrected = TRUE`, the total
   correlation is corrected for the number of items in the scale (which is
-  equvalent to `item_discrimination()`).
+  equivalent to `item_discrimination()`).
 
 * Column names of `item_reliability()` were changed to be in line with the
   _easystats_ naming convention and to be consistent with the output of other
