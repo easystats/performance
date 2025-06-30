@@ -11,7 +11,7 @@ parameters::principal_components() or parameters::factor_analysis()."><meta prop
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@ applied to (sub)scales, which items were extracted using
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_itemscale</span><span class="op">(</span><span class="va">x</span>, factor_index <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_itemscale</span><span class="op">(</span><span class="va">x</span>, factor_index <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -83,6 +83,10 @@ returned by <code><a href="https://easystats.github.io/parameters/reference/prin
 <dd><p>If <code>x</code> is a data frame, <code>factor_index</code> must be specified.
 It must be a numeric vector of same length as number of columns in <code>x</code>, where
 each element is the index of the factor to which the respective column in <code>x</code>.</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Toggle warnings and messages. If <code>TRUE</code>, messages are printed.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -109,7 +113,7 @@ is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See
 <code><a href="item_difficulty.html">item_difficulty()</a></code> for details.</p></li>
 <li><p>For <em>item discrimination</em>, also known as <em>corrected item-total correlations</em>,
 acceptable values are 0.20 or higher; the closer to 1.00 the better. See
-<code><a href="item_reliability.html">item_reliability()</a></code> for more details. If an item discrimination is
+<code><a href="item_discrimination.html">item_discrimination()</a></code> for more details. If an item discrimination is
 negative, the corresponding item probably need to be reverse-coded (which
 can be done with <code><a href="https://easystats.github.io/datawizard/reference/reverse.html" class="external-link">datawizard::reverse()</a></code>).</p></li>
 <li><p>In case the total <em>Cronbach's alpha</em> value is below the acceptable

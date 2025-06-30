@@ -9,7 +9,7 @@ item-scales of questionnaires."><meta property="og:image" content="https://easys
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,24 +90,51 @@ scales.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame with the corrected item-total correlations
-(<em>item discrimination</em>, column <code>item_discrimination</code>) and Cronbach's Alpha
-(if item deleted, column <code>alpha_if_deleted</code>) for each item of the scale, or
-<code>NULL</code> if data frame had too less columns.</p>
+    <p>A data frame with the item-total correlations (column
+<code>Item_Total_Correlation</code>), corrected item-total correlations (<em>item
+discrimination</em>, column <code>Discrimination</code>) and Cronbach's Alpha (if item
+deleted, column <code>Alpha_if_deleted</code>) for each item of the scale, or <code>NULL</code> if
+data frame had too less columns.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function calculates the item discriminations (corrected item-total
-correlations for each item of <code>x</code> with the remaining items) and the
-Cronbach's alpha for each item, if it was deleted from the scale. The
-absolute value of the item discrimination indices should be above 0.2. An
-index between 0.2 and 0.4 is considered as "fair", while an index above 0.4
-(or below -0.4) is "good". The range of satisfactory values is from 0.4 to
-0.7. Items with low discrimination indices are often ambiguously worded and
-should be examined. Items with negative indices should be examined to
-determine why a negative value was obtained (e.g. reversed answer categories
-regarding positive and negative poles).</p>
+    <p>This function calculates the item-total correlations, item discriminations
+(corrected item-total correlations for each item of <code>x</code> with the remaining
+items) and the Cronbach's alpha for each item, if it was deleted from the
+scale. The absolute value of the item discrimination indices should be above
+0.2. An index between 0.2 and 0.4 is considered as "fair", while an index
+above 0.4 (or below -0.4) is "good". The range of satisfactory values is from
+0.4 to 0.7. Items with low discrimination indices are often ambiguously
+worded and should be examined. Items with negative indices should be examined
+to determine why a negative value was obtained (e.g. reversed answer
+categories regarding positive and negative poles).</p>
+<p>See <code><a href="check_itemscale.html">check_itemscale()</a></code> and <code><a href="item_discrimination.html">item_discrimination()</a></code> for more details on
+the interpretation of the results.</p>
     </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+
+<ul><li><p><em>Item difficulty</em> should range between 0.2 and 0.8. Ideal value
+is <code>p+(1-p)/2</code> (which mostly is between 0.5 and 0.8). See
+<code><a href="item_difficulty.html">item_difficulty()</a></code> for details.</p></li>
+<li><p>For <em>item discrimination</em>, also known as <em>corrected item-total correlations</em>,
+acceptable values are 0.20 or higher; the closer to 1.00 the better. See
+<code><a href="item_discrimination.html">item_discrimination()</a></code> for more details. If an item discrimination is
+negative, the corresponding item probably need to be reverse-coded (which
+can be done with <code><a href="https://easystats.github.io/datawizard/reference/reverse.html" class="external-link">datawizard::reverse()</a></code>).</p></li>
+<li><p>In case the total <em>Cronbach's alpha</em> value is below the acceptable
+cut-off of 0.7 (mostly if an index has few items), the
+<em>mean inter-item-correlation</em> is an alternative measure to indicate
+acceptability. Satisfactory range lies between 0.2 and 0.4. See also
+<code><a href="item_intercor.html">item_intercor()</a></code>.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+
+<ul><li><p>Briggs SR, Cheek JM (1986) The role of factor analysis in the development
+and evaluation of personality scales. Journal of Personality, 54(1),
+106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -116,11 +143,16 @@ regarding positive and negative poles).</p>
 <span class="r-in"><span><span class="fu">item_reliability</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Some of the values are negative. Maybe affected items need to be</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   reverse-coded, e.g. using `datawizard::reverse()`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   term alpha_if_deleted item_discrimination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  cyl            0.048               0.826</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 gear            0.110              -0.127</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 carb            0.058               0.751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   hp            0.411               0.881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Item Reliability</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Item | Alpha if deleted | Total Correlation | Discrimination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl  |             0.05 |              0.83 |           0.83</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gear |             0.11 |             -0.12 |          -0.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb |             0.06 |              0.76 |           0.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> hp   |             0.41 |              1.00 |           0.88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Mean inter-item-correlation = 0.294  Cronbach's alpha = 0.095</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
