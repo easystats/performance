@@ -20,16 +20,19 @@
 #' @inherit check_itemscale note references
 #'
 #' @details
-#' This function calculates the item discriminations (corrected item-total
-#' correlations for each item of `x` with the remaining items) and the
-#' Cronbach's alpha for each item, if it was deleted from the scale. The
-#' absolute value of the item discrimination indices should be above 0.2. An
-#' index between 0.2 and 0.4 is considered as "fair", while an index above 0.4
-#' (or below -0.4) is "good". The range of satisfactory values is from 0.4 to
-#' 0.7. Items with low discrimination indices are often ambiguously worded and
-#' should be examined. Items with negative indices should be examined to
-#' determine why a negative value was obtained (e.g. reversed answer categories
-#' regarding positive and negative poles).
+#' This function calculates the item-total correlations, item discriminations
+#' (corrected item-total correlations for each item of `x` with the remaining
+#' items) and the Cronbach's alpha for each item, if it was deleted from the
+#' scale. The absolute value of the item discrimination indices should be above
+#' 0.2. An index between 0.2 and 0.4 is considered as "fair", while an index
+#' above 0.4 (or below -0.4) is "good". The range of satisfactory values is from
+#' 0.4 to 0.7. Items with low discrimination indices are often ambiguously
+#' worded and should be examined. Items with negative indices should be examined
+#' to determine why a negative value was obtained (e.g. reversed answer
+#' categories regarding positive and negative poles).
+#'
+#' See [`check_itemscale()`] and [`item_discrimination()`] for more details on
+#' the interpretation of the results.
 #'
 #' @examples
 #' data(mtcars)
