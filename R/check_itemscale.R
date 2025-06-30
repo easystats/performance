@@ -148,7 +148,7 @@ check_itemscale <- function(x, factor_index = NULL, verbose = TRUE) {
     )
 
     attr(s_out, "item_intercorrelation") <- item_intercor(items)
-    attr(s_out, "cronbachs_alpha") <- cronbachs_alpha(items)
+    attr(s_out, "cronbachs_alpha") <- cronbachs_alpha(items, verbose = FALSE)
 
     s_out
   })

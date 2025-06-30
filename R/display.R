@@ -51,3 +51,6 @@ display.item_reliability <- display.performance_model
 
 #' @export
 display.item_omega <- display.performance_model
+
+#' @export
+display.item_difficulty <- display.performance_model

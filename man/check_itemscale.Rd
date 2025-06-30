@@ -4,7 +4,7 @@
 \alias{check_itemscale}
 \title{Describe Properties of Item Scales}
 \usage{
-check_itemscale(x, factor_index = NULL)
+check_itemscale(x, factor_index = NULL, verbose = TRUE)
 }
 \arguments{
 \item{x}{An object of class \code{parameters_pca}, as returned by
