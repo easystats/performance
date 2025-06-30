@@ -124,38 +124,25 @@ print.item_reliability <- function(x, ...) {
   ), "yellow")
 
   cat(insight::export_table(out, ...))
-  invisible()
+  invisible(x)
 }
 
 
 #' @export
 print_md.item_reliability <- function(x, ...) {
-  out <- insight::format_table(x, ...)
-  # format column names
-  colnames(out) <- c("Item", "Alpha if deleted", "Total Correlation", "Discrimination")
-
-  # add attributes for table caption and footer
-  caption <- "Item Reliability"
-  footer <- sprintf(
-    "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-    attributes(out)$item_intercorrelation,
-    attributes(out)$cronbachs_alpha
-  )
-
-  insight::export_table(
-    out,
-    caption = caption,
-    footer = footer,
-    format = "markdown",
-    missing = "<NA>",
-    align = "firstleft",
-    zap_small = TRUE
-  )
+  .print_item_reliability(x, format = "markdown", ...)
 }
 
 
 #' @export
 print_html.item_reliability <- function(x, ...) {
+  .print_item_reliability(x, format = "html", ...)
+}
+
+
+# helper ---------------------------------------
+
+.print_item_reliability <- function(x, format = "markdown", ...) {
   out <- insight::format_table(x, ...)
   # format column names
   colnames(out) <- c("Item", "Alpha if deleted", "Total Correlation", "Discrimination")
@@ -172,7 +159,7 @@ print_html.item_reliability <- function(x, ...) {
     out,
     caption = caption,
     footer = footer,
-    format = "html",
+    format = format,
     missing = "<NA>",
     align = "firstleft",
     zap_small = TRUE
