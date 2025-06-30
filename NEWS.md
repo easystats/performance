@@ -9,12 +9,16 @@
   correlation is corrected for the number of items in the scale (which is
   equvalent to `item_discrimination()`).
 
+* Column names of `item_reliability()` were changed to be in line with the
+  _easystats_ naming convention and to be consistent with the output of other
+  related functions.
+
 ## Changes
 
 * `check_itemscale()` now work with factor analysis results, from
   `parameters::factor_analysis()`.
 
-* `check_reliability()` now includes the item-total correlation, and information
+* `item_reliability()` now includes the item-total correlation, and information
   about Cronbach's alpha and mean inter-item correlation in the printed output.
 
 * `cronbachs_alpha()` now work with factor analysis results, from

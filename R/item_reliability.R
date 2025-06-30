@@ -11,10 +11,11 @@
 #' @param digits Amount of digits for returned values.
 #' @param verbose Toggle warnings and messages.
 #'
-#' @return A data frame with the corrected item-total correlations
-#' (*item discrimination*, column `item_reliability`) and Cronbach's Alpha
-#' (if item deleted, column `alpha_if_deleted`) for each item of the scale, or
-#' `NULL` if data frame had too less columns.
+#' @return A data frame with the item-total correlations (column
+#' `Item_Total_Correlation`), corrected item-total correlations (*item
+#' discrimination*, column `Discrimination`) and Cronbach's Alpha (if item
+#' deleted, column `Alpha_if_deleted`) for each item of the scale, or `NULL` if
+#' data frame had too less columns.
 #'
 #' @details
 #' This function calculates the item discriminations (corrected item-total
@@ -84,10 +85,10 @@ item_reliability <- function(x, standardize = FALSE, digits = 3, verbose = TRUE)
     )
 
     out <- data.frame(
-      term = df.names,
-      alpha_if_deleted = round(cronbachDeleted, digits),
-      item_total_correlation = round(totalCorr$Item_Total_Correlation, digits),
-      item_reliability = round(totalCorrCorrected$Discrimination, digits),
+      Item = df.names,
+      Alpha_if_deleted = round(cronbachDeleted, digits),
+      Item_Total_Correlation = round(totalCorr$Item_Total_Correlation, digits),
+      Discrimination = round(totalCorrCorrected$Discrimination, digits),
       stringsAsFactors = FALSE
     )
 
