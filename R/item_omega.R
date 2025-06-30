@@ -193,16 +193,6 @@ print_html.item_omega <- function(x, ...) {
 
 
 #' @export
-display.item_omega <- function(object, format = "markdown", ...) {
-  if (format == "markdown") {
-    print_md(object, ...)
-  } else {
-    print_html(object, ...)
-  }
-}
-
-
-#' @export
 as.double.item_omega <- function(x, ...) {
   stats::setNames(as.vector(x$Coefficient), x$Statistic)
 }

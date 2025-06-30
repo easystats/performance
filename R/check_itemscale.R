@@ -11,6 +11,7 @@
 #' @param factor_index If `x` is a data frame, `factor_index` must be specified.
 #' It must be a numeric vector of same length as number of columns in `x`, where
 #' each element is the index of the factor to which the respective column in `x`.
+#' @param verbose Toggle warnings and messages. If `TRUE`, messages are printed.
 #'
 #' @return A list of data frames, with related measures of internal
 #' consistencies of each subscale.
@@ -32,7 +33,7 @@
 #'
 #' - For *item discrimination*, also known as *corrected item-total correlations*,
 #'   acceptable values are 0.20 or higher; the closer to 1.00 the better. See
-#'   [`item_reliability()`] for more details. If an item discrimination is
+#'   [`item_discrimination()`] for more details. If an item discrimination is
 #'   negative, the corresponding item probably need to be reverse-coded (which
 #'   can be done with [`datawizard::reverse()`]).
 #'
@@ -68,7 +69,7 @@
 #'   factor_index = parameters::closest_component(pca)
 #' )
 #' @export
-check_itemscale <- function(x, factor_index = NULL) {
+check_itemscale <- function(x, factor_index = NULL, verbose = TRUE) {
   if (!inherits(x, c("parameters_pca", "parameters_efa", "data.frame"))) {
     insight::format_error(
       "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, an object of class `parameters_efa`, as returned by `parameters::factor_analysis()`, or a data frame." # nolint
@@ -112,19 +113,34 @@ check_itemscale <- function(x, factor_index = NULL) {
   out <- lapply(sort(unique(subscales)), function(.subscale) {
     columns <- names(subscales)[subscales == .subscale]
     items <- dataset[columns]
-    reliability <- item_reliability(items)
+    reliability <- item_reliability(items, verbose = verbose)
 
-    .item_discr <- reliability$item_discrimination
-    if (is.null(.item_discr)) .item_discr <- NA
-    .item_alpha <- reliability$alpha_if_deleted
-    if (is.null(.item_alpha)) .item_alpha <- NA
+    # only show messages once, so set verbose to FALSE
+    verbose <- FALSE
+
+    .item_discr <- reliability$Discrimination
+    if (is.null(.item_discr)) {
+      .item_discr <- NA
+    }
+    .item_alpha <- reliability$Alpha_if_deleted
+    if (is.null(.item_alpha)) {
+      .item_alpha <- NA
+    }
 
     s_out <- data.frame(
       Item = columns,
-      Missings = vapply(items, function(i) sum(is.na(i)) / nrow(items), numeric(1)),
+      Missings = vapply(
+        items,
+        function(i) sum(is.na(i)) / nrow(items),
+        numeric(1)
+      ),
       Mean = vapply(items, mean, numeric(1), na.rm = TRUE),
       SD = vapply(items, stats::sd, numeric(1), na.rm = TRUE),
-      Skewness = vapply(items, function(i) as.numeric(datawizard::skewness(i)), numeric(1)),
+      Skewness = vapply(
+        items,
+        function(i) as.numeric(datawizard::skewness(i)),
+        numeric(1)
+      ),
       Difficulty = item_difficulty(items)$Difficulty,
       Discrimination = .item_discr,
       `alpha if deleted` = .item_alpha,
@@ -133,7 +149,7 @@ check_itemscale <- function(x, factor_index = NULL) {
     )
 
     attr(s_out, "item_intercorrelation") <- item_intercor(items)
-    attr(s_out, "cronbachs_alpha") <- cronbachs_alpha(items)
+    attr(s_out, "cronbachs_alpha") <- cronbachs_alpha(items, verbose = FALSE)
 
     s_out
   })
@@ -167,6 +183,33 @@ print.check_itemscale <- function(x, digits = 2, ...) {
     zap_small = TRUE,
     ...
   ))
+}
+
+
+#' @export
+print_md.check_itemscale <- function(x, digits = 2, ...) {
+  captions <- lapply(seq_along(x), function(i) {
+    sprintf("Component %i", i)
+  })
+
+  footers <- lapply(seq_along(x), function(i) {
+    sprintf(
+      "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+      attributes(x[[i]])$item_intercorrelation,
+      attributes(x[[i]])$cronbachs_alpha
+    )
+  })
+
+  insight::export_table(
+    x,
+    caption = captions,
+    footer = footers,
+    digits = digits,
+    format = "markdown",
+    missing = "<NA>",
+    align = "firstleft",
+    zap_small = TRUE
+  )
 }
 
 

@@ -37,10 +37,20 @@ display.performance_model <- function(object, format = "markdown", digits = 2, c
   }
 }
 
-
 #' @export
 display.compare_performance <- display.performance_model
 
-
 #' @export
 display.check_itemscale <- display.performance_model
+
+#' @export
+display.item_discrimination <- display.performance_model
+
+#' @export
+display.item_reliability <- display.performance_model
+
+#' @export
+display.item_omega <- display.performance_model
+
+#' @export
+display.item_difficulty <- display.performance_model
