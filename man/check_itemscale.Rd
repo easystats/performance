@@ -14,6 +14,8 @@ returned by \code{parameters::factor_analysis()}, or a data frame.}
 \item{factor_index}{If \code{x} is a data frame, \code{factor_index} must be specified.
 It must be a numeric vector of same length as number of columns in \code{x}, where
 each element is the index of the factor to which the respective column in \code{x}.}
+
+\item{verbose}{Toggle warnings and messages. If \code{TRUE}, messages are printed.}
 }
 \value{
 A list of data frames, with related measures of internal
