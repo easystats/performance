@@ -1,6 +1,10 @@
 test_that("item_discrimination", {
   data(iris)
   x <- iris[, 1:4]
+
+  expect_message(item_discrimination(x), regex = "Some of the values")
+  expect_silent(item_discrimination(x, verbose = FALSE))
+
   expect_equal(
     item_discrimination(x),
     structure(list(Item = c(
@@ -13,6 +17,14 @@ test_that("item_discrimination", {
       "item_discrimination",
       "data.frame"
     ), row.names = c(NA, -4L)),
+    tolerance = 1e-3
+  )
+
+  out1 <- item_discrimination(x, corrected = FALSE)
+  out2 <- item_totalcor(x)
+  expect_equal(
+    out1[["Item-Total Correlation"]],
+    out2[["Item-Total Correlation"]],
     tolerance = 1e-3
   )
 })

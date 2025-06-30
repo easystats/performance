@@ -3,11 +3,11 @@
 \name{item_discrimination}
 \alias{item_discrimination}
 \alias{item_totalcor}
-\title{Discrimination of Questionnaire Items (Corrected Item-Total Correlation)}
+\title{Discrimination and Item-Total Correlation of Questionnaire Items}
 \usage{
-item_discrimination(x, standardize = FALSE, verbose = TRUE)
+item_discrimination(x, standardize = FALSE, corrected = TRUE, verbose = TRUE)
 
-item_totalcor(x, standardize = FALSE, verbose = TRUE)
+item_totalcor(x, standardize = FALSE, corrected = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{x}{A matrix or a data frame.}
@@ -15,6 +15,10 @@ item_totalcor(x, standardize = FALSE, verbose = TRUE)
 \item{standardize}{Logical, if \code{TRUE}, the data frame's vectors will be
 standardized. Recommended when the variables have different measures /
 scales.}
+
+\item{corrected}{Logical, if \code{TRUE}, the item-total correlations are corrected
+for the item itself (default). If \code{FALSE}, the item-total correlations are
+calculated without correction.}
 
 \item{verbose}{Toggle warnings and messages.}
 }
@@ -26,7 +30,8 @@ correlations}) for each item of the scale.
 Compute various measures of internal consistencies for tests or
 item-scales of questionnaires. \code{item_discrimination()} calculates the
 corrected item-total correlations for each item of \code{x} with the remaining
-items. \code{item_totalcor()} is an alias for \code{item_discrimination()}.
+items. \code{item_totalcor()} by default calculates the item-total correlations
+(without correction).
 }
 \details{
 This function calculates the item discriminations (corrected item-total
@@ -39,11 +44,17 @@ negative indices should be examined to determine why a negative value was
 obtained (e.g. reversed answer categories regarding positive and negative
 poles - in such cases, use \code{\link[datawizard:reverse]{datawizard::reverse()}} to reverse-code items
 in advance).
+
+\code{item_discrimination()} and \code{item_totalcor()} only differ in the default
+value of the \code{corrected} argument. The former calculates the corrected
+item-total correlations, while the latter calculates the item-total
+correlations.
 }
 \examples{
 data(mtcars)
 x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 item_discrimination(x)
+item_totalcor(x)
 }
 \references{
 \itemize{

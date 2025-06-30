@@ -4,6 +4,11 @@
 
 * `item_omega()`, to calculate the McDonald's Omega reliability coefficient.
 
+* `item_totalcor()` calculates the total correlation of an item with the
+  sum of all other items in a scale. If `corrected = TRUE`, the total
+  correlation is corrected for the number of items in the scale (which is
+  equvalent to `item_discrimination()`).
+
 ## Changes
 
 * `check_itemscale()` now work with factor analysis results, from
@@ -20,7 +25,7 @@
 
 * `item_alpha()` was added as an alias for `cronbachs_alpha()`.
 
-* `item_totalcor()` was added as an alias for `item_discrimination()`.
+* Further functions get a `display()`, `print_md()` and `print_html()` method.
 
 ## Bug fixes
 

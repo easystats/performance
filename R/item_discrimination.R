@@ -1,15 +1,19 @@
-#' @title Discrimination of Questionnaire Items (Corrected Item-Total Correlation)
+#' @title Discrimination and Item-Total Correlation of Questionnaire Items
 #' @name item_discrimination
 #'
 #' @description Compute various measures of internal consistencies for tests or
 #' item-scales of questionnaires. `item_discrimination()` calculates the
 #' corrected item-total correlations for each item of `x` with the remaining
-#' items. `item_totalcor()` is an alias for `item_discrimination()`.
+#' items. `item_totalcor()` by default calculates the item-total correlations
+#' (without correction).
 #'
 #' @param x A matrix or a data frame.
 #' @param standardize Logical, if `TRUE`, the data frame's vectors will be
 #' standardized. Recommended when the variables have different measures /
 #' scales.
+#' @param corrected Logical, if `TRUE`, the item-total correlations are corrected
+#' for the item itself (default). If `FALSE`, the item-total correlations are
+#' calculated without correction.
 #' @param verbose Toggle warnings and messages.
 #'
 #' @return A data frame with the item discrimination (*corrected item-total
@@ -27,6 +31,11 @@
 #' poles - in such cases, use [`datawizard::reverse()`] to reverse-code items
 #' in advance).
 #'
+#' `item_discrimination()` and `item_totalcor()` only differ in the default
+#' value of the `corrected` argument. The former calculates the corrected
+#' item-total correlations, while the latter calculates the item-total
+#' correlations.
+#'
 #' @references
 #' - Kelava A, Moosbrugger H (2020). Deskriptivstatistische Itemanalyse und
 #'   Testwertbestimmung. In: Moosbrugger H,  Kelava A, editors. Testtheorie und
@@ -36,8 +45,9 @@
 #' data(mtcars)
 #' x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 #' item_discrimination(x)
+#' item_totalcor(x)
 #' @export
-item_discrimination <- function(x, standardize = FALSE, verbose = TRUE) {
+item_discrimination <- function(x, standardize = FALSE, corrected = TRUE, verbose = TRUE) {
   # check param
   if (!is.matrix(x) && !is.data.frame(x)) {
     insight::format_alert("`x` needs to be a data frame or matrix.")
@@ -58,7 +68,14 @@ item_discrimination <- function(x, standardize = FALSE, verbose = TRUE) {
   }
   # calculate corrected total-item correlation
   id <- vapply(seq_len(ncol(x)), function(i) {
-    stats::cor(x[, i], rowSums(x[, -i]), use = "pairwise.complete.obs")
+    if (corrected) {
+      # compute item discrimination (corrected item-total correlation)
+      score <- rowSums(x[, -i])
+    } else {
+      # compute item-total correlation
+      score <- rowSums(x)
+    }
+    stats::cor(x[, i], score, use = "pairwise.complete.obs")
   }, numeric(1))
 
   # check for negative discrimination values. Tell user that item might need
@@ -73,19 +90,65 @@ item_discrimination <- function(x, standardize = FALSE, verbose = TRUE) {
     stringsAsFactors = FALSE
   )
 
+  # change label
+  if (!corrected) {
+    colnames(out)[2] <- "Item-Total Correlation"
+  }
+
   class(out) <- c("item_discrimination", "data.frame")
   out
 }
 
+
 #' @rdname item_discrimination
 #' @export
-item_totalcor <- item_discrimination
+item_totalcor <- function(x, standardize = FALSE, corrected = FALSE, verbose = TRUE) {
+  # alias for item_discrimination, but corrected is FALSE by default
+  item_discrimination(x, standardize = standardize, corrected = corrected, verbose = verbose)
+}
+
 
 # methods --------------------------------------
 
 #' @export
 print.item_discrimination <- function(x, ...) {
   out <- insight::format_table(x, ...)
-  cat(insight::export_table(out, caption = c("Item Discrimination", "blue"), ...))
+  # set correct caption
+  if (colnames(out)[2] == "Discrimination") {
+    caption <- c("Item Discrimination", "blue")
+  } else {
+    caption <- c("Item-Total Correlation", "blue")
+  }
+  cat(insight::export_table(out, caption = caption, ...))
   invisible(x)
 }
+
+
+#' @export
+print_md.item_discrimination <- function(x, ...) {
+  out <- insight::format_table(x, ...)
+  # set correct caption
+  if (colnames(out)[2] == "Discrimination") {
+    caption <- "Item Discrimination"
+  } else {
+    caption <- "Item-Total Correlation"
+  }
+  insight::export_table(out, caption = caption, format = "markdown", ...)
+}
+
+
+#' @export
+print_html.item_discrimination <- function(x, ...) {
+  out <- insight::format_table(x, ...)
+  # set correct caption
+  if (colnames(out)[2] == "Discrimination") {
+    caption <- "Item Discrimination"
+  } else {
+    caption <- "Item-Total Correlation"
+  }
+  insight::export_table(out, caption = caption, format = "html", ...)
+}
+
+
+#' @export
+display.item_discrimination <- display.performance_model
