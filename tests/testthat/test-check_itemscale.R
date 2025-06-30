@@ -2,6 +2,7 @@ test_that("check_itemscale", {
   skip_if_not_installed("parameters")
   skip_if_not_installed("psych")
   skip_if_not_installed("GPArotation")
+  skip_if_not_installed("knitr")
 
   set.seed(123)
   d <- data.frame(

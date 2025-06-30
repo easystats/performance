@@ -68,7 +68,7 @@
 #'   factor_index = parameters::closest_component(pca)
 #' )
 #' @export
-check_itemscale <- function(x, factor_index = NULL) {
+check_itemscale <- function(x, factor_index = NULL, verbose = TRUE) {
   if (!inherits(x, c("parameters_pca", "parameters_efa", "data.frame"))) {
     insight::format_error(
       "`x` must be an object of class `parameters_pca`, as returned by `parameters::principal_components()`, an object of class `parameters_efa`, as returned by `parameters::factor_analysis()`, or a data frame." # nolint
@@ -112,19 +112,34 @@ check_itemscale <- function(x, factor_index = NULL) {
   out <- lapply(sort(unique(subscales)), function(.subscale) {
     columns <- names(subscales)[subscales == .subscale]
     items <- dataset[columns]
-    reliability <- item_reliability(items)
+    reliability <- item_reliability(items, verbose = verbose)
 
-    .item_discr <- reliability$item_discrimination
-    if (is.null(.item_discr)) .item_discr <- NA
-    .item_alpha <- reliability$alpha_if_deleted
-    if (is.null(.item_alpha)) .item_alpha <- NA
+    # only show messages once, so set verbose to FALSE
+    verbose <- FALSE
+
+    .item_discr <- reliability$Discrimination
+    if (is.null(.item_discr)) {
+      .item_discr <- NA
+    }
+    .item_alpha <- reliability$Alpha_if_deleted
+    if (is.null(.item_alpha)) {
+      .item_alpha <- NA
+    }
 
     s_out <- data.frame(
       Item = columns,
-      Missings = vapply(items, function(i) sum(is.na(i)) / nrow(items), numeric(1)),
+      Missings = vapply(
+        items,
+        function(i) sum(is.na(i)) / nrow(items),
+        numeric(1)
+      ),
       Mean = vapply(items, mean, numeric(1), na.rm = TRUE),
       SD = vapply(items, stats::sd, numeric(1), na.rm = TRUE),
-      Skewness = vapply(items, function(i) as.numeric(datawizard::skewness(i)), numeric(1)),
+      Skewness = vapply(
+        items,
+        function(i) as.numeric(datawizard::skewness(i)),
+        numeric(1)
+      ),
       Difficulty = item_difficulty(items)$Difficulty,
       Discrimination = .item_discr,
       `alpha if deleted` = .item_alpha,
