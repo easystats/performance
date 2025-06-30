@@ -19,7 +19,7 @@ on the factor structure specified."><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,6 @@ on the factor structure specified.</p>
 <span>  rotation <span class="op">=</span> <span class="st">"oblimin"</span>,</span>
 <span>  factor_method <span class="op">=</span> <span class="st">"minres"</span>,</span>
 <span>  poly_cor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  item_direction <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -100,7 +99,6 @@ on the factor structure specified.</p>
 <span>  factor_method <span class="op">=</span> <span class="st">"minres"</span>,</span>
 <span>  n_obs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  poly_cor <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  item_direction <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -138,13 +136,6 @@ etc.</p></dd>
 <dt id="arg-poly-cor">poly_cor<a class="anchor" aria-label="anchor" href="#arg-poly-cor"></a></dt>
 <dd><p>Logical, if <code>TRUE</code>, polychoric correlations will be computed
 (by passing <code>poly = TRUE</code> to <code><a href="https://rdrr.io/pkg/psych/man/omega.html" class="external-link">psych::omega()</a></code>). Defaults to <code>FALSE</code>.</p></dd>
-
-
-<dt id="arg-item-direction">item_direction<a class="anchor" aria-label="anchor" href="#arg-item-direction"></a></dt>
-<dd><p>A vector of item keys indicating the direction of
-scoring for items. E.g., <code>c(1, 1, -1, 1)</code> for four items where the third item
-is reverse-scored. Passed to the <code>key</code> argument in <code><a href="https://rdrr.io/pkg/psych/man/omega.html" class="external-link">psych::omega()</a></code>. Defaults
-to <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
