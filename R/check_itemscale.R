@@ -11,6 +11,7 @@
 #' @param factor_index If `x` is a data frame, `factor_index` must be specified.
 #' It must be a numeric vector of same length as number of columns in `x`, where
 #' each element is the index of the factor to which the respective column in `x`.
+#' @param verbose Toggle warnings and messages. If `TRUE`, messages are printed.
 #'
 #' @return A list of data frames, with related measures of internal
 #' consistencies of each subscale.
