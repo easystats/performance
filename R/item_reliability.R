@@ -12,7 +12,7 @@
 #' @param verbose Toggle warnings and messages.
 #'
 #' @return A data frame with the corrected item-total correlations
-#' (*item discrimination*, column `item_discrimination`) and Cronbach's Alpha
+#' (*item discrimination*, column `item_reliability`) and Cronbach's Alpha
 #' (if item deleted, column `alpha_if_deleted`) for each item of the scale, or
 #' `NULL` if data frame had too less columns.
 #'
@@ -48,7 +48,7 @@ item_reliability <- function(x, standardize = FALSE, digits = 3, verbose = TRUE)
   # remember item (column) names for return value
   # return value gets column names of initial data frame
   df.names <- colnames(x)
-  ret.df <- NULL
+  out <- NULL
 
   # check for minimum amount of columns can't be less than 3, because the
   # reliability test checks for Cronbach's alpha if a specific item is deleted.
@@ -70,23 +70,112 @@ item_reliability <- function(x, standardize = FALSE, digits = 3, verbose = TRUE)
     )
 
     # calculate corrected total-item correlation
-    totalCorr <- item_discrimination(
+    totalCorrCorrected <- item_discrimination(
       x,
       standardize = FALSE,
       verbose = verbose
     )
 
-    ret.df <- data.frame(
+    # calculate total-item correlation
+    totalCorr <- item_totalcor(
+      x,
+      standardize = FALSE,
+      verbose = FALSE
+    )
+
+    out <- data.frame(
       term = df.names,
       alpha_if_deleted = round(cronbachDeleted, digits),
-      item_discrimination = round(totalCorr$Discrimination, digits),
+      item_total_correlation = round(totalCorr$Item_Total_Correlation, digits),
+      item_reliability = round(totalCorrCorrected$Discrimination, digits),
       stringsAsFactors = FALSE
     )
+
+    attr(out, "item_intercorrelation") <- item_intercor(x)
+    attr(out, "cronbachs_alpha") <- cronbachs_alpha(x)
+    class(out) <- c("item_reliability", "data.frame")
   } else {
     insight::format_warning(
       "Data frame needs at least three columns for reliability-test."
     )
   }
 
-  ret.df
+  out
 }
+
+
+# methods --------------------------------------
+
+#' @export
+print.item_reliability <- function(x, ...) {
+  out <- insight::format_table(x, ...)
+  # format column names
+  colnames(out) <- c("Item", "Alpha if deleted", "Total Correlation", "Discrimination")
+
+  # add attributes for table caption and footer
+  attr(out, "table_caption") <- c("# Item Reliability", "blue")
+  attr(out, "table_footer") <- c(sprintf(
+    "\nMean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+    attributes(out)$item_intercorrelation,
+    attributes(out)$cronbachs_alpha
+  ), "yellow")
+
+  cat(insight::export_table(out, ...))
+  invisible()
+}
+
+
+#' @export
+print_md.item_reliability <- function(x, ...) {
+  out <- insight::format_table(x, ...)
+  # format column names
+  colnames(out) <- c("Item", "Alpha if deleted", "Total Correlation", "Discrimination")
+
+  # add attributes for table caption and footer
+  caption <- "Item Reliability"
+  footer <- sprintf(
+    "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+    attributes(out)$item_intercorrelation,
+    attributes(out)$cronbachs_alpha
+  )
+
+  insight::export_table(
+    out,
+    caption = caption,
+    footer = footer,
+    format = "markdown",
+    missing = "<NA>",
+    align = "firstleft",
+    zap_small = TRUE
+  )
+}
+
+
+#' @export
+print_html.item_reliability <- function(x, ...) {
+  out <- insight::format_table(x, ...)
+  # format column names
+  colnames(out) <- c("Item", "Alpha if deleted", "Total Correlation", "Discrimination")
+
+  # add attributes for table caption and footer
+  caption <- "Item Reliability"
+  footer <- sprintf(
+    "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
+    attributes(out)$item_intercorrelation,
+    attributes(out)$cronbachs_alpha
+  )
+
+  insight::export_table(
+    out,
+    caption = caption,
+    footer = footer,
+    format = "html",
+    missing = "<NA>",
+    align = "firstleft",
+    zap_small = TRUE
+  )
+}
+
+
+#' @export
+display.item_reliability <- display.performance_model

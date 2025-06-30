@@ -92,7 +92,7 @@ item_discrimination <- function(x, standardize = FALSE, corrected = TRUE, verbos
 
   # change label
   if (!corrected) {
-    colnames(out)[2] <- "Item-Total Correlation"
+    colnames(out)[2] <- "Item_Total_Correlation"
   }
 
   class(out) <- c("item_discrimination", "data.frame")
@@ -117,6 +117,7 @@ print.item_discrimination <- function(x, ...) {
   if (colnames(out)[2] == "Discrimination") {
     caption <- c("Item Discrimination", "blue")
   } else {
+    colnames(out)[2] <- "Total Correlation"
     caption <- c("Item-Total Correlation", "blue")
   }
   cat(insight::export_table(out, caption = caption, ...))
@@ -131,6 +132,7 @@ print_md.item_discrimination <- function(x, ...) {
   if (colnames(out)[2] == "Discrimination") {
     caption <- "Item Discrimination"
   } else {
+    colnames(out)[2] <- "Total Correlation"
     caption <- "Item-Total Correlation"
   }
   insight::export_table(out, caption = caption, format = "markdown", ...)
@@ -144,6 +146,7 @@ print_html.item_discrimination <- function(x, ...) {
   if (colnames(out)[2] == "Discrimination") {
     caption <- "Item Discrimination"
   } else {
+    colnames(out)[2] <- "Total Correlation"
     caption <- "Item-Total Correlation"
   }
   insight::export_table(out, caption = caption, format = "html", ...)

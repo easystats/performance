@@ -19,7 +19,7 @@ scales.}
 }
 \value{
 A data frame with the corrected item-total correlations
-(\emph{item discrimination}, column \code{item_discrimination}) and Cronbach's Alpha
+(\emph{item discrimination}, column \code{item_reliability}) and Cronbach's Alpha
 (if item deleted, column \code{alpha_if_deleted}) for each item of the scale, or
 \code{NULL} if data frame had too less columns.
 }

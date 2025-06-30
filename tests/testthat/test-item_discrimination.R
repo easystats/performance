@@ -23,8 +23,8 @@ test_that("item_discrimination", {
   out1 <- item_discrimination(x, corrected = FALSE)
   out2 <- item_totalcor(x)
   expect_equal(
-    out1[["Item-Total Correlation"]],
-    out2[["Item-Total Correlation"]],
+    out1$Item_Total_Correlation,
+    out2$Item_Total_Correlation,
     tolerance = 1e-3
   )
 })

@@ -14,6 +14,9 @@
 * `check_itemscale()` now work with factor analysis results, from
   `parameters::factor_analysis()`.
 
+* `check_reliability()` now includes the item-total correlation, and information
+  about Cronbach's alpha and mean inter-item correlation in the printed output.
+
 * `cronbachs_alpha()` now work with factor analysis results, from
   `parameters::factor_analysis()`.
 
