@@ -10,12 +10,12 @@ test_that("item_reliability", {
 
   expect_equal(
     out$Alpha_if_deleted,
-    c(0.454, 0.877, 0.489, 0.467)
+    c(0.454, 0.877, 0.489, 0.467),
     tolerance = 1e-3
   )
   expect_equal(
     out$Discrimination,
-    c(0.894, -0.349, 0.863, 0.921)
+    c(0.894, -0.349, 0.863, 0.921),
     tolerance = 1e-3
   )
   expect_named(
