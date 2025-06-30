@@ -17,6 +17,8 @@
 #' deleted, column `Alpha_if_deleted`) for each item of the scale, or `NULL` if
 #' data frame had too less columns.
 #'
+#' @inherit check_itemscale note references
+#'
 #' @details
 #' This function calculates the item discriminations (corrected item-total
 #' correlations for each item of `x` with the remaining items) and the

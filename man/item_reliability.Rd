@@ -18,10 +18,11 @@ scales.}
 \item{verbose}{Toggle warnings and messages.}
 }
 \value{
-A data frame with the corrected item-total correlations
-(\emph{item discrimination}, column \code{item_reliability}) and Cronbach's Alpha
-(if item deleted, column \code{alpha_if_deleted}) for each item of the scale, or
-\code{NULL} if data frame had too less columns.
+A data frame with the item-total correlations (column
+\code{Item_Total_Correlation}), corrected item-total correlations (\emph{item
+discrimination}, column \code{Discrimination}) and Cronbach's Alpha (if item
+deleted, column \code{Alpha_if_deleted}) for each item of the scale, or \code{NULL} if
+data frame had too less columns.
 }
 \description{
 Compute various measures of internal consistencies for tests or
@@ -39,8 +40,32 @@ should be examined. Items with negative indices should be examined to
 determine why a negative value was obtained (e.g. reversed answer categories
 regarding positive and negative poles).
 }
+\note{
+\itemize{
+\item \emph{Item difficulty} should range between 0.2 and 0.8. Ideal value
+is \code{p+(1-p)/2} (which mostly is between 0.5 and 0.8). See
+\code{\link[=item_difficulty]{item_difficulty()}} for details.
+\item For \emph{item discrimination}, also known as \emph{corrected item-total correlations},
+acceptable values are 0.20 or higher; the closer to 1.00 the better. See
+\code{\link[=item_reliability]{item_reliability()}} for more details. If an item discrimination is
+negative, the corresponding item probably need to be reverse-coded (which
+can be done with \code{\link[datawizard:reverse]{datawizard::reverse()}}).
+\item In case the total \emph{Cronbach's alpha} value is below the acceptable
+cut-off of 0.7 (mostly if an index has few items), the
+\emph{mean inter-item-correlation} is an alternative measure to indicate
+acceptability. Satisfactory range lies between 0.2 and 0.4. See also
+\code{\link[=item_intercor]{item_intercor()}}.
+}
+}
 \examples{
 data(mtcars)
 x <- mtcars[, c("cyl", "gear", "carb", "hp")]
 item_reliability(x)
+}
+\references{
+\itemize{
+\item Briggs SR, Cheek JM (1986) The role of factor analysis in the development
+and evaluation of personality scales. Journal of Personality, 54(1),
+106-148. doi: 10.1111/j.1467-6494.1986.tb00391.x
+}
 }
