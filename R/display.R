@@ -30,6 +30,7 @@
 #' display(mp)
 #' @export
 display.performance_model <- function(object, format = "markdown", digits = 2, caption = NULL, ...) {
+  format <- insight::validate_argument(format, c("markdown", "md", "html"))
   if (identical(format, "html")) {
     print_html(x = object, digits = digits, caption = caption, ...)
   } else {

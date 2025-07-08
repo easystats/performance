@@ -305,10 +305,11 @@ print_html.test_performance <- function(x, digits = 2, ...) {
 
 #' @export
 display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
-  if (format == "markdown") {
-    print_md(x = object, digits = digits, ...)
-  } else {
+  format <- insight::validate_argument(format, c("markdown", "md", "html"))
+  if (format == "html") {
     print_html(x = object, digits = digits, ...)
+  } else {
+    print_md(x = object, digits = digits, ...)
   }
 }
 
