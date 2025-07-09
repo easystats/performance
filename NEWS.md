@@ -1,4 +1,4 @@
-# performance (devel)
+# performance 0.15.0
 
 ## New functions
 
