@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.14.0.13
+Version: 0.15.0
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -92,7 +92,7 @@ Suggests:
     car,
     carData,
     CompQuadForm,
-    correlation,
+    correlation (>= 0.8.8),
     cplm,
     curl,
     dagitty,
@@ -135,7 +135,7 @@ Suggests:
     nonnest2,
     ordinal,
     parallel,
-    parameters (>= 0.26.0),
+    parameters (>= 0.27.0),
     patchwork,
     pscl,
     psych,
@@ -168,4 +168,3 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/insight, easystats/parameters, easystats/correlation
