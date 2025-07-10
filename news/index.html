@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,6 +53,30 @@
       <small>Source: <a href="https://github.com/easystats/performance/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.15.0" id="performance-0150">performance 0.15.0<a class="anchor" aria-label="anchor" href="#performance-0150"></a></h2><p class="text-muted">CRAN release: 2025-07-10</p>
+<div class="section level3">
+<h3 id="new-functions-0-15-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-15-0"></a></h3>
+<ul><li><p><code><a href="../reference/item_omega.html">item_omega()</a></code>, to calculate the McDonald’s Omega reliability coefficient.</p></li>
+<li><p><code><a href="../reference/item_discrimination.html">item_totalcor()</a></code> calculates the total correlation of an item with the sum of all other items in a scale. If <code>corrected = TRUE</code>, the total correlation is corrected for the number of items in the scale (which is equivalent to <code><a href="../reference/item_discrimination.html">item_discrimination()</a></code>).</p></li>
+<li><p>Column names of <code><a href="../reference/item_reliability.html">item_reliability()</a></code> were changed to be in line with the <em>easystats</em> naming convention and to be consistent with the output of other related functions.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-0-15-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-15-0"></a></h3>
+<ul><li><p><code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> now work with factor analysis results, from <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::factor_analysis()</a></code>.</p></li>
+<li><p><code><a href="../reference/item_reliability.html">item_reliability()</a></code> now includes the item-total correlation, and information about Cronbach’s alpha and mean inter-item correlation in the printed output.</p></li>
+<li><p><code><a href="../reference/cronbachs_alpha.html">cronbachs_alpha()</a></code> now work with factor analysis results, from <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::factor_analysis()</a></code>.</p></li>
+<li><p>Formatting of p-values in <code><a href="../reference/test_performance.html">test_likelihoodratio()</a></code> is now consistent with formatted p-values from other functions.</p></li>
+<li><p>Added following methods for <code><a href="https://rdrr.io/pkg/psych/man/fa.html" class="external-link">psych::fa()</a></code>, <code><a href="https://rdrr.io/pkg/psych/man/principal.html" class="external-link">psych::principal()</a></code>, <code><a href="../reference/item_omega.html">item_omega()</a></code>, <code><a href="https://rdrr.io/pkg/psych/man/omega.html" class="external-link">psych::omega()</a></code>, and <code><a href="https://easystats.github.io/parameters/reference/principal_components.html" class="external-link">parameters::factor_analysis()</a></code>: <code><a href="../reference/check_normality.html">check_normality()</a></code>, <code><a href="../reference/check_residuals.html">check_residuals()</a></code>, <code><a href="../reference/check_outliers.html">check_outliers()</a></code>, and <code><a href="../reference/model_performance.html">model_performance()</a></code>.</p></li>
+<li><p><code><a href="../reference/cronbachs_alpha.html">item_alpha()</a></code> was added as an alias for <code><a href="../reference/cronbachs_alpha.html">cronbachs_alpha()</a></code>.</p></li>
+<li><p>Further functions get a <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code>, <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> and <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_html()</a></code> method.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-15-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-15-0"></a></h3>
+<ul><li><p>Fixed issue in <code><a href="../reference/check_predictions.html">check_predictions()</a></code> for binomial models with a response defined as proportion or matrix of successes and trials.</p></li>
+<li><p><code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md()</a></code> for objects returned by <code><a href="../reference/check_itemscale.html">check_itemscale()</a></code> now include the footer with information about Cronbach’s alpha and mean inter-item correlation.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.14.0" id="performance-0140">performance 0.14.0<a class="anchor" aria-label="anchor" href="#performance-0140"></a></h2><p class="text-muted">CRAN release: 2025-05-22</p>
 <div class="section level3">
