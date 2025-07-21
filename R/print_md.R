@@ -49,7 +49,14 @@ print_html.compare_performance <- function(x,
                                            layout = "horizontal",
                                            ...) {
   layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
-  .print_md_compare_performance(x, digits = digits, caption = caption, layout = layout, format = "html", ...)
+  .print_md_compare_performance(
+    x,
+    digits = digits,
+    caption = caption,
+    layout = layout,
+    format = .check_format_backend(...),
+    ...
+  )
 }
 
 

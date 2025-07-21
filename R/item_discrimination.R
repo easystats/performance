@@ -148,7 +148,7 @@ print_md.item_discrimination <- function(x, ...) {
 
 #' @export
 print_html.item_discrimination <- function(x, ...) {
-  .print_item_discrimination(x, format = "html", ...)
+  .print_item_discrimination(x, format = .check_format_backend(...), ...)
 }
 
 

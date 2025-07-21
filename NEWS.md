@@ -1,3 +1,9 @@
+# performance (devel)
+
+## Changes
+
+* `display()` now supports the `tinytable` format, when `format = "tt"`.
+
 # performance 0.15.0
 
 ## New functions

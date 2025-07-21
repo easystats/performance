@@ -139,7 +139,7 @@ print_md.item_reliability <- function(x, ...) {
 
 #' @export
 print_html.item_reliability <- function(x, ...) {
-  .print_item_reliability(x, format = "html", ...)
+  .print_item_reliability(x, format = .check_format_backend(...), ...)
 }
 
 

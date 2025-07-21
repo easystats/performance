@@ -173,3 +173,14 @@ print.r2_nakagawa_by_group <- function(x, digits = 3, ...) {
   cat("\n")
   invisible(x)
 }
+
+
+# we allow exporting HTML format based on "gt" or "tinytable"
+.check_format_backend <- function(...) {
+  dots <- list(...)
+  if (identical(dots$backend, "tt")) {
+    "tt"
+  } else {
+    "html"
+  }
+}

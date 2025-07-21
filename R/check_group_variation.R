@@ -265,7 +265,13 @@ print_html.check_group_variation <- function(x, ...) {
     group_by <- "group"
   }
 
-  insight::export_table(x, caption = caption, by = group_by, format = "html", ...)
+  insight::export_table(
+    x,
+    caption = caption,
+    by = group_by,
+    format = .check_format_backend(...),
+    ...
+  )
 }
 
 

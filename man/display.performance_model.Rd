@@ -25,12 +25,14 @@
 )
 }
 \arguments{
-\item{object, x}{An object returned by \code{\link[=model_performance]{model_performance()}} or
-or \code{\link[=compare_performance]{compare_performance()}}.
-or its summary.}
+\item{object, x}{An object returned by one of the package's function, for
+example \code{\link[=model_performance]{model_performance()}}, \code{\link[=compare_performance]{compare_performance()}}, or
+\code{\link[=check_itemscale]{check_itemscale()}}.}
 
-\item{format}{String, indicating the output format. Currently, only
-\code{"markdown"} is supported.}
+\item{format}{String, indicating the output format. Can be \code{"markdown"}
+\code{"html"}, or \code{"tt"}. \code{format = "tt"} creates a \code{tinytable} object, which is
+either printed as markdown or HTML table, depending on the environment. See
+\code{\link[insight:export_table]{insight::export_table()}} for details.}
 
 \item{digits}{Number of decimal places.}
 
@@ -46,13 +48,12 @@ will be a character vector in markdown-table format.
 }
 \description{
 Prints tables (i.e. data frame) in different output formats.
-\code{print_md()} is a alias for \code{display(format = "markdown")}.
 }
 \details{
-\code{display()} is useful when the table-output from functions,
-which is usually printed as formatted text-table to console, should
-be formatted for pretty table-rendering in markdown documents, or if
-knitted from rmarkdown to PDF or Word files. See
+\code{display()} is useful when the table-output from functions, which is
+usually printed as formatted text-table to console, should be formatted for
+pretty table-rendering in markdown documents, or if knitted from rmarkdown
+to PDF or Word files. See
 \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{vignette}
 for examples.
 }
