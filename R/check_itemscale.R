@@ -229,7 +229,7 @@ print_html.check_itemscale <- function(x, digits = 2, ...) {
     x,
     caption = "Description of (Sub-)Scales",
     digits = digits,
-    format = "html",
+    format = .check_format_backend(...),
     missing = "<NA>",
     zap_small = TRUE
   )

@@ -188,7 +188,12 @@ print_md.item_omega <- function(x, ...) {
 
 #' @export
 print_html.item_omega <- function(x, ...) {
-  insight::export_table(x, caption = "Reliability Coefficients", format = "html", ...)
+  insight::export_table(
+    x,
+    caption = "Reliability Coefficients",
+    format = .check_format_backend(...),
+    ...
+  )
 }
 
 

@@ -103,5 +103,10 @@ print_md.item_difficulty <- function(x, ...) {
 #' @export
 print_html.item_difficulty <- function(x, ...) {
   out <- insight::format_table(x, ...)
-  insight::export_table(out, caption = "Item Difficulty", format = "html", ...)
+  insight::export_table(
+    out,
+    caption = "Item Difficulty",
+    format = .check_format_backend(...),
+    ...
+  )
 }

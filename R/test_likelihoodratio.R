@@ -111,15 +111,24 @@ print_md.test_likelihoodratio <- function(x, digits = 2, ...) {
 
 #' @export
 print_html.test_likelihoodratio <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, format = "html", ...), format = "html", ...)
+  insight::export_table(
+    format(x, digits = digits, format = "html", ...),
+    format = .check_format_backend(...),
+    ...
+  )
 }
 
 
 #' @export
 display.test_likelihoodratio <- function(object, format = "markdown", digits = 2, ...) {
-  format <- insight::validate_argument(format, c("markdown", "md", "html"))
-  if (format == "html") {
-    print_html(x = object, digits = digits, ...)
+  format <- insight::validate_argument(format, c("markdown", "md", "html", "tt"))
+  if (format %in% c("html", "tt")) {
+    print_html(
+      x = object,
+      digits = digits,
+      backend = ifelse(format == "tt", "tt", "html"),
+      ...
+    )
   } else {
     print_md(x = object, digits = digits, ...)
   }
