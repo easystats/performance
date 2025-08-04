@@ -163,7 +163,7 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
     data = cbpp
   )
 
-  cbpp <- transform(cbpp, prop = incidence/size)
+  cbpp <- transform(cbpp, prop = incidence / size)
   m3 <- glmmTMB::glmmTMB(
     prop ~ period + herd,
     weights = size,
@@ -171,7 +171,7 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
     data = cbpp
   )
 
-  X <- with(cbpp, cbind(incidence, size -  incidence))
+  X <- with(cbpp, cbind(incidence, size - incidence))
   cbpp$X <- X
 
   m4 <- glmmTMB::glmmTMB(
