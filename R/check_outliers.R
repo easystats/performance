@@ -576,7 +576,10 @@ check_outliers.default <- function(x,
   outlier <- my_df$Outlier > 0.5
 
   # Attributes
-  class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
+  class(outlier) <- c("check_outliers",
+                      "see_check_outliers",
+                      paste0("outlier_", method),
+                      class(outlier))
   attr(outlier, "data") <- my_df
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
@@ -877,12 +880,12 @@ check_outliers.item_omega <- check_outliers.parameters_efa
 
   # extract names for all correlation pairs
   pair_names <- NULL
-  for (j in 1:nrow(model_resid)) {
-    for (i in 1:ncol(model_resid)) {
+  for (j in seq_len(nrow(model_resid))) {
+    for (i in seq_len(ncol(model_resid))) {
       if (!is.na(model_resid[j, i])) {
         pair_names <- c(
           pair_names,
-          paste(row.names(model_resid)[j], row.names(model_resid)[i], sep = "/")
+          paste(row.names(model_resid)[j], row.names(model_resid)[i], sep = "/") # nolint
         )
       }
     }
@@ -1054,7 +1057,10 @@ check_outliers.data.frame <- function(x,
   row.names(outlier_count$all) <- NULL
 
   # Attributes
-  class(outlier) <- c("check_outliers", "see_check_outliers", class(outlier))
+  class(outlier) <- c("check_outliers",
+                      "see_check_outliers",
+                      paste0("outlier_", method),
+                      class(outlier))
   attr(outlier, "data") <- my_df
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
