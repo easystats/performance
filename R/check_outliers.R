@@ -883,7 +883,7 @@ check_outliers.item_omega <- check_outliers.parameters_efa
   # extract names for all correlation pairs
   pair_names <- NULL
   indices <- which(!is.na(model_resid), arr.ind = TRUE)
-  pair_names <- paste(
+  pair_names <- paste( #nolint
     row.names(model_resid)[indices[, "row"]],
     colnames(model_resid)[indices[, "col"]],
     sep = "/"
