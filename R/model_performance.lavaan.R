@@ -105,7 +105,7 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   # Check if convergeed
   # TODO: implement insight::is_converged
   if(is.null(model@vcov$vcov)) {
-    warning("This lavaan model did not converged, no performance indices can be computed. Returning NaNs.")
+    warning("This lavaan model did not converge, no performance indices can be computed. Returning NaNs.")
     original_model <-  model
     # Make mock model
     model <- lavaan::cfa(' visual  =~ x1 ', data = lavaan::HolzingerSwineford1939[1:100,])
