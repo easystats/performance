@@ -155,7 +155,7 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   out <- out[, metrics]
 
   # If not converged, set to NaN
-  if (is.null(original_model)) {
+  if (!is.null(original_model)) {
     out[1, ] <- NA
   }
 
