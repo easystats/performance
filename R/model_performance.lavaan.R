@@ -104,7 +104,7 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
 
   # Check if convergeed
   # TODO: implement insight::is_converged
-  if(is.null(model@vcov$vcov)) {
+  if(!lavaan::lavInspect(model, "converged")) {
     warning("This lavaan model did not converge, no performance indices can be computed. Returning NA.")
     original_model <-  model
     # Make mock model
@@ -154,7 +154,7 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   }
   out <- out[, metrics]
 
-  # If not converged, set to NaN
+  # If not converged, set to NA
   if (!is.null(original_model)) {
     out[1, ] <- NA
   }
