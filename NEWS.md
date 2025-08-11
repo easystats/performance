@@ -4,6 +4,8 @@
 
 * `display()` now supports the `tinytable` format, when `format = "tt"`.
 
+* Better handling of non-converged lavaan-models in `model_performance()`.
+
 # performance 0.15.0
 
 ## New functions
