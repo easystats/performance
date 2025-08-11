@@ -103,60 +103,68 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
   insight::check_if_installed("lavaan")
 
   # Check if convergeed
-  # TODO: implement insight::is_converged
-  if(!lavaan::lavInspect(model, "converged")) {
-    warning("This lavaan model did not converge, no performance indices can be computed. Returning NA.")
-    original_model <-  model
-    # Make mock model
-    model <- lavaan::cfa(' visual  =~ x1 ', data = lavaan::HolzingerSwineford1939[1:100,])
+  if(insight::is_converged(model)) {
+    if (isTRUE(verbose)) {
+      measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
+    } else {
+      measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(model, ...)))))
+    }
+
+    row.names(measures) <- NULL
+
+    out <- data.frame(
+      Chi2 = measures$chisq,
+      Chi2_df = measures$df,
+      p_Chi2 = measures$pvalue,
+      Baseline = measures$baseline.chisq,
+      Baseline_df = measures$baseline.df,
+      p_Baseline = measures$baseline.pvalue,
+      GFI = measures$gfi,
+      AGFI = measures$agfi,
+      NFI = measures$nfi,
+      NNFI = measures$tli,
+      CFI = measures$cfi,
+      RMSEA = measures$rmsea,
+      RMSEA_CI_low = measures$rmsea.ci.lower,
+      RMSEA_CI_high = measures$rmsea.ci.upper,
+      p_RMSEA = measures$rmsea.pvalue,
+      RMR = measures$rmr,
+      SRMR = measures$srmr,
+      RFI = measures$rfi,
+      PNFI = measures$pnfi,
+      IFI = measures$ifi,
+      RNI = measures$rni,
+      Loglikelihood = measures$logl,
+      AIC = measures$aic,
+      BIC = measures$bic,
+      BIC_adjusted = measures$bic2
+    )
+
+    if (all(metrics == "all")) {
+      metrics <- names(out)
+    }
+    out <- out[, metrics, drop = FALSE]
   } else {
-    original_model <- NULL
-  }
+    insight::format_warning("This lavaan model did not converge, no performance indices can be computed. Returning `NA`.")
 
-  if (isTRUE(verbose)) {
-    measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
-  } else {
-    measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(model, ...)))))
-  }
+    # All possible metrics that this function can return.
+    all_metric_names <- c(
+      "Chi2", "Chi2_df", "p_Chi2", "Baseline", "Baseline_df", "p_Baseline", "GFI",
+      "AGFI", "NFI", "NNFI", "CFI", "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high",
+      "p_RMSEA", "RMR", "SRMR", "RFI", "PNFI", "IFI", "RNI", "Loglikelihood",
+      "AIC", "BIC", "BIC_adjusted"
+    )
 
-  row.names(measures) <- NULL
+    if (is.character(metrics) && !all(metrics == "all")) {
+      out_names <- intersect(metrics, all_metric_names)
+    } else {
+      out_names <- all_metric_names
+    }
 
-  out <- data.frame(
-    Chi2 = measures$chisq,
-    Chi2_df = measures$df,
-    p_Chi2 = measures$pvalue,
-    Baseline = measures$baseline.chisq,
-    Baseline_df = measures$baseline.df,
-    p_Baseline = measures$baseline.pvalue,
-    GFI = measures$gfi,
-    AGFI = measures$agfi,
-    NFI = measures$nfi,
-    NNFI = measures$tli,
-    CFI = measures$cfi,
-    RMSEA = measures$rmsea,
-    RMSEA_CI_low = measures$rmsea.ci.lower,
-    RMSEA_CI_high = measures$rmsea.ci.upper,
-    p_RMSEA = measures$rmsea.pvalue,
-    RMR = measures$rmr,
-    SRMR = measures$srmr,
-    RFI = measures$rfi,
-    PNFI = measures$pnfi,
-    IFI = measures$ifi,
-    RNI = measures$rni,
-    Loglikelihood = measures$logl,
-    AIC = measures$aic,
-    BIC = measures$bic,
-    BIC_adjusted = measures$bic2
-  )
-
-  if (all(metrics == "all")) {
-    metrics <- names(out)
-  }
-  out <- out[, metrics]
-
-  # If not converged, set to NA
-  if (!is.null(original_model)) {
-    out[1, ] <- NA
+    out <- as.data.frame(stats::setNames(
+      rep(list(NA), length(out_names)),
+      out_names
+    ))
   }
 
   class(out) <- c("performance_lavaan", "performance_model", class(out))
@@ -167,7 +175,6 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
 #' @export
 model_performance.blavaan <- function(model, metrics = "all", verbose = TRUE, ...) {
   insight::check_if_installed(c("lavaan", "blavaan"))
-
 
   if (isTRUE(verbose)) {
     measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
@@ -201,7 +208,7 @@ model_performance.blavaan <- function(model, metrics = "all", verbose = TRUE, ..
   if (all(metrics == "all")) {
     metrics <- names(out)
   }
-  out <- out[, metrics]
+  out <- out[, metrics, drop = FALSE]
 
   class(out) <- c("performance_lavaan", "performance_model", class(out))
   out
