@@ -102,8 +102,23 @@
 model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...) {
   insight::check_if_installed("lavaan")
 
-  # Check if convergeed
-  if(insight::is_converged(model)) {
+  # All possible metrics that this function can return.
+  all_metric_names <- c(
+    "Chi2", "Chi2_df", "p_Chi2", "Baseline", "Baseline_df", "p_Baseline", "GFI",
+    "AGFI", "NFI", "NNFI", "CFI", "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high",
+    "p_RMSEA", "RMR", "SRMR", "RFI", "PNFI", "IFI", "RNI", "Loglikelihood",
+    "AIC", "BIC", "BIC_adjusted"
+  )
+
+  # extract valid column names based on metrics
+  if (is.character(metrics) && !all(metrics == "all")) {
+    out_names <- intersect(metrics, all_metric_names)
+  } else {
+    out_names <- all_metric_names
+  }
+
+  # Check if converged
+  if (insight::is_converged(model)) {
     if (isTRUE(verbose)) {
       measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
     } else {
@@ -139,33 +154,18 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
       BIC = measures$bic,
       BIC_adjusted = measures$bic2
     )
-
-    if (all(metrics == "all")) {
-      metrics <- names(out)
-    }
-    out <- out[, metrics, drop = FALSE]
   } else {
-    insight::format_warning("This lavaan model did not converge, no performance indices can be computed. Returning `NA`.")
-
-    # All possible metrics that this function can return.
-    all_metric_names <- c(
-      "Chi2", "Chi2_df", "p_Chi2", "Baseline", "Baseline_df", "p_Baseline", "GFI",
-      "AGFI", "NFI", "NNFI", "CFI", "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high",
-      "p_RMSEA", "RMR", "SRMR", "RFI", "PNFI", "IFI", "RNI", "Loglikelihood",
-      "AIC", "BIC", "BIC_adjusted"
-    )
-
-    if (is.character(metrics) && !all(metrics == "all")) {
-      out_names <- intersect(metrics, all_metric_names)
-    } else {
-      out_names <- all_metric_names
+    if (verbose) {
+      insight::format_warning("This lavaan model did not converge, no performance indices can be computed. Returning `NA`.")
     }
-
     out <- as.data.frame(stats::setNames(
       rep(list(NA), length(out_names)),
       out_names
     ))
   }
+
+  # select only the requested metrics
+  out <- out[out_names]
 
   class(out) <- c("performance_lavaan", "performance_model", class(out))
   out
