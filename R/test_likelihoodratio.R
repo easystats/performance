@@ -78,6 +78,9 @@ format.test_likelihoodratio <- function(x, digits = 2, p_digits = 3, format = "t
   if ("LogLik" %in% names(x)) {
     best <- which.max(x$LogLik)
     footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Model[best]), "yellow")
+  } else if ("Dev" %in% names(x)) {
+    best <- which.min(x$Dev)
+    footer <- c(sprintf("\nModel '%s' seems to have the best model fit.\n", x$Name[best]), "yellow")
   } else {
     footer <- NULL
   }
@@ -158,12 +161,14 @@ test_likelihoodratio.ListNestedRegressions <- function(objects, estimator = "ML"
   } else {
     # lmtest::lrtest()
     lls <- sapply(objects, insight::get_loglikelihood, REML = REML, check_response = TRUE)
-    chi2 <- abs(c(NA, -2 * diff(lls)))
+    devs <- -2 * lls
+    chi2 <- abs(c(NA, diff(devs)))
     p <- stats::pchisq(chi2, abs(dfs_diff), lower.tail = FALSE)
 
     out <- data.frame(
       df = dfs,
       df_diff = dfs_diff,
+      deviance = devs,
       Chi2 = chi2,
       p = p,
       stringsAsFactors = FALSE
