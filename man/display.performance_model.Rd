@@ -57,6 +57,15 @@ to PDF or Word files. See
 \href{https://easystats.github.io/parameters/articles/model_parameters_formatting.html}{vignette}
 for examples.
 }
+\section{Global Options to Customize Output when Printing}{
+
+\itemize{
+\item \code{easystats_display_format}: \verb{options(easystats_display_format = <value>)}
+will set the default format for the \code{display()} methods. Can be one of
+\code{"markdown"}, \code{"html"}, or \code{"tt"}.
+}
+}
+
 \examples{
 model <- lm(mpg ~ wt + cyl, data = mtcars)
 mp <- model_performance(model)
