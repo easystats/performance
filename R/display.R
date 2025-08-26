@@ -15,6 +15,12 @@
 #' @param caption Table caption as string. If `NULL`, no table caption is printed.
 #' @param ... Currently not used.
 #'
+#' @section Global Options to Customize Output when Printing:
+#'
+#' - `easystats_display_format`: `options(easystats_display_format = <value>)`
+#'   will set the default format for the `display()` methods. Can be one of
+#'   `"markdown"`, `"html"`, or `"tt"`.
+#'
 #' @return A character vector. If `format = "markdown"`, the return value
 #'   will be a character vector in markdown-table format.
 #'
@@ -31,7 +37,7 @@
 #' display(mp)
 #' @export
 display.performance_model <- function(object, format = "markdown", digits = 2, caption = NULL, ...) {
-  format <- insight::validate_argument(format, c("markdown", "md", "html", "tt"))
+  format <- .display_default_format(format)
   if (format %in% c("html", "tt")) {
     print_html(
       x = object,
@@ -62,3 +68,8 @@ display.item_omega <- display.performance_model
 
 #' @export
 display.item_difficulty <- display.performance_model
+
+.display_default_format <- function(format) {
+  format <- getOption("easystats_display_format", format)
+  insight::validate_argument(format, c("markdown", "html", "md", "tt"))
+}

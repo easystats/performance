@@ -309,7 +309,7 @@ print_html.test_performance <- function(x, digits = 2, ...) {
 
 #' @export
 display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
-  format <- insight::validate_argument(format, c("markdown", "md", "html", "tt"))
+  format <- .display_default_format(format)
   if (format %in% c("html", "tt")) {
     print_html(
       x = object,
