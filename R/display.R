@@ -70,6 +70,6 @@ display.item_omega <- display.performance_model
 display.item_difficulty <- display.performance_model
 
 .display_default_format <- function(format) {
-  format <- getOption("easystats_display_format", "markdown")
+  format <- getOption("easystats_display_format", format)
   insight::validate_argument(format, c("markdown", "html", "md", "tt"))
 }
