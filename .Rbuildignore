@@ -26,3 +26,5 @@
 \.code-workspace$
 \.lintr$
 ^CRAN-SUBMISSION$
+^[.]?air[.]toml$
+^\.vscode$
