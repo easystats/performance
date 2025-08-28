@@ -7,10 +7,10 @@
       
       Low Correlation
       
-       Term  VIF adj. VIF Tolerance
-          N 1.00     1.00      1.00
-          P 1.00     1.00      1.00
-          K 1.00     1.00      1.00
+       Term VIF adj. VIF Tolerance
+          N   1        1         1
+          P   1        1         1
+          K   1        1         1
 
 # check_collinearity, hurdle/zi models w/o zi-formula
 
