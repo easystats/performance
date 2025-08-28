@@ -5,9 +5,9 @@
     Output
       # Indices of model performance
       
-      AIC    |    BIC | Nagelkerke's R2 |  RMSE | Sigma
-      -------------------------------------------------
-      38.823 | 47.618 |           0.836 | 0.298 | 1.016
+      AIC  |  BIC | Nagelkerke's R2 |  RMSE | Sigma
+      ---------------------------------------------
+      38.8 | 47.6 |           0.836 | 0.298 | 1.016
 
 ---
 
@@ -16,7 +16,7 @@
     Output
       # Indices of model performance
       
-      AIC    |    BIC | Nagelkerke's R2 |  RMSE | Sigma
-      -------------------------------------------------
-      13.228 | 24.424 |           0.998 | 0.009 | 0.068
+      AIC  |  BIC | Nagelkerke's R2 |  RMSE | Sigma
+      ---------------------------------------------
+      13.2 | 24.4 |           0.998 | 0.009 | 0.068
 
