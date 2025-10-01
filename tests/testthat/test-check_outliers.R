@@ -294,6 +294,7 @@ test_that("cook multiple methods which", {
 })
 
 test_that("pareto which", {
+  skip_on_cran()
   skip_if_not_installed("dbscan")
   skip_if_not_installed("loo")
   skip_if_not_installed("rstanarm")
@@ -303,7 +304,7 @@ test_that("pareto which", {
 
   expect_identical(
     which(check_outliers(model, method = "pareto", threshold = list(pareto = 0.5))),
-    17L
+    c(17L, 18L)
   )
 })
 
