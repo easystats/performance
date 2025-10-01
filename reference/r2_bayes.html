@@ -56,7 +56,7 @@ posterior sample of Bayesian R2 values."><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Bayesian R2</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/v0.15.1/R/r2_bayes.R" class="external-link"><code>R/r2_bayes.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/r2_bayes.R" class="external-link"><code>R/r2_bayes.R</code></a></small>
       <div class="d-none name"><code>r2_bayes.Rd</code></div>
     </div>
 
@@ -193,14 +193,10 @@ The Royal Society Interface, 14(134), 20170213.</p></li>
 <span class="r-in"><span>  silent <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  refresh <span class="op">=</span> <span class="fl">0</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in .fun(model_code = .x1) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Boost not found; call install.packages('BH')</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .fun(model_code = .x1):</span> Boost not found; call install.packages('BH')</span>
 <span class="r-in"><span><span class="fu">r2_bayes</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Bayesian R2 with Compatibility Interval</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.954 (95% CI [0.950, 0.957])</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Marginal R2: 0.407 (95% CI [0.203, 0.616])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.826 (95% CI [0.756, 0.855])</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Petal.Width</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>,</span></span>
@@ -208,14 +204,11 @@ The Royal Society Interface, 14(134), 20170213.</p></li>
 <span class="r-in"><span>  silent <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  refresh <span class="op">=</span> <span class="fl">0</span></span></span>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Error in .fun(model_code = .x1) : </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Boost not found; call install.packages('BH')</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in .fun(model_code = .x1):</span> Boost not found; call install.packages('BH')</span>
 <span class="r-in"><span><span class="fu">r2_bayes</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;"># Bayesian R2 with Compatibility Interval</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.954 (95% CI [0.950, 0.957])</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      Marginal R2: 0.407 (95% CI [0.203, 0.616])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Conditional R2: 0.955 (95% CI [0.951, 0.957])</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Marginal R2: 0.385 (95% CI [0.180, 0.608])</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

@@ -50,7 +50,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Performance of Bayesian Models</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/v0.15.1/R/model_performance.bayesian.R" class="external-link"><code>R/model_performance.bayesian.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/model_performance.bayesian.R" class="external-link"><code>R/model_performance.bayesian.R</code></a></small>
       <div class="d-none name"><code>model_performance.stanreg.Rd</code></div>
     </div>
 
@@ -154,7 +154,7 @@ American Statistician, 1-6.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ELPD    | ELPD_SE | LOOIC | LOOIC_SE |  WAIC |    R2 | R2 (adj.) |  RMSE | Sigma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -78.013 |   4.461 | 156.0 |    8.922 | 156.0 | 0.815 |     0.801 | 2.464 | 2.602</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -78.013 |   4.461 | 156.0 |    8.921 | 156.0 | 0.815 |     0.801 | 2.464 | 2.602</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html" class="external-link">stan_glmer</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gear</span><span class="op">)</span>,</span></span>
@@ -168,11 +168,11 @@ American Statistician, 1-6.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ELPD    | ELPD_SE | LOOIC | LOOIC_SE |  WAIC |    R2 | R2 (marg.) | R2 (adj.)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -79.110 |   4.722 | 158.2 |    9.443 | 158.2 | 0.823 |      0.826 |     0.794</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -79.115 |   4.724 | 158.2 |    9.447 | 158.2 | 0.823 |      0.826 |     0.794</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ELPD    | R2_adjusted_marginal |   ICC |  RMSE | Sigma</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -79.110 |                0.794 | 0.234 | 2.438 | 2.597</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -79.115 |                0.794 | 0.234 | 2.438 | 2.597</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
