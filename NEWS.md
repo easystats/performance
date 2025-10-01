@@ -1,3 +1,9 @@
+# performance (devel)
+
+## Bug fixes
+
+* Fixed failing CRAN checks, related to the latest *rstanarm* update.
+
 # performance 0.15.1
 
 ## Changes
