@@ -1,4 +1,4 @@
-# performance (devel)
+# performance 0.15.2
 
 ## Bug fixes
 
