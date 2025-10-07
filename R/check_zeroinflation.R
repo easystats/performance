@@ -25,9 +25,9 @@
 #' negative binomial or zero-inflated models.
 #'
 #' In case of negative binomial models, models with zero-inflation component,
-#' or hurdle models, the results from `check_zeroinflation()` are based on
-#' [`simulate_residuals()`], i.e. `check_zeroinflation(simulate_residuals(model))`
-#' is internally called if necessary.
+#' hurdle models, or Poisson mixed models, the results from `check_zeroinflation()`
+#' are based on [`simulate_residuals()`], i.e.
+#' `check_zeroinflation(simulate_residuals(model))` is internally called if necessary.
 #'
 #' @section Tests based on simulated residuals:
 #' For certain models, resp. model from certain families, tests are based on
@@ -88,9 +88,12 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
   # model classes not supported in DHARMa
   not_supported <- c("fixest", "glmx")
 
-  # for models with zero-inflation component or negative binomial families,
-  # we use simulate_residuals()
-  if (!inherits(x, not_supported) && (model_info$is_zero_inflated || model_info$is_negbin || model_info$family == "genpois")) { # nolint
+  # for models with zero-inflation component, negative binomial families,
+  # or Poisson mixed models, we use simulate_residuals()
+  # Note: now including Poisson mixed models (see #595, #643)
+  use_simulated <- model_info$is_zero_inflated || model_info$is_negbin || model_info$family == "genpois" || (model_info$is_mixed && model_info$is_poisson) # nolint
+  
+  if (!inherits(x, not_supported) && use_simulated) {
     if (missing(tolerance)) {
       tolerance <- 0.1
     }

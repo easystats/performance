@@ -40,10 +40,10 @@
 #' [GLMM FAQ](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html),
 #' section *How can I deal with overdispersion in GLMMs?*. Note that this
 #' function only returns an *approximate* estimate of an overdispersion
-#' parameter. Using this approach would be inaccurate for zero-inflated or
-#' negative binomial mixed models (fitted with `glmmTMB`), thus, in such cases,
-#' the overdispersion test is based on [`simulate_residuals()`] (which is identical
-#' to `check_overdispersion(simulate_residuals(model))`).
+#' parameter. For Poisson, zero-inflated, or negative binomial mixed models
+#' (fitted with `glmmTMB` or `lme4`), the overdispersion test is based on
+#' [`simulate_residuals()`] (which is identical to
+#' `check_overdispersion(simulate_residuals(model))`).
 #'
 #' @inheritSection check_zeroinflation Tests based on simulated residuals
 #'
@@ -242,7 +242,8 @@ check_overdispersion.merMod <- function(x, ...) {
   obj_name <- insight::safe_deparse_symbol(substitute(x))
 
   # for certain distributions, simulated residuals are more accurate
-  use_simulated <- info$family == "genpois" || info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin # nolint
+  # Note: now including Poisson models for mixed models (see #595, #643)
+  use_simulated <- info$family == "genpois" || info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin || info$is_poisson # nolint
 
   if (use_simulated) {
     return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))

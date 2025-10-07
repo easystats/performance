@@ -4,9 +4,11 @@
 #' @description Check model for independence of residuals, i.e. for autocorrelation
 #' of error terms.
 #'
-#' @param x A model object.
+#' @param x A model object, or an object returned by `simulate_residuals()`.
 #' @param nsim Number of simulations for the Durbin-Watson-Test.
-#' @param ... Currently not used.
+#' @param ... Currently not used for models. For simulated residuals, arguments are
+#' passed to `DHARMa::testTemporalAutocorrelation()`, which can include `time` (a
+#' vector with time values) to specify the temporal order of the data.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates autocorrelated residuals.
@@ -17,6 +19,11 @@
 #' In case of autocorrelation, robust standard errors return more accurate
 #' results for the estimates, or maybe a mixed model with error term for the
 #' cluster groups should be used.
+#'
+#' For simulated residuals (from `simulate_residuals()`), the function uses
+#' `DHARMa::testTemporalAutocorrelation()` to check for temporal autocorrelation.
+#' This requires the data to be ordered by time. If the data are not ordered by
+#' time, you can provide a `time` argument to specify the temporal order.
 #'
 #' @examples
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
@@ -47,6 +54,27 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   class(p.val) <- c("check_autocorrelation", "see_check_autocorrelation", class(p.val))
   p.val
 }
+
+
+#' @rdname check_autocorrelation
+#' @export
+check_autocorrelation.performance_simres <- function(x, ...) {
+  insight::check_if_installed("DHARMa")
+  
+  # Use DHARMa's temporal autocorrelation test
+  # This requires the residuals to be ordered by time
+  # DHARMa::testTemporalAutocorrelation expects a DHARMa object
+  result <- DHARMa::testTemporalAutocorrelation(x, plot = FALSE, ...)
+  
+  # Extract p-value from the result
+  p.val <- result$p.value
+  
+  class(p.val) <- c("check_autocorrelation", "see_check_autocorrelation", class(p.val))
+  p.val
+}
+
+#' @export
+check_autocorrelation.DHARMa <- check_autocorrelation.performance_simres
 
 
 # methods ------------------------------
