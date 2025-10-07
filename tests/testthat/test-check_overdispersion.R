@@ -50,6 +50,7 @@ test_that("check_overdispersion, glmmTMB-poisson", {
 
 test_that("check_overdispersion, glmmTMB-poisson mixed", {
   skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("DHARMa")
   skip_if_not(getRversion() >= "4.0.0")
   data(Salamanders, package = "glmmTMB")
 
@@ -58,19 +59,20 @@ test_that("check_overdispersion, glmmTMB-poisson mixed", {
     family = poisson,
     data = Salamanders
   )
+  # Poisson mixed models now use simulated residuals (see #595, #643)
+  set.seed(123)
+  out <- check_overdispersion(m2)
   expect_equal(
-    check_overdispersion(m2),
+    out,
     structure(
       list(
-        chisq_statistic = 1475.87512547128,
-        dispersion_ratio = 2.32421279601777,
-        residual_df = 635L,
-        p_value = 8.41489530177729e-69
+        dispersion_ratio = 3.30,
+        p_value = 0
       ),
-      class = c("check_overdisp", "see_check_overdisp"),
-      object_name = "m2"
+      class = c("check_overdisp", "see_check_overdisp")
     ),
-    tolerance = 1e-3
+    tolerance = 0.1,
+    ignore_attr = TRUE
   )
 })
 
