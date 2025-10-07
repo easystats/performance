@@ -5,7 +5,7 @@ print_md.performance_model <- function(x,
                                        caption = "Indices of model performance",
                                        layout = "horizontal",
                                        ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   formatted_table <- format(
     x = x,
     digits = digits,
@@ -37,7 +37,7 @@ print_md.compare_performance <- function(x,
                                          caption = "Comparison of Model Performance Indices",
                                          layout = "horizontal",
                                          ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   .print_md_compare_performance(x, digits = digits, caption = caption, layout = layout, format = "markdown", ...)
 }
 
@@ -48,29 +48,14 @@ print_html.compare_performance <- function(x,
                                            caption = "Comparison of Model Performance Indices",
                                            layout = "horizontal",
                                            ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
-  .print_md_compare_performance(x, digits = digits, caption = caption, layout = layout, format = "html", ...)
-}
-
-
-#' @export
-print_md.check_itemscale <- function(x, digits = 2, ...) {
-  insight::export_table(
-    lapply(seq_along(x), function(i) {
-      out <- x[[i]]
-      attr(out, "caption") <- sprintf("Component %i", i)
-      attr(out, "footer") <- sprintf(
-        "Mean inter-item-correlation = %.3f  Cronbach's alpha = %.3f",
-        attributes(out)$item_intercorrelation,
-        attributes(out)$cronbachs_alpha
-      )
-      out
-    }),
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
+  .print_md_compare_performance(
+    x,
     digits = digits,
-    format = "markdown",
-    missing = "<NA>",
-    align = "firstleft",
-    zap_small = TRUE
+    caption = caption,
+    layout = layout,
+    format = .check_format_backend(...),
+    ...
   )
 }
 
@@ -83,7 +68,7 @@ print_md.check_itemscale <- function(x, digits = 2, ...) {
                                           layout = "horizontal",
                                           format = "markdown",
                                           ...) {
-  layout <- match.arg(layout, choices = c("horizontal", "vertical"))
+  layout <- insight::validate_argument(layout, c("horizontal", "vertical"))
   formatted_table <- format(x = x, digits = digits, format = format, ...)
 
   if ("Performance_Score" %in% colnames(x)) {

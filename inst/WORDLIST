@@ -49,6 +49,7 @@ Crujeiras
 Csaki
 DAGs
 DBSCAN
+DeBolt
 DOI
 Datenerhebung
 De
@@ -64,6 +65,7 @@ Dunson
 Durbin
 Dxy
 Döring
+EFA
 ELPD
 EQS
 Econometrica
@@ -77,6 +79,7 @@ Fragebogenkonstruktion
 Francoeur
 GFI
 GL
+glb
 GLMM
 GLMMadaptive
 GLMMadpative
@@ -148,10 +151,12 @@ Mattan
 Matuschek
 McElreath
 McKelvey
+Mehrvarz
 Merkle
 Methoden
 Michalos
 Moosbrugger
+Monette
 Mora
 Multicollinearity
 MuMIn
@@ -167,6 +172,7 @@ Nondegenerate
 Nordhausen
 Normed
 Nicewander
+Oakes
 ORCID
 OSF
 OSX
@@ -174,11 +180,13 @@ Olkin
 PNFI
 Pek
 Petrov
+polychoric
 Postestimation
 Pre
 Psychol
 Psychometrika
 QE
+Rast
 RFI
 RL
 RMR
@@ -187,10 +195,13 @@ Rabe
 Raudenbush
 Raykov
 Revelle
+Revelle's
 Rodríguez
 Rohrer
 Rousseeuw
 Routledge
+Rouder
+Rouder's
 SEM
 SRMR
 Scheepers
@@ -200,6 +211,7 @@ Schumacker
 Sensivity
 Shachar
 Shinichi
+Sijtsma
 Skrondal
 Smyth
 Solomons
@@ -222,6 +234,7 @@ Tweedie
 VIF
 VIFs
 VPC
+Vandekerckhove
 Vanhove
 Vasishth
 Vehtari
@@ -236,10 +249,12 @@ Windmeijer
 Winsorization
 Witten
 Xu
+Yovel
 YL
 Zavoina
 Zavoinas
 Zhou
+Zinbarg
 Zomeren
 Zuur
 acyclic
@@ -261,6 +276,7 @@ brms
 brmsfit
 cauchy
 clusterable
+codecov
 confounder
 confounders
 concurvity
@@ -308,6 +324,7 @@ mhurdle
 mis
 misspecification
 misspecified
+miskeyed
 mlm
 mlogit
 modelfit
@@ -357,6 +374,7 @@ und
 underfitted
 underfitting
 underdispersion
+vour
 visualisation
 winsorization
 winsorize

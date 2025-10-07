@@ -10,12 +10,7 @@ check_zeroinflation(x, ...)
 
 \method{check_zeroinflation}{default}(x, tolerance = 0.05, ...)
 
-\method{check_zeroinflation}{performance_simres}(
-  x,
-  tolerance = 0.1,
-  alternative = c("two.sided", "less", "greater"),
-  ...
-)
+\method{check_zeroinflation}{performance_simres}(x, tolerance = 0.1, alternative = "two.sided", ...)
 }
 \arguments{
 \item{x}{Fitted model of class \code{merMod}, \code{glmmTMB}, \code{glm}, or \code{glm.nb}
@@ -30,7 +25,8 @@ zeros to considered as over- or underfitting zeros. A ratio
 between 1 +/- \code{tolerance} is considered as OK, while a ratio
 beyond or below this threshold would indicate over- or underfitting.}
 
-\item{alternative}{A character string specifying the alternative hypothesis.}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }
 \value{
 A list with information about the amount of predicted and observed

@@ -70,42 +70,5 @@
 #' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
-  UseMethod("check_convergence")
-}
-
-
-#' @export
-check_convergence.default <- function(x, tolerance = 0.001, ...) {
-  .is_model_valid(x)
-  message(sprintf("`check_convergence()` does not work for models of class '%s'.", class(x)[1]))
-}
-
-
-#' @export
-check_convergence.merMod <- function(x, tolerance = 0.001, ...) {
-  insight::check_if_installed("Matrix")
-
-  relgrad <- with(x@optinfo$derivs, Matrix::solve(Hessian, gradient))
-
-  # copy logical value, TRUE if convergence is OK
-  retval <- max(abs(relgrad)) < tolerance
-  # copy convergence value
-  attr(retval, "gradient") <- max(abs(relgrad))
-
-  # return result
-  retval
-}
-
-
-#' @export
-check_convergence.glmmTMB <- function(x, tolerance = 0.001, ...) {
-  # https://github.com/glmmTMB/glmmTMB/issues/275
-  # https://stackoverflow.com/q/79110546/2094622
-  isTRUE(all.equal(x$fit$convergence, 0, tolerance = tolerance)) && isTRUE(x$sdr$pdHess)
-}
-
-
-#' @export
-check_convergence._glm <- function(x, ...) {
-  isTRUE(x$fit$converged)
+  insight::is_converged(x, tolerance = tolerance, ...)
 }

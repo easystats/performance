@@ -29,7 +29,7 @@
 #' standardized deviance residuals is shown (in line with changes in
 #' `plot.lm()` for R 4.3+).
 #'
-#' @examplesIf require("see")
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_normality(m)
 #'
@@ -58,7 +58,8 @@ check_normality.default <- function(x, ...) {
 
   if (!insight::model_info(x)$is_linear) {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
+      "Checking normality of residuals is only appropriate for linear models.",
+      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." # nolint
     )
     return(NULL)
   }
@@ -74,6 +75,38 @@ check_normality.default <- function(x, ...) {
   p.val
 }
 
+# PCA / FA ---------------
+
+#' @export
+check_normality.parameters_efa <- function(x, ...) {
+  # check for normality of residuals
+  p.val <- .check_normality(insight::get_residuals(x), x)
+
+  attr(p.val, "data") <- x
+  attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
+  attr(p.val, "effects") <- "fixed"
+  attr(p.val, "is_fa") <- TRUE
+  class(p.val) <- unique(c("check_normality", "see_check_normality", class(p.val)))
+
+  p.val
+}
+
+#' @export
+check_normality.fa <- check_normality.parameters_efa
+
+#' @export
+check_normality.principal <- check_normality.parameters_efa
+
+#' @export
+check_normality.omega <- check_normality.parameters_efa
+
+#' @export
+check_normality.item_omega <- function(x, ...) {
+  model <- attributes(x)$model
+  check_normality(model, ...)
+}
+
+
 # glm ---------------
 
 #' @export
@@ -86,8 +119,8 @@ check_normality.glm <- function(x, ...) {
   class(out) <- unique(c("check_normality", "see_check_normality", class(out)))
 
   insight::format_alert(
-    "There's no formal statistical test for normality for generalized linear model.",
-    "Instead, please use `simulate_residuals()` and `check_residuals()` to check for uniformity of residuals."
+    "Generalized linear model residuals are not expected to follow a normal distribution.",
+    "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." # nolint
   )
   invisible(out)
 }
@@ -179,6 +212,21 @@ print.check_normality <- function(x, ...) {
       }
     }
   }
+
+  # add FA / PCA information
+  if (isTRUE(attributes(x)$is_fa)) {
+    res <- insight::get_residuals(attributes(x)$data)
+    lge_resid_tot <- sum(abs(res) > 0.05)
+    lge_resid_pct <- lge_resid_tot / length(res)
+    cat(paste0(
+      "\nAbsolute residuals > 0.05 = ",
+      lge_resid_tot,
+      " (",
+      insight::format_percent(lge_resid_pct),
+      ")\n"
+    ))
+  }
+
   invisible(x)
 }
 
@@ -189,15 +237,16 @@ print.check_normality <- function(x, ...) {
 
 #' @rdname check_normality
 #' @export
-check_normality.merMod <- function(x, effects = c("fixed", "random"), ...) {
+check_normality.merMod <- function(x, effects = "fixed", ...) {
   # args
-  effects <- match.arg(effects)
+  effects <- insight::validate_argument(effects, c("fixed", "random"))
   info <- insight::model_info(x)
 
   # valid model?
   if (!info$is_linear && effects == "fixed") {
     insight::format_alert(
-      "Checking normality of residuals is only appropriate for linear models. It is recommended to use `simulate_residuals()` and `check_residuals()` to check generalized linear (mixed) models for uniformity of residuals." # nolint
+      "Checking normality of residuals is only appropriate for linear models.",
+      "Instead, please use `simulate_residuals()` and `check_residuals()` to test whether quantile residuals follow a uniform distribution." # nolint
     )
     return(NULL)
   }

@@ -299,16 +299,26 @@ print_md.test_performance <- function(x, digits = 2, ...) {
 
 #' @export
 print_html.test_performance <- function(x, digits = 2, ...) {
-  insight::export_table(format(x, digits = digits, ...), format = "html", ...)
+  insight::export_table(
+    format(x, digits = digits, ...),
+    format = .check_format_backend(...),
+    ...
+  )
 }
 
 
 #' @export
 display.test_performance <- function(object, format = "markdown", digits = 2, ...) {
-  if (format == "markdown") {
-    print_md(x = object, digits = digits, ...)
+  format <- .display_default_format(format)
+  if (format %in% c("html", "tt")) {
+    print_html(
+      x = object,
+      digits = digits,
+      backend = ifelse(format == "tt", "tt", "html"),
+      ...
+    )
   } else {
-    print_html(x = object, digits = digits, ...)
+    print_md(x = object, digits = digits, ...)
   }
 }
 

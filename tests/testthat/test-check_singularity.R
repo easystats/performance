@@ -16,6 +16,13 @@ test_that("check_singularity, lme4", {
     data = sleepstudy
   ))
   expect_true(check_singularity(model))
+
+  # term-wise
+  out <- check_singularity(model, check = "terms")
+  expect_identical(
+    out,
+    c(`mysubgrp:mygrp` = TRUE, Subject = FALSE, mygrp = FALSE)
+  )
 })
 
 
@@ -36,4 +43,22 @@ test_that("check_singularity", {
     m2 <- glmmTMB::glmmTMB(y ~ 1 + (x | f), data = dd, REML = FALSE)
   }))
   expect_true(check_singularity(m2))
+
+  data(Salamanders, package = "glmmTMB")
+  m <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    data = Salamanders[Salamanders$count > 0, , drop = FALSE],
+    family = glmmTMB::truncated_nbinom2(),
+    ziformula = ~ spp + (1 | site),
+    dispformula = ~ spp + (1 | site)
+  ))
+  out <- check_singularity(m, check = "terms")
+  expect_identical(
+    out,
+    list(
+      cond = c(`1 | site` = TRUE),
+      zi = c(`1 | site` = TRUE),
+      disp = c(`1 | site` = TRUE)
+    )
+  )
 })

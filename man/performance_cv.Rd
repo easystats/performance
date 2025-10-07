@@ -7,7 +7,7 @@
 performance_cv(
   model,
   data = NULL,
-  method = c("holdout", "k_fold", "loo"),
+  method = "holdout",
   metrics = "all",
   prop = 0.3,
   k = 5,

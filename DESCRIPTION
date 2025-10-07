@@ -1,12 +1,12 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.12.4.16
+Version: 0.15.2
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
              role = c("aut", "cre"),
-             email = "d.luedecke@uke.de",
+             email = "officialeasystats@gmail.com",
              comment = c(ORCID = "0000-0002-8895-3206")),
       person(given = "Dominique",
              family = "Makowski",
@@ -57,7 +57,7 @@ Authors@R:
              family = "Luchman",
              role = "ctb",
              comment = c(ORCID = "0000-0002-8886-9717")))
-Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+Maintainer: Daniel Lüdecke <officialeasystats@gmail.com>
 Description: Utilities for computing measures to assess model quality,
     which are not directly provided by R's 'base' or 'stats' packages.
     These include e.g. measures like r-squared, intraclass correlation
@@ -71,12 +71,13 @@ License: GPL-3
 URL: https://easystats.github.io/performance/
 BugReports: https://github.com/easystats/performance/issues
 Depends:
-    R (>= 3.6)
+    R (>= 4.0)
 Imports:
-    bayestestR (>= 0.15.0),
-    insight (>= 1.0.0),
-    datawizard (>= 0.13.0),
+    bayestestR (>= 0.17.0),
+    insight (>= 1.4.2),
+    datawizard (>= 1.2.0),
     stats,
+    methods,
     utils
 Suggests:
     AER,
@@ -91,11 +92,13 @@ Suggests:
     car,
     carData,
     CompQuadForm,
-    correlation,
+    correlation (>= 0.8.8),
     cplm,
+    curl,
     dagitty,
     dbscan,
     DHARMa (>= 0.4.7),
+    discovr,
     estimatr,
     fixest,
     flextable,
@@ -103,7 +106,8 @@ Suggests:
     ftExtra,
     gamm4,
     ggdag,
-    glmmTMB (>= 1.1.10),
+    glmmTMB (>= 1.1.12),
+    GPArotation,
     graphics,
     Hmisc,
     httr2,
@@ -123,20 +127,24 @@ Suggests:
     metafor,
     mgcv,
     mlogit,
+    modelbased (>= 0.12.0),
     multimode,
     nestedLogit,
     nlme,
+    nnet,
     nonnest2,
     ordinal,
     parallel,
-    parameters (>= 0.22.0),
+    parameters (>= 0.28.0),
     patchwork,
     pscl,
     psych,
+    psychTools,
     quantreg,
     qqplotr (>= 0.0.6),
     randomForest,
     RcppEigen,
+    reformulas,
     rempsyc,
     rmarkdown,
     rstanarm,
@@ -160,4 +168,3 @@ Config/Needs/website:
     r-lib/pkgdown,
     easystats/easystatstemplate
 Config/rcmdcheck/ignore-inconsequential-notes: true
-Remotes: easystats/datawizard, easystats/see, easystats/insight

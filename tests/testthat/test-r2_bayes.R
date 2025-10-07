@@ -38,6 +38,7 @@ test_that("r2_bayes", {
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("rstantools")
   model <- insight::download_model("stanreg_lmerMod_1")
+  skip_if(is.null(model))
   set.seed(123)
   out <- r2_bayes(model)
   expect_equal(out$R2_Bayes, 0.642, tolerance = 1e-3)

@@ -11,7 +11,7 @@ check_dag(
   exposure = NULL,
   adjusted = NULL,
   latent = NULL,
-  effect = c("all", "total", "direct"),
+  effect = "all",
   coords = NULL
 )
 
@@ -146,7 +146,7 @@ adjustments or over-adjustment.
 }
 
 \examples{
-\dontshow{if (require("ggdag", quietly = TRUE) && require("dagitty", quietly = TRUE) && require("see", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("ggdag", "dagitty", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # no adjustment needed
 check_dag(
   y ~ x + b,

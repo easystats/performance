@@ -1,9 +1,105 @@
-# performance 0.12.5
+# performance 0.15.2
+
+## Bug fixes
+
+* Fixed failing CRAN checks, related to the latest *rstanarm* update.
+
+# performance 0.15.1
+
+## Changes
+
+* `display()` now supports the `tinytable` format, when `format = "tt"`.
+
+* Better handling of non-converged lavaan-models in `model_performance()`.
+
+# performance 0.15.0
+
+## New functions
+
+* `item_omega()`, to calculate the McDonald's Omega reliability coefficient.
+
+* `item_totalcor()` calculates the total correlation of an item with the
+  sum of all other items in a scale. If `corrected = TRUE`, the total
+  correlation is corrected for the number of items in the scale (which is
+  equivalent to `item_discrimination()`).
+
+* Column names of `item_reliability()` were changed to be in line with the
+  _easystats_ naming convention and to be consistent with the output of other
+  related functions.
+
+## Changes
+
+* `check_itemscale()` now work with factor analysis results, from
+  `parameters::factor_analysis()`.
+
+* `item_reliability()` now includes the item-total correlation, and information
+  about Cronbach's alpha and mean inter-item correlation in the printed output.
+
+* `cronbachs_alpha()` now work with factor analysis results, from
+  `parameters::factor_analysis()`.
+
+* Formatting of p-values in `test_likelihoodratio()` is now consistent with
+  formatted p-values from other functions.
+
+* Added following methods for `psych::fa()`, `psych::principal()`, `item_omega()`,
+  `psych::omega()`, and `parameters::factor_analysis()`: `check_normality()`, `check_residuals()`, `check_outliers()`, and `model_performance()`.
+
+* `item_alpha()` was added as an alias for `cronbachs_alpha()`.
+
+* Further functions get a `display()`, `print_md()` and `print_html()` method.
+
+## Bug fixes
+
+* Fixed issue in `check_predictions()` for binomial models with a response
+  defined as proportion or matrix of successes and trials.
+
+* `print_md()` for objects returned by `check_itemscale()` now include the footer
+  with information about Cronbach's alpha and mean inter-item correlation.
+
+# performance 0.14.0
+
+## Breaking Changes
+
+* The `"Increased SE"` column in the output of `check_collinearity()` was renamed
+  into `"adj. VIF"` (=adjusted VIF). Furthermore, the computation of the adjusted
+  VIF now correctly accounts for the numbers of levels (i.e. degrees of freedom)
+  for factors.
+
+## New functions
+
+* New function `check_group_variation()` to check within-/between-group
+  variability (this function will replace `check_heterogeneity_bias()` in
+  future releases.)
+
+* New functions `performance_reliability()` and `performance_dvour()`. These
+  functions provide information about the reliability of group-level estimates
+  (i.e., random effects) in mixed models.
+
+## Changes
+
+* Singularity checks with `check_singularity()` are now more efficient and also
+  include the random effects for the dispersion component (from package
+  *glmmTMB*). Furthermore, a `check` argument allows to check for general
+  singularity (for the full model), or can return singularity checks for each
+  random effects term separately.
+
+## Bug fixes
+
+* Fixed issue with wrong computation of pseudo-R2 for some models where the
+  base-model (null model) was updated using the original data, which could
+  include missing values. Now the model frame is used, ensuring the correct
+  number of observations in the returned base-model, thus calculating the
+  correct log-likelihood and returning the correct pseudo-R2.
+
+* Fixed examples in `check_outliers()`.
+
+# performance 0.13.0
 
 ## Breaking changes
 
 * `check_outliers()` with `method = "optics"` now returns a further refined
-  cluster selection, by passing the `optics_xi` argument to `dbscan::extractXi()`.
+  cluster selection, by passing the `optics_xi` argument to
+  `dbscan::extractXi()`.
 
 * Deprecated arguments and alias-function-names have been removed.
 

@@ -68,11 +68,10 @@
 #' # look at the data frame
 #' as.data.frame(result)
 #'
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' \donttest{
 #' # plot
-#' if (require("see")) {
-#'   plot(result, show_dots = TRUE)
-#' }
+#' plot(result, show_dots = TRUE)
 #' }
 #'
 #' @export
@@ -81,13 +80,19 @@ binned_residuals <- function(model,
                              n_bins = NULL,
                              show_dots = NULL,
                              ci = 0.95,
-                             ci_type = c("exact", "gaussian", "boot"),
-                             residuals = c("deviance", "pearson", "response"),
+                             ci_type = "exact",
+                             residuals = "deviance",
                              iterations = 1000,
                              verbose = TRUE,
                              ...) {
-  ci_type <- match.arg(ci_type)
-  residuals <- match.arg(residuals)
+  ci_type <- insight::validate_argument(
+    ci_type,
+    c("exact", "gaussian", "boot")
+  )
+  residuals <- insight::validate_argument(
+    residuals,
+    c("deviance", "pearson", "response")
+  )
 
   # for non-bernoulli models, `"exact"` doesn't work
   if (isFALSE(insight::model_info(model)$is_bernoulli)) {

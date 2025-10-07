@@ -20,9 +20,11 @@
 ^.github/.
 ^CODE_OF_CONDUCT\.md$
 ^revdep$
-^tests/_snaps/.
+^tests/testthat/_snaps/.
 ^cran-comments\.md$
 ^\.github$
 \.code-workspace$
 \.lintr$
 ^CRAN-SUBMISSION$
+^[.]?air[.]toml$
+^\.vscode$

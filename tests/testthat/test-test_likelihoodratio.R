@@ -106,3 +106,13 @@ test_that("test_likelihoodratio - lm", {
   expect_equal(t1$`Pr(>Chi)`, t2$p, tolerance = 1e-3)
   expect_equal(attributes(t2)$estimator, "ols")
 })
+
+test_that("test_likelihoodratio - print p-digits", {
+  skip_if_not_installed("knitr")
+  data(mtcars)
+  m1 <- lm(mpg ~ hp, data = mtcars)
+  m2 <- lm(mpg ~ hp * as.factor(gear), data = mtcars)
+
+  expect_snapshot(test_likelihoodratio(m1, m2))
+  expect_snapshot(print_md(test_likelihoodratio(m1, m2), p_digits = 3))
+})

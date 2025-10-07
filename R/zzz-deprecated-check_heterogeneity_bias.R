@@ -1,8 +1,13 @@
-#' Check model predictor for heterogeneity bias
+#' @title Check model predictor for heterogeneity bias *(Deprecated)*
+#' @name check_heterogeneity_bias
 #'
+#' @description
 #' `check_heterogeneity_bias()` checks if model predictors or variables may
-#' cause a heterogeneity bias, i.e. if variables have a within- and/or
-#' between-effect (_Bell and Jones, 2015_).
+#' cause a heterogeneity bias, i.e. if variables have any within-group variance
+#' (_Bell and Jones, 2015_).
+#'
+#' **We recommend using [check_group_variation()] instead, for a more detailed
+#' and flexible examination of group-wise variability.**
 #'
 #' @param x A data frame or a mixed model object.
 #' @param select Character vector (or formula) with names of variables to select
@@ -23,7 +28,8 @@
 #'     where the levels are separated by `/`.
 #'
 #'   See also section _De-meaning for cross-classified designs_ and
-#'   _De-meaning for nested designs_ below.
+#'   _De-meaning for nested designs_ in [`datawizard::demean()`].
+#'
 #' @param nested Logical, if `TRUE`, the data is treated as nested. If `FALSE`,
 #'   the data is treated as cross-classified. Only applies if `by` contains more
 #'   than one variable.
@@ -32,6 +38,9 @@
 #' For further details, read the vignette
 #' <https://easystats.github.io/parameters/articles/demean.html> and also
 #' see documentation for [`datawizard::demean()`].
+#'
+#' For a more detailed and flexible examination of group-wise variability, see
+#' [`check_group_variation()`].
 #'
 #' @references
 #' - Bell A, Jones K. 2015. Explaining Fixed Effects: Random Effects
@@ -44,7 +53,7 @@
 #' check_heterogeneity_bias(iris, select = c("Sepal.Length", "Petal.Length"), by = "ID")
 #' @export
 check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE) {
-  insight::check_if_installed("datawizard", minimum_version = "0.12.0")
+  insight::format_alert("`check_heterogeneity_bias()` is deprecated. Please use `check_group_variation()` instead.")
 
   if (insight::is_model(x)) {
     by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
@@ -61,6 +70,19 @@ check_heterogeneity_bias <- function(x, select = NULL, by = NULL, nested = FALSE
       by <- all.vars(by)
     }
     my_data <- x
+  }
+
+  # sanity check
+  if (is.null(by)) {
+    insight::format_error("Please provide the group variable using `by`.")
+  }
+  if (!all(by %in% colnames(my_data))) {
+    insight::format_error("The variable(s) speciefied in `by` were not found in the data.")
+  }
+
+  # select all, if not given
+  if (is.null(select)) {
+    select <- setdiff(colnames(my_data), by)
   }
 
   # for nested designs?
@@ -108,14 +130,4 @@ print.check_heterogeneity_bias <- function(x, ...) {
   insight::print_color(toString(x), "red")
   cat("\n")
   invisible(x)
-}
-
-
-#' @keywords internal
-.n_unique <- function(x, na.rm = TRUE) {
-  if (is.null(x)) {
-    return(0)
-  }
-  if (isTRUE(na.rm)) x <- x[!is.na(x)]
-  length(unique(x))
 }

@@ -75,7 +75,7 @@
 #' - Gelman, A., Hill, J., and Vehtari, A. (2020). Regression and Other Stories.
 #'   Cambridge University Press.
 #'
-#' @examplesIf require("see")
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
 #' # linear model
 #' model <- lm(mpg ~ disp, data = mtcars)
 #' check_predictions(model)
@@ -126,7 +126,10 @@ check_predictions.default <- function(object,
   }
 
   # args
-  type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
+  type <- insight::validate_argument(
+    type,
+    c("density", "discrete_dots", "discrete_interval", "discrete_both")
+  )
 
   pp_check.lm(
     object,
@@ -161,7 +164,10 @@ check_predictions.stanreg <- function(object,
   }
 
   # args
-  type <- match.arg(type, choices = c("density", "discrete_dots", "discrete_interval", "discrete_both"))
+  type <- insight::validate_argument(
+    type,
+    c("density", "discrete_dots", "discrete_interval", "discrete_both")
+  )
 
   # convert to type-argument for pp_check
   pp_type <- switch(type,
@@ -274,8 +280,13 @@ pp_check.lm <- function(object,
                         verbose = TRUE,
                         model_info = NULL,
                         ...) {
+  # we need the formula and the response values to check for matrix responses
+  # or proportions in binomial models
+  model_response <- insight::find_response(object, combine = TRUE)
+  response_values <- insight::get_response(object)
+
   # if we have a matrix-response, continue here...
-  if (grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
+  if (grepl("^cbind\\((.*)\\)", model_response) || is.matrix(response_values)) {
     return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
   }
 
@@ -294,12 +305,26 @@ pp_check.lm <- function(object,
 
   # glmmTMB returns column matrix for bernoulli
   if (inherits(object, "glmmTMB") && minfo$is_binomial && !is.null(out)) {
+    # check if we have a response defined as proportions. in that case, we
+    # have to handle the results from `simulate()` differently. We have a
+    # proportion response if the formula contains a `/` in the response,
+    # or if the response is a non-integer numeric vector between 0 and 1.
+    proportion_response <- grepl("/", model_response, fixed = TRUE) ||
+      (!is.null(response_values) && !all(.is_integer(response_values)))
+
     out <- as.data.frame(lapply(out, function(i) {
       if (is.matrix(i)) {
-        i[, 1]
-      } else {
-        i
+        # do we have a response defined as proportions?
+        if (proportion_response) {
+          # if so, calculate the proportions
+          i <- i[, 1] / rowSums(i, na.rm = TRUE)
+        } else {
+          # if not, we just take the first column
+          i <- i[, 1]
+        }
       }
+      # and return as a vector
+      as.vector(i)
     }))
   }
 
@@ -340,18 +365,35 @@ pp_check.lm <- function(object,
 }
 
 
-pp_check.glm <- function(object,
-                         iterations = 50,
-                         check_range = FALSE,
-                         re_formula = NULL,
-                         bandwidth = "nrd",
-                         type = "density",
-                         verbose = TRUE,
-                         model_info = NULL,
-                         ...) {
+pp_check.glm <- function(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  model_info = NULL,
+  ...
+) {
+  # we need the formula and the response values to check for matrix responses
+  # or proportions in binomial models
+  model_response <- insight::find_response(object, combine = TRUE)
+  response_values <- insight::get_response(object)
+
   # if we have no matrix-response, continue here...
-  if (!grepl("^cbind\\((.*)\\)", insight::find_response(object, combine = TRUE))) {
-    return(pp_check.lm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
+  if (!grepl("^cbind\\((.*)\\)", model_response) && !is.matrix(response_values)) {
+    return(pp_check.lm(
+      object,
+      iterations,
+      check_range,
+      re_formula,
+      bandwidth,
+      type,
+      verbose,
+      model_info,
+      ...
+    ))
   }
 
   # else, process matrix response. for matrix response models, we compute
@@ -360,8 +402,17 @@ pp_check.glm <- function(object,
 
   out <- tryCatch(
     {
-      matrix_sim <- stats::simulate(object, nsim = iterations, re.form = re_formula, ...)
-      as.data.frame(sapply(matrix_sim, function(i) i[, 1] / rowSums(i, na.rm = TRUE), simplify = TRUE))
+      matrix_sim <- stats::simulate(
+        object,
+        nsim = iterations,
+        re.form = re_formula,
+        ...
+      )
+      as.data.frame(sapply(
+        matrix_sim,
+        function(i) i[, 1] / rowSums(i, na.rm = TRUE),
+        simplify = TRUE
+      ))
     },
     error = function(e) {
       NULL
@@ -379,8 +430,12 @@ pp_check.glm <- function(object,
   }
 
   # get response data, and response term
-  response <- eval(str2lang(insight::find_response(object)),
-    envir = insight::get_response(object)
+  response <- .safe(
+    eval(
+      str2lang(insight::find_response(object)),
+      envir = insight::get_response(object)
+    ),
+    insight::get_response(object)
   )
   resp_string <- insight::find_terms(object)$response
 
@@ -398,7 +453,11 @@ pp_check.glm <- function(object,
   attr(out, "bandwidth") <- bandwidth
   attr(out, "model_info") <- minfo
   attr(out, "type") <- type
-  class(out) <- c("performance_pp_check", "see_performance_pp_check", class(out))
+  class(out) <- c(
+    "performance_pp_check",
+    "see_performance_pp_check",
+    class(out)
+  )
   out
 }
 

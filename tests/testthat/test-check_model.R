@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("see")
+skip_if_not_installed("see", minimum_version = "0.9.1")
 
 d <- data.frame(
   y = c(

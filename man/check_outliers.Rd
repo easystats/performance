@@ -33,7 +33,9 @@ check_outliers(x, ...)
 }
 \arguments{
 \item{x}{A model, a data.frame, a \code{performance_simres} \code{\link[=simulate_residuals]{simulate_residuals()}}
-or a \code{DHARMa} object.}
+or a \code{DHARMa} object, or an EFA/PCA/Omega object returned by the \strong{psych}
+package, or an object returned by \code{parameters::factor_analysis()} or
+\code{item_omega()}.}
 
 \item{...}{When \code{method = "ics"}, further arguments in \code{...} are passed
 down to \code{\link[ICSOutlier:ics.outlier]{ICSOutlier::ics.outlier()}}. When \code{method = "mahalanobis"},
@@ -49,8 +51,9 @@ or \code{DHARMa}, further arguments are passed down to \code{DHARMa::testOutlier
 \item{threshold}{A list containing the threshold values for each method (e.g.
 \code{list('mahalanobis' = 7, 'cook' = 1)}), above which an observation is
 considered as outlier. If \code{NULL}, default values will be used (see
-'Details'). If a numeric value is given, it will be used as the threshold
-for any of the method run.}
+'Details'). If a numeric value is given, it will be used as the threshold for
+any of the method run. For EFA/PCA/Omega, indicates the threshold for
+correlation of residuals (by default, 0.05).}
 
 \item{ID}{Optional, to report an ID column along with the row number.}
 
@@ -63,15 +66,16 @@ by \code{simulate_residuals()} or of class \code{DHARMa}. See 'Details' in
 
 \item{iterations}{Number of simulations to run.}
 
-\item{alternative}{A character string specifying the alternative hypothesis.}
+\item{alternative}{A character string specifying the alternative hypothesis.
+Can be one of \code{"two.sided"}, \code{"less"}, or \code{"greater"}.}
 }
 \value{
 A logical vector of the detected outliers with a nice printing
 method: a check (message) on whether outliers were detected or not. The
 information on the distance measure and whether or not an observation is
-considered as outlier can be recovered with the \link{as.data.frame}
-function. Note that the function will (silently) return a vector of \code{FALSE}
-for non-supported data types such as character strings.
+considered as outlier can be recovered with the \link{as.data.frame} function.
+Note that the function will (silently) return a vector of \code{FALSE} for
+non-supported data types such as character strings.
 }
 \description{
 Checks for and locates influential observations (i.e.,
@@ -90,8 +94,8 @@ Outliers can be defined as particularly influential observations.
 Most methods rely on the computation of some distance metric, and the
 observations greater than a certain threshold are considered outliers.
 Importantly, outliers detection methods are meant to provide information to
-consider for the researcher, rather than to be an automatized procedure
-which mindless application is a substitute for thinking.
+consider for the researcher, rather than to be an automatized procedure which
+mindless application is a substitute for thinking.
 
 An \strong{example sentence} for reporting the usage of the composite method
 could be:
@@ -109,10 +113,9 @@ that were classified as outliers by at least half of the methods used."}
 \note{
 There is also a
 \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
-implemented in the
-\href{https://easystats.github.io/see/}{\pkg{see}-package}. \strong{Please
-note} that the range of the distance-values along the y-axis is re-scaled
-to range from 0 to 1.
+implemented in the \href{https://easystats.github.io/see/}{\strong{see} package}.
+\strong{Please note} that the range of the distance-values along the y-axis is
+re-scaled to range from 0 to 1.
 }
 \section{Model-specific methods}{
 
@@ -302,17 +305,16 @@ pooled effect.
 data <- mtcars # Size nrow(data) = 32
 
 # For single variables ------------------------------------------------------
-outliers_list <- check_outliers(data$mpg) # Find outliers
+# Find all observations beyond +/- 2 SD
+outliers_list <- check_outliers(data$mpg, method = "zscore", threshold = 2)
 outliers_list # Show the row index of the outliers
 as.numeric(outliers_list) # The object is a binary vector...
 filtered_data <- data[!outliers_list, ] # And can be used to filter a data frame
-nrow(filtered_data) # New size, 28 (4 outliers removed)
+nrow(filtered_data) # New size, 30 (2 outliers removed)
 
-# Find all observations beyond +/- 2 SD
-check_outliers(data$mpg, method = "zscore", threshold = 2)
 
 # For dataframes ------------------------------------------------------
-check_outliers(data) # It works the same way on data frames
+check_outliers(data, threshold = 2) # It works the same way on data frames
 
 # You can also use multiple methods at once
 outliers_list <- check_outliers(data, method = c(
@@ -334,7 +336,7 @@ filtered_data <- data[outliers_info$Outlier < 0.1, ]
 group_iris <- datawizard::data_group(iris, "Species")
 check_outliers(group_iris)
 # nolint start
-\dontshow{if (require("see") && require("bigutilsr") && require("loo") && require("MASS") && require("ICSOutlier") && require("ICS") && require("dbscan")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("bigutilsr", "MASS", "ICSOutlier", "ICS", "dbscan", "loo", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # nolint end
 \donttest{
 # You can also run all the methods

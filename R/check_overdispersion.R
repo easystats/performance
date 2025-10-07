@@ -284,8 +284,11 @@ check_overdispersion.glmmTMB <- check_overdispersion.merMod
 
 #' @rdname check_overdispersion
 #' @export
-check_overdispersion.performance_simres <- function(x, alternative = c("two.sided", "less", "greater"), ...) {
-  alternative <- match.arg(alternative)
+check_overdispersion.performance_simres <- function(x, alternative = "two.sided", ...) {
+  alternative <- insight::validate_argument(
+    alternative,
+    c("two.sided", "less", "greater")
+  )
 
   # check for special arguments - we may pass "object_name" from other methods
   dots <- list(...)

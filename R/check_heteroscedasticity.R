@@ -27,10 +27,9 @@
 #' check_heteroscedasticity(m)
 #'
 #' # plot results
-#' if (require("see")) {
-#'   x <- check_heteroscedasticity(m)
-#'   plot(x)
-#' }
+#' @examplesIf insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)
+#' x <- check_heteroscedasticity(m)
+#' plot(x)
 #' @export
 check_heteroscedasticity <- function(x, ...) {
   UseMethod("check_heteroscedasticity")

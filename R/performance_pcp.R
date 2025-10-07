@@ -59,7 +59,10 @@ performance_pcp <- function(model,
     model <- model$fit
   }
 
-  method <- match.arg(method, choices = c("Herron", "Gelman-Hill", "herron", "gelman_hill"))
+  method <- insight::validate_argument(
+    method,
+    c("Herron", "Gelman-Hill", "herron", "gelman_hill")
+  )
   mi <- insight::model_info(model, verbose = verbose)
 
   if (!mi$is_binomial) {

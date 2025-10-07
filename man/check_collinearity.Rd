@@ -14,20 +14,14 @@ multicollinearity(x, ...)
 
 \method{check_collinearity}{default}(x, ci = 0.95, verbose = TRUE, ...)
 
-\method{check_collinearity}{glmmTMB}(
-  x,
-  component = c("all", "conditional", "count", "zi", "zero_inflated"),
-  ci = 0.95,
-  verbose = TRUE,
-  ...
-)
+\method{check_collinearity}{glmmTMB}(x, component = "all", ci = 0.95, verbose = TRUE, ...)
 
 check_concurvity(x, ...)
 }
 \arguments{
-\item{x}{A model object (that should at least respond to \code{vcov()},
-and if possible, also to \code{model.matrix()} - however, it also should
-work without \code{model.matrix()}).}
+\item{x}{A model object (that should at least respond to \code{vcov()}, and if
+possible, also to \code{model.matrix()} - however, it also should work without
+\code{model.matrix()}).}
 
 \item{...}{Currently not used.}
 
@@ -36,28 +30,34 @@ work without \code{model.matrix()}).}
 \item{verbose}{Toggle off warnings or messages.}
 
 \item{component}{For models with zero-inflation component, multicollinearity
-can be checked for the conditional model (count component,
-\code{component = "conditional"} or \code{component = "count"}),
-zero-inflation component (\code{component = "zero_inflated"} or
-\code{component = "zi"}) or both components (\code{component = "all"}).
-Following model-classes are currently supported: \code{hurdle},
-\code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.}
+can be checked for the conditional model (count component, \code{component = "conditional"} or \code{component = "count"}), zero-inflation component
+(\code{component = "zero_inflated"} or \code{component = "zi"}) or both components
+(\code{component = "all"}). Following model-classes are currently supported:
+\code{hurdle}, \code{zeroinfl}, \code{zerocount}, \code{MixMod} and \code{glmmTMB}.}
 }
 \value{
 A data frame with information about name of the model term, the
-variance inflation factor and associated confidence intervals, the factor
-by which the standard error is increased due to possible correlation
-with other terms, and tolerance values (including confidence intervals),
-where \code{tolerance = 1/vif}.
+(generalized) variance inflation factor and associated confidence intervals,
+the adjusted VIF, which is the factor by which the standard error is
+increased due to possible correlation with other terms (inflation due to
+collinearity), and tolerance values (including confidence intervals), where
+\code{tolerance = 1/vif}.
 }
 \description{
-\code{check_collinearity()} checks regression models for
-multicollinearity by calculating the variance inflation factor (VIF).
-\code{multicollinearity()} is an alias for \code{check_collinearity()}.
+\code{check_collinearity()} checks regression models for multicollinearity by
+calculating the (generalized) variance inflation factor (VIF, Fox & Monette
+1992). \code{multicollinearity()} is an alias for \code{check_collinearity()}.
 \code{check_concurvity()} is a wrapper around \code{mgcv::concurvity()}, and can be
 considered as a collinearity check for smooth terms in GAMs. Confidence
-intervals for VIF and tolerance are based on Marcoulides et al.
-(2019, Appendix B).
+intervals for VIF and tolerance are based on Marcoulides et al. (2019,
+Appendix B).
+}
+\details{
+\code{check_collinearity()} calculates the generalized variance inflation factor
+(Fox & Monette 1992), which also returns valid results for categorical
+variables. The \emph{adjusted} VIF is calculated as \verb{VIF^(1/(2*<nlevels>)} (Fox &
+Monette 1992), which is identical to the square root of the VIF for numeric
+predictors, or for categorical variables with two levels.
 }
 \note{
 The code to compute the confidence intervals for the VIF and tolerance
@@ -97,7 +97,7 @@ multicollinearity of model terms. A VIF less than 5 indicates a low
 correlation of that predictor with other predictors. A value between 5 and
 10 indicates a moderate correlation, while VIF values larger than 10 are a
 sign for high, not tolerable correlation of model predictors (\emph{James et al.
-2013}). The \emph{Increased SE} column in the output indicates how much larger
+2013}). The \emph{adjusted VIF} column in the output indicates how much larger
 the standard error is due to the association with other predictors
 conditional on the remaining variables in the model. Note that these
 thresholds, although commonly used, are also criticized for being too high.
@@ -140,7 +140,7 @@ increasing lack of identifiability. The \emph{VIF proportion} column equals the
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_collinearity(m)
 
-\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # plot results
 x <- check_collinearity(m)
 plot(x)
@@ -148,6 +148,8 @@ plot(x)
 }
 \references{
 \itemize{
+\item Fox, J., & Monette, G. (1992). Generalized Collinearity Diagnostics.
+Journal of the American Statistical Association, 87(417), 178–183.
 \item Francoeur, R. B. (2013). Could Sequential Residual Centering Resolve
 Low Sensitivity in Moderated Regression? Simulations and Cancer Symptom
 Clusters. Open Journal of Statistics, 03(06), 24-44.

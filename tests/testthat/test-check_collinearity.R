@@ -9,15 +9,15 @@ test_that("check_collinearity, correct order in print", {
       "",
       "Low Correlation",
       "",
-      " Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI",
-      " gear 1.53 [1.19,  2.51]         1.24      0.65     [0.40, 0.84]",
+      " Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI",
+      " gear 1.53 [1.19,  2.51]     1.24      0.65     [0.40, 0.84]",
       "",
       "Moderate Correlation",
       "",
-      " Term  VIF    VIF 95% CI Increased SE Tolerance Tolerance 95% CI",
-      "   wt 5.05 [3.21,  8.41]         2.25      0.20     [0.12, 0.31]",
-      "  cyl 5.41 [3.42,  9.04]         2.33      0.18     [0.11, 0.29]",
-      " disp 9.97 [6.08, 16.85]         3.16      0.10     [0.06, 0.16]"
+      " Term  VIF    VIF 95% CI adj. VIF Tolerance Tolerance 95% CI",
+      "   wt 5.05 [3.21,  8.41]     2.25      0.20     [0.12, 0.31]",
+      "  cyl 5.41 [3.42,  9.04]     2.33      0.18     [0.11, 0.29]",
+      " disp 9.97 [6.08, 16.85]     3.16      0.10     [0.06, 0.16]"
     )
   )
 })
@@ -236,4 +236,26 @@ test_that("check_collinearity, glmmTMB hurdle w/o zi", {
   )
   out <- check_collinearity(mod_trunc_error)
   expect_equal(out$VIF, c(1.03414, 1.03414), tolerance = 1e-3)
+})
+
+test_that("check_collinearity, validate adjusted vif against car", {
+  skip_if_not_installed("car")
+  data(mtcars)
+  mod <- lm(mpg ~ cyl + hp + am, data = mtcars)
+  out1 <- car::vif(mod)
+  out2 <- check_collinearity(mod)
+  expect_equal(out1, out2$VIF, tolerance = 1e-3, ignore_attr = TRUE)
+
+  mod <- lm(mpg ~ as.factor(cyl) + hp + gear, data = mtcars)
+  out1 <- car::vif(mod)
+  out2 <- check_collinearity(mod)
+  expect_equal(out1[, 1], out2$VIF, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out1[, 3], out2$SE_factor, tolerance = 1e-3, ignore_attr = TRUE)
+
+  mtcars$gear <- factor(mtcars$gear)
+  mod <- lm(mpg ~ as.factor(cyl) + hp + gear, data = mtcars)
+  out1 <- car::vif(mod)
+  out2 <- check_collinearity(mod)
+  expect_equal(out1[, 1], out2$VIF, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(out1[, 3], out2$SE_factor, tolerance = 1e-3, ignore_attr = TRUE)
 })
