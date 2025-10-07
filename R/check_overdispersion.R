@@ -99,6 +99,10 @@ plot.check_overdisp <- function(x, ...) {
     }
   }
   if (!is.null(model)) {
+    # TODO: For models that use simulated residuals in check_overdispersion()
+    # (e.g., Poisson mixed models, zero-inflated models), this still uses
+    # classical residuals for plotting. Consider using simulated residuals
+    # for consistency. See #595, #643, #654
     x <- .model_diagnostic_overdispersion(model)
     class(x) <- c("see_check_overdisp", "data.frame")
     attr(x, "colors") <- list(...)$colors
