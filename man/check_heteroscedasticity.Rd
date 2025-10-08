@@ -36,7 +36,7 @@ m <<- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_heteroscedasticity(m)
 
 # plot results
-\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 x <- check_heteroscedasticity(m)
 plot(x)
 \dontshow{\}) # examplesIf}

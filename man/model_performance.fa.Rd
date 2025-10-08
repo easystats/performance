@@ -34,7 +34,7 @@ score adequacy. \code{R2} refers to the multiple R square of scores with factors
 while \code{Correlation} indicates the correlation of scores with factors.
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("psych", "GPArotation", "psychTools"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("psych", "GPArotation", "psychTools"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 out <- psych::fa(psychTools::bfi[, 1:25], 5)
 model_performance(out)
 

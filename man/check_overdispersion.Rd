@@ -96,7 +96,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_overdispersion(m)

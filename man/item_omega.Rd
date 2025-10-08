@@ -76,7 +76,7 @@ to return the reliability coefficients as (named) numeric vector. Detailed
 information can be found in the docs of \code{?psych::omega}.
 }
 \examples{
-\dontshow{if (insight::check_if_installed("parameters", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("parameters", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 data(mtcars)
 x <- mtcars[1:7]
 result <- item_omega(x, n = 2)

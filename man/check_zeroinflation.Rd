@@ -66,7 +66,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (require("glmmTMB") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("glmmTMB") && require("DHARMa")) withAutoprint(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(m)

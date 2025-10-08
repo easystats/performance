@@ -93,7 +93,7 @@ result
 # look at the data frame
 as.data.frame(result)
 
-\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \donttest{
 # plot
 plot(result, show_dots = TRUE)

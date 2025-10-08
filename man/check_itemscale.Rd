@@ -54,7 +54,7 @@ acceptability. Satisfactory range lies between 0.2 and 0.4. See also
 }
 }
 \examples{
-\dontshow{if (require("parameters") && require("psych")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("parameters") && require("psych")) withAutoprint(\{ # examplesIf}
 # data generation from '?prcomp', slightly modified
 C <- chol(S <- toeplitz(0.9^(0:15)))
 set.seed(17)

@@ -19,7 +19,7 @@ it always returns a significant result (suggesting that the distribution is
 multimodal). A better method might be needed here.
 }
 \examples{
-\dontshow{if (require("multimode") && require("mclust")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("multimode") && require("mclust")) withAutoprint(\{ # examplesIf}
 \donttest{
 # Univariate
 x <- rnorm(1000)
