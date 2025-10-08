@@ -149,11 +149,15 @@ test_that("check_dag, different adjustements for total and direct", {
 
 test_that("check_dag, collider bias", {
   dag <- check_dag(
-    SMD_ICD11 ~ agegroup + gender_kid + edgroup3 + residence + pss4_kid_sum_2sd + sm_h_total_kid,
+    SMD_ICD11 ~
+      agegroup + gender_kid + edgroup3 + residence + pss4_kid_sum_2sd + sm_h_total_kid,
     pss4_kid_sum_2sd ~ gender_kid,
     sm_h_total_kid ~ gender_kid + agegroup,
     adjusted = c(
-      "agegroup", "gender_kid", "edgroup3", "residence",
+      "agegroup",
+      "gender_kid",
+      "edgroup3",
+      "residence",
       "pss4_kid_sum_2sd"
     ),
     outcome = "SMD_ICD11",
@@ -162,12 +166,17 @@ test_that("check_dag, collider bias", {
   expect_snapshot(print(dag))
 
   dag <- check_dag(
-    SMD_ICD11 ~ agegroup + gender_kid + edgroup3 + residence + pss4_kid_sum_2sd + sm_h_total_kid,
+    SMD_ICD11 ~
+      agegroup + gender_kid + edgroup3 + residence + pss4_kid_sum_2sd + sm_h_total_kid,
     pss4_kid_sum_2sd ~ gender_kid,
     sm_h_total_kid ~ gender_kid + agegroup,
     adjusted = c(
-      "agegroup", "gender_kid", "edgroup3", "residence",
-      "pss4_kid_sum_2sd", "sm_h_total_kid"
+      "agegroup",
+      "gender_kid",
+      "edgroup3",
+      "residence",
+      "pss4_kid_sum_2sd",
+      "sm_h_total_kid"
     ),
     outcome = "SMD_ICD11",
     exposure = "agegroup"

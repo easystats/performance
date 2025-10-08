@@ -98,14 +98,16 @@ check_predictions <- function(object, ...) {
 
 #' @rdname check_predictions
 #' @export
-check_predictions.default <- function(object,
-                                      iterations = 50,
-                                      check_range = FALSE,
-                                      re_formula = NULL,
-                                      bandwidth = "nrd",
-                                      type = "density",
-                                      verbose = TRUE,
-                                      ...) {
+check_predictions.default <- function(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  ...
+) {
   .is_model_valid(object)
   # check_predictions() can't handle exotic formula notation
   if (verbose) {
@@ -120,7 +122,11 @@ check_predictions.default <- function(object,
   minfo <- insight::model_info(object, verbose = FALSE)
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
+  suggest_dots <- (minfo$is_bernoulli ||
+    minfo$is_count ||
+    minfo$is_ordinal ||
+    minfo$is_categorical ||
+    minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -146,19 +152,25 @@ check_predictions.default <- function(object,
 
 
 #' @export
-check_predictions.stanreg <- function(object,
-                                      iterations = 50,
-                                      check_range = FALSE,
-                                      re_formula = NULL,
-                                      bandwidth = "nrd",
-                                      type = "density",
-                                      verbose = TRUE,
-                                      ...) {
+check_predictions.stanreg <- function(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  ...
+) {
   # retrieve model information
   minfo <- insight::model_info(object, verbose = FALSE)
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
+  suggest_dots <- (minfo$is_bernoulli ||
+    minfo$is_count ||
+    minfo$is_ordinal ||
+    minfo$is_categorical ||
+    minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -170,10 +182,7 @@ check_predictions.stanreg <- function(object,
   )
 
   # convert to type-argument for pp_check
-  pp_type <- switch(type,
-    density = "dens",
-    "bars"
-  )
+  pp_type <- switch(type, density = "dens", "bars")
 
   insight::check_if_installed(
     "bayesplot",
@@ -184,9 +193,13 @@ check_predictions.stanreg <- function(object,
   resp_string <- insight::find_terms(object)$response
 
   if (inherits(object, "brmsfit")) {
-    out <- as.data.frame(bayesplot::pp_check(object, type = pp_type, ndraws = iterations, ...)$data)
+    out <- as.data.frame(
+      bayesplot::pp_check(object, type = pp_type, ndraws = iterations, ...)$data
+    )
   } else {
-    out <- as.data.frame(bayesplot::pp_check(object, type = pp_type, nreps = iterations, ...)$data)
+    out <- as.data.frame(
+      bayesplot::pp_check(object, type = pp_type, nreps = iterations, ...)$data
+    )
   }
 
   # bring data into shape, like we have for other models with `check_predictions()`
@@ -228,13 +241,15 @@ check_predictions.brmsfit <- check_predictions.stanreg
 
 
 #' @export
-check_predictions.BFBayesFactor <- function(object,
-                                            iterations = 50,
-                                            check_range = FALSE,
-                                            re_formula = NULL,
-                                            bandwidth = "nrd",
-                                            verbose = TRUE,
-                                            ...) {
+check_predictions.BFBayesFactor <- function(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  verbose = TRUE,
+  ...
+) {
   everything_we_need <- .get_bfbf_predictions(object, iterations = iterations)
 
   y <- everything_we_need[["y"]]
@@ -265,21 +280,25 @@ pp_check.BFBayesFactor <- check_predictions.BFBayesFactor
 
 #' @export
 check_predictions.lme <- function(object, ...) {
-  insight::format_error("`check_predictions()` does currently not work for models of class `lme`.")
+  insight::format_error(
+    "`check_predictions()` does currently not work for models of class `lme`."
+  )
 }
 
 
 # pp-check functions -------------------------------------
 
-pp_check.lm <- function(object,
-                        iterations = 50,
-                        check_range = FALSE,
-                        re_formula = NULL,
-                        bandwidth = "nrd",
-                        type = "density",
-                        verbose = TRUE,
-                        model_info = NULL,
-                        ...) {
+pp_check.lm <- function(
+  object,
+  iterations = 50,
+  check_range = FALSE,
+  re_formula = NULL,
+  bandwidth = "nrd",
+  type = "density",
+  verbose = TRUE,
+  model_info = NULL,
+  ...
+) {
   # we need the formula and the response values to check for matrix responses
   # or proportions in binomial models
   model_response <- insight::find_response(object, combine = TRUE)
@@ -287,7 +306,17 @@ pp_check.lm <- function(object,
 
   # if we have a matrix-response, continue here...
   if (grepl("^cbind\\((.*)\\)", model_response) || is.matrix(response_values)) {
-    return(pp_check.glm(object, iterations, check_range, re_formula, bandwidth, type, verbose, model_info, ...))
+    return(pp_check.glm(
+      object,
+      iterations,
+      check_range,
+      re_formula,
+      bandwidth,
+      type,
+      verbose,
+      model_info,
+      ...
+    ))
   }
 
   # else, proceed as usual
@@ -341,14 +370,19 @@ pp_check.lm <- function(object,
   pattern <- "^(scale|exp|expm1|log|log1p|log10|log2|sqrt)"
 
   # check for transformed response, and backtransform simulations
-  if (!is.null(resp_string) && length(resp_string) == 1 && grepl(paste0(pattern, "\\("), resp_string)) {
+  if (
+    !is.null(resp_string) &&
+      length(resp_string) == 1 &&
+      grepl(paste0(pattern, "\\("), resp_string)
+  ) {
     out <- .backtransform_sims(out, resp_string)
   }
 
   # sanity check - do we have a ratio or similar?
   if (is.data.frame(response)) {
     # get response data, evaluate formula
-    response <- eval(str2lang(insight::find_response(object)),
+    response <- eval(
+      str2lang(insight::find_response(object)),
       envir = insight::get_response(object)
     )
   }
@@ -462,7 +496,7 @@ pp_check.glm <- function(
 }
 
 
-# styler: off
+# fmt: skip
 pp_check.glmmTMB   <-
   pp_check.glm.nb  <-
   pp_check.lme     <-
@@ -475,7 +509,6 @@ pp_check.glmmTMB   <-
   pp_check.vlm     <-
   pp_check.wbm     <-
   pp_check.lm
-# styler: on
 
 
 #' @rawNamespace
@@ -493,9 +526,7 @@ pp_check.glmmTMB   <-
 #' S3method(bayesplot::pp_check, wbm)
 #' S3method(bayesplot::pp_check, BFBayesFactor)
 
-
 # methods -----------------------
-
 
 #' @export
 print.performance_pp_check <- function(x, verbose = TRUE, ...) {
@@ -533,7 +564,8 @@ print.performance_pp_check <- function(x, verbose = TRUE, ...) {
               ifelse(length(missing_levs) == 1, " ", "s "),
               paste0("'", missing_levs, "'", collapse = ", "),
               " from original data is not included in the replicated data."
-            ), "Model may not capture the variation of the data."
+            ),
+            "Model may not capture the variation of the data."
           ),
           "red"
         )
@@ -564,10 +596,14 @@ plot.performance_pp_check <- function(x, ...) {
   } else if (grepl("log(", resp_string, fixed = TRUE)) {
     # exceptions: log(x+1) or log(1+x)
     # 1. try: log(x + number)
-    plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string))))
+    plus_minus <- .safe(eval(parse(
+      text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\2", resp_string)
+    )))
     # 2. try: log(number + x)
     if (is.null(plus_minus)) {
-      plus_minus <- .safe(eval(parse(text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string))))
+      plus_minus <- .safe(eval(parse(
+        text = gsub("log\\(([^,\\+)]*)(.*)\\)", "\\1", resp_string)
+      )))
     }
     if (is.null(plus_minus) || !is.numeric(plus_minus)) {
       sims[] <- lapply(sims, exp)

@@ -6,13 +6,25 @@ test_that("model_performance.merMod", {
 
   model <- insight::download_model("lmerMod_1")
   skip_if(is.null(model))
-  expect_equal(model_performance(model, estimator = "ML")$AIC, AIC(logLik(model, REML = FALSE)), tolerance = 0.01)
-  expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
+  expect_equal(
+    model_performance(model, estimator = "ML")$AIC,
+    AIC(logLik(model, REML = FALSE)),
+    tolerance = 0.01
+  )
+  expect_equal(
+    model_performance(model, estimator = "REML")$AIC,
+    AIC(model),
+    tolerance = 0.01
+  )
 
   model <- insight::download_model("merMod_1")
   skip_if(is.null(model))
   expect_equal(model_performance(model)$AIC, AIC(model), tolerance = 0.01)
-  expect_equal(model_performance(model, estimator = "REML")$AIC, AIC(model), tolerance = 0.01)
+  expect_equal(
+    model_performance(model, estimator = "REML")$AIC,
+    AIC(model),
+    tolerance = 0.01
+  )
   expect_equal(model_performance(model)$AIC, 23.58593, tolerance = 0.01)
 
   model <- insight::download_model("merMod_2")
@@ -33,7 +45,11 @@ test_that("model_performance.merMod AICc", {
     c(177.52804, 182.88598),
     tolerance = 1e-3
   ))
-  expect_equal(model_performance(m1, metrics = "AICc", estimator = "REML")$AICc, 177.52804, tolerance = 1e-3)
+  expect_equal(
+    model_performance(m1, metrics = "AICc", estimator = "REML")$AICc,
+    177.52804,
+    tolerance = 1e-3
+  )
   expect_equal(performance_aicc(m1, estimator = "REML"), 177.52804, tolerance = 1e-3)
 
   # default - ML
@@ -44,7 +60,11 @@ test_that("model_performance.merMod AICc", {
   )
   # default model_performance is REML
   expect_equal(model_performance(m1, metrics = "AICc")$AICc, 177.52804, tolerance = 1e-3)
-  expect_equal(model_performance(m1, metrics = "AICc", estimator = "ML")$AICc, 174.5701, tolerance = 1e-3)
+  expect_equal(
+    model_performance(m1, metrics = "AICc", estimator = "ML")$AICc,
+    174.5701,
+    tolerance = 1e-3
+  )
   # default performance_aic is REML
   expect_equal(performance_aicc(m1), 177.52804, tolerance = 1e-3)
   expect_equal(performance_aicc(m1, estimator = "ML"), 174.5701, tolerance = 1e-3)

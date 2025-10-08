@@ -14,10 +14,18 @@ test_wald.default <- function(..., verbose = TRUE) {
   my_objects <- .test_performance_checks(my_objects, verbose = verbose)
 
   # ensure proper object names
-  my_objects <- .check_objectnames(my_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
+  my_objects <- .check_objectnames(
+    my_objects,
+    sapply(match.call(expand.dots = FALSE)[["..."]], as.character)
+  )
 
   # If a suitable class is found, run the more specific method on it
-  if (inherits(my_objects, c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan"))) {
+  if (
+    inherits(
+      my_objects,
+      c("ListNestedRegressions", "ListNonNestedRegressions", "ListLavaan")
+    )
+  ) {
     test_wald(my_objects)
   } else {
     insight::format_error("The models cannot be compared for some reason :/")
@@ -48,11 +56,12 @@ test_wald.ListNestedRegressions <- function(objects, verbose = TRUE, ...) {
 
 #' @export
 test_wald.ListNonNestedRegressions <- function(objects, verbose = TRUE, ...) {
-  insight::format_error("Wald tests cannot be run on non-nested models. Try `test_vuong()`.")
+  insight::format_error(
+    "Wald tests cannot be run on non-nested models. Try `test_vuong()`."
+  )
 }
 
 # Helpers --------------------------
-
 
 .test_wald <- function(objects, test = "F") {
   # Compute stuff
@@ -73,7 +82,6 @@ test_wald.ListNonNestedRegressions <- function(objects, verbose = TRUE, ...) {
     df_diff = round(dfs_diff),
     stringsAsFactors = FALSE
   )
-
 
   # Find reference-model related stuff
   refmodel <- order(dfs)[1]

@@ -14,7 +14,11 @@ test_that("rmse", {
     cp <- compare_performance(m1.1, m1.2, m1.3, m2.1, m2.2, m2.3),
     "seem to be identical"
   )
-  expect_equal(cp$RMSE, c(47.4489, 47.39881, 47.38701, 47.41375, 47.39979, 47.38705), tolerance = 1e-3)
+  expect_equal(
+    cp$RMSE,
+    c(47.4489, 47.39881, 47.38701, 47.41375, 47.39979, 47.38705),
+    tolerance = 1e-3
+  )
 })
 
 test_that("rmse, ci", {

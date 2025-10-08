@@ -89,7 +89,12 @@ test_that("mcd which", {
   # (not clear why method mcd needs a seed)
   set.seed(42)
   expect_identical(
-    tail(which(check_outliers(mtcars[1:4], method = "mcd", threshold = 45, verbose = FALSE))),
+    tail(which(check_outliers(
+      mtcars[1:4],
+      method = "mcd",
+      threshold = 45,
+      verbose = FALSE
+    ))),
     31L
   )
   expect_warning(
@@ -208,16 +213,35 @@ test_that("all methods which", {
   skip_if_not_installed("loo")
 
   expect_identical(
-    which(check_outliers(mtcars,
+    which(check_outliers(
+      mtcars,
       method = c(
-        "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-        "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+        "zscore",
+        "zscore_robust",
+        "iqr",
+        "ci",
+        "eti",
+        "hdi",
+        "bci",
+        "mahalanobis",
+        "mahalanobis_robust",
+        "mcd",
+        "optics",
+        "lof"
       ),
       threshold = list(
-        zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
-        ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
-        mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
-        optics = 14, lof = 0.005
+        zscore = 2.2,
+        zscore_robust = 2.2,
+        iqr = 1.2,
+        ci = 0.95,
+        eti = 0.95,
+        hdi = 0.90,
+        bci = 0.95,
+        mahalanobis = 20,
+        mahalanobis_robust = 25,
+        mcd = 25,
+        optics = 14,
+        lof = 0.005
       ),
       verbose = FALSE
     )),
@@ -226,7 +250,6 @@ test_that("all methods which", {
 })
 
 # 5. Next, we test adding ID
-
 
 test_that("multiple methods with ID", {
   skip_if_not_installed("bigutilsr")
@@ -237,16 +260,35 @@ test_that("multiple methods with ID", {
   skip_if_not_installed("loo")
 
   data <- datawizard::rownames_as_column(mtcars, var = "car")
-  x <- attributes(check_outliers(data,
+  x <- attributes(check_outliers(
+    data,
     method = c(
-      "zscore", "zscore_robust", "iqr", "ci", "eti", "hdi", "bci",
-      "mahalanobis", "mahalanobis_robust", "mcd", "optics", "lof"
+      "zscore",
+      "zscore_robust",
+      "iqr",
+      "ci",
+      "eti",
+      "hdi",
+      "bci",
+      "mahalanobis",
+      "mahalanobis_robust",
+      "mcd",
+      "optics",
+      "lof"
     ),
     threshold = list(
-      zscore = 2.2, zscore_robust = 2.2, iqr = 1.2,
-      ci = 0.95, eti = 0.95, hdi = 0.90, bci = 0.95,
-      mahalanobis = 20, mahalanobis_robust = 25, mcd = 25,
-      optics = 14, lof = 0.005
+      zscore = 2.2,
+      zscore_robust = 2.2,
+      iqr = 1.2,
+      ci = 0.95,
+      eti = 0.95,
+      hdi = 0.90,
+      bci = 0.95,
+      mahalanobis = 20,
+      mahalanobis_robust = 25,
+      mcd = 25,
+      optics = 14,
+      lof = 0.005
     ),
     ID = "car",
     verbose = FALSE
@@ -376,10 +418,14 @@ test_that("check_outliers with DHARMa", {
   skip_if_not_installed("DHARMa")
   mt1 <- mtcars[, c(1, 3, 4)]
   # create some fake outliers and attach outliers to main df
-  mt2 <- rbind(mt1, data.frame(
-    mpg = c(37, 40), disp = c(300, 400),
-    hp = c(110, 120)
-  ))
+  mt2 <- rbind(
+    mt1,
+    data.frame(
+      mpg = c(37, 40),
+      disp = c(300, 400),
+      hp = c(110, 120)
+    )
+  )
   # fit model with outliers
   model <- lm(disp ~ mpg + hp, data = mt2)
   set.seed(123)
@@ -389,8 +435,10 @@ test_that("check_outliers with DHARMa", {
     out,
     structure(
       list(
-        Coefficient = 0.0294117647058824, Expected = 0.00796812749003984,
-        CI_low = 0.000744364234690261, CI_high = 0.153267669560318,
+        Coefficient = 0.0294117647058824,
+        Expected = 0.00796812749003984,
+        CI_low = 0.000744364234690261,
+        CI_high = 0.153267669560318,
         p_value = 0.238146844116552
       ),
       class = c("check_outliers_simres", "list")
@@ -401,7 +449,9 @@ test_that("check_outliers with DHARMa", {
   expect_identical(
     capture.output(print(out)),
     c(
-      "# Outliers detection", "", "  Proportion of observed outliers: 2.94%",
+      "# Outliers detection",
+      "",
+      "  Proportion of observed outliers: 2.94%",
       "  Proportion of expected outliers: 0.80%, 95% CI [0.07, 15.33]",
       ""
     )

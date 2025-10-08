@@ -36,7 +36,13 @@
 #' mp <- model_performance(model)
 #' display(mp)
 #' @export
-display.performance_model <- function(object, format = "markdown", digits = 2, caption = NULL, ...) {
+display.performance_model <- function(
+  object,
+  format = "markdown",
+  digits = 2,
+  caption = NULL,
+  ...
+) {
   format <- .display_default_format(format)
   if (format %in% c("html", "tt")) {
     print_html(

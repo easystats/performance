@@ -32,8 +32,8 @@ test_that("check_convergence, glmmTMB", {
   skip_if_not_installed("glmmTMB")
   data(iris)
   model <- suppressWarnings(glmmTMB::glmmTMB(
-    Sepal.Length ~ poly(Petal.Width, 4) * poly(Petal.Length, 4) +
-      (1 + poly(Petal.Width, 4) | Species),
+    Sepal.Length ~
+      poly(Petal.Width, 4) * poly(Petal.Length, 4) + (1 + poly(Petal.Width, 4) | Species),
     data = iris
   ))
   expect_false(check_convergence(model))

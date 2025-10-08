@@ -71,14 +71,18 @@ check_homogeneity.default <- function(x, method = "bartlett", ...) {
     )
 
     if (is.null(check)) {
-      insight::print_color("'check_homogeneity()' cannot perform check for normality. Please specify the 'method'-argument for the test of equal variances.\n", "red") # nolint
+      insight::print_color(
+        "'check_homogeneity()' cannot perform check for normality. Please specify the 'method'-argument for the test of equal variances.\n",
+        "red"
+      ) # nolint
       return(NULL)
     }
 
     method <- ifelse(check < 0.05, "fligner", "bartlett")
   }
 
-  if (method == "fligner") { # nolint
+  if (method == "fligner") {
+    # nolint
     r <- stats::fligner.test(f, data = insight::get_data(x, verbose = FALSE))
     p.val <- r$p.value
   } else if (method == "bartlett") {
@@ -90,8 +94,8 @@ check_homogeneity.default <- function(x, method = "bartlett", ...) {
     p.val <- r$`Pr(>F)`
   }
 
-
-  method.string <- switch(method,
+  method.string <- switch(
+    method,
     bartlett = "Bartlett Test",
     fligner = "Fligner-Killeen Test",
     levene = "Levene's Test"
@@ -115,9 +119,23 @@ print.check_homogeneity <- function(x, ...) {
     insight::format_warning(paste0("Could not perform ", method.string, "."))
     invisible(NULL)
   } else if (x < 0.05) {
-    insight::print_color(sprintf("Warning: Variances differ between groups (%s, p = %.3f).\n", method.string, x), "red")
+    insight::print_color(
+      sprintf(
+        "Warning: Variances differ between groups (%s, p = %.3f).\n",
+        method.string,
+        x
+      ),
+      "red"
+    )
   } else {
-    insight::print_color(sprintf("OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n", method.string, x), "green") # nolint
+    insight::print_color(
+      sprintf(
+        "OK: There is not clear evidence for different variances across groups (%s, p = %.3f).\n",
+        method.string,
+        x
+      ),
+      "green"
+    ) # nolint
   }
   invisible(x)
 }
@@ -138,11 +156,15 @@ check_homogeneity.afex_aov <- function(x, method = "levene", ...) {
   insight::check_if_installed("car")
 
   if (tolower(method) != "levene") {
-    insight::format_alert("Only Levene's test for homogeneity supported for `afex_aov()`.")
+    insight::format_alert(
+      "Only Levene's test for homogeneity supported for `afex_aov()`."
+    )
   }
 
   if (length(attr(x, "between")) == 0) {
-    insight::format_error("Levene test is only aplicable to ANOVAs with between-subjects factors.")
+    insight::format_error(
+      "Levene test is only aplicable to ANOVAs with between-subjects factors."
+    )
   }
 
   long_data <- x$data$long # Use this to also get id column

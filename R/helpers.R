@@ -22,7 +22,12 @@
     out <- .adjust_ic_jacobian(x, stats::BIC(x)[["BIC"]])
   } else {
     out <- .safe(
-      stats::BIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = FALSE))
+      stats::BIC(insight::get_loglikelihood(
+        x,
+        check_response = TRUE,
+        REML = REML,
+        verbose = FALSE
+      ))
     )
     # when `get_loglikelihood()` does not work, `stats::BIC` sometimes still works (e.g., `fixest`)
     if (is.null(out)) {

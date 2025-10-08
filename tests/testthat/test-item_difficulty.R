@@ -6,7 +6,9 @@ test_that("item_difficulty", {
     structure(
       list(
         Item = c(
-          "Sepal.Length", "Sepal.Width", "Petal.Length",
+          "Sepal.Length",
+          "Sepal.Width",
+          "Petal.Length",
           "Petal.Width"
         ),
         Difficulty = c(0.74, 0.69, 0.54, 0.48),

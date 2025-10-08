@@ -39,11 +39,13 @@
 #' model <- lme4::lmer(Petal.Length ~ Sepal.Length + (1 | Species), data = iris)
 #' model_performance(model)
 #' @export
-model_performance.merMod <- function(model,
-                                     metrics = "all",
-                                     estimator = "REML",
-                                     verbose = TRUE,
-                                     ...) {
+model_performance.merMod <- function(
+  model,
+  metrics = "all",
+  estimator = "REML",
+  verbose = TRUE,
+  ...
+) {
   if (any(tolower(metrics) == "log_loss")) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
@@ -56,7 +58,6 @@ model_performance.merMod <- function(model,
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "ICC", "RMSE")
   }
-
 
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
@@ -105,7 +106,9 @@ model_performance.merMod <- function(model,
 
   if (("SCORE" %in% toupper(metrics)) && (mi$is_binomial || mi$is_count)) {
     .scoring_rules <- performance_score(model, verbose = verbose)
-    if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$logarithmic)) {
+      out$Score_log <- .scoring_rules$logarithmic
+    }
     if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
   }
 
@@ -139,10 +142,7 @@ model_performance.glmmTMB <- model_performance.merMod
 
 
 #' @export
-model_performance.mixor <- function(model,
-                                    metrics = "all",
-                                    verbose = TRUE,
-                                    ...) {
+model_performance.mixor <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (any(tolower(metrics) == "log_loss")) {
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
@@ -160,12 +160,21 @@ model_performance.mixor <- function(model,
   if ("BIC" %in% metrics) {
     out$BIC <- .get_BIC(model)
   }
-  if (("LOGLOSS" %in% metrics) && mi$is_binomial && !mi$is_ordinal && !mi$is_multinomial) {
+  if (
+    ("LOGLOSS" %in% metrics) && mi$is_binomial && !mi$is_ordinal && !mi$is_multinomial
+  ) {
     out$Log_loss <- performance_logloss(model, verbose = verbose)
   }
-  if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count) && !mi$is_ordinal && !mi$is_multinomial) {
+  if (
+    ("SCORE" %in% metrics) &&
+      (mi$is_binomial || mi$is_count) &&
+      !mi$is_ordinal &&
+      !mi$is_multinomial
+  ) {
     .scoring_rules <- performance_score(model, verbose = verbose)
-    if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
+    if (!is.na(.scoring_rules$logarithmic)) {
+      out$Score_log <- .scoring_rules$logarithmic
+    }
     if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
   }
 

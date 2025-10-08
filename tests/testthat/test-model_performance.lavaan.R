@@ -11,10 +11,31 @@ test_that("model_performance.lavaan", {
   expect_named(
     out,
     c(
-      "Chi2", "Chi2_df", "p_Chi2", "Baseline", "Baseline_df", "p_Baseline",
-      "GFI", "AGFI", "NFI", "NNFI", "CFI", "RMSEA", "RMSEA_CI_low",
-      "RMSEA_CI_high", "p_RMSEA", "RMR", "SRMR", "RFI", "PNFI", "IFI",
-      "RNI", "Loglikelihood", "AIC", "BIC", "BIC_adjusted"
+      "Chi2",
+      "Chi2_df",
+      "p_Chi2",
+      "Baseline",
+      "Baseline_df",
+      "p_Baseline",
+      "GFI",
+      "AGFI",
+      "NFI",
+      "NNFI",
+      "CFI",
+      "RMSEA",
+      "RMSEA_CI_low",
+      "RMSEA_CI_high",
+      "p_RMSEA",
+      "RMR",
+      "SRMR",
+      "RFI",
+      "PNFI",
+      "IFI",
+      "RNI",
+      "Loglikelihood",
+      "AIC",
+      "BIC",
+      "BIC_adjusted"
     )
   )
 

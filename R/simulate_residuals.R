@@ -90,8 +90,11 @@ print.performance_simres <- function(x, ...) {
   # DHARMa uses, but with an easystats style. For now we can just stick with
   # DHARMa's method.
   msg <- paste0(
-    "Simulated residuals from a model of class `", class(x$fittedModel)[1],
-    "` based on ", x$nSim, " simulations. Use `check_residuals()` to check",
+    "Simulated residuals from a model of class `",
+    class(x$fittedModel)[1],
+    "` based on ",
+    x$nSim,
+    " simulations. Use `check_residuals()` to check",
     " uniformity of residuals or `residuals()` to extract simulated residuals.",
     " It is recommended to refer to `?DHARMa::simulateResiudals` and",
     " `vignette(\"DHARMa\")` for more information about different settings",
@@ -111,7 +114,12 @@ plot.performance_simres <- function(x, ...) {
 
 #' @rdname simulate_residuals
 #' @export
-residuals.performance_simres <- function(object, quantile_function = NULL, outlier_values = NULL, ...) {
+residuals.performance_simres <- function(
+  object,
+  quantile_function = NULL,
+  outlier_values = NULL,
+  ...
+) {
   # check for DHARMa argument names
   dots <- list(...)
   if (!is.null(dots$quantileFunction)) {
@@ -153,7 +161,8 @@ residuals.performance_simres <- function(object, quantile_function = NULL, outli
     simulated <- apply(x$simulatedResponse, 2, statistic_fun)
   }
   # p is simply ratio of simulated zeros to observed zeros
-  p <- switch(alternative,
+  p <- switch(
+    alternative,
     greater = mean(simulated >= observed),
     less = mean(simulated <= observed),
     min(min(mean(simulated <= observed), mean(simulated >= observed)) * 2, 1)

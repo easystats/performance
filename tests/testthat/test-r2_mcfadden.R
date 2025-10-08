@@ -12,7 +12,8 @@ test_that("r2_mcfadden", {
             R2 = c(`McFadden's R2` = 0.0465152150591893),
             R2_adjusted = c(`adjusted McFadden's R2` = 0.0459671013089695)
           ),
-          model_type = "Generalized Linear", class = "r2_generic"
+          model_type = "Generalized Linear",
+          class = "r2_generic"
         ),
         tolerance = 1e-3
       )

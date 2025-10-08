@@ -14,8 +14,15 @@
 #' @export
 model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...) {
   all_metrics <- c(
-    "AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "Sargan",
-    "Wu_Hausman", "weak_instruments"
+    "AIC",
+    "BIC",
+    "R2",
+    "R2_adj",
+    "RMSE",
+    "SIGMA",
+    "Sargan",
+    "Wu_Hausman",
+    "weak_instruments"
   )
 
   if (all(metrics == "all")) {
@@ -23,7 +30,6 @@ model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...)
   } else if (all(metrics == "common")) {
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
-
 
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
@@ -57,8 +63,12 @@ model_performance.ivreg <- function(model, metrics = "all", verbose = TRUE, ...)
     # remove NA columns
     completed_tests <- intersect(
       c(
-        "Sargan", "Sargan_p", "Wu_Hausman", "Wu_Hausman_p",
-        "weak_instruments", "weak_instruments_p"
+        "Sargan",
+        "Sargan_p",
+        "Wu_Hausman",
+        "Wu_Hausman_p",
+        "weak_instruments",
+        "weak_instruments_p"
       ),
       colnames(out)
     )

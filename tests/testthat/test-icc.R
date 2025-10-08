@@ -12,7 +12,8 @@ test_that("icc", {
   expect_equal(
     icc(m1),
     data.frame(
-      ICC_adjusted = 0.910433109183341, ICC_conditional = 0.310947768161385,
+      ICC_adjusted = 0.910433109183341,
+      ICC_conditional = 0.310947768161385,
       ICC_unadjusted = 0.310947768161385
     ),
     tolerance = 1e-3,
@@ -43,7 +44,8 @@ test_that("icc", {
   expect_equal(
     icc(m2),
     data.frame(
-      ICC_adjusted = 0.40579, ICC_conditional = 0.21881,
+      ICC_adjusted = 0.40579,
+      ICC_conditional = 0.21881,
       ICC_unadjusted = 0.21881
     ),
     tolerance = 1e-2,
@@ -75,7 +77,8 @@ test_that("icc", {
   expect_equal(
     icc(m3),
     data.frame(
-      ICC_adjusted = 0.930217931275196, ICC_conditional = 0.771475122370036,
+      ICC_adjusted = 0.930217931275196,
+      ICC_conditional = 0.771475122370036,
       ICC_unadjusted = 0.771475122370036
     ),
     tolerance = 0.05,
@@ -132,12 +135,22 @@ test_that("icc, glmmTMB 1.1.9+", {
     x2 = runif(1000, 0, 10),
     re = rep(1:20, each = 50)
   )
-  dd <- transform(dd, x3 = as.factor(ifelse(
-    x1 <= 500, "Low", sample(c("Middle", "High"), 1000, replace = TRUE)
-  )))
-  dd <- transform(dd, x4 = as.factor(ifelse(
-    x1 > 500, "High", sample(c("Absent", "Low"), 1000, replace = TRUE)
-  )))
+  dd <- transform(
+    dd,
+    x3 = as.factor(ifelse(
+      x1 <= 500,
+      "Low",
+      sample(c("Middle", "High"), 1000, replace = TRUE)
+    ))
+  )
+  dd <- transform(
+    dd,
+    x4 = as.factor(ifelse(
+      x1 > 500,
+      "High",
+      sample(c("Absent", "Low"), 1000, replace = TRUE)
+    ))
+  )
   dd <- transform(dd, z = z + re * 5)
   expect_message({
     mod_TMB <- glmmTMB::glmmTMB(

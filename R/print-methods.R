@@ -27,13 +27,25 @@ print.r2_generic <- function(x, digits = 3, ...) {
     out[1] <- .add_r2_ci_to_print(out[1], x$R2[2], x$R2[3], digits = digits)
   }
   if (!is.null(x$R2_adjusted) && length(x$R2_adjusted) == 3 && length(out) > 1) {
-    out[2] <- .add_r2_ci_to_print(out[2], x$R2_adjusted[2], x$R2_adjusted[3], digits = digits)
+    out[2] <- .add_r2_ci_to_print(
+      out[2],
+      x$R2_adjusted[2],
+      x$R2_adjusted[3],
+      digits = digits
+    )
   }
   if (!is.null(x$R2_within) && length(x$R2_within) == 3 && length(out) > 2) {
     out[3] <- .add_r2_ci_to_print(out[3], x$R2_within[2], x$R2_within[3], digits = digits)
   }
-  if (!is.null(x$R2_within_adjusted) && length(x$R2_within_adjusted) == 3 && length(out) > 3) {
-    out[4] <- .add_r2_ci_to_print(out[4], x$R2_within_adjusted[2], x$R2_within_adjusted[3], digits = digits)
+  if (
+    !is.null(x$R2_within_adjusted) && length(x$R2_within_adjusted) == 3 && length(out) > 3
+  ) {
+    out[4] <- .add_r2_ci_to_print(
+      out[4],
+      x$R2_within_adjusted[2],
+      x$R2_within_adjusted[3],
+      digits = digits
+    )
   }
 
   # separate lines for multiple R2
@@ -123,10 +135,18 @@ print.r2_bayes <- function(x, digits = 3, ...) {
       ci = attributes(x)$CI$R2_Bayes_marginal$CI,
       digits = digits
     )
-    out <- paste(c(
-      out,
-      sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_Bayes_marginal, r2_marginal_ci)
-    ), collapse = "\n")
+    out <- paste(
+      c(
+        out,
+        sprintf(
+          "     Marginal R2: %.*f (%s)",
+          digits,
+          x$R2_Bayes_marginal,
+          r2_marginal_ci
+        )
+      ),
+      collapse = "\n"
+    )
   }
 
   cat(out)
@@ -154,10 +174,13 @@ print.r2_loo <- function(x, digits = 3, ...) {
       ci = attributes(x)$CI$R2_loo_marginal$CI,
       digits = digits
     )
-    out <- paste(c(
-      out,
-      sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_loo_marginal, r2_marginal_ci)
-    ), collapse = "\n")
+    out <- paste(
+      c(
+        out,
+        sprintf("     Marginal R2: %.*f (%s)", digits, x$R2_loo_marginal, r2_marginal_ci)
+      ),
+      collapse = "\n"
+    )
   }
 
   cat(out)

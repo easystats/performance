@@ -104,10 +104,31 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
 
   # All possible metrics that this function can return.
   all_metric_names <- c(
-    "Chi2", "Chi2_df", "p_Chi2", "Baseline", "Baseline_df", "p_Baseline", "GFI",
-    "AGFI", "NFI", "NNFI", "CFI", "RMSEA", "RMSEA_CI_low", "RMSEA_CI_high",
-    "p_RMSEA", "RMR", "SRMR", "RFI", "PNFI", "IFI", "RNI", "Loglikelihood",
-    "AIC", "BIC", "BIC_adjusted"
+    "Chi2",
+    "Chi2_df",
+    "p_Chi2",
+    "Baseline",
+    "Baseline_df",
+    "p_Baseline",
+    "GFI",
+    "AGFI",
+    "NFI",
+    "NNFI",
+    "CFI",
+    "RMSEA",
+    "RMSEA_CI_low",
+    "RMSEA_CI_high",
+    "p_RMSEA",
+    "RMR",
+    "SRMR",
+    "RFI",
+    "PNFI",
+    "IFI",
+    "RNI",
+    "Loglikelihood",
+    "AIC",
+    "BIC",
+    "BIC_adjusted"
   )
 
   # extract valid column names based on metrics
@@ -122,7 +143,10 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
     if (isTRUE(verbose)) {
       measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
     } else {
-      measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(model, ...)))))
+      measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(
+        model,
+        ...
+      )))))
     }
 
     row.names(measures) <- NULL
@@ -156,7 +180,9 @@ model_performance.lavaan <- function(model, metrics = "all", verbose = TRUE, ...
     )
   } else {
     if (verbose) {
-      insight::format_warning("This lavaan model did not converge, no performance indices can be computed. Returning `NA`.")
+      insight::format_warning(
+        "This lavaan model did not converge, no performance indices can be computed. Returning `NA`."
+      )
     }
     out <- as.data.frame(stats::setNames(
       rep(list(NA), length(out_names)),
@@ -180,7 +206,10 @@ model_performance.blavaan <- function(model, metrics = "all", verbose = TRUE, ..
     measures <- as.data.frame(t(as.data.frame(lavaan::fitmeasures(model, ...))))
     fitind <- summary(blavaan::blavFitIndices(model))
   } else {
-    measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(model, ...)))))
+    measures <- as.data.frame(t(as.data.frame(suppressWarnings(lavaan::fitmeasures(
+      model,
+      ...
+    )))))
     fitind <- suppressWarnings(summary(blavaan::blavFitIndices(model)))
   }
 
