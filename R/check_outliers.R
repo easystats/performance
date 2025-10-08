@@ -289,17 +289,17 @@
 #'
 #' - Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., and Makowski, D.
 #' (2021). performance: An R package for assessment, comparison and testing of
-#' statistical models. *Journal of Open Source Software*, *6*(60), 3139.
+#' statistical models. Journal of Open Source Software, 6(60), 3139.
 #' \doi{10.21105/joss.03139}
 #'
 #' - Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M.,
 #' and Makowski, D. (2023). Check your outliers! An introduction to identifying
-#' statistical outliers in R with easystats. *Behavior Research Methods*, 1-11.
+#' statistical outliers in R with easystats. Behavior Research Methods, 1-11.
 #' \doi{10.3758/s13428-024-02356-w}
 #'
 #' - Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
-#' outliers and leverage points. *Journal of the American Statistical
-#' association*, *85*(411), 633-639.
+#' outliers and leverage points. Journal of the American Statistical
+#' association, 85(411), 633-639.
 #'
 #' @examples
 #' data <- mtcars # Size nrow(data) = 32
@@ -372,25 +372,49 @@ check_outliers.character <- function(x, ...) {
 
 #' @rdname check_outliers
 #' @export
-check_outliers.default <- function(x,
-                                   method = c("cook", "pareto"),
-                                   threshold = NULL,
-                                   ID = NULL,
-                                   verbose = TRUE,
-                                   ...) {
+check_outliers.default <- function(
+  x,
+  method = c("cook", "pareto"),
+  threshold = NULL,
+  ID = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Check args
   if (all(method == "all")) {
     method <- c(
-      "zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis",
-      "mahalanobis_robust", "mcd", "ics", "optics", "lof"
+      "zscore_robust",
+      "iqr",
+      "ci",
+      "cook",
+      "pareto",
+      "mahalanobis",
+      "mahalanobis_robust",
+      "mcd",
+      "ics",
+      "optics",
+      "lof"
     )
   }
 
   method <- match.arg(
     method,
     c(
-      "zscore", "zscore_robust", "iqr", "ci", "hdi", "eti", "bci", "cook",
-      "pareto", "mahalanobis", "mahalanobis_robust", "mcd", "ics", "optics", "lof"
+      "zscore",
+      "zscore_robust",
+      "iqr",
+      "ci",
+      "hdi",
+      "eti",
+      "bci",
+      "cook",
+      "pareto",
+      "mahalanobis",
+      "mahalanobis_robust",
+      "mcd",
+      "ics",
+      "optics",
+      "lof"
     ),
     several.ok = TRUE
   )
@@ -402,7 +426,15 @@ check_outliers.default <- function(x,
   my_data <- insight::get_data(x, verbose = FALSE)
 
   # sanity check for date, POSIXt and difftime variables
-  if (any(vapply(my_data, inherits, FUN.VALUE = logical(1), what = c("Date", "POSIXt", "difftime"))) && verbose) {
+  if (
+    any(vapply(
+      my_data,
+      inherits,
+      FUN.VALUE = logical(1),
+      what = c("Date", "POSIXt", "difftime")
+    )) &&
+      verbose
+  ) {
     insight::format_alert(
       paste(
         "Date variables are not supported for outliers detection. These will be ignored.",
@@ -444,7 +476,11 @@ check_outliers.default <- function(x,
   }
 
   if (!missing(ID) && verbose) {
-    insight::format_warning(paste0("ID argument not supported for model objects of class `", class(x)[1], "`."))
+    insight::format_warning(paste0(
+      "ID argument not supported for model objects of class `",
+      class(x)[1],
+      "`."
+    ))
   }
 
   # Others
@@ -467,18 +503,18 @@ check_outliers.default <- function(x,
       threshold = thresholds$cook
     )$data_cook
 
-    my_df <- datawizard::data_merge(list(my_df, data_cook),
-      join = "full",
-      by = "Row"
-    )
+    my_df <- datawizard::data_merge(list(my_df, data_cook), join = "full", by = "Row")
 
     count.table <- datawizard::data_filter(
-      data_cook, "Outlier_Cook > 0.5"
+      data_cook,
+      "Outlier_Cook > 0.5"
     )
 
     count.table <- datawizard::data_remove(
-      count.table, "Cook",
-      regex = TRUE, as_data_frame = TRUE
+      count.table,
+      "Cook",
+      regex = TRUE,
+      as_data_frame = TRUE
     )
 
     if (nrow(count.table) >= 1) {
@@ -507,18 +543,18 @@ check_outliers.default <- function(x,
       threshold = thresholds$pareto
     )$data_pareto
 
-    my_df <- datawizard::data_merge(list(my_df, data_pareto),
-      join = "full",
-      by = "Row"
-    )
+    my_df <- datawizard::data_merge(list(my_df, data_pareto), join = "full", by = "Row")
 
     count.table <- datawizard::data_filter(
-      data_pareto, "Outlier_Pareto > 0.5"
+      data_pareto,
+      "Outlier_Pareto > 0.5"
     )
 
     count.table <- datawizard::data_remove(
-      count.table, "Pareto",
-      regex = TRUE, as_data_frame = TRUE
+      count.table,
+      "Pareto",
+      regex = TRUE,
+      as_data_frame = TRUE
     )
 
     if (nrow(count.table) >= 1) {
@@ -540,7 +576,8 @@ check_outliers.default <- function(x,
     method <- method[method != "pareto"]
   }
 
-  outlier_count$all <- datawizard::convert_na_to(outlier_count$all,
+  outlier_count$all <- datawizard::convert_na_to(
+    outlier_count$all,
     replace_num = 0,
     replace_char = "0",
     replace_fac = 0
@@ -581,7 +618,10 @@ check_outliers.default <- function(x,
   attr(outlier, "threshold") <- thresholds
   attr(outlier, "method") <- method
   attr(outlier, "text_size") <- 3
-  attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(x, threshold = unlist(thresholds))) # nolint
+  attr(outlier, "influential_obs") <- .safe(.model_diagnostic_outlier(
+    x,
+    threshold = unlist(thresholds)
+  )) # nolint
   attr(outlier, "variables") <- "(Whole model)"
   attr(outlier, "raw_data") <- my_data
   attr(outlier, "outlier_var") <- outlier_var
@@ -592,7 +632,6 @@ check_outliers.default <- function(x,
 
 
 # Methods -----------------------------------------------------------------
-
 
 #' @export
 as.data.frame.check_outliers <- function(x, ...) {
@@ -622,14 +661,22 @@ print.check_outliers <- function(x, ...) {
     method = method,
     thresholds = unlist(thresholds)
   )
-  method.thresholds <- paste0(method.thresholds$method, " (",
-    method.thresholds$thresholds, ")",
+  method.thresholds <- paste0(
+    method.thresholds$method,
+    " (",
+    method.thresholds$thresholds,
+    ")",
     collapse = ", "
   )
 
   method.univariate <- c(
-    "zscore", "zscore_robust", "iqr", "ci",
-    "eti", "hdi", "bci"
+    "zscore",
+    "zscore_robust",
+    "iqr",
+    "ci",
+    "eti",
+    "hdi",
+    "bci"
   )
 
   vars <- toString(attr(x, "variables"))
@@ -638,11 +685,10 @@ print.check_outliers <- function(x, ...) {
   if (identical(method, "Residual check")) {
     var.plural <- "correlation between"
   } else {
-    var.plural <- ifelse(length(attr(x, "variables")) > 1,
-      "variables", "variable"
-    )
+    var.plural <- ifelse(length(attr(x, "variables")) > 1, "variables", "variable")
   }
-  method.plural <- ifelse(length(thresholds) > 1,
+  method.plural <- ifelse(
+    length(thresholds) > 1,
     "methods and thresholds",
     "method and threshold"
   )
@@ -658,55 +704,73 @@ print.check_outliers <- function(x, ...) {
   if (length(outliers) >= 1) {
     outlier.count <- attr(x, "outlier_count")
     o <- toString(outliers)
-    insight::print_color(insight::format_message(
-      sprintf(
-        "%i %s detected: %s %s.", length(outliers),
-        outlier.plural, case.plural, o
+    insight::print_color(
+      insight::format_message(
+        sprintf(
+          "%i %s detected: %s %s.",
+          length(outliers),
+          outlier.plural,
+          case.plural,
+          o
+        ),
+        sprintf(
+          "- Based on the following %s: %s.",
+          method.plural,
+          method.thresholds
+        ),
+        sprintf("- For %s: %s.\n", var.plural, vars),
+        indent = ""
       ),
-      sprintf(
-        "- Based on the following %s: %s.",
-        method.plural, method.thresholds
-      ),
-      sprintf("- For %s: %s.\n", var.plural, vars),
-      indent = ""
-    ), color = "yellow")
+      color = "yellow"
+    )
 
     if (length(method) > 1) {
       insight::print_color(
         c(
           "\nNote: Outliers were classified as such by",
           "at least half of the selected methods. \n"
-        ), "yellow"
+        ),
+        "yellow"
       )
     }
 
-    if ((isTRUE(nrow(outlier.count$all) > 0) || isTRUE(attributes(x)$grouped)) &&
-      (length(method) > 1 || all(method %in% method.univariate))) {
-      cat(long_dash, insight::format_message(
-        "\nThe following observations were considered outliers for two or more",
-        "variables by at least one of the selected methods:\n\n"
-      ))
-      ifelse(isTRUE(attributes(x)$grouped),
+    if (
+      (isTRUE(nrow(outlier.count$all) > 0) || isTRUE(attributes(x)$grouped)) &&
+        (length(method) > 1 || all(method %in% method.univariate))
+    ) {
+      cat(
+        long_dash,
+        insight::format_message(
+          "\nThe following observations were considered outliers for two or more",
+          "variables by at least one of the selected methods:\n\n"
+        )
+      )
+      ifelse(
+        isTRUE(attributes(x)$grouped),
         print(lapply(outlier.count, function(x) x$all)),
         print(outlier.count$all)
       )
     }
 
     if (length(method) == 1 && all(method %in% method.univariate)) {
-      cat(long_dash, "Outliers per variable (", method,
-        "): \n\n",
-        sep = ""
-      )
-      ifelse(isTRUE(attributes(x)$grouped),
+      cat(long_dash, "Outliers per variable (", method, "): \n\n", sep = "")
+      ifelse(
+        isTRUE(attributes(x)$grouped),
         print(vars.outliers),
         print(vars.outliers[[1]])
       )
     }
   } else {
     insight::print_color(
-      sprintf("OK: No outliers detected.
+      sprintf(
+        "OK: No outliers detected.
 - Based on the following %s: %s.
-- For %s: %s\n\n", method.plural, method.thresholds, var.plural, vars),
+- For %s: %s\n\n",
+        method.plural,
+        method.thresholds,
+        var.plural,
+        vars
+      ),
       "green"
     )
   }
@@ -739,9 +803,18 @@ print.check_outliers_metafor <- function(x, ...) {
     } else {
       o <- datawizard::text_concatenate(paste0(outliers, " (", studies, ")"))
     }
-    insight::print_color(insight::format_message(
-      sprintf("%i %s detected: %s %s.\n", length(outliers), outlier.plural, case.plural, o)
-    ), "yellow")
+    insight::print_color(
+      insight::format_message(
+        sprintf(
+          "%i %s detected: %s %s.\n",
+          length(outliers),
+          outlier.plural,
+          case.plural,
+          o
+        )
+      ),
+      "yellow"
+    )
   } else {
     insight::print_color("OK: No outliers detected.\n", "green")
   }
@@ -768,13 +841,26 @@ print.check_outliers_metagen <- function(x, ...) {
     if (all(as.character(studies[outliers_fixed]) == as.character(outliers_fixed))) {
       o <- datawizard::text_concatenate(outliers_fixed)
     } else {
-      o <- datawizard::text_concatenate(paste0(outliers_fixed, " (", studies[outliers_fixed], ")"))
+      o <- datawizard::text_concatenate(paste0(
+        outliers_fixed,
+        " (",
+        studies[outliers_fixed],
+        ")"
+      ))
     }
-    insight::print_color(insight::format_message(
-      sprintf("- %i %s in fixed effects detected: %s %s.\n", length(outliers_fixed), outlier.plural, case.plural, o)
-    ), "yellow")
+    insight::print_color(
+      insight::format_message(
+        sprintf(
+          "- %i %s in fixed effects detected: %s %s.\n",
+          length(outliers_fixed),
+          outlier.plural,
+          case.plural,
+          o
+        )
+      ),
+      "yellow"
+    )
   }
-
 
   if (length(outliers_random) > 1) {
     outlier.plural <- "outliers"
@@ -788,14 +874,28 @@ print.check_outliers_metagen <- function(x, ...) {
     if (all(as.character(studies[outliers_random]) == as.character(outliers_random))) {
       o <- datawizard::text_concatenate(outliers_random)
     } else {
-      o <- datawizard::text_concatenate(paste0(outliers_random, " (", studies[outliers_random], ")"))
+      o <- datawizard::text_concatenate(paste0(
+        outliers_random,
+        " (",
+        studies[outliers_random],
+        ")"
+      ))
     }
     if (length(outliers_fixed) >= 1) {
       cat("\n")
     }
-    insight::print_color(insight::format_message(
-      sprintf("- %i %s in random effects detected: %s %s.\n", length(outliers_random), outlier.plural, case.plural, o)
-    ), "yellow")
+    insight::print_color(
+      insight::format_message(
+        sprintf(
+          "- %i %s in random effects detected: %s %s.\n",
+          length(outliers_random),
+          outlier.plural,
+          case.plural,
+          o
+        )
+      ),
+      "yellow"
+    )
   }
 
   if (!length(outliers_random) && !length(outliers_fixed)) {
@@ -917,31 +1017,24 @@ check_outliers.item_omega <- check_outliers.parameters_efa
 
 #' @rdname check_outliers
 #' @export
-check_outliers.numeric <- function(x,
-                                   method = "zscore_robust",
-                                   threshold = NULL,
-                                   ...) {
+check_outliers.numeric <- function(x, method = "zscore_robust", threshold = NULL, ...) {
   x <- as.data.frame(x)
   names(x) <- datawizard::text_remove(sys.call()[2], "()")
-  check_outliers(x,
-    method = method,
-    threshold = threshold,
-    ...
-  )
+  check_outliers(x, method = method, threshold = threshold, ...)
 }
 
 
 #' @rdname check_outliers
 #' @export
-check_outliers.data.frame <- function(x,
-                                      method = "mahalanobis",
-                                      threshold = NULL,
-                                      ID = NULL,
-                                      ...) {
+check_outliers.data.frame <- function(
+  x,
+  method = "mahalanobis",
+  threshold = NULL,
+  ID = NULL,
+  ...
+) {
   # Preserve ID column if desired
-  ID.names <- switch(!is.null(ID),
-    x[ID]
-  )
+  ID.names <- switch(!is.null(ID), x[ID])
 
   # Remove non-numerics
   my_data <- x
@@ -950,16 +1043,40 @@ check_outliers.data.frame <- function(x,
   # Check args
   if (all(method == "all")) {
     method <- c(
-      "zscore_robust", "iqr", "ci", "cook", "pareto", "mahalanobis",
-      "mahalanobis_robust", "mcd", "ics", "optics", "lof"
+      "zscore_robust",
+      "iqr",
+      "ci",
+      "cook",
+      "pareto",
+      "mahalanobis",
+      "mahalanobis_robust",
+      "mcd",
+      "ics",
+      "optics",
+      "lof"
     )
   }
-  method <- match.arg(method, c(
-    "zscore", "zscore_robust", "iqr", "ci", "hdi",
-    "eti", "bci", "cook", "pareto", "mahalanobis",
-    "mahalanobis_robust", "mcd", "ics", "optics",
-    "lof"
-  ), several.ok = TRUE)
+  method <- match.arg(
+    method,
+    c(
+      "zscore",
+      "zscore_robust",
+      "iqr",
+      "ci",
+      "hdi",
+      "eti",
+      "bci",
+      "cook",
+      "pareto",
+      "mahalanobis",
+      "mahalanobis_robust",
+      "mcd",
+      "ics",
+      "optics",
+      "lof"
+    ),
+    several.ok = TRUE
+  )
 
   # Thresholds
   if (is.null(threshold)) {
@@ -1017,21 +1134,20 @@ check_outliers.data.frame <- function(x,
 
   # Combine outlier frequency table
   if (length(outlier_count) > 1 && !is.null(ID)) {
-    outlier_count$all <- datawizard::data_merge(outlier_count,
+    outlier_count$all <- datawizard::data_merge(
+      outlier_count,
       join = "full",
       by = c("Row", ID)
     )
   } else if (length(outlier_count) > 1) {
-    outlier_count$all <- datawizard::data_merge(outlier_count,
-      join = "full",
-      by = "Row"
-    )
+    outlier_count$all <- datawizard::data_merge(outlier_count, join = "full", by = "Row")
   } else if (length(outlier_count) == 1) {
     outlier_count$all <- outlier_count[[1]]
   } else {
     outlier_count$all <- data.frame()
   }
-  outlier_count$all <- datawizard::convert_na_to(outlier_count$all,
+  outlier_count$all <- datawizard::convert_na_to(
+    outlier_count$all,
     replace_num = 0,
     replace_char = "0",
     replace_fac = 0
@@ -1075,7 +1191,9 @@ check_outliers.data.frame <- function(x,
       x[x[[Outlier_method]] >= 0.5, ]
     })
     outlier.list <- outlier.list[vapply(outlier.list, nrow, numeric(1)) > 0]
-    outlier.list <- lapply(outlier.list, datawizard::data_remove,
+    outlier.list <- lapply(
+      outlier.list,
+      datawizard::data_remove,
       Outlier_method,
       as_data_frame = TRUE
     )
@@ -1107,13 +1225,16 @@ check_outliers.data.frame <- function(x,
 
   # Z-score
   if ("zscore" %in% method) {
-    out <- c(out, .check_outliers_zscore(
-      x,
-      threshold = thresholds$zscore,
-      robust = FALSE,
-      method = "max",
-      ID.names = ID.names
-    ))
+    out <- c(
+      out,
+      .check_outliers_zscore(
+        x,
+        threshold = thresholds$zscore,
+        robust = FALSE,
+        method = "max",
+        ID.names = ID.names
+      )
+    )
 
     # Outliers per variable
     zscore.var <- lapply(
@@ -1130,22 +1251,30 @@ check_outliers.data.frame <- function(x,
   }
 
   if ("zscore_robust" %in% method) {
-    out <- c(out, .check_outliers_zscore(
+    out <- c(
+      out,
+      .check_outliers_zscore(
+        x,
+        threshold = thresholds$zscore_robust,
+        robust = TRUE,
+        method = "max",
+        ID.names = ID.names
+      )
+    )
+
+    # Outliers per variable
+    zscore_robust.var <- lapply(
       x,
+      .check_outliers_zscore,
       threshold = thresholds$zscore_robust,
       robust = TRUE,
       method = "max",
       ID.names = ID.names
-    ))
-
-    # Outliers per variable
-    zscore_robust.var <- lapply(x, .check_outliers_zscore,
-      threshold = thresholds$zscore_robust,
-      robust = TRUE, method = "max", ID.names = ID.names
     )
 
     outlier_var$zscore_robust <- process_outlier_list(
-      zscore_robust.var, "Outlier_Zscore_robust"
+      zscore_robust.var,
+      "Outlier_Zscore_robust"
     )
     outlier_count$zscore_robust <- count_outlier_table(
       outlier_var$zscore_robust
@@ -1154,12 +1283,15 @@ check_outliers.data.frame <- function(x,
 
   # IQR
   if ("iqr" %in% method) {
-    out <- c(out, .check_outliers_iqr(
-      x,
-      threshold = thresholds$iqr,
-      method = "tukey",
-      ID.names = ID.names
-    ))
+    out <- c(
+      out,
+      .check_outliers_iqr(
+        x,
+        threshold = thresholds$iqr,
+        method = "tukey",
+        ID.names = ID.names
+      )
+    )
 
     # Outliers per variable
     iqr.var <- lapply(x, function(x) {
@@ -1179,12 +1311,15 @@ check_outliers.data.frame <- function(x,
   # CI
   if (any(c("ci", "hdi", "eti", "bci") %in% method)) {
     for (i in method[method %in% c("ci", "hdi", "eti", "bci")]) {
-      out <- c(out, .check_outliers_ci(
-        x,
-        threshold = thresholds[i],
-        method = i,
-        ID.names = ID.names
-      ))
+      out <- c(
+        out,
+        .check_outliers_ci(
+          x,
+          threshold = thresholds[i],
+          method = i,
+          ID.names = ID.names
+        )
+      )
 
       # Outliers per variable
       loop.var <- lapply(x, function(x) {
@@ -1198,7 +1333,8 @@ check_outliers.data.frame <- function(x,
       })
 
       outlier_var[[i]] <- process_outlier_list(
-        loop.var, paste0("Outlier_", i)
+        loop.var,
+        paste0("Outlier_", i)
       )
       outlier_count[[i]] <- count_outlier_table(outlier_var[[i]])
     }
@@ -1206,20 +1342,26 @@ check_outliers.data.frame <- function(x,
 
   # Mahalanobis
   if ("mahalanobis" %in% method) {
-    out <- c(out, .check_outliers_mahalanobis(
-      x,
-      threshold = thresholds$mahalanobis,
-      ID.names = ID.names,
-      ...
-    ))
+    out <- c(
+      out,
+      .check_outliers_mahalanobis(
+        x,
+        threshold = thresholds$mahalanobis,
+        ID.names = ID.names,
+        ...
+      )
+    )
 
     count.table <- datawizard::data_filter(
-      out$data_mahalanobis, "Outlier_Mahalanobis > 0.5"
+      out$data_mahalanobis,
+      "Outlier_Mahalanobis > 0.5"
     )
 
     count.table <- datawizard::data_remove(
-      count.table, "Mahalanobis",
-      regex = TRUE, as_data_frame = TRUE
+      count.table,
+      "Mahalanobis",
+      regex = TRUE,
+      as_data_frame = TRUE
     )
 
     if (nrow(count.table) >= 1) {
@@ -1231,19 +1373,25 @@ check_outliers.data.frame <- function(x,
 
   # Robust Mahalanobis
   if ("mahalanobis_robust" %in% method) {
-    out <- c(out, .check_outliers_mahalanobis_robust(
-      x,
-      threshold = thresholds$mahalanobis_robust,
-      ID.names = ID.names
-    ))
+    out <- c(
+      out,
+      .check_outliers_mahalanobis_robust(
+        x,
+        threshold = thresholds$mahalanobis_robust,
+        ID.names = ID.names
+      )
+    )
 
     count.table <- datawizard::data_filter(
-      out$data_mahalanobis_robust, "Outlier_Mahalanobis_robust > 0.5"
+      out$data_mahalanobis_robust,
+      "Outlier_Mahalanobis_robust > 0.5"
     )
 
     count.table <- datawizard::data_remove(
-      count.table, "Mahalanobis",
-      regex = TRUE, as_data_frame = TRUE
+      count.table,
+      "Mahalanobis",
+      regex = TRUE,
+      as_data_frame = TRUE
     )
 
     if (nrow(count.table) >= 1) {
@@ -1255,20 +1403,26 @@ check_outliers.data.frame <- function(x,
 
   # MCD
   if ("mcd" %in% method) {
-    out <- c(out, .check_outliers_mcd(
-      x,
-      threshold = thresholds$mcd,
-      ID.names = ID.names,
-      ...
-    ))
+    out <- c(
+      out,
+      .check_outliers_mcd(
+        x,
+        threshold = thresholds$mcd,
+        ID.names = ID.names,
+        ...
+      )
+    )
 
     count.table <- datawizard::data_filter(
-      out$data_mcd, "Outlier_MCD > 0.5"
+      out$data_mcd,
+      "Outlier_MCD > 0.5"
     )
 
     count.table <- datawizard::data_remove(
-      count.table, "MCD",
-      regex = TRUE, as_data_frame = TRUE
+      count.table,
+      "MCD",
+      regex = TRUE,
+      as_data_frame = TRUE
     )
 
     if (nrow(count.table) >= 1) {
@@ -1280,21 +1434,27 @@ check_outliers.data.frame <- function(x,
 
   # ICS
   if ("ics" %in% method) {
-    out <- c(out, .check_outliers_ics(
-      x,
-      threshold = thresholds$ics,
-      ID.names = ID.names
-    ))
+    out <- c(
+      out,
+      .check_outliers_ics(
+        x,
+        threshold = thresholds$ics,
+        ID.names = ID.names
+      )
+    )
 
     # make sure we have valid results
     if (!is.null(out)) {
       count.table <- datawizard::data_filter(
-        out$data_ics, "Outlier_ICS > 0.5"
+        out$data_ics,
+        "Outlier_ICS > 0.5"
       )
 
       count.table <- datawizard::data_remove(
-        count.table, "ICS",
-        regex = TRUE, as_data_frame = TRUE
+        count.table,
+        "ICS",
+        regex = TRUE,
+        as_data_frame = TRUE
       )
 
       if (nrow(count.table) >= 1) {
@@ -1307,20 +1467,26 @@ check_outliers.data.frame <- function(x,
 
   # OPTICS
   if ("optics" %in% method) {
-    out <- c(out, .check_outliers_optics(
-      x,
-      threshold = thresholds$optics,
-      ID.names = ID.names,
-      xi = thresholds$optics_xi
-    ))
+    out <- c(
+      out,
+      .check_outliers_optics(
+        x,
+        threshold = thresholds$optics,
+        ID.names = ID.names,
+        xi = thresholds$optics_xi
+      )
+    )
 
     count.table <- datawizard::data_filter(
-      out$data_optics, "Outlier_OPTICS > 0.5"
+      out$data_optics,
+      "Outlier_OPTICS > 0.5"
     )
 
     count.table <- datawizard::data_remove(
-      count.table, "OPTICS",
-      regex = TRUE, as_data_frame = TRUE
+      count.table,
+      "OPTICS",
+      regex = TRUE,
+      as_data_frame = TRUE
     )
 
     if (nrow(count.table) >= 1) {
@@ -1337,19 +1503,25 @@ check_outliers.data.frame <- function(x,
 
   # Local Outlier Factor
   if ("lof" %in% method) {
-    out <- c(out, .check_outliers_lof(
-      x,
-      threshold = thresholds$lof,
-      ID.names = ID.names
-    ))
+    out <- c(
+      out,
+      .check_outliers_lof(
+        x,
+        threshold = thresholds$lof,
+        ID.names = ID.names
+      )
+    )
 
     count.table <- datawizard::data_filter(
-      out$data_lof, "Outlier_LOF > 0.5"
+      out$data_lof,
+      "Outlier_LOF > 0.5"
     )
 
     count.table <- datawizard::data_remove(
-      count.table, "LOF",
-      regex = TRUE, as_data_frame = TRUE
+      count.table,
+      "LOF",
+      regex = TRUE,
+      as_data_frame = TRUE
     )
 
     if (nrow(count.table) >= 1) {
@@ -1364,11 +1536,13 @@ check_outliers.data.frame <- function(x,
 
 
 #' @export
-check_outliers.grouped_df <- function(x,
-                                      method = "mahalanobis",
-                                      threshold = NULL,
-                                      ID = NULL,
-                                      ...) {
+check_outliers.grouped_df <- function(
+  x,
+  method = "mahalanobis",
+  threshold = NULL,
+  ID = NULL,
+  ...
+) {
   info <- attributes(x)
 
   # poorman < 0.8.0?
@@ -1399,13 +1573,16 @@ check_outliers.grouped_df <- function(x,
     out <- c(out, outliers_subset)
     thresholds[[paste0("group_", i)]] <- attributes(outliers_subset)$threshold
     outlier_var[[i]] <- lapply(
-      attributes(outliers_subset)$outlier_var, lapply, function(y) {
+      attributes(outliers_subset)$outlier_var,
+      lapply,
+      function(y) {
         y$Row <- rows[which(seq_along(rows) %in% y$Row)]
         y
       }
     )
     outlier_count[[i]] <- lapply(
-      attributes(outliers_subset)$outlier_count, function(y) {
+      attributes(outliers_subset)$outlier_count,
+      function(y) {
         y$Row <- rows[which(seq_along(rows) %in% y$Row)]
         y
       }
@@ -1449,15 +1626,17 @@ check_outliers.grouped_df <- function(x,
 
 
 #' @export
-check_outliers.BFBayesFactor <- function(x,
-                                         ID = NULL,
-                                         ...) {
+check_outliers.BFBayesFactor <- function(x, ID = NULL, ...) {
   if (!insight::is_model(x)) {
     insight::format_error("Collinearity only applicable to regression models.")
   }
 
   if (!missing(ID)) {
-    insight::format_warning(paste0("ID argument not supported for objects of class `", class(x)[1], "`."))
+    insight::format_warning(paste0(
+      "ID argument not supported for objects of class `",
+      class(x)[1],
+      "`."
+    ))
   }
 
   d <- insight::get_predictors(x)
@@ -1468,11 +1647,7 @@ check_outliers.BFBayesFactor <- function(x,
 
 
 #' @export
-check_outliers.gls <- function(x,
-                               method = "pareto",
-                               threshold = NULL,
-                               ID = NULL,
-                               ...) {
+check_outliers.gls <- function(x, method = "pareto", threshold = NULL, ID = NULL, ...) {
   if (!missing(ID)) {
     insight::format_warning(
       paste0("ID argument not supported for objects of class `", class(x)[1], "`.")
@@ -1500,11 +1675,13 @@ check_outliers.fixest <- check_outliers.gls
 
 
 #' @export
-check_outliers.fixest_multi <- function(x,
-                                        method = "pareto",
-                                        threshold = NULL,
-                                        ID = NULL,
-                                        ...) {
+check_outliers.fixest_multi <- function(
+  x,
+  method = "pareto",
+  threshold = NULL,
+  ID = NULL,
+  ...
+) {
   lapply(x, check_outliers.fixest)
 }
 
@@ -1584,16 +1761,36 @@ check_outliers.metabin <- check_outliers.metagen
 
 #' @rdname check_outliers
 #' @export
-check_outliers.performance_simres <- function(x, type = "default", iterations = 100, alternative = "two.sided", ...) {
+check_outliers.performance_simres <- function(
+  x,
+  type = "default",
+  iterations = 100,
+  alternative = "two.sided",
+  ...
+) {
   type <- insight::validate_argument(type, c("default", "binomial", "bootstrap"))
-  alternative <- insight::validate_argument(alternative, c("two.sided", "greater", "less"))
+  alternative <- insight::validate_argument(
+    alternative,
+    c("two.sided", "greater", "less")
+  )
 
   insight::check_if_installed("DHARMa")
-  result <- DHARMa::testOutliers(x, type = type, nBoot = iterations, alternative = alternative, plot = FALSE, ...)
+  result <- DHARMa::testOutliers(
+    x,
+    type = type,
+    nBoot = iterations,
+    alternative = alternative,
+    plot = FALSE,
+    ...
+  )
 
   outlier <- list(
     Coefficient = as.vector(result$estimate),
-    Expected = as.numeric(gsub("(.*)\\(expected: (\\d.*)\\)", "\\2", names(result$estimate))),
+    Expected = as.numeric(gsub(
+      "(.*)\\(expected: (\\d.*)\\)",
+      "\\2",
+      names(result$estimate)
+    )),
     CI_low = result$conf.int[1],
     CI_high = result$conf.int[2],
     p_value = result$p.value
@@ -1607,7 +1804,6 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 # Thresholds --------------------------------------------------------------
-
 
 .check_outliers_thresholds <- function(x) {
   suppressWarnings(.check_outliers_thresholds_nowarn(x))
@@ -1638,11 +1834,13 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 # utilities --------------------
 
-.check_outliers_zscore <- function(x,
-                                   threshold = stats::qnorm(p = 1 - 0.001 / 2),
-                                   robust = TRUE,
-                                   method = "max",
-                                   ID.names = NULL) {
+.check_outliers_zscore <- function(
+  x,
+  threshold = stats::qnorm(p = 1 - 0.001 / 2),
+  robust = TRUE,
+  method = "max",
+  ID.names = NULL
+) {
   if (threshold < 1) {
     insight::format_error(
       "The `threshold` argument must be one or greater for method `zscore`."
@@ -1685,8 +1883,10 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   if (isTRUE(robust)) {
     names(output) <- paste0(names(output), "_robust")
     output$data_zscore_robust <- datawizard::data_addsuffix(
-      output$data_zscore_robust, "_robust",
-      select = "Zscore$", regex = TRUE
+      output$data_zscore_robust,
+      "_robust",
+      select = "Zscore$",
+      regex = TRUE
     )
   }
 
@@ -1694,10 +1894,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_iqr <- function(x,
-                                threshold = 1.7,
-                                method = "tukey",
-                                ID.names = NULL) {
+.check_outliers_iqr <- function(x, threshold = 1.7, method = "tukey", ID.names = NULL) {
   d <- data.frame(Row = seq_len(nrow(as.data.frame(x))))
   Distance_IQR <- d
 
@@ -1705,7 +1902,8 @@ check_outliers.DHARMa <- check_outliers.performance_simres
     v <- x[, col]
 
     if (method == "tukey") {
-      iqr <- stats::quantile(v, 0.75, na.rm = TRUE) - stats::quantile(v, 0.25, na.rm = TRUE)
+      iqr <- stats::quantile(v, 0.75, na.rm = TRUE) -
+        stats::quantile(v, 0.25, na.rm = TRUE)
     } else {
       iqr <- stats::IQR(v, na.rm = TRUE)
     }
@@ -1730,13 +1928,21 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
   # out$Distance_IQR <- Distance_IQR
 
-  out$Distance_IQR <- vapply(as.data.frame(t(Distance_IQR)), function(x) {
-    ifelse(all(is.na(x)), NA_real_, max(x, na.rm = TRUE))
-  }, numeric(1))
+  out$Distance_IQR <- vapply(
+    as.data.frame(t(Distance_IQR)),
+    function(x) {
+      ifelse(all(is.na(x)), NA_real_, max(x, na.rm = TRUE))
+    },
+    numeric(1)
+  )
 
-  out$Outlier_IQR <- vapply(as.data.frame(t(d)), function(x) {
-    ifelse(all(is.na(x)), NA_real_, max(x, na.rm = TRUE))
-  }, numeric(1))
+  out$Outlier_IQR <- vapply(
+    as.data.frame(t(d)),
+    function(x) {
+      ifelse(all(is.na(x)), NA_real_, max(x, na.rm = TRUE))
+    },
+    numeric(1)
+  )
 
   list(
     data_iqr = out,
@@ -1745,10 +1951,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_ci <- function(x,
-                               threshold = 1 - 0.001,
-                               method = "ci",
-                               ID.names = NULL) {
+.check_outliers_ci <- function(x, threshold = 1 - 0.001, method = "ci", ID.names = NULL) {
   # Run through columns
   d <- data.frame(Row = seq_len(nrow(x)))
   Distance_CI <- d
@@ -1795,9 +1998,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_cook <- function(x,
-                                 threshold = NULL,
-                                 ID.names = NULL) {
+.check_outliers_cook <- function(x, threshold = NULL, ID.names = NULL) {
   # Compute
   d <- unname(stats::cooks.distance(x))
   out <- data.frame(Row = seq_along(d))
@@ -1832,12 +2033,15 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_mahalanobis <- function(x,
-                                        threshold = stats::qchisq(
-                                          p = 1 - 0.001, df = ncol(x)
-                                        ),
-                                        ID.names = NULL,
-                                        ...) {
+.check_outliers_mahalanobis <- function(
+  x,
+  threshold = stats::qchisq(
+    p = 1 - 0.001,
+    df = ncol(x)
+  ),
+  ID.names = NULL,
+  ...
+) {
   if (anyNA(x) || any(with(x, x == Inf))) {
     insight::format_error("Missing or infinite values are not allowed.")
   }
@@ -1849,7 +2053,12 @@ check_outliers.DHARMa <- check_outliers.performance_simres
   }
 
   # Compute
-  out$Distance_Mahalanobis <- stats::mahalanobis(x, center = colMeans(x), cov = stats::cov(x), ...)
+  out$Distance_Mahalanobis <- stats::mahalanobis(
+    x,
+    center = colMeans(x),
+    cov = stats::cov(x),
+    ...
+  )
 
   # Filter
   out$Outlier_Mahalanobis <- as.numeric(out$Distance_Mahalanobis > threshold)
@@ -1862,11 +2071,14 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 
 # Bigutils not yet fully available on CRAN
-.check_outliers_mahalanobis_robust <- function(x,
-                                               threshold = stats::qchisq(
-                                                 p = 1 - 0.001, df = ncol(x)
-                                               ),
-                                               ID.names = NULL) {
+.check_outliers_mahalanobis_robust <- function(
+  x,
+  threshold = stats::qchisq(
+    p = 1 - 0.001,
+    df = ncol(x)
+  ),
+  ID.names = NULL
+) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
@@ -1891,12 +2103,14 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_mcd <- function(x,
-                                threshold = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
-                                percentage_central = 0.75,
-                                ID.names = NULL,
-                                verbose = TRUE,
-                                ...) {
+.check_outliers_mcd <- function(
+  x,
+  threshold = stats::qchisq(p = 1 - 0.001, df = ncol(x)),
+  percentage_central = 0.75,
+  ID.names = NULL,
+  verbose = TRUE,
+  ...
+) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
@@ -1934,10 +2148,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_ics <- function(x,
-                                threshold = 0.001,
-                                ID.names = NULL,
-                                ...) {
+.check_outliers_ics <- function(x, threshold = 0.001, ID.names = NULL, ...) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
@@ -1986,9 +2197,18 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
   if (is.null(outliers)) {
     if (ncol(x) == 1) {
-      insight::print_color("At least two numeric predictors are required to detect outliers.\n", "red")
+      insight::print_color(
+        "At least two numeric predictors are required to detect outliers.\n",
+        "red"
+      )
     } else {
-      insight::print_color(sprintf("`check_outliers()` does not support models of class `%s`.\n", class(x)[1]), "red")
+      insight::print_color(
+        sprintf(
+          "`check_outliers()` does not support models of class `%s`.\n",
+          class(x)[1]
+        ),
+        "red"
+      )
     }
     return(NULL)
   }
@@ -2011,10 +2231,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 }
 
 
-.check_outliers_optics <- function(x,
-                                   threshold = NULL,
-                                   ID.names = NULL,
-                                   xi = 0.05) {
+.check_outliers_optics <- function(x, threshold = NULL, ID.names = NULL, xi = 0.05) {
   out <- data.frame(Row = seq_len(nrow(x)))
 
   if (!is.null(ID.names)) {
@@ -2075,10 +2292,7 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 #   )
 # }
 
-
-.check_outliers_lof <- function(x,
-                                threshold = 0.001,
-                                ID.names = NULL) {
+.check_outliers_lof <- function(x, threshold = 0.001, ID.names = NULL) {
   if (threshold < 0 || threshold > 1) {
     insight::format_error(
       "The `threshold` argument must be between 0 and 1 for method `lof`."
@@ -2113,7 +2327,11 @@ check_outliers.DHARMa <- check_outliers.performance_simres
 
 #' @export
 check_outliers.glmmTMB <- function(x, ...) {
-  insight::format_alert(paste0("`check_outliers()` does not yet support models of class `", class(x)[1], "`."))
+  insight::format_alert(paste0(
+    "`check_outliers()` does not yet support models of class `",
+    class(x)[1],
+    "`."
+  ))
   NULL
 }
 

@@ -386,15 +386,15 @@ In 2008 Eighth IEEE International Conference on Data Mining (pp. 413-422).
 IEEE.
 \item Lüdecke, D., Ben-Shachar, M. S., Patil, I., Waggoner, P., and Makowski, D.
 (2021). performance: An R package for assessment, comparison and testing of
-statistical models. \emph{Journal of Open Source Software}, \emph{6}(60), 3139.
+statistical models. Journal of Open Source Software, 6(60), 3139.
 \doi{10.21105/joss.03139}
 \item Thériault, R., Ben-Shachar, M. S., Patil, I., Lüdecke, D., Wiernik, B. M.,
 and Makowski, D. (2023). Check your outliers! An introduction to identifying
-statistical outliers in R with easystats. \emph{Behavior Research Methods}, 1-11.
+statistical outliers in R with easystats. Behavior Research Methods, 1-11.
 \doi{10.3758/s13428-024-02356-w}
 \item Rousseeuw, P. J., and Van Zomeren, B. C. (1990). Unmasking multivariate
-outliers and leverage points. \emph{Journal of the American Statistical
-association}, \emph{85}(411), 633-639.
+outliers and leverage points. Journal of the American Statistical
+association, 85(411), 633-639.
 }
 }
 \seealso{

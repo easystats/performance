@@ -52,7 +52,10 @@ check_heteroscedasticity.default <- function(x, ...) {
   if (!info$is_linear) {
     msg <- "This Breusch-Pagan Test currently only works Gaussian models."
     if (info$is_count) {
-      paste0(msg, " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()').")
+      paste0(
+        msg,
+        " You may check your model for overdispersion or zero-inflation instead (see 'check_overdispersion()' and 'check_zeroinflation()')."
+      )
     }
     insight::format_alert(msg)
     return(NULL)
@@ -72,7 +75,11 @@ check_heteroscedasticity.default <- function(x, ...) {
 
   attr(p.val, "data") <- x
   attr(p.val, "object_name") <- insight::safe_deparse_symbol(substitute(x))
-  class(p.val) <- unique(c("check_heteroscedasticity", "see_check_heteroscedasticity", class(p.val)))
+  class(p.val) <- unique(c(
+    "check_heteroscedasticity",
+    "see_check_heteroscedasticity",
+    class(p.val)
+  ))
 
   p.val
 }

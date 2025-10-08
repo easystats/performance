@@ -37,10 +37,7 @@
 #'   assessment of (cluster) tendency. In Proceedings of the 2002 International
 #'   Joint Conference on Neural Networks. IJCNN02 (3), 2225-2230. IEEE.
 #' @export
-check_clusterstructure <- function(x,
-                                   standardize = TRUE,
-                                   distance = "euclidean",
-                                   ...) {
+check_clusterstructure <- function(x, standardize = TRUE, distance = "euclidean", ...) {
   if (standardize) {
     x <- as.data.frame(scale(x))
   }
@@ -64,13 +61,22 @@ check_clusterstructure <- function(x,
 
   out <- list(
     H = H,
-    dissimilarity_matrix = .clusterstructure_dm(x, distance = distance, method = "ward.D2")
+    dissimilarity_matrix = .clusterstructure_dm(
+      x,
+      distance = distance,
+      method = "ward.D2"
+    )
   )
 
   attr(out, "text") <- res_text
   attr(out, "color") <- color
   attr(out, "title") <- "Clustering tendency"
-  class(out) <- c("see_check_clusterstructure", "check_clusterstructure", "easystats_check", class(out))
+  class(out) <- c(
+    "see_check_clusterstructure",
+    "check_clusterstructure",
+    "easystats_check",
+    class(out)
+  )
   out
 }
 
@@ -80,8 +86,10 @@ plot.check_clusterstructure <- function(x, ...) {
   # Can be reimplemented with ggplot in see
   stats::heatmap(
     x$dissimilarity_matrix,
-    Rowv = NA, Colv = NA,
-    labRow = FALSE, labCol = FALSE,
+    Rowv = NA,
+    Colv = NA,
+    labRow = FALSE,
+    labCol = FALSE,
     col = grDevices::colorRampPalette(c("#2196F3", "#FAFAFA", "#E91E63"))(100)
   )
 }

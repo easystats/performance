@@ -35,12 +35,14 @@
 #' model <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
 #' performance_accuracy(model)
 #' @export
-performance_accuracy <- function(model,
-                                 method = "cv",
-                                 k = 5,
-                                 n = 1000,
-                                 ci = 0.95,
-                                 verbose = TRUE) {
+performance_accuracy <- function(
+  model,
+  method = "cv",
+  k = 5,
+  n = 1000,
+  ci = 0.95,
+  verbose = TRUE
+) {
   method <- insight::validate_argument(method, c("cv", "boot"))
 
   # get formula from model fit
@@ -72,17 +74,25 @@ performance_accuracy <- function(model,
         model_upd
       })
 
-      predictions <- Map(function(.x, .y) {
-        stats::predict(.y, newdata = model_data[.x, ])
-      }, bootstr, models)
+      predictions <- Map(
+        function(.x, .y) {
+          stats::predict(.y, newdata = model_data[.x, ])
+        },
+        bootstr,
+        models
+      )
 
       response <- lapply(bootstr, function(.x) {
         as.data.frame(model_data[.x, ])[[resp.name]]
       })
 
-      accuracy <- mapply(function(.x, .y) {
-        stats::cor(.x, .y, use = "pairwise.complete.obs")
-      }, predictions, response)
+      accuracy <- mapply(
+        function(.x, .y) {
+          stats::cor(.x, .y, use = "pairwise.complete.obs")
+        },
+        predictions,
+        response
+      )
     } else {
       # accuracy linear models with cross validation
 
@@ -96,17 +106,25 @@ performance_accuracy <- function(model,
         # stats::lm(formula, data = model_data[.x$train, ])
       })
 
-      predictions <- Map(function(.x, .y) {
-        stats::predict(.y, newdata = model_data[.x$test, ])
-      }, cv, models)
+      predictions <- Map(
+        function(.x, .y) {
+          stats::predict(.y, newdata = model_data[.x$test, ])
+        },
+        cv,
+        models
+      )
 
       response <- lapply(cv, function(.x) {
         as.data.frame(model_data[.x$test, ])[[resp.name]]
       })
 
-      accuracy <- mapply(function(.x, .y) {
-        stats::cor(.x, .y, use = "pairwise.complete.obs")
-      }, predictions, response)
+      accuracy <- mapply(
+        function(.x, .y) {
+          stats::cor(.x, .y, use = "pairwise.complete.obs")
+        },
+        predictions,
+        response
+      )
     }
   } else if (info$is_binomial) {
     measure <- "Area under Curve"
@@ -125,18 +143,26 @@ performance_accuracy <- function(model,
         model_upd
       })
 
-      predictions <- Map(function(.x, .y) {
-        stats::predict(.y, newdata = model_data[.x, ], type = "link")
-      }, bootstr, models)
+      predictions <- Map(
+        function(.x, .y) {
+          stats::predict(.y, newdata = model_data[.x, ], type = "link")
+        },
+        bootstr,
+        models
+      )
 
       response <- lapply(bootstr, function(.x) {
         .recode_to_zero(as.data.frame(model_data[.x, ])[[resp.name]])
       })
 
-      accuracy <- mapply(function(.x, .y) {
-        roc <- performance_roc(x = .x, predictions = .y)
-        bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
-      }, response, predictions)
+      accuracy <- mapply(
+        function(.x, .y) {
+          roc <- performance_roc(x = .x, predictions = .y)
+          bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
+        },
+        response,
+        predictions
+      )
     } else {
       # accuracy linear models with cross validation
       cv <- .crossv_kfold(model_data, k = k)
@@ -149,18 +175,26 @@ performance_accuracy <- function(model,
         # stats::glm(formula, data = model_data[.x$train, ], family = stats::binomial(link = "logit"))
       })
 
-      predictions <- Map(function(.x, .y) {
-        stats::predict(.y, newdata = model_data[.x$test, ], type = "link")
-      }, cv, models)
+      predictions <- Map(
+        function(.x, .y) {
+          stats::predict(.y, newdata = model_data[.x$test, ], type = "link")
+        },
+        cv,
+        models
+      )
 
       response <- lapply(cv, function(.x) {
         .recode_to_zero(as.data.frame(model_data[.x$test, ])[[resp.name]])
       })
 
-      accuracy <- mapply(function(.x, .y) {
-        roc <- performance_roc(x = .x, predictions = .y)
-        bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
-      }, response, predictions)
+      accuracy <- mapply(
+        function(.x, .y) {
+          roc <- performance_roc(x = .x, predictions = .y)
+          bayestestR::area_under_curve(roc$Specificity, roc$Sensitivity)
+        },
+        response,
+        predictions
+      )
     }
 
     if (anyNA(accuracy)) {

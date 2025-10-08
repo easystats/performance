@@ -152,14 +152,18 @@ check_normality.numeric <- function(x, ...) {
   attr(p.val, "data") <- x
   attr(p.val, "object_name") <- insight::safe_deparse(substitute(x))
   attr(p.val, "effects") <- "fixed"
-  class(p.val) <- unique(c("check_normality", "see_check_normality", "check_normality_numeric", class(p.val)))
+  class(p.val) <- unique(c(
+    "check_normality",
+    "see_check_normality",
+    "check_normality_numeric",
+    class(p.val)
+  ))
 
   p.val
 }
 
 
 # methods ----------------------
-
 
 #' @importFrom stats residuals
 #' @export
@@ -192,23 +196,39 @@ print.check_normality <- function(x, ...) {
     for (i in seq_along(x)) {
       if (x[i] < 0.05) {
         insight::print_color(
-          sprintf("Warning: Non-normality for random effects '%s' detected (%s).\n", re_groups[i], pstring[i]),
+          sprintf(
+            "Warning: Non-normality for random effects '%s' detected (%s).\n",
+            re_groups[i],
+            pstring[i]
+          ),
           "red"
         )
       } else {
         insight::print_color(
-          sprintf("OK: Random effects '%s' appear as normally distributed (%s).\n", re_groups[i], pstring[i]),
+          sprintf(
+            "OK: Random effects '%s' appear as normally distributed (%s).\n",
+            re_groups[i],
+            pstring[i]
+          ),
           "green"
         )
       }
     }
   } else {
-    if (length(x) > 1 && "units" %in% names(attributes(x))) type <- attributes(x)$units
+    if (length(x) > 1 && "units" %in% names(attributes(x))) {
+      type <- attributes(x)$units
+    }
     for (i in seq_along(x)) {
       if (x[i] < 0.05) {
-        insight::print_color(sprintf("Warning: Non-normality of %s detected (%s).\n", type[i], pstring[i]), "red")
+        insight::print_color(
+          sprintf("Warning: Non-normality of %s detected (%s).\n", type[i], pstring[i]),
+          "red"
+        )
       } else {
-        insight::print_color(sprintf("OK: %s appear as normally distributed (%s).\n", type[i], pstring[i]), "green")
+        insight::print_color(
+          sprintf("OK: %s appear as normally distributed (%s).\n", type[i], pstring[i]),
+          "green"
+        )
       }
     }
   }
@@ -278,7 +298,11 @@ check_normality.merMod <- function(x, effects = "fixed", ...) {
           p.val <- c(p.val, .check_normality(re[[i]][[j]], x, "random effects"))
         }
       }
-      attr(p.val, "re_qq") <- .model_diagnostic_ranef_qq(x, level = 0.95, model_info = info)
+      attr(p.val, "re_qq") <- .model_diagnostic_ranef_qq(
+        x,
+        level = 0.95,
+        model_info = info
+      )
       attr(p.val, "type") <- "random effects"
       attr(p.val, "re_groups") <- re_groups
     }
@@ -336,7 +360,10 @@ check_normality.BFBayesFactor <- check_normality.afex_aov
 
   if (is.null(ts_result)) {
     insight::print_color(
-      sprintf("`check_normality()` does not support models of class `%s`.\n", class(model)[1]),
+      sprintf(
+        "`check_normality()` does not support models of class `%s`.\n",
+        class(model)[1]
+      ),
       "red"
     )
     return(NULL)

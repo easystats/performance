@@ -194,25 +194,27 @@ check_model <- function(x, ...) {
 
 #' @rdname check_model
 #' @export
-check_model.default <- function(x,
-                                panel = TRUE,
-                                check = "all",
-                                detrend = TRUE,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
-                                show_dots = NULL,
-                                size_dot = 2,
-                                size_line = 0.8,
-                                size_title = 12,
-                                size_axis_title = base_size,
-                                base_size = 10,
-                                alpha = 0.2,
-                                alpha_dot = 0.8,
-                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                theme = "see::theme_lucid",
-                                verbose = FALSE,
-                                ...) {
+check_model.default <- function(
+  x,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = "see::theme_lucid",
+  verbose = FALSE,
+  ...
+) {
   # check model formula
   if (verbose) {
     insight::formula_ok(x)
@@ -242,9 +244,23 @@ check_model.default <- function(x,
     if (minfo$is_bayesian) {
       suppressWarnings(.check_assumptions_stan(x, ...))
     } else if (minfo$is_linear) {
-      suppressWarnings(.check_assumptions_linear(x, minfo, check, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_linear(
+        x,
+        minfo,
+        check,
+        residual_type,
+        verbose,
+        ...
+      ))
     } else {
-      suppressWarnings(.check_assumptions_glm(x, minfo, check, residual_type, verbose, ...))
+      suppressWarnings(.check_assumptions_glm(
+        x,
+        minfo,
+        check,
+        residual_type,
+        verbose,
+        ...
+      ))
     },
     error = function(e) {
       e
@@ -257,7 +273,11 @@ check_model.default <- function(x,
     cleaned_string <- gsub(pattern, replacement, assumptions_data$message)
     insight::format_error(
       paste("`check_model()` returned following error:", cleaned_string),
-      paste0("\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `", class(x)[1], "` are not yet supported.") # nolint
+      paste0(
+        "\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `",
+        class(x)[1],
+        "` are not yet supported."
+      ) # nolint
     )
   }
 
@@ -271,7 +291,11 @@ check_model.default <- function(x,
   }
 
   # try to find sensible default for "type" argument
-  suggest_dots <- (minfo$is_bernoulli || minfo$is_count || minfo$is_ordinal || minfo$is_categorical || minfo$is_multinomial) # nolint
+  suggest_dots <- (minfo$is_bernoulli ||
+    minfo$is_count ||
+    minfo$is_ordinal ||
+    minfo$is_categorical ||
+    minfo$is_multinomial) # nolint
   if (missing(type) && suggest_dots) {
     type <- "discrete_interval"
   }
@@ -325,26 +349,29 @@ plot.check_model <- function(x, ...) {
 ## need to fix this later
 
 #' @export
-check_model.stanreg <- function(x,
-                                panel = TRUE,
-                                check = "all",
-                                detrend = TRUE,
-                                bandwidth = "nrd",
-                                type = "density",
-                                residual_type = NULL,
-                                show_dots = NULL,
-                                size_dot = 2,
-                                size_line = 0.8,
-                                size_title = 12,
-                                size_axis_title = base_size,
-                                base_size = 10,
-                                alpha = 0.2,
-                                alpha_dot = 0.8,
-                                colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                theme = "see::theme_lucid",
-                                verbose = FALSE,
-                                ...) {
-  check_model(bayestestR::bayesian_as_frequentist(x),
+check_model.stanreg <- function(
+  x,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = "see::theme_lucid",
+  verbose = FALSE,
+  ...
+) {
+  check_model(
+    bayestestR::bayesian_as_frequentist(x),
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -371,25 +398,27 @@ check_model.brmsfit <- check_model.stanreg
 
 
 #' @export
-check_model.model_fit <- function(x,
-                                  panel = TRUE,
-                                  check = "all",
-                                  detrend = TRUE,
-                                  bandwidth = "nrd",
-                                  type = "density",
-                                  residual_type = NULL,
-                                  show_dots = NULL,
-                                  size_dot = 2,
-                                  size_line = 0.8,
-                                  size_title = 12,
-                                  size_axis_title = base_size,
-                                  base_size = 10,
-                                  alpha = 0.2,
-                                  alpha_dot = 0.8,
-                                  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                  theme = "see::theme_lucid",
-                                  verbose = FALSE,
-                                  ...) {
+check_model.model_fit <- function(
+  x,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = "see::theme_lucid",
+  verbose = FALSE,
+  ...
+) {
   check_model(
     x$fit,
     size_dot = size_dot,
@@ -414,25 +443,27 @@ check_model.model_fit <- function(x,
 
 
 #' @export
-check_model.performance_simres <- function(x,
-                                           panel = TRUE,
-                                           check = "all",
-                                           detrend = TRUE,
-                                           bandwidth = "nrd",
-                                           type = "density",
-                                           residual_type = NULL,
-                                           show_dots = NULL,
-                                           size_dot = 2,
-                                           size_line = 0.8,
-                                           size_title = 12,
-                                           size_axis_title = base_size,
-                                           base_size = 10,
-                                           alpha = 0.2,
-                                           alpha_dot = 0.8,
-                                           colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-                                           theme = "see::theme_lucid",
-                                           verbose = FALSE,
-                                           ...) {
+check_model.performance_simres <- function(
+  x,
+  panel = TRUE,
+  check = "all",
+  detrend = TRUE,
+  bandwidth = "nrd",
+  type = "density",
+  residual_type = NULL,
+  show_dots = NULL,
+  size_dot = 2,
+  size_line = 0.8,
+  size_title = 12,
+  size_axis_title = base_size,
+  base_size = 10,
+  alpha = 0.2,
+  alpha_dot = 0.8,
+  colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
+  theme = "see::theme_lucid",
+  verbose = FALSE,
+  ...
+) {
   check_model(
     x$fittedModel,
     size_dot = size_dot,
@@ -461,7 +492,14 @@ check_model.DHARMa <- check_model.performance_simres
 
 # compile plots for checks of linear models  ------------------------
 
-.check_assumptions_linear <- function(model, model_info, check = "all", residual_type = "normal", verbose = TRUE, ...) {
+.check_assumptions_linear <- function(
+  model,
+  model_info,
+  check = "all",
+  residual_type = "normal",
+  verbose = TRUE,
+  ...
+) {
   dat <- list()
 
   # multicollinearity --------------
@@ -471,7 +509,8 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
-    dat$QQ <- switch(residual_type,
+    dat$QQ <- switch(
+      residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
       .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
@@ -479,7 +518,12 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(
+      model,
+      level = 0.95,
+      model_info = model_info,
+      verbose = verbose
+    )
   }
 
   # normal-curve plot (normality of residuals) --------------
@@ -521,7 +565,14 @@ check_model.DHARMa <- check_model.performance_simres
 
 # compile plots for checks of generalized linear models  ------------------------
 
-.check_assumptions_glm <- function(model, model_info, check = "all", residual_type = "simulated", verbose = TRUE, ...) {
+.check_assumptions_glm <- function(
+  model,
+  model_info,
+  check = "all",
+  residual_type = "simulated",
+  verbose = TRUE,
+  ...
+) {
   dat <- list()
 
   # multicollinearity --------------
@@ -531,7 +582,8 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Q-Q plot (normality/uniformity of residuals) --------------
   if (any(c("all", "qq") %in% check)) {
-    dat$QQ <- switch(residual_type,
+    dat$QQ <- switch(
+      residual_type,
       simulated = .safe(simulate_residuals(model, ...)),
       .model_diagnostic_qq(model, model_info = model_info, verbose = verbose)
     )
@@ -544,7 +596,12 @@ check_model.DHARMa <- check_model.performance_simres
 
   # Random Effects Q-Q plot (normality of BLUPs) --------------
   if (any(c("all", "reqq") %in% check)) {
-    dat$REQQ <- .model_diagnostic_ranef_qq(model, level = 0.95, model_info = model_info, verbose = verbose)
+    dat$REQQ <- .model_diagnostic_ranef_qq(
+      model,
+      level = 0.95,
+      model_info = model_info,
+      verbose = verbose
+    )
   }
 
   # outliers --------------
@@ -603,14 +660,21 @@ check_model.DHARMa <- check_model.performance_simres
 
     # get samples from posterior and prior
 
-    d1 <- d1[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d1), perl = TRUE)]
-    d2 <- d2[, grepl(pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)", colnames(d2), perl = TRUE)]
+    d1 <- d1[, grepl(
+      pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)",
+      colnames(d1),
+      perl = TRUE
+    )]
+    d2 <- d2[, grepl(
+      pattern = "(b_|bs_|bsp_|bcs_)(?!(Intercept|zi_Intercept))(.*)",
+      colnames(d2),
+      perl = TRUE
+    )]
   } else if (inherits(model, c("stanreg", "stanfit"))) {
     # check if rstanarm can be loaded
     if (!requireNamespace("rstanarm", quietly = TRUE)) {
       insight::format_error("Package `rstanarm` needs to be loaded first!")
     }
-
 
     # get samples from posterior and prior
 
@@ -626,7 +690,6 @@ check_model.DHARMa <- check_model.performance_simres
 
     d1 <- as.data.frame(model)
     d2 <- as.data.frame(prior)
-
 
     # remove intercept from output for ridgeline plot.
     # this would increase the range of the scale too much
@@ -647,10 +710,17 @@ check_model.DHARMa <- check_model.performance_simres
       d2 <- datawizard::data_remove(d2, "sigma")
     }
 
-    d1 <- d1[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d1), perl = TRUE)]
-    d2 <- d2[, grepl(pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)", colnames(d2), perl = TRUE)]
+    d1 <- d1[, grepl(
+      pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)",
+      colnames(d1),
+      perl = TRUE
+    )]
+    d2 <- d2[, grepl(
+      pattern = "^(?!(b\\[\\(Intercept\\)|Sigma\\[))(.*)",
+      colnames(d2),
+      perl = TRUE
+    )]
   }
-
 
   # grouping variable
 

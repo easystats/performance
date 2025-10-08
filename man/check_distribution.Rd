@@ -26,11 +26,11 @@ following): \code{"bernoulli"}, \code{"beta"}, \code{"beta-binomial"}, \code{"bi
 \code{"inverse-gamma"}, \code{"lognormal"}, \code{"normal"}, \code{"negative binomial"},
 \code{"negative binomial (zero-inflated)"}, \code{"pareto"}, \code{"poisson"},
 \code{"poisson (zero-inflated)"}, \code{"tweedie"}, \code{"uniform"} and \code{"weibull"}.
-\cr \cr
+
 Note the similarity between certain distributions according to shape, skewness,
 etc. Thus, the predicted distribution may not be perfectly representing the
 distributional family of the underlying fitted model, or the response value.
-\cr \cr
+
 There is a \code{plot()} method, which shows the probabilities of all predicted
 distributions, however, only if the probability is greater than zero.
 }
@@ -38,7 +38,7 @@ distributions, however, only if the probability is greater than zero.
 This function is somewhat experimental and might be improved in future
 releases. The final decision on the model-family should also be based on
 theoretical aspects and other information about the data and the model.
-\cr \cr
+
 There is also a
 \href{https://easystats.github.io/see/articles/performance.html}{\code{plot()}-method}
 implemented in the

@@ -7,6 +7,7 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
   }
 
   # all available options...
+  # fmt: skip
   all_metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
 
   if (all(metrics == "all")) {
@@ -15,12 +16,15 @@ model_performance.default <- function(model, metrics = "all", verbose = TRUE, ..
     metrics <- c("AIC", "BIC", "R2", "R2_adj", "RMSE")
   }
 
-
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
 
   if (!insight::is_model(model) || !insight::is_model_supported(model)) {
     if (isTRUE(verbose)) {
-      insight::format_warning(paste0("Objects of class `", class(model)[1], "` are not supported model objects."))
+      insight::format_warning(paste0(
+        "Objects of class `",
+        class(model)[1],
+        "` are not supported model objects."
+      ))
     }
     return(NULL)
   }

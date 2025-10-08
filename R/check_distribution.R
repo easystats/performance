@@ -23,7 +23,7 @@ NULL
 #' @note This function is somewhat experimental and might be improved in future
 #'   releases. The final decision on the model-family should also be based on
 #'   theoretical aspects and other information about the data and the model.
-#'   \cr \cr
+#'
 #'   There is also a
 #'   [`plot()`-method](https://easystats.github.io/see/articles/performance.html)
 #'   implemented in the
@@ -39,11 +39,11 @@ NULL
 #' `"inverse-gamma"`, `"lognormal"`, `"normal"`, `"negative binomial"`,
 #' `"negative binomial (zero-inflated)"`, `"pareto"`, `"poisson"`,
 #' `"poisson (zero-inflated)"`, `"tweedie"`, `"uniform"` and `"weibull"`.
-#' \cr \cr
+#'
 #' Note the similarity between certain distributions according to shape, skewness,
 #' etc. Thus, the predicted distribution may not be perfectly representing the
 #' distributional family of the underlying fitted model, or the response value.
-#' \cr \cr
+#'
 #' There is a `plot()` method, which shows the probabilities of all predicted
 #' distributions, however, only if the probability is greater than zero.
 #'
@@ -76,8 +76,11 @@ check_distribution.default <- function(model) {
   }
   dat <- .extract_features(x, "residuals")
 
-  dist_residuals <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
-
+  dist_residuals <- as.data.frame(t(stats::predict(
+    classify_distribution,
+    dat,
+    type = "prob"
+  )))
 
   # Extract features
   x <- datawizard::to_numeric(
@@ -87,7 +90,11 @@ check_distribution.default <- function(model) {
   )
   dat <- .extract_features(x, "response")
 
-  dist_response <- as.data.frame(t(stats::predict(classify_distribution, dat, type = "prob")))
+  dist_response <- as.data.frame(t(stats::predict(
+    classify_distribution,
+    dat,
+    type = "prob"
+  )))
 
   out <- data.frame(
     Distribution = rownames(dist_response),
@@ -174,7 +181,11 @@ check_distribution.numeric <- function(model) {
     row.names = NULL
   )
 
-  class(out) <- unique(c("check_distribution_numeric", "see_check_distribution_numeric", class(out)))
+  class(out) <- unique(c(
+    "check_distribution_numeric",
+    "see_check_distribution_numeric",
+    class(out)
+  ))
   attr(out, "data") <- model
 
   out

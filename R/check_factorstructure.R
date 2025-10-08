@@ -78,7 +78,7 @@
 #'
 #' - Bartlett, M. S. (1951). The effect of standardization on a Chi-square
 #'   approximation in factor analysis. Biometrika, 38(3/4), 337-344.
-
+#'
 #' - Kaiser, H. F. (1970). A second generation little jiffy.
 #'   Psychometrika, 35(4), 401-415.
 #'
@@ -95,7 +95,12 @@ check_factorstructure <- function(x, n = NULL, ...) {
   kmo <- check_kmo(x, n, ...)
   sphericity <- check_sphericity_bartlett(x, n, ...)
 
-  res_text <- paste0("\n  - Sphericity: ", attributes(sphericity)$text, "\n  - KMO: ", attributes(kmo)$text)
+  res_text <- paste0(
+    "\n  - Sphericity: ",
+    attributes(sphericity)$text,
+    "\n  - KMO: ",
+    attributes(kmo)$text
+  )
 
   if (attributes(kmo)$color == "red" || attributes(sphericity)$color == "red") {
     color <- "red"
