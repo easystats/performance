@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Print tables in different output formats</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/display.R" class="external-link"><code>R/display.R</code></a>, <a href="https://github.com/easystats/performance/blob/main/R/print_md.R" class="external-link"><code>R/print_md.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/performance/blob/main/R/display.R" class="external-link"><code>R/display.R</code></a>, <a href="https://github.com/easystats/performance/blob/main/R/print-methods.R" class="external-link"><code>R/print-methods.R</code></a>, <a href="https://github.com/easystats/performance/blob/main/R/print_md.R" class="external-link"><code>R/print_md.R</code></a></small>
       <div class="d-none name"><code>display.performance_model.Rd</code></div>
     </div>
 
@@ -62,6 +62,9 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'performance_model'</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="va">object</span>, format <span class="op">=</span> <span class="st">"markdown"</span>, digits <span class="op">=</span> <span class="fl">2</span>, caption <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'performance_model'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">3</span>, layout <span class="op">=</span> <span class="st">"horizontal"</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'performance_model'</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">print_md</a></span><span class="op">(</span></span>
@@ -108,7 +111,10 @@ either printed as markdown or HTML table, depending on the environment. See
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Currently not used.</p></dd>
+<dd><p>Arguments passed to other methods, e.g. <code><a href="https://rdrr.io/r/base/format.html" class="external-link">format()</a></code> (and thereby to
+<code><a href="https://easystats.github.io/insight/reference/format_table.html" class="external-link">insight::format_table()</a></code> or <code><a href="https://easystats.github.io/insight/reference/export_table.html" class="external-link">insight::export_table()</a></code>. See related
+documentation for details on available arguments. For example, to control
+digits for information criteria like AIC or BIC, use <code>ic_digits = &lt;value&gt;</code>.</p></dd>
 
 
 <dt id="arg-layout">layout<a class="anchor" aria-label="anchor" href="#arg-layout"></a></dt>
@@ -148,6 +154,12 @@ will set the default format for the <code><a href="https://easystats.github.io/i
 <span class="r-out co"><span class="r-pr">#&gt;</span> |AIC   |  AICc |   BIC |   R2 | R2 (adj.) | RMSE | Sigma |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |:-----|:-----:|:-----:|:----:|:---------:|:----:|:-----:|</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> |156.0 | 157.5 | 161.9 | 0.83 |      0.82 | 2.44 |  2.57 |</span>
+<span class="r-in"><span><span class="fu"><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display</a></span><span class="op">(</span><span class="va">mp</span>, digits <span class="op">=</span> <span class="fl">3</span>, ic_digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |AIC      |     AICc |      BIC |    R2 | R2 (adj.) |  RMSE | Sigma |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:--------|:--------:|:--------:|:-----:|:---------:|:-----:|:-----:|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |156.0101 | 157.4915 | 161.8730 | 0.830 |     0.819 | 2.444 | 2.568 |</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
