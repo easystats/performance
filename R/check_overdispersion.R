@@ -78,7 +78,11 @@ check_overdispersion <- function(x, ...) {
 check_overdispersion.default <- function(x, ...) {
   .is_model_valid(x)
   insight::format_error(
-    paste0("`check_overdisperion()` not yet implemented for models of class `", class(x)[1], "`.")
+    paste0(
+      "`check_overdisperion()` not yet implemented for models of class `",
+      class(x)[1],
+      "`."
+    )
   )
 }
 
@@ -122,7 +126,9 @@ print.check_overdisp <- function(x, digits = 3, ...) {
   }
 
   x$p_value <- pval <- round(x$p_value, digits = digits)
-  if (x$p_value < 0.001) x$p_value <- "< 0.001"
+  if (x$p_value < 0.001) {
+    x$p_value <- "< 0.001"
+  }
 
   maxlen <- max(
     nchar(x$dispersion_ratio),
@@ -132,12 +138,27 @@ print.check_overdisp <- function(x, digits = 3, ...) {
 
   insight::print_color("# Overdispersion test\n\n", "blue")
   if (is.null(x$chisq_statistic)) {
-    cat(sprintf(" dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
-    cat(sprintf("          p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+    cat(sprintf(
+      " dispersion ratio = %s\n",
+      format(x$dispersion_ratio, justify = "right", width = maxlen)
+    ))
+    cat(sprintf(
+      "          p-value = %s\n\n",
+      format(x$p_value, justify = "right", width = maxlen)
+    ))
   } else {
-    cat(sprintf("       dispersion ratio = %s\n", format(x$dispersion_ratio, justify = "right", width = maxlen)))
-    cat(sprintf("  Pearson's Chi-Squared = %s\n", format(x$chisq_statistic, justify = "right", width = maxlen)))
-    cat(sprintf("                p-value = %s\n\n", format(x$p_value, justify = "right", width = maxlen)))
+    cat(sprintf(
+      "       dispersion ratio = %s\n",
+      format(x$dispersion_ratio, justify = "right", width = maxlen)
+    ))
+    cat(sprintf(
+      "  Pearson's Chi-Squared = %s\n",
+      format(x$chisq_statistic, justify = "right", width = maxlen)
+    ))
+    cat(sprintf(
+      "                p-value = %s\n\n",
+      format(x$p_value, justify = "right", width = maxlen)
+    ))
   }
 
   if (pval > 0.05) {
@@ -161,7 +182,10 @@ check_overdispersion.glm <- function(x, verbose = TRUE, ...) {
   obj_name <- insight::safe_deparse_symbol(substitute(x))
 
   # for certain distributions, simulated residuals are more accurate
-  use_simulated <- info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin
+  use_simulated <- info$is_bernoulli ||
+    info$is_binomial ||
+    (!info$is_count && !info$is_binomial) ||
+    info$is_negbin
 
   # model classes not supported in DHARMa
   not_supported <- c("fixest", "glmx")
@@ -247,7 +271,13 @@ check_overdispersion.merMod <- function(x, ...) {
 
   # for certain distributions, simulated residuals are more accurate
   # Note: now including Poisson models for mixed models (see #595, #643)
-  use_simulated <- info$family == "genpois" || info$is_zero_inflated || info$is_bernoulli || info$is_binomial || (!info$is_count && !info$is_binomial) || info$is_negbin || info$is_poisson # nolint
+  use_simulated <- info$family == "genpois" ||
+    info$is_zero_inflated ||
+    info$is_bernoulli ||
+    info$is_binomial ||
+    (!info$is_count && !info$is_binomial) ||
+    info$is_negbin ||
+    info$is_poisson
 
   if (use_simulated) {
     return(check_overdispersion(simulate_residuals(x, ...), object_name = obj_name, ...))

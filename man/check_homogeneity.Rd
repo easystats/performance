@@ -39,7 +39,7 @@ model <<- lm(len ~ supp + dose, data = ToothGrowth)
 check_homogeneity(model)
 
 # plot results
-\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 result <- check_homogeneity(model)
 plot(result)
 \dontshow{\}) # examplesIf}

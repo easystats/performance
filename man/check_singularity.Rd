@@ -81,7 +81,7 @@ question of whether we can assume that the numerical optimization has
 worked correctly or not.
 }
 \examples{
-\dontshow{if (require("lme4") && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4") && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 data(sleepstudy, package = "lme4")
 set.seed(123)
 sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)

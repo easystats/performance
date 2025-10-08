@@ -64,10 +64,10 @@ is based on the code in the
 \href{http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html}{GLMM FAQ},
 section \emph{How can I deal with overdispersion in GLMMs?}. Note that this
 function only returns an \emph{approximate} estimate of an overdispersion
-parameter. Using this approach would be inaccurate for zero-inflated or
-negative binomial mixed models (fitted with \code{glmmTMB}), thus, in such cases,
-the overdispersion test is based on \code{\link[=simulate_residuals]{simulate_residuals()}} (which is identical
-to \code{check_overdispersion(simulate_residuals(model))}).
+parameter. For Poisson, zero-inflated, or negative binomial mixed models
+(fitted with \code{glmmTMB} or \code{lme4}), the overdispersion test is based on
+\code{\link[=simulate_residuals]{simulate_residuals()}} (which is identical to
+\code{check_overdispersion(simulate_residuals(model))}).
 }
 
 \section{How to fix Overdispersion}{
@@ -96,7 +96,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (getRversion() >= "4.0.0" && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_overdispersion(m)

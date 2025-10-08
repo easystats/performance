@@ -43,9 +43,9 @@ zero-inflation in the data. In such cases, it is recommended to use
 negative binomial or zero-inflated models.
 
 In case of negative binomial models, models with zero-inflation component,
-or hurdle models, the results from \code{check_zeroinflation()} are based on
-\code{\link[=simulate_residuals]{simulate_residuals()}}, i.e. \code{check_zeroinflation(simulate_residuals(model))}
-is internally called if necessary.
+hurdle models, or Poisson mixed models, the results from \code{check_zeroinflation()}
+are based on \code{\link[=simulate_residuals]{simulate_residuals()}}, i.e.
+\code{check_zeroinflation(simulate_residuals(model))} is internally called if necessary.
 }
 \section{Tests based on simulated residuals}{
 
@@ -66,7 +66,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (require("glmmTMB") && require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("glmmTMB") && require("DHARMa")) withAutoprint(\{ # examplesIf}
 data(Salamanders, package = "glmmTMB")
 m <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
 check_zeroinflation(m)

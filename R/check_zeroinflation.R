@@ -91,8 +91,11 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
   # for models with zero-inflation component, negative binomial families,
   # or Poisson mixed models, we use simulate_residuals()
   # Note: now including Poisson mixed models (see #595, #643)
-  use_simulated <- model_info$is_zero_inflated || model_info$is_negbin || model_info$family == "genpois" || (model_info$is_mixed && model_info$is_poisson) # nolint
-  
+  use_simulated <- model_info$is_zero_inflated ||
+    model_info$is_negbin ||
+    model_info$family == "genpois" ||
+    (model_info$is_mixed && model_info$is_poisson)
+
   if (!inherits(x, not_supported) && use_simulated) {
     if (missing(tolerance)) {
       tolerance <- 0.1
@@ -120,17 +123,23 @@ check_zeroinflation.default <- function(x, tolerance = 0.05, ...) {
 
 #' @rdname check_zeroinflation
 #' @export
-check_zeroinflation.performance_simres <- function(x,
-                                                   tolerance = 0.1,
-                                                   alternative = "two.sided",
-                                                   ...) {
+check_zeroinflation.performance_simres <- function(
+  x,
+  tolerance = 0.1,
+  alternative = "two.sided",
+  ...
+) {
   alternative <- insight::validate_argument(
     alternative,
     c("two.sided", "less", "greater")
   )
 
   # compute test results
-  result <- .simres_statistics(x, statistic_fun = function(i) sum(i == 0), alternative = alternative)
+  result <- .simres_statistics(
+    x,
+    statistic_fun = function(i) sum(i == 0),
+    alternative = alternative
+  )
 
   structure(
     class = "check_zi",

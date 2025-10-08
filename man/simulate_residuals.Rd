@@ -62,7 +62,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("DHARMa")) withAutoprint(\{ # examplesIf}
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 simulate_residuals(m)
 

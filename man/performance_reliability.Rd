@@ -98,7 +98,7 @@ the meta-reliability - depends on the number of groups).
 }
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "glmmTMB"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "glmmTMB"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 url <- "https://raw.githubusercontent.com/easystats/circus/refs/heads/main/data/illusiongame.csv"
 df <- read.csv(url)
 

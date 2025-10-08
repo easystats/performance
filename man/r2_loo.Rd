@@ -52,7 +52,7 @@ Mixed models are not currently fully supported.
 returns a posterior sample of LOO-adjusted Bayesian R2 values.
 }
 \examples{
-\dontshow{if (require("rstanarm") && require("rstantools")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm") && require("rstantools")) withAutoprint(\{ # examplesIf}
 model <- suppressWarnings(rstanarm::stan_glm(
   mpg ~ wt + cyl,
   data = mtcars,

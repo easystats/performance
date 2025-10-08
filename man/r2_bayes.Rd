@@ -69,7 +69,7 @@ that the random effects are integrated out, but are "ignored".
 posterior sample of Bayesian R2 values.
 }
 \examples{
-\dontshow{if (require("rstanarm") && require("rstantools") && require("brms") && require("RcppEigen")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm") && require("rstantools") && require("brms") && require("RcppEigen")) withAutoprint(\{ # examplesIf}
 library(performance)
 \donttest{
 model <- suppressWarnings(rstanarm::stan_glm(

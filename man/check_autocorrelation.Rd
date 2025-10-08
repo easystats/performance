@@ -10,9 +10,11 @@ check_autocorrelation(x, ...)
 \method{check_autocorrelation}{default}(x, nsim = 1000, ...)
 }
 \arguments{
-\item{x}{A model object.}
+\item{x}{A model object, or an object returned by \code{simulate_residuals()}.}
 
-\item{...}{Currently not used.}
+\item{...}{Currently not used for models. For simulated residuals, arguments are
+passed to \code{DHARMa::testTemporalAutocorrelation()}, which can include \code{time} (a
+vector with time values) to specify the temporal order of the data.}
 
 \item{nsim}{Number of simulations for the Durbin-Watson-Test.}
 }
@@ -29,6 +31,11 @@ Performs a Durbin-Watson-Test to check for autocorrelated residuals.
 In case of autocorrelation, robust standard errors return more accurate
 results for the estimates, or maybe a mixed model with error term for the
 cluster groups should be used.
+
+For simulated residuals (from \code{simulate_residuals()}), the function uses
+\code{DHARMa::testTemporalAutocorrelation()} to check for temporal autocorrelation.
+This requires the data to be ordered by time. If the data are not ordered by
+time, you can provide a \code{time} argument to specify the temporal order.
 }
 \examples{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)

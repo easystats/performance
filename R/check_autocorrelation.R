@@ -56,19 +56,18 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
 }
 
 
-#' @rdname check_autocorrelation
 #' @export
 check_autocorrelation.performance_simres <- function(x, ...) {
   insight::check_if_installed("DHARMa")
-  
+
   # Use DHARMa's temporal autocorrelation test
   # This requires the residuals to be ordered by time
   # DHARMa::testTemporalAutocorrelation expects a DHARMa object
   result <- DHARMa::testTemporalAutocorrelation(x, plot = FALSE, ...)
-  
+
   # Extract p-value from the result
   p.val <- result$p.value
-  
+
   class(p.val) <- c("check_autocorrelation", "see_check_autocorrelation", class(p.val))
   p.val
 }
@@ -81,7 +80,9 @@ check_autocorrelation.DHARMa <- check_autocorrelation.performance_simres
 
 #' @export
 plot.check_autocorrelation <- function(x, ...) {
-  insight::format_warning("There is currently no `plot()` method for `check_autocorrelation()`.")
+  insight::format_warning(
+    "There is currently no `plot()` method for `check_autocorrelation()`."
+  )
 }
 
 

@@ -250,7 +250,7 @@ get hints about possible problems.
 }
 
 \examples{
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4")) withAutoprint(\{ # examplesIf}
 \donttest{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_model(m)

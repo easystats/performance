@@ -73,7 +73,7 @@ accurate results.
 }
 
 \examples{
-\dontshow{if (require("DHARMa")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("DHARMa")) withAutoprint(\{ # examplesIf}
 dat <- DHARMa::createData(sampleSize = 100, overdispersion = 0.5, family = poisson())
 m <- glm(observedResponse ~ Environment1, family = poisson(), data = dat)
 res <- simulate_residuals(m)

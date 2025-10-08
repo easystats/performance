@@ -63,7 +63,7 @@ or not.
 }
 
 \examples{
-\dontshow{if (require("lme4") && require("glmmTMB")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4") && require("glmmTMB")) withAutoprint(\{ # examplesIf}
 data(cbpp, package = "lme4")
 set.seed(1)
 cbpp$x <- rnorm(nrow(cbpp))
