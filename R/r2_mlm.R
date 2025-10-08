@@ -69,10 +69,11 @@ r2_mlm <- function(model, ...) {
 
 #' @export
 r2_mlm.mlm <- function(model, verbose = TRUE, ...) {
-  rho2_vec <- 1 - stats::cancor(
-    insight::get_predictors(model),
-    insight::get_response(model)
-  )$cor^2
+  rho2_vec <- 1 -
+    stats::cancor(
+      insight::get_predictors(model),
+      insight::get_response(model)
+    )$cor^2
   R_xy <- 1 - Reduce(`*`, rho2_vec, 1)
 
   resid_cov <- stats::cov(residuals(model))

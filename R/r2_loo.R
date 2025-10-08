@@ -72,7 +72,9 @@ r2_loo_posterior.brmsfit <- function(model, verbose = TRUE, ...) {
 
   algorithm <- insight::find_algorithm(model)
   if (algorithm$algorithm != "sampling") {
-    insight::format_warning("`r2()` only available for models fit using the \"sampling\" algorithm.")
+    insight::format_warning(
+      "`r2()` only available for models fit using the \"sampling\" algorithm."
+    )
     return(NA)
   }
 

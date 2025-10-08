@@ -103,7 +103,11 @@ withr::with_environment(
       lot1 = c(118, 58, 42, 35, 27, 25, 21, 19, 18),
       lot2 = c(69, 35, 26, 21, 18, 16, 13, 12, 12)
     )
-    m <- suppressWarnings(glmmTMB::glmmTMB(lot1 ~ log(u), data = clotting, family = Gamma()))
+    m <- suppressWarnings(glmmTMB::glmmTMB(
+      lot1 ~ log(u),
+      data = clotting,
+      family = Gamma()
+    ))
     out <- r2(m)
     expect_equal(out[[1]], 0.996103, tolerance = 1e-3, ignore_attr = TRUE)
     # validate against glm

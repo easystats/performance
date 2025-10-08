@@ -39,9 +39,15 @@ check_symmetry.numeric <- function(x, ...) {
 print.check_symmetry <- function(x, ...) {
   pstring <- insight::format_p(x)
   if (x < 0.05) {
-    insight::print_color(sprintf("Warning: Non-symmetry detected (%s).\n", pstring), "red")
+    insight::print_color(
+      sprintf("Warning: Non-symmetry detected (%s).\n", pstring),
+      "red"
+    )
   } else {
-    insight::print_color(sprintf("OK: Data appears symmetrical (%s).\n", pstring), "green")
+    insight::print_color(
+      sprintf("OK: Data appears symmetrical (%s).\n", pstring),
+      "green"
+    )
   }
   return(invisible(x))
 }

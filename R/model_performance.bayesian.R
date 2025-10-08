@@ -71,14 +71,23 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
     metrics[tolower(metrics) == "log_loss"] <- "LOGLOSS"
   }
 
-  all_metrics <- c("LOOIC", "WAIC", "R2", "R2_adjusted", "ICC", "RMSE", "SIGMA", "LOGLOSS", "SCORE")
+  all_metrics <- c(
+    "LOOIC",
+    "WAIC",
+    "R2",
+    "R2_adjusted",
+    "ICC",
+    "RMSE",
+    "SIGMA",
+    "LOGLOSS",
+    "SCORE"
+  )
 
   if (all(metrics == "all")) {
     metrics <- all_metrics
   } else if (all(metrics == "common")) {
     metrics <- c("LOOIC", "WAIC", "R2", "RMSE")
   }
-
 
   metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
 
@@ -194,8 +203,12 @@ model_performance.stanreg <- function(model, metrics = "all", verbose = TRUE, ..
   if (("SCORE" %in% metrics) && (mi$is_binomial || mi$is_count)) {
     .scoring_rules <- .safe(performance_score(model, verbose = verbose))
     if (!is.null(.scoring_rules)) {
-      if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
-      if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
+      if (!is.na(.scoring_rules$logarithmic)) {
+        out$Score_log <- .scoring_rules$logarithmic
+      }
+      if (!is.na(.scoring_rules$spherical)) {
+        out$Score_spherical <- .scoring_rules$spherical
+      }
     }
   }
 
@@ -220,18 +233,19 @@ model_performance.stanmvreg <- model_performance.stanreg
 #' @export
 #' @inheritParams r2_bayes
 #' @rdname model_performance.stanreg
-model_performance.BFBayesFactor <- function(model,
-                                            metrics = "all",
-                                            verbose = TRUE,
-                                            average = FALSE,
-                                            prior_odds = NULL,
-                                            ...) {
+model_performance.BFBayesFactor <- function(
+  model,
+  metrics = "all",
+  verbose = TRUE,
+  average = FALSE,
+  prior_odds = NULL,
+  ...
+) {
   all_metrics <- c("R2", "SIGMA")
 
   if (all(metrics == "all")) {
     metrics <- all_metrics
   }
-
 
   metrics <- toupper(.check_bad_metrics(metrics, all_metrics, verbose))
 
@@ -257,7 +271,6 @@ model_performance.BFBayesFactor <- function(model,
     out <- append(out, as.list(r2_df))
   }
 
-
   if ("SIGMA" %in% toupper(metrics)) {
     sig <- suppressMessages(
       .get_sigma_bfbayesfactor(
@@ -269,7 +282,6 @@ model_performance.BFBayesFactor <- function(model,
     )
     out$Sigma <- bayestestR::point_estimate(sig, "median")[[1]]
   }
-
 
   out <- as.data.frame(out)
   row.names(out) <- NULL
@@ -283,8 +295,12 @@ model_performance.BFBayesFactor <- function(model,
 
 # helper -------------------
 
-
-.get_sigma_bfbayesfactor <- function(model, average = FALSE, prior_odds = NULL, verbose = TRUE) {
+.get_sigma_bfbayesfactor <- function(
+  model,
+  average = FALSE,
+  prior_odds = NULL,
+  verbose = TRUE
+) {
   if (average) {
     return(.get_sigma_bfbayesfactor_model_average(model, prior_odds = prior_odds))
   }
@@ -322,7 +338,6 @@ model_performance.BFBayesFactor <- function(model,
   }
 
   params <- lapply(params, data.frame)
-
 
   # Compute posterior model probabilities
   if (!is.null(prior_odds)) {

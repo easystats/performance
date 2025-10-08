@@ -35,15 +35,17 @@
 #' performance_cv(model)
 #'
 #' @export
-performance_cv <- function(model,
-                           data = NULL,
-                           method = "holdout",
-                           metrics = "all",
-                           prop = 0.30,
-                           k = 5,
-                           stack = TRUE,
-                           verbose = TRUE,
-                           ...) {
+performance_cv <- function(
+  model,
+  data = NULL,
+  method = "holdout",
+  metrics = "all",
+  prop = 0.30,
+  k = 5,
+  stack = TRUE,
+  verbose = TRUE,
+  ...
+) {
   if (all(metrics == "all")) {
     metrics <- c("MSE", "RMSE", "R2")
   } else if (all(metrics == "common")) {
@@ -69,18 +71,30 @@ performance_cv <- function(model,
       test_pred <- insight::get_predicted(model, ci = NULL, data = data)
       test_resd <- test_resp - test_pred
     } else if (method == "holdout") {
-      train_i <- sample.int(nrow(model_data), size = round((1 - prop) * nrow(model_data)), replace = FALSE)
+      train_i <- sample.int(
+        nrow(model_data),
+        size = round((1 - prop) * nrow(model_data)),
+        replace = FALSE
+      )
       model_upd <- stats::update(model, data = model_data[train_i, ])
       test_resp <- model_data[-train_i, resp.name]
-      test_pred <- insight::get_predicted(model_upd, ci = NULL, data = model_data[-train_i, ])
+      test_pred <- insight::get_predicted(
+        model_upd,
+        ci = NULL,
+        data = model_data[-train_i, ]
+      )
       test_resd <- test_resp - test_pred
     } else if (method == "loo" && !info$is_bayesian) {
       model_response <- insight::get_response(model)
-      MSE <- mean(insight::get_residuals(model, weighted = TRUE)^2 /
-        (1 - stats::hatvalues(model))^2)
+      MSE <- mean(
+        insight::get_residuals(model, weighted = TRUE)^2 /
+          (1 - stats::hatvalues(model))^2
+      )
       mean(test_resd^2, na.rm = TRUE)
       RMSE <- sqrt(MSE)
-      R2 <- 1 - MSE / (mean(model_response^2, na.rm = TRUE) - mean(model_response, na.rm = TRUE)^2)
+      R2 <- 1 -
+        MSE /
+          (mean(model_response^2, na.rm = TRUE) - mean(model_response, na.rm = TRUE)^2)
       out <- data.frame(MSE = MSE, RMSE = RMSE, R2 = R2)
     } else {
       # Manual method for LOO, use this for non-linear and Bayesian models
@@ -95,19 +109,27 @@ performance_cv <- function(model,
         k <- nrow(model_data)
       }
       if (k > nrow(model_data)) {
-        message(insight::color_text(insight::format_message(
-          "Requested number of folds (k) larger than the sample size.",
-          "'k' set equal to the sample size (leave-one-out [LOO])."
-        ), color = "yellow"))
+        message(insight::color_text(
+          insight::format_message(
+            "Requested number of folds (k) larger than the sample size.",
+            "'k' set equal to the sample size (leave-one-out [LOO])."
+          ),
+          color = "yellow"
+        ))
         k <- nrow(model_data)
       }
       cv_folds <- .crossv_kfold(model_data, k = k)
       models_upd <- lapply(cv_folds, function(.x) {
         stats::update(model, data = model_data[.x$train, ])
       })
-      test_pred <- mapply(function(.x, .y) {
-        insight::get_predicted(.y, ci = NULL, data = model_data[.x$test, ])
-      }, cv_folds, models_upd, SIMPLIFY = FALSE)
+      test_pred <- mapply(
+        function(.x, .y) {
+          insight::get_predicted(.y, ci = NULL, data = model_data[.x$test, ])
+        },
+        cv_folds,
+        models_upd,
+        SIMPLIFY = FALSE
+      )
       test_resp <- lapply(cv_folds, function(.x) {
         as.data.frame(model_data[.x$test, ])[[resp.name]]
       })
@@ -124,17 +146,27 @@ performance_cv <- function(model,
     R2 <- 1 - MSE / mean((test_resp - mean(test_resp, na.rm = TRUE))^2, na.rm = TRUE)
     out <- data.frame(MSE = MSE, RMSE = RMSE, R2 = R2)
   } else {
-    test_resd <- mapply(function(.x, .y) {
-      .x - .y
-    }, test_resp, test_pred, SIMPLIFY = FALSE)
+    test_resd <- mapply(
+      function(.x, .y) {
+        .x - .y
+      },
+      test_resp,
+      test_pred,
+      SIMPLIFY = FALSE
+    )
     MSEs <- sapply(test_resd, function(x) mean(x^2, na.rm = TRUE))
     RMSEs <- sqrt(MSEs)
-    resp_vars <- sapply(test_resp, function(x) mean((x - mean(x, na.rm = TRUE))^2, na.rm = TRUE))
+    resp_vars <- sapply(test_resp, function(x) {
+      mean((x - mean(x, na.rm = TRUE))^2, na.rm = TRUE)
+    })
     R2s <- 1 - MSEs / resp_vars
     out <- data.frame(
-      MSE = mean(MSEs), MSE_SE = stats::sd(MSEs),
-      RMSE = mean(RMSEs), RMSE_SE = stats::sd(RMSEs),
-      R2 = mean(R2s), R2_SE = stats::sd(R2s)
+      MSE = mean(MSEs),
+      MSE_SE = stats::sd(MSEs),
+      RMSE = mean(RMSEs),
+      RMSE_SE = stats::sd(RMSEs),
+      R2 = mean(R2s),
+      R2_SE = stats::sd(R2s)
     )
   }
 
@@ -144,14 +176,17 @@ performance_cv <- function(model,
   attr(out, "prop") <- if (method == "holdout") prop
   missing_metrics <- setdiff(metrics, c("MSE", "RMSE", "R2"))
   if (length(missing_metrics)) {
-    message(insight::colour_text(insight::format_message(
-      paste0(
-        "Metric",
-        ifelse(length(missing_metrics) > 1, "s '", " '"),
-        paste0(missing_metrics, collapse = "', '"),
-        "' not yet supported."
-      )
-    ), colour = "red"))
+    message(insight::colour_text(
+      insight::format_message(
+        paste0(
+          "Metric",
+          ifelse(length(missing_metrics) > 1, "s '", " '"),
+          paste0(missing_metrics, collapse = "', '"),
+          "' not yet supported."
+        )
+      ),
+      colour = "red"
+    ))
   }
   class(out) <- c("performance_cv", "data.frame")
   return(out)
@@ -171,7 +206,8 @@ performance_cv <- function(model,
 
 #' @export
 print.performance_cv <- function(x, digits = 2, ...) {
-  method <- switch(attr(x, "method"),
+  method <- switch(
+    attr(x, "method"),
     holdout = paste0(
       insight::format_value(attr(x, "prop"), as_percent = TRUE, digits = 0),
       " holdout"
@@ -181,18 +217,23 @@ print.performance_cv <- function(x, digits = 2, ...) {
   )
 
   formatted_table <- format(
-    x = x, digits = digits, format = "text",
+    x = x,
+    digits = digits,
+    format = "text",
     ...
   )
   cat(insight::export_table(
     x = formatted_table,
     digits = digits,
     format = "text",
-    caption = c(paste0(
-      "# Cross-validation performance (",
-      method,
-      " method)"
-    ), "blue"),
+    caption = c(
+      paste0(
+        "# Cross-validation performance (",
+        method,
+        " method)"
+      ),
+      "blue"
+    ),
     ...
   ))
   invisible(x)

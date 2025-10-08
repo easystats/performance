@@ -22,8 +22,16 @@ test_that("model_performance various", {
   )
 
   expect_equal(model_performance(m1, verbose = FALSE)$R2, 0.9617312, tolerance = 1e-4)
-  expect_equal(model_performance(m3, verbose = FALSE)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
-  expect_equal(model_performance(m4, verbose = FALSE)$R2_Nagelkerke, 0.4042792, tolerance = 1e-4)
+  expect_equal(
+    model_performance(m3, verbose = FALSE)$R2_Nagelkerke,
+    0.4042792,
+    tolerance = 1e-4
+  )
+  expect_equal(
+    model_performance(m4, verbose = FALSE)$R2_Nagelkerke,
+    0.4042792,
+    tolerance = 1e-4
+  )
   expect_equal(model_performance(m5, verbose = FALSE)$R2, 0.4294224, tolerance = 1e-4)
 
   mp <- model_performance(m5)
@@ -35,7 +43,6 @@ test_that("model_performance various", {
   expect_equal(mp$weak_instruments, ms$diagnostics["Weak instruments", 3])
   expect_equal(mp$weak_instruments_p, ms$diagnostics["Weak instruments", 4])
 })
-
 
 # DirichletReg is currently orphaned
 # test_that("model_performance (Dirichlet regression)", {

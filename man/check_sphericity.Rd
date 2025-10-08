@@ -20,7 +20,7 @@ Check model for violation of sphericity. For \link[=check_factorstructure]{Bartl
 (used for correlation matrices and factor analyses), see \link{check_sphericity_bartlett}.
 }
 \examples{
-\dontshow{if (require("car") && require("carData")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("car") && require("carData")) withAutoprint(\{ # examplesIf}
 data(Soils, package = "carData")
 soils.mod <- lm(
   cbind(pH, N, Dens, P, Ca, Mg, K, Na, Conduc) ~ Block + Contour * Depth,

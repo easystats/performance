@@ -53,7 +53,10 @@ print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
 
   # switch to vertical layout
   if (layout == "vertical") {
-    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    formatted_table <- datawizard::rownames_as_column(
+      as.data.frame(t(formatted_table)),
+      "Metric"
+    )
     colnames(formatted_table)[2] <- "Value"
   }
 

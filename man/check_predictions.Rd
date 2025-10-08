@@ -86,7 +86,7 @@ If \code{check_predictions()} doesn't work as expected, try setting \code{verbos
 to get hints about possible problems.
 }
 \examples{
-\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("see", minimum_version = "0.9.1", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # linear model
 model <- lm(mpg ~ disp, data = mtcars)
 check_predictions(model)

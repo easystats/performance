@@ -3,7 +3,12 @@ test_that("r2_ferarri", {
   data("GasolineYield", package = "betareg")
   model <- betareg::betareg(yield ~ batch + temp, data = GasolineYield)
   out <- r2_ferrari(model)
-  expect_equal(out$R2, summary(model)$pseudo.r.squared, tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(
+    out$R2,
+    summary(model)$pseudo.r.squared,
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
 })
 
 
@@ -33,5 +38,10 @@ test_that("r2_ferarri", {
     family = glmmTMB::ordbeta()
   )
   out <- r2(m)
-  expect_equal(out$R2, c(`Ferrari's R2` = 0.2354701), tolerance = 1e-3, ignore_attr = TRUE)
+  expect_equal(
+    out$R2,
+    c(`Ferrari's R2` = 0.2354701),
+    tolerance = 1e-3,
+    ignore_attr = TRUE
+  )
 })

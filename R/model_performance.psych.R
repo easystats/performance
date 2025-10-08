@@ -64,7 +64,12 @@ model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
 model_performance.principal <- model_performance.fa
 
 #' @export
-model_performance.parameters_efa <- function(model, metrics = "all", verbose = TRUE, ...) {
+model_performance.parameters_efa <- function(
+  model,
+  metrics = "all",
+  verbose = TRUE,
+  ...
+) {
   model_performance(attributes(model)$model, metrics = metrics, verbose = verbose, ...)
 }
 
@@ -80,23 +85,26 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
   }
 
   # generate statistics for n-factor solution and g-model
-  out <- do.call(rbind, lapply(list(model$schmid, model$gstats), function(stats) {
-    data.frame(
-      Chi2 = ifelse(is.null(stats$STATISTIC), NA_real_, stats$STATISTIC),
-      df = ifelse(is.null(stats$dof), NA_real_, stats$dof),
-      p_Chi2 = ifelse(is.null(stats$PVAL), NA_real_, stats$PVAL),
-      RMSA = ifelse(is.null(stats$rms), NA_real_, stats$rms),
-      RMSA_corrected = ifelse(is.null(stats$crms), NA_real_, stats$crms),
-      TLI = ifelse(is.null(stats$TLI), NA_real_, stats$TLI),
-      RMSEA = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[1]),
-      RMSEA_CI = ifelse(is.null(stats$RMSEA), NA_real_, 0.9),
-      RMSEA_CI_low = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[2]),
-      RMSEA_CI_high = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[3]),
-      BIC = ifelse(is.null(stats$BIC), NA_real_, stats$BIC),
-      R2 = ifelse(is.null(stats$R2), NA_real_, stats$R2),
-      Correlation = ifelse(is.null(stats$R2), NA_real_, sqrt(abs(stats$R2)))
-    )
-  }))
+  out <- do.call(
+    rbind,
+    lapply(list(model$schmid, model$gstats), function(stats) {
+      data.frame(
+        Chi2 = ifelse(is.null(stats$STATISTIC), NA_real_, stats$STATISTIC),
+        df = ifelse(is.null(stats$dof), NA_real_, stats$dof),
+        p_Chi2 = ifelse(is.null(stats$PVAL), NA_real_, stats$PVAL),
+        RMSA = ifelse(is.null(stats$rms), NA_real_, stats$rms),
+        RMSA_corrected = ifelse(is.null(stats$crms), NA_real_, stats$crms),
+        TLI = ifelse(is.null(stats$TLI), NA_real_, stats$TLI),
+        RMSEA = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[1]),
+        RMSEA_CI = ifelse(is.null(stats$RMSEA), NA_real_, 0.9),
+        RMSEA_CI_low = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[2]),
+        RMSEA_CI_high = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[3]),
+        BIC = ifelse(is.null(stats$BIC), NA_real_, stats$BIC),
+        R2 = ifelse(is.null(stats$R2), NA_real_, stats$R2),
+        Correlation = ifelse(is.null(stats$R2), NA_real_, sqrt(abs(stats$R2)))
+      )
+    })
+  )
 
   # bind first column, to indicate component
   out <- cbind(
@@ -119,7 +127,12 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
 
   attr(out, "n") <- n_factors
   attr(out, "model") <- model
-  class(out) <- unique(c("performance_omega", "performance_fa", "performance_model", class(out)))
+  class(out) <- unique(c(
+    "performance_omega",
+    "performance_fa",
+    "performance_model",
+    class(out)
+  ))
   out
 }
 
@@ -136,7 +149,9 @@ print.performance_omega <- function(x, ...) {
   insight::print_color(
     insight::format_message(sprintf(
       "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model has smaller RMSA and RMSEA then your items are more likely to describe a single unidimensional construct. If the %i-factor model has smaller RMSA and RMSEA then your construct is more likely to be made up of %i sub-constructs.",
-      n, n, n
+      n,
+      n,
+      n
     )),
     "yellow"
   )

@@ -21,7 +21,7 @@ regressions. For LOOIC and ELPD, smaller and larger values are respectively
 indicative of a better fit.
 }
 \examples{
-\dontshow{if (require("rstanarm")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("rstanarm")) withAutoprint(\{ # examplesIf}
 \donttest{
 model <- suppressWarnings(rstanarm::stan_glm(
   mpg ~ wt + cyl,

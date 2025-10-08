@@ -31,7 +31,8 @@ test_that("check_singularity", {
   skip_if_not_installed("glmmTMB")
   set.seed(101)
   dd <- expand.grid(x = factor(1:6), f = factor(1:20), rep = 1:5)
-  dd$y <- glmmTMB::simulate_new(~ 1 + (x | f),
+  dd$y <- glmmTMB::simulate_new(
+    ~ 1 + (x | f),
     newdata = dd,
     newparam = list(
       beta = 0,

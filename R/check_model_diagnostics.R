@@ -66,7 +66,10 @@
     return(NULL)
   }
 
-  if (inherits(model, c("glm", "glmerMod")) || (inherits(model, "glmmTMB") && isFALSE(model_info$is_linear))) {
+  if (
+    inherits(model, c("glm", "glmerMod")) ||
+      (inherits(model, "glmmTMB") && isFALSE(model_info$is_linear))
+  ) {
     fitted_ <- stats::qnorm((stats::ppoints(length(res_)) + 1) / 2)
   } else {
     fitted_ <- stats::fitted(model)
@@ -89,7 +92,12 @@
 
 # prepare data for random effects QQ plot ----------------------------------
 
-.model_diagnostic_ranef_qq <- function(model, level = 0.95, model_info = NULL, verbose = TRUE) {
+.model_diagnostic_ranef_qq <- function(
+  model,
+  level = 0.95,
+  model_info = NULL,
+  verbose = TRUE
+) {
   # check if we have mixed model
   if (is.null(model_info) || !model_info$is_mixed) {
     return(NULL)
@@ -110,7 +118,6 @@
     }
   )
 
-
   se <- tryCatch(
     suppressWarnings(lapply(re, function(.x) {
       pv <- attr(.x, var_attr, exact = TRUE)
@@ -124,28 +131,34 @@
 
   if (is.null(se)) {
     if (verbose) {
-      insight::format_alert("Could not compute standard errors from random effects for diagnostic plot.")
+      insight::format_alert(
+        "Could not compute standard errors from random effects for diagnostic plot."
+      )
     }
     return(NULL)
   }
 
+  Map(
+    function(.re, .se) {
+      ord <- unlist(lapply(.re, order)) +
+        rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
 
-  Map(function(.re, .se) {
-    ord <- unlist(lapply(.re, order)) + rep((0:(ncol(.re) - 1)) * nrow(.re), each = nrow(.re))
+      df.y <- unlist(.re)[ord]
+      df.ci <- stats::qnorm((1 + level) / 2) * .se[ord]
 
-    df.y <- unlist(.re)[ord]
-    df.ci <- stats::qnorm((1 + level) / 2) * .se[ord]
-
-    data.frame(
-      x = rep(stats::qnorm(stats::ppoints(nrow(.re))), ncol(.re)),
-      y = df.y,
-      conf.low = df.y - df.ci,
-      conf.high = df.y + df.ci,
-      facet = gl(ncol(.re), nrow(.re), labels = names(.re)),
-      stringsAsFactors = FALSE,
-      row.names = NULL
-    )
-  }, re, se)
+      data.frame(
+        x = rep(stats::qnorm(stats::ppoints(nrow(.re))), ncol(.re)),
+        y = df.y,
+        conf.low = df.y - df.ci,
+        conf.high = df.y + df.ci,
+        facet = gl(ncol(.re), nrow(.re), labels = names(.re)),
+        stringsAsFactors = FALSE,
+        row.names = NULL
+      )
+    },
+    re,
+    se
+  )
 }
 
 
@@ -163,7 +176,11 @@
   }
 
   dat <- as.data.frame(bayestestR::estimate_density(r))
-  dat$curve <- stats::dnorm(seq(min(dat$x), max(dat$x), length.out = nrow(dat)), mean(r), stats::sd(r))
+  dat$curve <- stats::dnorm(
+    seq(min(dat$x), max(dat$x), length.out = nrow(dat)),
+    mean(r),
+    stats::sd(r)
+  )
   dat
 }
 
@@ -198,7 +215,9 @@
   )
   plot_data$Index <- seq_len(nrow(plot_data))
   plot_data$Influential <- "OK"
-  plot_data$Influential[abs(plot_data$Cooks_Distance) >= max(cook_levels)] <- "Influential"
+  plot_data$Influential[
+    abs(plot_data$Cooks_Distance) >= max(cook_levels)
+  ] <- "Influential"
 
   attr(plot_data, "cook_levels") <- cook_levels
   attr(plot_data, "n_params") <- n_params
@@ -304,7 +323,8 @@
         d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(predicted)
       } else {
         # for nbinom2, "sigma()" has "inverse meaning" (see #654)
-        d$V <- (1 / insight::get_sigma(model)^2) * stats::family(model)$variance(predicted)
+        d$V <- (1 / insight::get_sigma(model)^2) *
+          stats::family(model)$variance(predicted)
       }
     } else {
       ## FIXME: this is not correct for glm.nb models?
@@ -332,7 +352,10 @@
     }
     d$Prob <- stats::predict(model, type = ptype)
     d$Disp <- insight::get_sigma(model)
-    d$V <- predicted * (1 + predicted / d$Disp) * (1 - d$Prob) * (1 + predicted * (1 + predicted / d$Disp) * d$Prob) # nolint
+    d$V <- predicted *
+      (1 + predicted / d$Disp) *
+      (1 - d$Prob) *
+      (1 + predicted * (1 + predicted / d$Disp) * d$Prob) # nolint
   }
 
   # data for zero-inflated negative binomial models with dispersion
@@ -345,7 +368,10 @@
     }
     d$Prob <- stats::predict(model, type = ptype)
     d$Disp <- stats::predict(model, type = "disp")
-    d$V <- predicted * (1 + predicted / d$Disp) * (1 - d$Prob) * (1 + predicted * (1 + predicted / d$Disp) * d$Prob) # nolint
+    d$V <- predicted *
+      (1 + predicted / d$Disp) *
+      (1 - d$Prob) *
+      (1 + predicted * (1 + predicted / d$Disp) * d$Prob) # nolint
   }
 
   d
@@ -376,7 +402,8 @@
         d$V <- insight::get_sigma(model)^2 * stats::family(model)$variance(d$Predicted)
       } else {
         # for nbinom2, "sigma()" has "inverse meaning" (see #654)
-        d$V <- (1 / insight::get_sigma(model)^2) * stats::family(model)$variance(d$Predicted)
+        d$V <- (1 / insight::get_sigma(model)^2) *
+          stats::family(model)$variance(d$Predicted)
       }
     } else {
       ## FIXME: this is not correct for glm.nb models?
@@ -415,7 +442,10 @@
     }
     d$Prob <- stats::predict(model, type = ptype)
     d$Disp <- insight::get_sigma(model)
-    d$V <- d$Predicted * (1 + d$Predicted / d$Disp) * (1 - d$Prob) * (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
+    d$V <- d$Predicted *
+      (1 + d$Predicted / d$Disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -431,7 +461,10 @@
     }
     d$Prob <- stats::predict(model, type = ptype)
     d$Disp <- stats::predict(model, type = "disp")
-    d$V <- d$Predicted * (1 + d$Predicted / d$Disp) * (1 - d$Prob) * (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
+    d$V <- d$Predicted *
+      (1 + d$Predicted / d$Disp) *
+      (1 - d$Prob) *
+      (1 + d$Predicted * (1 + d$Predicted / d$Disp) * d$Prob) # nolint
     d$StdRes <- insight::get_residuals(model, type = "pearson")
   }
 
@@ -446,7 +479,8 @@
     return(1)
   }
   betad <- model$fit$par["betadisp"]
-  switch(faminfo$family,
+  switch(
+    faminfo$family,
     gaussian = exp(0.5 * betad),
     Gamma = exp(-0.5 * betad),
     exp(betad)

@@ -152,7 +152,8 @@ check_singularity.merMod <- function(x, tolerance = 1e-5, check = "model", ...) 
     FUN.VALUE = logical(1)
   )
 
-  switch(check,
+  switch(
+    check,
     model = any(unlist(result, use.names = FALSE)),
     insight::compact_list(result)
   )
@@ -185,7 +186,8 @@ check_singularity.glmmTMB <- function(x, tolerance = 1e-5, check = "model", ...)
     names(result[[component]]) <- re_names
   }
 
-  switch(check,
+  switch(
+    check,
     model = any(unlist(result, use.names = FALSE)),
     insight::compact_list(result)
   )

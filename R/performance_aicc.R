@@ -88,7 +88,9 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
 
   # check ML estimator
   REML <- identical(estimator, "REML")
-  if (isTRUE(list(...)$REML)) REML <- TRUE
+  if (isTRUE(list(...)$REML)) {
+    REML <- TRUE
+  }
 
   # special handling for tweedie
   if (info$family == "Tweedie") {
@@ -97,7 +99,12 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
   } else {
     # all other models...
     aic <- .safe(
-      stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose))
+      stats::AIC(insight::get_loglikelihood(
+        x,
+        check_response = TRUE,
+        REML = REML,
+        verbose = verbose
+      ))
     )
     # when `get_loglikelihood()` does not work, `stats::AIC` sometimes still works (e.g., `fixest`)
     if (is.null(aic)) {
@@ -110,25 +117,32 @@ performance_aic.default <- function(x, estimator = "ML", verbose = TRUE, ...) {
 
 # mixed models ------------------------------------
 
-
 #' @rdname performance_aicc
 #' @export
 performance_aic.lmerMod <- function(x, estimator = "REML", verbose = TRUE, ...) {
   REML <- identical(estimator, "REML")
-  if (isFALSE(list(...)$REML)) REML <- FALSE
+  if (isFALSE(list(...)$REML)) {
+    REML <- FALSE
+  }
 
   if (isFALSE(as.logical(x@devcomp$dims[["REML"]])) && isTRUE(REML) && verbose) {
-    insight::format_alert("Model was not fitted with REML, however, `estimator = \"REML\"`. Set `estimator = \"ML\"` to obtain identical results as from `AIC()`.") # nolint
+    insight::format_alert(
+      "Model was not fitted with REML, however, `estimator = \"REML\"`. Set `estimator = \"ML\"` to obtain identical results as from `AIC()`."
+    ) # nolint
   }
 
   .safe(
-    stats::AIC(insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = verbose))
+    stats::AIC(insight::get_loglikelihood(
+      x,
+      check_response = TRUE,
+      REML = REML,
+      verbose = verbose
+    ))
   )
 }
 
 
 # VGAM models ------------------------------------
-
 
 #' @export
 performance_aic.vgam <- function(x, ...) {
@@ -162,22 +176,22 @@ performance_aic.logitor <- function(x, ...) {
 # styler: off
 
 #' @export
-performance_aic.logitmfx   <- performance_aic.logitor
+performance_aic.logitmfx <- performance_aic.logitor
 
 #' @export
-performance_aic.probitmfx  <- performance_aic.logitor
+performance_aic.probitmfx <- performance_aic.logitor
 
 #' @export
-performance_aic.negbinirr  <- performance_aic.logitor
+performance_aic.negbinirr <- performance_aic.logitor
 
 #' @export
-performance_aic.negbinmfx  <- performance_aic.logitor
+performance_aic.negbinmfx <- performance_aic.logitor
 
 #' @export
-performance_aic.betaor     <- performance_aic.logitor
+performance_aic.betaor <- performance_aic.logitor
 
 #' @export
-performance_aic.betamfx    <- performance_aic.logitor
+performance_aic.betamfx <- performance_aic.logitor
 
 #' @export
 performance_aic.poissonirr <- performance_aic.logitor
@@ -201,12 +215,13 @@ performance_aic.bayesx <- function(x, ...) {
 
 #' @export
 AIC.bife <- function(object, ..., k = 2) {
-  -2 * as.numeric(insight::get_loglikelihood(object)) + k * insight::get_df(object, type = "model")
+  -2 *
+    as.numeric(insight::get_loglikelihood(object)) +
+    k * insight::get_df(object, type = "model")
 }
 
 
 # AICc ------------------------------------------
-
 
 #' @export
 performance_aicc.default <- function(x, estimator = "ML", ...) {
@@ -214,7 +229,9 @@ performance_aicc.default <- function(x, estimator = "ML", ...) {
 
   # check ML estimator
   REML <- identical(estimator, "REML")
-  if (isTRUE(list(...)$REML)) REML <- TRUE
+  if (isTRUE(list(...)$REML)) {
+    REML <- TRUE
+  }
 
   n <- suppressWarnings(insight::n_obs(x))
   ll <- insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = TRUE)
@@ -227,7 +244,9 @@ performance_aicc.default <- function(x, estimator = "ML", ...) {
 #' @export
 performance_aicc.lmerMod <- function(x, estimator = "REML", ...) {
   REML <- identical(estimator, "REML")
-  if (isFALSE(list(...)$REML)) REML <- FALSE
+  if (isFALSE(list(...)$REML)) {
+    REML <- FALSE
+  }
 
   n <- suppressWarnings(insight::n_obs(x))
   ll <- insight::get_loglikelihood(x, check_response = TRUE, REML = REML, verbose = TRUE)
@@ -266,11 +285,14 @@ performance_aicc.rma <- function(x, ...) {
 
 # jacobian / derivate for log models and other transformations ----------------
 
-
 # this function adjusts any IC for models with transformed response variables
 .adjust_ic_jacobian <- function(model, ic) {
   response_transform <- insight::find_transformation(model)
-  if (!is.null(ic) && !is.null(response_transform) && !identical(response_transform, "identity")) {
+  if (
+    !is.null(ic) &&
+      !is.null(response_transform) &&
+      !identical(response_transform, "identity")
+  ) {
     adjustment <- .safe(insight::get_loglikelihood_adjustment(
       model,
       insight::get_weights(model, remove_na = TRUE)
