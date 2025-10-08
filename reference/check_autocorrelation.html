@@ -9,7 +9,7 @@ of error terms."><meta property="og:image" content="https://easystats.github.io/
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.2.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,10 @@ of error terms.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">check_autocorrelation</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">check_autocorrelation</span><span class="op">(</span><span class="va">x</span>, nsim <span class="op">=</span> <span class="fl">1000</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">check_autocorrelation</span><span class="op">(</span><span class="va">x</span>, nsim <span class="op">=</span> <span class="fl">1000</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'performance_simres'</span></span>
+<span><span class="fu">check_autocorrelation</span><span class="op">(</span><span class="va">x</span>, time <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,15 +77,21 @@ of error terms.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A model object.</p></dd>
+<dd><p>A model object, or an object returned by <code><a href="simulate_residuals.html">simulate_residuals()</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Currently not used.</p></dd>
+<dd><p>Currently not used for models. For simulated residuals, arguments are
+passed to <code><a href="https://rdrr.io/pkg/DHARMa/man/testTemporalAutocorrelation.html" class="external-link">DHARMa::testTemporalAutocorrelation()</a></code>.</p></dd>
 
 
 <dt id="arg-nsim">nsim<a class="anchor" aria-label="anchor" href="#arg-nsim"></a></dt>
 <dd><p>Number of simulations for the Durbin-Watson-Test.</p></dd>
+
+
+<dt id="arg-time">time<a class="anchor" aria-label="anchor" href="#arg-time"></a></dt>
+<dd><p>A vector with time values to specify the temporal order of the data.
+Only used if <code>x</code> is an object returned by <code><a href="simulate_residuals.html">simulate_residuals()</a></code> or by <code>DHARMa</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
