@@ -14,7 +14,9 @@ test_that("check_autocorrelation works with simulated residuals", {
 
   # Check autocorrelation
   set.seed(123)
-  out <- check_autocorrelation(simres)
+  expect_warning({
+    out <- check_autocorrelation(simres)
+  })
 
   # Should return a p-value
   expect_type(out, "double")
