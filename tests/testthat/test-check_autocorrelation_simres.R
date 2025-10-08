@@ -35,13 +35,15 @@ test_that("check_autocorrelation.DHARMa works", {
   set.seed(123)
   simres <- DHARMa::simulateResiduals(m, plot = FALSE)
 
+  expect_warning(check_autocorrelation(simres), regex = "Data are assumed")
   set.seed(123)
-  out <- check_autocorrelation(simres)
+  expect_silent({
+    out <- check_autocorrelation(simres, time = seq_along(simres$scaledResiduals))
+  })
 
   # Should return a p-value
   expect_type(out, "double")
   expect_s3_class(out, "check_autocorrelation")
 
-  # P-value should be between 0 and 1
-  expect_true(out >= 0 && out <= 1)
+  expect_equal(as.vector(out), 0.4163168, tolerance = 1e-3, ignore_attr = TRUE)
 })
