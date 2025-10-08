@@ -1,3 +1,35 @@
+#' @rdname display.performance_model
+#' @export
+print.performance_model <- function(x, digits = 3, layout = "horizontal", ...) {
+  layout <- insight::validate_argument(
+    layout,
+    c("horizontal", "vertical")
+  )
+  formatted_table <- format(x = x, digits = digits, format = "text", ...)
+
+  # switch to vertical layout
+  if (layout == "vertical") {
+    formatted_table <- datawizard::rownames_as_column(
+      as.data.frame(t(formatted_table)),
+      "Metric"
+    )
+    colnames(formatted_table)[2] <- "Value"
+  }
+
+  cat(
+    insight::export_table(
+      x = formatted_table,
+      digits = digits,
+      format = "text",
+      caption = c("# Indices of model performance", "blue"),
+      ...
+    )
+  )
+
+  invisible(x)
+}
+
+
 #' @export
 print.r2_generic <- function(x, digits = 3, ...) {
   model_type <- attr(x, "model_type")

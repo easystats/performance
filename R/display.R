@@ -13,7 +13,10 @@
 #' @param layout Table layout (can be either `"horizontal"` or `"vertical"`).
 #' @param digits Number of decimal places.
 #' @param caption Table caption as string. If `NULL`, no table caption is printed.
-#' @param ... Currently not used.
+#' @param ... Arguments passed to other methods, e.g. `format()` (and thereby to
+#' [`insight::format_table()`] or [`insight::export_table()`]. See related
+#' documentation for details on available arguments. For example, to control
+#' digits for information criteria like AIC or BIC, use `ic_digits = <value>`.
 #'
 #' @section Global Options to Customize Output when Printing:
 #'
@@ -35,6 +38,7 @@
 #' model <- lm(mpg ~ wt + cyl, data = mtcars)
 #' mp <- model_performance(model)
 #' display(mp)
+#' display(mp, digits = 3, ic_digits = 4)
 #' @export
 display.performance_model <- function(
   object,
