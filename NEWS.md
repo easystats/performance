@@ -1,3 +1,9 @@
+# performance (devel)
+
+## Changes
+
+* Improved documentation for printing-methods.
+
 # performance 0.15.2
 
 ## Bug fixes
