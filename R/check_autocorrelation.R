@@ -56,14 +56,22 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
 }
 
 
+#' @rdname check_autocorrelation
 #' @export
-check_autocorrelation.performance_simres <- function(x, ...) {
+check_autocorrelation.performance_simres <- function(x, time = NULL, ...) {
   insight::check_if_installed("DHARMa")
+
+  if (is.null(time)) {
+    insight::format_warning(
+      "Data are assumed to be ordered by time. If this is not the case, please provide a `time` argument."
+    )
+    time <- seq_along(x$scaledResiduals)
+  }
 
   # Use DHARMa's temporal autocorrelation test
   # This requires the residuals to be ordered by time
   # DHARMa::testTemporalAutocorrelation expects a DHARMa object
-  result <- DHARMa::testTemporalAutocorrelation(x, plot = FALSE, ...)
+  result <- DHARMa::testTemporalAutocorrelation(x, time = time, plot = FALSE, ...)
 
   # Extract p-value from the result
   p.val <- result$p.value
