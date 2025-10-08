@@ -196,17 +196,12 @@ test_that("check_collinearity, ci = NULL", {
   m <- lm(yield ~ N + P + K, npk)
   out <- check_collinearity(m, ci = NULL)
 
+  # fmt: skip
   expect_identical(
     colnames(out),
     c(
-      "Term",
-      "VIF",
-      "VIF_CI_low",
-      "VIF_CI_high",
-      "SE_factor",
-      "Tolerance",
-      "Tolerance_CI_low",
-      "Tolerance_CI_high"
+      "Term", "VIF", "VIF_CI_low", "VIF_CI_high", "SE_factor", "Tolerance",
+      "Tolerance_CI_low", "Tolerance_CI_high"
     )
   )
   expect_snapshot(out)
@@ -218,17 +213,12 @@ test_that("check_collinearity, ci are NA", {
   i <- fixest::i
   m_vif <- fixest::feols(mpg ~ disp + hp + wt + i(cyl) | carb, data = mtcars)
   out <- suppressWarnings(check_collinearity(m_vif))
+  # fmt: skip
   expect_identical(
     colnames(out),
     c(
-      "Term",
-      "VIF",
-      "VIF_CI_low",
-      "VIF_CI_high",
-      "SE_factor",
-      "Tolerance",
-      "Tolerance_CI_low",
-      "Tolerance_CI_high"
+      "Term", "VIF", "VIF_CI_low", "VIF_CI_high", "SE_factor", "Tolerance",
+      "Tolerance_CI_low", "Tolerance_CI_high"
     )
   )
 })
@@ -244,18 +234,12 @@ test_that("check_collinearity, hurdle/zi models w/o zi-formula", {
     link = "logit"
   )
   out <- check_collinearity(m)
+  # fmt: skip
   expect_named(
     out,
     c(
-      "Term",
-      "VIF",
-      "VIF_CI_low",
-      "VIF_CI_high",
-      "SE_factor",
-      "Tolerance",
-      "Tolerance_CI_low",
-      "Tolerance_CI_high",
-      "Component"
+      "Term", "VIF", "VIF_CI_low", "VIF_CI_high", "SE_factor", "Tolerance",
+      "Tolerance_CI_low", "Tolerance_CI_high", "Component"
     )
   )
   expect_equal(out$VIF, c(1.05772, 1.05772, 1.06587, 1.06587), tolerance = 1e-4)
