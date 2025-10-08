@@ -22,8 +22,7 @@ test_that("check_autocorrelation works with simulated residuals", {
   expect_type(out, "double")
   expect_s3_class(out, "check_autocorrelation")
 
-  # P-value should be between 0 and 1
-  expect_true(out >= 0 && out <= 1)
+  expect_equal(as.vector(out), 0.2211415, tolerance = 1e-3, ignore_attr = TRUE)
 })
 
 
