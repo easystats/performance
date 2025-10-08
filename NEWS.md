@@ -1,3 +1,8 @@
+# performance (devel)
+
+* `check_autocorrelation()` gets methods for `DHARMa` objects and objects from
+  `simulate_residuals()`.
+
 # performance 0.15.2
 
 ## Bug fixes
