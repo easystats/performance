@@ -3,20 +3,25 @@
 \name{check_autocorrelation}
 \alias{check_autocorrelation}
 \alias{check_autocorrelation.default}
+\alias{check_autocorrelation.performance_simres}
 \title{Check model for independence of residuals.}
 \usage{
 check_autocorrelation(x, ...)
 
 \method{check_autocorrelation}{default}(x, nsim = 1000, ...)
+
+\method{check_autocorrelation}{performance_simres}(x, time = NULL, ...)
 }
 \arguments{
 \item{x}{A model object, or an object returned by \code{simulate_residuals()}.}
 
 \item{...}{Currently not used for models. For simulated residuals, arguments are
-passed to \code{DHARMa::testTemporalAutocorrelation()}, which can include \code{time} (a
-vector with time values) to specify the temporal order of the data.}
+passed to \code{DHARMa::testTemporalAutocorrelation()}.}
 
 \item{nsim}{Number of simulations for the Durbin-Watson-Test.}
+
+\item{time}{A vector with time values to specify the temporal order of the data.
+Only used if \code{x} is an object returned by \code{simulate_residuals()} or by \code{DHARMa}.}
 }
 \value{
 Invisibly returns the p-value of the test statistics. A p-value < 0.05

@@ -6,9 +6,10 @@
 #'
 #' @param x A model object, or an object returned by `simulate_residuals()`.
 #' @param nsim Number of simulations for the Durbin-Watson-Test.
+#' @param time A vector with time values to specify the temporal order of the data.
+#' Only used if `x` is an object returned by `simulate_residuals()` or by `DHARMa`.
 #' @param ... Currently not used for models. For simulated residuals, arguments are
-#' passed to `DHARMa::testTemporalAutocorrelation()`, which can include `time` (a
-#' vector with time values) to specify the temporal order of the data.
+#' passed to `DHARMa::testTemporalAutocorrelation()`.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates autocorrelated residuals.
