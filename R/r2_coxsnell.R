@@ -39,7 +39,6 @@ r2_coxsnell <- function(model, ...) {
 
 # helper ---------------------------
 
-
 .r2_coxsnell <- function(model, l_base) {
   l_full <- insight::get_loglikelihood(model)
   G2 <- -2 * (l_base - l_full)
@@ -61,7 +60,6 @@ r2_coxsnell <- function(model, ...) {
 
 # r2-coxsnell based on model information ---------------------------
 
-
 #' @export
 r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   info <- list(...)$model_info
@@ -71,16 +69,25 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   matrix_response <- grepl("cbind", insight::find_response(model), fixed = TRUE)
 
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
-  if (info$is_binomial && !info$is_betabinomial && !info$is_bernoulli && class(model)[1] %in% c("glm", "glmmTMB")) {
+  if (
+    info$is_binomial &&
+      !info$is_betabinomial &&
+      !info$is_bernoulli &&
+      class(model)[1] %in% c("glm", "glmmTMB")
+  ) {
     if (verbose) {
-      insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_alert(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
   # currently, beta-binomial models without proportion response are not supported
   if (info$is_betabinomial && matrix_response) {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for beta-binomial models with matrix-response formulation.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for beta-binomial models with matrix-response formulation."
+      )
     }
     return(NULL)
   }
@@ -88,7 +95,10 @@ r2_coxsnell.glm <- function(model, verbose = TRUE, ...) {
   if (is.null(model$deviance)) {
     return(NULL)
   }
-  r2_coxsnell <- (1 - exp((model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)))
+  r2_coxsnell <- (1 -
+    exp(
+      (model$deviance - model$null.deviance) / insight::n_obs(model, disaggregate = TRUE)
+    ))
   names(r2_coxsnell) <- "Cox & Snell's R2"
   r2_coxsnell
 }
@@ -106,7 +116,9 @@ r2_coxsnell.glmmTMB <- function(model, verbose = TRUE, ...) {
   # Cox & Snell's R2 is not defined for binomial models that are not Bernoulli models
   if (info$is_binomial && !info$is_bernoulli && !info$is_betabinomial) {
     if (verbose) {
-      insight::format_alert("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_alert(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
@@ -169,7 +181,6 @@ r2_coxsnell.bife <- function(model, ...) {
 
 # mfx models ---------------------
 
-
 #' @export
 r2_coxsnell.logitmfx <- function(model, ...) {
   r2_coxsnell(model$fit, ...)
@@ -196,7 +207,6 @@ r2_coxsnell.negbinmfx <- r2_coxsnell.logitmfx
 
 # r2-coxsnell based on loglik stored in model object ---------------------------
 
-
 #' @export
 r2_coxsnell.coxph <- function(model, ...) {
   l_base <- model$loglik[1]
@@ -214,7 +224,6 @@ r2_coxsnell.svycoxph <- function(model, ...) {
 
 
 # r2-coxsnell based on loglik of null-model (update) ---------------------------
-
 
 #' @export
 r2_coxsnell.multinom <- function(model, ...) {

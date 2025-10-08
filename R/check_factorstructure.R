@@ -95,7 +95,12 @@ check_factorstructure <- function(x, n = NULL, ...) {
   kmo <- check_kmo(x, n, ...)
   sphericity <- check_sphericity_bartlett(x, n, ...)
 
-  res_text <- paste0("\n  - Sphericity: ", attributes(sphericity)$text, "\n  - KMO: ", attributes(kmo)$text)
+  res_text <- paste0(
+    "\n  - Sphericity: ",
+    attributes(sphericity)$text,
+    "\n  - KMO: ",
+    attributes(kmo)$text
+  )
 
   if (attributes(kmo)$color == "red" || attributes(sphericity)$color == "red") {
     color <- "red"

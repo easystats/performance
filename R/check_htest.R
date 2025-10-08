@@ -8,9 +8,10 @@ check_normality.htest <- function(x, ...) {
   }
   method <- x[["method"]]
 
-
-  if (grepl("Welch", method, fixed = TRUE) ||
-    grepl("F test to compare two variances", method, fixed = TRUE)) {
+  if (
+    grepl("Welch", method, fixed = TRUE) ||
+      grepl("F test to compare two variances", method, fixed = TRUE)
+  ) {
     # sanity check
     if (!is.numeric(model_data[[2]])) {
       insight::format_error(
@@ -44,7 +45,13 @@ check_normality.htest <- function(x, ...) {
     m <- stats::lm(d ~ 1)
 
     out <- check_normality(m)
-  } else if (grepl("One-way analysis of means (not assuming equal variances)", method, fixed = TRUE)) {
+  } else if (
+    grepl(
+      "One-way analysis of means (not assuming equal variances)",
+      method,
+      fixed = TRUE
+    )
+  ) {
     model_data <- split(model_data, model_data[[2]])
     outs <- lapply(model_data, function(d) {
       check_normality(stats::lm(d[[1]] ~ 1))
@@ -61,8 +68,10 @@ check_normality.htest <- function(x, ...) {
     out <- .MVN_hz(model_data)[["p value"]]
     class(out) <- c("check_normality", "see_check_normality", "numeric")
     attr(out, "type") <- "residuals"
-  } else if (grepl("Pearson's Chi-squared test", method, fixed = TRUE) ||
-    grepl("Chi-squared test for given probabilities", method, fixed = TRUE)) {
+  } else if (
+    grepl("Pearson's Chi-squared test", method, fixed = TRUE) ||
+      grepl("Chi-squared test for given probabilities", method, fixed = TRUE)
+  ) {
     out <- c(
       "5" = all(x$expected >= 5),
       "10" = all(x$expected >= 10)
@@ -92,9 +101,13 @@ check_homogeneity.htest <- function(x, ...) {
   }
   method <- x[["method"]]
 
-  if (grepl("(not assuming equal variances)", method, fixed = TRUE) ||
-    grepl("Welch", method, fixed = TRUE)) {
-    insight::format_error("Test does not assume homogeneity. No need to test this assumption.")
+  if (
+    grepl("(not assuming equal variances)", method, fixed = TRUE) ||
+      grepl("Welch", method, fixed = TRUE)
+  ) {
+    insight::format_error(
+      "Test does not assume homogeneity. No need to test this assumption."
+    )
   }
 
   if (grepl("Two Sample t-test", method, fixed = TRUE)) {
@@ -152,23 +165,31 @@ check_symmetry.htest <- function(x, ...) {
 #
 # }
 
-
 # Print -------------------------------------------------------------------
 
 #' @export
 print.check_normality_binom <- function(x, ...) {
   if (x["10"]) {
-    insight::print_color(insight::format_message(
-      "OK: All cells in the expected table have more than 10 observations.\n"
-    ), "green")
+    insight::print_color(
+      insight::format_message(
+        "OK: All cells in the expected table have more than 10 observations.\n"
+      ),
+      "green"
+    )
   } else if (x["5"]) {
-    insight::print_color(insight::format_message(
-      "Warning: All cells in the expected table have more than 5 observations, but some have less than 10.\n"
-    ), "yellow")
+    insight::print_color(
+      insight::format_message(
+        "Warning: All cells in the expected table have more than 5 observations, but some have less than 10.\n"
+      ),
+      "yellow"
+    )
   } else {
-    insight::print_color(insight::format_message(
-      "Warning: Some cells in the expected table have less than 5 observations.\n"
-    ), "red")
+    insight::print_color(
+      insight::format_message(
+        "Warning: Some cells in the expected table have less than 5 observations.\n"
+      ),
+      "red"
+    )
   }
   invisible(x)
 }
@@ -193,17 +214,30 @@ print.check_normality_binom <- function(x, ...) {
   dif <- scale(data, scale = FALSE)
   Dj <- diag(dif %*% solve(S, tol = tol) %*% t(dif))
   Y <- data %*% solve(S, tol = tol) %*% t(data)
-  Djk <- -2 * t(Y) + matrix(diag(t(Y))) %*% matrix(rep(1, n), 1, n) + matrix(rep(1, n), n, 1) %*% diag(t(Y))
+  Djk <- -2 *
+    t(Y) +
+    matrix(diag(t(Y))) %*% matrix(rep(1, n), 1, n) +
+    matrix(rep(1, n), n, 1) %*% diag(t(Y))
   b <- 1 / (sqrt(2)) * ((2 * p + 1) / 4)^(1 / (p + 4)) * (n^(1 / (p + 4)))
   if (qr(S)$rank == p) {
-    HZ <- n * (1 / (n^2) * sum(sum(exp(-(b^2) / 2 * Djk))) - 2 * ((1 + (b^2))^(-p / 2)) * (1 / n) * (sum(exp(-((b^2) / (2 * (1 + (b^2)))) * Dj))) + ((1 + (2 * (b^2)))^(-p / 2)))
+    HZ <- n *
+      (1 /
+        (n^2) *
+        sum(sum(exp(-(b^2) / 2 * Djk))) -
+        2 *
+          ((1 + (b^2))^(-p / 2)) *
+          (1 / n) *
+          (sum(exp(-((b^2) / (2 * (1 + (b^2)))) * Dj))) +
+        ((1 + (2 * (b^2)))^(-p / 2)))
   } else {
     HZ <- n * 4
   }
   wb <- (1 + b^2) * (1 + 3 * b^2)
   a <- 1 + 2 * b^2
   mu <- 1 - a^(-p / 2) * (1 + p * b^2 / a + (p * (p + 2) * (b^4)) / (2 * a^2))
-  si2 <- 2 * (1 + 4 * b^2)^(-p / 2) + 2 * a^(-p) * (1 + (2 * p * b^4) / a^2 + (3 * p * (p + 2) * b^8) / (4 * a^4)) -
+  si2 <- 2 *
+    (1 + 4 * b^2)^(-p / 2) +
+    2 * a^(-p) * (1 + (2 * p * b^4) / a^2 + (3 * p * (p + 2) * b^8) / (4 * a^4)) -
     4 * wb^(-p / 2) * (1 + (3 * p * b^4) / (2 * wb) + (p * (p + 2) * b^8) / (2 * wb^2))
   pmu <- log(sqrt(mu^4 / (si2 + mu^2)))
   psi <- sqrt(log((si2 + mu^2) / mu^2))

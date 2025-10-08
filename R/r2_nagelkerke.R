@@ -24,7 +24,6 @@ r2_nagelkerke <- function(model, ...) {
 
 # helper ---------------------------
 
-
 .r2_nagelkerke <- function(model, l_base) {
   L.full <- insight::get_loglikelihood(model)
   D.full <- -2 * L.full
@@ -56,7 +55,9 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
 
   if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
@@ -67,7 +68,8 @@ r2_nagelkerke.glm <- function(model, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  r2_nagelkerke <- r2cox / (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
+  r2_nagelkerke <- r2cox /
+    (1 - exp(-model$null.deviance / insight::n_obs(model, disaggregate = TRUE)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
@@ -85,7 +87,9 @@ r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
 
   if (info$is_binomial && !info$is_bernoulli) {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     return(NULL)
   }
@@ -105,7 +109,8 @@ r2_nagelkerke.glmmTMB <- function(model, verbose = TRUE, ...) {
     return(NULL)
   }
 
-  r2_nagelkerke <- r2cox / (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
+  r2_nagelkerke <- r2cox /
+    (1 - exp(-null_dev / insight::n_obs(model, disaggregate = TRUE)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
@@ -121,7 +126,8 @@ r2_nagelkerke.nestedLogit <- function(model, ...) {
       if (is.null(m$deviance)) {
         return(NA)
       }
-      r2_nagelkerke <- (1 - exp((m$deviance - m$null.deviance) / n[[i]])) / (1 - exp(-m$null.deviance / n[[i]]))
+      r2_nagelkerke <- (1 - exp((m$deviance - m$null.deviance) / n[[i]])) /
+        (1 - exp(-m$null.deviance / n[[i]]))
       names(r2_nagelkerke) <- "Nagelkerke's R2"
       r2_nagelkerke
     }),
@@ -132,14 +138,14 @@ r2_nagelkerke.nestedLogit <- function(model, ...) {
 
 #' @export
 r2_nagelkerke.bife <- function(model, ...) {
-  r2_nagelkerke <- r2_coxsnell(model) / (1 - exp(-model$null_deviance / insight::n_obs(model)))
+  r2_nagelkerke <- r2_coxsnell(model) /
+    (1 - exp(-model$null_deviance / insight::n_obs(model)))
   names(r2_nagelkerke) <- "Nagelkerke's R2"
   r2_nagelkerke
 }
 
 
 # mfx models ---------------------
-
 
 #' @export
 r2_nagelkerke.logitmfx <- function(model, ...) {
@@ -166,7 +172,6 @@ r2_nagelkerke.negbinmfx <- r2_nagelkerke.logitmfx
 
 
 # Nagelkerke's R2 based on LogLik ----------------
-
 
 #' @export
 r2_nagelkerke.multinom <- function(model, ...) {
@@ -219,7 +224,6 @@ r2_nagelkerke.DirichletRegModel <- r2_coxsnell.clm
 
 
 # Nagelkerke's R2 based on LogLik stored in model object ----------------
-
 
 #' @export
 r2_nagelkerke.coxph <- function(model, ...) {

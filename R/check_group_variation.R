@@ -149,10 +149,17 @@ check_group_variation.default <- function(x, ...) {
 
   by <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
   if (is.null(by)) {
-    insight::format_error("Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `by`.")
+    insight::format_error(
+      "Model is no mixed model. Please provide a mixed model, or a data frame and arguments `select` and `by`."
+    )
   }
   my_data <- insight::get_data(x, source = "mf", verbose = FALSE)
-  select <- insight::find_predictors(x, effects = "fixed", component = "conditional", flatten = TRUE)
+  select <- insight::find_predictors(
+    x,
+    effects = "fixed",
+    component = "conditional",
+    flatten = TRUE
+  )
 
   check_group_variation(my_data, select = select, by = by, ...)
 }
@@ -160,14 +167,16 @@ check_group_variation.default <- function(x, ...) {
 
 #' @rdname check_group_variation
 #' @export
-check_group_variation.data.frame <- function(x,
-                                             select = NULL,
-                                             by = NULL,
-                                             include_by = FALSE,
-                                             numeric_as_factor = FALSE,
-                                             tolerance_numeric = 1e-4,
-                                             tolerance_factor = "crossed",
-                                             ...) {
+check_group_variation.data.frame <- function(
+  x,
+  select = NULL,
+  by = NULL,
+  include_by = FALSE,
+  numeric_as_factor = FALSE,
+  tolerance_numeric = 1e-4,
+  tolerance_factor = "crossed",
+  ...
+) {
   if (inherits(select, "formula")) {
     select <- all.vars(select)
   }
@@ -287,7 +296,13 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
 
     result <- split(object$Variable, object$Group)
     if (length(result) > 1L) {
-      txt <- paste0("- ", names(result), ": ", sapply(result, paste0, collapse = ", "), collapse = "\n")
+      txt <- paste0(
+        "- ",
+        names(result),
+        ": ",
+        sapply(result, paste0, collapse = ", "),
+        collapse = "\n"
+      )
     } else {
       txt <- paste0("- ", paste0(result[[1]], collapse = ", "))
     }
@@ -360,7 +375,13 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
 }
 
 #' @keywords internals
-.check_nested.default <- function(data, by, predictor, tolerance_factor = "crossed", ...) {
+.check_nested.default <- function(
+  data,
+  by,
+  predictor,
+  tolerance_factor = "crossed",
+  ...
+) {
   tolerance_factor <- insight::validate_argument(
     tolerance_factor,
     c("crossed", "balanced")
@@ -381,7 +402,8 @@ summary.check_group_variation <- function(object, flatten = FALSE, ...) {
     f1 <- as.factor(variable)
     k <- nlevels(f1)
     sm <- methods::as(
-      methods::new("ngTMatrix",
+      methods::new(
+        "ngTMatrix",
         i = as.integer(group) - 1L,
         j = as.integer(f1) - 1L,
         Dim = c(nlevels(group), k)

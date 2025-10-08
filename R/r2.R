@@ -93,7 +93,10 @@ r2.default <- function(model, ci = NULL, verbose = TRUE, ...) {
   )
 
   if (is.null(out) && isTRUE(verbose)) {
-    insight::print_color(sprintf("`r2()` does not support models of class `%s`.\n", class(model)[1]), "red")
+    insight::print_color(
+      sprintf("`r2()` does not support models of class `%s`.\n", class(model)[1]),
+      "red"
+    )
   }
 
   if (!is.null(out)) {
@@ -210,7 +213,8 @@ r2.cph <- r2.ols
 r2.mhurdle <- function(model, ...) {
   resp <- insight::get_response(model, verbose = FALSE)
   mean_resp <- mean(resp, na.rm = TRUE)
-  ftd <- model$fitted.values[, "pos", drop = TRUE] * (1 - model$fitted.values[, "zero", drop = TRUE])
+  ftd <- model$fitted.values[, "pos", drop = TRUE] *
+    (1 - model$fitted.values[, "zero", drop = TRUE])
   n <- length(resp)
   K <- insight::n_parameters(model)
   Ko <- length(model$naive$coefficients)
@@ -296,7 +300,9 @@ r2.glm <- function(model, ci = NULL, verbose = TRUE, ...) {
     class(out) <- c("r2_pseudo", class(out))
   } else if (info$is_binomial && !info$is_bernoulli && class(model)[1] == "glm") {
     if (verbose) {
-      insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+      insight::format_warning(
+        "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+      )
     }
     out <- NULL
   } else if (info$is_orderedbeta) {
@@ -328,7 +334,6 @@ r2.nestedLogit <- function(model, ci = NULL, verbose = TRUE, ...) {
 
 
 # mfx models ---------------------
-
 
 #' @export
 r2.logitmfx <- function(model, ...) {
@@ -365,7 +370,6 @@ r2.model_fit <- r2.logitmfx
 
 # Cox & Snell R2 ---------------------
 
-
 #' @export
 r2.BBreg <- function(model, ...) {
   out <- list(R2_CoxSnell = r2_coxsnell(model))
@@ -382,7 +386,6 @@ r2.bayesx <- r2.BBreg
 
 
 # Nagelkerke R2 ----------------------
-
 
 #' @export
 r2.censReg <- function(model, ...) {
@@ -438,7 +441,6 @@ r2.mblogit <- function(model, ...) {
 
 # McFadden ----------------------
 
-
 #' @export
 r2.multinom <- function(model, ...) {
   out <- r2_mcfadden(model)
@@ -451,7 +453,6 @@ r2.mlogit <- r2.multinom
 
 
 # Zeroinflated R2 ------------------
-
 
 #' @export
 r2.hurdle <- function(model, ...) {
@@ -466,7 +467,6 @@ r2.zeroinfl <- r2.hurdle
 
 
 # Nakagawa R2 ----------------------
-
 
 #' @rdname r2
 #' @export
@@ -521,7 +521,9 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
       # currently, beta-binomial models without proportion response are not supported
       if (matrix_response) {
         if (verbose) {
-          insight::format_warning("Can't calculate accurate R2 for beta-binomial models with matrix-response formulation.")
+          insight::format_warning(
+            "Can't calculate accurate R2 for beta-binomial models with matrix-response formulation."
+          )
         }
         out <- NULL
       } else {
@@ -531,7 +533,9 @@ r2.glmmTMB <- function(model, ci = NULL, tolerance = 1e-5, verbose = TRUE, ...) 
     } else if (info$is_binomial && !info$is_bernoulli) {
       # currently, non-bernoulli binomial models are not supported
       if (verbose) {
-        insight::format_warning("Can't calculate accurate R2 for binomial models that are not Bernoulli models.")
+        insight::format_warning(
+          "Can't calculate accurate R2 for binomial models that are not Bernoulli models."
+        )
       }
       out <- NULL
     } else if ((info$is_poisson && !info$is_zero_inflated) || info$is_exponential) {
@@ -608,7 +612,6 @@ r2.sem <- function(model, ...) {
 
 # Bayes R2 ------------------------
 
-
 #' @export
 r2.brmsfit <- function(model, ...) {
   r2_bayes(model, ...)
@@ -623,7 +626,6 @@ r2.BFBayesFactor <- r2.brmsfit
 
 
 # Other methods ------------------------------
-
 
 #' @export
 r2.gam <- function(model, ...) {
@@ -682,19 +684,25 @@ r2.fixest <- function(model, ...) {
 
   r2 <- fixest::r2(model)
 
-  out_normal <- insight::compact_list(list(
-    R2 = r2["r2"],
-    R2_adjusted = r2["ar2"],
-    R2_within = r2["wr2"],
-    R2_within_adjusted = r2["war2"]
-  ), remove_na = TRUE)
+  out_normal <- insight::compact_list(
+    list(
+      R2 = r2["r2"],
+      R2_adjusted = r2["ar2"],
+      R2_within = r2["wr2"],
+      R2_within_adjusted = r2["war2"]
+    ),
+    remove_na = TRUE
+  )
 
-  out_pseudo <- insight::compact_list(list(
-    R2 = r2["pr2"],
-    R2_adjusted = r2["apr2"],
-    R2_within = r2["wpr2"],
-    R2_within_adjusted = r2["wapr2"]
-  ), remove_na = TRUE)
+  out_pseudo <- insight::compact_list(
+    list(
+      R2 = r2["pr2"],
+      R2_adjusted = r2["apr2"],
+      R2_within = r2["wpr2"],
+      R2_within_adjusted = r2["wapr2"]
+    ),
+    remove_na = TRUE
+  )
 
   if (length(out_normal)) {
     out <- out_normal
@@ -812,7 +820,9 @@ r2.mmclogit <- function(model, ...) {
 #' @export
 r2.Arima <- function(model, ...) {
   if (requireNamespace("forecast", quietly = TRUE)) {
-    list(R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2)
+    list(
+      R2 = stats::cor(stats::fitted(model), insight::get_data(model, verbose = FALSE))^2
+    )
   } else {
     list(R2 = NA)
   }
@@ -886,11 +896,25 @@ r2.DirichletRegModel <- function(model, ...) {
 
 # helper -------------------
 
-.check_r2_ci_args <- function(ci = NULL, ci_method = "bootstrap", valid_ci_method = NULL, verbose = TRUE) {
-  if (!is.null(ci) && !is.na(ci) && !is.null(valid_ci_method) && !ci_method %in% valid_ci_method) {
+.check_r2_ci_args <- function(
+  ci = NULL,
+  ci_method = "bootstrap",
+  valid_ci_method = NULL,
+  verbose = TRUE
+) {
+  if (
+    !is.null(ci) &&
+      !is.na(ci) &&
+      !is.null(valid_ci_method) &&
+      !ci_method %in% valid_ci_method
+  ) {
     if (verbose) {
       insight::format_warning(
-        paste0("Method `", ci_method, "` to compute confidence intervals for R2 not supported.")
+        paste0(
+          "Method `",
+          ci_method,
+          "` to compute confidence intervals for R2 not supported."
+        )
       )
     }
     return(NULL)

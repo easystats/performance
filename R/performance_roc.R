@@ -78,11 +78,17 @@ performance_roc <- function(x, ..., predictions, new_data) {
 
   if (is.numeric(x) && !missing(predictions) && !is.null(predictions)) {
     .performance_roc_numeric(x, predictions)
-  } else if (inherits(x, c("logitor", "logitmfx", "probitmfx", "model_fit")) && length(dots) == 0) {
-    if (missing(new_data)) new_data <- NULL
+  } else if (
+    inherits(x, c("logitor", "logitmfx", "probitmfx", "model_fit")) && length(dots) == 0
+  ) {
+    if (missing(new_data)) {
+      new_data <- NULL
+    }
     .performance_roc_model(x$fit, new_data)
   } else if (info$is_binomial && length(dots) == 0) {
-    if (missing(new_data)) new_data <- NULL
+    if (missing(new_data)) {
+      new_data <- NULL
+    }
     .performance_roc_model(x, new_data)
   } else if (length(dots) > 0) {
     .performance_roc_models(list(x, ...), names = object_names)
@@ -102,7 +108,10 @@ plot.performance_roc <- function(x, ...) {
 #' @export
 print.performance_roc <- function(x, ...) {
   if (length(unique(x$Model)) == 1) {
-    cat(sprintf("AUC: %.2f%%\n", 100 * bayestestR::area_under_curve(x$Specificity, x$Sensitivity)))
+    cat(sprintf(
+      "AUC: %.2f%%\n",
+      100 * bayestestR::area_under_curve(x$Specificity, x$Sensitivity)
+    ))
   } else {
     insight::print_color("# Area under Curve\n\n", "blue")
 
@@ -160,7 +169,9 @@ as.double.performance_roc <- function(x, ...) {
 
 .performance_roc_model <- function(x, new_data, model_name = "Model 1") {
   predictions <- stats::predict(x, newdata = new_data, type = "response")
-  if (is.null(new_data)) new_data <- insight::get_data(x, verbose = FALSE)
+  if (is.null(new_data)) {
+    new_data <- insight::get_data(x, verbose = FALSE)
+  }
   response <- new_data[[insight::find_response(x)]]
 
   if ((is.data.frame(response) || is.matrix(response)) && ncol(response) > 1) {

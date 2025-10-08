@@ -7,8 +7,6 @@ library(r2mlm)
 source("r2mlm_utils.R")
 
 
-
-
 r2mlm_init <- function(model) {
   # Step 1) check if model has_intercept
   has_intercept <- insight::has_intercept(model)
@@ -31,7 +29,6 @@ r2mlm_init <- function(model) {
   }
   data <- dplyr::group_by(modelframe, modelframe[cluster_variable])
 
-
   # Step 3b) determine whether data is appropriate format. Only the cluster variable can be a factor, for now
   # a) Pull all variables except for cluster
 
@@ -40,7 +37,9 @@ r2mlm_init <- function(model) {
   # b) If any of those variables is non-numeric, then throw an error
 
   for (variable in outcome_and_predictors) {
-    if (!(class(data[[variable]]) == "integer") && !(class(data[[variable]]) == "numeric")) {
+    if (
+      !(class(data[[variable]]) == "integer") && !(class(data[[variable]]) == "numeric")
+    ) {
       stop("Your data must be numeric. Only the cluster variable can be a factor.")
     }
   }
@@ -56,7 +55,10 @@ r2mlm_init <- function(model) {
   if (length(outcome_and_predictors) == 1) {
     predictors <- insight::find_interactions(model, flatten = TRUE)
   } else {
-    predictors <- append(outcome_and_predictors[2:length(outcome_and_predictors)], insight::find_interactions(model, flatten = TRUE))
+    predictors <- append(
+      outcome_and_predictors[2:length(outcome_and_predictors)],
+      insight::find_interactions(model, flatten = TRUE)
+    )
   }
 
   # * Step 4b) Create and fill vectors
@@ -101,7 +103,7 @@ r2mlm_init <- function(model) {
 
   # 8b) gamma_b, intercept value if hasintercept = TRUE, and fixed slopes for L2 variables (from between list)
   gammab <- c()
-  if (has_intercept ) {
+  if (has_intercept) {
     gammab[1] <- fixef(model)[1]
     i <- 2
   } else {

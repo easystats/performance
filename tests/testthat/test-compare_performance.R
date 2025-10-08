@@ -7,13 +7,39 @@ test_that("compare_performance", {
 
   expect_silent(expect_identical(
     colnames(compare_performance(lm1, lm2, lm3)),
-    c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+    c(
+      "Name",
+      "Model",
+      "AIC",
+      "AIC_wt",
+      "AICc",
+      "AICc_wt",
+      "BIC",
+      "BIC_wt",
+      "R2",
+      "R2_adjusted",
+      "RMSE",
+      "Sigma"
+    )
   ))
 
   expect_message(
     expect_identical(
       colnames(compare_performance(lm1, lm2, lm3, lm4)),
-      c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+      c(
+        "Name",
+        "Model",
+        "AIC",
+        "AIC_wt",
+        "AICc",
+        "AICc_wt",
+        "BIC",
+        "BIC_wt",
+        "R2",
+        "R2_adjusted",
+        "RMSE",
+        "Sigma"
+      )
     )
   )
 
@@ -22,11 +48,28 @@ test_that("compare_performance", {
   expect_snapshot(print(compare_performance(lm1, lm2, lm3), table_width = Inf))
   # vertical layout
   expect_snapshot(print(compare_performance(lm1, lm2, lm3), layout = "vertical"))
-  expect_snapshot(print(compare_performance(lm1, lm2, lm3, lm4), layout = "vertical", table_width = 50))
+  expect_snapshot(print(
+    compare_performance(lm1, lm2, lm3, lm4),
+    layout = "vertical",
+    table_width = 50
+  ))
 
   expect_silent(expect_identical(
     colnames(compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)),
-    c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+    c(
+      "Name",
+      "Model",
+      "AIC",
+      "AIC_wt",
+      "AICc",
+      "AICc_wt",
+      "BIC",
+      "BIC_wt",
+      "R2",
+      "R2_adjusted",
+      "RMSE",
+      "Sigma"
+    )
   ))
 
   out <- compare_performance(lm1, lm2, lm3, lm4, verbose = FALSE)
@@ -34,12 +77,29 @@ test_that("compare_performance", {
 
   models <- list(Interaction = lm3, NoInteraction = lm2, SingleTerm = lm1)
   rez <- compare_performance(models)
-  expect_equal(rez$Name, c("Interaction", "NoInteraction", "SingleTerm"), ignore_attr = TRUE)
+  expect_equal(
+    rez$Name,
+    c("Interaction", "NoInteraction", "SingleTerm"),
+    ignore_attr = TRUE
+  )
 
   out <- compare_performance(list(lm1, lm2, lm3, lm4), verbose = FALSE)
   expect_identical(
     colnames(out),
-    c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+    c(
+      "Name",
+      "Model",
+      "AIC",
+      "AIC_wt",
+      "AICc",
+      "AICc_wt",
+      "BIC",
+      "BIC_wt",
+      "R2",
+      "R2_adjusted",
+      "RMSE",
+      "Sigma"
+    )
   )
   expect_identical(out$Name, c("Model 1", "Model 2", "Model 3", "Model 4"))
 
@@ -47,7 +107,20 @@ test_that("compare_performance", {
   out <- compare_performance(models, verbose = FALSE)
   expect_identical(
     colnames(out),
-    c("Name", "Model", "AIC", "AIC_wt", "AICc", "AICc_wt", "BIC", "BIC_wt", "R2", "R2_adjusted", "RMSE", "Sigma")
+    c(
+      "Name",
+      "Model",
+      "AIC",
+      "AIC_wt",
+      "AICc",
+      "AICc_wt",
+      "BIC",
+      "BIC_wt",
+      "R2",
+      "R2_adjusted",
+      "RMSE",
+      "Sigma"
+    )
   )
   expect_identical(out$Name, c("Model 1", "Model 2", "Model 3", "Model 4"))
 

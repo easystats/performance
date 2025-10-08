@@ -45,7 +45,18 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
   # all available options...
-  all_metrics <- c("AIC", "AICc", "BIC", "R2", "R2_adj", "RMSE", "SIGMA", "LOGLOSS", "PCP", "SCORE")
+  all_metrics <- c(
+    "AIC",
+    "AICc",
+    "BIC",
+    "R2",
+    "R2_adj",
+    "RMSE",
+    "SIGMA",
+    "LOGLOSS",
+    "PCP",
+    "SCORE"
+  )
 
   if (all(metrics == "all")) {
     metrics <- all_metrics
@@ -57,7 +68,6 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   if (verbose) {
     insight::formula_ok(model)
   }
-
 
   metrics <- .check_bad_metrics(metrics, all_metrics, verbose)
   info <- suppressWarnings(insight::model_info(model, verbose = FALSE))
@@ -105,7 +115,12 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
       if ("R2_within_adjusted" %in% names(R2)) {
         out$R2_within_adjusted <- R2$R2_within_adjusted
       }
-      if (!any(c("R2", "R2_adj", "R2_adjusted", "R2_within", "R2_within_adjusted") %in% names(R2))) {
+      if (
+        !any(
+          c("R2", "R2_adj", "R2_adjusted", "R2_within", "R2_within_adjusted") %in%
+            names(R2)
+        )
+      ) {
         out <- c(out, R2)
       }
     }
@@ -134,29 +149,40 @@ model_performance.lm <- function(model, metrics = "all", verbose = TRUE, ...) {
   }
 
   # SCORE -------------
-  if (("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))) {
+  if (
+    ("SCORE" %in% toupper(metrics)) && (isTRUE(info$is_binomial) || isTRUE(info$is_count))
+  ) {
     .scoring_rules <- .safe(performance_score(model, verbose = verbose))
     if (!is.null(.scoring_rules)) {
-      if (!is.na(.scoring_rules$logarithmic)) out$Score_log <- .scoring_rules$logarithmic
-      if (!is.na(.scoring_rules$spherical)) out$Score_spherical <- .scoring_rules$spherical
+      if (!is.na(.scoring_rules$logarithmic)) {
+        out$Score_log <- .scoring_rules$logarithmic
+      }
+      if (!is.na(.scoring_rules$spherical)) {
+        out$Score_spherical <- .scoring_rules$spherical
+      }
     }
   }
 
   # PCP -------------
-  if (("PCP" %in% toupper(metrics)) &&
-    isTRUE(info$is_binomial) &&
-    isFALSE(info$is_multinomial) &&
-    isFALSE(info$is_ordinal)) {
+  if (
+    ("PCP" %in% toupper(metrics)) &&
+      isTRUE(info$is_binomial) &&
+      isFALSE(info$is_multinomial) &&
+      isFALSE(info$is_ordinal)
+  ) {
     out$PCP <- .safe(performance_pcp(model, verbose = verbose)$pcp_model)
   }
-
 
   out <- as.data.frame(insight::compact_list(out, remove_na = TRUE), check.names = FALSE)
 
   # check if model was actually supported...
   if (nrow(out) == 0 || ncol(out) == 0) {
     if (isTRUE(verbose)) {
-      insight::format_warning(paste0("Models of class `", class(model)[1], "` are not yet supported."))
+      insight::format_warning(paste0(
+        "Models of class `",
+        class(model)[1],
+        "` are not yet supported."
+      ))
     }
     return(NULL)
   }
@@ -267,7 +293,13 @@ model_performance.zerotrunc <- model_performance.lm
 
 #' @export
 model_performance.nestedLogit <- function(model, metrics = "all", verbose = TRUE, ...) {
-  mp <- lapply(model$models, model_performance.lm, metrics = metrics, verbose = verbose, ...)
+  mp <- lapply(
+    model$models,
+    model_performance.lm,
+    metrics = metrics,
+    verbose = verbose,
+    ...
+  )
   out <- cbind(
     data.frame(Response = names(mp), stringsAsFactors = FALSE),
     do.call(rbind, mp)
@@ -319,7 +351,6 @@ model_performance.model_fit <- model_performance.logitor
 
 
 # other models -------------------------------
-
 
 #' @export
 model_performance.mlogit <- function(model, metrics = "all", verbose = TRUE, ...) {

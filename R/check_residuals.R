@@ -57,12 +57,18 @@ check_residuals <- function(x, ...) {
 
 #' @rdname check_residuals
 #' @export
-check_residuals.default <- function(x, alternative = "two.sided",
-                                    distribution = "punif", ...) {
+check_residuals.default <- function(
+  x,
+  alternative = "two.sided",
+  distribution = "punif",
+  ...
+) {
   if (insight::is_model(x)) {
     check_residuals(simulate_residuals(x, ...), alternative = alternative)
   } else {
-    insight::format_error("`check_residuals()` only works with objects supported by `simulate_residuals()` or `DHARMa::simulateResiduals()`.") # nolint
+    insight::format_error(
+      "`check_residuals()` only works with objects supported by `simulate_residuals()` or `DHARMa::simulateResiduals()`."
+    ) # nolint
   }
 }
 
@@ -89,8 +95,12 @@ check_residuals.item_omega <- function(x, ...) {
 
 
 #' @export
-check_residuals.performance_simres <- function(x, alternative = "two.sided",
-                                               distribution = "punif", ...) {
+check_residuals.performance_simres <- function(
+  x,
+  alternative = "two.sided",
+  distribution = "punif",
+  ...
+) {
   alternative <- insight::validate_argument(
     alternative,
     c("two.sided", "less", "greater")
@@ -126,14 +136,16 @@ print.check_residuals <- function(x, ...) {
   if (x < 0.05) {
     insight::print_color(
       sprintf(
-        "Warning: Non-uniformity of simulated residuals detected (%s).\n", pstring
+        "Warning: Non-uniformity of simulated residuals detected (%s).\n",
+        pstring
       ),
       "red"
     )
   } else {
     insight::print_color(
       sprintf(
-        "OK: Simulated residuals appear as uniformly distributed (%s).\n", pstring
+        "OK: Simulated residuals appear as uniformly distributed (%s).\n",
+        pstring
       ),
       "green"
     )

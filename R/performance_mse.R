@@ -52,7 +52,9 @@ performance_mse.default <- function(model, verbose = TRUE, ...) {
   # for multivariate response models...
   if (is.data.frame(res)) {
     if (verbose) {
-      insight::format_warning("Multiple response variables detected. Cannot reliably compute (R)MSE.")
+      insight::format_warning(
+        "Multiple response variables detected. Cannot reliably compute (R)MSE."
+      )
     }
     return(NA)
   }

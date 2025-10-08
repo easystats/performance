@@ -84,15 +84,26 @@
 #' compare_performance(m1, m2, m3)
 #' @inheritParams model_performance.lm
 #' @export
-compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = "ML", verbose = TRUE) {
+compare_performance <- function(
+  ...,
+  metrics = "all",
+  rank = FALSE,
+  estimator = "ML",
+  verbose = TRUE
+) {
   # process input
   model_objects <- insight::ellipsis_info(..., only_models = TRUE)
 
   # ensure proper object names
-  model_objects <- .check_objectnames(model_objects, sapply(match.call(expand.dots = FALSE)[["..."]], as.character))
+  model_objects <- .check_objectnames(
+    model_objects,
+    sapply(match.call(expand.dots = FALSE)[["..."]], as.character)
+  )
 
   # drop unsupport models
-  supported_models <- sapply(model_objects, function(i) insight::is_model_supported(i) | inherits(i, "lavaan"))
+  supported_models <- sapply(model_objects, function(i) {
+    insight::is_model_supported(i) | inherits(i, "lavaan")
+  })
   object_names <- names(model_objects)
 
   if (!all(supported_models)) {
@@ -105,13 +116,31 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # iterate over all models, i.e. model-performance for each model
-  m <- mapply(function(.x, .y) {
-    dat <- model_performance(.x, metrics = metrics, estimator = estimator, verbose = FALSE)
-    model_name <- gsub("\"", "", insight::safe_deparse(.y), fixed = TRUE)
-    perf_df <- data.frame(Name = model_name, Model = class(.x)[1], dat, stringsAsFactors = FALSE)
-    attributes(perf_df) <- c(attributes(perf_df), attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")])
-    perf_df
-  }, model_objects, object_names, SIMPLIFY = FALSE)
+  m <- mapply(
+    function(.x, .y) {
+      dat <- model_performance(
+        .x,
+        metrics = metrics,
+        estimator = estimator,
+        verbose = FALSE
+      )
+      model_name <- gsub("\"", "", insight::safe_deparse(.y), fixed = TRUE)
+      perf_df <- data.frame(
+        Name = model_name,
+        Model = class(.x)[1],
+        dat,
+        stringsAsFactors = FALSE
+      )
+      attributes(perf_df) <- c(
+        attributes(perf_df),
+        attributes(dat)[!names(attributes(dat)) %in% c("names", "row.names", "class")]
+      )
+      perf_df
+    },
+    model_objects,
+    object_names,
+    SIMPLIFY = FALSE
+  )
 
   attri <- lapply(m, function(x) {
     attri <- attributes(x)
@@ -182,15 +211,17 @@ compare_performance <- function(..., metrics = "all", rank = FALSE, estimator = 
   }
 
   # for REML fits, warn user
-  if (isTRUE(verbose) &&
-    # only warn for REML fit
-    identical(estimator, "REML") &&
-    # only for IC comparison
-    any(grepl("(AIC|BIC)", names(dfs))) &&
-    # only when mixed models are involved, others probably don't have problems with REML fit
-    any(sapply(model_objects, insight::is_mixed_model)) &&
-    # only if not all models have same fixed effects (else, REML is ok)
-    !isTRUE(attributes(model_objects)$same_fixef)) {
+  if (
+    isTRUE(verbose) &&
+      # only warn for REML fit
+      identical(estimator, "REML") &&
+      # only for IC comparison
+      any(grepl("(AIC|BIC)", names(dfs))) &&
+      # only when mixed models are involved, others probably don't have problems with REML fit
+      any(sapply(model_objects, insight::is_mixed_model)) &&
+      # only if not all models have same fixed effects (else, REML is ok)
+      !isTRUE(attributes(model_objects)$same_fixef)
+  ) {
     insight::format_alert(
       "Information criteria (like AIC) are based on REML fits (i.e. `estimator=\"REML\"`).",
       "Please note that information criteria are probably not directly comparable and that it is not recommended comparing models with different fixed effects in such cases."
@@ -212,19 +243,37 @@ print.compare_performance <- function(x, digits = 3, layout = "horizontal", ...)
   formatted_table <- format(x = x, digits = digits, format = "text", ...)
 
   if ("Performance_Score" %in% colnames(formatted_table)) {
-    footer <- c(sprintf("\nModel `%s` (of class `%s`) performed best with an overall performance score of %s.", formatted_table$Model[1], formatted_table$Type[1], formatted_table$Performance_Score[1]), "yellow")
+    footer <- c(
+      sprintf(
+        "\nModel `%s` (of class `%s`) performed best with an overall performance score of %s.",
+        formatted_table$Model[1],
+        formatted_table$Type[1],
+        formatted_table$Performance_Score[1]
+      ),
+      "yellow"
+    )
   } else {
     footer <- NULL
   }
 
   # switch to vertical layout
   if (layout == "vertical") {
-    formatted_table <- datawizard::rownames_as_column(as.data.frame(t(formatted_table)), "Metric")
+    formatted_table <- datawizard::rownames_as_column(
+      as.data.frame(t(formatted_table)),
+      "Metric"
+    )
     formatted_table <- datawizard::row_to_colnames(formatted_table)
     colnames(formatted_table)[1] <- "Metric"
   }
 
-  cat(insight::export_table(x = formatted_table, digits = digits, format = "text", caption = table_caption, footer = footer, ...))
+  cat(insight::export_table(
+    x = formatted_table,
+    digits = digits,
+    format = "text",
+    caption = table_caption,
+    footer = footer,
+    ...
+  ))
   invisible(x)
 }
 
@@ -247,7 +296,9 @@ plot.compare_performance <- function(x, ...) {
   }
 
   # set reference for Bayes factors to 1
-  if ("BF" %in% colnames(x)) x$BF[is.na(x$BF)] <- 1
+  if ("BF" %in% colnames(x)) {
+    x$BF[is.na(x$BF)] <- 1
+  }
 
   # don't include test statistic in ranking
   x$p_CochransQ <- NULL
@@ -276,7 +327,9 @@ plot.compare_performance <- function(x, ...) {
 
   # normalize indices, for comparison
   out[] <- lapply(out, function(i) {
-    if (is.numeric(i)) i <- .normalize_vector(i)
+    if (is.numeric(i)) {
+      i <- .normalize_vector(i)
+    }
     i
   })
 
