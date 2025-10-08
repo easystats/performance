@@ -4,9 +4,12 @@
 #' @description Check model for independence of residuals, i.e. for autocorrelation
 #' of error terms.
 #'
-#' @param x A model object.
+#' @param x A model object, or an object returned by `simulate_residuals()`.
 #' @param nsim Number of simulations for the Durbin-Watson-Test.
-#' @param ... Currently not used.
+#' @param time A vector with time values to specify the temporal order of the data.
+#' Only used if `x` is an object returned by `simulate_residuals()` or by `DHARMa`.
+#' @param ... Currently not used for models. For simulated residuals, arguments are
+#' passed to `DHARMa::testTemporalAutocorrelation()`.
 #'
 #' @return Invisibly returns the p-value of the test statistics. A p-value < 0.05
 #' indicates autocorrelated residuals.
@@ -48,6 +51,32 @@ check_autocorrelation.default <- function(x, nsim = 1000, ...) {
   p.val
 }
 
+#' @rdname check_autocorrelation
+#' @export
+check_autocorrelation.performance_simres <- function(x, time = NULL, ...) {
+  insight::check_if_installed("DHARMa")
+
+  if (is.null(time)) {
+    insight::format_warning(
+      "Data are assumed to be ordered by time. If this is not the case, please provide a `time` argument."
+    )
+    time <- seq_along(x$scaledResiduals)
+  }
+
+  # Use DHARMa's temporal autocorrelation test
+  # This requires the residuals to be ordered by time
+  # DHARMa::testTemporalAutocorrelation expects a DHARMa object
+  result <- DHARMa::testTemporalAutocorrelation(x, time = time, plot = FALSE, ...)
+
+  # Extract p-value from the result
+  p.val <- result$p.value
+
+  class(p.val) <- c("check_autocorrelation", "see_check_autocorrelation", class(p.val))
+  p.val
+}
+
+#' @export
+check_autocorrelation.DHARMa <- check_autocorrelation.performance_simres
 
 # methods ------------------------------
 

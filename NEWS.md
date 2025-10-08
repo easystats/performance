@@ -2,6 +2,9 @@
 
 ## Changes
 
+* `check_autocorrelation()` gets methods for `DHARMa` objects and objects from
+  `simulate_residuals()`.
+
 * Improved documentation for printing-methods.
 
 # performance 0.15.2
