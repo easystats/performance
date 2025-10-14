@@ -165,7 +165,7 @@ Methods. Educational and Psychological Measurement, 79(5), 874–882.
 \item McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 \item Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
-Meta-Psychology, 5. \url{https://doi.org/10.15626/MP.2021.2548}
+Meta-Psychology, 5. \doi{10.15626/MP.2021.2548}
 \item Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 common statistical problems: Data exploration. Methods in Ecology and
 Evolution (2010) 1:3–14.
