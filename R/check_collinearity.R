@@ -123,7 +123,7 @@
 #' - McElreath, R. (2020). Statistical rethinking: A Bayesian course with
 #'   examples in R and Stan. 2nd edition. Chapman and Hall/CRC.
 #'
-#'   Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
+#' - Vanhove, J. (2021) Collinearity Isn’t a Disease That Needs Curing.
 #'   Meta-Psychology, 5. \url{https://doi.org/10.15626/MP.2021.2548}
 #'
 #' - Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
