@@ -454,7 +454,15 @@ pp_check.glm <- function(
   )
 
   # validation check, for mixed models, where re.form = NULL (default) might fail
-  out <- .check_re_formula(out, object, iterations, re_formula, verbose, ...)
+  out <- .check_re_formula(
+    out,
+    object,
+    iterations,
+    re_formula,
+    verbose,
+    as_proportion = TRUE,
+    ...
+  )
 
   if (is.null(out)) {
     insight::format_error(sprintf(
@@ -628,7 +636,15 @@ plot.performance_pp_check <- function(x, ...) {
 }
 
 
-.check_re_formula <- function(out, object, iterations, re_formula, verbose, ...) {
+.check_re_formula <- function(
+  out,
+  object,
+  iterations,
+  re_formula,
+  verbose,
+  as_proportion = FALSE,
+  ...
+) {
   # validation check, for mixed models, where re.form = NULL (default) might fail
   if (is.null(out) && insight::is_mixed_model(object) && !isTRUE(is.na(re_formula))) {
     if (verbose) {
@@ -642,6 +658,14 @@ plot.performance_pp_check <- function(x, ...) {
       )
     }
     out <- .safe(stats::simulate(object, nsim = iterations, re.form = NA, ...))
+    # if we have a matrix response, convert to proportions
+    if (as_proportion) {
+      out <- as.data.frame(sapply(
+        out,
+        function(i) i[, 1] / rowSums(i, na.rm = TRUE),
+        simplify = TRUE
+      ))
+    }
   }
   out
 }

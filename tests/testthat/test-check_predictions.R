@@ -367,3 +367,90 @@ test_that("check_predictions, glmmTMB, proportion and cbind binomial", {
   expect_equal(out1$sim_1, out4$sim_1, tolerance = 1e-4)
   expect_equal(out1$sim_16, out4$sim_16, tolerance = 1e-4)
 })
+
+
+test_that("check_predictions, glmer, works with proportion and cbind binomial and NA", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("lme4")
+
+  data(cbpp, package = "lme4")
+  cbpp_na <- cbpp
+  set.seed(1234)
+  cbpp_na$herd[sample(nrow(cbpp_na), 3)] <- NA
+  cbpp_na$period[sample(nrow(cbpp_na), 2)] <- NA
+
+  model_NA <- glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    weights = NULL,
+    family = binomial,
+    data = cbpp_na
+  )
+  set.seed(1234)
+  expect_message(
+    {
+      out <- check_predictions(model_NA)
+    },
+    regex = "Failed to compute"
+  )
+  expect_equal(
+    head(out$sim_1),
+    c(0.42857, 0, 0.11111, 0, 0.36364, 0.11111),
+    tolerance = 1e-4
+  )
+  expect_named(
+    out,
+    c(
+      "sim_1",
+      "sim_2",
+      "sim_3",
+      "sim_4",
+      "sim_5",
+      "sim_6",
+      "sim_7",
+      "sim_8",
+      "sim_9",
+      "sim_10",
+      "sim_11",
+      "sim_12",
+      "sim_13",
+      "sim_14",
+      "sim_15",
+      "sim_16",
+      "sim_17",
+      "sim_18",
+      "sim_19",
+      "sim_20",
+      "sim_21",
+      "sim_22",
+      "sim_23",
+      "sim_24",
+      "sim_25",
+      "sim_26",
+      "sim_27",
+      "sim_28",
+      "sim_29",
+      "sim_30",
+      "sim_31",
+      "sim_32",
+      "sim_33",
+      "sim_34",
+      "sim_35",
+      "sim_36",
+      "sim_37",
+      "sim_38",
+      "sim_39",
+      "sim_40",
+      "sim_41",
+      "sim_42",
+      "sim_43",
+      "sim_44",
+      "sim_45",
+      "sim_46",
+      "sim_47",
+      "sim_48",
+      "sim_49",
+      "sim_50",
+      "y"
+    )
+  )
+})
