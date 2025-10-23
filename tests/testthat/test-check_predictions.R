@@ -379,7 +379,7 @@ test_that("check_predictions, glmer, works with proportion and cbind binomial an
   cbpp_na$herd[sample(nrow(cbpp_na), 3)] <- NA
   cbpp_na$period[sample(nrow(cbpp_na), 2)] <- NA
 
-  model_NA <- glmer(
+  model_NA <- lme4::glmer(
     cbind(incidence, size - incidence) ~ period + (1 | herd),
     weights = NULL,
     family = binomial,
