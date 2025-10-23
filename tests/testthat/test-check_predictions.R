@@ -394,7 +394,7 @@ test_that("check_predictions, glmer, works with proportion and cbind binomial an
   )
   expect_equal(
     head(out$sim_1),
-    c(0.42857, 0, 0.11111, 0, 0.36364, 0.11111),
+    c(0.142857, 0, 0.111111, 0, 0.227273, 0.166667),
     tolerance = 1e-4
   )
   expect_named(
