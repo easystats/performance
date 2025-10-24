@@ -1,0 +1,800 @@
+# performance
+
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.03139/status.svg)](https://doi.org/10.21105/joss.03139)
+[![downloads](https://cranlogs.r-pkg.org/badges/performance)](https://cran.r-project.org/package=performance)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/performance)](https://cranlogs.r-pkg.org/)
+
+***Test if your model is a good model!***
+
+A crucial aspect when building regression models is to evaluate the
+quality of modelfit. It is important to investigate how well models fit
+to the data and which fit indices to report. Functions to create
+diagnostic plots or to compute fit measures do exist, however, mostly
+spread over different packages. There is no unique and consistent
+approach to assess the model quality for different kind of models.
+
+The primary goal of the **performance** package is to fill this gap and
+to provide utilities for computing **indices of model quality** and
+**goodness of fit**. These include measures like r-squared (R2), root
+mean squared error (RMSE) or intraclass correlation coefficient (ICC) ,
+but also functions to check (mixed) models for overdispersion,
+zero-inflation, convergence or singularity.
+
+## Installation
+
+[![CRAN](https://www.r-pkg.org/badges/version/performance)](https://cran.r-project.org/package=performance)
+[![performance status
+badge](https://easystats.r-universe.dev/badges/performance)](https://easystats.r-universe.dev)
+[![codecov](https://codecov.io/gh/easystats/performance/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/performance)
+
+The *performance* package is available on CRAN, while its latest
+development version is available on R-universe (from *rOpenSci*).
+
+| Type | Source | Command |
+|----|----|----|
+| Release | CRAN | `install.packages("performance")` |
+| Development | R-universe | `install.packages("performance", repos = "https://easystats.r-universe.dev")` |
+
+Once you have downloaded the package, you can then load it using:
+
+``` r
+
+library("performance")
+```
+
+> **Tip**
+>
+> Instead of
+> [`library(performance)`](https://easystats.github.io/performance/),
+> use [`library(easystats)`](https://easystats.github.io/easystats/).
+> This will make all features of the easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
+
+## Citation
+
+To cite performance in publications use:
+
+``` r
+
+citation("performance")
+#> To cite package 'performance' in publications use:
+#> 
+#>   Lüdecke et al., (2021). performance: An R Package for Assessment, Comparison and
+#>   Testing of Statistical Models. Journal of Open Source Software, 6(60), 3139.
+#>   https://doi.org/10.21105/joss.03139
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Article{,
+#>     title = {{performance}: An {R} Package for Assessment, Comparison and Testing of Statistical Models},
+#>     author = {Daniel Lüdecke and Mattan S. Ben-Shachar and Indrajeet Patil and Philip Waggoner and Dominique Makowski},
+#>     year = {2021},
+#>     journal = {Journal of Open Source Software},
+#>     volume = {6},
+#>     number = {60},
+#>     pages = {3139},
+#>     doi = {10.21105/joss.03139},
+#>   }
+```
+
+## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-performance-orange.svg?colorB=E91E63)](https://easystats.github.io/performance/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-performance-orange.svg?colorB=2196F3)](https://easystats.github.io/performance/reference/index.html)
+
+There is a nice introduction into the package on
+[youtube](https://www.youtube.com/watch?v=EPIxQ5i5oxs).
+
+## The *performance* workflow
+
+![](reference/figures/figure_workflow.png)
+
+### Assessing model quality
+
+#### R-squared
+
+**performance** has a generic
+[`r2()`](https://easystats.github.io/performance/reference/r2.md)
+function, which computes the r-squared for many different models,
+including mixed effects and Bayesian regression models.
+
+[`r2()`](https://easystats.github.io/performance/reference/r2.md)
+returns a list containing values related to the “most appropriate”
+r-squared for the given model.
+
+``` r
+
+model <- lm(mpg ~ wt + cyl, data = mtcars)
+r2(model)
+#> # R2 for Linear Regression
+#>        R2: 0.830
+#>   adj. R2: 0.819
+
+model <- glm(am ~ wt + cyl, data = mtcars, family = binomial)
+r2(model)
+#> # R2 for Logistic Regression
+#>   Tjur's R2: 0.705
+
+library(MASS)
+data(housing)
+model <- polr(Sat ~ Infl + Type + Cont, weights = Freq, data = housing)
+r2(model)
+#>   Nagelkerke's R2: 0.108
+```
+
+The different R-squared measures can also be accessed directly via
+functions like
+[`r2_bayes()`](https://easystats.github.io/performance/reference/r2_bayes.md),
+[`r2_coxsnell()`](https://easystats.github.io/performance/reference/r2_coxsnell.md)
+or
+[`r2_nagelkerke()`](https://easystats.github.io/performance/reference/r2_nagelkerke.md)
+(see a full list of functions
+[here](https://easystats.github.io/performance/reference/index.html#section-r-functions)).
+
+For mixed models, the *conditional* and *marginal* R-squared are
+returned. The *marginal R-squared* considers only the variance of the
+fixed effects and indicates how much of the model’s variance is
+explained by the fixed effects part only. The *conditional R-squared*
+takes both the fixed and random effects into account and indicates how
+much of the model’s variance is explained by the “complete” model.
+
+For frequentist mixed models,
+[`r2()`](https://easystats.github.io/performance/reference/r2.md) (resp.
+[`r2_nakagawa()`](https://easystats.github.io/performance/reference/r2_nakagawa.md))
+computes the *mean* random effect variances, thus
+[`r2()`](https://easystats.github.io/performance/reference/r2.md) is
+also appropriate for mixed models with more complex random effects
+structures, like random slopes or nested random effects (Johnson 2014;
+Nakagawa, Johnson, and Schielzeth 2017).
+
+``` r
+
+set.seed(123)
+library(rstanarm)
+
+model <- stan_glmer(
+  Petal.Length ~ Petal.Width + (1 | Species),
+  data = iris,
+  cores = 4
+)
+
+r2(model)
+#> # Bayesian R2 with Compatibility Interval
+#> 
+#>   Conditional R2: 0.954 (95% CI [0.951, 0.957])
+#>      Marginal R2: 0.414 (95% CI [0.204, 0.644])
+
+library(lme4)
+model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+r2(model)
+#> # R2 for Mixed Models
+#> 
+#>   Conditional R2: 0.799
+#>      Marginal R2: 0.279
+```
+
+#### Intraclass Correlation Coefficient (ICC)
+
+Similar to R-squared, the ICC provides information on the explained
+variance and can be interpreted as “the proportion of the variance
+explained by the grouping structure in the population” (Hox 2010).
+
+[`icc()`](https://easystats.github.io/performance/reference/icc.md)
+calculates the ICC for various mixed model objects, including `stanreg`
+models.
+
+``` r
+
+library(lme4)
+model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+icc(model)
+#> # Intraclass Correlation Coefficient
+#> 
+#>     Adjusted ICC: 0.722
+#>   Unadjusted ICC: 0.521
+```
+
+…and models of class `brmsfit`.
+
+``` r
+
+library(brms)
+set.seed(123)
+model <- brm(mpg ~ wt + (1 | cyl) + (1 + wt | gear), data = mtcars)
+```
+
+``` r
+
+icc(model)
+#> # Intraclass Correlation Coefficient
+#> 
+#>     Adjusted ICC: 0.930
+#>   Unadjusted ICC: 0.771
+```
+
+### Model diagnostics
+
+#### Check for overdispersion
+
+Overdispersion occurs when the observed variance in the data is higher
+than the expected variance from the model assumption (for Poisson,
+variance roughly equals the mean of an outcome).
+[`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+checks if a count model (including mixed models) is overdispersed or
+not.
+
+``` r
+
+library(glmmTMB)
+data(Salamanders)
+model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_overdispersion(model)
+#> # Overdispersion test
+#> 
+#>        dispersion ratio =    2.946
+#>   Pearson's Chi-Squared = 1873.710
+#>                 p-value =  < 0.001
+```
+
+Overdispersion can be fixed by either modelling the dispersion parameter
+(not possible with all packages), or by choosing a different
+distributional family (like Quasi-Poisson, or negative binomial, see
+(Gelman and Hill 2007)).
+
+#### Check for zero-inflation
+
+Zero-inflation (in (Quasi-)Poisson models) is indicated when the amount
+of observed zeros is larger than the amount of predicted zeros, so the
+model is *underfitting* zeros. In such cases, it is recommended to use
+negative binomial or zero-inflated models.
+
+Use
+[`check_zeroinflation()`](https://easystats.github.io/performance/reference/check_zeroinflation.md)
+to check if zero-inflation is present in the fitted model.
+
+``` r
+
+model <- glm(count ~ spp + mined, family = poisson, data = Salamanders)
+check_zeroinflation(model)
+#> # Check for zero-inflation
+#> 
+#>    Observed zeros: 387
+#>   Predicted zeros: 298
+#>             Ratio: 0.77
+```
+
+#### Check for singular model fits
+
+A “singular” model fit means that some dimensions of the
+variance-covariance matrix have been estimated as exactly zero. This
+often occurs for mixed models with overly complex random effects
+structures.
+
+[`check_singularity()`](https://easystats.github.io/performance/reference/check_singularity.md)
+checks mixed models (of class `lme`, `merMod`, `glmmTMB` or `MixMod`)
+for singularity, and returns `TRUE` if the model fit is singular.
+
+``` r
+
+library(lme4)
+data(sleepstudy)
+
+# prepare data
+set.seed(123)
+sleepstudy$mygrp <- sample(1:5, size = 180, replace = TRUE)
+sleepstudy$mysubgrp <- NA
+for (i in 1:5) {
+  filter_group <- sleepstudy$mygrp == i
+  sleepstudy$mysubgrp[filter_group] <-
+    sample(1:30, size = sum(filter_group), replace = TRUE)
+}
+
+# fit strange model
+model <- lmer(
+  Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+  data = sleepstudy
+)
+
+check_singularity(model)
+#> [1] TRUE
+```
+
+Remedies to cure issues with singular fits can be found
+[here](https://easystats.github.io/performance/reference/check_singularity.html).
+
+#### Check for heteroskedasticity
+
+Linear models assume constant error variance (homoskedasticity).
+
+The
+[`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
+functions assess if this assumption has been violated:
+
+``` r
+
+data(cars)
+model <- lm(dist ~ speed, data = cars)
+
+check_heteroscedasticity(model)
+#> Warning: Heteroscedasticity (non-constant error variance) detected (p = 0.031).
+```
+
+#### Comprehensive visualization of model checks
+
+**performance** provides many functions to check model assumptions, like
+[`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md),
+[`check_normality()`](https://easystats.github.io/performance/reference/check_normality.md)
+or
+[`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md).
+To get a comprehensive check, use
+[`check_model()`](https://easystats.github.io/performance/reference/check_model.md).
+
+``` r
+
+# defining a model
+model <- lm(mpg ~ wt + am + gear + vs * cyl, data = mtcars)
+
+# checking model assumptions
+check_model(model)
+```
+
+![](reference/figures/unnamed-chunk-14-1.png)
+
+### Model performance summaries
+
+[`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md)
+computes indices of model performance for regression models. Depending
+on the model object, typical indices might be r-squared, AIC, BIC, RMSE,
+ICC or LOOIC.
+
+#### Linear model
+
+``` r
+
+m1 <- lm(mpg ~ wt + cyl, data = mtcars)
+model_performance(m1)
+#> # Indices of model performance
+#> 
+#> AIC     |    AICc |     BIC |    R2 | R2 (adj.) |  RMSE | Sigma
+#> ---------------------------------------------------------------
+#> 156.010 | 157.492 | 161.873 | 0.830 |     0.819 | 2.444 | 2.568
+```
+
+#### Logistic regression
+
+``` r
+
+m2 <- glm(vs ~ wt + mpg, data = mtcars, family = "binomial")
+model_performance(m2)
+#> # Indices of model performance
+#> 
+#> AIC    |   AICc |    BIC | Tjur's R2 |  RMSE | Sigma | Log_loss | Score_log | Score_spherical |   PCP
+#> -----------------------------------------------------------------------------------------------------
+#> 31.298 | 32.155 | 35.695 |     0.478 | 0.359 | 1.000 |    0.395 |   -14.903 |           0.095 | 0.743
+```
+
+#### Linear mixed model
+
+``` r
+
+library(lme4)
+m3 <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+model_performance(m3)
+#> # Indices of model performance
+#> 
+#> AIC      |     AICc |      BIC | R2 (cond.) | R2 (marg.) |   ICC |   RMSE |  Sigma
+#> ----------------------------------------------------------------------------------
+#> 1755.628 | 1756.114 | 1774.786 |      0.799 |      0.279 | 0.722 | 23.438 | 25.592
+```
+
+### Models comparison
+
+The
+[`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.md)
+function can be used to compare the performance and quality of several
+models (including models of different types).
+
+``` r
+
+counts <- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+outcome <- gl(3, 1, 9)
+treatment <- gl(3, 3)
+m4 <- glm(counts ~ outcome + treatment, family = poisson())
+
+compare_performance(m1, m2, m3, m4, verbose = FALSE)
+#> # Comparison of Model Performance Indices
+#> 
+#> Name |   Model |  AIC (weights) | AICc (weights) |  BIC (weights) |   RMSE |  Sigma | Score_log
+#> -----------------------------------------------------------------------------------------------
+#> m1   |      lm |  156.0 (<.001) |  157.5 (<.001) |  161.9 (<.001) |  2.444 |  2.568 |          
+#> m2   |     glm |   31.3 (>.999) |   32.2 (>.999) |   35.7 (>.999) |  0.359 |  1.000 |   -14.903
+#> m3   | lmerMod | 1764.0 (<.001) | 1764.5 (<.001) | 1783.1 (<.001) | 23.438 | 25.592 |          
+#> m4   |     glm |   56.8 (<.001) |   76.8 (<.001) |   57.7 (<.001) |  3.043 |  1.000 |    -2.598
+#> 
+#> Name | Score_spherical |    R2 | R2 (adj.) | Tjur's R2 | Log_loss |   PCP | R2 (cond.) | R2 (marg.)
+#> ---------------------------------------------------------------------------------------------------
+#> m1   |                 | 0.830 |     0.819 |           |          |       |            |           
+#> m2   |           0.095 |       |           |     0.478 |    0.395 | 0.743 |            |           
+#> m3   |                 |       |           |           |          |       |      0.799 |      0.279
+#> m4   |           0.324 |       |           |           |          |       |            |           
+#> 
+#> Name |   ICC | Nagelkerke's R2
+#> ------------------------------
+#> m1   |       |                
+#> m2   |       |                
+#> m3   | 0.722 |                
+#> m4   |       |           0.657
+```
+
+#### General index of model performance
+
+One can also easily compute and a [**composite
+index**](https://easystats.github.io/performance/reference/compare_performance.html#details)
+of model performance and sort the models from the best one to the worse.
+
+``` r
+
+compare_performance(m1, m2, m3, m4, rank = TRUE, verbose = FALSE)
+#> # Comparison of Model Performance Indices
+#> 
+#> Name |   Model |   RMSE |  Sigma | AIC weights | AICc weights | BIC weights | Performance-Score
+#> -----------------------------------------------------------------------------------------------
+#> m2   |     glm |  0.359 |  1.000 |       1.000 |        1.000 |       1.000 |           100.00%
+#> m4   |     glm |  3.043 |  1.000 |    2.96e-06 |     2.06e-10 |    1.63e-05 |            37.67%
+#> m1   |      lm |  2.444 |  2.568 |    8.30e-28 |     6.07e-28 |    3.99e-28 |            36.92%
+#> m3   | lmerMod | 23.438 | 25.592 |    0.00e+00 |     0.00e+00 |    0.00e+00 |             0.00%
+```
+
+#### Visualisation of indices of models’ performance
+
+Finally, we provide convenient visualisation (the `see` package must be
+installed).
+
+``` r
+
+plot(compare_performance(m1, m2, m4, rank = TRUE, verbose = FALSE))
+```
+
+![](reference/figures/unnamed-chunk-20-1.png)
+
+### Testing models
+
+[`test_performance()`](https://easystats.github.io/performance/reference/test_performance.md)
+(and `test_bf`, its Bayesian sister) carries out the most relevant and
+appropriate tests based on the input (for instance, whether the models
+are nested or not).
+
+``` r
+
+set.seed(123)
+data(iris)
+
+lm1 <- lm(Sepal.Length ~ Species, data = iris)
+lm2 <- lm(Sepal.Length ~ Species + Petal.Length, data = iris)
+lm3 <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+lm4 <- lm(Sepal.Length ~ Species * Sepal.Width + Petal.Length + Petal.Width, data = iris)
+
+test_performance(lm1, lm2, lm3, lm4)
+#> Name | Model |     BF | Omega2 | p (Omega2) |    LR | p (LR)
+#> ------------------------------------------------------------
+#> lm1  |    lm |        |        |            |       |       
+#> lm2  |    lm | > 1000 |   0.69 |     < .001 | -6.25 | < .001
+#> lm3  |    lm | > 1000 |   0.36 |     < .001 | -3.44 | < .001
+#> lm4  |    lm | > 1000 |   0.73 |     < .001 | -7.77 | < .001
+#> Each model is compared to lm1.
+
+test_bf(lm1, lm2, lm3, lm4)
+#> Bayes Factors for Model Comparison
+#> 
+#>       Model                                                    BF
+#> [lm2] Species + Petal.Length                             3.45e+26
+#> [lm3] Species * Sepal.Width                              4.69e+07
+#> [lm4] Species * Sepal.Width + Petal.Length + Petal.Width 7.58e+29
+#> 
+#> * Against Denominator: [lm1] Species
+#> *   Bayes Factor Type: BIC approximation
+```
+
+### Plotting Functions
+
+Plotting functions are available through the [**see**
+package](https://easystats.github.io/see/articles/performance.html).
+
+# Code of Conduct
+
+Please note that the performance project is released with a [Contributor
+Code of
+Conduct](https://easystats.github.io/performance/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
+# Contributing
+
+We are happy to receive bug reports, suggestions, questions, and (most
+of all) contributions to fix problems and add features.
+
+Please follow contributing guidelines mentioned here:
+
+<https://easystats.github.io/performance/CONTRIBUTING.html>
+
+## References
+
+Gelman, Andrew, and Jennifer Hill. 2007. *Data Analysis Using Regression
+and Multilevel/Hierarchical Models*. Analytical Methods for Social
+Research. Cambridge ; New York: Cambridge University Press.
+
+Hox, J. J. 2010. *Multilevel Analysis: Techniques and Applications*. 2nd
+ed. Quantitative Methodology Series. New York: Routledge.
+
+Johnson, Paul C. D. 2014. “Extension of Nakagawa & Schielzeth’s R2 GLMM
+to Random Slopes Models.” Edited by Robert B. O’Hara. *Methods in
+Ecology and Evolution* 5 (9): 944–46.
+
+Nakagawa, Shinichi, Paul C. D. Johnson, and Holger Schielzeth. 2017.
+“The Coefficient of Determination R2 and Intra-Class Correlation
+Coefficient from Generalized Linear Mixed-Effects Models Revisited and
+Expanded.” *Journal of The Royal Society Interface* 14 (134): 20170213.
+
+# Package index
+
+## Comprehensive Summaries
+
+- [`model_performance()`](https://easystats.github.io/performance/reference/model_performance.md)
+  [`performance()`](https://easystats.github.io/performance/reference/model_performance.md)
+  : Model Performance
+- [`model_performance(`*`<fa>`*`)`](https://easystats.github.io/performance/reference/model_performance.fa.md)
+  : Performance of FA / PCA models
+- [`model_performance(`*`<ivreg>`*`)`](https://easystats.github.io/performance/reference/model_performance.ivreg.md)
+  : Performance of instrumental variable regression models
+- [`model_performance(`*`<kmeans>`*`)`](https://easystats.github.io/performance/reference/model_performance.kmeans.md)
+  : Model summary for k-means clustering
+- [`model_performance(`*`<lavaan>`*`)`](https://easystats.github.io/performance/reference/model_performance.lavaan.md)
+  : Performance of lavaan SEM / CFA Models
+- [`model_performance(`*`<lm>`*`)`](https://easystats.github.io/performance/reference/model_performance.lm.md)
+  : Performance of Regression Models
+- [`model_performance(`*`<merMod>`*`)`](https://easystats.github.io/performance/reference/model_performance.merMod.md)
+  : Performance of Mixed Models
+- [`model_performance(`*`<rma>`*`)`](https://easystats.github.io/performance/reference/model_performance.rma.md)
+  : Performance of Meta-Analysis Models
+- [`model_performance(`*`<stanreg>`*`)`](https://easystats.github.io/performance/reference/model_performance.stanreg.md)
+  [`model_performance(`*`<BFBayesFactor>`*`)`](https://easystats.github.io/performance/reference/model_performance.stanreg.md)
+  : Performance of Bayesian Models
+
+## Check Model Assumptions or Data Properties
+
+- [`binned_residuals()`](https://easystats.github.io/performance/reference/binned_residuals.md)
+  : Binned residuals for binomial logistic regression
+
+- [`check_autocorrelation()`](https://easystats.github.io/performance/reference/check_autocorrelation.md)
+  : Check model for independence of residuals.
+
+- [`check_clusterstructure()`](https://easystats.github.io/performance/reference/check_clusterstructure.md)
+  : Check suitability of data for clustering
+
+- [`check_collinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  [`multicollinearity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  [`check_concurvity()`](https://easystats.github.io/performance/reference/check_collinearity.md)
+  : Check for multicollinearity of model terms
+
+- [`check_convergence()`](https://easystats.github.io/performance/reference/check_convergence.md)
+  : Convergence test for mixed effects models
+
+- [`check_dag()`](https://easystats.github.io/performance/reference/check_dag.md)
+  [`as.dag()`](https://easystats.github.io/performance/reference/check_dag.md)
+  : Check correct model adjustment for identifying causal effects
+
+- [`check_distribution()`](https://easystats.github.io/performance/reference/check_distribution.md)
+  : Classify the distribution of a model-family using machine learning
+
+- [`check_factorstructure()`](https://easystats.github.io/performance/reference/check_factorstructure.md)
+  [`check_kmo()`](https://easystats.github.io/performance/reference/check_factorstructure.md)
+  [`check_sphericity_bartlett()`](https://easystats.github.io/performance/reference/check_factorstructure.md)
+  : Check suitability of data for Factor Analysis (FA) with Bartlett's
+  Test of Sphericity and KMO
+
+- [`check_group_variation()`](https://easystats.github.io/performance/reference/check_group_variation.md)
+  [`summary(`*`<check_group_variation>`*`)`](https://easystats.github.io/performance/reference/check_group_variation.md)
+  : Check variables for within- and/or between-group variation
+
+- [`check_heterogeneity_bias()`](https://easystats.github.io/performance/reference/check_heterogeneity_bias.md)
+  :
+
+  Check model predictor for heterogeneity bias *(Deprecated)*
+
+- [`check_heteroscedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
+  [`check_heteroskedasticity()`](https://easystats.github.io/performance/reference/check_heteroscedasticity.md)
+  : Check model for (non-)constant error variance
+
+- [`check_homogeneity()`](https://easystats.github.io/performance/reference/check_homogeneity.md)
+  : Check model for homogeneity of variances
+
+- [`check_itemscale()`](https://easystats.github.io/performance/reference/check_itemscale.md)
+  : Describe Properties of Item Scales
+
+- [`check_model()`](https://easystats.github.io/performance/reference/check_model.md)
+  : Visual check of model assumptions
+
+- [`check_multimodal()`](https://easystats.github.io/performance/reference/check_multimodal.md)
+  : Check if a distribution is unimodal or multimodal
+
+- [`check_normality()`](https://easystats.github.io/performance/reference/check_normality.md)
+  : Check model for (non-)normality of residuals.
+
+- [`check_outliers()`](https://easystats.github.io/performance/reference/check_outliers.md)
+  : Outliers detection (check for influential observations)
+
+- [`check_overdispersion()`](https://easystats.github.io/performance/reference/check_overdispersion.md)
+  : Check overdispersion (and underdispersion) of GL(M)M's
+
+- [`check_predictions()`](https://easystats.github.io/performance/reference/check_predictions.md)
+  : Posterior predictive checks
+
+- [`check_residuals()`](https://easystats.github.io/performance/reference/check_residuals.md)
+  : Check distribution of simulated quantile residuals
+
+- [`check_singularity()`](https://easystats.github.io/performance/reference/check_singularity.md)
+  : Check mixed models for boundary fits
+
+- [`check_sphericity()`](https://easystats.github.io/performance/reference/check_sphericity.md)
+  : Check model for violation of sphericity
+
+- [`check_symmetry()`](https://easystats.github.io/performance/reference/check_symmetry.md)
+  : Check distribution symmetry
+
+- [`check_zeroinflation()`](https://easystats.github.io/performance/reference/check_zeroinflation.md)
+  : Check for zero-inflation in count models
+
+- [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md)
+  [`residuals(`*`<performance_simres>`*`)`](https://easystats.github.io/performance/reference/simulate_residuals.md)
+  : Simulate randomized quantile residuals from a model
+
+## Check Model Performance or Quality
+
+- [`performance_accuracy()`](https://easystats.github.io/performance/reference/performance_accuracy.md)
+  : Accuracy of predictions from model fit
+- [`performance_aicc()`](https://easystats.github.io/performance/reference/performance_aicc.md)
+  [`performance_aic()`](https://easystats.github.io/performance/reference/performance_aicc.md)
+  : Compute the AIC or second-order AIC
+- [`performance_cv()`](https://easystats.github.io/performance/reference/performance_cv.md)
+  : Cross-validated model performance
+- [`performance_hosmer()`](https://easystats.github.io/performance/reference/performance_hosmer.md)
+  : Hosmer-Lemeshow goodness-of-fit test
+- [`performance_logloss()`](https://easystats.github.io/performance/reference/performance_logloss.md)
+  : Log Loss
+- [`performance_mae()`](https://easystats.github.io/performance/reference/performance_mae.md)
+  [`mae()`](https://easystats.github.io/performance/reference/performance_mae.md)
+  : Mean Absolute Error of Models
+- [`performance_mse()`](https://easystats.github.io/performance/reference/performance_mse.md)
+  [`mse()`](https://easystats.github.io/performance/reference/performance_mse.md)
+  : Mean Square Error of Linear Models
+- [`performance_pcp()`](https://easystats.github.io/performance/reference/performance_pcp.md)
+  : Percentage of Correct Predictions
+- [`performance_reliability()`](https://easystats.github.io/performance/reference/performance_reliability.md)
+  [`performance_dvour()`](https://easystats.github.io/performance/reference/performance_reliability.md)
+  : Random Effects Reliability
+- [`performance_rmse()`](https://easystats.github.io/performance/reference/performance_rmse.md)
+  [`rmse()`](https://easystats.github.io/performance/reference/performance_rmse.md)
+  : Root Mean Squared Error
+- [`performance_roc()`](https://easystats.github.io/performance/reference/performance_roc.md)
+  : Simple ROC curve
+- [`performance_rse()`](https://easystats.github.io/performance/reference/performance_rse.md)
+  : Residual Standard Error for Linear Models
+- [`performance_score()`](https://easystats.github.io/performance/reference/performance_score.md)
+  : Proper Scoring Rules
+- [`icc()`](https://easystats.github.io/performance/reference/icc.md)
+  [`variance_decomposition()`](https://easystats.github.io/performance/reference/icc.md)
+  : Intraclass Correlation Coefficient (ICC)
+- [`looic()`](https://easystats.github.io/performance/reference/looic.md)
+  : LOO-related Indices for Bayesian regressions.
+
+## Check Items and Scales
+
+- [`check_itemscale()`](https://easystats.github.io/performance/reference/check_itemscale.md)
+  : Describe Properties of Item Scales
+- [`cronbachs_alpha()`](https://easystats.github.io/performance/reference/cronbachs_alpha.md)
+  [`item_alpha()`](https://easystats.github.io/performance/reference/cronbachs_alpha.md)
+  : Cronbach's Alpha for Items or Scales
+- [`item_difficulty()`](https://easystats.github.io/performance/reference/item_difficulty.md)
+  : Difficulty of Questionnaire Items
+- [`item_discrimination()`](https://easystats.github.io/performance/reference/item_discrimination.md)
+  [`item_totalcor()`](https://easystats.github.io/performance/reference/item_discrimination.md)
+  : Discrimination and Item-Total Correlation of Questionnaire Items
+- [`item_intercor()`](https://easystats.github.io/performance/reference/item_intercor.md)
+  : Mean Inter-Item-Correlation
+- [`item_omega()`](https://easystats.github.io/performance/reference/item_omega.md)
+  : McDonald's Omega for Items or Scales
+- [`item_reliability()`](https://easystats.github.io/performance/reference/item_reliability.md)
+  : Reliability Test for Items or Scales
+- [`item_split_half()`](https://easystats.github.io/performance/reference/item_split_half.md)
+  : Split-Half Reliability
+
+## Comparing and Testing Models
+
+- [`compare_performance()`](https://easystats.github.io/performance/reference/compare_performance.md)
+  : Compare performance of different models
+- [`test_bf()`](https://easystats.github.io/performance/reference/test_performance.md)
+  [`test_likelihoodratio()`](https://easystats.github.io/performance/reference/test_performance.md)
+  [`test_lrt()`](https://easystats.github.io/performance/reference/test_performance.md)
+  [`test_performance()`](https://easystats.github.io/performance/reference/test_performance.md)
+  [`test_vuong()`](https://easystats.github.io/performance/reference/test_performance.md)
+  [`test_wald()`](https://easystats.github.io/performance/reference/test_performance.md)
+  : Test if models are different
+
+## R2 Functions
+
+- [`r2()`](https://easystats.github.io/performance/reference/r2.md) :
+  Compute the model's R2
+- [`r2_bayes()`](https://easystats.github.io/performance/reference/r2_bayes.md)
+  [`r2_posterior()`](https://easystats.github.io/performance/reference/r2_bayes.md)
+  : Bayesian R2
+- [`r2_coxsnell()`](https://easystats.github.io/performance/reference/r2_coxsnell.md)
+  : Cox & Snell's R2
+- [`r2_efron()`](https://easystats.github.io/performance/reference/r2_efron.md)
+  : Efron's R2
+- [`r2_ferrari()`](https://easystats.github.io/performance/reference/r2_ferrari.md)
+  : Ferrari's and Cribari-Neto's R2
+- [`r2_kullback()`](https://easystats.github.io/performance/reference/r2_kullback.md)
+  : Kullback-Leibler R2
+- [`r2_loo()`](https://easystats.github.io/performance/reference/r2_loo.md)
+  [`r2_loo_posterior()`](https://easystats.github.io/performance/reference/r2_loo.md)
+  : LOO-adjusted R2
+- [`r2_mcfadden()`](https://easystats.github.io/performance/reference/r2_mcfadden.md)
+  : McFadden's R2
+- [`r2_mckelvey()`](https://easystats.github.io/performance/reference/r2_mckelvey.md)
+  : McKelvey & Zavoinas R2
+- [`r2_mlm()`](https://easystats.github.io/performance/reference/r2_mlm.md)
+  : Multivariate R2
+- [`r2_nagelkerke()`](https://easystats.github.io/performance/reference/r2_nagelkerke.md)
+  : Nagelkerke's R2
+- [`r2_nakagawa()`](https://easystats.github.io/performance/reference/r2_nakagawa.md)
+  : Nakagawa's R2 for mixed models
+- [`r2_somers()`](https://easystats.github.io/performance/reference/r2_somers.md)
+  : Somers' Dxy rank correlation for binary outcomes
+- [`r2_tjur()`](https://easystats.github.io/performance/reference/r2_tjur.md)
+  : Tjur's R2 - coefficient of determination (D)
+- [`r2_xu()`](https://easystats.github.io/performance/reference/r2_xu.md)
+  : Xu' R2 (Omega-squared)
+- [`r2_zeroinflated()`](https://easystats.github.io/performance/reference/r2_zeroinflated.md)
+  : R2 for models with zero-inflation
+
+## Table Formatting
+
+- [`display(`*`<performance_model>`*`)`](https://easystats.github.io/performance/reference/display.performance_model.md)
+  [`print(`*`<performance_model>`*`)`](https://easystats.github.io/performance/reference/display.performance_model.md)
+  [`print_md(`*`<performance_model>`*`)`](https://easystats.github.io/performance/reference/display.performance_model.md)
+  [`print_md(`*`<compare_performance>`*`)`](https://easystats.github.io/performance/reference/display.performance_model.md)
+  : Print tables in different output formats
+- [`reexports`](https://easystats.github.io/performance/reference/reexports.md)
+  [`display`](https://easystats.github.io/performance/reference/reexports.md)
+  [`print_md`](https://easystats.github.io/performance/reference/reexports.md)
+  [`print_html`](https://easystats.github.io/performance/reference/reexports.md)
+  : Objects exported from other packages
+
+## Sample Data
+
+- [`classify_distribution`](https://easystats.github.io/performance/reference/classify_distribution.md)
+  : Classify the distribution of a model-family using machine learning
+
+# Articles
+
+### Checking model assumptions and data properties
+
+- [Checking model assumption - linear
+  models](https://easystats.github.io/performance/articles/check_model.md):
+- [Checking outliers with
+  \*performance\*](https://easystats.github.io/performance/articles/check_outliers.md):
+- [Checking simulated
+  residuals](https://easystats.github.io/performance/articles/simulate_residuals.md):
+
+### Model comparison and testing
+
+- [Compare, Test, and Select
+  Models](https://easystats.github.io/performance/articles/compare.md):
+- [R-squared
+  (R2)](https://easystats.github.io/performance/articles/r2.md):
+
+### Case Studies
+
+- [How to arrive at the best model
+  fit](https://easystats.github.io/performance/articles/check_model_practical.md):
