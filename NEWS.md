@@ -7,6 +7,14 @@
 
 * Improved documentation for printing-methods.
 
+## Known Issues
+
+* The `theme` argument in `check_model()` currently has no effect due to a bug
+  in the **see** package's plot method. The `check_model()` function correctly
+  stores the theme attribute, but the **see** package's `plot.check_model()`
+  function does not properly handle it. This issue is tracked in #851 and
+  requires a fix in the **see** package repository.
+
 # performance 0.15.2
 
 ## Bug fixes
