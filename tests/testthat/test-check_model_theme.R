@@ -46,7 +46,7 @@ test_that("check_model accepts standard ggplot2 themes as functions", {
       plot(p2)
     }
   })
-  
+
   # Test with theme_bw
   expect_no_error({
     p3 <- check_model(m, theme = ggplot2::theme_bw)
@@ -75,7 +75,7 @@ test_that("check_model accepts theme as string (backward compatibility)", {
       plot(p1)
     }
   })
-  
+
   # Test with theme_bw as string
   expect_no_error({
     p2 <- check_model(m, theme = "ggplot2::theme_bw")
@@ -96,10 +96,12 @@ test_that("check_model accepts custom theme functions from user environment", {
   skip_if_not_installed("ggplot2")
 
   # Define custom theme in test environment
-  my_custom_theme <- function(base_size = 11,
-                               base_family = "",
-                               base_line_size = base_size / 22,
-                               base_rect_size = base_size / 22) {
+  my_custom_theme <- function(
+    base_size = 11,
+    base_family = "",
+    base_line_size = base_size / 22,
+    base_rect_size = base_size / 22
+  ) {
     ggplot2::theme_minimal(
       base_size = base_size,
       base_family = base_family,
@@ -111,9 +113,9 @@ test_that("check_model accepts custom theme functions from user environment", {
         panel.grid.major = ggplot2::element_line(color = "gray80")
       )
   }
-  
+
   m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
-  
+
   # Custom theme function should work when passed directly
   expect_no_error({
     p1 <- check_model(m, theme = my_custom_theme)
@@ -121,7 +123,7 @@ test_that("check_model accepts custom theme functions from user environment", {
       plot(p1)
     }
   })
-  
+
   # Also test passing custom theme to plot method's style argument
   expect_no_error({
     p2 <- check_model(m)
@@ -157,17 +159,17 @@ test_that("theme attribute is stored and used correctly", {
   if (is.function(theme_attr)) {
     expect_s3_class(theme_attr(), "theme")
   }
-  
+
   # Theme should be applied when plotting
   if (requireNamespace("see", quietly = TRUE)) {
     expect_no_error(plot(p1))
   }
-  
+
   # Test with string
   p2 <- check_model(m, theme = "ggplot2::theme_minimal")
   expect_true(!is.null(attr(p2, "theme")))
   expect_identical(attr(p2, "theme"), "ggplot2::theme_minimal")
-  
+
   if (requireNamespace("see", quietly = TRUE)) {
     expect_no_error(plot(p2))
   }
