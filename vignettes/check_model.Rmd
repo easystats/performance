@@ -233,7 +233,7 @@ Dealing with outliers is not straightforward, as it is not recommended to automa
 
 ## Multicollinearity
 
-This plot checks for potential collinearity among predictors. Multicollinearity occurs when predictor variables are highly correlated with each other, conditional on the other variables in the model. This should not be confused with simple pairwise correlation between predictors; what matters is the association between predictors *after accounting for all other variables in the model*.
+This plot checks for potential collinearity among predictors. Multicollinearity occurs when predictor variables are highly correlated with each other, conditional on the other variables in the model. In other words, the information one predictor provides about the outcome is redundant in the presence of the other predictors. This should not be confused with simple pairwise correlation between predictors; what matters is the association between predictors *after accounting for all other variables in the model*.
 
 Multicollinearity can arise when a third, unobserved variable causally affects multiple predictors that are associated with the outcome. When multicollinearity is present, the model may show that individual predictors do not appear reliably associated with the outcome (yielding low estimates and high standard errors), even when these predictors are actually strongly related to the outcome (_McElreath 2020, chapter 6.1_).
 
