@@ -331,7 +331,7 @@ if (require("lavaan")) {
   }
 }
 #> Loading required package: mgcv
-#> This is mgcv 1.9-3. For overview type 'help("mgcv-package")'.
+#> This is mgcv 1.9-4. For overview type '?mgcv'.
 #> 
 #> Attaching package: ‘mgcv’
 #> The following objects are masked from ‘package:brms’:

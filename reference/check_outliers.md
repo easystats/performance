@@ -518,13 +518,12 @@ check_outliers(data, method = "all", verbose = FALSE)
 #> 7   28               2     0    1       (Multivariate) (Multivariate)
 #> 8   31               2     2    2       (Multivariate) (Multivariate)
 #> 9   32               2     0    0                    0              0
-#> 10   8               1     0    0                    0 (Multivariate)
-#> 11  21               1     0    0       (Multivariate)              0
-#> 12  27               1     0    0       (Multivariate) (Multivariate)
-#> 13  29               1     0    1       (Multivariate) (Multivariate)
-#> 14  30               1     0    0                    0 (Multivariate)
-#> 15   7               0     0    0       (Multivariate)              0
-#> 16  24               0     0    0       (Multivariate)              0
+#> 10  21               1     0    0       (Multivariate) (Multivariate)
+#> 11  27               1     0    0       (Multivariate) (Multivariate)
+#> 12  29               1     0    1       (Multivariate) (Multivariate)
+#> 13  30               1     0    0                    0 (Multivariate)
+#> 14   7               0     0    0       (Multivariate)              0
+#> 15  24               0     0    0       (Multivariate)              0
 #>             n_ICS
 #> 1               0
 #> 2  (Multivariate)
@@ -537,11 +536,10 @@ check_outliers(data, method = "all", verbose = FALSE)
 #> 9               0
 #> 10              0
 #> 11              0
-#> 12              0
-#> 13 (Multivariate)
+#> 12 (Multivariate)
+#> 13              0
 #> 14              0
 #> 15              0
-#> 16              0
 
 # For statistical models ---------------------------------------------
 # select only mpg and disp (continuous)
