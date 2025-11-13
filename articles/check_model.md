@@ -351,23 +351,22 @@ belong to the correct distribution and, therefore, should be retained.
 
 ### Multicollinearity
 
-This plot checks for potential collinearity among predictors. In a
-nutshell multicollinearity means that once you know the effect of one
-predictor, the value of knowing the other predictor is rather low.
-Multicollinearity might arise when a third, unobserved variable has a
-causal effect on each of the two predictors that are associated with the
-outcome. In such cases, the actual relationship that matters would be
-the association between the unobserved variable and the outcome.
+This plot checks for potential collinearity among predictors.
+Multicollinearity occurs when predictor variables are highly correlated
+with each other, conditional on the other variables in the model. In
+other words, the information one predictor provides about the outcome is
+redundant in the presence of the other predictors. This should not be
+confused with simple pairwise correlation between predictors; what
+matters is the association between predictors *after accounting for all
+other variables in the model*.
 
-Multicollinearity should not be confused with a raw strong correlation
-between predictors. What matters is the association between one or more
-predictor variables, *conditional on the other variables in the model*.
-
-If multicollinearity is a problem, the model seems to suggest that the
-predictors in question don’t seems to be reliably associated with the
-outcome (low estimates, high standard errors), although these predictors
-actually are strongly associated with the outcome, i.e. indeed might
-have strong effect (*McElreath 2020, chapter 6.1*).
+Multicollinearity can arise when a third, unobserved variable causally
+affects multiple predictors that are associated with the outcome. When
+multicollinearity is present, the model may show that individual
+predictors do not appear reliably associated with the outcome (yielding
+low estimates and high standard errors), even when these predictors are
+actually strongly related to the outcome (*McElreath 2020, chapter
+6.1*).
 
 ``` r
 
@@ -378,29 +377,61 @@ diagnostic_plots[[5]]
 ![](check_model_files/figure-html/unnamed-chunk-15-1.png)
 
 The variance inflation factor (VIF) indicates the magnitude of
-multicollinearity of model terms. The thresholds for low, moderate and
-high collinearity are VIF values less than 5, between 5 and 10 and
-larger than 10, respectively (*James et al. 2013*). Note that these
-thresholds, although commonly used, are also criticized for being too
-high. *Zuur et al. (2010)* suggest using lower values, e.g. a VIF of 3
-or larger may already no longer be considered as “low”.
+multicollinearity of model terms. Common thresholds suggest that VIF
+values less than 5 indicate low collinearity, values between 5 and 10
+indicate moderate collinearity, and values larger than 10 indicate high
+collinearity (*James et al. 2013*). However, these thresholds have been
+criticized for being too lenient. *Zuur et al. (2010)* suggest using
+stricter criteria, where a VIF of 3 or larger may warrant concern. That
+said, VIF thresholds should be interpreted cautiously and in context
+(*O’Brien 2007*).
 
-Our model clearly suffers from multicollinearity, as all predictors have
-high VIF values.
+Our model clearly shows multicollinearity, as all predictors have high
+VIF values.
 
-#### How to fix this?
+#### How to interpret and address this?
 
-Usually, predictors with (very) high VIF values should be removed from
-the model to fix multicollinearity. Some caution is needed for
-interaction terms. If interaction terms are included in a model, high
-VIF values are expected. This portion of multicollinearity among the
-component terms of an interaction is also called “inessential
-ill-conditioning”, which leads to inflated VIF values that are typically
-seen for models with interaction terms *(Francoeur 2013)*. In such
-cases, try centering the involved interaction terms, which can reduce
-multicollinearity *(Kim and Jung 2024)*, or re-fit your model without
-interaction terms and check this model for collinearity among
-predictors.
+High VIF values indicate that coefficient estimates may be unstable and
+have inflated standard errors. However, **removing predictors with high
+VIF values is generally not recommended** as a blanket solution
+(*Vanhove 2021; Morrissey and Ruxton 2018; Gregorich et al. 2021*).
+Multicollinearity is primarily a concern for *interpretation* of
+individual coefficients, not for the model’s overall predictive
+performance or for drawing inferences about the combined effects of
+correlated predictors.
+
+Consider these points when dealing with multicollinearity:
+
+1.  **If your goal is prediction**, multicollinearity is typically not a
+    problem. The model can still make accurate predictions even when
+    predictors are highly correlated (*Feng et al. 2019; Graham 2003*).
+
+2.  **If your goal is to interpret individual coefficients**, high VIF
+    values signal that you should be cautious. The coefficients
+    represent the effect of each predictor while holding all others
+    constant, which may not be meaningful when predictors are strongly
+    related. In such cases, consider:
+
+    - Interpreting coefficients jointly rather than individually
+    - Acknowledging the uncertainty in individual coefficient estimates
+    - Considering whether your research question truly requires
+      separating the effects of correlated predictors
+
+3.  **For interaction terms**, high VIF values are expected and often
+    unavoidable. This is sometimes called “inessential ill-conditioning”
+    (*Francoeur 2013*). Centering the component variables can sometimes
+    help reduce VIF values for interactions (*Kim and Jung 2024*).
+
+4.  **Consider the substantive context**: Sometimes, multicollinearity
+    reflects important aspects of your data or research question.
+    Removing variables to reduce VIF may actually harm your analysis by
+    omitting important confounders or by changing the interpretation of
+    remaining coefficients (*Gregorich et al. 2021*).
+
+Rather than automatically removing predictors, focus on whether
+multicollinearity prevents you from answering your specific research
+question, and whether the instability in coefficient estimates is
+acceptable given your goals.
 
 ### Normality of residuals
 
@@ -460,6 +491,10 @@ Technometrics. 1977;19(1): 15-18.
 Cook RD and Weisberg S. Residuals and Influence in Regression. London:
 Chapman and Hall, 1982.
 
+Feng X, Park DS, Liang Y, Pandey R, Papeş M. Collinearity in Ecological
+Niche Modeling: Confusions and Challenges. Ecology and Evolution.
+2019;9(18):10365-76. <doi:10.1002/ece3.5555>
+
 Francoeur RB. Could Sequential Residual Centering Resolve Low
 Sensitivity in Moderated Regression? Simulations and Cancer Symptom
 Clusters. Open Journal of Statistics. 2013:03(06), 24-44.
@@ -473,6 +508,14 @@ Gelman A, Greenland S. Are confidence intervals better termed
 Gelman A, and Hill J. Data analysis using regression and
 multilevel/hierarchical models. Cambridge; New York. Cambridge
 University Press, 2007
+
+Graham MH. Confronting Multicollinearity in Ecological Multiple
+Regression. Ecology. 2003;84(11):2809-15. <doi:10.1890/02-3114>
+
+Gregorich M, Strohmaier S, Dunkler D, Heinze G. Regression with Highly
+Correlated Predictors: Variable Omission Is Not the Solution.
+International Journal of Environmental Research and Public Health.
+2021;18(8):4259. <doi:10.3390/ijerph18084259>
 
 James, G., Witten, D., Hastie, T., and Tibshirani, R. (eds.).An
 introduction to statistical learning: with applications in R. New York:
@@ -489,9 +532,21 @@ Pre-Registration. International Review of Social Psychology, 2019
 McElreath, R. Statistical rethinking: A Bayesian course with examples in
 R and Stan. 2nd edition. Chapman and Hall/CRC, 2020
 
+Morrissey MB, Ruxton GD. Multiple Regression Is Not Multiple
+Regressions: The Meaning of Multiple Regression and the Non-Problem of
+Collinearity. Philosophy, Theory, and Practice in Biology. 2018;10.
+<doi:10.3998/ptpbio.16039257.0010.003>
+
+O’Brien RM. A Caution Regarding Rules of Thumb for Variance Inflation
+Factors. Quality & Quantity. 2007;41(5):673-90.
+<doi:10.1007/s11135-006-9018-6>
+
 Pek J, Wong O, Wong ACM. How to Address Non-normality: A Taxonomy of
 Approaches, Reviewed, and Illustrated. Front Psychol (2018) 9:2104. doi:
 10.3389/fpsyg.2018.02104
+
+Vanhove J. Collinearity Isn’t a Disease That Needs Curing.
+Meta-Psychology. 2021;5(April). <doi:10.15626/MP.2021.2548>
 
 Zuur AF, Ieno EN, Elphick CS. A protocol for data exploration to avoid
 common statistical problems: Data exploration. Methods in Ecology and
