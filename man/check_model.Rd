@@ -77,7 +77,10 @@ residuals.}
 to \code{FALSE} for models with many observations, if generating the plot is too
 time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
 tries to guess whether performance will be poor due to a very large model
-and thus automatically shows or hides dots.}
+and thus automatically shows or hides dots. For models with only categorical
+predictors, dots are automatically hidden to improve the visualization of
+variance patterns across groups (but you can override this by explicitly
+setting \code{show_dots = TRUE}).}
 
 \item{size_dot, size_line}{Size of line and dot-geoms.}
 

@@ -46,7 +46,10 @@
 #' to `FALSE` for models with many observations, if generating the plot is too
 #' time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
 #' tries to guess whether performance will be poor due to a very large model
-#' and thus automatically shows or hides dots.
+#' and thus automatically shows or hides dots. For models with only categorical
+#' predictors, dots are automatically hidden to improve the visualization of
+#' variance patterns across groups (but you can override this by explicitly
+#' setting `show_dots = TRUE`).
 #' @param verbose If `FALSE` (default), suppress most warning messages.
 #' @param ... Arguments passed down to the individual check functions, especially
 #' to `check_predictions()` and `binned_residuals()`.
@@ -300,10 +303,15 @@ check_model.default <- function(
     type <- "discrete_interval"
   }
 
-  # set default for show_dots, based on "model size"
+  # set default for show_dots, based on "model size" and predictor types
   if (is.null(show_dots)) {
     n <- .safe(insight::n_obs(x))
     show_dots <- is.null(n) || n <= 1e5
+    # Auto-disable dots for models with only categorical predictors
+    # to improve visualization of variance patterns
+    if (show_dots && .has_only_categorical_predictors(x)) {
+      show_dots <- FALSE
+    }
   }
 
   attr(assumptions_data, "panel") <- panel
@@ -741,4 +749,78 @@ check_model.DHARMa <- check_model.performance_simres
 
   class(dat) <- c("check_model", "see_check_model", "data.frame")
   dat
+}
+
+# Helper function to detect if model has only categorical predictors ----
+
+.has_only_categorical_predictors <- function(model) {
+  tryCatch(
+    {
+      # Get the model matrix (excludes intercept)
+      mm <- insight::get_modelmatrix(model, verbose = FALSE)
+      if (is.null(mm) || ncol(mm) <= 1) {
+        # Only intercept or no predictors
+        return(FALSE)
+      }
+
+      # Remove intercept column if present
+      mm_cols <- colnames(mm)
+      mm_cols <- mm_cols[mm_cols != "(Intercept)"]
+
+      if (length(mm_cols) == 0) {
+        return(FALSE)
+      }
+
+      # Get predictors from the model
+      predictors <- insight::find_predictors(model, flatten = TRUE)
+      if (is.null(predictors) || length(predictors) == 0) {
+        return(FALSE)
+      }
+
+      # Get model data
+      model_data <- insight::get_data(model, verbose = FALSE)
+      if (is.null(model_data)) {
+        return(FALSE)
+      }
+
+      # Check each predictor
+      # A predictor is considered categorical if:
+      # 1. It's a factor/character in the data, OR
+      # 2. It appears in the formula wrapped in factor(), as.factor(), etc., OR
+      # 3. It generates multiple dummy columns in the model matrix
+      predictor_is_categorical <- vapply(predictors, function(pred) {
+        # Check if it's a factor/character in the data
+        if (pred %in% names(model_data)) {
+          var <- model_data[[pred]]
+          if (is.factor(var) || is.character(var)) {
+            return(TRUE)
+          }
+        }
+
+        # Check if this predictor generates multiple dummy columns
+        # (indicates categorical treatment)
+        pred_pattern <- paste0("^", pred, "[^a-zA-Z0-9_]")
+        pred_cols <- grep(pred_pattern, mm_cols, value = TRUE)
+
+        # Also check for factor(pred), as.factor(pred) patterns
+        factor_patterns <- c(
+          paste0("^factor\\(", pred, "\\)"),
+          paste0("^as\\.factor\\(", pred, "\\)")
+        )
+        for (pattern in factor_patterns) {
+          pred_cols <- c(pred_cols, grep(pattern, mm_cols, value = TRUE))
+        }
+
+        # If multiple columns for this predictor, it's categorical
+        length(pred_cols) > 1
+      }, FUN.VALUE = logical(1))
+
+      # Return TRUE only if all predictors are categorical
+      length(predictor_is_categorical) > 0 && all(predictor_is_categorical)
+    },
+    error = function(e) {
+      # If there's any error, default to FALSE
+      FALSE
+    }
+  )
 }
