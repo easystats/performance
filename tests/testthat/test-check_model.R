@@ -206,3 +206,53 @@ test_that("`check_model()` with transformed response when named as function", {
   out <- check_predictions(model)
   expect_s3_class(out, "performance_pp_check")
 })
+
+
+test_that("`check_model()` with show_dots parameter", {
+  data(mtcars)
+  m <- lm(mpg ~ factor(cyl) + wt, data = mtcars)
+
+  # Test with show_dots = FALSE
+  result <- check_model(m, show_dots = FALSE, verbose = FALSE)
+
+  expect_s3_class(result, "check_model")
+  expect_false(attr(result, "show_dots"))
+})
+
+
+test_that("`check_model()` auto-detects categorical predictors", {
+  skip_if_not_installed("curl")
+
+  # Load test data
+  star <- tryCatch(
+    {
+      read.csv("https://drmankin.github.io/disc_stats/star.csv")
+    },
+    error = function(e) {
+      NULL
+    }
+  )
+
+  skip_if(is.null(star), message = "Could not download test data")
+
+  star$star2 <- factor(star$star2)
+
+  m <- lm(math2 ~ star2, data = star, na.action = na.exclude)
+  result <- check_model(m, verbose = FALSE)
+
+  # Should auto-disable dots for categorical-only models
+  expect_s3_class(result, "check_model")
+  expect_false(attr(result, "show_dots"))
+})
+
+
+test_that("`check_model()` keeps dots for mixed continuous/categorical models", {
+  data(mtcars)
+  m <- lm(mpg ~ factor(cyl) + wt + hp, data = mtcars)
+
+  result <- check_model(m, verbose = FALSE)
+
+  expect_s3_class(result, "check_model")
+  # Should keep dots by default for mixed models
+  expect_true(is.null(attr(result, "show_dots")) || attr(result, "show_dots"))
+})
