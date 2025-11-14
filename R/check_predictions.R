@@ -198,7 +198,7 @@ check_predictions.stanreg <- function(
     )
   } else {
     out <- as.data.frame(
-      bayesplot::pp_check(object, type = pp_type, nreps = iterations, ...)$data
+      bayesplot::pp_check(object, plotfun = pp_type, nreps = iterations, ...)$data
     )
   }
 
