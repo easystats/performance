@@ -226,6 +226,11 @@ check_predictions.stanreg <- function(
     )
   }
 
+  # make x cateogorical for bernoulli/categorical/multinomial models
+  if (minfo$is_bernoulli || minfo$is_categorical || minfo$is_multinomial) {
+    out$x <- as.factor(out$x)
+  }
+
   attr(out, "is_stan") <- TRUE
   attr(out, "check_range") <- check_range
   attr(out, "response_name") <- resp_string
