@@ -787,33 +787,47 @@ check_model.DHARMa <- check_model.performance_simres
       # A predictor is considered categorical if:
       # 1. It's a factor/character in the data, OR
       # 2. It appears in the formula wrapped in factor(), as.factor(), etc., OR
-      # 3. It generates multiple dummy columns in the model matrix
-      predictor_is_categorical <- vapply(predictors, function(pred) {
-        # Check if it's a factor/character in the data
-        if (pred %in% names(model_data)) {
-          var <- model_data[[pred]]
-          if (is.factor(var) || is.character(var)) {
+      # 3. It generates dummy columns in the model matrix
+      predictor_is_categorical <- vapply(
+        predictors,
+        function(pred) {
+          # Check if it's a factor/character in the data
+          if (pred %in% names(model_data)) {
+            var <- model_data[[pred]]
+            if (is.factor(var) || is.character(var)) {
+              return(TRUE)
+            }
+          }
+
+          # Check for explicit factor conversion in formula like factor() or as.factor()
+          # This correctly handles binary factors converted in the formula.
+          factor_patterns <- paste(
+            c(
+              paste0("^factor\\(", pred, "\\)"),
+              paste0("^as\\.factor\\(", pred, "\\)")
+            ),
+            collapse = "|"
+          )
+          if (any(grepl(factor_patterns, mm_cols))) {
             return(TRUE)
           }
-        }
 
-        # Check if this predictor generates multiple dummy columns
-        # (indicates categorical treatment)
-        pred_pattern <- paste0("^", pred, "[^a-zA-Z0-9_]")
-        pred_cols <- grep(pred_pattern, mm_cols, value = TRUE)
+          # Check if this predictor generates dummy columns
+          # (indicates categorical treatment for non-binary factors)
+          # This pattern correctly identifies dummy variables like 'cyl6' from 'cyl'
+          # without incorrectly matching partial names like 'cyl_long'.
+          pred_pattern <- paste0("^", pred, "(?![a-zA-Z_])")
+          pred_cols <- grep(pred_pattern, mm_cols, value = TRUE, perl = TRUE)
 
-        # Also check for factor(pred), as.factor(pred) patterns
-        factor_patterns <- c(
-          paste0("^factor\\(", pred, "\\)"),
-          paste0("^as\\.factor\\(", pred, "\\)")
-        )
-        for (pattern in factor_patterns) {
-          pred_cols <- c(pred_cols, grep(pattern, mm_cols, value = TRUE))
-        }
+          # Exclude exact matches (continuous predictors appear as-is in model matrix)
+          # Only count dummy variable columns (e.g., 'cyl6', 'cyl8' but not 'cyl')
+          pred_cols <- pred_cols[pred_cols != pred]
 
-        # If multiple columns for this predictor, it's categorical
-        length(pred_cols) > 1
-      }, FUN.VALUE = logical(1))
+          # If one or more dummy columns for this predictor, it's categorical
+          length(pred_cols) >= 1
+        },
+        FUN.VALUE = logical(1)
+      )
 
       # Return TRUE only if all predictors are categorical
       length(predictor_is_categorical) > 0 && all(predictor_is_categorical)

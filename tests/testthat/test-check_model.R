@@ -254,5 +254,17 @@ test_that("`check_model()` keeps dots for mixed continuous/categorical models", 
 
   expect_s3_class(result, "check_model")
   # Should keep dots by default for mixed models
-  expect_true(is.null(attr(result, "show_dots")) || attr(result, "show_dots"))
+  expect_true(attr(result, "show_dots"))
+})
+
+
+test_that("`check_model()` auto-disables dots for binary factor in formula", {
+  data(mtcars)
+  m <- lm(mpg ~ as.factor(am), data = mtcars)
+
+  result <- check_model(m, verbose = FALSE)
+
+  # Should auto-disable dots for categorical-only models (even binary)
+  expect_s3_class(result, "check_model")
+  expect_false(attr(result, "show_dots"))
 })
