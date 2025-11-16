@@ -198,7 +198,7 @@ check_predictions.stanreg <- function(
     )
   } else {
     out <- as.data.frame(
-      bayesplot::pp_check(object, type = pp_type, nreps = iterations, ...)$data
+      bayesplot::pp_check(object, plotfun = pp_type, nreps = iterations, ...)$data
     )
   }
 
@@ -224,6 +224,11 @@ check_predictions.stanreg <- function(
       names_to = "Group",
       values_to = "Count"
     )
+  }
+
+  # make x cateogorical for bernoulli/categorical/multinomial models
+  if (minfo$is_bernoulli || minfo$is_categorical || minfo$is_multinomial) {
+    out$x <- as.factor(out$x)
   }
 
   attr(out, "is_stan") <- TRUE
