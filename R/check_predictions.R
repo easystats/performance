@@ -46,7 +46,7 @@
 #' @details An example how posterior predictive checks can also be used for model
 #'   comparison is Figure 6 from _Gabry et al. 2019, Figure 6_.
 #'
-#'   \if{html}{\cr \figure{pp_check.png}{options: width="90\%" alt="Posterior Predictive Check"} \cr}
+#'   \if{html}{\cr \figure{pp_check.png}{options: style="width: 25\%;" alt="Posterior Predictive Check"} \cr}
 #'   The model shown in the right panel (b) can simulate new data that are more
 #'   similar to the observed outcome than the model in the left panel (a). Thus,
 #'   model (b) is likely to be preferred over model (a).
@@ -198,7 +198,7 @@ check_predictions.stanreg <- function(
     )
   } else {
     out <- as.data.frame(
-      bayesplot::pp_check(object, type = pp_type, nreps = iterations, ...)$data
+      bayesplot::pp_check(object, plotfun = pp_type, nreps = iterations, ...)$data
     )
   }
 
@@ -224,6 +224,11 @@ check_predictions.stanreg <- function(
       names_to = "Group",
       values_to = "Count"
     )
+  }
+
+  # make x cateogorical for bernoulli/categorical/multinomial models
+  if (minfo$is_bernoulli || minfo$is_categorical || minfo$is_multinomial) {
+    out$x <- as.factor(out$x)
   }
 
   attr(out, "is_stan") <- TRUE
