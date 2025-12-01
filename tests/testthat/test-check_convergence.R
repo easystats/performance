@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("check_convergence", {
   skip_if_not_installed("lme4")
 
