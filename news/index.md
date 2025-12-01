@@ -1,5 +1,17 @@
 # Changelog
 
+## performance 0.15.3
+
+CRAN release: 2025-12-01
+
+### Changes
+
+- [`check_autocorrelation()`](https://easystats.github.io/performance/reference/check_autocorrelation.md)
+  gets methods for `DHARMa` objects and objects from
+  [`simulate_residuals()`](https://easystats.github.io/performance/reference/simulate_residuals.md).
+
+- Improved documentation for printing-methods.
+
 ## performance 0.15.2
 
 CRAN release: 2025-10-06
