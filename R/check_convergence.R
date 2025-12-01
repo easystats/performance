@@ -70,5 +70,11 @@
 #' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
-  insight::is_converged(x, tolerance = tolerance, ...)
+  out <- .safe(insight::is_converged(x, tolerance = tolerance, ...))
+  if (is.null(out)) {
+    insight::format_alert("Could not compute convergence information.")
+    out <- NA
+  }
+
+  out
 }

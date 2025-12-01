@@ -1,7 +1,7 @@
 Type: Package
 Package: performance
 Title: Assessment of Regression Models Performance
-Version: 0.15.2.5
+Version: 0.15.3
 Authors@R:
     c(person(given = "Daniel",
              family = "Lüdecke",
@@ -49,7 +49,7 @@ Authors@R:
       person(given = "gjo11",
              role = "rev"),
       person(given = "Etienne",
-             family = "Bacher", ,
+             family = "Bacher",
              email = "etienne.bacher@protonmail.com",
              role = "ctb",
              comment = c(ORCID = "0000-0002-9271-5075")),
