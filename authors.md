@@ -40,7 +40,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/easystats/performance/blob/v0.15.3/inst/CITATION)
+[`inst/CITATION`](https://github.com/easystats/performance/blob/main/inst/CITATION)
 
 Lüdecke et al., (2021). performance: An R Package for Assessment,
 Comparison and Testing of Statistical Models. Journal of Open Source

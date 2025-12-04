@@ -98,9 +98,8 @@ model <- lme4::glmer(
 #> boundary (singular) fit: see help('isSingular')
 
 check_convergence(model)
-#> [1] TRUE
-#> attr(,"gradient")
-#> [1] 8.444782e-05
+#> Could not compute convergence information.
+#> [1] NA
 
 # \donttest{
 model <- suppressWarnings(glmmTMB::glmmTMB(
