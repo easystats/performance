@@ -1,3 +1,9 @@
+# performance (devel)
+
+## Bug fixes
+
+* Fixed CRAN check issues.
+
 # performance 0.15.3
 
 ## Changes
