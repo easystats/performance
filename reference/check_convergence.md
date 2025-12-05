@@ -40,10 +40,11 @@ standard errors.
 
 **lme4** performs a convergence-check (see
 [`?lme4::convergence`](https://rdrr.io/pkg/lme4/man/convergence.html)),
-however, as as discussed [here](https://github.com/lme4/lme4/issues/120)
+however, as discussed [here](https://github.com/lme4/lme4/issues/120)
 and suggested by one of the lme4-authors in [this
 comment](https://github.com/lme4/lme4/issues/120#issuecomment-39920269),
-this check can be too strict. `check_convergence()` thus provides an
+this check can be too strict. `is_converged()` (and its wrapper
+function, `performance::check_convergence()`) thus provides an
 alternative convergence test for `merMod`-objects.
 
 ## Resolving convergence issues
@@ -51,13 +52,15 @@ alternative convergence test for `merMod`-objects.
 Convergence issues are not easy to diagnose. The help page on
 [`?lme4::convergence`](https://rdrr.io/pkg/lme4/man/convergence.html)
 provides most of the current advice about how to resolve convergence
-issues. Another clue might be large parameter values, e.g. estimates (on
-the scale of the linear predictor) larger than 10 in (non-identity link)
-generalized linear model *might* indicate [complete
-separation](https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/).
-Complete separation can be addressed by regularization, e.g. penalized
-regression or Bayesian regression with appropriate priors on the fixed
-effects.
+issues. In general, convergence issues may be addressed by one or more
+of the following strategies: 1. Rescale continuous predictors; 2. try a
+different optimizer; 3. increase the number of iterations; or, if
+everything else fails, 4. simplify the model. Another clue might be
+large parameter values, e.g. estimates (on the scale of the linear
+predictor) larger than 10 in (non-identity link) generalized linear
+model *might* indicate complete separation, which can be addressed by
+regularization, e.g. penalized regression or Bayesian regression with
+appropriate priors on the fixed effects.
 
 ## Convergence versus Singularity
 
@@ -66,7 +69,27 @@ singularity indicates an issue with the "true" best estimate, i.e.
 whether the maximum likelihood estimation for the variance-covariance
 matrix of the random effects is positive definite or only semi-definite.
 Convergence is a question of whether we can assume that the numerical
-optimization has worked correctly or not.
+optimization has worked correctly or not. A convergence failure means
+the optimizer (the algorithm) could not find a stable solution (*Bates
+et. al 2015*).
+
+For singular models (see
+[`?lme4::isSingular`](https://rdrr.io/pkg/lme4/man/isSingular.html)),
+convergence is determined based on the optimizer's convergence code. If
+the optimizer reports successful convergence (convergence code 0) for a
+singular model, `is_converged()` returns `TRUE`. For non-singular
+models, in cases where the gradient and Hessian are not available,
+`is_converged()` returns `FALSE` and prints a message to indicate that
+convergence cannot be assessed through the usual gradient-based checks.
+Note that `performance::check_convergence()` is a wrapper around
+[`insight::is_converged()`](https://easystats.github.io/insight/reference/is_converged.html).
+
+## References
+
+Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting
+Linear Mixed-Effects Models Using lme4. Journal of Statistical Software,
+67(1), 1-48.
+[doi:10.18637/jss.v067.i01](https://doi.org/10.18637/jss.v067.i01)
 
 ## See also
 
