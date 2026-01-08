@@ -162,7 +162,7 @@ plots for the model under investigation.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/">performance</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/check_model.html">check_model</a></span><span class="op">(</span><span class="va">m1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="100%" height="100%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="100%" height="100%"></p>
 <p>Now let’s take a closer look for each plot. To do so, we ask
 <code><a href="../reference/check_model.html">check_model()</a></code> to return a single plot for each check,
 instead of arranging them in a grid. We can do so using the
@@ -183,7 +183,7 @@ p. 158</em>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># posterior predicive checks</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p>The blue lines are simulated data based on the model, if the model
 were true and distributional assumptions met. The green line represents
 the actual observed data of the response variable.</p>
@@ -199,7 +199,7 @@ distributional assumption of a linear model.</p>
 <span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">skewed</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_predictions.html">check_predictions</a></span><span class="op">(</span><span class="va">m2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p>As you can see, the green line in this plot deviates visibly from the
 blue lines. This may indicate that our linear model is not appropriate,
 since it does not capture the distributional nature of the response
@@ -235,7 +235,7 @@ observed, error bars for replicated outcomes) or
 <span><span class="op">)</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_predictions.html">check_predictions</a></span><span class="op">(</span><span class="va">m3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">out</span>, type <span class="op">=</span> <span class="st">"discrete_both"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 </div>
 </div>
 <div class="section level3">
@@ -249,7 +249,7 @@ specification seems to be ok.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># linearity</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p>Now to a different example, where we simulate data with a quadratic
 relationship of one of the predictors and the outcome.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -265,7 +265,7 @@ relationship of one of the predictors and the outcome.</p>
 <span></span>
 <span><span class="co"># linearity plot</span></span>
 <span><span class="va">out</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <div class="section level4">
 <h4 id="how-to-fix-this-1">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-1"></a>
 </h4>
@@ -281,7 +281,7 @@ linearity assumptions are not met.</p>
 <span></span>
 <span><span class="co"># linearity plot</span></span>
 <span><span class="va">out</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p><strong>Some caution is needed</strong> when interpreting these
 plots. Although these plots are helpful to check model assumptions, they
 do not necessarily indicate so-called “lack of fit”, e.g. missed
@@ -314,7 +314,7 @@ heteroscedasticity.</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, colour <span class="op">=</span> <span class="va">grp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p>For our example model, we see that our model indeed violates the
 assumption of homoscedasticity.</p>
 <p>But why does the diagnostic plot used in <code><a href="../reference/check_model.html">check_model()</a></code>
@@ -327,7 +327,7 @@ heteroscedasticity.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># homoscedasticiy - homogeneity of variance</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <div class="section level4">
 <h4 id="how-to-fix-this-2">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-2"></a>
 </h4>
@@ -365,7 +365,7 @@ observation.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># influential observations - outliers</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p>In our example, everything looks well.</p>
 <div class="section level4">
 <h4 id="how-to-fix-this-3">How to fix this?<a class="anchor" aria-label="anchor" href="#how-to-fix-this-3"></a>
@@ -407,7 +407,7 @@ predictors are actually strongly related to the outcome (<em>McElreath
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># multicollinearity</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p>The variance inflation factor (VIF) indicates the magnitude of
 multicollinearity of model terms. Common thresholds suggest that VIF
 values less than 5 indicate low collinearity, values between 5 and 10
@@ -484,7 +484,7 @@ inaccurate.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># normally distributed residuals</span></span>
 <span><span class="va">diagnostic_plots</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
-<p><img src="check_model_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="80%" height="80%"></p>
+<p><img src="check_model_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="80%" height="80%"></p>
 <p>In our example, we see that most data points are ok, except some
 observations at the tails. Whether any action is needed to fix this or
 not can also depend on the results of the remaining diagnostic plots. If

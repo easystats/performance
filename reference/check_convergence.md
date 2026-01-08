@@ -121,7 +121,8 @@ model <- lme4::glmer(
 #> boundary (singular) fit: see help('isSingular')
 
 check_convergence(model)
-#> Could not compute convergence information.
+#> [1] TRUE
+#> attr(,"gradient")
 #> [1] NA
 
 # \donttest{
