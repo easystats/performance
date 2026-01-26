@@ -22,6 +22,7 @@ check_model(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
   size_title = 12,
@@ -109,6 +110,12 @@ check_model(
   time-consuming. By default, `show_dots = NULL`. In this case
   `check_model()` tries to guess whether performance will be poor due to
   a very large model and thus automatically shows or hides dots.
+
+- maximum_dots:
+
+  Limits the number of data points for models with many observations, to
+  reduce the time for rendering the plot. Defaults to a maximum of 2000
+  data points to render
 
 - size_dot, size_line:
 

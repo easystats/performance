@@ -15,7 +15,7 @@ get hints about possible problems."><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.3.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@ get hints about possible problems.</p>
 <span>  type <span class="op">=</span> <span class="st">"density"</span>,</span>
 <span>  residual_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_dots <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  maximum_dots <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  size_dot <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  size_line <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  size_title <span class="op">=</span> <span class="fl">12</span>,</span>
@@ -167,6 +168,12 @@ to <code>FALSE</code> for models with many observations, if generating the plot 
 time-consuming. By default, <code>show_dots = NULL</code>. In this case <code>check_model()</code>
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.</p></dd>
+
+
+<dt id="arg-maximum-dots">maximum_dots<a class="anchor" aria-label="anchor" href="#arg-maximum-dots"></a></dt>
+<dd><p>Limits the number of data points for models with many
+observations, to reduce the time for rendering the plot. Defaults to a
+maximum of 2000 data points to render</p></dd>
 
 
 <dt id="arg-size-dot-size-line">size_dot, size_line<a class="anchor" aria-label="anchor" href="#arg-size-dot-size-line"></a></dt>
