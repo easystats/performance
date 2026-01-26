@@ -2,6 +2,8 @@
 
 ## Bug fixes
 
+* Fixed issue in `check_dag()` with multiple colliders.
+
 * Fixed CRAN check issues.
 
 # performance 0.15.3
