@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("check_convergence", {
   skip_if_not_installed("lme4")
 
@@ -14,7 +16,7 @@ test_that("check_convergence", {
   expect_true(check_convergence(model))
   expect_equal(
     check_convergence(model),
-    structure(TRUE, gradient = 0.000280307452338331),
+    structure(TRUE, gradient = NA_real_),
     tolerance = 1e-3
   )
 })

@@ -12,37 +12,18 @@
 #' @return `TRUE` if convergence is fine and `FALSE` if convergence
 #'   is suspicious. Additionally, the convergence value is returned as attribute.
 #'
-#' @section Convergence and log-likelihood:
-#' Convergence problems typically arise when the model hasn't converged
-#' to a solution where the log-likelihood has a true maximum. This may result
-#' in unreliable and overly complex (or non-estimable) estimates and standard
-#' errors.
+#' @inheritSection insight::is_converged Convergence and log-likelihood
 #'
-#' @section Inspect model convergence:
-#' **lme4** performs a convergence-check (see `?lme4::convergence`),
-#' however, as as discussed [here](https://github.com/lme4/lme4/issues/120)
-#' and suggested by one of the lme4-authors in
-#' [this comment](https://github.com/lme4/lme4/issues/120#issuecomment-39920269),
-#' this check can be too strict. `check_convergence()` thus provides an
-#' alternative convergence test for `merMod`-objects.
+#' @inheritSection insight::is_converged Inspect model convergence
 #'
-#' @section Resolving convergence issues:
-#' Convergence issues are not easy to diagnose. The help page on
-#' `?lme4::convergence` provides most of the current advice about
-#' how to resolve convergence issues. Another clue might be large parameter
-#' values, e.g. estimates (on the scale of the linear predictor) larger than
-#' 10 in (non-identity link) generalized linear model *might* indicate
-#' [complete separation](https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faqwhat-is-complete-or-quasi-complete-separation-in-logisticprobit-regression-and-how-do-we-deal-with-them/).
-#' Complete separation can be addressed by regularization, e.g. penalized
-#' regression or Bayesian regression with appropriate priors on the fixed effects.
+#' @inheritSection insight::is_converged Resolving convergence issues
 #'
-#' @section Convergence versus Singularity:
-#' Note the different meaning between singularity and convergence: singularity
-#' indicates an issue with the "true" best estimate, i.e. whether the maximum
-#' likelihood estimation for the variance-covariance matrix of the random effects
-#' is positive definite or only semi-definite. Convergence is a question of
-#' whether we can assume that the numerical optimization has worked correctly
-#' or not.
+#' @inheritSection insight::is_converged Convergence versus Singularity
+#'
+#' @references
+#' Bates, D., Mächler, M., Bolker, B., and Walker, S. (2015). Fitting Linear
+#' Mixed-Effects Models Using lme4. Journal of Statistical Software, 67(1),
+#' 1-48. \doi{10.18637/jss.v067.i01}
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
@@ -70,5 +51,11 @@
 #' }
 #' @export
 check_convergence <- function(x, tolerance = 0.001, ...) {
-  insight::is_converged(x, tolerance = tolerance, ...)
+  out <- .safe(insight::is_converged(x, tolerance = tolerance, ...))
+  if (is.null(out)) {
+    insight::format_alert("Could not compute convergence information.")
+    out <- NA
+  }
+
+  out
 }

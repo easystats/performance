@@ -1,5 +1,11 @@
 # performance (devel)
 
+## Bug fixes
+
+* Fixed CRAN check issues.
+
+# performance 0.15.3
+
 ## Changes
 
 * `check_autocorrelation()` gets methods for `DHARMa` objects and objects from

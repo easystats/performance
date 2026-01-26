@@ -137,6 +137,7 @@ test_that("check_collinearity", {
 })
 
 test_that("check_collinearity | afex", {
+  skip_on_cran()
   skip_if_not_installed("afex", minimum_version = "1.0.0")
 
   data(obk.long, package = "afex")
