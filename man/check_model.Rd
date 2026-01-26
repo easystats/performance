@@ -16,6 +16,7 @@ check_model(x, ...)
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
   size_title = 12,
@@ -78,6 +79,10 @@ to \code{FALSE} for models with many observations, if generating the plot is too
 time-consuming. By default, \code{show_dots = NULL}. In this case \code{check_model()}
 tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
+
+\item{maximum_dots}{Limits the number of data points for models with many
+observations, to reduce the time for rendering the plot. Defaults to a
+maximum of 2000 data points to render}
 
 \item{size_dot, size_line}{Size of line and dot-geoms.}
 

@@ -1,5 +1,11 @@
 # performance (devel)
 
+## Changes
+
+* `check_model()` now limits the number of data points for models with many
+  observations, to reduce the time for rendering the plot via the `maximum_dots`
+  argument.
+
 ## Bug fixes
 
 * Fixed issue in `check_dag()` with multiple colliders.
