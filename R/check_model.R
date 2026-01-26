@@ -305,9 +305,16 @@ check_model.default <- function(
   }
 
   # set default for show_dots, based on "model size"
+  n <- .safe(insight::n_obs(x))
   if (is.null(show_dots)) {
-    n <- .safe(insight::n_obs(x))
     show_dots <- is.null(n) || n <= 1e5
+  }
+
+  # tell user about limited dots
+  if (!is.null(maximum_dots) && !is.null(n) && n > maximum_dots && verbose) {
+    insight::format_alert(
+      "The model contains a large number of observations. To ensure efficient rendering, the plot is limited to 2,000 data points. You can use the `maximum_dots` argument to adjust this limit."
+    )
   }
 
   attr(assumptions_data, "panel") <- panel
