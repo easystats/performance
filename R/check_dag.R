@@ -347,7 +347,7 @@ check_dag <- function(
       # - required is NULL and current adjustment not NULL
       # - OR we have a collider in current adjustments
       incorrectly_adjusted = (is.null(adjustment_set) && !is.null(adjustment_nodes)) ||
-        (!is.null(collider) && collider %in% adjustment_nodes), # nolint
+        (!is.null(collider) && any(collider %in% adjustment_nodes)), # nolint
       current_adjustments = adjustment_nodes,
       minimal_adjustments = minimal_adjustments,
       collider = collider
