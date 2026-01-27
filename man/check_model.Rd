@@ -25,7 +25,7 @@ check_model(x, ...)
   alpha = 0.2,
   alpha_dot = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
   ...
 )
@@ -95,8 +95,8 @@ Scalar from 0 to 1.}
 length 3. First color is usually used for reference lines, second color
 for dots, and third color for outliers or extreme values.}
 
-\item{theme}{String, indicating the name of the plot-theme. Must be in the
-format \code{"package::theme_name"} (e.g. \code{"ggplot2::theme_minimal"}).}
+\item{theme}{A ggplot2-theme function, e.g. \code{theme = see::theme_lucid()} or
+\code{theme = ggplot2::theme_dark()}.}
 
 \item{verbose}{If \code{FALSE} (default), suppress most warning messages.}
 }

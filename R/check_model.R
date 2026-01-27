@@ -28,8 +28,8 @@
 #' @param colors Character vector with color codes (hex-format). Must be of
 #' length 3. First color is usually used for reference lines, second color
 #' for dots, and third color for outliers or extreme values.
-#' @param theme String, indicating the name of the plot-theme. Must be in the
-#' format `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
+#' @param theme A ggplot2-theme function, e.g. `theme = see::theme_lucid()` or
+#' `theme = ggplot2::theme_dark()`.
 #' @param detrend Logical. Should Q-Q/P-P plots be detrended? Defaults to
 #' `TRUE` for linear models or when `residual_type = "normal"`. Defaults to
 #' `FALSE` for QQ plots based on simulated residuals (i.e. when
@@ -215,7 +215,7 @@ check_model.default <- function(
   alpha = 0.2,
   alpha_dot = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
   ...
 ) {
@@ -379,7 +379,7 @@ check_model.stanreg <- function(
   alpha = 0.2,
   alpha_dot = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
   ...
 ) {
@@ -430,7 +430,7 @@ check_model.model_fit <- function(
   alpha = 0.2,
   alpha_dot = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
   ...
 ) {
@@ -477,7 +477,7 @@ check_model.performance_simres <- function(
   alpha = 0.2,
   alpha_dot = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
   ...
 ) {
