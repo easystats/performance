@@ -30,7 +30,8 @@ and for \code{parameters::factor_analysis()} and \code{item_omega()}.
 }
 \details{
 The \code{RMSR_corrected} metric is the Root Mean Square Residual corrected for
-degrees of freedom.
+degrees of freedom (i.e., dividing by degrees of freedom rather than the
+number of observations).
 
 For omega-models, the columns \code{R2} and \code{Correlation} are measures of factor
 score adequacy. \code{R2} refers to the multiple R square of scores with factors,
