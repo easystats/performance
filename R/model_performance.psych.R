@@ -7,8 +7,8 @@
 #' `principal` (e.g., from `psych::principal()`), or from
 #' `parameters::factor_analysis()` or `item_omega()`.
 #' @param metrics Can be `"all"` or a character vector of metrics to be computed
-#' (some of `"Chi2"`, `"Chi2_df"`, `"df"`, `"p_Chi2"`, `"RMSA"`,
-#' `"RMSA_corrected"`, `"TLI"`, `"RMSEA"`, and `"BIC"`. For omega-models, can
+#' (some of `"Chi2"`, `"Chi2_df"`, `"df"`, `"p_Chi2"`, `"RMSR"`,
+#' `"RMSR_corrected"`, `"TLI"`, `"RMSEA"`, and `"BIC"`. For omega-models, can
 #' also include `"R2"` and `"Correlation"`.
 #' @param verbose Toggle off warnings.
 #' @param ... Arguments passed to or from other methods.
@@ -33,8 +33,8 @@ model_performance.fa <- function(model, metrics = "all", verbose = TRUE, ...) {
     Chi2 = ifelse(is.null(model$STATISTIC), NA_real_, model$STATISTIC),
     Chi2_df = ifelse(is.null(model$dof), NA_real_, model$dof),
     p_Chi2 = ifelse(is.null(model$PVAL), NA_real_, model$PVAL),
-    RMSA = ifelse(is.null(model$rms), NA_real_, model$rms),
-    RMSA_corrected = ifelse(is.null(model$crms), NA_real_, model$crms),
+    RMSR = ifelse(is.null(model$rms), NA_real_, model$rms),
+    RMSR_corrected = ifelse(is.null(model$crms), NA_real_, model$crms),
     TLI = ifelse(is.null(model$TLI), NA_real_, model$TLI),
     RMSEA = ifelse(is.null(model$RMSEA), NA_real_, model$RMSEA[1]),
     RMSEA_CI = ifelse(is.null(model$RMSEA), NA_real_, 0.9),
@@ -92,8 +92,8 @@ model_performance.omega <- function(model, metrics = "all", verbose = TRUE, ...)
         Chi2 = ifelse(is.null(stats$STATISTIC), NA_real_, stats$STATISTIC),
         df = ifelse(is.null(stats$dof), NA_real_, stats$dof),
         p_Chi2 = ifelse(is.null(stats$PVAL), NA_real_, stats$PVAL),
-        RMSA = ifelse(is.null(stats$rms), NA_real_, stats$rms),
-        RMSA_corrected = ifelse(is.null(stats$crms), NA_real_, stats$crms),
+        RMSR = ifelse(is.null(stats$rms), NA_real_, stats$rms),
+        RMSR_corrected = ifelse(is.null(stats$crms), NA_real_, stats$crms),
         TLI = ifelse(is.null(stats$TLI), NA_real_, stats$TLI),
         RMSEA = ifelse(is.null(stats$RMSEA), NA_real_, stats$RMSEA[1]),
         RMSEA_CI = ifelse(is.null(stats$RMSEA), NA_real_, 0.9),
@@ -148,7 +148,7 @@ print.performance_omega <- function(x, ...) {
   n <- attr(x, "n", exact = TRUE)
   insight::print_color(
     insight::format_message(sprintf(
-      "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model has smaller RMSA and RMSEA then your items are more likely to describe a single unidimensional construct. If the %i-factor model has smaller RMSA and RMSEA then your construct is more likely to be made up of %i sub-constructs.",
+      "\nCompare the model fit of the %i-factor solution with the g-only model. If the g-model has smaller RMSR and RMSEA then your items are more likely to describe a single unidimensional construct. If the %i-factor model has smaller RMSR and RMSEA then your construct is more likely to be made up of %i sub-constructs.",
       n,
       n,
       n
