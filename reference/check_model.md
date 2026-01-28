@@ -22,6 +22,7 @@ check_model(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -31,7 +32,7 @@ check_model(
   alpha = 0.2,
   alpha_dot = 0.8,
   colors = c("#3aaf85", "#1b6ca8", "#cd201f"),
-  theme = "see::theme_lucid",
+  theme = see::theme_lucid(),
   verbose = FALSE,
   ...
 )
@@ -111,6 +112,13 @@ check_model(
   `check_model()` tries to guess whether performance will be poor due to
   a very large model and thus automatically shows or hides dots.
 
+- show_ci:
+
+  Logical, if `TRUE`, confidence intervals in plots are shown. For
+  models with only categorical predictors, confidence intervals are not
+  shown by default, because in this case, these are usually on very
+  large scales.
+
 - maximum_dots:
 
   Limits the number of data points for models with many observations, to
@@ -138,8 +146,8 @@ check_model(
 
 - theme:
 
-  String, indicating the name of the plot-theme. Must be in the format
-  `"package::theme_name"` (e.g. `"ggplot2::theme_minimal"`).
+  A ggplot2-theme function, e.g. `theme = see::theme_lucid()` or
+  `theme = ggplot2::theme_dark()`.
 
 - verbose:
 
@@ -321,13 +329,14 @@ Other functions to check model assumptions and and assess model quality:
 ## Examples
 
 ``` r
+if (FALSE) { # require("lme4") && FALSE
 # \donttest{
 m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 check_model(m)
-
 
 data(sleepstudy, package = "lme4")
 m <- lme4::lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 check_model(m, panel = FALSE)
 # }
+}
 ```

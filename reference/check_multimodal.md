@@ -40,7 +40,7 @@ check_multimodal(x)
 #> 
 #> The Ameijeiras-Alonso et al. (2018) excess mass test suggests that the
 #>   hypothesis of a multimodal distribution cannot be rejected (excess mass
-#>   = 0.02, p = 0.278).
+#>   = 0.02, p = 0.174).
 #> 
 
 x <- c(rnorm(1000), rnorm(1000, 2))
@@ -48,8 +48,8 @@ check_multimodal(x)
 #> # Is the variable multimodal?
 #> 
 #> The Ameijeiras-Alonso et al. (2018) excess mass test suggests that the
-#>   distribution is significantly multimodal (excess mass = 0.02, p =
-#>   0.040).
+#>   hypothesis of a multimodal distribution cannot be rejected (excess mass
+#>   = 0.01, p = 0.810).
 #> 
 
 # Multivariate
@@ -63,7 +63,7 @@ check_multimodal(m)
 #> # Is the data multimodal?
 #> 
 #> The parametric mixture modelling test suggests that the multivariate
-#>   distribution is significantly multimodal (Chi2(8) = 25.13, p = 0.001).
+#>   distribution is significantly multimodal (Chi2(7) = 21.34, p = 0.003).
 #> 
 
 m <- data.frame(
@@ -76,7 +76,7 @@ check_multimodal(m)
 #> # Is the data multimodal?
 #> 
 #> The parametric mixture modelling test suggests that the multivariate
-#>   distribution is significantly multimodal (Chi2(11) = 78.42, p < .001).
+#>   distribution is significantly multimodal (Chi2(11) = 104.48, p < .001).
 #> 
 # }
 ```

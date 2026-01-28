@@ -15,7 +15,7 @@ get hints about possible problems."><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">performance</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.3.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.15.3.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@ get hints about possible problems.</p>
 <span>  type <span class="op">=</span> <span class="st">"density"</span>,</span>
 <span>  residual_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show_dots <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_ci <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  maximum_dots <span class="op">=</span> <span class="fl">2000</span>,</span>
 <span>  size_dot <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  size_line <span class="op">=</span> <span class="fl">0.8</span>,</span>
@@ -93,7 +94,7 @@ get hints about possible problems.</p>
 <span>  alpha <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  alpha_dot <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>  colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#3aaf85"</span>, <span class="st">"#1b6ca8"</span>, <span class="st">"#cd201f"</span><span class="op">)</span>,</span>
-<span>  theme <span class="op">=</span> <span class="st">"see::theme_lucid"</span>,</span>
+<span>  theme <span class="op">=</span> <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_lucid.html" class="external-link">theme_lucid</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -170,6 +171,12 @@ tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.</p></dd>
 
 
+<dt id="arg-show-ci">show_ci<a class="anchor" aria-label="anchor" href="#arg-show-ci"></a></dt>
+<dd><p>Logical, if <code>TRUE</code>, confidence intervals in plots are shown.
+For models with only categorical predictors, confidence intervals are not shown
+by default, because in this case, these are usually on very large scales.</p></dd>
+
+
 <dt id="arg-maximum-dots">maximum_dots<a class="anchor" aria-label="anchor" href="#arg-maximum-dots"></a></dt>
 <dd><p>Limits the number of data points for models with many
 observations, to reduce the time for rendering the plot. Defaults to a
@@ -196,8 +203,8 @@ for dots, and third color for outliers or extreme values.</p></dd>
 
 
 <dt id="arg-theme">theme<a class="anchor" aria-label="anchor" href="#arg-theme"></a></dt>
-<dd><p>String, indicating the name of the plot-theme. Must be in the
-format <code>"package::theme_name"</code> (e.g. <code>"ggplot2::theme_minimal"</code>).</p></dd>
+<dd><p>A ggplot2-theme function, e.g. <code>theme = see::theme_lucid()</code> or
+<code>theme = ggplot2::theme_dark()</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -378,15 +385,16 @@ get hints about possible problems.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># require("lme4") &amp;&amp; FALSE</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">cyl</span> <span class="op">+</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">check_model</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="check_model-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">sleepstudy</span>, package <span class="op">=</span> <span class="st">"lme4"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, <span class="va">sleepstudy</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">check_model</span><span class="op">(</span><span class="va">m</span>, panel <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
