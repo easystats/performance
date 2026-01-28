@@ -89,7 +89,7 @@
     Output
       # Indices of model performance
       
-      Chi2(167) | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |   RMSEA 90% CI |     BIC
+      Chi2(167) | p (Chi2) |  RMSR | RMSR_corrected |   TLI | RMSEA |   RMSEA 90% CI |     BIC
       ----------------------------------------------------------------------------------------
       267.210   |   < .001 | 0.013 |          0.015 | 0.991 | 0.015 | [0.012, 0.019] | -1044.1
 
@@ -100,7 +100,7 @@
     Output
       # Indices of model performance
       
-      Chi2(1) | p (Chi2) |  RMSA
+      Chi2(1) | p (Chi2) |  RMSR
       --------------------------
       4.119   |    0.042 | 0.035
 
@@ -111,15 +111,15 @@
     Output
       # Indices of model performance
       
-      Model             |    Chi2 | df | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC |    R2 | Correlation
+      Model             |    Chi2 | df | p (Chi2) |  RMSR | RMSR_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC |    R2 | Correlation
       -----------------------------------------------------------------------------------------------------------------------------------
       3-factor solution |  31.796 | 25 |   0.164  | 0.015 |          0.023 |       | 0.087 | [0.000, 0.181] | -54.8 |       |            
       g-model           | 264.781 | 44 |   < .001 | 0.393 |          0.440 | 0.195 | 0.395 | [0.356, 0.450] | 112.3 | 0.761 |       0.873
       
       Compare the model fit of the 3-factor solution with the g-only model.
-        If the g-model has smaller RMSA and RMSEA then your items are more
+        If the g-model has smaller RMSR and RMSEA then your items are more
         likely to describe a single unidimensional construct. If the 3-factor
-        model has smaller RMSA and RMSEA then your construct is more likely to
+        model has smaller RMSR and RMSEA then your construct is more likely to
         be made up of 3 sub-constructs.
 
 ---
@@ -129,14 +129,14 @@
     Output
       # Indices of model performance
       
-      Model             |    Chi2 | df | p (Chi2) |  RMSA | RMSA_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC |    R2 | Correlation
+      Model             |    Chi2 | df | p (Chi2) |  RMSR | RMSR_corrected |   TLI | RMSEA |   RMSEA 90% CI |   BIC |    R2 | Correlation
       -----------------------------------------------------------------------------------------------------------------------------------
       3-factor solution |  31.796 | 25 |   0.164  | 0.015 |          0.023 |       | 0.087 | [0.000, 0.181] | -54.8 |       |            
       g-model           | 264.781 | 44 |   < .001 | 0.393 |          0.440 | 0.195 | 0.395 | [0.356, 0.450] | 112.3 | 0.761 |       0.873
       
       Compare the model fit of the 3-factor solution with the g-only model.
-        If the g-model has smaller RMSA and RMSEA then your items are more
+        If the g-model has smaller RMSR and RMSEA then your items are more
         likely to describe a single unidimensional construct. If the 3-factor
-        model has smaller RMSA and RMSEA then your construct is more likely to
+        model has smaller RMSR and RMSEA then your construct is more likely to
         be made up of 3 sub-constructs.
 
