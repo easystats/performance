@@ -47,6 +47,9 @@
 #' time-consuming. By default, `show_dots = NULL`. In this case `check_model()`
 #' tries to guess whether performance will be poor due to a very large model
 #' and thus automatically shows or hides dots.
+#' @param show_ci Logical, if `TRUE`, confidence intervals in plots are shown.
+#' For models with only categorical predictors, confidence intervals are not shown
+#' by default, because in this case, these are usually on very large scales.
 #' @param maximum_dots Limits the number of data points for models with many
 #' observations, to reduce the time for rendering the plot. Defaults to a
 #' maximum of 2000 data points to render
@@ -206,6 +209,7 @@ check_model.default <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -317,6 +321,16 @@ check_model.default <- function(
     )
   }
 
+  # if we have only categorical predictors, we don't show CI by default
+  parameter_types <- .safe(parameters::parameters_type(x))
+  if (
+    !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
+  ) {
+    show_ci = FALSE
+  } else {
+    show_ci = TRUE
+  }
+
   attr(assumptions_data, "panel") <- panel
   attr(assumptions_data, "dot_size") <- size_dot
   attr(assumptions_data, "line_size") <- size_line
@@ -327,6 +341,7 @@ check_model.default <- function(
   attr(assumptions_data, "alpha") <- alpha
   attr(assumptions_data, "dot_alpha") <- alpha_dot
   attr(assumptions_data, "show_dots") <- isTRUE(show_dots)
+  attr(assumptions_data, "show_ci") <- isTRUE(show_ci)
   attr(assumptions_data, "detrend") <- detrend
   attr(assumptions_data, "colors") <- colors
   attr(assumptions_data, "theme") <- theme
@@ -370,6 +385,7 @@ check_model.stanreg <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -397,6 +413,7 @@ check_model.stanreg <- function(
     size_axis_title = size_axis_title,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
     bandwidth = bandwidth,
     type = type,
     residual_type = residual_type,
@@ -421,6 +438,7 @@ check_model.model_fit <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -448,6 +466,7 @@ check_model.model_fit <- function(
     base_size = base_size,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
@@ -468,6 +487,7 @@ check_model.performance_simres <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -495,6 +515,7 @@ check_model.performance_simres <- function(
     base_size = base_size,
     detrend = detrend,
     show_dots = show_dots,
+    show_ci = show_ci,
     maximum_dots = maximum_dots,
     bandwidth = bandwidth,
     type = type,
