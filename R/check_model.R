@@ -48,9 +48,8 @@
 #' tries to guess whether performance will be poor due to a very large model
 #' and thus automatically shows or hides dots.
 #' @param show_ci Logical, if `TRUE`, confidence intervals in plots are shown.
-#' For models with categorical predictors, confidence intervals are sometimes
-#' on very large scales. In this case, it is more appropriate to disable
-#' confidence intervals.
+#' For models with only categorical predictors, confidence intervals are not shown
+#' by default, because in this case, these are usually on very large scales.
 #' @param maximum_dots Limits the number of data points for models with many
 #' observations, to reduce the time for rendering the plot. Defaults to a
 #' maximum of 2000 data points to render
@@ -210,7 +209,7 @@ check_model.default <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
-  show_ci = TRUE,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -322,6 +321,16 @@ check_model.default <- function(
     )
   }
 
+  # if we have only categorical predictors, we don't show CI by default
+  parameter_types <- .safe(parameters::parameters_type(x))
+  if (
+    !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
+  ) {
+    show_ci = FALSE
+  } else {
+    show_ci = TRUE
+  }
+
   attr(assumptions_data, "panel") <- panel
   attr(assumptions_data, "dot_size") <- size_dot
   attr(assumptions_data, "line_size") <- size_line
@@ -376,7 +385,7 @@ check_model.stanreg <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
-  show_ci = TRUE,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -429,7 +438,7 @@ check_model.model_fit <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
-  show_ci = TRUE,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -478,7 +487,7 @@ check_model.performance_simres <- function(
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
-  show_ci = TRUE,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,

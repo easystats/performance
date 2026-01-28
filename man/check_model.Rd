@@ -16,7 +16,7 @@ check_model(x, ...)
   type = "density",
   residual_type = NULL,
   show_dots = NULL,
-  show_ci = TRUE,
+  show_ci = NULL,
   maximum_dots = 2000,
   size_dot = 2,
   size_line = 0.8,
@@ -82,9 +82,8 @@ tries to guess whether performance will be poor due to a very large model
 and thus automatically shows or hides dots.}
 
 \item{show_ci}{Logical, if \code{TRUE}, confidence intervals in plots are shown.
-For models with categorical predictors, confidence intervals are sometimes
-on very large scales. In this case, it is more appropriate to disable
-confidence intervals.}
+For models with only categorical predictors, confidence intervals are not shown
+by default, because in this case, these are usually on very large scales.}
 
 \item{maximum_dots}{Limits the number of data points for models with many
 observations, to reduce the time for rendering the plot. Defaults to a
