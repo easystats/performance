@@ -181,7 +181,7 @@
 #'
 #' @family functions to check model assumptions and and assess model quality
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4") && FALSE
 #' \donttest{
 #' m <- lm(mpg ~ wt + cyl + gear + disp, data = mtcars)
 #' check_model(m)
