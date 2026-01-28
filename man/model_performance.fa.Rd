@@ -29,6 +29,9 @@ Compute indices of model performance for models from the \strong{psych} package,
 and for \code{parameters::factor_analysis()} and \code{item_omega()}.
 }
 \details{
+The \code{RMSR_corrected} metric is the Root Mean Square Residual corrected for
+degrees of freedom.
+
 For omega-models, the columns \code{R2} and \code{Correlation} are measures of factor
 score adequacy. \code{R2} refers to the multiple R square of scores with factors,
 while \code{Correlation} indicates the correlation of scores with factors.

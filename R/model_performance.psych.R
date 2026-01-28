@@ -14,6 +14,9 @@
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @details
+#' The `RMSR_corrected` metric is the Root Mean Square Residual corrected for
+#' degrees of freedom.
+#'
 #' For omega-models, the columns `R2` and `Correlation` are measures of factor
 #' score adequacy. `R2` refers to the multiple R square of scores with factors,
 #' while `Correlation` indicates the correlation of scores with factors.
