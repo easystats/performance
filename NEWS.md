@@ -1,10 +1,12 @@
 # performance (devel)
 
-## Changes
+## Breaking Changes
 
 * `model_performance()` for psych FA objects now correctly names the metric as
   `RMSR` (Root Mean Square Residual) instead of `RMSA`. The `RMSR_corrected`
   column (previously `RMSA_corrected`) is also renamed accordingly.
+
+## Changes
 
 * `check_model()` now limits the number of data points for models with many
   observations, to reduce the time for rendering the plot via the `maximum_dots`
