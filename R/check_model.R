@@ -9,7 +9,7 @@
 #' If `check_model()` doesn't work as expected, try setting `verbose = TRUE` to
 #' get hints about possible problems.
 #'
-#' @param x A model object.
+#' @param model A model object.
 #' @param size_dot,size_line Size of line and dot-geoms.
 #' @param base_size,size_title,size_axis_title Base font size for axis and plot titles.
 #' @param panel Logical, if `TRUE`, plots are arranged as panels; else,
@@ -191,7 +191,7 @@
 #' check_model(m, panel = FALSE)
 #' }
 #' @export
-check_model <- function(x, ...) {
+check_model <- function(model, ...) {
   UseMethod("check_model")
 }
 
@@ -201,7 +201,7 @@ check_model <- function(x, ...) {
 #' @rdname check_model
 #' @export
 check_model.default <- function(
-  x,
+  model,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -225,10 +225,10 @@ check_model.default <- function(
 ) {
   # check model formula
   if (verbose) {
-    insight::formula_ok(x)
+    insight::formula_ok(model)
   }
 
-  minfo <- insight::model_info(x, verbose = FALSE)
+  minfo <- insight::model_info(model, verbose = FALSE)
 
   # set default for residual_type
   if (is.null(residual_type)) {
@@ -250,10 +250,10 @@ check_model.default <- function(
 
   assumptions_data <- tryCatch(
     if (minfo$is_bayesian) {
-      suppressWarnings(.check_assumptions_stan(x, ...))
+      suppressWarnings(.check_assumptions_stan(model, ...))
     } else if (minfo$is_linear) {
       suppressWarnings(.check_assumptions_linear(
-        x,
+        model,
         minfo,
         check,
         residual_type,
@@ -262,7 +262,7 @@ check_model.default <- function(
       ))
     } else {
       suppressWarnings(.check_assumptions_glm(
-        x,
+        model,
         minfo,
         check,
         residual_type,
@@ -283,7 +283,7 @@ check_model.default <- function(
       paste("`check_model()` returned following error:", cleaned_string),
       paste0(
         "\nIf the error message does not help identifying your problem, another reason why `check_model()` failed might be that models of class `",
-        class(x)[1],
+        class(model)[1],
         "` are not yet supported."
       ) # nolint
     )
@@ -293,7 +293,7 @@ check_model.default <- function(
   if (is.null(assumptions_data$QQ) && residual_type == "simulated") {
     insight::format_alert(paste0(
       "Cannot simulate residuals for models of class `",
-      class(x)[1],
+      class(model)[1],
       "`. Please try `check_model(..., residual_type = \"normal\")` instead."
     ))
   }
@@ -309,7 +309,7 @@ check_model.default <- function(
   }
 
   # set default for show_dots, based on "model size"
-  n <- .safe(insight::n_obs(x))
+  n <- .safe(insight::n_obs(model))
   if (is.null(show_dots)) {
     show_dots <- is.null(n) || n <= 1e5
   }
@@ -322,7 +322,7 @@ check_model.default <- function(
   }
 
   # if we have only categorical predictors, we don't show CI by default
-  parameter_types <- .safe(parameters::parameters_type(x))
+  parameter_types <- .safe(parameters::parameters_type(model))
   if (
     !is.null(parameter_types) && all(parameter_types$Type %in% c("intercept", "factor"))
   ) {
@@ -350,7 +350,7 @@ check_model.default <- function(
   attr(assumptions_data, "bandwidth") <- bandwidth
   attr(assumptions_data, "type") <- type
   attr(assumptions_data, "maximum_dots") <- maximum_dots
-  attr(assumptions_data, "model_class") <- class(x)[1]
+  attr(assumptions_data, "model_class") <- class(model)[1]
   assumptions_data
 }
 
@@ -377,7 +377,7 @@ plot.check_model <- function(x, ...) {
 
 #' @export
 check_model.stanreg <- function(
-  x,
+  model,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -400,7 +400,7 @@ check_model.stanreg <- function(
   ...
 ) {
   check_model(
-    bayestestR::bayesian_as_frequentist(x),
+    bayestestR::bayesian_as_frequentist(model),
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -430,7 +430,7 @@ check_model.brmsfit <- check_model.stanreg
 
 #' @export
 check_model.model_fit <- function(
-  x,
+  model,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -453,7 +453,7 @@ check_model.model_fit <- function(
   ...
 ) {
   check_model(
-    x$fit,
+    model$fit,
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,
@@ -479,7 +479,7 @@ check_model.model_fit <- function(
 
 #' @export
 check_model.performance_simres <- function(
-  x,
+  model,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -502,7 +502,7 @@ check_model.performance_simres <- function(
   ...
 ) {
   check_model(
-    x$fittedModel,
+    model$fittedModel,
     size_dot = size_dot,
     size_line = size_line,
     panel = panel,

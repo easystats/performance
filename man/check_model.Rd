@@ -5,10 +5,10 @@
 \alias{check_model.default}
 \title{Visual check of model assumptions}
 \usage{
-check_model(x, ...)
+check_model(model, ...)
 
 \method{check_model}{default}(
-  x,
+  model,
   panel = TRUE,
   check = "all",
   detrend = TRUE,
@@ -32,7 +32,7 @@ check_model(x, ...)
 )
 }
 \arguments{
-\item{x}{A model object.}
+\item{model}{A model object.}
 
 \item{...}{Arguments passed down to the individual check functions, especially
 to \code{check_predictions()} and \code{binned_residuals()}.}
